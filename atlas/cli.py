@@ -1,0 +1,50 @@
+import argparse
+import json
+from pathlib import Path
+import subprocess
+from .model import ROOT, all_models
+
+
+def main():
+    parser=argparse.ArgumentParser(description='Constitutive Atlas research and simulation tools')
+    sub=parser.add_subparsers(dest='command',required=True)
+    sub.add_parser('validate',help='Validate every executable definition')
+    generate=sub.add_parser('generate');generate.add_argument('destination',type=Path)
+    db=sub.add_parser('database');db.add_argument('destination',type=Path)
+    ingest=sub.add_parser('ingest');ingest.add_argument('archive',type=Path);ingest.add_argument('--output',type=Path,default=ROOT/'data/normalized');ingest.add_argument('--metadata',type=Path)
+    discovery=sub.add_parser('discover');discovery.add_argument('--query',required=True);discovery.add_argument('--output',required=True,type=Path);discovery.add_argument('--rows',type=int,default=50);discovery.add_argument('--cursor',default='*')
+    run=sub.add_parser('run');run.add_argument('specification',type=Path);run.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');run.add_argument('--output',type=Path,required=True)
+    benchmark=sub.add_parser('benchmark');benchmark.add_argument('configuration',type=Path);benchmark.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');benchmark.add_argument('--output',type=Path,required=True)
+    args=parser.parse_args()
+    if args.command=='validate':print(f'{len(all_models())} declarative models passed structural and semantic validation')
+    elif args.command=='generate':
+        from .compiler import generate
+        generate(args.destination);print(args.destination)
+    elif args.command=='database':
+        from .research import export_database
+        print(export_database(args.destination))
+    elif args.command=='ingest':
+        from .data import ingest
+        metadata=json.loads(args.metadata.read_text()) if args.metadata else None
+        outputs=ingest(args.archive,args.output,metadata);print(f'Normalized {len(outputs)} experiments into {args.output}')
+    elif args.command=='discover':
+        from .research import discover
+        result=discover(args.query,args.output,args.rows,args.cursor);print(f"Saved {len(result['response']['message']['items'])} unscreened records to {args.output}")
+    elif args.command=='run':
+        spec=json.loads(args.specification.read_text());spec=spec.get('specification',spec)
+        from .structure import check
+        check(spec,json.loads((ROOT/'schemas/run.schema.json').read_text()))
+        known={'model','parameters','initial','protocol','target','steps','cycles'}
+        if set(spec)-known or not {'model','protocol','target','steps','cycles'}<=spec.keys():raise ValueError('invalid run specification fields')
+        command=[str(args.solver)]
+        for key,value in spec.items():command.extend(['--'+key,','.join(str(x) for x in value) if isinstance(value,list) else str(value)])
+        result=subprocess.run(command,text=True,capture_output=True,timeout=60);data=json.loads(result.stdout)
+        args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(data,indent=2)+'\n')
+        print(f"{'Completed' if data['ok'] else 'Failed'}: {args.output}")
+        if not data['ok']:raise SystemExit(1)
+    elif args.command=='benchmark':
+        from .benchmark import execute
+        result=execute(args.configuration,args.solver,args.output);print(f"Recorded {len(result['comparisons'])} comparisons: {args.output}")
+
+
+if __name__=='__main__':main()
