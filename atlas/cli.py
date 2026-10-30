@@ -15,6 +15,7 @@ def main():
     ingest=sub.add_parser('ingest');ingest.add_argument('archive',type=Path);ingest.add_argument('--output',type=Path,default=ROOT/'data/normalized');ingest.add_argument('--metadata',type=Path)
     discovery=sub.add_parser('discover');discovery.add_argument('--query',required=True);discovery.add_argument('--output',required=True,type=Path);discovery.add_argument('--rows',type=int,default=50);discovery.add_argument('--cursor',default='*')
     run=sub.add_parser('run');run.add_argument('specification',type=Path);run.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');run.add_argument('--output',type=Path,required=True)
+    replay=sub.add_parser('replay',help='Replay a validated ordered recorded path');replay.add_argument('specification',type=Path);replay.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');replay.add_argument('--output',type=Path,required=True)
     benchmark=sub.add_parser('benchmark');benchmark.add_argument('configuration',type=Path);benchmark.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');benchmark.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     if args.command=='validate':print(f'{len(all_models())} declarative models passed structural and semantic validation')
@@ -51,6 +52,13 @@ def main():
         args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(data,indent=2)+'\n')
         print(f"{'Completed' if data['ok'] else 'Failed'}: {args.output}")
         if not data['ok']:raise SystemExit(1)
+    elif args.command=='replay':
+        from .recorded import execute_recorded
+        spec=json.loads(args.specification.read_text())
+        result=execute_recorded(spec,args.solver)
+        args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
+        print(f"{'Completed' if result['ok'] else 'Failed'}: {args.output}")
+        if not result['ok']:raise SystemExit(1)
     elif args.command=='benchmark':
         from .benchmark import execute
         result=execute(args.configuration,args.solver,args.output);print(f"Recorded {len(result['comparisons'])} comparisons: {args.output}")

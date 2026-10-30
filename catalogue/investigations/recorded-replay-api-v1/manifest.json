@@ -1,0 +1,105 @@
+{
+  "id": "recorded-replay-api-v1",
+  "date": "2026-10-31",
+  "base_revision": "41fa213",
+  "status": "passed bounded native checks; experimental API",
+  "scope": "Closed JSON recorded run -> validated Python bridge -> numeric native CLI -> additive C ABI -> existing typed recorded driver.",
+  "native_build": {
+    "command": "cmake --build /private/tmp/atlas-recorded-cmake --target atlas_solver --parallel 1",
+    "compiler": "Apple clang 21.0.0 (clang-2100.4.1.1)",
+    "target": "arm64-apple-darwin25.6.0",
+    "cmake": "4.4.3",
+    "python": "3.14.7",
+    "flags": "-O0 -std=gnu++20 -Wall -Wextra -Wno-unused-variable",
+    "completed_normally": true,
+    "executable_sha256": "d01a0acf903cca299c79b2b4a25206dadddebbc46c85c86616a1559e12f2dae1",
+    "generated_header_sha256": "d5381b70319eecca056f8374f948b40b6dcd2bc1eff854c9188761a5b87b0919"
+  },
+  "capture": {
+    "ok": true,
+    "cases": 16,
+    "successful": 13,
+    "failed": 3,
+    "accepted_points": 5043,
+    "scope": "Public native endpoint/provenance consistency; analytical oracles are separate tests."
+  },
+  "tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 ATLAS_RECORDED_SOLVER=/private/tmp/atlas-recorded-cmake/atlas_solver python3 -m unittest tests.test_recorded_api tests.test_recorded_path tests.test_integration_settings tests.test_linearization_api -v",
+    "passed": 35,
+    "native_capture_command": "PYTHONDONTWRITEBYTECODE=1 ATLAS_RECORDED_SOLVER=/private/tmp/atlas-recorded-cmake/atlas_solver ATLAS_RECORDED_CAPTURE=/private/tmp/atlas-recorded-api-stage/native-responses.json.gz python3 -m unittest tests.test_recorded_api.RecordedNativeAPITests tests.test_recorded_api.RecordedRunContractTests tests.test_recorded_path -v",
+    "coverage": [
+      "Analytical drained normal response and exponential void-ratio closure, reversal and duplicate history.",
+      "Analytical all-stress inversion with oblique normal/shear coefficients and nonzero strain origin.",
+      "All five public models: exact same-engine replay and restart equality.",
+      "Budget failure before advancement and after one accepted record; initial-target rejection.",
+      "5001 observations; no material work for identical targets.",
+      "Malformed native wire tags/counts/finiteness, integer/settings bounds, unrelated mode options.",
+      "JSON CLI output for success and unknown model failure.",
+      "Offline capture corruption rejection and existing settings/linearization evidence tests."
+    ],
+    "scope_limit": "Shared-engine comparisons establish transport/driver semantics, not independent constitutive correctness."
+  },
+  "compatibility": {
+    "ok": true,
+    "cases": 46,
+    "models": [
+      "drucker-prager",
+      "hypoplastic-sand-igs97",
+      "hypoplastic-sand-vw96",
+      "linear-elastic",
+      "modified-cam-clay"
+    ],
+    "excluded_fields": [
+      "elapsed_ms"
+    ],
+    "prior_binary_sha256": "355dbbfd8bac7fcb7c99c1cb1a5049dd8592688448705d1c20e1c2e279125e19",
+    "new_binary_sha256": "d01a0acf903cca299c79b2b4a25206dadddebbc46c85c86616a1559e12f2dae1"
+  },
+  "compatibility_capture": {
+    "executed_command": "PYTHONDONTWRITEBYTECODE=1 python3 /private/tmp/atlas-recorded-api-stage/check_compatibility.py",
+    "executed_source_artifact": "compatibility-capture-source.py",
+    "equivalent_repository_reproduction": "python3 tools/check_recorded_compatibility.py --prior PRIOR_BINARY --current CURRENT_BINARY --output OUTPUT_DIRECTORY",
+    "scope": "Five public laws, five protocols, default/configured integrate/linearize and describe; elapsed_ms excluded."
+  },
+  "example_command": "python3 -m atlas.cli replay protocols/recorded-linear-elastic-run.json --solver /private/tmp/atlas-recorded-cmake/atlas_solver --output /private/tmp/atlas-recorded-api-stage/example-result.json",
+  "review": {
+    "independent_scientific_review": "pending",
+    "new_parallel_agents": false
+  },
+  "limitations": [
+    "Wasm export annotation is present; no new Wasm compilation/runtime parity or browser import verified in this investigation.",
+    "No timed/research API catalogue verification; public five-model scope only.",
+    "No path-density study, full Wichtmann recorded benchmark or calibration.",
+    "Endpoint-only stress controls and other typed-driver limitations remain.",
+    "Native CI workflow edits are local and have not run on hosted runners.",
+    "No hosted publication, source-model admission or independent scientific review is implied."
+  ],
+  "source_sha256": {
+    ".github/workflows/macos.yml": "64c61ea15135664bdbeeff862297ef7ca53077f4a8f12c1990ebc54899d73c58",
+    ".github/workflows/verify.yml": "ad0ccf86a429b113bc227628151db80b04f36c110efd68d29e9d284ecda76ed2",
+    "ROADMAP.md": "6859e2b9bd0d0431bd544ba865fe717fd0f75e260215e3faac7c48c54bb1536f",
+    "atlas/cli.py": "20801263dddc8b4d9f7a2d21d742aea8ae8de3507247228c9b86ee4fdf2322bb",
+    "atlas/recorded.py": "04dc86d27eed79335bf64a5c2783c28f8101ed36797e6b25dc1d48f2ebe23b04",
+    "cpp/main.cpp": "bb3095908773f0561134802ec7dfa8711520555fb4ac3932b00215345369ed99",
+    "cpp/include/atlas/recorded.hpp": "5261b7499834bd618e48925d98591f1753b8c802adee59c66d3afd42941ad29e",
+    "cpp/include/atlas/linearize.hpp": "40f8ed4bc722636c3ce0573af150dcbe6afe59618e0dad1542aa9a2b9e7b4319",
+    "cpp/include/atlas/settings.hpp": "3eb1171ae1ef17440b19e8becfc8e9bf92335519a88da8f1e9be407d3488662b",
+    "cpp/include/atlas/solver.hpp": "7842240f542949a1ba547f4a2fea44e4ef1fadf50b35a18fd86f8fe4327164d5",
+    "cpp/include/atlas/tensor.hpp": "d964ff6e2e46f81e465533f2b517c3aabef7df42de4ed2b9907cc5e4448c6a1e",
+    "docs/RECORDED_PATHS.md": "c85eb2d2de2081ae63450c3c85e44b6c596c49f514bac903e7e5aa9a83069b1f",
+    "protocols/recorded-linear-elastic-run.json": "aa0f465bdfc34b37fabc7cbb44358706fd7bf7a2a7fe3dd901eae3cbe28ed71e",
+    "schemas/recorded-run.schema.json": "7deee348e01c7d1e5d9cedd9a306d5bf1a278e00a7e534062cd1eabb0e3bb94b",
+    "schemas/recorded-path.schema.json": "9240c1f82d65dd2ebfc77f97d5f0e26dfc57368a3cdc4979a1ce81c9d08ae2f0",
+    "tests/test_recorded_api.py": "334139e9cbcbbe1d6aec9dfd0088cc480e747fa0b18db56e0657a405c28d2b09",
+    "tools/check_recorded_compatibility.py": "bc5cfe45ab6cf5be8727ff4391bae942bc91b34039fa8ede5105cc72ac72f125",
+    "tools/verify_recorded_replay.py": "57ce71f2ceec606f4e25549f2f3456474e482eabc8a69a2e4ff3a12ba4a3aec8"
+  },
+  "artifact_sha256": {
+    "compatibility-capture-source.py": "e1e50b9ca37e19ed50001ab05708fdccda5c696244cdd6ca80229f0baef0578a",
+    "compatibility-summary.json": "f1111c440d94edefc044ab939a2e5cddf32abea4205d662fbc42b92e7ba4ef8a",
+    "compatibility.json.gz": "b7a0f684ea28e9b68b30cc9848090a7f0ed02ba3da15823e3bb832d31578cc25",
+    "example-result.json": "bb679bb3820710e93865d32c20b57780ae0ba2187866507be9a82a8b14e35cd0",
+    "responses.json.gz": "a01fead76ea5eb8cbed880ba9b3defb5d30d83e49085a9ef8660332e3fb7d595",
+    "tests.txt": "fe5f92fde93efdadf799dd4713214c63eb7a502928a7caba6f30a74343ed81da"
+  }
+}

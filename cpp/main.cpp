@@ -1,5 +1,6 @@
 #include "atlas/schedule.hpp"
-#include "atlas/linearize.hpp"
+#include "atlas/recorded.hpp"
+#include <fstream>
 #include <cctype>
 #include <chrono>
 #include <iomanip>
@@ -102,6 +103,59 @@ static const char* linearize_response(const char*id,const char*parameters,const 
 }
 extern "C" ATLAS_EXPORT const char* atlas_linearize(const char*id,const char*parameters,const char*initial,const char*strain){return linearize_response(id,parameters,initial,strain,nullptr);}
 extern "C" ATLAS_EXPORT const char* atlas_linearize_with_settings(const char*id,const char*parameters,const char*initial,const char*strain,const char*settings){return linearize_response(id,parameters,initial,strain,settings?settings:"");}
+// Numeric wire: 6 rows of (stress tag, six coefficients), and 2..5001
+// rows of (coordinate, six absolute targets). No file I/O in the C/Wasm API.
+extern "C" ATLAS_EXPORT const char* atlas_replay_recorded(const char*id,const char*parameters,const char*initial,
+        const char*initial_strain,const char*controls,const char*knots,const char*material_settings,const char*control_settings){
+    try{
+        int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial);
+        auto e=parse_csv(initial_strain),c=parse_csv(controls),k=parse_csv(knots),v=parse_csv(control_settings);
+        if(e.size()!=6||c.size()!=42||k.size()<14||k.size()>35007||k.size()%7)
+            throw std::runtime_error("invalid recorded wire layout");
+        atlas::RecordedPath path;path.initial_strain=atlas::tensor_from(e,0);
+        for(int i=0;i<6;++i){
+            if(c[7*i]!=0&&c[7*i]!=1)throw std::runtime_error("recorded stress tag must be 0 or 1");
+            path.controls[i].stress=c[7*i]==1;
+            for(int j=0;j<6;++j)path.controls[i].coefficients.v[j]=c[7*i+1+j];
+        }
+        for(size_t i=0;i<k.size();i+=7){atlas::RecordedKnot knot;knot.coordinate=k[i];
+            for(int j=0;j<6;++j)knot.targets[j]=k[i+1+j];path.knots.push_back(knot);}
+        atlas::RecordedSettings settings;settings.material=settings_for(material_settings);
+        if(!v.empty()){
+            if(v.size()!=5)throw std::runtime_error("five recorded control settings required");
+            for(int i=1;i<4;++i)if(v[i]!=std::floor(v[i])||v[i]<0||v[i]>1000000)
+                throw std::runtime_error("invalid integer recorded control setting");
+            settings.control_tolerance=v[0];settings.max_iterations=int(v[1]);settings.max_backtracks=int(v[2]);
+            settings.max_material_trials=int(v[3]);settings.finite_difference_step=v[4];
+        }
+        if(!atlas::valid_recorded_settings(settings))throw std::runtime_error("invalid recorded settings");
+        auto run=atlas::replay_recorded(m,z,p,path,settings);
+        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(run.ok?"true":"false")
+          <<",\"api_version\":\"experimental-recorded-replay-0.1\",\"catalogue_hash\":"<<quote(atlas::catalogue_hash())
+          <<",\"model\":"<<quote(id)<<",\"message\":"<<quote(run.message)<<",\"failed_knot\":"<<run.failed_knot
+          <<",\"parameters\":";array(o,p);o<<",\"initial\":";array(o,z);o<<",\"initial_strain\":";array(o,e);
+        o<<",\"controls_wire\":";array(o,c);o<<",\"knots_wire\":";array(o,k);
+        o<<",\"integration_settings\":";write_settings(o,settings.material);
+        o<<",\"control_settings\":{\"control_tolerance\":"<<settings.control_tolerance
+          <<",\"max_iterations\":"<<settings.max_iterations<<",\"max_backtracks\":"<<settings.max_backtracks
+          <<",\"max_material_trials\":"<<settings.max_material_trials<<",\"finite_difference_step\":"<<settings.finite_difference_step
+          <<"},\"state\":";array(o,run.state);o<<",\"strain\":";array(o,atlas::State(run.strain.v.begin(),run.strain.v.end()));
+        o<<",\"material_trials\":"<<run.material_trials<<",\"finite_difference_probes\":"<<run.finite_difference_probes
+          <<",\"attempted_substeps\":"<<run.attempted_substeps<<",\"last_control_error\":";
+        if(std::isfinite(run.last_control_error))o<<run.last_control_error;else o<<"null";
+        o<<",\"last_trial_increment\":";array(o,atlas::State(run.last_trial_increment.v.begin(),run.last_trial_increment.v.end()));
+        o<<",\"points\":[";
+        for(size_t i=0;i<run.points.size();++i){if(i)o<<',';const auto& point=run.points[i];
+            o<<"{\"coordinate\":"<<point.coordinate<<",\"state\":";array(o,point.state);
+            o<<",\"strain\":";array(o,atlas::State(point.strain.v.begin(),point.strain.v.end()));
+            o<<",\"control_error\":"<<point.control_error<<",\"diagnostics\":{\"iterations\":"<<point.diagnostics.iterations
+              <<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":";
+            if(std::isfinite(point.diagnostics.error))o<<point.diagnostics.error;else o<<"null";
+            o<<",\"increment_fractions\":";array(o,point.diagnostics.increment_fractions);o<<"}}";
+        }
+        o<<"]}";output=o.str();return output.c_str();
+    }catch(const std::exception&e){return failure(e.what());}
+}
 extern "C" ATLAS_EXPORT const char* atlas_evaluate_time(const char*id,const char*parameters,const char*current,const char*rate,double time){
     try{int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,current),d=parse_csv(rate);
         if(!atlas::models()[m].physical_time)throw std::runtime_error("physical-time ODE model required");
@@ -174,13 +228,13 @@ int main(int argc,char**argv){
     std::map<std::string,std::string> args;const char*response=nullptr;
     try{
         for(int i=1;i<argc;i+=2){if(i+1>=argc)throw std::runtime_error("arguments require --key value pairs");std::string key=argv[i];if(args.count(key))throw std::runtime_error("duplicate option");args[key]=argv[i+1];}
-        const std::vector<std::string> known={"--model","--parameters","--initial","--protocol","--target","--steps","--cycles","--mode","--current","--strain","--strain-rate","--start-time","--duration","--rtol","--atol","--min-time-step","--max-time-step","--max-substeps","--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations","--integration-settings"};
+        const std::vector<std::string> known={"--model","--parameters","--initial","--protocol","--target","--steps","--cycles","--mode","--current","--strain","--strain-rate","--start-time","--duration","--rtol","--atol","--min-time-step","--max-time-step","--max-substeps","--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings"};
         for(const auto&arg:args)if(std::find(known.begin(),known.end(),arg.first)==known.end())throw std::runtime_error("unknown option: "+arg.first);
         auto get=[&](const std::string&key,const std::string&fallback=""){auto i=args.find(key);return i==args.end()?fallback:i->second;};
         auto num=[&](const std::string&key,const std::string&fallback){auto s=get(key,fallback);size_t pos=0;double v=std::stod(s,&pos);if(pos!=s.size()||!std::isfinite(v))throw std::runtime_error("invalid number: "+key);return v;};
         auto integer=[&](const std::string&key,const std::string&fallback){double x=num(key,fallback);if(x!=std::floor(x)||std::abs(x)>1000000)throw std::runtime_error("invalid integer: "+key);return int(x);};
         auto id=get("--model"),p=get("--parameters"),z=get("--initial"),mode=get("--mode","run"),d=get("--strain"),current=get("--current");
-        if(args.count("--integration-settings")&&mode!="run"&&mode!="integrate"&&mode!="linearize")throw std::runtime_error("incremental settings require run, integrate or linearize mode");
+        if(args.count("--integration-settings")&&mode!="run"&&mode!="integrate"&&mode!="linearize"&&mode!="recorded")throw std::runtime_error("incremental settings require run, integrate or linearize mode");
         if(mode=="linearize"){
             const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--strain","--integration-settings"};
             for(const auto& arg:args)if(std::find(allowed.begin(),allowed.end(),arg.first)==allowed.end())
@@ -190,16 +244,32 @@ int main(int argc,char**argv){
         const bool timed=mode=="integrate-time"||mode=="evaluate-time"||mode=="observe-time"||mode=="schedule";
         for(const auto& arg:args){
             const bool time_option=std::find(temporal.begin(),temporal.end(),arg.first)!=temporal.end();
-            if(!timed&&time_option)throw std::runtime_error("physical-time options require a timed mode");
+            if(!timed&&time_option&&!(mode=="recorded"&&arg.first=="--initial-strain"))throw std::runtime_error("physical-time options require a timed mode");
             if(timed&&!time_option&&arg.first!="--model"&&arg.first!="--mode"&&arg.first!="--parameters"&&arg.first!="--initial")throw std::runtime_error("option unsupported by timed mode: "+arg.first);
             if((mode=="evaluate-time"||mode=="observe-time")&&time_option&&arg.first!="--strain-rate"&&arg.first!="--start-time")throw std::runtime_error("integration settings are unsupported by rate evaluation");
         }
         for(const auto& arg:args){
             const std::vector<std::string> schedule_options={"--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations"};
-            if(mode!="schedule"&&std::find(schedule_options.begin(),schedule_options.end(),arg.first)!=schedule_options.end())throw std::runtime_error("schedule option requires schedule mode");
+            if(mode!="schedule"&&!(mode=="recorded"&&arg.first=="--initial-strain")&&std::find(schedule_options.begin(),schedule_options.end(),arg.first)!=schedule_options.end())throw std::runtime_error("schedule option requires schedule mode");
             if(mode=="schedule"&&(arg.first=="--duration"||arg.first=="--strain-rate"))throw std::runtime_error("schedule duration and rates belong to its segments");
         }
-        if(mode=="schedule")response=atlas_run_schedule(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),get("--initial-strain-rate").c_str(),get("--segments").c_str(),get("--segment-ids").c_str(),num("--start-time","0"),num("--rtol","1e-6"),num("--atol","1e-9"),num("--min-time-step","1e-12"),num("--max-time-step","1e6"),integer("--max-substeps","20000"),num("--nonlinear-tolerance","1e-10"),integer("--max-iterations","40"));
+        const std::vector<std::string> recorded_options={"--recorded-controls-file","--recorded-knots-file","--recorded-settings"};
+        for(const auto& arg:args)if(mode!="recorded"&&std::find(recorded_options.begin(),recorded_options.end(),arg.first)!=recorded_options.end())
+            throw std::runtime_error("recorded option requires recorded mode");
+        if(mode=="recorded"){
+            const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--initial-strain","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings"};
+            for(const auto& arg:args)if(std::find(allowed.begin(),allowed.end(),arg.first)==allowed.end())throw std::runtime_error("option unsupported by recorded mode: "+arg.first);
+            auto read_wire=[&](const char* key){
+                std::ifstream in(get(key),std::ios::binary);if(!in)throw std::runtime_error(std::string("cannot read ")+key);
+                std::string data;char ch;while(in.get(ch)){
+                    if(data.size()>=2000000)throw std::runtime_error("recorded wire file exceeds 2 MB");data+=ch;
+                }
+                if(!in.eof())throw std::runtime_error("recorded wire read failed");return data;
+            };
+            auto c=read_wire("--recorded-controls-file"),k=read_wire("--recorded-knots-file");
+            response=atlas_replay_recorded(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),c.c_str(),k.c_str(),get("--integration-settings").c_str(),get("--recorded-settings").c_str());
+        }
+        else if(mode=="schedule")response=atlas_run_schedule(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),get("--initial-strain-rate").c_str(),get("--segments").c_str(),get("--segment-ids").c_str(),num("--start-time","0"),num("--rtol","1e-6"),num("--atol","1e-9"),num("--min-time-step","1e-12"),num("--max-time-step","1e6"),integer("--max-substeps","20000"),num("--nonlinear-tolerance","1e-10"),integer("--max-iterations","40"));
         else if(mode=="observe-time")response=atlas_observe_time(id.c_str(),p.c_str(),z.c_str(),get("--strain-rate").c_str(),num("--start-time","nan"));
         else if(mode=="evaluate-time")response=atlas_evaluate_time(id.c_str(),p.c_str(),z.c_str(),get("--strain-rate").c_str(),num("--start-time","nan"));
         else if(mode=="integrate-time")response=atlas_integrate_time(id.c_str(),p.c_str(),z.c_str(),get("--strain-rate").c_str(),num("--start-time","0"),num("--duration","nan"),num("--rtol","1e-6"),num("--atol","1e-9"),num("--min-time-step","1e-12"),num("--max-time-step","1e6"),integer("--max-substeps","20000"));

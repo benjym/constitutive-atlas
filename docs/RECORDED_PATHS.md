@@ -1,6 +1,6 @@
 # Experimental ordered incremental replay
 
-`experimental-recorded-path-0.1` adds a [JSON contract](../schemas/recorded-path.schema.json), [Python validation](../atlas/recorded.py) and [C++ driver](../cpp/include/atlas/recorded.hpp) for recorded paths. It advances NUM-04 with ordered reversals, linear mixed constraints and committed-history replay. This is an experimental C++ interface; the production C ABI, CLI, benchmark importer, Wasm and browser do not yet consume this contract. Their current ramp/sinusoid interfaces remain separate.
+`experimental-recorded-path-0.1` adds a [JSON contract](../schemas/recorded-path.schema.json), [Python validation](../atlas/recorded.py) and [C++ driver](../cpp/include/atlas/recorded.hpp) for recorded paths. It advances NUM-04 with ordered reversals, linear mixed constraints and committed-history replay. The typed C++ driver and experimental native C ABI/CLI consume this contract. The benchmark importer, Wasm runtime and browser do not yet consume it. Existing ramp/sinusoid interfaces remain separate.
 
 ## Contract and units
 
@@ -53,4 +53,32 @@ cmake --build build --target atlas_recorded_fixture_tests --parallel 1
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_recorded_path -v
 ```
 
-Development used small standalone compilations, followed by fresh CMake Debug builds with `-O0 -std=gnu++20`, one target at a time. The final CMake runs pass 56 public cases with 1,850 assertions and 90 transaction assertions; 21 related Python tests pass. Commands and source hashes are recorded in the manifest. Public API/CLI serialization, native/Wasm parity, browser import, source-matched nonlinear references and experimental replay remain open before NUM-04 is complete.
+Development used small standalone compilations, followed by fresh CMake Debug builds with `-O0 -std=gnu++20`, one target at a time. The final CMake runs pass 56 public cases with 1,850 assertions and 90 transaction assertions; 21 related Python tests pass. Commands and source hashes are recorded in the manifest. Native/Wasm parity, browser import, source-matched nonlinear references and experimental replay remain open before NUM-04 is complete.
+
+
+## Native JSON replay command
+
+The [closed run schema](../schemas/recorded-run.schema.json) wraps the path with a model ID and optional ordered `parameters`, full `initial` state, `integration_settings` and `control_settings` objects. Omit parameter/state arrays to use model defaults; explicit empty arrays are rejected. Partial settings objects overlay the documented defaults. Full-state restart uses the saved state and accumulated strain as described above.
+
+```sh
+python3 -m atlas.cli replay protocols/recorded-linear-elastic-run.json \
+  --solver build/atlas_solver --output result.json
+ATLAS_RECORDED_SOLVER="$PWD/build/atlas_solver" \
+  python3 -m unittest tests.test_recorded_api tests.test_recorded_path -v
+```
+
+The [elastic example](../protocols/recorded-linear-elastic-run.json) is illustrative, with no experimental calibration claim. JSON validation runs before launching the engine. Numeric transport uses IEEE binary64; integer inputs that cannot be represented exactly are rejected before execution. The Python command transports numeric rows through temporary files to avoid operating-system argument-size limits at 5,001 knots. It writes successful or failed engine responses, includes the exact `specification`, and records `request_sha256` over UTF-8 Python `json.dumps(spec, sort_keys=True, separators=(',', ':'), allow_nan=False)` output. This identifies the parsed request; it is not a hash of the original file bytes. A failed engine response exits with status 1, retaining any accepted prefix. Malformed JSON/specifications or process/transport errors raise an error without publishing a new result file. The default process timeout is 60 seconds; Python callers may override it.
+
+`atlas.recorded.execute_recorded(spec, solver, timeout=60)` exposes the same bridge. The C ABI is additive:
+
+```cpp
+const char* atlas_replay_recorded(const char* model, const char* parameters,
+    const char* initial, const char* initial_strain, const char* controls,
+    const char* knots, const char* material_settings, const char* control_settings);
+```
+
+Arguments are numeric CSV strings except the model ID. `initial_strain` requires six Mandel components. `controls` requires six seven-value rows: stress tag (`0` strain, `1` stress), then six coefficients. `knots` requires 2–5,001 seven-value rows: coordinate, then six absolute targets. All values must be finite; rows stay in supplied order. Material settings use the existing six-value order: residual tolerance, rate tolerance, Newton iterations, depth, substeps, backtracks. Control settings use five values: control tolerance, Newton iterations, backtracks, path material-trial budget, finite-difference step. Null/empty parameter, initial-state and settings arguments select defaults; required wire arguments reject missing values. C callers own the buffers passed in. The returned JSON string uses shared storage, remains valid until the next API call, and is not thread safe.
+
+The native CLI has `--mode recorded`, `--initial-strain`, `--recorded-controls-file`, `--recorded-knots-file`, optional `--integration-settings` and `--recorded-settings`; wire files are bounded to 2 MB each. These options are rejected in other modes, and recorded mode rejects unrelated protocol/time flags. Native responses echo the numeric wire, resolved initial state/parameters/settings, API version and catalogue hash. Coordinate labels live in the JSON request and are preserved by the Python bridge; the numeric C ABI carries only ordering values. Parsed replay failures carry `failed_knot`, `points`, final committed `state`/`strain`, and work counters. Parse/parameter/settings errors return `ok:false` with a message before executing a path and do not publish state. No stress/strain interpolation or initial preparation is added by the bridge.
+
+The [API evidence](../catalogue/investigations/recorded-replay-api-v1/manifest.json) retains 16 native responses, including three failure branches and the 5,001-point case. Analytical normal/shear/oblique controls, all-five-model direct replay and restart, malformed wire/mode separation, and JSON command output are checked separately. Forty-six existing public native commands match the prior binary exactly after excluding elapsed time. This evidence covers the native C entry point through CLI execution; its Emscripten export annotation does not establish Wasm runtime parity.

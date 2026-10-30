@@ -15,3 +15,7 @@ jobs:
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       - run: cmake --build build --parallel 2
       - run: ctest --test-dir build --output-on-failure
+      - name: Verify recorded-path JSON replay
+        env:
+          ATLAS_RECORDED_SOLVER: ${{ github.workspace }}/build/atlas_solver
+        run: python -m unittest tests.test_recorded_api tests.test_recorded_path -v
