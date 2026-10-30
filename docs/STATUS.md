@@ -108,3 +108,7 @@ The [fixed-memory backward-Euler research draft](models/sanisand-2004-fixed-memo
 ## SANISAND history domains and rollback — 2026-10-31
 
 The fixed-memory research definition now enforces deviatoric backstress, fabric and reversal memory with declared trace tolerance `1e-12`. A [small native transaction probe](../catalogue/investigations/sanisand-transactions-v1/manifest.json) passes seven cases, including late-failure rollback after two accepted internal substeps, retention of nonzero memory and the prior transient multiplier, and repeated-trial equality. All 21 SANISAND Python groups pass. This tests full-parent rollback for the current fixed-memory material; no reversal reset is implemented.
+
+## SANISAND parent-reset research variant — 2026-10-31
+
+A [separate research identity](models/sanisand-2004-parent-reset-be.md) adds the source-inspired parent trial-direction policy through unchanged generic reset support. One small native build/run passes 896 cyclic increments, 18 resets, six zero trials and six late failures restoring pre-reset parents. Monotonic parity (224 states), Python/native preparation, interpreted residuals and cyclic refinement pass in the [record](../catalogue/investigations/sanisand-parent-reset-v1/manifest.json). All 26 SANISAND Python groups pass. This is a named project policy; the original cone-normal event rule and full OpenSees material remain unreconciled.

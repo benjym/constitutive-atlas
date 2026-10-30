@@ -60,3 +60,7 @@ The [finite-product investigation](models/sanisand-2004-hardening-limit.md) repr
 ## Common-solver residual research execution
 
 The [fixed-memory research material](models/sanisand-2004-fixed-memory-be.md) now demonstrates a 26-component backward-Euler formulation using existing DSL and AD solver features. The rearranged `gamma=Delta_lambda*h` products avoid separate division by reversal distance on the tested initial loading branch. A small native build passes 336 increments with interpreted residual and first-order refinement evidence. Memory remains fixed; the original cone-normal reset rule is not replaced by the external parent trial-direction rule. This advances SAN-05 but closes neither reversal/event semantics nor full material admission.
+
+## Parent-direction cyclic research execution
+
+The [separate parent-reset variant](models/sanisand-2004-parent-reset-be.md) demonstrates complete tensor residuals plus the existing parent transaction contract without engine changes. Native cyclic, preparation, rollback and refinement evidence now passes. The policy is explicitly distinct from the source cone-normal rule; it does not close canonical reversal semantics, located events, independent reference or Wasm gates.

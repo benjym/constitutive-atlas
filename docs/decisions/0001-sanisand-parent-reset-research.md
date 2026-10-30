@@ -1,0 +1,11 @@
+# Decision 0001: isolate the SANISAND parent-direction research policy
+
+Date: 2026-10-31. Status: **experimental implementation choice; scientific admission pending**.
+
+The original 2004 publication's cone-normal reversal condition and the pinned OpenSees parent trial-direction test are different local rules. The existing generic parent reset contract can express the latter, while full original loading-process/event reconciliation remains open. Blocking all numerical experiments on that unresolved choice would prevent testing the demonstrated common-engine capability with the complete tensor equations.
+
+Add a separate research identity, `research-sanisand-2004-parent-reset-be`, alongside the unchanged fixed-memory identity. Reuse the existing `increment_reset` object and backward-Euler residual equations; do not change schema or engine defaults. Use a strict negative parent deviatoric trial-direction guard, simultaneous assignment from the immutable parent, frozen selection through internal integration, and complete rollback to the pre-reset parent on failure. Record source and project numerical choices in the [variant dossier](../models/sanisand-2004-parent-reset-be.md).
+
+This enables identified cyclic experiments and reference comparisons without selecting a canonical original-paper event policy. Current-density elasticity and the other project discretizations remain explicit, so the identity also cannot claim full OpenSees equivalence. Do not merge it into the original candidate or count it as an additional admitted/public model. No reviewer or maintainer assignment is implied by this implementation choice.
+
+Existing model identities and public catalogues are unchanged. The research catalogue gains an entry and therefore changes its catalogue hash; callers must select by model ID, not position. Recorded old research outputs retain their original hashes. Future located events or a reviewed canonical rule require their own documented identity/migration decision rather than silently changing this policy. Evidence required before broader use includes guard and rollback tests, monotonic parity, cyclic refinement, independent matching references, mixed-control behaviour, derivatives and native/Wasm agreement. The current evidence supplies only the explicitly tested subset.
