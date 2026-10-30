@@ -24,4 +24,14 @@ Before scaling discovery, use known foundational references as checks, inspect q
 
 ## Verification
 
+The SQLite export (`python3 -m atlas.cli database /private/tmp/constitutive-atlas.sqlite`) preserves screening alongside the publication lineage graph. The current union contains 43 distinct DOI publications: 37 screened papers and nine lineage nodes, with three shared identities. Shared DOIs use the richer graph record in `publications.record_json`; the unchanged screening record remains in `publication_screening.record_json`. Screening-only rows retain their canonical screening record in `publications.record_json`. Exclusions are retained, and an inclusion for full-text review does not become an admitted model.
+
+`publication_screening` exposes decision, reason code, basis, full-text flag, reviewer, date and independent-review status as queryable columns. `screening_evidence` preserves all 53 raw search occurrences, including duplicate DOI hits, with their batch path, checksum, pointer and URL. Both tables have publication foreign keys. `publication_models` continues to represent only direct bindings from the lineage graph; screening model tags are preserved in screening JSON without becoming source bindings.
+
+`atlas.research.load_screening()` validates the ledger before export opens the destination database. It checks schema, DOI identity, model tags, review/date consistency, repository-contained evidence paths, raw checksums and exact source metadata/pointers. Invalid evidence leaves an existing export unchanged. These checks establish provenance consistency; scientific judgment and independent review remain separate requirements.
+
+For example, `SELECT decision, COUNT(*) FROM publication_screening GROUP BY decision;` reconciles the decision counts above. Join `publication_screening` to `screening_evidence` by `publication_id` to retrieve every search occurrence behind a decision.
+
 Run `python3 -m unittest discover -s tests -p test_screening.py` to check schema conformance, DOI uniqueness, exact raw-source hash/pointer linkage, preservation of all captured result occurrences and the reported count reconciliation. These are static Python checks; they compile or execute no constitutive or third-party code. They establish ledger integrity, not independent scientific screening correctness.
+
+Run `python3 -m unittest discover -s tests -p test_screening_export.py` for export round trips, foreign keys, duplicate-occurrence preservation, corrupt-evidence rejection and protection of an existing database on validation failure.

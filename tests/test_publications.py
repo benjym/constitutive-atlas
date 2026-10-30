@@ -1,4 +1,5 @@
 import copy
+from contextlib import closing
 import json
 from pathlib import Path
 import sqlite3
@@ -7,7 +8,7 @@ import unittest
 
 from atlas.dsl import ValidationError
 from atlas.model import ROOT
-from atlas.research import export_database, load_publications, validate_publications
+from atlas.research import export_database, load_publications, load_screening, validate_publications
 
 
 class PublicationTests(unittest.TestCase):
@@ -57,10 +58,12 @@ class PublicationTests(unittest.TestCase):
             path = Path(directory) / 'atlas.sqlite'
             for _ in range(2):
                 export_database(path)
-                with sqlite3.connect(path) as db:
+                with closing(sqlite3.connect(path)) as db:
                     self.assertEqual(db.execute('PRAGMA foreign_key_check').fetchall(), [])
                     rows = db.execute('SELECT id,record_json FROM publications').fetchall()
-                    self.assertEqual(dict((i, json.loads(r)) for i, r in rows), {n['id']: n for n in graph['publications']})
+                    expected_records = {r['publication_id']: r for r in load_screening()}
+                    expected_records.update({n['id']: n for n in graph['publications']})
+                    self.assertEqual(dict((i, json.loads(r)) for i, r in rows), expected_records)
                     rows = db.execute('SELECT record_json FROM publication_relations').fetchall()
                     self.assertCountEqual([json.loads(row[0]) for row in rows], graph['relations'])
                     rows = db.execute('SELECT publication_id,model_id FROM publication_models').fetchall()
