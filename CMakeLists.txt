@@ -7,7 +7,7 @@ file(GLOB MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/*.json")
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/generated/models.hpp" "${CMAKE_BINARY_DIR}/generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/generated"
-  DEPENDS ${MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  DEPENDS ${MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_models DEPENDS "${CMAKE_BINARY_DIR}/generated/models.hpp" "${CMAKE_BINARY_DIR}/generated/models.json")
 add_executable(atlas_solver cpp/main.cpp)
@@ -29,5 +29,28 @@ else()
   target_include_directories(atlas_numerical_tests PRIVATE cpp/include "${CMAKE_BINARY_DIR}/generated")
   add_test(NAME atlas_numerical COMMAND atlas_numerical_tests)
   add_test(NAME atlas_python COMMAND "${Python3_EXECUTABLE}" -m unittest discover -s tests -v)
-  set_tests_properties(atlas_python PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}" ENVIRONMENT "ATLAS_SOLVER=$<TARGET_FILE:atlas_solver>")
+  set_tests_properties(atlas_python PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}" ENVIRONMENT "ATLAS_SOLVER=$<TARGET_FILE:atlas_solver>;ATLAS_TIME_SOLVER=$<TARGET_FILE:atlas_time_solver>")
+endif()
+
+# Synthetic temporal fixtures use the same compiler and engine, but a separate
+# generated catalogue. They are never packaged as public atlas models.
+file(GLOB TIME_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/tests/fixtures/time/*.json")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/time-generated/models.hpp"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/time-generated" "${CMAKE_SOURCE_DIR}/tests/fixtures/time"
+  DEPENDS ${TIME_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model-v0.2.schema.json
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_custom_target(atlas_time_models DEPENDS "${CMAKE_BINARY_DIR}/time-generated/models.hpp")
+add_executable(atlas_time_solver cpp/main.cpp)
+add_dependencies(atlas_time_solver atlas_time_models)
+target_include_directories(atlas_time_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/time-generated")
+if(EMSCRIPTEN)
+  set_target_properties(atlas_time_solver PROPERTIES OUTPUT_NAME "time-fixtures" SUFFIX ".js")
+  get_target_property(ATLAS_WASM_OPTIONS atlas_solver LINK_OPTIONS)
+  target_link_options(atlas_time_solver PRIVATE ${ATLAS_WASM_OPTIONS})
+else()
+  add_executable(atlas_time_tests tests/test_time.cpp)
+  add_dependencies(atlas_time_tests atlas_time_models)
+  target_include_directories(atlas_time_tests PRIVATE cpp/include "${CMAKE_BINARY_DIR}/time-generated")
+  add_test(NAME atlas_time COMMAND atlas_time_tests)
 endif()

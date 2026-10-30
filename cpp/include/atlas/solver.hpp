@@ -75,6 +75,7 @@ inline bool advance_recursive(int model,const State&zn,const Sym<double>&de,cons
 inline Advance integrate(int model,const State&zn,const Sym<double>&de,const State&p){
     Advance result;result.state=zn;
     if(model<0||model>=int(models().size())){result.message="unknown model";return result;}
+    if(models()[model].physical_time){result.message="physical-time model requires the timed update API";return result;}
     if(zn.size()!=initial_state(model).size()||!valid_parameters(model,p)||!domain(model,zn,p,true)||!std::isfinite(norm(de))){result.message="invalid parameters, inadmissible initial state or strain increment";return result;}
     for(double s:model_scales(model,p))if(!std::isfinite(s)||s<=0){result.message="invalid state scales";return result;}
     State trial;

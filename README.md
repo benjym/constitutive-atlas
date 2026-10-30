@@ -28,7 +28,7 @@ python3 -m atlas.cli run benchmarks/elastic-example.json --output artifacts/elas
 python3 -m atlas.cli database artifacts/atlas.sqlite
 ```
 
-The authoritative definitions are in [models](models/). [JSON schemas](schemas/) cover model, experiment and run documents. [Architecture](docs/ARCHITECTURE.md) describes the mathematical language and conventions. The [temporal integration design draft](docs/TEMPORAL_INTEGRATION.md) sets out the proposed physical-time extension for Terracotta and its implementation gates.
+The authoritative definitions are in [models](models/). [JSON schemas](schemas/) cover model, experiment and run documents. [Architecture](docs/ARCHITECTURE.md) describes the mathematical language and conventions. The [temporal integration design draft](docs/TEMPORAL_INTEGRATION.md) sets out the physical-time extension for Terracotta and its implementation gates. An [experimental v0.2 ODE update](docs/TIME_ODE_API.md) now runs analytical native/Wasm fixtures; timed laboratory controls and Terracotta execution remain outstanding.
 
 ## Browser laboratory
 

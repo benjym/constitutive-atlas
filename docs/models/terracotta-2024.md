@@ -14,7 +14,9 @@ The immediate target is the **original triaxial-invariant clay model**, not an u
 
 ## Why it belongs near term
 
-The published model is rate dependent and uses a mesoscopic-temperature internal variable. It provides a concrete test of physical-time semantics that the existing rate-independent soil implementations do not exercise. The current engine's integration path fraction is not physical elapsed time; adding this candidate does not change that limitation.
+The published model is rate dependent and uses a mesoscopic-temperature internal variable. It provides a concrete test of physical-time semantics that the existing rate-independent soil implementations do not exercise. The legacy v0.1 engine's integration path fraction is not physical elapsed time. The separate experimental v0.2 ODE update adds a physical clock, but admitting this candidate still requires its source equations, observables and controls.
+
+The [author-source audit](terracotta-2024-source-audit.md) records inspected file hashes, core state/output requirements and unresolved reference-code discrepancies. The [experimental ODE engine](../TIME_ODE_API.md) now provides time-aware material updates; invariant observables, timed mixed controls and source reconciliation remain outstanding.
 
 ## Extraction and representation work
 

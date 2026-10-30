@@ -1,23 +1,47 @@
 """Restricted tensor expressions: one AST for checking, interpretation and C++.
 
 No eval, exec, attribute access, indexing, strings or arbitrary function calls.
-Dimensions use (mass, length, time) SI exponents, including fractional powers.
+Dimensions use (mass, length, time, temperature) SI exponents, including fractional powers.
 """
 from __future__ import annotations
 import ast
 import math
+import re
 from dataclasses import dataclass
 from fractions import Fraction
 
-ZERO = (Fraction(0),) * 3
-PRESSURE = (Fraction(1), Fraction(-1), Fraction(-2))
-DIMS = {"1": ZERO, "Pa": PRESSURE}
+ZERO = (Fraction(0),) * 4
+PRESSURE = (Fraction(1), Fraction(-1), Fraction(-2), Fraction(0))
+TIME = (Fraction(0), Fraction(0), Fraction(1), Fraction(0))
+DIMS = {"1": ZERO, "Pa": PRESSURE, "s": TIME,
+        "K": (Fraction(0), Fraction(0), Fraction(0), Fraction(1))}
+
+
+def dimensions(unit):
+    if isinstance(unit, str) and unit in DIMS:
+        return DIMS[unit]
+    if isinstance(unit, dict) and set(unit) == {'si'}:
+        values = unit['si']
+        if isinstance(values, list) and len(values) == 4:
+            def valid_exponent(v):
+                return (type(v) in (int,float) and math.isfinite(v)) or (
+                    isinstance(v,str) and re.fullmatch(r'-?[0-9]{1,3}/[1-9][0-9]?',v) is not None)
+            if all(valid_exponent(v) for v in values):
+                result = tuple(Fraction(str(v)) for v in values)
+                if all(abs(v) <= 16 and v.denominator <= 16 for v in result):
+                    return result
+    raise ValidationError('unit must be 1, Pa, s, K or four bounded rational SI exponents')
 
 
 @dataclass(frozen=True)
 class Type:
     shape: str = "scalar"
     dim: tuple = ZERO
+
+    def __post_init__(self):
+        # Existing callers using the v0.1 mass/length/time tuple remain valid.
+        if len(self.dim) == 3:
+            object.__setattr__(self, 'dim', tuple(self.dim) + (Fraction(0),))
 
 
 class ValidationError(ValueError):
@@ -86,6 +110,18 @@ def parse(expression):
     return tree
 
 
+def constant_fraction(node):
+    """Exact bounded-expression literals for dimensional powers, e.g. 1/3."""
+    if isinstance(node,ast.Constant) and type(node.value) in (int,float) and math.isfinite(node.value):
+        return Fraction(str(node.value))
+    if isinstance(node,ast.UnaryOp) and isinstance(node.op,(ast.UAdd,ast.USub)):
+        value=constant_fraction(node.operand)
+        return -value if isinstance(node.op,ast.USub) else value
+    if isinstance(node,ast.BinOp) and isinstance(node.op,ast.Div):
+        return constant_fraction(node.left)/constant_fraction(node.right)
+    raise ValueError('nonconstant dimensional exponent')
+
+
 def infer(node, symbols):
     if isinstance(node, ast.Constant):
         if type(node.value) not in (float, int) or not math.isfinite(node.value):
@@ -115,8 +151,8 @@ def infer(node, symbols):
             if a.dim == ZERO:
                 return Type()
             try:
-                exponent = Fraction(ast.literal_eval(node.right))
-            except (ValueError, TypeError):
+                exponent = constant_fraction(node.right)
+            except (ValueError, TypeError, ZeroDivisionError):
                 raise ValidationError("dimensioned power requires a constant exponent")
             return Type(dim=tuple(x*exponent for x in a.dim))
     if isinstance(node, ast.Compare) and len(node.ops) == 1 and isinstance(node.ops[0], (ast.Gt, ast.GtE, ast.Lt, ast.LtE)):

@@ -4,11 +4,11 @@ import json
 import math
 import re
 from pathlib import Path
-from .dsl import DIMS, I, Sym, Type, ZERO, ValidationError, cpp, evaluate, infer, parse
+from .dsl import DIMS, TIME, I, Sym, Type, ZERO, dimensions, ValidationError, cpp, evaluate, infer, parse
 
 ROOT = Path(__file__).resolve().parents[1]
 IDENT = re.compile(r"[A-Za-z][A-Za-z0-9_]*\Z")
-RESERVED = {"I", "de", "dt", "T", "params", "z", "zn", "out", "domain", "true", "false",
+RESERVED = {"I", "de", "dt", "time", "time_n", "strain_rate", "loading", "evaluation_time", "check_only", "T", "params", "z", "zn", "out", "domain", "true", "false",
             "double", "auto", "if", "else", "return", "const", "class", "struct", "template",
             "int", "float", "void", "bool", "new", "delete", "switch", "case", "default",
             "for", "while", "do", "break", "continue", "throw", "try", "catch", "namespace",
@@ -32,18 +32,27 @@ def load(path):
 
 
 def field_type(field):
-    if field.get('shape', 'scalar') not in ('scalar', 'sym') or field.get('unit', '1') not in DIMS:
-        raise ValidationError('unsupported shape or unit')
-    return Type(field.get('shape','scalar'), DIMS[field.get('unit','1')])
+    if field.get('shape', 'scalar') not in ('scalar', 'sym'):
+        raise ValidationError('unsupported shape')
+    return Type(field.get('shape','scalar'), dimensions(field.get('unit','1')))
+
+
+def physical_time(model):
+    return model.get('schema_version') == '0.2'
 
 
 def validate(model):
     from .structure import check
-    check(model,json.loads((ROOT/'schemas/model.schema.json').read_text()))
-    required = {'schema_version','id','name','family','status','sources','parameters','state', 'derived','equations','domain','integration','description'}
+    version=model.get('schema_version')
+    if version not in ('0.1','0.2'):
+        raise ValidationError('unsupported schema version')
+    physical=physical_time(model)
+    schema='model-v0.2.schema.json' if physical else 'model.schema.json'
+    check(model,json.loads((ROOT/'schemas'/schema).read_text()))
+    required = {'schema_version','id','name','family','status','sources','parameters','state', 'derived','equations','domain','description'}
     if not required <= model.keys():
         raise ValidationError(f"missing fields: {sorted(required-model.keys())}")
-    if model['schema_version'] != '0.1' or model['integration'] not in ('residual','rate'):
+    if not physical and model['integration'] not in ('residual','rate'):
         raise ValidationError('unsupported schema version or integration kind')
     if not re.fullmatch(r'[a-z][a-z0-9-]*',model['id']):
         raise ValidationError('invalid model ID')
@@ -51,7 +60,7 @@ def validate(model):
         raise ValidationError('invalid review status')
     if not model['sources'] or any(not {'url','locator','role'} <= s.keys() for s in model['sources']):
         raise ValidationError('source URL, locator and role are required')
-    symbols = {'I':Type('sym'),'de':Type('sym')}
+    symbols = {'I':Type('sym'), 'time':Type(dim=TIME), 'strain_rate':Type('sym',tuple(-v for v in TIME))} if physical else {'I':Type('sym'),'de':Type('sym')}
     names = set()
     def declare(name, typ):
         if not IDENT.fullmatch(name) or name in RESERVED or name.endswith('_n') or name in names:
@@ -66,12 +75,13 @@ def validate(model):
             raise ValidationError(f'{name}: finite default, min and max required')
         if not field['min'] <= field['default'] <= field['max']:
             raise ValidationError(f'{name}: default outside bounds')
-    if not model['state'] or model['state'][0]['name'] != 'sigma' or field_type(model['state'][0]) != Type('sym',DIMS['Pa']):
+    if not physical and (not model['state'] or model['state'][0]['name'] != 'sigma' or field_type(model['state'][0]) != Type('sym',DIMS['Pa'])):
         raise ValidationError('first state must be symmetric stress sigma in Pa')
     count=0
     for field in model['state']:
         typ=field_type(field); name=field['name']
-        declare(name,typ); symbols[name+'_n']=typ
+        declare(name,typ)
+        if not physical: symbols[name+'_n']=typ
         initial=field['initial']
         if typ.shape=='sym':
             if not isinstance(initial,list) or len(initial)!=6: raise ValidationError(f'{name}: six Mandel components required')
@@ -84,9 +94,11 @@ def validate(model):
         env={k:v['default'] for k,v in model['parameters'].items()}
         if not evaluate(scale,env)>0: raise ValidationError('state scale must be positive')
         count+=6 if typ.shape=='sym' else 1
+        if physical and (field.get('transient') or field.get('multiplier')):
+            raise ValidationError('physical-time ODE state must be persistent; incremental multipliers are unsupported')
         if field.get('multiplier') and (typ!=Type() or not field.get('transient') or model['integration']!='residual'):
             raise ValidationError('multipliers must be dimensionless transient scalars in residual models')
-    if count>24: raise ValidationError('v0.1 supports at most 24 state components')
+    if count>24: raise ValidationError('at most 24 state components are supported')
     for field in model['derived']:
         typ=infer(parse(field['expr']),symbols)
         if typ.shape=='bool': raise ValidationError('derived values must be numeric')
@@ -94,7 +106,9 @@ def validate(model):
     eqs=model['equations']
     if set(eqs)!={f['name'] for f in model['state']}: raise ValidationError('one equation per state is required')
     for f in model['state']:
-        if infer(parse(eqs[f['name']]),symbols)!=field_type(f): raise ValidationError(f"{f['name']}: equation shape or dimensions mismatch")
+        expected=field_type(f)
+        if physical: expected=Type(expected.shape,tuple(a-b for a,b in zip(expected.dim,TIME)))
+        if infer(parse(eqs[f['name']]),symbols)!=expected: raise ValidationError(f"{f['name']}: equation shape or dimensions mismatch")
     for condition in model['domain']:
         if infer(parse(condition),symbols)!=Type('bool'): raise ValidationError('domain checks must be comparisons')
     for condition in model.get('initial_checks',[]):
@@ -106,11 +120,15 @@ def defaults(model):
     return {name: p['default'] for name,p in model['parameters'].items()}
 
 
-def interpret(model, state, previous, increment, parameters=None):
+def interpret(model, state, previous, increment, parameters=None, *, time=None):
+    if physical_time(model) and (type(time) not in (int,float) or not math.isfinite(time)):
+        raise ValueError('physical-time evaluation requires finite stage time')
     env={'I':I,'de':Sym(tuple(increment)),**defaults(model),**(parameters or {})}
+    if physical_time(model): env.update(time=time, strain_rate=Sym(tuple(increment)))
     for f in model['state']:
         name=f['name']; wrap=lambda v: Sym(tuple(v)) if f.get('shape')=='sym' else v
-        env[name]=wrap(state[name]); env[name+'_n']=wrap(previous[name])
+        env[name]=wrap(state[name])
+        if not physical_time(model): env[name+'_n']=wrap(previous[name])
     for f in model['derived']: env[f['name']]=evaluate(parse(f['expr']),env)
     if not all(evaluate(parse(c),env) for c in model['domain']): raise ValueError('state outside model domain')
     return {k:evaluate(parse(expr),env) for k,expr in model['equations'].items()}
