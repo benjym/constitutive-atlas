@@ -698,16 +698,35 @@
       "source_url": "https://data.mendeley.com/datasets/n6t49stxrh/1",
       "scientific_value": "Oedometric response linked to grain motion and shape",
       "license": "CC-BY-4.0 (repository page)",
-      "review_stage": "repository identity and licence verified; file retrieval and author-site fallback checked",
-      "decision": "future micromechanics",
+      "review_stage": "verified source acquisition and comparator ingested; units and source duplicates reviewed",
+      "decision": "ingest measured native oedometer blocks; exclude fits and duplicate views",
       "notes": [
         "Includes synthetic printed-particle experiments and tomography, not a substitute for natural-sand specimen validation.",
         "The normal file browser identifies a 4.56 MB mechanical workbook plus a 274 KB description manual, avoiding the 6.78 GB tomography archive. The documented api.data.mendeley.com public metadata/download endpoints return 403; normal file download attempts also time out.",
-        "A fresh network-enabled request to the exact public workbook link reached Mendeley but returned HTTP 403 with Cloudflare error 1010. This is a remote file-access refusal, distinct from local sandbox DNS restrictions and Cortex build failures. A scoped check found no workbook/manual saved in Downloads after normal browser clicks. The authors\u2019 publications and Software & Data pages provide no alternative workbook copy; the publication entry points back to Mendeley."
+        "A fresh network-enabled request to the exact public workbook link reached Mendeley but returned HTTP 403 with Cloudflare error 1010. This is a remote file-access refusal, distinct from local sandbox DNS restrictions and Cortex build failures. A scoped check found no workbook/manual saved in Downloads after normal browser clicks. The authors\u2019 publications and Software & Data pages provide no alternative workbook copy; the publication entry points back to Mendeley.",
+        "User supplied the mechanical workbook and description manual in Downloads. Both exact published SHA-256 hashes match. Duplicate copies with (1) suffix have identical bytes; only one of each is needed. Originals were left in place; review copies are under tmp/dataset-survey/user-downloads/.",
+        "The complete acquisition contains 8,032 rows. All 5,762 E:O rows of the relaxation-filtered copy are exact aliases matched by the source numeric time value, so the filtered sheet is not counted as an independent test.",
+        "An independent AO:AR block labelled Real Sand Specimen in source chart series has 2,138 observations; its preparation and source identity are unresolved, and it remains separate from the printed-particle assembly.",
+        "Polynomial fitted stress in column Q and repeated scan summaries are excluded as new measurements. Original acquisition rows, sparse scan markers, cached calculated void ratios and manual compliance caveats are preserved.",
+        "Time/sensor unit inconsistencies remain explicitly unresolved. Reviewed stress, strain, displacement and jack-speed units convert to SI for browser assets; the original values remain unchanged in curated records.",
+        "All 96,922 numeric values and the complete native acquisition rows were independently compared with original workbook cells."
       ],
       "ingestion": {
-        "status": "held: file retrieval blocked",
-        "reason": "The exact CC BY 4.0 workbook is identified, but public browser attempts have produced no saved file and a network-enabled direct request receives remote HTTP 403 / Cloudflare 1010. The author site links back to Mendeley. A normally accessible original or checksum-matching local copy is needed before source review and ingestion."
+        "status": "ingested reviewed useful measurements",
+        "records": 2,
+        "observations": 10170,
+        "kinds": {
+          "measurement-series": 2
+        },
+        "protocols": {
+          "oedometer-acquisition": 1,
+          "oedometer-comparison-source": 1
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "remaining": [],
+        "limitations": "Two source series, not two fully characterized validation specimens. Comparator preparation and apparatus signal units remain unresolved; polynomial fits and filtered duplicates are not new observations."
       },
       "retrieval_requirements": {
         "workbook": {
@@ -724,7 +743,7 @@
           "https://www.poromechanics.org/publications.html",
           "https://www.poromechanics.org/software--data.html"
         ],
-        "next_action": "Obtain the original mechanical workbook and description through normal access or an existing local copy; verify hashes before admitting any measurements. Do not fetch the 6.78 GB tomography archive or bypass the host protection."
+        "next_action": "Originals recovered and reviewed; no further mechanical file retrieval needed."
       }
     },
     {
@@ -801,7 +820,7 @@
       "source_url": "https://soilmodels.com/sand-and-clay-standard-datasets/",
       "scientific_value": "ExCalibre-format multi-material calibration sets",
       "license": "unconfirmed",
-      "review_stage": "33 original workbooks and source terms reviewed",
+      "review_stage": "local source tables prepared and verified; public reuse terms unresolved",
       "decision": "permission follow-up",
       "notes": [
         "Downloaded all 33 public workbook links (4,400,836 bytes), covering 208 measurement worksheets in 23 clay and 10 sand workbooks. Raw hashes and sheet inventories are recorded in docs/data-license-evidence/excalibre-workbook-review.json.",
@@ -813,6 +832,21 @@
         "status": "held: dataset reuse terms unresolved",
         "reason": "All 33 workbooks are locally available and scientifically useful, but neither the workbooks nor the linked SoilModels terms establish a dataset-specific redistribution grant.",
         "evidence": "docs/data-license-evidence/excalibre-workbook-review.json"
+      },
+      "local_ingestion": {
+        "status": "prepared and fully verified locally; public admission held",
+        "format": "atlas-private-review-v1",
+        "manifest": "tmp/private-measurements/index.json",
+        "public_hosting": false,
+        "tables": 273,
+        "numeric_rows": 0,
+        "retained_workbook_rows": 92742,
+        "source_text_lines": 0,
+        "verification": "docs/data-license-evidence/private-preparation-verification.json",
+        "remaining": [
+          "Establish applicable dataset redistribution terms.",
+          "Complete physical protocol/material mapping before any public or normalized model-overlay admission."
+        ]
       }
     },
     {
@@ -821,15 +855,39 @@
       "source_url": "https://soilmodels.com/karlsruhe-kaolin-wichtmann/",
       "scientific_value": "Monotonic/cyclic clay and consolidation",
       "license": "unconfirmed",
-      "review_stage": "official source description inspected",
+      "review_stage": "local source tables prepared and verified; public reuse terms unresolved",
       "decision": "permission/access follow-up",
       "notes": [
         "Monotonic/cyclic undrained and oedometric tests; listed package 24.20 MB.",
-        "Page explicitly requires login to download. No dataset-specific redistribution licence established."
+        "Page explicitly requires login to download. No dataset-specific redistribution licence established.",
+        "User supplied kaolin-database-complete.zip (274384202 bytes). Local integrity checks passed; download size differs from the earlier listing, so source identity/version must be checked from contents. No downloaded executable has been run.",
+        "Full package measurement/header inventories, source hashes and included-document reuse checks are retained in docs/data-license-evidence/soilmodels-package-review.json. The VIBE source implementation has BSD-style notices; those do not establish a grant for its external experimental data."
       ],
       "ingestion": {
-        "status": "held: access or dataset reuse terms unresolved",
-        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+        "status": "held: dataset reuse terms unresolved",
+        "reason": "Candidate package is now locally available and readable. The user confirms no existing public-hosting permission. Applicable dataset reuse terms must be established before public admission."
+      },
+      "local_package": {
+        "filename": "kaolin-database-complete.zip",
+        "size_bytes": 274384202,
+        "sha256": "b8017ccff06a010f5a4c603ec95eb49ca42695df40e981ec6f25d56ba57a9bd3",
+        "acquisition": "User download; original left in Downloads; review copy in tmp/dataset-survey/user-downloads/.",
+        "verification": "ZIP member CRC or complete RAR measurement/document decompression passed. Material/version mapping and included reuse terms require review."
+      },
+      "local_ingestion": {
+        "status": "prepared and fully verified locally; public admission held",
+        "format": "atlas-private-review-v1",
+        "manifest": "tmp/private-measurements/index.json",
+        "public_hosting": false,
+        "tables": 118,
+        "numeric_rows": 8267629,
+        "retained_workbook_rows": 0,
+        "source_text_lines": 288,
+        "verification": "docs/data-license-evidence/private-preparation-verification.json",
+        "remaining": [
+          "Establish applicable dataset redistribution terms.",
+          "Complete physical protocol/material mapping before any public or normalized model-overlay admission."
+        ]
       }
     },
     {
@@ -838,15 +896,39 @@
       "source_url": "https://soilmodels.com/malaysian-kaolin-cyclic-cu/",
       "scientific_value": "Cyclic history, preloading and clay accumulation",
       "license": "unconfirmed",
-      "review_stage": "official source description inspected",
+      "review_stage": "local source tables prepared and verified; public reuse terms unresolved",
       "decision": "permission/access follow-up",
       "notes": [
         "Experimental programme covers monotonic/cyclic loading, undrained Miner rule and drained preloading; listed package 36.43 MB.",
-        "Page explicitly requires login to download. No dataset-specific redistribution licence established."
+        "Page explicitly requires login to download. No dataset-specific redistribution licence established.",
+        "User supplied Summary-experiments-kaolin.rar (76337260 bytes). Local integrity checks passed; download size differs from the earlier listing, so source identity/version must be checked from contents. No downloaded executable has been run.",
+        "Full package measurement/header inventories, source hashes and included-document reuse checks are retained in docs/data-license-evidence/soilmodels-package-review.json. The VIBE source implementation has BSD-style notices; those do not establish a grant for its external experimental data."
       ],
       "ingestion": {
-        "status": "held: access or dataset reuse terms unresolved",
-        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+        "status": "held: dataset reuse terms unresolved",
+        "reason": "Candidate package is now locally available and readable. The user confirms no existing public-hosting permission. Applicable dataset reuse terms must be established before public admission."
+      },
+      "local_package": {
+        "filename": "Summary-experiments-kaolin.rar",
+        "size_bytes": 76337260,
+        "sha256": "c0536163eac6c310f518c29eabfba15414d58561f59392974c729cc0eaa74d4a",
+        "acquisition": "User download; original left in Downloads; review copy in tmp/dataset-survey/user-downloads/.",
+        "verification": "ZIP member CRC or complete RAR measurement/document decompression passed. Material/version mapping and included reuse terms require review."
+      },
+      "local_ingestion": {
+        "status": "prepared and fully verified locally; public admission held",
+        "format": "atlas-private-review-v1",
+        "manifest": "tmp/private-measurements/index.json",
+        "public_hosting": false,
+        "tables": 28,
+        "numeric_rows": 4440199,
+        "retained_workbook_rows": 0,
+        "source_text_lines": 28,
+        "verification": "docs/data-license-evidence/private-preparation-verification.json",
+        "remaining": [
+          "Establish applicable dataset redistribution terms.",
+          "Complete physical protocol/material mapping before any public or normalized model-overlay admission."
+        ]
       }
     },
     {
@@ -855,15 +937,39 @@
       "source_url": "https://soilmodels.com/zbraslav-sand-cyclic-cu/",
       "scientific_value": "Cyclic preloading and sand fabric/history",
       "license": "unconfirmed",
-      "review_stage": "official source description inspected",
+      "review_stage": "local source tables prepared and verified; public reuse terms unresolved",
       "decision": "permission/access follow-up",
       "notes": [
         "Programme focuses on cyclic preloading and subsequent sand response; listed package 14.15 MB.",
-        "Page explicitly requires login to download. No dataset-specific redistribution licence established."
+        "Page explicitly requires login to download. No dataset-specific redistribution licence established.",
+        "User supplied Database-Zbrsalav-sand.rar (32078993 bytes). Local integrity checks passed; download size differs from the earlier listing, so source identity/version must be checked from contents. No downloaded executable has been run.",
+        "Full package measurement/header inventories, source hashes and included-document reuse checks are retained in docs/data-license-evidence/soilmodels-package-review.json. The VIBE source implementation has BSD-style notices; those do not establish a grant for its external experimental data."
       ],
       "ingestion": {
-        "status": "held: access or dataset reuse terms unresolved",
-        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+        "status": "held: dataset reuse terms unresolved",
+        "reason": "Candidate package is now locally available and readable. The user confirms no existing public-hosting permission. Applicable dataset reuse terms must be established before public admission."
+      },
+      "local_package": {
+        "filename": "Database-Zbrsalav-sand.rar",
+        "size_bytes": 32078993,
+        "sha256": "ce1277e859320633ed6ce20a93d92e381a2c0c0612da30fc95b16fa3844926ec",
+        "acquisition": "User download; original left in Downloads; review copy in tmp/dataset-survey/user-downloads/.",
+        "verification": "ZIP member CRC or complete RAR measurement/document decompression passed. Material/version mapping and included reuse terms require review."
+      },
+      "local_ingestion": {
+        "status": "prepared and fully verified locally; public admission held",
+        "format": "atlas-private-review-v1",
+        "manifest": "tmp/private-measurements/index.json",
+        "public_hosting": false,
+        "tables": 56,
+        "numeric_rows": 529857,
+        "retained_workbook_rows": 0,
+        "source_text_lines": 56,
+        "verification": "docs/data-license-evidence/private-preparation-verification.json",
+        "remaining": [
+          "Establish applicable dataset redistribution terms.",
+          "Complete physical protocol/material mapping before any public or normalized model-overlay admission."
+        ]
       }
     },
     {
@@ -872,15 +978,39 @@
       "source_url": "https://soilmodels.com/bcv/",
       "scientific_value": "Swelling and coupled hydro-thermomechanical behaviour",
       "license": "unconfirmed",
-      "review_stage": "official source and package descriptions inspected",
+      "review_stage": "local source tables prepared and verified; public reuse terms unresolved",
       "decision": "specialist permission/access follow-up",
       "notes": [
         "BCV Ca/Mg bentonite programmes cover thermal treatment, homogenisation and hydromechanical response.",
-        "Listed resources require login; some are publications rather than machine-readable measurements. Dataset-specific redistribution terms and experimental/model separation remain unresolved."
+        "Listed resources require login; some are publications rather than machine-readable measurements. Dataset-specific redistribution terms and experimental/model separation remain unresolved.",
+        "User supplied vyplne-datasets.zip (21278765 bytes). Local integrity checks passed; download size differs from the earlier listing, so source identity/version must be checked from contents. No downloaded executable has been run.",
+        "Full package measurement/header inventories, source hashes and included-document reuse checks are retained in docs/data-license-evidence/soilmodels-package-review.json. The VIBE source implementation has BSD-style notices; those do not establish a grant for its external experimental data."
       ],
       "ingestion": {
-        "status": "held: access or dataset reuse terms unresolved",
-        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+        "status": "held: dataset reuse terms unresolved",
+        "reason": "Candidate package is now locally available and readable. The user confirms no existing public-hosting permission. Applicable dataset reuse terms must be established before public admission."
+      },
+      "local_package": {
+        "filename": "vyplne-datasets.zip",
+        "size_bytes": 21278765,
+        "sha256": "d97bdfcba636afe8e6e0694102e5c5b1e856d47b686f5c547325b73e2bf6a54e",
+        "acquisition": "User download; original left in Downloads; review copy in tmp/dataset-survey/user-downloads/.",
+        "verification": "ZIP member CRC or complete RAR measurement/document decompression passed. Material/version mapping and included reuse terms require review."
+      },
+      "local_ingestion": {
+        "status": "prepared and fully verified locally; public admission held",
+        "format": "atlas-private-review-v1",
+        "manifest": "tmp/private-measurements/index.json",
+        "public_hosting": false,
+        "tables": 23,
+        "numeric_rows": 0,
+        "retained_workbook_rows": 1461,
+        "source_text_lines": 0,
+        "verification": "docs/data-license-evidence/private-preparation-verification.json",
+        "remaining": [
+          "Establish applicable dataset redistribution terms.",
+          "Complete physical protocol/material mapping before any public or normalized model-overlay admission."
+        ]
       }
     },
     {
@@ -889,15 +1019,39 @@
       "source_url": "https://soilmodels.com/download/vibe-paper-dataset/",
       "scientific_value": "Bentonite rate effects for future timed constitutive models",
       "license": "unconfirmed",
-      "review_stage": "official package description inspected",
+      "review_stage": "local source tables prepared and verified; public reuse terms unresolved",
       "decision": "specialist permission/access follow-up",
       "notes": [
         "Package explicitly mixes model implementation, element-driver inputs, simulation graphs and BCV experimental data; 1.46 MB.",
-        "Page explicitly requires login to download. Experimental and model-output channels must be separated, and dataset terms remain unresolved."
+        "Page explicitly requires login to download. Experimental and model-output channels must be separated, and dataset terms remain unresolved.",
+        "User supplied VIBEPaperDataset.zip (8952082 bytes). Local integrity checks passed; download size differs from the earlier listing, so source identity/version must be checked from contents. No downloaded executable has been run.",
+        "Full package measurement/header inventories, source hashes and included-document reuse checks are retained in docs/data-license-evidence/soilmodels-package-review.json. The VIBE source implementation has BSD-style notices; those do not establish a grant for its external experimental data."
       ],
       "ingestion": {
-        "status": "held: access or dataset reuse terms unresolved",
-        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+        "status": "held: dataset reuse terms unresolved",
+        "reason": "Candidate package is now locally available and readable. The user confirms no existing public-hosting permission. Applicable dataset reuse terms must be established before public admission."
+      },
+      "local_package": {
+        "filename": "VIBEPaperDataset.zip",
+        "size_bytes": 8952082,
+        "sha256": "4c868a57158ffb96015a4359268a004d03fefc6f1b81d67441280c4945a811c2",
+        "acquisition": "User download; original left in Downloads; review copy in tmp/dataset-survey/user-downloads/.",
+        "verification": "ZIP member CRC or complete RAR measurement/document decompression passed. Material/version mapping and included reuse terms require review."
+      },
+      "local_ingestion": {
+        "status": "prepared and fully verified locally; public admission held",
+        "format": "atlas-private-review-v1",
+        "manifest": "tmp/private-measurements/index.json",
+        "public_hosting": false,
+        "tables": 24,
+        "numeric_rows": 233,
+        "retained_workbook_rows": 0,
+        "source_text_lines": 20,
+        "verification": "docs/data-license-evidence/private-preparation-verification.json",
+        "remaining": [
+          "Establish applicable dataset redistribution terms.",
+          "Complete physical protocol/material mapping before any public or normalized model-overlay admission."
+        ]
       }
     },
     {
@@ -1232,7 +1386,7 @@
   ],
   "ranking_rationale": "Prefer explicit reuse terms, measured channels with documented units and initial state, material/protocol diversity, and compatibility with existing element drivers. Ranking is provisional until per-test checks; no numerical quality score is inferred from repository reputation.",
   "review_limits": [
-    "All 30 candidate entries have an explicit ingestion or hold decision. Twenty-two candidates have admitted records; eight remain held or paused.",
+    "All 30 candidate entries have an explicit ingestion or hold decision. Twenty-three candidates have admitted records; six SoilModels sources await applicable reuse terms and 4TU remains paused/unavailable.",
     "Counts distinguish SI triaxial overlays, native measurement series and test summaries. Acquisition blocks and grain populations are not independent laboratory tests.",
     "GEOLAB basic-property and reference tables are retained as context. Empty templates, parameter/model tabs and source duplicates in LEAP calibration-example folders are excluded.",
     "Raw tomography volumes, CAD/printing assets, machine configuration files and redundant workbook exports are outside this material-response ingestion pass. Processed 3DXRD grain data and original mechanical acquisition files are included.",
@@ -1240,9 +1394,9 @@
     "The prior 4TU compilation remains paused at user request."
   ],
   "ingestion_progress": {
-    "status": "available licensed sources ingested; access/licence holds remain",
-    "records": 626,
-    "observations": 3584922,
+    "status": "23 candidates publicly admitted; six SoilModels sources prepared locally pending reuse terms and physical admission review; 4TU unavailable",
+    "records": 628,
+    "observations": 3595092,
     "admitted_candidates": [
       "castlegate",
       "finnish-oedometer",
@@ -1264,12 +1418,12 @@
       "leap-2020",
       "leap-2022",
       "opara-sand-fines",
+      "printed-grains",
       "rockfills",
       "shale"
     ],
-    "admitted_candidate_count": 22,
+    "admitted_candidate_count": 23,
     "held_candidates": [
-      "printed-grains",
       "soilmodels-standard",
       "soilmodels-karlsruhe-kaolin",
       "soilmodels-malaysian",
@@ -1278,11 +1432,19 @@
       "soilmodels-vibe",
       "wang-sand"
     ],
-    "held_candidate_count": 8,
+    "held_candidate_count": 7,
     "next": [
-      "Retrieve printed-grain mechanical workbook through normal public access when the host permits it.",
-      "Resolve SoilModels package access and data licences; do not treat software GPL terms as data grants.",
-      "Keep 4TU paused until the user resumes it."
-    ]
+      "Resolve SoilModels dataset reuse terms and complete physical admission mappings before promoting private tables.",
+      "Keep 4TU retrieval paused; user confirms the host remains down."
+    ],
+    "local_preparation": {
+      "format": "atlas-private-review-v1",
+      "source_count": 6,
+      "tables": 522,
+      "numeric_rows": 13237918,
+      "retained_workbook_rows": 94203,
+      "public_hosting": false,
+      "verification": "docs/data-license-evidence/private-preparation-verification.json"
+    }
   }
 }
