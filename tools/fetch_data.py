@@ -1,4 +1,5 @@
 """Download pinned public source archives without overwriting local evidence."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -8,8 +9,13 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--approved-only', action='store_true', help='Fetch only archive revisions approved for public hosting')
+    args=parser.parse_args()
+    approved={grant['archive_sha256'] for grant in json.loads((ROOT/'data/experiment_releases.json').read_text())['grants'] if grant.get('public_hosting') is True}
     manifest=json.loads((ROOT/'data/sources.json').read_text());raw=ROOT/'data/raw';raw.mkdir(parents=True,exist_ok=True)
     for source in manifest['sources']:
+        if args.approved_only and source['sha256'] not in approved:continue
         path=raw/source['filename']
         if path.exists():
             if hashlib.sha256(path.read_bytes()).hexdigest()!=source['sha256']:raise ValueError(f'Existing raw file differs from pinned evidence: {path}')

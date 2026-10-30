@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="A source-linked geomechanics model atlas and WebAssembly material-point laboratory.">
   <title>Constitutive Atlas · Material laboratory</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23274e40'/%3E%3Cpath d='M20 5 34 13v15l-14 8-14-8V13Z M6 13l14 8 14-8M20 21v15' fill='none' stroke='%23d8e1d8' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -14,43 +15,82 @@
     <a class="brand" href="#laboratory" aria-label="Constitutive Atlas home"><svg viewBox="0 0 42 48" aria-hidden="true">
         <path d="M21 2 40 13v22L21 46 2 35V13Z M2 13l19 11 19-11M21 24v22" fill="none" stroke="currentColor" stroke-width="2" />
       </svg><span>Constitutive<br><b>Atlas</b></span></a>
-    <div class="rail-label">RESEARCH WORKSPACE</div>
     <nav aria-label="Main navigation"><a href="#laboratory" class="active">◫ <span>Material laboratory</span></a><a href="#catalogue">⌕ <span>Model catalogue</span><small id="catalogue-count">31</small></a><a href="#methods">≋ <span>Methods & evidence</span></a></nav>
-    <footer><span class="version">v0.1 · RESEARCH PREVIEW</span>
-      <p>Authors &amp; maintainers<br><a href="https://github.com/benjym" target="_blank" rel="noopener">Benjy Marks</a><br><a href="https://github.com/Franzzzzzzzz" target="_blank" rel="noopener">François Guillard</a></p>
+    <footer>
+      <p>By<br><a href="https://github.com/benjym" target="_blank" rel="noopener">Benjy Marks</a><br><a href="https://github.com/Franzzzzzzzz" target="_blank" rel="noopener">François Guillard</a></p>
     </footer>
   </aside>
   <main>
-    <header class="topbar"><span>GEOMECHANICS / <b id="breadcrumb">MATERIAL LABORATORY</b></span><span class="research-tag">Experimental software</span></header>
+    <header class="topbar"><span><b id="breadcrumb">MATERIAL LABORATORY</b></span></header>
     <section id="laboratory" class="page">
       <div class="intro">
         <div>
           <div class="eyebrow">THE VIRTUAL ELEMENT TEST</div>
-          <h1>Put a model to the test.</h1>
-          <p>Explore constitutive behaviour, one material point at a time.</p>
+          <h1>Explore material behaviour.</h1>
+          <p>Choose a model, adjust the controls, and watch the response update.</p>
         </div><button id="import-run" class="secondary">↑ Import run</button><input id="run-file" type="file" accept="application/json,.json" hidden>
       </div>
-      <div class="lab-layout">
-        <div class="results-column">
           <section class="model-card">
             <div class="model-card-top"><span class="eyebrow">CONSTITUTIVE MODEL</span><span class="badge" id="model-status">Loading</span></div><label class="sr-only" for="model">Select a model</label><select id="model"></select>
             <p id="model-description"></p>
-            <div id="model-sources" aria-label="Model sources"></div>
+            <details class="model-references"><summary>Sources &amp; model definition</summary><div id="model-sources" aria-label="Model sources"></div></details>
             <div class="model-meta"><span id="model-family"></span><span>3D · small strain</span><button id="equations-button" class="text-button">View equations ↗</button></div>
           </section>
-          <section class="experiment-card" aria-labelledby="experiment-title">
-            <div class="eyebrow">EXPERIMENTAL EVIDENCE</div>
-            <h2 id="experiment-title">Compare with measurements.</h2>
-            <p>Download original Wichtmann tests, extract the ZIP, then load TMD/TMU .dat files here. Atlas experiment JSON is also supported. Files are processed locally. Measurements are not bundled while redistribution terms remain unconfirmed.</p>
-            <p class="experiment-downloads"><a href="https://www.torsten-wichtmann.de/KFSDB/TMD/TMD1-5/TMD1-5.zip">Download drained TMD1–5 ↗</a> · <a href="https://www.torsten-wichtmann.de/KFSDB/TMU/TMU-all.zip">Download undrained TMU1–12 ↗</a></p>
-            <div class="experiment-toolbar"><label class="secondary file-label">Load measurements<input id="experiment-file" type="file" accept=".dat,.json,application/json,text/plain" multiple hidden></label><label class="experiment-toggle"><input id="show-experiment" type="checkbox" role="switch" disabled> Show experimental data</label><button id="clear-experiments" class="text-button" disabled>Clear</button></div>
-            <label class="experiment-selector">Experimental test<select id="experiment-select" disabled>
-                <option value="">Load measurements to select a test</option>
-              </select></label>
-            <p id="experiment-status" role="status">No measurements loaded. Files stay in your browser.</p><a id="experiment-source" target="_blank" rel="noopener noreferrer" hidden>Original data source ↗</a>
+      <nav class="workspace-links" aria-label="Laboratory sections"><a href="#controls">Test controls ↓</a><a href="#response">Response plots ↓</a><a href="#measurements">Compare measurements ↓</a><a href="#equations">Equations &amp; sources ↓</a></nav>
+      <div class="lab-layout">
+        <form id="controls" class="controls">
+          <div class="control-heading">
+            <h2>Test controls</h2><button type="button" id="reset" class="text-button">Reset</button>
+          </div>
+          <p class="control-hint"><span class="dot"></span> Live updates as you adjust</p>
+          <label>Loading protocol<select id="protocol">
+              <option value="1">Drained triaxial</option>
+              <option value="2">Undrained triaxial</option>
+              <option value="0">Oedometer</option>
+              <option value="4">Isotropic compression</option>
+              <option value="3">Undrained · stress control</option>
+            </select></label>
+          <label><span id="target-label">Axial strain (%)</span><input id="target" type="number" value="1" min="-10" max="10" step="0.1" required></label>
+          <label>Loading history<select id="cycles">
+              <option value="0">Monotonic ramp</option>
+              <option value="1">1 sinusoidal cycle</option>
+              <option value="3">3 sinusoidal cycles</option>
+              <option value="10">10 sinusoidal cycles</option>
+            </select></label>
+          <div class="divider"></div>
+          <div class="eyebrow">INITIAL STATE</div>
+          <label>Radial effective stress (kPa)<input id="confinement" type="number" value="100" min="0.001" max="1000000" step="any" required></label>
+          <details class="control-section"><summary>Initial state details</summary>
+          <label>Axial / radial stress ratio<input id="stress-ratio" type="number" value="1" min="0.01" max="10" step="any" required></label>
+          <div id="state-fields"></div></details>
+          <div class="divider"></div>
+          <details class="control-section"><summary>Material parameters <span>Adjust model constants</span></summary>
+          <div class="parameter-title"><span class="eyebrow">MATERIAL PARAMETERS</span><span>SI units</span></div>
+          <div id="parameter-fields"></div></details>
+          <details class="control-section"><summary>Solver settings</summary><label>Increments<input id="steps" type="number" value="100" min="1" max="5000" step="1" required></label><p class="control-hint">More increments improve resolution and take longer. Cyclic histories need at least 16 per cycle.</p></details>
+          <div class="run-actions"><p id="control-status" role="status">Changes update the plots automatically.</p><button type="button" id="cancel-button" class="secondary" hidden>Stop calculation</button><button type="button" id="retry-button" class="secondary" hidden>Retry calculation</button></div>
+        </form>
+        <div class="results-column">
+          <section id="measurements" class="experiment-card" aria-labelledby="experiment-title">
+            <div class="eyebrow">EXPERIMENTAL COMPARISON</div>
+            <h2 id="experiment-title">Compare with a laboratory test.</h2>
+            <p>Choose a measured test to compare its response or inspect its source channels. Model settings stay under your control.</p>
+            <label>Find measurements<input id="experiment-search" type="search" placeholder="Material or test ID" autocomplete="off"></label>
+            <label class="experiment-selector">Experimental test<select id="experiment-select" disabled><option value="">Loading available tests…</option></select></label>
+            <div class="experiment-toolbar"><label class="experiment-toggle"><input id="show-experiment" type="checkbox" role="switch" disabled> Show measurements</label><button id="match-experiment" class="text-button" disabled>Use initial state &amp; protocol</button><button id="retry-experiment" class="text-button" hidden>Retry loading measurements</button></div>
+            <p id="experiment-status" role="status" aria-live="polite">Loading available tests…</p>
+            <details id="experiment-details" hidden><summary>Data notes &amp; limitations</summary><p id="experiment-warnings"></p></details>
+            <p id="experiment-attribution" hidden></p><a id="experiment-source" target="_blank" rel="noopener noreferrer" hidden>Data source &amp; citation ↗</a>
+            <a id="experiment-license" target="_blank" rel="noopener noreferrer" hidden></a>
+            <section id="source-record-view" hidden aria-label="Source measurement channels">
+              <p>Source measurements · native units. These channels are shown separately from the model prediction.</p>
+              <div class="source-axis-controls"><label>X channel <select id="source-x"></select></label><label>Y channel <select id="source-y"></select></label></div>
+              <svg id="source-chart" viewBox="0 0 480 290" role="img" aria-label="Selected source measurement channels"></svg>
+            </section>
+            <details class="local-experiments"><summary>Compare your own measurements</summary><p>Load original TMD/TMU .dat files or Atlas experiment JSON. Your files stay in this browser.</p><div class="experiment-toolbar"><label class="secondary file-label">Load local measurements<input id="experiment-file" type="file" accept=".dat,.json,application/json,text/plain" multiple hidden></label><button id="clear-experiments" class="text-button" disabled>Clear local files</button></div></details>
           </section>
-          <div class="run-summary"><span id="run-state"><span class="dot"></span> Ready to simulate</span><span id="run-detail">Double precision · compression positive</span></div>
-          <div class="charts">
+          <div class="run-summary" id="response" role="status" aria-live="polite"><span id="run-state"><span class="dot"></span> Preparing live response</span><span id="run-detail">Double precision · compression positive</span></div>
+          <div class="charts" id="response-charts" aria-label="Simulation results">
             <section class="chart-panel">
               <div class="chart-title">
                 <h2>Stress–strain response</h2><span>01</span>
@@ -86,36 +126,7 @@
             <div id="equation-content"></div>
           </details>
         </div>
-        <form id="controls" class="controls">
-          <div class="control-heading">
-            <h2>Test configuration</h2><button type="button" id="reset" class="text-button">Reset</button>
-          </div>
-          <label>Loading protocol<select id="protocol">
-              <option value="1">Drained triaxial</option>
-              <option value="2">Undrained triaxial</option>
-              <option value="0">Oedometer</option>
-              <option value="4">Isotropic compression</option>
-              <option value="3">Undrained · stress control</option>
-            </select></label>
-          <div class="field-pair"><label><span id="target-label">Axial strain (%)</span><input id="target" type="number" value="1" min="-10" max="10" step="0.1" required></label><label>Increments<input id="steps" type="number" value="100" min="1" max="5000" step="1" required></label></div>
-          <label>Loading history<select id="cycles">
-              <option value="0">Monotonic ramp</option>
-              <option value="1">1 sinusoidal cycle</option>
-              <option value="3">3 sinusoidal cycles</option>
-              <option value="10">10 sinusoidal cycles</option>
-            </select></label>
-          <div class="divider"></div>
-          <div class="eyebrow">INITIAL STATE</div>
-          <label>Radial effective stress (kPa)<input id="confinement" type="number" value="100" min="0.001" max="1000000" step="any" required></label>
-          <label>Axial / radial stress ratio<input id="stress-ratio" type="number" value="1" min="0.01" max="10" step="any" required></label>
-          <div id="state-fields"></div>
-          <div class="divider"></div>
-          <div class="parameter-title"><span class="eyebrow">MATERIAL PARAMETERS</span><span>SI units</span></div>
-          <div id="parameter-fields"></div>
-          <div class="run-actions"><button type="submit" id="run-button" class="primary">Run element test <span>→</span></button><button type="button" id="cancel-button" class="secondary" hidden>Cancel</button>
-            <p>Same C++ kernel as the native solver.</p>
-          </div>
-        </form>
+
       </div>
     </section>
     <section id="catalogue" class="page" hidden>

@@ -38,7 +38,17 @@ Model source hyperlinks are required in each executable definition and displayed
 
 [Launch the laboratory](https://benjym.github.io/constitutive-atlas/) to edit parameters and initial states, run five loading protocols, inspect model equations and sources, overlay experiments, and import/export reproducible runs. The C++ engine runs in your browser through WebAssembly; no installation or solver server is required.
 
-To overlay Wichtmann measurements, download a linked TMD/TMU archive in the laboratory, extract it, and load one or more original `.dat` files. Select a test and use **Show experimental data** to toggle its measured points. Atlas experiment JSON is also supported. Files stay in the browser; simulation settings are not changed automatically. See the [data reuse review](docs/DATA_REUSE.md) for the unresolved redistribution terms.
+The laboratory supports built-in experimental tests: select a test, and its processed measurements load automatically. No archive download, extraction or upload is required. **Show measurements** toggles the overlay; **Use initial state & protocol** explicitly applies available initial stresses, void ratio and drainage conditions while preserving material constants and loading history. Local-file comparison remains available under **Compare your own measurements**. Public builds currently include 522 records with 3,094,470 observations from 19 of the 30 screened candidates: OPARA, ten GEOLAB material workbooks, Finnish clay, rockfills, Castlegate, Hurley 3DXRD and four LEAP campaigns. The catalogue separates 49 normalized triaxial overlays, 401 native measurement series and 72 summary tables/populations. Record counts are not independent specimen counts. Each record retains source attribution, its CC BY 4.0 or ODC Attribution 1.0 terms, and interpretation warnings. The 17 original Wichtmann tests remain local-preview only; their public release is pending the evidence recorded in the [data reuse review](docs/DATA_REUSE.md).
+
+The separate [public-source registry](data/public_sources.json) pins original file hashes, licences and attribution. Committed gzip JSON in `data/curated/` retains full reviewed channels and native worksheet observations; the website builds a smaller plot view without sampling. These measurements retain their source licences and are not relicensed under the software's MIT licence. Rebuilding from originals requires optional readers:
+
+```sh
+python3 -m pip install '.[data]'
+python3 tools/ingest_public_data.py --download
+python3 tools/build_web.py
+```
+
+The ordinary website build is offline with respect to these curated sources and requires no HDF5, spreadsheet or MATLAB readers. Search the measurement catalogue by material, protocol or ID. Native-source records provide separate X/Y channel selectors and source units; they do not apply simulation initial conditions. GEOLAB principal stresses with unspecified total/effective meaning are archived as reported; effective mean stress and initial state are not inferred. Missing optional channels remain missing. The [30-candidate survey](docs/dataset-survey-2026-10-30.json) tracks every ingestion decision and the eleven remaining access/licence holds, including the user-requested 4TU pause.
 
 Developer build and local preview instructions are in [web/README.md](web/README.md).
 

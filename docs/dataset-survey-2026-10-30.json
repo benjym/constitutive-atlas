@@ -1,0 +1,1208 @@
+{
+  "reviewed_at": "2026-10-30",
+  "purpose": "Discovery longlist and initial detailed screening for Constitutive Atlas; no ingestion or public release authorized by this ledger alone.",
+  "count": 30,
+  "counting_note": "Ten GEOLAB material workbooks are counted separately within one corpus. LEAP campaigns are related, may reuse tests, and are not independent validation populations.",
+  "admission_checks": [
+    "Applicable dataset redistribution terms and exact version/file hashes",
+    "Real measurement histories, not only fitted parameters/summary strengths/simulations",
+    "Initial effective stress, void ratio/OCR and preparation/loading metadata",
+    "Stress/strain units, signs, total/effective conventions and time/cycle ordering",
+    "Original versus digitized observations and specimen localization limits",
+    "Protocol supported by engine and UI; data admission separate from model capability",
+    "Deduplicate original experiments across compilations; hold out whole tests/campaigns for validation"
+  ],
+  "initial_shortlist": [
+    "geolab-darmstadt",
+    "geolab-speswhite",
+    "opara-sand-fines",
+    "leap-2017",
+    "leap-2020",
+    "finnish-oedometer"
+  ],
+  "candidates": [
+    {
+      "id": "geolab-darmstadt",
+      "name": "GEOLAB: Darmstadt sand",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Sand density and pressure dependence; drained and undrained response",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "shortlist",
+      "notes": [
+        "Workbook has 6 populated drained and 7 populated undrained triaxial tabs, 6 oedometer tabs and 5 cycle-accumulation tabs.",
+        "Cyclic tabs contain accumulation/amplitude versus cycle number, not full within-cycle stress-strain loops.",
+        "At least one CU sheet has a fixed radial-stress column alongside independently varying mean stress. Total/effective stress meaning must be reconciled before deriving p or pore pressure.",
+        "CU-1 density metadata and qualitative Dense note are inconsistent; do not use loose/dense note as authoritative. Some decimals use comma separators and some numeric values are stored as strings."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 28,
+        "observations": 24319,
+        "kinds": {
+          "measurement-series": 22,
+          "experiment": 6
+        },
+        "protocols": {
+          "grain-size-distribution": 4,
+          "oedometer": 6,
+          "drained-triaxial": 6,
+          "undrained-triaxial": 7,
+          "cycle-accumulation": 5
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": true,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "geolab-speswhite",
+      "name": "GEOLAB: Speswhite kaolin",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Clay compression, OCR, drained/undrained response",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "shortlist",
+      "notes": [
+        "Populated oedometer/isotropic compression, drained, lightly/heavily overconsolidated undrained and cyclic drained tabs; specimen state and original thesis references present.",
+        "Workbook includes template-like content and possible residual example tabs. Audit each test independently; sheet names/dimensions alone are not admission evidence.",
+        "Original Al-Tabbaa (1987) provenance retained; acquisition versus digitization status still requires original-source review."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 9,
+        "observations": 4422,
+        "kinds": {
+          "measurement-series": 9
+        },
+        "protocols": {
+          "isotropic-compression": 1,
+          "oedometer": 1,
+          "triaxial-source-curve": 5,
+          "cyclic-drained-triaxial": 2
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "geolab-hostun",
+      "name": "GEOLAB: Hostun sand",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Independent sand compression and drained response",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "reserve",
+      "notes": [
+        "Populated drained/compression tabs; triax-cyc-CD has no numeric data in inspected file.",
+        "Some test/reference cells retain template wording. Not every named tab represents an admissible experiment."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 14,
+        "observations": 1761,
+        "kinds": {
+          "measurement-series": 14
+        },
+        "protocols": {
+          "grain-size-distribution": 2,
+          "oedometer": 2,
+          "drained-triaxial": 10
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "geolab-baskarp",
+      "name": "GEOLAB: Baskarp sand No. 15",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Additional reference sand",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "second wave",
+      "notes": [
+        "Six populated drained triaxial tabs; initial dry density is supplied where initial void ratio is missing.",
+        "A sample metadata consolidation pressure of 15 kPa accompanies some measured radial stresses near 88 kPa. Reconcile metadata per test before using it to initialize a simulation."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 7,
+        "observations": 19979,
+        "kinds": {
+          "measurement-series": 1,
+          "experiment": 6
+        },
+        "protocols": {
+          "grain-size-distribution": 1,
+          "drained-triaxial": 6
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": true,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "geolab-nevada",
+      "name": "GEOLAB: Nevada sand",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Additional reference sand",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "shortlist",
+      "notes": [
+        "Seven populated drained triaxial tabs, typically about 10,700\u201314,300 numeric rows in the inspected columns; strain, volumetric strain and axial/radial/deviator stress supplied.",
+        "Initial void ratio, confinement, B-value and original reference are present in the first test. Good candidate for density/pressure-dependent sand response."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 7,
+        "observations": 80867,
+        "kinds": {
+          "experiment": 7
+        },
+        "protocols": {
+          "drained-triaxial": 7
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": true,
+        "public_native_channel_view": false,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "geolab-perth",
+      "name": "GEOLAB: Perth sand",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Additional reference sand",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "second wave",
+      "notes": [
+        "Four populated drained triaxial tabs and one oedometer tab.",
+        "All four triaxial sheets have 30,823 numeric entries after row 18; equal lengths are not proof of four distinct experiments. Check duplicates and native acquisition details.",
+        "Compression strain header says percent but sample oedometer values resemble dimensionless strain; cross-check against void ratio before conversion."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 10,
+        "observations": 258448,
+        "kinds": {
+          "measurement-series": 6,
+          "experiment": 4
+        },
+        "protocols": {
+          "grain-size-distribution": 2,
+          "oedometer": 1,
+          "cyclic-drained-simple-shear": 3,
+          "drained-triaxial": 4
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": true,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "geolab-geba",
+      "name": "GEOLAB: Geba sand",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Additional reference sand",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "shortlist",
+      "notes": [
+        "Five populated drained and five populated undrained triaxial tabs, plus four oedometer tabs.",
+        "Metadata includes initial void ratio and test conditions. Confirm total/effective stress interpretation in undrained tabs and compression sign per channel."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 20,
+        "observations": 86861,
+        "kinds": {
+          "test-summary": 5,
+          "measurement-series": 10,
+          "experiment": 5
+        },
+        "protocols": {
+          "bender-element-summary": 5,
+          "grain-size-distribution": 1,
+          "oedometer": 4,
+          "drained-triaxial": 5,
+          "undrained-triaxial": 5
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": true,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "geolab-fontainebleau",
+      "name": "GEOLAB: Fontainebleau NE34 sand",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Additional reference sand",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "second wave",
+      "notes": [
+        "Nine populated drained tabs and two compression tabs; cyclic drained tab empty in inspected workbook.",
+        "Drained tabs have approximately 48\u201357 numeric axial-strain entries after row 18; some channels have different missing values. Confirm whether curves were digitized and independently aligned.",
+        "Compression strain labels and scaling need checking against void-ratio changes."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 12,
+        "observations": 527,
+        "kinds": {
+          "measurement-series": 3,
+          "experiment": 9
+        },
+        "protocols": {
+          "grain-size-distribution": 1,
+          "oedometer": 2,
+          "drained-triaxial": 9
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": true,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "geolab-ovp",
+      "name": "GEOLAB: OVP clay",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Natural clay diversity",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "second wave",
+      "notes": [
+        "Two populated CRS compression tabs, six anisotropically consolidated undrained compression tabs and three undrained extension tabs.",
+        "Rich machine channels include time and effective/total stress-related quantities. Requires preserving anisotropic initial state and extension signs.",
+        "At least one derived modulus cell contains #NAME?; ignore broken derived formulas rather than discarding measured channels or converting the error to zero."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 17,
+        "observations": 93864,
+        "kinds": {
+          "measurement-series": 17
+        },
+        "protocols": {
+          "oedometer": 2,
+          "undrained-simple-shear": 6,
+          "anisotropic-undrained-compression": 6,
+          "anisotropic-undrained-extension": 3
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "geolab-loce",
+      "name": "GEOLAB: Lo\u010de silty clay",
+      "source_url": "https://zenodo.org/records/12697903",
+      "scientific_value": "Silty clay diversity",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "specialist reserve",
+      "notes": [
+        "Two compression tabs and six permeability-in-triaxial tabs. Permeability tests are not stress-strain triaxial histories.",
+        "Some source-reference cells still contain template instructions. A measurement-to-source audit is needed before admitting the compression curves."
+      ],
+      "corpus": "GEOLAB v2; material workbook, not independent repository",
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 27,
+        "observations": 1062,
+        "kinds": {
+          "measurement-series": 19,
+          "test-summary": 8
+        },
+        "protocols": {
+          "direct-shear-100-kPa": 2,
+          "direct-shear-200-kPa": 2,
+          "direct-shear-400-kPa": 2,
+          "direct-shear-strength-summary": 2,
+          "grain-size-distribution": 1,
+          "oedometer": 2,
+          "permeability-summary": 6,
+          "permeability-volume": 6,
+          "unconfined-compression": 4
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "leap-2015",
+      "name": "LEAP-GWU-2015 laboratory tests",
+      "source_url": "https://doi.org/10.17603/DS2TH7Q",
+      "scientific_value": "Ottawa F65 monotonic and cyclic triaxial tests",
+      "license": "ODC-BY-1.0 (DataCite verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "cyclic reserve",
+      "notes": [
+        "Official DesignSafe PRJ-1780 confirms characterization plus monotonic and cyclic triaxial tests.",
+        "DataCite explicitly specifies ODC-BY-1.0; official page structured licence field is null. Check package notices and retain attribution. Raw files not inspected."
+      ],
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 36,
+        "observations": 31968,
+        "kinds": {
+          "measurement-series": 36
+        },
+        "protocols": {
+          "drained-triaxial-source": 12,
+          "drained-triaxial-extension": 4,
+          "cyclic-triaxial-strain-controlled": 12,
+          "cyclic-triaxial-stress-controlled": 8
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "leap-2017",
+      "name": "LEAP-2017 GWU laboratory tests",
+      "source_url": "https://doi.org/10.17603/DS2210X",
+      "scientific_value": "Ottawa F65 cyclic triaxial model assessment",
+      "license": "ODC-BY-1.0 (DataCite verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "shortlist",
+      "notes": [
+        "Official project PRJ-1783 confirms cyclic Ottawa F65 tests and states that LEAP-2015 tests were also provided to calibration teams. Deduplicate by original test identity.",
+        "ODC-BY-1.0 recorded in DataCite; official page structured licence field is null. Preserve exact DOI terms and inspect package notices.",
+        "Direct repository HTML is accessible despite web-tool 403 responses; raw files not yet inspected."
+      ],
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 26,
+        "observations": 81134,
+        "kinds": {
+          "test-summary": 3,
+          "measurement-series": 23
+        },
+        "protocols": {
+          "cyclic-strength-summary": 3,
+          "cyclic-triaxial-source": 23
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "leap-2018-dss",
+      "name": "LEAP-2018 cyclic simple shear",
+      "source_url": "https://doi.org/10.17603/DS2NM4W",
+      "scientific_value": "Ottawa F65 shear response at 40 and 100 kPa",
+      "license": "unconfirmed",
+      "review_stage": "public project API and file listing inspected",
+      "decision": "cyclic reserve",
+      "notes": [
+        "Official PRJ-2137 describes cyclic direct simple shear; experiment DOI DS2NM4W.",
+        "Structured licence field is null; terms and raw file retrieval remain unresolved. Simple-shear driver required for like-for-like simulation.",
+        "Experiment DataCite rightsList is also empty; no exact data licence established in either inspected metadata source."
+      ],
+      "ingestion": {
+        "status": "held: dataset reuse terms unresolved",
+        "reason": "Public HTML, DOI metadata and project API do not provide a dataset-specific licence. The public file route works, but no public redistribution grant has been established."
+      }
+    },
+    {
+      "id": "leap-2018-torsion",
+      "name": "LEAP-Asia-2018 cyclic torsional shear",
+      "source_url": "https://doi.org/10.17603/DS2D40H",
+      "scientific_value": "Complementary cyclic shear geometry",
+      "license": "unconfirmed",
+      "review_stage": "public project API and file listing inspected",
+      "decision": "cyclic reserve",
+      "notes": [
+        "Official PRJ-2136 confirms cyclic torsional shear; its experiment DOI is 10.17603/DS28D8G. Prior DS2D40H identifies related project rather than this experiment DOI.",
+        "Structured licence field is null; raw files and exact torsional conventions still need checking.",
+        "Experiment DataCite rightsList is also empty; no exact data licence established in either inspected metadata source."
+      ],
+      "related_experiment_doi": "10.17603/DS28D8G",
+      "ingestion": {
+        "status": "held: dataset reuse terms unresolved",
+        "reason": "Public HTML, DOI metadata and project API do not provide a dataset-specific licence. The public file route works, but no public redistribution grant has been established."
+      }
+    },
+    {
+      "id": "leap-2020",
+      "name": "LEAP-2020 GWU triaxial and DSS programme",
+      "source_url": "https://doi.org/10.17603/ds2-dyph-pf84",
+      "scientific_value": "Uniform/nonuniform cyclic DSS and separate strain-controlled triaxial experiment",
+      "license": "ODC Attribution (official project and experiment metadata verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "shortlist",
+      "notes": [
+        "Official PRJ-2557 explicitly lists ODC Attribution for the project and each experiment.",
+        "Three separate experiment DOIs: triaxial ds2-92c9-t496; uniform DSS ds2-dyph-pf84; nonuniform DSS ds2-dwt9-ke80.",
+        "Start with triaxial for current element-test comparison. Raw files not yet inspected; DSS admission does not imply an implemented DSS driver."
+      ],
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 66,
+        "observations": 1648788,
+        "kinds": {
+          "measurement-series": 66
+        },
+        "protocols": {
+          "cyclic-triaxial-source": 38,
+          "cyclic-simple-shear-source": 28
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "leap-2022",
+      "name": "LEAP-2022 Ottawa F65 cyclic strength",
+      "source_url": "https://doi.org/10.17603/ds2-52dm-s780",
+      "scientific_value": "Static shear, density and overburden effects",
+      "license": "ODC Attribution shown on repository page",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "cyclic reserve",
+      "notes": [
+        "Official PRJ-3484 lists ODC Attribution and three experiments: static shear ds2-q3fz-kq91, density ds2-z7zb-bq89, overburden ds2-52dm-s780.",
+        "Procedure report and MATLAB postprocessing described; raw files not inspected. Adds nonzero static shear and stress-history coverage."
+      ],
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 54,
+        "observations": 290463,
+        "kinds": {
+          "measurement-series": 54
+        },
+        "protocols": {
+          "cyclic-simple-shear-source": 54
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "opara-sand-fines",
+      "name": "Ullmann et al. sand\u2013fines triaxial tests",
+      "source_url": "https://doi.org/10.25532/OPARA-1072",
+      "scientific_value": "Low-pressure drained/undrained response beyond clean sand",
+      "license": "CC-BY-4.0 (full repository metadata verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "first implementation priority",
+      "notes": [
+        "Six drained and six undrained measured HDF5 tests at 20, 40, 60, 100, 200 and 300 kPa; initial void ratio and confinement provided.",
+        "Stress channels explicitly identify mean/effective axial/effective radial stress in kPa. Strains are dimensionless, not percent. Time is seconds.",
+        "Measured pore-water pressure is absolute; any excess-pore-pressure channel must explicitly subtract the first reading. Preserve author-supplied corrected stress channels and measured volumetric strain."
+      ],
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 12,
+        "observations": 13628,
+        "kinds": {
+          "experiment": 12
+        },
+        "protocols": {
+          "drained-triaxial": 6,
+          "undrained-triaxial": 6
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": true,
+        "public_native_channel_view": false,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "finnish-oedometer",
+      "name": "Haarajoki and Suurpelto clay oedometer collection",
+      "source_url": "https://doi.org/10.5281/zenodo.4472442",
+      "scientific_value": "Compression/unloading and natural-clay variability",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "shortlist",
+      "notes": [
+        "24 Haarajoki and 26 Suurpelto specimen tabs, plus info sheets; not all tab rows contain a complete observation.",
+        "Raw IL/CRS measurements are distinct from the FI-CLAY parameter database and Monte Carlo simulations in the same package.",
+        "Units and missing values documented; rate/creep validation requires checking actual loading-time records, not assuming every curve is time resolved."
+      ],
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 50,
+        "observations": 2559,
+        "kinds": {
+          "measurement-series": 50
+        },
+        "protocols": {
+          "oedometer": 50
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "rockfills",
+      "name": "Ovalle et al. rockfill database",
+      "source_url": "https://doi.org/10.5281/zenodo.3625778",
+      "scientific_value": "Coarse-grain pressure dependence, peak strength and secant stiffness",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "summary benchmarks only",
+      "notes": [
+        "158 rows for 33 materials; one row per test with initial void ratio, confinement, maximum stress, friction angle, E50 and some breakage indicators. No full stress-strain histories in the published workbook."
+      ],
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 33,
+        "observations": 158,
+        "kinds": {
+          "test-summary": 33
+        },
+        "protocols": {
+          "triaxial-summary": 33
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "castlegate",
+      "name": "Castlegate sandstone true-triaxial tests",
+      "source_url": "https://data.openei.org/submissions/4075",
+      "scientific_value": "Constant mean stress/Lode angle; extension/pure shear",
+      "license": "CC-BY-4.0 (official repository structured metadata verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "future rock extension",
+      "notes": [
+        "Official embedded Dataset metadata explicitly specifies CC-BY-4.0. Seven resources include summary workbook and raw/preprocessed stress-state archives; total about 1.43 GB.",
+        "Summary workbook repeats tests under different sort orders and includes aggregate AVG rows. Deduplicate test identifiers; do not count each sheet as independent tests.",
+        "Raw histories not inspected. Useful for Lode-angle and rock yield-surface work; lower immediate priority than soil element tests."
+      ],
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 69,
+        "observations": 424839,
+        "kinds": {
+          "measurement-series": 68,
+          "test-summary": 1
+        },
+        "protocols": {
+          "hydrostatic-acquisition": 8,
+          "true-triaxial-asc-acquisition": 16,
+          "true-triaxial-ps-acquisition": 13,
+          "true-triaxial-ascps-acquisition": 10,
+          "true-triaxial-ase-acquisition": 10,
+          "true-triaxial-aseps-acquisition": 11,
+          "true-triaxial-summary": 1
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "printed-grains",
+      "name": "Gupta et al. 3D-printed granular experiments",
+      "source_url": "https://data.mendeley.com/datasets/n6t49stxrh/1",
+      "scientific_value": "Oedometric response linked to grain motion and shape",
+      "license": "CC-BY-4.0 (repository page)",
+      "review_stage": "repository description reviewed",
+      "decision": "future micromechanics",
+      "notes": [
+        "Includes synthetic printed-particle experiments and tomography, not a substitute for natural-sand specimen validation."
+      ],
+      "ingestion": {
+        "status": "held: file retrieval blocked",
+        "reason": "Landing page declares CC BY 4.0. Direct dataset-page and official API-documentation requests returned 403; the search-readable page does not expose file URLs. No measurement contents admitted."
+      }
+    },
+    {
+      "id": "hurley",
+      "name": "Hurley et al. grain stress/local strain experiments",
+      "source_url": "https://zenodo.org/records/7582286",
+      "scientific_value": "Experimental tests of continuum-plasticity assumptions",
+      "license": "CC-BY-4.0 (Zenodo API verified)",
+      "review_stage": "processed records verified against pinned sources",
+      "decision": "future micromechanics",
+      "notes": [
+        "CC-BY-4.0 verified in repository API.",
+        "Whole repository about 3.1 GB, but processed diffraction archive is only 11.6 MB. Large tomography is not required merely to assess processed channels.",
+        "Grain-scale stress/local strain observations have specialist value; sample-scale loading and conventions still need inspection."
+      ],
+      "ingestion": {
+        "status": "ingested reviewed useful measurements",
+        "records": 25,
+        "observations": 28823,
+        "kinds": {
+          "test-summary": 22,
+          "measurement-series": 3
+        },
+        "protocols": {
+          "3dxrd-test-summary": 22,
+          "3dxrd-measurement-series": 3
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "Python scientific mapping/public-projection checks; browser decoding and SHA-256 checks; local Playwright viewer checks",
+        "remaining": [],
+        "limitations": "Record counts include independent digitized curves, acquisition blocks, grain populations and summary tables; they are not independent specimen counts. Native source signs/units and missingness remain explicit."
+      }
+    },
+    {
+      "id": "shale",
+      "name": "Shale true-triaxial loading/unloading and seepage",
+      "source_url": "https://doi.org/10.5061/dryad.msbcc2g19",
+      "scientific_value": "Rock deformation, unloading and hydraulic coupling",
+      "license": "CC0-1.0 (Dryad API verified)",
+      "review_stage": "repository API, licence and six-file inventory inspected",
+      "decision": "future rock extension",
+      "notes": [
+        "Repository API explicitly specifies CC0-1.0. Five XLSX files plus README total 148,394 bytes.",
+        "Correct API identifier requires percent-encoding the DOI slash. Download API returned 401 without authentication, despite public metadata; no file contents inspected.",
+        "True triaxial, unloading and permeability require rock/hydraulic capabilities beyond current soil triaxial overlays.",
+        "Continuation review found the normal public file_stream links; each also returned 403, so the block is not limited to the authenticated API route."
+      ],
+      "ingestion": {
+        "status": "held: file retrieval blocked",
+        "reason": "CC0 declaration verified. Six API download links returned 401, and all six normal landing-page file-stream links returned 403. No file contents admitted."
+      }
+    },
+    {
+      "id": "soilmodels-standard",
+      "name": "Sand and clay standard datasets",
+      "source_url": "https://soilmodels.com/sand-and-clay-standard-datasets/",
+      "scientific_value": "ExCalibre-format multi-material calibration sets",
+      "license": "unconfirmed",
+      "review_stage": "source page and public ExCalibre catalogue inspected",
+      "decision": "permission follow-up",
+      "notes": [
+        "The embedded ExCalibre catalogue is publicly accessible and links 23 clay and 10 sand workbooks, with physical properties and model parameters.",
+        "Workbook contents and dataset-specific redistribution terms still need inspection; no blanket dataset grant established."
+      ],
+      "ingestion": {
+        "status": "held: access or dataset reuse terms unresolved",
+        "reason": "Public ExCalibre workbook links exist, but dataset-specific redistribution terms are unverified."
+      }
+    },
+    {
+      "id": "soilmodels-karlsruhe-kaolin",
+      "name": "Karlsruhe kaolin cyclic tests",
+      "source_url": "https://soilmodels.com/karlsruhe-kaolin-wichtmann/",
+      "scientific_value": "Monotonic/cyclic clay and consolidation",
+      "license": "unconfirmed",
+      "review_stage": "official source description inspected",
+      "decision": "permission/access follow-up",
+      "notes": [
+        "Monotonic/cyclic undrained and oedometric tests; listed package 24.20 MB.",
+        "Page explicitly requires login to download. No dataset-specific redistribution licence established."
+      ],
+      "ingestion": {
+        "status": "held: access or dataset reuse terms unresolved",
+        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+      }
+    },
+    {
+      "id": "soilmodels-malaysian",
+      "name": "Malaysian kaolin cyclic tests",
+      "source_url": "https://soilmodels.com/malaysian-kaolin-cyclic-cu/",
+      "scientific_value": "Cyclic history, preloading and clay accumulation",
+      "license": "unconfirmed",
+      "review_stage": "official source description inspected",
+      "decision": "permission/access follow-up",
+      "notes": [
+        "Experimental programme covers monotonic/cyclic loading, undrained Miner rule and drained preloading; listed package 36.43 MB.",
+        "Page explicitly requires login to download. No dataset-specific redistribution licence established."
+      ],
+      "ingestion": {
+        "status": "held: access or dataset reuse terms unresolved",
+        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+      }
+    },
+    {
+      "id": "soilmodels-zbraslav",
+      "name": "Zbraslav sand cyclic tests",
+      "source_url": "https://soilmodels.com/zbraslav-sand-cyclic-cu/",
+      "scientific_value": "Cyclic preloading and sand fabric/history",
+      "license": "unconfirmed",
+      "review_stage": "official source description inspected",
+      "decision": "permission/access follow-up",
+      "notes": [
+        "Programme focuses on cyclic preloading and subsequent sand response; listed package 14.15 MB.",
+        "Page explicitly requires login to download. No dataset-specific redistribution licence established."
+      ],
+      "ingestion": {
+        "status": "held: access or dataset reuse terms unresolved",
+        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+      }
+    },
+    {
+      "id": "soilmodels-bcv",
+      "name": "BCV bentonite experiments",
+      "source_url": "https://soilmodels.com/bcv/",
+      "scientific_value": "Swelling and coupled hydro-thermomechanical behaviour",
+      "license": "unconfirmed",
+      "review_stage": "official source and package descriptions inspected",
+      "decision": "specialist permission/access follow-up",
+      "notes": [
+        "BCV Ca/Mg bentonite programmes cover thermal treatment, homogenisation and hydromechanical response.",
+        "Listed resources require login; some are publications rather than machine-readable measurements. Dataset-specific redistribution terms and experimental/model separation remain unresolved."
+      ],
+      "ingestion": {
+        "status": "held: access or dataset reuse terms unresolved",
+        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+      }
+    },
+    {
+      "id": "soilmodels-vibe",
+      "name": "VIBE paper dataset",
+      "source_url": "https://soilmodels.com/download/vibe-paper-dataset/",
+      "scientific_value": "Bentonite rate effects for future timed constitutive models",
+      "license": "unconfirmed",
+      "review_stage": "official package description inspected",
+      "decision": "specialist permission/access follow-up",
+      "notes": [
+        "Package explicitly mixes model implementation, element-driver inputs, simulation graphs and BCV experimental data; 1.46 MB.",
+        "Page explicitly requires login to download. Experimental and model-output channels must be separated, and dataset terms remain unresolved."
+      ],
+      "ingestion": {
+        "status": "held: access or dataset reuse terms unresolved",
+        "reason": "Download package requires login and a dataset-specific redistribution licence has not been established."
+      }
+    },
+    {
+      "id": "wang-sand",
+      "name": "Wang Sand Triaxial Test Database v3",
+      "source_url": "https://doi.org/10.4121/086847a6-ba39-4d66-973b-6b93028c7ad8.v3",
+      "scientific_value": "Broad standardized drained-material coverage",
+      "license": "CC-BY-4.0 (version DOI metadata verified)",
+      "review_stage": "metadata reviewed; package unavailable",
+      "decision": "paused at user request",
+      "notes": [
+        "4TU unavailable; do not retry until later instruction. Compilation may overlap GEOLAB and other listed campaigns; preserve original test identities."
+      ],
+      "ingestion": {
+        "status": "paused at user request",
+        "reason": "Do not retry 4TU retrieval until the user resumes it."
+      }
+    }
+  ],
+  "local_evidence": [
+    {
+      "local_review_file": "tmp/dataset-survey/Haarajoki_oedometer_rawdata.xlsx",
+      "sha256": "8f8f890d8405b41dca423cc5a94339585da9919749416dd32311aeb67b8b4aa4",
+      "size_bytes": 324759
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Database_UCam_Hostun Sand.xlsx",
+      "sha256": "8389a770fd1ec553df4897c203fe514669676d387bfa70fddc8c8d328a6238bd",
+      "size_bytes": 223986
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Database_UCam_Speswhite Kaolin.xlsx",
+      "sha256": "b376936b9aadb7ea0b31ecbd0b8fbe80a1d07c059c90292c01b21dfccd60c8de",
+      "size_bytes": 410079
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Properties Database_TUDa_Darmstadt Sand.xlsx",
+      "sha256": "7ff67f1896d3954c3ba2f9ca299860c089e22f284a630ec158a979853faa0d42",
+      "size_bytes": 4520174
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Ovalle et al. 2020 - Database rockfills.xlsx",
+      "sha256": "79cacb9ebc77867c61f8894677024a3705447dcd9fe556243a53e9d556ff3bb6",
+      "size_bytes": 26692
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Suurpelto_oedometer_rawdata.xlsx",
+      "sha256": "8e229b9c61fbeb61df45a584dca6d5631d104682d399a4ec64b4f554609a0183",
+      "size_bytes": 103792
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/finnish-Dataset.zip",
+      "sha256": "92a725663b8ebfa772e0c29981bdfb067931ec1e22f3c92212deb4f0c7293aac",
+      "size_bytes": 7408138
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/finnish.json",
+      "sha256": "0eda50853a3955179958bac81f26518d8cba75dee913a4f94e98837d650a095d",
+      "size_bytes": 5899
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/geolab.json",
+      "sha256": "858aa8be3a188950d966aeff0c476bd01a4c45ecdb9618951c8840108d50fb1c",
+      "size_bytes": 8693
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2017.json",
+      "sha256": "bb4593357633967d6785c30833c0422473b79fb00f210824902c99df64274589",
+      "size_bytes": 11228
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2020.json",
+      "sha256": "9c7ec2303a84f6234ac15af389732d86d0eae90664dcf74d30b8ce652213bbbc",
+      "size_bytes": 11753
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/opara-README.md",
+      "sha256": "30c0039ecdd4eed62733c76881478d285c86aea20d0d6d6b0029bb763845f6c3",
+      "size_bytes": 1072
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/opara-TXCD.zip",
+      "sha256": "49681ae77388fb0f3f081cbebfd263cb328b9bc678ed5a376a19e6c4dba82b35",
+      "size_bytes": 347016
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/opara-TXCU.zip",
+      "sha256": "756a998ee76a5f029fcb260e95bc85f3f88082669ef3c666c6faf96254d859bc",
+      "size_bytes": 314857
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/opara-item.json",
+      "sha256": "d193655acff404bcc1c22c2e0d85760976feb952c03463ac85ef8b061e26c717",
+      "size_bytes": 11188
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/opara-readme.json",
+      "sha256": "8832ac11c144caf2b3f31c27724715cfce339770328d62ec6dcfa33933de60d4",
+      "size_bytes": 2300
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/rockfills.json",
+      "sha256": "d7ccc92fb555647d0c21e28f1d1bb13d7eabf27e1ab1767bbabff9a7b61d0c96",
+      "size_bytes": 4649
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/workbook-review.json",
+      "sha256": "ac510b2afccfefc57813c8adcbef1799513ad0b160a52b0d4d15256f7a7ff663",
+      "size_bytes": 26129
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Properties Database_Deltares_ Baskarp Sand No.15.xlsx",
+      "sha256": "e880624b9557be06bfe449b994b50fa62b29bf0e5b672238dcf8cf4f3994a175",
+      "size_bytes": 1828203
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Properties Database_Deltares_OVP Clay.xlsx",
+      "sha256": "56fef543c8e49371eb931bd7fec11a813ed14349a1b8c67e0ff0282c70ece51d",
+      "size_bytes": 11968818
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Properties Database_ETHZ_Nevada Sand.xlsx",
+      "sha256": "590bf6ec4ca6e68f39da858ef2d0ada28839c4cb3790cc7103d8a28abe89d210",
+      "size_bytes": 12278925
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Properties Database_ETHZ_Perth Sand.xlsx",
+      "sha256": "591af95a53d011fdeb7b8c5965a06a82f1bb6a6a14f500add183e407005e609a",
+      "size_bytes": 22957690
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Properties Database_TU Delft_Geba Sand.xlsx",
+      "sha256": "9c24a0fdb3f9af2a8a22e6a2c4009f08da27e5fd29a2d3e9a4de2da06a26d36e",
+      "size_bytes": 7257399
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Properties Database_Uni-Eiffel_Fontainebleau-NE34-Sand.xlsx",
+      "sha256": "27a9a7bc8234acde91588fa6eca722e44ad1d826bfcb45f888fc0a47f58f3d3d",
+      "size_bytes": 4691964
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Material Properties Database_ZAG_Lo\u010de Silty Clay.xlsx",
+      "sha256": "db865a3b37209f9ec6e792350ee4c376e80284c197ce9de357c446f66d6c81cc",
+      "size_bytes": 310368
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/Record of Changes.txt",
+      "sha256": "3861ebf50eafd5c1cf785e45e460d1f6260c58c6edd3b9ccb5b336e4ed457df6",
+      "size_bytes": 495
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/castlegate-page",
+      "sha256": "430f1da4d58686de85398b562aa9dd27e83cc046bf348df98cebb0e6b1149911",
+      "size_bytes": 78214
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/castlegate-summary.xlsx",
+      "sha256": "c366e099f7b6cb0d8da2e3218ea90ba12a95543177109e1038c5b421b6f03ae3",
+      "size_bytes": 71294
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/geolab-remaining-review.json",
+      "sha256": "8b561ca716b5aeac1d50511a8b6a0226ff2a78aebbdcaafc02b0628f47dc5014",
+      "size_bytes": 338148
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/hurley-api",
+      "sha256": "b26a2f4bcad069ba800798c455f693bc97d089f0920ede8ceedcc0ea4dfa2fcb",
+      "size_bytes": 6422
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/hurley-description.pdf",
+      "sha256": "bccb1afe84cea3a5141f36cbfc503ccb3ed93e3a98f3418b0d34715526b79b9c",
+      "size_bytes": 122780
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2015",
+      "sha256": "9866603d61c71ba546a2ee9db75435c5b2607450f178967014243a4fd55a4f00",
+      "size_bytes": 26934
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2017-page",
+      "sha256": "b20f5eb586d946eec55568e4c2ede247775cc1cfcf2dd12322262047a7d01c27",
+      "size_bytes": 25677
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2018-dss-page",
+      "sha256": "1585993085380d0c2a39c1c90021954feb5ae4324192621b5f576c59f22a9bb2",
+      "size_bytes": 24248
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2018-torsion-page",
+      "sha256": "84b9701396e62b5231d3f09a06c5fac7d5e5a0381bdc51a94b621454fff7ee50",
+      "size_bytes": 24727
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2020-page",
+      "sha256": "236082f0695f647b33be95b5a3b249319da4e8519aa741c48feea760f48ddd31",
+      "size_bytes": 30637
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2022-page",
+      "sha256": "3da581fb922207e739c915fc73d574d6905c50778f3e4cc924d64d51552c2fd4",
+      "size_bytes": 30877
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/shale-api",
+      "sha256": "e63ed3937cc61707d3fea837f257ccd70233067fffeb2be6e1c2a44a7b440b01",
+      "size_bytes": 4487
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/shale-files.json",
+      "sha256": "80217f655b535bffabb3340ea8d3d2e9597592e5a5b2ebdf1f68227fc1eae8b4",
+      "size_bytes": 4194
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/shale-page",
+      "sha256": "0f3a44b85e34113242a311491cf56b8833630a9c8e46e70546f755ce45b14ba1",
+      "size_bytes": 37647
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/soilmodels-bcv",
+      "sha256": "583ef9d6171cd0f3768504383341132cc341a38eb6e93879b2fbb65a24e7607f",
+      "size_bytes": 150272
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/soilmodels-kaolin",
+      "sha256": "1444cc24461c587c14fba28bb49ed7fa3ca0bc54585359e36485c2d4d96f1c4e",
+      "size_bytes": 144597
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/soilmodels-malaysian",
+      "sha256": "7690f0c098ef38d4b29cdd1061d7e0264aac43fb22dfc20e472dd3430524a4e3",
+      "size_bytes": 142134
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/soilmodels-standard",
+      "sha256": "26808357913b3799d8303d65654755742496a0ae89f521cfb144dd7f1e9110bc",
+      "size_bytes": 130204
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/soilmodels-vibe",
+      "sha256": "beaa881c45ceb4ae57c7cf4a0837d6c20d946595966d3c170ee7a27c94da15e3",
+      "size_bytes": 121766
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/soilmodels-zbraslav",
+      "sha256": "8a2e31e509e0802171c5471a094f20064f6a23eab7e976442f39f96d990b800f",
+      "size_bytes": 145756
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/standard-excalibre",
+      "sha256": "3ca81e9cd8683fac75017d1f7c039286820bd4e6381cacc846973c6210e423f9",
+      "size_bytes": 27871
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2015-doi.json",
+      "sha256": "57bc9c6aecf51f8b1a11ae50e7e8862b8b3d09c4d7a55e664f56cd8514a776f7",
+      "size_bytes": 11911
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2018-torsion-doi.json",
+      "sha256": "14d60805d7e746ab2a08a337450c3a1de9ebe1a7de1814281b0062b51f521be1",
+      "size_bytes": 12200
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2018-dss-doi.json",
+      "sha256": "79815e713e4b613e6e6983a03e414ee463da3ced011eb7529a59803d7e189c44",
+      "size_bytes": 11252
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/geolab-property-review.json",
+      "sha256": "c2863bf0ef9b4ca29946f452254014dfd5e059de3723937d62b49d418f3d301c",
+      "size_bytes": 68821007
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/designsafe-imports.js",
+      "sha256": "497461c6bc5321da59c148c38020211f0a3d60acfbd67ddc2b94f652cd3e2d72",
+      "size_bytes": 2508085
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/PRJ-2137-metadata.json",
+      "sha256": "0aa77433bad4f6fa2fcd8bc5d3b1d451d4768fbb5e10017ce2a88a1d2d26a7a4",
+      "size_bytes": 12691
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/PRJ-2136-metadata.json",
+      "sha256": "bd835df9be2670a8b63214a5a9d1c345392f37c4763cf9050a77ec8beccd328e",
+      "size_bytes": 13442
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/shale-public-page",
+      "sha256": "285cf30df9e5bc4e3869951608ea863cfe7b30afb5ec1a364d8f794c1a000ff4",
+      "size_bytes": 37647
+    }
+  ],
+  "excluded_leads": [
+    {
+      "name": "Baltic Sea soft clay raw tests",
+      "doi": "10.5281/zenodo.18455655",
+      "reason": "Zenodo API returned 410 Gone. University search listing exists, but no retrievable dataset; do not recommend as currently available."
+    }
+  ],
+  "recommended_first_wave": [
+    "opara-sand-fines",
+    "geolab-nevada",
+    "geolab-geba",
+    "geolab-darmstadt",
+    "geolab-speswhite",
+    "finnish-oedometer",
+    "leap-2020"
+  ],
+  "ranking_rationale": "Prefer explicit reuse terms, measured channels with documented units and initial state, material/protocol diversity, and compatibility with existing element drivers. Ranking is provisional until per-test checks; no numerical quality score is inferred from repository reputation.",
+  "review_limits": [
+    "All 30 candidate entries have an explicit ingestion or hold decision. Nineteen candidates have admitted records; eleven remain held or paused.",
+    "Counts distinguish SI triaxial overlays, native measurement series and test summaries. Acquisition blocks and grain populations are not independent laboratory tests.",
+    "GEOLAB basic-property and reference tables are retained as context. Empty templates, parameter/model tabs and source duplicates in LEAP calibration-example folders are excluded.",
+    "Raw tomography volumes, CAD/printing assets, machine configuration files and redundant workbook exports are outside this material-response ingestion pass. Processed 3DXRD grain data and original mechanical acquisition files are included.",
+    "A source licence declaration is retained as evidence, not represented as a new licence grant from Atlas.",
+    "The prior 4TU compilation remains paused at user request."
+  ],
+  "ingestion_progress": {
+    "status": "available licensed sources ingested; access/licence holds remain",
+    "records": 522,
+    "observations": 3094470,
+    "admitted_candidates": [
+      "castlegate",
+      "finnish-oedometer",
+      "geolab-baskarp",
+      "geolab-darmstadt",
+      "geolab-fontainebleau",
+      "geolab-geba",
+      "geolab-hostun",
+      "geolab-loce",
+      "geolab-nevada",
+      "geolab-ovp",
+      "geolab-perth",
+      "geolab-speswhite",
+      "hurley",
+      "leap-2015",
+      "leap-2017",
+      "leap-2020",
+      "leap-2022",
+      "opara-sand-fines",
+      "rockfills"
+    ],
+    "admitted_candidate_count": 19,
+    "held_candidates": [
+      "leap-2018-dss",
+      "leap-2018-torsion",
+      "printed-grains",
+      "shale",
+      "soilmodels-standard",
+      "soilmodels-karlsruhe-kaolin",
+      "soilmodels-malaysian",
+      "soilmodels-zbraslav",
+      "soilmodels-bcv",
+      "soilmodels-vibe",
+      "wang-sand"
+    ],
+    "held_candidate_count": 11,
+    "next": [
+      "Resolve dataset-specific rights for the two LEAP 2018 campaigns before public release.",
+      "Retrieve printed-grain and shale files through normal public access when the hosts permit it.",
+      "Resolve SoilModels package access and data licences; do not treat software GPL terms as data grants.",
+      "Keep 4TU paused until the user resumes it."
+    ]
+  }
+}

@@ -4,7 +4,7 @@ This directory contains the static material laboratory in the main GitHub reposi
 
 Run `python3 tools/build_web.py` from that workspace after native/Wasm tests. It copies this UI, the compiled engine and canonical catalogue into `dist/`. The catalogue hash in the runtime and browser metadata must agree. GitHub Actions publishes `dist/` to GitHub Pages after native and Wasm verification. All asset URLs are relative to support the `/constitutive-atlas/` project path. Source references, model JSON definitions, and schemas are bundled; raw measurements are excluded. The optional Sites publication helper also packages `dist/` using `.openai/hosting.json`.
 
-The [public GitHub Pages laboratory](https://benjym.github.io/constitutive-atlas/) is an experimental research preview. Five models are executable; the 21-entry catalogue includes research candidates. No raw Wichtmann measurements are distributed in this site, and no model is described as independently source-reviewed or experimentally validated.
+The [public GitHub Pages laboratory](https://benjym.github.io/constitutive-atlas/) is an experimental research preview. Five models are executable; the 21-entry catalogue includes research candidates. Public measurement assets are generated only for approved archive revisions, and no model is described as independently source-reviewed or experimentally validated.
 
 For Sites publication, use a separate Sites checkout and copy this directory plus the freshly generated `dist/` into it. Do not initialize another Git repository inside `web/`. The pre-migration Sites history is preserved locally in `.local/sites-source.git` at the research repository root.
 
@@ -22,8 +22,41 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory web/dist
 
 Open <http://127.0.0.1:8765> for development. The native build must exist before running the parity check. Packaging rejects stale model definitions.
 
-## Experimental overlays
+## Live laboratory controls
 
-Load one or more original Wichtmann `TMD*.dat` / `TMU*.dat` files after extracting the provider archives, or normalized Atlas experiment JSON. The selector switches tests; **Show experimental data** toggles measured points without rerunning the solver. Clear removes the loaded collection from the application. No file is uploaded. Other original formats require a reviewed importer. See [data reuse review](../docs/DATA_REUSE.md); measurements are excluded from the public build pending permission.
+The laboratory recalculates automatically when a model, protocol, slider or numeric field changes. Rapid edits are coalesced into updates every 100 ms; the Wasm worker is reused and only the latest settings may replace the plots. Sliders supplement precise numeric inputs, with logarithmic scaling for wide positive parameter ranges. Numeric inputs retain their declared bounds even when a slider uses a narrower exploration range.
 
-Run `node tools/test_experiments.mjs` from the repository root to verify browser import mappings and visibility semantics.
+Initial state details, material parameters, solver settings, measurements and sources expand on demand. Reset restores the current model’s defaults and recalculates. Invalid inputs pause updates with an inline explanation; exports remain disabled until a response matches the current settings. Cyclic presets increase increments to the minimum required resolution. On small screens the section links stay available when scrolling between controls and plots.
+
+## Built-in experimental comparisons
+
+The experiment selector loads a compact, checksum-verified test from `experiments/` on demand and caches it for the session. Tests are grouped by material and drainage protocol and labelled with available initial radial stress and void ratio. Every admitted observation is retained in order for the plotted channels; the column-based JSON format removes repeated field names without rounding, interpolation or sampling. Missing optional channels are represented by null and omitted from the corresponding plotted series. The UI keeps attribution, source and licence links, without a dataset download step.
+
+**Use initial state & protocol** applies only available initial stress, void ratio and drainage conditions. It preserves material constants, loading amplitude and loading history. No calibration or experimental validity is implied. Selection and overlay visibility do not rerun the solver; applying test conditions does.
+
+Original Wichtmann archives are allowlisted through `data/experiment_releases.json`. That grant list remains empty pending permission. Separately licensed public-source assets are pinned in `data/public_sources.json` and `data/curated/index.json`: the builder verifies processed-file hashes, source archive hashes and matching source-specific attribution/licence fields. Public builds currently contain 522 measurement records with 3,094,470 observations, spanning 19 surveyed candidates. These comprise 49 normalized overlays, 401 native measurement series and 72 summaries or grain populations; acquisition blocks are not counted as independent specimens. Curated assets build without upstream access or source-reader dependencies. Pending original Wichtmann assets cannot leak from a previous preview because experiment outputs are rebuilt from scratch, and previews use a separate ignored directory.
+
+OPARA records preserve all HDF5 channels, author-supplied corrected stresses, source attributes and inputs. GEOLAB records preserve reviewed native worksheet blocks, independent curve coordinates, source row numbers, material properties and original references. Finnish oedometer series, rockfill summaries, Castlegate acquisition blocks, Hurley macro/grain populations and LEAP histories retain their own native-unit contracts. Source summaries and grain populations are never treated as SI triaxial overlays. Where source stress meaning or copied initial-state metadata is unresolved, overlays show only interpretable channels and retain warnings. Baskarp volumetric strain is withheld pending independent review; native values remain archived. These overlays are data comparisons, not validated model predictions.
+
+To review all 17 locally cached Wichtmann tests:
+
+```sh
+python3 tools/fetch_data.py
+python3 tools/build_web.py --preview-experiments
+python3 -m http.server 8765 --bind 127.0.0.1 --directory web/preview
+```
+
+This local preview is not a public deployment artifact. See the [data reuse review](../docs/DATA_REUSE.md) before registering grants or publishing measurement assets.
+
+Local TMD/TMU `.dat` and Atlas experiment JSON comparison remains available in **Compare your own measurements**. Those files stay in browser memory. Clear removes only local files; built-in tests remain available.
+
+Verification:
+
+```sh
+python3 -m unittest discover -s tests -p test_web_experiments.py -v
+node tools/test_experiments.mjs
+```
+
+Native series use `atlas-source-columns-v1` and [the source-measurement schema](../schemas/source-measurement.schema.json), with selectable chart axes, explicit units and missing channels. Normalized overlays retain `atlas-experiment-columns-v1`. Source values are not rounded or resampled during packaging; the chart displays at most 350 measured markers while preserving every observation in the loaded record.
+
+Rebuilding originals uses `tools/ingest_public_data.py --download` with the optional `data` dependencies. DesignSafe files resolve through official public preview links; selected Castlegate mechanical files use HTTP ZIP ranges with member CRC and SHA-256 verification. Ordinary site builds use committed curated assets and make no upstream requests.

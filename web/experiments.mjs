@@ -1,6 +1,14 @@
 // Plot import contract. Full archival normalization remains in atlas/data.py.
 export function validateExperiment(data){
-  if(data?.schema_version!=='0.1'||data.kind!=='experiment'||typeof data.id!=='string'||!data.id.trim()||!Array.isArray(data.rows)||!data.rows.length||data.rows.length>100000)throw Error('Expected an Atlas experiment with an ID and 1–100,000 rows.');
+  if(data?.schema_version!=='0.1'||!['experiment','measurement-series','test-summary'].includes(data.kind)||typeof data.id!=='string'||!data.id.trim()||!Array.isArray(data.rows)||!data.rows.length||data.rows.length>(data.kind==='experiment'?100000:200000))throw Error('Expected an Atlas measurement record with an ID and a supported observation count.');
+  if(data.kind!=='experiment'){
+    const c=data.conventions,columns=data.columns;
+    if(c?.stress!=='source-defined'||c?.strain!=='source-defined'||c?.stress_unit!=='per-channel'||c?.strain_unit!=='per-channel'||!Array.isArray(columns)||columns.length<2||columns.length>100)throw Error('Source measurements must declare native channel conventions.');
+    const keys=new Set(columns.map(c=>c.key));
+    if(keys.size!==columns.length||columns.some(c=>typeof c.key!=='string'||!/^c\d+$/.test(c.key)||typeof c.name!=='string'||typeof c.unit!=='string')||!keys.has(data.source_plot?.x)||!keys.has(data.source_plot?.y))throw Error('Invalid source measurement columns.');
+    for(const row of data.rows)if(!row||!Object.keys(row).length||Object.entries(row).some(([k,v])=>!keys.has(k)||!Number.isFinite(v)))throw Error('Invalid source measurement observation.');
+    return data;
+  }
   const c=data.conventions;
   if(c?.stress!=='compression-positive'||c?.strain!=='compression-positive'||c?.stress_unit!=='Pa'||c?.strain_unit!=='1')throw Error('Experiment must declare compression-positive Pa / dimensionless strain conventions.');
   for(const row of data.rows){
@@ -31,4 +39,31 @@ export function normalizeWichtmann(text,name){
 export function measuredSeries(experiment,visible,x,y){
   if(!visible||!experiment)return [];
   return experiment.rows.filter(r=>Number.isFinite(r[x])&&Number.isFinite(r[y])).map(r=>[r[x],r[y]]);
+}
+
+// The hosted format removes repeated channel names without rounding or sampling.
+export function decodeExperiment(data){
+  if(!['atlas-experiment-columns-v1','atlas-source-columns-v1'].includes(data?.format)||!data.metadata||!Array.isArray(data.columns)||!Array.isArray(data.values)||data.values.length>200000)throw Error('Unsupported built-in experiment format.');
+  const native=data.format==='atlas-source-columns-v1';
+  if(native&&data.metadata.kind==='experiment'||!native&&data.metadata.kind!=='experiment')throw Error('Measurement format and record kind differ.');
+  const allowed=native?(data.metadata.columns||[]).map(c=>c.key):['axial_strain','q','p','volumetric_strain','pore_pressure'];
+  if((!native&&(!data.columns.includes('axial_strain')||!data.columns.includes('q')))||new Set(data.columns).size!==data.columns.length||data.columns.some(c=>!allowed.includes(c))||native&&data.columns.length!==allowed.length)throw Error('Invalid experiment channels.');
+  const rows=data.values.map(values=>{
+    if(!Array.isArray(values)||values.length!==data.columns.length||!values.every(x=>x===null||Number.isFinite(x)))throw Error('Invalid experiment observation.');
+    return Object.fromEntries(data.columns.map((c,i)=>[c,values[i]]).filter(([,v])=>v!==null));
+  });
+  return validateExperiment({...data.metadata,rows});
+}
+
+export async function fetchExperiment(entry,fetcher=fetch){
+  if(!/^[A-Za-z0-9][A-Za-z0-9_-]{0,119}$/.test(entry.id)||entry.path!==entry.id+'.json'||!/^[a-f0-9]{64}$/.test(entry.sha256))throw Error('Invalid experiment catalogue entry.');
+  const response=await fetcher('./experiments/'+entry.path);
+  if(!response.ok)throw Error('Measurements could not be loaded. Please try selecting the test again.');
+  const bytes=await response.arrayBuffer();
+  if(bytes.byteLength>10*1024*1024||bytes.byteLength!==entry.size_bytes)throw Error('Experiment file size does not match the catalogue.');
+  const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');
+  if(digest!==entry.sha256)throw Error('Experiment checksum differs from the catalogue. Reload the page.');
+  const data=decodeExperiment(JSON.parse(new TextDecoder().decode(bytes)));
+  if(data.id!==entry.id||data.rows.length!==entry.rows)throw Error('Experiment does not match the selected test.');
+  return data;
 }
