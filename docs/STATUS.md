@@ -10,7 +10,7 @@
 - Axisymmetric oedometer, drained/undrained triaxial, undrained signed-q control and isotropic-strain drivers, with monotonic/sinusoidal histories. No general finite-element or poromechanics solver.
 - Structural/language/data/numerical Python tests, separate C++ Jacobian/covariance tests, and native/Wasm parity checks across 25 model/protocol pairs. Hosted CI has passed on both native platforms and Wasm; GitHub Pages is deployed through the same workflow.
 - Responsive browser lab with real Wasm execution, plots, equations/source links, editable parameters and initial state, cancellation/resource limits, experiment overlay, and run/result export/import.
-- Thirty-two-entry discovery catalogue and generated SQLite view; two auditable Crossref discovery batches containing 50 unscreened records.
+- Thirty-two-entry discovery catalogue and generated SQLite view; the original two Crossref batches have been metadata-screened (50 occurrences, 34 distinct DOIs, all out of scope). A targeted three-result probe adds one paper for full-text review and two unresolved records. See the [screening ledger and search-quality report](LITERATURE_SCREENING.md); independent review is pending.
 - Seventeen locally ingested original Wichtmann tests with raw/member hashes and normalization warnings. Five completed, early-strain drained transfer comparisons using a sourced literature parameter set; no fitting or held-out claims.
 - Five-page editable/compiled methods manuscript with generated table and scientific figure. Working draft only; no paper submitted or research release archived.
 

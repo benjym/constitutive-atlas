@@ -10,12 +10,12 @@ The eventual paper asks whether a shared declarative representation can faithful
 
 ## Search protocol
 
-- Initial cutoff: 2026-10-30. Save query, API URL, retrieval time, cursor, and unmodified discovery response. Crossref batches in `catalogue/discovery` are unscreened evidence.
+- Initial cutoff: 2026-10-30. Save query, API URL, retrieval time, cursor, and unmodified discovery response. Crossref batches in `catalogue/discovery` preserve discovery evidence; screening decisions live separately in `catalogue/screening.jsonl`. A batch's saved `status` describes retrieval time and is never rewritten after screening.
 - Search themes: constitutive geomechanics; soil plasticity/critical state; bounding/multisurface plasticity; hypoplasticity/barodesy; rock plasticity/damage; creep; unsaturated/coupled models; interfaces/nonlocal theories.
 - Combine bibliographic searches with foundational books/reviews, author publication lists, code registries and backward/forward citation tracing. Log source availability and languages; inaccessible texts remain unresolved records.
 - Deduplicate publications by normalized DOI, then title/authors/year when DOI is absent. Deduplicate formulations separately by governing equations, assumptions, state variables and documented lineage.
 - A screening record includes publication ID, model ID(s), inclusion decision, reason, evidence locator, reviewer, review date and unresolved questions. An automated extraction is never its own independent review.
-- Report screened/included/excluded/unavailable counts only after screening. The present empty screening ledger is intentional: discovery is not admission.
+- Report screened/included/excluded/unavailable counts only after screening. The [screening ledger](../catalogue/screening.jsonl) records metadata decisions against immutable source locators and hashes; [the screening report](LITERATURE_SCREENING.md) distinguishes occurrences, publications, inclusion for full-text review and admission. Discovery or inclusion for full-text review is not admission.
 
 ## Admission and identity
 

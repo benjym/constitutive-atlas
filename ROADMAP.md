@@ -21,7 +21,7 @@ Literature discovery has broad geomechanics scope. The first executable release 
 | Area | Existing foundation | Outstanding evidence or capability |
 | --- | --- | --- |
 | Models | Elasticity, Drucker–Prager, Modified Cam Clay, von Wolffersdorff sand hypoplasticity, hypoplasticity + IGS | Independent equation/source review for all five; IGS is explicitly draft |
-| Catalogue | Thirty-two discovery entries, including the near-term Terracotta candidate and SoilModels coverage; fifty unscreened Crossref records | Reviewed admission, exact variants and literature coverage accounting |
+| Catalogue | Thirty-two discovery entries, including the near-term Terracotta candidate and SoilModels coverage; 34 distinct publications excluded from the original fifty Crossref results; targeted source review started | Reviewed admission, exact variants and literature coverage accounting |
 | Representation | Restricted expressions, dimensional/shape checks, Python interpretation, C++ generation | Equation-level provenance, history/event semantics, richer initialization and version migration |
 | Numerics | AD residual Jacobians, implicit/rate integration, substepping, rollback, five axisymmetric drivers | Independent references, public update tangent, configurable tolerances and recorded-path replay |
 | Data | Seventeen normalized Wichtmann tests; five early-strain drained transfer demonstrations | Preparation metadata, missing initial states, broader importers and controlled evaluation |
@@ -187,7 +187,7 @@ The [SoilModels coverage record](catalogue/discovery/soilmodels-2026-10-30.json)
 
 Author-source screening on 2026-10-31 identifies a separate PM4Sand3D 1.0 release (Kippen, Boulanger & Ziotopoulou, May 2026). The [version dossier](docs/models/pm4sand-versions.md) and [lineage record](catalogue/discovery/pm4sand-2026-10-31.json) distinguish it from the selected plane-strain PM4Sand2D 3.3 candidate. This adds one discovery entry (32 total, 27 candidates); manuals/equations and exact file revisions remain uninspected. A 3D author release changes the earlier scope-screening question, but does not count toward twenty verified formulations.
 
-- [ ] **LIT-01:** Screen and deduplicate the fifty discovery records, then perform backward/forward citation tracing and targeted searches across the charter's families. Preserve queries, dates, source access and exclusion reasons.
+- [ ] **LIT-01:** Initial metadata screening and DOI deduplication are recorded in the [screening report](docs/LITERATURE_SCREENING.md): all 34 distinct publications in the original fifty results were outside scope. Continue targeted searches and backward/forward citation tracing across the charter's families; complete full-text screening and independent review. Preserve queries, dates, source access and exclusion reasons.
 - [ ] **LIT-02:** Maintain a publication-to-formulation lineage graph linking originals, corrections, extensions and competing implementations.
 - [ ] **ATLAS-01:** Select each implementation from an admitted source dossier, with an applicability target and a clear reason it adds scientific or representational coverage.
 - [ ] **ATLAS-02:** Apply the M1 review process and M3 compatibility suite to every added formulation. Extend the capability matrix and browser provenance together.
