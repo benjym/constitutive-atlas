@@ -698,15 +698,33 @@
       "source_url": "https://data.mendeley.com/datasets/n6t49stxrh/1",
       "scientific_value": "Oedometric response linked to grain motion and shape",
       "license": "CC-BY-4.0 (repository page)",
-      "review_stage": "repository description reviewed",
+      "review_stage": "repository identity and licence verified; file retrieval and author-site fallback checked",
       "decision": "future micromechanics",
       "notes": [
         "Includes synthetic printed-particle experiments and tomography, not a substitute for natural-sand specimen validation.",
-        "The normal file browser identifies a 4.56 MB mechanical workbook plus a 274 KB description manual, avoiding the 6.78 GB tomography archive. The documented api.data.mendeley.com public metadata/download endpoints return 403; normal file download attempts also time out."
+        "The normal file browser identifies a 4.56 MB mechanical workbook plus a 274 KB description manual, avoiding the 6.78 GB tomography archive. The documented api.data.mendeley.com public metadata/download endpoints return 403; normal file download attempts also time out.",
+        "A fresh network-enabled request to the exact public workbook link reached Mendeley but returned HTTP 403 with Cloudflare error 1010. This is a remote file-access refusal, distinct from local sandbox DNS restrictions and Cortex build failures. A scoped check found no workbook/manual saved in Downloads after normal browser clicks. The authors\u2019 publications and Software & Data pages provide no alternative workbook copy; the publication entry points back to Mendeley."
       ],
       "ingestion": {
         "status": "held: file retrieval blocked",
-        "reason": "CC BY 4.0 and the mechanical workbook file identity are verified on the normal public page. Documented public API/direct downloads return 403; browser download attempts have not produced a retrievable file."
+        "reason": "The exact CC BY 4.0 workbook is identified, but public browser attempts have produced no saved file and a network-enabled direct request receives remote HTTP 403 / Cloudflare 1010. The author site links back to Mendeley. A normally accessible original or checksum-matching local copy is needed before source review and ingestion."
+      },
+      "retrieval_requirements": {
+        "workbook": {
+          "filename": "Oedometer Test Results Analysed.xlsx",
+          "source_url": "https://data.mendeley.com/public-files/datasets/n6t49stxrh/files/10ae0302-f70a-4fc0-b9ab-c0e33f2efa94/file_downloaded",
+          "sha256": "0bc9aa4757a966cd7ef0caf7612ff511bab831214aef2d68c6c147401485088c"
+        },
+        "manual": {
+          "filename": "Description manual.pdf",
+          "source_url": "https://data.mendeley.com/public-files/datasets/n6t49stxrh/files/54a7629f-7177-4332-b134-f546729bc5b6/file_downloaded",
+          "sha256": "96123c205aa18d49b83dd732005ee2b76a6f657c4357535f04ad197650d917b3"
+        },
+        "author_pages_checked": [
+          "https://www.poromechanics.org/publications.html",
+          "https://www.poromechanics.org/software--data.html"
+        ],
+        "next_action": "Obtain the original mechanical workbook and description through normal access or an existing local copy; verify hashes before admitting any measurements. Do not fetch the 6.78 GB tomography archive or bypass the host protection."
       }
     },
     {
