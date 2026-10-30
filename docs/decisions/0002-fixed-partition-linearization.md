@@ -9,3 +9,5 @@ Add an opt-in C++ `linearize_update` API alongside unchanged `integrate`. Comput
 Return material-update success separately from derivative availability. A singular derivative must not reclassify a converged material update as failed. Hold discrete branches/partition fixed and report exact-zero reset guards; do not claim a unique derivative at every yield, history or adaptation transition. Document uncovered branches and limit current use to tested local regimes.
 
 This adds no C/Wasm export and changes no public model identity. Generated headers need rebuilding; existing binaries/evidence retain their original source hashes. Future control/time derivatives and generalized event-location derivatives require explicit contracts and matching native/Wasm evidence. The [implementation/evidence document](../UPDATE_LINEARIZATION.md) records the present scope and remaining gates.
+
+Subsequent implementation: the [experimental native C ABI/CLI endpoint](../UPDATE_LINEARIZATION_API.md) now exposes the same opt-in result and separate status flags. This extends the initial C++ surface without changing the derivative convention; Wasm runtime verification remains pending.

@@ -1,6 +1,6 @@
 # Experimental accepted-update linearization
 
-This C++ API advances NUM-01/02. It differentiates the complete converged discrete material update on its accepted partition, including parent memory preparation. It is distinct from the AD residual Jacobian already used inside Newton. It does not close the numerical API milestone, expose a new C/Wasm endpoint or independently validate a constitutive model.
+This C++ API advances NUM-01/02. It differentiates the complete converged discrete material update on its accepted partition, including parent memory preparation. It is distinct from the AD residual Jacobian already used inside Newton. It does not close the numerical API milestone or independently validate a constitutive model. The subsequent [native C ABI/CLI endpoint](UPDATE_LINEARIZATION_API.md) exposes this result; Wasm runtime verification remains open.
 
 ## Interface
 
@@ -66,4 +66,4 @@ c++ -std=c++20 -O0 -Icpp/include -I/private/tmp/atlas-update-tangent-small/gener
 python3 tools/verify_update_tangent.py verify /private/tmp/atlas-update-tangent-small/output.json --output /private/tmp/atlas-update-tangent-small/verification.json
 ```
 
-Preparation and verification do not invoke native code. The C++ header is the initial API surface; CLI/C ABI/website access, native/Wasm parity, physical-time updates, broader branch-boundary policy, rotated tangent tests, independent directional perturbations at multiple step sizes, ill-conditioning diagnostics, highest-capacity cases and full numerical regression gates remain open. NUM-01/02 are not complete.
+Preparation and verification do not invoke native code. The C++ header was the initial API surface; [native C ABI/CLI access](UPDATE_LINEARIZATION_API.md) is now separately verified. Website access, native/Wasm parity, physical-time updates, broader branch-boundary policy, rotated tangent tests, independent directional perturbations at multiple step sizes, ill-conditioning diagnostics, highest-capacity cases and full numerical regression gates remain open. NUM-01/02 are not complete.

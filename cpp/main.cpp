@@ -1,4 +1,5 @@
 #include "atlas/schedule.hpp"
+#include "atlas/linearize.hpp"
 #include <cctype>
 #include <chrono>
 #include <iomanip>
@@ -48,6 +49,32 @@ extern "C" ATLAS_EXPORT const char* atlas_integrate(const char*id,const char*par
     try{int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial),d=parse_csv(strain);if(d.size()!=6)throw std::runtime_error("six Mandel strain components required");auto result=atlas::integrate(m,z,atlas::tensor_from(d,0),p);
         std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"message\":"<<quote(result.message)<<",\"state\":";array(o,result.state);o<<",\"diagnostics\":{\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"rejected\":"<<result.diagnostics.rejected<<",\"increment_fractions\":";array(o,result.diagnostics.increment_fractions);o<<"}}";output=o.str();return output.c_str();
     }catch(const std::exception&e){return failure(e.what());}
+}
+extern "C" ATLAS_EXPORT const char* atlas_linearize(const char*id,const char*parameters,const char*initial,const char*strain){
+    try{
+        int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial),d=parse_csv(strain);
+        if(d.size()!=6)throw std::runtime_error("six Mandel strain components required");
+        const auto result=atlas::linearize_update(m,z,atlas::tensor_from(d,0),p);
+        const auto& a=result.advance;const auto& diag=a.diagnostics;
+        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(a.ok?"true":"false")
+          <<",\"tangent_ok\":"<<(result.tangent_ok?"true":"false")
+          <<",\"api_version\":\"experimental-update-linearization-0.1\",\"catalogue_hash\":"<<quote(atlas::catalogue_hash())
+          <<",\"model\":"<<quote(id)<<",\"message\":"<<quote(a.message)<<",\"tangent_message\":"<<quote(result.message)
+          <<",\"partition_policy\":\"accepted_fixed\",\"branch_policy\":\"selected_fixed\""
+          <<",\"reset_guard_at_zero\":"<<(result.reset_guard_at_zero?"true":"false")<<",\"parameters\":";array(o,p);
+        o<<",\"initial\":";array(o,z);o<<",\"strain\":";array(o,d);o<<",\"state\":";array(o,a.state);
+        o<<",\"state_fields\":[";const auto& fields=atlas::models()[m].fields;
+        for(size_t i=0;i<fields.size();++i){if(i)o<<',';o<<"{\"name\":"<<quote(fields[i].name)<<",\"offset\":"<<fields[i].offset<<",\"size\":"<<fields[i].size<<'}';}
+        o<<"],\"tangent_columns\":[\"xx\",\"yy\",\"zz\",\"sqrt2_xy\",\"sqrt2_yz\",\"sqrt2_xz\"],\"state_tangent\":";
+        if(!result.tangent_ok)o<<"null";
+        else{ o<<'[';for(size_t i=0;i<result.state_tangent.size();++i){if(i)o<<',';array(o,result.state_tangent[i]);}o<<']'; }
+        o<<",\"diagnostics\":{\"iterations\":"<<diag.iterations<<",\"substeps\":"<<diag.substeps<<",\"rejected\":"<<diag.rejected<<",\"increment_fractions\":";
+        array(o,diag.increment_fractions);o<<",\"error\":";if(std::isfinite(diag.error))o<<diag.error;else o<<"null";
+        o<<"}}";output=o.str();return output.c_str();
+    }catch(const std::exception& e){
+        output="{\"ok\":false,\"tangent_ok\":false,\"state_tangent\":null,\"message\":"+quote(e.what())+"}";
+        return output.c_str();
+    }
 }
 extern "C" ATLAS_EXPORT const char* atlas_evaluate_time(const char*id,const char*parameters,const char*current,const char*rate,double time){
     try{int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,current),d=parse_csv(rate);
@@ -127,6 +154,11 @@ int main(int argc,char**argv){
         auto num=[&](const std::string&key,const std::string&fallback){auto s=get(key,fallback);size_t pos=0;double v=std::stod(s,&pos);if(pos!=s.size()||!std::isfinite(v))throw std::runtime_error("invalid number: "+key);return v;};
         auto integer=[&](const std::string&key,const std::string&fallback){double x=num(key,fallback);if(x!=std::floor(x)||std::abs(x)>1000000)throw std::runtime_error("invalid integer: "+key);return int(x);};
         auto id=get("--model"),p=get("--parameters"),z=get("--initial"),mode=get("--mode","run"),d=get("--strain"),current=get("--current");
+        if(mode=="linearize"){
+            const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--strain"};
+            for(const auto& arg:args)if(std::find(allowed.begin(),allowed.end(),arg.first)==allowed.end())
+                throw std::runtime_error("option unsupported by linearize mode: "+arg.first);
+        }
         const std::vector<std::string> temporal={"--strain-rate","--start-time","--duration","--rtol","--atol","--min-time-step","--max-time-step","--max-substeps","--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations"};
         const bool timed=mode=="integrate-time"||mode=="evaluate-time"||mode=="observe-time"||mode=="schedule";
         for(const auto& arg:args){
@@ -146,6 +178,7 @@ int main(int argc,char**argv){
         else if(mode=="integrate-time")response=atlas_integrate_time(id.c_str(),p.c_str(),z.c_str(),get("--strain-rate").c_str(),num("--start-time","0"),num("--duration","nan"),num("--rtol","1e-6"),num("--atol","1e-9"),num("--min-time-step","1e-12"),num("--max-time-step","1e6"),integer("--max-substeps","20000"));
         else if(mode=="evaluate")response=atlas_evaluate(id.c_str(),p.c_str(),current.c_str(),z.c_str(),d.c_str());
         else if(mode=="integrate")response=atlas_integrate(id.c_str(),p.c_str(),z.c_str(),d.c_str());
+        else if(mode=="linearize")response=atlas_linearize(id.c_str(),p.c_str(),z.c_str(),d.c_str());
         else if(mode=="run")response=atlas_run(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),num("--target","0.01"),integer("--steps","100"),integer("--cycles","0"));
         else throw std::runtime_error("unknown mode");
     }catch(const std::exception&e){response=failure(e.what());}

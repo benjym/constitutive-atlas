@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "cases": 21,
+  "matrix_parity_cases": 11,
+  "singular_derivative_preserves_update": true,
+  "failed_updates_restore_parent": true,
+  "cli_error_cases": 5,
+  "existing_integrate_compatible": true,
+  "scope": "Native C ABI through CLI; Emscripten annotation present, Wasm runtime unverified.",
+  "kind": "update-linearization-api-investigation",
+  "sha256": {
+    "cpp/main.cpp": "fbee176805a42f5b1b462eafd7a07c322fe68986862062d149054a165b44332b",
+    "cpp/include/atlas/linearize.hpp": "4fdb2b600877d4102e32553051894078b5f36a1b8e6a4fecd0881fbfc8854ea5",
+    "cpp/include/atlas/solver.hpp": "1e0e5d4d75f11faed0ec728d0be187d8ba9925f098e56fec75fb7b617bd401f0",
+    "atlas/compiler.py": "9998949ba1cb2c719333770a5bffe6f1d4951b2728caac78195d6f7bb23b0895",
+    "tools/verify_linearization_api.py": "d99213f3d2aaf28be328f6ba8f1844af4b42035fac7f1488651a90827f3e2798",
+    "tools/verify_update_tangent.py": "6c5a3b75367e652c1211efe894f369c5ade8dc860742d33e4501702ef6d9a8ed",
+    "catalogue/investigations/update-tangent-v1/results.json.gz": "d97a58a505c023ab127706a099cd6da16f86e96a44be2cf79dddb8a75a98657c",
+    "tests/fixtures/time/maxwell.json": "d4eafd8a06d11d73849e02e779ab055068b25da74242f01567eb819f4a101988",
+    "models/drucker-prager.json": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+    "models/hypoplastic-sand-igs97.json": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+    "models/hypoplastic-sand-vw96.json": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+    "models/linear-elastic.json": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+    "models/modified-cam-clay.json": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+    "models/research/sanisand-2004-parent-reset-be.json": "47b94747bfa7dd8f53330d99276d0cef52f9ca54fdf928103a98118a66195a98",
+    "tests/fixtures/time/parent-reset-cutback.json": "e25e2da6c1a174ee3d9c07295e34ef596370facd3f5a51d79773a44b7edb785e",
+    "tests/fixtures/linearization/reset.json": "485088390fc14862eaa70e4327fc38b28b762956cb752419312923d5637e1a7f",
+    "tests/fixtures/linearization/implicit.json": "e0493b7ce35b07063050555add2cc325584f8b8a7805baa9eab3820c61896b02",
+    "tests/fixtures/linearization/singular.json": "b0b422722e3a7e9505681087e0cc31252b48344340ef80504dc496b5cc7440b3",
+    "tests/test_linearization_api.py": "f027b7947b6c389765e7348dadf2f2e9aefcf7fe9400ea490114240107b32d09"
+  },
+  "raw_sha256": "572c7e38631e3cc4ec6e3c4b6dd32f49b1983c92b46d995d4954ffabb108198c",
+  "date": "2026-10-31",
+  "source_revision": "f4ee086",
+  "raw_file": "responses.json.gz",
+  "compiler": {
+    "argv": [
+      "c++",
+      "-std=c++20",
+      "-O0",
+      "-I/Users/bmar5496/code/constitutive-atlas/cpp/include",
+      "-I/private/tmp/atlas-linearization-api-reproduce/generated",
+      "/Users/bmar5496/code/constitutive-atlas/cpp/main.cpp",
+      "-o",
+      "/private/tmp/atlas-linearization-api-reproduce/solver"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 0.695029917
+  },
+  "capture": {
+    "exit_code": 0,
+    "wall_seconds": 0.880739,
+    "timeout_seconds_per_case": 45,
+    "cases": 21
+  },
+  "exported_native_symbol": "_atlas_linearize",
+  "python_checks": {
+    "command": "python3 -m unittest tests.test_linearization_api tests.test_update_tangent tests.test_atlas.LanguageTests tests.test_parent_reset.ParentResetLanguageTests -q",
+    "tests": 24,
+    "exit_code": 0
+  },
+  "limitations": [
+    "Native CLI through C ABI only; Wasm/browser runtime unverified.",
+    "No full native regression or external reference build.",
+    "Fixed branches/accepted partition; no general nonsmooth derivative guarantee."
+  ],
+  "generated_header_sha256": "328a128145f7b557af5b892648ac36c290b5247c2571110fa6612331ee5bdcce",
+  "executable_sha256": "692880df8e296d7f13cf58856a377aae3e46d4f240f826975bb4206362cdb856"
+}
