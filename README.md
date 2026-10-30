@@ -2,6 +2,8 @@
 
 A declarative geomechanics model database, C++20 material-point engine, reproducible experiment pipeline, and WebAssembly laboratory.
 
+**[Open the browser laboratory →](https://benjym.github.io/constitutive-atlas/)** · [Model catalogue](https://benjym.github.io/constitutive-atlas/#catalogue) · [Methods & evidence](https://benjym.github.io/constitutive-atlas/#methods)
+
 Authors and maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
 
 **This is an initial research implementation, not the completed atlas or a validated engineering package.** Five models execute; the 20-entry catalogue includes fifteen research candidates. SANISAND, the full literature review, controlled calibration/held-out validation, and the final paper remain outstanding. See [project status](docs/STATUS.md) and the [research charter](docs/RESEARCH_CHARTER.md).
@@ -34,19 +36,9 @@ The public website is deployed to [GitHub Pages](https://benjym.github.io/consti
 
 Model source hyperlinks are required in each executable definition and displayed in the laboratory and catalogue. Candidate entries link to discovery references pending review. Each executable card also links to its downloadable JSON definition; the [model schema](https://benjym.github.io/constitutive-atlas/schemas/model.schema.json) is published alongside it.
 
-Requires Emscripten; tested here with 6.0.8. Use a workspace-local cache when the installed SDK directory is not writable.
+[Launch the laboratory](https://benjym.github.io/constitutive-atlas/) to edit parameters and initial states, run five loading protocols, inspect model equations and sources, overlay experiments, and import/export reproducible runs. The C++ engine runs in your browser through WebAssembly; no installation or solver server is required.
 
-```sh
-EM_CACHE="$PWD/.cache/emscripten" emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
-EM_CACHE="$PWD/.cache/emscripten" cmake --build build-wasm --parallel 2
-node tools/test_wasm.mjs
-python3 tools/build_web.py
-python3 -m http.server 8765 --bind 127.0.0.1 --directory web/dist
-```
-
-Open <http://127.0.0.1:8765>. The app runs the generated C++ engine in a Worker, supports cancellation, parameter/state editing, five laboratory protocols, model/source inspection, experimental overlays, and reproducible run import/export. No solver server is required. The browser catalogue hash must match the Wasm build; packaging rejects stale definitions.
-
-The [private preview](https://geomechanics-constitutive-atlas.creamyjoy12.chatgpt.site) requires its owner's ChatGPT sign-in and is managed through the Sites project recorded in `web/.openai/hosting.json`. Publishing does not establish a scientific release or make the site public. Rebuild and use the Sites workflow from a separate Sites checkout for future deployments; see [browser distribution instructions](web/README.md). The authoritative source repository is [benjym/constitutive-atlas](https://github.com/benjym/constitutive-atlas).
+Developer build and local preview instructions are in [web/README.md](web/README.md).
 
 ## Original experimental data
 
