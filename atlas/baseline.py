@@ -161,7 +161,10 @@ def capture(ref, destination):
     try:
         archive = subprocess.check_output(['git','archive','--format=tar',commit], cwd=ROOT)
         with tempfile.TemporaryDirectory(prefix='atlas-baseline-') as directory:
-            source = Path(directory)/'source'
+            # SDK cache builds derive relative paths from their working directory.
+            # Resolve macOS /var -> /private/var before handing paths to tools.
+            directory = Path(directory).resolve()
+            source = directory/'source'
             source.mkdir()
             with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
                 tar.extractall(source, filter='data')
