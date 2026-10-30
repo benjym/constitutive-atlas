@@ -222,17 +222,39 @@ function renderCharts(){
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
-  for(const entry of catalogue){const executable=models.some(x=>x.id===entry.id);if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
-    const card=element('article',undefined,'catalogue-card');card.append(element('span',executable?'Executable · '+models.find(x=>x.id===entry.id).status:'Research candidate','badge'),element('h2',entry.name),element('p',entry.family),element('p',entry.note||''));
-    if(executable){sourceLinks(card,models.find(x=>x.id===entry.id).sources);card.append(definitionLink(entry.id));}
-    else if(entry.discovery_url)sourceLinks(card,[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'},...(entry.research_sources||[])]);
-    sourceLinks(card,entry.catalogue_sources||[]);
-    card.append(publicationReference(entry.id));
-    if(executable){const b=element('button','Explore in laboratory →','text-button');b.onclick=()=>{$('model').value=entry.id;populate();location.hash='laboratory';simulate();};card.append(b);}
-    else {const p=element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.');card.append(p);}
+  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec;if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
+    const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
+    meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'In laboratory':'Research candidate','catalogue-availability'+(executable?' available':'')));
+    const heading=element('h2'),open=element('button',entry.name,'catalogue-open');open.type='button';open.setAttribute('aria-haspopup','dialog');open.onclick=()=>showCatalogueModel(entry,spec);heading.append(open);
+    const hint=element('span',undefined,'catalogue-card-hint');hint.setAttribute('aria-hidden','true');hint.append(element('span','View details'),element('span','↗','catalogue-arrow'));
+    card.append(meta,heading,hint);
     grid.append(card);
   }
-  if(!grid.children.length)grid.append(element('p','No matching models.'));
+  const count=grid.children.length;$('catalogue-results').textContent=count+' '+(count===1?'model':'models')+(query||filter!=='all'?' found':'');
+  if(!count)grid.append(element('p','No matching models. Try another name or availability.','catalogue-empty'));
+}
+function showCatalogueModel(entry,spec){
+  const dialog=$('catalogue-dialog'),body=$('catalogue-detail-body');body.replaceChildren();
+  $('catalogue-detail-title').textContent=entry.name;$('catalogue-detail-family').textContent=entry.family;
+  $('catalogue-detail-status').textContent=spec?'In laboratory · '+spec.status:'Research candidate';
+  $('catalogue-detail-status').className='catalogue-availability'+(spec?' available':'');
+  body.append(element('p',entry.note||spec?.description||'Bibliographic and formulation review pending.','catalogue-detail-note'));
+  if(!spec){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
+  const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
+  sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);
+  if(sources.length){
+    const section=element('section'),list=element('ul',undefined,'catalogue-references');section.append(element('h3','Sources & references'),list);
+    for(const source of sources){
+      const url=new URL(source.url);if(!['https:','http:'].includes(url.protocol))continue;
+      const row=element('li'),link=element('a',source.role+' ↗');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';row.append(link,element('p',source.locator));list.append(row);
+    }
+    body.append(section);
+  }
+  body.append(publicationReference(entry.id));
+  if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
+  $('catalogue-detail-id').textContent=entry.id;
+  const explore=$('catalogue-explore');explore.hidden=!spec;explore.onclick=()=>{dialog.close();$('model').value=entry.id;populate();location.hash='laboratory';simulate();$('model').focus({preventScroll:true});};
+  dialog.showModal();body.scrollTop=0;
 }
 function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function setProtocol(){
@@ -363,6 +385,8 @@ setProtocol();addSlider($('confinement'),'Radial effective stress (kPa)',1,10000
 $('export-run').onclick=()=>download(lastSpec.model+'-run.json',JSON.stringify({schema_version:'0.1',catalogue_hash:catalogueHash,specification:lastSpec,result:currentResult},null,2),'application/json');
 $('export-csv').onclick=()=>{const rows=['axial_strain,radial_strain,volumetric_strain,p_Pa,q_signed_Pa,pore_pressure_Pa,iterations,substeps'];for(const p of currentResult.points)rows.push([p.strain[0],p.strain[1],p.strain.slice(0,3).reduce((a,b)=>a+b,0),p.p,p.q_signed,p.u,p.iterations,p.substeps].join(','));download(lastSpec.model+'-results.csv',rows.join('\n'),'text/csv');};
 $('search').oninput=$('availability').onchange=catalogueCards;
+$('catalogue-close').onclick=()=>$('catalogue-dialog').close();
+$('catalogue-dialog').onclick=e=>{if(e.target===$('catalogue-dialog')){const box=e.target.getBoundingClientRect();if(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom)e.target.close();}};
 try{
   const [response,manifest]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json')]);if(!response.ok||!manifest.ok)throw Error('Catalogue could not be loaded.');
   const definitions=await response.json();catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
