@@ -701,11 +701,12 @@
       "review_stage": "repository description reviewed",
       "decision": "future micromechanics",
       "notes": [
-        "Includes synthetic printed-particle experiments and tomography, not a substitute for natural-sand specimen validation."
+        "Includes synthetic printed-particle experiments and tomography, not a substitute for natural-sand specimen validation.",
+        "The normal file browser identifies a 4.56 MB mechanical workbook plus a 274 KB description manual, avoiding the 6.78 GB tomography archive. The documented api.data.mendeley.com public metadata/download endpoints return 403; normal file download attempts also time out."
       ],
       "ingestion": {
         "status": "held: file retrieval blocked",
-        "reason": "Landing page declares CC BY 4.0. Direct dataset-page and official API-documentation requests returned 403; the search-readable page does not expose file URLs. No measurement contents admitted."
+        "reason": "CC BY 4.0 and the mechanical workbook file identity are verified on the normal public page. Documented public API/direct downloads return 403; browser download attempts have not produced a retrievable file."
       }
     },
     {
@@ -751,13 +752,13 @@
       "decision": "future rock extension",
       "notes": [
         "Repository API explicitly specifies CC0-1.0. Five XLSX files plus README total 148,394 bytes.",
-        "Correct API identifier requires percent-encoding the DOI slash. Download API returned 401 without authentication, despite public metadata; no file contents inspected.",
         "True triaxial, unloading and permeability require rock/hydraulic capabilities beyond current soil triaxial overlays.",
-        "Continuation review found the normal public file_stream links; each also returned 403, so the block is not limited to the authenticated API route."
+        "Continuation review found the normal public file_stream links; each also returned 403, so the block is not limited to the authenticated API route.",
+        "Dryad browser README preview is partially readable and distinguishes measured stress/strain/flow data (Date_1 through Date_4) from fitted criterion curves (Date_5). Direct and normal browser workbook downloads still provide no retrievable file; the full-dataset action prepares and resets without an observed download."
       ],
       "ingestion": {
         "status": "held: file retrieval blocked",
-        "reason": "CC0 declaration verified. Six API download links returned 401, and all six normal landing-page file-stream links returned 403. No file contents admitted."
+        "reason": "CC0 verified and README excerpt read through the normal public preview. Original workbook files remain inaccessible through the direct, API and normal browser download paths tried; no measurements admitted."
       }
     },
     {
@@ -766,15 +767,18 @@
       "source_url": "https://soilmodels.com/sand-and-clay-standard-datasets/",
       "scientific_value": "ExCalibre-format multi-material calibration sets",
       "license": "unconfirmed",
-      "review_stage": "source page and public ExCalibre catalogue inspected",
+      "review_stage": "33 original workbooks and source terms reviewed",
       "decision": "permission follow-up",
       "notes": [
-        "The embedded ExCalibre catalogue is publicly accessible and links 23 clay and 10 sand workbooks, with physical properties and model parameters.",
-        "Workbook contents and dataset-specific redistribution terms still need inspection; no blanket dataset grant established."
+        "Downloaded all 33 public workbook links (4,400,836 bytes), covering 208 measurement worksheets in 23 clay and 10 sand workbooks. Raw hashes and sheet inventories are recorded in docs/data-license-evidence/excalibre-workbook-review.json.",
+        "All worksheet text, NOTES, comments and other workbook XML text parts were inspected. No dataset-specific redistribution grant was found.",
+        "The source terms explicitly default software to GPL; they do not explicitly license these measurement workbooks. Public hosting remains held on data reuse terms, not file access.",
+        "Several workbook notes flag estimated or unrealistic initial void ratios; those source warnings must survive any later ingestion."
       ],
       "ingestion": {
-        "status": "held: access or dataset reuse terms unresolved",
-        "reason": "Public ExCalibre workbook links exist, but dataset-specific redistribution terms are unverified."
+        "status": "held: dataset reuse terms unresolved",
+        "reason": "All 33 workbooks are locally available and scientifically useful, but neither the workbooks nor the linked SoilModels terms establish a dataset-specific redistribution grant.",
+        "evidence": "docs/data-license-evidence/excalibre-workbook-review.json"
       }
     },
     {
