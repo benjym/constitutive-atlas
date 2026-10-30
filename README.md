@@ -2,6 +2,8 @@
 
 A declarative geomechanics model database, C++20 material-point engine, reproducible experiment pipeline, and WebAssembly laboratory.
 
+Authors and maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
+
 **This is an initial research implementation, not the completed atlas or a validated engineering package.** Five models execute; the 20-entry catalogue includes fifteen research candidates. SANISAND, the full literature review, controlled calibration/held-out validation, and the final paper remain outstanding. See [project status](docs/STATUS.md) and the [research charter](docs/RESEARCH_CHARTER.md).
 
 ## Build and test
