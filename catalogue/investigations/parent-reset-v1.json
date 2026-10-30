@@ -1,0 +1,178 @@
+{
+  "kind": "engine-capability-verification",
+  "capability": "parent-increment-reset",
+  "schema_version": "0.1",
+  "source_commit": "d207c9dc694882c9ebeaa986efc63c2a0f0bf1cb",
+  "created_at": "2026-10-30T09:06:32.110135+00:00",
+  "scope": "Synthetic reset semantics only; no SANISAND equation execution, reference equivalence, independent review or admission claim.",
+  "analytical_matrix_cases": 16,
+  "native_fixture_catalogue_hash": "c6fee45abb6318aa68c0fba3bc14a2e130ff9b0efa8011f5f31366ba78bff7b9",
+  "passed": true,
+  "runs": [
+    {
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_parent_reset.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_invalid_shapes_units_scopes_and_duplicate_targets (test_parent_reset.ParentResetLanguageTests.test_invalid_shapes_units_scopes_and_duplicate_targets) ... ok\ntest_nonfinite_guard_and_lazy_values (test_parent_reset.ParentResetLanguageTests.test_nonfinite_guard_and_lazy_values) ... ok\ntest_nonfinite_parent_and_prepared_derived_values (test_parent_reset.ParentResetLanguageTests.test_nonfinite_parent_and_prepared_derived_values) ... ok\ntest_pure_parent_selection_zero_and_positive_boundary (test_parent_reset.ParentResetLanguageTests.test_pure_parent_selection_zero_and_positive_boundary) ... ok\ntest_analytical_matrix_and_python_preparation (test_parent_reset.ParentResetNumericalTests.test_analytical_matrix_and_python_preparation) ... ok\ntest_failed_late_substep_restores_pre_reset_state (test_parent_reset.ParentResetNumericalTests.test_failed_late_substep_restores_pre_reset_state) ... ok\ntest_internal_crossing_and_explicit_caller_partition (test_parent_reset.ParentResetNumericalTests.test_internal_crossing_and_explicit_caller_partition) ... ok\ntest_repeated_outer_trials_do_not_accumulate_resets (test_parent_reset.ParentResetNumericalTests.test_repeated_outer_trials_do_not_accumulate_resets) ... ok\ntest_reset_frozen_across_cutbacks_and_parent_partition (test_parent_reset.ParentResetNumericalTests.test_reset_frozen_across_cutbacks_and_parent_partition) ... ok\ntest_reversal_boundary_multiple_reversals_and_zero (test_parent_reset.ParentResetNumericalTests.test_reversal_boundary_multiple_reversals_and_zero) ... ok\n\n----------------------------------------------------------------------\nRan 10 tests in 0.238s\n\nOK\n"
+    },
+    {
+      "command": [
+        "node",
+        "tools/test_time_wasm.mjs"
+      ],
+      "returncode": 0,
+      "stdout": "Physical-time analytical checks and native/Wasm parity passed for 5 success/failure cases.\nGenerated tensor square: Cartesian native/Wasm checks passed for 24 tensors.\nParent resets: 16 analytical cases, six reversal steps, repeated trials, parent boundaries and mixed-control native/Wasm checks passed.\n",
+      "stderr": ""
+    }
+  ],
+  "source_files": [
+    {
+      "path": "atlas/model.py",
+      "sha256": "709fd988b95ead1f343fdef1608865927bc85d7bf218d062ff5139aab83099c0"
+    },
+    {
+      "path": "atlas/dsl.py",
+      "sha256": "5bdb057a0c6be9f47315aa56cf4607a97b4c0eb5088f710f49121e50d4df5060"
+    },
+    {
+      "path": "atlas/compiler.py",
+      "sha256": "14cb1f0231b99303e4a89c4ce000fe6b5d107d8848538ea2be0e15a778fd91c1"
+    },
+    {
+      "path": "atlas/structure.py",
+      "sha256": "30b1ef624c642b217e19e0a58e6988c2a2f802f0bfc5f892c6d7a38def1bcd47"
+    },
+    {
+      "path": "cpp/include/atlas/solver.hpp",
+      "sha256": "1e0e5d4d75f11faed0ec728d0be187d8ba9925f098e56fec75fb7b617bd401f0"
+    },
+    {
+      "path": "cpp/include/atlas/tensor.hpp",
+      "sha256": "d964ff6e2e46f81e465533f2b517c3aabef7df42de4ed2b9907cc5e4448c6a1e"
+    },
+    {
+      "path": "schemas/model.schema.json",
+      "sha256": "85acda14fe4a8dcd12fced802202b7c3a11a60e811e5da2d7db8224d35621ec7"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "e2c014f0879e5dd8631d7835c30313bfde278fdd18e608d84a653f5545e4ab7b"
+    },
+    {
+      "path": "tests/test_parent_reset.py",
+      "sha256": "85f8c2a07030c02d68c3b86555b43eed35ad14cf2ddd2e4ebfd6b4c9c164a93a"
+    },
+    {
+      "path": "tests/fixtures/parent-reset-cases.json",
+      "sha256": "70ecfe90c2c14ec90cdf60dd51e33fa9395dbfb669d1b75946243478c46e93ad"
+    },
+    {
+      "path": "tools/test_time_wasm.mjs",
+      "sha256": "5b0c647c980db7a66c4ca1e120df206ca3ca3d15e6c58006d02a1f0e3f830276"
+    },
+    {
+      "path": "tools/verify_parent_resets.py",
+      "sha256": "33bb3b9d4e032cf44ab5db193d37fc1656366f81943e51be5b7a9aff89359f82"
+    },
+    {
+      "path": "docs/PARENT_INCREMENT_RESETS.md",
+      "sha256": "cef997be7ebe777a1558db4abf480086da4db7496439ca88f52cacc88d938ea6"
+    },
+    {
+      "path": "tests/fixtures/time/capacity-32.json",
+      "sha256": "43964a96adb5b8efd64e630f1f941e6b755a63b07a7cb85341a5eec89b9cff25"
+    },
+    {
+      "path": "tests/fixtures/time/clock.json",
+      "sha256": "0a399cf391dcb8c0820a9056d5c022ef982ab0c19881fd4322d060b480f5f2c8"
+    },
+    {
+      "path": "tests/fixtures/time/kelvin.json",
+      "sha256": "ca6fbcf21255017206021bb59c119993e36ca548b8eca0c5690d898e841ec1b0"
+    },
+    {
+      "path": "tests/fixtures/time/maxwell-axisymmetric.json",
+      "sha256": "adf35bc4a3ee9d214f8fa69dfe68dcf63036c0411b774473ba74873f7b12f6e7"
+    },
+    {
+      "path": "tests/fixtures/time/maxwell.json",
+      "sha256": "d4eafd8a06d11d73849e02e779ab055068b25da74242f01567eb819f4a101988"
+    },
+    {
+      "path": "tests/fixtures/time/parent-boundary-cutback.json",
+      "sha256": "0b975cbceff754ca75d10817ea8fa9de125fd1acf3bcabd351d71ef69ea9135f"
+    },
+    {
+      "path": "tests/fixtures/time/parent-derived.json",
+      "sha256": "9503df4a46cc6d2885fded413e58f7e0154d2a152750f17c0b7d22b693042526"
+    },
+    {
+      "path": "tests/fixtures/time/parent-nonfinite-derived.json",
+      "sha256": "8f2d6d361d113283d9c45004714270092ba941bd58296577ff8ed25cff4efa16"
+    },
+    {
+      "path": "tests/fixtures/time/parent-nonfinite-guard.json",
+      "sha256": "4c728086400d7eb85c3fb78d568e61a525fe011b939245ea20bbd0834c770668"
+    },
+    {
+      "path": "tests/fixtures/time/parent-nonfinite-value.json",
+      "sha256": "b374a081d7789dce5238496170a110226054cdc0c4bcd1d24bff155912743402"
+    },
+    {
+      "path": "tests/fixtures/time/parent-prepared-derived.json",
+      "sha256": "7dda96dedc1b1d391b83a9db0d97c470729f73110ab558b697a8fde383565c82"
+    },
+    {
+      "path": "tests/fixtures/time/parent-reset-cutback.json",
+      "sha256": "e25e2da6c1a174ee3d9c07295e34ef596370facd3f5a51d79773a44b7edb785e"
+    },
+    {
+      "path": "tests/fixtures/time/parent-reset-domain.json",
+      "sha256": "c825a0cda6bc24192b4bf1073a36de1a04d8f2b41f74dab27f29a89ba4580474"
+    },
+    {
+      "path": "tests/fixtures/time/parent-reset.json",
+      "sha256": "c0ee4a478d1c3afa98e0cbac53fd82e91ab77b216c3b8688e73cfaba498f5785"
+    },
+    {
+      "path": "tests/fixtures/time/parent-residual.json",
+      "sha256": "68fb36417b0e323868577deb796a27fe15caa2cf53aa02f9cbd125739ab9c23d"
+    },
+    {
+      "path": "tests/fixtures/time/parent-simultaneous.json",
+      "sha256": "5c3534b095547aa432a80666de0f1ebe4e86261dda6c0452fa1163de857fb0e5"
+    },
+    {
+      "path": "tests/fixtures/time/parent-tensor.json",
+      "sha256": "765c6a2ea02c1ac5726dca79f833e3449145d6342f2728485d7657d274393820"
+    },
+    {
+      "path": "tests/fixtures/time/tensor-square.json",
+      "sha256": "95a1bf802ec875342d669e9e0d22db3fdd437274b52ecdc94974a6b73a1c8dac"
+    }
+  ],
+  "built_artifacts": [
+    {
+      "path": "build/atlas_time_solver",
+      "sha256": "1bc8d86fa6c238afd633ac52937803256b59c04e321fcb3ab4fd4be1067201b7"
+    },
+    {
+      "path": "build-wasm/time-fixtures.js",
+      "sha256": "3f4429c8d06581bbed3620f3b559b041431f741f90e5f2f7c69ff63a5de41d32"
+    },
+    {
+      "path": "build-wasm/time-fixtures.wasm",
+      "sha256": "41083d872335845e247e3abeedc67577d4c9c77b4779300c94bafb39c849853d"
+    }
+  ]
+}
