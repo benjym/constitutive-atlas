@@ -117,3 +117,7 @@ PostShake is a user-selected mode, initially off; it is not inferred from elapse
 8. **HIST-G8: runtime evidence.** Only after the Python reference and source gates, run controlled serial native/Wasm checks with the same fixtures and explicit contract versions, respecting the current build caution. Publish honest supported/unsupported capabilities; numerical/independent-review status changes require their separate evidence.
 
 Implement the Python validation/interpreter reference before code generation. Then design typed buffers and the coupled AD unknown layout from resolved fields, rather than copying every persistent field into Jet. Preserve the legacy `State`/API path through identity adapters; any new public result envelope is versioned and negotiates required capabilities before evaluating inputs. This packet adds no kernel, public API, schema parser change, state-capacity increase or build requirement.
+
+## Python reference progress
+
+The separate [typed Python history reference](HISTORY_REFERENCE.md) now implements a bounded scalar/symmetric-tensor envelope, explicit immutable phase bindings, guarded simultaneous writes, preparation ancestry, finite-intermediate checks and atomic rollback. Its arithmetic regression fixtures advance HIST-G2/G3; native/legacy adapters, host reductions, source-blocked PM4 equations and scientific/runtime admission remain separate gates. The PM4 design example above is still not an executable program.

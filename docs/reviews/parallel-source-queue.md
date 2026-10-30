@@ -21,3 +21,7 @@ Only primary-source fragments that fit the existing engine should proceed direct
 - [Terracotta prepared creep](../TERRACOTTA_CREEP_REFERENCE.md#nativewasm-prepared-creep-verification): all nine native and Wasm cases independently satisfy the scalar-reference study. Source reconciliation, external experimental comparisons, scientific review and browser creep interaction remain open.
 
 - [HCA recording/accumulation contract](hca-2005-contract.md): source-located cycle inputs, amplitude operator, scalar history and companion handoffs. Recording-filter inconsistency and full-space polarization normalization block a canonical implementation; cycle count must remain distinct from physical time.
+
+### Implemented follow-ups
+
+The [Python history reference](../HISTORY_REFERENCE.md) and [SANISAND event fixtures](../SANISAND_EVENT_FIXTURES.md) now supply the first bounded implementations from this queue. Their tests preserve open source decisions; they do not admit PM4Sand/SANISAND as new public models. Next work is legacy transaction adapters and HCA sampled-loop/scalar-history checks, alongside the missing primary-source batches.

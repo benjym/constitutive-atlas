@@ -379,3 +379,9 @@ The [source-located decision packet](docs/reviews/sanisand-2004-decision.md) sep
 ### 2026-10-31 — HCA recording and accumulation contract
 
 The [HCA-2005 contract draft](docs/reviews/hca-2005-contract.md) specifies one recording cycle and one accumulation block, source-located amplitude/history equations, companion-law handoffs and per-cycle evolution. It preserves conflicting recording-filter rules and the full 9D versus symmetric 6D polarization-initialization issue. Next independent checks are sampled-loop amplitudes and scalar history composition; a general cycle-count API, full closure and executable admission remain open. No source document was redistributed and no build was run.
+
+### 2026-10-31 — Typed Python history reference and SANISAND event fixtures
+
+The [experimental history reference](docs/HISTORY_REFERENCE.md) implements a separate versioned program/snapshot contract with scalar/symmetric-tensor SI checking, immutable phase bindings, simultaneous writes, preparation ancestry, strict negative guards, finite intermediate arithmetic and full-parent rollback. Fourteen arithmetic regression groups cover preparation/modes/lag/clock, late failure, serialization, repeated candidates, invalid inputs and budgets. This advances HIST-G2/G3 without changing legacy model semantics, native APIs or capacity. Source-blocked PM4 updates, host reductions, coupled solver adapters and native/Wasm parity remain open.
+
+The [SANISAND event fixtures](docs/SANISAND_EVENT_FIXTURES.md) retain portable Python-only entry brackets, an independent constant-volume analytical entry, peak/oblique guard decisions and regular zero-distance hardening comparisons with dependency/input hashes. Four fixture groups pass; frozen-state selection is explicitly not a sequential trajectory or partition-convergence result. Canonical loading-process/event semantics, plastic continuation and source-matched external histories remain open.

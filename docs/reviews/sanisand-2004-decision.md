@@ -21,3 +21,7 @@ The smallest useful next task is a **Python-only event decision fixture packet**
 For original reversal closure, review [Dafalias (1986), DOI](https://doi.org/10.1061/%28ASCE%290733-9399%281986%29112%3A9%28966%29) and map its loading-process/conjugate-point definitions to the changed 2004 Eq. (24). That source's full rules are currently unreviewed; obtaining metadata alone does not resolve them. Then specify and review the event/transaction contract before implementing a canonical reset. External matched-preparation full histories remain a separate validation gate. The unreviewed VIBEPaperDataset UMAT lead in the triage packet is not an accepted reference implementation.
 
 Verified scope: source inspection and existing retained evidence only; newly visual-checked original p. 631. No new trajectory calculations, code changes, status promotion or source redistribution.
+
+## Fixture follow-up
+
+The [bounded event packet](../SANISAND_EVENT_FIXTURES.md) now implements the proposed Python-only checks with retained inputs and hashes. It demonstrates local guard distinctions and regular limits; the source loading-process mapping, sequential material trajectories and canonical event policy remain unresolved.
