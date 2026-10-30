@@ -25,7 +25,7 @@ Literature discovery has broad geomechanics scope. The first executable release 
 | Representation | Restricted expressions, dimensional/shape checks, Python interpretation, C++ generation | Equation-level provenance, history/event semantics, richer initialization and version migration |
 | Numerics | AD residual Jacobians, implicit/rate integration, substepping, rollback, five axisymmetric drivers | Independent references, public update tangent, configurable tolerances and recorded-path replay |
 | Data | Seventeen normalized Wichtmann tests; five early-strain drained transfer demonstrations | Preparation metadata, missing initial states, broader importers and controlled evaluation |
-| Delivery | Native/Wasm checks, Linux/macOS CI, public GitHub Pages deployment | Evidence-backed model pages and a scientific release package |
+| Delivery | Native/Wasm checks, automatic Linux CI, manual macOS checks, public GitHub Pages deployment | Evidence-backed model pages and a scientific release package |
 | Paper | Editable working manuscript and generated preliminary results | Completed study, novelty assessment, independent review and archival release |
 
 Passing interpreter/native/Wasm comparisons establishes agreement between paths sharing the same equations. It does not independently verify the transcription. The present five-test demonstration is neither calibration nor held-out validation.
