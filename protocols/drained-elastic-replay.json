@@ -1,0 +1,30 @@
+{
+  "version": "experimental-drained-replay-0.1",
+  "model": "linear-elastic",
+  "parameters": {
+    "p_ref": 100000,
+    "E": 30000000.0,
+    "nu": 0.25
+  },
+  "initial_history": {
+    "e": 0.7
+  },
+  "initial_strain": [
+    0.001,
+    0.002,
+    0.002,
+    0,
+    0,
+    0
+  ],
+  "declarations": {
+    "kinematics": "fixed-frame-axisymmetric-x",
+    "p": "mean-effective-stress",
+    "q": "signed-axial-minus-radial-effective-stress",
+    "strain_origin": "first-observation",
+    "radial_control": "replay-measured-effective-stress",
+    "evidence_url": "https://github.com/benjym/constitutive-atlas",
+    "evidence_locator": "tests/test_experiment_replay.py synthetic()",
+    "initialization_note": "Analytical fixture; e=.7 at row zero."
+  }
+}

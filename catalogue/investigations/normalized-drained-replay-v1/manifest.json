@@ -1,0 +1,45 @@
+{
+  "id": "normalized-drained-replay-v1",
+  "date": "2026-10-31",
+  "status": "pipeline-investigation-not-experimental-validation",
+  "base_revision": "114d7fa2cf841fb6a9e7b4269fb5f69c3ccf37aa",
+  "inputs_and_implementation": {
+    "atlas/experiment_replay.py": "5ebd8ef363b7fb4bec8850bcee3cf74ac33d6fa6812c15d7ea64b95ed2991926",
+    "atlas/cli.py": "9d832795452e8fd46365ff0f4f7156976bd1faa1b8d875de3455aaa775a6bfd7",
+    "schemas/drained-replay.schema.json": "58bf7e7294451623d1aa7a041715dc9aa1a1890639488526be2494046e76c27b",
+    "tests/test_experiment_replay.py": "0f7bcb77f6099582fc481a00724256a305a3a1db65c3c742ebd8a52d0f08856e",
+    "tests/fixtures/experiments/synthetic-drained-elastic.json": "1ed5552da6bd0bcef293dbe1881386f16ffc179b5353f1d4380ca8fa53460008",
+    "protocols/drained-elastic-replay.json": "cb04dd473636fb980d31ed725af381942a64f2795db418c9632863f2d5347e71"
+  },
+  "runtime": {
+    "python": "3.14.7",
+    "native_binary_sha256": "116edee1e14de73dac5837462d507d84fbee1bff615feddb88104a8a075c581b",
+    "new_builds": 0
+  },
+  "artifacts": {
+    "synthetic.json": "68e8d67f9e1d4313f16f1ba6e4d2e1949ec2f9c5e133c1743a4c061c855bfe39",
+    "python-tests.txt": "e71a86df845ad3f231231027f97ef2625a034966d6e6562ad5208fd2e8d86323"
+  },
+  "checks": {
+    "python_tests": 59,
+    "passed": 59,
+    "skipped": 0,
+    "command": "ATLAS_RECORDED_SOLVER=/path/to/atlas_solver python3 -m unittest tests.test_experiment_replay tests.test_recorded_path tests.test_recorded_api tests.test_refinement tests.test_recorded_restarts -v",
+    "synthetic_observations": 6
+  },
+  "local_permission_held_pipeline": {
+    "experiment": "KFS-TMD1",
+    "experiment_file_sha256": "cd8f820c6ec12b27cda493dcf22929fcba655c44f684046e82daeae0b8d8fa79",
+    "request_sha256": "1bce3a784c1da7f3901f69730cddec3e36a41ff9d6c7b9bd285dc247ac069ea0",
+    "ok": true,
+    "observations": 421,
+    "material_trials": 840,
+    "sampled_request_and_response_retained_in_repository": false,
+    "claim": "Illustrative elastic pipeline only; not calibrated, reviewed controls, or experimental validation."
+  },
+  "limitations": [
+    "No browser QA or new Wasm build in this milestone.",
+    "Source data permissions and model applicability are separate gates.",
+    "Parallel AI source reports do not confer independent scientific review."
+  ]
+}

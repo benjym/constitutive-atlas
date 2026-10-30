@@ -16,6 +16,7 @@ def main():
     discovery=sub.add_parser('discover');discovery.add_argument('--query',required=True);discovery.add_argument('--output',required=True,type=Path);discovery.add_argument('--rows',type=int,default=50);discovery.add_argument('--cursor',default='*')
     run=sub.add_parser('run');run.add_argument('specification',type=Path);run.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');run.add_argument('--output',type=Path,required=True)
     replay=sub.add_parser('replay',help='Replay a validated ordered recorded path');replay.add_argument('specification',type=Path);replay.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');replay.add_argument('--output',type=Path,required=True)
+    prepare=sub.add_parser('prepare-replay',help='Convert normalized drained observations with explicit assumptions');prepare.add_argument('experiment',type=Path);prepare.add_argument('configuration',type=Path);prepare.add_argument('--output',type=Path,required=True)
     refine=sub.add_parser('refine-recorded',help='Investigate ordered caller-path resolution');refine.add_argument('configuration',type=Path);refine.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');refine.add_argument('--output',type=Path,required=True)
     benchmark=sub.add_parser('benchmark');benchmark.add_argument('configuration',type=Path);benchmark.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');benchmark.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
@@ -60,6 +61,23 @@ def main():
         args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
         print(f"{'Completed' if result['ok'] else 'Failed'}: {args.output}")
         if not result['ok']:raise SystemExit(1)
+    elif args.command=='prepare-replay':
+        import hashlib
+        from .experiment_replay import prepare_replay, parse_json
+        provenance_path=args.output.with_suffix(args.output.suffix+'.provenance.json')
+        inputs={args.experiment.resolve(),args.configuration.resolve()}
+        if args.output.resolve() in inputs or provenance_path.resolve() in inputs:
+            raise ValueError('output must not overwrite experiment or configuration')
+        experiment_bytes=args.experiment.read_bytes()
+        configuration_bytes=args.configuration.read_bytes()
+        bundle=prepare_replay(parse_json(experiment_bytes),parse_json(configuration_bytes))
+        bundle['provenance']['input_file_sha256']={
+            'experiment':hashlib.sha256(experiment_bytes).hexdigest(),
+            'configuration':hashlib.sha256(configuration_bytes).hexdigest()}
+        args.output.parent.mkdir(parents=True,exist_ok=True)
+        args.output.write_text(json.dumps(bundle['request'],indent=2,allow_nan=False)+'\n')
+        provenance_path.write_text(json.dumps(bundle['provenance'],indent=2,allow_nan=False)+'\n')
+        print(f'Prepared {len(bundle["request"]["path"]["knots"])} ordered observations: {args.output}; provenance: {provenance_path}')
     elif args.command=='refine-recorded':
         from .refinement import execute_study
         report=execute_study(json.loads(args.configuration.read_text()),args.solver,args.output)
