@@ -1,0 +1,46 @@
+{
+  "schema_version": "0.1",
+  "kind": "source-equation-fragment",
+  "id": "pm4sand3d-1.0-lode-surfaces",
+  "model_id": "pm4sand3d-1.0",
+  "status": "draft",
+  "complete_constitutive_model": false,
+  "reviewer": "Codex (AI-assisted equation transcription)",
+  "independent_review": "pending",
+  "source": {
+    "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf",
+    "sha256": "6073a97a374d4b947e20a492b5009bbd01e3e5b0b773841b0f3b037c194f7453",
+    "edition": "June 2026",
+    "accessed_on": "2026-10-31"
+  },
+  "scope": "Instantaneous Lode shape and yield-surface distance only; no stress integration, history, initialization, calibration or host averaging.",
+  "inputs": {
+    "r": {"shape": "sym", "unit": "1", "meaning": "Deviatoric effective stress ratio; Mandel order xx, yy, zz, sqrt(2)xy, sqrt(2)yz, sqrt(2)xz"},
+    "alpha": {"shape": "sym", "unit": "1", "meaning": "Deviatoric back-stress ratio in the same convention as r"},
+    "c": {"shape": "scalar", "unit": "1", "meaning": "Extension/compression shape ratio; supplied here, not the evolving default calibration"},
+    "m": {"shape": "scalar", "unit": "1", "meaning": "Yield-cone size parameter"}
+  },
+  "audit_domain": {
+    "c_min": 0.64,
+    "c_max": 1.0,
+    "trace_relative_tolerance": 1e-12,
+    "requirements": ["Finite inputs", "Deviatoric r and alpha", "Nonzero norm(r-alpha)", "Positive m"],
+    "policy": "Audit scope and trace tolerance are project choices. No zero-direction regularization or clipping is inferred from the paper. This domain is not a complete admissibility rule for PM4Sand3D."
+  },
+  "terms": [
+    {"name": "delta", "expression": "r-alpha", "shape": "sym", "unit": "1", "locator": "Equation 18, printed page 24 (PDF 29); intermediate difference"},
+    {"name": "distance", "expression": "norm(delta)", "shape": "scalar", "unit": "1", "locator": "Equations 18 and 23, printed pages 24-25 (PDF 29-30)"},
+    {"name": "n", "expression": "delta/distance", "shape": "sym", "unit": "1", "locator": "Equation 18, printed page 24 (PDF 29)"},
+    {"name": "cos3theta", "expression": "sqrt(6)*cube_trace(n)", "shape": "scalar", "unit": "1", "locator": "Equation 17, printed page 24 (PDF 29)"},
+    {"name": "g", "expression": "2**(1/4)*c/((1+c**4)-(1-c**4)*cos3theta)**(1/4)", "shape": "scalar", "unit": "1", "locator": "Equation 16, printed page 23 (PDF 28), with adopted ns=0.25 on printed page 24"},
+    {"name": "M_current", "expression": "sqrt((3/2)*dot(r,r))", "shape": "scalar", "unit": "1", "locator": "Equation 15, printed page 23 (PDF 28)"},
+    {"name": "yield_distance", "expression": "distance-sqrt(2/3)*m", "shape": "scalar", "unit": "1", "locator": "Equation 23, printed page 25 (PDF 30); stress-ratio form, not stress-valued Equation 22"}
+  ],
+  "unresolved": [
+    "Full stress-sign, physical-unit and history initialization reconciliation with host implementation.",
+    "Zero or nearly zero direction policy and branch derivatives.",
+    "Evolving c calibration, dense/loose bounding/dilatancy surfaces, flow, hardening and fabric equations.",
+    "Native/Wasm and AD verification of the eventual complete formulation.",
+    "Independent original-equation review."
+  ]
+}
