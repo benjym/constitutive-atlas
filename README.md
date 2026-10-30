@@ -28,7 +28,7 @@ python3 -m atlas.cli run benchmarks/elastic-example.json --output artifacts/elas
 python3 -m atlas.cli database artifacts/atlas.sqlite
 ```
 
-The authoritative definitions are in [models](models/). [JSON schemas](schemas/) cover model, experiment and run documents. [Architecture](docs/ARCHITECTURE.md) describes the mathematical language and conventions.
+The authoritative definitions are in [models](models/). [JSON schemas](schemas/) cover model, experiment and run documents. [Architecture](docs/ARCHITECTURE.md) describes the mathematical language and conventions. The [temporal integration design draft](docs/TEMPORAL_INTEGRATION.md) sets out the proposed physical-time extension for Terracotta and its implementation gates.
 
 ## Browser laboratory
 

@@ -18,7 +18,7 @@ The published model is rate dependent and uses a mesoscopic-temperature internal
 
 ## Extraction and representation work
 
-Use roadmap tasks **TC-01–06**. Before implementation, record:
+Use roadmap tasks **TC-01–06** and the [temporal integration design draft](../TEMPORAL_INTEGRATION.md). The draft separates physical-time equations, timed controls and numerical methods, with implementation packages and analytical acceptance cases; equation extraction and contract validation remain open. Before implementation, record:
 
 - Equation-level original-paper locators and any differences from the author code.
 - State and parameter definitions, units, initialization, admissible domains and sign conventions.

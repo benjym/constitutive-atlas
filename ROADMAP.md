@@ -101,6 +101,8 @@ The candidate source is already linked in the [catalogue](catalogue/manifest.jso
 
 ### Additional near-term target — Terracotta (M2T)
 
+**Temporal design progress:** [The physical-time integration draft](docs/TEMPORAL_INTEGRATION.md) records the current-engine gap, proposed equation/time contracts, timed controls, rollback semantics, analytical acceptance cases and TIME-01–06 implementation packages. The draft is delivered; TC-02/TC-03 remain open pending source extraction and contract validation. Physical-time execution is not implemented.
+
 Target the original **Terracotta / Terra Cotta model by Max Wiebicke and Itai Einav (2024)**, [A simple hydrodynamic model for clay](https://doi.org/10.1016/j.jmps.2024.105789), with the [author reference implementation](https://github.com/MaxWiebicke/Terracotta-pq). The [source and implementation brief](docs/models/terracotta-2024.md) pins the reference revision and open questions. It is a candidate, not an executable or reviewed atlas model.
 
 - [ ] **TC-01:** Extract the published triaxial-invariant equations, energy/stress contributions, solid-fraction and mesoscopic-temperature evolution, parameters, units and initialization. Reconcile the journal version against the pinned author code and record differences.
