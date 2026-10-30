@@ -128,6 +128,7 @@ function catalogueCards(){
     const card=element('article',undefined,'catalogue-card');card.append(element('span',executable?'Executable · '+models.find(x=>x.id===entry.id).status:'Research candidate','badge'),element('h2',entry.name),element('p',entry.family),element('p',entry.note||''));
     if(executable){sourceLinks(card,models.find(x=>x.id===entry.id).sources);card.append(definitionLink(entry.id));}
     else if(entry.discovery_url)sourceLinks(card,[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'},...(entry.research_sources||[])]);
+    sourceLinks(card,entry.catalogue_sources||[]);
     if(executable){const b=element('button','Explore in laboratory →','text-button');b.onclick=()=>{$('model').value=entry.id;populate();location.hash='laboratory';simulate();};card.append(b);}
     else {const p=element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.');card.append(p);}
     grid.append(card);

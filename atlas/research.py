@@ -32,6 +32,11 @@ def export_database(path):
             connection.execute('DELETE FROM sources');connection.execute('DELETE FROM models')
             for entry in manifest['models']:
                 m=models.get(entry['id']);connection.execute('INSERT INTO models VALUES(?,?,?,?,?,?)',(entry['id'],entry['name'],entry['family'],m['status'] if m else 'candidate',int(bool(m)),json.dumps(m) if m else None))
-                for s in (m or {}).get('sources',[]):connection.execute('INSERT INTO sources VALUES(?,?,?,?)',(entry['id'],s['url'],s['locator'],s['role']))
+                sources = list((m or {}).get('sources', []))
+                if entry.get('discovery_url'):
+                    sources.append(dict(url=entry['discovery_url'], locator='Bibliographic review pending', role='Discovery reference'))
+                sources += entry.get('research_sources', []) + entry.get('catalogue_sources', [])
+                for s in sources:
+                    connection.execute('INSERT INTO sources VALUES(?,?,?,?)', (entry['id'], s['url'], s['locator'], s['role']))
     finally:connection.close()
     return dest
