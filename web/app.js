@@ -87,7 +87,13 @@ function scheduleUpdate(){
 }
 function populate(){
   const m=model();$('model-description').textContent=m.description;$('model-family').textContent=m.family;$('model-status').textContent=m.status;
-  $('parameter-fields').replaceChildren();for(const [name,p] of Object.entries(m.parameters))field($('parameter-fields'),'param-'+name,p.label||name,p.default,p.min,p.max);
+  $('parameter-fields').replaceChildren();
+  for(const [name,p] of Object.entries(m.parameters)){
+    const angle=p.unit==='rad'||/\[rad\]/.test(p.label||''),factor=angle?Math.PI/180:1;
+    const label=angle?(p.label||name).replace(/\s*\[rad\]/,'')+' (°)':p.label||name;
+    field($('parameter-fields'),'param-'+name,label,p.default,p.min,p.max,factor);
+    if(angle)$('param-'+name).value=Number((p.default/factor).toPrecision(14));
+  }
   $('state-fields').replaceChildren();
   for(const s of m.state.slice(1)){
     if(s.transient)continue;
@@ -116,7 +122,7 @@ function valuesForState(m){
 }
 function specification(){
   const m=model(),protocol=Number($('protocol').value);
-  return {model:m.id,parameters:Object.keys(m.parameters).map(n=>Number($('param-'+n).value)),initial:valuesForState(m),protocol,target:Number($('target').value)*(protocol===3?1000:.01),steps:Number($('steps').value),cycles:Number($('cycles').value)};
+  return {model:m.id,parameters:Object.keys(m.parameters).map(n=>Number($('param-'+n).value)*Number($('param-'+n).dataset.factor)),initial:valuesForState(m),protocol,target:Number($('target').value)*(protocol===3?1000:.01),steps:Number($('steps').value),cycles:Number($('cycles').value)};
 }
 function validateSpec(s){
   const m=models.find(m=>m.id===s.model);if(!m)throw Error('This model is not in the executable catalogue.');
@@ -279,7 +285,7 @@ function setProtocol(){
 async function readFile(file){if(!file)return null;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');return JSON.parse(await file.text());}
 async function importRun(file){
   try{const doc=await readFile(file);if(!doc)return;if(doc.schema_version!=='0.1')throw Error('Unsupported run schema version.');if(doc.catalogue_hash!==catalogueHash)throw Error('Run was created with a different model catalogue. Use the matching release.');
-    const s=doc.specification,m=validateSpec(s);$('model').value=m.id;populate();Object.keys(m.parameters).forEach((n,i)=>$('param-'+n).value=s.parameters[i]);
+    const s=doc.specification,m=validateSpec(s);$('model').value=m.id;populate();Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
     $('confinement').value=s.initial[1]/1000;$('stress-ratio').value=s.initial[0]/s.initial[1];let offset=6;
     for(const f of m.state.slice(1)){const size=f.shape==='sym'?6:1;if(!f.transient){const input=$('state-'+f.name);input.value=size===6?s.initial.slice(offset,offset+6).join(','):s.initial[offset]/Number(input.dataset.factor);}offset+=size;}
     $('protocol').value=s.protocol;setProtocol();$('target').value=s.target/(s.protocol===3?1000:.01);$('steps').value=s.steps;
