@@ -116,8 +116,27 @@ class PublicAssetTests(unittest.TestCase):
                 self.assertEqual(hashlib.sha256(content).hexdigest(), entry['sha256'])
                 packed = json.loads(content)
                 source = by_id[entry['id']]
+                self.assertEqual(len(source['rows']), len(packed['values']))
+                conversions = {}
+                if source['kind'] != 'experiment':
+                    originals = {c['key']: c for c in source['columns']}
+                    for column in packed['metadata']['columns']:
+                        self.assertEqual(column['source_unit'], originals[column['key']]['unit'])
+                        if column['unit_status'] == 'standardized':
+                            conversions[column['key']] = column['unit_conversion']
+                        else:
+                            self.assertEqual(column['unit_status'], 'unresolved')
+                            self.assertEqual(column['unit'], column['source_unit'])
+                            self.assertNotIn('unit_conversion', column)
                 for row, values in zip(source['rows'], packed['values']):
-                    self.assertEqual([row.get(c) for c in packed['columns']], values)
+                    expected = []
+                    for channel in packed['columns']:
+                        value = row.get(channel)
+                        if value is not None and channel in conversions:
+                            transform = conversions[channel]
+                            value = value * transform['scale'] + transform['offset']
+                        expected.append(value)
+                    self.assertEqual(expected, values)
                 self.assertEqual(packed['metadata']['provenance']['license'], source['provenance']['license'])
                 if source['provenance']['source_id'] == 'opara-sand-fines':
                     self.assertEqual(source['rows'][0]['pore_pressure'], 0)
