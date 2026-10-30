@@ -49,7 +49,8 @@ def _hash(program):
 
 def _number(value):
     try:
-        return type(value) in (int, float) and math.isfinite(value)
+        return (type(value) in (int, float) and math.isfinite(value)
+                and (type(value) is float or float(value) == value))
     except OverflowError:
         return False
 
@@ -80,6 +81,16 @@ def _tree(expression, symbols, expected):
             stack.extend((child, depth + 1) for child in ast.iter_child_nodes(node))
         if infer(tree, symbols) != expected:
             raise ValidationError('history expression shape or dimensions mismatch')
+        # The legacy DSL infers boolean unary/additive expressions as boolean,
+        # while Python evaluates them as numbers. Keep this new contract strict:
+        # booleans may control select or be checked, never enter arithmetic.
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Constant) and not _number(node.value):
+                raise ValidationError('history literals must be exactly representable in binary64')
+            operands = ([node.operand] if isinstance(node, ast.UnaryOp) else
+                        [node.left, node.right] if isinstance(node, ast.BinOp) else [])
+            if any(infer(operand, symbols).shape == 'bool' for operand in operands):
+                raise ValidationError('history arithmetic requires numeric operands')
         return tree
     except (ArithmeticError, RecursionError, TypeError) as exc:
         raise ValidationError('invalid history expression') from exc

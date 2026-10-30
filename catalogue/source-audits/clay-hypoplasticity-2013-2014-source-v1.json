@@ -1,0 +1,322 @@
+{
+  "packet_version": "clay-source-inventory-0.1",
+  "checked_on": "2026-10-31",
+  "status": "source-located inventory; not executable or independently scientifically reviewed",
+  "candidate_status_changes": false,
+  "repo_mutations": false,
+  "native_execution": false,
+  "sources": [
+    {
+      "id": "masin-2013-author",
+      "title": "Clay hypoplasticity with explicitly defined asymptotic states",
+      "author": "David Mašín",
+      "issue_year": 2013,
+      "online_date": "2012-12-22",
+      "journal": "Acta Geotechnica",
+      "volume": 8,
+      "issue": 5,
+      "pages": "481-496",
+      "doi": "10.1007/s11440-012-0199-y",
+      "doi_url": "https://doi.org/10.1007/s11440-012-0199-y",
+      "publisher_url": "https://link.springer.com/article/10.1007/s11440-012-0199-y",
+      "acquisition_url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_AG12-pp.pdf",
+      "discovery_url": "https://web.natur.cuni.cz/uhigug/masin/phdposition/",
+      "source_kind": "author university-hosted manuscript",
+      "acquired_private_path": "/private/tmp/atlas-clay-source-private/masin-2013-author.pdf",
+      "bytes": 2646368,
+      "sha256": "21834ab9da81ec2cdebdf3a3d7f97b691d47bf481a24432bc0562aca9f503281",
+      "page_count": 16,
+      "visually_inspected_pdf_pages": [
+        1,
+        3,
+        4,
+        6,
+        7,
+        8,
+        13,
+        14
+      ],
+      "page_basis": "author manuscript PDF, not journal pagination",
+      "redistribution_permission": "not established; source not included",
+      "publisher_equation_comparison": "displayed Appendix43-58 agrees; full version equivalence unverified"
+    },
+    {
+      "id": "masin-2014-publisher",
+      "title": "Clay hypoplasticity model including stiffness anisotropy",
+      "author": "David Mašín",
+      "issue_year": 2014,
+      "journal": "Géotechnique",
+      "volume": 64,
+      "issue": 3,
+      "pages": "232-238",
+      "doi": "10.1680/geot.13.P.065",
+      "doi_url": "https://doi.org/10.1680/geot.13.P.065",
+      "publisher_url": "https://www.emerald.com/jgeot/article/64/3/232/401267/Clay-hypoplasticity-model-including-stiffness",
+      "source_kind": "primary publisher metadata and abstract only",
+      "full_text_acquired": false,
+      "sha256": null,
+      "acquisition_gap": "current author bibliography routes to login-gated SoilModels; publisher full text restricted; no primary author copy acquired in bounded pass"
+    }
+  ],
+  "local_inventory": {
+    "named_downloads_pdf_match": false,
+    "canonical_full_text_receipt_match_before_acquisition": false,
+    "relevant_archive_member_names_checked": [
+      "VIBEPaperDataset.zip",
+      "kaolin-database-complete.zip",
+      "vyplne-datasets.zip",
+      "TMD1-5.zip"
+    ],
+    "scope_caveat": "bounded filenames/receipts and relevant archive member inventory; not every unrelated archive title-audited"
+  },
+  "variants": [
+    {
+      "candidate_id": "hypoplastic-clay-2013",
+      "identity": "2013 isotropic explicit-ASBS base",
+      "base_state": [
+        {
+          "name": "T",
+          "shape": "symmetric tensor",
+          "unit": "Pa",
+          "source_sign": "compression negative"
+        },
+        {
+          "name": "e",
+          "shape": "scalar",
+          "unit": "1"
+        }
+      ],
+      "state_locator": "PDF p.14 final Appendix paragraph",
+      "parameters": [
+        {
+          "name": "phi_c",
+          "unit": "angle; table degrees, explicit radians conversion required"
+        },
+        {
+          "name": "lambda_star",
+          "unit": "1"
+        },
+        {
+          "name": "kappa_star",
+          "unit": "1"
+        },
+        {
+          "name": "N",
+          "unit": "1"
+        },
+        {
+          "name": "nu",
+          "unit": "1"
+        }
+      ],
+      "parameter_locator": "PDF p.8 Section7; p.14 Appendix",
+      "fixed_constants": {
+        "alpha": 2,
+        "a": 0.3,
+        "pr_Pa": 1000
+      },
+      "equations": [
+        {
+          "equation": 43,
+          "pdf_page": 13,
+          "expression": "T_circle = fs*(L:D) - (fd/fdA)*(A:d)*norm(D)",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 44,
+          "pdf_page": 13,
+          "expression": "L=I4+nu/(1-2*nu)*(one outer one)",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 45,
+          "pdf_page": 13,
+          "expression": "A=fs*L+(T/lambda_star) outer one",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 46,
+          "pdf_page": 13,
+          "expression": "fs=(3*p/2)*(1/lambda_star+1/kappa_star)*(1-2*nu)/(1+nu)",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 47,
+          "pdf_page": 13,
+          "expression": "fd=(2*p/pe)^alpha; alpha=2",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 48,
+          "pdf_page": 13,
+          "expression": "pe=pr*exp((N-log(1+e))/lambda_star); pr=1000 Pa",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 49,
+          "pdf_page": 13,
+          "expression": "fdA=2^alpha*(1-Fm)^(alpha/omega)",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 50,
+          "pdf_page": 13,
+          "expression": "Fm=(9*I3+I1*I2)/(I3+I1*I2)",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 51,
+          "pdf_page": 13,
+          "expression": "omega=-log(cos(phi_c)^2)/log(2)+a*(Fm-sin(phi_c)^2); a=0.3",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 52,
+          "pdf_page": 13,
+          "expression": "I1=trace(T)",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 53,
+          "pdf_page": 13,
+          "expression": "I2=(dot(T,T)-I1^2)/2",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 54,
+          "pdf_page": 13,
+          "expression": "I3=det(T)",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 55,
+          "pdf_page": 13,
+          "expression": "d=dA/norm(dA)",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 56,
+          "pdf_page": 14,
+          "expression": "dA=-That_star+one*(2/3-(cos3theta+1)*Fm^(1/4)/4)*(Fm^(xi/2)-sin(phi_c)^xi)/(1-sin(phi_c)^xi)",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 57,
+          "pdf_page": 14,
+          "expression": "cos3theta=-sqrt(6)*trace(That_star^3)/(dot(That_star,That_star)^(3/2))",
+          "visual_status": "inspected"
+        },
+        {
+          "equation": 58,
+          "pdf_page": 14,
+          "expression": "xi=1.7+3.9*sin(phi_c)^2; That_star=T/trace(T)-one/3",
+          "visual_status": "inspected"
+        }
+      ],
+      "density": {
+        "expression": "e_dot=(1+e)*trace(D)",
+        "locator": "PDF p.3 Eq.7; obtained directly by equating its two displayed terms"
+      },
+      "objective_rate": {
+        "expression": "T_circle=T_dot+T*W-W*T",
+        "locator": "PDF p.3 Eqs.1,3; W skew part of velocity gradient"
+      },
+      "source_notation_cautions": [
+        "I2 is negative of common second principal invariant",
+        "N scalar intercept is not introductory general-law tensor N",
+        "D is Euler stretching, not automatically derivative of finite logarithmic strain",
+        "fourth-order identity differs from second-order identity",
+        "intended effective skeleton-stress mapping does not supply hydraulic/pore-pressure coupling"
+      ],
+      "literal_arithmetic_gates": [
+        "e>-1",
+        "lambda_star,kappa_star nonzero",
+        "nu != 1/2 and nu != -1",
+        "trace(T) nonzero",
+        "I3+I1*I2 nonzero",
+        "omega nonzero",
+        "fdA positive nonzero",
+        "norm(dA) nonzero",
+        "real-compatible fractional powers",
+        "all evaluated intermediate values finite"
+      ],
+      "proposed_diagnostic_scope_not_source_theorem": [
+        "e>=0",
+        "lambda_star>kappa_star>0",
+        "-1<nu<1/2",
+        "0<phi_c<pi/2",
+        "strictly compressive effective principal stresses",
+        "0<=Fm<1",
+        "omega>0"
+      ],
+      "derived_limit_proposal": {
+        "isotropic_direction": "d=-one/sqrt(3) at T=-p*one with p>0 and phi_c>0",
+        "status": "derived proposed branch; continuity/tolerance tests required; not direct evaluation of Eq.57"
+      },
+      "operations": [
+        "scalar arithmetic",
+        "log",
+        "exp",
+        "sin",
+        "cos",
+        "real powers with dynamic exponents",
+        "trace",
+        "Frobenius dot/norm",
+        "symmetric tensor sums/scaling",
+        "determinant",
+        "cubic trace",
+        "lazy limiting branches",
+        "stage domain checks"
+      ],
+      "fourth_order_reduction_proposal": [
+        "L:X=X+nu/(1-2*nu)*trace(X)*one",
+        "A:X=fs*(L:X)+(T/lambda_star)*trace(X)"
+      ],
+      "admission_gaps": [
+        "independent Cartesian source-rate comparison",
+        "complete parameter/state domain and ASBS admission",
+        "near-isotropic limiting policy",
+        "singular-boundary rejection/regularization",
+        "sign/unit/basis mapping tests",
+        "coupled stress-density integration/error and rollback tests",
+        "finite-spin support or explicit zero-spin restriction",
+        "source-matched experimental validation"
+      ]
+    },
+    {
+      "candidate_id": "hypoplastic-clay-2014",
+      "identity": "2014 anisotropic stiffness extension of explicit-ASBS clay host",
+      "outline_basis": "publisher abstract plus author university literature documentation",
+      "dependencies": [
+        "hypoplastic-clay-2013",
+        "Masin-Rott2014 stiffness-anisotropy review as separate dependency",
+        "optional source-pinned enhanced IGS pairing, not automatically original IGS97"
+      ],
+      "unverified_full_text_items": [
+        "anisotropic stiffness entries",
+        "independent anisotropy parameters",
+        "material axes initialization/evolution",
+        "enhanced IGS equations",
+        "normalization and coupling changes",
+        "anisotropy admissibility bounds"
+      ],
+      "status": "dependency outline only; no full equation inventory"
+    }
+  ],
+  "variant_separation": [
+    "2013 base",
+    "2013 plus specified IGS",
+    "2014 anisotropic base",
+    "2014 plus source-pinned IGS"
+  ],
+  "implementation_documentation": {
+    "literature_url": "https://web.natur.cuni.cz/uhigug/masin/plaxumat/node2.html",
+    "bibliography_url": "https://web.natur.cuni.cz/uhigug/masin/plaxumat/node13.html",
+    "date": "2017-09-12",
+    "year_mismatch": "node2 prose labels anisotropic reference2013; bibliography item6 identifies exact title as2014",
+    "integration_url": "https://web.natur.cuni.cz/uhigug/masin/plaxumat/node3.html",
+    "integration_scope": "later combined implementation RK2/3 with adaptive local substepping; not original paper integrator or Atlas parity proof"
+  },
+  "next_task": "Python-only independent Cartesian and reduced Mandel rate oracles for2013, explicit domains/limits/signs; no native admission",
+  "documentation": "docs/reviews/clay-2013-2014-source-packet.md"
+}

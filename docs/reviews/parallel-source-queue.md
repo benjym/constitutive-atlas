@@ -27,3 +27,10 @@ Only primary-source fragments that fit the existing engine should proceed direct
 The [Python history reference](../HISTORY_REFERENCE.md) and [SANISAND event fixtures](../SANISAND_EVENT_FIXTURES.md) now supply the first bounded implementations from this queue. Their tests preserve open source decisions; they do not admit PM4Sand/SANISAND as new public models. Next work is legacy transaction adapters and HCA sampled-loop/scalar-history checks, alongside the missing primary-source batches.
 
 The [legacy bridge](../HISTORY_LEGACY_BRIDGE.md) and [HCA arithmetic diagnostics](../HCA_DIAGNOSTICS.md) now provide the next implemented follow-ups. Native phase code generation and full HCA/PM4 closure remain distinct from these transport/algebra checks.
+
+### Source acquisition and runtime follow-up
+
+- [Clay2013/2014 packet](clay-2013-2014-source-packet.md): author-hosted 2013 manuscript pinned and stress/density/parameter/domain/operation inventory extracted. The separate 2014 full text remains unavailable. Next: independent Cartesian and reduced rate oracles, including isotropic/singular branches and sign/unit maps.
+- [Generalized IGS2024](../models/hypoplastic-generalized-igs-2024-source.md): institutional full text pins HP+extracted-ASBS+GIS, 18 physical parameters and 14 raw retained components. Next: supplied-host GIS fragment and independent structured host-action reduction; author code/license unverified.
+- [Dafalias1986 access gap](sanisand-1986-loading-process.md): exact identity and 2004 dependency mapped; full text remains unavailable. Canonical SANISAND loading-process rules cannot be inferred from the cross-reference.
+- [Shared history runtime](../HISTORY_RUNTIME.md): synthetic C++/Wasm parity now follows the Python and legacy-bridge checks. Source-blocked PM4 updates and full host/coupled solver integration remain open.

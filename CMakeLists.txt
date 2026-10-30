@@ -91,3 +91,21 @@ if(EMSCRIPTEN)
 else()
   set_property(TEST atlas_python APPEND PROPERTY ENVIRONMENT "ATLAS_RESEARCH_SOLVER=$<TARGET_FILE:atlas_research_solver>")
 endif()
+
+# Experimental phased history is separate from model integration and admission.
+file(GLOB HISTORY_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/fixtures/history/*.json")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/history-generated/history_programs.hpp"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.history_compiler "${CMAKE_BINARY_DIR}/history-generated" "${CMAKE_SOURCE_DIR}/fixtures/history"
+  DEPENDS ${HISTORY_FILES} atlas/history_compiler.py atlas/history.py atlas/dsl.py atlas/structure.py schemas/history-program.schema.json
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_executable(atlas_history_solver cpp/history_main.cpp "${CMAKE_BINARY_DIR}/history-generated/history_programs.hpp")
+target_include_directories(atlas_history_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/history-generated")
+target_compile_options(atlas_history_solver PRIVATE -Wall -Wextra -Wno-unused-variable)
+if(EMSCRIPTEN)
+  target_compile_options(atlas_history_solver PRIVATE -fexceptions)
+  set_target_properties(atlas_history_solver PROPERTIES OUTPUT_NAME "history-fixtures" SUFFIX ".js")
+  target_link_options(atlas_history_solver PRIVATE ${ATLAS_WASM_OPTIONS})
+else()
+  set_property(TEST atlas_python APPEND PROPERTY ENVIRONMENT "ATLAS_HISTORY_SOLVER=$<TARGET_FILE:atlas_history_solver>")
+endif()

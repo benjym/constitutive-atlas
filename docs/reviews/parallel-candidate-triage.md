@@ -35,13 +35,13 @@ Recommended first work packets:
 
 **Identity:** Mašín (2013), *Clay hypoplasticity with explicitly defined asymptotic states*, Acta Geotechnica 8(5), 481–496. This is not the 2005 model or the separate 2014 anisotropic-stiffness extension. Discovery route: [author model documentation](https://web.natur.cuni.cz/uhigug/masin/plaxumat/node2.html), retained via [SoilModels clay entry](https://soilmodels.com/hypoclay/).
 
-**Available:** Candidate metadata and retained bibliographic references; no full-text receipt identified in the canonical source receipts, Downloads inventory or inspected paper-side local-source directory.
+**Available now:** The [2013/2014 source packet](clay-2013-2014-source-packet.md) pins the author-hosted 2013 manuscript, DOI10.1007/s11440-012-0199-y, stress law/density/parameters and domain/operation inventory. The issue year is2013; online publication was2012. Full manuscript/final equivalence remains unverified.
 
-**Acquire:** Exact 2013 paper and any author equation/implementation supplement; resolve DOI and version before assigning a definitive source record. Prefer author's university-hosted manuscript or publisher record.
+**Remaining source work:** Reconcile the complete manuscript with final publication and pin any reference implementation/version/license. Do not import the separate 2014 extension.
 
 **Capability:** Likely scalar/symmetric-tensor state and ordinary objective rate-law algebra; complete state layout, normalization, asymptotic-state domains and singular functions must be inventoried before claiming current DSL suffices. Existing rate integration has no finite-spin support.
 
-**Small next task:** Pin paper bytes/title page, extract only the complete stress law, density state, parameters and admissible domains with page/equation locators; list every missing DSL operation. No default calibration or public model yet.
+**Small next task:** Independent reduced and Cartesian rate oracles for the extracted 2013 base, including isotropic/singular branches, sign/unit conversions and zero rate. No default calibration or public model yet.
 
 ### A3 — Clay barodesy-2017 (`barodesy-clay-2017`)
 
@@ -57,23 +57,23 @@ Recommended first work packets:
 
 ### A4 — Generalized IGS-2024 (`hypoplastic-generalized-igs-2024`)
 
-**Identity:** Mugele, Stutz & Mašín (2024), Computers and Geotechnics 173, 106480; exact host/extension pairing is unresolved. It is not IGS97 or ISA. [Overview](https://soilmodels.com/istrain/).
+**Identity:** Mugele, Stutz & Mašín (2024), Computers and Geotechnics 173, 106480; the selected pairing is VW96 HP with extracted ASBS plus GIS. Other hosts and the S=Y option remain separate variants. It is not IGS97 or ISA. [Overview](https://soilmodels.com/istrain/).
 
-**Available:** Directory/candidate metadata. No matching original identified locally. The three generic `1-s2.0-*.pdf` files in Downloads were title-screened and concern other granular fabric/contact topics, not this article.
+**Available now:** The [source/capability packet](../models/hypoplastic-generalized-igs-2024-source.md) pins institutional full text, DOI10.1016/j.compgeo.2024.106480, the exact host pairing,18 physical parameters and14 raw retained scalar components. Initial Downloads title screening found only unrelated generic PDFs.
 
-**Acquire:** Article 106480, supplementary derivation and author code/release if present; pin exact article title/DOI and intended host law.
+**Remaining source work:** Acquire the exact author release and its license/readme to inventory parameter/state ordering and integration, without inferring code rights from the paper license.
 
 **Capability:** Extra history, history-band constraints, reversal rules and host/overlay interfaces. Existing IGS97 tensor memory, initialization tests and accepted-substep evidence are reusable infrastructure, not proof of equation equivalence. Determine the resulting state count against 32.
 
-**Small next task:** Source-backed dependency matrix: allowed host(s), independent extension parameters, additional states, evolution and initialization; then select exactly one paired formulation identity.
+**Small next task:** Supplied-host GIS rate fragment and independent structured HP ASBS host-action reduction. Preserve nested exponent S**(k**gamma), independent gamma_Omega and nondeviatoric h; no capacity increase or new reset phase is source-justified.
 
 ### B1 — Anisotropic clay hypoplasticity-2014 (`hypoplastic-clay-2014`)
 
 **Identity:** Mašín (2014), *Clay hypoplasticity model including stiffness anisotropy*, Géotechnique 64(3), 232–238. Preserve dependency on the 2013 host and separate optional IGS pairing. [Directory](https://soilmodels.com/hypoclay/).
 
-**Available:** Candidate only in inspected inventories.
+**Available now:** The [2013/2014 packet](clay-2013-2014-source-packet.md) resolves exact2014 DOI10.1680/geot.13.P.065 and the2013 host. The2014 full text remains unacquired; only publisher/author dependency metadata was reviewed.
 
-**Acquire:** Exact 2014 original and its 2013 dependency together; author implementation documentation with version/date.
+**Acquire:** Exact2014 original and matching author implementation/version; do not substitute the distinct Mašín–Rott review.
 
 **Capability:** Anisotropic stiffness representation and material orientation/initialization. Existing six-component tensors can represent a symmetric fabric only if the source uses one; do not infer fourth-order contractions, basis updates or finite rotations are supported. Determine fixed versus evolving anisotropy.
 
@@ -198,3 +198,7 @@ Recommended first work packets:
 Canonical evidence: `catalogue/discovery/soilmodels-2026-10-30.json`, `catalogue/manifest.json`, `catalogue/source-audits/original-papers-2026-10-31.json`, SANISAND source/research dossiers, `docs/STATE_CAPACITY.md`, `docs/TIME_ODE_API.md`, `docs/TIMED_SCHEDULES.md`, and roadmap expansion waves. Supplemental draft evidence: `paper/study/source_formulations/{hca-sand-2005,hypoplastic-interface-2016}.json`, `paper/study/hca_normalization.md`, and local source directory. Dataset provenance: `docs/data-license-evidence/user-download-review-2026-10-31.json` and `private-bentonite-verification.json`.
 
 “Not found locally” means no matching receipt/filename in those inventories and the inspected Downloads/paper-side directories; it is not a whole-machine search or proof a source cannot be acquired. Existing URLs are acquisition routes recorded by the project, not newly tested live links. Do not duplicate existing user-supplied papers, invent DOI metadata, redistribute copyrighted sources, promote draft review flags, or equate a candidate source audit with complete executable model admission.
+
+## Latest source-gap follow-up
+
+The [Dafalias1986 packet](sanisand-1986-loading-process.md) verifies the exact PartI dependency and records unsuccessful primary full-text acquisition. Its loading-process/conjugate-point rules remain unavailable; the2004 cross-reference and later implementations cannot close that gap.

@@ -47,3 +47,7 @@ HIST-G2/G3 advance for this bounded reference. Legacy adapters and their migrati
 ## Legacy bridge follow-up
 
 The [separate legacy snapshot bridge](HISTORY_LEGACY_BRIDGE.md) now transports existing full-integrator calls with pinned model/parameter/wire-layout identities, copied original-parent inputs and atomic full-state/strain publication. It supplies a bounded part of HIST-G4 without translating legacy reset expressions or generating new native phase code. Remaining gates above still apply.
+
+## Shared runtime follow-up
+
+The [experimental C++/Wasm runtime](HISTORY_RUNTIME.md) now executes synthetic programs with canonical sorted flat layouts, finite executed intermediates, lazy branches, immutable snapshots and full rollback. The history validator explicitly rejects Boolean arithmetic to avoid Python/C++ type-promotion ambiguity and rejects integer values/literals that cannot roundtrip exactly through finite binary64. Generic runtime infrastructure advances; PM4 source/model gates and coupled/host integration remain open.

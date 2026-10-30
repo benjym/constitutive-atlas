@@ -1,0 +1,593 @@
+{
+  "audit_format": "source-dependency-inventory-0.1",
+  "candidate_id": "hypoplastic-generalized-igs-2024",
+  "status": "candidate-source-inventory-only",
+  "date": "2026-10-31",
+  "scope": {
+    "selected_pairing": "von-Wolffersdorff-1996 HP with extracted ASBS + generalized intergranular strain 2024",
+    "selected_pairing_status": "source-resolved; implementation not transcribed or admitted",
+    "not_equivalent_to": [
+      "IGS97",
+      "ISA",
+      "HP+GIS with S=Y fallback",
+      "later NHP+GIS"
+    ],
+    "native_execution": false,
+    "repository_mutation": false,
+    "admission": false,
+    "independent_implementation_review": "pending"
+  },
+  "publication": {
+    "title": "Generalized intergranular strain concept and its application to hypoplastic models",
+    "authors": [
+      "L. Mugele",
+      "H.H. Stutz",
+      "D. Mašín"
+    ],
+    "journal": "Computers and Geotechnics",
+    "volume": 173,
+    "article": "106480",
+    "year": 2024,
+    "doi": "10.1016/j.compgeo.2024.106480",
+    "url": "https://doi.org/10.1016/j.compgeo.2024.106480",
+    "institutional_landing": "https://publikationen.bibliothek.kit.edu/1000171366",
+    "published_pdf": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+    "online_date_from_pdf": "2024-06-05",
+    "metadata_conflict": "KIT landing advance-publication field says 2023-06-05; PDF and publication record say 2024."
+  },
+  "private_receipt": {
+    "path": "/private/tmp/atlas-generalized-igs-source/mugele-stutz-masin-2024-gis.pdf",
+    "sha256": "39ec8356a26b82ae651be8feb4cdb3e49bb86ded9a850adc4c7eee5e9ec3bdc3",
+    "bytes": 2381423,
+    "pages": 13,
+    "page_number_mapping": "printed page equals one-based PDF page",
+    "acquisition": "Institutional KIT publisher-version URL; no matching named original found in Downloads at task start. Existing triage records generic PDFs as unrelated.",
+    "copyright": "2024 Authors; Elsevier publication; paper CC BY-NC-ND 4.0, verified PDF p1",
+    "redistribution": "No PDF, extraction, render or author implementation staged",
+    "visual_pages": [
+      1,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      12
+    ]
+  },
+  "sources": [
+    {
+      "id": "article",
+      "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+      "locator": "pp1-13",
+      "kind": "institutional-publisher-version"
+    },
+    {
+      "id": "code_landing",
+      "url": "https://soilmodels.com/download/generalised-intergranular-strain-concept/",
+      "locator": "Description and release dates",
+      "kind": "author-upload-description-only",
+      "checked": "2026-10-31"
+    }
+  ],
+  "dependencies": [
+    {
+      "variant": "selected_HP_extracted_ASBS_GIS",
+      "locators": [
+        "p3 Eqs8-12",
+        "p4 Eqs17-32",
+        "p7 Section6",
+        "p12 AppendixB"
+      ],
+      "host_outputs": [
+        "E_action(X)",
+        "m=-normalize(L_inverse_action(N))",
+        "C=norm(L_inverse_action(N))*fdAstar",
+        "S=fd/fdAstar",
+        "f=0"
+      ],
+      "projection": "Evaluate Eq31 with current sigma and e to obtain fdAstar. Actual ASBS reference-state search is a separate numerical preparation operation.",
+      "state_dependencies": [
+        "sigma",
+        "e",
+        "h",
+        "Omega"
+      ],
+      "evidence": "visually verified"
+    },
+    {
+      "variant": "HP_GIS_S_equals_Y",
+      "locators": [
+        "p3 Eqs13-14",
+        "p7 Section6"
+      ],
+      "host_outputs": [
+        "C=1",
+        "S=Y=fd*norm(L_inverse_action(N))"
+      ],
+      "status": "separate optional pairing; not selected and not a silent fallback",
+      "evidence": "visually verified"
+    },
+    {
+      "variant": "other_hypoplastic_hosts",
+      "locators": [
+        "p2 Section2",
+        "p3 Eq7"
+      ],
+      "status": "formal generality only; host-specific ASBS and state evolution required",
+      "host_outputs": [
+        "E_action(X)",
+        "m",
+        "C",
+        "S",
+        "f(strain_rate,host_state)"
+      ],
+      "evidence": "text checked; p3 visually verified"
+    },
+    {
+      "variant": "elastoplastic_extension",
+      "locators": [
+        "p7 Eqs44-45"
+      ],
+      "status": "discussion outside worked scope; not a full admitted host algorithm",
+      "evidence": "visually verified"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "phi_c",
+      "group": "HP",
+      "shape": "scalar",
+      "unit": "degree",
+      "published_example": 34,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "e_i0",
+      "group": "HP",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 1.027,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "e_c0",
+      "group": "HP",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 0.893,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "e_d0",
+      "group": "HP",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 0.52,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "h_s",
+      "group": "HP",
+      "shape": "scalar",
+      "unit": "kPa",
+      "published_example": 111746,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "n",
+      "group": "HP",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 0.346,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "alpha",
+      "group": "HP",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 0.15,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "beta",
+      "group": "HP",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 2.2,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "R",
+      "group": "IS_GIS",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 0.0001,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "m_R",
+      "group": "IS_GIS",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 5,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "m_T",
+      "group": "IS_GIS",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 2.5,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "beta_R",
+      "group": "IS_GIS",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 0.1,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "chi_R",
+      "group": "IS_GIS",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 4.0,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "gamma_chi",
+      "group": "GIS_historiotropy",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 1.7,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "chi_0",
+      "group": "GIS_historiotropy",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 0.8,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "chi_max",
+      "group": "GIS_historiotropy",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 1.5,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "C_Omega",
+      "group": "GIS_historiotropy",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 45,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    },
+    {
+      "name": "gamma_Omega",
+      "group": "GIS_historiotropy",
+      "shape": "scalar",
+      "unit": "1",
+      "published_example": 1.0,
+      "source": {
+        "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+        "locator": "p8 Table1"
+      },
+      "independent": true
+    }
+  ],
+  "parameter_counts": {
+    "HP": 8,
+    "IS_GIS": 5,
+    "GIS_historiotropy": 5,
+    "physical_total": 18,
+    "atlas_numerical_scaling_p_ref_excluded": true
+  },
+  "fields": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "role": "host_physical_state",
+      "scalarized_components": 6,
+      "locator": "p4 Section3; p1 objective rate convention"
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "host_physical_state",
+      "scalarized_components": 1,
+      "locator": "p4 Eq22"
+    },
+    {
+      "name": "h",
+      "shape": "sym",
+      "unit": "1",
+      "role": "overlay_physical_history",
+      "scalarized_components": 6,
+      "locator": "p5 Eq33; p6 Eqs34-35 and Section5",
+      "not_deviatoric": true
+    },
+    {
+      "name": "Omega",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "overlay_physical_history",
+      "scalarized_components": 1,
+      "locator": "p7 Eqs41-43",
+      "not_cycle_counter": true
+    }
+  ],
+  "storage_budget": {
+    "raw_scalar_components": 14,
+    "minimal_independent_count_claimed": false,
+    "derived_not_state": [
+      "rho",
+      "h_direction",
+      "k",
+      "chi",
+      "gamma",
+      "fd",
+      "fdAstar",
+      "m",
+      "C",
+      "S",
+      "host stiffness actions"
+    ],
+    "additional_algorithm_workspace": "not inventoried until author code inspected",
+    "capacity_increase_justified": false
+  },
+  "evolution": [
+    {
+      "fields": [
+        "h"
+      ],
+      "locator": "p5 Eq33; p6 Eqs34-35",
+      "rule": "Positive dot(h_direction,strain_rate) branch suppresses projected loading by rho**beta_R; nonpositive branch uses full strain rate. h_direction=0 at h=0. rho=norm(h)/R.",
+      "event_semantics": "continuous direction-dependent rate, not a discrete reversal reset"
+    },
+    {
+      "fields": [
+        "sigma"
+      ],
+      "locator": "p6 Eq39; p7 Eq40",
+      "critical_typography": "nested S**(k**gamma); outer k multiplies entire E_action including f",
+      "k_checkpoints": [
+        "rho=1 monotonic: k approaches 1",
+        "rho=1 180 degree reversal: k=m_R",
+        "rho=1 90 degree reversal: k=m_T",
+        "rho=0: k=m_R"
+      ],
+      "zero_rate": "normalized strain-rate direction undefined in displayed notation; explicit zero-increment continuation and test required"
+    },
+    {
+      "fields": [
+        "Omega"
+      ],
+      "locator": "p7 Eqs41-43",
+      "rate": "C_Omega*(1-rho**gamma_Omega-Omega)*norm(strain_rate)",
+      "derived": [
+        "chi=chi_0+Omega*(chi_max-chi_0)",
+        "gamma=gamma_chi*chi"
+      ],
+      "gamma_Omega": "independent Table1 parameter; optional textual gamma_Omega=gamma is not automatically selected",
+      "bounds": "continuous-law rho in [0,1] and Omega in [0,1]; no sourced discrete clipping policy"
+    }
+  ],
+  "initialization": [
+    {
+      "case": "published drained triaxial reversal",
+      "locator": "p8 Section6.1.1; Figs7-9",
+      "verified": "visual",
+      "source_convention": "tension/extension positive",
+      "values": {
+        "compressive_pressure_magnitude_Pa": 100000,
+        "e": 0.595,
+        "h_three_normal_components": "-R/sqrt(3)",
+        "h_shear_components": 0,
+        "Omega": 0
+      },
+      "loading": "Unloading axial stress by 70 kPa after 10% compressive axial strain, followed by reloading.",
+      "scope": "explicit example preparation, not universal defaults"
+    },
+    {
+      "case": "unknown or absent cyclic preloading",
+      "locator": "p7 following Eq43",
+      "verified": "visual",
+      "rule": "Omega0=0 permitted; known history remains caller supplied"
+    },
+    {
+      "case": "ASBS oedometer state",
+      "locator": "p9 Section6.1.2; p4 Section3",
+      "verified": "text-only p9, visual p4",
+      "rule": "ASBS initial reference state found iteratively; not hidden default preparation",
+      "fixture_status": "pending visual p9 verification"
+    },
+    {
+      "case": "cyclic triaxial",
+      "locator": "p9 Section6.2",
+      "verified": "text-only",
+      "fixture_status": "pending visual p9 verification"
+    }
+  ],
+  "conventions": {
+    "locator": "p12 AppendixA; p1 introduction",
+    "stress": "effective Cauchy; tension positive",
+    "strain": "extension positive; Euler stretching in general",
+    "objective_stress_rate": "Zaremba-Jaumann",
+    "p": "-trace(sigma)/3",
+    "tensor_norm": "Euclidean",
+    "atlas_mapping_required": [
+      "stress/strain/h sign conversion",
+      "sqrt(2) Mandel shear conversion",
+      "degrees to radians",
+      "kPa to Pa"
+    ],
+    "immediate_scope": "zero-spin rate-independent material paths only; no finite-rotation claim"
+  },
+  "capability_gaps": [
+    {
+      "id": "GIS-RATE-FRAGMENT",
+      "priority": 1,
+      "scope": "Typed Eqs33-35 and39-43; supplied host action rather than guessed host law",
+      "new_DSL_primitive": "none proven necessary",
+      "evidence": [
+        "atlas/dsl.py:103-107",
+        "atlas/dsl.py:224-228"
+      ],
+      "acceptance": [
+        "zero memory",
+        "zero increment",
+        "both directional branches",
+        "0/90/180 degree reversal checkpoints",
+        "nested exponent at S=1",
+        "Omega growth and decay",
+        "Cartesian covariance"
+      ]
+    },
+    {
+      "id": "HP-ASBS-HOST",
+      "priority": 2,
+      "scope": "Eq31 and required L inverse actions with independently verified Cartesian oracle",
+      "new_DSL_primitive": "Generic fourth-order inversion is not yet proven necessary: p12 B.2 is identity-plus-dyadic. Derive and verify a structured action first. B.10 is fd, not an inverse.",
+      "acceptance": [
+        "denominator domains",
+        "root domains",
+        "isotropic and Lode limits",
+        "sign and unit mapping",
+        "projected value versus ASBS preparation separation"
+      ]
+    },
+    {
+      "id": "HOST-COMPOSITION",
+      "priority": 3,
+      "scope": "Explicit typed E_action,m,C,S,f contract or deliberately flattened paired model; dependency identities/hashes required",
+      "acceptance": [
+        "no silent S=Y fallback",
+        "no unsupported host compatibility claims"
+      ]
+    },
+    {
+      "id": "DISCRETE-REFERENCE",
+      "priority": 4,
+      "scope": "Inspect exact author release/license and discretization before reference-equivalence claims",
+      "unknown": [
+        "integration method",
+        "substep/error policy",
+        "endpoint bounds",
+        "zero-rate convention",
+        "UMAT state/parameter ordering",
+        "code reuse license"
+      ],
+      "history_framework": "No new ordered lag/reset phase demanded by paper inventory. Existing transaction/rollback is infrastructure, not a source algorithm."
+    }
+  ],
+  "repo_context": [
+    {
+      "path": "docs/reviews/parallel-candidate-triage.md",
+      "locator": "58-68",
+      "note": "prior unresolved identity/source gap"
+    },
+    {
+      "path": "models/hypoplastic-sand-vw96.json",
+      "locator": "parameters and derived fields",
+      "note": "infrastructure/algebra only, not proof of GIS equivalence"
+    },
+    {
+      "path": "models/hypoplastic-sand-igs97.json",
+      "locator": "state and evolution",
+      "note": "IGS97 infrastructure only, distinct identity"
+    },
+    {
+      "path": "atlas/model.py",
+      "locator": "97-102",
+      "note": "scalarized state capacity check"
+    }
+  ],
+  "pending": [
+    "Independent review of exact equation transcription",
+    "Author release access and license inspection",
+    "Structured HP action and Eq31 oracle",
+    "Numerical domain and initialization policy",
+    "Discrete integration/refinement and rollback evidence",
+    "Reference implementation comparison",
+    "Any experimental validation"
+  ],
+  "next_packet": "GIS rate-only source fragment with supplied host quantities, followed by separate HP ASBS host-action fragment; no model admission or state-capacity change."
+}
