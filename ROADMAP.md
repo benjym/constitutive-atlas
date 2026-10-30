@@ -113,6 +113,8 @@ The [experimental parent-increment reset contract](docs/PARENT_INCREMENT_RESETS.
 
 A [source-conventions audit](docs/models/sanisand-2004-conventions.md) now adds tested engineering-shear/unit/tangent conversions and 87 Cartesian comparisons of 18 unchanged selected OpenSees state/tensor functions. The [revision-pinned report](catalogue/investigations/sanisand-source-functions-v1.json) documents a unit-dependent low-pressure correction and other variant-specific limits. This advances SAN-01/02/06 source reconciliation; complete original-paper extraction, full reference integration and canonical transcription remain open.
 
+An [initialization/transaction source contract](docs/models/sanisand-2004-initialization.md) now records stage-dependent parameter mutation, shared stage/copy effects, preparation strain origins, recorder trial/committed distinctions and reset omissions. Its [twelve pending full-reference scenarios](catalogue/source-audits/sanisand-2004-initialization.json) advance SAN-01/03/06 extraction without claiming runtime characterization or closing those tasks.
+
 **Acceptance:** all six formulations meet their review gates and execute through the common engine without model-specific mathematical escape hatches. History and initialization semantics are explicit and tested under substepping and rollback. A paper figure or website curve alone cannot close this milestone.
 
 ### Additional near-term target — Terracotta (M2T)

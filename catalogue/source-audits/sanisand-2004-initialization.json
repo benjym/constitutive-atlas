@@ -1,0 +1,163 @@
+{
+  "schema_version": "0.1",
+  "kind": "reference-initialization-contract",
+  "model_id": "sanisand-2004",
+  "inspected_on": "2026-10-31",
+  "reference_commit": "8a0273db3e2f5a14c05924a179c1e439500c852c",
+  "status": "source-inspection-only",
+  "runtime_status": "not-executed",
+  "original_paper_inspected": false,
+  "scope": "Initialization, stage, state observation and transaction behavior of one pinned implementation; no full material execution or canonical model admission.",
+  "sources": [
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/ManzariDafalias.cpp",
+      "sha256": "fd24f826b09b3abb9b571529a50cdb11801db883fbcefbdc474fb529e571d933"
+    },
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/ManzariDafalias.h",
+      "sha256": "a4fcf8560d75cdf8fa00ef5c2691b11bba1ee88eeeb52ac5e658870f3f0801ff"
+    },
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/ManzariDafalias3D.cpp",
+      "sha256": "7781988f9e5898cac1d3ff2b557614a3a3f98621e1776bedd7edfe84b79c02e7"
+    },
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/COPYRIGHT",
+      "sha256": "54ed2fe97dbc30c6b8c77e094e71f20c255c52a642ce66d279a8f1b6a3676036"
+    }
+  ],
+  "locators": [
+    {
+      "file": "ManzariDafalias.cpp",
+      "symbols": [
+        "mElastFlag",
+        "OPS_ManzariDafaliasMaterial",
+        "constructors",
+        "commitState",
+        "revertToLastCommit",
+        "revertToStart",
+        "getState",
+        "getAlpha_in",
+        "getResponse",
+        "updateParameter",
+        "initialize",
+        "integrate",
+        "elastic_integrator",
+        "Elastic2Plastic"
+      ]
+    },
+    {
+      "file": "ManzariDafalias.h",
+      "symbols": [
+        "constructor defaults",
+        "static mElastFlag",
+        "nonvirtual getState/getAlpha_in"
+      ]
+    },
+    {
+      "file": "ManzariDafalias3D.cpp",
+      "symbols": [
+        "getCopy",
+        "getState",
+        "getEStrain",
+        "getStress"
+      ]
+    }
+  ],
+  "required_provenance": [
+    "source hashes",
+    "binary hash",
+    "toolchain and build settings",
+    "numeric pressure unit",
+    "factory and copy route",
+    "supplied parameters",
+    "effective parameters after stage changes",
+    "stage transitions",
+    "integration/Jacobian/tangent settings",
+    "tolerances",
+    "preparation increments",
+    "absolute strain origin",
+    "commit boundaries",
+    "accessor route and representation"
+  ],
+  "cases": [
+    {
+      "id": "construction",
+      "runtime_status": "pending",
+      "setup": "Construct a fresh valid 3D material with all options explicit.",
+      "source_prediction": "Stored stress and strain are zero; initial tangent is evaluated using auxiliary isotropic P_atm. Do not infer consolidated stress from the tangent."
+    },
+    {
+      "id": "isotropic-elastic-preparation",
+      "runtime_status": "pending",
+      "setup": "Explicit stage 0 after construction. Apply internal normal strains p_target/(3*K0) once to a fresh material, then commit.",
+      "source_prediction": "Expected stress is p_target*I; e=e_init-(1+e_init)*p_target/K0; alpha=0. Compare the complete state and tangent, not stress alone."
+    },
+    {
+      "id": "anisotropic-elastic-preparation",
+      "runtime_status": "pending",
+      "setup": "Explicit stage 0. Apply normal and all shear strains to a fresh material, then commit with positive resulting p_raw.",
+      "source_prediction": "The elastic branch assigns alpha=dev(stress_next)/p_raw. Fabric begins zero; anisotropic prepared alpha must not be replaced with zero."
+    },
+    {
+      "id": "stage-pressure-floor-boundaries",
+      "runtime_status": "pending",
+      "setup": "Stage 1 at trial or committed means below, equal to, and above p_min; include unequal trial/committed states.",
+      "source_prediction": "Either strictly low mean triggers replacement of both stresses by p_min*I and both alphas by zero. Equality alone does not satisfy the test; inspect other fields for their distinct behavior."
+    },
+    {
+      "id": "stage-critical-ratio-mutation",
+      "runtime_status": "pending",
+      "setup": "Above the pressure-floor branch, switch to stage 1 with trial eta below, equal to, and above supplied Mc.",
+      "source_prediction": "Only eta>Mc sets effective Mc to 1.1*eta. Inspect supplied/effective parameters and do not treat the transition as a stress projection."
+    },
+    {
+      "id": "uncommitted-stage-transition",
+      "runtime_status": "pending",
+      "setup": "Change trial stress without commit, then request stage 1; replay from a fresh process for comparison.",
+      "source_prediction": "The floor predicate uses both trial and committed means; critical-ratio calculation uses trial stress. Stage changes must therefore have explicit commit boundaries."
+    },
+    {
+      "id": "shared-stage-and-copy",
+      "runtime_status": "pending",
+      "setup": "In isolated processes, vary construction/copy order and update stage on one of two material instances.",
+      "source_prediction": "mElastFlag is static; class-tag null construction sets it to zero. The 3D no-argument getCopy invokes that constructor. Verify effects on both instances and explicitly select stage after setup."
+    },
+    {
+      "id": "void-ratio-origin",
+      "runtime_status": "pending",
+      "setup": "Replay an identical prepared state with absolute preparation strain retained, then compare an intentionally rebased laboratory origin.",
+      "source_prediction": "e=e_init-(1+e_init)*trace(total_strain). Retaining prepared e and incremental coefficient (1+e_init) reproduces this relation; replacing the coefficient with (1+e_current) defines another law."
+    },
+    {
+      "id": "void-ratio-parameter-update",
+      "runtime_status": "pending",
+      "setup": "At nonzero total volumetric strain, request a current void ratio via parameter update 8, away from eps_v=1.",
+      "source_prediction": "e_init becomes (e_requested+eps_v)/(1-eps_v); the method does not immediately assign mVoidRatio. Subsequent stiffness uses the changed e_init. Observe before and after integration/commit."
+    },
+    {
+      "id": "trial-versus-committed-memory",
+      "runtime_status": "pending",
+      "setup": "Create a loading reversal. Read direct 3D state, base state response and alpha_in response before and after commit.",
+      "source_prediction": "Base state and alpha_in expose committed memory; direct 3D getState packs trial memory. Check both accessor route and packet shear/sign conventions."
+    },
+    {
+      "id": "repeated-outer-trials",
+      "runtime_status": "pending",
+      "setup": "From the same committed state, evaluate A then B without commit and compare B against fresh-process replay of the committed prefix followed by B.",
+      "source_prediction": "Characterize any order dependence: reversal guard reads mutable mCe, and the material rollback method is empty. Agreement is not assumed."
+    },
+    {
+      "id": "reset-versus-fresh-replay",
+      "runtime_status": "pending",
+      "setup": "After nonzero committed elastic strain and plastic loading, exercise revertToLastCommit, ordinary revertToStart and initial-state-analysis reset separately.",
+      "source_prediction": "Record exact outputs. Last-commit rollback is unimplemented; initialize does not explicitly clear mEpsilonE_n or mDGamma_n; initial-state-analysis reset skips initialization. Check parameter and static-stage retention too."
+    }
+  ],
+  "unresolved": [
+    "Full material reference execution, including constructor, copy and reset behavior.",
+    "Original-paper initialization and equation reconciliation.",
+    "Canonical Atlas initialization and reversal policy.",
+    "Full monotonic/extension/reversal/cyclic source-matched comparisons."
+  ]
+}
