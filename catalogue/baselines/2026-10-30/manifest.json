@@ -1,0 +1,176 @@
+{
+  "schema_version": "0.1",
+  "kind": "software-baseline",
+  "id": "baseline-ffdb92fc8e49-84bd2f818f00",
+  "created_at": "2026-10-30T06:42:31.705528+00:00",
+  "source_commit": "ffdb92fc8e4953b02169a5cb557b031978f371e1",
+  "git_tree": "80ea14177e33894834e3c110f67c682b9ffccab4",
+  "scope": "Fresh committed-source export; native and WebAssembly software verification. No experimental dataset or manuscript build.",
+  "outcome": "failed",
+  "versions": {
+    "python_package": "0.1.0",
+    "model_schema_versions": [
+      "0.1",
+      "0.2"
+    ],
+    "compiler": "Source-pinned in source inventory; no separate frozen semantic version",
+    "engine": "Source-pinned in source inventory; no separate frozen semantic version",
+    "expression_language": "Source-pinned in source inventory; no separate frozen semantic version"
+  },
+  "toolchain": {
+    "python": "Python 3.14.7",
+    "cmake": "cmake version 4.4.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).",
+    "node": "v26.7.0",
+    "emscripten": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.8-git\nCopyright (C) 2026 the Emscripten authors (see AUTHORS.txt)\nThis is free and open source software under the MIT license.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O"
+  },
+  "configuration": {},
+  "inventory": {
+    "path": "source-inventory.json",
+    "sha256": "92f1c851306f99e6bd7a3662beb7429c4678b0e20cc83c9307362ecacfbc80be"
+  },
+  "checks": [
+    {
+      "id": "definitions",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-m",
+        "atlas.cli",
+        "validate"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.05781691602896899,
+      "log": {
+        "path": "logs/definitions.txt",
+        "sha256": "1bb64b05d69c0f6af5df72fbc651de542e090b57a31a5362525a2dbee015dacc"
+      }
+    },
+    {
+      "id": "configure-native",
+      "command": [
+        "cmake",
+        "-S",
+        ".",
+        "-B",
+        "build",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.7217770419083536,
+      "log": {
+        "path": "logs/configure-native.txt",
+        "sha256": "23be3fcf47361815cef127bbe365e75e8e7ae98d4384043e9f4b43f384cb130a"
+      }
+    },
+    {
+      "id": "build-native",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 6.172266541980207,
+      "log": {
+        "path": "logs/build-native.txt",
+        "sha256": "41287fada43093c2f6e4c3b30f5bb32df9a549fcb54f915e87ec50b48f299662"
+      }
+    },
+    {
+      "id": "native-tests",
+      "command": [
+        "ctest",
+        "--test-dir",
+        "build",
+        "--verbose"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 4.4400732920039445,
+      "log": {
+        "path": "logs/native-tests.txt",
+        "sha256": "f36ea95a46e2c5167c766216852e6bc8c509a5111ec71f86a9f4f25310c933d0"
+      }
+    },
+    {
+      "id": "elasticity-closed-forms",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "tools/verify_elasticity.py",
+        "--output",
+        "artifacts/elasticity-results.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.36027262499555945,
+      "log": {
+        "path": "logs/elasticity-closed-forms.txt",
+        "sha256": "7ebc32fd403580ba0ac55029b860f4e9655c83ccd95826330e1fc176f510bdc7"
+      }
+    },
+    {
+      "id": "elasticity-evidence-integrity",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-m",
+        "atlas.cli",
+        "evidence",
+        "catalogue/evidence/linear-elastic-analytical-v1.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.047925999970175326,
+      "log": {
+        "path": "logs/elasticity-evidence-integrity.txt",
+        "sha256": "b851c122bc365d3e785b86d96637019c63dbd6d6ab187502ff3e019865680b88"
+      }
+    },
+    {
+      "id": "configure-wasm",
+      "command": [
+        "emcmake",
+        "cmake",
+        "-S",
+        ".",
+        "-B",
+        "build-wasm",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.6657003330765292,
+      "log": {
+        "path": "logs/configure-wasm.txt",
+        "sha256": "e59de175015445a3b8b2a18c28be7721180b2df9def84a4e4489fe58c9a67d17"
+      }
+    },
+    {
+      "id": "build-wasm",
+      "command": [
+        "cmake",
+        "--build",
+        "build-wasm",
+        "--parallel",
+        "2"
+      ],
+      "returncode": 2,
+      "elapsed_seconds": 3.005126333096996,
+      "log": {
+        "path": "logs/build-wasm.txt",
+        "sha256": "0d181470887cf3598b01f6c7305cbec246898ea7e9fc3b41c04ea6ac156d2ad4"
+      }
+    }
+  ],
+  "catalogues": {},
+  "build_products": {},
+  "reports": [],
+  "limitations": [
+    "Independent scientific review remains pending for all public formulations.",
+    "Five public executable formulations are distinct from discovery candidates, synthetic fixtures and the restricted Terracotta research draft.",
+    "No Wichtmann data, calibration, experimental validation, paper compilation or full literature-review claim is included.",
+    "Compiler, engine and expression language have source identities rather than separately frozen semantic versions; schema v1 remains open.",
+    "Binary hashes identify this build/platform; reproduction on another platform is assessed by declared numerical checks, not bitwise equality."
+  ],
+  "reproduction": [
+    "git checkout --detach ffdb92fc8e4953b02169a5cb557b031978f371e1",
+    "python3 tools/capture_baseline.py --ref ffdb92fc8e4953b02169a5cb557b031978f371e1 --output artifacts/reproduced-baseline"
+  ]
+}

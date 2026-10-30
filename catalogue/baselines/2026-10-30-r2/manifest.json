@@ -1,0 +1,310 @@
+{
+  "schema_version": "0.1",
+  "kind": "software-baseline",
+  "id": "baseline-e17ef3fcc6c0-690fdac18a9f",
+  "created_at": "2026-10-30T06:44:01.133763+00:00",
+  "source_commit": "e17ef3fcc6c0534884bc89a342daa7f412162e1e",
+  "git_tree": "63af22ab40408845c8da930cc03327215108592f",
+  "scope": "Fresh committed-source export; native and WebAssembly software verification. No experimental dataset or manuscript build.",
+  "outcome": "failed",
+  "versions": {
+    "python_package": "0.1.0",
+    "model_schema_versions": [
+      "0.1",
+      "0.2"
+    ],
+    "compiler": "Source-pinned in source inventory; no separate frozen semantic version",
+    "engine": "Source-pinned in source inventory; no separate frozen semantic version",
+    "expression_language": "Source-pinned in source inventory; no separate frozen semantic version"
+  },
+  "toolchain": {
+    "python": "Python 3.14.7",
+    "cmake": "cmake version 4.4.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).",
+    "node": "v26.7.0",
+    "emscripten": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.8-git\nCopyright (C) 2026 the Emscripten authors (see AUTHORS.txt)\nThis is free and open source software under the MIT license.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "native_cxx": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+  },
+  "configuration": {
+    "native": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CXX_COMPILER": "/usr/bin/c++",
+      "CMAKE_CXX_FLAGS": "",
+      "CMAKE_CXX_FLAGS_RELEASE": "-O3 -DNDEBUG",
+      "CMAKE_EXE_LINKER_FLAGS": "",
+      "CMAKE_EXE_LINKER_FLAGS_RELEASE": "",
+      "CMAKE_GENERATOR": "Unix Makefiles"
+    },
+    "wasm": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_CXX_FLAGS": "",
+      "CMAKE_CXX_FLAGS_RELEASE": "-O3 -DNDEBUG",
+      "CMAKE_EXE_LINKER_FLAGS": "",
+      "CMAKE_EXE_LINKER_FLAGS_RELEASE": "",
+      "CMAKE_TOOLCHAIN_FILE": "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/cmake/Modules/Platform/Emscripten.cmake",
+      "CMAKE_GENERATOR": "Unix Makefiles"
+    }
+  },
+  "inventory": {
+    "path": "source-inventory.json",
+    "sha256": "2304abbc79a50994d9de9aa3763b3e57b3536d0475d93164d245b4fe3f722a94"
+  },
+  "checks": [
+    {
+      "id": "definitions",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-m",
+        "atlas.cli",
+        "validate"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.04813245893456042,
+      "log": {
+        "path": "logs/definitions.txt",
+        "sha256": "1bb64b05d69c0f6af5df72fbc651de542e090b57a31a5362525a2dbee015dacc"
+      }
+    },
+    {
+      "id": "configure-native",
+      "command": [
+        "cmake",
+        "-S",
+        ".",
+        "-B",
+        "build",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.6695612500188872,
+      "log": {
+        "path": "logs/configure-native.txt",
+        "sha256": "51b4b9d925bdd90b9c90ba1c3f8afea401dd583f9ccd411259a94f7120721e27"
+      }
+    },
+    {
+      "id": "build-native",
+      "command": [
+        "cmake",
+        "--build",
+        "build",
+        "--parallel",
+        "2"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 6.226363542024046,
+      "log": {
+        "path": "logs/build-native.txt",
+        "sha256": "41287fada43093c2f6e4c3b30f5bb32df9a549fcb54f915e87ec50b48f299662"
+      }
+    },
+    {
+      "id": "native-tests",
+      "command": [
+        "ctest",
+        "--test-dir",
+        "build",
+        "--verbose"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 3.7118749580113217,
+      "log": {
+        "path": "logs/native-tests.txt",
+        "sha256": "f221d931743f2048d108443f257b12c1af03907c771a45dcc6045a07e980d896"
+      }
+    },
+    {
+      "id": "elasticity-closed-forms",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "tools/verify_elasticity.py",
+        "--output",
+        "artifacts/elasticity-results.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.40536241699010134,
+      "log": {
+        "path": "logs/elasticity-closed-forms.txt",
+        "sha256": "7ebc32fd403580ba0ac55029b860f4e9655c83ccd95826330e1fc176f510bdc7"
+      }
+    },
+    {
+      "id": "elasticity-evidence-integrity",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-m",
+        "atlas.cli",
+        "evidence",
+        "catalogue/evidence/linear-elastic-analytical-v1.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.04804070794489235,
+      "log": {
+        "path": "logs/elasticity-evidence-integrity.txt",
+        "sha256": "b851c122bc365d3e785b86d96637019c63dbd6d6ab187502ff3e019865680b88"
+      }
+    },
+    {
+      "id": "configure-wasm",
+      "command": [
+        "emcmake",
+        "cmake",
+        "-S",
+        ".",
+        "-B",
+        "build-wasm",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.665334542049095,
+      "log": {
+        "path": "logs/configure-wasm.txt",
+        "sha256": "a3c623271aa9ec323bac991227721978de3f7f4fb804d90933bd0b285c0d3e6c"
+      }
+    },
+    {
+      "id": "build-wasm",
+      "command": [
+        "cmake",
+        "--build",
+        "build-wasm",
+        "--parallel",
+        "2"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 17.433333624969237,
+      "log": {
+        "path": "logs/build-wasm.txt",
+        "sha256": "826698c419383fda17621d5a150d9d2dd08d9297799529667aca483713fdd42b"
+      }
+    },
+    {
+      "id": "browser-experiment-tests",
+      "command": [
+        "node",
+        "tools/test_experiments.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.03281462506856769,
+      "log": {
+        "path": "logs/browser-experiment-tests.txt",
+        "sha256": "ea7df1b2ef27d0df681f7d4aab3bfd4d65bff59244386951a8c406eb56e74b96"
+      }
+    },
+    {
+      "id": "public-parity",
+      "command": [
+        "node",
+        "tools/test_wasm.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.38091558299493045,
+      "log": {
+        "path": "logs/public-parity.txt",
+        "sha256": "f353b9c39842baa39781c09f48027c31ab1a2cd731a7a9aa9619a8aeecc17c23"
+      }
+    },
+    {
+      "id": "time-parity",
+      "command": [
+        "node",
+        "tools/test_time_wasm.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.09732895903289318,
+      "log": {
+        "path": "logs/time-parity.txt",
+        "sha256": "5a9ba591032524f6cbf411259a93ffc58df6081b4237ab7086df66f6d63e9ca4"
+      }
+    },
+    {
+      "id": "schedule-parity",
+      "command": [
+        "node",
+        "tools/test_schedule_wasm.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.7360612499760464,
+      "log": {
+        "path": "logs/schedule-parity.txt",
+        "sha256": "c7e1edb708b009ef507dee7ac575d805a7b929cc4c481e37e8407cecd6c39efe"
+      }
+    },
+    {
+      "id": "terracotta-parity",
+      "command": [
+        "node",
+        "tools/test_terracotta_wasm.mjs"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.9400444170460105,
+      "log": {
+        "path": "logs/terracotta-parity.txt",
+        "sha256": "21da1053e6ce5db35cbae5e0bb1c52d2e0bd5f68288915fa9ca3397e4a636257"
+      }
+    },
+    {
+      "id": "package-website",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "tools/build_web.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.06138583295978606,
+      "log": {
+        "path": "logs/package-website.txt",
+        "sha256": "50b37198a0ba694a013f4d78ef491963bfbd079780633bd72559d1bf3d432aa9"
+      }
+    }
+  ],
+  "catalogues": {
+    "public": {
+      "sha256": "c43016f8f8becb1b9b8fb44be037ee59de09cea9237d026c33f56962025e840c",
+      "models": [
+        {
+          "id": "drucker-prager",
+          "status": "transcribed",
+          "path": "models/drucker-prager.json",
+          "sha256": "9eff38d8ba9ea327d9b0590b03c966b7f5797a53f0aff9e1ecd0b923423a346e"
+        },
+        {
+          "id": "hypoplastic-sand-igs97",
+          "status": "draft",
+          "path": "models/hypoplastic-sand-igs97.json",
+          "sha256": "3780d1ffe547e6bed6fa0fd62cfc9cde71f2a28fb2c0fd15d5049ffccbb038de"
+        },
+        {
+          "id": "hypoplastic-sand-vw96",
+          "status": "transcribed",
+          "path": "models/hypoplastic-sand-vw96.json",
+          "sha256": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31"
+        },
+        {
+          "id": "linear-elastic",
+          "status": "transcribed",
+          "path": "models/linear-elastic.json",
+          "sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041"
+        },
+        {
+          "id": "modified-cam-clay",
+          "status": "transcribed",
+          "path": "models/modified-cam-clay.json",
+          "sha256": "124ad98fb85da007d510ef66c21428ef955e5dd36052b76b9c1c78fb8a3085f8"
+        }
+      ]
+    }
+  },
+  "build_products": {},
+  "reports": [],
+  "limitations": [
+    "Independent scientific review remains pending for all public formulations.",
+    "Five public executable formulations are distinct from discovery candidates, synthetic fixtures and the restricted Terracotta research draft.",
+    "No Wichtmann data, calibration, experimental validation, paper compilation or full literature-review claim is included.",
+    "Compiler, engine and expression language have source identities rather than separately frozen semantic versions; schema v1 remains open.",
+    "Binary hashes identify this build/platform; reproduction on another platform is assessed by declared numerical checks, not bitwise equality."
+  ],
+  "reproduction": [
+    "git checkout --detach e17ef3fcc6c0534884bc89a342daa7f412162e1e",
+    "python3 tools/capture_baseline.py --ref e17ef3fcc6c0534884bc89a342daa7f412162e1e --output artifacts/reproduced-baseline"
+  ]
+}

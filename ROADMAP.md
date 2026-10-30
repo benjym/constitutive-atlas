@@ -60,7 +60,7 @@ Literature screening, data curation and prior-work analysis can proceed alongsid
 
 ## 5. M0 — establish the baseline
 
-- [ ] **BASE-01:** Capture a pinned baseline manifest: source commit, model hashes, schema/compiler version, toolchain, checks and known limitations.
+- [x] **BASE-01:** Capture a pinned baseline manifest: source commit, model hashes, schema/compiler source identity, toolchain, checks and known limitations. The [complete clean-export baseline](catalogue/baselines/2026-10-30-r3/manifest.json) passes all fifteen ordered checks; [run history](catalogue/baselines/README.md) retains two failed attempts and [reproduction instructions](docs/SOFTWARE_BASELINE.md) describe the fresh native/Wasm build. This is software verification, not independent scientific review.
 - [ ] **BASE-02:** Reconcile `docs/STATUS.md`, catalogue statuses and website wording with actual evidence. Keep operational deployment status separate from scientific release readiness.
 - [x] **BASE-03:** Define machine-readable review and evidence records, with schema validation and stable IDs. The [record contract](docs/EVIDENCE_RECORDS.md), numerical/review schemas, hashed [elasticity evidence](catalogue/evidence/linear-elastic-analytical-v1.json) and [pending review](catalogue/reviews/linear-elastic-source-v1.json) are implemented. Integrity and current-definition checks are separate; no model is automatically promoted. Decision records remain to be created when a scope decision is made.
 - [ ] **BASE-04:** Turn the first work package in section 13 into repository issues, with leads and reviewers. Do not assign tasks to either maintainer without agreement.
@@ -212,7 +212,7 @@ Start with these bounded tasks; they prepare the six-model milestone without pre
 6. **TC-01–03:** Start the Terracotta source dossier and physical-time/hold-driver design as near-term work, then implement and verify the original variant through TC-04–06.
 7. **DATA-01–02 / BENCH-01:** Audit current imports and select the first source-matched published baseline alongside model review.
 
-The first checkpoint is a reviewed elasticity dossier plus a reusable evidence record and reproducible analytical case. The next checkpoint is the complete five-model review pack and source-complete SANISAND and Terracotta designs. BASE-03 and the elasticity dossier/analytical evidence are implemented. Neither independently reviewed checkpoint is complete at the date of this roadmap.
+The first checkpoint is a reviewed elasticity dossier plus a reusable evidence record and reproducible analytical case. The next checkpoint is the complete five-model review pack and source-complete SANISAND and Terracotta designs. BASE-01/BASE-03 and the elasticity dossier/analytical evidence are implemented. Neither independently reviewed checkpoint is complete at the date of this roadmap.
 
 ## 14. Tracking and scope decisions
 
