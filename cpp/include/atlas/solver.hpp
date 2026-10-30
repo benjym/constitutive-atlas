@@ -93,8 +93,12 @@ inline Advance integrate(int model,const State&zn,const Sym<double>&de,const Sta
     if(models()[model].physical_time){result.message="physical-time model requires the timed update API";return result;}
     if(zn.size()!=initial_state(model).size()||!valid_parameters(model,p)||!domain(model,zn,p,true)||!std::isfinite(norm(de))){result.message="invalid parameters, inadmissible initial state or strain increment";return result;}
     for(double s:model_scales(model,p))if(!std::isfinite(s)||s<=0){result.message="invalid state scales";return result;}
+    State prepared;
+    if(!prepare_model_increment(model,zn,de,p,prepared)||!domain(model,prepared,p)){
+        result.message="increment reset failed: nonfinite guard/state or domain boundary; state rolled back";return result;
+    }
     State trial;
-    result.ok=advance_recursive(model,zn,de,p,trial,result.diagnostics,0);
+    result.ok=advance_recursive(model,prepared,de,p,trial,result.diagnostics,0);
     if(result.ok)result.state=trial;else result.message="integration failed: domain boundary, singular system or substep limit; state rolled back";
     return result;
 }

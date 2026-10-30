@@ -104,6 +104,17 @@ def validate(model):
         typ=infer(parse(field['expr']),symbols)
         if typ.shape=='bool': raise ValidationError('derived values must be numeric')
         declare(field['name'],typ)
+    reset_targets=set()
+    state_fields={f['name']:f for f in model['state']}
+    for update in model.get('increment_reset',{}).get('updates',[]):
+        target=update['target'];field=state_fields.get(target)
+        if field is None or target in reset_targets or field.get('transient') or field.get('multiplier'):
+            raise ValidationError('increment reset targets must be distinct persistent state fields')
+        reset_targets.add(target)
+        if infer(parse(update['guard']),symbols).shape!='scalar':
+            raise ValidationError('increment reset guard must be a signed scalar expression')
+        if infer(parse(update['value']),symbols)!=field_type(field):
+            raise ValidationError('increment reset value must match target shape and dimensions')
     eqs=model['equations']
     if set(eqs)!={f['name'] for f in model['state']}: raise ValidationError('one equation per state is required')
     for f in model['state']:
@@ -142,7 +153,7 @@ def axisymmetric_x(values):
     return abs(values[1]-values[2])<=tolerance and all(abs(v)<=tolerance for v in values[3:])
 
 
-def evaluation_environment(model, state, previous, increment, parameters=None, *, time=None):
+def evaluation_environment(model, state, previous, increment, parameters=None, *, time=None, _check_domain=True):
     if physical_time(model) and (type(time) not in (int,float) or not math.isfinite(time)):
         raise ValueError('physical-time evaluation requires finite stage time')
     if model.get('formulation',{}).get('kinematics')=='axisymmetric_x' and not axisymmetric_x(increment):
@@ -153,9 +164,45 @@ def evaluation_environment(model, state, previous, increment, parameters=None, *
         name=f['name']; wrap=lambda v: Sym(tuple(v)) if f.get('shape')=='sym' else v
         env[name]=wrap(state[name])
         if not physical_time(model): env[name+'_n']=wrap(previous[name])
-    for f in model['derived']: env[f['name']]=evaluate(parse(f['expr']),env)
-    if not all(evaluate(parse(c),env) for c in model['domain']): raise ValueError('state outside model domain')
+    for f in model['derived']:
+        v=env[f['name']]=evaluate(parse(f['expr']),env)
+        if model.get('increment_reset') and any(not math.isfinite(x) for x in (v.v if isinstance(v,Sym) else [v])):
+            raise ValueError('nonfinite derived value in reset-enabled model')
+    if _check_domain and not all(evaluate(parse(c),env) for c in model['domain']): raise ValueError('state outside model domain')
     return env
+
+
+def prepare_increment(model, state, increment, parameters=None):
+    """Pure committed-parent reset, before any internal integration or trial stage."""
+    if physical_time(model):raise ValidationError('parent-increment resets require a legacy incremental definition')
+    if len(increment)!=6 or any(not math.isfinite(v) for v in increment):
+        raise ValueError('six finite Mandel increment components required')
+    values={**defaults(model),**(parameters or {})}
+    if set(values)!=set(model['parameters']) or any(type(values[n]) not in (int,float) or not math.isfinite(values[n]) or not f['min']<=values[n]<=f['max'] for n,f in model['parameters'].items()):
+        raise ValueError('invalid increment reset parameters')
+    if set(state)!={f['name'] for f in model['state']}:
+        raise ValueError('increment reset state layout mismatch')
+    for f in model['state']:
+        v=state[f['name']];components=v if f['shape']=='sym' else [v]
+        if (f['shape']=='sym' and len(v)!=6) or any(type(x) not in (int,float) or not math.isfinite(x) for x in components):
+            raise ValueError('invalid increment reset state')
+        scale=evaluate(parse(f['scale']),values)
+        if not math.isfinite(scale) or scale<=0:raise ValueError('invalid state scale')
+    initial_env=evaluation_environment(model,state,state,[0]*6,values)
+    if not all(evaluate(parse(c),initial_env) for c in model.get('initial_checks',[])):
+        raise ValueError('inadmissible parent state')
+    env=evaluation_environment(model,state,state,increment,values,_check_domain=False)
+    prepared={f['name']:list(state[f['name']]) if f.get('shape')=='sym' else state[f['name']] for f in model['state']}
+    for update in model.get('increment_reset',{}).get('updates',[]):
+        guard=evaluate(parse(update['guard']),env)
+        if not math.isfinite(guard):raise ValueError('nonfinite increment reset guard')
+        if guard<0:
+            v=evaluate(parse(update['value']),env)
+            prepared[update['target']]=list(v.v) if isinstance(v,Sym) else v
+    if any(not math.isfinite(v) for f in model['state'] for v in (prepared[f['name']] if f.get('shape')=='sym' else [prepared[f['name']]])):
+        raise ValueError('nonfinite increment reset state')
+    evaluation_environment(model,prepared,prepared,[0]*6,values)
+    return prepared
 
 
 def interpret(model, state, previous, increment, parameters=None, *, time=None):

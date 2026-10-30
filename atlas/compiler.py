@@ -2,8 +2,26 @@
 import hashlib
 import json
 from pathlib import Path
-from .dsl import cpp, parse
-from .model import ROOT, all_models, load, physical_time
+from .dsl import Type, cpp, infer, parse
+from .model import ROOT, all_models, field_type, load, physical_time
+
+
+
+def reset_derived_types(model):
+    symbols={'I':Type('sym'),'de':Type('sym')}
+    symbols.update({name:field_type(f) for name,f in model['parameters'].items()})
+    for f in model['state']:
+        symbols[f['name']]=symbols[f['name']+'_n']=field_type(f)
+    result={}
+    for f in model['derived']:
+        symbols[f['name']]=result[f['name']]=infer(parse(f['expr']),symbols)
+    return result
+
+
+def finite_derived(name,typ):
+    if typ.shape=='sym':
+        return f'if (!std::all_of({name}.v.begin(),{name}.v.end(),[](const auto& v){{return std::isfinite(atlas::value(v));}})) return false;'
+    return f'if (!std::isfinite(atlas::value({name}))) return false;'
 
 
 def generate(destination, model_paths=None):
@@ -38,6 +56,7 @@ def generate(destination, model_paths=None):
     obs_scales=['inline std::vector<double> model_observable_scales(int model,const std::vector<double>& params) { using T=double; switch(model) {']
     scales=['inline std::vector<double> model_scales(int model,const std::vector<double>& params) { using T=double; switch(model) {']
     for i,m in enumerate(models):
+        reset_types=reset_derived_types(m) if m.get('increment_reset') else {}
         lines.append(f'case {i}: {{'); scales.append(f'case {i}: {{'); obs_scales.append(f'case {i}: {{')
         if physical_time(m):
             lines += ['if (!std::isfinite(evaluation_time)) return false;', 'const T time=T(evaluation_time);', 'const auto& strain_rate=loading;']
@@ -55,7 +74,9 @@ def generate(destination, model_paths=None):
                 lines+= [f'const auto {n} = tensor_from(z,{offset});',f'const auto {n}_n = tensor_from(zn,{offset});']
             else: lines += [f'const T {n}=z.at({offset});',f'const T {n}_n=zn.at({offset});']
             scal.extend([cpp(parse(f['scale']))]*size);offset+=size
-        for f in m['derived']: lines.append(f"const auto {f['name']} = {cpp(parse(f['expr']))};")
+        for f in m['derived']:
+            lines.append(f"const auto {f['name']} = {cpp(parse(f['expr']))};")
+            if m.get('increment_reset'):lines.append(finite_derived(f['name'],reset_types[f['name']]))
         lines.append('if (!('+' && '.join(cpp(parse(c)) for c in m['domain'])+')) return false;' if m['domain'] else '')
         if m.get('initial_checks'):
             lines.append('if (check_initial && !('+' && '.join(cpp(parse(c)) for c in m['initial_checks'])+')) return false;')
@@ -83,6 +104,31 @@ def generate(destination, model_paths=None):
         lines+=['return true;', '}']
         scales+=['return {'+','.join(scal)+'};','}']
     lines+=['default: return false;','}','}']; scales+=['default: return {};','}','}']; obs_scales+=['default: return {};','}','}']
+    resets=['inline bool prepare_model_increment(int model,const std::vector<double>& zn,const Sym<double>& loading,const std::vector<double>& params,std::vector<double>& out) {',
+            'using T=double; (void)params; const auto I=identity<T>(); const auto& de=loading; out=zn; switch(model) {']
+    for i,m in enumerate(models):
+        updates=m.get('increment_reset',{}).get('updates',[])
+        if not updates:continue
+        reset_types=reset_derived_types(m)
+        resets.append(f'case {i}: {{')
+        for j,name in enumerate(m['parameters']):resets.append(f'const T {name}=params.at({j});')
+        offset=0;offsets={}
+        for f in m['state']:
+            n=f['name'];size=6 if f['shape']=='sym' else 1;offsets[n]=offset
+            resets.append(f'const auto {n}=tensor_from(zn,{offset});' if size==6 else f'const T {n}=zn.at({offset});')
+            resets.append(f'const auto {n}_n={n};');offset+=size
+        for f in m['derived']:
+            resets.append(f"const auto {f['name']}={cpp(parse(f['expr']))};")
+            resets.append(finite_derived(f['name'],reset_types[f['name']]))
+        for update in updates:
+            guard=cpp(parse(update['guard']));value=cpp(parse(update['value']));target=update['target']
+            resets.append(f'if (!std::isfinite(atlas::value({guard}))) return false;')
+            size=next(f['shape'] for f in m['state'] if f['name']==target)
+            assignment=f'put_tensor(out,{offsets[target]},{value});' if size=='sym' else f'out[{offsets[target]}]={value};'
+            resets.append(f'if (atlas::value({guard}) < 0.) {{ {assignment} }}')
+        resets+=['break;','}']
+    resets+=['default: break;', '}', 'return std::all_of(out.begin(),out.end(),[](double x){return std::isfinite(x);});','}']
+    lines+=resets
     digest=hashlib.sha256(json.dumps(canonical,sort_keys=True,separators=(',',':')).encode()).hexdigest()
     catalogue={'schema_version':'0.1','sha256':digest,'models':canonical}
     lines+=scales+obs_scales+[f'inline const char* catalogue_hash() {{ return "{digest}"; }}',

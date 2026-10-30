@@ -36,7 +36,7 @@ Raw archives are ignored and immutable. `atlas.data` recognizes only reviewed TM
 
 ## Known capability gate: SANISAND
 
-SANISAND-2004 needs source-complete equations and reversal-dependent memory updates. The current DSL cannot safely encode those events. Do not publish a simplified substitute using the SANISAND ID. Extend the general state/event representation, define deterministic event timing/rollback, add source-specific initialisation and independent reference tests, and only then admit it. The six-model proof is incomplete until this gate passes.
+SANISAND-2004 needs source-complete equations and a reconciled reversal-memory policy. The [experimental parent-increment reset](PARENT_INCREMENT_RESETS.md) supplies one explicit transaction scope, verified with synthetic fixtures; located events and a canonical SANISAND policy remain open. Do not publish a simplified substitute using the SANISAND ID. Extend the general state/event representation, define deterministic event timing/rollback, add source-specific initialisation and independent reference tests, and only then admit it. The six-model proof is incomplete until this gate passes.
 
 ## Experimental physical-time update
 

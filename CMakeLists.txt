@@ -36,13 +36,13 @@ else()
   set_tests_properties(atlas_python PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}" ENVIRONMENT "ATLAS_SOLVER=$<TARGET_FILE:atlas_solver>;ATLAS_TIME_SOLVER=$<TARGET_FILE:atlas_time_solver>")
 endif()
 
-# Synthetic temporal fixtures use the same compiler and engine, but a separate
+# Synthetic integration fixtures use the same compiler and engine, but a separate
 # generated catalogue. They are never packaged as public atlas models.
 file(GLOB TIME_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/tests/fixtures/time/*.json")
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/time-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/time-generated" "${CMAKE_SOURCE_DIR}/tests/fixtures/time"
-  DEPENDS ${TIME_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model-v0.2.schema.json
+  DEPENDS ${TIME_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_time_models DEPENDS "${CMAKE_BINARY_DIR}/time-generated/models.hpp")
 add_executable(atlas_time_solver cpp/main.cpp)

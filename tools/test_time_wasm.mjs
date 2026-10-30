@@ -49,3 +49,47 @@ for(const v of tensorCases){
   for(const result of [actual,expected])result.values.forEach((x,i)=>assert.ok(Math.abs(x-squareReference(v)[i])<1e-12*Math.max(1,Math.abs(x)),`Cartesian tensor square component ${i}`));
 }
 console.log(`Generated tensor square: Cartesian native/Wasm checks passed for ${tensorCases.length} tensors.`);
+
+// Parent-increment reset contract: synthetic legacy fixtures share the private
+// module so these checks run in the same CI native/Wasm gate as temporal cases.
+const {readFileSync}=await import('node:fs');
+const resetCases=JSON.parse(readFileSync(resolve(root,'tests/fixtures/parent-reset-cases.json'),'utf8')).cases;
+const resetCatalogue=JSON.parse(wasm.ccall('atlas_describe','string',[],[]));
+for(const id of new Set(resetCases.map(c=>c.model))){
+  const source=JSON.parse(readFileSync(resolve(root,'tests/fixtures/time',id.replace(/^test-/,'')+'.json'),'utf8'));
+  assert.deepEqual(resetCatalogue.models.find(m=>m.id===id),source,'Wasm reset fixture is stale: '+id);
+}
+function resetStep(id,initial,increment,parameters=null){
+  const args=[id,parameters?.join(',')??'',initial.join(','),increment.join(',')];
+  const actual=JSON.parse(wasm.ccall('atlas_integrate','string',Array(4).fill('string'),args));
+  const command=['--mode','integrate','--model',id,'--initial',args[2],'--strain',args[3]];
+  if(parameters)command.push('--parameters',args[1]);
+  const native=spawnSync(resolve(root,'build/atlas_time_solver'),command,{encoding:'utf8',timeout:30000});
+  assert.equal(native.status,actual.ok?0:1,native.stderr);
+  const reference=JSON.parse(native.stdout);assert.equal(actual.ok,reference.ok);assert.equal(actual.message,reference.message);
+  actual.state.forEach((x,i)=>assert.ok(Math.abs(x-reference.state[i])<1e-8*Math.max(1,Math.abs(reference.state[i]))));
+  return actual;
+}
+for(const test of resetCases){
+  const actual=resetStep(test.model,test.initial,test.increment,test.parameters);
+  assert.equal(actual.ok,test.ok,test.name);assert.equal(actual.state.length,test.expected.length);
+  actual.state.forEach((x,i)=>assert.ok(Math.abs(x-test.expected[i])<=(test.tolerance??1e-10),`${test.name} component ${i}`));
+  for(const key of ['substeps','rejected'])assert.ok(actual.diagnostics[key]>=(test[`minimum_${key}`]??0),test.name);
+  if(!actual.ok)assert.deepEqual(actual.state,test.initial);
+}
+let resetState=[100,100,100,0,0,0,1,0];
+for(const [increment,coordinate,anchor] of [[-.5,.5,1],[-1,-.5,1],[.25,-.25,-.5],[.5,.25,-.5],[-.1,.15,.25],[0,.15,.25]]){
+  const result=resetStep('test-parent-reset',resetState,[increment,0,0,0,0,0]);assert.equal(result.ok,true);
+  assert.ok(Math.abs(result.state[6]-coordinate)<1e-12);assert.ok(Math.abs(result.state[7]-anchor)<1e-12);resetState=result.state;
+}
+const resetInitial=[100,100,100,0,0,0,1,0],resetDe=[-.5,0,0,0,0,0];
+const resetFirst=resetStep('test-parent-reset',resetInitial,resetDe);
+resetStep('test-parent-reset',resetInitial,[.7,0,0,0,0,0]);
+assert.deepEqual(resetStep('test-parent-reset',resetInitial,resetDe),resetFirst);
+// A caller split deliberately re-runs the parent guard at its new boundary.
+const boundaryFirst=resetStep('test-parent-boundary-cutback',resetInitial,resetDe);
+const boundarySecond=resetStep('test-parent-boundary-cutback',boundaryFirst.state,resetDe);
+assert.equal(boundaryFirst.state[7],0);assert.equal(boundarySecond.state[7],boundaryFirst.state[6]);
+const outer=JSON.parse(wasm.ccall('atlas_run','string',['string','string','string','number','number','number','number'],['test-parent-reset','','',1,-.01,1,0]));
+assert.equal(outer.ok,true);assert.ok(Math.abs(outer.points.at(-1).state[6]-.99)<1e-10);assert.equal(outer.points.at(-1).state[7],1);
+console.log(`Parent resets: ${resetCases.length} analytical cases, six reversal steps, repeated trials, parent boundaries and mixed-control native/Wasm checks passed.`);

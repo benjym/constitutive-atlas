@@ -109,6 +109,8 @@ The [SANISAND source brief](docs/models/sanisand-2004.md), [pinned OpenSees inve
 
 The [symmetric tensor-square primitive](docs/TENSOR_SQUARE.md) now resolves the demonstrated algebraic gap, with dimensional/type checks, Cartesian references, all native AD columns and a generated Python/native/Wasm fixture. Existing five-model references continue to pass. The [state-capacity extension](docs/STATE_CAPACITY.md) also accommodates 32 state components and all six mixed controls. Reversal transactions, complete original-paper extraction and the rest of SAN-04–07 remain open.
 
+The [experimental parent-increment reset contract](docs/PARENT_INCREMENT_RESETS.md) now supplies typed simultaneous memory assignments from a committed parent, frozen internal trials and exact rollback. Python/native/Wasm synthetic checks cover reversals, cutbacks, internal threshold crossing, caller partition effects, invalid values and outer mixed controls. The [verification record](catalogue/investigations/parent-reset-v1.json) pins its source and outcomes. This implements one explicit engine scope; canonical SANISAND policy, full original-paper extraction, initialization and independent reference execution remain open.
+
 **Acceptance:** all six formulations meet their review gates and execute through the common engine without model-specific mathematical escape hatches. History and initialization semantics are explicit and tested under substepping and rollback. A paper figure or website curve alone cannot close this milestone.
 
 ### Additional near-term target — Terracotta (M2T)
