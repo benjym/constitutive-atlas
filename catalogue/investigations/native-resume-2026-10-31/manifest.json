@@ -1,0 +1,55 @@
+{
+  "record_version": 1,
+  "date": "2026-10-31",
+  "kind": "native-execution-resumption",
+  "source_revision": "fd14be46f74c8b10e37d0835b5d38c08461d551a",
+  "build_directory": "/private/tmp/atlas-native-resume-20261031",
+  "configuration": "Clean Release build; AppleClang 21.0.0.21000401; Python 3.14.7",
+  "commands": [
+    "cmake -S /Users/bmar5496/code/constitutive-atlas -B /private/tmp/atlas-native-resume-20261031 -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build /private/tmp/atlas-native-resume-20261031 -j 2",
+    "ctest --test-dir /private/tmp/atlas-native-resume-20261031 --output-on-failure",
+    "python3 tools/verify_hypoplasticity.py --solver /private/tmp/atlas-native-resume-20261031/atlas_solver --output /private/tmp/vw96-native-resume.json",
+    "python3 tools/verify_igs.py --solver /private/tmp/atlas-native-resume-20261031/atlas_solver --output /private/tmp/igs-native-resume.json"
+  ],
+  "ctest": {
+    "groups_passed": 5,
+    "groups_total": 5,
+    "python_tests": 163,
+    "exit_code": 0
+  },
+  "focused": {
+    "vw96": {
+      "passed": 229,
+      "total": 229,
+      "exit_code": 0
+    },
+    "igs": {
+      "passed": 303,
+      "total": 303,
+      "exit_code": 0
+    }
+  },
+  "source_hashes": {
+    "CMakeLists.txt": "e2c014f0879e5dd8631d7835c30313bfde278fdd18e608d84a653f5545e4ab7b",
+    "cpp/include/atlas/schedule.hpp": "5c90e6cede9f24f124286cf10e2254a47a991e5d62f9bc7b3899ed62e6deb7e9",
+    "cpp/include/atlas/solver.hpp": "1e0e5d4d75f11faed0ec728d0be187d8ba9925f098e56fec75fb7b617bd401f0",
+    "cpp/include/atlas/tensor.hpp": "d964ff6e2e46f81e465533f2b517c3aabef7df42de4ed2b9907cc5e4448c6a1e",
+    "cpp/include/atlas/time.hpp": "7b9942fbb1eae296201ad12db210c0c767fb3cc53c1f37de37de3e517f13f4d1",
+    "cpp/main.cpp": "90004d576107275db76e2fd68239b0c09e5fca33e581736b92c04788e1315c0a",
+    "models/drucker-prager.json": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+    "models/hypoplastic-sand-igs97.json": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+    "models/hypoplastic-sand-vw96.json": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+    "models/linear-elastic.json": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+    "models/modified-cam-clay.json": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+    "models/research/terracotta-2024-fig1.json": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+    "tools/verify_hypoplasticity.py": "8aadab8cfae1d25b454bff0da1efc6020306c3c2a3539a9dc8725bc2067b23f7",
+    "tools/verify_igs.py": "42d3fc38a83378fb61ece773048a6c76554b4aa37db6fcf7e84fdeb198fc3414"
+  },
+  "artifacts": {
+    "ctest.log": "cddaf90e3de1cc2bf79a608079e88068cb393cd6fd8136482c5a8a58c6a4fdbe",
+    "igs.json": "c5497a7e15536115d9738c5bde6a533fc87ed265de00483b0936bfb0a7203873",
+    "vw96.json": "ec958f5ba678f8afbb5e6161da3caf5195c55d2080392977ef90532397f8fbd6"
+  },
+  "limits": "Current native software regression and existing project-authored reference cases only. No new independent scientific review, original-paper figure reproduction, Wasm run, experimental calibration or full roadmap completion is established."
+}

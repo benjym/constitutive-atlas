@@ -80,3 +80,7 @@ The [IGS original review](models/hypoplastic-sand-igs97-original.md) now maps th
 ## VW96 original-source reconciliation — 2026-10-31
 
 The [original VW96 review](models/hypoplastic-sand-vw96-original.md) now supplies direct rate-law, continuity, isotropic-limit and calibration locators. The eight-parameter formulation matches the initial summary transcription. Original Hochstetten parameters remain distinct from illustrative defaults and the seven-parameter IGS97 host. Independent scientific review and original benchmark reproduction remain open.
+
+## Native builds resumed — 2026-10-31
+
+Following user authorization, a clean Release build with AppleClang 21 completed and all five CTest groups passed, including 163 Python tests. Separate current native suites passed 229/229 VW96 and 303/303 IGS cases. The [restart record](../catalogue/investigations/native-resume-2026-10-31/manifest.json) pins source and retained log/report hashes. This adds current software verification, not independent scientific review, original-paper benchmark reproduction or Wasm evidence.
