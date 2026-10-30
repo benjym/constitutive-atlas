@@ -20,7 +20,7 @@ jobs:
       - name: Verify recorded-path JSON replay
         env:
           ATLAS_RECORDED_SOLVER: ${{ github.workspace }}/build/atlas_solver
-        run: python -m unittest tests.test_recorded_api tests.test_recorded_path -v
+        run: python -m unittest tests.test_recorded_api tests.test_recorded_path tests.test_web_recorded -v
   wasm:
     runs-on: ubuntu-latest
     steps:
@@ -47,6 +47,7 @@ jobs:
           node tools/test_experiments.mjs
           node tools/test_wasm.mjs
           node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+          node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
           node tools/test_time_wasm.mjs
           node tools/test_schedule_wasm.mjs
           node tools/test_terracotta_wasm.mjs

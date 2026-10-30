@@ -15,7 +15,7 @@
     <a class="brand" href="#laboratory" aria-label="Constitutive Atlas home"><svg viewBox="0 0 42 48" aria-hidden="true">
         <path d="M21 2 40 13v22L21 46 2 35V13Z M2 13l19 11 19-11M21 24v22" fill="none" stroke="currentColor" stroke-width="2" />
       </svg><span>Constitutive<br><b>Atlas</b></span></a>
-    <nav aria-label="Main navigation"><a href="#laboratory" class="active">◫ <span>Model testing</span></a><a href="#catalogue">⌕ <span>Model catalogue</span><small id="catalogue-count">32</small></a><a href="#methods">≋ <span>Methods & evidence</span></a><a href="./publications.html">↗ <span>Publications &amp; lineage</span></a></nav>
+    <nav aria-label="Main navigation"><a href="#laboratory" class="active">◫ <span>Model testing</span></a><a href="#recorded">↝ <span>Recorded paths</span></a><a href="#catalogue">⌕ <span>Model catalogue</span><small id="catalogue-count">32</small></a><a href="#methods">≋ <span>Methods & evidence</span></a><a href="./publications.html">↗ <span>Publications &amp; lineage</span></a></nav>
     <footer>
       <p>By<br><a href="https://github.com/benjym" target="_blank" rel="noopener">Benjy Marks</a><br><a href="https://github.com/Franzzzzzzzz" target="_blank" rel="noopener">François Guillard</a></p>
     </footer>
@@ -155,6 +155,28 @@
         </div>
 
       </div>
+    </section>
+    <section id="recorded" class="page" hidden>
+      <div class="intro"><h1>Replay a recorded path.</h1><button id="recorded-example" class="secondary">Load elastic example</button></div>
+      <section class="model-card">
+        <span class="eyebrow">EXPERIMENTAL · ORDERED INCREMENTAL REPLAY</span>
+        <h2 id="recorded-model">Load a recorded run</h2>
+        <p>Import a recorded-run JSON file with six linear stress or strain controls and 2–5,001 ordered observations. Reversals and repeated targets remain in their supplied order. Files stay on this device.</p>
+        <label for="recorded-file">Recorded run or exported replay</label><input id="recorded-file" type="file" accept=".json,application/json">
+        <p id="recorded-summary"></p>
+        <p>Coordinates express path order, not physical time. Stress constraints apply at record endpoints; lines connect the accepted observations. Refining the records can change the response. These plots do not establish experimental accuracy.</p>
+        <p><a href="./schemas/recorded-run.schema.json" target="_blank" rel="noopener">Run schema ↗</a> · <a href="./recorded-example.json" download>Download example</a></p>
+        <details><summary>Model sources &amp; definition</summary><div id="recorded-sources"></div></details>
+      </section>
+      <div class="model-card">
+        <label for="recorded-component">Mandel component</label><select id="recorded-component"><option value="0">xx</option><option value="1">yy</option><option value="2">zz</option><option value="3">√2 xy</option><option value="4">√2 yz</option><option value="5">√2 xz</option></select>
+        <p id="recorded-status" role="status" aria-live="polite">Load the example or import a run to begin.</p>
+        <button id="recorded-replay" disabled>Replay from initial state</button><button id="recorded-cancel" class="secondary" hidden>Cancel</button>
+        <button id="recorded-export" class="secondary" disabled>Export replay JSON</button><button id="recorded-csv" class="secondary" disabled>Export observations CSV</button>
+        <details><summary>Resolved initial state, parameters &amp; numerical settings</summary><pre id="recorded-resolved"></pre></details>
+      </div>
+      <section class="chart-panel"><h2>Strain by record order</h2><svg id="recorded-strain-chart" viewBox="0 0 560 320" role="img" aria-label="Recorded strain component versus ordered coordinate"></svg></section>
+      <section class="chart-panel"><h2>Effective stress by record order</h2><svg id="recorded-stress-chart" viewBox="0 0 560 320" role="img" aria-label="Recorded effective stress component versus ordered coordinate"></svg></section>
     </section>
     <section id="catalogue" class="page" hidden>
       <div class="eyebrow">A LIVING LITERATURE MAP</div>

@@ -1,6 +1,6 @@
 # Experimental ordered incremental replay
 
-`experimental-recorded-path-0.1` adds a [JSON contract](../schemas/recorded-path.schema.json), [Python validation](../atlas/recorded.py) and [C++ driver](../cpp/include/atlas/recorded.hpp) for recorded paths. It advances NUM-04 with ordered reversals, linear mixed constraints and committed-history replay. The typed C++ driver and experimental native C ABI/CLI consume this contract. The benchmark importer, Wasm runtime and browser do not yet consume it. Existing ramp/sinusoid interfaces remain separate.
+`experimental-recorded-path-0.1` adds a [JSON contract](../schemas/recorded-path.schema.json), [Python validation](../atlas/recorded.py) and [C++ driver](../cpp/include/atlas/recorded.hpp) for recorded paths. It advances NUM-04 with ordered reversals, linear mixed constraints and committed-history replay. The typed C++ driver and experimental native C ABI/CLI consume this contract. The Wasm runtime and browser also consume it through the same C entry point; the benchmark importer remains separate. Existing ramp/sinusoid interfaces remain separate.
 
 ## Contract and units
 
@@ -53,7 +53,7 @@ cmake --build build --target atlas_recorded_fixture_tests --parallel 1
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_recorded_path -v
 ```
 
-Development used small standalone compilations, followed by fresh CMake Debug builds with `-O0 -std=gnu++20`, one target at a time. The final CMake runs pass 56 public cases with 1,850 assertions and 90 transaction assertions; 21 related Python tests pass. Commands and source hashes are recorded in the manifest. Native/Wasm parity, browser import, source-matched nonlinear references and experimental replay remain open before NUM-04 is complete.
+Development used small standalone compilations, followed by fresh CMake Debug builds with `-O0 -std=gnu++20`, one target at a time. The final CMake runs pass 56 public cases with 1,850 assertions and 90 transaction assertions; 21 related Python tests pass. Commands and source hashes are recorded in the manifest. Source-matched nonlinear references, path-density studies and full experimental replay remain open before NUM-04 is complete.
 
 
 ## Native JSON replay command
@@ -82,3 +82,19 @@ Arguments are numeric CSV strings except the model ID. `initial_strain` requires
 The native CLI has `--mode recorded`, `--initial-strain`, `--recorded-controls-file`, `--recorded-knots-file`, optional `--integration-settings` and `--recorded-settings`; wire files are bounded to 2 MB each. These options are rejected in other modes, and recorded mode rejects unrelated protocol/time flags. Native responses echo the numeric wire, resolved initial state/parameters/settings, API version and catalogue hash. Coordinate labels live in the JSON request and are preserved by the Python bridge; the numeric C ABI carries only ordering values. Parsed replay failures carry `failed_knot`, `points`, final committed `state`/`strain`, and work counters. Parse/parameter/settings errors return `ok:false` with a message before executing a path and do not publish state. No stress/strain interpolation or initial preparation is added by the bridge.
 
 The [API evidence](../catalogue/investigations/recorded-replay-api-v1/manifest.json) retains 16 native responses, including three failure branches and the 5,001-point case. Analytical normal/shear/oblique controls, all-five-model direct replay and restart, malformed wire/mode separation, and JSON command output are checked separately. Forty-six existing public native commands match the prior binary exactly after excluding elapsed time. This evidence covers the native C entry point through CLI execution; its Emscripten export annotation does not establish Wasm runtime parity.
+
+
+## Browser recorded paths
+
+The **Recorded paths** view imports a raw recorded-run request, a native JSON result containing `specification`, or a browser replay export. It recalculates the supplied request locally in a dedicated worker, retaining ordered duplicates and reversals. Model sources and the executable definition stay linked beside the run. Default parameters/initial states are explicitly labelled; the resolved values and both sets of numerical settings are inspectable after execution.
+
+Select any of the six orthonormal Mandel components to plot strain or effective stress against the dimensionless ordering coordinate. Shear plots use `sqrt(2)` components. Stress plots use kPa; CSV exports retain Pa. Lines connect accepted observations and do not assert controlled stress between knots. A stopped replay displays and exports only its committed prefix; cancellation/timeout terminates the worker. Replaying starts from the supplied initial state. Import checks catalogue identity when supplied, and rejects unsupported models or malformed paths/settings. The 10 MB file limit and 60-second worker timeout bound browser transport/runtime; files stay local.
+
+Exports preserve the exact parsed `specification`, full engine result and catalogue hash. They can be reimported in this view or passed as `document['specification']` to `execute_recorded`. Unlike Python results, browser exports do not compute Python's canonical request hash. Their engine wire and resolved settings still identify the values actually executed. The elastic example is available directly from the view.
+
+The [browser investigation](../catalogue/investigations/recorded-browser-v1/manifest.json) verifies 16 fresh public native/Wasm replay pairs, including 5,001 observations and three failure branches. It also retains browser export/native replay equality, a source-linked screenshot, and existing protocol/tangent regressions. Its scope excludes timed/research catalogues, arbitrary recorded-measurement overlays, automatic experiment-to-path conversion, source-matched nonlinear references and experimental validity.
+
+```sh
+node tools/test_recorded.mjs
+node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+```

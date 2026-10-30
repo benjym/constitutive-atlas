@@ -1,0 +1,111 @@
+{
+  "id": "recorded-browser-v1",
+  "date": "2026-10-31",
+  "engine_base_revision": "b5d410e",
+  "status": "passed bounded public native/Wasm checks and local browser verification",
+  "scope": "Same recorded C ABI in browser worker; public five-model catalogue, no physical-time/research catalogues.",
+  "toolchain": {
+    "emscripten": "6.0.8-git",
+    "node": "v26.7.0",
+    "native": "Apple clang 21.0.0; existing -O0 CMake binary from recorded-replay-api-v1",
+    "python": "3.14.7"
+  },
+  "wasm_build": {
+    "completed_normally": true,
+    "command": "EM_CACHE=/private/tmp/atlas-browser-settings/em-cache em++ cpp/main.cpp -Icpp/include -I/private/tmp/atlas-recorded-browser/generated -std=c++20 -O0 -fexceptions -sMODULARIZE=1 -sEXPORT_ES6=1 -sEXPORT_NAME=createAtlas -sENVIRONMENT=web,worker,node -sALLOW_MEMORY_GROWTH=1 -sMAXIMUM_MEMORY=268435456 -sSTACK_SIZE=1048576 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -sFILESYSTEM=0 --no-entry -o /private/tmp/atlas-recorded-browser/atlas.js",
+    "cache": "Reused previously populated temporary Emscripten cache; no additional native build.",
+    "js_sha256": "fda8c53513247b4665d3b313512f203e9f63094fbbda07281a66cd55aac63757",
+    "wasm_sha256": "2b0723249ed5c04afe0de7fc7f75e7c2575a2c8ab1e83d6563f690418ac9e8e7",
+    "generated_header_sha256": "d5381b70319eecca056f8374f948b40b6dcd2bc1eff854c9188761a5b87b0919",
+    "native_binary_sha256": "d01a0acf903cca299c79b2b4a25206dadddebbc46c85c86616a1559e12f2dae1"
+  },
+  "parity": {
+    "cases": 16,
+    "successes": 13,
+    "failure_branches": 3,
+    "largest_path_observations": 5001,
+    "numeric_tolerance": "1e-9 * max(1, abs(native)); exact work/status counters, keys and metadata",
+    "command": "node tools/test_recorded.mjs --wasm /private/tmp/atlas-recorded-browser/atlas.js --native /private/tmp/atlas-recorded-cmake/atlas_solver --output /private/tmp/atlas-recorded-browser/parity.json"
+  },
+  "regression": {
+    "settings_and_tangent_pairs": 17,
+    "protocol_pairs": 25,
+    "rollback_cases": 4,
+    "cartesian_rate_states": 2,
+    "igs_crossing_and_history_increments": 6,
+    "commands": [
+      "node tools/test_numerics.mjs --wasm /private/tmp/atlas-recorded-browser/atlas.js --native /private/tmp/atlas-recorded-cmake/atlas_solver --output /private/tmp/atlas-recorded-browser/numerics.json",
+      "node tools/test_wasm.mjs --wasm-dir /private/tmp/atlas-recorded-browser --native /private/tmp/atlas-recorded-cmake/atlas_solver",
+      "node tools/test_experiments.mjs",
+      "node tools/test_recorded.mjs"
+    ]
+  },
+  "python": {
+    "passed": 25,
+    "command": "PYTHONPATH=tests PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_web_recorded tests.test_browser_numerics tests.test_web_experiments tests.test_web_publications tests.test_recorded_api.RecordedRunContractTests tests.test_recorded_path -v",
+    "invocation_note": "Initial combined invocation omitted PYTHONPATH=tests, which the existing experiment tests require; corrected invocation passes."
+  },
+  "packaging": {
+    "command": "python3 tools/build_web.py --wasm-dir /private/tmp/atlas-recorded-browser --output /private/tmp/atlas-recorded-browser/site",
+    "result": "Packaged public build with 628 available experiment records; recorded example and modules included. Final CSS was copied into the same preview after visual review.",
+    "scope_note": "Experimental data channels are not imported into or overlaid by the recorded view."
+  },
+  "browser": {
+    "ok": true,
+    "imported_file": "failure.json",
+    "failed_knot": 2,
+    "committed_observations": 2,
+    "export_exact_native_replay": true,
+    "component_switch": "sqrt2_xz",
+    "source_links_verified": 4,
+    "browser_reimport_reproduced_failure": true,
+    "example": "5 ordered observations and 6 material trials",
+    "preview_url": "http://127.0.0.1:8794/#recorded",
+    "screenshot": "preview.png",
+    "final_status_message": "Stopped at record 2; 2 committed observations retained.",
+    "verification": "Local IAB actions: example, component selection, raw file import, source disclosure, JSON export, exported file reimport. Native replay of export matches state/strain/points/settings exactly."
+  },
+  "review": {
+    "independent_scientific_review": "pending",
+    "new_agents": false
+  },
+  "limitations": [
+    "Endpoint stress constraints only; no between-record controlled stress guarantee or path-density result.",
+    "No timed/research Wasm catalogues, source-matched nonlinear reference or experimental validity claim.",
+    "No automatic experiment-to-path conversion or recorded measurement overlay.",
+    "Browser import is file based; no in-page path/model/parameter editor in this view.",
+    "Browser cancellation/timeout code exists; runtime timeout was not deliberately forced in this investigation.",
+    "CI edits remain local; no hosted workflow run, deployment or publication."
+  ],
+  "source_sha256": {
+    ".github/workflows/verify.yml": "ed5df23c1dff163dd1e296f6a5c3395a1c45e19f204c9f171c25b87253ef40a1",
+    "ROADMAP.md": "2cac371b89e5e2078abdfaad0f74eb4c854b206d5b07651010fc607162a9437b",
+    "docs/RECORDED_PATHS.md": "16fa588d6b6787dd9eaa1e90a2daadcd071e49147f217ab203858c1bd2408999",
+    "tools/build_web.py": "aabe55f18f8fb4e7067cb221f71e3b7e49ede10631b1dec597a29abf51465eb8",
+    "tools/test_recorded.mjs": "163a2dd335eb5a9c54b6ae5dcf4d07d613999bf2cca8e854817ac21c4f3c05c2",
+    "web/README.md": "4457d1524f80ff4926806b53c373f0b0913730a5db0d6038d4aecabae7fe5e09",
+    "web/app.js": "f3e4adb534fe488c327bdbe2cd4d5e407668349c99a049a6ea145648b5653a0f",
+    "web/index.html": "1aa116e63ac0ceac7762b8ed028bdae449043b290f0cab19ba653004c5a3cbba",
+    "web/style.css": "dff8b6987322a6fe42d5990f87137e32c81e2d911e738e133f20ce3b38acfcb2",
+    "web/worker.js": "327e7470b586c5552a5d85e3dafb4372157724ec3129a5424986b0f59e661489",
+    "web/recorded.mjs": "c94528d2bd5687787e8c08bbb02058c7d80d45f30cfd380c64c31a8d606c9edb",
+    "web/recorded-view.mjs": "aa6508c018b4eb1f27237320e7053cf748947a633f707ff559f9a98787e817f2",
+    "web/numerics.mjs": "c1c805112b9c4004673404b735417ee72e2f0fc5edb84d7cca2e4ab5735cbd18",
+    "tests/test_web_recorded.py": "821405a8848ea3717b39655dd31053a78cb7313b68acc22d28f2f9e9643c65ee",
+    "cpp/main.cpp": "bb3095908773f0561134802ec7dfa8711520555fb4ac3932b00215345369ed99",
+    "cpp/include/atlas/recorded.hpp": "5261b7499834bd618e48925d98591f1753b8c802adee59c66d3afd42941ad29e",
+    "protocols/recorded-linear-elastic-run.json": "aa0f465bdfc34b37fabc7cbb44358706fd7bf7a2a7fe3dd901eae3cbe28ed71e",
+    "schemas/recorded-run.schema.json": "7deee348e01c7d1e5d9cedd9a306d5bf1a278e00a7e534062cd1eabb0e3bb94b",
+    "schemas/recorded-path.schema.json": "9240c1f82d65dd2ebfc77f97d5f0e26dfc57368a3cdc4979a1ce81c9d08ae2f0"
+  },
+  "artifact_sha256": {
+    "browser-check.json": "0c30a60f40bc15cc301ec7ea316f0a9c3982f1c5725a35e1437ff229a3e89423",
+    "browser-export.json": "3bb89b447085c73ee3631d4a40eae5ce492e5f3f4fa67c8567e0a0fdd0cb2f46",
+    "numerics-parity.json.gz": "3df186ce4e3367072a98fb0d8147f376f77d7253525b34c4ff4c5d7858abefcf",
+    "parity.json.gz": "bc2177d461d8c01f6564829234186acbadd5a4fbd9f026eca9cb573dd9f71369",
+    "preview.png": "bb9669fb8a3a05d6a2ceb557539c4bd4e81750d1972a68067b415f1a2234c463",
+    "python-tests.txt": "d22a08a7eb788f3256191b27722ca5a2db6148c660bce6178befa287abc116a8",
+    "regression.txt": "55d9a9fbe16a1df5ff36af64b6f55e443bd577675800fe465726c1a9287652f8",
+    "wasm-build.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
