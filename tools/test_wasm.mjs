@@ -45,3 +45,14 @@ for (const [id,initial,strain] of [
   if (!actual.ok) assert.deepEqual(actual.state,initial.split(',').map(Number));
 }
 console.log('Native/WebAssembly increment diagnostics and rollback parity passed for 4 cases.');
+
+for (const current of ['100000,100000,100000,0,0,0,.7','150000,90000,60000,8000,-5000,3000,.7']) {
+  const strain='.001,-.0003,.0002,.0004,-.0002,.0001',id='hypoplastic-sand-vw96';
+  const native=spawnSync(resolve(root,'build/atlas_solver'),['--model',id,'--mode','evaluate','--current',current,'--initial',current,'--strain',strain],{encoding:'utf8',timeout:30000});
+  assert.equal(native.status,0,native.stdout);
+  const expected=JSON.parse(native.stdout);
+  const actual=JSON.parse(wasm.ccall('atlas_evaluate','string',['string','string','string','string','string'],[id,'',current,current,strain]));
+  assert.equal(actual.ok,true);
+  actual.values.forEach((v,i)=>assert.ok(Math.abs(v-expected.values[i])<=1e-4+1e-9*Math.abs(expected.values[i])));
+}
+console.log('Native/WebAssembly Cartesian-rate parity passed for 2 hypoplastic states.');

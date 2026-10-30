@@ -104,6 +104,23 @@ def execute(solver):
                     args,code,result=invoke('evaluate',state,strain,parameters)
                     passed,ratio=compare(result.get('values',[]),expected,RATE_STRESS_ATOL,RATE_STATE_ATOL,RATE_RTOL)
                     cases.append(dict(id=f'rate-p{pressure}-density{fraction}-shape{shape}-D{j}',kind='cartesian-source-rate',arguments=args,expected=expected,actual=result.get('values'),max_tolerance_ratio=ratio,passed=passed and code==0 and result.get('ok') is True))
+    # Oblique fixed-frame covariance, distinct from finite-spin objectivity.
+    base=[150000,90000,60000,8000,-5000,3000,.7]
+    deformation=[.001,-.0003,.0002,.0004,-.0002,.0001]
+    base_args,base_code,base_result=invoke('evaluate',base,deformation,parameters)
+    def rotate(v,Q):
+        transpose=[list(row) for row in zip(*Q)]
+        return mandel(multiply(multiply(Q,matrix(v)),transpose))+list(v[6:])
+    for axis,angle in enumerate((.37,-.63,1.12)):
+        c=math.cos(angle);t=math.sin(angle)
+        Q=([[1,0,0],[0,c,-t],[0,t,c]] if axis==0 else [[c,0,t],[0,1,0],[-t,0,c]] if axis==1 else [[c,-t,0],[t,c,0],[0,0,1]])
+        state=rotate(base,Q);strain=rotate(deformation,Q)
+        args,code,result=invoke('evaluate',state,strain,parameters)
+        expected=reference_rate(state,strain,parameters)
+        source_ok,source_ratio=compare(result.get('values',[]),expected,RATE_STRESS_ATOL,RATE_STATE_ATOL,RATE_RTOL)
+        covariance=rotate(base_result['values'],Q)
+        cov_ok,cov_ratio=compare(result.get('values',[]),covariance,RATE_STRESS_ATOL,RATE_STATE_ATOL,RATE_RTOL)
+        cases.append(dict(id=f'oblique-covariance-axis{axis}',kind='fixed-frame-covariance',arguments=args,rotation=Q,base_arguments=base_args,base_result=base_result,expected=expected,covariance_expected=covariance,actual=result.get('values'),source_tolerance_ratio=source_ratio,covariance_tolerance_ratio=cov_ratio,passed=source_ok and cov_ok and code==0 and base_code==0 and result.get('ok') is True))
     initial=[1e5]*3+[0,0,0,.7]
     histories={
         'isotropic-compression':[[.001]*3+[0]*3],
@@ -117,12 +134,19 @@ def execute(solver):
     for name,history in histories.items():
         actual=initial.copy();reference=initial.copy();segments=[];passed=True
         for strain in history:
-            coarse=rk4(reference,strain,parameters,128);fine=rk4(reference,strain,parameters,256)
-            converged,reference_ratio=compare(coarse,fine,REFERENCE_STRESS_ATOL,REFERENCE_STATE_ATOL,REFERENCE_RTOL)
+            levels=[];previous=None;converged=False;reference_ratio=None
+            for steps in (128,256,512,1024,2048,4096):
+                fine=rk4(reference,strain,parameters,steps)
+                if previous is not None:
+                    converged,reference_ratio=compare(previous,fine,REFERENCE_STRESS_ATOL,REFERENCE_STATE_ATOL,REFERENCE_RTOL)
+                levels.append(dict(steps=steps,state=fine,comparison_to_previous=reference_ratio,converged=converged))
+                if converged:break
+                previous=fine
+            coarse=levels[-2]['state']
             args,code,result=invoke('integrate',actual,strain,parameters)
             valid,ratio=compare(result.get('state',[]),fine,PATH_STRESS_ATOL,PATH_STATE_ATOL,PATH_RTOL)
             passed=passed and converged and valid and code==0 and result.get('ok') is True
-            segments.append(dict(arguments=args,reference_steps=[128,256],reference_converged=converged,reference_tolerance_ratio=reference_ratio,coarse=coarse,expected=fine,actual=result.get('state'),max_tolerance_ratio=ratio,diagnostics=result.get('diagnostics'),passed=converged and valid and code==0 and result.get('ok') is True))
+            segments.append(dict(arguments=args,reference_steps=[level['steps'] for level in levels],reference_levels=levels,reference_converged=converged,reference_tolerance_ratio=reference_ratio,coarse=coarse,expected=fine,actual=result.get('state'),max_tolerance_ratio=ratio,diagnostics=result.get('diagnostics'),passed=converged and valid and code==0 and result.get('ok') is True))
             actual=result['state'];reference=fine
         cases.append(dict(id='path-'+name,kind='independent-rk4-reference',initial=initial,strain_segments=history,segments=segments,passed=passed))
     for label,state in [('tensile',[-1e5]*3+[0,0,0,.7]),('too-dense',[1e5]*3+[0,0,0,.1]),('too-loose',[1e5]*3+[0,0,0,1.1])]:

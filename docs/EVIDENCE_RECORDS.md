@@ -23,3 +23,5 @@ Changing an artifact requires a new evidence revision rather than quietly repair
 Current records leave review pending. No independent reviewer has signed the elasticity transcription, and these records do not close REV-01 or the five-model review milestone.
 
 The [plasticity investigation](PLASTICITY_VERIFICATION.md) retains failing comparisons as evidence with `outcome: failed`. Its scalar-root and continuum references use method `analytical-and-scalar-reduction`. A nonzero investigative checker result is not hidden by the green software checks.
+
+The [base sand hypoplasticity dossier](models/hypoplastic-sand-vw96.md) uses method `independent-cartesian-rates-and-rk4`: direct Cartesian source-equation rates and separately refined RK4 paths. The failed initial reference-convergence attempt is retained alongside the expanded passing evidence; neither substitutes for original-paper or independent human review.
