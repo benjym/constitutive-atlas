@@ -85,6 +85,8 @@ Prepare one source dossier per formulation. Each dossier must contain the exact 
 
 The [elasticity dossier](docs/models/linear-elastic.md) and [29-case analytical report](catalogue/evidence/reports/linear-elastic-analytical-v1.json) now provide the first source mapping and numerical evidence example. All 29 native cases pass, and the rebuilt public catalogue passes native/Wasm parity. REV-01 remains open for independent review; the automated oracle does not supply independent authorship.
 
+The [plasticity investigation](docs/PLASTICITY_VERIFICATION.md) adds 19 Drucker–Prager and 20 MCC comparisons, source-scope notes, increment diagnostics and revision-pinned failed-outcome evidence. DP passes 18/19, with a shear/apex rollback limitation. MCC passes 19/20: the retained full-step comparison differs after automatic subdivision, while the matching two-half-step scalar reference agrees; both isotropic refinement studies pass. REV-02/REV-03 and independent review remain open.
+
 **Acceptance:** all five dossiers and evidence records are complete, with review independent of the original transcription. If no suitable independent reference exists, document the gap and keep that model below the reviewed gate. Existing IGS draft status is not promoted solely because CI passes.
 
 ## 7. M2 — SANISAND-2004 and the six-model proof

@@ -1,0 +1,1447 @@
+{
+  "kind": "plasticity-verification-report",
+  "model": "modified-cam-clay",
+  "catalogue_hash": "c43016f8f8becb1b9b8fb44be037ee59de09cea9237d026c33f56962025e840c",
+  "oracle": "Closed-form radial return and scalar invariant reductions; no DSL evaluation or shared nonlinear solve.",
+  "tolerances": {
+    "stress_absolute_Pa": 0.0001,
+    "other_state_absolute": 1e-09,
+    "relative": 1e-09
+  },
+  "runtime": {
+    "python": "3.14.7",
+    "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "solver_sha256": "077ca7e9f299b0199f6a3485a5dcf3d871694d0562322b704b51bb629c9e50c2"
+  },
+  "cases": [
+    {
+      "id": "elastic-isotropic-compression",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        114563.03186838809,
+        114563.03186838809,
+        114563.03186838809,
+        0.0,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        200000.0,
+        0
+      ],
+      "actual": [
+        114563.03186838808,
+        114563.03186838808,
+        114563.03186838808,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 4,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 6.782116705590235e-08,
+      "passed": true
+    },
+    {
+      "id": "elastic-isotropic-unloading",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "-0.001,-0.001,-0.001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        -0.001,
+        -0.001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        88661.67271808675,
+        88661.67271808675,
+        88661.67271808675,
+        0.0,
+        0.0,
+        0.0,
+        0.7051076576557409,
+        200000.0,
+        0
+      ],
+      "actual": [
+        88661.67271808675,
+        88661.67271808675,
+        88661.67271808675,
+        0,
+        0,
+        0,
+        0.7051076576557409,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 4,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 0.0,
+      "passed": true
+    },
+    {
+      "id": "elastic-shear-3",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0.00050000000000000001,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0.0005,
+        0,
+        0
+      ],
+      "expected": [
+        100000.0,
+        100000.0,
+        100000.0,
+        2550.0,
+        0.0,
+        0.0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        100000,
+        100000,
+        100000,
+        2550,
+        0,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 0.0,
+      "passed": true
+    },
+    {
+      "id": "elastic-shear-4",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0.00050000000000000001,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0.0005,
+        0
+      ],
+      "expected": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        2550.0,
+        0.0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        100000,
+        100000,
+        100000,
+        0,
+        2550,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 0.0,
+      "passed": true
+    },
+    {
+      "id": "elastic-shear-5",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0,0.00050000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.0005
+      ],
+      "expected": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        2550.0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        2550,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 0.0,
+      "passed": true
+    },
+    {
+      "id": "elastic-mixed",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0.00029999999999999997,-0.0001,0.00020000000000000001,0.00020000000000000001,-0.0001,0.00014999999999999999"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0003,
+        -0.0001,
+        0.0002,
+        0.0002,
+        -0.0001,
+        0.00015
+      ],
+      "expected": [
+        102593.0443283799,
+        100518.60886567597,
+        102074.43546270391,
+        1037.2177313519592,
+        -518.6088656759796,
+        777.9132985139693,
+        0.6993201359818684,
+        200000.0,
+        0
+      ],
+      "actual": [
+        102593.0443283799,
+        100518.60886567598,
+        102074.43546270391,
+        1037.2177313519592,
+        -518.6088656759796,
+        777.9132985139692,
+        0.6993201359818684,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 4,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.257139529685712e-08,
+      "passed": true
+    },
+    {
+      "id": "normally-consolidated-volume-0.001",
+      "method": "isotropic-plastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.00033333333333333332,0.00033333333333333332,0.00033333333333333332,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0003333333333333333,
+        0.0003333333333333333,
+        0.0003333333333333333,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        100853.49231643343,
+        100853.49231643343,
+        100853.49231643343,
+        0,
+        0,
+        0,
+        0.6983008497167376,
+        100853.49231643343,
+        0.0005513212857323413
+      ],
+      "actual": [
+        100853.49231643345,
+        100853.49231643345,
+        100853.49231643345,
+        0,
+        0,
+        0,
+        0.6983008497167376,
+        100853.49231643343,
+        0.0005513212857323383
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 10,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.24503968566358e-08,
+      "passed": true
+    },
+    {
+      "id": "normally-consolidated-volume-0.003",
+      "method": "isotropic-plastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        102581.56273563087,
+        102581.56273563087,
+        102581.56273563087,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        102581.56273563087,
+        0.0016288399563306418
+      ],
+      "actual": [
+        102581.56273563323,
+        102581.56273563323,
+        102581.56273563323,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        102581.56273563027,
+        0.0016288399563301964
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 10,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.1636845106540383e-05,
+      "passed": true
+    },
+    {
+      "id": "normally-consolidated-volume-0.009",
+      "method": "isotropic-plastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.0029999999999999996,0.0029999999999999996,0.0029999999999999996,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0029999999999999996,
+        0.0029999999999999996,
+        0.0029999999999999996,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        107937.63886763382,
+        107937.63886763382,
+        107937.63886763382,
+        0,
+        0,
+        0,
+        0.6847686439139022,
+        107937.63886763382,
+        0.004667062456944053
+      ],
+      "actual": [
+        107937.63886763426,
+        107937.63886763426,
+        107937.63886763426,
+        0,
+        0,
+        0,
+        0.6847686439139022,
+        107937.6388676337,
+        0.004667062456943951
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 2.099463373867121e-06,
+      "passed": true
+    },
+    {
+      "id": "overconsolidated-yield-crossing",
+      "method": "isotropic-plastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0.01,0.01,0.01,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0.01,
+        0.01,
+        0.01,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        235946.07738820912,
+        235946.07738820912,
+        235946.07738820912,
+        0,
+        0,
+        0,
+        0.6497574070324639,
+        235946.07738820912,
+        0.009436056113859496
+      ],
+      "actual": [
+        233234.6915784347,
+        233234.6915784347,
+        233234.6915784347,
+        0,
+        0,
+        0,
+        0.6497574070324639,
+        233234.69157843373,
+        0.0074418271369055475
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 28,
+        "substeps": 2,
+        "rejected": 1
+      },
+      "max_tolerance_ratio": 8070895.873691623,
+      "passed": false
+    },
+    {
+      "id": "overconsolidated-two-half-step-reference",
+      "method": "isotropic-plastic-composed-2-steps",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0.01,0.01,0.01,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0.01,
+        0.01,
+        0.01,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        233234.69157843385,
+        233234.69157843385,
+        233234.69157843385,
+        0,
+        0,
+        0,
+        0.6497574070324639,
+        233234.69157843385,
+        0.007441827136905643
+      ],
+      "actual": [
+        233234.6915784347,
+        233234.6915784347,
+        233234.6915784347,
+        0,
+        0,
+        0,
+        0.6497574070324639,
+        233234.69157843373,
+        0.0074418271369055475
+      ],
+      "expected_failure": false,
+      "reference_steps": 2,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 28,
+        "substeps": 2,
+        "rejected": 1
+      },
+      "max_tolerance_ratio": 2.5327827641457357e-06,
+      "passed": true
+    },
+    {
+      "id": "critical-state-compression",
+      "method": "critical-shear",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "180000,60000,60000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0.001,-0.00050000000000000001,-0.00050000000000000001,0,0,0"
+      ],
+      "initial": [
+        180000.0,
+        60000.0,
+        60000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        -0.0005,
+        -0.0005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        180000.0,
+        60000.0,
+        60000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0.0008333333333333334
+      ],
+      "actual": [
+        180000.00000000003,
+        59999.999999999985,
+        59999.999999999985,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0.0008333333333333276
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.0394225163119179e-07,
+      "passed": true
+    },
+    {
+      "id": "critical-state-extension",
+      "method": "critical-shear",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "20000,140000,140000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "-0.001,0.00050000000000000001,0.00050000000000000001,0,0,0"
+      ],
+      "initial": [
+        20000.0,
+        140000.0,
+        140000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        0.0005,
+        0.0005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        20000.0,
+        140000.0,
+        140000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0.0008333333333333334
+      ],
+      "actual": [
+        19999.999999999978,
+        140000,
+        140000,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0.0008333333333333293
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.8189894035458565e-07,
+      "passed": true
+    },
+    {
+      "id": "preload-for-unloading",
+      "method": "isotropic-plastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        102581.56273563087,
+        102581.56273563087,
+        102581.56273563087,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        102581.56273563087,
+        0.0016288399563306418
+      ],
+      "actual": [
+        102581.56273563323,
+        102581.56273563323,
+        102581.56273563323,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        102581.56273563027,
+        0.0016288399563301964
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 10,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.1636845106540383e-05,
+      "passed": true
+    },
+    {
+      "id": "elastic-unloading-keeps-pc",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "102581.56273563087,102581.56273563087,102581.56273563087,0,0,0,0.6949076423557341,102581.56273563087,0.0016288399563306418",
+        "--strain",
+        "-0.00050000000000000001,-0.00050000000000000001,-0.00050000000000000001,0,0,0"
+      ],
+      "initial": [
+        102581.56273563087,
+        102581.56273563087,
+        102581.56273563087,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        102581.56273563087,
+        0.0016288399563306418
+      ],
+      "strain_increment": [
+        -0.0005,
+        -0.0005,
+        -0.0005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        96442.56464638503,
+        96442.56464638503,
+        96442.56464638503,
+        0.0,
+        0.0,
+        0.0,
+        0.6974519115441087,
+        102581.56273563087,
+        0
+      ],
+      "actual": [
+        96442.56464638503,
+        96442.56464638503,
+        96442.56464638503,
+        0,
+        0,
+        0,
+        0.6974519115441087,
+        102581.56273563087,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 4,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 0.0,
+      "passed": true
+    },
+    {
+      "id": "invalid-tensile-start",
+      "method": "exact-rollback",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "-100000,-100000,-100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0,0"
+      ],
+      "initial": [
+        -100000.0,
+        -100000.0,
+        -100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        -100000.0,
+        -100000.0,
+        -100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        -100000,
+        -100000,
+        -100000,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": true,
+      "reference_steps": 1,
+      "returncode": 1,
+      "solver_ok": false,
+      "message": "invalid parameters, inadmissible initial state or strain increment",
+      "diagnostics": {
+        "iterations": 0,
+        "substeps": 0,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": null,
+      "passed": true
+    },
+    {
+      "id": "outside-yield-start",
+      "method": "exact-rollback",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "300000,300000,300000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0,0"
+      ],
+      "initial": [
+        300000.0,
+        300000.0,
+        300000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        300000.0,
+        300000.0,
+        300000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        300000,
+        300000,
+        300000,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": true,
+      "reference_steps": 1,
+      "returncode": 1,
+      "solver_ok": false,
+      "message": "invalid parameters, inadmissible initial state or strain increment",
+      "diagnostics": {
+        "iterations": 0,
+        "substeps": 0,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": null,
+      "passed": true
+    },
+    {
+      "id": "invalid-compression-indices",
+      "method": "exact-rollback",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.040000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": true,
+      "reference_steps": 1,
+      "returncode": 1,
+      "solver_ok": false,
+      "message": "invalid parameters, inadmissible initial state or strain increment",
+      "diagnostics": {
+        "iterations": 0,
+        "substeps": 0,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": null,
+      "passed": true
+    },
+    {
+      "id": "continuum-elastic-refinement",
+      "method": "independent-continuum-isotropic-solution",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "total_volumetric_strain": 0.003,
+      "expected_pressure": 113576.7848961761,
+      "levels": [
+        {
+          "steps": 8,
+          "final_state": [
+            113690.37249201156,
+            113690.37249201156,
+            113690.37249201156,
+            0,
+            0,
+            0,
+            0.6949076423557337,
+            200000,
+            0
+          ],
+          "relative_pressure_error": 0.001000095186171125,
+          "failed_steps": []
+        },
+        {
+          "steps": 16,
+          "final_state": [
+            113633.26466569157,
+            113633.26466569157,
+            113633.26466569157,
+            0,
+            0,
+            0,
+            0.694907642355733,
+            200000,
+            0
+          ],
+          "relative_pressure_error": 0.0004972826935284361,
+          "failed_steps": []
+        },
+        {
+          "steps": 32,
+          "final_state": [
+            113604.94699650683,
+            113604.94699650683,
+            113604.94699650683,
+            0,
+            0,
+            0,
+            0.6949076423557357,
+            200000,
+            0
+          ],
+          "relative_pressure_error": 0.0002479564847382021,
+          "failed_steps": []
+        },
+        {
+          "steps": 64,
+          "final_state": [
+            113590.84739271856,
+            113590.84739271856,
+            113590.84739271856,
+            0,
+            0,
+            0,
+            0.6949076423557334,
+            200000,
+            0
+          ],
+          "relative_pressure_error": 0.0001238148848402896,
+          "failed_steps": []
+        }
+      ],
+      "observed_orders": [
+        1.007999189741502,
+        1.0039792669735974,
+        1.001902192635482
+      ],
+      "acceptance": {
+        "minimum_order": 0.8,
+        "maximum_final_relative_error": 0.0005
+      },
+      "passed": true
+    },
+    {
+      "id": "continuum-plastic-refinement",
+      "method": "independent-continuum-isotropic-solution",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "total_volumetric_strain": 0.03,
+      "expected_pressure": 128558.38393337339,
+      "levels": [
+        {
+          "steps": 8,
+          "final_state": [
+            128598.48927742809,
+            128598.48927742809,
+            128598.48927742809,
+            0,
+            0,
+            0,
+            0.6497574070324634,
+            128598.48927736425,
+            0.002025905257231356
+          ],
+          "relative_pressure_error": 0.00031196210490232667,
+          "failed_steps": []
+        },
+        {
+          "steps": 16,
+          "final_state": [
+            128578.62702025315,
+            128578.62702025315,
+            128578.62702025315,
+            0,
+            0,
+            0,
+            0.6497574070324645,
+            128578.62702025287,
+            0.0010272382630154902
+          ],
+          "relative_pressure_error": 0.00015746220713418413,
+          "failed_steps": []
+        },
+        {
+          "steps": 32,
+          "final_state": [
+            128568.55305167161,
+            128568.55305167161,
+            128568.55305167161,
+            0,
+            0,
+            0,
+            0.6497574070324665,
+            128568.55305167158,
+            0.0005172173061691795
+          ],
+          "relative_pressure_error": 7.910116778916494e-05,
+          "failed_steps": []
+        },
+        {
+          "steps": 64,
+          "final_state": [
+            128563.48038793786,
+            128563.48038793786,
+            128563.48038793786,
+            0,
+            0,
+            0,
+            0.6497574070324585,
+            128563.4803809306,
+            0.00025951154388828627
+          ],
+          "relative_pressure_error": 3.964311317967958e-05,
+          "failed_steps": []
+        }
+      ],
+      "observed_orders": [
+        0.9863651850473163,
+        0.9932347067965559,
+        0.9966287316687249
+      ],
+      "acceptance": {
+        "minimum_order": 0.8,
+        "maximum_final_relative_error": 0.0005
+      },
+      "passed": true
+    }
+  ],
+  "passed": false
+}
