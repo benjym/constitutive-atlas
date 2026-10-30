@@ -21,3 +21,9 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory web/dist
 ```
 
 Open <http://127.0.0.1:8765> for development. The native build must exist before running the parity check. Packaging rejects stale model definitions.
+
+## Experimental overlays
+
+Load one or more original Wichtmann `TMD*.dat` / `TMU*.dat` files after extracting the provider archives, or normalized Atlas experiment JSON. The selector switches tests; **Show experimental data** toggles measured points without rerunning the solver. Clear removes the loaded collection from the application. No file is uploaded. Other original formats require a reviewed importer. See [data reuse review](../docs/DATA_REUSE.md); measurements are excluded from the public build pending permission.
+
+Run `node tools/test_experiments.mjs` from the repository root to verify browser import mappings and visibility semantics.

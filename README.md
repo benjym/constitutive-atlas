@@ -38,6 +38,8 @@ Model source hyperlinks are required in each executable definition and displayed
 
 [Launch the laboratory](https://benjym.github.io/constitutive-atlas/) to edit parameters and initial states, run five loading protocols, inspect model equations and sources, overlay experiments, and import/export reproducible runs. The C++ engine runs in your browser through WebAssembly; no installation or solver server is required.
 
+To overlay Wichtmann measurements, download a linked TMD/TMU archive in the laboratory, extract it, and load one or more original `.dat` files. Select a test and use **Show experimental data** to toggle its measured points. Atlas experiment JSON is also supported. Files stay in the browser; simulation settings are not changed automatically. See the [data reuse review](docs/DATA_REUSE.md) for the unresolved redistribution terms.
+
 Developer build and local preview instructions are in [web/README.md](web/README.md).
 
 ## Original experimental data
