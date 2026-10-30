@@ -1,0 +1,104 @@
+{
+  "status": "passed",
+  "increments": 336,
+  "active_increments": 336,
+  "largest_scaled_residual": 1.5355957657448016e-10,
+  "largest_scaled_yield": 2.0161082829872613e-11,
+  "refinement": [
+    {
+      "path": 0,
+      "steps": [
+        16,
+        32,
+        64
+      ],
+      "scaled_endpoint_changes": [
+        0.007903541351978202,
+        0.004206053133411915
+      ],
+      "ratio": 0.5321732304670195
+    },
+    {
+      "path": 1,
+      "steps": [
+        16,
+        32,
+        64
+      ],
+      "scaled_endpoint_changes": [
+        0.005697462494857031,
+        0.0029495306479065952
+      ],
+      "ratio": 0.5176919813985733
+    },
+    {
+      "path": 2,
+      "steps": [
+        16,
+        32,
+        64
+      ],
+      "scaled_endpoint_changes": [
+        0.004163614783490484,
+        0.002176718314499594
+      ],
+      "ratio": 0.5227953179363979
+    }
+  ],
+  "kind": "fixed-memory-sanisand-research-investigation",
+  "independent_review": "pending",
+  "scope": "Native common-solver monotonic paths only; no reversals, reference-code or experimental agreement.",
+  "sha256": {
+    "models/research/sanisand-2004-fixed-memory-be.json": "3c69c0c5c03d4a125de0f42f2d2e50987575526ecfdb1c8d5f8b6ce8916be915",
+    "tests/native/sanisand_fixed_memory.cpp": "48500f29703e36650e6f5fd7237eecc300815e5d0116109414e0128ca69d0d7c",
+    "tools/verify_sanisand_fixed_memory.py": "d98bfca3f552a098cee70a8141aa08c09af25f73e8606d4e3f5f87944f73b88b",
+    "atlas/compiler.py": "14cb1f0231b99303e4a89c4ce000fe6b5d107d8848538ea2be0e15a778fd91c1",
+    "atlas/model.py": "709fd988b95ead1f343fdef1608865927bc85d7bf218d062ff5139aab83099c0",
+    "atlas/dsl.py": "5bdb057a0c6be9f47315aa56cf4607a97b4c0eb5088f710f49121e50d4df5060",
+    "cpp/include/atlas/solver.hpp": "1e0e5d4d75f11faed0ec728d0be187d8ba9925f098e56fec75fb7b617bd401f0",
+    "cpp/include/atlas/tensor.hpp": "d964ff6e2e46f81e465533f2b517c3aabef7df42de4ed2b9907cc5e4448c6a1e",
+    "tests/test_sanisand_fixed_memory.py": "2af2110a62e242e2f66f3679a1c79e66bedb44e091bf59d47013d6391f58250f"
+  },
+  "raw_sha256": "575a91ece27fbafcde781d6b5d878ed641461f7405381c39d0c2e8d51863840f",
+  "date": "2026-10-31",
+  "source_revision": "cfc5821",
+  "raw_file": "trajectories.json.gz",
+  "compiler": {
+    "version": "Apple clang 21.0.0 (clang-2100.4.1.1)",
+    "target": "arm64-apple-darwin25.6.0",
+    "argv": [
+      "c++",
+      "-std=c++20",
+      "-O0",
+      "-I/Users/bmar5496/code/constitutive-atlas/cpp/include",
+      "-I/private/tmp/atlas-sanisand-residual-small/generated",
+      "/private/tmp/atlas-sanisand-residual-small/probe.cpp",
+      "-o",
+      "/private/tmp/atlas-sanisand-residual-small/probe"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 0.682596458
+  },
+  "execution": {
+    "exit_code": 0,
+    "timeout_seconds": 30,
+    "records": 336
+  },
+  "generated_header_sha256": "913ff8fe8c8974146ef659fcd69253248954a532ed02857b083f2a3a0cc1c5fc",
+  "binary_sha256": "e58c9e4fed2119d39b0f9e2c203ddd4aa5d2047f13304a0abba44f32f68c6cfe",
+  "limitations": [
+    "Fixed alpha_in; reversal support absent.",
+    "Normalized off-cone direction and backward-Euler products are explicit project choices.",
+    "Step refinement supports convergence but not independent scientific validation.",
+    "No full OpenSees, Wasm, experimental agreement or algorithmic-tangent evidence."
+  ],
+  "python_tests": {
+    "tests_run": 19,
+    "log": "test_research_scope_and_capacity (tests.test_sanisand_fixed_memory.FixedMemoryResearchTests.test_research_scope_and_capacity) ... ok\ntest_residual_matches_original_rates_to_first_order (tests.test_sanisand_fixed_memory.FixedMemoryResearchTests.test_residual_matches_original_rates_to_first_order) ... ok\ntest_retained_native_matrix_and_invalid_evidence (tests.test_sanisand_fixed_memory.FixedMemoryResearchTests.test_retained_native_matrix_and_invalid_evidence) ... ok\ntest_zero_increment_elastic_interior (tests.test_sanisand_fixed_memory.FixedMemoryResearchTests.test_zero_increment_elastic_interior) ... ok\ntest_constant_volume_first_yield_analytic (tests.test_sanisand_elastic_entry.ElasticEntryTests.test_constant_volume_first_yield_analytic) ... ok\ntest_matches_independent_rate_integration_and_refinement (tests.test_sanisand_elastic_entry.ElasticEntryTests.test_matches_independent_rate_integration_and_refinement) ... ok\ntest_mixed_yield_partition_rotation_and_unloading (tests.test_sanisand_elastic_entry.ElasticEntryTests.test_mixed_yield_partition_rotation_and_unloading) ... ok\ntest_partition_covariance_and_units (tests.test_sanisand_elastic_entry.ElasticEntryTests.test_partition_covariance_and_units) ... ok\ntest_rejects_domains_and_failed_search_without_mutation (tests.test_sanisand_elastic_entry.ElasticEntryTests.test_rejects_domains_and_failed_search_without_mutation) ... ok\ntest_zero_volume_and_small_volume_limit (tests.test_sanisand_elastic_entry.ElasticEntryTests.test_zero_volume_and_small_volume_limit) ... ok\ntest_general_cartesian_flow_and_loading_consistency (tests.test_sanisand_original.SANISANDOriginalTests.test_general_cartesian_flow_and_loading_consistency) ... ok\ntest_pressure_unit_covariance (tests.test_sanisand_original.SANISANDOriginalTests.test_pressure_unit_covariance) ... ok\ntest_softening_is_not_clipped_and_unresolved_states_are_rejected (tests.test_sanisand_original.SANISANDOriginalTests.test_softening_is_not_clipped_and_unresolved_states_are_rejected) ... ok\ntest_triaxial_reductions_and_current_density_elasticity (tests.test_sanisand_original.SANISANDOriginalTests.test_triaxial_reductions_and_current_density_elasticity) ... ok\ntest_unloading_is_elastic_and_fabric_evolves_only_during_dilation (tests.test_sanisand_original.SANISANDOriginalTests.test_unloading_is_elastic_and_fabric_evolves_only_during_dilation) ... ok\ntest_equivalent_to_finite_original_in_loading_and_unloading (tests.test_sanisand_limit.SANISANDLimitTests.test_equivalent_to_finite_original_in_loading_and_unloading) ... ok\ntest_negative_distance_and_invalid_zero_limits_are_not_regularized (tests.test_sanisand_limit.SANISANDLimitTests.test_negative_distance_and_invalid_zero_limits_are_not_regularized) ... ok\ntest_one_sided_convergence_to_zero_and_overflow_avoidance (tests.test_sanisand_limit.SANISANDLimitTests.test_one_sided_convergence_to_zero_and_overflow_avoidance) ... ok\ntest_zero_limit_from_yield_consistency_and_no_hardening_cap (tests.test_sanisand_limit.SANISANDLimitTests.test_zero_limit_from_yield_consistency_and_no_hardening_cap) ... ok\n\n----------------------------------------------------------------------\nRan 19 tests in 0.496s\n\nOK\n"
+  },
+  "source": {
+    "doi": "10.1061/(ASCE)0733-9399(2004)130:6(622)",
+    "receipt": "catalogue/source-audits/original-papers-2026-10-31.json",
+    "sha256": "b6e0f6ccfd018729a9bbd8492745af649c7682a8a1e929348ae25a728917e023"
+  }
+}

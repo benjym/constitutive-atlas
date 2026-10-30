@@ -56,3 +56,7 @@ The [conventions and state-function audit](models/sanisand-2004-conventions.md) 
 ## Derived infinite-hardening products
 
 The [finite-product investigation](models/sanisand-2004-hardening-limit.md) represents the one-sided regular zero-distance limit using existing scalar/tensor expressions; no infinity literal, cap or new DSL operator is needed for that branch. The [separate draft](../catalogue/source-audits/sanisand-2004-hardening-limit.json) is Python-verified. Simultaneous-zero limits, general initialization, first yield, reversal events and finite-step integration remain unresolved; this result does not close SAN-01/03/05.
+
+## Common-solver residual research execution
+
+The [fixed-memory research material](models/sanisand-2004-fixed-memory-be.md) now demonstrates a 26-component backward-Euler formulation using existing DSL and AD solver features. The rearranged `gamma=Delta_lambda*h` products avoid separate division by reversal distance on the tested initial loading branch. A small native build passes 336 increments with interpreted residual and first-order refinement evidence. Memory remains fixed; the original cone-normal reset rule is not replaced by the external parent trial-direction rule. This advances SAN-05 but closes neither reversal/event semantics nor full material admission.

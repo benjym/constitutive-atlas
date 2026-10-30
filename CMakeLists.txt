@@ -70,7 +70,7 @@ file(GLOB RESEARCH_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/res
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/research-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/research-generated" "${CMAKE_SOURCE_DIR}/models/research"
-  DEPENDS ${RESEARCH_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model-v0.2.schema.json
+  DEPENDS ${RESEARCH_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model-v0.2.schema.json schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_research_models DEPENDS "${CMAKE_BINARY_DIR}/research-generated/models.hpp")
 add_executable(atlas_research_solver cpp/main.cpp)
