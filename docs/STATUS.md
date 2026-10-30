@@ -68,3 +68,7 @@ The standalone publication evidence browser now renders the canonical publicatio
 The [SANISAND integration audit](models/sanisand-2004-integration.md) now records all eleven scheme-code routes and nine source-inspection findings, including shifted stage density, wrapper bookkeeping, tolerance scaling, implicit fallback and public status limitations. Ten full-reference cases remain pending. This changes the reference comparison requirements without adding executed cases or promoting the candidate.
 
 The PM4Sand3D manual audit now includes a source-linked instantaneous surface fragment in the existing DSL. Four Python tests check Cartesian invariants, rotations, backstress directions and domain failures. This establishes representability of selected surface terms only; no complete model, native/Wasm agreement or scientific admission is claimed.
+
+## Original-paper receipt — 2026-10-31
+
+Four user-supplied originals are [hash-pinned](../catalogue/source-audits/original-papers-2026-10-31.json), resolving the requested-paper access gap. The [SANISAND original extraction](models/sanisand-2004-original.md) records source equations and parameter/figure distinctions, current-void-ratio elasticity and an apparent printed Eq. (20) omission requiring review. The other three title pages are verified; detailed reconciliation remains pending. PDFs are not redistributed. Source completeness, independent review and full-reference execution gates remain open.
