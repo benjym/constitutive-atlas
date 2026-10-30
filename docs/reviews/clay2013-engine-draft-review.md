@@ -1,0 +1,15 @@
+# Bounded clay2013 engine-draft review
+
+Review type: independent AI technical check; no human scientific sign-off.
+
+Reviewed draft `models/research/clay2013/hypoplastic-clay-2013-research.json` SHA256 `f4437ed4f5e47c94abdbe45920e4146d899a9d72cfb3ee81631b944d2f414d7b` read-only. No blocker found before engine execution.
+
+The stress and void-ratio equations match the pinned rate fragment and visually checked source Appendix43–58: compression-positive stress/stretching signs, full symmetric Mandel stress, direct volumetric void-ratio coupling, fixed1000Pa density-reference pressure, and zero-spin scope. Seven evolving components are exactly stress6 plus e1. `p_scale` appears only in state scaling; changing it changes numerical accuracy weighting rather than material law. Illustrative parameter/initial values are explicitly labelled and do not supply calibration or physical initialization evidence.
+
+The invariant SPD checks are correct in exact real arithmetic: for real symmetric stress, positive trace, positive pairwise eigenvalue sum and positive determinant imply three positive eigenvalues. If two eigenvalues were negative, trace positivity forces the positive one above their absolute sum, making the pairwise sum negative. The model computes normalized pair/determinant from j2/j3, so rounding near a singular boundary can reject admissible inputs or lose eigenvalue-sign resolution. This is a numerical domain restriction, not certified positivity for arbitrarily ill-conditioned binary64 stress.
+
+The exact-isotropy guard rejects j2 underflow from a nonzero supplied deviator without choosing an arbitrary Lode angle. Double projection before normalization preserves the tested small diagonal differences. Fm/omega/pe/fd/fdA/fs and direction checks reject unresolved/singular arithmetic; the magnitude bounds are conservative numerical limits, not source physical admissibility. ASBS is deliberately not a yield barrier. Invalid derived states may be computed before final domain predicates, so no claim is made that every mathematical SPD input is evaluable through all intermediate expressions.
+
+Independent interpreted-rate probe:40 random noncoaxial SPD Cartesian stresses (sigma=10000*(A*A^T+I)), general symmetric stretching, seed771, e=.8 and default constitutive parameters were compared against tools/reference_clay2013_cartesian.py. All40 passed domain and max component difference divided by max(1,abs(reference)) was8.207736676642225e-14; e-rate absolute differences were below1e-17. This checks algebra and representation, not integration.
+
+Use the adjacent closed-form isotropic packet to test finite coupled trajectories, density cases, refinement, caller partitions and rollback. Still unverified here: native generated execution, finite7-component trajectories, engine error scaling, step rejection/rollback in this model, nonisotropic integration, physical/objective spin, initialization/calibration and experimental response. No builds/native execution, repository changes or scientific-status promotion were performed.

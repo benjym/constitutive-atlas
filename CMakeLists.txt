@@ -109,3 +109,22 @@ if(EMSCRIPTEN)
 else()
   set_property(TEST atlas_python APPEND PROPERTY ENVIRONMENT "ATLAS_HISTORY_SOLVER=$<TARGET_FILE:atlas_history_solver>")
 endif()
+
+# Isolated clay research catalogue preserves prior research evidence hashes.
+file(GLOB CLAY2013_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research/clay2013/*.json")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/clay2013-generated" "${CMAKE_SOURCE_DIR}/models/research/clay2013"
+  DEPENDS ${CLAY2013_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_custom_target(atlas_clay2013_models DEPENDS "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp")
+add_executable(atlas_clay2013_solver cpp/main.cpp)
+add_dependencies(atlas_clay2013_solver atlas_clay2013_models)
+target_include_directories(atlas_clay2013_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/clay2013-generated")
+if(EMSCRIPTEN)
+  target_compile_options(atlas_clay2013_solver PRIVATE -fexceptions)
+  set_target_properties(atlas_clay2013_solver PROPERTIES OUTPUT_NAME "clay2013" SUFFIX ".js")
+  target_link_options(atlas_clay2013_solver PRIVATE ${ATLAS_WASM_OPTIONS})
+else()
+  set_property(TEST atlas_python APPEND PROPERTY ENVIRONMENT "ATLAS_CLAY2013_SOLVER=$<TARGET_FILE:atlas_clay2013_solver>")
+endif()

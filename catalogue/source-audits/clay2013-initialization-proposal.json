@@ -1,0 +1,61 @@
+{
+  "acceptance_separation": {
+    "diagnostic": "ASBS classification/excursions recorded independently",
+    "material": "domain and finite state/rate",
+    "numerical": "common solver error/residual acceptance with transactional rollback"
+  },
+  "explicit_inputs": [
+    "phi_c_rad",
+    "lambda_star",
+    "kappa_star",
+    "N",
+    "nu",
+    "compression_positive_stress6_Pa",
+    "void_ratio"
+  ],
+  "integration_validation": "not performed",
+  "oracle_implementation_sha256": "d37b6b87206cafc0a74af53f4effd51c37495f318dcf4889eeec19d55943e50b",
+  "physical_outside_initialization_validity": "not established",
+  "project_policy": {
+    "ASBS_stage_enforcement": false,
+    "default_ASBS_initial_enforcement": false,
+    "diagnostic_gap": "omega*ln(p/pe)-ln(1-Fm)",
+    "factor_domain": "0<=Fm<1; omega>0; required factors positive finite; direction norm nonzero; rates finite",
+    "forbidden_implicit_actions": [
+      "yield return",
+      "projection",
+      "clipping",
+      "density/OCR inference"
+    ],
+    "optional_preparation_constraint": "explicitly declared policy and dimensionless gap tolerance, initial-only, no state mutation",
+    "parameters": "finite; 0<phi_c<pi/2; lambda_star>kappa_star>0; -1<nu<0.5",
+    "state_size": 7,
+    "stress_domain": "finite SPD compression-positive",
+    "void_ratio_domain": "finite >=0",
+    "zero_spin": true
+  },
+  "source": {
+    "doi": "10.1007/s11440-012-0199-y",
+    "sha256": "21834ab9da81ec2cdebdf3a3d7f97b691d47bf481a24432bc0562aca9f503281"
+  },
+  "source_relations": {
+    "ASBS": {
+      "equality": "Fm+(p/pe)^omega-1=0",
+      "locator": "p4 Eq17-25",
+      "universal_initial_inequality_found": false
+    },
+    "density": {
+      "e_from_ratio": "expm1(N-lambda_star*(ln(p/pr)+ln(pe_over_p)))",
+      "locator": "p3 Eq5,7; p13 Eq48",
+      "pr_Pa": 1000
+    },
+    "example_preparations": [
+      "p9 Fig10: within-ASBS initial state",
+      "p10 Fig11: K0 unloading line",
+      "p9-10 kaolin: isotropic loading then unloading"
+    ]
+  },
+  "status": "research-design-only",
+  "test_evidence": "catalogue/investigations/clay2013-initialization-v1/outward-asbs-evidence.json",
+  "version": "clay2013-initialization-proposal-0.1"
+}
