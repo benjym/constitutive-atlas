@@ -8,7 +8,7 @@ import unittest
 from atlas.dsl import Sym
 from atlas.model import all_models, interpret, load
 from tools.inspect_sanisand_limit import load_fragment, evaluate_fragment
-from tools.verify_sanisand_fixed_memory import MODEL, ROOT, verify
+from tools.verify_sanisand_fixed_memory import MODEL, ROOT, verify, verify_transactions
 
 
 class FixedMemoryResearchTests(unittest.TestCase):
@@ -59,6 +59,26 @@ class FixedMemoryResearchTests(unittest.TestCase):
         with self.assertRaises(ValueError):verify(changed)
         changed=copy.deepcopy(rows);changed[0]['state'][19]=.01
         with self.assertRaises(ValueError):verify(changed)
+
+    def test_history_domain_checks(self):
+        model=load(ROOT/MODEL)
+        state={f['name']:copy.deepcopy(f['initial']) for f in model['state']}
+        for name in ('alpha','fabric','alpha_in'):
+            bad=copy.deepcopy(state);bad[name][0]=.001
+            with self.subTest(name=name),self.assertRaises(ValueError):interpret(model,bad,bad,[0]*6)
+
+    def test_retained_native_transactions_and_tampering(self):
+        raw=ROOT/'catalogue/investigations/sanisand-transactions-v1/transactions.json'
+        rows=json.loads(raw.read_text())
+        self.assertEqual(verify_transactions(rows)['cases'],7)
+        changed=copy.deepcopy(rows);changed[5]['state'][19]+=.01
+        with self.assertRaises(ValueError):verify_transactions(changed)
+        changed=copy.deepcopy(rows);changed[5]['substeps']=0
+        with self.assertRaises(ValueError):verify_transactions(changed)
+        changed=copy.deepcopy(rows);changed[6]['state'][25]+=.01
+        with self.assertRaises(ValueError):verify_transactions(changed)
+        changed=copy.deepcopy(rows);changed[3]['state'][0]=float('nan')
+        with self.assertRaises(ValueError):verify_transactions(changed)
 
 
 if __name__=='__main__':unittest.main()

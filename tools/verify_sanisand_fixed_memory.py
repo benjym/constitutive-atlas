@@ -3,6 +3,7 @@ import argparse
 import gzip
 import hashlib
 import json
+import math
 from pathlib import Path
 import shutil
 import sys
@@ -15,11 +16,14 @@ from atlas.model import evaluation_environment, interpret, load
 
 MODEL='models/research/sanisand-2004-fixed-memory-be.json'
 HARNESS='tests/native/sanisand_fixed_memory.cpp'
+TRANSACTIONS='tests/native/sanisand_transactions.cpp'
 PATHS=[[.002,-.001,-.001,0,0,0],[-.002,.001,.001,0,0,0],
        [.001,-.0003,-.0007,.001,-.0004,.0002]]
 
 
 def unpack(model, values):
+    if any(type(v) not in (int,float) or not math.isfinite(v) for v in values):
+        raise ValueError('nonfinite or invalid native state')
     result={};offset=0
     for field in model['state']:
         n=6 if field['shape']=='sym' else 1
@@ -70,27 +74,61 @@ def verify(rows):
                 largest_scaled_residual=worst,largest_scaled_yield=max_yield,refinement=refinement)
 
 
+def verify_transactions(rows):
+    model=load(ROOT/MODEL)
+    names=['alpha','fabric','alpha_in','first-trial','zero-trial','late-failure','repeat-trial']
+    if [r['case'] for r in rows]!=names:raise ValueError('incomplete transaction matrix')
+    for row in rows:
+        before=unpack(model,row['before']);current=unpack(model,row['state'])
+        if row['case'] in names[:3]:
+            if row['ok'] is not False or row['iterations']!=0 or row['state']!=row['before']:
+                raise ValueError('invalid history was not rejected before solving')
+            try:evaluation_environment(model,before,before,[0]*6)
+            except ValueError:pass
+            else:raise ValueError('claimed invalid parent is in domain')
+        elif row['case']=='late-failure':
+            if (row['ok'] is not False or row['state']!=row['before'] or
+                row['substeps']<1 or row['rejected']<1):
+                raise ValueError('late failure rollback was not established')
+            if before['gamma']<=0 or not any(before['alpha_in']):
+                raise ValueError('rollback did not exercise transient and nonzero persistent memory')
+        else:
+            if row['ok'] is not True or row['substeps']!=1:raise ValueError('unexpected trial partition/failure')
+            increment=[0]*6 if row['case']=='zero-trial' else [.000125,-.0000625,-.0000625,0,0,0]
+            residual=interpret(model,current,before,increment)
+            if any(abs(x)/(1e5 if n=='sigma' else 1)>2e-10 for n,v in residual.items()
+                   for x in (v.v if isinstance(v,Sym) else [v])):
+                raise ValueError('trial residual exceeds solver tolerance')
+    if rows[3]['state']!=rows[6]['state'] or any(rows[i]['before']!=rows[3]['before'] for i in (4,5,6)):
+        raise ValueError('repeated trials did not read the same immutable parent')
+    return dict(status='passed',cases=7,invalid_histories=3,
+                late_failure={k:rows[5][k] for k in ('substeps','rejected','iterations')},
+                repeated_trial='exact numeric state equality',scope='Domain rejection and whole-parent rollback; no reversal semantics.')
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     sub=parser.add_subparsers(dest='command',required=True)
     p=sub.add_parser('prepare');p.add_argument('directory',type=Path)
+    p=sub.add_parser('prepare-transactions');p.add_argument('directory',type=Path)
     p=sub.add_parser('verify');p.add_argument('raw',type=Path);p.add_argument('--output',type=Path,required=True)
+    p=sub.add_parser('verify-transactions');p.add_argument('raw',type=Path);p.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
-    if args.command=='prepare':
+    if args.command in ('prepare','prepare-transactions'):
         generate(args.directory/'generated',[ROOT/MODEL])
-        shutil.copyfile(ROOT/HARNESS,args.directory/'probe.cpp')
+        shutil.copyfile(ROOT/(TRANSACTIONS if args.command=='prepare-transactions' else HARNESS),args.directory/'probe.cpp')
         print('Prepared C++ only; compile and run separately.');return
     raw=args.raw.read_bytes()
     rows=json.loads(gzip.decompress(raw) if args.raw.suffix=='.gz' else raw)
-    result=verify(rows)
-    paths=[MODEL,HARNESS,'tools/verify_sanisand_fixed_memory.py','atlas/compiler.py',
+    result=verify_transactions(rows) if args.command=='verify-transactions' else verify(rows)
+    paths=[MODEL,HARNESS,TRANSACTIONS,'tools/verify_sanisand_fixed_memory.py','atlas/compiler.py',
            'atlas/model.py','atlas/dsl.py','cpp/include/atlas/solver.hpp','cpp/include/atlas/tensor.hpp']
     result.update(kind='fixed-memory-sanisand-research-investigation',independent_review='pending',
-                  scope='Native common-solver monotonic paths only; no reversals, reference-code or experimental agreement.',
+                  scope=result.get('scope','Native common-solver monotonic paths only; no reversals, reference-code or experimental agreement.'),
                   sha256={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths},
                   raw_sha256=hashlib.sha256(raw).hexdigest())
     args.output.write_text(json.dumps(result,indent=2)+'\n')
-    print(json.dumps({k:result[k] for k in ('status','increments','active_increments','largest_scaled_residual')}))
+    print(json.dumps({k:result[k] for k in ('status','increments','cases','largest_scaled_residual') if k in result}))
 
 
 if __name__=='__main__':main()

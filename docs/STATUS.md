@@ -104,3 +104,7 @@ A [research reference](models/sanisand-2004-elastic-entry.md) now exactly integr
 ## SANISAND common-solver research material — 2026-10-31
 
 The [fixed-memory backward-Euler research draft](models/sanisand-2004-fixed-memory-be.md) adds a 26-component declarative material with original tensor equations and explicit project discretization. It executes through the unchanged common C++ solver. A small standalone native build passes 336 initial-branch increments across three paths and three step sizes; the [manifest](../catalogue/investigations/sanisand-fixed-memory-be-v1/manifest.json) retains full trajectories, hashes and refinement metrics. Four new Python test groups pass, giving 19 passing SANISAND groups overall. Reversal behaviour is unsupported: the source cone-normal reset test and external parent trial-direction test must still be reconciled. This is research execution, not public admission or independent scientific validation.
+
+## SANISAND history domains and rollback — 2026-10-31
+
+The fixed-memory research definition now enforces deviatoric backstress, fabric and reversal memory with declared trace tolerance `1e-12`. A [small native transaction probe](../catalogue/investigations/sanisand-transactions-v1/manifest.json) passes seven cases, including late-failure rollback after two accepted internal substeps, retention of nonzero memory and the prior transient multiplier, and repeated-trial equality. All 21 SANISAND Python groups pass. This tests full-parent rollback for the current fixed-memory material; no reversal reset is implemented.
