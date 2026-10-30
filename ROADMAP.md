@@ -115,6 +115,8 @@ A [source-conventions audit](docs/models/sanisand-2004-conventions.md) now adds 
 
 An [initialization/transaction source contract](docs/models/sanisand-2004-initialization.md) now records stage-dependent parameter mutation, shared stage/copy effects, preparation strain origins, recorder trial/committed distinctions and reset omissions. Its [twelve pending full-reference scenarios](catalogue/source-audits/sanisand-2004-initialization.json) advance SAN-01/03/06 extraction without claiming runtime characterization or closing those tasks.
 
+The [integration source contract](docs/models/sanisand-2004-integration.md) now maps all eleven declared scheme codes and identifies stage-density, tolerance, subdivision, fallback and status-reporting differences. Its ten runtime scenarios remain pending; scheme names and zero API return codes do not establish a source-matched reference solution. SAN-01/03/06 stay open.
+
 **Acceptance:** all six formulations meet their review gates and execute through the common engine without model-specific mathematical escape hatches. History and initialization semantics are explicit and tested under substepping and rollback. A paper figure or website curve alone cannot close this milestone.
 
 ### Additional near-term target — Terracotta (M2T)
