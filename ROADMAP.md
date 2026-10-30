@@ -255,3 +255,7 @@ The [IGS97 original-paper review](docs/models/hypoplastic-sand-igs97-original.md
 ### VW96 original-source reconciliation — 2026-10-31
 
 The [original VW96 review](docs/models/hypoplastic-sand-vw96-original.md) directly maps Eqs. (40)–(46), the isotropic limit and the published continuity law to the existing transcription. The eight-parameter host is confirmed; its Hochstetten Table I uses `beta=1.5`, distinct from the IGS97 specialization and current illustrative defaults. Independent review, full derivation/domain studies and source-specific benchmark reproduction remain open under REV-04. No model equations or defaults change.
+
+### SANISAND original algebra — 2026-10-31
+
+A [33-term source fragment](catalogue/source-audits/sanisand-2004-original-equations.json) now type-checks the original on-cone elasticity, surfaces, flow, hardening, fabric and loading equations in the existing DSL. Five [Python test groups](tests/test_sanisand_original.py) verify source identities, Cartesian tensor algebra, active yield consistency, triaxial limits, pressure-unit covariance, unloading/dilation, softening and undefined-state rejection. The [record](catalogue/investigations/sanisand-original-algebra-v1.json) pins this evidence. SAN-05 remains open: infinite-hardening initialization, yield entry, reversal events and the finite-step algorithm are deliberately not supplied by this fragment. Native builds/executable tests are held again following the latest Cortex report; no compilation was used for this investigation.

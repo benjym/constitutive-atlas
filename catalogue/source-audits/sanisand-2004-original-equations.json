@@ -1,0 +1,370 @@
+{
+  "schema_version": "0.1",
+  "kind": "source-equation-fragment",
+  "id": "sanisand-2004-original-on-cone",
+  "model_id": "sanisand-2004",
+  "status": "draft",
+  "complete_constitutive_model": false,
+  "independent_review": "pending",
+  "source": {
+    "doi": "10.1061/(ASCE)0733-9399(2004)130:6(622)",
+    "url": "https://doi.org/10.1061/%28ASCE%290733-9399%282004%29130%3A6%28622%29",
+    "sha256": "b6e0f6ccfd018729a9bbd8492745af649c7682a8a1e929348ae25a728917e023",
+    "receipt": "catalogue/source-audits/original-papers-2026-10-31.json"
+  },
+  "scope": "Instantaneous original-paper equations on the yield cone, with finite positive reversal distance and nonsingular loading denominator. No finite-step integration, initialization, reversal reset or pressure regularization.",
+  "inputs": {
+    "G0": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 125.0
+    },
+    "nu": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 0.05
+    },
+    "M": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 1.25
+    },
+    "c": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 0.712
+    },
+    "lambda_c": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 0.019
+    },
+    "e0": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 0.934
+    },
+    "xi": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 0.7
+    },
+    "m": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 0.01
+    },
+    "h0": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 7.05
+    },
+    "ch": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 0.968
+    },
+    "nb": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 1.1
+    },
+    "A0": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 0.704
+    },
+    "nd": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 3.5
+    },
+    "zmax": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 4.0
+    },
+    "cz": {
+      "shape": "scalar",
+      "unit": "1",
+      "default": 600.0
+    },
+    "p_at": {
+      "shape": "scalar",
+      "unit": "Pa",
+      "default": 100000.0
+    },
+    "sigma": {
+      "shape": "sym",
+      "unit": "Pa"
+    },
+    "e": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "alpha": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "z": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "alpha_in": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "d_epsilon": {
+      "shape": "sym",
+      "unit": "1"
+    }
+  },
+  "terms": [
+    {
+      "name": "p",
+      "expression": "trace(sigma)/3",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "p. 627, multiaxial definitions"
+    },
+    {
+      "name": "s",
+      "expression": "dev(sigma)",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "p. 627, multiaxial definitions"
+    },
+    {
+      "name": "r",
+      "expression": "s/p",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p. 627, multiaxial definitions"
+    },
+    {
+      "name": "yield_value",
+      "expression": "norm(s-p*alpha)-sqrt(2/3)*p*m",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq. 13, p. 627"
+    },
+    {
+      "name": "n",
+      "expression": "(r-alpha)/(sqrt(2/3)*m)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq. 14, p. 627",
+      "note": "Evaluated only on the yield cone; no off-surface extension is selected."
+    },
+    {
+      "name": "G",
+      "expression": "G0*p_at*(2.97-e)**2/(1+e)*(p/p_at)**(1/2)",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq. 3, p. 623"
+    },
+    {
+      "name": "K",
+      "expression": "2*(1+nu)/(3*(1-2*nu))*G",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq. 3, p. 623"
+    },
+    {
+      "name": "ec",
+      "expression": "e0-lambda_c*(p/p_at)**xi",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 8, p. 624"
+    },
+    {
+      "name": "psi",
+      "expression": "e-ec",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "state parameter, p. 624"
+    },
+    {
+      "name": "cos3theta",
+      "expression": "sqrt(6)*cube_trace(n)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 15, p. 628"
+    },
+    {
+      "name": "g",
+      "expression": "2*c/((1+c)-(1-c)*cos3theta)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 16, p. 628"
+    },
+    {
+      "name": "alpha_b",
+      "expression": "sqrt(2/3)*(g*M*exp(-nb*psi)-m)*n",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq. 17, p. 628"
+    },
+    {
+      "name": "alpha_d",
+      "expression": "sqrt(2/3)*(g*M*exp(nd*psi)-m)*n",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq. 17, p. 628"
+    },
+    {
+      "name": "B",
+      "expression": "1+(3/2)*(1-c)/c*g*cos3theta",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 19b, p. 628"
+    },
+    {
+      "name": "C",
+      "expression": "3*sqrt(3/2)*(1-c)/c*g",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 19c, p. 628"
+    },
+    {
+      "name": "Rdev",
+      "expression": "B*n-C*(tensor_square(n)-I/3)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq. 19a, p. 628"
+    },
+    {
+      "name": "b0",
+      "expression": "G0*h0*(1-ch*e)*(p/p_at)**(-1/2)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 6, p. 623"
+    },
+    {
+      "name": "hardening_distance",
+      "expression": "dot(alpha-alpha_in,n)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 24 denominator, p. 631"
+    },
+    {
+      "name": "h",
+      "expression": "b0/hardening_distance",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 24, p. 631"
+    },
+    {
+      "name": "Kp",
+      "expression": "(2/3)*p*h*dot(alpha_b-alpha,n)",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq. 23, p. 631"
+    },
+    {
+      "name": "Ad",
+      "expression": "A0*(1+max(dot(z,n),0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 27, p. 631"
+    },
+    {
+      "name": "D",
+      "expression": "Ad*dot(alpha_d-alpha,n)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 25, p. 631"
+    },
+    {
+      "name": "R",
+      "expression": "Rdev+D*I/3",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq. 19a, p. 628"
+    },
+    {
+      "name": "volumetric_increment",
+      "expression": "trace(d_epsilon)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "strain decomposition, p. 629"
+    },
+    {
+      "name": "de",
+      "expression": "dev(d_epsilon)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "strain decomposition, p. 629"
+    },
+    {
+      "name": "loading_denominator",
+      "expression": "Kp+2*G*(B-C*cube_trace(n))-K*D*dot(n,r)",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq. 20, p. 629"
+    },
+    {
+      "name": "L",
+      "expression": "(2*G*dot(n,de)-K*volumetric_increment*dot(n,r))/loading_denominator",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Derived dimensionally consistent Eq. 20, p. 629",
+      "note": "Printed numerator omits K. This explicitly corrected expression follows elastic substitution; independent review pending."
+    },
+    {
+      "name": "plastic_multiplier",
+      "expression": "max(L,0)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq. 18, p. 628"
+    },
+    {
+      "name": "plastic_strain_increment",
+      "expression": "plastic_multiplier*R",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq. 18, p. 628"
+    },
+    {
+      "name": "stress_increment",
+      "expression": "2*G*de+K*volumetric_increment*I-plastic_multiplier*(2*G*Rdev+K*D*I)",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "Eq. 21, p. 629"
+    },
+    {
+      "name": "backstress_increment",
+      "expression": "plastic_multiplier*(2/3)*h*(alpha_b-alpha)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq. 22, p. 629"
+    },
+    {
+      "name": "fabric_increment",
+      "expression": "-cz*max(-trace(plastic_strain_increment),0)*(zmax*n+z)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq. 26, p. 631"
+    },
+    {
+      "name": "void_ratio_increment",
+      "expression": "-(1+e)*volumetric_increment",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Project constant-solid-volume kinematic closure",
+      "note": "Not a numbered equation in the inspected SANISAND paper."
+    }
+  ],
+  "audit_domain": {
+    "on_cone_relative_tolerance": 1e-10,
+    "deviatoric_trace_tolerance": 1e-12,
+    "policy": "Project audit scope only, not a complete physical admissibility domain."
+  },
+  "unresolved": [
+    "Independent review, including the apparent missing K in printed Eq. 20.",
+    "Infinite-hardening initialization and zero hardening distance.",
+    "Elastic interior, first yield, reversal events and off-surface normal.",
+    "Finite-step integration, consistent derivatives, state preparation and rollback.",
+    "Complete physical parameter/state domains, native/Wasm and external reference comparisons."
+  ]
+}

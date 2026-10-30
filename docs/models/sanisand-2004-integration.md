@@ -2,7 +2,7 @@
 
 This is source inspection of the [pinned OpenSees implementation](https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/ManzariDafalias.cpp), revision `8a0273db3e2f5a14c05924a179c1e439500c852c`. It advances SAN-01/03/06 without executing the complete material or selecting Atlas's canonical equations. The [machine-readable contract](../../catalogue/source-audits/sanisand-2004-integration.json) pins raw file hashes, function ranges and normalized function hashes, nine findings and ten pending runtime cases. No case is marked passed from inspection.
 
-Original-paper extraction remains open. The ASCE reader returned 403 on 2026-10-31; the [NTUA university record](https://dspace.lib.ntua.gr/xmlui/handle/123456789/16222?show=full) supplies bibliographic metadata but no inspected full text. The numerical implementation below is not a substitute for the article. Read alongside the [initialization contract](sanisand-2004-initialization.md) and [tensor/unit conventions](sanisand-2004-conventions.md).
+The original article has since been supplied and inspected in the [original-paper dossier](sanisand-2004-original.md). Earlier publisher access attempts failed; that access gap is resolved. Numerical-variant reconciliation, domain and initialization completion remain open. Read alongside the [initialization contract](sanisand-2004-initialization.md) and [tensor/unit conventions](sanisand-2004-conventions.md).
 
 ## Record actual routing
 

@@ -84,3 +84,7 @@ The [original VW96 review](models/hypoplastic-sand-vw96-original.md) now supplie
 ## Native builds resumed — 2026-10-31
 
 Following user authorization, a clean Release build with AppleClang 21 completed and all five CTest groups passed, including 163 Python tests. Separate current native suites passed 229/229 VW96 and 303/303 IGS cases. The [restart record](../catalogue/investigations/native-resume-2026-10-31/manifest.json) pins source and retained log/report hashes. This adds current software verification, not independent scientific review, original-paper benchmark reproduction or Wasm evidence.
+
+## SANISAND original algebra — 2026-10-31
+
+The [33-term original-paper fragment](../catalogue/source-audits/sanisand-2004-original-equations.json) uses the existing DSL for all finite on-cone state/flow terms. Five Python-only test groups pass, including 40 active general-tensor consistency cases, pressure scaling, triaxial limits, softening and fabric switching. See the [investigation](../catalogue/investigations/sanisand-original-algebra-v1.json). Initialization, singular limits, reversal/yield-entry transactions, full integration and independent review remain open. Following the subsequent Cortex report, native compilation and executable tests are held again; the successful earlier native restart record remains historical evidence.

@@ -1,6 +1,6 @@
 # SANISAND-2004 capability analysis
 
-This is SAN-02 planning evidence grounded in the [source brief](models/sanisand-2004.md) and the current Atlas implementation. The original-paper extraction is incomplete, so this is a provisional gap analysis, not permission to close SAN-01 or implement an unreviewed variant. The [machine-readable probe report](../catalogue/investigations/sanisand-capabilities-v3.json) records synthetic capacity/type observations; it does not execute SANISAND.
+This is SAN-02 planning evidence grounded in the [source brief](models/sanisand-2004.md) and the current Atlas implementation. The [original-paper dossier](models/sanisand-2004-original.md) and typed algebra fragment now map the continuous equations; initialization, singular limits, domains and independent review remain incomplete. This is still a provisional gap analysis, not permission to close SAN-01 or promote an unreviewed variant. The [machine-readable probe report](../catalogue/investigations/sanisand-capabilities-v3.json) records synthetic capacity/type observations; it does not execute SANISAND.
 
 ## Current engine versus required representation
 

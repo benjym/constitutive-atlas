@@ -94,3 +94,9 @@ Figures 5–9 compare Toyoura tests from Verdugo and Ishihara (1996), with initi
 - Implement declaratively and verify tensor identities and triaxial reductions before source-matched reference histories and experiments.
 
 SAN-01 remains open for initialization/domain completion; SAN-02–07 are not closed by source acquisition. See the [main brief](sanisand-2004.md) and [integration audit](sanisand-2004-integration.md).
+
+## Typed algebra investigation
+
+The [33-term declarative fragment](../../catalogue/source-audits/sanisand-2004-original-equations.json) now represents these continuous equations in the existing tensor DSL, including source locators and the explicit Eq. (20) correction. Its [Python evaluator](../../tools/inspect_sanisand_original.py) checks source identity, tensor shapes and SI dimensions. It evaluates only on the yield cone with finite positive reversal distance and nonsingular loading denominator; this audit domain is not a complete physical domain. `p_at=100000 Pa` is the chosen audit normalization, not a claim that the paper fixes atmospheric pressure to that value.
+
+Five [Python test groups](../../tests/test_sanisand_original.py) verify triaxial flow/surface reductions, current-density elasticity, 40 general Cartesian matrix-square/cubic-invariant and active yield-consistency cases, pressure-unit covariance, dilation/fabric switching, elastic unloading, signed softening and unresolved-state rejection. The [investigation record](../../catalogue/investigations/sanisand-original-algebra-v1.json) pins the fragment, helper and test hashes. No finite-increment algorithm, initial-memory rule, external-reference agreement, native/Wasm execution or independent scientific review is claimed. SAN-05 has a typed algebra draft; it remains open for a complete executable definition.

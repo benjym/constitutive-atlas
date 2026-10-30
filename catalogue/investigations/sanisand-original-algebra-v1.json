@@ -1,0 +1,26 @@
+{
+  "record_version": 1,
+  "kind": "original-sanisand-algebra-investigation",
+  "date": "2026-10-31",
+  "complete_constitutive_model": false,
+  "independent_review": "pending",
+  "source_sha256": "b6e0f6ccfd018729a9bbd8492745af649c7682a8a1e929348ae25a728917e023",
+  "files": {
+    "catalogue/source-audits/sanisand-2004-original-equations.json": "a054edbba6ca29b67197b42e4c5c1fb97df282336bbc2986723103580ae5a459",
+    "tools/inspect_sanisand_original.py": "63be5fcaea74c8e9fc18d56091909f830411e20a5a33b7b2b18d8235a1580ed5",
+    "tests/test_sanisand_original.py": "20a1a3d80d5deae43cbadf872bdf34d34640af964e0f13f074722548715d5936"
+  },
+  "command": "python3 -m unittest discover -s tests -p test_sanisand_original.py -v",
+  "exit_code": 0,
+  "test_groups": 5,
+  "active_general_tensor_cases": 40,
+  "log": "test_general_cartesian_flow_and_loading_consistency (test_sanisand_original.SANISANDOriginalTests.test_general_cartesian_flow_and_loading_consistency) ... ok\ntest_pressure_unit_covariance (test_sanisand_original.SANISANDOriginalTests.test_pressure_unit_covariance) ... ok\ntest_softening_is_not_clipped_and_unresolved_states_are_rejected (test_sanisand_original.SANISANDOriginalTests.test_softening_is_not_clipped_and_unresolved_states_are_rejected) ... ok\ntest_triaxial_reductions_and_current_density_elasticity (test_sanisand_original.SANISANDOriginalTests.test_triaxial_reductions_and_current_density_elasticity) ... ok\ntest_unloading_is_elastic_and_fabric_evolves_only_during_dilation (test_sanisand_original.SANISANDOriginalTests.test_unloading_is_elastic_and_fabric_evolves_only_during_dilation) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.027s\n\nOK\n",
+  "scope": "Existing DSL type/SI checks and Python-only algebra. No compiler, material integrator, external executable, trajectory comparison, Wasm or independent scientific review.",
+  "open_requirements": [
+    "Independent review, including the apparent missing K in printed Eq. 20.",
+    "Infinite-hardening initialization and zero hardening distance.",
+    "Elastic interior, first yield, reversal events and off-surface normal.",
+    "Finite-step integration, consistent derivatives, state preparation and rollback.",
+    "Complete physical parameter/state domains, native/Wasm and external reference comparisons."
+  ]
+}
