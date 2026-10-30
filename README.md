@@ -6,7 +6,7 @@ A declarative geomechanics model database, C++20 material-point engine, reproduc
 
 Authors and maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
 
-**This is an initial research implementation, not the completed atlas or a validated engineering package.** Five models execute; the 20-entry catalogue includes fifteen research candidates. SANISAND, the full literature review, controlled calibration/held-out validation, and the final paper remain outstanding. See the [detailed roadmap](ROADMAP.md), [project status](docs/STATUS.md) and [research charter](docs/RESEARCH_CHARTER.md).
+**This is an initial research implementation, not the completed atlas or a validated engineering package.** Five models execute; the 21-entry catalogue includes sixteen research candidates. SANISAND, the full literature review, controlled calibration/held-out validation, and the final paper remain outstanding. See the [detailed roadmap](ROADMAP.md), [project status](docs/STATUS.md) and [research charter](docs/RESEARCH_CHARTER.md).
 
 ## Build and test
 
@@ -76,6 +76,6 @@ Open `paper/article` in Codex for the source editor and live PDF preview. Origin
 python3 -m atlas.cli discover --query 'soil constitutive hypoplasticity critical state model' --rows 50 --output catalogue/discovery/new-search.json
 ```
 
-Discovery preserves query/cursor/retrieval metadata and raw Crossref responses. It refuses to overwrite evidence. Existing batches contain 50 unscreened search results across soil and rock queries, not 50 admitted models. Use the screening ledger and research charter before promoting a record. The first 20 candidate entries are a working shortlist, not a frozen reviewed release manifest.
+Discovery preserves query/cursor/retrieval metadata and raw Crossref responses. It refuses to overwrite evidence. Existing batches contain 50 unscreened search results across soil and rock queries, not 50 admitted models. Use the screening ledger and research charter before promoting a record. The 21 catalogue entries, including the near-term [Terracotta target](docs/models/terracotta-2024.md), are a working shortlist, not a frozen reviewed release manifest.
 
 Original code and original definitions are MIT licensed. Referenced publications, implementations and data retain their own terms.

@@ -14,14 +14,14 @@ The project has three final products:
 
 Literature discovery has broad geomechanics scope. The first executable release targets local, three-dimensional, infinitesimal-strain soil models and **twenty distinct, source-pinned formulations**. Broad discovery does not imply broad solver support or exhaustive coverage.
 
-**The next major milestone is a reviewed six-model collection, a representation proven against SANISAND-2004, and one reproducible experimental benchmark.** Review the existing models before expanding the count. Do not freeze schema v1 until this proof exposes and resolves the necessary history and initialization semantics.
+**The next major milestone is a reviewed six-model collection, a representation proven against SANISAND-2004, and one reproducible experimental benchmark.** Terracotta (Wiebicke & Einav, 2024) is an additional near-term priority: begin source extraction and the physical-time capability design alongside that work, with a separate execution gate below. Review the existing models before expanding the count. Do not freeze schema v1 until this proof exposes and resolves the necessary history and initialization semantics.
 
 ## 2. Starting point
 
 | Area | Existing foundation | Outstanding evidence or capability |
 | --- | --- | --- |
 | Models | Elasticity, Drucker–Prager, Modified Cam Clay, von Wolffersdorff sand hypoplasticity, hypoplasticity + IGS | Independent equation/source review for all five; IGS is explicitly draft |
-| Catalogue | Twenty seed entries; fifty unscreened discovery records | Reviewed admission, exact variants and literature coverage accounting |
+| Catalogue | Twenty-one seed entries, including the near-term Terracotta candidate; fifty unscreened discovery records | Reviewed admission, exact variants and literature coverage accounting |
 | Representation | Restricted expressions, dimensional/shape checks, Python interpretation, C++ generation | Equation-level provenance, history/event semantics, richer initialization and version migration |
 | Numerics | AD residual Jacobians, implicit/rate integration, substepping, rollback, five axisymmetric drivers | Independent references, public update tangent, configurable tolerances and recorded-path replay |
 | Data | Seventeen normalized Wichtmann tests; five early-strain drained transfer demonstrations | Preparation metadata, missing initial states, broader importers and controlled evaluation |
@@ -49,7 +49,8 @@ For every work item, record an ID, owner, dependencies, deliverable, acceptance 
 | M0 | Auditable project baseline | Existing foundation | Current inventory, evidence records and issue-sized backlog |
 | M1 | Five reviewed model definitions | M0 | Source dossiers and independent numerical evidence for each |
 | M2 | Six-model representation proof | M1; SANISAND source dossier | SANISAND, history/initialization semantics and regression evidence |
-| M3 | Representation and numerical interface v1 | M2 | Versioned contract, documented limits and reproducible implementations |
+| M2T | Terracotta source dossier and time-dependent execution proof | M1 review process; TC-01–03 capability design | Original triaxial variant, timed reference cases and explicit scope limits |
+| M3 | Representation and numerical interface v1 | M2 and M2T for physical-time support | Versioned contract, documented limits and reproducible implementations |
 | M4 | Reproducible experimental benchmark | M1; usable specimen metadata | Published baseline reproduction and frozen evaluation protocol |
 | M5 | Twenty executable formulations | M3; screened source dossiers | Twenty complete formulations meeting admission and verification gates |
 | M6 | Evidence-driven public atlas | Incremental from M1; M3/M4 for complete evidence views | Source, capability and result provenance visible on the website |
@@ -98,11 +99,24 @@ The candidate source is already linked in the [catalogue](catalogue/manifest.jso
 
 **Acceptance:** all six formulations meet their review gates and execute through the common engine without model-specific mathematical escape hatches. History and initialization semantics are explicit and tested under substepping and rollback. A paper figure or website curve alone cannot close this milestone.
 
+### Additional near-term target — Terracotta (M2T)
+
+Target the original **Terracotta / Terra Cotta model by Max Wiebicke and Itai Einav (2024)**, [A simple hydrodynamic model for clay](https://doi.org/10.1016/j.jmps.2024.105789), with the [author reference implementation](https://github.com/MaxWiebicke/Terracotta-pq). The [source and implementation brief](docs/models/terracotta-2024.md) pins the reference revision and open questions. It is a candidate, not an executable or reviewed atlas model.
+
+- [ ] **TC-01:** Extract the published triaxial-invariant equations, energy/stress contributions, solid-fraction and mesoscopic-temperature evolution, parameters, units and initialization. Reconcile the journal version against the pinned author code and record differences.
+- [ ] **TC-02:** Design physical time, step duration and strain/stress-rate inputs in the schema and generic solver. Establish dimensional checks for all additional quantities; do not reinterpret normalized path fraction as elapsed seconds.
+- [ ] **TC-03:** Specify rate changes, finite-duration holds, creep and relaxation controls, initial internal-state requirements and rollback. Determine the required internal-variable domain restrictions from the source.
+- [ ] **TC-04:** Implement the original triaxial formulation declaratively with an explicitly restricted capability label. Decide how this scope fits the initial 3D release requirement; do not silently infer a full tensor law or count a restricted implementation toward the twenty-model 3D gate.
+- [ ] **TC-05:** Reproduce author reference cases for monotonic loading, at least two physical loading rates, a rate change, relaxation and creep. Pin source code, parameters, durations and comparison tolerances. Seek independent equation/numerical review and preserve existing model regressions.
+- [ ] **TC-06:** Add timed protocol/parameter presets and source links to the browser only once the native/Wasm execution evidence passes. Choose compatible clay data for later experimental comparison; do not treat Karlsruhe sand as clay validation.
+
+**Acceptance:** a source-complete dossier, versioned physical-time contract and executable declarative original variant reproduce the pinned reference cases, including nontrivial evolution during a zero-strain-rate hold where the source predicts it. Native and Wasm agree, units/initialization are explicit and the displayed kinematic scope is accurate. SANISAND's six-model gate remains separate. Later tensorial generalizations or fault-friction variants require distinct source review and model identity.
+
 ## 8. M3 — freeze the supported representation and numerical API
 
 - [ ] **REP-01:** Separate document/schema version, expression-language version, model revision and engine version. Define compatibility rules, migration fixtures and result hash semantics.
 - [ ] **REP-02:** Specify supported kinematics, stress measures, zero-spin assumption, tensor bases, units and differentiation rules. Reject unsupported capabilities clearly rather than accepting partially meaningful inputs.
-- [ ] **REP-03:** Finalize reusable initialization and history contracts proven by M2. Keep vectors, fourth-order anisotropy, physical-time dependence and cycle-count drivers explicitly unsupported until source-complete models justify them.
+- [ ] **REP-03:** Finalize reusable initialization and history contracts proven by M2. Use M2T to specify physical-time dependence before freezing that part of v1; retain its unsupported status until implemented and verified. Keep vectors, fourth-order anisotropy and cycle-count drivers unsupported until source-complete models justify them.
 - [ ] **NUM-01:** Expose a material update API returning committed state, convergence diagnostics and a documented algorithmic tangent. Distinguish an AD residual Jacobian from the tangent of the complete integrated update.
 - [ ] **NUM-02:** Verify tangents against independent perturbations over smooth elastic/plastic/rate regimes. Declare behaviour at yield switches and history events; do not promise a unique derivative where one does not exist.
 - [ ] **NUM-03:** Make integration tolerances, maximum iterations, substepping and failure limits configurable and include them in run provenance. Add refinement evidence before changing defaults.
@@ -147,7 +161,7 @@ Screen and source-pin the shortlist before treating it as a release commitment. 
 | C | Mohr–Coulomb; Tresca; Lade–Duncan; Matsuoka–Nakai-based formulation | Complete constitutive closures; generic nonsmooth/edge/apex treatment where required |
 | D | Duncan–Chang-1970; source-pinned sand barodesy; ISA extension; HCA-2005 | Complete 3D loading/unloading laws or new history/cycle-count capabilities supported by sources |
 
-SANISAND is delivered through M2. Together these waves account for the other fourteen existing candidates. A criterion alone, an unspecified family, an unsupported cycle-averaged law or an inaccessible source does not count toward twenty executable formulations.
+SANISAND is delivered through M2; Terracotta is prioritized separately through M2T. These waves account for the other fourteen existing candidates. The catalogue now has twenty-one entries while the executable release target remains twenty; freeze the final selection after source/capability review, without silently dropping an existing candidate. A criterion alone, an unspecified family, an unsupported cycle-averaged law or an inaccessible source does not count toward twenty executable formulations.
 
 - [ ] **LIT-01:** Screen and deduplicate the fifty discovery records, then perform backward/forward citation tracing and targeted searches across the charter's families. Preserve queries, dates, source access and exclusion reasons.
 - [ ] **LIT-02:** Maintain a publication-to-formulation lineage graph linking originals, corrections, extensions and competing implementations.
@@ -189,9 +203,10 @@ Start with these bounded tasks; they prepare the six-model milestone without pre
 3. **REV-02–03:** Review Drucker–Prager and Modified Cam Clay, exercising the same admission workflow on plasticity.
 4. **REV-04–05:** Review both hypoplastic formulations, with IGS reversal evidence before status promotion.
 5. **SAN-01–02:** Extract SANISAND and publish the capability gap analysis; then implement only the demonstrated missing semantics.
-6. **DATA-01–02 / BENCH-01:** Audit current imports and select the first source-matched published baseline alongside model review.
+6. **TC-01–03:** Start the Terracotta source dossier and physical-time/hold-driver design as near-term work, then implement and verify the original variant through TC-04–06.
+7. **DATA-01–02 / BENCH-01:** Audit current imports and select the first source-matched published baseline alongside model review.
 
-The first checkpoint is a reviewed elasticity dossier plus a reusable evidence record and reproducible analytical case. The next checkpoint is the complete five-model review pack and a source-complete SANISAND design. Neither checkpoint is complete at the date of this roadmap.
+The first checkpoint is a reviewed elasticity dossier plus a reusable evidence record and reproducible analytical case. The next checkpoint is the complete five-model review pack and source-complete SANISAND and Terracotta designs. Neither checkpoint is complete at the date of this roadmap.
 
 ## 14. Tracking and scope decisions
 
@@ -199,4 +214,4 @@ Maintain this file as the milestone-level plan, repository issues as task-level 
 
 Track progress through admitted/source-complete/executable/reviewed formulations, reproduced reference cases, eligible experiments, baseline reproductions, study completion and reproducibility status. Do not use paper counts, lines of code or passing CI alone as measures of scientific completion.
 
-Keep finite-strain/finite-rotation mechanics, finite elements, boundary-value solvers, unsaturated/coupled processes, rock damage, physical-time creep and general nonlocal execution outside the initial engine release unless a documented scope decision adds them with corresponding sources and tests. Continue discovering and cataloguing them with honest capability labels.
+Keep finite-strain/finite-rotation mechanics, finite elements, boundary-value solvers, unsaturated/coupled processes, rock damage, general time-dependent families and nonlocal execution outside the initial engine release unless a documented scope decision adds them with corresponding sources and tests. Terracotta's physical-time, creep and relaxation work is the explicit near-term exception in M2T; it does not imply general support for those other families. Continue discovering and cataloguing them with honest capability labels.
