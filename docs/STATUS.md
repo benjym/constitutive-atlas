@@ -76,3 +76,7 @@ Four user-supplied originals are [hash-pinned](../catalogue/source-audits/origin
 ## IGS original-source reconciliation — 2026-10-31
 
 The [IGS original review](models/hypoplastic-sand-igs97-original.md) now maps the overlay, seven-parameter host specialization (`beta=1`), Table I and objective history transport. A separate Cartesian fourth-order oracle passes [576 interpreter-rate comparisons](../catalogue/investigations/igs-original-rates-v1.json). This does not extend native or integrated-history evidence. Original overshoot correction, resting-period preparation and strict parameter recommendations differ from current Atlas choices and remain explicit review items.
+
+## VW96 original-source reconciliation — 2026-10-31
+
+The [original VW96 review](models/hypoplastic-sand-vw96-original.md) now supplies direct rate-law, continuity, isotropic-limit and calibration locators. The eight-parameter formulation matches the initial summary transcription. Original Hochstetten parameters remain distinct from illustrative defaults and the seven-parameter IGS97 host. Independent scientific review and original benchmark reproduction remain open.

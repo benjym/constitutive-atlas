@@ -21,21 +21,21 @@
     </footer>
   </aside>
   <main>
-    <header class="topbar"><span><b id="breadcrumb">MODEL TESTING</b></span></header>
     <section id="laboratory" class="page">
       <div class="intro">
         <div>
-          <div class="eyebrow">THE VIRTUAL ELEMENT TEST</div>
           <h1>Explore material behaviour.</h1>
-          <p>Choose a model, adjust the controls, and watch the response update.</p>
         </div><button id="import-run" class="secondary">↑ Import run</button><input id="run-file" type="file" accept="application/json,.json" hidden>
       </div>
-          <section class="model-card">
-            <div class="model-card-top"><span class="eyebrow">CONSTITUTIVE MODEL</span><span class="badge" id="model-status">Loading</span></div><label class="sr-only" for="model">Select a model</label><select id="model"></select>
-            <p id="model-description"></p>
-            <details class="model-references"><summary>Sources &amp; model definition</summary><div id="model-sources" aria-label="Model sources"></div></details>
-            <div class="model-meta"><span id="model-family"></span><span>3D · small strain</span><button id="equations-button" class="text-button">View equations ↗</button></div>
-          </section>
+      <section class="model-card">
+        <div class="model-card-top"><span class="eyebrow">CONSTITUTIVE MODEL</span><span class="badge" id="model-status">Loading</span></div><label class="sr-only" for="model">Select a model</label><select id="model"></select>
+        <p id="model-description"></p>
+        <details class="model-references">
+          <summary>Sources &amp; model definition</summary>
+          <div id="model-sources" aria-label="Model sources"></div>
+        </details>
+        <div class="model-meta"><span id="model-family"></span><span>3D · small strain</span><button id="equations-button" class="text-button">View equations ↗</button></div>
+      </section>
       <nav class="workspace-links" aria-label="Model testing sections"><a href="#controls">Test controls ↓</a><a href="#response">Response plots ↓</a><a href="#measurements">Compare measurements ↓</a><a href="#equations">Equations &amp; sources ↓</a></nav>
       <div class="lab-layout">
         <form id="controls" class="controls">
@@ -60,15 +60,24 @@
           <div class="divider"></div>
           <div class="eyebrow">INITIAL STATE</div>
           <label>Radial effective stress (kPa)<input id="confinement" type="number" value="100" min="0.001" max="1000000" step="any" required></label>
-          <details class="control-section"><summary>Initial state details</summary>
-          <label>Axial / radial stress ratio<input id="stress-ratio" type="number" value="1" min="0.01" max="10" step="any" required></label>
-          <div id="state-fields"></div></details>
+          <details class="control-section">
+            <summary>Initial state details</summary>
+            <label>Axial / radial stress ratio<input id="stress-ratio" type="number" value="1" min="0.01" max="10" step="any" required></label>
+            <div id="state-fields"></div>
+          </details>
           <div class="divider"></div>
-          <details class="control-section"><summary>Material parameters <span>Adjust model constants</span></summary>
-          <div class="parameter-title"><span class="eyebrow">MATERIAL PARAMETERS</span><span>Units shown per control</span></div>
-          <div id="parameter-fields"></div></details>
-          <details class="control-section"><summary>Solver settings</summary><label>Increments<input id="steps" type="number" value="100" min="1" max="5000" step="1" required></label><p class="control-hint">More increments improve resolution and take longer. Cyclic histories need at least 16 per cycle.</p></details>
-          <div class="run-actions"><p id="control-status" role="status">Changes update the plots automatically.</p><button type="button" id="cancel-button" class="secondary" hidden>Stop calculation</button><button type="button" id="retry-button" class="secondary" hidden>Retry calculation</button></div>
+          <details class="control-section">
+            <summary>Material parameters <span>Adjust model constants</span></summary>
+            <div class="parameter-title"><span class="eyebrow">MATERIAL PARAMETERS</span><span>Units shown per control</span></div>
+            <div id="parameter-fields"></div>
+          </details>
+          <details class="control-section">
+            <summary>Solver settings</summary><label>Increments<input id="steps" type="number" value="100" min="1" max="5000" step="1" required></label>
+            <p class="control-hint">More increments improve resolution and take longer. Cyclic histories need at least 16 per cycle.</p>
+          </details>
+          <div class="run-actions">
+            <p id="control-status" role="status">Changes update the plots automatically.</p><button type="button" id="cancel-button" class="secondary" hidden>Stop calculation</button><button type="button" id="retry-button" class="secondary" hidden>Retry calculation</button>
+          </div>
         </form>
         <div class="results-column">
           <section id="measurements" class="experiment-card" aria-labelledby="experiment-title">
@@ -77,10 +86,15 @@
             <p>Tests are filtered by drainage protocol, loading path and verified plot axes. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.</p>
             <p id="experiment-filter-note" class="comparison-filter-note"></p>
             <label>Find measurements<input id="experiment-search" type="search" placeholder="Material or test ID" autocomplete="off"></label>
-            <label class="experiment-selector">Experimental test<select id="experiment-select" disabled><option value="">Loading available tests…</option></select></label>
+            <label class="experiment-selector">Experimental test<select id="experiment-select" disabled>
+                <option value="">Loading available tests…</option>
+              </select></label>
             <div class="experiment-toolbar"><label class="experiment-toggle"><input id="show-experiment" type="checkbox" role="switch" disabled> Show measurements</label><button id="match-experiment" class="text-button" disabled>Use initial state &amp; protocol</button><button id="retry-experiment" class="text-button" hidden>Retry loading measurements</button></div>
             <p id="experiment-status" role="status" aria-live="polite">Loading available tests…</p>
-            <details id="experiment-details" hidden><summary>Data notes &amp; limitations</summary><p id="experiment-warnings"></p></details>
+            <details id="experiment-details" hidden>
+              <summary>Data notes &amp; limitations</summary>
+              <p id="experiment-warnings"></p>
+            </details>
             <p id="experiment-attribution" hidden></p><a id="experiment-source" target="_blank" rel="noopener noreferrer" hidden>Data source &amp; citation ↗</a>
             <a id="experiment-license" target="_blank" rel="noopener noreferrer" hidden></a>
             <section id="source-record-view" hidden aria-label="Source measurement channels">
@@ -89,40 +103,46 @@
               <svg id="source-chart" viewBox="0 0 480 290" role="img" aria-label="Selected source measurement channels"></svg>
             </section>
             <label class="experiment-toggle"><input id="browse-source-records" type="checkbox"> Browse all source records (includes tests without model overlays)</label>
-            <details class="local-experiments"><summary>Compare your own measurements</summary><p>Load original TMD/TMU .dat files or Atlas experiment JSON. Your files stay in this browser.</p><div class="experiment-toolbar"><label class="secondary file-label">Load local measurements<input id="experiment-file" type="file" accept=".dat,.json,application/json,text/plain" multiple hidden></label><button id="clear-experiments" class="text-button" disabled>Clear local files</button></div></details>
+            <details class="local-experiments">
+              <summary>Compare your own measurements</summary>
+              <p>Load original TMD/TMU .dat files or Atlas experiment JSON. Your files stay in this browser.</p>
+              <div class="experiment-toolbar"><label class="secondary file-label">Load local measurements<input id="experiment-file" type="file" accept=".dat,.json,application/json,text/plain" multiple hidden></label><button id="clear-experiments" class="text-button" disabled>Clear local files</button></div>
+            </details>
           </section>
           <div class="run-summary" id="response" role="status" aria-live="polite"><span id="run-state"><span class="dot"></span> Preparing live response</span><span id="run-detail">Double precision · compression positive</span></div>
           <div class="charts" id="response-charts" aria-label="Simulation results">
             <section class="chart-panel">
               <div class="chart-title">
-                <h2>Stress–strain response</h2><span>01</span>
+                <h2>Stress–strain response</h2>
               </div><svg id="stress-chart" viewBox="0 0 480 290" role="img" aria-label="Deviator stress versus axial strain"></svg>
               <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key">● Experiment</span></div>
               <p class="measurement-note"></p>
             </section>
             <section class="chart-panel">
               <div class="chart-title">
-                <h2>Effective stress path</h2><span>02</span>
+                <h2>Effective stress path</h2>
               </div><svg id="path-chart" viewBox="0 0 480 290" role="img" aria-label="Deviator stress versus effective mean stress"></svg>
               <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div>
               <p class="measurement-note"></p>
             </section>
             <section class="chart-panel">
               <div class="chart-title">
-                <h2>Volumetric response</h2><span>03</span>
+                <h2>Volumetric response</h2>
               </div><svg id="volume-chart" viewBox="0 0 480 290" role="img" aria-label="Volumetric versus axial strain"></svg>
               <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div>
               <p class="measurement-note"></p>
             </section>
             <section class="chart-panel">
               <div class="chart-title">
-                <h2>Pore-pressure change</h2><span>04</span>
+                <h2>Pore-pressure change</h2>
               </div><svg id="pore-chart" viewBox="0 0 480 290" role="img" aria-label="Pore-pressure change versus axial strain"></svg>
-              <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div><p class="measurement-note"></p><p id="pore-caption" class="pore-protocol-note">Reconstructed only for undrained protocols</p>
+              <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div>
+              <p class="measurement-note"></p>
+              <p id="pore-caption" class="pore-protocol-note">Reconstructed only for undrained protocols</p>
             </section>
           </div>
           <div class="result-footer">
-            <p id="result-note">Parameters are examples. Numerical verification does not establish experimental validity.</p>
+            <!-- <p id="result-note">Parameters are examples. Numerical verification does not establish experimental validity.</p> -->
             <div><button id="export-csv" class="text-button" disabled>↓ Results CSV</button><button id="export-run" class="text-button" disabled>↓ Reproducible run</button></div>
           </div>
 

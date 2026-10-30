@@ -251,3 +251,7 @@ The [four-paper receipt](catalogue/source-audits/original-papers-2026-10-31.json
 ### IGS original-source reconciliation — 2026-10-31
 
 The [IGS97 original-paper review](docs/models/hypoplastic-sand-igs97-original.md) confirms the continuous overlay, identifies the seven-parameter host as `beta=1`, pins Table I, and separates history overshoot/reset and spin transport from Atlas numerical choices. A new [Python-only source-equation report](catalogue/investigations/igs-original-rates-v1.json) passes 576 Cartesian fourth-order versus interpreter comparisons. Complete preparation-path reproduction, native/reference integration, original VW96 reconciliation and independent review remain open; REV-04/REV-05 are not closed.
+
+### VW96 original-source reconciliation — 2026-10-31
+
+The [original VW96 review](docs/models/hypoplastic-sand-vw96-original.md) directly maps Eqs. (40)–(46), the isotropic limit and the published continuity law to the existing transcription. The eight-parameter host is confirmed; its Hochstetten Table I uses `beta=1.5`, distinct from the IGS97 specialization and current illustrative defaults. Independent review, full derivation/domain studies and source-specific benchmark reproduction remain open under REV-04. No model equations or defaults change.
