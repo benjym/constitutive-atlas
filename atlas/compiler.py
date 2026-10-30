@@ -104,8 +104,9 @@ def generate(destination, model_paths=None):
         lines+=['return true;', '}']
         scales+=['return {'+','.join(scal)+'};','}']
     lines+=['default: return false;','}','}']; scales+=['default: return {};','}','}']; obs_scales+=['default: return {};','}','}']
-    resets=['inline bool prepare_model_increment(int model,const std::vector<double>& zn,const Sym<double>& loading,const std::vector<double>& params,std::vector<double>& out) {',
-            'using T=double; (void)params; const auto I=identity<T>(); const auto& de=loading; out=zn; switch(model) {']
+    resets=['template<class T> bool prepare_model_increment(int model,const std::vector<T>& zn,const Sym<T>& loading,const std::vector<double>& params,std::vector<T>& out,bool* reset_boundary=nullptr) {',
+            'if(reset_boundary) *reset_boundary=false;',
+            '(void)params; const auto I=identity<T>(); const auto& de=loading; out=zn; switch(model) {']
     for i,m in enumerate(models):
         updates=m.get('increment_reset',{}).get('updates',[])
         if not updates:continue
@@ -123,11 +124,12 @@ def generate(destination, model_paths=None):
         for update in updates:
             guard=cpp(parse(update['guard']));value=cpp(parse(update['value']));target=update['target']
             resets.append(f'if (!std::isfinite(atlas::value({guard}))) return false;')
+            resets.append(f'if (reset_boundary && atlas::value({guard}) == 0.) *reset_boundary=true;')
             size=next(f['shape'] for f in m['state'] if f['name']==target)
             assignment=f'put_tensor(out,{offsets[target]},{value});' if size=='sym' else f'out[{offsets[target]}]={value};'
             resets.append(f'if (atlas::value({guard}) < 0.) {{ {assignment} }}')
         resets+=['break;','}']
-    resets+=['default: break;', '}', 'return std::all_of(out.begin(),out.end(),[](double x){return std::isfinite(x);});','}']
+    resets+=['default: break;', '}', 'return std::all_of(out.begin(),out.end(),[](const auto& x){return std::isfinite(atlas::value(x));});','}']
     lines+=resets
     digest=hashlib.sha256(json.dumps(canonical,sort_keys=True,separators=(',',':')).encode()).hexdigest()
     catalogue={'schema_version':'0.1','sha256':digest,'models':canonical}
