@@ -1,0 +1,59 @@
+{
+  "id": "terracotta-creep-v1",
+  "date": "2026-10-31",
+  "base_revision": "031f6b2cbe37a5f3ab9a5edc7ab529adcc96bd50",
+  "status": "research-numerical-reference-not-scientific-review",
+  "implementation_and_inputs": {
+    "tools/reference_terracotta_creep.py": "89d405f708db2b84c65d9f432eeb8ac002ad07200c1244e749fc20c234b2a22c",
+    "tools/terracotta_creep_study.py": "3adcc99b525b98813aa1781417260125777daea977e81d6556684b05e28e3755",
+    "tests/test_terracotta_creep.py": "c4149418cdb58864535aef0fa2f1db12029d42d03a4259ebddd70344bdeb07a7",
+    "tests/reference/terracotta-2024-scalar-creep.json": "92aef9d686f8a71beac11698c862382507adaae16e5b544867e46bfc0d69413c",
+    "models/research/terracotta-2024-fig1.json": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+    "atlas/schedule.py": "919811a0592bae4023614de55531cf211993cba9a2c705a4f9d3a2fd44f72b16"
+  },
+  "artifacts": {
+    "native.json": "8f6967c9d272c66ed85ba59427a4c7001870a3646561a221dc8b50d12537cdf6",
+    "summary.json": "145b870a48bb92785024a4f1d92ded898a3fea68b8117da187e26e952a25bdcf",
+    "catalogue-tests.txt": "cd03d076abf9fa99291333135413468612829d8247c947230e2580b0aa805beb"
+  },
+  "study": {
+    "cases": 3,
+    "native_runs": 9,
+    "native_relative_tolerances": [
+      0.0001,
+      1e-06,
+      1e-08
+    ],
+    "reference": "separate scalar Figure1 implementation; RK4 with three grids and explicit midpoint cross-check",
+    "creep_duration_seconds": 20,
+    "preparation_duration_seconds": 10,
+    "native_initialization": "same frozen independently prepared state and accumulated strain per case",
+    "native_builds": 0,
+    "wasm_checked": false,
+    "experimental_data": false
+  },
+  "runtime": {
+    "python": "3.14.7",
+    "research_binary_sha256": "e38efd636f2db0885d818cd9999ce82d6f924caa3832b21a09d714b47e654c12",
+    "catalogue_hash": "fb1c40d2f11abf1f196720f9b9bb35e01ef1e8de43b4d5cde0fc33ecce0f6686"
+  },
+  "interpretation": [
+    "All9native runs complete; every non-roundoff state/strain/rate error channel improves at the declared sample grid.",
+    "Frozen-preparation hold comparison isolates creep integration; not end-to-end source preparation reproduction.",
+    "Reference code is a separate mathematical implementation by AI, not independent scientific authorship.",
+    "No use of the disputed author mixed-control temperature residual; no model count or review promotion."
+  ],
+  "checks": {
+    "test_groups": 28,
+    "passed": 28,
+    "skipped": 0,
+    "command": "ATLAS_RESEARCH_SOLVER=/path/to/atlas_research_solver python3 -m unittest tests.test_terracotta_creep tests.test_initialization tests.test_terracotta.TerracottaRepresentationTests tests.test_pm4sand_flow tests.test_pm4sand_surfaces -v"
+  },
+  "catalogue_metadata_check": {
+    "test_groups": 2,
+    "passed": 2,
+    "command": "python3 -m unittest tests.test_catalogue -v",
+    "catalogue_manifest_file_sha256": "c97dfb72fa51392208e174485168cfd5b8fcc7d4ed11de2773a272838357e089",
+    "scope": "new source links persist in database export; candidate/public-executable separation unchanged"
+  }
+}

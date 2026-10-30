@@ -51,7 +51,7 @@ Each stage resets viscous stress algebraically to its new one-sided rate-depende
 
 The atlas's backward-Euler schedule checks use `rtol=1e-6`, absolute scale fraction `1e-10`, and 100,000 allowed accepted substeps. Frozen-reference acceptance bounds are 100 Pa for pressure/q, `1e-5` for elastic strains/solid fraction, and `2e-6 K` for `Tm`. They are engine transcription checks, not experimental-error or calibration criteria. A separate case verifies improvement under tolerance refinement. Native and Wasm pass the same source-reference histories, and agree with each other within the stated script tolerance. Closed-form temperature production/decay and solid-fraction evolution, mixed radial stress control, invalid-state rejection, and out-of-scope rollback provide additional checks.
 
-TC-A01 uses the unhalved journal Eq. 36 consistently; the author's discrepant mixed-control routine is not used for these references. TC-A02 uses pressure-only `Tm^2/Gamma`. TC-A03/04 are handled by the stated algebraic boundary adaptation. TC-A05 is recorded as a changed numerical policy. Author-code agreement remains shared-source evidence; independent equation review, original outer-step reproduction/refinement, mixed-control author reconciliation, creep reference comparisons and experimental validation remain open. TC-01/05 are not closed by this evidence.
+TC-A01 uses the unhalved journal Eq. 36 consistently; the author's discrepant mixed-control routine is not used for these references. TC-A02 uses pressure-only `Tm^2/Gamma`. TC-A03/04 are handled by the stated algebraic boundary adaptation. TC-A05 is recorded as a changed numerical policy. Author-code agreement remains shared-source evidence; independent equation review, original outer-step reproduction/refinement, mixed-control author reconciliation, external source-matched creep reference comparisons and experimental validation remain open. TC-01/05 are not closed by this evidence.
 
 ## Reproduce
 
@@ -77,3 +77,7 @@ The source is MIT licensed by its authors; consult its [pinned license](https://
 ## Explicit initialization preprocessing
 
 The [experimental recipe contract](../INITIALIZATION_RECIPES.md) now implements the positive stable inversion described above with explicit named parameters and total pressure/q, phi, Tm and rates. It checks model domain and initial-history guards, preserves provenance and exports arrays for the unchanged timed solver. Native one-sided rate-jump and closed-form temperature-decay checks supplement the existing histories; they do not close independent creep or full source-review gates.
+
+## Separate prepared-creep reference
+
+The [scalar creep investigation](../TERRACOTTA_CREEP_REFERENCE.md) now checks three frozen prepared states at constant total pressure/q against a separate RK4/midpoint implementation of the continuous Figure1 equations. Nine native runs refine all non-roundoff state/strain/rate/elastic-stress channels; source reconciliation, external author-matched histories, scientific review, new-case Wasm parity and experimental validation remain open. This is Terracotta-specific creep evidence, separate from the Maxwell engine fixture and earlier shared-author-RHS histories.

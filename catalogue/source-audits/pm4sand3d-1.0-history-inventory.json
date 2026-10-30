@@ -1,0 +1,1890 @@
+{
+  "schema_version": "0.1",
+  "kind": "candidate-history-inventory",
+  "model_id": "pm4sand3d-1.0",
+  "status": "candidate; non-executable documentary draft",
+  "independent_review": "pending",
+  "source_complete": false,
+  "reviewed_on": "2026-10-31",
+  "reviewer": "Codex (AI-assisted bounded source inventory)",
+  "source": {
+    "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf",
+    "local_private_path": "/private/tmp/atlas-pm4sand-source/pm4sand3d-1.0-itasca.pdf",
+    "sha256": "6073a97a374d4b947e20a492b5009bbd01e3e5b0b773841b0f3b037c194f7453",
+    "edition": "June 2026 vendor manual",
+    "pdf_page_count": 149,
+    "printed_to_pdf_offset": 5,
+    "redistribution": "No permission inferred; no PDF or extracted source text included."
+  },
+  "review_scope": {
+    "visually_inspected_for_inventory": [
+      "printed pp76-79/PDF81-84 algorithm and initialization (existing renders; p79 rechecked for this task)"
+    ],
+    "text_located_not_full_visual_equation_verification": [
+      "Sections2.2,2.5-2.9 and4.1; field dependencies and prose only; exact equation transcription remains pending"
+    ],
+    "repo_context": [
+      "docs/models/pm4sand3d-1.0-manual.md",
+      "docs/models/pm4sand-versions.md",
+      "catalogue/source-audits/pm4sand-manuals-2026-10-31.json"
+    ],
+    "variant_exclusion": "No 2D PM4Sand3.3 tensors, parameters or storage assumptions imported."
+  },
+  "fields": [
+    {
+      "id": "stress",
+      "symbol": "sigma",
+      "shape": "symmetric_tensor_3d",
+      "unit": "stress",
+      "category": "mechanical_state",
+      "scope": "subzone trial; corrected zone commit",
+      "initialize_or_reset": "Host stress, with Table 3.3 admissibility correction; alpha from corrected r.",
+      "update_and_commit": "Subzone elastic/plastic update, penalty, host averaging, zone penalty, zone commit; rotation at step 22.",
+      "dependencies": [
+        "strain_increment",
+        "G",
+        "K",
+        "D",
+        "Kp",
+        "image_surfaces"
+      ],
+      "possible_derivation_or_alias": "sigma includes mean stress; alpha not generally r.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Host subzone stress versus returned averaged stress must be specified.",
+      "raw_components": 6
+    },
+    {
+      "id": "backstress",
+      "symbol": "alpha",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "mechanical_state",
+      "scope": "subzone trial; corrected zone commit",
+      "initialize_or_reset": "Host stress, with Table 3.3 admissibility correction; alpha from corrected r.",
+      "update_and_commit": "Subzone elastic/plastic update, penalty, host averaging, zone penalty, zone commit; rotation at step 22.",
+      "dependencies": [
+        "strain_increment",
+        "G",
+        "K",
+        "D",
+        "Kp",
+        "image_surfaces"
+      ],
+      "possible_derivation_or_alias": "sigma includes mean stress; alpha not generally r.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Host subzone stress versus returned averaged stress must be specified.",
+      "raw_components": 6
+    },
+    {
+      "id": "initial_backstress",
+      "symbol": "alpha_in",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "All four equal initialized alpha.",
+      "update_and_commit": "Current true reversal anchor. Reversal detected from (alpha-alpha_in):n<0; previous receives old initial before initial receives current alpha. Ordered updates at zone steps 19-20.",
+      "dependencies": [
+        "alpha",
+        "n",
+        "reversal_event"
+      ],
+      "possible_derivation_or_alias": "alpha_intrue appears to denote alpha_in, not an additional tensor; extrema may support alpha_inapp.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            26,
+            27
+          ],
+          "pdf_pages": [
+            31,
+            32
+          ],
+          "detail": "Section 2.5, Eqs 26-27 and apparent/true initial backstress discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=31"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Exact extrema update, component loading-direction choice and step 19/20 duplication unresolved. Componentwise extrema need not remain trace-free; do not compress to five components without proof.",
+      "raw_components": 6
+    },
+    {
+      "id": "previous_initial_backstress",
+      "symbol": "alpha_inP",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "All four equal initialized alpha.",
+      "update_and_commit": "Previous true reversal anchor. Reversal detected from (alpha-alpha_in):n<0; previous receives old initial before initial receives current alpha. Ordered updates at zone steps 19-20.",
+      "dependencies": [
+        "alpha",
+        "n",
+        "reversal_event"
+      ],
+      "possible_derivation_or_alias": "alpha_intrue appears to denote alpha_in, not an additional tensor; extrema may support alpha_inapp.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            26,
+            27
+          ],
+          "pdf_pages": [
+            31,
+            32
+          ],
+          "detail": "Section 2.5, Eqs 26-27 and apparent/true initial backstress discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=31"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Exact extrema update, component loading-direction choice and step 19/20 duplication unresolved. Componentwise extrema need not remain trace-free; do not compress to five components without proof.",
+      "raw_components": 6
+    },
+    {
+      "id": "minimum_initial_backstress",
+      "symbol": "alpha_inMin",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "All four equal initialized alpha.",
+      "update_and_commit": "Minimum initial backstress tensor named in initialization. Reversal detected from (alpha-alpha_in):n<0; previous receives old initial before initial receives current alpha. Ordered updates at zone steps 19-20.",
+      "dependencies": [
+        "alpha",
+        "n",
+        "reversal_event"
+      ],
+      "possible_derivation_or_alias": "alpha_intrue appears to denote alpha_in, not an additional tensor; extrema may support alpha_inapp.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            26,
+            27
+          ],
+          "pdf_pages": [
+            31,
+            32
+          ],
+          "detail": "Section 2.5, Eqs 26-27 and apparent/true initial backstress discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=31"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Exact extrema update, component loading-direction choice and step 19/20 duplication unresolved. Componentwise extrema need not remain trace-free; do not compress to five components without proof.",
+      "raw_components": 6
+    },
+    {
+      "id": "maximum_initial_backstress",
+      "symbol": "alpha_inMax",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "All four equal initialized alpha.",
+      "update_and_commit": "Maximum initial backstress tensor named in initialization. Reversal detected from (alpha-alpha_in):n<0; previous receives old initial before initial receives current alpha. Ordered updates at zone steps 19-20.",
+      "dependencies": [
+        "alpha",
+        "n",
+        "reversal_event"
+      ],
+      "possible_derivation_or_alias": "alpha_intrue appears to denote alpha_in, not an additional tensor; extrema may support alpha_inapp.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            26,
+            27
+          ],
+          "pdf_pages": [
+            31,
+            32
+          ],
+          "detail": "Section 2.5, Eqs 26-27 and apparent/true initial backstress discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=31"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Exact extrema update, component loading-direction choice and step 19/20 duplication unresolved. Componentwise extrema need not remain trace-free; do not compress to five components without proof.",
+      "raw_components": 6
+    },
+    {
+      "id": "fabric",
+      "symbol": "z",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "Zero.",
+      "update_and_commit": "Update during dilative branch at step 15; related histories step 16; rotate step 22.",
+      "dependencies": [
+        "plastic_volumetric_increment",
+        "D",
+        "n",
+        "z_cum",
+        "z_max",
+        "c_z"
+      ],
+      "possible_derivation_or_alias": "Not equivalent to accumulated plastic strain.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            35,
+            36,
+            37,
+            38
+          ],
+          "pdf_pages": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "detail": "Section 2.8, Eqs 64-71 and additional fabric-history discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=40"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Do not evaluate plastic volumetric increment / D at D=0 without a source-matched limit.",
+      "raw_components": 6
+    },
+    {
+      "id": "reversal_fabric",
+      "symbol": "z_in",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "Zero.",
+      "update_and_commit": "Snapshot fabric at stress-ratio reversal; immediate branch history, not greatest prior fabric.",
+      "dependencies": [
+        "z",
+        "reversal_event"
+      ],
+      "possible_derivation_or_alias": "Not z_peak or an extrema tensor.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            35,
+            36,
+            37,
+            38
+          ],
+          "pdf_pages": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "detail": "Section 2.8, Eqs 64-71 and additional fabric-history discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=40"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Snapshot ordering relative to same-step fabric update must be pinned.",
+      "raw_components": 6
+    },
+    {
+      "id": "unresolved_fabric_tensor",
+      "symbol": "z_alpha",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "unresolved_named_memory",
+      "scope": "zone",
+      "initialize_or_reset": "Zero in Table 3.3 step 7.",
+      "update_and_commit": "No evolution or consuming expression identified in the bounded manual review.",
+      "dependencies": [],
+      "possible_derivation_or_alias": "Could be auxiliary/alias/obsolete implementation memory; do not delete or assign a law.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        }
+      ],
+      "unresolved": "Requires constitutive source or author clarification.",
+      "raw_components": 6
+    },
+    {
+      "id": "cumulative_fabric",
+      "symbol": "z_cum",
+      "shape": "scalar",
+      "unit": "1",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "Zero.",
+      "update_and_commit": "Accumulated fabric-increment norm, Eq 65; step 16.",
+      "dependencies": [
+        "delta_z"
+      ],
+      "possible_derivation_or_alias": "Cannot derive from current z after reversal.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            35,
+            36,
+            37,
+            38
+          ],
+          "pdf_pages": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "detail": "Section 2.8, Eqs 64-71 and additional fabric-history discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=40"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Algorithm prose says if fabric exceeds former value; reconcile with Eq 65 cumulative norm.",
+      "raw_components": 1
+    },
+    {
+      "id": "peak_fabric",
+      "symbol": "z_peak / z_pk",
+      "shape": "scalar",
+      "unit": "1",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "z_max/100000, not exactly zero.",
+      "update_and_commit": "Historical maximum fabric magnitude Eq 66; step 16.",
+      "dependencies": [
+        "z",
+        "old_z_peak"
+      ],
+      "possible_derivation_or_alias": "z_peak and z_pk are likely spelling aliases, counted once.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            35,
+            36,
+            37,
+            38
+          ],
+          "pdf_pages": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "detail": "Section 2.8, Eqs 64-71 and additional fabric-history discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=40"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Norm convention and strict/equal peak policy to transcribe.",
+      "raw_components": 1
+    },
+    {
+      "id": "fabric_formation_pressure",
+      "symbol": "p_zp",
+      "shape": "scalar",
+      "unit": "stress",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "p0/100 in host sign convention.",
+      "update_and_commit": "Retain mean pressure at greatest peak of fabric-pressure product.",
+      "dependencies": [
+        "p",
+        "fabric_pressure_product",
+        "fabric_pressure_peak"
+      ],
+      "possible_derivation_or_alias": "Not current p; no separate p_zp_peak count asserted.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            35,
+            36,
+            37,
+            38
+          ],
+          "pdf_pages": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "detail": "Section 2.8, Eqs 64-71 and additional fabric-history discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=40"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Table 3.2 uses pzp and associated pzp,peak ambiguously versus zxpPk in Table 3.3.",
+      "raw_components": 1
+    },
+    {
+      "id": "fabric_pressure_peak",
+      "symbol": "zxpPk",
+      "shape": "scalar",
+      "unit": "stress (if fabric norm times pressure)",
+      "category": "constitutive_history",
+      "scope": "zone",
+      "initialize_or_reset": "-z_max*p0/50.",
+      "update_and_commit": "Update when fabric-pressure product exceeds previous peak.",
+      "dependencies": [
+        "fabric_pressure_product",
+        "p"
+      ],
+      "possible_derivation_or_alias": "Candidate alias of pzp,peak in algorithm; not proven.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            35,
+            36,
+            37,
+            38
+          ],
+          "pdf_pages": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "detail": "Section 2.8, Eqs 64-71 and additional fabric-history discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=40"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Exact norm/sign/product definition unresolved; Table 3.3 prints z^ij:p although p is scalar.",
+      "raw_components": 1
+    },
+    {
+      "id": "fabric_pressure_product",
+      "symbol": "zxp",
+      "shape": "scalar_candidate",
+      "unit": "stress candidate",
+      "category": "derived_or_cache",
+      "scope": "zone",
+      "initialize_or_reset": "Zero.",
+      "update_and_commit": "Current product of fabric and mean pressure.",
+      "dependencies": [
+        "z",
+        "p"
+      ],
+      "possible_derivation_or_alias": "May be recomputed; not included in retained-history base ledger.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            35,
+            36,
+            37,
+            38
+          ],
+          "pdf_pages": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "detail": "Section 2.8, Eqs 64-71 and additional fabric-history discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=40"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Tensor/scalar contraction and product comparison convention unresolved.",
+      "raw_components": 1
+    },
+    {
+      "id": "dilatancy_lag",
+      "symbol": "D",
+      "shape": "scalar",
+      "unit": "1",
+      "category": "algorithmic_lagged_memory",
+      "scope": "zone shared by all subzones",
+      "initialize_or_reset": "0",
+      "update_and_commit": "Compute from past averaged zone response at step 13; use for all subzones in next caller step.",
+      "dependencies": [
+        "averaged_stress",
+        "averaged_alpha",
+        "averaged_n",
+        "backstress_histories",
+        "fabric_histories",
+        "resolved_parameters"
+      ],
+      "possible_derivation_or_alias": "Cannot replace by reevaluation from current stress during each material trial without changing documented algorithm.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        },
+        {
+          "printed_pages": [
+            71,
+            72
+          ],
+          "pdf_pages": [
+            76,
+            77
+          ],
+          "detail": "Section 3.2 explicit one-step lag",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=76"
+        }
+      ],
+      "unresolved": "Chronology relative to new fabric, new g and new surfaces makes this a staged dependency, not a simultaneous state function.",
+      "raw_components": 1
+    },
+    {
+      "id": "plastic_modulus_lag",
+      "symbol": "Kp",
+      "shape": "scalar",
+      "unit": "stress",
+      "category": "algorithmic_lagged_memory",
+      "scope": "zone shared by all subzones",
+      "initialize_or_reset": "100*G",
+      "update_and_commit": "Compute from past averaged zone response at step 13; use for all subzones in next caller step.",
+      "dependencies": [
+        "averaged_stress",
+        "averaged_alpha",
+        "averaged_n",
+        "backstress_histories",
+        "fabric_histories",
+        "resolved_parameters"
+      ],
+      "possible_derivation_or_alias": "Cannot replace by reevaluation from current stress during each material trial without changing documented algorithm.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        },
+        {
+          "printed_pages": [
+            71,
+            72
+          ],
+          "pdf_pages": [
+            76,
+            77
+          ],
+          "detail": "Section 3.2 explicit one-step lag",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=76"
+        }
+      ],
+      "unresolved": "Chronology relative to new fabric, new g and new surfaces makes this a staged dependency, not a simultaneous state function.",
+      "raw_components": 1
+    },
+    {
+      "id": "shear_modulus_cache",
+      "symbol": "G",
+      "shape": "scalar",
+      "unit": "stress",
+      "category": "algorithmic_next_step_cache",
+      "scope": "zone",
+      "initialize_or_reset": "G0*pA*sqrt(-p0/pA); K=2*(1+nu)/(3*(1-2*nu))*G.",
+      "update_and_commit": "Update at step 18 from pressure/state/fabric; optionally multiply by Fsed at step 23.",
+      "dependencies": [
+        "p",
+        "CSR_initial_normalizer",
+        "z_cum",
+        "resolved_parameters",
+        "PostShake"
+      ],
+      "possible_derivation_or_alias": "K derivable from same-stage G and nu; G reproducible only with exact staged inputs and preparation normalizer.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        },
+        {
+          "printed_pages": [
+            27,
+            28,
+            43,
+            44
+          ],
+          "pdf_pages": [
+            32,
+            33,
+            48,
+            49
+          ],
+          "detail": "Section 2.6 Eqs 30-32; Eq 93; postshake Eqs 94-99",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=32"
+        }
+      ],
+      "unresolved": "Store or retain full dependency stage; do not apply Fsed cumulatively to already reduced G/K.",
+      "raw_components": 1
+    },
+    {
+      "id": "bulk_modulus_cache",
+      "symbol": "K",
+      "shape": "scalar",
+      "unit": "stress",
+      "category": "algorithmic_next_step_cache",
+      "scope": "zone",
+      "initialize_or_reset": "G0*pA*sqrt(-p0/pA); K=2*(1+nu)/(3*(1-2*nu))*G.",
+      "update_and_commit": "Update at step 18 from pressure/state/fabric; optionally multiply by Fsed at step 23.",
+      "dependencies": [
+        "p",
+        "CSR_initial_normalizer",
+        "z_cum",
+        "resolved_parameters",
+        "PostShake"
+      ],
+      "possible_derivation_or_alias": "K derivable from same-stage G and nu; G reproducible only with exact staged inputs and preparation normalizer.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        },
+        {
+          "printed_pages": [
+            27,
+            28,
+            43,
+            44
+          ],
+          "pdf_pages": [
+            32,
+            33,
+            48,
+            49
+          ],
+          "detail": "Section 2.6 Eqs 30-32; Eq 93; postshake Eqs 94-99",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=32"
+        }
+      ],
+      "unresolved": "Store or retain full dependency stage; do not apply Fsed cumulatively to already reduced G/K.",
+      "raw_components": 1
+    },
+    {
+      "id": "density_or_volume_memory",
+      "symbol": "D_R_current or e or volumetric_history",
+      "shape": "scalar_candidate",
+      "unit": "1",
+      "category": "physical_state_representation_unresolved",
+      "scope": "zone",
+      "initialize_or_reset": "Input D_R defines initial state; e_max/e_min affect volumetric evolution.",
+      "update_and_commit": "Step 18 updates relative state; secondary parameter table says e_max/e_min affect how volumetric strain changes relative state.",
+      "dependencies": [
+        "initial_D_R",
+        "volumetric_strain",
+        "e_max",
+        "e_min",
+        "p"
+      ],
+      "possible_derivation_or_alias": "Choose one sufficient current density/volume representation, not all aliases.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            22
+          ],
+          "pdf_pages": [
+            27
+          ],
+          "detail": "Eqs 10-11 relative state",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=27"
+        },
+        {
+          "printed_pages": [
+            77
+          ],
+          "pdf_pages": [
+            82
+          ],
+          "detail": "Table 3.2 step 18",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=82"
+        },
+        {
+          "printed_pages": [
+            86
+          ],
+          "pdf_pages": [
+            91
+          ],
+          "detail": "Table 4.2 e_max/e_min",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=91"
+        }
+      ],
+      "unresolved": "Exact finite versus infinitesimal volume update, host density use and reset behavior not established.",
+      "raw_components": 1
+    },
+    {
+      "id": "CSR_initial_normalizer",
+      "symbol": "initial stress-ratio normalization",
+      "shape": "scalar_candidate",
+      "unit": "1",
+      "category": "initialization_memory_or_resolved_parameter",
+      "scope": "zone",
+      "initialize_or_reset": "CSR normalized to one at initialization.",
+      "update_and_commit": "Hold normalization fixed within preparation epoch; current CSR varies with stress ratio.",
+      "dependencies": [
+        "initial_stress",
+        "initial_Mb_or_Md",
+        "current_Mcur",
+        "current_Mb_or_Md"
+      ],
+      "possible_derivation_or_alias": "Could store initial ratio or equivalent normalizing coefficient; one scalar provisional only.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            27,
+            28
+          ],
+          "pdf_pages": [
+            32,
+            33
+          ],
+          "detail": "Section 2.6 Eqs 30-31",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=32"
+        }
+      ],
+      "unresolved": "Dense/loose branch transitions and exact factor to pin; do not normalize anew every step.",
+      "raw_components": 1
+    },
+    {
+      "id": "mean_pressure_cache",
+      "symbol": "p",
+      "shape": "scalar",
+      "unit": "stress",
+      "category": "derived_or_host_cache",
+      "scope": "subzone and zone",
+      "initialize_or_reset": "From initialized stress under reconciled sign convention.",
+      "update_and_commit": "Subzone trial, area-weighted averaging, corrected zone commit.",
+      "dependencies": [
+        "sigma"
+      ],
+      "possible_derivation_or_alias": "trace(sigma)/3 if averaging and correction preserve identity; table explicitly stores p.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Do not eliminate cache without testing host stage consistency.",
+      "raw_components": 1
+    },
+    {
+      "id": "stress_ratio_cache",
+      "symbol": "r",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "derived_or_host_cache",
+      "scope": "subzone and zone",
+      "initialize_or_reset": "r from stress; n undefined at zero yield distance unless branch specified.",
+      "update_and_commit": "Subzone trial; area-weighted average at step 9; later zone correction/use.",
+      "dependencies": [
+        "sigma",
+        "p",
+        "alpha"
+      ],
+      "possible_derivation_or_alias": "r=(sigma-pI)/p pointwise; n=(r-alpha)/norm(r-alpha) pointwise, but average of unit normals need not be unit.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Averaged n normalization and relation between corrected averaged r and separately stored r unresolved.",
+      "raw_components": 6
+    },
+    {
+      "id": "normal_cache",
+      "symbol": "n",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "category": "derived_or_host_cache",
+      "scope": "subzone and zone",
+      "initialize_or_reset": "r from stress; n undefined at zero yield distance unless branch specified.",
+      "update_and_commit": "Subzone trial; area-weighted average at step 9; later zone correction/use.",
+      "dependencies": [
+        "sigma",
+        "p",
+        "alpha"
+      ],
+      "possible_derivation_or_alias": "r=(sigma-pI)/p pointwise; n=(r-alpha)/norm(r-alpha) pointwise, but average of unit normals need not be unit.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Averaged n normalization and relation between corrected averaged r and separately stored r unresolved.",
+      "raw_components": 6
+    },
+    {
+      "id": "strain_increment_accumulators",
+      "symbol": "unnamed accumulators",
+      "shape": "unknown",
+      "unit": "strain",
+      "category": "algorithmic_host_memory",
+      "scope": "zone",
+      "initialize_or_reset": "Not specified in initialization table.",
+      "update_and_commit": "Explicitly updated at step 19.",
+      "dependencies": [
+        "subzone_strain_increments",
+        "subzone_weights"
+      ],
+      "possible_derivation_or_alias": "Not automatically total strain or plastic strain; do not invent field count.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Names, shapes, clearing cadence, role in reversal and restart unresolved.",
+      "raw_components": null
+    },
+    {
+      "id": "zone_reduction_workspace",
+      "symbol": "weighted sums; final-subzone marker",
+      "shape": "workspace_set",
+      "unit": "mixed",
+      "category": "transaction_workspace",
+      "scope": "host zone",
+      "initialize_or_reset": "Clear at start of caller zone step; inferred adapter requirement.",
+      "update_and_commit": "Gather listed quantities for all subzones then reduce exactly once after final subzone.",
+      "dependencies": [
+        "subzone_weights",
+        "subzone_order",
+        "subzone_trials"
+      ],
+      "possible_derivation_or_alias": "Transient unless resumable mid-zone checkpoints are supported.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        },
+        {
+          "printed_pages": [
+            70,
+            71,
+            80
+          ],
+          "pdf_pages": [
+            75,
+            76,
+            85
+          ],
+          "detail": "Section 3.1, Section 3.2 and Figure 3.1",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=75"
+        }
+      ],
+      "unresolved": "Implementation design requirement, not source-named material history; weights described as area-weighted.",
+      "raw_components": null
+    },
+    {
+      "id": "hourglass_parallel_state",
+      "symbol": "parallel deviatoric elastoplastic resistance",
+      "shape": "per_subzone_state_unknown",
+      "unit": "stress and strain",
+      "category": "host_stabilization_memory",
+      "scope": "each subzone independently",
+      "initialize_or_reset": "G_hg and K_hg=0.01 initial main moduli; strength=max(specified chg, crhg*initial pressure magnitude), default crhg=.005.",
+      "update_and_commit": "Independent deviatoric response; contributes no mean stress.",
+      "dependencies": [
+        "subzone_deviatoric_strain",
+        "initial_moduli",
+        "initial_pressure",
+        "chg",
+        "crhg"
+      ],
+      "possible_derivation_or_alias": "Separate from zone averaged main PM4 state; initial properties fixed, not rescaled with current G.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            72
+          ],
+          "pdf_pages": [
+            77
+          ],
+          "detail": "Section 3.2 parallel elastoplastic hourglass resistance",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=77"
+        }
+      ],
+      "unresolved": "Plastic law, internal variables, exact strength measure/sign and stress combination not specified sufficiently to count storage or reproduce.",
+      "raw_components": null
+    },
+    {
+      "id": "FirstCall",
+      "symbol": "First_Call",
+      "shape": "flag",
+      "unit": "1",
+      "category": "control_event",
+      "scope": "zone/material assignment",
+      "initialize_or_reset": "Unspecified or 0 invokes initialization; code then sets 1.",
+      "update_and_commit": "Later explicit 0 requests complete reinitialization from current host stress, clearing fabric/backstress history.",
+      "dependencies": [
+        "current_host_stress",
+        "input_parameters"
+      ],
+      "possible_derivation_or_alias": "Event and preparation epoch marker, not constitutive continuous state.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            83,
+            84,
+            85
+          ],
+          "pdf_pages": [
+            88,
+            89,
+            90
+          ],
+          "detail": "Section 4.1 and Table 4.1 FirstCall",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=88"
+        },
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        }
+      ],
+      "unresolved": "Which overridden/default effective parameters are recomputed on later reset needs source confirmation.",
+      "raw_components": 1
+    },
+    {
+      "id": "PostShake",
+      "symbol": "Post_Shake",
+      "shape": "flag",
+      "unit": "1",
+      "category": "control_mode",
+      "scope": "zone",
+      "initialize_or_reset": "Internally 0.",
+      "update_and_commit": "User sets 1 after strong shaking; reduces next-step G/K at step 23.",
+      "dependencies": [
+        "Fsed",
+        "z_cum",
+        "p",
+        "Mcur",
+        "Md",
+        "initial_D_R"
+      ],
+      "possible_derivation_or_alias": "No autonomous elapsed-time state or sedimentation ODE inferred.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            44,
+            45
+          ],
+          "pdf_pages": [
+            49,
+            50
+          ],
+          "detail": "Section 2.9 Eqs 94-99",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=49"
+        },
+        {
+          "printed_pages": [
+            84,
+            85
+          ],
+          "pdf_pages": [
+            89,
+            90
+          ],
+          "detail": "Section 4.1 and Table 4.1",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=89"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Mode off/on transitions, p_sed=0 boundary and invalid fractional-power arguments require explicit policy.",
+      "raw_components": 1
+    },
+    {
+      "id": "resolved_initial_parameters",
+      "symbol": "Ado,zmax,CKalpha_f,Fsed_min,p_sed0,p_min,p_min2,initial_D_R,etc.",
+      "shape": "named_parameter_record",
+      "unit": "mixed",
+      "category": "resolved_parameters_and_preparation_provenance",
+      "scope": "zone",
+      "initialize_or_reset": "Default secondary parameters resolved during initialization; zero input selects default; user overrides retained distinctly.",
+      "update_and_commit": "Some bounds initialization-fixed; Ado default uses initial surfaces; Fsed_min uses initial density.",
+      "dependencies": [
+        "raw_inputs",
+        "initial_stress",
+        "initial_density",
+        "edition"
+      ],
+      "possible_derivation_or_alias": "Store resolved values plus raw-input/default provenance; not all are evolving state.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            85,
+            86,
+            87,
+            88
+          ],
+          "pdf_pages": [
+            90,
+            91,
+            92,
+            93
+          ],
+          "detail": "Tables 4.1-4.2 primary/secondary inputs",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=90"
+        },
+        {
+          "printed_pages": [
+            44
+          ],
+          "pdf_pages": [
+            49
+          ],
+          "detail": "Eqs 98-99",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=49"
+        }
+      ],
+      "unresolved": "Not an exhaustive parameter transcription; signs and initial-versus-current dependence must be reconciled before executable admission.",
+      "raw_components": null
+    },
+    {
+      "id": "derived_stage_terms",
+      "symbol": "xi_R,g,Mcur,Mb,Md,MdR,alpha_b,alpha_d,alpha_dR,B,C,R,L,Fsed,p_sed and multipliers",
+      "shape": "derived_scalar_tensor_set",
+      "unit": "mixed",
+      "category": "derived_stage_values",
+      "scope": "subzone/zone by stage",
+      "initialize_or_reset": "Evaluate only after inputs valid.",
+      "update_and_commit": "Compute at source-ordered stages; do not retain by default unless required for exact replay.",
+      "dependencies": [
+        "mechanical_state",
+        "history",
+        "lagged_caches",
+        "resolved_parameters"
+      ],
+      "possible_derivation_or_alias": "Images, flow and modifiers are not independent histories; p_sed Eq 97 is algebraic.",
+      "source_locators": [
+        {
+          "printed_pages": [
+            22,
+            23,
+            24,
+            25,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44
+          ],
+          "pdf_pages": [
+            27,
+            28,
+            29,
+            30,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49
+          ],
+          "detail": "Section 2 constitutive equations",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=27"
+        },
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ],
+      "unresolved": "Exact stage dependency DAG and singular-domain branches pending.",
+      "raw_components": null
+    }
+  ],
+  "ordered_phases": [
+    {
+      "phase": 0,
+      "name": "preparation_or_explicit_FirstCall_reset",
+      "action": "Read host stress, resolve default/override parameters, enforce source bounds, initialize histories/caches; mark FirstCall=1. Record reset event and corrected initial stress.",
+      "sources": [
+        {
+          "printed_pages": [
+            78,
+            79
+          ],
+          "pdf_pages": [
+            83,
+            84
+          ],
+          "detail": "Table 3.3, initialization steps 1-7",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83"
+        },
+        {
+          "printed_pages": [
+            83,
+            84,
+            85
+          ],
+          "pdf_pages": [
+            88,
+            89,
+            90
+          ],
+          "detail": "FirstCall",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=88"
+        }
+      ]
+    },
+    {
+      "phase": 1,
+      "name": "immutable_parent_subzone_trials",
+      "action": "Every subzone consumes committed zone D/Kp and prior prepared caches; get host strain/rotation, trial elastic stress, branch, plastic update and penalties; return stress.",
+      "sources": [
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "complete_zone_reduction",
+      "action": "Only after final subzone, area-weighted average listed increments/states/n/rotations; enforce consistency/bounds; compute images and reversal predicate.",
+      "sources": [
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "next_step_D_Kp",
+      "action": "Compute D/Kp from past averaged response BEFORE new fabric/g/surface updates. Retain for next caller increment.",
+      "sources": [
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        },
+        {
+          "printed_pages": [
+            71,
+            72
+          ],
+          "pdf_pages": [
+            76,
+            77
+          ],
+          "detail": "Section 3.2",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=76"
+        }
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "fabric_and_related_memory",
+      "action": "Compute plastic volumetric increment, update z when dilative, zcum/zpeak/product peak/formation pressure and reversal fabric. Source ordering within this group unresolved.",
+      "sources": [
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        },
+        {
+          "printed_pages": [
+            35,
+            36,
+            37,
+            38
+          ],
+          "pdf_pages": [
+            40,
+            41,
+            42,
+            43
+          ],
+          "detail": "Section 2.8, Eqs 64-71 and additional fabric-history discussion",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=40"
+        }
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "next_step_state_surfaces_and_moduli",
+      "action": "New Lode g, relative state, Mb/Md, G/K; then backstress anchors and unnamed strain accumulators at steps 19-20.",
+      "sources": [
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ]
+    },
+    {
+      "phase": 6,
+      "name": "commit_rotate_postshake",
+      "action": "Commit zone sigma/p/alpha/r, apply large-strain corrections if enabled, then PostShake stiffness reduction. Zero-spin scope omits rotations explicitly.",
+      "sources": [
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ]
+    },
+    {
+      "phase": 7,
+      "name": "atlas_transaction_requirement",
+      "action": "All trials including zone reductions/events must remain provisional. Commit once only when entire caller update succeeds; failed trial restores every history, cache, flag and workspace. This is a schema/adapter requirement, not a transaction guarantee made by the manual.",
+      "sources": [
+        {
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables 3.1-3.2, ordered subzone steps 1-8 and whole-zone steps 9-23",
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81"
+        }
+      ]
+    }
+  ],
+  "storage_budget": {
+    "interpretation": "Conservative documentary allocation scenarios, not a minimum independent state count or an executable layout. Scalars are real-valued slots except flags. Stress included; committed strain and global solver metadata excluded.",
+    "symmetric_tensor_components": 6,
+    "named_tensor_history_ids": [
+      "stress",
+      "backstress",
+      "initial_backstress",
+      "previous_initial_backstress",
+      "minimum_initial_backstress",
+      "maximum_initial_backstress",
+      "fabric",
+      "reversal_fabric",
+      "unresolved_fabric_tensor"
+    ],
+    "named_tensor_slots": 54,
+    "named_scalar_history_ids": [
+      "cumulative_fabric",
+      "peak_fabric",
+      "fabric_formation_pressure",
+      "fabric_pressure_peak"
+    ],
+    "named_scalar_history_slots": 4,
+    "named_history_scenario_total": 58,
+    "lag_and_modulus_cache_ids": [
+      "dilatancy_lag",
+      "plastic_modulus_lag",
+      "shear_modulus_cache",
+      "bulk_modulus_cache"
+    ],
+    "lag_and_modulus_slots": 4,
+    "history_plus_lag_moduli_scenario_total": 62,
+    "explicit_p_r_n_cache_slots": 13,
+    "with_explicit_p_r_n_cache_scenario_total": 75,
+    "optional_density_and_CSR_normalizer_slots": 2,
+    "with_two_provisional_scalar_representations_scenario_total": 77,
+    "control_flags": 2,
+    "with_control_flags_scenario_total": 79,
+    "not_counted": [
+      "current fabric-pressure product (one candidate derived/cache scalar)",
+      "resolved initialization parameters and original inputs",
+      "unnamed strain increment accumulators: shapes/count unknown",
+      "zone reduction workspace and transaction copies",
+      "independent hourglass state for every subzone: shape/count unknown",
+      "host total strain, pore pressure, density, rotations, mesh and global integration state",
+      "derived stage values and alias duplicates"
+    ],
+    "safe_reductions_to_prove": [
+      "alpha_intrue alias alpha_in",
+      "zpk alias zpeak",
+      "p and r from consistent same-stage sigma",
+      "K from same-stage G and nu",
+      "alpha_inapp reconstruction from extrema and loading direction",
+      "z_alpha live role or redundancy",
+      "exact fabric pressure peak aliases"
+    ],
+    "warning": "Do not raise max_state to 79 based on this inventory. A typed model-specific history structure, parameter/preparation record, algorithm cache, host workspace and explicit transaction semantics are prerequisites. Raw six-component extrema storage avoids assuming trace-free componentwise extrema."
+  },
+  "source_conflicts_and_open_items": [
+    "June 2026 vendor edition versus May 2026 author citation; exact Box/DLL pairing not reconciled.",
+    "Table 3.1 step 1 points to Table 3.2 for initialization, but initialization is Table 3.3; use page/step locators.",
+    "Table 3.1 step 7(b)(ii) stress correction typography conflicts with clean flow Eqs 35-37; use no invented repair.",
+    "Chapter 2 pressure formulas and Table 3.3 host tension-positive negative compression require one explicit boundary/sign map; Table 3.3 trace notation is ambiguous.",
+    "Table 3.3 leaves sigma11=0, xi_R=0 and Mfin=Mcut equality branches unspecified; hydrostatic Lode direction and Ado 0/0 limit not resolved.",
+    "Minimum pressure prose (p72), low-pressure formulas and signed Table 3.3 min bounds must be reconciled.",
+    "Table 3.2 steps 19/20 both update reversal anchors; old/new snapshot order and strain accumulator role unresolved.",
+    "Initial zpeak is positive epsilon while prose sometimes says zpeak=0 before dilation; retain explicit initialization discrepancy.",
+    "Fabric product z^ij:p is not a well-typed scalar contraction; norm/sign, zxpPk versus pzp,peak aliases and strict peak comparisons unresolved.",
+    "z_alpha initialized but evolution unidentified; no unsupported minimal state count.",
+    "Large-strain step lists rotating sigma/alpha/r/z; rotation of all stored reversal tensors not specified and must not be guessed.",
+    "Constitutive source/DLL not inspected or executed; public driver access does not establish constitutive-source reuse rights."
+  ],
+  "schema_requirements": [
+    "Typed symmetric tensors, scalars, flags, named resolved parameters and variable host collections; shape/unit/stage validation.",
+    "Separate physical history from next-caller-step algorithmic caches and transient reduction workspace.",
+    "Represent ordered event snapshots (old initial before overwrite; fabric reversal snapshot), explicit FirstCall reset and user PostShake mode.",
+    "Declare caller increment as lag-advance boundary; hidden adaptive subdivisions change documented algorithm unless separately specified and validated.",
+    "Preparation record must retain input/default overrides, initial stress corrections and normalization provenance.",
+    "Declare homogeneous single-subzone reduction separately from full FLAC3D zone averaging and stabilization.",
+    "No partial commit from constitutive trials, failed mixed controls, invalid domains or incomplete zone reduction."
+  ],
+  "next_bounded_tasks": [
+    "Reconcile extrema/app/true anchor algorithm and z_alpha using constitutive source or author clarification.",
+    "Transcribe density/volume update and exact CSR initialization normalizer.",
+    "Resolve well-typed fabric product/peak rule and D=0-safe fabric increment.",
+    "Source-map all initialization equality/domain branches and bounds in one sign convention.",
+    "Define zero-spin one-homogeneous-subzone reference contract with explicit caller-step lag and optional separate hourglass resistance.",
+    "Verify reset/replay equivalence, lag partition sensitivity, reversal microcycles and failed-trial rollback before runtime admission."
+  ]
+}
