@@ -16,6 +16,7 @@ def main():
     discovery=sub.add_parser('discover');discovery.add_argument('--query',required=True);discovery.add_argument('--output',required=True,type=Path);discovery.add_argument('--rows',type=int,default=50);discovery.add_argument('--cursor',default='*')
     run=sub.add_parser('run');run.add_argument('specification',type=Path);run.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');run.add_argument('--output',type=Path,required=True)
     replay=sub.add_parser('replay',help='Replay a validated ordered recorded path');replay.add_argument('specification',type=Path);replay.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');replay.add_argument('--output',type=Path,required=True)
+    initializer=sub.add_parser('initialize',help='Resolve a typed initialization recipe');initializer.add_argument('recipe',type=Path);initializer.add_argument('configuration',type=Path);initializer.add_argument('--model-definition',type=Path,required=True);initializer.add_argument('--output',type=Path,required=True)
     prepare=sub.add_parser('prepare-replay',help='Convert normalized drained observations with explicit assumptions');prepare.add_argument('experiment',type=Path);prepare.add_argument('configuration',type=Path);prepare.add_argument('--output',type=Path,required=True)
     refine=sub.add_parser('refine-recorded',help='Investigate ordered caller-path resolution');refine.add_argument('configuration',type=Path);refine.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');refine.add_argument('--output',type=Path,required=True)
     benchmark=sub.add_parser('benchmark');benchmark.add_argument('configuration',type=Path);benchmark.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');benchmark.add_argument('--output',type=Path,required=True)
@@ -61,6 +62,19 @@ def main():
         args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
         print(f"{'Completed' if result['ok'] else 'Failed'}: {args.output}")
         if not result['ok']:raise SystemExit(1)
+    elif args.command=='initialize':
+        import hashlib
+        from .initialization import initialize
+        from .experiment_replay import parse_json
+        paths={'recipe':args.recipe,'configuration':args.configuration,'model':args.model_definition}
+        if args.output.resolve() in {p.resolve() for p in paths.values()}:
+            raise ValueError('initialization output must not overwrite an input')
+        raw={k:p.read_bytes() for k,p in paths.items()}
+        result=initialize(parse_json(raw['recipe']),parse_json(raw['configuration']),parse_json(raw['model']))
+        result['provenance']['input_file_sha256']={k:hashlib.sha256(v).hexdigest() for k,v in raw.items()}
+        args.output.parent.mkdir(parents=True,exist_ok=True)
+        args.output.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
+        print(f'Initialized {result["run_fields"]["model"]}: {args.output}')
     elif args.command=='prepare-replay':
         import hashlib
         from .experiment_replay import prepare_replay, parse_json

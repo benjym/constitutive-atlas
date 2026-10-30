@@ -1,0 +1,52 @@
+{
+  "id": "initialization-and-pm4-flow-v1",
+  "date": "2026-10-31",
+  "base_revision": "e57a007314cb70b770d98de5b11895b9e06e51ab",
+  "status": "research-transcription-and-initialization-investigation",
+  "implementation_and_inputs": {
+    "atlas/initialization.py": "409eb4fa8c2251d30bb280af57e6cc9794c1a842c5c2777089a84e82fff0c023",
+    "atlas/cli.py": "3f5987678191ad27a40a8ee2da4097c27661310c89aae4391f1af895f9696073",
+    "schemas/initialization-input.schema.json": "855a874ec4dad889aceb1d9beb84985e13bb6bbc0b4b7d2e7d29b58797d2bc6c",
+    "schemas/initialization-recipe.schema.json": "b2da03cd87b37c1011a92f4fb9bf8330eac73ffd7925118e3fb1e05caa123117",
+    "initialization/terracotta-2024-fig1-total-stress.json": "f70f098eedbe1e698fd593d2d4df383ded781f0945a9dc15ff087c573bec54bf",
+    "initialization/terracotta-2024-kaolin-initialization.json": "3dbcdea7bd4d9c1c91e97d48212d94ac77fca99ec65b4e2f895fb1500afeb5f1",
+    "models/research/terracotta-2024-fig1.json": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+    "tests/test_initialization.py": "f107b0bf76f0714ed2ae844e749825ba48645dc7e78211eefa3dcb516b3b4f8e",
+    "catalogue/source-audits/pm4sand3d-1.0-flow.json": "5261bb48c4598684e672f33ef65a2de75ba69d5b21747a6be0363c01696db233",
+    "catalogue/source-audits/pm4sand3d-1.0-surfaces.json": "cf96b2727da3009eb90adc431997a4c53482ddc5ed6781705d6f6b8b08642f14",
+    "tools/inspect_pm4sand_flow.py": "fc6dafa488da4bcf354cda7605913f2034aafc1e4e69dea703b0e70ac19c6ec6",
+    "tools/inspect_pm4sand_surfaces.py": "14ad8ab3af1c010b45953f609619144f66c7a8e328356a55e03d09ad51a52e3b",
+    "tests/test_pm4sand_flow.py": "239321847b23e69ffcaf9bfeeac0e4c79c2ccc268400b04a9dfb1c0e0ca07624",
+    "tests/test_pm4sand_surfaces.py": "7db4a97424ddca127686b5a8d3ef1c7395f2fe9f6421dbca64102d6be3d6250a"
+  },
+  "artifacts": {
+    "tests.txt": "204c96e4f5e25b94a60074f34dec5a552779c708549e3f76a0437971f5668474",
+    "terracotta.json": "edca5863d4a7b04b923bca109c313f5173c259c22d8b949ab3392998d1fc0536"
+  },
+  "checks": {
+    "test_groups": 34,
+    "passed": 34,
+    "skipped": 0,
+    "native_builds": 0,
+    "pm4_flow_native_or_wasm_execution": false,
+    "command": "ATLAS_RESEARCH_SOLVER=/path/to/atlas_research_solver ATLAS_RECORDED_SOLVER=/path/to/atlas_solver python3 -m unittest tests.test_initialization tests.test_pm4sand_surfaces tests.test_pm4sand_flow tests.test_terracotta.TerracottaRepresentationTests tests.test_experiment_replay -v"
+  },
+  "runtime": {
+    "python": "3.14.7",
+    "research_binary_sha256": "e38efd636f2db0885d818cd9999ce82d6f924caa3832b21a09d714b47e654c12",
+    "generated_research_catalogue_sha256": "fb1c40d2f11abf1f196720f9b9bb35e01ef1e8de43b4d5cde0fc33ecce0f6686",
+    "model_matches_retained_generated_catalogue": true
+  },
+  "review": {
+    "kind": "bounded AI technical review, not independent scientific review",
+    "findings_resolved": [
+      "Enforce model initial_checks in addition to domain admission.",
+      "Exact-byte input provenance and explicit all-parameter/input mapping."
+    ],
+    "unresolved": [
+      "Complete Terracotta journal reconciliation and independent creep reference.",
+      "PM4Sand3D full dilatancy/history/update/initialization inventory and source algorithm ambiguities.",
+      "Generic browser/native initialization recipe execution."
+    ]
+  }
+}

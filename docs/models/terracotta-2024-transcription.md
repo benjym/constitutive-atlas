@@ -73,3 +73,7 @@ python tools/reference_terracotta.py --author-functions /path/to/Terracotta_func
 ```
 
 The source is MIT licensed by its authors; consult its [pinned license](https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/LICENSE). The generator executes only the explicitly supplied, hash-verified file. SciPy is an optional reference-generation dependency, not required for normal atlas tests or deployment. Frozen numeric outputs are committed for offline regression.
+
+## Explicit initialization preprocessing
+
+The [experimental recipe contract](../INITIALIZATION_RECIPES.md) now implements the positive stable inversion described above with explicit named parameters and total pressure/q, phi, Tm and rates. It checks model domain and initial-history guards, preserves provenance and exports arrays for the unchanged timed solver. Native one-sided rate-jump and closed-form temperature-decay checks supplement the existing histories; they do not close independent creep or full source-review gates.

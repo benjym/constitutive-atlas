@@ -1,6 +1,6 @@
 # Terracotta / Terra Cotta — near-term model target
 
-Catalogue ID: `terracotta-2024`. Status: **candidate; not executable**. Priority: near term, requested by Benjy Marks on 30 October 2026. This is a source and implementation brief, not a completed equation transcription or review.
+Catalogue ID: `terracotta-2024`. Status: **public catalogue candidate; separate restricted research draft executable**. Priority: near term, requested by Benjy Marks on 30 October 2026. This is a source and implementation brief, not a completed equation transcription or review.
 
 ## Sources and variant identity
 
@@ -8,7 +8,7 @@ Catalogue ID: `terracotta-2024`. Status: **candidate; not executable**. Priority
 - [Author implementation: MaxWiebicke/Terracotta-pq](https://github.com/MaxWiebicke/Terracotta-pq), formulated in triaxial invariants. Reference revision inspected for this brief: [`a4039d0124d8ff61e766f5201f44ddc163c4cff5`](https://github.com/MaxWiebicke/Terracotta-pq/tree/a4039d0124d8ff61e766f5201f44ddc163c4cff5).
 - [Pinned reference README](https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/README.md) documents the Python implementation and loading controls, including physical rates, creep and relaxation. [Pinned code licence](https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/LICENSE): MIT. This identifies the code terms, not the terms for any third-party experimental measurements.
 
-Use the journal paper as the formulation source and the pinned author code as reference evidence. The reference README cites an earlier manuscript, so code/paper equivalence must be checked rather than assumed. No author code has been imported or executed as part of adding this candidate.
+Use the journal paper as the formulation source and the pinned author code as reference evidence. The reference README cites an earlier manuscript, so code/paper equivalence must be checked rather than assumed. The initial candidate addition did not execute author code. Later research work executed the pinned unmodified prescribed-rate RHS for the frozen comparisons linked below; its mixed-control routine remains excluded because of a recorded discrepancy.
 
 The immediate target is the **original Figure 1 simplified triaxial-invariant clay model** (distinct from the fuller Appendix B variant in the same paper), not an unreviewed tensorial extension. The later [Hydrodynamics of Fault Gouges From Constitutive Modelling to the Physics of Friction](https://doi.org/10.1029/2024JB030822) distinguishes the original triaxial model from its tensorial generalization and derived friction law. If either later variant is admitted, give it a separate source-pinned identity and review.
 
@@ -16,7 +16,7 @@ The immediate target is the **original Figure 1 simplified triaxial-invariant cl
 
 The published model is rate dependent and uses a mesoscopic-temperature internal variable. It provides a concrete test of physical-time semantics that the existing rate-independent soil implementations do not exercise. The legacy v0.1 engine's integration path fraction is not physical elapsed time. The separate experimental v0.2 ODE update adds a physical clock, but admitting this candidate still requires its source equations, observables and controls.
 
-The [author-source audit](terracotta-2024-source-audit.md) records inspected file hashes, core state/output requirements and unresolved reference-code discrepancies. The [experimental ODE engine](../TIME_ODE_API.md) now provides time-aware material updates, with [algebraic observables and timed mixed component controls](../TIMED_SCHEDULES.md) verified on synthetic laws. Terracotta-specific signed invariant kinematics, source reconciliation and author-case comparisons remain outstanding.
+The [author-source audit](terracotta-2024-source-audit.md) records inspected file hashes, core state/output requirements and unresolved reference-code discrepancies. The [experimental ODE engine](../TIME_ODE_API.md) now provides time-aware material updates, with [algebraic observables and timed mixed component controls](../TIMED_SCHEDULES.md) verified on synthetic laws. The separate research draft now implements signed invariant kinematics and five author-RHS comparisons. Complete journal reconciliation, independent creep/mixed-control evidence and experimental matching remain outstanding.
 
 ## Extraction and representation work
 
@@ -41,8 +41,10 @@ Experimental comparisons require appropriate clay material/preparation data and 
 
 ## Admission decision still open
 
-Source extraction, numerical implementation, experimental matching and independent review remain outstanding. The candidate increases catalogue breadth to 21 entries while the initial executable release target remains 20. Inclusion of a restricted triaxial implementation in the initial 3D release requires an explicit scope decision or a separately reviewed tensorial formulation; it must not silently weaken the release gate.
+Complete source reconciliation, independent creep/mixed-control verification, experimental matching and scientific review remain outstanding. The original candidate addition broadened discovery coverage; the initial executable release target remains 20. Inclusion of a restricted triaxial implementation in the initial 3D release requires an explicit scope decision or a separately reviewed tensorial formulation; it must not silently weaken the release gate.
 
 ## Research implementation progress
 
 The [Figure 1 transcription dossier](terracotta-2024-transcription.md) links the separate declarative research model, source/unit mapping, five frozen author-RHS histories, native/Wasm checks and remaining admission gates. The restricted draft is executable with `build/atlas_research_solver`; it is not part of the browser executable catalogue or twenty-model 3D count.
+
+The [initialization recipe](../INITIALIZATION_RECIPES.md) now recovers the positive stable elastic state from explicit total stress, solid fraction, temperature and rate, with typed guarded algebra, model-domain checks and hash provenance. It addresses the prior fixed-default-pressure gap without inferring preparation or changing admission status.

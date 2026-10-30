@@ -1,0 +1,114 @@
+{
+  "version": "experimental-initialization-recipe-0.1",
+  "id": "terracotta-2024-fig1-total-stress-positive-root",
+  "model": "terracotta-2024-fig1",
+  "model_sha256": "001852244901b4b51e9ea9e42144b9b621557194649afc2c317d866fe5595614",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1016/j.jmps.2024.105789",
+      "locator": "Figure1; Eqs23\u201324,29\u201331,37\u201338; positive stable branch is Atlas algebraic initialization choice"
+    },
+    {
+      "url": "https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/images/theModel.png",
+      "locator": "Pinned author equation summary; Figure1 elastic/viscous/mesoscopic stresses"
+    }
+  ],
+  "inputs": {
+    "pInput": {
+      "shape": "scalar",
+      "unit": "Pa"
+    },
+    "qInput": {
+      "shape": "scalar",
+      "unit": "Pa"
+    },
+    "phiInput": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "TmInput": {
+      "shape": "scalar",
+      "unit": "K"
+    },
+    "DvInput": {
+      "shape": "scalar",
+      "unit": {
+        "si": [
+          0,
+          0,
+          -1,
+          0
+        ]
+      }
+    },
+    "DsInput": {
+      "shape": "scalar",
+      "unit": {
+        "si": [
+          0,
+          0,
+          -1,
+          0
+        ]
+      }
+    }
+  },
+  "terms": [
+    {
+      "name": "pElastic",
+      "shape": "scalar",
+      "unit": "Pa",
+      "expr": "pInput-2*alpha/Gamma*TmInput*DvInput-TmInput**2/Gamma",
+      "locator": "Figure 1 / Eqs29\u201331,37\u201338, rearranged",
+      "requires": [
+        "phiInput > 0",
+        "phiInput <= 1",
+        "TmInput >= 0 * TmInput"
+      ]
+    },
+    {
+      "name": "qElastic",
+      "shape": "scalar",
+      "unit": "Pa",
+      "expr": "qInput-2*gamma/Gamma*TmInput*DsInput",
+      "locator": "Figure 1 / Eqs29\u201331,38, rearranged",
+      "requires": [
+        "pElastic > 0 * pInput"
+      ]
+    },
+    {
+      "name": "discriminant",
+      "shape": "scalar",
+      "unit": "1",
+      "expr": "1-Kmod/(3*Gmod)*(qElastic/pElastic)**2",
+      "locator": "Project algebraic inversion of Eqs23\u201324; dimensionless stable-branch discriminant"
+    },
+    {
+      "name": "evInitial",
+      "shape": "scalar",
+      "unit": "1",
+      "expr": "sqrt(pElastic/(Kmod*phiInput**6)*(1+sqrt(discriminant)))",
+      "locator": "Project positive stable root of elastic Eqs23\u201324",
+      "requires": [
+        "discriminant >= 0"
+      ]
+    },
+    {
+      "name": "esInitial",
+      "shape": "scalar",
+      "unit": "1",
+      "expr": "qElastic/(3*Gmod*phiInput**6*evInitial)",
+      "locator": "Eq24, rearranged",
+      "requires": [
+        "evInitial > 0"
+      ]
+    }
+  ],
+  "state": {
+    "ev_e": "evInitial",
+    "es_e": "esInitial",
+    "Tm": "TmInput",
+    "phi": "phiInput"
+  },
+  "initial_strain_rate": "sym(DvInput/3+DsInput, DvInput/3-DsInput/2, DvInput/3-DsInput/2, 0*DvInput, 0*DvInput, 0*DvInput)"
+}
