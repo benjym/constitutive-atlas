@@ -13,9 +13,9 @@ struct LinearizedAdvance {
     std::string message;
 };
 
-inline LinearizedAdvance linearize_update(int model,const State& parent,const Sym<double>& increment,const State& parameters){
+inline LinearizedAdvance linearize_update(int model,const State& parent,const Sym<double>& increment,const State& parameters,const IntegrationSettings&settings={}){
     LinearizedAdvance result;
-    result.advance=integrate(model,parent,increment,parameters);
+    result.advance=integrate(model,parent,increment,parameters,settings);
     if(!result.advance.ok){result.message="material update failed; no tangent";return result;}
     const auto scales=model_scales(model,parameters);const int n=int(parent.size());
     constexpr int controls=max_state;
@@ -40,7 +40,7 @@ inline LinearizedAdvance linearize_update(int model,const State& parent,const Sy
             State old(n),endpoint;for(int i=0;i<n;++i)old[i]=previous[i].v;
             Sym<double> step;for(int j=0;j<6;++j)step.v[j]=de.v[j].v;
             Diagnostics replay;
-            if(!implicit_step(model,old,step,parameters,endpoint,replay)){
+            if(!implicit_step(model,old,step,parameters,endpoint,replay,settings)){
                 result.message="accepted residual step could not be replayed";return result;
             }
             std::vector<Jet> unknown(n),residual;

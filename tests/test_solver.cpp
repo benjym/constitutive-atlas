@@ -51,6 +51,28 @@ int main(){
         require(std::abs(corrected.state[10]-analytical)<1e-9,"crossing history inaccurate");
         double fraction=0;for(double f:corrected.diagnostics.increment_fractions)fraction+=f;
         require(fraction==1&&corrected.diagnostics.increment_fractions.size()==size_t(corrected.diagnostics.substeps),"crossing increment trace incomplete");
-        std::cout<<"AD Jacobians and fixed-frame rotation covariance passed for all executable models\n";
+        // Settings are validated by the C++ entry point too, independently of
+        // the CSV API. Failures retain the complete supplied parent.
+        atlas::IntegrationSettings settings;
+        settings.residual_tolerance=std::numeric_limits<double>::quiet_NaN();
+        auto invalid=atlas::integrate(igs,z,de,p,settings);
+        require(!invalid.ok&&invalid.state==z&&invalid.diagnostics.iterations==0&&invalid.diagnostics.substeps==0,"invalid settings advanced state");
+        settings={};settings.max_substeps=1;
+        auto one=atlas::integrate(igs,z,atlas::Sym<double>{},p,settings);
+        require(!one.ok&&one.state==z&&one.diagnostics.substeps==0,"midpoint pair exceeded one-step budget");
+        require(one.settings.max_substeps==1,"failed update lost requested settings");
+        settings.max_substeps=2;
+        auto two_budget=atlas::integrate(igs,z,atlas::Sym<double>{},p,settings);
+        require(two_budget.ok&&two_budget.diagnostics.substeps==2,"exact midpoint pair budget rejected");
+        settings.max_substeps=3;
+        auto late=atlas::integrate(igs,z,de,p,settings);
+        require(!late.ok&&late.state==z&&late.diagnostics.substeps==2,"odd budget lost late rollback or exceeded cap");
+        settings={};settings.max_depth=0;
+        auto shallow=atlas::integrate(igs,z,de,p,settings);
+        require(!shallow.ok&&shallow.state==z&&shallow.diagnostics.substeps==0,"depth limit did not stop crossing refinement");
+        settings={};settings.max_substeps=1;
+        auto limited_run=atlas::run_protocol(igs,atlas::initial_state(igs),p,0,1e-5,1,0,settings);
+        require(!limited_run.ok&&limited_run.points.size()==1&&limited_run.settings.max_substeps==1,"protocol failed to propagate material settings");
+        std::cout<<"AD Jacobians, fixed-frame rotation covariance and integration-settings checks passed\n";
     }catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}
 }

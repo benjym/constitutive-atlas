@@ -49,3 +49,5 @@ python3 -m unittest tests.test_linearization_api tests.test_update_tangent tests
 ```
 
 Two small standalone C++20 `-O0` builds and separate captures completed normally. The final capture bounds each invocation to 45 seconds. No full native suite, external reference build, CI run or Wasm build was performed for this change. `ATLAS_EXPORT` supplies the existing Emscripten keepalive annotation for a future rebuild; source annotation alone does not establish export/runtime parity. Browser integration and native/Wasm matrix comparisons remain open under NUM-01/02.
+
+The subsequent [incremental settings API](INCREMENTAL_SETTINGS.md) adds `atlas_linearize_with_settings` and the opt-in `--integration-settings` option. It records numerical choices and uses the same settings for update and tangent replay; calls without that option retain the response contract above.

@@ -69,3 +69,5 @@ python3 tools/verify_update_tangent.py verify /private/tmp/atlas-update-tangent-
 Preparation and verification do not invoke native code. The C++ header was the initial API surface; [native C ABI/CLI access](UPDATE_LINEARIZATION_API.md) is now separately verified. Website access, native/Wasm parity, physical-time updates, broader branch-boundary policy, rotated tangent tests, independent directional perturbations at multiple step sizes, ill-conditioning diagnostics, highest-capacity cases and full numerical regression gates remain open. NUM-01/02 are not complete.
 
 A subsequent [directional-refinement and rotation investigation](TANGENT_GEOMETRY.md) covers one arbitrary direction at three step sizes and six same-partition rotations. It retains one coarse finite-difference discrepancy and a changed-partition IGS rotation explicitly; broader geometry/regression gates remain open.
+
+[Incremental settings](INCREMENTAL_SETTINGS.md) can now be supplied as an optional final C++ argument. Implicit replay uses those same settings; accepted partition and branch semantics are unchanged.

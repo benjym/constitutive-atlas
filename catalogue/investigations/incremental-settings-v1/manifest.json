@@ -1,0 +1,162 @@
+{
+  "status": "passed",
+  "cases": 30,
+  "invalid_requests": 14,
+  "bounded_rollback_cases": 5,
+  "rate_errors": [
+    6.130220242739348e-05,
+    3.7642782991786916e-06,
+    2.3423440670411466e-07
+  ],
+  "implicit_root_errors": [
+    5.413427527312109e-05,
+    3.571785089917512e-10,
+    0.0
+  ],
+  "refinement": [
+    {
+      "name": "rate-0.0001",
+      "substeps": 32,
+      "coordinate_error": 6.130220242739348e-05
+    },
+    {
+      "name": "rate-1e-06",
+      "substeps": 128,
+      "coordinate_error": 3.7642782991786916e-06
+    },
+    {
+      "name": "rate-1e-08",
+      "substeps": 512,
+      "coordinate_error": 2.3423440670411466e-07
+    },
+    {
+      "name": "implicit-0.0001",
+      "substeps": 2,
+      "root_error": 5.413427527312109e-05,
+      "tangent_error": 0.0004583157456723441
+    },
+    {
+      "name": "implicit-2e-10",
+      "substeps": 2,
+      "root_error": 3.571785089917512e-10,
+      "tangent_error": 3.024787531558104e-09
+    },
+    {
+      "name": "implicit-1e-12",
+      "substeps": 2,
+      "root_error": 0.0,
+      "tangent_error": 8.881784197001252e-16
+    },
+    {
+      "name": "implicit-budget-two",
+      "substeps": 2,
+      "root_error": 3.571785089917512e-10,
+      "tangent_error": 3.024787531558104e-09
+    },
+    {
+      "name": "no-backtracks",
+      "substeps": 2,
+      "root_error": 3.571785089917512e-10,
+      "tangent_error": 3.024787531558104e-09
+    }
+  ],
+  "raw_sha256": "7bf0eea582efb6ef5fd7aa41cc92ab3ba6381f8fe1a7e774c87fd3a1e8cadd25",
+  "sha256": {
+    "tools/verify_integration_settings.py": "b7db696ea34df5accce3c30f0ed46d9b1081e02f2a5e5dc0aaae3930afd7bf76",
+    "cpp/main.cpp": "320c1138036642d9123951c2e24dcb22f817b645330aa81a1f43761cb06cb963",
+    "cpp/include/atlas/settings.hpp": "3eb1171ae1ef17440b19e8becfc8e9bf92335519a88da8f1e9be407d3488662b",
+    "cpp/include/atlas/solver.hpp": "7842240f542949a1ba547f4a2fea44e4ef1fadf50b35a18fd86f8fe4327164d5",
+    "cpp/include/atlas/linearize.hpp": "40f8ed4bc722636c3ce0573af150dcbe6afe59618e0dad1542aa9a2b9e7b4319",
+    "atlas/compiler.py": "9998949ba1cb2c719333770a5bffe6f1d4951b2728caac78195d6f7bb23b0895",
+    "models/drucker-prager.json": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+    "models/hypoplastic-sand-igs97.json": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+    "models/hypoplastic-sand-vw96.json": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+    "models/linear-elastic.json": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+    "models/modified-cam-clay.json": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+    "models/research/sanisand-2004-parent-reset-be.json": "47b94747bfa7dd8f53330d99276d0cef52f9ca54fdf928103a98118a66195a98",
+    "tests/fixtures/time/parent-reset-cutback.json": "e25e2da6c1a174ee3d9c07295e34ef596370facd3f5a51d79773a44b7edb785e",
+    "tests/fixtures/linearization/reset.json": "485088390fc14862eaa70e4327fc38b28b762956cb752419312923d5637e1a7f",
+    "tests/fixtures/linearization/implicit.json": "e0493b7ce35b07063050555add2cc325584f8b8a7805baa9eab3820c61896b02",
+    "tests/fixtures/linearization/singular.json": "b0b422722e3a7e9505681087e0cc31252b48344340ef80504dc496b5cc7440b3",
+    "tests/test_integration_settings.py": "d8378c49866d81c9c69e662f699a1211395fe7f592cd14294837d4f8317c2838",
+    "tests/test_solver.cpp": "ac0bef4fb8926e0e6c17e96dae0ac527f7f5c6e04766b25a1c897b25de3791eb",
+    "atlas/dsl.py": "5bdb057a0c6be9f47315aa56cf4607a97b4c0eb5088f710f49121e50d4df5060",
+    "atlas/model.py": "709fd988b95ead1f343fdef1608865927bc85d7bf218d062ff5139aab83099c0"
+  },
+  "kind": "incremental-integration-settings-investigation",
+  "date": "2026-10-31",
+  "source_revision": "08ea172",
+  "raw_file": "responses.json.gz",
+  "default_api_file": "default-api.json.gz",
+  "default_api_cases": 21,
+  "default_responses_identical_to": "catalogue/investigations/linearization-api-v1/responses.json.gz",
+  "compiler": {
+    "argv": [
+      "c++",
+      "-std=c++20",
+      "-O0",
+      "-I/Users/bmar5496/code/constitutive-atlas/cpp/include",
+      "-I/private/tmp/atlas-linearization-api-reproduce/generated",
+      "/Users/bmar5496/code/constitutive-atlas/cpp/main.cpp",
+      "-o",
+      "/private/tmp/atlas-settings-solver"
+    ],
+    "exit_code": 0,
+    "wall_seconds": 0.632022292,
+    "executable_sha256": "df25e1ee1edcdc3b70a137a6095fab5fa48a2feb018fce48b543ec8fb7459f61",
+    "generated_header_sha256": "328a128145f7b557af5b892648ac36c290b5247c2571110fa6612331ee5bdcce"
+  },
+  "capture": {
+    "exit_code": 0,
+    "cases": 30,
+    "timeout_seconds_per_case": 45,
+    "wall_seconds": 0.969956084
+  },
+  "default_capture": {
+    "exit_code": 0,
+    "cases": 21,
+    "wall_seconds": 0.297240291
+  },
+  "native_numerical_tests": {
+    "source": "tests/test_solver.cpp",
+    "compile_exit_code": 0,
+    "compile_wall_seconds": 0.431483542,
+    "run_exit_code": 0,
+    "run_wall_seconds": 0.418367792,
+    "output": "AD Jacobians, fixed-frame rotation covariance and integration-settings checks passed",
+    "executable_sha256": "677ee1c31ea229d8d1a146ede7fb89d82eab7892659fa8afe4bbc64b66d501a6",
+    "generated_header_sha256": "d5381b70319eecca056f8374f948b40b6dcd2bc1eff854c9188761a5b87b0919",
+    "compile_argv": [
+      "c++",
+      "-std=c++20",
+      "-O0",
+      "-I/Users/bmar5496/code/constitutive-atlas/cpp/include",
+      "-I/private/tmp/atlas-settings-public/generated",
+      "/Users/bmar5496/code/constitutive-atlas/tests/test_solver.cpp",
+      "-o",
+      "/private/tmp/atlas-settings-public/numerical-tests"
+    ]
+  },
+  "python_checks": {
+    "tests": 33,
+    "exit_code": 0,
+    "command": "python3 -m unittest tests.test_integration_settings tests.test_tangent_geometry tests.test_linearization_api tests.test_update_tangent tests.test_atlas.LanguageTests tests.test_parent_reset.ParentResetLanguageTests -q"
+  },
+  "build_scope": {
+    "api_compilations": 3,
+    "native_test_compilations": 1,
+    "mode": "standalone C++20 -O0; all exited normally; no CMake/full build"
+  },
+  "exported_symbols": [
+    "_atlas_integrate_with_settings",
+    "_atlas_linearize_with_settings",
+    "_atlas_run_with_settings"
+  ],
+  "limitations": [
+    "Incremental settings only; physical-time/schedule settings remain separate.",
+    "Outer mixed-control tolerances and iteration limits remain fixed.",
+    "Componentwise norm unchanged; no rotation-invariant adaptation claim.",
+    "No Wasm/browser test or full CTest run; model schemas and defaults unchanged except strict enforcement of nominal accepted-step budget."
+  ],
+  "default_raw_sha256": "572c7e38631e3cc4ec6e3c4b6dd32f49b1983c92b46d995d4954ffabb108198c"
+}
