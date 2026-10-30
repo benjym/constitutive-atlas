@@ -1,6 +1,6 @@
 # Physical-time ODE support — experimental v0.2 subset
 
-The shared engine now implements the first part of [the temporal design](TEMPORAL_INTEGRATION.md). A separate [experimental timed driver](TIMED_SCHEDULES.md) now adds ordered mixed controls and algebraic outputs; Terracotta is not yet executable.
+The shared engine now implements the first part of [the temporal design](TEMPORAL_INTEGRATION.md). A separate [experimental timed driver](TIMED_SCHEDULES.md) now adds ordered mixed controls and algebraic outputs; Terracotta now has a [separate axisymmetric research draft](models/terracotta-2024-transcription.md), outside the public browser executable catalogue.
 
 ## Accepted model contract
 
@@ -8,7 +8,7 @@ Use [model-v0.2.schema.json](../schemas/model-v0.2.schema.json), plus `atlas.mod
 
 A v0.2 model declares `formulation: {"time_dependence": "physical_time", "equation_form": "ode"}`. It supplies one `equations` expression per persistent state, with **state units per second**. The expression inputs are current state, parameters, `time` in seconds, and `strain_rate` as a symmetric Mandel tensor in 1/s. Previous-state symbols, `de`, `dt`, incremental multipliers and transient state are rejected. There is no algebraic-constraint or physical-time-residual support in this subset.
 
-State need not start with stress. The generic timed update supports scalar/tensor states up to 24 components. This removes the stress-first restriction for physical ODEs; optional algebraic `observables` now represent stress separately from state. The original Terracotta invariant/capability contract and browser integration remain outstanding.
+State need not start with stress. The generic timed update supports scalar/tensor states up to 24 components. This removes the stress-first restriction for physical ODEs; optional algebraic `observables` now represent stress separately from state. The restricted `axisymmetric_x` kinematic contract now supports the Terracotta research draft; full journal/source reconciliation and browser integration remain outstanding.
 
 Units are `1`, `Pa`, `s`, `K`, or `{"si": [mass, length, time, temperature]}`. Exponents may be numbers or exact rational strings such as `"1/3"`; absolute magnitude is at most 16 and reduced denominator at most 16. Values are in SI; no automatic kPa or other prefix conversion occurs. For example, Pa·s is `{"si": [1,-1,-1,0]}`, 1/s is `[0,0,-1,0]` inside the same object, and K²/Pa is `[-1,1,2,2]`. Temperature units do not assert that a mesoscopic state has the physical meaning of ordinary thermodynamic temperature.
 

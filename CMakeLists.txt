@@ -54,3 +54,22 @@ else()
   target_include_directories(atlas_time_tests PRIVATE cpp/include "${CMAKE_BINARY_DIR}/time-generated")
   add_test(NAME atlas_time COMMAND atlas_time_tests)
 endif()
+
+# Source-pinned research drafts stay separate from both admitted browser models
+# and synthetic verification fixtures. They use exactly the same compiler/engine.
+file(GLOB RESEARCH_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research/*.json")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/research-generated/models.hpp"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/research-generated" "${CMAKE_SOURCE_DIR}/models/research"
+  DEPENDS ${RESEARCH_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model-v0.2.schema.json
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_custom_target(atlas_research_models DEPENDS "${CMAKE_BINARY_DIR}/research-generated/models.hpp")
+add_executable(atlas_research_solver cpp/main.cpp)
+add_dependencies(atlas_research_solver atlas_research_models)
+target_include_directories(atlas_research_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/research-generated")
+if(EMSCRIPTEN)
+  set_target_properties(atlas_research_solver PROPERTIES OUTPUT_NAME "research" SUFFIX ".js")
+  target_link_options(atlas_research_solver PRIVATE ${ATLAS_WASM_OPTIONS})
+else()
+  set_property(TEST atlas_python APPEND PROPERTY ENVIRONMENT "ATLAS_RESEARCH_SOLVER=$<TARGET_FILE:atlas_research_solver>")
+endif()

@@ -42,3 +42,7 @@ Experimental comparisons require appropriate clay material/preparation data and 
 ## Admission decision still open
 
 Source extraction, numerical implementation, experimental matching and independent review remain outstanding. The candidate increases catalogue breadth to 21 entries while the initial executable release target remains 20. Inclusion of a restricted triaxial implementation in the initial 3D release requires an explicit scope decision or a separately reviewed tensorial formulation; it must not silently weaken the release gate.
+
+## Research implementation progress
+
+The [Figure 1 transcription dossier](terracotta-2024-transcription.md) links the separate declarative research model, source/unit mapping, five frozen author-RHS histories, native/Wasm checks and remaining admission gates. The restricted draft is executable with `build/atlas_research_solver`; it is not part of the browser executable catalogue or twenty-model 3D count.

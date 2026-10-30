@@ -10,6 +10,9 @@ const hold=(stress=false)=>[+stress,0,0], rate=(value,stress=false)=>[+stress,1,
 const allHold=(stress=false)=>Array.from({length:6},()=>hold(stress));
 const segment=(duration,controls)=>[duration,4,...controls.flat()];
 const tests=[
+ {id:'test-maxwell-axisymmetric',names:'creep',rows:[segment(4,[hold(true),hold(true),hold(true),hold(),hold(),hold()])],check(d){
+   const p=d.points.at(-1);assert.ok(Math.abs(p.strain[0]-40000/(2*12e6*2)*4)<1e-12);assert.equal(p.strain[1],p.strain[2]);
+ }},
  {id:'test-maxwell',names:'creep',rows:[segment(4,allHold(true))],check(d){
    const p=d.points.at(-1);assert.equal(p.time,4);assert.ok(Math.abs(p.strain[0]-40000/(2*12e6*2)*4)<1e-12);
    assert.ok(Math.abs(p.observables[0]-140000)<1e-5);assert.deepEqual(d.points[1].strain_rate,Array(6).fill(null));

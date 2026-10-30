@@ -1,4 +1,5 @@
 #pragma once
+#include <limits>
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -51,6 +52,12 @@ inline Jet apow(const Jet&a,const Jet&b){
 template<class T>T amin(const T&a,const T&b){return a<b?a:b;}
 template<class T>T amax(const T&a,const T&b){return a>b?a:b;}
 template<class T>struct Sym { std::array<T,6> v{}; };
+template<class T>Sym<T> make_sym(T xx,T yy,T zz,T xy,T yz,T xz){return Sym<T>{{xx,yy,zz,xy,yz,xz}};}
+template<class T>bool axisymmetric_x(const Sym<T>& a){
+    double scale=0;for(const auto& v:a.v){if(!std::isfinite(value(v)))return false;scale=std::max(scale,std::abs(value(v)));}
+    const double tol=64*std::numeric_limits<double>::epsilon()*scale;
+    return std::abs(value(a.v[1])-value(a.v[2]))<=tol&&std::abs(value(a.v[3]))<=tol&&std::abs(value(a.v[4]))<=tol&&std::abs(value(a.v[5]))<=tol;
+}
 template<class T>Sym<T> identity(){Sym<T> s;s.v[0]=s.v[1]=s.v[2]=T(1);return s;}
 template<class T>Sym<T> operator+(const Sym<T>&a,const Sym<T>&b){Sym<T> c;for(int i=0;i<6;++i)c.v[i]=a.v[i]+b.v[i];return c;}
 template<class T>Sym<T> operator-(const Sym<T>&a,const Sym<T>&b){Sym<T> c;for(int i=0;i<6;++i)c.v[i]=a.v[i]-b.v[i];return c;}

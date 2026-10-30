@@ -13,7 +13,7 @@ def generate(destination, model_paths=None):
            'struct Field { std::string name; int offset; int size; double initial[6]; bool transient; bool multiplier; };',
            'struct Parameter { std::string name; double value, lower, upper; };',
            'struct Observable { std::string name; int offset, size; };',
-           'struct Model { std::string id, name; bool rate; bool physical_time; std::vector<Field> fields; std::vector<Parameter> parameters; std::vector<Observable> observables; int stress_offset; };',
+           'struct Model { std::string id, name; bool rate; bool physical_time; std::vector<Field> fields; std::vector<Parameter> parameters; std::vector<Observable> observables; int stress_offset; bool axisymmetric; };',
            'inline const std::vector<Model>& models() { static const std::vector<Model> data = {']
     canonical=[]
     for m in models:
@@ -30,7 +30,7 @@ def generate(destination, model_paths=None):
             observables.append('{'+json.dumps(obs['name'])+f',{obs_offset},{size}'+'}')
             if obs['name']=='stress':stress_offset=obs_offset
             obs_offset+=size
-        lines.append('{'+json.dumps(m['id'])+','+json.dumps(m['name'])+','+str(physical_time(m) or m['integration']=='rate').lower()+','+str(physical_time(m)).lower()+',{'+','.join(fields)+'},{'+','.join(params)+'},{'+','.join(observables)+'},'+str(stress_offset)+'},')
+        lines.append('{'+json.dumps(m['id'])+','+json.dumps(m['name'])+','+str(physical_time(m) or m['integration']=='rate').lower()+','+str(physical_time(m)).lower()+',{'+','.join(fields)+'},{'+','.join(params)+'},{'+','.join(observables)+'},'+str(stress_offset)+','+str(m.get('formulation',{}).get('kinematics')=='axisymmetric_x').lower()+'},')
         canonical.append(m)
     lines+=['}; return data; }', 'template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {', 'const auto I = identity<T>();', '(void)evaluation_time;', 'switch(model) {']
     obs_scales=['inline std::vector<double> model_observable_scales(int model,const std::vector<double>& params) { using T=double; switch(model) {']
@@ -41,6 +41,8 @@ def generate(destination, model_paths=None):
             lines += ['if (!std::isfinite(evaluation_time)) return false;', 'const T time=T(evaluation_time);', 'const auto& strain_rate=loading;']
         else:
             lines.append('const auto& de=loading;')
+        if m.get('formulation',{}).get('kinematics')=='axisymmetric_x':
+            lines.append('if (!axisymmetric_x(loading)) return false;')
         for j,name in enumerate(m['parameters']):
             decl=f'const T {name} = T(params.at({j}));'
             lines.append(decl); scales.append(decl); obs_scales.append(decl)
@@ -64,6 +66,9 @@ def generate(destination, model_paths=None):
             expr=cpp(parse(f['expr']));size=6 if f['shape']=='sym' else 1
             lines.append(f'put_tensor(out,{obs_offset},{expr});' if size==6 else f'out[{obs_offset}]={expr};')
             obs_scale.extend([cpp(parse(f['scale']))]*size);obs_offset+=size
+        stress_offset=next((sum(6 if f['shape']=='sym' else 1 for f in observables[:i]) for i,f in enumerate(observables) if f['name']=='stress'),-1)
+        if m.get('formulation',{}).get('kinematics')=='axisymmetric_x' and stress_offset>=0:
+            lines.append(f'if (!axisymmetric_x(tensor_from(out,{stress_offset}))) return false;')
         lines += ['return true;','}']
         obs_scales += ['return {'+','.join(obs_scale)+'};','}']
         lines.append(f'out.resize({offset});')

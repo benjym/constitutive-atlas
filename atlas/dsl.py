@@ -91,7 +91,7 @@ def cube_trace(a):
     return x**3 + y**3 + z**3 + 3*((x+y)*xy**2+(y+z)*yz**2+(x+z)*xz**2) + 6*xy*yz*xz
 
 
-FUNCTIONS = {"sqrt": math.sqrt, "exp": math.exp, "log": math.log,
+FUNCTIONS = {"sym": lambda *values: Sym(tuple(values)), "sqrt": math.sqrt, "exp": math.exp, "log": math.log,
              "sin": math.sin, "cos": math.cos, "abs": abs,
              "min": min, "max": max, "trace": trace, "dev": dev,
              "dot": dot, "norm": lambda a: math.sqrt(dot(a, a)),
@@ -167,6 +167,10 @@ def infer(node, symbols):
             if args[0] != Type("bool") or args[1] != args[2]:
                 raise ValidationError("select requires condition and equally typed branches")
             return args[1]
+        if name == "sym":
+            if len(args)!=6 or any(a.shape!="scalar" or a!=args[0] for a in args):
+                raise ValidationError("sym requires six equally dimensioned scalars in Mandel order")
+            return Type("sym",args[0].dim)
         arity = 2 if name in ("dot", "min", "max") else 1
         if name not in FUNCTIONS or len(args) != arity:
             raise ValidationError(f"unsupported function or arity: {name}")
@@ -232,6 +236,6 @@ def cpp(node):
     if isinstance(node,ast.Call):
         name=node.func.id
         if name=='select': return f"({cpp(node.args[0])} ? {cpp(node.args[1])} : {cpp(node.args[2])})"
-        name={'min':'amin','max':'amax','sqrt':'asqrt','exp':'aexp','log':'alog','sin':'asin','cos':'acos','abs':'aabs'}.get(name,name)
+        name={'sym':'make_sym','min':'amin','max':'amax','sqrt':'asqrt','exp':'aexp','log':'alog','sin':'asin','cos':'acos','abs':'aabs'}.get(name,name)
         return f"{name}({', '.join(cpp(a) for a in node.args)})"
     raise ValidationError("invalid AST")

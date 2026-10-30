@@ -12,7 +12,7 @@ RESERVED = {"I", "de", "dt", "time", "time_n", "strain_rate", "loading", "evalua
             "double", "auto", "if", "else", "return", "const", "class", "struct", "template",
             "int", "float", "void", "bool", "new", "delete", "switch", "case", "default",
             "for", "while", "do", "break", "continue", "throw", "try", "catch", "namespace",
-            "using", "typename", "static", "virtual", "public", "private", "protected"}
+            "make_sym", "axisymmetric_x", "using", "typename", "static", "virtual", "public", "private", "protected"}
 
 
 def reject_duplicate_keys(pairs):
@@ -88,11 +88,11 @@ def validate(model):
         else: initial=[initial]
         if any(type(v) not in (float,int) or not math.isfinite(v) for v in initial): raise ValidationError('nonfinite initial value')
         scale=parse(field['scale'])
-        if infer(scale,symbols)!=Type(dim=typ.dim): raise ValidationError(f'{name}: scale must have matching units')
-        if any(n.id not in model['parameters'] for n in __import__('ast').walk(scale) if isinstance(n,__import__('ast').Name)):
-            raise ValidationError('state scales may reference parameters only')
+        param_symbols={key:field_type(value) for key,value in model['parameters'].items()}
+        if infer(scale,param_symbols)!=Type(dim=typ.dim): raise ValidationError(f'{name}: scale must have matching units and reference parameters only')
         env={k:v['default'] for k,v in model['parameters'].items()}
-        if not evaluate(scale,env)>0: raise ValidationError('state scale must be positive')
+        scale_value=evaluate(scale,env)
+        if not math.isfinite(scale_value) or scale_value<=0: raise ValidationError('state scale must be finite and positive')
         count+=6 if typ.shape=='sym' else 1
         if physical and (field.get('transient') or field.get('multiplier')):
             raise ValidationError('physical-time ODE state must be persistent; incremental multipliers are unsupported')
@@ -121,7 +121,8 @@ def validate(model):
             raise ValidationError('stress observable must be a symmetric tensor in Pa')
         scale=parse(field['scale'])
         param_symbols={name:field_type(value) for name,value in model['parameters'].items()}
-        if infer(scale,param_symbols)!=Type(dim=typ.dim) or not evaluate(scale,defaults(model))>0:
+        scale_value=evaluate(scale,defaults(model)) if infer(scale,param_symbols)==Type(dim=typ.dim) else float('nan')
+        if not math.isfinite(scale_value) or scale_value<=0:
             raise ValidationError('observable scale must be positive, parameter-only, and have matching units')
         # Output names do not enter the equation/derived namespace.
         if not IDENT.fullmatch(field['name']) or field['name'] in RESERVED or field['name'].endswith('_n') or field['name'] in names:
@@ -134,9 +135,17 @@ def defaults(model):
     return {name: p['default'] for name,p in model['parameters'].items()}
 
 
+def axisymmetric_x(values):
+    if len(values)!=6 or any(not math.isfinite(v) for v in values):return False
+    tolerance=64*__import__('sys').float_info.epsilon*max(map(abs,values))
+    return abs(values[1]-values[2])<=tolerance and all(abs(v)<=tolerance for v in values[3:])
+
+
 def evaluation_environment(model, state, previous, increment, parameters=None, *, time=None):
     if physical_time(model) and (type(time) not in (int,float) or not math.isfinite(time)):
         raise ValueError('physical-time evaluation requires finite stage time')
+    if model.get('formulation',{}).get('kinematics')=='axisymmetric_x' and not axisymmetric_x(increment):
+        raise ValueError('axisymmetric_x requires equal radial rates and zero shear')
     env={'I':I,'de':Sym(tuple(increment)),**defaults(model),**(parameters or {})}
     if physical_time(model): env.update(time=time, strain_rate=Sym(tuple(increment)))
     for f in model['state']:
@@ -156,7 +165,10 @@ def interpret(model, state, previous, increment, parameters=None, *, time=None):
 def observe(model,state,strain_rate,parameters=None,*,time=None):
     if not physical_time(model):raise ValidationError('observables require a physical-time ODE definition')
     env=evaluation_environment(model,state,None,strain_rate,parameters,time=time)
-    return {f['name']:evaluate(parse(f['expr']),env) for f in model.get('observables',[])}
+    outputs={f['name']:evaluate(parse(f['expr']),env) for f in model.get('observables',[])}
+    if model.get('formulation',{}).get('kinematics')=='axisymmetric_x' and 'stress' in outputs and not axisymmetric_x(outputs['stress'].v):
+        raise ValueError('axisymmetric_x stress observable is outside its declared scope')
+    return outputs
 
 
 def all_models():

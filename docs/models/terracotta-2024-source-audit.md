@@ -1,6 +1,6 @@
 # Terracotta author-source audit — 30 October 2026
 
-Status: **partial source extraction; unresolved; not independent review**. This audit records requirements for TC-01–03. It does not establish journal/code equivalence, numerical correctness or experimental validity. No author solver code has been copied into the atlas or executed for these findings.
+Status: **partial source extraction; unresolved; not independent review**. This audit records requirements for TC-01–03. It does not establish journal/code equivalence, numerical correctness or experimental validity. The initial findings used read-only inspection. The subsequent [research transcription](terracotta-2024-transcription.md) now includes hash-checked execution of the unmodified author RHS to generate frozen numerical references; no author solver source is bundled into the atlas.
 
 ## Pinned evidence
 
@@ -54,3 +54,7 @@ The [journal full text uploaded by Itai Einav](https://www.researchgate.net/publ
 - Appendix C, p. 27: the dimension table supports the time/temperature extension.
 
 These targeted text checks advance TC-01 but do not close equation extraction, parameter reconciliation, numerical reproduction or independent review.
+
+## Research transcription follow-up
+
+A [declarative Figure 1 research draft](terracotta-2024-transcription.md) now has four scalar states, algebraic outputs, explicit axisymmetric kinematics and five prescribed-rate author-RHS reference histories in native/Wasm. Its dossier records SI conversion, rounded `p1`, admissibility guards, a boundary adaptation and the precise remaining TC-A01–05 limitations. This does not close independent review, original outer-step reproduction or mixed-control/creep reference comparisons.
