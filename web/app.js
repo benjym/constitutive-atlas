@@ -3,6 +3,17 @@ const $ = id => document.getElementById(id);
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
 const experimentCache=new Map();
+let publicationModels=new Set();
+function publicationReference(id){const row=document.createElement('p');row.dataset.publicationModel=id;updatePublicationReference(row);return row;}
+function updatePublicationReference(row){
+  row.replaceChildren();if(!publicationModels.has(row.dataset.publicationModel))return;
+  const link=document.createElement('a');link.textContent='Publications, versions & lineage →';link.href='./publications.html?'+new URLSearchParams({model:row.dataset.publicationModel});row.append(link);
+}
+async function loadPublicationReferences(){
+  try{const response=await fetch('./publications.json');if(!response.ok)return;const graph=await response.json();if(graph.kind!=='publication-lineage'||graph.schema_version!=='0.1')return;
+    publicationModels=new Set(graph.publications.flatMap(node=>node.model_ids));document.querySelectorAll('[data-publication-model]').forEach(updatePublicationReference);
+  }catch{/* The separate publication page reports evidence-loading errors. */}
+}
 const protocolNames=['Oedometer','Drained triaxial','Undrained triaxial','Undrained stress control','Isotropic compression'];
 function toast(message){$('toast').textContent=message;$('toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').style.display='none',7000);}
 function route(){
@@ -89,7 +100,7 @@ function populate(){
   for(const d of m.derived)content.append(element('pre',d.name+' = '+d.expr));
   for(const [name,expression]of Object.entries(m.equations))content.append(element('pre',name+' : '+expression));
   sourceLinks(content,m.sources);
-  const sources=$('model-sources');sources.replaceChildren();sourceLinks(sources,m.sources);sources.append(definitionLink(m.id));
+  const sources=$('model-sources');sources.replaceChildren();sourceLinks(sources,m.sources);sources.append(definitionLink(m.id),publicationReference(m.id));
   currentResult=null;lastSpec=null;renderCharts();$('export-run').disabled=$('export-csv').disabled=true;syncSliders();
 }
 function valuesForState(m){
@@ -216,6 +227,7 @@ function catalogueCards(){
     if(executable){sourceLinks(card,models.find(x=>x.id===entry.id).sources);card.append(definitionLink(entry.id));}
     else if(entry.discovery_url)sourceLinks(card,[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'},...(entry.research_sources||[])]);
     sourceLinks(card,entry.catalogue_sources||[]);
+    card.append(publicationReference(entry.id));
     if(executable){const b=element('button','Explore in laboratory →','text-button');b.onclick=()=>{$('model').value=entry.id;populate();location.hash='laboratory';simulate();};card.append(b);}
     else {const p=element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.');card.append(p);}
     grid.append(card);
@@ -355,5 +367,5 @@ try{
   const [response,manifest]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json')]);if(!response.ok||!manifest.ok)throw Error('Catalogue could not be loaded.');
   const definitions=await response.json();catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
-  populate();catalogueCards();route();simulate();loadExperimentCatalogue();
+  populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadPublicationReferences();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

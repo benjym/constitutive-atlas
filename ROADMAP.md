@@ -204,6 +204,8 @@ Author-source screening on 2026-10-31 identifies a separate PM4Sand3D 1.0 releas
 - [ ] **WEB-05:** Support comparisons under identical declared conditions, while flagging incompatible materials, state assumptions or protocols. Avoid an unexplained aggregate leaderboard.
 - [ ] **WEB-06:** Check keyboard/mobile use, chart units, import compatibility, stale-asset detection, cancellation and resource limits. Verify deployment beneath the GitHub Pages project path.
 
+A standalone publication browser now exposes the canonical graph with title/author/DOI/year search, version and formulation filters, correction notices, source locators and shareable publication links. Model source panels link to bound publications. The regular Pages packaging includes these assets; local static browser checks cover the initial graph without running the solver. WEB-01/02 remain open for complete per-formulation evidence, assumptions, parameter and review pages; deployment verification of this addition is pending.
+
 **Acceptance:** a reader can travel from a plotted curve to the exact formulation, source equations, parameters, initialization, protocol and evidence used to generate it. Pages deployment continues to depend on native and Wasm checks. Website availability remains separate from scientific review status.
 
 ## 12. M7 — paper, reproducibility package and research release

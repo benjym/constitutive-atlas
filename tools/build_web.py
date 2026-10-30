@@ -8,6 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from atlas.compiler import generate
 from build_experiments import bundle
+from build_publications import bundle as bundle_publications
 
 def main():
     parser=argparse.ArgumentParser()
@@ -28,6 +29,7 @@ def main():
         shutil.copyfile(ROOT/'build-wasm'/name,dest/name)
     shutil.copyfile(generated/'models.json',dest/'models.json')
     shutil.copyfile(ROOT/'catalogue/manifest.json',dest/'catalogue.json')
+    bundle_publications(dest)
     shutil.copytree(ROOT/'schemas',dest/'schemas',dirs_exist_ok=True)
     shutil.copytree(ROOT/'models',dest/'models',dirs_exist_ok=True)
     experiment_manifest=bundle(dest/'experiments', preview=args.preview_experiments)

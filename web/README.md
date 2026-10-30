@@ -4,7 +4,7 @@ This directory contains the static material laboratory in the main GitHub reposi
 
 Run `python3 tools/build_web.py` from that workspace after native/Wasm tests. It copies this UI, the compiled engine and canonical catalogue into `dist/`. The catalogue hash in the runtime and browser metadata must agree. GitHub Actions publishes `dist/` to GitHub Pages after native and Wasm verification. All asset URLs are relative to support the `/constitutive-atlas/` project path. Source references, model JSON definitions, and schemas are bundled; raw measurements are excluded. The optional Sites publication helper also packages `dist/` using `.openai/hosting.json`.
 
-The [public GitHub Pages laboratory](https://benjym.github.io/constitutive-atlas/) is an experimental research preview. Five models are executable; the 21-entry catalogue includes research candidates. Public measurement assets are generated only for approved archive revisions, and no model is described as independently source-reviewed or experimentally validated.
+The [public GitHub Pages laboratory](https://benjym.github.io/constitutive-atlas/) is an experimental research preview. Five models are executable; the 32-entry catalogue includes research candidates. Public measurement assets are generated only for approved archive revisions, and no model is described as independently source-reviewed or experimentally validated.
 
 For Sites publication, use a separate Sites checkout and copy this directory plus the freshly generated `dist/` into it. Do not initialize another Git repository inside `web/`. The pre-migration Sites history is preserved locally in `.local/sites-source.git` at the research repository root.
 
@@ -60,3 +60,9 @@ node tools/test_experiments.mjs
 Native series use `atlas-source-columns-v1` and [the source-measurement schema](../schemas/source-measurement.schema.json), with selectable chart axes, explicit units and missing channels. Normalized overlays retain `atlas-experiment-columns-v1`. Source values are not rounded or resampled during packaging; the chart displays at most 350 measured markers while preserving every observation in the loaded record.
 
 Rebuilding originals uses `tools/ingest_public_data.py --download` with the optional `data` dependencies. DesignSafe files resolve through official public preview links; selected Castlegate mechanical files use HTTP ZIP ranges with member CRC and SHA-256 verification. Ordinary site builds use committed curated assets and make no upstream requests.
+
+## Publication evidence browser
+
+`publications.html` renders the canonical publication lineage records with search, version/formulation filters, correction notices, DOI/source hyperlinks, evidence locators and shareable anchors. Its assets are included by the existing Pages packaging. Bound model source panels link directly to the corresponding publication records; publication identity remains separate from executable model admission. All current lineage evidence awaits independent review.
+
+To review this static page without compiling or running the solver, use `python3 tools/build_publications.py --output /private/tmp/atlas-publication-preview` and serve that directory locally. This page loads no Wasm; the standalone preview does not contain the laboratory. The full website still requires its existing native/Wasm verification and packaging workflow. See [publication lineage](../docs/PUBLICATION_LINEAGE.md) for source coverage and verification limits.
