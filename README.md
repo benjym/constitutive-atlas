@@ -28,6 +28,10 @@ The authoritative definitions are in [models](models/). [JSON schemas](schemas/)
 
 ## Browser laboratory
 
+The public website is deployed to [GitHub Pages](https://benjym.github.io/constitutive-atlas/). The verification workflow builds the Emscripten engine, runs native/Wasm parity checks, and uploads only `web/dist`. Deployment from `main` waits for both native CI platforms and the Wasm job to pass; pull requests only build and test. You can also trigger it manually from Actions.
+
+Model source hyperlinks are required in each executable definition and displayed in the laboratory and catalogue. Candidate entries link to discovery references pending review. Each executable card also links to its downloadable JSON definition; the [model schema](https://benjym.github.io/constitutive-atlas/schemas/model.schema.json) is published alongside it.
+
 Requires Emscripten; tested here with 6.0.8. Use a workspace-local cache when the installed SDK directory is not writable.
 
 ```sh

@@ -27,6 +27,10 @@ def run(model, **kwargs):
 class LanguageTests(unittest.TestCase):
     def test_all_models_validate(self):
         self.assertGreaterEqual(len(all_models()),5)
+    def test_sources_require_clickable_urls(self):
+        for sources in [[],[{'url':'javascript:alert(1)','locator':'Equation 1','role':'original'}],[{'locator':'Equation 1','role':'original'}]]:
+            m=load(ROOT/'models/linear-elastic.json');m['sources']=sources
+            with self.subTest(sources=sources),self.assertRaises(ValidationError):validate(m)
     def test_injection_and_unsupported_syntax(self):
         for expression in ["__import__('os').system('true')",'sigma[0]','(lambda: 1)()', 'x.__class__','[1,2]', 'sum(x for x in y)']:
             with self.subTest(expression=expression),self.assertRaises(ValidationError): infer(parse(expression),{'x':Type()})

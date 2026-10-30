@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://geomechanics-constitutive-atlas.creamyjoy12.chatgpt.site/schemas/model.schema.json",
+  "$id": "https://benjym.github.io/constitutive-atlas/schemas/model.schema.json",
   "title": "Constitutive Atlas model v0.1",
   "description": "Structural schema; atlas.model.validate additionally enforces dimensions, tensor types and symbol resolution. JSON files are the canonical JSON-compatible subset of YAML.",
   "type": "object",
@@ -59,7 +59,9 @@
         "properties": {
           "url": {
             "type": "string",
-            "pattern": "^https?://"
+            "pattern": "^https?://",
+            "description": "Persistent clickable source URL, preferably the original publication DOI or an official author/institutional page. Retain this link in all generated catalogues and browser views.",
+            "format": "uri"
           },
           "locator": {
             "type": "string",

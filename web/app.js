@@ -5,6 +5,14 @@ function toast(message){$('toast').textContent=message;$('toast').style.display=
 function route(){const page=['laboratory','catalogue','methods'].includes(location.hash.slice(1))?location.hash.slice(1):'laboratory';document.querySelectorAll('.page').forEach(x=>x.hidden=x.id!==page);document.querySelectorAll('nav a').forEach(x=>x.classList.toggle('active',x.hash==='#'+page));$('breadcrumb').textContent={laboratory:'MATERIAL LABORATORY',catalogue:'MODEL CATALOGUE',methods:'METHODS & EVIDENCE'}[page];}
 function model(){return models.find(x=>x.id===$('model').value);}
 function element(tag,text,className){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(className)e.className=className;return e;}
+function sourceLinks(container,sources){
+  for(const source of sources){
+    const url=new URL(source.url);if(!['https:','http:'].includes(url.protocol))continue;
+    const row=element('p',undefined,'source-reference'),link=element('a',source.role+' · '+source.locator+' ↗');
+    link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';row.append(link);container.append(row);
+  }
+}
+function definitionLink(id){const link=element('a','Model definition (JSON) ↗');link.href='./models/'+encodeURIComponent(id)+'.json';link.target='_blank';link.rel='noopener';return link;}
 function field(container,name,label,value,min,max,factor=1){
   const lab=element('label');const span=element('span',label);span.title=label;lab.append(span);
   const input=document.createElement('input');input.type='number';input.id=name;input.value=value/factor;input.step='any';input.required=true;input.dataset.factor=factor;
@@ -24,7 +32,8 @@ function populate(){
   content.append(element('p','Integration: '+m.integration+'. State equations are residuals for implicit models, or increments per unit path fraction for rate models.'));
   for(const d of m.derived)content.append(element('pre',d.name+' = '+d.expr));
   for(const [name,expression]of Object.entries(m.equations))content.append(element('pre',name+' : '+expression));
-  for(const source of m.sources){const link=element('a',source.locator+' ↗');link.href=source.url;link.target='_blank';link.rel='noopener';content.append(link);}
+  sourceLinks(content,m.sources);
+  const sources=$('model-sources');sources.replaceChildren();sourceLinks(sources,m.sources);sources.append(definitionLink(m.id));
   currentResult=null;lastSpec=null;renderCharts();$('export-run').disabled=$('export-csv').disabled=true;
 }
 function valuesForState(m){
@@ -113,6 +122,8 @@ function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
   for(const entry of catalogue){const executable=models.some(x=>x.id===entry.id);if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card');card.append(element('span',executable?'Executable · '+models.find(x=>x.id===entry.id).status:'Research candidate','badge'),element('h2',entry.name),element('p',entry.family),element('p',entry.note||''));
+    if(executable){sourceLinks(card,models.find(x=>x.id===entry.id).sources);card.append(definitionLink(entry.id));}
+    else if(entry.discovery_url)sourceLinks(card,[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]);
     if(executable){const b=element('button','Explore in laboratory →','text-button');b.onclick=()=>{$('model').value=entry.id;populate();location.hash='laboratory';simulate();};card.append(b);}
     else {const p=element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.');card.append(p);}
     grid.append(card);

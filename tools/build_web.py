@@ -24,6 +24,8 @@ def main():
     shutil.copyfile(generated/'models.json',dest/'models.json')
     shutil.copyfile(ROOT/'catalogue/manifest.json',dest/'catalogue.json')
     shutil.copytree(ROOT/'schemas',dest/'schemas',dirs_exist_ok=True)
+    shutil.copytree(ROOT/'models',dest/'models',dirs_exist_ok=True)
+    (dest/'.nojekyll').touch()
     print(f'Packaged {dest}')
 
 if __name__=='__main__':main()
