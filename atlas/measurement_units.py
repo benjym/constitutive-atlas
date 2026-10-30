@@ -5,19 +5,20 @@ import math
 # SI target, scale, additive offset. Aliases are exact, reviewed source labels.
 UNITS = {}
 for aliases, target, scale, offset in [
-    (['Pa'], 'Pa', 1, 0), (['kPa', '(kPa)', '[kPa]', "s' [kPa]"], 'Pa', 1000, 0),
+    (['Pa'], 'Pa', 1, 0), (['kPa', '(kPa)', '[kPa]', "s' [kPa]", 'kN/m2'], 'Pa', 1000, 0),
     (['MPa'], 'Pa', 1e6, 0), (['%', '(%)', '[%]', 'in %'], '1', .01, 0),
     (['1', '-', '(-)', '[-]', 'unitless', 'mm/mm'], '1', 1, 0),
     (['mm', '(mm)', 'in mm'], 'm', .001, 0),
     (['mm^2'], 'm²', 1e-6, 0), (['(mm3)'], 'm³', 1e-9, 0),
-    (['cm^3'], 'm³', 1e-6, 0), (['N'], 'N', 1, 0),
+    (['cm^3', 'ml'], 'm³', 1e-6, 0), (['N'], 'N', 1, 0),
+    (['N・m', 'Nm'], 'N·m', 1, 0),
     (['kN'], 'N', 1000, 0), (['lbf'], 'N', 4.4482216152605, 0),
-    (['s', 'Sec', '(sec)'], 's', 1, 0), (['ms'], 's', .001, 0),
+    (['s', 'Sec', '(sec)', 'sec'], 's', 1, 0), (['ms'], 's', .001, 0),
     (['min'], 's', 60, 0), (['h', 'hour'], 's', 3600, 0),
-    (['%/h'], 's⁻¹', .01/3600, 0), (['degree'], 'rad', math.pi/180, 0),
+    (['%/h'], 's⁻¹', .01/3600, 0), (['degree', 'deg'], 'rad', math.pi/180, 0),
     (['\\circC'], 'K', 1, 273.15), (['kg/m3'], 'kg/m³', 1, 0),
     (['m/s', 'kT [m/s]', 'k10 [m/s]'], 'm/s', 1, 0),
-    (['V'], 'V', 1, 0), (['cycles'], 'cycles', 1, 0),
+    (['V'], 'V', 1, 0), (['cycles', '回'], 'cycles', 1, 0),
 ]:
     for alias in aliases:
         UNITS[alias] = (target, scale, offset)

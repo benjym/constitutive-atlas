@@ -27,7 +27,9 @@ class MeasurementUnitTests(unittest.TestCase):
                  ('mm', 10, .01), ('mm^2', 100, .0001),
                  ('(mm3)', 1000, 1e-6), ('cm^3', 1, 1e-6),
                  ('min', 2, 120), ('ms', 2, .002), ('h', 1, 3600),
-                 ('%/h', 3600, .01), ('mm/mm', -.02, -.02)]
+                 ('%/h', 3600, .01), ('mm/mm', -.02, -.02),
+                 ('kN/m2', -2, -2000), ('ml', 2, 2e-6),
+                 ('deg', 180, 3.141592653589793), ('N・m', -2, -2)]
         for unit, value, expected in cases:
             with self.subTest(unit=unit):
                 record = dict(kind='measurement-series', columns=[dict(key='c1', name='Signal', unit=unit)], rows=[dict(c1=value)])

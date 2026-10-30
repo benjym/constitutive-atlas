@@ -56,11 +56,14 @@ export function decodeExperiment(data){
 }
 
 export async function fetchExperiment(entry,fetcher=fetch){
-  if(!/^[A-Za-z0-9][A-Za-z0-9_-]{0,119}$/.test(entry.id)||entry.path!==entry.id+'.json'||!/^[a-f0-9]{64}$/.test(entry.sha256))throw Error('Invalid experiment catalogue entry.');
+  // Full-resolution, 24-channel torsion histories exceed 10 MiB. Keep a
+  // bounded payload while retaining every measured channel and observation.
+  const maxBytes=32*1024*1024;
+  if(!/^[A-Za-z0-9][A-Za-z0-9_-]{0,119}$/.test(entry.id)||entry.path!==entry.id+'.json'||!/^[a-f0-9]{64}$/.test(entry.sha256)||!Number.isSafeInteger(entry.size_bytes)||entry.size_bytes<=0||entry.size_bytes>maxBytes)throw Error('Invalid experiment catalogue entry.');
   const response=await fetcher('./experiments/'+entry.path);
   if(!response.ok)throw Error('Measurements could not be loaded. Please try selecting the test again.');
   const bytes=await response.arrayBuffer();
-  if(bytes.byteLength>10*1024*1024||bytes.byteLength!==entry.size_bytes)throw Error('Experiment file size does not match the catalogue.');
+  if(bytes.byteLength>maxBytes||bytes.byteLength!==entry.size_bytes)throw Error('Experiment file size does not match the catalogue.');
   const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');
   if(digest!==entry.sha256)throw Error('Experiment checksum differs from the catalogue. Reload the page.');
   const data=decodeExperiment(JSON.parse(new TextDecoder().decode(bytes)));

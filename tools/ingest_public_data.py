@@ -16,15 +16,17 @@ from pathlib import Path
 import re
 import sys
 import urllib.request
+import urllib.parse
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from atlas.public_data import json_bytes, normalize_opara
+from atlas.public_data import json_bytes, normalize_opara, load_curated
 from tools.ingest_tables import read_tables, workbook_context
 from tools.ingest_hurley import read_hurley
 from tools.ingest_castlegate import read_castlegate
 from tools.ingest_leap import read_leap
+from tools.ingest_torsion import read_torsion
 from tools.source_downloads import zip_member
 
 
@@ -178,10 +180,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--raw-dir', type=Path, default=ROOT / 'data/raw/public')
     parser.add_argument('--download', action='store_true')
+    parser.add_argument('--source', action='append', help='Rebuild only these source IDs; verify and retain other committed records')
     args = parser.parse_args()
     sources = json.loads((ROOT / 'data/public_sources.json').read_text())['sources']
-    records = []
+    selected = set(args.source or [s['id'] for s in sources])
+    if selected - {s['id'] for s in sources}:
+        parser.error('Unknown source ID')
+    records = ([r for r in load_curated(ROOT) if r['provenance']['source_id'] not in selected]
+               if args.source else [])
     for source in sources:
+        if source['id'] not in selected:
+            continue
         if args.download:
             args.raw_dir.mkdir(parents=True, exist_ok=True)
             for file in source['files']:
@@ -193,6 +202,8 @@ def main():
                     with urllib.request.urlopen(url, timeout=45) as response:
                         preview = json.loads(response.read(2_000_000))
                     url = preview['href']
+                    if urllib.parse.urlparse(url).hostname == 'view.officeapps.live.com':
+                        url = urllib.parse.parse_qs(urllib.parse.urlparse(url).query).get('src', [''])[0]
                     if not url.startswith('https://designsafe.tapis.io/v3/files/postits/redeem/'):
                         raise ValueError('Unexpected public DesignSafe download host')
                 if file.get('download_resolution') == 'zip-member':
@@ -211,6 +222,8 @@ def main():
             records.extend(read_tables(source, args.raw_dir))
         elif source.get('reader') == 'leap-native':
             records.extend(read_leap(source, args.raw_dir))
+        elif source.get('reader') == 'leap-torsion':
+            records.extend(read_torsion(source, args.raw_dir))
         elif source.get('reader') == 'castlegate-mts':
             records.extend(read_castlegate(source, args.raw_dir))
             records.extend(read_tables(source, args.raw_dir))

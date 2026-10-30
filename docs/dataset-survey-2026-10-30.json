@@ -443,38 +443,61 @@
     {
       "id": "leap-2018-dss",
       "name": "LEAP-2018 cyclic simple shear",
-      "source_url": "https://doi.org/10.17603/DS2NM4W",
+      "source_url": "https://doi.org/10.17603/DS2HX3H",
       "scientific_value": "Ottawa F65 shear response at 40 and 100 kPa",
-      "license": "unconfirmed",
-      "review_stage": "public project API and file listing inspected",
-      "decision": "cyclic reserve",
+      "license": "ODC-BY-1.0",
+      "review_stage": "project DOI rights and pinned original measurements reviewed",
+      "decision": "admitted native measurements",
       "notes": [
-        "Official PRJ-2137 describes cyclic direct simple shear; experiment DOI DS2NM4W.",
-        "Structured licence field is null; terms and raw file retrieval remain unresolved. Simple-shear driver required for like-for-like simulation.",
-        "Experiment DataCite rightsList is also empty; no exact data licence established in either inspected metadata source."
+        "Project DOI explicitly declares ODC-BY 1.0. Earlier review inspected the child experiment DOI rightsList and null project API fields; that incomplete review is corrected in the licence evidence.",
+        "Torsion and simple shear retain native signs and quantities. No axisymmetric triaxial comparison or initial state is inferred.",
+        "Seventeen full-resolution cyclic simple-shear acquisitions at 40 and 100 kPa; all six original channels and final acquisition rows retained."
       ],
       "ingestion": {
-        "status": "held: dataset reuse terms unresolved",
-        "reason": "Public HTML, DOI metadata and project API do not provide a dataset-specific licence. The public file route works, but no public redistribution grant has been established."
-      }
+        "status": "ingested reviewed useful measurements",
+        "records": 17,
+        "observations": 252331,
+        "kinds": {
+          "measurement-series": 17
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "All numeric channel values checked against pinned original CSV/XLS cells; scientific mapping, source integrity and browser bundle checks.",
+        "remaining": [],
+        "limitations": "Acquisition, calibrated phase and summary records overlap; record counts are not independent specimen counts. Raw source channels with missing units remain unresolved."
+      },
+      "related_experiment_doi": "10.17603/DS2NM4W"
     },
     {
       "id": "leap-2018-torsion",
       "name": "LEAP-Asia-2018 cyclic torsional shear",
       "source_url": "https://doi.org/10.17603/DS2D40H",
       "scientific_value": "Complementary cyclic shear geometry",
-      "license": "unconfirmed",
-      "review_stage": "public project API and file listing inspected",
-      "decision": "cyclic reserve",
+      "license": "ODC-BY-1.0",
+      "review_stage": "project DOI rights and pinned original measurements reviewed",
+      "decision": "admitted native measurements",
       "notes": [
-        "Official PRJ-2136 confirms cyclic torsional shear; its experiment DOI is 10.17603/DS28D8G. Prior DS2D40H identifies related project rather than this experiment DOI.",
-        "Structured licence field is null; raw files and exact torsional conventions still need checking.",
-        "Experiment DataCite rightsList is also empty; no exact data licence established in either inspected metadata source."
+        "Project DOI explicitly declares ODC-BY 1.0. Earlier review inspected the child experiment DOI rightsList and null project API fields; that incomplete review is corrected in the licence evidence.",
+        "Torsion and simple shear retain native signs and quantities. No axisymmetric triaxial comparison or initial state is inferred.",
+        "Nine torsion specimens: 27 full raw acquisitions, 27 calibrated phase histories, 18 independent-coordinate cycle summaries and two strength summaries. Twenty-four copied raw files are checksum-deduplicated; source alias paths retained.",
+        "Fitted curves and redundant comparison/graph sheets are documentation rather than experimental measurements."
       ],
       "related_experiment_doi": "10.17603/DS28D8G",
       "ingestion": {
-        "status": "held: dataset reuse terms unresolved",
-        "reason": "Public HTML, DOI metadata and project API do not provide a dataset-specific licence. The public file route works, but no public redistribution grant has been established."
+        "status": "ingested reviewed useful measurements",
+        "records": 74,
+        "observations": 235537,
+        "kinds": {
+          "measurement-series": 54,
+          "test-summary": 20
+        },
+        "curated_manifest": "data/curated/index.json",
+        "public_browser_overlay": false,
+        "public_native_channel_view": true,
+        "verification": "All numeric channel values checked against pinned original CSV/XLS cells; scientific mapping, source integrity and browser bundle checks.",
+        "remaining": [],
+        "limitations": "Acquisition, calibrated phase and summary records overlap; record counts are not independent specimen counts. Raw source channels with missing units remain unresolved."
       }
     },
     {
@@ -1131,6 +1154,26 @@
       "local_review_file": "tmp/dataset-survey/shale-public-page",
       "sha256": "285cf30df9e5bc4e3869951608ea863cfe7b30afb5ec1a364d8f794c1a000ff4",
       "size_bytes": 37647
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2018-torsion-recheck",
+      "sha256": "10c23de44560609684d29732b4d1e8aeee2ae08a71c4e02d56f09fba50f7c071",
+      "size_bytes": 10018
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/leap2018-dss-project-doi.json",
+      "sha256": "fdb68ca800974c9a3f7a4285af15a449033ff2f196de656992c3ba673c706b1f",
+      "size_bytes": 8475
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/PRJ-2136-recursive-inventory.json",
+      "sha256": "048e154b3e98c3b6b7b6ba88a0c11f6c8d08ea200046db8f82dadea6ed5a8856",
+      "size_bytes": 32474
+    },
+    {
+      "local_review_file": "tmp/dataset-survey/PRJ-2137-recursive-inventory.json",
+      "sha256": "aaa71ffe69c6f8727147f0b128e4e99f763f9ac3641ff221fae3af0e976368f0",
+      "size_bytes": 10736
     }
   ],
   "excluded_leads": [
@@ -1151,7 +1194,7 @@
   ],
   "ranking_rationale": "Prefer explicit reuse terms, measured channels with documented units and initial state, material/protocol diversity, and compatibility with existing element drivers. Ranking is provisional until per-test checks; no numerical quality score is inferred from repository reputation.",
   "review_limits": [
-    "All 30 candidate entries have an explicit ingestion or hold decision. Nineteen candidates have admitted records; eleven remain held or paused.",
+    "All 30 candidate entries have an explicit ingestion or hold decision. Twenty-one candidates have admitted records; nine remain held or paused.",
     "Counts distinguish SI triaxial overlays, native measurement series and test summaries. Acquisition blocks and grain populations are not independent laboratory tests.",
     "GEOLAB basic-property and reference tables are retained as context. Empty templates, parameter/model tabs and source duplicates in LEAP calibration-example folders are excluded.",
     "Raw tomography volumes, CAD/printing assets, machine configuration files and redundant workbook exports are outside this material-response ingestion pass. Processed 3DXRD grain data and original mechanical acquisition files are included.",
@@ -1160,8 +1203,8 @@
   ],
   "ingestion_progress": {
     "status": "available licensed sources ingested; access/licence holds remain",
-    "records": 522,
-    "observations": 3094470,
+    "records": 613,
+    "observations": 3582338,
     "admitted_candidates": [
       "castlegate",
       "finnish-oedometer",
@@ -1178,15 +1221,15 @@
       "hurley",
       "leap-2015",
       "leap-2017",
+      "leap-2018-dss",
+      "leap-2018-torsion",
       "leap-2020",
       "leap-2022",
       "opara-sand-fines",
       "rockfills"
     ],
-    "admitted_candidate_count": 19,
+    "admitted_candidate_count": 21,
     "held_candidates": [
-      "leap-2018-dss",
-      "leap-2018-torsion",
       "printed-grains",
       "shale",
       "soilmodels-standard",
@@ -1197,9 +1240,8 @@
       "soilmodels-vibe",
       "wang-sand"
     ],
-    "held_candidate_count": 11,
+    "held_candidate_count": 9,
     "next": [
-      "Resolve dataset-specific rights for the two LEAP 2018 campaigns before public release.",
       "Retrieve printed-grain and shale files through normal public access when the hosts permit it.",
       "Resolve SoilModels package access and data licences; do not treat software GPL terms as data grants.",
       "Keep 4TU paused until the user resumes it."
