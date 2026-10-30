@@ -46,7 +46,7 @@ extern "C" ATLAS_EXPORT const char* atlas_evaluate(const char*id,const char*para
 }
 extern "C" ATLAS_EXPORT const char* atlas_integrate(const char*id,const char*parameters,const char*initial,const char*strain){
     try{int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial),d=parse_csv(strain);if(d.size()!=6)throw std::runtime_error("six Mandel strain components required");auto result=atlas::integrate(m,z,atlas::tensor_from(d,0),p);
-        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"message\":"<<quote(result.message)<<",\"state\":";array(o,result.state);o<<",\"diagnostics\":{\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"rejected\":"<<result.diagnostics.rejected<<"}}";output=o.str();return output.c_str();
+        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"message\":"<<quote(result.message)<<",\"state\":";array(o,result.state);o<<",\"diagnostics\":{\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"rejected\":"<<result.diagnostics.rejected<<",\"increment_fractions\":";array(o,result.diagnostics.increment_fractions);o<<"}}";output=o.str();return output.c_str();
     }catch(const std::exception&e){return failure(e.what());}
 }
 extern "C" ATLAS_EXPORT const char* atlas_evaluate_time(const char*id,const char*parameters,const char*current,const char*rate,double time){

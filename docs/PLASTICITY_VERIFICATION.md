@@ -2,7 +2,7 @@
 
 This is the historical v1 investigation pinned in its evidence records, not independent review or experimental validation. Both formulations retain their existing catalogue status. The checker is original project code: it does not evaluate DSL expressions, call the production nonlinear solver for its reference calculations, or execute an external constitutive implementation.
 
-The later [Drucker–Prager apex correction](models/drucker-prager-apex.md) replaces the direction regularization and passes an expanded 73-case check. The failing v1 reports below are retained; the MCC partition comparison remains unchanged.
+The later [Drucker–Prager apex correction](models/drucker-prager-apex.md) passes an expanded 73-case check. The [MCC dossier](models/modified-cam-clay.md) adds a general scalar reduction and explicit accepted-partition replay, with 57 passing cases. Both failing v1 reports below remain immutable historical evidence.
 
 ## Conventions and reproducibility
 

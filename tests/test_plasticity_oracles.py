@@ -40,6 +40,41 @@ class PlasticityOracleTests(unittest.TestCase):
         self.assertEqual(len(report['cases']), 73)
         self.assertTrue(report['passed'], [c['id'] for c in report['cases'] if not c['passed']])
 
+    def test_general_mcc_matches_special_isotropic_reference(self):
+        start=[1e5]*3+[0,0,0,.7,1e5,0]
+        parameters=[1e5,1.2,.2,.04,.25]
+        de=[.001]*3+[0]*3
+        general=oracle.mcc_general_reference(start,de,parameters)
+        special=oracle.mcc_reference(start,de,parameters,'isotropic-plastic')
+        self.assertTrue(oracle.compare(general,special)[0])
+
+    def test_general_mcc_covers_hardening_and_softening(self):
+        parameters=[1e5,1.2,.2,.04,.25]
+        for pc,amplitude,sign in [(1e5,.04,1),(4e5,.06,-1)]:
+            start=[1e5]*3+[0,0,0,.7,pc,0]
+            result=oracle.mcc_general_reference(start,[0,0,0,amplitude,0,0],parameters)
+            self.assertGreater(sign*(result[7]-pc),0)
+            p=oracle.mean(result);q=oracle.q_value(result)
+            self.assertLess(abs(q*q+1.2**2*p*(p-result[7]))/1e10,1e-12)
+            self.assertGreater(result[8],0)
+
+    def test_partition_contract_rejects_missing_or_incomplete_traces(self):
+        result=dict(ok=True,diagnostics=dict(substeps=2,increment_fractions=[.5,.5]))
+        self.assertEqual(oracle.increment_partition(result),[.5,.5])
+        for fractions in ([],[.5],[.5,.25],[1.,-0.0],[float('nan'),.5]):
+            result['diagnostics']['increment_fractions']=fractions
+            with self.subTest(fractions=fractions),self.assertRaises(ValueError):
+                oracle.increment_partition(result)
+
+    def test_native_mcc_general_tensor_and_partition_references(self):
+        report=oracle.execute(Path(os.environ.get('ATLAS_SOLVER',ROOT/'build/atlas_solver')),'modified-cam-clay')
+        self.assertEqual(len(report['cases']),57)
+        self.assertTrue(report['passed'],[c['id'] for c in report['cases'] if not c['passed']])
+        for case in report['cases']:
+            raw=case.get('unpartitioned_reference')
+            if raw is not None:
+                self.assertEqual(raw['applicable'],case['diagnostics']['increment_fractions']==[1.])
+
     def test_scalar_root_rejects_unbracketed_inputs(self):
         with self.assertRaises(ValueError): oracle.bisect(lambda x: x+1, 0, 1)
 

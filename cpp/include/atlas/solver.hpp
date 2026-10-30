@@ -6,7 +6,7 @@
 
 namespace atlas {
 using State=std::vector<double>;
-struct Diagnostics { int iterations=0, substeps=0, rejected=0; double error=0; };
+struct Diagnostics { int iterations=0, substeps=0, rejected=0; double error=0; std::vector<double> increment_fractions; };
 struct Advance { bool ok=false; State state; Diagnostics diagnostics; std::string message; };
 inline State default_parameters(int model) { State p;for(const auto&v:models().at(model).parameters)p.push_back(v.value);return p; }
 inline State initial_state(int model){State z;for(const auto&f:models().at(model).fields)for(int i=0;i<f.size;++i)z.push_back(f.initial[i]);return z;}
@@ -58,14 +58,14 @@ inline bool midpoint(int model,const State&zn,const Sym<double>&de,const State&p
 inline bool advance_recursive(int model,const State&zn,const Sym<double>&de,const State&p,State&z,Diagnostics&diag,int depth){
     if(depth>14||diag.substeps>20000)return false;
     const bool rate=models().at(model).rate;
-    if(!rate){if(implicit_step(model,zn,de,p,z,diag)){++diag.substeps;return true;}}
+    if(!rate){if(implicit_step(model,zn,de,p,z,diag)){++diag.substeps;diag.increment_fractions.push_back(std::ldexp(1.,-depth));return true;}}
     else {
         State full,half,two;const auto halfde=.5*de;
         if(midpoint(model,zn,de,p,full)&&midpoint(model,zn,halfde,p,half)&&midpoint(model,half,halfde,p,two)){
             auto scales=model_scales(model,p);double error=0;
             for(size_t i=0;i<zn.size();++i)error=std::max(error,std::abs(full[i]-two[i])/scales[i]);
             diag.error=error;
-            if(error<1e-6){z=two;diag.substeps+=2;return true;}
+            if(error<1e-6){z=two;diag.substeps+=2;diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));return true;}
         }
     }
     ++diag.rejected;State half;

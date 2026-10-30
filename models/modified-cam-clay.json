@@ -114,12 +114,17 @@
   "id": "modified-cam-clay",
   "name": "Modified Cam Clay",
   "family": "critical-state plasticity",
-  "description": "Associated Modified Cam Clay with pressure/void-ratio dependent elasticity, exponential hardening, and backward-Euler integration. Demonstration parameters; finite rotation is unsupported.",
+  "description": "Associated Modified Cam Clay with endpoint pressure/void-ratio dependent elasticity, exponential log-pc hardening and exponential volume bookkeeping. Project finite-step choices documented in the source dossier; demonstration initialization; finite rotation unsupported.",
   "sources": [
     {
-      "url": "https://www.opengeosys.org/docs/benchmarks/small-deformations/modifiedcamclay/ModifiedCamClay_report.pdf",
-      "locator": "Model equations and incremental formulation; use repository equations for the precise integration convention",
+      "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/web/content/docs/benchmarks/small-deformations/ModifiedCamClay/ModifiedCamClay_report.pdf",
+      "locator": "Silbermann & Nagel, 28 June 2023: equations 14–17 and 30b; equation 11 prints M while 30b uses M squared. Section 3.1 hardening differs from atlas exponential log-pc update. Project discretization and normalization: docs/models/modified-cam-clay.md.",
       "role": "formulation"
+    },
+    {
+      "url": "https://docs.itascacg.com/itasca930/common/models/camclay/doc/modelcamclay.html",
+      "locator": "Equations 15, 18–25: stiffness, yield and associated flow; 31 and 8 have different finite-step hardening/volume updates. Initialization: 32 and 42. Not an executed cross-code comparison.",
+      "role": "formulation reference"
     }
   ],
   "equations": {

@@ -39,6 +39,8 @@ for (const [id,initial,strain] of [
   assert.equal(actual.message,expected.message);
   assert.deepEqual(actual.diagnostics,expected.diagnostics);
   for (const key of ['iterations','substeps','rejected']) assert.ok(Number.isInteger(actual.diagnostics[key]) && actual.diagnostics[key]>=0);
+  assert.equal(actual.diagnostics.increment_fractions.length,actual.diagnostics.substeps);
+  if (actual.ok) assert.equal(actual.diagnostics.increment_fractions.reduce((a,b)=>a+b,0),1);
   actual.state.forEach((v,i)=>assert.ok(Math.abs(v-expected.state[i])<=1e-7*Math.max(1,Math.abs(expected.state[i]))));
   if (!actual.ok) assert.deepEqual(actual.state,initial.split(',').map(Number));
 }

@@ -81,11 +81,67 @@ def mcc_reference(initial,de,parameters,branch):
     return [s+p if i<3 else s for i,s in enumerate(stress)]+[v-1,pc0,0]
 
 
+def mcc_general_reference(initial,de,parameters):
+    """Eliminate hardening and flow to one bracketed pressure root.
+
+    Intended domain: a positive finite elastic trial pressure. This reference
+    does not implement adaptive subdivision or the production Newton system.
+    """
+    _,M,lam,kappa,nu=parameters
+    p0=mean(initial);pc0=initial[7];V=sum(de[:3])
+    v=(1+initial[6])*math.exp(-V);delta=lam-kappa
+    denominator=1-v*V/kappa
+    if denominator<=0: raise ValueError('Reference requires a positive elastic trial pressure')
+    pel=p0/denominator
+    s0=deviator(initial);d=deviator(de)
+    def shear_modulus(p): return 3*v*p/kappa*(1-2*nu)/(2*(1+nu))
+    def trial(p): return [a+2*shear_modulus(p)*b for a,b in zip(s0,d)]
+    tel=trial(pel);qel2=1.5*sum(x*x for x in tel)
+    if qel2+M*M*pel*(pel-pc0)<=0:
+        return [x+pel if i<3 else x for i,x in enumerate(tel)]+[v-1,pc0,0]
+    # Hardening and mean equilibrium imply pc as a function of p.
+    def log_ratio(p): return (v*V-kappa*(1-p0/p))/delta
+    def critical(p): return math.log(2*p/pc0)-log_ratio(p)
+    if 2*pel==pc0:
+        qtarget=M*pel;G=shear_modulus(pel)
+        gamma=pc0/(6*G)*(math.sqrt(qel2)/qtarget-1)
+        factor=qtarget/math.sqrt(qel2)
+        return [x*factor+pel if i<3 else x*factor for i,x in enumerate(tel)]+[v-1,pc0,gamma]
+    lo=min(p0,pel,pc0)*1e-8;hi=max(p0,pel,pc0)
+    while critical(hi)<0: hi*=2
+    pcritical=bisect(critical,lo,hi)
+    def yield_reduced(p):
+        if p==pcritical: return -M*M*p*p
+        pc=pc0*math.exp(log_ratio(p));Vp=V-kappa/v*(1-p0/p)
+        # Multiplication by 2p-pc avoids a singular gamma at critical state.
+        scale=(2*p-pc)/(2*p-pc+6*shear_modulus(p)*Vp/(M*M))
+        q2=1.5*sum(x*x for x in trial(p))*scale*scale
+        return q2+M*M*p*(p-pc)
+    if pel>pcritical: p=bisect(yield_reduced,pcritical,pel)
+    else: p=bisect(lambda p:-yield_reduced(p),pel,pcritical)
+    pc=pc0*math.exp(log_ratio(p));Vp=V-kappa/v*(1-p0/p)
+    gamma=pc0*Vp/(M*M*(2*p-pc))
+    scale=1/(1+6*shear_modulus(p)*gamma/pc0)
+    return [x*scale+p if i<3 else x*scale for i,x in enumerate(trial(p))]+[v-1,pc,gamma]
+
+
 def compare(actual,expected):
     if len(actual)!=len(expected) or not all(math.isfinite(x) for x in actual): return False,None
     limits=[(STRESS_ATOL if i<6 or len(expected)==9 and i==7 else STATE_ATOL)+REL_TOL*abs(x) for i,x in enumerate(expected)]
     ratios=[abs(a-b)/limit for a,b,limit in zip(actual,expected,limits)]
     return max(ratios,default=0)<=1,max(ratios,default=0)
+
+
+def increment_partition(result):
+    """Validate the complete accepted partition of a successful legacy update."""
+    diagnostics=result.get('diagnostics',{})
+    fractions=diagnostics.get('increment_fractions')
+    if (result.get('ok') is not True or not isinstance(fractions,list) or not fractions
+            or len(fractions)!=diagnostics.get('substeps')
+            or any(type(x) not in (int,float) or not math.isfinite(x) or not 0<x<=1 for x in fractions)
+            or math.fsum(fractions)!=1):
+        raise ValueError('Missing or incomplete accepted increment partition')
+    return fractions
 
 
 def execute(solver,model):
@@ -100,15 +156,22 @@ def execute(solver,model):
         process=subprocess.run([str(solver),*args],text=True,capture_output=True,timeout=30)
         result=json.loads(process.stdout)
         return args,process.returncode,result
-    def case(ident,initial,de,params=None,branch=None,expected_failure=False,reference_steps=1):
+    def case(ident,initial,de,params=None,branch=None,expected_failure=False):
         params=parameters if params is None else params
-        expected,method=(initial,'exact-rollback') if expected_failure else (dp_reference(initial,de,params) if model=='drucker-prager' else (mcc_reference(initial,de,params,branch),branch))
-        if reference_steps>1:
-            expected=initial.copy()
-            for _ in range(reference_steps):
-                expected=mcc_reference(expected,[x/reference_steps for x in de],params,branch)
-            method=branch+'-composed-'+str(reference_steps)+'-steps'
+        reference_steps=1
+        expected,method=(initial,'exact-rollback') if expected_failure else (dp_reference(initial,de,params) if model=='drucker-prager' else (mcc_general_reference(initial,de,params) if branch=='general' else mcc_reference(initial,de,params,branch),branch))
         args,code,result=invoke(initial,de,params)
+        unpartitioned_reference=None
+        if not expected_failure and result.get('ok') is True and model=='modified-cam-clay':
+            fractions=increment_partition(result)
+            raw_passed,raw_ratio=compare(result.get('state',[]),expected)
+            unpartitioned_reference=dict(expected=expected,passed=raw_passed,max_tolerance_ratio=raw_ratio,
+                applicable=fractions==[1.],reason='One implicit step applies only when the solver accepts the entire increment.')
+            expected=initial.copy()
+            for fraction in fractions:
+                expected=mcc_general_reference(expected,[x*fraction for x in de],params)
+            reference_steps=len(fractions)
+            method='independent-scalar-reduction-on-recorded-partition'
         if expected_failure:
             passed=code!=0 and result.get('ok') is False and result.get('state')==initial;ratio=None
         else:
@@ -117,7 +180,7 @@ def execute(solver,model):
         cases.append(dict(id=ident,method=method,arguments=args,initial=initial,strain_increment=de,
             expected=expected,actual=result.get('state'),expected_failure=expected_failure,reference_steps=reference_steps,
             returncode=code,solver_ok=result.get('ok'),message=result.get('message'),diagnostics=result.get('diagnostics'),
-            max_tolerance_ratio=ratio,passed=passed))
+            max_tolerance_ratio=ratio,unpartitioned_reference=unpartitioned_reference,passed=passed))
         return expected
     if model=='drucker-prager':
         initial=[1e5]*3+[0,0,0,.7,0]
@@ -170,7 +233,6 @@ def execute(solver,model):
         for V in (.001,.003,.009):
             case('normally-consolidated-volume-'+str(V),normal,[V/3]*3+[0]*3,branch='isotropic-plastic')
         case('overconsolidated-yield-crossing',initial,[.01]*3+[0]*3,branch='isotropic-plastic')
-        case('overconsolidated-two-half-step-reference',initial,[.01]*3+[0]*3,branch='isotropic-plastic',reference_steps=2)
         for sign,label in [(1,'compression'),(-1,'extension')]:
             pc=2e5;p=pc/2;q=sign*parameters[1]*pc/2
             critical=[p+2*q/3,p-q/3,p-q/3,0,0,0,.7,pc,0]
@@ -181,6 +243,17 @@ def execute(solver,model):
         case('outside-yield-start',[3e5]*3+[0,0,0,.7,2e5,0],[0]*6,expected_failure=True)
         bad=parameters.copy();bad[2]=bad[3]
         case('invalid-compression-indices',initial,[0]*6,bad,expected_failure=True)
+        # Wet-side hardening and dry-side softening, including noncoaxial trial tensors.
+        directions=([1,-.5,-.5,0,0,0],[-1,.5,.5,0,0,0],[0,0,0,1,0,0],[0,0,0,0,1,0],[0,0,0,0,0,1],[1,-.5,-.5,.3,-.2,.1])
+        for pc,amplitude,side in [(1e5,.04,'wet'),(4e5,.06,'dry')]:
+            start=initial.copy();start[7]=pc
+            for V in (-.003,0.,.003):
+                for j,direction in enumerate(directions):
+                    de=[(V/3 if i<3 else 0)+amplitude*x for i,x in enumerate(direction)]
+                    case(f'general-{side}-V{V}-direction{j}',start,de,branch='general')
+        for pc,side in [(1.5e5,'wet'),(4e5,'dry')]:
+            start=[130000,85000,85000,2000,-1000,500,.7,pc,0]
+            case('general-noncoaxial-'+side,start,[.001,-.0003,-.0007,.06,-.02,.01],branch='general')
         # Continuum isotropic solutions use v=v0 exp(-V), not the step residuals.
         for branch,V,start,denominator in [('elastic',.003,initial,parameters[3]),('plastic',.03,normal,parameters[2])]:
             v0=1+start[6];v=v0*math.exp(-V)
@@ -202,7 +275,7 @@ def execute(solver,model):
                 total_volumetric_strain=V,expected_pressure=exact,levels=levels,observed_orders=orders,
                 acceptance=dict(minimum_order=.8,maximum_final_relative_error=5e-4),passed=passed))
     return dict(kind='plasticity-verification-report',model=model,catalogue_hash=definitions['sha256'],
-        oracle='Closed-form radial return and scalar invariant reductions; no DSL evaluation or shared nonlinear solve.',
+        oracle='Closed-form Drucker-Prager and scalar-reduced MCC references, with recorded-partition replay; no DSL evaluation or shared nonlinear solve.',
         tolerances=dict(stress_absolute_Pa=STRESS_ATOL,other_state_absolute=STATE_ATOL,relative=REL_TOL),
         runtime=dict(python=platform.python_version(),platform=platform.platform(),solver_sha256=sha256(solver)),
         cases=cases,passed=all(c['passed'] for c in cases))
