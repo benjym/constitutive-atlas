@@ -91,11 +91,20 @@ def cube_trace(a):
     return x**3 + y**3 + z**3 + 3*((x+y)*xy**2+(y+z)*yz**2+(x+z)*xz**2) + 6*xy*yz*xz
 
 
+def tensor_square(a):
+    """Mandel representation of the Cartesian matrix product A @ A."""
+    x,y,z,u,v,w=a.v
+    r=math.sqrt(2)
+    return Sym((x*x+(u*u+w*w)/2, y*y+(u*u+v*v)/2,
+                z*z+(v*v+w*w)/2, (x+y)*u+v*w/r,
+                (y+z)*v+u*w/r, (x+z)*w+u*v/r))
+
+
 FUNCTIONS = {"sym": lambda *values: Sym(tuple(values)), "sqrt": math.sqrt, "exp": math.exp, "log": math.log,
              "sin": math.sin, "cos": math.cos, "abs": abs,
              "min": min, "max": max, "trace": trace, "dev": dev,
              "dot": dot, "norm": lambda a: math.sqrt(dot(a, a)),
-             "cube_trace": cube_trace}
+             "cube_trace": cube_trace, "tensor_square": tensor_square}
 
 
 def parse(expression):
@@ -175,12 +184,12 @@ def infer(node, symbols):
         if name not in FUNCTIONS or len(args) != arity:
             raise ValidationError(f"unsupported function or arity: {name}")
         a = args[0]
-        if name in ("trace", "dev", "norm", "cube_trace", "dot"):
+        if name in ("trace", "dev", "norm", "cube_trace", "dot", "tensor_square"):
             if a.shape != "sym" or (name == "dot" and args[1].shape != "sym"):
                 raise ValidationError(f"{name} requires symmetric tensors")
             if name == "dot":
                 return Type(dim=tuple(x+y for x,y in zip(a.dim,args[1].dim)))
-            return Type("sym" if name == "dev" else "scalar", tuple(x*(3 if name == "cube_trace" else 1) for x in a.dim))
+            return Type("sym" if name in ("dev", "tensor_square") else "scalar", tuple(x*(3 if name == "cube_trace" else 2 if name == "tensor_square" else 1) for x in a.dim))
         if a.shape != "scalar":
             raise ValidationError(f"{name} requires scalar")
         if name in ("min", "max") and a != args[1]:
@@ -236,6 +245,6 @@ def cpp(node):
     if isinstance(node,ast.Call):
         name=node.func.id
         if name=='select': return f"({cpp(node.args[0])} ? {cpp(node.args[1])} : {cpp(node.args[2])})"
-        name={'sym':'make_sym','min':'amin','max':'amax','sqrt':'asqrt','exp':'aexp','log':'alog','sin':'asin','cos':'acos','abs':'aabs'}.get(name,name)
+        name={'tensor_square':'atlas::tensor_square','sym':'make_sym','min':'amin','max':'amax','sqrt':'asqrt','exp':'aexp','log':'alog','sin':'asin','cos':'acos','abs':'aabs'}.get(name,name)
         return f"{name}({', '.join(cpp(a) for a in node.args)})"
     raise ValidationError("invalid AST")

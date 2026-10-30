@@ -8,7 +8,7 @@ The [SoilModels entry](https://soilmodels.com/sanisand/) is a discovery source. 
 
 The proposed Atlas layout is stress (six Mandel components), void ratio (one), backstress ratio (six), fabric (six), and reversal backstress ratio (six). That is **25 persistent components**, or 26 with a residual plastic multiplier. This is a planning layout, not a claim that every implementation must store exactly these quantities. Five-component deviatoric storage would change the representation and require a separately verified basis map. Elastic/plastic strain outputs, if retained, increase storage further.
 
-The flow direction needs the symmetric square of its normalized deviatoric direction. A scalar cubic invariant cannot replace that tensor. The [capability analysis](../SANISAND_CAPABILITIES.md) separates this algebraic gap from state capacity and history transactions.
+The flow direction needs the symmetric square of its normalized deviatoric direction. A scalar cubic invariant cannot replace that tensor. The required [tensor-square primitive](../TENSOR_SQUARE.md) is now implemented and verified; the state-capacity and history gaps remain. The [capability analysis](../SANISAND_CAPABILITIES.md) separates this algebraic gap from state capacity and history transactions.
 
 ## Implementation cross-check observations
 

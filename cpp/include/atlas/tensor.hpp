@@ -74,6 +74,13 @@ template<class T>T cube_trace(const Sym<T>&a){
     const T x=a.v[0],y=a.v[1],z=a.v[2],xy=a.v[3]/T(std::sqrt(2.)),yz=a.v[4]/T(std::sqrt(2.)),xz=a.v[5]/T(std::sqrt(2.));
     return x*x*x+y*y*y+z*z*z+T(3)*((x+y)*xy*xy+(y+z)*yz*yz+(x+z)*xz*xz)+T(6)*xy*yz*xz;
 }
+// Cartesian A*A, expressed in the orthonormal Mandel basis. The square of
+// one symmetric matrix is symmetric; this is not a general tensor product.
+template<class T>Sym<T> tensor_square(const Sym<T>&a){
+    const T x=a.v[0],y=a.v[1],z=a.v[2],u=a.v[3],v=a.v[4],w=a.v[5],r=T(std::sqrt(2.));
+    return make_sym(x*x+(u*u+w*w)/T(2),y*y+(u*u+v*v)/T(2),z*z+(v*v+w*w)/T(2),
+                    (x+y)*u+v*w/r,(y+z)*v+u*w/r,(x+z)*w+u*v/r);
+}
 template<class T>Sym<T> tensor_from(const std::vector<T>&v,int offset){Sym<T> a;for(int i=0;i<6;++i)a.v[i]=v.at(offset+i);return a;}
 template<class T>void put_tensor(std::vector<T>&v,int offset,const Sym<T>&a){for(int i=0;i<6;++i)v.at(offset+i)=a.v[i];}
 }

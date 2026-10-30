@@ -1,6 +1,6 @@
 # SANISAND-2004 capability analysis
 
-This is SAN-02 planning evidence grounded in the [source brief](models/sanisand-2004.md) and the current Atlas implementation. The original-paper extraction is incomplete, so this is a provisional gap analysis, not permission to close SAN-01 or implement an unreviewed variant. The [machine-readable probe report](../catalogue/investigations/sanisand-capabilities-v1.json) records synthetic capacity/type observations; it does not execute SANISAND.
+This is SAN-02 planning evidence grounded in the [source brief](models/sanisand-2004.md) and the current Atlas implementation. The original-paper extraction is incomplete, so this is a provisional gap analysis, not permission to close SAN-01 or implement an unreviewed variant. The [machine-readable probe report](../catalogue/investigations/sanisand-capabilities-v2.json) records synthetic capacity/type observations; it does not execute SANISAND.
 
 ## Current engine versus required representation
 
@@ -8,7 +8,7 @@ This is SAN-02 planning evidence grounded in the [source brief](models/sanisand-
 | --- | --- | --- |
 | 25 persistent scalar components; 26 with a residual multiplier | Semantic validation caps state at 24; `Jet` allocates 24 state derivatives plus six control derivatives | Choose a checked larger bound or a verified deviatoric basis. Prefer a modest common bound over deleting constitutive memory. Include schema, Python validation, AD storage, generators and Wasm input checks in the change. |
 | Stress plus several deviatoric tensors | Six-component Mandel `sym`, scalar fields, `dev`, `trace`, `dot`, `norm`, `cube_trace` | Existing operators cover much of the algebra. Deviatoric constraints and conversion of source engineering shear need explicit tests. |
-| Symmetric tensor square | Tensor multiplication is rejected; `dot` returns a scalar | A typed `tensor_square(sym) -> sym` is a plausible minimal generic primitive. Its output has twice the input dimensions. Do not introduce unrestricted matrix code or model-specific callbacks. |
+| Symmetric tensor square | [`tensor_square(sym) -> sym`](TENSOR_SQUARE.md) now passes Cartesian, AD and Python/native/Wasm checks; arbitrary multiplication remains rejected | The demonstrated algebraic gap is resolved. Output dimensions double. This does not resolve capacity or history semantics. |
 | Reversal memory | Previous-substep symbols and ordinary state equations exist | Need a declared policy for when memory is sampled/reset and which state snapshot a guard sees. Existing algebraic `select` alone does not define event ordering. |
 | Elastic/plastic switches and finite singular limits | Residual complementarity, rate laws, branch expressions and domain rejection exist | Decide rate versus residual formulation after source extraction. Specify zero normals, reversal hardening limits and derivative choices; do not silently borrow external cutoffs. |
 | Pressure/state-dependent elasticity | Units, scalar powers and parameterized tensor expressions exist | No demonstrated algebraic extension required. Distinguish evolving void ratio from an implementation's frozen initial value. |
@@ -47,4 +47,4 @@ For history transactions, use a small synthetic history model whose exact resets
 python3 tools/inspect_sanisand_capabilities.py --output /tmp/sanisand-capabilities.json
 ```
 
-The report includes observed acceptance/rejection messages and hashes of the relevant Atlas sources. It is a capability investigation, not a numerical-evidence envelope or independent review. No runtime/schema changes are made by the probe. SAN-01–04 remain open until the source and contracts are complete and the demonstrated extensions pass their acceptance checks.
+The report includes observed acceptance/rejection messages and hashes of the relevant Atlas sources. It is a capability investigation, not a numerical-evidence envelope or independent review. The probe makes no runtime/schema changes. Its v2 observation follows the additive tensor-square implementation; v1 remains historical evidence of the earlier missing operation. SAN-01–04 remain open until the source and contracts are complete and the demonstrated extensions pass their acceptance checks.
