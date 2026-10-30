@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1",
+  "kind": "equation-source-inventory",
+  "model_id": "hypoplastic-sand-igs97",
+  "accessed_on": "2026-10-30",
+  "scope": "Continuous IGS overlay and history-law cross-check; full original-paper review remains pending. Source files inspected, not redistributed or executed.",
+  "sources": [
+    {
+      "url": "https://j-machacek.github.io/numgeo/2026-09/theory/constitutive-models/mechanical-models/hypo-igs.html#igs-extension",
+      "sha256": "8142c304ec4a38affa46fee03027798258aa28dae06ea8e71e3d6d8bad64caab",
+      "locator": "IGS Extension, stiffness and history displays",
+      "inspection": "HTML mathematics read; no PDF visual inspection claimed."
+    },
+    {
+      "url": "https://github.com/j-machacek/numgeo-hypo-igs-isa-gis/blob/3f3b1fa372bfdd77c6c3de220df4fb1b1731f102/src/material_hypoplasticity_isa_igs_gis_.f90",
+      "sha256": "e649a8d4b20eaa2aef8c8cd8d6ec9f002d39b0e05aef5ab1731cc3b5292abbff",
+      "locator": "update_igs, lines 860-968",
+      "inspection": "Published finite-increment update normalizes history when its radius exceeds R; not the same finite-increment algorithm as Atlas.",
+      "license_url": "https://github.com/j-machacek/numgeo-hypo-igs-isa-gis/blob/3f3b1fa372bfdd77c6c3de220df4fb1b1731f102/LICENSE",
+      "license_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "license_identifier": "GPL-3.0"
+    }
+  ],
+  "obsolete_locator": {
+    "url": "https://www.numgeo.de/wp-content/uploads/2023/08/numgeo_keyword_manual.pdf",
+    "observed_http_status": 404,
+    "old_locator": "7.4.1.1, 7.74-7.82",
+    "verified_equations": false
+  },
+  "atlas_numerical_choices": [
+    "rho=min(norm(h)/R,1)",
+    "norm(h)<1.01*R admission band; no post-step projection",
+    "eta=0 at zero history",
+    "zero-spin Mandel tensors and adaptive midpoint step doubling"
+  ],
+  "unresolved": [
+    "Inspect full Niemunis & Herle (1997) original paper.",
+    "Independent review of equations, sign conversion and exact formulation.",
+    "Resolve retained failed history investigation and independently converge reversal/cyclic references.",
+    "External-code execution with matched conventions and declared projection/integration differences."
+  ]
+}
