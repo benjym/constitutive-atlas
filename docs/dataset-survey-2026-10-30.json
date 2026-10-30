@@ -748,17 +748,33 @@
       "source_url": "https://doi.org/10.5061/dryad.msbcc2g19",
       "scientific_value": "Rock deformation, unloading and hydraulic coupling",
       "license": "CC0-1.0 (Dryad API verified)",
-      "review_stage": "repository API, licence and six-file inventory inspected",
-      "decision": "future rock extension",
+      "review_stage": "six originals checksum-verified; worksheets and primary-paper axes reviewed",
+      "decision": "ingest native rock/hydraulic records with source inconsistencies flagged",
       "notes": [
-        "Repository API explicitly specifies CC0-1.0. Five XLSX files plus README total 148,394 bytes.",
-        "True triaxial, unloading and permeability require rock/hydraulic capabilities beyond current soil triaxial overlays.",
-        "Continuation review found the normal public file_stream links; each also returned 403, so the block is not limited to the authenticated API route.",
-        "Dryad browser README preview is partially readable and distinguishes measured stress/strain/flow data (Date_1 through Date_4) from fitted criterion curves (Date_5). Direct and normal browser workbook downloads still provide no retrievable file; the full-dataset action prepares and resets without an observed download."
+        "All six originals (148,394 bytes) acquired through normal public browser download links and matched to Dryad SHA-256 digests. Download-event timeouts had obscured the successfully saved files.",
+        "True-triaxial stress is not axisymmetric q; source records remain outside standard triaxial overlays. Published axes establish percent strain, MPa stress, seconds, litres and permeability in 10^-16 m^2.",
+        "Date_1 sheets Figure 5b 6b and Figure 5c 6c are cell-for-cell identical despite different pressure labels; only the former is counted.",
+        "Date_3 t1/stress and t2/water volume are independent coordinates. Date_2 untimed flow and missing markers remain in original_rows without inferred time joins. Unequal channel lengths and workbook/paper range disagreements are retained and flagged.",
+        "Date_5 contains four failure points in each of two invariant representations, not eight independent tests. Sheet labels are swapped relative to published figure 11; the native headers and correct axis interpretation are retained.",
+        "All 8,335 numeric values across 13 admitted blocks independently matched originals; complete original worksheet rows are also retained. See docs/data-license-evidence/shale-workbook-review.json."
       ],
       "ingestion": {
-        "status": "held: file retrieval blocked",
-        "reason": "CC0 verified and README excerpt read through the normal public preview. Original workbook files remain inaccessible through the direct, API and normal browser download paths tried; no measurements admitted."
+        "status": "ingested reviewed useful measurements",
+        "records": 13,
+        "observations": 2584,
+        "kinds": {
+          "measurement-series": 11,
+          "test-summary": 2
+        },
+        "protocols": {
+          "true-triaxial-hydraulic-source": 11,
+          "failure-invariants-summary": 2
+        },
+        "limitations": [
+          "Duplicated pressure-labelled sheet is not an independent experiment.",
+          "Source coordinate and figure-label inconsistencies remain flagged rather than silently repaired.",
+          "Initial effective stress is not established; no triaxial overlay inferred."
+        ]
       }
     },
     {
@@ -1198,7 +1214,7 @@
   ],
   "ranking_rationale": "Prefer explicit reuse terms, measured channels with documented units and initial state, material/protocol diversity, and compatibility with existing element drivers. Ranking is provisional until per-test checks; no numerical quality score is inferred from repository reputation.",
   "review_limits": [
-    "All 30 candidate entries have an explicit ingestion or hold decision. Twenty-one candidates have admitted records; nine remain held or paused.",
+    "All 30 candidate entries have an explicit ingestion or hold decision. Twenty-two candidates have admitted records; eight remain held or paused.",
     "Counts distinguish SI triaxial overlays, native measurement series and test summaries. Acquisition blocks and grain populations are not independent laboratory tests.",
     "GEOLAB basic-property and reference tables are retained as context. Empty templates, parameter/model tabs and source duplicates in LEAP calibration-example folders are excluded.",
     "Raw tomography volumes, CAD/printing assets, machine configuration files and redundant workbook exports are outside this material-response ingestion pass. Processed 3DXRD grain data and original mechanical acquisition files are included.",
@@ -1207,8 +1223,8 @@
   ],
   "ingestion_progress": {
     "status": "available licensed sources ingested; access/licence holds remain",
-    "records": 613,
-    "observations": 3582338,
+    "records": 626,
+    "observations": 3584922,
     "admitted_candidates": [
       "castlegate",
       "finnish-oedometer",
@@ -1230,12 +1246,12 @@
       "leap-2020",
       "leap-2022",
       "opara-sand-fines",
-      "rockfills"
+      "rockfills",
+      "shale"
     ],
-    "admitted_candidate_count": 21,
+    "admitted_candidate_count": 22,
     "held_candidates": [
       "printed-grains",
-      "shale",
       "soilmodels-standard",
       "soilmodels-karlsruhe-kaolin",
       "soilmodels-malaysian",
@@ -1244,9 +1260,9 @@
       "soilmodels-vibe",
       "wang-sand"
     ],
-    "held_candidate_count": 9,
+    "held_candidate_count": 8,
     "next": [
-      "Retrieve printed-grain and shale files through normal public access when the hosts permit it.",
+      "Retrieve printed-grain mechanical workbook through normal public access when the host permits it.",
       "Resolve SoilModels package access and data licences; do not treat software GPL terms as data grants.",
       "Keep 4TU paused until the user resumes it."
     ]
