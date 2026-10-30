@@ -51,6 +51,8 @@ jobs:
           node tools/test_time_wasm.mjs
           node tools/test_schedule_wasm.mjs
           node tools/test_terracotta_wasm.mjs
+          node tools/test_terracotta_creep_wasm.mjs --output "$RUNNER_TEMP/terracotta-creep-parity.json"
+          python -m tools.verify_terracotta_creep_wasm "$RUNNER_TEMP/terracotta-creep-parity.json"
           python tools/fetch_data.py --approved-only
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments

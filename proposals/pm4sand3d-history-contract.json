@@ -1,0 +1,1169 @@
+{
+  "proposal_format": "atlas-history-transactions/0.1-experimental-design",
+  "kind": "non-executable-contract-example",
+  "model_id": "pm4sand3d-1.0",
+  "candidate_status": "unchanged; not admitted",
+  "independent_review": "pending",
+  "execution_allowed": false,
+  "compatibility": {
+    "accepted_by_current_model_loader": false,
+    "reason": "Not schema_version0.1/0.2 model JSON; contains unresolved source blocks and no kernel equations.",
+    "no_state_capacity_change": true,
+    "legacy_increment_reset_semantics_unchanged": true,
+    "public_API_added": false
+  },
+  "basis": {
+    "repo_revision": "6cf1e58e8781353200e0fa15e32e4f5801590713",
+    "inventory_path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+    "inventory_sha256": "81d44146bc562b62e0caf7b7565c73d9781f97c3c76ba6ba78e92fee67615624",
+    "manual": {
+      "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf",
+      "sha256": "6073a97a374d4b947e20a492b5009bbd01e3e5b0b773841b0f3b037c194f7453",
+      "edition": "June 2026 vendor manual",
+      "pdf_page_count": 149,
+      "printed_to_pdf_offset": 5,
+      "redistribution": "No permission inferred; no PDF or extracted source text included."
+    },
+    "repo_locators": [
+      {
+        "path": "docs/PARENT_INCREMENT_RESETS.md",
+        "section": "Definition; Transaction and differentiation; Caller partitions and event limits"
+      },
+      {
+        "path": "atlas/model.py",
+        "symbols": [
+          "validate",
+          "MAX_STATE_COMPONENTS",
+          "prepare_increment"
+        ]
+      },
+      {
+        "path": "atlas/compiler.py",
+        "symbols": [
+          "generate",
+          "prepare_model_increment generated function"
+        ]
+      },
+      {
+        "path": "cpp/include/atlas/solver.hpp",
+        "symbols": [
+          "integrate",
+          "advance_recursive",
+          "implicit_step",
+          "midpoint"
+        ]
+      },
+      {
+        "path": "cpp/include/atlas/recorded.hpp",
+        "symbols": [
+          "replay_recorded"
+        ]
+      },
+      {
+        "path": "cpp/include/atlas/time.hpp",
+        "symbols": [
+          "integrate_time"
+        ]
+      }
+    ]
+  },
+  "containers": [
+    {
+      "name": "state_history",
+      "persistent": true,
+      "restart_required": true,
+      "role": "Mechanical state and path-dependent constitutive history; no assumed equation law from storage class."
+    },
+    {
+      "name": "preparation",
+      "persistent": true,
+      "restart_required": true,
+      "role": "Raw inputs, override mask, resolved parameter values, initial stress correction, normalization provenance and preparation epoch; immutable during ordinary caller advances."
+    },
+    {
+      "name": "lag_cache",
+      "persistent": true,
+      "restart_required": true,
+      "role": "Algorithm-required next-caller-step values; recompute only under declared stage/boundary policy, not as arbitrary performance cache."
+    },
+    {
+      "name": "user_mode",
+      "persistent": true,
+      "restart_required": true,
+      "role": "Explicit selected PostShake mode and other admitted finite modes; request commands distinct from current mode."
+    },
+    {
+      "name": "host_subzone_state",
+      "persistent": true,
+      "restart_required": true,
+      "role": "Independent host stabilization state per subzone; unknown layout blocks full-host admission."
+    },
+    {
+      "name": "host_workspace",
+      "persistent": false,
+      "restart_required": false,
+      "role": "Trial-only reduction scratch; incomplete-step restart unsupported."
+    },
+    {
+      "name": "derived",
+      "persistent": false,
+      "restart_required": false,
+      "role": "Pure stage evaluations with explicit dependency snapshots."
+    },
+    {
+      "name": "diagnostics",
+      "persistent": false,
+      "restart_required": false,
+      "role": "Attempt counters and provisional event trace; cannot influence material evolution."
+    }
+  ],
+  "field_inventory": [
+    {
+      "inventory_id": "stress",
+      "symbol": "sigma",
+      "class": "state_history",
+      "shape": "symmetric_tensor_3d",
+      "unit": "stress",
+      "scope": "subzone trial; corrected zone commit",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "stress"
+      },
+      "resolution": "blocked",
+      "open_item": "Host subzone stress versus returned averaged stress must be specified.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "backstress",
+      "symbol": "alpha",
+      "class": "state_history",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "subzone trial; corrected zone commit",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "backstress"
+      },
+      "resolution": "blocked",
+      "open_item": "Host subzone stress versus returned averaged stress must be specified.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "initial_backstress",
+      "symbol": "alpha_in",
+      "class": "state_history",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "initial_backstress"
+      },
+      "resolution": "blocked",
+      "open_item": "Exact extrema update, component loading-direction choice and step 19/20 duplication unresolved. Componentwise extrema need not remain trace-free; do not compress to five components without proof.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "previous_initial_backstress",
+      "symbol": "alpha_inP",
+      "class": "state_history",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "previous_initial_backstress"
+      },
+      "resolution": "blocked",
+      "open_item": "Exact extrema update, component loading-direction choice and step 19/20 duplication unresolved. Componentwise extrema need not remain trace-free; do not compress to five components without proof.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "minimum_initial_backstress",
+      "symbol": "alpha_inMin",
+      "class": "state_history",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "minimum_initial_backstress"
+      },
+      "resolution": "blocked",
+      "open_item": "Exact extrema update, component loading-direction choice and step 19/20 duplication unresolved. Componentwise extrema need not remain trace-free; do not compress to five components without proof.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "maximum_initial_backstress",
+      "symbol": "alpha_inMax",
+      "class": "state_history",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "maximum_initial_backstress"
+      },
+      "resolution": "blocked",
+      "open_item": "Exact extrema update, component loading-direction choice and step 19/20 duplication unresolved. Componentwise extrema need not remain trace-free; do not compress to five components without proof.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "fabric",
+      "symbol": "z",
+      "class": "state_history",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "fabric"
+      },
+      "resolution": "blocked",
+      "open_item": "Do not evaluate plastic volumetric increment / D at D=0 without a source-matched limit.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "reversal_fabric",
+      "symbol": "z_in",
+      "class": "state_history",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "reversal_fabric"
+      },
+      "resolution": "blocked",
+      "open_item": "Snapshot ordering relative to same-step fabric update must be pinned.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "unresolved_fabric_tensor",
+      "symbol": "z_alpha",
+      "class": "unresolved_storage",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "unresolved_fabric_tensor"
+      },
+      "resolution": "blocked",
+      "open_item": "Requires constitutive source or author clarification.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "cumulative_fabric",
+      "symbol": "z_cum",
+      "class": "state_history",
+      "shape": "scalar",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "cumulative_fabric"
+      },
+      "resolution": "blocked",
+      "open_item": "Algorithm prose says if fabric exceeds former value; reconcile with Eq 65 cumulative norm.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "peak_fabric",
+      "symbol": "z_peak / z_pk",
+      "class": "state_history",
+      "shape": "scalar",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "peak_fabric"
+      },
+      "resolution": "blocked",
+      "open_item": "Norm convention and strict/equal peak policy to transcribe.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "fabric_formation_pressure",
+      "symbol": "p_zp",
+      "class": "state_history",
+      "shape": "scalar",
+      "unit": "stress",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "fabric_formation_pressure"
+      },
+      "resolution": "blocked",
+      "open_item": "Table 3.2 uses pzp and associated pzp,peak ambiguously versus zxpPk in Table 3.3.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "fabric_pressure_peak",
+      "symbol": "zxpPk",
+      "class": "state_history",
+      "shape": "scalar",
+      "unit": "stress (if fabric norm times pressure)",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "fabric_pressure_peak"
+      },
+      "resolution": "blocked",
+      "open_item": "Exact norm/sign/product definition unresolved; Table 3.3 prints z^ij:p although p is scalar.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "fabric_pressure_product",
+      "symbol": "zxp",
+      "class": "derived_or_cache_candidate",
+      "shape": "scalar_candidate",
+      "unit": "stress candidate",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "fabric_pressure_product"
+      },
+      "resolution": "blocked",
+      "open_item": "Tensor/scalar contraction and product comparison convention unresolved.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "dilatancy_lag",
+      "symbol": "D",
+      "class": "lag_cache",
+      "shape": "scalar",
+      "unit": "1",
+      "scope": "zone shared by all subzones",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "dilatancy_lag"
+      },
+      "resolution": "blocked",
+      "open_item": "Chronology relative to new fabric, new g and new surfaces makes this a staged dependency, not a simultaneous state function.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "plastic_modulus_lag",
+      "symbol": "Kp",
+      "class": "lag_cache",
+      "shape": "scalar",
+      "unit": "stress",
+      "scope": "zone shared by all subzones",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "plastic_modulus_lag"
+      },
+      "resolution": "blocked",
+      "open_item": "Chronology relative to new fabric, new g and new surfaces makes this a staged dependency, not a simultaneous state function.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "shear_modulus_cache",
+      "symbol": "G",
+      "class": "lag_cache",
+      "shape": "scalar",
+      "unit": "stress",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "shear_modulus_cache"
+      },
+      "resolution": "blocked",
+      "open_item": "Store or retain full dependency stage; do not apply Fsed cumulatively to already reduced G/K.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "bulk_modulus_cache",
+      "symbol": "K",
+      "class": "lag_cache",
+      "shape": "scalar",
+      "unit": "stress",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "bulk_modulus_cache"
+      },
+      "resolution": "blocked",
+      "open_item": "Store or retain full dependency stage; do not apply Fsed cumulatively to already reduced G/K.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "density_or_volume_memory",
+      "symbol": "D_R_current or e or volumetric_history",
+      "class": "unresolved_storage",
+      "shape": "scalar_candidate",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "density_or_volume_memory"
+      },
+      "resolution": "blocked",
+      "open_item": "Exact finite versus infinitesimal volume update, host density use and reset behavior not established.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "CSR_initial_normalizer",
+      "symbol": "initial stress-ratio normalization",
+      "class": "preparation",
+      "shape": "scalar_candidate",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "CSR_initial_normalizer"
+      },
+      "resolution": "blocked",
+      "open_item": "Dense/loose branch transitions and exact factor to pin; do not normalize anew every step.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "mean_pressure_cache",
+      "symbol": "p",
+      "class": "lag_cache_candidate",
+      "shape": "scalar",
+      "unit": "stress",
+      "scope": "subzone and zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "mean_pressure_cache"
+      },
+      "resolution": "blocked",
+      "open_item": "Do not eliminate cache without testing host stage consistency.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "stress_ratio_cache",
+      "symbol": "r",
+      "class": "lag_cache_candidate",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "subzone and zone",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "stress_ratio_cache"
+      },
+      "resolution": "blocked",
+      "open_item": "Averaged n normalization and relation between corrected averaged r and separately stored r unresolved.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "normal_cache",
+      "symbol": "n",
+      "class": "lag_cache_candidate",
+      "shape": "symmetric_tensor_3d",
+      "unit": "1",
+      "scope": "subzone and zone",
+      "raw_components": 6,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "normal_cache"
+      },
+      "resolution": "blocked",
+      "open_item": "Averaged n normalization and relation between corrected averaged r and separately stored r unresolved.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "strain_increment_accumulators",
+      "symbol": "unnamed accumulators",
+      "class": "unresolved_storage",
+      "shape": "unknown",
+      "unit": "strain",
+      "scope": "zone",
+      "raw_components": null,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "strain_increment_accumulators"
+      },
+      "resolution": "blocked",
+      "open_item": "Names, shapes, clearing cadence, role in reversal and restart unresolved.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "zone_reduction_workspace",
+      "symbol": "weighted sums; final-subzone marker",
+      "class": "host_workspace",
+      "shape": "workspace_set",
+      "unit": "mixed",
+      "scope": "host zone",
+      "raw_components": null,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "zone_reduction_workspace"
+      },
+      "resolution": "blocked",
+      "open_item": "Implementation design requirement, not source-named material history; weights described as area-weighted.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "hourglass_parallel_state",
+      "symbol": "parallel deviatoric elastoplastic resistance",
+      "class": "host_subzone_state",
+      "shape": "per_subzone_state_unknown",
+      "unit": "stress and strain",
+      "scope": "each subzone independently",
+      "raw_components": null,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "hourglass_parallel_state"
+      },
+      "resolution": "blocked",
+      "open_item": "Plastic law, internal variables, exact strength measure/sign and stress combination not specified sufficiently to count storage or reproduce.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "FirstCall",
+      "symbol": "First_Call",
+      "class": "control_event",
+      "shape": "flag",
+      "unit": "1",
+      "scope": "zone/material assignment",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "FirstCall"
+      },
+      "resolution": "blocked",
+      "open_item": "Which overridden/default effective parameters are recomputed on later reset needs source confirmation.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "PostShake",
+      "symbol": "Post_Shake",
+      "class": "user_mode",
+      "shape": "flag",
+      "unit": "1",
+      "scope": "zone",
+      "raw_components": 1,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "PostShake"
+      },
+      "resolution": "blocked",
+      "open_item": "Mode off/on transitions, p_sed=0 boundary and invalid fractional-power arguments require explicit policy.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "resolved_initial_parameters",
+      "symbol": "Ado,zmax,CKalpha_f,Fsed_min,p_sed0,p_min,p_min2,initial_D_R,etc.",
+      "class": "preparation",
+      "shape": "named_parameter_record",
+      "unit": "mixed",
+      "scope": "zone",
+      "raw_components": null,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "resolved_initial_parameters"
+      },
+      "resolution": "blocked",
+      "open_item": "Not an exhaustive parameter transcription; signs and initial-versus-current dependence must be reconciled before executable admission.",
+      "equations_supplied": false
+    },
+    {
+      "inventory_id": "derived_stage_terms",
+      "symbol": "xi_R,g,Mcur,Mb,Md,MdR,alpha_b,alpha_d,alpha_dR,B,C,R,L,Fsed,p_sed and multipliers",
+      "class": "derived",
+      "shape": "derived_scalar_tensor_set",
+      "unit": "mixed",
+      "scope": "subzone/zone by stage",
+      "raw_components": null,
+      "definition_ref": {
+        "path": "catalogue/source-audits/pm4sand3d-1.0-history-inventory.json",
+        "field_id": "derived_stage_terms"
+      },
+      "resolution": "blocked",
+      "open_item": "Exact stage dependency DAG and singular-domain branches pending.",
+      "equations_supplied": false
+    }
+  ],
+  "snapshot_contract": {
+    "identity": [
+      "model_source_hash",
+      "contract_version",
+      "preparation_epoch",
+      "committed_generation",
+      "host_scope",
+      "physical_clock_if_applicable"
+    ],
+    "parent": "Immutable complete incoming snapshot, including every retained history, lag value, mode and applicable clock/strain/host state.",
+    "caller_input": "Full declared increment, optional actual time interval, frame, host weights, user command and algorithm settings; independent of output sampling.",
+    "prepared": "One provisional preparation/reset snapshot per candidate transaction; identity map when no command/reset applies.",
+    "phase_outputs": "Named immutable records; no read of a later phase and no mutable implicit new namespace.",
+    "within_phase": "All guards and RHS expressions read the same input snapshots and assignments apply simultaneously; unique target per phase; reject cycles/undeclared cross-phase reads.",
+    "conditional_evaluation": "Future phased contract evaluates guard first; evaluates only selected assignment RHS/dependencies. Guard finite and signed scalar if using sign rule. Legacy eager-derived behavior is preserved by its adapter.",
+    "conflicts": "Multiple writes to the same target require explicit separate phase edges; competing event writes without declared composition are rejected.",
+    "publication": "Only validated candidate_full_snapshot can be atomically published. Intermediate source term commit refers to local provisional stage, not a public durable commit.",
+    "base": "The successful provisional prepared snapshot is the base for all within-caller-step history reads; otherwise base=parent. Incoming parent remains the rollback target even if preparation succeeded."
+  },
+  "outer_transaction": [
+    {
+      "phase": "validate",
+      "action": "Validate version/capabilities, parent, preparation lineage, units/shapes/scales, caller inputs and supported command; do not repair parent."
+    },
+    {
+      "phase": "fork",
+      "action": "Allocate private trial snapshot/workspace, sharing immutable parameters; clear trial-only counters/sums."
+    },
+    {
+      "phase": "prepare",
+      "action": "Apply supported explicit reset/mode command provisionally using the same parent and caller input for every outer candidate."
+    },
+    {
+      "phase": "evaluate",
+      "action": "Run declared model phase DAG; no caller-visible writes and no durable event logs."
+    },
+    {
+      "phase": "validate_candidate",
+      "action": "Check complete required outputs, finite values, domain, host reduction completion, stage tags, budgets and caller controls."
+    },
+    {
+      "phase": "select",
+      "action": "Mixed-control solver may accept a candidate endpoint; selection still does not mutate caller parent."
+    },
+    {
+      "phase": "commit",
+      "action": "Publish state/history, preparation epoch, lag caches, modes, time/strain and host state together exactly once; publish accepted event records only then."
+    },
+    {
+      "phase": "failure",
+      "action": "Return incoming snapshot values and identity exactly, with failure location and attempted-work diagnostics; discard all candidate events/workspace."
+    }
+  ],
+  "caller_and_subdivision": {
+    "caller_increment": "Physical algorithm boundary at which admitted caller-stage resets/lag advancement occur; explicit path knots define it, not sampling, Newton iterations or numerical cutbacks.",
+    "PM4_documented_policy": "Explicit full caller step with end-zone update and one-step D/Kp lag; constitutive substepping absent from manual implementation.",
+    "proposed_initial_PM4_scope": "No internal subdivision support. If full trial fails, fail transaction; caller may submit explicit finer increments with new recorded provenance.",
+    "future_subdivisions": "Require separate declared policy and reference evidence. Legacy parent-reset adapter freezes caller reset across internal subdivisions while continuous state and _n evolve per accepted internal substep; do not infer same policy for PM4 lag.",
+    "zero_increment": "Material update dispatch is distinct from observation. Existing replay duplicate targets preserve history and skip integration; explicit reset/mode commands need a separate command boundary and must not disappear through observation deduplication.",
+    "physical_time": "No PM4 physical time dependence inferred. Timed ODE adapter retains clock atomically; no previous-state/caller de injected into an ODE RHS.",
+    "rejected_outer_trials": "Each finite-difference probe, line search, restart seed and mixed-control candidate forks the same committed parent plus same pending explicit command; no accumulation across candidates."
+  },
+  "ordered_model_phases": [
+    {
+      "id": "prepared",
+      "scope": "preparation_transaction",
+      "reads": [
+        "parent",
+        "caller.command",
+        "preparation.raw_inputs"
+      ],
+      "writes": [
+        "preparation_epoch",
+        "resolved_parameters",
+        "initialized_history",
+        "initialized_lag_cache",
+        "FirstCall_marker"
+      ],
+      "assignment_semantics": "all guards and RHS read declared immutable snapshots; writes become visible only in named output snapshot",
+      "source_locators": [
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=83",
+          "printed_pages": [
+            78,
+            79,
+            83,
+            84,
+            85,
+            86
+          ],
+          "pdf_pages": [
+            83,
+            84,
+            88,
+            89,
+            90,
+            91
+          ],
+          "detail": "Table3.3; FirstCall and zero-selects-default behavior"
+        }
+      ],
+      "model_execution": "blocked_pending_equations_and_source_resolution",
+      "blockers": [
+        "INIT-SIGNS",
+        "INIT-BRANCHES",
+        "RESET-DEFAULTS"
+      ]
+    },
+    {
+      "id": "subzone_trial",
+      "scope": "per_subzone",
+      "reads": [
+        "prepared_or_parent",
+        "caller.full_increment",
+        "host.subzone_strains",
+        "lag_cache.D",
+        "lag_cache.Kp",
+        "lag_cache.G",
+        "lag_cache.K"
+      ],
+      "writes": [
+        "trial_subzone_stress",
+        "trial_subzone_alpha",
+        "trial_subzone_p",
+        "trial_subzone_r",
+        "trial_subzone_n"
+      ],
+      "assignment_semantics": "all guards and RHS read declared immutable snapshots; writes become visible only in named output snapshot",
+      "source_locators": [
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=81",
+          "printed_pages": [
+            76,
+            77
+          ],
+          "pdf_pages": [
+            81,
+            82
+          ],
+          "detail": "Tables3.1-3.2 steps2-8"
+        }
+      ],
+      "model_execution": "blocked_pending_equations_and_source_resolution",
+      "blockers": [
+        "STRESS-CORRECTION",
+        "HOST-PARENT"
+      ]
+    },
+    {
+      "id": "zone_reduced",
+      "scope": "all_subzones_complete",
+      "reads": [
+        "subzone_trial.completed_set",
+        "host.weights"
+      ],
+      "writes": [
+        "averaged_strain_increment",
+        "averaged_volumetric_increment",
+        "averaged_stress",
+        "averaged_alpha",
+        "averaged_p",
+        "averaged_n",
+        "averaged_rotation"
+      ],
+      "assignment_semantics": "all guards and RHS read declared immutable snapshots; writes become visible only in named output snapshot",
+      "source_locators": [
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=82",
+          "printed_pages": [
+            77,
+            80
+          ],
+          "pdf_pages": [
+            82,
+            85
+          ],
+          "detail": "Table3.2 step9; Figure3.1"
+        }
+      ],
+      "model_execution": "blocked_pending_equations_and_source_resolution",
+      "blockers": [
+        "HOST-AVERAGING"
+      ]
+    },
+    {
+      "id": "zone_corrected",
+      "scope": "zone",
+      "reads": [
+        "zone_reduced"
+      ],
+      "writes": [
+        "corrected_stress",
+        "corrected_alpha",
+        "corrected_r",
+        "images",
+        "reversal_predicate"
+      ],
+      "assignment_semantics": "all guards and RHS read declared immutable snapshots; writes become visible only in named output snapshot",
+      "source_locators": [
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=82",
+          "printed_pages": [
+            77
+          ],
+          "pdf_pages": [
+            82
+          ],
+          "detail": "Table3.2 steps10-12"
+        }
+      ],
+      "model_execution": "blocked_pending_equations_and_source_resolution",
+      "blockers": [
+        "PENALTIES",
+        "EVENT-STAGE"
+      ]
+    },
+    {
+      "id": "lag_candidate",
+      "scope": "zone",
+      "reads": [
+        "zone_corrected",
+        "prepared_or_parent.history",
+        "prepared_or_parent.resolved_parameters"
+      ],
+      "writes": [
+        "next_D",
+        "next_Kp"
+      ],
+      "assignment_semantics": "all guards and RHS read declared immutable snapshots; writes become visible only in named output snapshot",
+      "source_locators": [
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=76",
+          "printed_pages": [
+            71,
+            72,
+            77
+          ],
+          "pdf_pages": [
+            76,
+            77,
+            82
+          ],
+          "detail": "Sec3.2 one-step lag; Table3.2 step13"
+        }
+      ],
+      "model_execution": "blocked_pending_equations_and_source_resolution",
+      "blockers": [
+        "LAG-DEPENDENCIES"
+      ]
+    },
+    {
+      "id": "fabric_candidate",
+      "scope": "zone",
+      "reads": [
+        "zone_corrected",
+        "lag_candidate",
+        "prepared_or_parent.fabric_history"
+      ],
+      "writes": [
+        "next_z",
+        "next_z_cum",
+        "next_z_peak",
+        "next_product_peak",
+        "next_p_zp",
+        "next_z_in"
+      ],
+      "assignment_semantics": "all guards and RHS read declared immutable snapshots; writes become visible only in named output snapshot",
+      "source_locators": [
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=40",
+          "printed_pages": [
+            35,
+            36,
+            37,
+            38,
+            77
+          ],
+          "pdf_pages": [
+            40,
+            41,
+            42,
+            43,
+            82
+          ],
+          "detail": "Sec2.8; Table3.2 steps14-16"
+        }
+      ],
+      "model_execution": "blocked_pending_equations_and_source_resolution",
+      "blockers": [
+        "FABRIC-PRODUCT",
+        "FABRIC-ZERO-D",
+        "FABRIC-SNAPSHOT"
+      ]
+    },
+    {
+      "id": "surfaces_moduli_candidate",
+      "scope": "zone",
+      "reads": [
+        "zone_corrected",
+        "fabric_candidate",
+        "preparation.initial_normalizers"
+      ],
+      "writes": [
+        "next_density_representation",
+        "next_relative_state",
+        "next_g",
+        "next_Mb",
+        "next_Md",
+        "base_next_G",
+        "base_next_K"
+      ],
+      "assignment_semantics": "all guards and RHS read declared immutable snapshots; writes become visible only in named output snapshot",
+      "source_locators": [
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=32",
+          "printed_pages": [
+            27,
+            28,
+            43,
+            77
+          ],
+          "pdf_pages": [
+            32,
+            33,
+            48,
+            82
+          ],
+          "detail": "Sec2.6; Eq93; Table3.2 steps17-18"
+        }
+      ],
+      "model_execution": "blocked_pending_equations_and_source_resolution",
+      "blockers": [
+        "DENSITY",
+        "CSR-NORMALIZER"
+      ]
+    },
+    {
+      "id": "anchor_candidate",
+      "scope": "zone",
+      "reads": [
+        "zone_corrected",
+        "prepared_or_parent.reversal_histories",
+        "fabric_candidate"
+      ],
+      "writes": [
+        "next_alpha_in",
+        "next_alpha_inP",
+        "next_alpha_inMin",
+        "next_alpha_inMax",
+        "next_strain_accumulators"
+      ],
+      "assignment_semantics": "all guards and RHS read declared immutable snapshots; writes become visible only in named output snapshot",
+      "source_locators": [
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=31",
+          "printed_pages": [
+            26,
+            27,
+            77,
+            79
+          ],
+          "pdf_pages": [
+            31,
+            32,
+            82,
+            84
+          ],
+          "detail": "Sec2.5; Table3.2 steps19-20; Table3.3 step5"
+        }
+      ],
+      "model_execution": "blocked_pending_equations_and_source_resolution",
+      "blockers": [
+        "ANCHOR-ORDER",
+        "ANCHOR-EXTREMA",
+        "ACCUMULATORS"
+      ]
+    },
+    {
+      "id": "rotation_postshake_candidate",
+      "scope": "zone",
+      "reads": [
+        "zone_corrected",
+        "lag_candidate",
+        "fabric_candidate",
+        "surfaces_moduli_candidate",
+        "anchor_candidate",
+        "caller.user_mode"
+      ],
+      "writes": [
+        "candidate_full_snapshot"
+      ],
+      "assignment_semantics": "all guards and RHS read declared immutable snapshots; writes become visible only in named output snapshot",
+      "source_locators": [
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf#page=49",
+          "printed_pages": [
+            44,
+            45,
+            77
+          ],
+          "pdf_pages": [
+            49,
+            50,
+            82
+          ],
+          "detail": "Eqs94-99; Table3.2 steps21-23"
+        }
+      ],
+      "model_execution": "blocked_pending_equations_and_source_resolution",
+      "blockers": [
+        "ZERO-SPIN-SCOPE",
+        "POSTSHAKE-DOMAINS"
+      ]
+    }
+  ],
+  "ordered_snapshot_example": {
+    "status": "illustrative dependency notation only; not an admitted PM4 assignment program",
+    "snapshots": [
+      "old=prepared_or_parent.reversal_history",
+      "current=zone_corrected"
+    ],
+    "desired_generic_property": "previous receives old initial even when initial receives current alpha in another ordered phase; source must choose actual phase ordering.",
+    "illustrative_operations": [
+      {
+        "target": "candidate.alpha_inP",
+        "operation": "copy",
+        "read": "old.alpha_in",
+        "enabled": false,
+        "blocked_by": "ANCHOR-ORDER"
+      },
+      {
+        "target": "candidate.alpha_in",
+        "operation": "copy",
+        "read": "current.alpha",
+        "enabled": false,
+        "blocked_by": "ANCHOR-ORDER"
+      }
+    ],
+    "fabric_snapshot_requirement": "Source must select whether z_in reads old fabric or updated fabric; contract refuses ambiguous new.z."
+  },
+  "cache_policy": {
+    "algorithm_cache": "D/Kp retained even if algebraically derivable with earlier-stage inputs; they are not arbitrary memoization.",
+    "trial_memoization_key": [
+      "model_source_hash",
+      "contract_version",
+      "parent_identity",
+      "preparation_identity",
+      "full_candidate_loading",
+      "command",
+      "settings",
+      "stage_id"
+    ],
+    "memoization_scope": "At most one transaction; reuse across different candidate loading/parent/settings forbidden unless key exact.",
+    "restart": "Serialize required algorithmic cache and stage/epoch metadata; reject missing cache unless source-validated reconstruction exists.",
+    "diagnostics": "Attempt counts may differ without changing committed material data."
+  },
+  "derivative_policy": {
+    "continuous_unknowns": "Separate coupled solve unknowns from retained copied histories/caches; do not put all persistent fields in one AD vector automatically.",
+    "frozen_snapshots": "No inner derivative through caller-selected discrete assignments unless an explicit differentiability contract is added.",
+    "outer_probes": "Include candidate-dependent preparation naturally by fresh transactions; guard crossings may be nonsmooth.",
+    "tangent_claim": "No consistent tangent through PM4 events or source-host update claimed.",
+    "capacity": "Existing32-component model/Jet limits unchanged. This proposal is not an allocation authorization."
+  },
+  "initialization_and_modes": [
+    {
+      "event": "assign_material",
+      "scope": "explicit preparation transaction",
+      "result": "Admissible initialized snapshot or exact unchanged incoming host state on failure; record source corrections/default resolution."
+    },
+    {
+      "event": "FirstCall_zero",
+      "scope": "explicit preparation reset from current host stress",
+      "result": "Erase specified histories and reinitialize caches; new epoch only on commit; exact default recomputation unresolved."
+    },
+    {
+      "event": "set_PostShake",
+      "scope": "explicit user mode boundary",
+      "result": "Apply user mode at declared next caller update; source ordering/domain gate required; no autonomous trigger from time."
+    },
+    {
+      "event": "ordinary_restart",
+      "scope": "restore serialized committed snapshot",
+      "result": "Does not invoke FirstCall, renormalize CSR, recompute initial defaults, clear fabric or toggle PostShake."
+    }
+  ],
+  "unsupported": [
+    "Execution of this proposal by existing schema0.1/0.2 loaders or legacy APIs.",
+    "PM4 constitutive kernel, complete initialization, inferred z_alpha evolution or repaired source equations.",
+    "Full FLAC3D mixed-discretization/hourglass host equivalence.",
+    "Large-strain rotations/objectivity for all history tensors.",
+    "Automatic continuous event location, event prioritization, accepted-substep resets, time-triggered mode changes, DAEs or arbitrary multistep histories.",
+    "Mid-zone or mid-trial resumable restart.",
+    "Automatic partition invariance for caller-stage lag/event algorithms.",
+    "Automatic material-point or runtime admission merely because a field inventory fits allocated memory."
+  ],
+  "source_blockers": {
+    "INIT-SIGNS": "One explicit Chapter2/host tension-positive sign map, pressure floors and Table3.3 trace notation.",
+    "INIT-BRANCHES": "sigma11=0, xi_R=0, Mfin=Mcut, hydrostatic Lode direction and critical Ado limit.",
+    "RESET-DEFAULTS": "Exact secondary override/default recomputation on later FirstCall=0.",
+    "STRESS-CORRECTION": "Printed Table3.1 step7(b)(ii) versus clean Eqs35-37 and complete plastic update.",
+    "HOST-PARENT": "Exact subzone stress parent versus main zone state and independent hourglass law/state.",
+    "HOST-AVERAGING": "Weights, corrected p/r/n consistency and whether averaged n is normalized.",
+    "PENALTIES": "Exact consistency/bounding projection algorithm, domain handling and tie policy.",
+    "EVENT-STAGE": "Exact corrected/averaged alpha and n used for reversal decision.",
+    "LAG-DEPENDENCIES": "Complete old/new stage dependency map for D and Kp before new fabric/g/surfaces.",
+    "FABRIC-PRODUCT": "Well-typed z*p metric, signs, zxpPk/pzp,peak aliases and strict/equal peak update policy.",
+    "FABRIC-ZERO-D": "Source-matched finite fabric update at D=0; reconcile cumulative Eq65 and algorithm prose.",
+    "FABRIC-SNAPSHOT": "z_in before/after same-step fabric update; unexplained z_alpha.",
+    "DENSITY": "Exact density/volume update, state representation, restart and reset behavior.",
+    "CSR-NORMALIZER": "Exact initialization scalar provenance and dense/loose transitions.",
+    "ANCHOR-ORDER": "Step19/20 duplication and exact old/new reversal snapshot assignments.",
+    "ANCHOR-EXTREMA": "alpha_inMin/Max relation to apparent anchor and component loading direction.",
+    "ACCUMULATORS": "Names/shapes, reset/clear cadence and role of strain increment accumulators.",
+    "ZERO-SPIN-SCOPE": "Only zero-spin point reduction proposed; full rotation of all histories unsupported.",
+    "POSTSHAKE-DOMAINS": "p_sed=0 and fractional-power domains, flag transitions and initial-density provenance."
+  },
+  "acceptance_gates": [
+    {
+      "id": "HIST-G1",
+      "name": "parser_isolation",
+      "require": "Proposal JSON rejected by model loader; current models and canonical hashes unchanged; no execution dispatch by candidate status."
+    },
+    {
+      "id": "HIST-G2",
+      "name": "typed_phase_validation",
+      "require": "Scopes/units/shapes immutable snapshot reads validated; reject DAG cycles, duplicate writes, future reads, unknown layouts, invalid enum and missing required cache."
+    },
+    {
+      "id": "HIST-G3",
+      "name": "transaction_oracles",
+      "require": "Synthetic analytical assignments test old/new snapshots, simultaneous phase swaps, lazy inactive branches, nonfinite guards and later failure after provisional work; exact full-parent rollback."
+    },
+    {
+      "id": "HIST-G4",
+      "name": "legacy_compatibility",
+      "require": "All existing parent-reset, five-model references, recorded mixed-control and physical-time/timed schedule cases retain declared behavior and settings."
+    },
+    {
+      "id": "HIST-G5",
+      "name": "restart_and_lineage",
+      "require": "Complete serialized snapshot restart reproduces endpoint; missing/wrong hashes/epochs/cache stages rejected; mode/reset events commit once."
+    },
+    {
+      "id": "HIST-G6",
+      "name": "PM4_source_resolution",
+      "require": "Resolve all source_blockers or explicitly exclude capability/variant affected; independent review of exact selected manual/implementation."
+    },
+    {
+      "id": "HIST-G7",
+      "name": "bounded_PM4_numerics",
+      "require": "Source-matched zero-spin homogeneous reference, caller-partition refinement, microcycle reversal, initialization/reset, lag and optional hourglass-separated tests; retained error metrics and source locations."
+    },
+    {
+      "id": "HIST-G8",
+      "name": "runtime_and_publication",
+      "require": "After source and Python gates, controlled serial native and Wasm evidence with same contract/fixtures, then honest catalogue capability labels; no status promotion from engine tests alone."
+    }
+  ],
+  "migration_sequence": [
+    "Document only: retain proposal outside executable model directories; confirm scope and source blockers.",
+    "Add future versioned experimental transaction-envelope schema with strict capability negotiation and synthetic <=32-unknown fixtures; do not change model schema defaults.",
+    "Implement Python interpreter and validation reference before generated code; use explicit typed snapshots and separate preparation/cache records.",
+    "Adapt existing v0.1 parent_increment resets and v0.2 timed ODEs with identity wrappers preserving evaluator/_n/clock semantics; never reinterpret them as PM4 phases.",
+    "Design storage/backend resources from resolved layouts and coupled unknown counts; no blanket max_state increase.",
+    "Implement generated/native envelope only after analytical reference tests pass; obtain separate serial-build authorization as appropriate.",
+    "Admit source-resolved PM4 homogeneous kernel separately; full-host and rotations remain distinct later capabilities."
+  ]
+}

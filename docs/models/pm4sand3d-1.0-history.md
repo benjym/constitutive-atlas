@@ -74,3 +74,7 @@ The JSON retains the full conflict ledger. The immediate gates are:
 - Define an explicit zero-spin homogeneous reduction and lag boundary, then verify reset/replay equivalence, reversal microcycles, caller-step partition sensitivity and failed-trial rollback.
 
 Table3.1's initialization cross-reference is wrong (it points to Table3.2; initialization is Table3.3). Its printed plastic stress correction also needs reconciliation with Eqs35–37. No source ambiguity here is repaired silently, no executable registration is added, and no reuse permission is inferred from availability of the manual or driver examples.
+
+## Proposed engine contract
+
+The [experimental history/transaction design](../HISTORY_TRANSACTIONS.md) and [non-executable PM4Sand3D example](../../proposals/pm4sand3d-history-contract.json) map this inventory to typed storage lifetimes, immutable phase snapshots, caller boundaries and atomic commit/rollback. All source-blocked update phases remain disabled. The current model parser, solver and state capacity are unchanged.

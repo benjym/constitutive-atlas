@@ -80,4 +80,6 @@ The [experimental recipe contract](../INITIALIZATION_RECIPES.md) now implements 
 
 ## Separate prepared-creep reference
 
-The [scalar creep investigation](../TERRACOTTA_CREEP_REFERENCE.md) now checks three frozen prepared states at constant total pressure/q against a separate RK4/midpoint implementation of the continuous Figure1 equations. Nine native runs refine all non-roundoff state/strain/rate/elastic-stress channels; source reconciliation, external author-matched histories, scientific review, new-case Wasm parity and experimental validation remain open. This is Terracotta-specific creep evidence, separate from the Maxwell engine fixture and earlier shared-author-RHS histories.
+The [scalar creep investigation](../TERRACOTTA_CREEP_REFERENCE.md) now checks three frozen prepared states at constant total pressure/q against a separate RK4/midpoint implementation of the continuous Figure1 equations. Nine native runs refine all non-roundoff state/strain/rate/elastic-stress channels; source reconciliation, external author-matched histories, scientific review, experimental validation remain open. This is Terracotta-specific creep evidence, separate from the Maxwell engine fixture and earlier shared-author-RHS histories.
+
+The [prepared-creep native/Wasm study](../TERRACOTTA_CREEP_REFERENCE.md#nativewasm-prepared-creep-verification) now covers all nine frozen-preparation cases through both C-ABI backends, each separately checked against the scalar reference. This does not close interactive browser creep, source reconciliation or experimental validation.

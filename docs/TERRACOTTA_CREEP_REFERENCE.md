@@ -42,6 +42,18 @@ ATLAS_RESEARCH_SOLVER=build/atlas_research_solver \
   python -m unittest tests.test_terracotta_creep -v
 ```
 
-The [retained manifest](../catalogue/investigations/terracotta-creep-v1/manifest.json) pins reference/implementation inputs, all nine native responses, summary and test evidence. The existing matching research binary was reused; no native build, external DLL/Fortran execution, experimental-data redistribution or new Wasm/browser check was required. CI's existing CTest Python discovery includes these tests and supplies the research solver path.
+The [retained manifest](../catalogue/investigations/terracotta-creep-v1/manifest.json) pins reference/implementation inputs, all nine native responses, summary and test evidence. That native-only milestone reused the existing matching research binary; no native build, external DLL/Fortran execution or experimental-data redistribution was required. CI's existing CTest Python discovery includes these tests and supplies the research solver path.
 
-This advances numerical creep verification and TC-05 while preserving candidate/draft status. External source-matched creep histories, independent scientific equation review, full journal/author reconciliation, broader initial/rate/domain coverage, Wasm parity for these new cases and applicable clay experimental comparisons remain open. The original axisymmetric scope and the twenty-model full-3D gate are unchanged.
+This advances numerical creep verification and TC-05 while preserving candidate/draft status. External source-matched creep histories, independent scientific equation review, full journal/author reconciliation, broader initial/rate/domain coverage, applicable clay experimental comparisons remain open. The original axisymmetric scope and the twenty-model full-3D gate are unchanged.
+
+## Native/Wasm prepared-creep verification
+
+The [paired C-ABI runner](../tools/test_terracotta_creep_wasm.mjs) executes all nine frozen-preparation requests through both backends. The [reference verifier](../tools/verify_terracotta_creep_wasm.py) independently subjects each complete backend matrix to the componentwise bounds and refinement checks above. Pairwise differences must also stay below `1e-7 * max(1, abs(native))` for each sampled value; this is a parity criterion, not a physical accuracy bound. Iteration counts may differ.
+
+[Retained evidence](../catalogue/investigations/terracotta-creep-wasm-v1/manifest.json) binds the requests, reference, model, verification tools and paired results; the paired report also records the exact native binary, Wasm loader and Wasm binary hashes. Existing matching builds were reused. These are Node-hosted Wasm C-ABI checks; an interactive-browser creep workflow remains separate. CI runs both commands after its existing research builds:
+
+```sh
+node tools/test_terracotta_creep_wasm.mjs --output /tmp/terracotta-creep-parity.json
+python -m tools.verify_terracotta_creep_wasm /tmp/terracotta-creep-parity.json
+python -m unittest tests.test_terracotta_creep_wasm -v
+```
