@@ -247,3 +247,7 @@ Keep finite-strain/finite-rotation mechanics, finite elements, boundary-value so
 ### Original papers received — 2026-10-31
 
 The [four-paper receipt](catalogue/source-audits/original-papers-2026-10-31.json) pins user-supplied SANISAND-2004, VW96, IGS97 and Wu–Bauer 1994 PDFs without redistributing them. All title pages are verified. The [SANISAND original-paper dossier](docs/models/sanisand-2004-original.md) maps equations, Table 1 and triaxial reductions, distinguishes current-void-ratio elasticity from OpenSees, and flags the apparent missing bulk modulus in printed Eq. (20). VW96/IGS97 equation reconciliation and Wu–Bauer extraction remain pending. SAN-01 remains open for initialization, domains and independent review; no executable count or validation claim changes.
+
+### IGS original-source reconciliation — 2026-10-31
+
+The [IGS97 original-paper review](docs/models/hypoplastic-sand-igs97-original.md) confirms the continuous overlay, identifies the seven-parameter host as `beta=1`, pins Table I, and separates history overshoot/reset and spin transport from Atlas numerical choices. A new [Python-only source-equation report](catalogue/investigations/igs-original-rates-v1.json) passes 576 Cartesian fourth-order versus interpreter comparisons. Complete preparation-path reproduction, native/reference integration, original VW96 reconciliation and independent review remain open; REV-04/REV-05 are not closed.

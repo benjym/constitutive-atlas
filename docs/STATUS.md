@@ -72,3 +72,7 @@ The PM4Sand3D manual audit now includes a source-linked instantaneous surface fr
 ## Original-paper receipt — 2026-10-31
 
 Four user-supplied originals are [hash-pinned](../catalogue/source-audits/original-papers-2026-10-31.json), resolving the requested-paper access gap. The [SANISAND original extraction](models/sanisand-2004-original.md) records source equations and parameter/figure distinctions, current-void-ratio elasticity and an apparent printed Eq. (20) omission requiring review. The other three title pages are verified; detailed reconciliation remains pending. PDFs are not redistributed. Source completeness, independent review and full-reference execution gates remain open.
+
+## IGS original-source reconciliation — 2026-10-31
+
+The [IGS original review](models/hypoplastic-sand-igs97-original.md) now maps the overlay, seven-parameter host specialization (`beta=1`), Table I and objective history transport. A separate Cartesian fourth-order oracle passes [576 interpreter-rate comparisons](../catalogue/investigations/igs-original-rates-v1.json). This does not extend native or integrated-history evidence. Original overshoot correction, resting-period preparation and strict parameter recommendations differ from current Atlas choices and remain explicit review items.
