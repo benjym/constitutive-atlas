@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from atlas.refinement import VERSION,validate_study,refine_recorded,difference
-from atlas.recorded import recorded_wire,MATERIAL_DEFAULTS,CONTROL_DEFAULTS
+from atlas.recorded import recorded_wire,MATERIAL_DEFAULTS,CONTROL_DEFAULTS,RESTART_DEFAULTS
 
 
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
@@ -38,6 +38,9 @@ def summarize(report,settings_pairs=()):
             expected_material=MATERIAL_DEFAULTS|spec.get('integration_settings',{})
             if any(r['integration_settings'][key]!=v for key,v in expected_material.items()):raise ValueError('material settings changed')
             if r['control_settings']!=CONTROL_DEFAULTS|spec.get('control_settings',{}):raise ValueError('control settings changed')
+            if 'restart_settings' in spec:
+                if r.get('restart_settings')!=RESTART_DEFAULTS|spec['restart_settings']:raise ValueError('restart settings changed')
+            elif 'restart_settings' in r:raise ValueError('unexpected restart settings')
             for field in ('parameters','initial'):
                 if field in spec and spec[field]!=r[field]:raise ValueError('explicit material/state inputs changed')
             if first is None:first=r

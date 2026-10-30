@@ -101,3 +101,8 @@ node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_sol
 
 
 Explicit caller-path density studies are now available through [recorded refinement](RECORDED_REFINEMENT.md). They preserve original knots and report failures, successive differences and differences from the requested finest level; they do not change normal replay automatically. Source-matched references, diagnosis of coarse-control failures and full experimental-path validation remain open.
+
+
+### Optional bounded control restarts
+
+An explicit top-level `restart_settings` object enables [bounded restarts](RECORDED_RESTARTS.md) after a finite mixed-control Jacobian proves singular. It changes the numerical policy without altering observations or material equations. Omission preserves the original API/default behavior. The additive C/Wasm endpoint is `atlas_replay_recorded_with_restarts`; its ninth argument contains `max_restarts,restart_step,restart_levels`. CLI callers use `--recorded-restarts`. JSON imports and browser exports preserve the policy and its separate work counters. See the [complete Drucker–Prager example](../protocols/recorded-dp-restart-run.json).

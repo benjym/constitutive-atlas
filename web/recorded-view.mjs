@@ -24,7 +24,7 @@ export function setupRecordedView({models,catalogueHash,chart,sourceLinks,defini
     if(r.catalogue_hash!==catalogueHash)throw Error('Engine and catalogue differ. Reload a matching build.');
     result=r;plot();exports(Boolean(r.points.length));
     message(r.ok?`Replay complete · ${r.points.length} ordered observations · ${r.material_trials} material trials.`:r.failed_knot<0?`Replay rejected before integration. ${r.message}`:`Stopped at record ${r.failed_knot} · ${r.points.length} committed observations retained. ${r.message}`);
-    $('recorded-resolved').textContent=JSON.stringify({parameters:r.parameters,initial:r.initial,integration_settings:r.integration_settings,control_settings:r.control_settings},null,2);
+    $('recorded-resolved').textContent=JSON.stringify({parameters:r.parameters,initial:r.initial,integration_settings:r.integration_settings,control_settings:r.control_settings,...(r.restart_settings?{restart_settings:r.restart_settings,restart_diagnostics:r.restart_diagnostics}:{})},null,2);
    }catch(error){message('Replay error: '+error.message);}
   };
   worker.onerror=event=>{if(id!==generation)return;stop();message('Replay error: '+event.message);};

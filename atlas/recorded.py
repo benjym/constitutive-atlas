@@ -68,6 +68,8 @@ CONTROL_DEFAULTS = dict(control_tolerance=1e-10, max_iterations=30,
                         finite_difference_step=1e-7)
 
 
+RESTART_DEFAULTS = dict(max_restarts=1, restart_step=1e-4, restart_levels=8)
+
 def validate_recorded_run(spec):
     """Validate a closed request; model compatibility is checked by the engine."""
     try:
@@ -112,6 +114,7 @@ def execute_recorded(spec, solver, timeout=60):
     controls, knots = recorded_wire(spec)
     material = MATERIAL_DEFAULTS | spec.get('integration_settings', {})
     control = CONTROL_DEFAULTS | spec.get('control_settings', {})
+    restarts = RESTART_DEFAULTS | spec['restart_settings'] if 'restart_settings' in spec else None
     csv = lambda values: ','.join(repr(float(v)) for v in values)
     with tempfile.TemporaryDirectory(prefix='atlas-recorded-') as directory:
         c, k = Path(directory)/'controls.csv', Path(directory)/'knots.csv'
@@ -121,6 +124,7 @@ def execute_recorded(spec, solver, timeout=60):
                    '--recorded-controls-file', str(c), '--recorded-knots-file', str(k),
                    '--integration-settings', csv(material.values()),
                    '--recorded-settings', csv(control.values())]
+        if restarts is not None: command.extend(['--recorded-restarts', csv(restarts.values())])
         for field in ('parameters', 'initial'):
             if field in spec: command.extend(['--'+field, csv(spec[field])])
         process = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
@@ -141,6 +145,19 @@ def execute_recorded(spec, solver, timeout=60):
                 or any(result.get('integration_settings', {}).get(key) != value
                        for key, value in material.items())):
             raise RuntimeError('recorded solver response does not match request or settings')
+    if result['ok'] or 'api_version' in result:
+        if (restarts is not None and result.get('restart_settings') != restarts) or (restarts is None and any(key in result for key in ('restart_settings','restart_diagnostics'))):
+            raise RuntimeError('recorded solver restart policy does not match request')
+        if restarts is not None:
+            diagnostics=result.get('restart_diagnostics', {})
+            if set(diagnostics) != {'searches','material_trials','accepted'} or any(type(v) is not int or v<0 for v in diagnostics.values()):
+                raise RuntimeError('invalid recorded restart diagnostics')
+            total=result.get('material_trials')
+            if type(total) is not int or total<0:
+                raise RuntimeError('invalid recorded material trial total')
+            if (not diagnostics['accepted']<=diagnostics['searches'] or diagnostics['material_trials']>total
+                    or (restarts['max_restarts']==0 and any(diagnostics.values()))):
+                raise RuntimeError('inconsistent recorded restart diagnostics')
     result['specification'] = spec
     canonical = json.dumps(spec, sort_keys=True, separators=(',', ':'), allow_nan=False)
     result['request_sha256'] = hashlib.sha256(canonical.encode()).hexdigest()

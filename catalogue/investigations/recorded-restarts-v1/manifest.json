@@ -1,0 +1,243 @@
+{
+  "id": "recorded-restarts-v1",
+  "date": "2026-10-31",
+  "base_revision": "6422f4d8b73c63fea958383ed4b97188dba1e995",
+  "status": "passed bounded opt-in numerical restart investigation; no admission or experimental validation",
+  "scope": "Untimed fixed-frame recorded mixed controls, finite singular reduced Jacobians; legacy defaults remain disabled.",
+  "policy": {
+    "opt_in": "Explicit restart_settings object; empty object resolves defaults",
+    "defaults": {
+      "max_restarts": 1,
+      "restart_step": 0.0001,
+      "restart_levels": 8
+    },
+    "max_restarts_scope": "Per attempted caller knot",
+    "directions": "Positive/negative normalized sum, then positive/negative individual feasible nullspace directions",
+    "radii": "restart_step * 2^level for level=0..restart_levels-1",
+    "selection": "Immediate convergence or best sufficient improvement at smallest improving radius; first exact tie retained",
+    "sufficient_improvement": "next_error < current_error * (1 - 1e-8) unless converged",
+    "parent": "Immutable last committed caller knot for every trial",
+    "budgets": "Existing global material trial cap and outer iteration limit remain in force; all exploratory calls and accepted internal work are counted"
+  },
+  "execution": {
+    "native_compiler": "Apple clang 21.0.0; arm64-apple-darwin25.6.0",
+    "native_flags": "-O0 -std=gnu++20 -Wall -Wextra -Wno-unused-variable",
+    "native_binary_sha256": "116edee1e14de73dac5837462d507d84fbee1bff615feddb88104a8a075c581b",
+    "fixture_binary_sha256": "49453faff89f12994a2acc11379578c8da7b689e95e564a05b39ed3301b14b89",
+    "generated_header_sha256": "d5381b70319eecca056f8374f948b40b6dcd2bc1eff854c9188761a5b87b0919",
+    "fixture_header_sha256": "413de40ac3bbe0766f76815ae0482a09a906ca4eada2bf573b3a27dd849a42a4",
+    "catalogue_hash": "1cac1ed6b2a284b561ed6fed00dd751e384748ea5e5f9d14467e410dc18a218c",
+    "emscripten": "6.0.8-git",
+    "node": "v26.7.0",
+    "python": "3.14.7",
+    "wasm_js_sha256": "4e0e16b48458b74bc76a9f6060c940ddca6ccc44ae19a3cb2082bd87f0884477",
+    "wasm_sha256": "d6a84918736ca3f5b1edae903e9d2d14b262b2e1f3c146ffe5becc18d190d568",
+    "builds_serial": true,
+    "native_builds": "Three small CMake targets; fixture rebuilt after correcting a test assumption about normalized oblique directions. No external/reference builds.",
+    "commands": [
+      "cmake --build /private/tmp/atlas-recorded-cmake --target atlas_solver -j 1",
+      "cmake --build /private/tmp/atlas-recorded-cmake --target atlas_recorded_fixture_tests -j 1",
+      "cmake --build /private/tmp/atlas-recorded-cmake --target atlas_recorded_tests -j 1",
+      "EM_CACHE=/private/tmp/atlas-browser-settings/em-cache em++ cpp/main.cpp -Icpp/include -I/private/tmp/atlas-recorded-browser/generated -std=c++20 -O0 -fexceptions -sMODULARIZE=1 -sEXPORT_ES6=1 -sEXPORT_NAME=createAtlas -sENVIRONMENT=web,worker,node -sALLOW_MEMORY_GROWTH=1 -sMAXIMUM_MEMORY=268435456 -sSTACK_SIZE=1048576 -sEXPORTED_RUNTIME_METHODS=[\"ccall\"] -sFILESYSTEM=0 --no-entry -o /private/tmp/atlas-recorded-restarts/atlas.js",
+      "ATLAS_RECORDED_SOLVER=/private/tmp/atlas-recorded-cmake/atlas_solver ATLAS_RESTART_CAPTURE=/private/tmp/atlas-recorded-restarts/responses.json.gz python3 -m unittest tests.test_recorded_restarts.RestartNativeTests -v",
+      "ATLAS_RECORDED_SOLVER=/private/tmp/atlas-recorded-cmake/atlas_solver ATLAS_EXACT_RECORDED_BASELINE=1 python3 -m unittest tests.test_recorded_restarts tests.test_recorded_api tests.test_recorded_path tests.test_refinement tests.test_web_recorded tests.test_isotropic_reference tests.test_resolution_diagnosis -v",
+      "node tools/test_recorded.mjs --wasm /private/tmp/atlas-recorded-restarts/atlas.js --native /private/tmp/atlas-recorded-cmake/atlas_solver --output /private/tmp/atlas-recorded-restarts/parity.json",
+      "/private/tmp/atlas-recorded-cmake/atlas_recorded_tests",
+      "/private/tmp/atlas-recorded-cmake/atlas_recorded_fixture_tests"
+    ],
+    "reproduction_note": "The capture command was run before the additional retained-response test and contract corruption tests were added; native cases and their requests are unchanged. Capture runner and parity runner each execute requests serially. Final Python and Node regression processes briefly overlapped; builds did not overlap."
+  },
+  "outcomes": {
+    "retained_requests": 29,
+    "unique_retained_requests": 28,
+    "enabled_requests": 10,
+    "enabled_successes": 5,
+    "parity_pairs": 46,
+    "unique_parity_requests": 29,
+    "legacy_api_cases_exactly_preserved": 16,
+    "coarse_dp": [
+      {
+        "factor": 1,
+        "ok": true,
+        "material_trials": 116,
+        "restart_diagnostics": {
+          "searches": 2,
+          "material_trials": 90,
+          "accepted": 2
+        },
+        "points": 6
+      },
+      {
+        "factor": 2,
+        "ok": true,
+        "material_trials": 160,
+        "restart_diagnostics": {
+          "searches": 4,
+          "material_trials": 132,
+          "accepted": 4
+        },
+        "points": 11
+      },
+      {
+        "factor": 4,
+        "ok": true,
+        "material_trials": 126,
+        "restart_diagnostics": {
+          "searches": 4,
+          "material_trials": 72,
+          "accepted": 4
+        },
+        "points": 21
+      }
+    ],
+    "python_tests": 62,
+    "native_public": {
+      "ok": true,
+      "cases": 56,
+      "checks": 1850
+    },
+    "native_fixture": {
+      "ok": true,
+      "checks": 104,
+      "failed_attempt_substeps": 2,
+      "fallback_probes": 18
+    }
+  },
+  "compatibility": {
+    "local": "Exact parsed-response equality for all16 retained API requests and three disabled coarse DP requests on the pinned compiler",
+    "ci": "Fresh cross-compiler legacy comparisons use 1e-9*max(1,abs(reference)) for floating values and omit work-count/partition comparisons; structural/status/prefix checks remain. Saved local responses retain exact legacy equality.",
+    "wasm": "46 fresh native/Wasm pairs; 1e-9*max(1,abs(native)) numerical tolerance, exact keys/status/work counters",
+    "legacy_c_api": "Unchanged 8-string endpoint; additive 9-string endpoint reports opt-in policy and counters"
+  },
+  "review": {
+    "method": "Bounded AI C++ transaction review and separate Python/JS/schema provenance review; not independent scientific review",
+    "corrections": [
+      "Disabled-policy counters must be zero",
+      "Omitted policy rejects both restart metadata fields",
+      "Explicit total-trial integer validation precedes subset accounting",
+      "Corruption regressions added"
+    ]
+  },
+  "limitations": [
+    "Finite direction/radius search does not guarantee a root or rotational invariance.",
+    "Material-first-trial failures, nonsingular line-search failures and nonfinite Jacobians do not invoke this restart.",
+    "Stress constraints remain endpoint constraints; material discretization accuracy is separate.",
+    "Independent scalar DP algebra checks stress and density bookkeeping; no new source-matched or experimental validation.",
+    "Browser module exercised with Node/Wasm and an importable example; no new interactive browser capture.",
+    "Local serial builds used unoptimized Apple clang/Emscripten; hosted CI and deployment have not run."
+  ],
+  "inputs": [
+    {
+      "path": "models/drucker-prager.json",
+      "sha256": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d"
+    },
+    {
+      "path": "catalogue/investigations/recorded-refinement-v1/plastic-report.json.gz",
+      "sha256": "1626e205568d5435c135ccfc46dbd1afaf25160854e74756bcf5d20ce15047a2"
+    },
+    {
+      "path": "catalogue/investigations/recorded-replay-api-v1/responses.json.gz",
+      "sha256": "a01fead76ea5eb8cbed880ba9b3defb5d30d83e49085a9ef8660332e3fb7d595"
+    }
+  ],
+  "implementation": [
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "3e7781419616c2aa986bd032d3b1a72dcc88364f5872a8873449635e2235f72f"
+    },
+    {
+      "path": "ROADMAP.md",
+      "sha256": "83976b11c23543d5ce6d1f794bf9999b1f69bee2616a323fcf18b93504a52717"
+    },
+    {
+      "path": "atlas/recorded.py",
+      "sha256": "1dfda789714db40a01c29269131dfd69551c4ba596b3a23de64ea94a236c5fd1"
+    },
+    {
+      "path": "cpp/include/atlas/recorded.hpp",
+      "sha256": "9c0f9fae85a033d1af1c8f6ffc718ea1f04e5f6ac6e94dacda233870d1ffaba6"
+    },
+    {
+      "path": "cpp/main.cpp",
+      "sha256": "88f35705114993bac3eabb3ae33ddadedf27fe4d01b666b7ec5d036dc06cb4e7"
+    },
+    {
+      "path": "docs/RECORDED_PATHS.md",
+      "sha256": "05638015acccdeb68dcf44461418f368712271175b44050ae2a6592022eb4b27"
+    },
+    {
+      "path": "docs/RECORDED_RESTARTS.md",
+      "sha256": "4d839113f2c27c75202ade79248b36536901e78cb040fba0693d5dcc00f52a8e"
+    },
+    {
+      "path": "schemas/recorded-run.schema.json",
+      "sha256": "49d816e03aa430a2642ebfdbcac6210606dd387f66532a0ba39468f545b5a8a2"
+    },
+    {
+      "path": "schemas/recorded-refinement.schema.json",
+      "sha256": "e111866f406e257a5ca01766b5eb555f5755e7bcc12575f7d92d7c2d0bec3e9a"
+    },
+    {
+      "path": "tests/test_recorded_fixture.cpp",
+      "sha256": "16ed0c2d424ad04d96ae1d43e03d3b57d69de85e64a3e08431055ada2de1827c"
+    },
+    {
+      "path": "tests/test_recorded_restarts.py",
+      "sha256": "861ea2dd7b427cae43ecc2fa780623b4ad628c12a244203baa4bdc40055368a3"
+    },
+    {
+      "path": "tests/fixtures/time/recorded-plateau.json",
+      "sha256": "3f1d2221c398548ffde91da6a405fc201cab21d03a58dac340f5eea6f54b5657"
+    },
+    {
+      "path": "tools/analyze_recorded_refinement.py",
+      "sha256": "1962ab12083e39de59a634ecc5f4c915955a5c76eb06b5a726b426d4fab84e78"
+    },
+    {
+      "path": "tools/test_recorded.mjs",
+      "sha256": "45133e86775c8c8aafb2d4421b6e52b5ae61afea55179a0ba77784721803321e"
+    },
+    {
+      "path": "web/recorded.mjs",
+      "sha256": "38330cfc4646575a632569a04831d7a3d0f15ffadba86b89f93266889f0533d5"
+    },
+    {
+      "path": "web/recorded-view.mjs",
+      "sha256": "2741fa1be8c03a3388370c1e4a996af9f0d717eb792b5bbdaf8467cd375fcd3f"
+    },
+    {
+      "path": "protocols/recorded-dp-restart-run.json",
+      "sha256": "43cfccbfc1b03562a74976ee07ee5aa8c475d46815679eed65ebad1a5dbfac2d"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "catalogue/investigations/recorded-restarts-v1/native-fixture.txt",
+      "sha256": "9c8f3884d0d183e03e5f59c6627a23ce3afa53e08585ba9b69b777b16d6e1200"
+    },
+    {
+      "path": "catalogue/investigations/recorded-restarts-v1/native-recorded.txt",
+      "sha256": "6007b94251b0379e15ab6e8563fa4d2194df51ef0f1ad382d140f09947b3975b"
+    },
+    {
+      "path": "catalogue/investigations/recorded-restarts-v1/numerical-compatibility.txt",
+      "sha256": "6f82cf2d1a57886b3af7be132b4221473a8fcaffa34127967b2227977eb26743"
+    },
+    {
+      "path": "catalogue/investigations/recorded-restarts-v1/parity.json.gz",
+      "sha256": "ee010094c4ab7f37586b12795f21bc8616be3dda7dfef7d179edd0231136b0ff"
+    },
+    {
+      "path": "catalogue/investigations/recorded-restarts-v1/python-tests.txt",
+      "sha256": "c2df45ba5161dbc3588959b2bdd052d4bbab1f482b8106b08238783852391582"
+    },
+    {
+      "path": "catalogue/investigations/recorded-restarts-v1/responses.json.gz",
+      "sha256": "7b9a216ca532f3e78c5f460cb16b24bcf383db1b9f7333e4a9be68f7a4e2c732"
+    },
+    {
+      "path": "catalogue/investigations/recorded-restarts-v1/summary.json",
+      "sha256": "f1c068a2069aa47979a4e696bf235420f9b184ab08fd4df4089b4d29782baac8"
+    }
+  ]
+}

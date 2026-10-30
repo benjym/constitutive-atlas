@@ -16,6 +16,7 @@ struct RecordedSettings {
     double control_tolerance=1e-10;
     int max_iterations=30,max_backtracks=10,max_material_trials=20000;
     double finite_difference_step=1e-7;
+    int max_restarts=0,restart_levels=8; double restart_step=1e-4;
 };
 struct RecordedPoint {
     double coordinate=0; Sym<double> strain; State state; Diagnostics diagnostics;
@@ -25,6 +26,7 @@ struct RecordedResult {
     bool ok=false; std::string message; int failed_knot=-1;
     std::vector<RecordedPoint> points;
     State state; Sym<double> strain;
+    int restart_searches=0,restart_trials=0,accepted_restarts=0;
     int material_trials=0,finite_difference_probes=0; long long attempted_substeps=0;
     double last_control_error=0; Sym<double> last_trial_increment;
 };
@@ -32,7 +34,8 @@ inline bool valid_recorded_settings(const RecordedSettings& s){
     return valid_settings(s.material)&&std::isfinite(s.control_tolerance)&&s.control_tolerance>0&&s.control_tolerance<=1e-3&&
         s.max_iterations>=1&&s.max_iterations<=1000&&s.max_backtracks>=0&&s.max_backtracks<=30&&
         s.max_material_trials>=1&&s.max_material_trials<=1000000&&
-        std::isfinite(s.finite_difference_step)&&s.finite_difference_step>0&&s.finite_difference_step<=1e-2;
+        std::isfinite(s.finite_difference_step)&&s.finite_difference_step>0&&s.finite_difference_step<=1e-2&&s.max_restarts>=0&&s.max_restarts<=16&&
+        s.restart_levels>=1&&s.restart_levels<=16&&std::isfinite(s.restart_step)&&s.restart_step>0&&s.restart_step<=1e-2;
 }
 // Temporary max-component-normalized rows avoid sensitivity to multiplying an equation by a
 // constant. Raw document values remain untouched. Stress scale is fixed from
@@ -157,6 +160,56 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
                 for(int j=0;j<unknowns;++j)candidate=candidate+values[j]*directions[j];
                 return candidate;
             };
+            int restarts=0;
+            // Bounded opt-in globalization for a locally singular stress map.
+            // Search only the feasible nullspace and never advance the parent.
+            auto restart=[&](double current_error){
+                if(restarts>=settings.max_restarts)return false;
+                ++restarts;++result.restart_searches;
+                std::vector<State> offsets;
+                if(unknowns>1){
+                    Sym<double> sum;for(const auto& d:directions)sum=sum+d;
+                    double scale=0;for(double x:sum.v)scale=std::max(scale,std::abs(x));
+                    if(scale>0&&std::isfinite(scale))offsets.push_back(State(unknowns,1./scale));
+                }
+                for(int j=0;j<unknowns;++j){State offset(unknowns,0.);offset[j]=1.;offsets.push_back(offset);}
+                for(int level=0;level<settings.restart_levels;++level){
+                    const double radius=std::ldexp(settings.restart_step,level);
+                    double best_error=current_error;State best_values;Sym<double> best_increment;
+                    for(const auto& offset:offsets)for(double sign:{1.,-1.}){
+                        auto values=free_values;for(int j=0;j<unknowns;++j)values[j]+=sign*radius*offset[j];
+                        const auto candidate=construct(values);
+                        bool valid=true;for(double x:candidate.v)valid=valid&&std::isfinite(x);
+                        if(!valid||candidate.v==increment.v)continue;
+                        Advance trial;const int before=result.material_trials;
+                        const bool ok=material(parent.state,candidate,trial);
+                        result.restart_trials+=result.material_trials-before;
+                        if(ok){
+                            State trial_r;
+                            if(residual(trial.state,parent.strain+candidate,knot,trial_r)){
+                                const double next_error=error(trial_r);
+                                if(next_error<=settings.control_tolerance){
+                                    increment=candidate;free_values=values;accepted=trial;control_error=next_error;converged=true;
+                                    result.last_control_error=next_error;result.last_trial_increment=candidate;
+                                    ++result.accepted_restarts;return true;
+                                }
+                                // Avoid selecting roundoff noise on a flat branch.
+                                if(next_error<current_error*(1.-1e-8)&&next_error<best_error){
+                                    best_error=next_error;best_values=values;best_increment=candidate;
+                                }
+                            }
+                        }
+                        if(result.material_trials>=settings.max_material_trials)break;
+                    }
+                    if(!best_values.empty()){
+                        increment=best_increment;free_values=best_values;
+                        result.last_control_error=best_error;result.last_trial_increment=increment;
+                        ++result.accepted_restarts;return true;
+                    }
+                    if(result.material_trials>=settings.max_material_trials)return false;
+                }
+                return false;
+            };
             for(int iteration=0;iteration<settings.max_iterations;++iteration){
                 if(result.material_trials>=settings.max_material_trials)return fail("material trial budget exhausted");
                 ++result.material_trials;
@@ -195,7 +248,11 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
                 }
                 State load(unknowns),delta;
                 for(int i=0;i<unknowns;++i)load[i]=-r[stress_rows[i]];
-                if(!solve_linear(jacobian,load,delta))return fail("singular mixed-control system");
+                for(const auto& row:jacobian)if(!finite(row))return fail("nonfinite mixed-control Jacobian");
+                if(!solve_linear(jacobian,load,delta)){
+                    if(restart(current_error)){if(converged)break;continue;}
+                    return fail(settings.max_restarts?"singular mixed-control system; bounded restart failed or trial budget exhausted":"singular mixed-control system");
+                }
                 bool improved=false;
                 for(int backtrack=0;backtrack<=settings.max_backtracks;++backtrack){
                     const double alpha=std::ldexp(1.,-backtrack);auto values=free_values;

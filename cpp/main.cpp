@@ -105,8 +105,8 @@ extern "C" ATLAS_EXPORT const char* atlas_linearize(const char*id,const char*par
 extern "C" ATLAS_EXPORT const char* atlas_linearize_with_settings(const char*id,const char*parameters,const char*initial,const char*strain,const char*settings){return linearize_response(id,parameters,initial,strain,settings?settings:"");}
 // Numeric wire: 6 rows of (stress tag, six coefficients), and 2..5001
 // rows of (coordinate, six absolute targets). No file I/O in the C/Wasm API.
-extern "C" ATLAS_EXPORT const char* atlas_replay_recorded(const char*id,const char*parameters,const char*initial,
-        const char*initial_strain,const char*controls,const char*knots,const char*material_settings,const char*control_settings){
+static const char* recorded_response(const char*id,const char*parameters,const char*initial,
+        const char*initial_strain,const char*controls,const char*knots,const char*material_settings,const char*control_settings,const char*restart_settings){
     try{
         int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial);
         auto e=parse_csv(initial_strain),c=parse_csv(controls),k=parse_csv(knots),v=parse_csv(control_settings);
@@ -128,6 +128,13 @@ extern "C" ATLAS_EXPORT const char* atlas_replay_recorded(const char*id,const ch
             settings.control_tolerance=v[0];settings.max_iterations=int(v[1]);settings.max_backtracks=int(v[2]);
             settings.max_material_trials=int(v[3]);settings.finite_difference_step=v[4];
         }
+        if(restart_settings){
+            auto restarts=parse_csv(restart_settings);
+            if(restarts.size()!=3||restarts[0]!=std::floor(restarts[0])||restarts[0]<0||restarts[0]>16||
+               restarts[2]!=std::floor(restarts[2])||restarts[2]<1||restarts[2]>16)
+                throw std::runtime_error("three valid recorded restart settings required");
+            settings.max_restarts=int(restarts[0]);settings.restart_step=restarts[1];settings.restart_levels=int(restarts[2]);
+        }
         if(!atlas::valid_recorded_settings(settings))throw std::runtime_error("invalid recorded settings");
         auto run=atlas::replay_recorded(m,z,p,path,settings);
         std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(run.ok?"true":"false")
@@ -139,7 +146,12 @@ extern "C" ATLAS_EXPORT const char* atlas_replay_recorded(const char*id,const ch
         o<<",\"control_settings\":{\"control_tolerance\":"<<settings.control_tolerance
           <<",\"max_iterations\":"<<settings.max_iterations<<",\"max_backtracks\":"<<settings.max_backtracks
           <<",\"max_material_trials\":"<<settings.max_material_trials<<",\"finite_difference_step\":"<<settings.finite_difference_step
-          <<"},\"state\":";array(o,run.state);o<<",\"strain\":";array(o,atlas::State(run.strain.v.begin(),run.strain.v.end()));
+          <<"}";
+        if(restart_settings)o<<",\"restart_settings\":{\"max_restarts\":"<<settings.max_restarts
+          <<",\"restart_step\":"<<settings.restart_step<<",\"restart_levels\":"<<settings.restart_levels
+          <<"},\"restart_diagnostics\":{\"searches\":"<<run.restart_searches<<",\"material_trials\":"<<run.restart_trials
+          <<",\"accepted\":"<<run.accepted_restarts<<"}";
+        o<<",\"state\":";array(o,run.state);o<<",\"strain\":";array(o,atlas::State(run.strain.v.begin(),run.strain.v.end()));
         o<<",\"material_trials\":"<<run.material_trials<<",\"finite_difference_probes\":"<<run.finite_difference_probes
           <<",\"attempted_substeps\":"<<run.attempted_substeps<<",\"last_control_error\":";
         if(std::isfinite(run.last_control_error))o<<run.last_control_error;else o<<"null";
@@ -155,6 +167,16 @@ extern "C" ATLAS_EXPORT const char* atlas_replay_recorded(const char*id,const ch
         }
         o<<"]}";output=o.str();return output.c_str();
     }catch(const std::exception&e){return failure(e.what());}
+}
+// Legacy endpoint keeps identical defaults and response shape. The additive
+// endpoint requires explicit restart settings and reports their resolved policy.
+extern "C" ATLAS_EXPORT const char* atlas_replay_recorded(const char*id,const char*p,const char*z,
+        const char*e,const char*c,const char*k,const char*m,const char*control){
+    return recorded_response(id,p,z,e,c,k,m,control,nullptr);
+}
+extern "C" ATLAS_EXPORT const char* atlas_replay_recorded_with_restarts(const char*id,const char*p,const char*z,
+        const char*e,const char*c,const char*k,const char*m,const char*control,const char*restarts){
+    return recorded_response(id,p,z,e,c,k,m,control,restarts?restarts:"");
 }
 extern "C" ATLAS_EXPORT const char* atlas_evaluate_time(const char*id,const char*parameters,const char*current,const char*rate,double time){
     try{int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,current),d=parse_csv(rate);
@@ -228,7 +250,7 @@ int main(int argc,char**argv){
     std::map<std::string,std::string> args;const char*response=nullptr;
     try{
         for(int i=1;i<argc;i+=2){if(i+1>=argc)throw std::runtime_error("arguments require --key value pairs");std::string key=argv[i];if(args.count(key))throw std::runtime_error("duplicate option");args[key]=argv[i+1];}
-        const std::vector<std::string> known={"--model","--parameters","--initial","--protocol","--target","--steps","--cycles","--mode","--current","--strain","--strain-rate","--start-time","--duration","--rtol","--atol","--min-time-step","--max-time-step","--max-substeps","--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings"};
+        const std::vector<std::string> known={"--model","--parameters","--initial","--protocol","--target","--steps","--cycles","--mode","--current","--strain","--strain-rate","--start-time","--duration","--rtol","--atol","--min-time-step","--max-time-step","--max-substeps","--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts"};
         for(const auto&arg:args)if(std::find(known.begin(),known.end(),arg.first)==known.end())throw std::runtime_error("unknown option: "+arg.first);
         auto get=[&](const std::string&key,const std::string&fallback=""){auto i=args.find(key);return i==args.end()?fallback:i->second;};
         auto num=[&](const std::string&key,const std::string&fallback){auto s=get(key,fallback);size_t pos=0;double v=std::stod(s,&pos);if(pos!=s.size()||!std::isfinite(v))throw std::runtime_error("invalid number: "+key);return v;};
@@ -253,11 +275,11 @@ int main(int argc,char**argv){
             if(mode!="schedule"&&!(mode=="recorded"&&arg.first=="--initial-strain")&&std::find(schedule_options.begin(),schedule_options.end(),arg.first)!=schedule_options.end())throw std::runtime_error("schedule option requires schedule mode");
             if(mode=="schedule"&&(arg.first=="--duration"||arg.first=="--strain-rate"))throw std::runtime_error("schedule duration and rates belong to its segments");
         }
-        const std::vector<std::string> recorded_options={"--recorded-controls-file","--recorded-knots-file","--recorded-settings"};
+        const std::vector<std::string> recorded_options={"--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts"};
         for(const auto& arg:args)if(mode!="recorded"&&std::find(recorded_options.begin(),recorded_options.end(),arg.first)!=recorded_options.end())
             throw std::runtime_error("recorded option requires recorded mode");
         if(mode=="recorded"){
-            const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--initial-strain","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings"};
+            const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--initial-strain","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts"};
             for(const auto& arg:args)if(std::find(allowed.begin(),allowed.end(),arg.first)==allowed.end())throw std::runtime_error("option unsupported by recorded mode: "+arg.first);
             auto read_wire=[&](const char* key){
                 std::ifstream in(get(key),std::ios::binary);if(!in)throw std::runtime_error(std::string("cannot read ")+key);
@@ -267,7 +289,7 @@ int main(int argc,char**argv){
                 if(!in.eof())throw std::runtime_error("recorded wire read failed");return data;
             };
             auto c=read_wire("--recorded-controls-file"),k=read_wire("--recorded-knots-file");
-            response=atlas_replay_recorded(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),c.c_str(),k.c_str(),get("--integration-settings").c_str(),get("--recorded-settings").c_str());
+            response=recorded_response(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),c.c_str(),k.c_str(),get("--integration-settings").c_str(),get("--recorded-settings").c_str(),args.count("--recorded-restarts")?get("--recorded-restarts").c_str():nullptr);
         }
         else if(mode=="schedule")response=atlas_run_schedule(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),get("--initial-strain-rate").c_str(),get("--segments").c_str(),get("--segment-ids").c_str(),num("--start-time","0"),num("--rtol","1e-6"),num("--atol","1e-9"),num("--min-time-step","1e-12"),num("--max-time-step","1e6"),integer("--max-substeps","20000"),num("--nonlinear-tolerance","1e-10"),integer("--max-iterations","40"));
         else if(mode=="observe-time")response=atlas_observe_time(id.c_str(),p.c_str(),z.c_str(),get("--strain-rate").c_str(),num("--start-time","nan"));
