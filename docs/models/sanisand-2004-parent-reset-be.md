@@ -56,3 +56,5 @@ python3 tools/verify_sanisand_parent_reset.py verify /private/tmp/atlas-sanisand
 ```
 
 Preparation/verification do not compile or execute native code. Full OpenSees builds remain deferred. Canonical reversal rules, located first-yield/reversal events, nonproportional paths, accepted-substep reset alternatives, mixed controls, complete-update tangents, matching independent reference histories, Wasm and website execution remain open under SAN-03/05/06. No public model count or review status changes.
+
+A subsequent [mixed-control investigation](sanisand-2004-mixed-controls.md) now adds native fixed-radial-stress and prescribed-q/zero-volume evidence for this same definition, including independent elastic references and replay isolation. It does not extend the original cyclic matrix or alter its historical scope; complete tangents, failed outer controls and Wasm remain open.

@@ -112,3 +112,7 @@ The fixed-memory research definition now enforces deviatoric backstress, fabric 
 ## SANISAND parent-reset research variant — 2026-10-31
 
 A [separate research identity](models/sanisand-2004-parent-reset-be.md) adds the source-inspired parent trial-direction policy through unchanged generic reset support. One small native build/run passes 896 cyclic increments, 18 resets, six zero trials and six late failures restoring pre-reset parents. Monotonic parity (224 states), Python/native preparation, interpreted residuals and cyclic refinement pass in the [record](../catalogue/investigations/sanisand-parent-reset-v1/manifest.json). All 26 SANISAND Python groups pass. This is a named project policy; the original cone-normal event rule and full OpenSees material remain unreconciled.
+
+## SANISAND mixed-control research evidence — 2026-10-31
+
+The [mixed-control investigation](models/sanisand-2004-mixed-controls.md) passes 896 cyclic increments and two analytical elastic cases through the unchanged common solver. Fixed radial stress and prescribed deviator-stress increment at zero volume both converge under step halving; direct replay confirms accepted results do not accumulate outer trial history. The [record](../catalogue/investigations/sanisand-mixed-controls-v1/manifest.json) keeps the `0.001 Pa` outer-control tolerance separate from scaled material residuals. All 30 SANISAND Python groups pass. This is research-variant execution, not original-model admission, failed-outer-control coverage, a material tangent or Wasm parity.
