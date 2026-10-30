@@ -1,0 +1,132 @@
+{
+  "id": "recorded-path-v1",
+  "date": "2026-10-31",
+  "status": "experimental, bounded native verification",
+  "scope": "Ordered untimed endpoint replay with six fixed linear strain/stress constraints; Python/JSON contract and typed C++ interface only.",
+  "toolchain": {
+    "compiler": "Apple clang 21.0.0 (clang-2100.4.1.1)",
+    "target": "arm64-apple-darwin25.6.0",
+    "cmake": "4.4.3",
+    "python": "3.14.7",
+    "flags": "-O0 -std=gnu++20",
+    "build_directory": "/private/tmp/atlas-recorded-cmake"
+  },
+  "commands": [
+    "cmake -S /Users/bmar5496/code/constitutive-atlas -B /private/tmp/atlas-recorded-cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS_DEBUG=-O0",
+    "cmake --build /private/tmp/atlas-recorded-cmake --target atlas_recorded_tests --parallel 1",
+    "/private/tmp/atlas-recorded-cmake/atlas_recorded_tests",
+    "cmake --build /private/tmp/atlas-recorded-cmake --target atlas_recorded_fixture_tests --parallel 1",
+    "/private/tmp/atlas-recorded-cmake/atlas_recorded_fixture_tests",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_recorded_path tests.test_time.TemporalLanguageTests tests.test_parent_reset.ParentResetLanguageTests tests.test_capacity.CapacityTests.test_definition_boundary_and_transport tests.test_capacity.CapacityTests.test_legacy_26_component_multiplier_layout -v"
+  ],
+  "results": {
+    "public": {
+      "ok": true,
+      "cases": 56,
+      "checks": 1850
+    },
+    "transaction": {
+      "ok": true,
+      "checks": 90,
+      "failed_attempt_substeps": 2,
+      "fallback_probes": 18
+    },
+    "python": {
+      "tests": 21,
+      "ok": true
+    },
+    "builds": {
+      "parallel": 1,
+      "completed_normally": true
+    }
+  },
+  "policy": {
+    "control_tolerance": 1e-10,
+    "material_settings": "production defaults; explicit boundary overrides in tests",
+    "oracle_tolerances": "Pinned in tests/test_recorded.cpp; analytical Lame elasticity and exponential void-ratio oracle, plus driver comparisons with shared material integrator.",
+    "independent_scientific_review": "pending",
+    "ai_review": "Separate agents supplied contract validation and analytical cases; bounded read-only implementation review supplied boundary and diagnostic corrections."
+  },
+  "negative_evidence": {
+    "artifact": "failed-zero-guess.json.gz",
+    "summary": "Initial six-unknown mixed solve attenuated known axial strain in line searches and stalled after 30 iterations on IGS drained knot 1. Nullspace parameterization fixes the defect at unchanged tolerance.",
+    "last_control_error": 7.863499340804992e-05,
+    "material_trials": 225
+  },
+  "limitations": [
+    "No C ABI/CLI JSON consumer, Wasm or browser replay yet.",
+    "Endpoint stress controls only; no between-knot stress interpolation guarantee or automatic resampling.",
+    "No physical-time models, control-row mode switches or finite rotations.",
+    "No full recorded Wichtmann benchmark, calibration or model admission.",
+    "Shared-engine comparisons verify driver semantics, not independent constitutive accuracy."
+  ],
+  "source_sha256": {
+    "CMakeLists.txt": "85520fb2f691ef8d344d2cfa8ddfec740fbf49f700e2d317fa03e3ac70cb3ef2",
+    "ROADMAP.md": "1b66debdd8e17e0bffbc9a788ab292cdd164bc4b9e45766ef94447ef5af01689",
+    "cpp/include/atlas/recorded.hpp": "5261b7499834bd618e48925d98591f1753b8c802adee59c66d3afd42941ad29e",
+    "atlas/recorded.py": "7cc09154b921bbce629757cd56c2b0a5cc3774bfa63c3a7de2b8a1434b52e9b6",
+    "schemas/recorded-path.schema.json": "9240c1f82d65dd2ebfc77f97d5f0e26dfc57368a3cdc4979a1ce81c9d08ae2f0",
+    "tests/test_recorded_path.py": "a8a2b820eb40f8da30dac2f39bb66503230a14ee00abbeffc8ece875cc0f05ef",
+    "tests/test_recorded.cpp": "ac0e7ad1c2670d7a495905e793ad4619c246bcdae300cc61e962e5addeec88eb",
+    "tests/test_recorded_fixture.cpp": "6effb31526f1060295ca6d41665f79c7e5091694f8e6027fb97b35855951d1b0",
+    "tests/fixtures/time/recorded-singular-multiplier.json": "97c20b22698c23f1357062842185babda7c4c8365f51f787d4e0c4fee6a3f2c2",
+    "protocols/recorded-drained-reversal.json": "5b8c79a3d36e766a70690ad15bdb128266cc4196c4119a6103d5c9edb002eb65",
+    "docs/RECORDED_PATHS.md": "7851f2bf4a78b8570f70d74281cb3301cee300399703cecf695eda4c9f8d20ea",
+    "cpp/include/atlas/linearize.hpp": "40f8ed4bc722636c3ce0573af150dcbe6afe59618e0dad1542aa9a2b9e7b4319",
+    "cpp/include/atlas/schedule.hpp": "5c90e6cede9f24f124286cf10e2254a47a991e5d62f9bc7b3899ed62e6deb7e9",
+    "cpp/include/atlas/settings.hpp": "3eb1171ae1ef17440b19e8becfc8e9bf92335519a88da8f1e9be407d3488662b",
+    "cpp/include/atlas/solver.hpp": "7842240f542949a1ba547f4a2fea44e4ef1fadf50b35a18fd86f8fe4327164d5",
+    "cpp/include/atlas/tensor.hpp": "d964ff6e2e46f81e465533f2b517c3aabef7df42de4ed2b9907cc5e4448c6a1e",
+    "cpp/include/atlas/time.hpp": "7b9942fbb1eae296201ad12db210c0c767fb3cc53c1f37de37de3e517f13f4d1",
+    "atlas/__init__.py": "a8fc14bd14c81b692d4875ecea57087edebd75c544f1c26a295731c28bd4a922",
+    "atlas/baseline.py": "0cd58ee44962fd5fe246ecaf6c9ef7ef023987101c9aadd17f66e96e39ed2ba4",
+    "atlas/benchmark.py": "875274308a90408611746dff973a29bfebda9ae497086160a0a801c7ffab19c7",
+    "atlas/cli.py": "c7f5f3a931b8b5d055e6852419d37e395df3e6669b6a251480f48c1763d6f748",
+    "atlas/compiler.py": "9998949ba1cb2c719333770a5bffe6f1d4951b2728caac78195d6f7bb23b0895",
+    "atlas/data.py": "378d05c07fb3697bc44575e54693fccd8d6c654acec868965120035e18280cb2",
+    "atlas/dsl.py": "5bdb057a0c6be9f47315aa56cf4607a97b4c0eb5088f710f49121e50d4df5060",
+    "atlas/evidence.py": "18804fd49c7ee2cfcb9875e566d21e9b3b922209ab70f2ac945ff9082b43850d",
+    "atlas/measurement_units.py": "42dd3e3564ff6df91385a00422026a33fe4d7f0d9be91c0c1f20765ffc5f70ea",
+    "atlas/model.py": "709fd988b95ead1f343fdef1608865927bc85d7bf218d062ff5139aab83099c0",
+    "atlas/opensees.py": "c0f86b37c74a9c7e235b5b8a1cf47f0246b87bd409dbc20759c59ded9e81e31c",
+    "atlas/public_data.py": "776ec23a147811cbc037575427c89fc5429cfc68d1864a90338768f9e6ce98cc",
+    "atlas/research.py": "1b223596218237960e921383cb6413e4031e0fa0228e76c9e0b3f0a63e225577",
+    "atlas/schedule.py": "919811a0592bae4023614de55531cf211993cba9a2c705a4f9d3a2fd44f72b16",
+    "atlas/structure.py": "30b1ef624c642b217e19e0a58e6988c2a2f802f0bfc5f892c6d7a38def1bcd47",
+    "models/drucker-prager.json": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+    "models/hypoplastic-sand-igs97.json": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+    "models/hypoplastic-sand-vw96.json": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+    "models/linear-elastic.json": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+    "models/modified-cam-clay.json": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+    "models/research/sanisand-2004-fixed-memory-be.json": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+    "models/research/sanisand-2004-parent-reset-be.json": "47b94747bfa7dd8f53330d99276d0cef52f9ca54fdf928103a98118a66195a98",
+    "models/research/terracotta-2024-fig1.json": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+    "tests/fixtures/time/capacity-32.json": "43964a96adb5b8efd64e630f1f941e6b755a63b07a7cb85341a5eec89b9cff25",
+    "tests/fixtures/time/clock.json": "0a399cf391dcb8c0820a9056d5c022ef982ab0c19881fd4322d060b480f5f2c8",
+    "tests/fixtures/time/kelvin.json": "ca6fbcf21255017206021bb59c119993e36ca548b8eca0c5690d898e841ec1b0",
+    "tests/fixtures/time/maxwell-axisymmetric.json": "adf35bc4a3ee9d214f8fa69dfe68dcf63036c0411b774473ba74873f7b12f6e7",
+    "tests/fixtures/time/maxwell.json": "d4eafd8a06d11d73849e02e779ab055068b25da74242f01567eb819f4a101988",
+    "tests/fixtures/time/parent-boundary-cutback.json": "0b975cbceff754ca75d10817ea8fa9de125fd1acf3bcabd351d71ef69ea9135f",
+    "tests/fixtures/time/parent-derived.json": "9503df4a46cc6d2885fded413e58f7e0154d2a152750f17c0b7d22b693042526",
+    "tests/fixtures/time/parent-nonfinite-derived.json": "8f2d6d361d113283d9c45004714270092ba941bd58296577ff8ed25cff4efa16",
+    "tests/fixtures/time/parent-nonfinite-guard.json": "4c728086400d7eb85c3fb78d568e61a525fe011b939245ea20bbd0834c770668",
+    "tests/fixtures/time/parent-nonfinite-value.json": "b374a081d7789dce5238496170a110226054cdc0c4bcd1d24bff155912743402",
+    "tests/fixtures/time/parent-prepared-derived.json": "7dda96dedc1b1d391b83a9db0d97c470729f73110ab558b697a8fde383565c82",
+    "tests/fixtures/time/parent-reset-cutback.json": "e25e2da6c1a174ee3d9c07295e34ef596370facd3f5a51d79773a44b7edb785e",
+    "tests/fixtures/time/parent-reset-domain.json": "c825a0cda6bc24192b4bf1073a36de1a04d8f2b41f74dab27f29a89ba4580474",
+    "tests/fixtures/time/parent-reset.json": "c0ee4a478d1c3afa98e0cbac53fd82e91ab77b216c3b8688e73cfaba498f5785",
+    "tests/fixtures/time/parent-residual.json": "68fb36417b0e323868577deb796a27fe15caa2cf53aa02f9cbd125739ab9c23d",
+    "tests/fixtures/time/parent-simultaneous.json": "5c3534b095547aa432a80666de0f1ebe4e86261dda6c0452fa1163de857fb0e5",
+    "tests/fixtures/time/parent-tensor.json": "765c6a2ea02c1ac5726dca79f833e3449145d6342f2728485d7657d274393820",
+    "tests/fixtures/time/tensor-square.json": "95a1bf802ec875342d669e9e0d22db3fdd437274b52ecdc94974a6b73a1c8dac"
+  },
+  "generated_sha256": {
+    "generated/models.hpp": "d5381b70319eecca056f8374f948b40b6dcd2bc1eff854c9188761a5b87b0919",
+    "time-generated/models.hpp": "9f021f4dda4335738e90513f318f44a31b72a0ea2e343ccf5d0e14c998b15237"
+  },
+  "artifact_sha256": {
+    "failed-zero-guess.json.gz": "c5f4d19ee9c8dcbf6c85a3eb96aef0c9322c60dd74e5f30b0020fbbfaa3452ab",
+    "python-tests.txt": "c09389e5bbd8ecea5b575c17c653a10020fae4148e19fd47b7f73528ed0bcb8a",
+    "results.json": "6b8ee4c8835d74195e7546cfd41dd3a03782d7e3cbc23641a1a66551f3eef63c"
+  }
+}
