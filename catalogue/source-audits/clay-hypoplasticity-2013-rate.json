@@ -1,0 +1,257 @@
+{
+  "fragment_version": "clay-source-rate-0.1",
+  "model_id": "hypoplastic-clay-2013",
+  "status": "research source-rate algebra only; not executable model admission",
+  "source": {
+    "doi": "10.1007/s11440-012-0199-y",
+    "url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_AG12-pp.pdf",
+    "sha256": "21834ab9da81ec2cdebdf3a3d7f97b691d47bf481a24432bc0562aca9f503281",
+    "locators": "author manuscript PDF pp13–14 Eqs43–58; density p3 Eq7"
+  },
+  "scope": {
+    "stress": "compression-positive effective Cauchy, Pa, Mandel xx yy zz xy yz xz",
+    "stretching": "compression-positive symmetric Euler stretching per caller path coordinate; zero spin",
+    "density": "e_rate=-(1+e)*trace(stretching)",
+    "limitations": [
+      "no finite spin or pore-pressure coupling",
+      "diagnostic domain only; no proven ASBS admission",
+      "not an integration algorithm or parameter calibration"
+    ]
+  },
+  "inputs": {
+    "sigma": {
+      "shape": "sym",
+      "unit": "Pa"
+    },
+    "stretching": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "e": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "phi_c": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "lambda_star": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "kappa_star": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "N": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "nu": {
+      "shape": "scalar",
+      "unit": "1"
+    }
+  },
+  "constants": {
+    "p_ref": {
+      "shape": "scalar",
+      "unit": "Pa",
+      "value": 1000
+    },
+    "lode_roundoff_allowance": {
+      "shape": "scalar",
+      "unit": "1",
+      "value": 1.4210854715202004e-14
+    }
+  },
+  "audit_domain": {
+    "requirements": [
+      "finite explicit inputs; e>=0; lambda_star>kappa_star>0; -1<nu<0.5; 0<phi_c<pi/2 radians",
+      "strictly positive-definite compression stress (scaled Cholesky)",
+      "all executed arithmetic finite, pe>0, 0<=fm<1, omega>0, fdA>0, direction norm>0",
+      "raw Lode cosine within 64 binary64 ulps of [-1,1]; no clipping",
+      "exact spherical stress uses the algebraic isotropic limit; nonisotropic j2==0 rejected"
+    ],
+    "asbs": "not enforced; f=Fm+(p/pe)^omega-1 diagnostic only"
+  },
+  "notes": [
+    "double deviator projection before normalization is algebraically idempotent, removes spherical roundoff, and avoids subtracting rounded normalized pressures",
+    "Fm is reduced exactly to deviatoric invariants to avoid near-isotropic determinant cancellation",
+    "d is source-sign strain direction; stress and stretching signs have both been mapped"
+  ],
+  "terms": [
+    {
+      "name": "p",
+      "expression": "trace(sigma)/3",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq46, compression-positive map",
+      "checks": [
+        "p > p*0"
+      ]
+    },
+    {
+      "name": "a",
+      "expression": "dev(dev(sigma))/trace(sigma)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq58; second dev is algebraic identity"
+    },
+    {
+      "name": "j2",
+      "expression": "dot(a,a)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "stable invariant reduction"
+    },
+    {
+      "name": "j3",
+      "expression": "cube_trace(a)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "stable invariant reduction"
+    },
+    {
+      "name": "fm",
+      "expression": "(j2-3*j3)/(8/27-(j2+j3)/3)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq50, reduced using det(t)=1/27-j2/6+j3/3",
+      "checks": [
+        "fm >= 0",
+        "fm < 1"
+      ]
+    },
+    {
+      "name": "omega",
+      "expression": "-log(cos(phi_c)**2)/log(2)+0.3*(fm-sin(phi_c)**2)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq51",
+      "checks": [
+        "omega > 0"
+      ]
+    },
+    {
+      "name": "pe",
+      "expression": "p_ref*exp((N-log(1+e))/lambda_star)",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq48",
+      "checks": [
+        "pe > pe*0"
+      ]
+    },
+    {
+      "name": "fd",
+      "expression": "(2*p/pe)**2",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq47",
+      "checks": [
+        "fd > 0"
+      ]
+    },
+    {
+      "name": "fdA",
+      "expression": "4*(1-fm)**(2/omega)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq49",
+      "checks": [
+        "fdA > 0"
+      ]
+    },
+    {
+      "name": "fs",
+      "expression": "(3*p/2)*(1/lambda_star+1/kappa_star)*(1-2*nu)/(1+nu)",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq46",
+      "checks": [
+        "fs > fs*0"
+      ]
+    },
+    {
+      "name": "cos3theta",
+      "expression": "select(j2 > 0,-sqrt(6)*j3/j2**(3/2),0)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq57; placeholder zero only at exact isotropic stress",
+      "checks": [
+        "cos3theta >= -1-lode_roundoff_allowance",
+        "cos3theta <= 1+lode_roundoff_allowance"
+      ]
+    },
+    {
+      "name": "xi",
+      "expression": "1.7+3.9*sin(phi_c)**2",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq58"
+    },
+    {
+      "name": "dA",
+      "expression": "-a+I*(2/3-(cos3theta+1)*fm**(1/4)/4)*(fm**(xi/2)-sin(phi_c)**xi)/(1-sin(phi_c)**xi)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq56",
+      "checks": [
+        "norm(dA) > 0"
+      ]
+    },
+    {
+      "name": "d",
+      "expression": "dA/norm(dA)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq55; exact isotropic limit -I/sqrt(3)"
+    },
+    {
+      "name": "c",
+      "expression": "nu/(1-2*nu)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq44"
+    },
+    {
+      "name": "Ld",
+      "expression": "d+c*trace(d)*I",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq44 contraction"
+    },
+    {
+      "name": "Ad",
+      "expression": "fs*Ld-(sigma/lambda_star)*trace(d)",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "Eq45 contraction and T=-sigma"
+    },
+    {
+      "name": "stress_rate",
+      "expression": "fs*(stretching+c*trace(stretching)*I)+(fd/fdA)*Ad*norm(stretching)",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "Eq43 with T=-sigma and D=-stretching"
+    },
+    {
+      "name": "e_rate",
+      "expression": "-(1+e)*trace(stretching)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq7 with D=-stretching"
+    },
+    {
+      "name": "asbs",
+      "expression": "fm+(p/pe)**omega-1",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq17; diagnostic, not yield admission"
+    }
+  ],
+  "outputs": [
+    "stress_rate",
+    "e_rate"
+  ]
+}

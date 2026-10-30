@@ -41,7 +41,7 @@ Recommended first work packets:
 
 **Capability:** Likely scalar/symmetric-tensor state and ordinary objective rate-law algebra; complete state layout, normalization, asymptotic-state domains and singular functions must be inventoried before claiming current DSL suffices. Existing rate integration has no finite-spin support.
 
-**Small next task:** Independent reduced and Cartesian rate oracles for the extracted 2013 base, including isotropic/singular branches, sign/unit conversions and zero rate. No default calibration or public model yet.
+**Implemented follow-up:** [Reduced and Cartesian source-rate oracles with Decimal limit checks](../models/clay2013-source-rate.md). Next: initial-state/ASBS and boundary policy, coupled integration and source-matched paths. No default calibration or public admission.
 
 ### A3 — Clay barodesy-2017 (`barodesy-clay-2017`)
 
@@ -65,7 +65,7 @@ Recommended first work packets:
 
 **Capability:** Extra history, history-band constraints, reversal rules and host/overlay interfaces. Existing IGS97 tensor memory, initialization tests and accepted-substep evidence are reusable infrastructure, not proof of equation equivalence. Determine the resulting state count against 32.
 
-**Small next task:** Supplied-host GIS rate fragment and independent structured HP ASBS host-action reduction. Preserve nested exponent S**(k**gamma), independent gamma_Omega and nondeviatoric h; no capacity increase or new reset phase is source-justified.
+**Implemented follow-up:** [Supplied-host GIS rates](../models/gis-2024-supplied-host-rates.md) retain the nested exponent, independent gamma_Omega and full symmetric h with Cartesian checks. Next: independent structured HP ASBS host-action reduction, host/overlay coupling and integration; no capacity increase or reset phase is source-justified.
 
 ### B1 — Anisotropic clay hypoplasticity-2014 (`hypoplastic-clay-2014`)
 

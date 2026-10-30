@@ -34,3 +34,7 @@ The [legacy bridge](../HISTORY_LEGACY_BRIDGE.md) and [HCA arithmetic diagnostics
 - [Generalized IGS2024](../models/hypoplastic-generalized-igs-2024-source.md): institutional full text pins HP+extracted-ASBS+GIS, 18 physical parameters and 14 raw retained components. Next: supplied-host GIS fragment and independent structured host-action reduction; author code/license unverified.
 - [Dafalias1986 access gap](sanisand-1986-loading-process.md): exact identity and 2004 dependency mapped; full text remains unavailable. Canonical SANISAND loading-process rules cannot be inferred from the cross-reference.
 - [Shared history runtime](../HISTORY_RUNTIME.md): synthetic C++/Wasm parity now follows the Python and legacy-bridge checks. Source-blocked PM4 updates and full host/coupled solver integration remain open.
+
+### Implemented source-rate fragments
+
+[Clay2013 reduced/Cartesian/Decimal rate algebra](../models/clay2013-source-rate.md) and [supplied-host GIS2024 rates](../models/gis-2024-supplied-host-rates.md) now follow the acquisition packets. The independent [technical review](clay2013-algebra-review.md) found and helped resolve near-isotropic and full-memory interpolation cancellation. Next work is clay initial-state/ASBS and coupled integration policy, and separate HP/extracted-ASBS host actions for GIS. Their source/algebra evidence remains distinct from scientific review, integration and admission.

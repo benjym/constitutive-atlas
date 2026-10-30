@@ -1,0 +1,289 @@
+{
+  "schema_version": "0.1",
+  "kind": "source-equation-fragment",
+  "id": "gis-2024-supplied-host-rates",
+  "candidate_id": "hypoplastic-generalized-igs-2024",
+  "status": "draft",
+  "complete_constitutive_model": false,
+  "independent_review": "pending",
+  "source": {
+    "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+    "doi": "10.1016/j.compgeo.2024.106480",
+    "sha256": "39ec8356a26b82ae651be8feb4cdb3e49bb86ded9a850adc4c7eee5e9ec3bdc3",
+    "locators": [
+      "p5 Eq33",
+      "p6 Eqs34-35,39",
+      "p7 Eqs40-43"
+    ],
+    "visual_inspection": [
+      5,
+      6,
+      7
+    ]
+  },
+  "scope": "Instantaneous supplied-host GIS directional rates with respect to a dimensionless path coordinate. de means its strain derivative/direction, not an integrated finite update. E,m,C,S,f must be independently supplied by the host. No HP/ASBS evaluation, e update, state integration or admission.",
+  "convention": {
+    "stress": "compression positive",
+    "strain": "compression positive",
+    "h": "full symmetric compression-positive memory",
+    "mandel_order": [
+      "xx",
+      "yy",
+      "zz",
+      "sqrt(2)xy",
+      "sqrt(2)yz",
+      "sqrt(2)xz"
+    ],
+    "source_mapping": "sigma_atlas=-sigma_source; de_atlas=-de_source; h_atlas=-h_source; m_atlas=-m_source; f_atlas=-f_source; E action unchanged after same Cartesian/Mandel basis mapping. rho, q, k, C, S, Omega unchanged."
+  },
+  "inputs": {
+    "de": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "h": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "Omega": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "m": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "C": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "S": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "f": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "R": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "m_R": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "m_T": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "beta_R": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "chi_R": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "gamma_chi": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "chi_0": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "chi_max": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "C_Omega": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "gamma_Omega": {
+      "shape": "scalar",
+      "unit": "1"
+    }
+  },
+  "host_action": {
+    "name": "E",
+    "representation": "supplied finite real 6x6 Mandel linear-action matrix",
+    "unit": "Pa",
+    "input": "effective_de",
+    "output": {
+      "name": "E_effective_de",
+      "shape": "sym",
+      "unit": "Pa"
+    },
+    "meaning": "Caller supplies E at this instantaneous state; no stiffness construction or positive-definiteness claim."
+  },
+  "audit_domain": {
+    "requirements": [
+      "finite exact typed inputs, no bools",
+      "0<R; 0<beta_R,chi_R,gamma_chi,chi_0,gamma_Omega",
+      "chi_max>=chi_0; C_Omega>=0",
+      "1<=m_T<=m_R",
+      "0<=Omega<=1; norm(h)<=R",
+      "C>=0; S>=0",
+      "m is normalized to absolute tolerance 1e-12",
+      "f is an explicitly supplied host correction; degree-one homogeneity and zero-at-zero are host obligations"
+    ],
+    "policy": "Bounded positive-parameter audit domain, not asserted exhaustive source parameter bounds. No clipping or norm floor.",
+    "roundoff_policy": "Accept norm(h) up to R+16*ulp(R) solely for tensor-component roundoff at prescribed boundary; retain the supplied h unchanged, no projection or clipping. Raw q may lie within64*ulp(1) of[-1,1]; it is retained, not clipped. Nonpositive unresolved k is rejected."
+  },
+  "zero_direction": {
+    "kind": "analytic zero-rate continuation, not source-specified k value",
+    "requirements": [
+      "de all exactly zero",
+      "f all exactly zero"
+    ],
+    "outputs": {
+      "h_rhs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "Omega_rhs": 0,
+      "effective_de": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "sigma_rhs": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "k": null,
+      "q": null,
+      "suppression": null
+    },
+    "explanation": "For finite admissible host/state, rates vanish as norm(de) tends to zero regardless of direction; k and suppression have no unique directional value. Return undefined diagnostics rather than invent k=m_R. Nonzero inputs whose norm underflows are rejected, not treated as zero."
+  },
+  "terms": [
+    {
+      "name": "hn",
+      "expression": "norm(h)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p6 Eq34"
+    },
+    {
+      "name": "hdir",
+      "expression": "select(hn>0,h/hn,0*I)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p6 Eq34; compression-positive mapping"
+    },
+    {
+      "name": "rho",
+      "expression": "hn/R",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p6 Eq35"
+    },
+    {
+      "name": "dn",
+      "expression": "norm(de)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p7 Eq40; rate-independent direction input"
+    },
+    {
+      "name": "loading",
+      "expression": "dot(hdir,de)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p5 Eq33"
+    },
+    {
+      "name": "h_rhs",
+      "expression": "select(loading>0,de-hdir*(rho**beta_R)*loading,de)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p5 Eq33; p6 adoption in Section5"
+    },
+    {
+      "name": "chi",
+      "expression": "chi_0+Omega*(chi_max-chi_0)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p7 Eq42"
+    },
+    {
+      "name": "gamma",
+      "expression": "gamma_chi*chi",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p7 Eq41"
+    },
+    {
+      "name": "Omega_rhs",
+      "expression": "C_Omega*(1-rho**gamma_Omega-Omega)*dn",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p7 Eq43"
+    },
+    {
+      "name": "q",
+      "expression": "loading/dn",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p6 Eq39; nonzero de only"
+    },
+    {
+      "name": "k",
+      "expression": "select(loading>0,(1-rho**chi_R)*m_R+rho**chi_R*((1-q)*m_T+q),rho**chi_R*(1+q)*m_T+(1-rho**chi_R*(1+q))*m_R)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p6 Eq39; algebraically equivalent convex interpolation avoids full-memory cancellation"
+    },
+    {
+      "name": "suppression",
+      "expression": "S**(k**gamma)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p7 Eq40; nested exponent"
+    },
+    {
+      "name": "effective_de",
+      "expression": "de-m*C*suppression*dn+f",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p7 Eq40; f supplied homogeneous host correction"
+    },
+    {
+      "name": "sigma_rhs",
+      "expression": "k*E_effective_de",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "p7 Eq40; supplied host linear action applied to effective_de"
+    }
+  ],
+  "outputs": [
+    "h_rhs",
+    "Omega_rhs",
+    "sigma_rhs"
+  ],
+  "excluded": [
+    "finite step integration",
+    "h or Omega endpoint projection",
+    "reset/FirstCall events",
+    "parameter calibration",
+    "host ASBS law",
+    "host state update",
+    "full objective spin",
+    "code equivalence",
+    "admission"
+  ]
+}
