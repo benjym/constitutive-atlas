@@ -10,7 +10,7 @@ For Sites publication, use a separate Sites checkout and copy this directory plu
 
 ## Developer build and local preview
 
-Requires Emscripten (tested with 6.0.8). From the repository root:
+Requires Node.js 24 (specified in `.nvmrc`) and Emscripten (tested with 6.0.8). GitHub Actions reads the same Node version file. From the repository root:
 
 ```sh
 EM_CACHE="$PWD/.cache/emscripten" emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
