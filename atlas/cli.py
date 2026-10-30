@@ -32,13 +32,18 @@ def main():
         result=discover(args.query,args.output,args.rows,args.cursor);print(f"Saved {len(result['response']['message']['items'])} unscreened records to {args.output}")
     elif args.command=='run':
         spec=json.loads(args.specification.read_text());spec=spec.get('specification',spec)
-        from .structure import check
-        check(spec,json.loads((ROOT/'schemas/run.schema.json').read_text()))
-        known={'model','parameters','initial','protocol','target','steps','cycles'}
-        if set(spec)-known or not {'model','protocol','target','steps','cycles'}<=spec.keys():raise ValueError('invalid run specification fields')
-        command=[str(args.solver)]
-        for key,value in spec.items():command.extend(['--'+key,','.join(str(x) for x in value) if isinstance(value,list) else str(value)])
+        if spec.get('schema_version')=='0.2':
+            from .schedule import schedule_command
+            command=schedule_command(spec,args.solver)
+        else:
+            from .structure import check
+            check(spec,json.loads((ROOT/'schemas/run.schema.json').read_text()))
+            known={'model','parameters','initial','protocol','target','steps','cycles'}
+            if set(spec)-known or not {'model','protocol','target','steps','cycles'}<=spec.keys():raise ValueError('invalid run specification fields')
+            command=[str(args.solver)]
+            for key,value in spec.items():command.extend(['--'+key,','.join(str(x) for x in value) if isinstance(value,list) else str(value)])
         result=subprocess.run(command,text=True,capture_output=True,timeout=60);data=json.loads(result.stdout)
+        if spec.get('schema_version')=='0.2':data['specification']=spec
         args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(data,indent=2)+'\n')
         print(f"{'Completed' if data['ok'] else 'Failed'}: {args.output}")
         if not data['ok']:raise SystemExit(1)

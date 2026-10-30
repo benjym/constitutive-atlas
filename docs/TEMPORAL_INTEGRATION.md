@@ -1,6 +1,6 @@
 # Physical time and temporal integration — design draft
 
-Status: **design contract with an implemented experimental ODE subset**. See [the accepted ODE API and current limits](TIME_ODE_API.md). Recorded 30 October 2026 for roadmap TC-02/TC-03 and REP-03/NUM-03/NUM-04. This document defines requirements and implementation gates; it preserves v0.1 semantics and does not promote Terracotta to executable status. The separately versioned v0.2 ODE schema is implemented; the broader schedule/constraint contract below remains proposed. Equation extraction (TC-01) and independent review remain open.
+Status: **design contract with an implemented experimental ODE subset**. See [the accepted ODE API and current limits](TIME_ODE_API.md). Recorded 30 October 2026 for roadmap TC-02/TC-03 and REP-03/NUM-03/NUM-04. This document defines requirements and implementation gates; it preserves v0.1 semantics and does not promote Terracotta to executable status. The separately versioned v0.2 ODE schema is implemented; the [component schedule/observable subset](TIMED_SCHEDULES.md) is also implemented. The broader invariant/constraint contract below remains proposed. Equation extraction (TC-01) and independent review remain open.
 
 ## 1. Decision and motivation
 
@@ -10,7 +10,7 @@ Today `integration: "rate"` means the equations return state increments for a su
 
 The [pinned Terracotta author README](https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/README.md) describes strain-rate loading in 1/s, stress-rate loading in kPa/s, multi-path histories, and timed relaxation/creep controls. It uses `scipy.solve_ivp`. These are requirements evidence, not evidence that the reference code and the [2024 journal formulation](https://doi.org/10.1016/j.jmps.2024.105789) are identical. See [the source brief](models/terracotta-2024.md).
 
-### Current-code gap audit
+### Baseline v0.1 gap audit (before the temporal extension)
 
 | Location | Present behaviour | Required change |
 | --- | --- | --- |
@@ -138,7 +138,7 @@ Illustrative run fragment, also **not an accepted v0.1 run**:
 
 `hold` captures that control's value from the committed state at segment entry. The second segment is a mixed axial hold, not a claim of a fully constrained relaxation test. Resulting initial control values and absolute segment boundaries must be materialized in run provenance. A rate change starts a new segment; it does not reset internal state.
 
-Integration must land exactly on each segment boundary (within a recorded floating-point boundary tolerance) without stepping across a control discontinuity. Specify one-sided stage evaluation at boundaries and avoid duplicate/zero-duration intervals. In the initial driver, start each segment using the new segment's controls and report persistent state once at the boundary. Preserve one-sided observable values where needed: a rate-dependent viscous stress may jump at a prescribed rate change even when internal state remains continuous. See TC-A04 in [the source audit](models/terracotta-2024-source-audit.md). Constitutive reversal events remain a separate SANISAND requirement; a schedule boundary cannot stand in for internal event detection.
+Integration must land exactly on each segment boundary (within a recorded floating-point boundary tolerance) without stepping across a control discontinuity. Specify one-sided stage evaluation at boundaries and avoid duplicate/zero-duration intervals. In the initial driver, start each segment using the new segment's controls and report the same continuous persistent state in both boundary records (incoming left and new-control right). Preserve one-sided observable values where needed: a rate-dependent viscous stress may jump at a prescribed rate change even when internal state remains continuous. See TC-A04 in [the source audit](models/terracotta-2024-source-audit.md). Constitutive reversal events remain a separate SANISAND requirement; a schedule boundary cannot stand in for internal event detection.
 
 Recorded experiments must retain acquisition order and timestamps. Never sort cyclic or creep data by strain. Missing timestamps can still support strain-domain comparisons but cannot establish a physical loading rate or validate time-dependent behaviour without a separate sourced protocol.
 
@@ -173,7 +173,7 @@ After these pass, reproduce the author Terracotta cases pinned in TC-05, with so
 
 ## 7. Implementation order and unresolved decisions
 
-The design draft and the [experimental physical-time ODE subset](TIME_ODE_API.md) are delivered; **TC-02 and TC-03 are not closed**. TIME-01/02/04/05 have partial implementation evidence; timed mixed controls, observables, source reconciliation and the complete native/Wasm laboratory contract remain open. Execute these bounded work packages after the relevant TC-01 extraction:
+The design draft and the [experimental physical-time ODE subset](TIME_ODE_API.md) are delivered; **TC-02 and TC-03 are not closed**. TIME-01/02/04/05 have partial implementation evidence; ordered mixed component controls and observables now have [analytical native/Wasm evidence](TIMED_SCHEDULES.md). Source reconciliation, original invariant capabilities, stiffness assessment and browser integration remain open. Execute these bounded work packages after the relevant TC-01 extraction:
 
 1. **TIME-01 — representation:** settle unit serialization, typed engine inputs, equation/state/observable roles, capability/version declarations and migration fixtures. Resolve whether the original Terracotta representation is an ODE after eliminating algebraic stress relationships, or needs a DAE contract. Verify the stress-first state restriction can represent it honestly.
 2. **TIME-02 — transactional update:** pass time context through the Python evaluator, generated C++, domain/initial checks and material-update API. Add generic time-aware integration and analytical fixtures. Keep v0.1 entry points working unchanged.

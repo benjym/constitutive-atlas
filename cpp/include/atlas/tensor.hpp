@@ -6,25 +6,26 @@
 
 namespace atlas {
 constexpr int max_state = 24;
+constexpr int max_derivatives = max_state + 6; // state plus mixed-control increments
 struct Jet {
     double v = 0;
-    std::array<double,max_state> d{};
+    std::array<double,max_derivatives> d{};
     Jet()=default;
     Jet(double value):v(value) {}
 };
 inline double value(double x) { return x; }
 inline double value(const Jet& x) { return x.v; }
-inline Jet operator+(const Jet& a,const Jet& b) { Jet c(a.v+b.v); for(int i=0;i<max_state;++i)c.d[i]=a.d[i]+b.d[i]; return c; }
-inline Jet operator-(const Jet& a,const Jet& b) { Jet c(a.v-b.v); for(int i=0;i<max_state;++i)c.d[i]=a.d[i]-b.d[i]; return c; }
+inline Jet operator+(const Jet& a,const Jet& b) { Jet c(a.v+b.v); for(int i=0;i<max_derivatives;++i)c.d[i]=a.d[i]+b.d[i]; return c; }
+inline Jet operator-(const Jet& a,const Jet& b) { Jet c(a.v-b.v); for(int i=0;i<max_derivatives;++i)c.d[i]=a.d[i]-b.d[i]; return c; }
 inline Jet operator-(const Jet& a) { return Jet(0)-a; }
 inline Jet operator+(const Jet& a) { return a; }
-inline Jet operator*(const Jet& a,const Jet& b) { Jet c(a.v*b.v); for(int i=0;i<max_state;++i)c.d[i]=a.d[i]*b.v+a.v*b.d[i]; return c; }
-inline Jet operator/(const Jet& a,const Jet& b) { Jet c(a.v/b.v); for(int i=0;i<max_state;++i)c.d[i]=(a.d[i]-c.v*b.d[i])/b.v; return c; }
+inline Jet operator*(const Jet& a,const Jet& b) { Jet c(a.v*b.v); for(int i=0;i<max_derivatives;++i)c.d[i]=a.d[i]*b.v+a.v*b.d[i]; return c; }
+inline Jet operator/(const Jet& a,const Jet& b) { Jet c(a.v/b.v); for(int i=0;i<max_derivatives;++i)c.d[i]=(a.d[i]-c.v*b.d[i])/b.v; return c; }
 inline bool operator>(const Jet&a,const Jet&b){return a.v>b.v;}
 inline bool operator<(const Jet&a,const Jet&b){return a.v<b.v;}
 inline bool operator>=(const Jet&a,const Jet&b){return a.v>=b.v;}
 inline bool operator<=(const Jet&a,const Jet&b){return a.v<=b.v;}
-inline Jet unary(const Jet& a,double v,double derivative) { Jet b(v);for(int i=0;i<max_state;++i)b.d[i]=derivative*a.d[i];return b; }
+inline Jet unary(const Jet& a,double v,double derivative) { Jet b(v);for(int i=0;i<max_derivatives;++i)b.d[i]=derivative*a.d[i];return b; }
 inline double asqrt(double a){return std::sqrt(a);}
 inline Jet asqrt(const Jet&a){const double v=std::sqrt(a.v);return unary(a,v,v>0?.5/v:0.);}
 inline double aexp(double a){return std::exp(a);}
@@ -40,7 +41,7 @@ inline Jet aabs(const Jet&a){return unary(a,std::abs(a.v),a.v>=0?1:-1);}
 inline double apow(double a,double b){return std::pow(a,b);}
 inline Jet apow(const Jet&a,const Jet&b){
     const double v=std::pow(a.v,b.v);Jet c(v);
-    for(int i=0;i<max_state;++i) {
+    for(int i=0;i<max_derivatives;++i) {
         const double da=a.d[i]==0?0:b.v*std::pow(a.v,b.v-1)*a.d[i];
         const double db=b.d[i]==0?0:v*std::log(a.v)*b.d[i];
         c.d[i]=da+db;

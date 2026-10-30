@@ -8,7 +8,7 @@ from .dsl import DIMS, TIME, I, Sym, Type, ZERO, dimensions, ValidationError, cp
 
 ROOT = Path(__file__).resolve().parents[1]
 IDENT = re.compile(r"[A-Za-z][A-Za-z0-9_]*\Z")
-RESERVED = {"I", "de", "dt", "time", "time_n", "strain_rate", "loading", "evaluation_time", "check_only", "T", "params", "z", "zn", "out", "domain", "true", "false",
+RESERVED = {"I", "de", "dt", "time", "time_n", "strain_rate", "loading", "evaluation_time", "check_only", "observables_only", "check_initial", "T", "params", "z", "zn", "out", "domain", "true", "false",
             "double", "auto", "if", "else", "return", "const", "class", "struct", "template",
             "int", "float", "void", "bool", "new", "delete", "switch", "case", "default",
             "for", "while", "do", "break", "continue", "throw", "try", "catch", "namespace",
@@ -113,6 +113,20 @@ def validate(model):
         if infer(parse(condition),symbols)!=Type('bool'): raise ValidationError('domain checks must be comparisons')
     for condition in model.get('initial_checks',[]):
         if infer(parse(condition),symbols)!=Type('bool'): raise ValidationError('initial checks must be comparisons')
+    for field in model.get('observables',[]):
+        typ=field_type(field)
+        if infer(parse(field['expr']),symbols)!=typ:
+            raise ValidationError(f"{field['name']}: observable shape or dimensions mismatch")
+        if field['name']=='stress' and typ!=Type('sym',DIMS['Pa']):
+            raise ValidationError('stress observable must be a symmetric tensor in Pa')
+        scale=parse(field['scale'])
+        param_symbols={name:field_type(value) for name,value in model['parameters'].items()}
+        if infer(scale,param_symbols)!=Type(dim=typ.dim) or not evaluate(scale,defaults(model))>0:
+            raise ValidationError('observable scale must be positive, parameter-only, and have matching units')
+        # Output names do not enter the equation/derived namespace.
+        if not IDENT.fullmatch(field['name']) or field['name'] in RESERVED or field['name'].endswith('_n') or field['name'] in names:
+            raise ValidationError('invalid or duplicate observable name')
+        names.add(field['name'])
     return model
 
 
@@ -120,7 +134,7 @@ def defaults(model):
     return {name: p['default'] for name,p in model['parameters'].items()}
 
 
-def interpret(model, state, previous, increment, parameters=None, *, time=None):
+def evaluation_environment(model, state, previous, increment, parameters=None, *, time=None):
     if physical_time(model) and (type(time) not in (int,float) or not math.isfinite(time)):
         raise ValueError('physical-time evaluation requires finite stage time')
     env={'I':I,'de':Sym(tuple(increment)),**defaults(model),**(parameters or {})}
@@ -131,7 +145,18 @@ def interpret(model, state, previous, increment, parameters=None, *, time=None):
         if not physical_time(model): env[name+'_n']=wrap(previous[name])
     for f in model['derived']: env[f['name']]=evaluate(parse(f['expr']),env)
     if not all(evaluate(parse(c),env) for c in model['domain']): raise ValueError('state outside model domain')
+    return env
+
+
+def interpret(model, state, previous, increment, parameters=None, *, time=None):
+    env=evaluation_environment(model,state,previous,increment,parameters,time=time)
     return {k:evaluate(parse(expr),env) for k,expr in model['equations'].items()}
+
+
+def observe(model,state,strain_rate,parameters=None,*,time=None):
+    if not physical_time(model):raise ValidationError('observables require a physical-time ODE definition')
+    env=evaluation_environment(model,state,None,strain_rate,parameters,time=time)
+    return {f['name']:evaluate(parse(f['expr']),env) for f in model.get('observables',[])}
 
 
 def all_models():

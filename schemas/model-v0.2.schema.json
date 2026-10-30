@@ -304,6 +304,82 @@
         }
       },
       "additionalProperties": false
+    },
+    "observables": {
+      "type": "array",
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "shape",
+          "unit",
+          "scale",
+          "expr"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_]*$"
+          },
+          "shape": {
+            "enum": [
+              "scalar",
+              "sym"
+            ]
+          },
+          "unit": {
+            "oneOf": [
+              {
+                "enum": [
+                  "1",
+                  "Pa",
+                  "s",
+                  "K"
+                ]
+              },
+              {
+                "type": "object",
+                "required": [
+                  "si"
+                ],
+                "properties": {
+                  "si": {
+                    "type": "array",
+                    "minItems": 4,
+                    "maxItems": 4,
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "number",
+                          "minimum": -16,
+                          "maximum": 16
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "^-?[0-9]{1,3}/[1-9][0-9]?$"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "scale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000
+          },
+          "expr": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
   "additionalProperties": false

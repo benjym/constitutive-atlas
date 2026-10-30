@@ -1,4 +1,4 @@
-"""Validate the JSON Schema subset used by the project's own three schemas.
+"""Validate the JSON Schema subset used by the project's own schemas.
 
 This is deliberately not advertised as a general JSON Schema implementation.
 Consumers may use a draft-2020-12 validator instead; semantic model validation
@@ -39,4 +39,5 @@ def check(value,schema,path='$'):
         if len(value)<schema.get('minLength',0) or len(value)>schema.get('maxLength',math.inf):raise ValidationError(f'{path}: invalid string length')
         if 'pattern' in schema and not re.search(schema['pattern'],value):raise ValidationError(f'{path}: invalid string pattern')
     if type(value) in (float,int):
+        if 'exclusiveMinimum' in schema and value<=schema['exclusiveMinimum']:raise ValidationError(f'{path}: value must exceed minimum')
         if value<schema.get('minimum',-math.inf) or value>schema.get('maximum',math.inf):raise ValidationError(f'{path}: number outside bounds')

@@ -1,6 +1,6 @@
 # Physical-time ODE support — experimental v0.2 subset
 
-The shared engine now implements the first part of [the temporal design](TEMPORAL_INTEGRATION.md). This is a material-update capability, not a completed timed laboratory driver or an executable Terracotta model.
+The shared engine now implements the first part of [the temporal design](TEMPORAL_INTEGRATION.md). A separate [experimental timed driver](TIMED_SCHEDULES.md) now adds ordered mixed controls and algebraic outputs; Terracotta is not yet executable.
 
 ## Accepted model contract
 
@@ -8,7 +8,7 @@ Use [model-v0.2.schema.json](../schemas/model-v0.2.schema.json), plus `atlas.mod
 
 A v0.2 model declares `formulation: {"time_dependence": "physical_time", "equation_form": "ode"}`. It supplies one `equations` expression per persistent state, with **state units per second**. The expression inputs are current state, parameters, `time` in seconds, and `strain_rate` as a symmetric Mandel tensor in 1/s. Previous-state symbols, `de`, `dt`, incremental multipliers and transient state are rejected. There is no algebraic-constraint or physical-time-residual support in this subset.
 
-State need not start with stress. The generic timed update supports scalar/tensor states up to 24 components. This removes the stress-first restriction for physical ODEs; stress observables and the original Terracotta invariant/control contract are still to implement before connecting a physical-time model to laboratory plots.
+State need not start with stress. The generic timed update supports scalar/tensor states up to 24 components. This removes the stress-first restriction for physical ODEs; optional algebraic `observables` now represent stress separately from state. The original Terracotta invariant/capability contract and browser integration remain outstanding.
 
 Units are `1`, `Pa`, `s`, `K`, or `{"si": [mass, length, time, temperature]}`. Exponents may be numbers or exact rational strings such as `"1/3"`; absolute magnitude is at most 16 and reduced denominator at most 16. Values are in SI; no automatic kPa or other prefix conversion occurs. For example, Pa·s is `{"si": [1,-1,-1,0]}`, 1/s is `[0,0,-1,0]` inside the same object, and K²/Pa is `[-1,1,2,2]`. Temperature units do not assert that a mesoscopic state has the physical meaning of ordinary thermodynamic temperature.
 
@@ -58,4 +58,4 @@ The expected first stress component is `100000 + 40000 exp(-2)` Pa and the commi
 
 [Native analytical tests](../tests/test_time.cpp) cover relaxation, the stationary-stress Maxwell creep relation, nonautonomous evolution, varying stage rates, partitioning, refinement, rejected steps, full-update rollback and invalid times/settings. The creep relation uses its analytically known strain rate; it does **not** test a numerical stress-control driver. [Python tests](../tests/test_time.py) cover dimensions, equation/version boundaries, reserved inputs and interpreter/native agreement. [Wasm tests](../tools/test_time_wasm.mjs) compare analytical values and native/Wasm success/failure results.
 
-TIME-01/02/04/05 have an implemented ODE subset, not full milestone acceptance. Outstanding work includes source-complete Terracotta equations and units, independent review, algebraic observables, original invariant kinematics, timed mixed controls/holds, ordered schedule serialization, reference-case stiffness assessment and browser controls. TIME-03 and TIME-06 remain open. The broader roadmap, including the six-model SANISAND gate and the twenty-model research release, remains incomplete.
+TIME-01/02/04/05 have an implemented ODE subset, not full milestone acceptance. Outstanding work includes source-complete Terracotta equations and units, independent review, original invariant kinematics, reference-case stiffness assessment and browser controls. Algebraic observables, ordered schedule serialization and timed mixed controls/holds now have [analytical native/Wasm evidence](TIMED_SCHEDULES.md). TIME-03 has an experimental component-control implementation; full source-specific acceptance and TIME-06 remain open. The broader roadmap, including the six-model SANISAND gate and the twenty-model research release, remains incomplete.
