@@ -64,15 +64,37 @@ def reference_rate(state, strain, parameters):
     return stress+[forward[6]]+mandel(Hdot)
 
 
+def collinear_axis(initial, strain, parameters):
+    active = {i for v in [initial[7:],strain] for i,x in enumerate(v) if x!=0}
+    if len(active)==1 and parameters[12]==.5:
+        axis = next(iter(active))
+        if abs(initial[7+axis])<=parameters[9]: return axis
+    return None
+
+
 def rk4(initial, strain, parameters, steps):
+    """RK4, with exact history supplied at stages for collinear beta=1/2.
+
+    Eliminating that scalar history ODE avoids its non-smooth zero crossing;
+    stress and void ratio remain integrated and independently grid refined.
+    Noncollinear histories and other exponents use full-state RK4.
+    """
     z = initial.copy(); dt = 1/steps
-    def shifted(z,k,f): return [a+dt*f*b for a,b in zip(z,k)]
-    for _ in range(steps):
+    axis = collinear_axis(initial,strain,parameters)
+    def set_history(state, t):
+        if axis is not None:
+            state[7:] = [0.]*6
+            state[7+axis] = collinear_memory_half_exponent(initial[7+axis],t*strain[axis],parameters[9])
+        return state
+    def shifted(z,k,f,t):
+        return set_history([a+dt*f*b for a,b in zip(z,k)],t)
+    for step in range(steps):
+        t = step/steps
         a = reference_rate(z,strain,parameters)
-        b = reference_rate(shifted(z,a,.5),strain,parameters)
-        c = reference_rate(shifted(z,b,.5),strain,parameters)
-        d = reference_rate(shifted(z,c,1),strain,parameters)
-        z = [x+dt*(w+2*y+2*t+u)/6 for x,w,y,t,u in zip(z,a,b,c,d)]
+        b = reference_rate(shifted(z,a,.5,t+.5*dt),strain,parameters)
+        c = reference_rate(shifted(z,b,.5,t+.5*dt),strain,parameters)
+        d = reference_rate(shifted(z,c,1,t+dt),strain,parameters)
+        z = set_history([x+dt*(w+2*y+2*t+u)/6 for x,w,y,t,u in zip(z,a,b,c,d)],(step+1)/steps)
     return z
 
 
@@ -175,7 +197,7 @@ def execute(solver):
             ok,ratio = compare(result.get('state',[]),fine,TOLERANCES['path'])
             final = result.get('state',[])
             radius = math.sqrt(sum(x*x for x in final[7:]))/R if len(final)==13 else None
-            segments.append(dict(arguments=args,expected=fine,actual=final,reference_levels=levels,reference_converged=converged,reference_tolerance_ratio=reference_ratio,max_tolerance_ratio=ratio,history_radius_fraction=radius,diagnostics=result.get('diagnostics'),passed=ok and converged and code==0 and result.get('ok') is True and radius<1.01))
+            segments.append(dict(reference_scheme='RK4 with analytical collinear stage history' if collinear_axis(reference,deformation,defaults) is not None else 'full-state RK4',arguments=args,expected=fine,actual=final,reference_levels=levels,reference_converged=converged,reference_tolerance_ratio=reference_ratio,max_tolerance_ratio=ratio,history_radius_fraction=radius,diagnostics=result.get('diagnostics'),passed=ok and converged and code==0 and result.get('ok') is True and radius<1.01))
             if scalar_axis is not None:
                 scalar_memory = collinear_memory_half_exponent(scalar_memory,deformation[scalar_axis],R)
                 analytical = [0.]*13;analytical[7+scalar_axis] = scalar_memory
@@ -197,7 +219,7 @@ def execute(solver):
         args,code,result = invoke('integrate',state,axis,params)
         cases.append(dict(id='rollback-'+name,kind='invalid-state-or-parameters',arguments=args,initial=state,result=result,passed=code!=0 and result.get('ok') is False and result.get('state')==state))
     return dict(kind='igs-verification-report',model=MODEL,catalogue_hash=description['sha256'],parameters=defaults,parameter_variants=variants,
-        oracle='Project-authored Cartesian IGS operator using odd/even decomposition of the separate VW96 Cartesian host; fixed-step RK4 histories. No DSL evaluator or production integrator; not independent authorship or executed external code.',
+        oracle='Project-authored Cartesian IGS operator using odd/even decomposition of the separate VW96 Cartesian host; analytically eliminated collinear history and fixed-step RK4 (full-state for noncollinear paths). No DSL evaluator or production integrator; not independent authorship or executed external code.',
         tolerances={k:dict(stress_absolute_Pa=v[0],void_ratio_absolute=v[1],history_absolute=v[2],relative=v[3]) for k,v in TOLERANCES.items()},
         runtime=dict(python=platform.python_version(),platform=platform.platform(),solver_sha256=sha256(solver)),cases=cases,passed=all(c['passed'] for c in cases))
 

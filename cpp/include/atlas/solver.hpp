@@ -49,21 +49,36 @@ inline bool implicit_step(int model,const State&zn,const Sym<double>&de,const St
     }
     return false;
 }
-inline bool midpoint(int model,const State&zn,const Sym<double>&de,const State&p,State&z){
+inline bool midpoint(int model,const State&zn,const Sym<double>&de,const State&p,State&z,State*endpoint_defect=nullptr){
     State k1,k2,mid=zn;if(!evaluate_model(model,zn,zn,de,p,k1)||!finite(k1))return false;
     for(size_t i=0;i<zn.size();++i)mid[i]+=.5*k1[i];
     if(!finite(mid)||!evaluate_model(model,mid,zn,de,p,k2)||!finite(k2))return false;
-    z=zn;for(size_t i=0;i<zn.size();++i)z[i]+=k2[i];return domain(model,z,p);
+    z=zn;for(size_t i=0;i<zn.size();++i)z[i]+=k2[i];
+    if(!domain(model,z,p))return false;
+    // Step doubling alone can miss a branch entered after the final midpoint.
+    // Sample the endpoint and compare midpoint with Simpson-type quadrature.
+    // The defect is O(increment^3) on smooth paths and detects hidden crossings.
+    if(endpoint_defect){
+        State k3;if(!evaluate_model(model,z,zn,de,p,k3)||!finite(k3))return false;
+        endpoint_defect->resize(zn.size());
+        for(size_t i=0;i<zn.size();++i)(*endpoint_defect)[i]=(k1[i]-2*k2[i]+k3[i])/6.;
+        if(!finite(*endpoint_defect))return false;
+    }
+    return true;
 }
 inline bool advance_recursive(int model,const State&zn,const Sym<double>&de,const State&p,State&z,Diagnostics&diag,int depth){
     if(depth>14||diag.substeps>20000)return false;
     const bool rate=models().at(model).rate;
     if(!rate){if(implicit_step(model,zn,de,p,z,diag)){++diag.substeps;diag.increment_fractions.push_back(std::ldexp(1.,-depth));return true;}}
     else {
-        State full,half,two;const auto halfde=.5*de;
-        if(midpoint(model,zn,de,p,full)&&midpoint(model,zn,halfde,p,half)&&midpoint(model,half,halfde,p,two)){
+        State full,half,two,half_defect,two_defect;const auto halfde=.5*de;
+        if(midpoint(model,zn,de,p,full)&&midpoint(model,zn,halfde,p,half,&half_defect)&&midpoint(model,half,halfde,p,two,&two_defect)){
             auto scales=model_scales(model,p);double error=0;
-            for(size_t i=0;i<zn.size();++i)error=std::max(error,std::abs(full[i]-two[i])/scales[i]);
+            for(size_t i=0;i<zn.size();++i){
+                error=std::max(error,std::abs(full[i]-two[i])/scales[i]);
+                error=std::max(error,std::abs(half_defect[i])/scales[i]);
+                error=std::max(error,std::abs(two_defect[i])/scales[i]);
+            }
             diag.error=error;
             if(error<1e-6){z=two;diag.substeps+=2;diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));return true;}
         }

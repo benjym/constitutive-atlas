@@ -68,14 +68,19 @@ class IGSOracleTests(unittest.TestCase):
         self.assertAlmostEqual(oracle.collinear_memory_half_exponent(h,-h-length,R),-h,places=17)
         self.assertEqual(oracle.collinear_memory_half_exponent(R,R,R),R)
 
-    def test_native_rates_covariance_and_rollback(self):
+    def test_native_rates_histories_covariance_and_rollback(self):
         report = oracle.execute(Path(os.environ.get('ATLAS_SOLVER',ROOT/'build/atlas_solver')))
         self.assertEqual(len(report['cases']),303)
         instantaneous = [c for c in report['cases'] if c['kind']!='independent-rk4-reference']
         self.assertEqual(len(instantaneous),295)
         self.assertTrue(all(c['passed'] for c in instantaneous),[c['id'] for c in instantaneous if not c['passed']])
-        # History convergence and cyclic discrepancies are retained as failed
-        # investigation evidence, not advertised as passing regression checks.
+        self.assertTrue(report['passed'],[c['id'] for c in report['cases'] if not c['passed']])
+        for case in report['cases']:
+            for segment in case.get('segments',[]):
+                self.assertTrue(segment['reference_converged'])
+                self.assertLess(segment['history_radius_fraction'],1.01)
+                if 'analytical_history' in segment:
+                    self.assertTrue(segment['analytical_history']['passed'])
 
 
 if __name__=='__main__': unittest.main()

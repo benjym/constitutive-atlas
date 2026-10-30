@@ -31,6 +31,26 @@ int main(){
             auto a=atlas::integrate(int(m),z,de,p),b=atlas::integrate(int(m),zr,rotate(de),p);require(a.ok&&b.ok,"rotation integration failed");
             auto want=rotate(atlas::tensor_from(a.state,0));for(int i=0;i<6;++i)require(std::abs(want.v[i]-b.state[i])<.01,"fixed-frame rotation covariance failed");
         }
+        // Hidden zero-history crossing: both midpoint estimates sample unloading
+        // and agree exactly, yet the true endpoint is on the loading branch.
+        int igs=-1;for(size_t i=0;i<atlas::models().size();++i)
+            if(atlas::models()[i].id=="hypoplastic-sand-igs97")igs=int(i);
+        require(igs>=0,"IGS model missing");
+        auto p=atlas::default_parameters(igs),z=atlas::initial_state(igs);
+        z[10]=-7.862141684009169e-6;
+        atlas::Sym<double>de;de.v={0,0,0,1e-5,0,0};
+        atlas::State full,half,two,defect;
+        require(atlas::midpoint(igs,z,de,p,full)&&atlas::midpoint(igs,z,.5*de,p,half)
+                &&atlas::midpoint(igs,half,.5*de,p,two,&defect),"crossing probes failed");
+        require(std::abs(full[10]-two[10])<1e-18,"crossing counterexample changed");
+        require(std::abs(defect[10])>1e-8,"endpoint defect missed hidden branch");
+        const double analytical=1.93701012831811e-6;
+        require(std::abs(two[10]-analytical)>1e-7,"uncontrolled crossing should expose error");
+        auto corrected=atlas::integrate(igs,z,de,p);
+        require(corrected.ok&&corrected.diagnostics.rejected>0,"crossing was not refined");
+        require(std::abs(corrected.state[10]-analytical)<1e-9,"crossing history inaccurate");
+        double fraction=0;for(double f:corrected.diagnostics.increment_fractions)fraction+=f;
+        require(fraction==1&&corrected.diagnostics.increment_fractions.size()==size_t(corrected.diagnostics.substeps),"crossing increment trace incomplete");
         std::cout<<"AD Jacobians and fixed-frame rotation covariance passed for all executable models\n";
     }catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}
 }

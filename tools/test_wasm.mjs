@@ -56,3 +56,32 @@ for (const current of ['100000,100000,100000,0,0,0,.7','150000,90000,60000,8000,
   actual.values.forEach((v,i)=>assert.ok(Math.abs(v-expected.values[i])<=1e-4+1e-9*Math.abs(expected.values[i])));
 }
 console.log('Native/WebAssembly Cartesian-rate parity passed for 2 hypoplastic states.');
+
+// Independent analytical history targets for the missed IGS branch crossing
+// and a five-segment reversal cycle (beta_r=1/2, R=1e-4).
+const igs='hypoplastic-sand-igs97';
+for (const [start,increments,analytical] of [
+  [[100000,100000,100000,0,0,0,.7,0,0,0,-7.862141684009169e-6,0,0],
+   [1e-5],[1.93701012831811e-6]],
+  [[100000,100000,100000,0,0,0,.7,0,0,0,0,0,0],
+   [2e-5,-4e-5,4e-5,-4e-5,2e-5],
+   [1.4682934039814636e-5,-1.7855070763784847e-5,1.5987881160017447e-5,-1.7095642373659458e-5,2.588276509887993e-6]],
+]) {
+  let nativeState=start,wasmState=start;
+  for (let j=0;j<increments.length;j++) {
+    const strain=[0,0,0,increments[j],0,0].join(',');
+    const native=spawnSync(resolve(root,'build/atlas_solver'),['--model',igs,'--mode','integrate','--initial',nativeState.join(','),'--strain',strain],{encoding:'utf8',timeout:30000});
+    assert.equal(native.status,0,native.stdout+native.stderr);
+    const expected=JSON.parse(native.stdout);
+    const actual=JSON.parse(wasm.ccall('atlas_integrate','string',['string','string','string','string'],[igs,'',wasmState.join(','),strain]));
+    assert.equal(actual.ok,true,actual.message);
+    for (const result of [actual,expected]) {
+      assert.ok(Math.abs(result.state[10]-analytical[j])<=1e-9+2e-5*Math.abs(analytical[j]),`IGS analytical history segment ${j}`);
+      assert.equal(result.diagnostics.increment_fractions.reduce((a,b)=>a+b,0),1);
+      assert.equal(result.diagnostics.increment_fractions.length,result.diagnostics.substeps);
+    }
+    actual.state.forEach((v,i)=>assert.ok(Math.abs(v-expected.state[i])<=(i<6?1e-4:1e-12)+1e-9*Math.abs(expected.state[i]),`IGS native/Wasm segment ${j} state ${i}`));
+    nativeState=expected.state;wasmState=actual.state;
+  }
+}
+console.log('Native/WebAssembly IGS analytical crossing and cyclic history passed for 6 increments.');

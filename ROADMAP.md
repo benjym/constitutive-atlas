@@ -89,6 +89,8 @@ The [plasticity investigation](docs/PLASTICITY_VERIFICATION.md) adds 19 Druckerâ
 
 The [IGS draft dossier](docs/models/hypoplastic-sand-igs97.md) now separates the continuous history/overlay law from numerical caps and external projection algorithms. Its initial 303-case investigation passes all 295 instantaneous/covariance/rollback checks and four histories, while retaining four failed history checks. Cyclic native history discrepancy and RK4 reference convergence remain open; REV-05 is not complete.
 
+The [IGS endpoint-defect correction](docs/models/hypoplastic-sand-igs97.md#endpoint-defect-correction-and-v2-evidence) resolves the analytically confirmed small-cycle error. All 303 checks now pass with unchanged tolerances and analytical-stage history for collinear RK4 references; full-state refinement remains for noncollinear paths. Native/Wasm crossing and cyclic regressions supplement the preserved failed v1 evidence. Independent review and REV-05 remain open.
+
 **Acceptance:** all five dossiers and evidence records are complete, with review independent of the original transcription. If no suitable independent reference exists, document the gap and keep that model below the reviewed gate. Existing IGS draft status is not promoted solely because CI passes.
 
 ## 7. M2 â€” SANISAND-2004 and the six-model proof
