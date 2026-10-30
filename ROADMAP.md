@@ -111,6 +111,8 @@ The [symmetric tensor-square primitive](docs/TENSOR_SQUARE.md) now resolves the 
 
 The [experimental parent-increment reset contract](docs/PARENT_INCREMENT_RESETS.md) now supplies typed simultaneous memory assignments from a committed parent, frozen internal trials and exact rollback. Python/native/Wasm synthetic checks cover reversals, cutbacks, internal threshold crossing, caller partition effects, invalid values and outer mixed controls. The [verification record](catalogue/investigations/parent-reset-v1.json) pins its source and outcomes. This implements one explicit engine scope; canonical SANISAND policy, full original-paper extraction, initialization and independent reference execution remain open.
 
+A [source-conventions audit](docs/models/sanisand-2004-conventions.md) now adds tested engineering-shear/unit/tangent conversions and 87 Cartesian comparisons of 18 unchanged selected OpenSees state/tensor functions. The [revision-pinned report](catalogue/investigations/sanisand-source-functions-v1.json) documents a unit-dependent low-pressure correction and other variant-specific limits. This advances SAN-01/02/06 source reconciliation; complete original-paper extraction, full reference integration and canonical transcription remain open.
+
 **Acceptance:** all six formulations meet their review gates and execute through the common engine without model-specific mathematical escape hatches. History and initialization semantics are explicit and tested under substepping and rollback. A paper figure or website curve alone cannot close this milestone.
 
 ### Additional near-term target — Terracotta (M2T)
