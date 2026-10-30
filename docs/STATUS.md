@@ -96,3 +96,7 @@ A [separate algebraic limit draft](models/sanisand-2004-hardening-limit.md) now 
 ## Cautious native SANISAND check — 2026-10-31
 
 The user reauthorized gradual native checks. One standalone C++20 compilation and execution completed normally, passing 12 cases, 2,280 value checks and 6,840 automatic strain-derivative comparisons against Python central differences. The [evidence record](../catalogue/investigations/sanisand-native-algebra-v1.json) pins hashes and commands. This supersedes the latest blanket native hold for individual checks; the larger OpenSees build remains deferred. This adds algebra/code-generation verification, not state or finite-step tangents, integrated trajectories or independent scientific validation.
+
+## SANISAND exact elastic entry — 2026-10-31
+
+A [research reference](models/sanisand-2004-elastic-entry.md) now exactly integrates straight elastic strain paths using current void ratio and brackets first yield. Six new test groups pass, including independent RK4 refinement, an analytical yield fraction, partition/rotation/unit invariance and unload/reload entry. All 15 combined SANISAND Python groups pass in the [hashed record](../catalogue/investigations/sanisand-elastic-entry-v1.json). This advances SAN-03/05 without adding an executable model or selecting plastic/reversal transactions. No further native compilation was needed for this derivation.
