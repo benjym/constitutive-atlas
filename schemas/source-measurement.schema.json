@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Source measurements in native units",
-  "description": "Separate from normalized material-point experiments. Column keys and plot axes are cross-checked by Atlas readers.",
+  "title": "Source measurements with explicit channel units",
+  "description": "Separate from normalized material-point experiments. Column keys and plot axes are cross-checked by Atlas readers. Browser assets may standardize units while retaining source units and conversion metadata.",
   "type": "object",
   "required": ["schema_version", "kind", "id", "material", "protocol", "conventions", "provenance", "initial", "columns", "rows", "source_plot"],
   "properties": {
@@ -29,7 +29,14 @@
         "properties": {
           "key": {"type": "string", "pattern": "^c[0-9]+$"},
           "name": {"type": "string", "minLength": 1},
-          "unit": {"type": "string", "minLength": 1}
+          "unit": {"type": "string", "minLength": 1},
+          "source_unit": {"type": "string"},
+          "unit_status": {"enum": ["standardized", "unresolved"]},
+          "unit_conversion": {
+            "type": "object", "required": ["scale", "offset"],
+            "properties": {"scale": {"type": "number"}, "offset": {"type": "number"}},
+            "additionalProperties": false
+          }
         }
       }
     },

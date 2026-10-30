@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="A source-linked geomechanics model atlas and WebAssembly material-point laboratory.">
-  <title>Constitutive Atlas · Material laboratory</title>
+  <title>Constitutive Atlas · Model testing</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23274e40'/%3E%3Cpath d='M20 5 34 13v15l-14 8-14-8V13Z M6 13l14 8 14-8M20 21v15' fill='none' stroke='%23d8e1d8' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -15,13 +15,13 @@
     <a class="brand" href="#laboratory" aria-label="Constitutive Atlas home"><svg viewBox="0 0 42 48" aria-hidden="true">
         <path d="M21 2 40 13v22L21 46 2 35V13Z M2 13l19 11 19-11M21 24v22" fill="none" stroke="currentColor" stroke-width="2" />
       </svg><span>Constitutive<br><b>Atlas</b></span></a>
-    <nav aria-label="Main navigation"><a href="#laboratory" class="active">◫ <span>Material laboratory</span></a><a href="#catalogue">⌕ <span>Model catalogue</span><small id="catalogue-count">32</small></a><a href="#methods">≋ <span>Methods & evidence</span></a><a href="./publications.html">↗ <span>Publications &amp; lineage</span></a></nav>
+    <nav aria-label="Main navigation"><a href="#laboratory" class="active">◫ <span>Model testing</span></a><a href="#catalogue">⌕ <span>Model catalogue</span><small id="catalogue-count">32</small></a><a href="#methods">≋ <span>Methods & evidence</span></a><a href="./publications.html">↗ <span>Publications &amp; lineage</span></a></nav>
     <footer>
       <p>By<br><a href="https://github.com/benjym" target="_blank" rel="noopener">Benjy Marks</a><br><a href="https://github.com/Franzzzzzzzz" target="_blank" rel="noopener">François Guillard</a></p>
     </footer>
   </aside>
   <main>
-    <header class="topbar"><span><b id="breadcrumb">MATERIAL LABORATORY</b></span></header>
+    <header class="topbar"><span><b id="breadcrumb">MODEL TESTING</b></span></header>
     <section id="laboratory" class="page">
       <div class="intro">
         <div>
@@ -36,7 +36,7 @@
             <details class="model-references"><summary>Sources &amp; model definition</summary><div id="model-sources" aria-label="Model sources"></div></details>
             <div class="model-meta"><span id="model-family"></span><span>3D · small strain</span><button id="equations-button" class="text-button">View equations ↗</button></div>
           </section>
-      <nav class="workspace-links" aria-label="Laboratory sections"><a href="#controls">Test controls ↓</a><a href="#response">Response plots ↓</a><a href="#measurements">Compare measurements ↓</a><a href="#equations">Equations &amp; sources ↓</a></nav>
+      <nav class="workspace-links" aria-label="Model testing sections"><a href="#controls">Test controls ↓</a><a href="#response">Response plots ↓</a><a href="#measurements">Compare measurements ↓</a><a href="#equations">Equations &amp; sources ↓</a></nav>
       <div class="lab-layout">
         <form id="controls" class="controls">
           <div class="control-heading">
@@ -73,8 +73,9 @@
         <div class="results-column">
           <section id="measurements" class="experiment-card" aria-labelledby="experiment-title">
             <div class="eyebrow">EXPERIMENTAL COMPARISON</div>
-            <h2 id="experiment-title">Compare with a laboratory test.</h2>
-            <p>Choose a measured test to compare its response or inspect its source channels. Model settings stay under your control.</p>
+            <h2 id="experiment-title">Compare with measurements</h2>
+            <p>Tests are filtered by drainage protocol, loading path and verified plot axes. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.</p>
+            <p id="experiment-filter-note" class="comparison-filter-note"></p>
             <label>Find measurements<input id="experiment-search" type="search" placeholder="Material or test ID" autocomplete="off"></label>
             <label class="experiment-selector">Experimental test<select id="experiment-select" disabled><option value="">Loading available tests…</option></select></label>
             <div class="experiment-toolbar"><label class="experiment-toggle"><input id="show-experiment" type="checkbox" role="switch" disabled> Show measurements</label><button id="match-experiment" class="text-button" disabled>Use initial state &amp; protocol</button><button id="retry-experiment" class="text-button" hidden>Retry loading measurements</button></div>
@@ -83,10 +84,11 @@
             <p id="experiment-attribution" hidden></p><a id="experiment-source" target="_blank" rel="noopener noreferrer" hidden>Data source &amp; citation ↗</a>
             <a id="experiment-license" target="_blank" rel="noopener noreferrer" hidden></a>
             <section id="source-record-view" hidden aria-label="Source measurement channels">
-              <p>Source measurements · native units. These channels are shown separately from the model prediction.</p>
+              <p><span id="source-unit-note"></span></p>
               <div class="source-axis-controls"><label>X channel <select id="source-x"></select></label><label>Y channel <select id="source-y"></select></label></div>
               <svg id="source-chart" viewBox="0 0 480 290" role="img" aria-label="Selected source measurement channels"></svg>
             </section>
+            <label class="experiment-toggle"><input id="browse-source-records" type="checkbox"> Browse all source records (includes tests without model overlays)</label>
             <details class="local-experiments"><summary>Compare your own measurements</summary><p>Load original TMD/TMU .dat files or Atlas experiment JSON. Your files stay in this browser.</p><div class="experiment-toolbar"><label class="secondary file-label">Load local measurements<input id="experiment-file" type="file" accept=".dat,.json,application/json,text/plain" multiple hidden></label><button id="clear-experiments" class="text-button" disabled>Clear local files</button></div></details>
           </section>
           <div class="run-summary" id="response" role="status" aria-live="polite"><span id="run-state"><span class="dot"></span> Preparing live response</span><span id="run-detail">Double precision · compression positive</span></div>
@@ -96,24 +98,27 @@
                 <h2>Stress–strain response</h2><span>01</span>
               </div><svg id="stress-chart" viewBox="0 0 480 290" role="img" aria-label="Deviator stress versus axial strain"></svg>
               <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key">● Experiment</span></div>
+              <p class="measurement-note"></p>
             </section>
             <section class="chart-panel">
               <div class="chart-title">
                 <h2>Effective stress path</h2><span>02</span>
               </div><svg id="path-chart" viewBox="0 0 480 290" role="img" aria-label="Deviator stress versus effective mean stress"></svg>
-              <div class="chart-caption">Compression is positive · stresses in kPa</div>
+              <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div>
+              <p class="measurement-note"></p>
             </section>
             <section class="chart-panel">
               <div class="chart-title">
                 <h2>Volumetric response</h2><span>03</span>
               </div><svg id="volume-chart" viewBox="0 0 480 290" role="img" aria-label="Volumetric versus axial strain"></svg>
-              <div class="chart-caption">Drained contraction and dilation</div>
+              <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div>
+              <p class="measurement-note"></p>
             </section>
             <section class="chart-panel">
               <div class="chart-title">
                 <h2>Pore-pressure change</h2><span>04</span>
               </div><svg id="pore-chart" viewBox="0 0 480 290" role="img" aria-label="Pore-pressure change versus axial strain"></svg>
-              <div class="chart-caption" id="pore-caption">Reconstructed only for undrained protocols</div>
+              <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div><p class="measurement-note"></p><p id="pore-caption" class="pore-protocol-note">Reconstructed only for undrained protocols</p>
             </section>
           </div>
           <div class="result-footer">
@@ -132,11 +137,11 @@
     <section id="catalogue" class="page" hidden>
       <div class="eyebrow">A LIVING LITERATURE MAP</div>
       <h1>The model catalogue.</h1>
-      <p class="page-lead">Choose a model to explore its formulation and sources. Research candidates are not yet available in the laboratory.</p>
+      <p class="page-lead">Choose a model to explore its formulation and sources. Research candidates are not yet available for testing.</p>
       <p><a href="./publications.html">Browse publication versions, corrections &amp; lineage →</a></p>
       <div class="catalogue-tools"><label>Search models<input id="search" type="search" placeholder="Name, family, or formulation…"></label><label>Availability<select id="availability">
             <option value="all">All entries</option>
-            <option value="executable">In laboratory</option>
+            <option value="executable">Available to test</option>
             <option value="candidate">Research candidates</option>
           </select></label></div>
       <p id="catalogue-results" class="catalogue-results" role="status"></p>
@@ -181,7 +186,7 @@
         <h2 id="catalogue-detail-title"></h2>
       </header>
       <div id="catalogue-detail-body" class="catalogue-detail-body"></div>
-      <footer class="catalogue-dialog-footer"><span id="catalogue-detail-id"></span><button id="catalogue-explore" type="button" class="primary">Explore in laboratory →</button></footer>
+      <footer class="catalogue-dialog-footer"><span id="catalogue-detail-id"></span><button id="catalogue-explore" type="button" class="primary">Test this model →</button></footer>
     </div>
   </dialog>
   <div id="toast" role="status" aria-live="polite"></div>

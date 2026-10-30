@@ -67,3 +67,31 @@ export async function fetchExperiment(entry,fetcher=fetch){
   if(data.id!==entry.id||data.rows.length!==entry.rows)throw Error('Experiment does not match the selected test.');
   return data;
 }
+
+// Axes describe physical quantities, not merely matching unit dimensions.
+export const comparisonAxes={
+  stress:{x:'axial_strain',y:'q',xLabel:'Axial strain ε₁ (%)',yLabel:'Deviator stress q (kPa)',xScale:100,yScale:.001},
+  path:{x:'p',y:'q',xLabel:'Mean effective stress p′ (kPa)',yLabel:'Deviator stress q (kPa)',xScale:.001,yScale:.001},
+  volume:{x:'axial_strain',y:'volumetric_strain',xLabel:'Axial strain ε₁ (%)',yLabel:'Volumetric strain εᵥ (%)',xScale:100,yScale:100},
+  pore:{x:'axial_strain',y:'pore_pressure',xLabel:'Axial strain ε₁ (%)',yLabel:'Pore-pressure change Δu (kPa)',xScale:100,yScale:.001}
+};
+const comparisonCache=new WeakMap();
+export function comparisonMetadata(record){
+  if(record?.kind!=='experiment')return {plots:[],loading:'unreviewed'};
+  if(comparisonCache.has(record))return comparisonCache.get(record);
+  const plots=Object.entries(comparisonAxes).filter(([,a])=>record.rows.some(r=>Number.isFinite(r[a.x])&&Number.isFinite(r[a.y]))).map(([key])=>key);
+  let lo=Infinity,hi=-Infinity;for(const row of record.rows){lo=Math.min(lo,row.axial_strain);hi=Math.max(hi,row.axial_strain);}
+  const tolerance=Math.max(1e-8,(hi-lo)*.05);let rising=false,falling=false,low=record.rows[0].axial_strain,high=low;
+  for(const row of record.rows){const value=row.axial_strain;rising||=value-low>tolerance;falling||=high-value>tolerance;low=Math.min(low,value);high=Math.max(high,value);}
+  const result={plots,loading:rising&&falling?'reversing':'monotonic'};comparisonCache.set(record,result);return result;
+}
+export function compatibleExperiment(record,protocol,cycles=0){
+  const expected={1:'drained-triaxial',2:'undrained-triaxial',3:'undrained-triaxial'}[protocol];
+  const meta=record?.rows instanceof Array?comparisonMetadata(record):record?.comparison;
+  return !!expected&&record?.kind==='experiment'&&record.protocol===expected&&!!meta?.plots?.length&&meta.loading===(Number(cycles)>0?'reversing':'monotonic');
+}
+export function comparisonSeries(record,visible,plot,protocol,cycles=0){
+  const axes=comparisonAxes[plot];
+  if(!axes||!compatibleExperiment(record,protocol,cycles)||plot==='pore'&&![2,3].includes(Number(protocol)))return [];
+  return measuredSeries(record,visible,axes.x,axes.y).map(([x,y])=>[x*axes.xScale,y*axes.yScale]);
+}

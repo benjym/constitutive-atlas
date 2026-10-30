@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from atlas.data import normalize_member
 from atlas.public_data import load_curated
+from atlas.measurement_units import sanitize_units, comparison_metadata
 
 CHANNELS = ('axial_strain', 'q', 'p', 'volumetric_strain', 'pore_pressure')
 ATTRIBUTION = 'Wichtmann & Triantafyllidis (2016), Karlsruhe fine sand database, Parts I and II.'
@@ -19,6 +20,7 @@ ATTRIBUTION = 'Wichtmann & Triantafyllidis (2016), Karlsruhe fine sand database,
 
 def encode(record):
     """Keep all observations in acquisition order, with only plotted channels."""
+    record = sanitize_units(record)
     if record['kind'] != 'experiment':
         columns = [c['key'] for c in record['columns']]
         return dict(format='atlas-source-columns-v1',
@@ -72,7 +74,7 @@ def bundle(destination, *, preview=False, root=ROOT):
                 data = json_bytes(encode(record))
                 filename = record['id']+'.json'
                 (destination/filename).write_bytes(data)
-                entry = dict(id=record['id'], protocol=record['protocol'], material=record['material'],
+                entry = dict(id=record['id'], kind=record['kind'], comparison=comparison_metadata(record), protocol=record['protocol'], material=record['material'],
                              initial=record['initial'], rows=len(record['rows']), path=filename,
                              sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data))
                 source_entries.append(entry)
@@ -81,7 +83,7 @@ def bundle(destination, *, preview=False, root=ROOT):
         data = json_bytes(encode(record))
         filename = record['id'] + '.json'
         (destination/filename).write_bytes(data)
-        entries.append(dict(id=record['id'], kind=record['kind'], protocol=record['protocol'], material=record['material'],
+        entries.append(dict(id=record['id'], kind=record['kind'], comparison=comparison_metadata(record), protocol=record['protocol'], material=record['material'],
                             initial=record['initial'], rows=len(record['rows']), path=filename,
                             sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data)))
     if len({entry['id'] for entry in entries}) != len(entries):

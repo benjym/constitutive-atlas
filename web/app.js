@@ -1,4 +1,4 @@
-import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment} from './experiments.mjs';
+import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries} from './experiments.mjs';
 const $ = id => document.getElementById(id);
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
@@ -20,7 +20,7 @@ function route(){
   const anchor=location.hash.slice(1),page=['catalogue','methods'].includes(anchor)?anchor:'laboratory';
   document.querySelectorAll('.page').forEach(x=>x.hidden=x.id!==page);
   document.querySelectorAll('.rail nav a').forEach(x=>{const active=x.hash==='#'+page;x.classList.toggle('active',active);if(active)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current');});
-  $('breadcrumb').textContent={laboratory:'MATERIAL LABORATORY',catalogue:'MODEL CATALOGUE',methods:'METHODS & EVIDENCE'}[page];
+  if($('breadcrumb'))$('breadcrumb').textContent={laboratory:'MODEL TESTING',catalogue:'MODEL CATALOGUE',methods:'METHODS & EVIDENCE'}[page];
   const target=$(anchor);
   if(target&&target!==$(page)){
     if(target.tagName==='DETAILS')target.open=true;
@@ -202,29 +202,40 @@ function chart(id,xLabel,yLabel,predicted,measured=[]){
 }
 function renderCharts(){
   const visible=$('show-experiment').checked;
-  document.querySelectorAll('.measured-key').forEach(e=>e.hidden=!experiment||!visible||experiment.kind!=='experiment');
   describeExperiment();
   const native=experiment&&experiment.kind!=='experiment',view=$('source-record-view');view.hidden=!native;
   if(native){
     if(view.dataset.record!==experiment.id){
-      for(const axis of ['x','y']){$('source-'+axis).replaceChildren(...experiment.columns.map(c=>new Option(c.name+' ['+c.unit+']',c.key)));$('source-'+axis).value=experiment.source_plot[axis];}
+      for(const axis of ['x','y']){$('source-'+axis).replaceChildren(...experiment.columns.filter(c=>c.unit_status==='standardized').map(c=>new Option(c.name+' ['+c.unit+']',c.key)));const select=$('source-'+axis);if([...select.options].some(o=>o.value===experiment.source_plot[axis]))select.value=experiment.source_plot[axis];else if(axis==='y'&&select.options.length>1)select.selectedIndex=1;}
       view.dataset.record=experiment.id;
     }
     const x=experiment.columns.find(c=>c.key===$('source-x').value),y=experiment.columns.find(c=>c.key===$('source-y').value);
-    chart('source-chart',x.name+' ['+x.unit+']',y.name+' ['+y.unit+']',[],measuredSeries(experiment,visible,x.key,y.key));
+    $('source-chart').hidden=!x||!y;
+    $('source-unit-note').textContent=x&&y?'Explicitly labelled units are converted to SI. Original units and conversion factors are retained in the record. Source signs are unchanged; these channels are not model overlays.':'No channels with verified units are available for plotting. See the source and data notes.';
+    if(x&&y)chart('source-chart',x.name+' ['+x.unit+']',y.name+' ['+y.unit+']',[],measuredSeries(experiment,visible,x.key,y.key));
   }else delete view.dataset.record;
-  const pts=currentResult?.points||[];
-  const series=(x,y)=>measuredSeries(experiment,visible,x,y).map(([a,b])=>[a*(['axial_strain'].includes(x)?100:.001),b*(['volumetric_strain'].includes(y)?100:.001)]);
-  chart('stress-chart','Axial strain ε₁ (%)','Deviator stress q (kPa)',pts.map(p=>[p.strain[0]*100,p.q_signed/1000]),series('axial_strain','q'));
-  chart('path-chart','Mean effective stress p′ (kPa)','Deviator stress q (kPa)',pts.map(p=>[p.p/1000,p.q_signed/1000]),series('p','q'));
-  chart('volume-chart','Axial strain ε₁ (%)','Volumetric strain εᵥ (%)',pts.map(p=>[p.strain[0]*100,p.strain.slice(0,3).reduce((a,b)=>a+b,0)*100]),series('axial_strain','volumetric_strain'));
-  chart('pore-chart','Axial strain ε₁ (%)','Pore pressure Δu (kPa)',lastSpec&&[2,3].includes(lastSpec.protocol)?pts.map(p=>[p.strain[0]*100,p.u/1000]):[],series('axial_strain','pore_pressure'));
+  const protocol=Number($('protocol').value),cycles=Number($('cycles').value);
+  // Do not combine an old solver response with a newly selected test protocol.
+  const pts=lastSpec?.protocol===protocol?currentResult?.points||[]:[];
+  const predicted={
+    stress:pts.map(p=>[p.strain[0]*100,p.q_signed/1000]),
+    path:pts.map(p=>[p.p/1000,p.q_signed/1000]),
+    volume:pts.map(p=>[p.strain[0]*100,p.strain.slice(0,3).reduce((a,b)=>a+b,0)*100]),
+    pore:[2,3].includes(protocol)?pts.map(p=>[p.strain[0]*100,p.u/1000]):[]
+  };
+  for(const [key,axes] of Object.entries(comparisonAxes)){
+    const measured=comparisonSeries(experiment,visible,key,protocol,cycles);
+    chart(key+'-chart',axes.xLabel,axes.yLabel,predicted[key],measured);
+    const panel=$(key+'-chart').closest('.chart-panel');
+    panel.querySelector('.measured-key').hidden=!measured.length;
+    panel.querySelector('.measurement-note').textContent=experiment&&experiment.kind==='experiment'&&!measured.length?(visible?'No compatible measured channel pair for these axes.':'Measurements hidden.') : '';
+  }
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
   for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec;if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
-    meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'In laboratory':'Research candidate','catalogue-availability'+(executable?' available':'')));
+    meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
     const heading=element('h2'),open=element('button',entry.name,'catalogue-open');open.type='button';open.setAttribute('aria-haspopup','dialog');open.onclick=()=>showCatalogueModel(entry,spec);heading.append(open);
     const hint=element('span',undefined,'catalogue-card-hint');hint.setAttribute('aria-hidden','true');hint.append(element('span','View details'),element('span','↗','catalogue-arrow'));
     card.append(meta,heading,hint);
@@ -236,7 +247,7 @@ function catalogueCards(){
 function showCatalogueModel(entry,spec){
   const dialog=$('catalogue-dialog'),body=$('catalogue-detail-body');body.replaceChildren();
   $('catalogue-detail-title').textContent=entry.name;$('catalogue-detail-family').textContent=entry.family;
-  $('catalogue-detail-status').textContent=spec?'In laboratory · '+spec.status:'Research candidate';
+  $('catalogue-detail-status').textContent=spec?'Available to test · '+spec.status:'Research candidate';
   $('catalogue-detail-status').className='catalogue-availability'+(spec?' available':'');
   body.append(element('p',entry.note||spec?.description||'Bibliographic and formulation review pending.','catalogue-detail-note'));
   if(!spec){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
@@ -273,18 +284,18 @@ async function importRun(file){
     for(const f of m.state.slice(1)){const size=f.shape==='sym'?6:1;if(!f.transient){const input=$('state-'+f.name);input.value=size===6?s.initial.slice(offset,offset+6).join(','):s.initial[offset]/Number(input.dataset.factor);}offset+=size;}
     $('protocol').value=s.protocol;setProtocol();$('target').value=s.target/(s.protocol===3?1000:.01);$('steps').value=s.steps;
     if(![...$('cycles').options].some(o=>Number(o.value)===s.cycles))$('cycles').append(new Option(s.cycles+' sinusoidal cycles',s.cycles));$('cycles').value=s.cycles;
-    location.hash='laboratory';simulate(s);
+    refreshExperimentFilter();location.hash='laboratory';simulate(s);
   }catch(e){toast(e.message);}
 }
 function describeExperiment(){
   const sourceNotes=Array.isArray(experiment?.warnings)?experiment.warnings:[];
   $('experiment-details').hidden=!sourceNotes.length;$('experiment-warnings').textContent=sourceNotes.join(' ');
-  if(!experiment){$('experiment-status').textContent=$('experiment-select').value?'Loading selected measurements…':(builtinExperiments.length?'Select a test to compare measured and predicted behaviour.':'No built-in tests are available in this build. You can compare your own measurements below.');return;}
+  if(!experiment){$('experiment-status').textContent=$('experiment-select').value?'Loading selected measurements…':(builtinExperiments.length?($('experiment-select').options.length>1?'Select a compatible test to compare measured and predicted behaviour.':'No verified overlays match this protocol and loading path. You can browse source records or load your own measurements.'):'No built-in tests are available in this build. You can compare your own measurements below.');return;}
   const stress=experiment.initial?.effective_stress,p=Array.isArray(stress)?stress.slice(0,3).reduce((a,b)=>a+b,0)/3000:null,e=experiment.initial?.void_ratio;
   const label=[experiment.kind==='test-summary'?'Test summary':null,experiment.id,experiment.material,experiment.protocol,Number.isFinite(p)?`initial p′ ${numberLabel(p)} kPa`:null,Number.isFinite(e)?`e₀ ${numberLabel(e)}`:'e₀ unavailable'].filter(Boolean).join(' · ');
-  const notes=[`${experiment.rows.length} measured rows. ${$('show-experiment').checked?'Overlay shown.':'Overlay hidden.'} Simulation settings are unchanged.`,...(sourceNotes.length?['Source limitations apply; see data notes.']:[])];
+  const notes=[`${experiment.rows.length} measured rows. ${$('show-experiment').checked&&compatibleExperiment(experiment,Number($('protocol').value),Number($('cycles').value))?'Verified channel pairs are overlaid.':'No model overlay is shown.'} Simulation settings are unchanged.`,...(sourceNotes.length?['Source limitations apply; see data notes.']:[])];
   if(experiment.kind!=='experiment'){
-    notes[0]=`${experiment.rows.length} source rows. ${$('show-experiment').checked?'Source chart shown.':'Source chart hidden.'} Native units; no model overlay.`;
+    notes[0]=`${experiment.rows.length} source rows. ${$('show-experiment').checked?'Source chart shown.':'Source chart hidden.'} Standardized units where verified; no model overlay.`;
     $('experiment-status').textContent=label+'. '+notes.join(' ');return;
   }
   if(lastSpec){
@@ -299,15 +310,20 @@ function experimentOptions(selected=''){
   const options=[new Option('No measurements selected','')];
   const groups=new Map();
   const query=$('experiment-search').value.trim().toLowerCase();
-  for(const entry of [...builtinExperiments].sort((a,b)=>a.material.localeCompare(b.material)||a.protocol.localeCompare(b.protocol)||a.id.localeCompare(b.id,undefined,{numeric:true}))){if(query&&'builtin:'+entry.id!==selected&&!(entry.id+' '+entry.material+' '+entry.protocol).toLowerCase().includes(query))continue;const key=entry.material+' · '+entry.protocol;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(entry);}
+  const browse=$('browse-source-records').checked,protocol=Number($('protocol').value),cycles=Number($('cycles').value);
+  const relevant=entry=>browse||compatibleExperiment(entry,protocol,cycles);
+  const count=builtinExperiments.filter(entry=>compatibleExperiment(entry,protocol,cycles)).length;
+  $('experiment-filter-note').textContent=`${count} compatible tests · ${protocolNames[protocol]} · ${cycles>0?'reversing':'monotonic'} loading. Only verified channel pairs overlay the model. Other source records are available below.`;
+  for(const entry of [...builtinExperiments].filter(relevant).sort((a,b)=>a.material.localeCompare(b.material)||a.protocol.localeCompare(b.protocol)||a.id.localeCompare(b.id,undefined,{numeric:true}))){if(query&&'builtin:'+entry.id!==selected&&!(entry.id+' '+entry.material+' '+entry.protocol).toLowerCase().includes(query))continue;const key=entry.material+' · '+entry.protocol;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(entry);}
   for(const [label,entries] of groups){
     const group=element('optgroup');group.label=label.replace('drained-triaxial','drained triaxial').replace('undrained-triaxial','undrained triaxial');
     for(const entry of entries){const stress=entry.initial?.effective_stress,p=Array.isArray(stress)?stress[1]/1000:null,e=entry.initial?.void_ratio;
       group.append(new Option([entry.kind==='test-summary'?'Summary':null,entry.id.replace(/^GEOLAB-[A-Z]+-/,'').replace('KFS-',''),Number.isFinite(p)?numberLabel(p)+' kPa':null,Number.isFinite(e)?'e₀ '+numberLabel(e):null].filter(Boolean).join(' · '),'builtin:'+entry.id));}
     options.push(group);
   }
-  if(experiments.length){const group=element('optgroup');group.label='Your local measurements';experiments.forEach((e,i)=>group.append(new Option(e.id+' · '+e.protocol,'local:'+i)));options.push(group);}
+  if(experiments.length){const group=element('optgroup');group.label='Your local measurements';experiments.forEach((e,i)=>{if(relevant(e))group.append(new Option(e.id+' · '+e.protocol,'local:'+i));});options.push(group);}
   $('experiment-select').replaceChildren(...options);$('experiment-select').disabled=false;$('experiment-select').value=selected;
+  if(selected&&$('experiment-select').value!==selected){$('experiment-select').value='';++experimentLoadSequence;showExperiment(null);}
 }
 function showExperiment(data){
   experiment=data;$('retry-experiment').hidden=true;
@@ -332,7 +348,7 @@ async function selectExperiment(){
       data=experimentCache.get(entry.id);
       if(!data){data=await fetchExperiment(entry);experimentCache.set(entry.id,data);}
     }
-    if(revision===experimentLoadSequence)showExperiment(data);
+    if(revision===experimentLoadSequence&&choice===$('experiment-select').value)showExperiment(data);
   }catch(error){if(revision===experimentLoadSequence){$('experiment-status').textContent=error.message;$('retry-experiment').hidden=false;}}
 }
 async function loadExperimentCatalogue(){
@@ -349,10 +365,11 @@ function matchExperiment(){
   const stress=experiment.initial?.effective_stress,e=experiment.initial?.void_ratio;
   if(experiment.protocol==='drained-triaxial')$('protocol').value='1';
   else if(experiment.protocol==='undrained-triaxial')$('protocol').value='2';
+  if(comparisonMetadata(experiment).loading==='monotonic')$('cycles').value='0';
   setProtocol();
   if(Array.isArray(stress)&&stress[1]>0){$('confinement').value=stress[1]/1000;$('stress-ratio').value=stress[0]/stress[1];}
   if(Number.isFinite(e)&&$('state-e'))$('state-e').value=e;
-  scheduleUpdate();
+  refreshExperimentFilter();scheduleUpdate();
 }
 async function loadExperiments(files){
   const id=++experimentLoadSequence;
@@ -365,14 +382,16 @@ async function loadExperiments(files){
       if(loaded.some(x=>x.id===data.id))throw Error('Duplicate experiment ID: '+data.id);loaded.push(data);
     }
     if(id!==experimentLoadSequence)return;
-    experiments=loaded;experimentOptions('local:0');$('clear-experiments').disabled=false;selectExperiment();
+    experiments=loaded;const first=loaded.findIndex(e=>compatibleExperiment(e,Number($('protocol').value),Number($('cycles').value)));experimentOptions(first<0?'':'local:'+first);$('clear-experiments').disabled=false;selectExperiment();
   }catch(e){if(id===experimentLoadSequence)toast(e.message);}
   finally{$('experiment-file').value='';}
 }
-window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{cancel('');populate();simulate();};$('protocol').onchange=()=>{setProtocol();scheduleUpdate();};
-$('cycles').onchange=()=>{const minimum=16*Number($('cycles').value);if(Number($('steps').value)<minimum)$('steps').value=minimum;scheduleUpdate();};
-$('reset').onclick=()=>{cancel('');HTMLFormElement.prototype.reset.call($('controls'));populate();setProtocol();simulate();};$('equations-button').onclick=()=>{$('equations').open=true;$('equations').scrollIntoView({behavior:'smooth'});};
+window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{cancel('');populate();simulate();};$('protocol').onchange=()=>{setProtocol();refreshExperimentFilter();scheduleUpdate();};
+$('cycles').onchange=()=>{refreshExperimentFilter();const minimum=16*Number($('cycles').value);if(Number($('steps').value)<minimum)$('steps').value=minimum;scheduleUpdate();};
+$('reset').onclick=()=>{cancel('');HTMLFormElement.prototype.reset.call($('controls'));populate();setProtocol();refreshExperimentFilter();simulate();};$('equations-button').onclick=()=>{$('equations').open=true;$('equations').scrollIntoView({behavior:'smooth'});};
 $('import-run').onclick=()=>$('run-file').click();$('run-file').onchange=e=>importRun(e.target.files[0]);$('experiment-file').onchange=e=>loadExperiments(e.target.files);
+function refreshExperimentFilter(){experimentOptions($('experiment-select').value);renderCharts();}
+$('browse-source-records').onchange=refreshExperimentFilter;
 $('show-experiment').onchange=renderCharts;$('experiment-select').onchange=selectExperiment;
 $('source-x').onchange=renderCharts;$('source-y').onchange=renderCharts;
 $('experiment-search').oninput=()=>experimentOptions($('experiment-select').value);

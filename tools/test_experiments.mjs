@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
-import {normalizeWichtmann,validateExperiment,measuredSeries,decodeExperiment,fetchExperiment} from '../web/experiments.mjs';
+import {normalizeWichtmann,validateExperiment,measuredSeries,decodeExperiment,fetchExperiment,comparisonMetadata,compatibleExperiment,comparisonSeries} from '../web/experiments.mjs';
 
 const tmd='eps1 epsv eps3 epsq Void ratio q p eta = q/p\n[%] [%] [%] [%] [%] [kPa] [kPa] [-]\n\n0 0 0 0 .8 0 100 0\n1 .2 -.4 .8 .796 30 110 .27\n';
 const tmu="eps1 u sigma3 sigma3' sigma1 sigma1' p q\n[%] [kPa] [kPa] [kPa] [kPa] [kPa] [kPa] [kPa]\n\n0 200 300 100 300 100 100 0\n1 220 300 80 330 110 90 30\n";
@@ -78,7 +78,34 @@ if(process.argv[2]==='--built-assets'){
     const content=await readFile(directory+'/'+entry.path);
     const actual=await fetchExperiment(entry,async()=>new Response(content));
     assert.equal(actual.rows.length,entry.rows);
+    assert.deepEqual(entry.comparison,comparisonMetadata(actual));
+    for(const column of actual.columns||[]){
+      assert.ok(['standardized','unresolved'].includes(column.unit_status));
+      assert.equal(typeof column.source_unit,'string');
+      if(column.unit_status==='standardized')assert.ok(Number.isFinite(column.unit_conversion.scale)&&Number.isFinite(column.unit_conversion.offset));
+    }
     assert.ok(['https://creativecommons.org/licenses/by/4.0/','https://opendatacommons.org/licenses/by/1-0/'].includes(actual.provenance.license_url));
   }
   console.log(`All ${manifest.experiments.length} built experiments passed browser decoding and checksum checks.`);
 }
+
+assert.equal(compatibleExperiment(drained,1,0),true);
+assert.equal(compatibleExperiment(drained,2,0),false);
+assert.equal(compatibleExperiment(drained,1,3),false);
+assert.equal(compatibleExperiment(undrained,3,0),true);
+assert.equal(compatibleExperiment(drained,0,0),false);
+assert.equal(compatibleExperiment(native,1,0),false);
+assert.equal(compatibleExperiment({...native,kind:'test-summary'},1,0),false);
+assert.deepEqual(comparisonSeries(drained,true,'stress',1),[[0,0],[1,30]]);
+assert.deepEqual(comparisonSeries(drained,true,'path',1),[[100,0],[110,30]]);
+assert.deepEqual(comparisonSeries(drained,true,'volume',1),[[0,0],[1,.2]]);
+assert.deepEqual(comparisonSeries(undrained,true,'pore',2),[[0,0],[1,20]]);
+assert.deepEqual(comparisonSeries(undrained,true,'volume',2),[]);
+assert.deepEqual(comparisonSeries(drained,true,'stress',2),[]);
+assert.deepEqual(comparisonSeries(drained,false,'stress',1),[]);
+assert.equal(comparisonMetadata(cyclic).loading,'reversing');
+assert.equal(compatibleExperiment(cyclic,1,3),true);
+assert.equal(compatibleExperiment({...entry,kind:'experiment',protocol:drained.protocol,comparison:comparisonMetadata(drained)},1),true);
+const noisy={...drained,rows:[{axial_strain:0,q:0},{axial_strain:.01,q:100},{axial_strain:.00999,q:99}]};
+assert.equal(comparisonMetadata(noisy).loading,'monotonic');
+console.log('Comparison axes, display-unit conversions, drainage/loading filters and missing pairs passed.');
