@@ -16,6 +16,7 @@ def main():
     discovery=sub.add_parser('discover');discovery.add_argument('--query',required=True);discovery.add_argument('--output',required=True,type=Path);discovery.add_argument('--rows',type=int,default=50);discovery.add_argument('--cursor',default='*')
     run=sub.add_parser('run');run.add_argument('specification',type=Path);run.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');run.add_argument('--output',type=Path,required=True)
     replay=sub.add_parser('replay',help='Replay a validated ordered recorded path');replay.add_argument('specification',type=Path);replay.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');replay.add_argument('--output',type=Path,required=True)
+    refine=sub.add_parser('refine-recorded',help='Investigate ordered caller-path resolution');refine.add_argument('configuration',type=Path);refine.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');refine.add_argument('--output',type=Path,required=True)
     benchmark=sub.add_parser('benchmark');benchmark.add_argument('configuration',type=Path);benchmark.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');benchmark.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     if args.command=='validate':print(f'{len(all_models())} declarative models passed structural and semantic validation')
@@ -59,6 +60,13 @@ def main():
         args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
         print(f"{'Completed' if result['ok'] else 'Failed'}: {args.output}")
         if not result['ok']:raise SystemExit(1)
+    elif args.command=='refine-recorded':
+        from .refinement import execute_study
+        report=execute_study(json.loads(args.configuration.read_text()),args.solver,args.output)
+        levels=[level for case in report['cases'] for level in case['levels']]
+        successful=sum(bool(level.get('response',{}).get('ok')) for level in levels)
+        print(f'Recorded {successful}/{len(levels)} successful refinement runs: {args.output}')
+        if successful!=len(levels):raise SystemExit(1)
     elif args.command=='benchmark':
         from .benchmark import execute
         result=execute(args.configuration,args.solver,args.output);print(f"Recorded {len(result['comparisons'])} comparisons: {args.output}")

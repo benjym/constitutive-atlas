@@ -98,3 +98,6 @@ The [browser investigation](../catalogue/investigations/recorded-browser-v1/mani
 node tools/test_recorded.mjs
 node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
 ```
+
+
+Explicit caller-path density studies are now available through [recorded refinement](RECORDED_REFINEMENT.md). They preserve original knots and report failures, successive differences and differences from the requested finest level; they do not change normal replay automatically. Source-matched references, diagnosis of coarse-control failures and full experimental-path validation remain open.

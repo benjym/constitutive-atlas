@@ -1,0 +1,134 @@
+{
+  "id": "recorded-refinement-v1",
+  "date": "2026-10-31",
+  "base_revision": "25aa423",
+  "status": "completed numerical investigation with six retained coarse failures; no accuracy admission",
+  "scope": "Two predeclared numerical caller-path density studies; five public models with illustrative defaults, six nested factors per case, original-observation comparisons.",
+  "execution": {
+    "new_compilation": false,
+    "binary_reused_from": "recorded-replay-api-v1; also verified by recorded-browser-v1",
+    "solver_sha256": "d01a0acf903cca299c79b2b4a25206dadddebbc46c85c86616a1559e12f2dae1",
+    "catalogue_hash": "1cac1ed6b2a284b561ed6fed00dd751e384748ea5e5f9d14467e410dc18a218c",
+    "native_toolchain": "Apple clang 21.0.0; -O0 -std=gnu++20",
+    "python": "3.14.7",
+    "matplotlib": "3.11.2",
+    "serial": true,
+    "commands": [
+      "python3 -m atlas.cli refine-recorded benchmarks/recorded-path-density.json --solver /private/tmp/atlas-recorded-cmake/atlas_solver --output /private/tmp/atlas-recorded-refinement/report.json",
+      "python3 -m atlas.cli refine-recorded benchmarks/recorded-plastic-path-density.json --solver /private/tmp/atlas-recorded-cmake/atlas_solver --output /private/tmp/atlas-recorded-refinement/plastic-report.json"
+    ],
+    "exit_codes": [
+      1,
+      1
+    ],
+    "exit_semantics": "Both studies reached execution_complete; CLI exits 1 because predefined coarse levels fail. Reports retain all successes and failures."
+  },
+  "outcomes": {
+    "cases": 10,
+    "runs": 60,
+    "successful": 54,
+    "failed": 6,
+    "factors": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "records_per_path": [
+      6,
+      11,
+      21,
+      41,
+      81,
+      161
+    ],
+    "failure_cases": [
+      "IGS97 drained default factor 1",
+      "IGS97 drained tight factors 1,2",
+      "Drucker-Prager plastic drained factors 1,2,4"
+    ],
+    "finest_all_complete": true,
+    "observed_finest_pair_stress_changes_Pa": {
+      "mcc_smaller_drained": 136.36982692238234,
+      "vw96_default": 3.84725397703005,
+      "igs97_default": 371.47932926673093,
+      "mcc_plastic_isotropic": 4434.937378359085
+    }
+  },
+  "comparison_policy": {
+    "interpolation": "Explicit piecewise-linear coordinate and absolute control targets; preserve original endpoint objects, reversal order and duplicates.",
+    "grid": "Only exact original observations, with frozen indices.",
+    "comparator": "Requested finest, never replaced by a selected successful level.",
+    "persistent_norm": "Maximum absolute component difference divided by declared parameter-based field scale, excluding transient fields.",
+    "transient_norm": "Reported separately; per-increment multipliers are not persistent-state accuracy measures.",
+    "failure": "No full-path metric for failed/transport-error levels; failed intermediate levels break successive comparisons."
+  },
+  "analysis": {
+    "commands": [
+      "MPLCONFIGDIR=/private/tmp/atlas-recorded-refinement/mpl python3 tools/analyze_recorded_refinement.py /private/tmp/atlas-recorded-refinement/report.json --output /private/tmp/atlas-recorded-refinement/summary.json --pair hypoplastic-sand-vw96-drained-default=hypoplastic-sand-vw96-drained-tight --pair hypoplastic-sand-igs97-drained-default=hypoplastic-sand-igs97-drained-tight --figures /private/tmp/atlas-recorded-refinement/figures",
+      "python3 tools/analyze_recorded_refinement.py /private/tmp/atlas-recorded-refinement/plastic-report.json --output /private/tmp/atlas-recorded-refinement/plastic-summary.json"
+    ],
+    "visual_inspection": "PNG inspected: axes, units, legend, failed-case note and intended near-coincident tight/default curves legible. SVG/PNG standalone artifacts retained."
+  },
+  "verification": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_refinement tests.test_recorded_api.RecordedRunContractTests tests.test_recorded_path tests.test_web_recorded -v",
+    "tests_passed": 30,
+    "coverage": [
+      "Exact original knots, input immutability, reversal/duplicate preservation, 5001 cap and floating-point coordinate collapse.",
+      "Closed schema and nested factors; persistent/transient norms.",
+      "Mocked failed finest/intermediate and transport timeout: no selected replacement or hidden missing metric.",
+      "All 60 retained responses and endpoint/metadata/metric consistency.",
+      "Independent closed-form elasticity at every retained elastic observation.",
+      "Nonzero plastic multipliers in both plastic cases; nontrivial Cam-Clay hardening.",
+      "Corrupt grid, settings, metrics and incomplete execution rejected."
+    ],
+    "independent_scientific_review": "pending"
+  },
+  "limitations": [
+    "Finest level is not an exact reference; no numerical convergence/accuracy threshold or universal convergence order claimed.",
+    "Cam-Clay plastic finest-pair difference remains about 4.43 kPa; additional refinement/source-matched reference remains necessary.",
+    "Six coarse material/control failures are not diagnosed to one cause by current engine messages.",
+    "Two sensitivities (caller density and internal tolerances) do not by themselves estimate true error.",
+    "No experimental comparison/calibration, Wichtmann path conversion, timed/research formulations or constitutive admission.",
+    "No native build, hosted CI run, push or deployment in this investigation."
+  ],
+  "source_sha256": {
+    "atlas/refinement.py": "415549eea60f9db38fe66e64281328bb105e4933b895d9198e64d5737ae7c185",
+    "atlas/cli.py": "82624166038cee7af9f54d710006836fc7ca65ab869b1d45e11e910ea6b4b551",
+    "atlas/recorded.py": "04dc86d27eed79335bf64a5c2783c28f8101ed36797e6b25dc1d48f2ebe23b04",
+    "atlas/model.py": "709fd988b95ead1f343fdef1608865927bc85d7bf218d062ff5139aab83099c0",
+    "atlas/compiler.py": "9998949ba1cb2c719333770a5bffe6f1d4951b2728caac78195d6f7bb23b0895",
+    "schemas/recorded-refinement.schema.json": "c707adcf95f4fe37f5fad0167e78bd03adeb18705f4dbf36af863424cdd4c3c0",
+    "schemas/recorded-run.schema.json": "7deee348e01c7d1e5d9cedd9a306d5bf1a278e00a7e534062cd1eabb0e3bb94b",
+    "schemas/recorded-path.schema.json": "9240c1f82d65dd2ebfc77f97d5f0e26dfc57368a3cdc4979a1ce81c9d08ae2f0",
+    "benchmarks/recorded-path-density.json": "913248717dbb4d29856905a0066153eeda02b2ff40cc8a3b2df30c5d5e5b872a",
+    "benchmarks/recorded-plastic-path-density.json": "6abc4f29a4b15e2de7d64697b7d08fb3d50fe8eb90d4bde8cca40786a4b8569e",
+    "tools/analyze_recorded_refinement.py": "c120bda7227afaeada4380395fb8c33ba7264b4135afab16cfecc7b8fc4c70f9",
+    "tests/test_refinement.py": "e5bec19622662a7e4b51b6dd0464758b938b1c3cd26b2963d2125929c76b85b0",
+    "docs/RECORDED_REFINEMENT.md": "ca0e35ed37da4bd6b5fb36c568ab4d4860633aee3ec04c740b068322182649c7",
+    "docs/RECORDED_PATHS.md": "28608a592b25fb30be2f0f55f93f51714f2e6be05b6ce6441383e247a79931ba",
+    "ROADMAP.md": "82466b28bac7c1eaa8cac33d1c85999d38e8e743c4599742b512faa270dd0c2e",
+    ".github/workflows/verify.yml": "282bcc9643071b3e17fa0fcbd84af572e6c94f60f5c3cd6d051ea42343b4b0b1",
+    "cpp/main.cpp": "bb3095908773f0561134802ec7dfa8711520555fb4ac3932b00215345369ed99",
+    "cpp/include/atlas/recorded.hpp": "5261b7499834bd618e48925d98591f1753b8c802adee59c66d3afd42941ad29e",
+    "cpp/include/atlas/settings.hpp": "3eb1171ae1ef17440b19e8becfc8e9bf92335519a88da8f1e9be407d3488662b",
+    "models/drucker-prager.json": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+    "models/hypoplastic-sand-igs97.json": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+    "models/hypoplastic-sand-vw96.json": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+    "models/linear-elastic.json": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+    "models/modified-cam-clay.json": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14"
+  },
+  "artifact_sha256": {
+    "path-resolution.png": "a306f05ee8689c6c324b589f99fab44b9c65e8da4ed84a8abe21448312da0de6",
+    "path-resolution.svg": "c4f654d3f8fe90bd41e9e547576643880196b437913f8508ae7f107c0e9f19f0",
+    "plastic-report.json.gz": "1626e205568d5435c135ccfc46dbd1afaf25160854e74756bcf5d20ce15047a2",
+    "plastic-run.txt": "eb5967ab47754f689682fbda08f07d27e38dc6fe76709688e8e837076fdcdf04",
+    "plastic-summary.json": "2f0911bfd016fe570e3c61ae27777d7da4fe8281295c9ef2798eb6cdb7d0db56",
+    "report.json.gz": "15f3a61b28961dd11b8f3bac955a153498f316e2bf6c7c4726c5fe0f021ddf5e",
+    "run.txt": "524c8021e77514000d9845f6868476b6d514b5f6a84594a457785d8ce62a4230",
+    "summary.json": "830754022bc255fd41384a34861fd3bc2b8bb13ee481538454f992ae20d36fc6",
+    "tests.txt": "3fd004c5a34b870d28124920dc087a65db0a975e08aea20fe06f56b51698c219"
+  }
+}
