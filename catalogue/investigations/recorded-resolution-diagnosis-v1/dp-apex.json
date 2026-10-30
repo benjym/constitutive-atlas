@@ -1,0 +1,644 @@
+{
+  "kind": "retained-response-independent-dp-apex-diagnostic",
+  "status": "analytical-only-no-native-execution",
+  "report_path": "catalogue/investigations/recorded-refinement-v1/plastic-report.json.gz",
+  "report_sha256": "1626e205568d5435c135ccfc46dbd1afaf25160854e74756bcf5d20ce15047a2",
+  "model_path": "models/drucker-prager.json",
+  "model_sha256": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+  "report_solver_sha256": "d01a0acf903cca299c79b2b4a25206dadddebbc46c85c86616a1559e12f2dae1",
+  "report_catalogue_hash": "1cac1ed6b2a284b561ed6fed00dd751e384748ea5e5f9d14467e410dc18a218c",
+  "equations": {
+    "trial": "p_t=p_n+K tr(de); s_t=s_n+2G dev(de); q_t=sqrt(3/2 s_t:s_t)",
+    "smooth_gamma": "(q_t-M*p_t-c)/(3G+M*K*Md)",
+    "smooth_condition": "trial_yield>0 and smooth_gamma<q_t/(3G)",
+    "apex_condition": "trial_yield>0 and smooth_gamma>=q_t/(3G)",
+    "apex": "sigma=(-c/M)I; gamma=((-c/M)-p_t)/(K*Md)",
+    "apex_margin": "(-c/M)-(p_t+K*Md*q_t/(3G)); strictly positive margin gives a locally constant stress map",
+    "tangent": "d sigma / d de = 0 on strict apex branch"
+  },
+  "conclusions": [
+    "All retained failures occur after a successful material trial at the zero-free-coordinate seed.",
+    "A locally constant apex stress gives a singular reduced radial control Jacobian with nonzero residual.",
+    "Tiny derivative probes remain on the same apex branch; finite-difference fallback alone cannot escape.",
+    "Independent scalar roots exist for all three endpoints; the singular seed is not evidence of unattainable targets."
+  ],
+  "limitations": [
+    "Retained data do not expose the failed trial state or Jacobian; these are independently reconstructed from pinned model algebra.",
+    "Elastic seeds and scalar roots have not been executed through the C++ material solver.",
+    "No claim of general nonlinear globalization or trajectory accuracy."
+  ],
+  "cases": [
+    {
+      "factor": 1,
+      "failed_knot": 2,
+      "parent": {
+        "coordinate": 1,
+        "state": [
+          316666.66666667286,
+          99999.99999999857,
+          99999.99999999854,
+          0,
+          0,
+          0,
+          0.6985165206605983,
+          0.013690476190475944
+        ],
+        "strain": [
+          0.02,
+          -0.00956349206349201,
+          -0.009563492063492014,
+          0,
+          0,
+          0
+        ],
+        "control_error": 1.4551915228366852e-14,
+        "diagnostics": {
+          "iterations": 8,
+          "substeps": 1,
+          "rejected": 0,
+          "error": 6.315531209111214e-14,
+          "increment_fractions": [
+            1
+          ]
+        }
+      },
+      "initial": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "parameters": [
+        100000,
+        30000000,
+        0.25,
+        1.2,
+        0.2,
+        10000
+      ],
+      "parameter_order": [
+        "p_ref",
+        "E",
+        "nu",
+        "M",
+        "Md",
+        "c"
+      ],
+      "K": 20000000.0,
+      "G": 12000000.0,
+      "target_record": [
+        2,
+        -0.002,
+        100000,
+        100000,
+        0,
+        0,
+        0
+      ],
+      "retained_message": "singular mixed-control system; last committed knot retained",
+      "retained_material_trials": 5,
+      "retained_finite_difference_probes": 0,
+      "retained_attempted_substeps": 5,
+      "retained_last_control_error": 1.083333333333575,
+      "initial_seed_increment": [
+        -0.022,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "independent_scalar_return": {
+        "branch": "apex",
+        "stress": [
+          -8333.333333333334,
+          -8333.333333333334,
+          -8333.333333333334,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gamma": 0.06486111111111084,
+        "p_trial": -267777.7777777767,
+        "q_trial": 311333.33333332563,
+        "trial_yield": 622666.6666666577,
+        "smooth_gamma": 0.015261437908496512,
+        "apex_gamma_threshold": 0.008648148148147934,
+        "smooth_gamma_minus_threshold": 0.006613289760348577,
+        "apex_pressure": -8333.333333333334,
+        "apex_pressure_margin": 224851.85185185162
+      },
+      "reproduced_normalized_radial_residual": [
+        -1.0833333333333333,
+        -1.0833333333333333
+      ],
+      "analytical_apex_jacobian": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "independent_scalar_finite_difference_columns": [
+        {
+          "component": 1,
+          "h": 1e-07,
+          "plus_branch": "apex",
+          "minus_branch": "apex",
+          "normalized_stress_derivative": [
+            0.0,
+            0.0
+          ],
+          "plus_apex_margin": 224849.71851774742,
+          "minus_apex_margin": 224853.98518441396
+        },
+        {
+          "component": 2,
+          "h": 1e-07,
+          "plus_branch": "apex",
+          "minus_branch": "apex",
+          "normalized_stress_derivative": [
+            0.0,
+            0.0
+          ],
+          "plus_apex_margin": 224849.71851774742,
+          "minus_apex_margin": 224853.98518441396
+        }
+      ],
+      "elastic_seed_increment": [
+        -0.022,
+        0.0055,
+        0.0055,
+        0,
+        0,
+        0
+      ],
+      "elastic_seed_scalar_return": {
+        "branch": "smooth",
+        "stress": [
+          -6601.307189542427,
+          3790.8496732029225,
+          3790.8496732029216,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gamma": 0.012026143790849453,
+        "p_trial": -47777.777777776675,
+        "q_trial": 443333.3333333257,
+        "trial_yield": 490666.6666666577,
+        "smooth_gamma": 0.012026143790849453,
+        "apex_gamma_threshold": 0.012314814814814603,
+        "smooth_gamma_minus_threshold": -0.00028867102396515007,
+        "apex_pressure": -8333.333333333334,
+        "apex_pressure_margin": -9814.81481481507
+      },
+      "independently_bracketed_radial_root": {
+        "increment": [
+          -0.022,
+          0.007325396825396818,
+          0.007325396825396818,
+          0,
+          0,
+          0
+        ],
+        "scalar_return": {
+          "branch": "smooth",
+          "stress": [
+            7142.85714285713,
+            99999.99999999997,
+            99999.99999999997,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gamma": 0.010952380952380734,
+          "p_trial": 25238.09523809608,
+          "q_trial": 487142.8571428493,
+          "trial_yield": 446857.142857134,
+          "smooth_gamma": 0.010952380952380734,
+          "apex_gamma_threshold": 0.013531746031745813,
+          "smooth_gamma_minus_threshold": -0.002579365079365079,
+          "apex_pressure": -8333.333333333334,
+          "apex_pressure_margin": -87698.41269841266
+        },
+        "note": "Existence diagnostic for this symmetric scalar case; not an executed generic-driver update."
+      }
+    },
+    {
+      "factor": 2,
+      "failed_knot": 3,
+      "parent": {
+        "coordinate": 1,
+        "state": [
+          316666.6666666749,
+          100000,
+          99999.99999999999,
+          0,
+          0,
+          0,
+          0.6985165206605985,
+          0.010714285714285473
+        ],
+        "strain": [
+          0.02,
+          -0.009563492063491965,
+          -0.009563492063491967,
+          0,
+          0,
+          0
+        ],
+        "control_error": 1.4551915228366853e-16,
+        "diagnostics": {
+          "iterations": 8,
+          "substeps": 1,
+          "rejected": 0,
+          "error": 4.9476511776447293e-14,
+          "increment_fractions": [
+            1
+          ]
+        }
+      },
+      "initial": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "parameters": [
+        100000,
+        30000000,
+        0.25,
+        1.2,
+        0.2,
+        10000
+      ],
+      "parameter_order": [
+        "p_ref",
+        "E",
+        "nu",
+        "M",
+        "Md",
+        "c"
+      ],
+      "K": 20000000.0,
+      "G": 12000000.0,
+      "target_record": [
+        1.5,
+        0.009000000000000001,
+        100000,
+        100000,
+        0,
+        0,
+        0
+      ],
+      "retained_message": "singular mixed-control system; last committed knot retained",
+      "retained_material_trials": 9,
+      "retained_finite_difference_probes": 0,
+      "retained_attempted_substeps": 9,
+      "retained_last_control_error": 1.08333333333337,
+      "initial_seed_increment": [
+        -0.011,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "independent_scalar_return": {
+        "branch": "apex",
+        "stress": [
+          -8333.333333333334,
+          -8333.333333333334,
+          -8333.333333333334,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gamma": 0.009861111111110427,
+        "p_trial": -47777.777777775045,
+        "q_trial": 47333.33333332507,
+        "trial_yield": 94666.66666665513,
+        "smooth_gamma": 0.002320261437908214,
+        "apex_gamma_threshold": 0.0013148148148145852,
+        "smooth_gamma_minus_threshold": 0.001005446623093629,
+        "apex_pressure": -8333.333333333334,
+        "apex_pressure_margin": 34185.18518518337
+      },
+      "reproduced_normalized_radial_residual": [
+        -1.0833333333333333,
+        -1.0833333333333333
+      ],
+      "analytical_apex_jacobian": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "independent_scalar_finite_difference_columns": [
+        {
+          "component": 1,
+          "h": 1e-07,
+          "plus_branch": "apex",
+          "minus_branch": "apex",
+          "normalized_stress_derivative": [
+            0.0,
+            0.0
+          ],
+          "plus_apex_margin": 34183.051846779745,
+          "minus_apex_margin": 34187.31851344612
+        },
+        {
+          "component": 2,
+          "h": 1e-07,
+          "plus_branch": "apex",
+          "minus_branch": "apex",
+          "normalized_stress_derivative": [
+            0.0,
+            0.0
+          ],
+          "plus_apex_margin": 34183.051846779745,
+          "minus_apex_margin": 34187.31851344612
+        }
+      ],
+      "elastic_seed_increment": [
+        -0.011,
+        0.00275,
+        0.00275,
+        0,
+        0,
+        0
+      ],
+      "elastic_seed_scalar_return": {
+        "branch": "smooth",
+        "stress": [
+          6339.869281046071,
+          94379.08496732252,
+          94379.0849673225,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gamma": 0.0007026143790846849,
+        "p_trial": 62222.222222224955,
+        "q_trial": 113333.33333332509,
+        "trial_yield": 28666.666666655146,
+        "smooth_gamma": 0.0007026143790846849,
+        "apex_gamma_threshold": 0.003148148148147919,
+        "smooth_gamma_minus_threshold": -0.0024455337690632343,
+        "apex_pressure": -8333.333333333334,
+        "apex_pressure_margin": -83148.14814814996
+      },
+      "independently_bracketed_radial_root": {
+        "increment": [
+          -0.011,
+          0.002856646825396782,
+          0.002856646825396782,
+          0,
+          0,
+          0
+        ],
+        "scalar_return": {
+          "branch": "smooth",
+          "stress": [
+            7142.857142857152,
+            100000.0,
+            99999.99999999999,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gamma": 0.0006398809523806948,
+          "p_trial": 66488.09523809626,
+          "q_trial": 115892.85714284785,
+          "trial_yield": 26107.14285713235,
+          "smooth_gamma": 0.0006398809523806948,
+          "apex_gamma_threshold": 0.0032192460317457734,
+          "smooth_gamma_minus_threshold": -0.0025793650793650784,
+          "apex_pressure": -8333.333333333334,
+          "apex_pressure_margin": -87698.41269841268
+        },
+        "note": "Existence diagnostic for this symmetric scalar case; not an executed generic-driver update."
+      }
+    },
+    {
+      "factor": 4,
+      "failed_knot": 7,
+      "parent": {
+        "coordinate": 1.5,
+        "state": [
+          7142.857142856918,
+          99999.99999999991,
+          99999.9999999999,
+          0,
+          0,
+          0,
+          0.7075198567619643,
+          0.0006398809523808169
+        ],
+        "strain": [
+          0.009000000000000001,
+          -0.006706845238095213,
+          -0.006706845238095213,
+          0,
+          0,
+          0
+        ],
+        "control_error": 1.0186340659856795e-15,
+        "diagnostics": {
+          "iterations": 8,
+          "substeps": 1,
+          "rejected": 0,
+          "error": 3.055902197957039e-15,
+          "increment_fractions": [
+            1
+          ]
+        }
+      },
+      "initial": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "parameters": [
+        100000,
+        30000000,
+        0.25,
+        1.2,
+        0.2,
+        10000
+      ],
+      "parameter_order": [
+        "p_ref",
+        "E",
+        "nu",
+        "M",
+        "Md",
+        "c"
+      ],
+      "K": 20000000.0,
+      "G": 12000000.0,
+      "target_record": [
+        1.75,
+        0.0035,
+        100000,
+        100000,
+        0,
+        0,
+        0
+      ],
+      "retained_message": "singular mixed-control system; last committed knot retained",
+      "retained_material_trials": 22,
+      "retained_finite_difference_probes": 0,
+      "retained_attempted_substeps": 22,
+      "retained_last_control_error": 1.0833333333333535,
+      "initial_seed_increment": [
+        -0.005500000000000001,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "independent_scalar_return": {
+        "branch": "apex",
+        "stress": [
+          -8333.333333333334,
+          -8333.333333333334,
+          -8333.333333333334,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gamma": 0.008154761904761946,
+        "p_trial": -40952.38095238112,
+        "q_trial": 224857.14285714302,
+        "trial_yield": 264000.00000000035,
+        "smooth_gamma": 0.006470588235294126,
+        "apex_gamma_threshold": 0.00624603174603175,
+        "smooth_gamma_minus_threshold": 0.00022455648926237616,
+        "apex_pressure": -8333.333333333334,
+        "apex_pressure_margin": 7634.920634920787
+      },
+      "reproduced_normalized_radial_residual": [
+        -1.0833333333333333,
+        -1.0833333333333333
+      ],
+      "analytical_apex_jacobian": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "independent_scalar_finite_difference_columns": [
+        {
+          "component": 1,
+          "h": 1e-07,
+          "plus_branch": "apex",
+          "minus_branch": "apex",
+          "normalized_stress_derivative": [
+            0.0,
+            0.0
+          ],
+          "plus_apex_margin": 7632.787300520113,
+          "minus_apex_margin": 7637.053967186772
+        },
+        {
+          "component": 2,
+          "h": 1e-07,
+          "plus_branch": "apex",
+          "minus_branch": "apex",
+          "normalized_stress_derivative": [
+            0.0,
+            0.0
+          ],
+          "plus_apex_margin": 7632.787300520113,
+          "minus_apex_margin": 7637.053967186772
+        }
+      ],
+      "elastic_seed_increment": [
+        -0.005500000000000001,
+        0.0013750000000000004,
+        0.0013750000000000004,
+        0,
+        0,
+        0
+      ],
+      "elastic_seed_scalar_return": {
+        "branch": "smooth",
+        "stress": [
+          672.2689075630187,
+          54705.882352941,
+          54705.882352941,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gamma": 0.005661764705882362,
+        "p_trial": 14047.619047618893,
+        "q_trial": 257857.14285714302,
+        "trial_yield": 231000.00000000035,
+        "smooth_gamma": 0.005661764705882362,
+        "apex_gamma_threshold": 0.0071626984126984174,
+        "smooth_gamma_minus_threshold": -0.0015009337068160556,
+        "apex_pressure": -8333.333333333334,
+        "apex_pressure_margin": -51031.7460317459
+      },
+      "independently_bracketed_radial_root": {
+        "increment": [
+          -0.005500000000000001,
+          0.0022343750000000037,
+          0.0022343750000000037,
+          0,
+          0,
+          0
+        ],
+        "scalar_return": {
+          "branch": "smooth",
+          "stress": [
+            7142.857142857152,
+            100000.0,
+            100000.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gamma": 0.005156250000000007,
+          "p_trial": 48422.619047619024,
+          "q_trial": 278482.14285714313,
+          "trial_yield": 210375.0000000003,
+          "smooth_gamma": 0.005156250000000007,
+          "apex_gamma_threshold": 0.007735615079365087,
+          "smooth_gamma_minus_threshold": -0.0025793650793650797,
+          "apex_pressure": -8333.333333333334,
+          "apex_pressure_margin": -87698.4126984127
+        },
+        "note": "Existence diagnostic for this symmetric scalar case; not an executed generic-driver update."
+      }
+    }
+  ]
+}

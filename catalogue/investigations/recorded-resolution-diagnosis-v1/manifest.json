@@ -1,0 +1,158 @@
+{
+  "id": "recorded-resolution-diagnosis-v1",
+  "date": "2026-10-31",
+  "base_revision": "11e4d9c31c394eae9d6b7e77f802b5471f5ddbe5",
+  "status": "bounded numerical mechanism investigation and analytical project-equation reference; no admission or scientific validation",
+  "scope": "Retained coarse recorded-path failures and exact continuous isotropic MCC limit, with five isolated serial native follow-up calls.",
+  "execution": {
+    "new_compilation": false,
+    "native_calls": 5,
+    "native_calls_successful": 5,
+    "serial": true,
+    "solver_sha256": "d01a0acf903cca299c79b2b4a25206dadddebbc46c85c86616a1559e12f2dae1",
+    "binary_origin": "Previously verified recorded-replay-api-v1 binary, also used for recorded-browser-v1 and recorded-refinement-v1",
+    "python": "3.14.7",
+    "commands": [
+      "python3 tools/diagnose_igs_recorded_depth.py --output igs-depth.json.gz",
+      "python3 tools/diagnose_dp_recorded_apex.py --output dp-apex.json",
+      "python3 tools/run_recorded_resolution_probes.py --solver /private/tmp/atlas-recorded-cmake/atlas_solver --output-dir followup",
+      "python3 tools/analyze_mcc_continuous.py catalogue/investigations/recorded-refinement-v1/plastic-report.json.gz --followup followup/mcc-native-followup.json.gz --output mcc-continuous.json",
+      "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_isotropic_reference tests.test_resolution_diagnosis tests.test_refinement tests.test_recorded_path tests.test_recorded_api tests.test_web_recorded -v"
+    ],
+    "note": "Native calls were initially made with a temporary orchestration script, then retained as the parameterized repository tool. IGS original failure probes are preserved separately; the five follow-up calls do not include those earlier probes."
+  },
+  "outcomes": {
+    "igs_original_failed_depths": [
+      14,
+      18,
+      18
+    ],
+    "igs_passing_depths": [
+      15,
+      20,
+      19
+    ],
+    "igs_passing_substeps": [
+      618,
+      2788,
+      2512
+    ],
+    "dp": "Independent scalar reconstruction places each failed root seed strictly inside a constant-stress apex; finite difference probes remain on it, while attainable scalar endpoint roots exist.",
+    "mcc_factor32_max_pressure_pc_error_Pa": 4496.9849149773945,
+    "mcc_factor64_max_pressure_pc_error_Pa": 2258.4611185774556,
+    "mcc_factor32_residual1e_12_max_change_Pa": 0,
+    "tests_run": 53,
+    "tests_passed": 45,
+    "tests_skipped": 8,
+    "skipped": "Optional fresh native API regression suite requires ATLAS_RECORDED_SOLVER; retained API/Wasm evidence and the five new native calls are separately checked."
+  },
+  "review": {
+    "method": "Three bounded AI diagnostic reviews plus root-agent reproduction and tests; not independent scientific review",
+    "topics": [
+      "IGS history mobilisation and local error barrier",
+      "DP apex return and reduced singular control Jacobian",
+      "MCC isotropic continuous reduction and convergence; follow-up code review fixed model-identity and nonfinite-evidence gaps"
+    ]
+  },
+  "limitations": [
+    "IGS successful probes cover isolated material intervals, not the entire previously failing mixed-control path.",
+    "DP alternative seeds and scalar roots remain analytical diagnostics; no generic control restart has been implemented.",
+    "MCC oracle is the continuous limit of declared Atlas equations, not independent source or experimental validation.",
+    "First-order evidence is specific to this isotropic path; final factor64 error is nonzero.",
+    "No solver/model defaults, release gates or public admission statuses changed; no compilation, push or deployment."
+  ],
+  "sources": [
+    {
+      "path": "models/modified-cam-clay.json",
+      "sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14"
+    },
+    {
+      "path": "models/hypoplastic-sand-igs97.json",
+      "sha256": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86"
+    },
+    {
+      "path": "models/drucker-prager.json",
+      "sha256": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d"
+    },
+    {
+      "path": "cpp/include/atlas/solver.hpp",
+      "sha256": "7842240f542949a1ba547f4a2fea44e4ef1fadf50b35a18fd86f8fe4327164d5"
+    },
+    {
+      "path": "cpp/include/atlas/recorded.hpp",
+      "sha256": "5261b7499834bd618e48925d98591f1753b8c802adee59c66d3afd42941ad29e"
+    },
+    {
+      "path": "catalogue/investigations/recorded-refinement-v1/report.json.gz",
+      "sha256": "15f3a61b28961dd11b8f3bac955a153498f316e2bf6c7c4726c5fe0f021ddf5e"
+    },
+    {
+      "path": "catalogue/investigations/recorded-refinement-v1/plastic-report.json.gz",
+      "sha256": "1626e205568d5435c135ccfc46dbd1afaf25160854e74756bcf5d20ce15047a2"
+    }
+  ],
+  "implementation": [
+    {
+      "path": "atlas/isotropic_reference.py",
+      "sha256": "dd657e109d399b42a5fb983f84a98b00398878ee6c79001d3ce979bd99daac34"
+    },
+    {
+      "path": "tools/analyze_mcc_continuous.py",
+      "sha256": "bf381510510e55f31522cbf710377735ff2886fae3bd1dcf591b410127733aae"
+    },
+    {
+      "path": "tools/diagnose_igs_recorded_depth.py",
+      "sha256": "4151e0804909354d27becf2d8a71ac155a7546113de6ad79e834c73ed399796f"
+    },
+    {
+      "path": "tools/diagnose_dp_recorded_apex.py",
+      "sha256": "d27665efb9e6bc0594003d51888874a9bb6556319c6f7f3a9557cc5627736398"
+    },
+    {
+      "path": "tools/run_recorded_resolution_probes.py",
+      "sha256": "3f424c5faa27d475ac494f2b62171079975e25834bc4e58f6627b9b5978af911"
+    },
+    {
+      "path": "tests/test_isotropic_reference.py",
+      "sha256": "be8d9cef0428c3b277114e31dd920d178d9afe14a8ef6675c521c91d4a38b744"
+    },
+    {
+      "path": "tests/test_resolution_diagnosis.py",
+      "sha256": "3da923e1c9075e1f4b3c0891c0fc6504bee403a8299aad530ff854c2a35f56d6"
+    },
+    {
+      "path": "docs/RECORDED_RESOLUTION_DIAGNOSIS.md",
+      "sha256": "967c0a6f7133f39b5f374aee1005471a1114038149d6c368149aa20486dcfd72"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "catalogue/investigations/recorded-resolution-diagnosis-v1/dp-apex.json",
+      "sha256": "40f36d3e76fbc3316d4465c7d9beb76fac0d75211947ec6d583c9fd1b0d056db"
+    },
+    {
+      "path": "catalogue/investigations/recorded-resolution-diagnosis-v1/igs-depth.json.gz",
+      "sha256": "6e04fca8d1c135c5603b093beefb47e6deffe58ecac371305e4e4a37b44ec948"
+    },
+    {
+      "path": "catalogue/investigations/recorded-resolution-diagnosis-v1/igs-native-depth-probes.json",
+      "sha256": "ee5f723d0c9ebb810f0a7c90f6d77821829ded8d61bedf3c753d28844b3888e1"
+    },
+    {
+      "path": "catalogue/investigations/recorded-resolution-diagnosis-v1/mcc-continuous.json",
+      "sha256": "0fce9b2f01bdb93279536209f848057266c542e1790bf28f41a843beb9c4ccae"
+    },
+    {
+      "path": "catalogue/investigations/recorded-resolution-diagnosis-v1/mcc-native-followup.json.gz",
+      "sha256": "8359aace31d42be015634bf0e79494a4a825860338b17fd871599ece02253961"
+    },
+    {
+      "path": "catalogue/investigations/recorded-resolution-diagnosis-v1/original-igs-material-probes.json",
+      "sha256": "9bd0343f1821af6b6c9ab666ebea634f907f9f9d468e0da2aeca6307a9a95848"
+    },
+    {
+      "path": "catalogue/investigations/recorded-resolution-diagnosis-v1/tests.txt",
+      "sha256": "8cec27810a71d0cc17f952a456b140f9a89db0c5b525f826480d2ef2856a0929"
+    }
+  ]
+}
