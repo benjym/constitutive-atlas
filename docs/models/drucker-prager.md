@@ -7,3 +7,5 @@ The [plasticity investigation](../PLASTICITY_VERIFICATION.md#druckerprager-refer
 Supporting evidence: [drucker-prager-investigation-v1](../../catalogue/evidence/drucker-prager-investigation-v1.json). The automated outcome is `failed`; see its limitations before using the passing case count.
 
 Open review work: Resolve shear/apex integration failure; assess regularization and Md<=M admissibility. Independently verify sign and Mandel conventions, complete source extraction and reproduce the numerical evidence before considering admission.
+
+The [declarative apex correction](drucker-prager-apex.md) supersedes the v1 numerical algorithm and passes 73 independent invariant-reference cases. The earlier failed evidence remains historical; independent review and parameter-admissibility work remain open.

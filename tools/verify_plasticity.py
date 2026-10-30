@@ -142,6 +142,22 @@ def execute(solver,model):
         params=parameters.copy();params[4]=0
         case('nondilatant-hydrostatic-tension-rollback',initial,[-.002]*3+[0]*3,params,expected_failure=True)
         case('inadmissible-start-rollback',[4e5,1e5,1e5,0,0,0,.7,0],[.001,0,0,0,0,0],expected_failure=True)
+
+        # Apex branch, all shear planes and both axial deviatoric directions.
+        # Reference remains the independent invariant return, not the DSL target.
+        for Md in (.05,.2,1.2):
+            for c in (0.,1e4):
+                params=parameters.copy();params[4]=Md;params[5]=c
+                for j,direction in enumerate(([1,-.5,-.5,0,0,0],[-1,.5,.5,0,0,0],[0,0,0,1,0,0],[0,0,0,0,1,0],[0,0,0,0,0,1],[1,-.5,-.5,.3,-.2,.1])):
+                    de=[(-.002 if i<3 else 0)+1e-5*x for i,x in enumerate(direction)]
+                    case(f'apex-Md{Md}-c{c}-direction{j}',initial,de,params)
+                # Approach the smooth/apex junction from each side, including it.
+                K=params[1]/(3*(1-2*params[2]));G=params[1]/(2*(1+params[2]))
+                q_boundary=3*G*(-c/params[3]-(mean(initial)-.006*K))/(K*Md)
+                for factor in (.9,1.,1.1):
+                    de=[-.002]*3+[factor*q_boundary/(math.sqrt(1.5)*2*G),0,0]
+                    case(f'apex-junction-Md{Md}-c{c}-factor{factor}',initial,de,params)
+
     else:
         initial=[1e5]*3+[0,0,0,.7,2e5,0]
         for V,label in [(.003,'compression'),(-.003,'unloading')]:

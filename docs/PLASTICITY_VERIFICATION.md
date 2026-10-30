@@ -1,6 +1,8 @@
 # Plasticity verification: first investigation
 
-This is automated numerical evidence for the current atlas definitions, not independent review or experimental validation. Both formulations retain their existing catalogue status. The checker is original project code: it does not evaluate DSL expressions, call the production nonlinear solver for its reference calculations, or execute an external constitutive implementation.
+This is the historical v1 investigation pinned in its evidence records, not independent review or experimental validation. Both formulations retain their existing catalogue status. The checker is original project code: it does not evaluate DSL expressions, call the production nonlinear solver for its reference calculations, or execute an external constitutive implementation.
+
+The later [Drucker–Prager apex correction](models/drucker-prager-apex.md) replaces the direction regularization and passes an expanded 73-case check. The failing v1 reports below are retained; the MCC partition comparison remains unchanged.
 
 ## Conventions and reproducibility
 
@@ -13,7 +15,7 @@ python3 tools/verify_plasticity.py --model drucker-prager --output artifacts/dru
 python3 tools/verify_plasticity.py --model modified-cam-clay --output artifacts/modified-cam-clay-verification.json
 ```
 
-Each command deliberately returns nonzero while its report contains an unresolved comparison. Reports retain complete case inputs, expected/actual states, tolerances, return codes, solver diagnostics, embedded catalogue identity and binary hash. They are investigative checks, not part of the green CI acceptance suite. Python unit tests check the reference calculations and reject selected incorrect results; they do not excuse a failing native comparison.
+On the historical source revision, each command returns nonzero while its report contains an unresolved comparison. Use each evidence record’s source commit to reproduce that revision. The current DP checker is expanded and passes after the apex correction. Reports retain complete case inputs, expected/actual states, tolerances, return codes, solver diagnostics, embedded catalogue identity and binary hash. The historical investigative failures are separate from the green CI acceptance suite; the corrected DP suite is now a native regression gate. Python unit tests check the reference calculations and reject selected incorrect results; they do not excuse a failing native comparison.
 
 The additive `diagnostics` object in the increment API reports Newton iterations, accepted internal substeps and rejected attempts. These counters can include partial internal progress before a failed transaction; the returned state still rolls back completely. The multiplier `gamma` is transient and describes the last accepted internal step, not cumulative plastic deformation.
 

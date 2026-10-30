@@ -2,6 +2,7 @@
 import importlib.util
 from pathlib import Path
 import unittest
+import os
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('plasticity_oracle', ROOT/'tools/verify_plasticity.py')
@@ -33,6 +34,11 @@ class PlasticityOracleTests(unittest.TestCase):
         self.assertGreater(state[8], 0)
         wrong = state.copy(); wrong[7] *= 1.001
         self.assertFalse(oracle.compare(wrong, state)[0])
+
+    def test_native_dp_smooth_and_apex_returns(self):
+        report = oracle.execute(Path(os.environ.get('ATLAS_SOLVER', ROOT/'build/atlas_solver')), 'drucker-prager')
+        self.assertEqual(len(report['cases']), 73)
+        self.assertTrue(report['passed'], [c['id'] for c in report['cases'] if not c['passed']])
 
     def test_scalar_root_rejects_unbracketed_inputs(self):
         with self.assertRaises(ValueError): oracle.bisect(lambda x: x+1, 0, 1)
