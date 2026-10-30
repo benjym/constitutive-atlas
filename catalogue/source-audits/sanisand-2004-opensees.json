@@ -1,0 +1,86 @@
+{
+  "schema_version": "0.1",
+  "kind": "equation-source-inventory",
+  "model_id": "sanisand-2004",
+  "accessed_on": "2026-10-30",
+  "status": "partial-source-extraction",
+  "target_publication": {
+    "title": "Simple Plasticity Sand Model Accounting for Fabric Change Effects",
+    "authors": [
+      "Yannis F. Dafalias",
+      "Majid T. Manzari"
+    ],
+    "year": 2004,
+    "journal": "Journal of Engineering Mechanics",
+    "volume": 130,
+    "issue": 6,
+    "pages": "622-634",
+    "doi_url": "https://doi.org/10.1061/(ASCE)0733-9399(2004)130:6(622)",
+    "full_text_inspected": false
+  },
+  "reference_repository": "https://github.com/OpenSees/OpenSees",
+  "reference_commit": "8a0273db3e2f5a14c05924a179c1e439500c852c",
+  "scope": "Primary implementation source and documentation inspection only; no external execution or original-paper equation review. Raw third-party files are not redistributed.",
+  "sources": [
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/ManzariDafalias.cpp",
+      "sha256": "fd24f826b09b3abb9b571529a50cdb11801db883fbcefbdc474fb529e571d933",
+      "locators": [
+        "integrate: 857-892",
+        "commitState/revertToLastCommit: 367-418",
+        "GetF/GetPSI/GetLodeAngle: 4467-4494",
+        "GetElasticModuli: 4527-4554",
+        "GetStateDependent: 4686-4754",
+        "GetDevPart: 4829-4842"
+      ]
+    },
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/ManzariDafalias.h",
+      "sha256": "a4fcf8560d75cdf8fa00ef5c2691b11bba1ee88eeeb52ac5e658870f3f0801ff",
+      "locators": [
+        "constructor signatures and state members"
+      ]
+    },
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/ManzariDafalias3D.cpp",
+      "sha256": "7781988f9e5898cac1d3ff2b557614a3a3f98621e1776bedd7edfe84b79c02e7",
+      "locators": [
+        "setTrialStrain: 78-84",
+        "getStress: 119-123"
+      ]
+    },
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/COPYRIGHT",
+      "sha256": "54ed2fe97dbc30c6b8c77e094e71f20c255c52a642ce66d279a8f1b6a3676036",
+      "locators": [
+        "repository reuse notice"
+      ]
+    },
+    {
+      "url": "https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/ManzariDafalias.html",
+      "sha256": "0cf9705e2c1e3a7d9bf83a7e03aef0f8a7193c84f351caa0966498d479f09688",
+      "locators": [
+        "Theory",
+        "parameter table",
+        "example"
+      ],
+      "immutable_revision": false
+    }
+  ],
+  "atlas_planning_state_components": {
+    "sigma": 6,
+    "e": 1,
+    "alpha": 6,
+    "fabric": 6,
+    "alpha_in": 6,
+    "persistent_total": 25,
+    "with_incremental_multiplier": 26
+  },
+  "unresolved": [
+    "Original-paper full equations, initial states, parameter conventions and numbered mappings.",
+    "Reconcile code numerical modifications and documentation inconsistencies against publication.",
+    "Specify exact reversal event scope and transactions under subdivision.",
+    "Review reuse terms before reference packaging or redistribution.",
+    "Execute independent source-matched reference and numerical/experimental comparisons."
+  ]
+}

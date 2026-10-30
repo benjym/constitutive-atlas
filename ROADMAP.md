@@ -105,6 +105,8 @@ The candidate source is already linked in the [catalogue](catalogue/manifest.jso
 - [ ] **SAN-06:** Verify monotonic compression/extension, unloading/reloading, reversal and representative cyclic paths against an independent matching reference. Record parameter sets and tolerances per case.
 - [ ] **SAN-07:** Demonstrate unchanged results for the existing five models within predefined numerical tolerances.
 
+The [SANISAND source brief](docs/models/sanisand-2004.md), [pinned OpenSees inventory](catalogue/source-audits/sanisand-2004-opensees.json) and [provisional capability analysis](docs/SANISAND_CAPABILITIES.md) identify a 25-component persistent layout (26 with a multiplier), missing tensor square and unresolved reversal transaction scope. Synthetic capacity/type probes are reproducible. Original-paper extraction and numerical-variant reconciliation remain incomplete; SAN-01–04 are not closed and no executable candidate is added.
+
 **Acceptance:** all six formulations meet their review gates and execute through the common engine without model-specific mathematical escape hatches. History and initialization semantics are explicit and tested under substepping and rollback. A paper figure or website curve alone cannot close this milestone.
 
 ### Additional near-term target — Terracotta (M2T)

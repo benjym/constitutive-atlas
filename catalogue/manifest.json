@@ -65,13 +65,37 @@
       "status": "candidate",
       "executable": false,
       "discovery_url": "https://doi.org/10.1061/(ASCE)0733-9399(2004)130:6(622)",
-      "note": "Research candidate; bibliographic and formulation review pending.",
-      "capability_gap": "Needs source-complete extraction, reversal-memory events, backstress/fabric evolution and independent reference comparisons.",
+      "note": "Original 2004 formulation targeted; pinned implementation-source audit and provisional capability analysis available. Full original-paper extraction and independent review pending.",
+      "capability_gap": "Natural Mandel layout requires 25 persistent components (26 with residual multiplier), above current 24; needs tensor square, specified reversal-memory transactions and source/variant reconciliation.",
       "catalogue_sources": [
         {
           "url": "https://soilmodels.com/sanisand/",
           "role": "SoilModels discovery",
           "locator": "SANISAND (Dafalias and Manzari, 2004); description and references (accessed 2026-10-30); Existing candidate retained."
+        }
+      ],
+      "reference_implementation_url": "https://github.com/OpenSees/OpenSees",
+      "reference_implementation_commit": "8a0273db3e2f5a14c05924a179c1e439500c852c",
+      "research_sources": [
+        {
+          "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/ManzariDafalias.cpp",
+          "role": "Pinned primary implementation cross-check; not executed",
+          "locator": "integrate, GetStateDependent, GetF; numerical variant reconciliation pending"
+        },
+        {
+          "url": "https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/ManzariDafalias.html",
+          "role": "Official implementation documentation",
+          "locator": "Theory and parameter table; displayed deviator/markup issues recorded in dossier"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/sanisand-2004.md",
+          "role": "Atlas source brief (partial)",
+          "locator": "Target variant, source audit and remaining extraction tasks"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SANISAND_CAPABILITIES.md",
+          "role": "Atlas provisional capability analysis",
+          "locator": "State capacity, tensor square and reversal transactions; no executable admission"
         }
       ]
     },
