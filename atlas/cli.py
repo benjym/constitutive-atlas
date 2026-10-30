@@ -9,6 +9,7 @@ def main():
     parser=argparse.ArgumentParser(description='Constitutive Atlas research and simulation tools')
     sub=parser.add_subparsers(dest='command',required=True)
     sub.add_parser('validate',help='Validate every executable definition')
+    evidence=sub.add_parser('evidence',help='Validate numerical evidence integrity; does not confer review status');evidence.add_argument('record',type=Path);evidence.add_argument('--current',action='store_true')
     generate=sub.add_parser('generate');generate.add_argument('destination',type=Path)
     db=sub.add_parser('database');db.add_argument('destination',type=Path)
     ingest=sub.add_parser('ingest');ingest.add_argument('archive',type=Path);ingest.add_argument('--output',type=Path,default=ROOT/'data/normalized');ingest.add_argument('--metadata',type=Path)
@@ -17,6 +18,9 @@ def main():
     benchmark=sub.add_parser('benchmark');benchmark.add_argument('configuration',type=Path);benchmark.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');benchmark.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     if args.command=='validate':print(f'{len(all_models())} declarative models passed structural and semantic validation')
+    elif args.command=='evidence':
+        from .evidence import validate_record
+        record=validate_record(args.record,current=args.current);print(f"{record['id']}: record verified ({record.get('outcome',record.get('status'))}); no automatic model promotion")
     elif args.command=='generate':
         from .compiler import generate
         generate(args.destination);print(args.destination)

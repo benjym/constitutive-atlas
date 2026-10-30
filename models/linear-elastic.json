@@ -67,9 +67,19 @@
   "description": "Infinitesimal isotropic elasticity. Demonstration parameters, not calibrated to a soil.",
   "sources": [
     {
-      "url": "https://www.opengeosys.org/docs/userguide/blocks/materials/solid/constitutive_relation/",
-      "locator": "LinearElasticIsotropic; standard isotropic Hooke law",
-      "role": "formulation"
+      "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticIsotropic.h",
+      "locator": "MaterialProperties::lambda, mu, bulk_modulus; elasticTangentStiffness",
+      "role": "Pinned reference formulation"
+    },
+    {
+      "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticIsotropic.cpp",
+      "locator": "LinearElasticIsotropic::integrateStress; sigma_prev + C * (eps_m - eps_m_prev)",
+      "role": "Pinned incremental stress update"
+    },
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/linear-elastic.md",
+      "locator": "Equation mapping; project-specific void-ratio bookkeeping and small-strain limits",
+      "role": "Transcription dossier"
     }
   ],
   "equations": {
