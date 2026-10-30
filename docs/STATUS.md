@@ -4,7 +4,6 @@
 
 - Restricted tensor expression language, SI dimension/shape checks, structural schemas, Python reference interpretation, deterministic C++ generation and catalogue hashes.
 - Reusable numerical-evidence and source-review schemas, integrity/current-definition validation, and a pinned elasticity dossier with 29 passing Cartesian closed-form cases. Independent review remains pending; see [the record contract](EVIDENCE_RECORDS.md).
-- Reusable numerical-evidence and source-review schemas, integrity/current-definition validation, and a pinned elasticity dossier with 29 passing Cartesian closed-form cases. Independent review remains pending; see [the record contract](EVIDENCE_RECORDS.md).
 - Five declarative executable formulations: linear isotropic elasticity; nonassociated perfect-plastic Drucker–Prager; Modified Cam Clay; von Wolffersdorff sand hypoplasticity; hypoplasticity + IGS. All require independent source review; IGS remains explicitly draft.
 - Native C++20 engine with AD residual Jacobians, implicit complementarity correction, elastic predictor, line search, adaptive midpoint rates, substepping and rollback. Initial plastic states must satisfy declared admissibility checks.
 - Axisymmetric oedometer, drained/undrained triaxial, undrained signed-q control and isotropic-strain drivers, with monotonic/sinusoidal histories. No general finite-element or poromechanics solver.
