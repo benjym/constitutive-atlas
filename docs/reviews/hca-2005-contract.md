@@ -161,3 +161,7 @@ The complete source-aligned evolution of void ratio and its finite-deformation m
 6. Only after these checks, propose a cycle-count API distinct from physical-time and recorded path-order modes. Count actual persistent components including companion histories. A symmetric 6×6 `pi` alone would occupy 21 scalar slots, but the unresolved full-space identity makes that count provisional; do not assert the present 32-component engine is sufficient.
 
 This packet advances acquisition/extraction and representation design. Complete equation reconciliation, paper-version comparison, source/implementation permissions, continuous/discrete algorithm choice, independent scientific review, executable admission and source-matched experimental validation remain open.
+
+## Diagnostic follow-up
+
+[The bounded arithmetic packet](../HCA_DIAGNOSTICS.md) now implements finite sampled-loop amplitudes and fixed-amplitude scalar history with analytical/high-precision tests and hash-bound evidence. It preserves the unresolved recording-filter and polarization-representation conflicts and supplies no full constitutive update.

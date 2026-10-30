@@ -25,3 +25,5 @@ Only primary-source fragments that fit the existing engine should proceed direct
 ### Implemented follow-ups
 
 The [Python history reference](../HISTORY_REFERENCE.md) and [SANISAND event fixtures](../SANISAND_EVENT_FIXTURES.md) now supply the first bounded implementations from this queue. Their tests preserve open source decisions; they do not admit PM4Sand/SANISAND as new public models. Next work is legacy transaction adapters and HCA sampled-loop/scalar-history checks, alongside the missing primary-source batches.
+
+The [legacy bridge](../HISTORY_LEGACY_BRIDGE.md) and [HCA arithmetic diagnostics](../HCA_DIAGNOSTICS.md) now provide the next implemented follow-ups. Native phase code generation and full HCA/PM4 closure remain distinct from these transport/algebra checks.
