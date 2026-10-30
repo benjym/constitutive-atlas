@@ -52,3 +52,7 @@ The report includes observed acceptance/rejection messages and hashes of the rel
 ## Selected reference-function execution
 
 The [conventions and state-function audit](models/sanisand-2004-conventions.md) now maps source storage, pressure units and the exact selected corrections. Its [87-case report](../catalogue/investigations/sanisand-source-functions-v1.json) checks unchanged source methods in a private minimal adapter against Cartesian algebra. The low-pressure dilatancy correction is numerically unit-dependent; current void ratio is ignored by elasticity; hardening uses a signed denominator outside its singular guard. These observations constrain variant selection and reference parameters. They do not establish full integrator behavior or close original-paper extraction, canonical history/initialization, transcription or independent review.
+
+## Derived infinite-hardening products
+
+The [finite-product investigation](models/sanisand-2004-hardening-limit.md) represents the one-sided regular zero-distance limit using existing scalar/tensor expressions; no infinity literal, cap or new DSL operator is needed for that branch. The [separate draft](../catalogue/source-audits/sanisand-2004-hardening-limit.json) is Python-verified. Simultaneous-zero limits, general initialization, first yield, reversal events and finite-step integration remain unresolved; this result does not close SAN-01/03/05.

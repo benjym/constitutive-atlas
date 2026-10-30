@@ -88,3 +88,7 @@ Following user authorization, a clean Release build with AppleClang 21 completed
 ## SANISAND original algebra — 2026-10-31
 
 The [33-term original-paper fragment](../catalogue/source-audits/sanisand-2004-original-equations.json) uses the existing DSL for all finite on-cone state/flow terms. Five Python-only test groups pass, including 40 active general-tensor consistency cases, pressure scaling, triaxial limits, softening and fabric switching. See the [investigation](../catalogue/investigations/sanisand-original-algebra-v1.json). Initialization, singular limits, reversal/yield-entry transactions, full integration and independent review remain open. Following the subsequent Cortex report, native compilation and executable tests are held again; the successful earlier native restart record remains historical evidence.
+
+## SANISAND derived hardening limit — 2026-10-31
+
+A [separate algebraic limit draft](models/sanisand-2004-hardening-limit.md) now keeps stress/plastic/history products finite as reversal distance tends to zero on a regular branch. Four Python-only groups pass, including 120 equivalence cases and positive distances down to `1e-305`. The [record](../catalogue/investigations/sanisand-hardening-limit-v1.json) pins source and checks. Double-zero limits, reversal/yield-entry handling, finite-step integration and independent review remain open. Native builds/executable tests remain held.

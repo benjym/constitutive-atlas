@@ -1,0 +1,28 @@
+{
+  "record_version": 1,
+  "kind": "derived-sanisand-hardening-limit-investigation",
+  "date": "2026-10-31",
+  "complete_constitutive_model": false,
+  "independent_review": "pending",
+  "derivation": "Positive-distance algebraic equivalence and one-sided zero-distance limit at positive hardening numerator; not an equation printed in the original article.",
+  "files": {
+    "catalogue/source-audits/sanisand-2004-hardening-limit.json": "a32888f952cb88a47e6a4769b11350f157b5802d9a9cb6f4785698cb546fbe3d",
+    "catalogue/source-audits/sanisand-2004-original-equations.json": "a054edbba6ca29b67197b42e4c5c1fb97df282336bbc2986723103580ae5a459",
+    "tools/inspect_sanisand_limit.py": "3fefefc1b24c3b2f1ca376fb02d81cf0a7355a2fc91183e41d7c68e18ce8267f",
+    "tools/inspect_sanisand_original.py": "63be5fcaea74c8e9fc18d56091909f830411e20a5a33b7b2b18d8235a1580ed5",
+    "tests/test_sanisand_limit.py": "3d40b5d92924722e64ee2cb89aa744972d20968fffa86135be7d3222ec456066"
+  },
+  "command": "python3 -m unittest discover -s tests -p test_sanisand_limit.py -v",
+  "exit_code": 0,
+  "test_groups": 4,
+  "finite_distance_comparisons": 120,
+  "smallest_positive_distance": 1e-305,
+  "log": "test_equivalent_to_finite_original_in_loading_and_unloading (test_sanisand_limit.SANISANDLimitTests.test_equivalent_to_finite_original_in_loading_and_unloading) ... ok\ntest_negative_distance_and_invalid_zero_limits_are_not_regularized (test_sanisand_limit.SANISANDLimitTests.test_negative_distance_and_invalid_zero_limits_are_not_regularized) ... ok\ntest_one_sided_convergence_to_zero_and_overflow_avoidance (test_sanisand_limit.SANISANDLimitTests.test_one_sided_convergence_to_zero_and_overflow_avoidance) ... ok\ntest_zero_limit_from_yield_consistency_and_no_hardening_cap (test_sanisand_limit.SANISANDLimitTests.test_zero_limit_from_yield_consistency_and_no_hardening_cap) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.141s\n\nOK\n",
+  "scope": "Python-only type/SI and instantaneous algebra. No finite-step integration, native compilation/execution, Wasm, external reference or experimental validation.",
+  "unresolved": [
+    "Independent review of algebra, corrected loading numerator and limit.",
+    "Simultaneous-zero and negative-numerator zero-distance limits.",
+    "Elastic interior, yield entry, reversal transactions and state preparation.",
+    "Finite-step integration, consistent derivatives, external reference and physical domains."
+  ]
+}
