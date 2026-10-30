@@ -21,3 +21,5 @@ The elasticity checker can emit an envelope with `--record PATH`; commit its che
 Changing an artifact requires a new evidence revision rather than quietly repairing an existing hash. To reproduce a historical report, check out its source commit and run its command. Platform/compiler differences can change the binary hash and floating-point last digits; compare declared numerical tolerances and model/source identity rather than requiring identical binary bytes across platforms.
 
 Current records leave review pending. No independent reviewer has signed the elasticity transcription, and these records do not close REV-01 or the five-model review milestone.
+
+The [plasticity investigation](PLASTICITY_VERIFICATION.md) retains failing comparisons as evidence with `outcome: failed`. Its scalar-root and continuum references use method `analytical-and-scalar-reduction`. A nonzero investigative checker result is not hidden by the green software checks.

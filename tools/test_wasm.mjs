@@ -24,3 +24,21 @@ for(const model of catalogue.models){
   }
 }
 console.log(`Native/WebAssembly parity passed for ${runs} model/protocol combinations.`);
+
+// Increment diagnostics are public in native and Wasm, including failed transactions.
+for (const [id,initial,strain] of [
+  ['drucker-prager','100000,100000,100000,0,0,0,.7,0','.01,-.005,-.005,0,0,0'],
+  ['modified-cam-clay','100000,100000,100000,0,0,0,.7,200000,0','.01,.01,.01,0,0,0'],
+  ['drucker-prager','400000,100000,100000,0,0,0,.7,0','.001,0,0,0,0,0'],
+]) {
+  const native=spawnSync(resolve(root,'build/atlas_solver'),['--model',id,'--mode','integrate','--initial',initial,'--strain',strain],{encoding:'utf8',timeout:30000});
+  const expected=JSON.parse(native.stdout);
+  const actual=JSON.parse(wasm.ccall('atlas_integrate','string',['string','string','string','string'],[id,'',initial,strain]));
+  assert.equal(actual.ok,expected.ok);
+  assert.equal(actual.message,expected.message);
+  assert.deepEqual(actual.diagnostics,expected.diagnostics);
+  for (const key of ['iterations','substeps','rejected']) assert.ok(Number.isInteger(actual.diagnostics[key]) && actual.diagnostics[key]>=0);
+  actual.state.forEach((v,i)=>assert.ok(Math.abs(v-expected.state[i])<=1e-7*Math.max(1,Math.abs(expected.state[i]))));
+  if (!actual.ok) assert.deepEqual(actual.state,initial.split(',').map(Number));
+}
+console.log('Native/WebAssembly increment diagnostics and rollback parity passed for 3 cases.');
