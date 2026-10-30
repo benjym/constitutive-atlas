@@ -104,3 +104,7 @@ Five [Python test groups](../../tests/test_sanisand_original.py) verify triaxial
 The subsequent [finite-hardening-product derivation](sanisand-2004-hardening-limit.md) supplies a candidate one-sided zero-distance limit on a regular branch, with a separate typed fragment and Python evidence. It preserves this finite-distance draft unchanged. It does not settle general initialization, simultaneous-zero limits or reversal-event policy.
 
 The subsequent [exact elastic-entry reference](sanisand-2004-elastic-entry.md) derives straight-path elastic evolution and brackets first yield under explicit audit-domain and numerical-event policies. It advances the elastic-interior gap without specifying initialization, plastic continuation or reversal memory.
+
+## Bounded parallel source audit
+
+A separate AI audit visually checked PDF pages 2, 5–8 and 10–12 (printed 623, 626–629, 631–633), confirming the core transcription and the disclosed missing-`K` issue in printed Eq.(20). Appendix p.633 also refers to substitution into Eq.(24) to obtain `L`, although Eq.(24) defines `h`; the loading relation appears to be Eq.(20). This is recorded as a printed cross-reference ambiguity, not an implemented equation change. The scalar `z=0` initialization discussed on p.626 belongs to a particular explanatory loading example and does not establish a universal tensor initialization rule. The reversal discussion on p.631 refers to Dafalias (1986); this paper alone does not specify the complete event algorithm. These bounded checks do not close independent scientific review.

@@ -1,0 +1,71 @@
+{
+  "record_version": 1,
+  "date": "2026-10-31",
+  "kind": "bounded-original-source-audit",
+  "status": "passed-with-open-source-conflicts",
+  "independent_review": "pending",
+  "scope": "Selected original-paper equations and source records. Instantaneous source-algebra checks, not canonical Wu\u2013Bauer sign resolution, physical admissibility, finite integration, external implementation or experimental validation.",
+  "builds_performed": false,
+  "commands": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests.test_wu_bauer_original tests.test_publications tests.test_sanisand_original tests.test_pm4sand_surfaces -v",
+      "exit_code": 0,
+      "test_groups": 17
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 tools/verify_igs_original.py",
+      "exit_code": 0,
+      "cases": 576,
+      "passed": 576
+    }
+  ],
+  "wu_bauer_checks": {
+    "test_groups": 5,
+    "cartesian_or_rotated_comparisons": 120,
+    "axisymmetric_comparisons": 24,
+    "relative_component_threshold": 2e-12,
+    "threshold_scale": "max(1,abs(actual),abs(reference))",
+    "additional_checks": [
+      "positive stress/stretching scaling",
+      "zero direction and opposite-direction nonsmoothness",
+      "undefined-input rejection",
+      "printed calibration and arcsine-domain counterexamples"
+    ]
+  },
+  "provenance_checks": {
+    "four_local_pdf_hashes_match_receipt": true,
+    "three_parallel_dossier_hashes_match_records": true,
+    "database_counts": {
+      "publications": 43,
+      "publication_relations": 7,
+      "publication_models": 1
+    },
+    "wu_source_audit_retained_in_database": true,
+    "wu_public_model_binding": false
+  },
+  "inputs": {
+    "catalogue/source-audits/wu-bauer-1994-original.json": "17c230c0602ffb03951402903ffbeca8e59e1a493f460e6127628d2a2a243bfe",
+    "catalogue/source-audits/parallel-original-reviews-2026-10-31.json": "1a291bd95080fbd048687198ea1f155093232f322d74d19fbc0118dfdcb3f39c",
+    "catalogue/source-audits/original-papers-2026-10-31.json": "e0340c703ebe824960e0137941fcee2f429c0f0d8568c33f97e82d96f98fd2e7",
+    "catalogue/publications.json": "aed4c5520d62b2c91f8851bda077ef877c30a70d9b31361a605697e93f70d14d",
+    "tools/inspect_wu_bauer_original.py": "4dacc6f020aa7117ef60d61a0f1294f57242ce9c7c4f9450845f1a88d1b62707",
+    "tests/test_wu_bauer_original.py": "a7405b696307e7776e1d597eecd51f16f96e5d8a644fc17a38598fa3b2667f68",
+    "tests/test_publications.py": "ba0e1249754c02fde9960d6d3eba18b5321bff45944169b17449076fa29a1065",
+    "tools/verify_igs_original.py": "e4a14c1fee345b28d34b77ea7fe08d703b9f8af6b371e4723886a3763bf69ef2",
+    "models/hypoplastic-sand-igs97.json": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+    "docs/models/wu-bauer-1994-original.md": "ad243a159aa6f373441cf185be2622e8a93214b8694336697b5d48aa3aa25293",
+    "docs/models/sanisand-2004-original.md": "d872213ff90a7dbebf4ea4da9e78700ceaf26134fde71d88103d863061e65eb4",
+    "docs/models/hypoplastic-sand-igs97-original.md": "cc08e1d0d6a507176ff0e72cc6433995edf414a11107e272229c470833228d6c",
+    "docs/models/hypoplastic-sand-vw96-original.md": "83d791c6c2d0618f589c6c159a0ed855f724825e7d6121d002dedb6b4a355293"
+  },
+  "artifacts": {
+    "python-tests.txt": "51b6ba199e387268c33a895762ba6c6f1bad3851a8db29dd489f45fefc6ccc49"
+  },
+  "remaining": [
+    "Resolve Wu\u2013Bauer printed signs and calibration conflicts",
+    "IGS finite-spin source conflict",
+    "Physical-domain and singular-limit decisions",
+    "Full source-path/external-reference reproduction",
+    "Independent human scientific review"
+  ]
+}

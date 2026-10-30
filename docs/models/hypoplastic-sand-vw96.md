@@ -83,7 +83,7 @@ The implementation requires `e>0`, `p>1e-8 p_ref`, `ed0<ec0<ei0`, `ed<e<ei`, `F>
 
 ## Numerical integration and evidence
 
-The legacy rate API supplies a strain increment as the rate over a unit loading interval; it introduces no physical material clock. The common solver uses explicit midpoint with full-step/two-half-step comparison and recursive subdivision. Its error threshold is `1e-6` in model-scaled state coordinates; this is a local integration heuristic, not a validated error bound. The accepted solution is the two-half-step state. Depth and work limits remain fixed in this legacy path.
+The legacy rate API supplies a strain increment as the rate over a unit loading interval; it introduces no physical material clock. The common solver uses explicit midpoint with full-step/two-half-step comparison and recursive subdivision. Its error threshold is `1e-6` in model-scaled state coordinates; this is a local integration heuristic, not a validated error bound. The accepted solution is the two-half-step state. These are the defaults used by the retained legacy evidence. The additive [incremental settings interface](../INCREMENTAL_SETTINGS.md) now permits explicit rate tolerance, depth and accepted-substep limits; the browser records selected settings in exported results. Those settings do not retroactively change the historical evidence.
 
 `tools/verify_hypoplasticity.py` computes references with ordinary 3-by-3 Cartesian matrices in the source's tension-positive convention. It neither evaluates the DSL nor calls the generated tensor operations. Integrated references use fixed-step classical RK4 and successive grid comparisons up to 4,096 steps under unchanged, declared convergence thresholds.
 

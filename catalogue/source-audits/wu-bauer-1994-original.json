@@ -1,0 +1,213 @@
+{
+  "schema_version": "0.1",
+  "kind": "source-equation-fragment",
+  "id": "wu-bauer-1994-original-rate",
+  "status": "draft",
+  "complete_constitutive_model": false,
+  "reviewer": "Codex (AI-assisted equation transcription)",
+  "independent_review": "pending",
+  "publication_metadata": {
+    "DOI": "10.1002/nag.1610181203",
+    "title": [
+      "A simple hypoplastic constitutive model for sand"
+    ]
+  },
+  "source": {
+    "url": "https://doi.org/10.1002/nag.1610181203",
+    "sha256": "c8dfbc3cac0adc8bf3d273ec9e8a08ae9bff2273c696b354f1a4059c2f5bb050",
+    "local_filename": "Num Anal Meth Geomechanics - December 1994 - Wu - A simple hypoplastic constitutive model for sand.pdf",
+    "pdf_pages": 30,
+    "printed_pages": "833\u2013862"
+  },
+  "scope": "Instantaneous Eq. (21) in unresolved source algebra coordinates only. No Atlas sign map, stress update, spin integration, calibration converter, admissibility rule or public executable model.",
+  "visually_inspected_pdf_pages": [
+    2,
+    3,
+    8,
+    9,
+    10,
+    11,
+    14
+  ],
+  "coordinate_policy": "Symmetric tensors use Mandel order xx, yy, zz, sqrt(2)xy, sqrt(2)yz, sqrt(2)xz. Signs remain source algebra variables; do not assume Atlas compression-positive stretching.",
+  "inputs": {
+    "stress": {
+      "shape": "sym",
+      "unit": "Pa"
+    },
+    "stretching": {
+      "shape": "sym",
+      "unit": {
+        "si": [
+          0,
+          0,
+          -1,
+          0
+        ]
+      }
+    },
+    "c1": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "c2": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "c3": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "c4": {
+      "shape": "scalar",
+      "unit": "1"
+    }
+  },
+  "audit_domain": {
+    "requirements": [
+      "Finite six-component symmetric tensors and four finite coefficients",
+      "Nonzero stress trace",
+      "All intermediate and output values finite"
+    ],
+    "policy": "Algebra-only conditions; not physical admissibility. No pressure floor, eigenvalue guard or density interpolation is inferred."
+  },
+  "terms": [
+    {
+      "name": "stress_trace",
+      "expression": "trace(stress)",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Equation (21), printed p.840 (PDF 8)"
+    },
+    {
+      "name": "deviator",
+      "expression": "dev(stress)",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "Equation (22), printed p.840 (PDF 8)"
+    },
+    {
+      "name": "stretch_norm",
+      "expression": "norm(stretching)",
+      "shape": "scalar",
+      "unit": {
+        "si": [
+          0,
+          0,
+          -1,
+          0
+        ]
+      },
+      "locator": "Equation (21), printed p.840 (PDF 8)"
+    },
+    {
+      "name": "linear_rate",
+      "expression": "c1*stress_trace*stretching+c2*dot(stress,stretching)*stress/stress_trace",
+      "shape": "sym",
+      "unit": {
+        "si": [
+          1,
+          -1,
+          -3,
+          0
+        ]
+      },
+      "locator": "Equation (21), printed p.840 (PDF 8)"
+    },
+    {
+      "name": "nonlinear_rate",
+      "expression": "(c3*tensor_square(stress)+c4*tensor_square(deviator))*stretch_norm/stress_trace",
+      "shape": "sym",
+      "unit": {
+        "si": [
+          1,
+          -1,
+          -3,
+          0
+        ]
+      },
+      "locator": "Equation (21), printed p.840 (PDF 8)"
+    },
+    {
+      "name": "objective_rate",
+      "expression": "linear_rate+nonlinear_rate",
+      "shape": "sym",
+      "unit": {
+        "si": [
+          1,
+          -1,
+          -3,
+          0
+        ]
+      },
+      "locator": "Equation (21), printed p.840 (PDF 8)"
+    }
+  ],
+  "published_parameter_sets": [
+    {
+      "id": "karlsruhe-medium-loose",
+      "relative_density": 0.1,
+      "coefficients": [
+        -69.4,
+        -673.1,
+        -655.9,
+        699.6
+      ],
+      "locator": "Table II, printed p.843 (PDF 11)"
+    },
+    {
+      "id": "karlsruhe-medium-dense",
+      "relative_density": 0.95,
+      "coefficients": [
+        -101.2,
+        -962.1,
+        -877.3,
+        1229.2
+      ],
+      "locator": "Table II, printed p.843 (PDF 11)"
+    }
+  ],
+  "findings": [
+    {
+      "id": "sign-convention-conflict",
+      "status": "unresolved",
+      "locators": [
+        "Eq. (1), p.834 (PDF 2)",
+        "Prose preceding Section 2.1, p.835 (PDF 3)",
+        "Section 3.3.1, p.846 (PDF 14)"
+      ],
+      "observation": "Prose assigns negative tensile stress and elongative strain/rates. Eq. (1) uses the symmetric velocity gradient with a positive sign; the triaxial compression recipe uses axial stretching -1 and confining stress +100 kPa. A common source-to-Atlas sign map cannot be inferred consistently from all these statements."
+    },
+    {
+      "id": "calibration-c3-sign-conflict",
+      "status": "unresolved",
+      "locators": [
+        "Eqs. (25), (27), (28), (31), p.842 (PDF 10)"
+      ],
+      "observation": "At initial Poisson ratio zero, row 2 of Eq. (25) requires c3=c2, as does Eq. (31). Printed Eqs. (27) and (28) instead give c3=-c2 when their common denominator and numerator are nonzero. No corrected expression is selected."
+    },
+    {
+      "id": "friction-angle-domain-conflict",
+      "status": "unresolved",
+      "locators": [
+        "Eq. (33), p.843 (PDF 11)"
+      ],
+      "observation": "Printed arcsin((Rf+1)/(Rf-1)) has no real value for Rf>1. No reciprocal correction is silently applied."
+    }
+  ],
+  "integration_requirements": [
+    "Objective Jaumann rate from Eq. (3), p.835: objective=ordinary+stress*spin-spin*stress. Ordinary rate equals this fragment only at zero spin.",
+    "Rate-independent ODE, with no plastic multiplier or explicit yield activation; six stress components are the minimal constitutive state of Eq. (21).",
+    "No explicit void-ratio evolution appears in Eq. (21). Table II density-specific coefficient sets must remain distinct calibrations.",
+    "Nonzero initial stress trace required by the printed denominator; stress-free start and physical admissibility remain unresolved.",
+    "The norm makes the rate generally nondifferentiable at zero stretching; zero rate itself is defined at nonzero stress trace.",
+    "Section 3.3.1, p.846 uses forward Euler and solves for the radial strain rate at each constant-confinement step. Atlas adaptive integration would be a project choice with refinement evidence required."
+  ],
+  "unresolved": [
+    "Independent scientific review and resolution of printed conflicts",
+    "Physical stress domain and near-zero-trace limit",
+    "Canonical sign mapping and finite-spin transport",
+    "Full Appendix I component reconciliation and figure-specific reproduction",
+    "Calibration identity and independent experimental/reference trajectories"
+  ]
+}

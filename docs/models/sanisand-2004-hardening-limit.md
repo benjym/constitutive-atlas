@@ -1,6 +1,6 @@
 # SANISAND: finite products at infinite hardening
 
-**Derived algebra investigation; independent review pending.** This extends the [original-paper equation draft](sanisand-2004-original.md) by a one-sided mathematical limit. It is not an original printed equation, a finite-step integrator or a selection of reversal events. The [separate typed fragment](../../catalogue/source-audits/sanisand-2004-hardening-limit.json) preserves the pinned source and all unchanged expressions. Native compilation and executable tests remain held following the latest Cortex report; all checks here use Python.
+**Derived algebra investigation; independent review pending.** This extends the [original-paper equation draft](sanisand-2004-original.md) by a one-sided mathematical limit. It is not an original printed equation, a finite-step integrator or a selection of reversal events. The [separate typed fragment](../../catalogue/source-audits/sanisand-2004-hardening-limit.json) preserves the pinned source and all unchanged expressions. The initial checks below used Python during a native-build hold. Subsequent user-authorized standalone native checks are documented later in this dossier; the large external OpenSees build remains deferred.
 
 ## Rearrangement on a fixed smooth branch
 
