@@ -1,0 +1,137 @@
+{
+  "audit_version": "pm4sand3d-order-review-0.1",
+  "model": "pm4sand3d-1.0",
+  "status": "candidate-source-review-only",
+  "executable": false,
+  "independent_review": "pending",
+  "source": {
+    "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf",
+    "private_path": "/private/tmp/atlas-pm4sand-source/pm4sand3d-1.0-itasca.pdf",
+    "sha256": "6073a97a374d4b947e20a492b5009bbd01e3e5b0b773841b0f3b037c194f7453",
+    "bytes": 17267510,
+    "page_map": "one-based PDF page = printed page + 5",
+    "visually_inspected_printed_pages": [
+      26,
+      27,
+      31,
+      36,
+      71,
+      72,
+      76,
+      77,
+      79
+    ]
+  },
+  "verified": [
+    {
+      "id": "D-KP-CALLER-LAG",
+      "locator": "Sec3.2 pp71\u201372; Table3.2 p77 step13",
+      "fact": "Next D/Kp derived from completed corrected zone response, shared by subzones on next caller timestep."
+    },
+    {
+      "id": "NO-INTERNAL-SUBSTEP",
+      "locator": "Sec3.2 p72",
+      "fact": "Documented implementation explicit, without constitutive substepping."
+    },
+    {
+      "id": "REDUCTION-COMPLETION",
+      "locator": "Table3.2 p77 step9",
+      "fact": "Averaging follows final subzone."
+    },
+    {
+      "id": "REVERSAL-STRICT",
+      "locator": "Sec2.5 p26 Eq26",
+      "fact": "Reversal predicate is strict negative anchor projection."
+    },
+    {
+      "id": "FABRIC-REVERSAL-CADENCE",
+      "locator": "Sec2.8 p36",
+      "fact": "z_in sampled at same reversal times as initial/previous anchors, with different fabric history logic."
+    }
+  ],
+  "open_items": [
+    {
+      "id": "REV-EVENT-STAGE",
+      "locator": "Table3.2 p77 steps9\u201312; Sec2.5 p26 Eq26",
+      "detail": "Corrected averaged alpha/n snapshot and n normalization unresolved.",
+      "resolved": false
+    },
+    {
+      "id": "ANCHOR-ORDER",
+      "locator": "Table3.2 p77 steps19\u201320; Sec2.5 p26",
+      "detail": "Separate late updates; preserve pre-copy initial anchor; no duplicate reset inferred.",
+      "resolved": false
+    },
+    {
+      "id": "PREVIOUS-EQUALITY",
+      "locator": "Sec2.5 p27 Eq27; p31 Eq47",
+      "detail": "Strict versus nonstrict previous-anchor branch; reachable equality behavior unverified.",
+      "resolved": false
+    },
+    {
+      "id": "COINCIDENT-ANCHOR",
+      "locator": "p31 Eqs46\u201347; Table3.3 p79 step5",
+      "detail": "True-anchor denominator vanishes at current-alpha reset/initialization; ratio is 0/0 if apparent anchor also coincides, whose exact initialization is unresolved. C_gamma1 is in a different denominator.",
+      "resolved": false
+    },
+    {
+      "id": "LAG-READ-EDGES",
+      "locator": "Sec3.2 pp71\u201372; Table3.2 p77 step13",
+      "detail": "One-step D/Kp lag verified; exact coefficient-candidate old/new history inputs unresolved.",
+      "resolved": false
+    },
+    {
+      "id": "FABRIC-EPOCH",
+      "locator": "Sec2.8 p36; Table3.2 p77 steps14\u201316",
+      "detail": "Reversal fabric cadence verified; pre/post-fabric copy and D epoch/zero branch unresolved.",
+      "resolved": false
+    },
+    {
+      "id": "APPARENT-EXTREMA",
+      "locator": "Sec2.5 p26; Table3.3 p79 step5",
+      "detail": "Component loading direction, extrema update cadence and exact Min/Max-to-apparent mapping unresolved.",
+      "resolved": false
+    },
+    {
+      "id": "Z-ALPHA",
+      "locator": "Table3.3 p79 step7",
+      "detail": "Initialization verified; no consumer/evolution identified in this bounded review.",
+      "resolved": false
+    },
+    {
+      "id": "ROTATION-SCOPE",
+      "locator": "Table3.2 p77 step22",
+      "detail": "Listed sigma/alpha/r/z rotation does not give complete history tensor rotation.",
+      "resolved": false
+    },
+    {
+      "id": "VERSION-PAIRING",
+      "locator": "Manual cover June2026; existing source receipt May2026",
+      "detail": "Exact manual/source-code pairing unresolved.",
+      "resolved": false
+    }
+  ],
+  "engineering_requirements_not_source_facts": [
+    "Immutable caller parent for every outer trial",
+    "All retained state/lag/preparation/modes committed atomically only after complete acceptance",
+    "Failed/incomplete zone trial returns exact original parent",
+    "No durable events from rejected trial"
+  ],
+  "synthetic_evidence": {
+    "path": "evidence/synthetic-order-witnesses.json",
+    "tests": "tests/test_pm4_order_witnesses.py",
+    "test_groups": 4,
+    "result": "pass",
+    "is_pm4_reference_trajectory": false,
+    "is_actual_history_runtime_test": false,
+    "equality_state_reachability_verified": false
+  },
+  "capability_changes": [],
+  "unsupported": [
+    "PM4 kernel",
+    "Resolved phase DAG",
+    "Reference code equivalence",
+    "Large-spin history transport",
+    "Full FLAC mixed-discretization/hourglass scope"
+  ]
+}

@@ -128,3 +128,22 @@ if(EMSCRIPTEN)
 else()
   set_property(TEST atlas_python APPEND PROPERTY ENVIRONMENT "ATLAS_CLAY2013_SOLVER=$<TARGET_FILE:atlas_clay2013_solver>")
 endif()
+
+# Selected HP/extracted-ASBS+GIS has its own research catalogue and source identity.
+file(GLOB GIS2024_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research/gis2024/*.json")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/gis2024-generated" "${CMAKE_SOURCE_DIR}/models/research/gis2024"
+  DEPENDS ${GIS2024_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_custom_target(atlas_gis2024_models DEPENDS "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp")
+add_executable(atlas_gis2024_solver cpp/main.cpp)
+add_dependencies(atlas_gis2024_solver atlas_gis2024_models)
+target_include_directories(atlas_gis2024_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/gis2024-generated")
+if(EMSCRIPTEN)
+  target_compile_options(atlas_gis2024_solver PRIVATE -fexceptions)
+  set_target_properties(atlas_gis2024_solver PROPERTIES OUTPUT_NAME "gis2024" SUFFIX ".js")
+  target_link_options(atlas_gis2024_solver PRIVATE ${ATLAS_WASM_OPTIONS})
+else()
+  set_property(TEST atlas_python APPEND PROPERTY ENVIRONMENT "ATLAS_GIS2024_SOLVER=$<TARGET_FILE:atlas_gis2024_solver>")
+endif()

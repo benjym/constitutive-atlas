@@ -58,6 +58,12 @@ jobs:
           python -m tools.clay2013_integration_study --output "$RUNNER_TEMP/clay2013-native.json"
           node tools/test_clay2013_wasm.mjs --native-report "$RUNNER_TEMP/clay2013-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/clay2013-wasm.json"
           python -m tools.verify_clay2013_wasm "$RUNNER_TEMP/clay2013-wasm.json"
+          python -m tools.clay2013_nonisotropic_study --output "$RUNNER_TEMP/clay2013-path-native.json"
+          node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/clay2013-path-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/clay2013-path-wasm.json"
+          python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/clay2013-path-wasm.json"
+          python -m tools.gis2024_rate_study --output "$RUNNER_TEMP/gis2024-native.json"
+          node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/gis2024-native.json" --wasm build-wasm/gis2024.js --output "$RUNNER_TEMP/gis2024-wasm.json"
+          python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/gis2024-wasm.json"
           python tools/fetch_data.py --approved-only
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments

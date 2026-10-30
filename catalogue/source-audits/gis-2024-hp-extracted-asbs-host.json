@@ -1,0 +1,406 @@
+{
+  "schema_version": "0.1",
+  "kind": "source-equation-fragment",
+  "id": "hp-2024-extracted-asbs-supplied-gis-host",
+  "candidate_id": "hypoplastic-generalized-igs-2024",
+  "status": "draft",
+  "complete_constitutive_model": false,
+  "independent_review": "pending",
+  "source": {
+    "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+    "sha256": "39ec8356a26b82ae651be8feb4cdb3e49bb86ded9a850adc4c7eee5e9ec3bdc3",
+    "doi": "10.1016/j.compgeo.2024.106480",
+    "locators": [
+      "p3 Eqs8-12",
+      "p4 Eqs26-32",
+      "p12 AppendixB"
+    ]
+  },
+  "scope": "Instantaneous selected VW96 HP with extracted-ASBS host outputs E,m,C,S,f; no state update, GIS evolution, preparation root, calibration, reference-code equivalence or model admission. Parameters and current state are supplied explicitly.",
+  "inputs": {
+    "sigma": {
+      "shape": "sym",
+      "unit": "Pa"
+    },
+    "e": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "phi": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "hs": {
+      "shape": "scalar",
+      "unit": "Pa"
+    },
+    "ei0": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "ec0": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "ed0": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "n": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "alpha": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "beta": {
+      "shape": "scalar",
+      "unit": "1"
+    }
+  },
+  "terms": [
+    {
+      "name": "p",
+      "expression": "trace(sigma)/3",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "AppendixA p12, compression-positive mapping"
+    },
+    {
+      "name": "H",
+      "expression": "sigma/trace(sigma)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p12 B.4; invariant under source sign change"
+    },
+    {
+      "name": "Hdev",
+      "expression": "dev(dev(sigma))/trace(sigma)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p12 B.4; algebraically idempotent double deviator projection before normalization"
+    },
+    {
+      "name": "Q",
+      "expression": "dot(H,H)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.2-B.3"
+    },
+    {
+      "name": "j2",
+      "expression": "dot(Hdev,Hdev)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.7-B.8"
+    },
+    {
+      "name": "tanpsi",
+      "expression": "sqrt(3*j2)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.7"
+    },
+    {
+      "name": "cos3theta",
+      "expression": "select(j2>0,-sqrt(6)*cube_trace(Hdev)/j2**1.5,0)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.8; isotropic F limit uses no Lode value"
+    },
+    {
+      "name": "Fden",
+      "expression": "2+sqrt(2)*tanpsi*cos3theta",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.6 denominator"
+    },
+    {
+      "name": "Frad",
+      "expression": "tanpsi**2/8+(2-tanpsi**2)/Fden",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.6 square-root radicand"
+    },
+    {
+      "name": "F",
+      "expression": "sqrt(Frad)-tanpsi/(2*sqrt(2))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.6"
+    },
+    {
+      "name": "a",
+      "expression": "sqrt(3/8)*(3-sin(phi))/sin(phi)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.5; phi in radians"
+    },
+    {
+      "name": "compression",
+      "expression": "exp(-(3*p/hs)**n)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.11"
+    },
+    {
+      "name": "ei",
+      "expression": "ei0*compression",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.11"
+    },
+    {
+      "name": "ec",
+      "expression": "ec0*compression",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.11"
+    },
+    {
+      "name": "ed",
+      "expression": "ed0*compression",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.11"
+    },
+    {
+      "name": "fd",
+      "expression": "((e-ed)/(ec-ed))**alpha",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.10, NOT an inverse action"
+    },
+    {
+      "name": "fsden",
+      "expression": "3+a**2-a*sqrt(3)*((ei0-ed0)/(ec0-ed0))**alpha",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p12 B.9 denominator"
+    },
+    {
+      "name": "fs",
+      "expression": "hs/n*(ei/e)**beta*(1+ei)/ei*(3*p/hs)**(1-n)/fsden",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "p12 B.9"
+    },
+    {
+      "name": "N",
+      "expression": "-F*a/Q*(H+Hdev)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p12 B.3 with compression-positive N=-N_source"
+    },
+    {
+      "name": "inverse_den",
+      "expression": "F**2+a**2*Q",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "derived inverse action from p12 B.2"
+    },
+    {
+      "name": "B",
+      "expression": "Q/F**2*(N-a**2*H*dot(H,N)/inverse_den)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p4 Eq26; derived L inverse action; B=-B_source"
+    },
+    {
+      "name": "Bnorm",
+      "expression": "norm(B)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p3 Eqs9-10"
+    },
+    {
+      "name": "sigma_unit",
+      "expression": "sigma/norm(sigma)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p4 Eq27, compression-positive unit stress"
+    },
+    {
+      "name": "Caux",
+      "expression": "Q/F**2*(sigma_unit-a**2*H*dot(H,sigma_unit)/inverse_den)/fs",
+      "shape": "sym",
+      "unit": {
+        "si": [
+          -1,
+          1,
+          2,
+          0
+        ]
+      },
+      "locator": "p4 Eq27; Caux=-C_source; not scalar host C"
+    },
+    {
+      "name": "G",
+      "expression": "n/hs*trace(sigma_unit)*(3*p/hs)**(n-1)",
+      "shape": "scalar",
+      "unit": {
+        "si": [
+          -1,
+          1,
+          2,
+          0
+        ]
+      },
+      "locator": "p4 Eq28; G=-G_source"
+    },
+    {
+      "name": "ratio",
+      "expression": "(1+e)/e",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p4 Eq31 current-state substitution"
+    },
+    {
+      "name": "asbs_den",
+      "expression": "G-ratio*trace(Caux)",
+      "shape": "scalar",
+      "unit": {
+        "si": [
+          -1,
+          1,
+          2,
+          0
+        ]
+      },
+      "locator": "p4 Eqs25,31"
+    },
+    {
+      "name": "asbs_t",
+      "expression": "ratio*trace(B)/asbs_den",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "derived shorthand for p4 Eq31"
+    },
+    {
+      "name": "asbs_vector",
+      "expression": "B+asbs_t*Caux",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "norm-square rearrangement of p4 Eq31; all B,Caux,G mapped consistently"
+    },
+    {
+      "name": "asbs_norm",
+      "expression": "norm(asbs_vector)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq31 bracket equals norm(B+asbs_t*Caux)^2"
+    },
+    {
+      "name": "fdAstar",
+      "expression": "1/asbs_norm",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p4 Eq31 with sigmaA=sigma,eA=e; stable norm rearrangement"
+    },
+    {
+      "name": "m",
+      "expression": "-B/Bnorm",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p3 Eq9; Atlas compression-positive flow tensor"
+    },
+    {
+      "name": "C",
+      "expression": "Bnorm*fdAstar",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p3 Eq10"
+    },
+    {
+      "name": "S",
+      "expression": "fd/fdAstar",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "p3 Eq11"
+    },
+    {
+      "name": "f",
+      "expression": "0*I",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p3 Eq12, selected HP host"
+    }
+  ],
+  "actions": {
+    "L": {
+      "argument": {
+        "name": "X",
+        "shape": "sym",
+        "unit": "1"
+      },
+      "expression": "(F**2*X+a**2*H*dot(H,X))/Q",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "p12 B.2"
+    },
+    "L_inverse": {
+      "argument": {
+        "name": "X",
+        "shape": "sym",
+        "unit": "1"
+      },
+      "expression": "Q/F**2*(X-a**2*H*dot(H,X)/inverse_den)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "derived identity-plus-dyadic inverse of p12 B.2"
+    },
+    "E": {
+      "argument": {
+        "name": "X",
+        "shape": "sym",
+        "unit": "1"
+      },
+      "expression": "fs*(F**2*X+a**2*H*dot(H,X))/Q",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "p3 Eq8 and p12 B.2"
+    }
+  },
+  "outputs": [
+    "m",
+    "C",
+    "S",
+    "f"
+  ],
+  "derived_action_output": "E represented to GIS test runner as explicit 6x6 Mandel action matrix",
+  "conventions": {
+    "sigma": "effective compression-positive Pa",
+    "h_and_de": "compression-positive in paired GIS fragment",
+    "phi": "radians, source Table1 printed degrees",
+    "hs": "Pa, source Table1 printed kPa",
+    "mapping": "H and L unchanged; N,B,Caux,G are negatives of corresponding source auxiliaries. Both asbs_t and Eq31 norm bracket unchanged. m_atlas=-m_source.",
+    "B10": "fd density factor, not inverse"
+  },
+  "audit_domain": {
+    "requirements": [
+      "finite exact scalar/tensor inputs; no bool coercion",
+      "hs>0;0<n<1;0<phi<pi/2;alpha>0;beta>=0",
+      "0<ed0<ec0<ei0; e>0",
+      "p>0;ed<e<ei",
+      "Fden>0;Frad>0;F>0;fsden>0;fs>0",
+      "inverse_den>0; Bnorm>0; asbs_den nonzero; asbs_norm>0",
+      "Q,compression,ei,ec,ed,fd,fdAstar,C,S strictly positive and finite in the selected open-density audit domain",
+      "raw Lode cosine within64 binary64 ulps of[-1,1], unclipped; nonisotropic input with unresolved j2==0 rejects"
+    ],
+    "policy": "Bounded audit scope, not complete physical admissibility. No pressure/norm floor, Lode clipping, denominator regularization, tensile-eigenvalue restriction or endpoint projection."
+  },
+  "isotropic_limit": {
+    "cos3theta": "undefined at exact isotropy; stored diagnostic zero only because tanpsi=0 gives unique F=1",
+    "F": 1,
+    "L_on_X": "3*X+(a^2/3)*trace(X)*I",
+    "B": "-a/(3+a^2)*I",
+    "m": "I/sqrt(3)"
+  },
+  "asbs_projection": "Current sigma,e substituted into Eq31 to evaluate fdAstar; not a numerical root for an actual ASBS reference state. No silent S=Y substitution.",
+  "repo_paths": {
+    "evaluator": "tools/inspect_gis2024_hp_host.py",
+    "reference": "tools/reference_gis2024_hp_host.py",
+    "tests": "tests/test_gis_hp_host.py"
+  }
+}
