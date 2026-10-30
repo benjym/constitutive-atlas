@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from atlas.baseline import CHECK_IDS, artifact, dump, verify
+from atlas.baseline import CHECK_IDS, artifact, catalogue_record, dump, verify
 from atlas.model import ROOT
 
 
@@ -68,3 +68,12 @@ class BaselineTests(unittest.TestCase):
     def test_committed_baseline_records(self):
         for path in (ROOT/'catalogue/baselines').glob('*/manifest.json'):
             with self.subTest(baseline=path.parent.name): verify(path)
+
+    def test_model_identity_does_not_assume_matching_filename(self):
+        source=self.root/'source';(source/'definitions').mkdir(parents=True);(source/'generated').mkdir()
+        dump(source/'definitions/clock.json',dict(id='test-clock'))
+        dump(source/'generated/models.json',dict(sha256='a'*64,models=[dict(id='test-clock',status='draft')]))
+        result=catalogue_record(source,'generated','definitions')
+        self.assertEqual(result['models'][0]['path'],'definitions/clock.json')
+        dump(source/'definitions/second.json',dict(id='test-clock'))
+        with self.assertRaises(ValueError): catalogue_record(source,'generated','definitions')

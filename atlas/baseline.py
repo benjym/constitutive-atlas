@@ -17,6 +17,7 @@ import sys
 import tarfile
 import tempfile
 import time
+import traceback
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -118,6 +119,21 @@ def verify(path):
     return record
 
 
+
+def catalogue_record(source, generated, definitions):
+    catalogue = json.loads((source/generated/'models.json').read_text())
+    paths = {}
+    for path in (source/definitions).glob('*.json'):
+        ident = json.loads(path.read_text())['id']
+        if ident in paths:
+            raise ValueError('Repeated model identity in '+definitions)
+        paths[ident] = path
+    if set(paths) != {m['id'] for m in catalogue['models']}:
+        raise ValueError('Generated/source catalogue identities differ in '+definitions)
+    return dict(sha256=catalogue['sha256'], models=[dict(id=m['id'], status=m['status'],
+        **artifact(source,paths[m['id']])) for m in catalogue['models']])
+
+
 def capture(ref, destination):
     # Resolve before creating the output directory; never copy a dirty checkout.
     commit = subprocess.check_output(['git', 'rev-parse', '--verify', '--end-of-options', ref+'^{commit}'], cwd=ROOT, text=True).strip()
@@ -207,6 +223,10 @@ def capture(ref, destination):
                 ('package-website',[sys.executable,'tools/build_web.py'])]
             for ident,command in commands:
                 run(ident, command, source, env)
+                if ident == 'elasticity-closed-forms':
+                    shutil.copyfile(source/'artifacts/elasticity-results.json', destination/'elasticity-results.json')
+                    record['reports'].append(artifact(destination,destination/'elasticity-results.json'))
+                    save()
             # Capture the actual configured compiler, rather than assuming $CXX.
             cache = (source/'build/CMakeCache.txt').read_text()
             compiler = next(line.split('=',1)[1] for line in cache.splitlines() if line.startswith('CMAKE_CXX_COMPILER:FILEPATH='))
@@ -222,20 +242,20 @@ def capture(ref, destination):
                 record['configuration'][scope] = values
             scopes = [('public','build/generated','models'),('temporal-fixtures','build/time-generated','tests/fixtures/time'),('research','build/research-generated','models/research')]
             for scope,generated,definitions in scopes:
-                catalogue = json.loads((source/generated/'models.json').read_text())
-                record['catalogues'][scope] = dict(sha256=catalogue['sha256'], models=[dict(id=m['id'], status=m['status'], **artifact(source,source/definitions/(m['id']+'.json'))) for m in catalogue['models']])
+                record['catalogues'][scope] = catalogue_record(source,generated,definitions)
             # Read-only consistency assertions supplement the parity executables.
             consistency = [sys.executable,'-c',
                 "import json; from pathlib import Path; a=json.loads(Path('build/generated/models.json').read_text()); b=json.loads(Path('build-wasm/generated/models.json').read_text()); c=json.loads(Path('web/dist/models.json').read_text()); assert a==b==c; x=json.loads(Path('catalogue/manifest.json').read_text()); y=json.loads(Path('web/dist/catalogue.json').read_text()); assert x==y; assert {m['id'] for m in a['models']}=={m['id'] for m in x['models'] if m['executable']}; print('Native, Wasm, packaged definitions and public executable identities agree.')"]
             run('catalogue-consistency',consistency,source,env)
             for name in ['build/atlas_solver','build/atlas_time_solver','build/atlas_research_solver','build-wasm/atlas.js','build-wasm/atlas.wasm','build-wasm/time-fixtures.js','build-wasm/time-fixtures.wasm','build-wasm/research.js','build-wasm/research.wasm']:
                 record['build_products'][name] = digest(source/name)
-            shutil.copyfile(source/'artifacts/elasticity-results.json', destination/'elasticity-results.json')
-            record['reports'].append(artifact(destination,destination/'elasticity-results.json'))
             record['outcome'] = 'passed'
             save()
             verify(manifest)
     except BaseException:
+        error_log = destination/'controller-error.txt'
+        error_log.write_text(traceback.format_exc())
+        record['reports'].append(artifact(destination,error_log))
         record['outcome'] = 'failed'
         save()
         raise
