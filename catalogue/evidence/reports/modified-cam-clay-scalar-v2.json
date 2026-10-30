@@ -1,0 +1,5047 @@
+{
+  "kind": "plasticity-verification-report",
+  "model": "modified-cam-clay",
+  "catalogue_hash": "33df647876c65d6607f7fa05a659adec4488246e24ed751a19e6d52417ac034b",
+  "oracle": "Closed-form Drucker-Prager and scalar-reduced MCC references, with recorded-partition replay; no DSL evaluation or shared nonlinear solve.",
+  "tolerances": {
+    "stress_absolute_Pa": 0.0001,
+    "other_state_absolute": 1e-09,
+    "relative": 1e-09
+  },
+  "runtime": {
+    "python": "3.14.7",
+    "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "solver_sha256": "4359838907ecff6048c145a69d257b91d5fda7d00226745fc0ea59403f25533f"
+  },
+  "cases": [
+    {
+      "id": "elastic-isotropic-compression",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        114563.03186838809,
+        114563.03186838809,
+        114563.03186838809,
+        0.0,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        200000.0,
+        0
+      ],
+      "actual": [
+        114563.03186838808,
+        114563.03186838808,
+        114563.03186838808,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 4,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 6.782116705590235e-08,
+      "unpartitioned_reference": {
+        "expected": [
+          114563.03186838809,
+          114563.03186838809,
+          114563.03186838809,
+          0.0,
+          0.0,
+          0.0,
+          0.6949076423557341,
+          200000.0,
+          0
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 6.782116705590235e-08,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "elastic-isotropic-unloading",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "-0.001,-0.001,-0.001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        -0.001,
+        -0.001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        88661.67271808675,
+        88661.67271808675,
+        88661.67271808675,
+        0.0,
+        0.0,
+        0.0,
+        0.7051076576557409,
+        200000.0,
+        0
+      ],
+      "actual": [
+        88661.67271808675,
+        88661.67271808675,
+        88661.67271808675,
+        0,
+        0,
+        0,
+        0.7051076576557409,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 4,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 0.0,
+      "unpartitioned_reference": {
+        "expected": [
+          88661.67271808675,
+          88661.67271808675,
+          88661.67271808675,
+          0.0,
+          0.0,
+          0.0,
+          0.7051076576557409,
+          200000.0,
+          0
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.0,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "elastic-shear-3",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0.00050000000000000001,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0.0005,
+        0,
+        0
+      ],
+      "expected": [
+        100000.0,
+        100000.0,
+        100000.0,
+        2549.9999999999995,
+        0.0,
+        0.0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        100000,
+        100000,
+        100000,
+        2550,
+        0,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.434396400648114e-09,
+      "unpartitioned_reference": {
+        "expected": [
+          100000.0,
+          100000.0,
+          100000.0,
+          2550.0,
+          0.0,
+          0.0,
+          0.7,
+          200000.0,
+          0
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.0,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "elastic-shear-4",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0.00050000000000000001,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0.0005,
+        0
+      ],
+      "expected": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        2549.9999999999995,
+        0.0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        100000,
+        100000,
+        100000,
+        0,
+        2550,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.434396400648114e-09,
+      "unpartitioned_reference": {
+        "expected": [
+          100000.0,
+          100000.0,
+          100000.0,
+          0.0,
+          2550.0,
+          0.0,
+          0.7,
+          200000.0,
+          0
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.0,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "elastic-shear-5",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0,0.00050000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.0005
+      ],
+      "expected": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        2549.9999999999995,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        2550,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.434396400648114e-09,
+      "unpartitioned_reference": {
+        "expected": [
+          100000.0,
+          100000.0,
+          100000.0,
+          0.0,
+          0.0,
+          2550.0,
+          0.7,
+          200000.0,
+          0
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.0,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "elastic-mixed",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0.00029999999999999997,-0.0001,0.00020000000000000001,0.00020000000000000001,-0.0001,0.00014999999999999999"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0003,
+        -0.0001,
+        0.0002,
+        0.0002,
+        -0.0001,
+        0.00015
+      ],
+      "expected": [
+        102593.0443283799,
+        100518.60886567597,
+        102074.43546270391,
+        1037.217731351959,
+        -518.6088656759795,
+        777.9132985139692,
+        0.6993201359818684,
+        200000.0,
+        0
+      ],
+      "actual": [
+        102593.0443283799,
+        100518.60886567598,
+        102074.43546270391,
+        1037.2177313519592,
+        -518.6088656759796,
+        777.9132985139692,
+        0.6993201359818684,
+        200000,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 4,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 7.257139529685712e-08,
+      "unpartitioned_reference": {
+        "expected": [
+          102593.0443283799,
+          100518.60886567597,
+          102074.43546270391,
+          1037.2177313519592,
+          -518.6088656759796,
+          777.9132985139693,
+          0.6993201359818684,
+          200000.0,
+          0
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 7.257139529685712e-08,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "normally-consolidated-volume-0.001",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.00033333333333333332,0.00033333333333333332,0.00033333333333333332,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0003333333333333333,
+        0.0003333333333333333,
+        0.0003333333333333333,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        100853.49231643343,
+        100853.49231643343,
+        100853.49231643343,
+        0.0,
+        0.0,
+        0.0,
+        0.6983008497167376,
+        100853.49231643343,
+        0.0005513212857323413
+      ],
+      "actual": [
+        100853.49231643345,
+        100853.49231643345,
+        100853.49231643345,
+        0,
+        0,
+        0,
+        0.6983008497167376,
+        100853.49231643343,
+        0.0005513212857323383
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 10,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 7.24503968566358e-08,
+      "unpartitioned_reference": {
+        "expected": [
+          100853.49231643343,
+          100853.49231643343,
+          100853.49231643343,
+          0,
+          0,
+          0,
+          0.6983008497167376,
+          100853.49231643343,
+          0.0005513212857323413
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 7.24503968566358e-08,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "normally-consolidated-volume-0.003",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        102581.56273563087,
+        102581.56273563087,
+        102581.56273563087,
+        0.0,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        102581.56273563085,
+        0.0016288399563306416
+      ],
+      "actual": [
+        102581.56273563323,
+        102581.56273563323,
+        102581.56273563323,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        102581.56273563027,
+        0.0016288399563301964
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 10,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.1636845106540383e-05,
+      "unpartitioned_reference": {
+        "expected": [
+          102581.56273563087,
+          102581.56273563087,
+          102581.56273563087,
+          0,
+          0,
+          0,
+          0.6949076423557341,
+          102581.56273563087,
+          0.0016288399563306418
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.1636845106540383e-05,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "normally-consolidated-volume-0.009",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.0029999999999999996,0.0029999999999999996,0.0029999999999999996,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0029999999999999996,
+        0.0029999999999999996,
+        0.0029999999999999996,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        107937.63886763382,
+        107937.63886763382,
+        107937.63886763382,
+        0.0,
+        0.0,
+        0.0,
+        0.6847686439139022,
+        107937.63886763381,
+        0.0046670624569440525
+      ],
+      "actual": [
+        107937.63886763426,
+        107937.63886763426,
+        107937.63886763426,
+        0,
+        0,
+        0,
+        0.6847686439139022,
+        107937.6388676337,
+        0.004667062456943951
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 2.099463373867121e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          107937.63886763382,
+          107937.63886763382,
+          107937.63886763382,
+          0,
+          0,
+          0,
+          0.6847686439139022,
+          107937.63886763382,
+          0.004667062456944053
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 2.099463373867121e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "overconsolidated-yield-crossing",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0.01,0.01,0.01,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0.01,
+        0.01,
+        0.01,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        233234.6915784339,
+        233234.6915784339,
+        233234.6915784339,
+        0.0,
+        0.0,
+        0.0,
+        0.6497574070324639,
+        233234.69157843394,
+        0.007441827136905644
+      ],
+      "actual": [
+        233234.6915784347,
+        233234.6915784347,
+        233234.6915784347,
+        0,
+        0,
+        0,
+        0.6497574070324639,
+        233234.69157843373,
+        0.0074418271369055475
+      ],
+      "expected_failure": false,
+      "reference_steps": 2,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 28,
+        "substeps": 2,
+        "rejected": 1,
+        "increment_fractions": [
+          0.5,
+          0.5
+        ]
+      },
+      "max_tolerance_ratio": 2.358108090756374e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          235946.07738820912,
+          235946.07738820912,
+          235946.07738820912,
+          0,
+          0,
+          0,
+          0.6497574070324639,
+          235946.07738820912,
+          0.009436056113859496
+        ],
+        "passed": false,
+        "max_tolerance_ratio": 8070895.873691623,
+        "applicable": false,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "critical-state-compression",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "180000,60000,60000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0.001,-0.00050000000000000001,-0.00050000000000000001,0,0,0"
+      ],
+      "initial": [
+        180000.0,
+        60000.0,
+        60000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        -0.0005,
+        -0.0005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        180000.0,
+        60000.0,
+        60000.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        200000.0,
+        0.0008333333333333333
+      ],
+      "actual": [
+        180000.00000000003,
+        59999.999999999985,
+        59999.999999999985,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0.0008333333333333276
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.0394225163119179e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          180000.0,
+          60000.0,
+          60000.0,
+          0,
+          0,
+          0,
+          0.7,
+          200000.0,
+          0.0008333333333333334
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.0394225163119179e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "critical-state-extension",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "20000,140000,140000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "-0.001,0.00050000000000000001,0.00050000000000000001,0,0,0"
+      ],
+      "initial": [
+        20000.0,
+        140000.0,
+        140000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        0.0005,
+        0.0005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        20000.0,
+        140000.0,
+        140000.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        200000.0,
+        0.0008333333333333333
+      ],
+      "actual": [
+        19999.999999999978,
+        140000,
+        140000,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0.0008333333333333293
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.8189894035458565e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          20000.0,
+          140000.0,
+          140000.0,
+          0,
+          0,
+          0,
+          0.7,
+          200000.0,
+          0.0008333333333333334
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.8189894035458565e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "preload-for-unloading",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        102581.56273563087,
+        102581.56273563087,
+        102581.56273563087,
+        0.0,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        102581.56273563085,
+        0.0016288399563306416
+      ],
+      "actual": [
+        102581.56273563323,
+        102581.56273563323,
+        102581.56273563323,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        102581.56273563027,
+        0.0016288399563301964
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 10,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.1636845106540383e-05,
+      "unpartitioned_reference": {
+        "expected": [
+          102581.56273563087,
+          102581.56273563087,
+          102581.56273563087,
+          0,
+          0,
+          0,
+          0.6949076423557341,
+          102581.56273563087,
+          0.0016288399563306418
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.1636845106540383e-05,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "elastic-unloading-keeps-pc",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "102581.56273563087,102581.56273563087,102581.56273563087,0,0,0,0.6949076423557341,102581.56273563085,0.0016288399563306416",
+        "--strain",
+        "-0.00050000000000000001,-0.00050000000000000001,-0.00050000000000000001,0,0,0"
+      ],
+      "initial": [
+        102581.56273563087,
+        102581.56273563087,
+        102581.56273563087,
+        0.0,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        102581.56273563085,
+        0.0016288399563306416
+      ],
+      "strain_increment": [
+        -0.0005,
+        -0.0005,
+        -0.0005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        96442.56464638503,
+        96442.56464638503,
+        96442.56464638503,
+        0.0,
+        0.0,
+        0.0,
+        0.6974519115441087,
+        102581.56273563085,
+        0
+      ],
+      "actual": [
+        96442.56464638503,
+        96442.56464638503,
+        96442.56464638503,
+        0,
+        0,
+        0,
+        0.6974519115441087,
+        102581.56273563085,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 4,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 0.0,
+      "unpartitioned_reference": {
+        "expected": [
+          96442.56464638503,
+          96442.56464638503,
+          96442.56464638503,
+          0.0,
+          0.0,
+          0.0,
+          0.6974519115441087,
+          102581.56273563085,
+          0
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.0,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "invalid-tensile-start",
+      "method": "exact-rollback",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "-100000,-100000,-100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0,0"
+      ],
+      "initial": [
+        -100000.0,
+        -100000.0,
+        -100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        -100000.0,
+        -100000.0,
+        -100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        -100000,
+        -100000,
+        -100000,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": true,
+      "reference_steps": 1,
+      "returncode": 1,
+      "solver_ok": false,
+      "message": "invalid parameters, inadmissible initial state or strain increment",
+      "diagnostics": {
+        "iterations": 0,
+        "substeps": 0,
+        "rejected": 0,
+        "increment_fractions": []
+      },
+      "max_tolerance_ratio": null,
+      "unpartitioned_reference": null,
+      "passed": true
+    },
+    {
+      "id": "outside-yield-start",
+      "method": "exact-rollback",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "300000,300000,300000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0,0"
+      ],
+      "initial": [
+        300000.0,
+        300000.0,
+        300000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        300000.0,
+        300000.0,
+        300000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        300000,
+        300000,
+        300000,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": true,
+      "reference_steps": 1,
+      "returncode": 1,
+      "solver_ok": false,
+      "message": "invalid parameters, inadmissible initial state or strain increment",
+      "diagnostics": {
+        "iterations": 0,
+        "substeps": 0,
+        "rejected": 0,
+        "increment_fractions": []
+      },
+      "max_tolerance_ratio": null,
+      "unpartitioned_reference": null,
+      "passed": true
+    },
+    {
+      "id": "invalid-compression-indices",
+      "method": "exact-rollback",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.040000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,200000,0",
+        "--strain",
+        "0,0,0,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "actual": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0,
+        0.7,
+        200000,
+        0
+      ],
+      "expected_failure": true,
+      "reference_steps": 1,
+      "returncode": 1,
+      "solver_ok": false,
+      "message": "invalid parameters, inadmissible initial state or strain increment",
+      "diagnostics": {
+        "iterations": 0,
+        "substeps": 0,
+        "rejected": 0,
+        "increment_fractions": []
+      },
+      "max_tolerance_ratio": null,
+      "unpartitioned_reference": null,
+      "passed": true
+    },
+    {
+      "id": "general-wet-V-0.003-direction0",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.039,-0.021000000000000001,-0.021000000000000001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.039,
+        -0.021,
+        -0.021,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        110040.4759536456,
+        46456.46760315211,
+        46456.46760315211,
+        0.0,
+        0.0,
+        0.0,
+        0.7051076576557409,
+        109152.1036915146,
+        0.021822136845451427
+      ],
+      "actual": [
+        110040.4759536457,
+        46456.46760315208,
+        46456.46760315208,
+        0,
+        0,
+        0,
+        0.7051076576557409,
+        109152.10369151458,
+        0.021822136845451357
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.84970366478547e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          110040.4759536456,
+          46456.46760315211,
+          46456.46760315211,
+          0.0,
+          0.0,
+          0.0,
+          0.7051076576557409,
+          109152.1036915146,
+          0.021822136845451427
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 4.84970366478547e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V-0.003-direction1",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "-0.041000000000000002,0.019,0.019,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.041,
+        0.019,
+        0.019,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        25261.798152987612,
+        88845.8065034811,
+        88845.8065034811,
+        0.0,
+        0.0,
+        0.0,
+        0.7051076576557409,
+        109152.1036915146,
+        0.021822136845451427
+      ],
+      "actual": [
+        25261.79815298754,
+        88845.80650348116,
+        88845.80650348116,
+        0,
+        0,
+        0,
+        0.7051076576557409,
+        109152.10369151458,
+        0.02182213684545136
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 5.808600643986433e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          25261.798152987612,
+          88845.8065034811,
+          88845.8065034811,
+          0.0,
+          0.0,
+          0.0,
+          0.7051076576557409,
+          109152.1036915146,
+          0.021822136845451427
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 5.808600643986433e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V-0.003-direction2",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "-0.001,-0.001,-0.001,0.040000000000000001,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        -0.001,
+        -0.001,
+        0.04,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        69325.65654285377,
+        69325.65654285377,
+        69325.65654285377,
+        50852.738769768475,
+        0.0,
+        0.0,
+        0.7051076576557409,
+        108182.13793903928,
+        0.016819848745750196
+      ],
+      "actual": [
+        69325.65654285377,
+        69325.65654285377,
+        69325.65654285377,
+        50852.73876976848,
+        0,
+        0,
+        0.7051076576557409,
+        108182.13793903928,
+        0.01681984874575019
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.8232187718434435e-08,
+      "unpartitioned_reference": {
+        "expected": [
+          69325.65654285377,
+          69325.65654285377,
+          69325.65654285377,
+          50852.738769768475,
+          0.0,
+          0.0,
+          0.7051076576557409,
+          108182.13793903928,
+          0.016819848745750196
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 4.8232187718434435e-08,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V-0.003-direction3",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "-0.001,-0.001,-0.001,0,0.040000000000000001,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        -0.001,
+        -0.001,
+        0.0,
+        0.04,
+        0.0
+      ],
+      "expected": [
+        69325.65654285377,
+        69325.65654285377,
+        69325.65654285377,
+        0.0,
+        50852.738769768475,
+        0.0,
+        0.7051076576557409,
+        108182.13793903928,
+        0.016819848745750196
+      ],
+      "actual": [
+        69325.65654285377,
+        69325.65654285377,
+        69325.65654285377,
+        0,
+        50852.73876976848,
+        0,
+        0.7051076576557409,
+        108182.13793903928,
+        0.01681984874575019
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.8232187718434435e-08,
+      "unpartitioned_reference": {
+        "expected": [
+          69325.65654285377,
+          69325.65654285377,
+          69325.65654285377,
+          0.0,
+          50852.738769768475,
+          0.0,
+          0.7051076576557409,
+          108182.13793903928,
+          0.016819848745750196
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 4.8232187718434435e-08,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V-0.003-direction4",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "-0.001,-0.001,-0.001,0,0,0.040000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        -0.001,
+        -0.001,
+        0.0,
+        0.0,
+        0.04
+      ],
+      "expected": [
+        69325.65654285377,
+        69325.65654285377,
+        69325.65654285377,
+        0.0,
+        0.0,
+        50852.738769768475,
+        0.7051076576557409,
+        108182.13793903928,
+        0.016819848745750196
+      ],
+      "actual": [
+        69325.65654285377,
+        69325.65654285377,
+        69325.65654285377,
+        0,
+        0,
+        50852.73876976848,
+        0.7051076576557409,
+        108182.13793903928,
+        0.01681984874575019
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.8232187718434435e-08,
+      "unpartitioned_reference": {
+        "expected": [
+          69325.65654285377,
+          69325.65654285377,
+          69325.65654285377,
+          0.0,
+          0.0,
+          50852.738769768475,
+          0.7051076576557409,
+          108182.13793903928,
+          0.016819848745750196
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 4.8232187718434435e-08,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V-0.003-direction5",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.039,-0.021000000000000001,-0.021000000000000001,0.012,-0.0080000000000000002,0.0040000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.039,
+        -0.021,
+        -0.021,
+        0.012,
+        -0.008,
+        0.004
+      ],
+      "expected": [
+        108011.66776953598,
+        46957.19600228046,
+        46957.19600228046,
+        12210.894353451105,
+        -8140.59623563407,
+        4070.298117817035,
+        0.7051076576557409,
+        109357.51861458365,
+        0.023076313467684285
+      ],
+      "actual": [
+        108011.6677695363,
+        46957.19600228038,
+        46957.19600228038,
+        12210.894353451182,
+        -8140.596235634122,
+        4070.298117817061,
+        0.7051076576557409,
+        109357.51861458362,
+        0.023076313467684077
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.539058546363699e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          108011.66776953598,
+          46957.19600228046,
+          46957.19600228046,
+          12210.894353451105,
+          -8140.59623563407,
+          4070.298117817035,
+          0.7051076576557409,
+          109357.51861458365,
+          0.023076313467684285
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.539058546363699e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.0-direction0",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.040000000000000001,-0.02,-0.02,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.04,
+        -0.02,
+        -0.02,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        113386.20736001183,
+        49445.40108003813,
+        49445.40108003813,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        110883.72351103384,
+        0.02204201672950245
+      ],
+      "actual": [
+        113386.20736001352,
+        49445.40108003778,
+        49445.40108003778,
+        0,
+        0,
+        0,
+        0.7,
+        110883.72351103365,
+        0.022042016729501446
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 7.910643276219956e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          113386.20736001183,
+          49445.40108003813,
+          49445.40108003813,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          110883.72351103384,
+          0.02204201672950245
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 7.910643276219956e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.0-direction1",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "-0.040000000000000001,0.02,0.02,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.04,
+        0.02,
+        0.02,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        28131.798986713562,
+        92072.60526668726,
+        92072.60526668726,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        110883.72351103384,
+        0.02204201672950245
+      ],
+      "actual": [
+        28131.798986712536,
+        92072.60526668828,
+        92072.60526668828,
+        0,
+        0,
+        0,
+        0.6999999999999998,
+        110883.72351103365,
+        0.022042016729501443
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 8.006677746764824e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          28131.798986713562,
+          92072.60526668726,
+          92072.60526668726,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          110883.72351103384,
+          0.02204201672950245
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 8.006677746764824e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.0-direction2",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0,0,0,0.040000000000000001,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        72722.89182666002,
+        72722.89182666002,
+        72722.89182666002,
+        50898.4263424944,
+        0.0,
+        0.0,
+        0.7,
+        109830.78836649869,
+        0.017208494301762967
+      ],
+      "actual": [
+        72722.89182666001,
+        72722.89182666001,
+        72722.89182666001,
+        50898.42634249432,
+        0,
+        0,
+        0.6999999999999998,
+        109830.7883664987,
+        0.017208494301763
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 5.303934288510134e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          72722.89182666002,
+          72722.89182666002,
+          72722.89182666002,
+          50898.4263424944,
+          0.0,
+          0.0,
+          0.7,
+          109830.78836649869,
+          0.017208494301762967
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 5.303934288510134e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.0-direction3",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0,0,0,0,0.040000000000000001,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04,
+        0.0
+      ],
+      "expected": [
+        72722.89182666002,
+        72722.89182666002,
+        72722.89182666002,
+        0.0,
+        50898.4263424944,
+        0.0,
+        0.7,
+        109830.78836649869,
+        0.017208494301762967
+      ],
+      "actual": [
+        72722.89182666001,
+        72722.89182666001,
+        72722.89182666001,
+        0,
+        50898.42634249432,
+        0,
+        0.6999999999999998,
+        109830.7883664987,
+        0.017208494301763
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 5.303934288510134e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          72722.89182666002,
+          72722.89182666002,
+          72722.89182666002,
+          0.0,
+          50898.4263424944,
+          0.0,
+          0.7,
+          109830.78836649869,
+          0.017208494301762967
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 5.303934288510134e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.0-direction4",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0,0,0,0,0,0.040000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.04
+      ],
+      "expected": [
+        72722.89182666002,
+        72722.89182666002,
+        72722.89182666002,
+        0.0,
+        0.0,
+        50898.4263424944,
+        0.7,
+        109830.78836649869,
+        0.017208494301762967
+      ],
+      "actual": [
+        72722.89182666001,
+        72722.89182666001,
+        72722.89182666001,
+        0,
+        0,
+        50898.42634249432,
+        0.6999999999999998,
+        109830.7883664987,
+        0.017208494301763
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 5.303934288510134e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          72722.89182666002,
+          72722.89182666002,
+          72722.89182666002,
+          0.0,
+          0.0,
+          50898.4263424944,
+          0.7,
+          109830.78836649869,
+          0.017208494301762967
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 5.303934288510134e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.0-direction5",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.040000000000000001,-0.02,-0.02,0.012,-0.0080000000000000002,0.0040000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.04,
+        -0.02,
+        -0.02,
+        0.012,
+        -0.008,
+        0.004
+      ],
+      "expected": [
+        111323.61003038826,
+        49872.19620239413,
+        49872.19620239413,
+        12290.282765598824,
+        -8193.52184373255,
+        4096.760921866275,
+        0.7,
+        111108.35574882045,
+        0.023256214523851914
+      ],
+      "actual": [
+        111323.61003039191,
+        49872.19620239338,
+        49872.19620239338,
+        12290.282765599704,
+        -8193.521843733135,
+        4096.7609218665675,
+        0.7,
+        111108.35574882005,
+        0.02325621452384956
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.7284063630158728e-05,
+      "unpartitioned_reference": {
+        "expected": [
+          111323.61003038826,
+          49872.19620239413,
+          49872.19620239413,
+          12290.282765598824,
+          -8193.52184373255,
+          4096.760921866275,
+          0.7,
+          111108.35574882045,
+          0.023256214523851914
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.7284063630158728e-05,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.003-direction0",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.041000000000000002,-0.019,-0.019,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.041,
+        -0.019,
+        -0.019,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        116805.36578985261,
+        52564.637272204105,
+        52564.637272204105,
+        0.0,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        112717.7645188019,
+        0.02227138966032078
+      ],
+      "actual": [
+        116805.36578988114,
+        52564.63727219934,
+        52564.63727219934,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        112717.7645187986,
+        0.02227138966030463
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 0.00013155464922969155,
+      "unpartitioned_reference": {
+        "expected": [
+          116805.36578985261,
+          52564.637272204105,
+          52564.637272204105,
+          0.0,
+          0.0,
+          0.0,
+          0.6949076423557341,
+          112717.7645188019,
+          0.02227138966032078
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.00013155464922969155,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.003-direction1",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "-0.039,0.021000000000000001,0.021000000000000001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.039,
+        0.021,
+        0.021,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        31151.061099654602,
+        95391.78961730312,
+        95391.78961730312,
+        0.0,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        112717.7645188019,
+        0.02227138966032078
+      ],
+      "actual": [
+        31151.061099638733,
+        95391.78961732054,
+        95391.78961732054,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        112717.7645187986,
+        0.02227138966030463
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 0.0001209968369564022,
+      "unpartitioned_reference": {
+        "expected": [
+          31151.061099654602,
+          95391.78961730312,
+          95391.78961730312,
+          0.0,
+          0.0,
+          0.0,
+          0.6949076423557341,
+          112717.7645188019,
+          0.02227138966032078
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.0001209968369564022,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.003-direction2",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.001,0.001,0.001,0.040000000000000001,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0.04,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        76228.55594599215,
+        76228.55594599215,
+        76228.55594599215,
+        50876.101956408405,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        111598.85503859754,
+        0.017607551450194728
+      ],
+      "actual": [
+        76228.55594599234,
+        76228.55594599234,
+        76228.55594599234,
+        50876.10195640908,
+        0,
+        0,
+        0.6949076423557341,
+        111598.85503859745,
+        0.017607551450194388
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.484898863005902e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          76228.55594599215,
+          76228.55594599215,
+          76228.55594599215,
+          50876.101956408405,
+          0.0,
+          0.0,
+          0.6949076423557341,
+          111598.85503859754,
+          0.017607551450194728
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 4.484898863005902e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.003-direction3",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0.040000000000000001,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0.0,
+        0.04,
+        0.0
+      ],
+      "expected": [
+        76228.55594599215,
+        76228.55594599215,
+        76228.55594599215,
+        0.0,
+        50876.101956408405,
+        0.0,
+        0.6949076423557341,
+        111598.85503859754,
+        0.017607551450194728
+      ],
+      "actual": [
+        76228.55594599234,
+        76228.55594599234,
+        76228.55594599234,
+        0,
+        50876.10195640908,
+        0,
+        0.6949076423557341,
+        111598.85503859745,
+        0.017607551450194388
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.484898863005902e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          76228.55594599215,
+          76228.55594599215,
+          76228.55594599215,
+          0.0,
+          50876.101956408405,
+          0.0,
+          0.6949076423557341,
+          111598.85503859754,
+          0.017607551450194728
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 4.484898863005902e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.003-direction4",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0,0.040000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0.0,
+        0.0,
+        0.04
+      ],
+      "expected": [
+        76228.55594599215,
+        76228.55594599215,
+        76228.55594599215,
+        0.0,
+        0.0,
+        50876.101956408405,
+        0.6949076423557341,
+        111598.85503859754,
+        0.017607551450194728
+      ],
+      "actual": [
+        76228.55594599234,
+        76228.55594599234,
+        76228.55594599234,
+        0,
+        0,
+        50876.10195640908,
+        0.6949076423557341,
+        111598.85503859745,
+        0.017607551450194388
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.484898863005902e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          76228.55594599215,
+          76228.55594599215,
+          76228.55594599215,
+          0.0,
+          0.0,
+          50876.101956408405,
+          0.6949076423557341,
+          111598.85503859754,
+          0.017607551450194728
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 4.484898863005902e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-wet-V0.003-direction5",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,100000,0",
+        "--strain",
+        "0.041000000000000002,-0.019,-0.019,0.012,-0.0080000000000000002,0.0040000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "strain_increment": [
+        0.041,
+        -0.019,
+        -0.019,
+        0.012,
+        -0.008,
+        0.004
+      ],
+      "expected": [
+        114713.67667663007,
+        52914.618374658385,
+        52914.618374658385,
+        12359.811660394338,
+        -8239.874440262893,
+        4119.937220131446,
+        0.6949076423557341,
+        112958.39609223341,
+        0.023445524925580857
+      ],
+      "actual": [
+        114713.67667669365,
+        52914.61837464787,
+        52914.61837464787,
+        12359.811660409154,
+        -8239.874440272768,
+        4119.937220136384,
+        0.6949076423557341,
+        112958.39609222594,
+        0.023445524925541826
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 0.0002961027849589922,
+      "unpartitioned_reference": {
+        "expected": [
+          114713.67667663007,
+          52914.618374658385,
+          52914.618374658385,
+          12359.811660394338,
+          -8239.874440262893,
+          4119.937220131446,
+          0.6949076423557341,
+          112958.39609223341,
+          0.023445524925580857
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.0002961027849589922,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V-0.003-direction0",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0.058999999999999997,-0.031,-0.031,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.059,
+        -0.031,
+        -0.031,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        284070.1194967906,
+        72983.62696577453,
+        72983.62696577453,
+        0.0,
+        0.0,
+        0.0,
+        0.7051076576557409,
+        359206.42560067255,
+        0.03866509855364056
+      ],
+      "actual": [
+        284070.1194967908,
+        72983.6269657742,
+        72983.6269657742,
+        0,
+        0,
+        0,
+        0.7051076576557409,
+        359206.42560067255,
+        0.03866509855364037
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.9348308052221504e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          284070.1194967906,
+          72983.62696577453,
+          72983.62696577453,
+          0.0,
+          0.0,
+          0.0,
+          0.7051076576557409,
+          359206.42560067255,
+          0.03866509855364056
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.9348308052221504e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V-0.003-direction1",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "-0.060999999999999999,0.028999999999999998,0.028999999999999998,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.061,
+        0.028999999999999998,
+        0.028999999999999998,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        2621.4627887691895,
+        213707.95531978522,
+        213707.95531978522,
+        0.0,
+        0.0,
+        0.0,
+        0.7051076576557409,
+        359206.42560067255,
+        0.03866509855364056
+      ],
+      "actual": [
+        2621.4627887686393,
+        213707.9553197853,
+        213707.9553197853,
+        0,
+        0,
+        0,
+        0.7051076576557409,
+        359206.4256006726,
+        0.03866509855364035
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 5.3618831735542155e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          2621.4627887691895,
+          213707.95531978522,
+          213707.95531978522,
+          0.0,
+          0.0,
+          0.0,
+          0.7051076576557409,
+          359206.42560067255,
+          0.03866509855364056
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 5.3618831735542155e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V-0.003-direction2",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "-0.001,-0.001,-0.001,0.059999999999999998,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        -0.001,
+        -0.001,
+        0.06,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        135125.20253483322,
+        135125.20253483322,
+        135125.20253483322,
+        171944.42723271262,
+        0.0,
+        0.0,
+        0.7051076576557409,
+        363037.95108961215,
+        0.02723678973958205
+      ],
+      "actual": [
+        135125.20253483322,
+        135125.20253483322,
+        135125.20253483322,
+        171944.42723271265,
+        0,
+        0,
+        0.7051076576557409,
+        363037.95108961215,
+        0.027236789739582042
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.0702124236518556e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          135125.20253483322,
+          135125.20253483322,
+          135125.20253483322,
+          171944.42723271262,
+          0.0,
+          0.0,
+          0.7051076576557409,
+          363037.95108961215,
+          0.02723678973958205
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.0702124236518556e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V-0.003-direction3",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "-0.001,-0.001,-0.001,0,0.059999999999999998,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        -0.001,
+        -0.001,
+        0.0,
+        0.06,
+        0.0
+      ],
+      "expected": [
+        135125.20253483322,
+        135125.20253483322,
+        135125.20253483322,
+        0.0,
+        171944.42723271262,
+        0.0,
+        0.7051076576557409,
+        363037.95108961215,
+        0.02723678973958205
+      ],
+      "actual": [
+        135125.20253483322,
+        135125.20253483322,
+        135125.20253483322,
+        0,
+        171944.42723271265,
+        0,
+        0.7051076576557409,
+        363037.95108961215,
+        0.027236789739582042
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.0702124236518556e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          135125.20253483322,
+          135125.20253483322,
+          135125.20253483322,
+          0.0,
+          171944.42723271262,
+          0.0,
+          0.7051076576557409,
+          363037.95108961215,
+          0.02723678973958205
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.0702124236518556e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V-0.003-direction4",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "-0.001,-0.001,-0.001,0,0,0.059999999999999998"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        -0.001,
+        -0.001,
+        0.0,
+        0.0,
+        0.06
+      ],
+      "expected": [
+        135125.20253483322,
+        135125.20253483322,
+        135125.20253483322,
+        0.0,
+        0.0,
+        171944.42723271262,
+        0.7051076576557409,
+        363037.95108961215,
+        0.02723678973958205
+      ],
+      "actual": [
+        135125.20253483322,
+        135125.20253483322,
+        135125.20253483322,
+        0,
+        0,
+        171944.42723271265,
+        0.7051076576557409,
+        363037.95108961215,
+        0.027236789739582042
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.0702124236518556e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          135125.20253483322,
+          135125.20253483322,
+          135125.20253483322,
+          0.0,
+          0.0,
+          171944.42723271262,
+          0.7051076576557409,
+          363037.95108961215,
+          0.02723678973958205
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.0702124236518556e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V-0.003-direction5",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0.058999999999999997,-0.031,-0.031,0.017999999999999999,-0.012,0.0060000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.059,
+        -0.031,
+        -0.031,
+        0.018,
+        -0.012,
+        0.006
+      ],
+      "expected": [
+        279478.65516154765,
+        77561.20688428576,
+        77561.20688428576,
+        40383.48965545238,
+        -26922.326436968255,
+        13461.163218484127,
+        0.7051076576557409,
+        358549.1804225747,
+        0.04143753622856537
+      ],
+      "actual": [
+        279478.6551615486,
+        77561.20688428482,
+        77561.20688428482,
+        40383.48965545275,
+        -26922.326436968506,
+        13461.163218484253,
+        0.7051076576557409,
+        358549.1804225748,
+        0.041437536228564775
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 5.245079096710628e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          279478.65516154765,
+          77561.20688428576,
+          77561.20688428576,
+          40383.48965545238,
+          -26922.326436968255,
+          13461.163218484127,
+          0.7051076576557409,
+          358549.1804225747,
+          0.04143753622856537
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 5.245079096710628e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.0-direction0",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0.059999999999999998,-0.029999999999999999,-0.029999999999999999,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.06,
+        -0.03,
+        -0.03,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        298222.43609015876,
+        81177.61479235538,
+        81177.61479235538,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        366611.80382573686,
+        0.0382592058660869
+      ],
+      "actual": [
+        298222.4360901923,
+        81177.61479232596,
+        81177.61479232596,
+        0,
+        0,
+        0,
+        0.6999999999999998,
+        366611.8038257402,
+        0.03825920586606981
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 0.00016240401787759537,
+      "unpartitioned_reference": {
+        "expected": [
+          298222.43609015876,
+          81177.61479235538,
+          81177.61479235538,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          366611.80382573686,
+          0.0382592058660869
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.00016240401787759537,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.0-direction1",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "-0.059999999999999998,0.029999999999999999,0.029999999999999999,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.06,
+        0.03,
+        0.03,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        8829.341026420909,
+        225874.1623242243,
+        225874.1623242243,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        366611.80382573686,
+        0.0382592058660869
+      ],
+      "actual": [
+        8829.341026370514,
+        225874.16232423682,
+        225874.16232423682,
+        0,
+        0,
+        0,
+        0.7,
+        366611.8038257402,
+        0.03825920586606981
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 0.0004630653916484098,
+      "unpartitioned_reference": {
+        "expected": [
+          8829.341026420909,
+          225874.1623242243,
+          225874.1623242243,
+          0.0,
+          0.0,
+          0.0,
+          0.7,
+          366611.80382573686,
+          0.0382592058660869
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.0004630653916484098,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.0-direction2",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0,0,0,0.059999999999999998,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0,
+        0.0,
+        0.0,
+        0.06,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        146678.52008422435,
+        146678.52008422435,
+        146678.52008422435,
+        177096.11005130087,
+        0.0,
+        0.0,
+        0.7,
+        369409.32746270526,
+        0.027349339861539996
+      ],
+      "actual": [
+        146678.52008421958,
+        146678.52008421958,
+        146678.52008421958,
+        177096.11005132244,
+        0,
+        0,
+        0.7,
+        369409.3274627073,
+        0.02734933986153389
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 7.782836924144122e-05,
+      "unpartitioned_reference": {
+        "expected": [
+          146678.52008422435,
+          146678.52008422435,
+          146678.52008422435,
+          177096.11005130087,
+          0.0,
+          0.0,
+          0.7,
+          369409.32746270526,
+          0.027349339861539996
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 7.782836924144122e-05,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.0-direction3",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0,0,0,0,0.059999999999999998,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.06,
+        0.0
+      ],
+      "expected": [
+        146678.52008422435,
+        146678.52008422435,
+        146678.52008422435,
+        0.0,
+        177096.11005130087,
+        0.0,
+        0.7,
+        369409.32746270526,
+        0.027349339861539996
+      ],
+      "actual": [
+        146678.52008421958,
+        146678.52008421958,
+        146678.52008421958,
+        0,
+        177096.11005132244,
+        0,
+        0.7,
+        369409.3274627073,
+        0.02734933986153389
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 7.782836924144122e-05,
+      "unpartitioned_reference": {
+        "expected": [
+          146678.52008422435,
+          146678.52008422435,
+          146678.52008422435,
+          0.0,
+          177096.11005130087,
+          0.0,
+          0.7,
+          369409.32746270526,
+          0.027349339861539996
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 7.782836924144122e-05,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.0-direction4",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0,0,0,0,0,0.059999999999999998"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.06
+      ],
+      "expected": [
+        146678.52008422435,
+        146678.52008422435,
+        146678.52008422435,
+        0.0,
+        0.0,
+        177096.11005130087,
+        0.7,
+        369409.32746270526,
+        0.027349339861539996
+      ],
+      "actual": [
+        146678.52008421958,
+        146678.52008421958,
+        146678.52008421958,
+        0,
+        0,
+        177096.11005132244,
+        0.7,
+        369409.3274627073,
+        0.02734933986153389
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 7.782836924144122e-05,
+      "unpartitioned_reference": {
+        "expected": [
+          146678.52008422435,
+          146678.52008422435,
+          146678.52008422435,
+          0.0,
+          0.0,
+          177096.11005130087,
+          0.7,
+          369409.32746270526,
+          0.027349339861539996
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 7.782836924144122e-05,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.0-direction5",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0.059999999999999998,-0.029999999999999999,-0.029999999999999999,0.017999999999999999,-0.012,0.0060000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.06,
+        -0.03,
+        -0.03,
+        0.018,
+        -0.012,
+        0.006
+      ],
+      "expected": [
+        293172.871975602,
+        85604.28441655941,
+        85604.28441655941,
+        41513.71751180852,
+        -27675.811674539014,
+        13837.905837269507,
+        0.7,
+        366123.1343530573,
+        0.040922787164827945
+      ],
+      "actual": [
+        293172.87197563297,
+        85604.28441653242,
+        85604.28441653242,
+        41513.71751182011,
+        -27675.811674546745,
+        13837.905837273373,
+        0.7,
+        366123.1343530602,
+        0.040922787164810834
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 0.0001454373902707827,
+      "unpartitioned_reference": {
+        "expected": [
+          293172.871975602,
+          85604.28441655941,
+          85604.28441655941,
+          41513.71751180852,
+          -27675.811674539014,
+          13837.905837269507,
+          0.7,
+          366123.1343530573,
+          0.040922787164827945
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 0.0001454373902707827,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.003-direction0",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0.060999999999999999,-0.028999999999999998,-0.028999999999999998,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.061,
+        -0.028999999999999998,
+        -0.028999999999999998,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        312971.44512124115,
+        90003.63557212353,
+        90003.63557212353,
+        0.0,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        374420.8570031709,
+        0.03786194002859886
+      ],
+      "actual": [
+        312971.44512124115,
+        90003.6355721235,
+        90003.6355721235,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        374420.8570031709,
+        0.03786194002859884
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 1.5317512409222388e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          312971.44512124115,
+          90003.63557212353,
+          90003.63557212353,
+          0.0,
+          0.0,
+          0.0,
+          0.6949076423557341,
+          374420.8570031709,
+          0.03786194002859886
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 1.5317512409222388e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.003-direction1",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "-0.058999999999999997,0.031,0.031,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        -0.059,
+        0.031,
+        0.031,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        15681.032389084314,
+        238648.84193820198,
+        238648.84193820198,
+        0.0,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        374420.8570031709,
+        0.03786194002859886
+      ],
+      "actual": [
+        15681.032389084265,
+        238648.84193820195,
+        238648.84193820195,
+        0,
+        0,
+        0,
+        0.6949076423557341,
+        374420.8570031708,
+        0.03786194002859884
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 4.245528664591379e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          15681.032389084314,
+          238648.84193820198,
+          238648.84193820198,
+          0.0,
+          0.0,
+          0.0,
+          0.6949076423557341,
+          374420.8570031709,
+          0.03786194002859886
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 4.245528664591379e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.003-direction2",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0.001,0.001,0.001,0.059999999999999998,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0.06,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        159010.75292186864,
+        159010.75292186864,
+        159010.75292186864,
+        182136.8635942297,
+        0.0,
+        0.0,
+        0.6949076423557341,
+        376329.89427947736,
+        0.027432091475150345
+      ],
+      "actual": [
+        159010.7529218686,
+        159010.7529218686,
+        159010.7529218686,
+        182136.8635942298,
+        0,
+        0,
+        0.6949076423557341,
+        376329.89427947736,
+        0.027432091475150324
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 3.094650243782848e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          159010.75292186864,
+          159010.75292186864,
+          159010.75292186864,
+          182136.8635942297,
+          0.0,
+          0.0,
+          0.6949076423557341,
+          376329.89427947736,
+          0.027432091475150345
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 3.094650243782848e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.003-direction3",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0.059999999999999998,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0.0,
+        0.06,
+        0.0
+      ],
+      "expected": [
+        159010.75292186864,
+        159010.75292186864,
+        159010.75292186864,
+        0.0,
+        182136.8635942297,
+        0.0,
+        0.6949076423557341,
+        376329.89427947736,
+        0.027432091475150345
+      ],
+      "actual": [
+        159010.7529218686,
+        159010.7529218686,
+        159010.7529218686,
+        0,
+        182136.8635942298,
+        0,
+        0.6949076423557341,
+        376329.89427947736,
+        0.027432091475150324
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 3.094650243782848e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          159010.75292186864,
+          159010.75292186864,
+          159010.75292186864,
+          0.0,
+          182136.8635942297,
+          0.0,
+          0.6949076423557341,
+          376329.89427947736,
+          0.027432091475150345
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 3.094650243782848e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.003-direction4",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0.001,0.001,0.001,0,0,0.059999999999999998"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0.001,
+        0.001,
+        0.0,
+        0.0,
+        0.06
+      ],
+      "expected": [
+        159010.75292186864,
+        159010.75292186864,
+        159010.75292186864,
+        0.0,
+        0.0,
+        182136.8635942297,
+        0.6949076423557341,
+        376329.89427947736,
+        0.027432091475150345
+      ],
+      "actual": [
+        159010.7529218686,
+        159010.7529218686,
+        159010.7529218686,
+        0,
+        0,
+        182136.8635942298,
+        0.6949076423557341,
+        376329.89427947736,
+        0.027432091475150324
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 3.094650243782848e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          159010.75292186864,
+          159010.75292186864,
+          159010.75292186864,
+          0.0,
+          0.0,
+          182136.8635942297,
+          0.6949076423557341,
+          376329.89427947736,
+          0.027432091475150345
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 3.094650243782848e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-dry-V0.003-direction5",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,400000,0",
+        "--strain",
+        "0.060999999999999999,-0.028999999999999998,-0.028999999999999998,0.017999999999999999,-0.012,0.0060000000000000001"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.061,
+        -0.028999999999999998,
+        -0.028999999999999998,
+        0.018,
+        -0.012,
+        0.006
+      ],
+      "expected": [
+        307446.261759029,
+        94244.63604577513,
+        94244.63604577513,
+        42640.32514265077,
+        -28426.88342843385,
+        14213.441714216926,
+        0.6949076423557341,
+        374081.3916281017,
+        0.04042240110373385
+      ],
+      "actual": [
+        307446.261759029,
+        94244.63604577509,
+        94244.63604577509,
+        42640.325142650785,
+        -28426.88342843386,
+        14213.44171421693,
+        0.6949076423557341,
+        374081.3916281017,
+        0.04042240110373383
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 12,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 2.2474620959320993e-07,
+      "unpartitioned_reference": {
+        "expected": [
+          307446.261759029,
+          94244.63604577513,
+          94244.63604577513,
+          42640.32514265077,
+          -28426.88342843385,
+          14213.441714216926,
+          0.6949076423557341,
+          374081.3916281017,
+          0.04042240110373385
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 2.2474620959320993e-07,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-noncoaxial-wet",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "130000,85000,85000,2000,-1000,500,0.69999999999999996,150000,0",
+        "--strain",
+        "0.001,-0.00029999999999999997,-0.00069999999999999999,0.059999999999999998,-0.02,0.01"
+      ],
+      "initial": [
+        130000,
+        85000,
+        85000,
+        2000,
+        -1000,
+        500,
+        0.7,
+        150000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        -0.0003,
+        -0.0007,
+        0.06,
+        -0.02,
+        0.01
+      ],
+      "expected": [
+        94436.95387816265,
+        80780.21146231209,
+        80311.67798525577,
+        70819.31083024367,
+        -23696.31848871395,
+        11848.159244356975,
+        0.7,
+        156670.39980827572,
+        0.031176229655583268
+      ],
+      "actual": [
+        94436.95387816295,
+        80780.21146231212,
+        80311.67798525578,
+        70819.31083024526,
+        -23696.318488714474,
+        11848.159244357237,
+        0.6999999999999998,
+        156670.39980827566,
+        0.031176229655582314
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 9.285593954118426e-06,
+      "unpartitioned_reference": {
+        "expected": [
+          94436.95387816265,
+          80780.21146231209,
+          80311.67798525577,
+          70819.31083024367,
+          -23696.31848871395,
+          11848.159244356975,
+          0.7,
+          156670.39980827572,
+          0.031176229655583268
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 9.285593954118426e-06,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "general-noncoaxial-dry",
+      "method": "independent-scalar-reduction-on-recorded-partition",
+      "arguments": [
+        "--model",
+        "modified-cam-clay",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,1.2,0.20000000000000001,0.040000000000000001,0.25",
+        "--initial",
+        "130000,85000,85000,2000,-1000,500,0.69999999999999996,400000,0",
+        "--strain",
+        "0.001,-0.00029999999999999997,-0.00069999999999999999,0.059999999999999998,-0.02,0.01"
+      ],
+      "initial": [
+        130000,
+        85000,
+        85000,
+        2000,
+        -1000,
+        500,
+        0.7,
+        400000.0,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        -0.0003,
+        -0.0007,
+        0.06,
+        -0.02,
+        0.01
+      ],
+      "expected": [
+        162947.8232323011,
+        143189.4802394026,
+        142092.64490651872,
+        165245.01673973922,
+        -55201.62504777253,
+        27600.812523886267,
+        0.7,
+        368260.06144873303,
+        0.031126718951259538
+      ],
+      "actual": [
+        162947.82323230046,
+        143189.48023940116,
+        142092.64490651723,
+        165245.01673974484,
+        -55201.6250477744,
+        27600.8125238872,
+        0.7,
+        368260.06144873356,
+        0.03112671895125774
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 11,
+        "substeps": 1,
+        "rejected": 0,
+        "increment_fractions": [
+          1
+        ]
+      },
+      "max_tolerance_ratio": 2.1176794750723228e-05,
+      "unpartitioned_reference": {
+        "expected": [
+          162947.8232323011,
+          143189.4802394026,
+          142092.64490651872,
+          165245.01673973922,
+          -55201.62504777253,
+          27600.812523886267,
+          0.7,
+          368260.06144873303,
+          0.031126718951259538
+        ],
+        "passed": true,
+        "max_tolerance_ratio": 2.1176794750723228e-05,
+        "applicable": true,
+        "reason": "One implicit step applies only when the solver accepts the entire increment."
+      },
+      "passed": true
+    },
+    {
+      "id": "continuum-elastic-refinement",
+      "method": "independent-continuum-isotropic-solution",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        200000.0,
+        0
+      ],
+      "total_volumetric_strain": 0.003,
+      "expected_pressure": 113576.7848961761,
+      "levels": [
+        {
+          "steps": 8,
+          "final_state": [
+            113690.37249201156,
+            113690.37249201156,
+            113690.37249201156,
+            0,
+            0,
+            0,
+            0.6949076423557337,
+            200000,
+            0
+          ],
+          "relative_pressure_error": 0.001000095186171125,
+          "failed_steps": []
+        },
+        {
+          "steps": 16,
+          "final_state": [
+            113633.26466569157,
+            113633.26466569157,
+            113633.26466569157,
+            0,
+            0,
+            0,
+            0.694907642355733,
+            200000,
+            0
+          ],
+          "relative_pressure_error": 0.0004972826935284361,
+          "failed_steps": []
+        },
+        {
+          "steps": 32,
+          "final_state": [
+            113604.94699650683,
+            113604.94699650683,
+            113604.94699650683,
+            0,
+            0,
+            0,
+            0.6949076423557357,
+            200000,
+            0
+          ],
+          "relative_pressure_error": 0.0002479564847382021,
+          "failed_steps": []
+        },
+        {
+          "steps": 64,
+          "final_state": [
+            113590.84739271856,
+            113590.84739271856,
+            113590.84739271856,
+            0,
+            0,
+            0,
+            0.6949076423557334,
+            200000,
+            0
+          ],
+          "relative_pressure_error": 0.0001238148848402896,
+          "failed_steps": []
+        }
+      ],
+      "observed_orders": [
+        1.007999189741502,
+        1.0039792669735974,
+        1.001902192635482
+      ],
+      "acceptance": {
+        "minimum_order": 0.8,
+        "maximum_final_relative_error": 0.0005
+      },
+      "passed": true
+    },
+    {
+      "id": "continuum-plastic-refinement",
+      "method": "independent-continuum-isotropic-solution",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        100000.0,
+        0
+      ],
+      "total_volumetric_strain": 0.03,
+      "expected_pressure": 128558.38393337339,
+      "levels": [
+        {
+          "steps": 8,
+          "final_state": [
+            128598.48927742809,
+            128598.48927742809,
+            128598.48927742809,
+            0,
+            0,
+            0,
+            0.6497574070324634,
+            128598.48927736425,
+            0.002025905257231356
+          ],
+          "relative_pressure_error": 0.00031196210490232667,
+          "failed_steps": []
+        },
+        {
+          "steps": 16,
+          "final_state": [
+            128578.62702025315,
+            128578.62702025315,
+            128578.62702025315,
+            0,
+            0,
+            0,
+            0.6497574070324645,
+            128578.62702025287,
+            0.0010272382630154902
+          ],
+          "relative_pressure_error": 0.00015746220713418413,
+          "failed_steps": []
+        },
+        {
+          "steps": 32,
+          "final_state": [
+            128568.55305167161,
+            128568.55305167161,
+            128568.55305167161,
+            0,
+            0,
+            0,
+            0.6497574070324665,
+            128568.55305167158,
+            0.0005172173061691795
+          ],
+          "relative_pressure_error": 7.910116778916494e-05,
+          "failed_steps": []
+        },
+        {
+          "steps": 64,
+          "final_state": [
+            128563.48038793786,
+            128563.48038793786,
+            128563.48038793786,
+            0,
+            0,
+            0,
+            0.6497574070324585,
+            128563.4803809306,
+            0.00025951154388828627
+          ],
+          "relative_pressure_error": 3.964311317967958e-05,
+          "failed_steps": []
+        }
+      ],
+      "observed_orders": [
+        0.9863651850473163,
+        0.9932347067965559,
+        0.9966287316687249
+      ],
+      "acceptance": {
+        "minimum_order": 0.8,
+        "maximum_final_relative_error": 0.0005
+      },
+      "passed": true
+    }
+  ],
+  "passed": true
+}
