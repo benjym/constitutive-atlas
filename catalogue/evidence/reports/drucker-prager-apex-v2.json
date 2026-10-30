@@ -1,0 +1,4837 @@
+{
+  "kind": "plasticity-verification-report",
+  "model": "drucker-prager",
+  "catalogue_hash": "c7ed651de124559e6d3bfc6787fc7e8c044bb24b2e043135a7acd94e9290154c",
+  "oracle": "Closed-form radial return and scalar invariant reductions; no DSL evaluation or shared nonlinear solve.",
+  "tolerances": {
+    "stress_absolute_Pa": 0.0001,
+    "other_state_absolute": 1e-09,
+    "relative": 1e-09
+  },
+  "runtime": {
+    "python": "3.14.7",
+    "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+    "solver_sha256": "a4046d667777346c789612ff837a3f4a5c6431b678811b3391eb44c9044e4462"
+  },
+  "cases": [
+    {
+      "id": "elastic-isotropic",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0.0001,0.0001,0.0001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0.0001,
+        0.0001,
+        0.0001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        106000.0,
+        106000.0,
+        106000.0,
+        0,
+        0,
+        0,
+        0.6994900764923506,
+        0
+      ],
+      "actual": [
+        106000,
+        106000,
+        106000,
+        0,
+        0,
+        0,
+        0.6994900764923506,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 0.0,
+      "passed": true
+    },
+    {
+      "id": "elastic-compression",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0.001,-0.00050000000000000001,-0.00050000000000000001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        -0.0005,
+        -0.0005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        124000.0,
+        88000.0,
+        88000.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0
+      ],
+      "actual": [
+        124000,
+        88000,
+        88000,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 0.0,
+      "passed": true
+    },
+    {
+      "id": "plastic-compression",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0.01,-0.0050000000000000001,-0.0050000000000000001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0.01,
+        -0.005,
+        -0.005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        227254.9019607843,
+        70196.07843137255,
+        70196.07843137255,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.005637254901960784
+      ],
+      "actual": [
+        227254.9019607856,
+        70196.07843137153,
+        70196.07843137153,
+        0,
+        0,
+        0,
+        0.7,
+        0.00563725490196072
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 5.985061908441204e-06,
+      "passed": true
+    },
+    {
+      "id": "elastic-extension",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.001,0.00050000000000000001,0.00050000000000000001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.001,
+        0.0005,
+        0.0005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        76000.0,
+        112000.0,
+        112000.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0
+      ],
+      "actual": [
+        76000,
+        112000,
+        112000,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 0.0,
+      "passed": true
+    },
+    {
+      "id": "plastic-extension",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.01,0.0050000000000000001,0.0050000000000000001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.01,
+        0.005,
+        0.005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        17843.137254901958,
+        174901.96078431373,
+        174901.96078431373,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.005637254901960784
+      ],
+      "actual": [
+        17843.13725490015,
+        174901.96078431426,
+        174901.96078431426,
+        0,
+        0,
+        0,
+        0.7,
+        0.005637254901960719
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.534306968774603e-05,
+      "passed": true
+    },
+    {
+      "id": "plastic-shear-3",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0,0,0,0.01,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0.01,
+        0,
+        0
+      ],
+      "expected": [
+        116072.42834646876,
+        116072.42834646876,
+        116072.42834646876,
+        121892.25487112152,
+        0.0,
+        0.0,
+        0.7,
+        0.004018107086617191
+      ],
+      "actual": [
+        116072.42834646859,
+        116072.42834646859,
+        116072.42834646859,
+        121892.25487112284,
+        0,
+        0,
+        0.7,
+        0.004018107086617146
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 5.967870697201728e-06,
+      "passed": true
+    },
+    {
+      "id": "plastic-shear-4",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0,0,0,0,0.01,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0.01,
+        0
+      ],
+      "expected": [
+        116072.42834646876,
+        116072.42834646876,
+        116072.42834646876,
+        0.0,
+        121892.25487112152,
+        0.0,
+        0.7,
+        0.004018107086617191
+      ],
+      "actual": [
+        116072.42834646859,
+        116072.42834646859,
+        116072.42834646859,
+        0,
+        121892.25487112284,
+        0,
+        0.7,
+        0.004018107086617146
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 5.967870697201728e-06,
+      "passed": true
+    },
+    {
+      "id": "plastic-shear-5",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0,0,0,0,0,0.01"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.01
+      ],
+      "expected": [
+        116072.42834646876,
+        116072.42834646876,
+        116072.42834646876,
+        0.0,
+        0.0,
+        121892.25487112152,
+        0.7,
+        0.004018107086617191
+      ],
+      "actual": [
+        116072.42834646859,
+        116072.42834646859,
+        116072.42834646859,
+        0,
+        0,
+        121892.25487112284,
+        0.7,
+        0.004018107086617146
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 5.967870697201728e-06,
+      "passed": true
+    },
+    {
+      "id": "mixed-nonzero-initial-shear",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "120000,110000,90000,1400,-600,900,0.69999999999999996,0",
+        "--strain",
+        "0.0089999999999999993,-0.0030000000000000001,-0.002,0.001,0.00050000000000000001,-0.00080000000000000004"
+      ],
+      "initial": [
+        120000,
+        110000,
+        90000,
+        1400,
+        -600,
+        900,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0.009,
+        -0.003,
+        -0.002,
+        0.001,
+        0.0005,
+        -0.0008
+      ],
+      "expected": [
+        352585.5482344639,
+        111622.28283509056,
+        114856.68908206203,
+        20538.479668268737,
+        9218.057803868645,
+        -14797.408579894405,
+        0.6932135818847855,
+        0.0015887100126347144
+      ],
+      "actual": [
+        352585.54823446425,
+        111622.2828350903,
+        114856.68908206177,
+        20538.47966826879,
+        9218.057803868667,
+        -14797.40857989444,
+        0.6932135818847855,
+        0.0015887100126346974
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.2377452440333005e-06,
+      "passed": true
+    },
+    {
+      "id": "nondilatant",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0.01,-0.0050000000000000001,-0.0050000000000000001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0.01,
+        -0.005,
+        -0.005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        186666.6666666667,
+        56666.666666666664,
+        56666.666666666664,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.006388888888888889
+      ],
+      "actual": [
+        186666.66666666864,
+        56666.666666665675,
+        56666.66666666568,
+        0,
+        0,
+        0,
+        0.7,
+        0.006388888888888807
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 6.8021743276784586e-06,
+      "passed": true
+    },
+    {
+      "id": "associated",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0.01,-0.0050000000000000001,-0.0050000000000000001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0.01,
+        -0.005,
+        -0.005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        340000.0,
+        107777.77777777775,
+        107777.77777777775,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.0035493827160493828
+      ],
+      "actual": [
+        340000,
+        107777.77777777686,
+        107777.77777777686,
+        0,
+        0,
+        0,
+        0.7,
+        0.003549382716049357
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 4.272193294317327e-06,
+      "passed": true
+    },
+    {
+      "id": "pressure-independent-j2",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,0,0,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0.002,-0.001,-0.001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0.002,
+        -0.001,
+        -0.001,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        106666.66666666667,
+        96666.66666666667,
+        96666.66666666667,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.0017222222222222222
+      ],
+      "actual": [
+        106666.6666666672,
+        96666.6666666664,
+        96666.6666666664,
+        0,
+        0,
+        0,
+        0.7,
+        0.0017222222222221999
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 2.5348497494574514e-06,
+      "passed": true
+    },
+    {
+      "id": "preload-for-unloading",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0.01,-0.0050000000000000001,-0.0050000000000000001,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0.01,
+        -0.005,
+        -0.005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        227254.9019607843,
+        70196.07843137255,
+        70196.07843137255,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.005637254901960784
+      ],
+      "actual": [
+        227254.9019607856,
+        70196.07843137153,
+        70196.07843137153,
+        0,
+        0,
+        0,
+        0.7,
+        0.00563725490196072
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 5.985061908441204e-06,
+      "passed": true
+    },
+    {
+      "id": "unloading-resets-local-multiplier",
+      "method": "elastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "227254.90196078431,70196.078431372545,70196.078431372545,0,0,0,0.69999999999999996,0.0056372549019607842",
+        "--strain",
+        "-0.001,0.00050000000000000001,0.00050000000000000001,0,0,0"
+      ],
+      "initial": [
+        227254.9019607843,
+        70196.07843137255,
+        70196.07843137255,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.005637254901960784
+      ],
+      "strain_increment": [
+        -0.001,
+        0.0005,
+        0.0005,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        203254.9019607843,
+        82196.07843137255,
+        82196.07843137255,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0
+      ],
+      "actual": [
+        203254.9019607843,
+        82196.07843137255,
+        82196.07843137255,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 3,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 0.0,
+      "passed": true
+    },
+    {
+      "id": "load-reversal",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "227254.90196078431,70196.078431372545,70196.078431372545,0,0,0,0.69999999999999996,0.0056372549019607842",
+        "--strain",
+        "-0.02,0.01,0.01,0,0,0"
+      ],
+      "initial": [
+        227254.9019607843,
+        70196.07843137255,
+        70196.07843137255,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.005637254901960784
+      ],
+      "strain_increment": [
+        -0.02,
+        0.01,
+        0.01,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        25801.614763552498,
+        230611.30334486737,
+        230611.30334486737,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.009948096885813149
+      ],
+      "actual": [
+        25801.614763549333,
+        230611.30334486824,
+        230611.30334486824,
+        0,
+        0,
+        0,
+        0.7,
+        0.009948096885813036
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 2.5158989955085797e-05,
+      "passed": true
+    },
+    {
+      "id": "hydrostatic-apex-limit",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "actual": [
+        -8333.33333333446,
+        -8333.33333333446,
+        -8333.33333333446,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.002916666666666385
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.03934256073374e-05,
+      "passed": true
+    },
+    {
+      "id": "near-apex-with-shear",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,1.0000000000000001e-05,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        1e-05,
+        0,
+        0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "actual": [
+        -8333.33333333446,
+        -8333.33333333446,
+        -8333.33333333446,
+        -5.586196790277311e-15,
+        0,
+        0,
+        0.7102306612919103,
+        0.002916666666666384
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.03934256073374e-05,
+      "passed": true
+    },
+    {
+      "id": "nondilatant-hydrostatic-tension-rollback",
+      "method": "exact-rollback",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "actual": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "expected_failure": true,
+      "reference_steps": 1,
+      "returncode": 1,
+      "solver_ok": false,
+      "message": "integration failed: domain boundary, singular system or substep limit; state rolled back",
+      "diagnostics": {
+        "iterations": 147,
+        "substeps": 9,
+        "rejected": 15
+      },
+      "max_tolerance_ratio": null,
+      "passed": true
+    },
+    {
+      "id": "inadmissible-start-rollback",
+      "method": "exact-rollback",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "400000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "0.001,0,0,0,0,0"
+      ],
+      "initial": [
+        400000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        0.001,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "expected": [
+        400000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "actual": [
+        400000,
+        100000,
+        100000,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "expected_failure": true,
+      "reference_steps": 1,
+      "returncode": 1,
+      "solver_ok": false,
+      "message": "invalid parameters, inadmissible initial state or strain increment",
+      "diagnostics": {
+        "iterations": 0,
+        "substeps": 0,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": null,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c0.0-direction0",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.02
+      ],
+      "actual": [
+        -7.70559629633439e-09,
+        -7.711584395240009e-09,
+        -7.711584395240009e-09,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.01999999999999229
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.711584395240008e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c0.0-direction1",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.0020100000000000001,-0.0019950000000000002,-0.0019950000000000002,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00201,
+        -0.0019950000000000002,
+        -0.0019950000000000002,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.02
+      ],
+      "actual": [
+        -7.71289169071197e-09,
+        -7.713585566841425e-09,
+        -7.710674797376399e-09,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.01999999999999229
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.713585566841424e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c0.0-direction2",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,1.0000000000000001e-05,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        1e-05,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.02
+      ],
+      "actual": [
+        -7.718236334578252e-09,
+        -7.718236334578252e-09,
+        -7.718236334578252e-09,
+        -1.1655890045965353e-14,
+        0,
+        0,
+        0.7102306612919103,
+        0.019999999999992274
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.71823633457825e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c0.0-direction3",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,1.0000000000000001e-05,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        1e-05,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.02
+      ],
+      "actual": [
+        -7.718236334578252e-09,
+        -7.718236334578252e-09,
+        -7.718236334578252e-09,
+        0,
+        -1.1655890045965353e-14,
+        0,
+        0.7102306612919103,
+        0.019999999999992274
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.71823633457825e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c0.0-direction4",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,0,1.0000000000000001e-05"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        0.0,
+        1e-05
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.02
+      ],
+      "actual": [
+        -7.718236334578252e-09,
+        -7.718236334578252e-09,
+        -7.718236334578252e-09,
+        0,
+        0,
+        -1.1655890045965353e-14,
+        0.7102306612919103,
+        0.019999999999992274
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.71823633457825e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c0.0-direction5",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,3.0000000000000001e-06,-2.0000000000000003e-06,1.0000000000000002e-06"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        3e-06,
+        -2.0000000000000003e-06,
+        1.0000000000000002e-06
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.02
+      ],
+      "actual": [
+        -7.710820723657957e-09,
+        -7.71317972554068e-09,
+        -7.713435520925554e-09,
+        3.014949401247692e-15,
+        -1.4484941024406345e-15,
+        7.242470512203173e-16,
+        0.7102306612919103,
+        0.019999999999992284
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.713435520925553e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.05-c0.0-factor0.9",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.022045407685048604,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.022045407685048604,
+        0,
+        0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.02
+      ],
+      "actual": [
+        -1.2654571681823044e-11,
+        -1.2654571681823044e-11,
+        -1.2654571681823044e-11,
+        -2.37456663415573e-12,
+        0,
+        0,
+        0.7102306612919103,
+        0.01999999999999999
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.2654571681823044e-07,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.05-c0.0-factor1.0",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.024494897427831782,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.024494897427831782,
+        0,
+        0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.02
+      ],
+      "actual": [
+        -2.414669460706053e-10,
+        -2.414669460706053e-10,
+        -2.414669460706053e-10,
+        7.329168634616407e-09,
+        0,
+        0,
+        0.7102306612919103,
+        0.01999999999999975
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.329168634616407e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.05-c0.0-factor1.1",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.026944387170614963,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.026944387170614963,
+        0,
+        0
+      ],
+      "expected": [
+        1935.483870967746,
+        1935.483870967746,
+        1935.483870967746,
+        1896.3791557031395,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.021935483870967745
+      ],
+      "actual": [
+        1935.483870967475,
+        1935.483870967475,
+        1935.483870967475,
+        1896.3791557111422,
+        0,
+        0,
+        0.7102306612919103,
+        0.02193548387096747
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 7.853707803170833e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c10000.0-direction0",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666666665
+      ],
+      "actual": [
+        -8333.33333333783,
+        -8333.333333337832,
+        -8333.333333337832,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666662162
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 4.152333041509756e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c10000.0-direction1",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.0020100000000000001,-0.0019950000000000002,-0.0019950000000000002,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00201,
+        -0.0019950000000000002,
+        -0.0019950000000000002,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666666665
+      ],
+      "actual": [
+        -8333.333333337834,
+        -8333.33333333784,
+        -8333.333333337827,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666662164
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 4.159049310076695e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c10000.0-direction2",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,1.0000000000000001e-05,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        1e-05,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666666665
+      ],
+      "actual": [
+        -8333.333333337834,
+        -8333.333333337834,
+        -8333.333333337834,
+        3.3825789476372602e-15,
+        0,
+        0,
+        0.7102306612919103,
+        0.01166666666666216
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 4.154012108651491e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c10000.0-direction3",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,1.0000000000000001e-05,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        1e-05,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666666665
+      ],
+      "actual": [
+        -8333.333333337834,
+        -8333.333333337834,
+        -8333.333333337834,
+        0,
+        3.3825789476372602e-15,
+        0,
+        0.7102306612919103,
+        0.01166666666666216
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 4.154012108651491e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c10000.0-direction4",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,0,1.0000000000000001e-05"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        0.0,
+        1e-05
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666666665
+      ],
+      "actual": [
+        -8333.333333337834,
+        -8333.333333337834,
+        -8333.333333337834,
+        0,
+        0,
+        3.3825789476372602e-15,
+        0.7102306612919103,
+        0.01166666666666216
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 4.154012108651491e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.05-c10000.0-direction5",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,3.0000000000000001e-06,-2.0000000000000003e-06,1.0000000000000002e-06"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        3e-06,
+        -2.0000000000000003e-06,
+        1.0000000000000002e-06
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666666665
+      ],
+      "actual": [
+        -8333.333333337834,
+        -8333.333333337838,
+        -8333.333333337838,
+        -6.110563444128303e-16,
+        -4.961309141293668e-16,
+        2.480654570646834e-16,
+        0.7102306612919103,
+        0.011666666666662162
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 4.15737024293496e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.05-c10000.0-factor0.9",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.012859821149611686,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.012859821149611686,
+        0,
+        0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666666665
+      ],
+      "actual": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        8.779831264043689e-12,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666666667
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 8.779831264043688e-08,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.05-c10000.0-factor1.0",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.014288690166235206,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.014288690166235206,
+        0,
+        0
+      ],
+      "expected": [
+        -8333.333333333332,
+        -8333.333333333332,
+        -8333.333333333332,
+        0.0,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.011666666666666667
+      ],
+      "actual": [
+        -8333.333333333478,
+        -8333.333333333478,
+        -8333.333333333478,
+        4.2727977888377664e-09,
+        0,
+        0,
+        0.7102306612919103,
+        0.011666666666666521
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 4.272797788837766e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.05-c10000.0-factor1.1",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.050000000000000003,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.015717559182858731,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.01571755918285873,
+        0,
+        0
+      ],
+      "expected": [
+        -7204.301075268815,
+        -7204.301075268815,
+        -7204.301075268815,
+        1106.2211741601725,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.012795698924731185
+      ],
+      "actual": [
+        -7204.301075268978,
+        -7204.301075268978,
+        -7204.301075268978,
+        1106.2211741648284,
+        0,
+        0,
+        0.7102306612919103,
+        0.012795698924731027
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 4.6049893844128595e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c0.0-direction0",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.005
+      ],
+      "actual": [
+        -1.9272863152257662e-09,
+        -1.9182125736846477e-09,
+        -1.918191257402575e-09,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.004999999999999519
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.927286315225766e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c0.0-direction1",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.0020100000000000001,-0.0019950000000000002,-0.0019950000000000002,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00201,
+        -0.0019950000000000002,
+        -0.0019950000000000002,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.005
+      ],
+      "actual": [
+        -1.9309517136297845e-09,
+        -1.9291328349030046e-09,
+        -1.9318894606886085e-09,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.004999999999999516
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.9318894606886085e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c0.0-direction2",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,1.0000000000000001e-05,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        1e-05,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.005
+      ],
+      "actual": [
+        -1.928816322281754e-09,
+        -1.928816322281754e-09,
+        -1.928816322281754e-09,
+        1.6513276006982756e-15,
+        0,
+        0,
+        0.7102306612919103,
+        0.00499999999999952
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.9288163222817538e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c0.0-direction3",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,1.0000000000000001e-05,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        1e-05,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.005
+      ],
+      "actual": [
+        -1.928816322281754e-09,
+        -1.928816322281754e-09,
+        -1.928816322281754e-09,
+        0,
+        1.6513276006982756e-15,
+        0,
+        0.7102306612919103,
+        0.00499999999999952
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.9288163222817538e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c0.0-direction4",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,0,1.0000000000000001e-05"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        0.0,
+        1e-05
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.005
+      ],
+      "actual": [
+        -1.928816322281754e-09,
+        -1.928816322281754e-09,
+        -1.928816322281754e-09,
+        0,
+        0,
+        1.6513276006982756e-15,
+        0.7102306612919103,
+        0.00499999999999952
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.9288163222817538e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c0.0-direction5",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,3.0000000000000001e-06,-2.0000000000000003e-06,1.0000000000000002e-06"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        3e-06,
+        -2.0000000000000003e-06,
+        1.0000000000000002e-06
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.005
+      ],
+      "actual": [
+        -1.9287516204888374e-09,
+        -1.9285031527413625e-09,
+        -1.928478283745611e-09,
+        -4.028027911218146e-15,
+        1.4398204850607499e-15,
+        -7.199102425303749e-16,
+        0.7102306612919103,
+        0.004999999999999516
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.9287516204888374e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.2-c0.0-factor0.9",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.005511351921262151,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.005511351921262151,
+        0,
+        0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.005
+      ],
+      "actual": [
+        -5.164027076240878e-10,
+        -5.164027076240878e-10,
+        -5.164027076240878e-10,
+        4.019803956807591e-12,
+        0,
+        0,
+        0.7102306612919103,
+        0.004999999999999868
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 5.164027076240877e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.2-c0.0-factor1.0",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.0061237243569579455,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0061237243569579455,
+        0,
+        0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.005
+      ],
+      "actual": [
+        -2.225861473788443e-10,
+        -2.225861473788443e-10,
+        -2.225861473788443e-10,
+        1.6733502471157381e-09,
+        0,
+        0,
+        0.7102306612919103,
+        0.004999999999999944
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.673350247115738e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.2-c0.0-factor1.1",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.0067360967926537408,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.006736096792653741,
+        0,
+        0
+      ],
+      "expected": [
+        1764.7058823529442,
+        1764.7058823529442,
+        1764.7058823529442,
+        1729.0515831410867,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.005441176470588236
+      ],
+      "actual": [
+        1764.705882352701,
+        1764.705882352701,
+        1764.705882352701,
+        1729.0515831428902,
+        0,
+        0,
+        0.7102306612919103,
+        0.005441176470588174
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.772874086161837e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c10000.0-direction0",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "actual": [
+        -8333.333333334454,
+        -8333.333333334456,
+        -8333.333333334456,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.002916666666666384
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.0359844264502708e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c10000.0-direction1",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.0020100000000000001,-0.0019950000000000002,-0.0019950000000000002,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00201,
+        -0.0019950000000000002,
+        -0.0019950000000000002,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "actual": [
+        -8333.333333334464,
+        -8333.333333334456,
+        -8333.33333333446,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666663853
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.0427006950172094e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c10000.0-direction2",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,1.0000000000000001e-05,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        1e-05,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "actual": [
+        -8333.33333333446,
+        -8333.33333333446,
+        -8333.33333333446,
+        -5.586196790277311e-15,
+        0,
+        0,
+        0.7102306612919103,
+        0.002916666666666384
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.03934256073374e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c10000.0-direction3",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,1.0000000000000001e-05,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        1e-05,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "actual": [
+        -8333.33333333446,
+        -8333.33333333446,
+        -8333.33333333446,
+        0,
+        -5.586196790277311e-15,
+        0,
+        0.7102306612919103,
+        0.002916666666666384
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.03934256073374e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c10000.0-direction4",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,0,1.0000000000000001e-05"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        0.0,
+        1e-05
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "actual": [
+        -8333.33333333446,
+        -8333.33333333446,
+        -8333.33333333446,
+        0,
+        0,
+        -5.586196790277311e-15,
+        0.7102306612919103,
+        0.002916666666666384
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.03934256073374e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md0.2-c10000.0-direction5",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,3.0000000000000001e-06,-2.0000000000000003e-06,1.0000000000000002e-06"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        3e-06,
+        -2.0000000000000003e-06,
+        1.0000000000000002e-06
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "actual": [
+        -8333.333333334465,
+        -8333.33333333446,
+        -8333.33333333446,
+        -4.145989107584569e-15,
+        -3.3410774147313305e-15,
+        1.6705387073656652e-15,
+        0.7102306612919103,
+        0.002916666666666383
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.044379762158944e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.2-c10000.0-factor0.9",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.0032149552874029216,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0032149552874029216,
+        0,
+        0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "actual": [
+        -8333.333333333636,
+        -8333.333333333636,
+        -8333.333333333636,
+        2.2252051286654396e-12,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666665918
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 2.787251455279497e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.2-c10000.0-factor1.0",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.0035721725415588015,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0035721725415588015,
+        0,
+        0
+      ],
+      "expected": [
+        -8333.333333333332,
+        -8333.333333333332,
+        -8333.333333333332,
+        0.0,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.002916666666666667
+      ],
+      "actual": [
+        -8333.333333333463,
+        -8333.333333333463,
+        -8333.333333333463,
+        9.768737725030066e-10,
+        0,
+        0,
+        0.7102306612919103,
+        0.002916666666666634
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 9.768737725030065e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md0.2-c10000.0-factor1.1",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,0.20000000000000001,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.0039293897957146827,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.003929389795714683,
+        0,
+        0
+      ],
+      "expected": [
+        -7303.921568627447,
+        -7303.921568627447,
+        -7303.921568627447,
+        1008.6134234989592,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.003174019607843138
+      ],
+      "actual": [
+        -7303.921568627594,
+        -7303.921568627594,
+        -7303.921568627594,
+        1008.6134235000155,
+        0,
+        0,
+        0.7102306612919103,
+        0.003174019607843102
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.0458297171946893e-05,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c0.0-direction0",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333334
+      ],
+      "actual": [
+        -3.0614402980242657e-10,
+        -3.15623197253403e-10,
+        -3.15623197253403e-10,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333205
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 3.15623197253403e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c0.0-direction1",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.0020100000000000001,-0.0019950000000000002,-0.0019950000000000002,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00201,
+        -0.0019950000000000002,
+        -0.0019950000000000002,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333334
+      ],
+      "actual": [
+        -3.1207396816680795e-10,
+        -3.1760279390930607e-10,
+        -3.17609011158244e-10,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333203
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 3.1760901115824395e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c0.0-direction2",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,1.0000000000000001e-05,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        1e-05,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333334
+      ],
+      "actual": [
+        -3.2104953109841853e-10,
+        -3.2104953109841853e-10,
+        -3.2104953109841853e-10,
+        2.2996516866846506e-15,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333203
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 3.210495310984185e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c0.0-direction3",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,1.0000000000000001e-05,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        1e-05,
+        0.0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333334
+      ],
+      "actual": [
+        -3.2104953109841853e-10,
+        -3.2104953109841853e-10,
+        -3.2104953109841853e-10,
+        0,
+        2.2996516866846506e-15,
+        0,
+        0.7102306612919103,
+        0.0008333333333333203
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 3.210495310984185e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c0.0-direction4",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,0,1.0000000000000001e-05"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        0.0,
+        1e-05
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333334
+      ],
+      "actual": [
+        -3.2104953109841853e-10,
+        -3.2104953109841853e-10,
+        -3.2104953109841853e-10,
+        0,
+        0,
+        2.2996516866846506e-15,
+        0.7102306612919103,
+        0.0008333333333333203
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 3.210495310984185e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c0.0-direction5",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,3.0000000000000001e-06,-2.0000000000000003e-06,1.0000000000000002e-06"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        3e-06,
+        -2.0000000000000003e-06,
+        1.0000000000000002e-06
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333334
+      ],
+      "actual": [
+        -3.2225098305343013e-10,
+        -3.2561104528650153e-10,
+        -3.219738713864837e-10,
+        -1.8041124150158806e-15,
+        -1.901256929670581e-15,
+        9.506284648352905e-16,
+        0.7102306612919103,
+        0.0008333333333333197
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 3.2561104528650153e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md1.2-c0.0-factor0.9",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.0009185586535436918,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0009185586535436918,
+        0,
+        0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333334
+      ],
+      "actual": [
+        -2.295466785679907e-10,
+        -2.295466785679907e-10,
+        -2.295466785679907e-10,
+        1.007974722747286e-12,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333237
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 2.295466785679907e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md1.2-c0.0-factor1.0",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.0010206207261596577,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0010206207261596577,
+        0,
+        0
+      ],
+      "expected": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.0008333333333333334
+      ],
+      "actual": [
+        -1.407532576826808e-10,
+        -1.407532576826808e-10,
+        -1.407532576826808e-10,
+        1.7733041001809852e-10,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008333333333333273
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.7733041001809852e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md1.2-c0.0-factor1.1",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,0",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.0011226827987756234,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0011226827987756234,
+        0,
+        0
+      ],
+      "expected": [
+        1111.1111111111095,
+        1111.1111111111095,
+        1111.1111111111095,
+        1088.6621079036338,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.0008796296296296296
+      ],
+      "actual": [
+        1111.1111111109558,
+        1111.1111111109558,
+        1111.1111111109558,
+        1088.6621079038152,
+        0,
+        0,
+        0.7102306612919103,
+        0.0008796296296296234
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.794901517343486e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c10000.0-direction0",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111111
+      ],
+      "actual": [
+        -8333.333333333514,
+        -8333.333333333518,
+        -8333.333333333518,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111036
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.695857813151983e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c10000.0-direction1",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.0020100000000000001,-0.0019950000000000002,-0.0019950000000000002,0,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00201,
+        -0.0019950000000000002,
+        -0.0019950000000000002,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111111
+      ],
+      "actual": [
+        -8333.333333333525,
+        -8333.333333333523,
+        -8333.333333333523,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111034
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.7630204988213684e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c10000.0-direction2",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,1.0000000000000001e-05,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        1e-05,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111111
+      ],
+      "actual": [
+        -8333.33333333352,
+        -8333.33333333352,
+        -8333.33333333352,
+        9.188748404958276e-15,
+        0,
+        0,
+        0.7102306612919103,
+        0.00048611111111110335
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.7126484845693294e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c10000.0-direction3",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,1.0000000000000001e-05,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        1e-05,
+        0.0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111111
+      ],
+      "actual": [
+        -8333.33333333352,
+        -8333.33333333352,
+        -8333.33333333352,
+        0,
+        9.188748404958276e-15,
+        0,
+        0.7102306612919103,
+        0.00048611111111110335
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.7126484845693294e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c10000.0-direction4",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0,0,1.0000000000000001e-05"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0,
+        0.0,
+        1e-05
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111111
+      ],
+      "actual": [
+        -8333.33333333352,
+        -8333.33333333352,
+        -8333.33333333352,
+        0,
+        0,
+        9.188748404958276e-15,
+        0.7102306612919103,
+        0.00048611111111110335
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.7126484845693294e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-Md1.2-c10000.0-direction5",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.00199,-0.0020049999999999998,-0.0020049999999999998,3.0000000000000001e-06,-2.0000000000000003e-06,1.0000000000000002e-06"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.00199,
+        -0.002005,
+        -0.002005,
+        3e-06,
+        -2.0000000000000003e-06,
+        1.0000000000000002e-06
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111111
+      ],
+      "actual": [
+        -8333.33333333352,
+        -8333.333333333518,
+        -8333.333333333518,
+        1.942890293094024e-16,
+        -3.7470027081098915e-16,
+        1.8735013540549457e-16,
+        0.7102306612919103,
+        0.0004861111111111035
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.7126484845693294e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md1.2-c10000.0-factor0.9",
+      "method": "apex-limit",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.00053582588123382026,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0005358258812338203,
+        0,
+        0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111111
+      ],
+      "actual": [
+        -8333.333333333469,
+        -8333.333333333469,
+        -8333.333333333469,
+        2.8497469184851915e-13,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111055
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 9,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.242509684883631e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md1.2-c10000.0-factor1.0",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.00059536209025980028,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0005953620902598003,
+        0,
+        0
+      ],
+      "expected": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0.0,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.0004861111111111111
+      ],
+      "actual": [
+        -8333.33333333342,
+        -8333.33333333342,
+        -8333.33333333342,
+        1.0077972065549693e-10,
+        0,
+        0,
+        0.7102306612919103,
+        0.0004861111111111078
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.0077972065549694e-06,
+      "passed": true
+    },
+    {
+      "id": "apex-junction-Md1.2-c10000.0-factor1.1",
+      "method": "smooth-plastic",
+      "arguments": [
+        "--model",
+        "drucker-prager",
+        "--mode",
+        "integrate",
+        "--parameters",
+        "100000,30000000,0.25,1.2,1.2,10000",
+        "--initial",
+        "100000,100000,100000,0,0,0,0.69999999999999996,0",
+        "--strain",
+        "-0.002,-0.002,-0.002,0.0006548982992857803,0,0"
+      ],
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0,
+        0.7,
+        0
+      ],
+      "strain_increment": [
+        -0.002,
+        -0.002,
+        -0.002,
+        0.0006548982992857803,
+        0,
+        0
+      ],
+      "expected": [
+        -7685.185185185186,
+        -7685.185185185186,
+        -7685.185185185186,
+        635.05289627712,
+        0.0,
+        0.0,
+        0.7102306612919103,
+        0.0005131172839506173
+      ],
+      "actual": [
+        -7685.185185185271,
+        -7685.185185185271,
+        -7685.185185185271,
+        635.0528962772295,
+        0,
+        0,
+        0.7102306612919103,
+        0.0005131172839506136
+      ],
+      "expected_failure": false,
+      "reference_steps": 1,
+      "returncode": 0,
+      "solver_ok": true,
+      "message": "",
+      "diagnostics": {
+        "iterations": 8,
+        "substeps": 1,
+        "rejected": 0
+      },
+      "max_tolerance_ratio": 1.087895535154693e-06,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

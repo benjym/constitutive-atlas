@@ -35,7 +35,7 @@ The language's current state limit is 24 scalars, and v0.1 declared units are `1
 
 ## Plasticity verification investigation
 
-The [investigation](PLASTICITY_VERIFICATION.md) retains 18/19 passing Drucker–Prager and 19/20 passing MCC comparisons in hashed evidence records with `outcome: failed`. DP has an unresolved shear/apex integration failure with exact rollback. MCC agrees with a matching two-half-step scalar reference, while the full-step comparison remains different. Both MCC isotropic refinement studies pass. Source review remains pending; these findings do not promote either model.
+The historical [v1 investigation](PLASTICITY_VERIFICATION.md) retains failed-outcome evidence for both plasticity laws. The subsequent [declarative DP apex correction](models/drucker-prager-apex.md) passes all 73 independent invariant-reference cases and includes the formerly failing increment in native/Wasm parity; its [v2 evidence](../catalogue/evidence/drucker-prager-apex-v2.json) records the corrected model hash. The generic C++ solver is unchanged. MCC still agrees with a matching two-half-step scalar reference while its full-step comparison remains different; both isotropic refinement studies pass. Independent source review and physical parameter admissibility remain open; neither model is promoted.
 
 ## Near-term addition: Terracotta
 
