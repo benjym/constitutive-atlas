@@ -371,3 +371,11 @@ All nine frozen-preparation creep requests now pass native/Wasm C-ABI parity and
 ### 2026-10-31 — History and transaction design
 
 The [experimental history contract](docs/HISTORY_TRANSACTIONS.md) turns the PM4Sand3D inventory into explicit storage classes, immutable ordered phase snapshots, atomic reset/advance/rollback, caller-step lag and restart lineage. Its [machine-readable example](proposals/pm4sand3d-history-contract.json) is deliberately non-loadable, retains 19 source blockers and leaves every PM4 update phase disabled. Eight acceptance gates specify separate Python validation/interpreter work, transaction fixtures, legacy compatibility, source resolution and eventual native/Wasm evidence. No runtime API or 32-component capacity change is made.
+
+### 2026-10-31 — SANISAND event decision review
+
+The [source-located decision packet](docs/reviews/sanisand-2004-decision.md) separates the original continuous law, pinned OpenSees policies and the two Atlas research algorithms for initialization, first yield, reversal, zero-distance hardening and rollback. The paper-local cone-normal and parent trial-direction guards demonstrably differ at an existing retained peak. Canonical reset semantics remain open pending the referenced loading-process source and distinguishing Python fixtures; no public model or review status changes.
+
+### 2026-10-31 — HCA recording and accumulation contract
+
+The [HCA-2005 contract draft](docs/reviews/hca-2005-contract.md) specifies one recording cycle and one accumulation block, source-located amplitude/history equations, companion-law handoffs and per-cycle evolution. It preserves conflicting recording-filter rules and the full 9D versus symmetric 6D polarization-initialization issue. Next independent checks are sampled-loop amplitudes and scalar history composition; a general cycle-count API, full closure and executable admission remain open. No source document was redistributed and no build was run.

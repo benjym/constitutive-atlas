@@ -13,3 +13,11 @@ PM4Sand2D's in-plane mean stress differs from 3D mean stress. PM4Sand3D's tensor
 The candidate triage also identifies an existing local HCA manuscript and warns that a Fortran member inside the VIBE dataset archive identifies SANISAND, not VIBE. Source identity and reuse must be resolved before either is treated as a constitutive reference. Local paper-side drafts cited by that report are supplemental work in progress and may be absent from a clean checkout; they are not canonical admitted-model evidence.
 
 Only primary-source fragments that fit the existing engine should proceed directly to transcription. Changes to state capacity, event/update chronology, plane-strain/interface channels, cycle count and thermal/hydraulic inputs require source-backed capability contracts and matching verification. Keep native executions serial and reference builds bounded. Do not promote a candidate merely because its algebra compiles.
+
+## Follow-up packets
+
+- [SANISAND decision table](sanisand-2004-decision.md): distinguishes source initialization, first yield, local versus parent-direction reversal, zero-distance hardening and transaction choices. Canonical reversal remains open; Python-only distinguishing fixtures and the referenced 1986 loading-process source are the next gates.
+- [PM4Sand history/transaction design](../HISTORY_TRANSACTIONS.md): explicit lifetimes, phase snapshots, lag and atomic rollback, with a non-executable source-blocked example. Next work is a separate typed Python validator/reference interpreter and synthetic transaction fixtures before code generation.
+- [Terracotta prepared creep](../TERRACOTTA_CREEP_REFERENCE.md#nativewasm-prepared-creep-verification): all nine native and Wasm cases independently satisfy the scalar-reference study. Source reconciliation, external experimental comparisons, scientific review and browser creep interaction remain open.
+
+- [HCA recording/accumulation contract](hca-2005-contract.md): source-located cycle inputs, amplitude operator, scalar history and companion handoffs. Recording-filter inconsistency and full-space polarization normalization block a canonical implementation; cycle count must remain distinct from physical time.
