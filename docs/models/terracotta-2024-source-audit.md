@@ -12,7 +12,7 @@ All repository evidence is at revision [`a4039d0124d8ff61e766f5201f44ddc163c4cff
 | [Example driver](https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/code/Terracotta_main.py) | `62c45ae3ba7d556956e4e29d940371a5f1a39b8feeb0d1a0c59db80fbe44a888` |
 | [Author equation summary](https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/images/theModel.png) | `e019012545c5fb0bb80c8f95bad68d35f458c9094ea471d8f42616a170dcc071` |
 
-The original journal source remains [Wiebicke & Einav (2024)](https://doi.org/10.1016/j.jmps.2024.105789). Its abstract and repository association were confirmed; the journal equations have not yet been checked against these author assets. The README cites an earlier SSRN version. Source locators below refer to the pinned code, not purported journal equation numbers.
+The original journal source remains [Wiebicke & Einav (2024)](https://doi.org/10.1016/j.jmps.2024.105789). The initial extraction used the repository assets; the follow-up below records the journal passages subsequently located. Complete visual/equation cross-checking remains outstanding. The README cites an earlier SSRN version. Source locators below refer to the pinned code, not purported journal equation numbers.
 
 ## State and output requirements extracted
 
@@ -43,3 +43,14 @@ The example labels elastic moduli in kPa, `alpha`/`gamma` in K·s, `eta` in 1/(K
 ## Next evidence
 
 Retrieve and inspect the complete journal equations and parameter/initialization passages, attach exact locators, and reconcile TC-A01–05. Then transcribe a source-pinned original invariant model with explicit observables. Compare prescribed-rate paths first, followed by genuinely matching mixed controls, creep and relaxation with source-matched durations and parameters. Keep author-code agreement, independent equation review and experimental validation as separate evidence gates.
+
+## Journal follow-up
+
+The [journal full text uploaded by Itai Einav](https://www.researchgate.net/publication/382467665_A_simple_hydrodynamic_model_for_clay) provides these additional locators:
+
+- Section 4.5, Eq. (36), p. 10: the temperature-rate expression has no factor of one half, supporting TC-A01's identification of a discrepancy in the mixed-control routine.
+- Section 6, p. 13: BDF and the outer-step acceleration approximation are stated numerical choices, supporting TC-A03/05.
+- Appendix B, p. 26: Figure 1 is the simplified variant; the fuller variant retains an elastic contribution to thermodynamic pressure and changes plastic transport coefficients. Pin **Figure 1** as the immediate target; Appendix B requires a separate variant identity.
+- Appendix C, p. 27: the dimension table supports the time/temperature extension.
+
+These targeted text checks advance TC-01 but do not close equation extraction, parameter reconciliation, numerical reproduction or independent review.

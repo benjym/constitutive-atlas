@@ -10,7 +10,7 @@ Catalogue ID: `terracotta-2024`. Status: **candidate; not executable**. Priority
 
 Use the journal paper as the formulation source and the pinned author code as reference evidence. The reference README cites an earlier manuscript, so code/paper equivalence must be checked rather than assumed. No author code has been imported or executed as part of adding this candidate.
 
-The immediate target is the **original triaxial-invariant clay model**, not an unreviewed tensorial extension. The later [Hydrodynamics of Fault Gouges From Constitutive Modelling to the Physics of Friction](https://doi.org/10.1029/2024JB030822) distinguishes the original triaxial model from its tensorial generalization and derived friction law. If either later variant is admitted, give it a separate source-pinned identity and review.
+The immediate target is the **original Figure 1 simplified triaxial-invariant clay model** (distinct from the fuller Appendix B variant in the same paper), not an unreviewed tensorial extension. The later [Hydrodynamics of Fault Gouges From Constitutive Modelling to the Physics of Friction](https://doi.org/10.1029/2024JB030822) distinguishes the original triaxial model from its tensorial generalization and derived friction law. If either later variant is admitted, give it a separate source-pinned identity and review.
 
 ## Why it belongs near term
 
