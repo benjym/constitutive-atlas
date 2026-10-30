@@ -92,3 +92,7 @@ The [33-term original-paper fragment](../catalogue/source-audits/sanisand-2004-o
 ## SANISAND derived hardening limit — 2026-10-31
 
 A [separate algebraic limit draft](models/sanisand-2004-hardening-limit.md) now keeps stress/plastic/history products finite as reversal distance tends to zero on a regular branch. Four Python-only groups pass, including 120 equivalence cases and positive distances down to `1e-305`. The [record](../catalogue/investigations/sanisand-hardening-limit-v1.json) pins source and checks. Double-zero limits, reversal/yield-entry handling, finite-step integration and independent review remain open. Native builds/executable tests remain held.
+
+## Cautious native SANISAND check — 2026-10-31
+
+The user reauthorized gradual native checks. One standalone C++20 compilation and execution completed normally, passing 12 cases, 2,280 value checks and 6,840 automatic strain-derivative comparisons against Python central differences. The [evidence record](../catalogue/investigations/sanisand-native-algebra-v1.json) pins hashes and commands. This supersedes the latest blanket native hold for individual checks; the larger OpenSees build remains deferred. This adds algebra/code-generation verification, not state or finite-step tangents, integrated trajectories or independent scientific validation.

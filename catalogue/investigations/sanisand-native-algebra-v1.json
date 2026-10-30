@@ -1,0 +1,73 @@
+{
+  "kind": "native-algebra-verification",
+  "cases": 12,
+  "scope": "On-cone algebra and six strain columns at fixed state; no finite integration or state tangent.",
+  "sha256": {
+    "catalogue/source-audits/sanisand-2004-hardening-limit.json": "a32888f952cb88a47e6a4769b11350f157b5802d9a9cb6f4785698cb546fbe3d",
+    "catalogue/source-audits/sanisand-2004-original-equations.json": "a054edbba6ca29b67197b42e4c5c1fb97df282336bbc2986723103580ae5a459",
+    "tools/inspect_sanisand_limit.py": "3fefefc1b24c3b2f1ca376fb02d81cf0a7355a2fc91183e41d7c68e18ce8267f",
+    "tools/inspect_sanisand_original.py": "63be5fcaea74c8e9fc18d56091909f830411e20a5a33b7b2b18d8235a1580ed5",
+    "tools/prepare_sanisand_native.py": "ea848c498b43f4c3a430af47873f5f22f7aeb9d592ab8ec2a502f7754180a04b",
+    "atlas/dsl.py": "5bdb057a0c6be9f47315aa56cf4607a97b4c0eb5088f710f49121e50d4df5060",
+    "cpp/include/atlas/tensor.hpp": "d964ff6e2e46f81e465533f2b517c3aabef7df42de4ed2b9907cc5e4448c6a1e"
+  },
+  "fixture_sha256": "640ef32467e03c9552bcae43895241eb2f267f9091107fad8bd9e87873c7d910",
+  "date": "2026-10-31",
+  "status": "passed",
+  "source_revision": "5d9058f",
+  "compiler": {
+    "version": "Apple clang version 21.0.0 (clang-2100.4.1.1)",
+    "target": "arm64-apple-darwin25.6.0"
+  },
+  "compile": {
+    "argv": [
+      "c++",
+      "-std=c++20",
+      "-O0",
+      "-I/Users/bmar5496/code/constitutive-atlas/cpp/include",
+      "/private/tmp/atlas-sanisand-native-small-20261031/sanisand_algebra.cpp",
+      "-o",
+      "/private/tmp/atlas-sanisand-native-small-20261031/sanisand_algebra"
+    ],
+    "exit_code": 0,
+    "output": "",
+    "wall_seconds": 0.5461395
+  },
+  "execution": {
+    "exit_code": 0,
+    "stdout": "12 cases: 2280 values and 6840 strain derivatives passed\n",
+    "wall_seconds": 0.579411917
+  },
+  "coverage": {
+    "directions": 3,
+    "reversal_distances": [
+      0.0,
+      0.03
+    ],
+    "loading_signs": [
+      -1,
+      1
+    ],
+    "terms": 35,
+    "value_checks": 2280,
+    "strain_derivative_checks": 6840,
+    "derivative_oracle": "Python central differences, step 1e-8, strain-only at fixed on-cone state and loading branch",
+    "value_tolerances": {
+      "absolute": 1e-08,
+      "relative": 2e-10
+    },
+    "derivative_tolerances": {
+      "absolute": 1e-07,
+      "relative": 2e-07
+    }
+  },
+  "limitations": [
+    "Checks generated C++ against the Python interpreter of the same draft equations, not an independent scientific oracle.",
+    "No state derivatives, branch-boundary derivative, finite-step integration, Wasm or experimental comparison.",
+    "No full OpenSees build or external source compilation."
+  ],
+  "reproduce": [
+    "python3 tools/prepare_sanisand_native.py /private/tmp/atlas-sanisand-native-small-20261031",
+    "Run the recorded compiler command, then the resulting executable separately."
+  ]
+}
