@@ -13,20 +13,22 @@ from build_publications import bundle as bundle_publications
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--preview-experiments', action='store_true', help='Include pending datasets in web/preview for local review only')
+    parser.add_argument('--wasm-dir',type=Path,default=ROOT/'build-wasm',help='Verified engine directory containing atlas.js, atlas.wasm and generated/models.json')
+    parser.add_argument('--output',type=Path,help='Explicit local output directory')
     args=parser.parse_args()
-    dest=ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
-    generated=ROOT/'build-wasm/generated'
-    # CMake owns code generation; do not silently create a mismatched catalogue.
+    dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
+    generated=args.wasm_dir/'generated'
+    # Do not package an engine alongside a stale generated model catalogue.
     if not (generated/'models.json').exists():raise SystemExit('Build the Emscripten target first.')
     import tempfile
     with tempfile.TemporaryDirectory() as check:
         generate(check)
         if (Path(check)/'models.json').read_bytes() != (generated/'models.json').read_bytes():
             raise SystemExit('Wasm catalogue is stale: rebuild before packaging.')
-    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs']:
+    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     for name in ['atlas.js','atlas.wasm']:
-        shutil.copyfile(ROOT/'build-wasm'/name,dest/name)
+        shutil.copyfile(args.wasm_dir/name,dest/name)
     shutil.copyfile(generated/'models.json',dest/'models.json')
     shutil.copyfile(ROOT/'catalogue/manifest.json',dest/'catalogue.json')
     bundle_publications(dest)

@@ -1,6 +1,6 @@
 # Experimental update-linearization JSON API
 
-The native C ABI and CLI expose the accepted-update tangent described in [UPDATE_LINEARIZATION.md](UPDATE_LINEARIZATION.md). This is an opt-in experimental interface, version `experimental-update-linearization-0.1`, independent of model schema versions. Native evidence is retained; this endpoint has not been rebuilt or exercised in WebAssembly or the website.
+The native C ABI and CLI expose the accepted-update tangent described in [UPDATE_LINEARIZATION.md](UPDATE_LINEARIZATION.md). This is an opt-in experimental interface, version `experimental-update-linearization-0.1`, independent of model schema versions. Native evidence is retained. Subsequent [browser numerical verification](BROWSER_NUMERICS.md) covers this endpoint in WebAssembly for the five public formulations; the website exposes configured protocol runs, not a tangent viewer.
 
 ## Calling convention
 

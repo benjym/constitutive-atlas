@@ -1,0 +1,107 @@
+{
+  "kind": "public-browser-numerical-settings-investigation",
+  "date": "2026-10-31",
+  "source_revision": "19666f2",
+  "status": "passed",
+  "scope": "Five public formulations; configured laboratory runs and default/configured full-update tangents. Research variants and timed/schedule catalogues were not rebuilt.",
+  "toolchain": {
+    "emscripten": "6.0.8-git (installed Homebrew 6.0.8)",
+    "node": "v26.7.0",
+    "native": "c++ C++20 -O0"
+  },
+  "wasm_build": {
+    "exit_code": 0,
+    "source": "cpp/main.cpp",
+    "flags": [
+      "-std=c++20",
+      "-O0",
+      "-fexceptions",
+      "-sMODULARIZE=1",
+      "-sEXPORT_ES6=1",
+      "-sEXPORT_NAME=createAtlas",
+      "-sENVIRONMENT=web,worker,node",
+      "-sALLOW_MEMORY_GROWTH=1",
+      "-sMAXIMUM_MEMORY=268435456",
+      "-sSTACK_SIZE=1048576",
+      "-sEXPORTED_RUNTIME_METHODS=[\"ccall\"]",
+      "-sFILESYSTEM=0",
+      "--no-entry"
+    ],
+    "directory": "/private/tmp/atlas-browser-settings",
+    "cache_note": "Copied the existing Emscripten cache into the temporary build directory. EMCC_FROZEN_CACHE=1 did not prevent automatic generation of missing debug libc/stubs/allocator/C++/ABI libraries. All compilation/linking completed normally.",
+    "js_sha256": "194bb339dc2b58b72ad66ed206db6be9919b5d8da2993858a16d25f83b8cbad2",
+    "wasm_sha256": "29aa7d45bf75553cdfe4d0a12fa73e9f76156d5b93d53600d2dfcc2e3cb3a569",
+    "generated_header_sha256": "d5381b70319eecca056f8374f948b40b6dcd2bc1eff854c9188761a5b87b0919",
+    "generated_models_sha256": "d04491926af92085c5c3e5d847afca4d9cd5bba38fc4355f1cba8e6fdb73de23"
+  },
+  "native_build": {
+    "exit_code": 0,
+    "wall_seconds": 0.665590583,
+    "executable_sha256": "355dbbfd8bac7fcb7c99c1cb1a5049dd8592688448705d1c20e1c2e279125e19"
+  },
+  "parity": {
+    "cases": 17,
+    "exit_code": 0,
+    "relative_or_absolute_tolerance": 1e-07,
+    "command": "node tools/test_numerics.mjs --wasm /private/tmp/atlas-browser-settings/atlas.js --native /private/tmp/atlas-browser-settings/native-solver --output /private/tmp/atlas-browser-settings/numerics-parity.json",
+    "raw_file": "parity.json.gz"
+  },
+  "regression": {
+    "exit_code": 0,
+    "model_protocol_pairs": 25,
+    "increment_diagnostics_rollback_cases": 4,
+    "cartesian_rate_states": 2,
+    "igs_analytical_crossing_cyclic_increments": 6,
+    "command": "node tools/test_wasm.mjs --wasm-dir /private/tmp/atlas-browser-settings --native /private/tmp/atlas-browser-settings/native-solver"
+  },
+  "python": {
+    "tests": 6,
+    "exit_code": 0,
+    "command": "PYTHONPATH=tests python3 -m unittest tests.test_browser_numerics tests.test_web_experiments tests.test_web_publications -q"
+  },
+  "packaging": {
+    "exit_code": 0,
+    "command": "python3 tools/build_web.py --wasm-dir /private/tmp/atlas-browser-settings --output /private/tmp/atlas-browser-settings/site",
+    "release": "public",
+    "experiments": 626
+  },
+  "browser": {
+    "initial_default_run": "Response up to date; 101 points",
+    "custom_rate_tolerance": 1e-08,
+    "custom_run": "Response up to date; exported specification settings exactly equal engine settings",
+    "custom_import": "Restored rate tolerance 1e-8 and recalculated successfully",
+    "legacy_import": "Missing integration_settings maps to rate tolerance 1e-6 and other defaults; recalculated successfully",
+    "zero_residual_tolerance": "Inline Invalid numerical setting error; exports disabled",
+    "reset": "Restored defaults and recalculated",
+    "console_fix": "Restored commented-out result-note element; existing response handler had thrown after updating plots. Added required static DOM target regression. After reload/custom update, note and pore caption update successfully and no new errors were observed. Five prior error entries remain in browser log.",
+    "screenshot": "settings-preview.png",
+    "export_file": "browser-export.json.gz"
+  },
+  "limitations": [
+    "Isolated -O0 local build; no Release build or hosted deployment.",
+    "Research models, physical-time/schedule binaries, tangent UI and global numerical configuration gates remain open.",
+    "Local Node 26.7.0 differs from CI-pinned Node 24; GitHub Actions has not run these changes.",
+    "UI checked at desktop size; full mobile/keyboard and cancellation regression coverage remains pending."
+  ],
+  "sha256": {
+    "web/index.html": "cf2479a951ca2d322cd1c844f9f88f85743e2b7a1544f00c5023fe9d369165c5",
+    "web/app.js": "2a49d7168974637ab1d571033ddaeb8f465fc57934f59787014340339ace0779",
+    "web/worker.js": "626924007134c24fdeca4ef57554858392396a8b819ece1139122780bc1d04a1",
+    "web/numerics.mjs": "c1c805112b9c4004673404b735417ee72e2f0fc5edb84d7cca2e4ab5735cbd18",
+    "tools/build_web.py": "8c69ca098cf6f6603ea940bf5507e69400adfed7ef07bb947c43a0f697b64fd0",
+    "tools/test_wasm.mjs": "104ea011d8d4e87ced0a08abeaf610bdcfba9459bccab33a52c856af53db327c",
+    "tools/test_numerics.mjs": "08914e94564a690efa0f9c41c18e877c78b498301e35b8992a7082d319f2455b",
+    "tests/test_browser_numerics.py": "73dc29c2fd066e88030c4e6c4125a113603f5b1449a90fdaf9fa3fdd52a056ef",
+    ".github/workflows/verify.yml": "cbc857b75054aaf438b8e1206a3bdf476ee6f1ef01a3491023b450b3a6e27719",
+    "cpp/main.cpp": "320c1138036642d9123951c2e24dcb22f817b645330aa81a1f43761cb06cb963",
+    "cpp/include/atlas/solver.hpp": "7842240f542949a1ba547f4a2fea44e4ef1fadf50b35a18fd86f8fe4327164d5",
+    "cpp/include/atlas/settings.hpp": "3eb1171ae1ef17440b19e8becfc8e9bf92335519a88da8f1e9be407d3488662b",
+    "cpp/include/atlas/linearize.hpp": "40f8ed4bc722636c3ce0573af150dcbe6afe59618e0dad1542aa9a2b9e7b4319",
+    "atlas/compiler.py": "9998949ba1cb2c719333770a5bffe6f1d4951b2728caac78195d6f7bb23b0895"
+  },
+  "artifacts_sha256": {
+    "parity.json.gz": "5aa81ce0b598c5ff93b186997fb1b3f82af591a86eb781a5d7820dc368f6fef6",
+    "browser-export.json.gz": "7b57e17e0cd05797eb805264c3ef185d8aee56de3edb77e8c17f59fbc243c924",
+    "settings-preview.png": "f70d83607a1ab178cd9f8259c028d8f46bf32dd7ef928b3fef8879d98bf5147d"
+  }
+}

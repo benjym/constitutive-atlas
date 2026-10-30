@@ -1,3 +1,4 @@
+import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries} from './experiments.mjs';
 const $ = id => document.getElementById(id);
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
@@ -120,11 +121,25 @@ function valuesForState(m){
   }
   return z;
 }
+function numericalControls(){
+  const container=$('numerical-fields');
+  for(const f of settingFields){
+    const label=element('label',f.label),input=element('input');input.type='number';input.id='numerical-'+f.key;
+    input.value=input.defaultValue=f.value;input.required=true;input.min=f.min;input.step=f.integer?'1':'any';
+    if(f.max!==undefined)input.max=f.max;label.append(input);container.append(label);
+  }
+}
+function numericalValues(){
+  const s=normalizeSettings();for(const f of settingFields)s[f.key]=Number($('numerical-'+f.key).value);
+  return normalizeSettings(s);
+}
+function setNumericalValues(value){const s=normalizeSettings(value);for(const f of settingFields)$('numerical-'+f.key).value=s[f.key];}
 function specification(){
   const m=model(),protocol=Number($('protocol').value);
-  return {model:m.id,parameters:Object.keys(m.parameters).map(n=>Number($('param-'+n).value)*Number($('param-'+n).dataset.factor)),initial:valuesForState(m),protocol,target:Number($('target').value)*(protocol===3?1000:.01),steps:Number($('steps').value),cycles:Number($('cycles').value)};
+  return {model:m.id,parameters:Object.keys(m.parameters).map(n=>Number($('param-'+n).value)*Number($('param-'+n).dataset.factor)),initial:valuesForState(m),protocol,target:Number($('target').value)*(protocol===3?1000:.01),steps:Number($('steps').value),cycles:Number($('cycles').value),integration_settings:numericalValues()};
 }
 function validateSpec(s){
+  normalizeSettings(s.integration_settings);
   const m=models.find(m=>m.id===s.model);if(!m)throw Error('This model is not in the executable catalogue.');
   if(!Array.isArray(s.parameters)||s.parameters.length!==Object.keys(m.parameters).length)throw Error('Parameter array does not match model.');
   Object.values(m.parameters).forEach((p,i)=>{if(typeof s.parameters[i]!=='number'||!Number.isFinite(s.parameters[i])||s.parameters[i]<p.min||s.parameters[i]>p.max)throw Error('Parameter outside declared bounds.');});
@@ -154,7 +169,9 @@ function startRun(job){
     clearTimeout(timer);busy(false);activeId=null;
     // A completed older calculation must never replace newer slider settings.
     if(data.id===sequence){
-      if(data.error)calculationError(data.error);
+      let responseError=data.error;
+      if(!responseError){try{verifyReturnedSettings(data.result,s.integration_settings);}catch(error){responseError=error.message;}}
+      if(responseError)calculationError(responseError);
       else if(data.result.catalogue_hash&&data.result.catalogue_hash!==catalogueHash)calculationError('Wasm and model catalogue differ. Reload a consistent build.');
       else{
         const r=data.result;currentResult=r;lastSpec=structuredClone(s);renderCharts();
@@ -177,7 +194,7 @@ function simulate(s){
   clearTimeout(updateTimer);updateTimer=null;
   try{
     if(!s){if(!$('controls').checkValidity()){scheduleUpdate();return;}s=specification();}
-    validateSpec(s);invalidate();syncSliders();
+    s={...s,integration_settings:normalizeSettings(s.integration_settings)};validateSpec(s);invalidate();syncSliders();
     const job={s,id:sequence};
     if(activeId!==null)pendingRun=job;else startRun(job);
   }catch(error){invalidate();calculationError(error.message);}
@@ -285,7 +302,7 @@ function setProtocol(){
 async function readFile(file){if(!file)return null;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');return JSON.parse(await file.text());}
 async function importRun(file){
   try{const doc=await readFile(file);if(!doc)return;if(doc.schema_version!=='0.1')throw Error('Unsupported run schema version.');if(doc.catalogue_hash!==catalogueHash)throw Error('Run was created with a different model catalogue. Use the matching release.');
-    const s=doc.specification,m=validateSpec(s);$('model').value=m.id;populate();Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
+    const s={...doc.specification,integration_settings:normalizeSettings(doc.specification?.integration_settings)},m=validateSpec(s);setNumericalValues(s.integration_settings);$('model').value=m.id;populate();Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
     $('confinement').value=s.initial[1]/1000;$('stress-ratio').value=s.initial[0]/s.initial[1];let offset=6;
     for(const f of m.state.slice(1)){const size=f.shape==='sym'?6:1;if(!f.transient){const input=$('state-'+f.name);input.value=size===6?s.initial.slice(offset,offset+6).join(','):s.initial[offset]/Number(input.dataset.factor);}offset+=size;}
     $('protocol').value=s.protocol;setProtocol();$('target').value=s.target/(s.protocol===3?1000:.01);$('steps').value=s.steps;
@@ -406,7 +423,7 @@ $('retry-experiment').onclick=()=>{if($('experiment-select').value)selectExperim
 $('clear-experiments').onclick=()=>{const local=$('experiment-select').value.startsWith('local:');experiments=[];$('clear-experiments').disabled=true;$('experiment-file').value='';if(local){++experimentLoadSequence;showExperiment(null);}experimentOptions(local?'':$('experiment-select').value);};
 $('controls').addEventListener('input',scheduleUpdate);
 $('retry-button').onclick=()=>simulate();
-setProtocol();addSlider($('confinement'),'Radial effective stress (kPa)',1,10000);addSlider($('stress-ratio'),'Axial / radial stress ratio',.01,10);
+numericalControls();setProtocol();addSlider($('confinement'),'Radial effective stress (kPa)',1,10000);addSlider($('stress-ratio'),'Axial / radial stress ratio',.01,10);
 $('export-run').onclick=()=>download(lastSpec.model+'-run.json',JSON.stringify({schema_version:'0.1',catalogue_hash:catalogueHash,specification:lastSpec,result:currentResult},null,2),'application/json');
 $('export-csv').onclick=()=>{const rows=['axial_strain,radial_strain,volumetric_strain,p_Pa,q_signed_Pa,pore_pressure_Pa,iterations,substeps'];for(const p of currentResult.points)rows.push([p.strain[0],p.strain[1],p.strain.slice(0,3).reduce((a,b)=>a+b,0),p.p,p.q_signed,p.u,p.iterations,p.substeps].join(','));download(lastSpec.model+'-results.csv',rows.join('\n'),'text/csv');};
 $('search').oninput=$('availability').onchange=catalogueCards;

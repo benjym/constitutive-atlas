@@ -5,14 +5,17 @@ import {resolve,dirname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const createAtlas=(await import(pathToFileURL(resolve(root,'build-wasm/atlas.js')))).default;
+const options={};for(let i=2;i<process.argv.length;i+=2){assert.ok(['--wasm-dir','--native'].includes(process.argv[i]));assert.ok(process.argv[i+1]);assert.ok(!options[process.argv[i]]);options[process.argv[i]]=process.argv[i+1];}
+const wasmDir=resolve(options['--wasm-dir']||resolve(root,'build-wasm'));
+const nativeSolver=resolve(options['--native']||resolve(root,'build/atlas_solver'));
+const createAtlas=(await import(pathToFileURL(resolve(wasmDir,'atlas.js')))).default;
 const wasm=await createAtlas();
-const catalogue=JSON.parse(readFileSync(resolve(root,'build-wasm/generated/models.json'),'utf8'));
+const catalogue=JSON.parse(readFileSync(resolve(wasmDir,'generated/models.json'),'utf8'));
 let runs=0;
 for(const model of catalogue.models){
   for(const protocol of [0,1,2,3,4]){
     const target=protocol===3?10000:.002,steps=64,cycles=protocol===3?1:0;
-    const native=spawnSync(resolve(root,'build/atlas_solver'),['--model',model.id,'--protocol',String(protocol),'--target',String(target),'--steps',String(steps),'--cycles',String(cycles)],{encoding:'utf8',timeout:30000});
+    const native=spawnSync(nativeSolver,['--model',model.id,'--protocol',String(protocol),'--target',String(target),'--steps',String(steps),'--cycles',String(cycles)],{encoding:'utf8',timeout:30000});
     assert.equal(native.status,0,model.id+': '+native.stdout+native.stderr);
     const expected=JSON.parse(native.stdout);
     const actual=JSON.parse(wasm.ccall('atlas_run','string',['string','string','string','number','number','number','number'],[model.id,'','',protocol,target,steps,cycles]));
@@ -32,7 +35,7 @@ for (const [id,initial,strain] of [
   ['drucker-prager','100000,100000,100000,0,0,0,.7,0','-.002,-.002,-.002,.00001,0,0'],
   ['drucker-prager','400000,100000,100000,0,0,0,.7,0','.001,0,0,0,0,0'],
 ]) {
-  const native=spawnSync(resolve(root,'build/atlas_solver'),['--model',id,'--mode','integrate','--initial',initial,'--strain',strain],{encoding:'utf8',timeout:30000});
+  const native=spawnSync(nativeSolver,['--model',id,'--mode','integrate','--initial',initial,'--strain',strain],{encoding:'utf8',timeout:30000});
   const expected=JSON.parse(native.stdout);
   const actual=JSON.parse(wasm.ccall('atlas_integrate','string',['string','string','string','string'],[id,'',initial,strain]));
   assert.equal(actual.ok,expected.ok);
@@ -48,7 +51,7 @@ console.log('Native/WebAssembly increment diagnostics and rollback parity passed
 
 for (const current of ['100000,100000,100000,0,0,0,.7','150000,90000,60000,8000,-5000,3000,.7']) {
   const strain='.001,-.0003,.0002,.0004,-.0002,.0001',id='hypoplastic-sand-vw96';
-  const native=spawnSync(resolve(root,'build/atlas_solver'),['--model',id,'--mode','evaluate','--current',current,'--initial',current,'--strain',strain],{encoding:'utf8',timeout:30000});
+  const native=spawnSync(nativeSolver,['--model',id,'--mode','evaluate','--current',current,'--initial',current,'--strain',strain],{encoding:'utf8',timeout:30000});
   assert.equal(native.status,0,native.stdout);
   const expected=JSON.parse(native.stdout);
   const actual=JSON.parse(wasm.ccall('atlas_evaluate','string',['string','string','string','string','string'],[id,'',current,current,strain]));
@@ -70,7 +73,7 @@ for (const [start,increments,analytical] of [
   let nativeState=start,wasmState=start;
   for (let j=0;j<increments.length;j++) {
     const strain=[0,0,0,increments[j],0,0].join(',');
-    const native=spawnSync(resolve(root,'build/atlas_solver'),['--model',igs,'--mode','integrate','--initial',nativeState.join(','),'--strain',strain],{encoding:'utf8',timeout:30000});
+    const native=spawnSync(nativeSolver,['--model',igs,'--mode','integrate','--initial',nativeState.join(','),'--strain',strain],{encoding:'utf8',timeout:30000});
     assert.equal(native.status,0,native.stdout+native.stderr);
     const expected=JSON.parse(native.stdout);
     const actual=JSON.parse(wasm.ccall('atlas_integrate','string',['string','string','string','string'],[igs,'',wasmState.join(','),strain]));

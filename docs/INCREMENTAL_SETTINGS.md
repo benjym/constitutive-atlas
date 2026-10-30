@@ -51,7 +51,7 @@ solver --mode linearize --model hypoplastic-sand-vw96 --strain 0.0001,-0.00005,-
 
 New responses include `integration_settings` with `version="incremental-settings-0.1"`, `norm="scaled_component_max"` and all six resolved values. Settings-enabled integrate responses also include model/catalogue identity, resolved parameters, parent and increment. Linearize/run retain their existing request provenance. Malformed, nonfinite, out-of-range and fractional integer settings fail without publishing a decoded material result. The settings API uses the existing shared response-string lifetime and concurrency constraints. CLI status still follows material success separately from tangent availability.
 
-Existing C exports and CLI calls without the option retain their previous response structure and use defaults. Their historical responses do not carry this new settings object. For an explicit default-settings run with provenance, use the option with an empty string or all six default values. Source annotations provide future Emscripten exports; no new Wasm or browser runtime has been verified.
+Existing C exports and CLI calls without the option retain their previous response structure and use defaults. Their historical responses do not carry this new settings object. For an explicit default-settings run with provenance, use the option with an empty string or all six default values. The initial settings investigation was native-only; subsequent [browser numerical verification](BROWSER_NUMERICS.md) covers the five public formulations in Wasm and the laboratory controls.
 
 ## Verification and reproduction
 
@@ -75,3 +75,5 @@ python3 -m unittest tests.test_integration_settings tests.test_tangent_geometry 
 ```
 
 Preparation and offline verification do not run native code; captures execute serial native requests with 45-second individual bounds. Outer mixed-control stopping rules, linear pivot cutoffs, tangent replay tolerances, global resource budgets, website/export settings controls and native/Wasm parity remain open. NUM-03 is not complete; no solver default tolerance is changed by these refinement results.
+
+The subsequent [public browser integration](BROWSER_NUMERICS.md) adds settings controls, import/export replay and 17 native/Wasm comparisons. Research-model Wasm evidence, outer-control settings and global budgets remain open; this does not complete NUM-03.

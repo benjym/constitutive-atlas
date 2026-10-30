@@ -74,6 +74,8 @@
           <details class="control-section">
             <summary>Solver settings</summary><label>Increments<input id="steps" type="number" value="100" min="1" max="5000" step="1" required></label>
             <p class="control-hint">More increments improve resolution and take longer. Cyclic histories need at least 16 per cycle.</p>
+            <div id="numerical-fields"></div>
+            <p class="control-hint">Tolerances use model state scales. Smaller values usually require more work; they do not bound total error. Limits apply to each material increment.</p>
           </details>
           <div class="run-actions">
             <p id="control-status" role="status">Changes update the plots automatically.</p><button type="button" id="cancel-button" class="secondary" hidden>Stop calculation</button><button type="button" id="retry-button" class="secondary" hidden>Retry calculation</button>
@@ -142,7 +144,7 @@
             </section>
           </div>
           <div class="result-footer">
-            <!-- <p id="result-note">Parameters are examples. Numerical verification does not establish experimental validity.</p> -->
+            <p id="result-note">Parameters are examples. Numerical verification does not establish experimental validity.</p>
             <div><button id="export-csv" class="text-button" disabled>↓ Results CSV</button><button id="export-run" class="text-button" disabled>↓ Reproducible run</button></div>
           </div>
 
