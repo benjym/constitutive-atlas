@@ -1,0 +1,123 @@
+{
+  "schema_version": "0.1",
+  "kind": "formulation-lineage-discovery",
+  "accessed_on": "2026-10-31",
+  "status": "author-page-screening",
+  "source_full_text_inspected": false,
+  "scope": "Author HTML overview, release lists, bibliography and driver README only; linked manuals inaccessible through web-reader redirects. No equations, binaries or drivers executed.",
+  "sources": [
+    {
+      "url": "https://pm4sand.engr.ucdavis.edu/",
+      "role": "Author overview",
+      "locator": "Background: separate PM4Sand2D and PM4Sand3D; 3D authorship"
+    },
+    {
+      "url": "https://pm4sand.engr.ucdavis.edu/pm4sand-files",
+      "role": "Author release listing",
+      "locator": "Version 3.1, 3.2 and 3.3 sections; scope and calibration changes"
+    },
+    {
+      "url": "https://pm4sand.engr.ucdavis.edu/pm4sand3d-files",
+      "role": "Author release listing",
+      "locator": "Version 1: May 2026 manual and FLAC3D 9.X distribution; example driver paths"
+    },
+    {
+      "url": "https://pm4sand.engr.ucdavis.edu/pm4sand-references",
+      "role": "Author bibliography",
+      "locator": "Manual report identities and 2013 formulation/implementation papers"
+    },
+    {
+      "url": "https://github.com/katerinaziot/PM4Sand3D_drivers_auto",
+      "role": "Author calibration drivers; not executed",
+      "locator": "README v1.0 June 2026; FLAC3D input generation and postprocessing; not constitutive source"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "pm4sand-2d-family",
+      "scope": "plane_strain",
+      "catalogue_id": null,
+      "role": "lineage-family"
+    },
+    {
+      "id": "pm4sand-2d-3.1",
+      "scope": "plane_strain",
+      "catalogue_id": null,
+      "report": "UCD/CGM-17/01",
+      "year": 2017,
+      "role": "historical-version"
+    },
+    {
+      "id": "pm4sand-2d-3.2",
+      "scope": "plane_strain",
+      "catalogue_id": null,
+      "report": "UCD/CGM-22/02",
+      "year": 2022,
+      "role": "historical-version"
+    },
+    {
+      "id": "pm4sand-2d-3.3",
+      "scope": "plane_strain",
+      "catalogue_id": "pm4sand",
+      "report": "UCD/CGM-23/01",
+      "year": 2023,
+      "reported_revision": "May 2024",
+      "role": "selected-candidate"
+    },
+    {
+      "id": "pm4sand-3d-1.0",
+      "scope": "three_dimensional",
+      "catalogue_id": "pm4sand3d-1.0",
+      "report": "UCD/CGM-26/01",
+      "year": 2026,
+      "reported_release": "May 2026",
+      "role": "selected-candidate"
+    }
+  ],
+  "edges": [
+    {
+      "parent": "pm4sand-2d-3.1",
+      "child": "pm4sand-2d-3.2",
+      "relation": "revision",
+      "source_url": "https://pm4sand.engr.ucdavis.edu/pm4sand-files",
+      "changes": "Backstress initialization and elasticity changed; calibration revision required."
+    },
+    {
+      "parent": "pm4sand-2d-3.2",
+      "child": "pm4sand-2d-3.3",
+      "relation": "revision",
+      "source_url": "https://pm4sand.engr.ucdavis.edu/pm4sand-files",
+      "changes": "Elastic shear-modulus stress-ratio term capped; calibration checks required."
+    },
+    {
+      "parent": "pm4sand-2d-family",
+      "child": "pm4sand-3d-1.0",
+      "relation": "three-dimensional-generalization",
+      "source_url": "https://pm4sand.engr.ucdavis.edu/",
+      "changes": "A separate author-identified 3D generalization; an exact parent release/equation mapping has not been inspected."
+    }
+  ],
+  "manuals": [
+    {
+      "node_id": "pm4sand-2d-3.3",
+      "url": "https://ucdavis.box.com/s/op92sb4hxh9zzw8imfsvib16hjuepzuk",
+      "full_text_inspected": false,
+      "sha256": null,
+      "access_result": "Web reader could not follow Box redirect."
+    },
+    {
+      "node_id": "pm4sand-3d-1.0",
+      "url": "https://ucdavis.box.com/s/l1i2qm704l6ii9g3v6lodx6uwwu8x5t1",
+      "full_text_inspected": false,
+      "sha256": null,
+      "access_result": "Web reader could not follow Box redirect."
+    }
+  ],
+  "unresolved": [
+    "Inspect and hash exact manual editions and errata.",
+    "Extract equations, initial states, history, singular limits and integration settings for each selected variant.",
+    "Pin a constitutive reference implementation and distinguish it from driver generators.",
+    "Review reuse terms per artifact before bundling.",
+    "Verify source-matched cases before executable admission."
+  ]
+}

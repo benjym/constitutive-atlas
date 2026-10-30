@@ -304,18 +304,45 @@
     },
     {
       "id": "pm4sand",
-      "name": "PM4Sand — Boulanger & Ziotopoulou",
+      "name": "PM4Sand2D 3.3 — Boulanger & Ziotopoulou",
       "family": "bounding-surface plasticity",
       "status": "candidate",
       "executable": false,
       "discovery_url": "https://soilmodels.com/pm4sand/",
-      "note": "Sand model for earthquake loading; the directory cites the 2013 plane-strain formulation and subsequent developments.",
-      "capability_gap": "Pin a numbered release and its manual, dimensional scope, initialization, reversal/fabric memory and integration rules; do not assume a complete 3D law.",
+      "note": "Plane-strain 3.3 candidate, report UCD/CGM-23/01; author listing notes May 2024 manual revision. Full manual and equations uninspected. PM4Sand3D has a separate candidate identity.",
+      "capability_gap": "Inspect and hash the selected manual; extract plane-strain kinematics, initialization, cyclic history, parameter conventions and integration. Restrict unsupported 3D paths; do not transfer calibrations between releases without review.",
       "catalogue_sources": [
         {
           "url": "https://soilmodels.com/pm4sand/",
           "role": "SoilModels discovery",
           "locator": "PM4Sand (Boulanger & Ziotopoulou); description and references (accessed 2026-10-30); Exact numbered release remains to be pinned; original sources discuss plane strain."
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/",
+          "role": "Author overview",
+          "locator": "Background: separate PM4Sand2D and PM4Sand3D; 3D authorship"
+        },
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/pm4sand-files",
+          "role": "Author release listing",
+          "locator": "Version 3.1, 3.2 and 3.3 sections; scope and calibration changes"
+        },
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/pm4sand-references",
+          "role": "Author bibliography",
+          "locator": "Manual report identities and 2013 formulation/implementation papers"
+        },
+        {
+          "url": "https://ucdavis.box.com/s/op92sb4hxh9zzw8imfsvib16hjuepzuk",
+          "role": "Author-linked 3.3 manual; not inspected",
+          "locator": "Report UCD/CGM-23/01; exact bytes and revision pending"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/pm4sand-versions.md",
+          "role": "Atlas version and dimensional-scope screening",
+          "locator": "2D and 3D identities, calibration/version distinctions and remaining source tasks"
         }
       ]
     },
@@ -469,6 +496,50 @@
           "url": "https://soilmodels.com/hypoclay/",
           "role": "SoilModels discovery",
           "locator": "Clay Hypoplasticity; description and references (accessed 2026-10-30); Description names the 2014 law; references distinguish the 2013 base formulation. The older 2005 candidate remains separate."
+        }
+      ]
+    },
+    {
+      "id": "pm4sand3d-1.0",
+      "name": "PM4Sand3D 1.0 — Kippen, Boulanger & Ziotopoulou",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://pm4sand.engr.ucdavis.edu/pm4sand3d-files",
+      "note": "Separate 3D generalization, report UCD/CGM-26/01, May 2026. Authors list FLAC3D 9.X binaries and example drivers; full manual and equations uninspected.",
+      "capability_gap": "Obtain and pin manual/source revisions; extract full tensor equations, state and reversal memory, initialization, parameter defaults and integration. Establish independent reference execution and per-artifact reuse rights. Driver generation is not a constitutive implementation.",
+      "catalogue_sources": [
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/",
+          "role": "Author overview",
+          "locator": "Background: separate PM4Sand2D and PM4Sand3D; 3D authorship"
+        },
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/pm4sand3d-files",
+          "role": "Author release listing",
+          "locator": "Version 1: May 2026 manual and FLAC3D 9.X distribution; example driver paths"
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/pm4sand-references",
+          "role": "Author bibliography",
+          "locator": "Manual report identities and 2013 formulation/implementation papers"
+        },
+        {
+          "url": "https://github.com/katerinaziot/PM4Sand3D_drivers_auto",
+          "role": "Author calibration drivers; not executed",
+          "locator": "README v1.0 June 2026; FLAC3D input generation and postprocessing; not constitutive source"
+        },
+        {
+          "url": "https://ucdavis.box.com/s/l1i2qm704l6ii9g3v6lodx6uwwu8x5t1",
+          "role": "Author-linked 3D 1.0 manual; not inspected",
+          "locator": "Kippen, Boulanger and Ziotopoulou (2026), report UCD/CGM-26/01"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/pm4sand-versions.md",
+          "role": "Atlas version and dimensional-scope screening",
+          "locator": "Distinct 3D candidate; no equation extraction or numerical admission"
         }
       ]
     }
