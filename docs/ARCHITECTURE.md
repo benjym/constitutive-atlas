@@ -20,6 +20,8 @@ Implicit residuals use forward-mode AD, state/residual scaling, pivoted dense li
 
 Laboratory protocols: `0` oedometer, `1` drained triaxial fixed radial effective stress, `2` undrained axial strain control, `3` undrained signed-q stress control, `4` isotropic equal normal-strain increments. For protocol 4 the `target` is strain in each normal direction, not volumetric strain. Initial stress must be axisymmetric and shear-free. Stress targets are Pa, other targets dimensionless. Histories are linear ramps or sine cycles. The stress-control initial signed q is retained and the target is its change. Undrained volume is constrained to zero, assuming incompressible constituents; `delta_u` assumes fixed radial total stress. No pore pressure is reported as a defined physical result for drained paths.
 
+State layouts allow up to 32 scalar components (a Mandel tensor counts as six). AD reserves six additional columns for simultaneous mixed controls. Generated catalogues assert their required capacity at compile time; see [capacity verification](STATE_CAPACITY.md).
+
 ## Interfaces
 
 The generated model catalogue describes state and parameter layouts. Native `--list` prints model IDs. The CLI accepts `--mode run|integrate|evaluate`, `--model`, positional-layout numeric CSV for `--parameters`, `--initial`, `--current`, `--strain`, and laboratory controls. `atlas.cli run` accepts a JSON specification and writes a JSON result. `atlas_evaluate`, `atlas_integrate`, and `atlas_run` are C ABI exports; their returned string storage remains valid only until the next call. Each Worker owns an engine instance.

@@ -6,6 +6,7 @@ import re
 from pathlib import Path
 from .dsl import DIMS, TIME, I, Sym, Type, ZERO, dimensions, ValidationError, cpp, evaluate, infer, parse
 
+MAX_STATE_COMPONENTS = 32
 ROOT = Path(__file__).resolve().parents[1]
 IDENT = re.compile(r"[A-Za-z][A-Za-z0-9_]*\Z")
 RESERVED = {"I", "de", "dt", "time", "time_n", "strain_rate", "loading", "evaluation_time", "check_only", "observables_only", "check_initial", "T", "params", "z", "zn", "out", "domain", "true", "false",
@@ -98,7 +99,7 @@ def validate(model):
             raise ValidationError('physical-time ODE state must be persistent; incremental multipliers are unsupported')
         if field.get('multiplier') and (typ!=Type() or not field.get('transient') or model['integration']!='residual'):
             raise ValidationError('multipliers must be dimensionless transient scalars in residual models')
-    if count>24: raise ValidationError('at most 24 state components are supported')
+    if count>MAX_STATE_COMPONENTS: raise ValidationError(f'at most {MAX_STATE_COMPONENTS} state components are supported')
     for field in model['derived']:
         typ=infer(parse(field['expr']),symbols)
         if typ.shape=='bool': raise ValidationError('derived values must be numeric')

@@ -10,6 +10,18 @@ const hold=(stress=false)=>[+stress,0,0], rate=(value,stress=false)=>[+stress,1,
 const allHold=(stress=false)=>Array.from({length:6},()=>hold(stress));
 const segment=(duration,controls)=>[duration,4,...controls.flat()];
 const tests=[
+ {id:'test-capacity-32',initial:[100,200,300,4,5,6,...Array(25).fill(0),1].join(','),names:'all-six-stress-holds',rows:[segment(2,allHold(true))],check(d){
+   const p=d.points.at(-1);assert.equal(p.state.length,32);assert.equal(p.state[31],1);
+   assert.deepEqual(p.state.slice(0,6),[100,200,300,4,5,6]);
+   for(let j=0;j<6;j++)assert.ok(Math.abs(p.strain[j]+.01*(j+1))<1e-12);
+   for(let i=1;i<=25;i++)assert.ok(Math.abs(p.state[5+i]-i)<1e-12);
+ }},
+ {id:'test-capacity-32',initial:[100,200,300,4,5,6,...Array(25).fill(0),2].join(','),names:'memory-decay',rows:[segment(.1,allHold(true))],check(d){
+   const p=d.points.at(-1),decay=Math.exp(-.05);
+   assert.ok(Math.abs(p.state[31]-(1+decay))<5e-6);
+   for(let j=0;j<6;j++)assert.ok(Math.abs(p.strain[j]+.01*(j+1)*(.05+1-decay))<3e-8);
+   for(let i=1;i<=25;i++)assert.ok(Math.abs(p.state[5+i]-.05*i)<1e-12);
+ }},
  {id:'test-maxwell-axisymmetric',names:'creep',rows:[segment(4,[hold(true),hold(true),hold(true),hold(),hold(),hold()])],check(d){
    const p=d.points.at(-1);assert.ok(Math.abs(p.strain[0]-40000/(2*12e6*2)*4)<1e-12);assert.equal(p.strain[1],p.strain[2]);
  }},
@@ -46,14 +58,22 @@ function compare(a,b,path=''){
 }
 for(const test of tests){
  const wire=test.rows.flat().join(','),parameters=test.parameters??'',budget=test.budget??20000;
- const args=[test.id,parameters,'','','',wire,test.names,0,1e-8,1e-11,1e-12,1e6,budget,1e-10,40];
+ const args=[test.id,parameters,test.initial??'','','',wire,test.names,0,1e-8,1e-11,1e-12,1e6,budget,1e-10,40];
  const actual=JSON.parse(wasm.ccall('atlas_run_schedule','string',[...Array(7).fill('string'),...Array(8).fill('number')],args));
  assert.equal(actual.ok,!test.failure,actual.message);test.check(actual);
  const command=['--mode','schedule','--model',test.id,'--segments',wire,'--segment-ids',test.names,'--rtol','1e-8','--atol','1e-11','--max-substeps',String(budget)];
  if(parameters)command.push('--parameters',parameters);
+ if(test.initial)command.push('--initial',test.initial);
  const native=spawnSync(resolve(root,'build/atlas_time_solver'),command,{encoding:'utf8',timeout:30000});
  assert.equal(native.status,test.failure?1:0,native.stderr);compare(actual,JSON.parse(native.stdout));
 }
+// ABI length rejection occurs before model evaluation or AD indexing.
+const overflow=Array(33).fill(0).join(','),wire=segment(2,allHold(true)).join(',');
+const invalidArgs=['test-capacity-32','',overflow,'','',wire,'overflow',0,1e-8,1e-11,1e-12,1e6,20000,1e-10,40];
+const invalid=JSON.parse(wasm.ccall('atlas_run_schedule','string',[...Array(7).fill('string'),...Array(8).fill('number')],invalidArgs));
+assert.equal(invalid.ok,false);assert.match(invalid.message,/state length invalid/);
+const rejected=spawnSync(resolve(root,'build/atlas_time_solver'),['--mode','schedule','--model','test-capacity-32','--initial',overflow,'--segments',wire,'--segment-ids','overflow'],{encoding:'utf8'});
+assert.equal(rejected.status,1);assert.deepEqual(JSON.parse(rejected.stdout),invalid);
 const observed=JSON.parse(wasm.ccall('atlas_observe_time','string',['string','string','string','string','number'],['test-kelvin','','','.001,-.0005,-.0005,0,0,0',0]));
 assert.deepEqual(observed,{ok:true,values:[148000,76000,76000,0,0,0]});
 console.log(`Timed controls: ${tests.length} analytical success/failure cases and observable native/Wasm verification passed.`);

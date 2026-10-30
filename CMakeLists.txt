@@ -15,12 +15,13 @@ add_dependencies(atlas_solver atlas_models)
 target_include_directories(atlas_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/generated")
 target_compile_options(atlas_solver PRIVATE -Wall -Wextra -Wno-unused-variable)
 if(EMSCRIPTEN)
+  target_compile_options(atlas_solver PRIVATE -fexceptions)
   set_target_properties(atlas_solver PROPERTIES OUTPUT_NAME "atlas" SUFFIX ".js")
   target_link_options(atlas_solver PRIVATE
     "-sMODULARIZE=1" "-sEXPORT_ES6=1" "-sEXPORT_NAME=createAtlas"
     "-sENVIRONMENT=web,worker,node" "-sALLOW_MEMORY_GROWTH=1"
     "-sMAXIMUM_MEMORY=268435456" "-sSTACK_SIZE=1048576"
-    "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-sDISABLE_EXCEPTION_CATCHING=0"
+    "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-fexceptions"
     "-sFILESYSTEM=0" "--no-entry")
 else()
   enable_testing()
@@ -48,6 +49,7 @@ add_executable(atlas_time_solver cpp/main.cpp)
 add_dependencies(atlas_time_solver atlas_time_models)
 target_include_directories(atlas_time_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/time-generated")
 if(EMSCRIPTEN)
+  target_compile_options(atlas_time_solver PRIVATE -fexceptions)
   set_target_properties(atlas_time_solver PROPERTIES OUTPUT_NAME "time-fixtures" SUFFIX ".js")
   get_target_property(ATLAS_WASM_OPTIONS atlas_solver LINK_OPTIONS)
   target_link_options(atlas_time_solver PRIVATE ${ATLAS_WASM_OPTIONS})
@@ -56,6 +58,10 @@ else()
   add_dependencies(atlas_time_tests atlas_time_models)
   target_include_directories(atlas_time_tests PRIVATE cpp/include "${CMAKE_BINARY_DIR}/time-generated")
   add_test(NAME atlas_time COMMAND atlas_time_tests)
+  add_executable(atlas_capacity_tests tests/test_capacity.cpp)
+  add_dependencies(atlas_capacity_tests atlas_time_models)
+  target_include_directories(atlas_capacity_tests PRIVATE cpp/include "${CMAKE_BINARY_DIR}/time-generated")
+  add_test(NAME atlas_capacity COMMAND atlas_capacity_tests)
 endif()
 
 # Source-pinned research drafts stay separate from both admitted browser models
@@ -71,6 +77,7 @@ add_executable(atlas_research_solver cpp/main.cpp)
 add_dependencies(atlas_research_solver atlas_research_models)
 target_include_directories(atlas_research_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/research-generated")
 if(EMSCRIPTEN)
+  target_compile_options(atlas_research_solver PRIVATE -fexceptions)
   set_target_properties(atlas_research_solver PROPERTIES OUTPUT_NAME "research" SUFFIX ".js")
   target_link_options(atlas_research_solver PRIVATE ${ATLAS_WASM_OPTIONS})
 else()

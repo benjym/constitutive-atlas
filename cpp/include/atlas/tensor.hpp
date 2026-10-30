@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace atlas {
-constexpr int max_state = 24;
+constexpr int max_state = 32;
 constexpr int max_derivatives = max_state + 6; // state plus mixed-control increments
 struct Jet {
     double v = 0;

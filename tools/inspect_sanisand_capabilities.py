@@ -25,7 +25,7 @@ def inspect():
     fixture['state']=[stress]+memory
     fixture['equations']={'sigma':'0 * p_ref * I',**{f['name']:'0 * I' for f in memory}}
     probes=[]
-    for size in (24,25,26):
+    for size in (24,25,26,32,33):
         model=copy.deepcopy(fixture)
         if size>=25:
             model['state'].append(dict(name='e',unit='1',shape='scalar',initial=.7,scale='1'))
@@ -34,6 +34,9 @@ def inspect():
             model['integration']='residual'
             model['state'].append(dict(name='gamma',unit='1',shape='scalar',initial=0.,scale='1',transient=True,multiplier=True))
             model['equations']['gamma']='gamma'
+        if size>=32:
+            for i in range(size-25):
+                name=f'extra{i}';model['state'].append(dict(name=name,unit='1',shape='scalar',initial=0.,scale='1'));model['equations'][name]='0'
         try:
             validate(model);accepted=True;message=None
         except ValidationError as error:
@@ -47,7 +50,7 @@ def inspect():
         except ValidationError as error:
             accepted=False;shape=None;message=str(error)
         probes.append(dict(kind='expression-type',expression=expression,accepted=accepted,shape=shape,message=message))
-    paths=['atlas/model.py','atlas/dsl.py','atlas/compiler.py','atlas/structure.py','schemas/model.schema.json','schemas/model-v0.2.schema.json','cpp/include/atlas/tensor.hpp','cpp/include/atlas/solver.hpp','tools/inspect_sanisand_capabilities.py']
+    paths=['atlas/model.py','atlas/dsl.py','atlas/compiler.py','atlas/structure.py','schemas/model.schema.json','schemas/model-v0.2.schema.json','cpp/include/atlas/tensor.hpp','cpp/include/atlas/solver.hpp','tools/inspect_sanisand_capabilities.py','schemas/run-v0.2.schema.json','cpp/include/atlas/schedule.hpp','tests/fixtures/time/capacity-32.json','tests/test_capacity.py','tests/test_capacity.cpp','tools/test_schedule_wasm.mjs','CMakeLists.txt']
     return dict(kind='capability-investigation',model_candidate='sanisand-2004',source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),scope='Synthetic capacity and type observations only; no constitutive execution, original-paper reconciliation or admission claim.',state_requirement=dict(stress=6,void_ratio=1,backstress=6,fabric=6,reversal_backstress=6,persistent_total=25,with_incremental_multiplier=26),probes=probes,source_files=[dict(path=p,sha256=hashlib.sha256((ROOT/p).read_bytes()).hexdigest()) for p in paths])
 
 

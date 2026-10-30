@@ -98,7 +98,7 @@ The [IGS endpoint-defect correction](docs/models/hypoplastic-sand-igs97.md#endpo
 The candidate source is already linked in the [catalogue](catalogue/manifest.json). Pin the exact formulation and its initialization before implementing it; do not mix later SANISAND variants into the 2004 model without separate identities.
 
 - [ ] **SAN-01:** Extract the full three-dimensional equations, bounding/dilatancy surfaces, backstress and fabric evolution, reversal memory, parameter conventions and admissible starting states.
-- [ ] **SAN-02:** Write a capability gap analysis against the existing DSL and 24-scalar state limit. Determine which history operations are actually required from the source before designing generic events.
+- [ ] **SAN-02:** Write a capability gap analysis against the DSL and state capacity (originally 24 scalar components). Determine which history operations are actually required from the source before designing generic events.
 - [ ] **SAN-03:** Specify trial versus committed state, event detection and ordering, reversal updates, initialization, substep behaviour and rollback. Define any event-location tolerance and the derivative policy at nonsmooth transitions.
 - [ ] **SAN-04:** Implement the smallest generic extensions needed by the extracted equations, with matching Python/native/Wasm semantics. Document the design decision and migration implications.
 - [ ] **SAN-05:** Transcribe SANISAND declaratively, including source locators and declared parameter/state constraints.
@@ -107,7 +107,7 @@ The candidate source is already linked in the [catalogue](catalogue/manifest.jso
 
 The [SANISAND source brief](docs/models/sanisand-2004.md), [pinned OpenSees inventory](catalogue/source-audits/sanisand-2004-opensees.json) and [provisional capability analysis](docs/SANISAND_CAPABILITIES.md) identify a 25-component persistent layout (26 with a multiplier), missing tensor square and unresolved reversal transaction scope. Synthetic capacity/type probes are reproducible. Original-paper extraction and numerical-variant reconciliation remain incomplete; SAN-01–04 are not closed and no executable candidate is added.
 
-The [symmetric tensor-square primitive](docs/TENSOR_SQUARE.md) now resolves the demonstrated algebraic gap, with dimensional/type checks, Cartesian references, all native AD columns and a generated Python/native/Wasm fixture. Existing five-model references continue to pass. State capacity, reversal transactions, complete original-paper extraction and the rest of SAN-04–07 remain open.
+The [symmetric tensor-square primitive](docs/TENSOR_SQUARE.md) now resolves the demonstrated algebraic gap, with dimensional/type checks, Cartesian references, all native AD columns and a generated Python/native/Wasm fixture. Existing five-model references continue to pass. The [state-capacity extension](docs/STATE_CAPACITY.md) also accommodates 32 state components and all six mixed controls. Reversal transactions, complete original-paper extraction and the rest of SAN-04–07 remain open.
 
 **Acceptance:** all six formulations meet their review gates and execute through the common engine without model-specific mathematical escape hatches. History and initialization semantics are explicit and tested under substepping and rollback. A paper figure or website curve alone cannot close this milestone.
 
