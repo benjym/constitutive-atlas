@@ -1,3 +1,44 @@
+# Current project status — 1 November 2026
+
+This summary describes the current local repository. The delivery history below
+records earlier checkpoints; its counts, test totals and “next” instructions are
+historical. Use the [live board](../IMPLEMENTATION_PLAN.md) for current assignments
+and the [roadmap](../ROADMAP.md) for milestone acceptance.
+
+| Area | Current evidence | Still open |
+| --- | --- | --- |
+| Executable definitions | Nine top-level [model records](../models/): four `transcribed`, five `draft`; the existing browser package contains nine models. Research records are separate. | Twenty-formulation release target; source-complete SANISAND and Terra Cotta; independent scientific admission. |
+| Source review | Fourteen [formal review records](../catalogue/reviews/), all `pending`, covering the five baseline formulations. [Catalogue disclosure](reviews/web-source-review-status-v1/README.md) distinguishes current and historical definition bindings. | Signed independent judgments; review coverage of the additional four executable definitions. Numerical passes do not promote status. |
+| Representation | [v0.3 contract](FORMULATION_CONTRACT.md): explicit incremental-residual, strain-path-rate and physical-time ODE profiles; Mandel/kinematic/stress declarations. Current engine limit is 32 scalar state components. | Stable v1 representation, source-specific preparation/history contracts and demonstrated extensions. Physical-time research support does not establish Terra Cotta correctness. |
+| KFS comparison | [Scientific-review handoff](benchmarks/kfs-development-review-v1/README.md), existing qualified TMD2 reproduction and one [current-source TMD7 replay](benchmarks/current-kfs-tmd7-v1/README.md). The [local website panel](reviews/web-current-tmd7-v1/README.md) exposes the scoped connection. | Independent scientific review, historical-coordinate/preparation qualifications and original-measurement reuse permission. Evaluation tests were previously exposed during development. |
+| Model ingestion | [Multilaminate consolidation](ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/README.md) closes the current reading pass with ordered source/lifecycle/capability gates. [Terra Cotta publication identities](ingestion/terracotta-2024/publication-records-v1/README.md) are distinct. | Multilaminate source-resolution/correction ledger; Terra Cotta full journal reconciliation; SANISAND missing exact source. None is admitted by inventory alone. |
+| Website and distribution | [GitHub Pages](https://benjym.github.io/constitutive-atlas/) is the public entry point. Local preview evidence documents recent catalogue/evidence improvements. | Latest hosted revision and deployment checks are not reverified here. A local preview is not proof of hosted availability or scientific readiness. |
+| Paper and release | [Research charter](RESEARCH_CHARTER.md), [prior-work comparison](PRIOR_WORK.md), working manuscript and retained reproducibility evidence. | Completed study, independent review, permitted release contents and an archived scientific release. |
+
+The nine executable definitions are linear elasticity, Drucker–Prager, Modified
+Cam Clay, VW96 sand, VW96+IGS97, hypoplastic clay 2005 and 2013, and barodesy sand
+and clay 2017. “Executable” means a local software capability, not reviewed status
+or demonstrated experimental applicability. Catalogue discovery entries and
+restricted research variants do not increase this count.
+
+Current delivery priority is to resolve the outstanding scientific/source gates
+using the assembled evidence. Do not reopen the completed KFS fitting/refinement
+campaign, repeat source micro-audits, or extend the engine without a demonstrated
+source-derived requirement. Independent review remains unassigned; no maintainer
+has been assigned a review by this status update. Other bounded roadmap work can
+proceed when it does not depend on those judgments.
+
+This reconciliation checked the nine model JSON statuses, fourteen review JSON
+statuses and linked delivery records. It ran no new build or material simulation
+and does not assert a fresh whole-project test pass. Older test totals below
+apply only to their recorded revisions and scopes.
+
+# Delivery history
+
+The following checkpoint text is retained as history, including superseded
+capability descriptions and proposed next steps. Its original bytes are preserved
+in the repository's content-addressed source snapshots before this update.
+
 # Current delivery checkpoint — 1 November 2026
 
 The [catalogue now exposes formal source-review records](reviews/web-source-review-status-v1/README.md)

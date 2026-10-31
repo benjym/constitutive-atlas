@@ -20,113 +20,54 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 ## Delivery focus — 1 November 2026
 
-[Formal source-review status is now visible in catalogue details](docs/reviews/web-source-review-status-v1/README.md),
-including pending questions and historical/current definition binding. All 14
-retained records remain pending; numerical passes do not close scientific gates.
-The [KFS review handoff](docs/benchmarks/kfs-development-review-v1/README.md)
-is prepared and unsigned. Keep independent review separate from further fits.
+The [current status summary](docs/STATUS.md) separates executable definitions,
+source review, numerical evidence and deployment. Nine top-level models execute
+locally; fourteen formal reviews covering the five baselines remain pending.
+These counts do not close scientific admission, the six-model proof or the
+twenty-formulation release target. Historical delivery notes are not new assignments.
 
-The [active VW96 source dossier](docs/models/hypoplastic-sand-vw96.md) now
-incorporates the already completed full-paper technical reading, adopted
-applicability policy and visually rechecked figure-preparation ambiguities.
-Original-source access/technical reading are complete; independent scientific
-sign-off and source-figure preparation/reproduction remain open. Preserve that
-distinction instead of repeating the equation review or adding calibration runs.
+The immediate scientific deliverable remains a qualified model-to-experiment
+comparison. The [KFS scientific-review handoff](docs/benchmarks/kfs-development-review-v1/README.md)
+is assembled and unsigned; no reviewer is assigned. Original VW96 technical
+reading and baseline source/initialization reconciliations are complete to their
+recorded scopes. Independent judgment, historical coordinate/preparation issues
+and public data-reuse permission remain open. Do not repeat the technical review
+or launch more fits to avoid those gates.
 
-The [website current-build evidence slice](docs/reviews/web-current-tmd7-v1/README.md)
-is locally complete: a separately scoped TMD7 panel displays the seven gates,
-build identity, errors and source links, preserving archived six-test panels
-and the original failed refinement. No private curves, new fits or builds were
-introduced. The numerical-to-website handoff is complete for this slice; focus
-next on original-paper/model review and the existing scientific admission gates,
-not another numerical campaign. Deployment remains a separate user-authorized step.
+The bounded KFS numerical campaign and its website handoff are delivered:
+[current build receipt](docs/benchmarks/current-source-build-v1/README.md),
+[synthetic comparison](docs/benchmarks/current-archived-vw96-v1/README.md),
+[current-source TMD7 replay](docs/benchmarks/current-kfs-tmd7-v1/README.md) and
+[local evidence panel](docs/reviews/web-current-tmd7-v1/README.md).
+The [original failed refinement](docs/benchmarks/kfs-propagation-refinement-v1/README.md)
+and [separate passing nested regime](docs/benchmarks/kfs-nested-partitions-v1/README.md)
+remain distinct. The [portable TMD2 command](docs/benchmarks/kfs-tmd2-portable-v1/README.md)
+and [read-only website snapshot](docs/reviews/tmd2-web-snapshot-v1/README.md)
+are available with their stated qualifications. Stop numerical expansion here;
+none of these deliveries constitutes scientific signoff.
 
-The [current-source TMD7 replay](docs/benchmarks/current-kfs-tmd7-v1/README.md)
-now connects one complete existing development window to the pinned current
-executable. All seven frozen compatibility gates pass across 44 observations,
-with unchanged parameter/state/control policy and reconstructed full predictions.
-No new build, fit or refinement sweep ran; scientific review and rights remain
-open. Stop numerical expansion and expose the limited current-build connection
-in the provisional website evidence links next.
+The [catalogue review disclosure](docs/reviews/web-source-review-status-v1/README.md)
+shows pending reviews independently of numerical passes. Latest local website
+changes still require separate hosted verification; deployment needs a fresh
+explicit instruction. Existing Pages availability does not establish that those
+changes are deployed. The [archive-coverage repair](docs/reviews/historical-archive-coverage-v1/README.md)
+is complete; separate exact-source availability gaps stay on the live board.
 
-A [bounded synthetic VW96 comparison](docs/benchmarks/current-archived-vw96-v1/README.md)
-now passes for the pinned current and archived executables: exact raw-law
-responses, zero-increment preservation and six drained/undrained/reversal
-comparisons at 32/64 caller increments, with matching diagnostic totals. This
-closes only that prospective compatibility slice. Next freeze one complete
-existing acquired-order development replay under the current executable; no
-refit, broad equivalence claim or restart of the completed refinement branch.
+For source ingestion, the [multilaminate full-formulation decision](docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/README.md)
+closes the current reading pass. Next resolve the ordered equation, branch and
+lifecycle questions or prepare an independently reviewed corrected-variant ledger,
+then scope a generic capability design. No capacity shortcut or reduced variant.
+[Terra Cotta journal/preprint identities](docs/ingestion/terracotta-2024/publication-records-v1/README.md)
+are now canonical; full journal page reconciliation remains open. The
+[SANISAND access checkpoint](docs/reviews/sanisand-1986-access-v2/README.md)
+requires a readable copy or concrete new lead before further retries.
 
-The [current source/build receipt](docs/benchmarks/current-source-build-v1/README.md)
-provides a clean serial native executable from 351 pinned source files, with exact
-pre-build/generated/compiled nine-model catalogue checks. No material calls ran.
-Historical/current engine equivalence remains unproven because the integrator
-has changed. The next numerical action must be a separately frozen small
-comparison, not an automatic refit or restart of the completed refinement branch.
-
-The next bounded cycle turns existing KFS development work into one reviewed
-model-to-experiment comparison, rather than adding another model or solver
-capability. The [KFS checkpoint](docs/benchmarks/kfs-development-checkpoint-v1/README.md)
-records recovered results, input-information limits, current/archived model
-differences, acceptance gaps and the remaining delivery checklist. Its saved
-summary/figure regeneration and snapshot audit are complete; scientific admission
-is open. Source-to-definition and initialization review come before new fits or
-compiled studies. No new model family, optimizer, data campaign or schema feature
-is part of this cycle unless it demonstrably blocks the chosen comparison.
-
-The [TMD2 result](docs/benchmarks/kfs-tmd2-research-range-v1/README.md)
-now completes the bounded three-resolution operational reconstruction, with
-unchanged prospective source bounds, a model-only figure, refinement table and
-descriptive experimental errors. A native research-only range mode leaves the
-interactive limit unchanged. Historical strain conversion and independent
-scientific review remain open. The local [portable command](docs/benchmarks/kfs-tmd2-portable-v1/README.md) now reproduces that result from a fresh author download and serial build. Next address independent model review and public data-reuse permission, not a new numerical framework.
-
-The five baseline source/initialization reconciliation packets are complete to
-their documented scope; independent scientific admission remains pending.
-The source-supported DP dilatancy guard is also [verified in local Release Wasm
-and the nine-model website package](docs/reviews/dp-dilatancy-web-v1/README.md).
-This closes that bounded correction slice. Debug Wasm remains unverified after
-a retained first-call trap. Resume independent review of existing source/input
-and benchmark claims before adding models or numerical capabilities.
-
-The [TMD2 source-law/input review](docs/benchmarks/kfs-tmd2-appendix-law-v1/README.md)
-now checks the complete 2016 Appendix A composition, including the benchmark's
-general beta = 2.5 host, and binds all frozen inputs to the existing record.
-No transcription correction was identified. Source/project continuations and
-unobserved internal-stage limits are explicit. The scoped scientific checklist
-is unsigned; historical-coordinate, scientific-review and public-rights gates
-remain open. This source-only task adds no material execution or new framework.
-
-The immediate six-model/SANISAND and Terracotta goals remain unchanged. The first
-release targets twenty formulations; the paper's 50+ planning ambition is not a
-prerequisite for this increment. Mohr–Coulomb browser integration remains queued
-with its preserved checkpoint. The [bounded archive-coverage repair](docs/reviews/historical-archive-coverage-v1/README.md)
-is complete: the 15 remaining coverage failures are closed, with original bytes
-and reverse bindings preserved. Separate legacy source-availability gaps remain
-open. The qualified TMD2 figure/table and local website evidence summary are
-already delivered; their independent scientific review remains unsigned. Finish
-that review before broadening numerical work. A [bounded SANISAND access recheck](docs/reviews/sanisand-1986-access-v2/README.md)
-confirms that the advertised mirror PDF requires login. Resume acquisition only
-with a readable copy or new concrete lead; do not repeat the same searches.
-Deployment still needs a fresh explicit instruction.
-
-The [read-only TMD2 website snapshot](docs/reviews/tmd2-web-snapshot-v1/README.md)
-now connects the Methods figure to its exact archived definition, published-case
-parameters, nominal initial state, controls and numerical settings. Regular Pages
-packaging validates and includes these assets; local browser navigation passes.
-This advances WEB-04 provenance, with scientific review and deployment still open.
-
-The [Terra Cotta publication increment](docs/ingestion/terracotta-2024/publication-records-v1/README.md)
-adds separate journal and preprint records to the canonical database/source browser.
-Only the journal is bound to the candidate; publisher/Crossref metadata agree on
-the journal CC BY declaration. No preprint relationship or equation equivalence
-is inferred. Full journal page-image reconciliation and TC-01 remain open.
-
-The deferred MC checkpoint has a [bounded saved-JSON correction](docs/reviews/mc-saved-json-v1/README.md):
-three retained false passes now reject under one strict decoder, with valid
-synthetic replay/recovery and source-ideal path frames preserved. No new numerical
-execution or model integration follows; full prospective closure/audit remains
-a resumption gate. This repairs evidence ingestion, not a new solver capability.
+SANISAND and Terra Cotta remain near-term targets. Mohr–Coulomb browser integration
+is deferred with its [saved-JSON correction checkpoint](docs/reviews/mc-saved-json-v1/README.md);
+full prospective closure/audit precedes resumption. The first release still targets
+twenty distinct formulations; the paper's 50+ ambition is not a prerequisite.
+Use the live implementation board to claim bounded work and preserve completed
+source, numerical and website deliveries rather than restarting them.
 
 ## 2. Starting point
 
@@ -173,7 +114,7 @@ Literature screening, data curation and prior-work analysis can proceed alongsid
 ## 5. M0 — establish the baseline
 
 - [x] **BASE-01:** Capture a pinned baseline manifest: source commit, model hashes, schema/compiler source identity, toolchain, checks and known limitations. The [complete clean-export baseline](catalogue/baselines/2026-10-30-r3/manifest.json) passes all fifteen ordered checks; [run history](catalogue/baselines/README.md) retains two failed attempts and [reproduction instructions](docs/SOFTWARE_BASELINE.md) describe the fresh native/Wasm build. This is software verification, not independent scientific review.
-- [ ] **BASE-02:** Reconcile `docs/STATUS.md`, catalogue statuses and website wording with actual evidence. Keep operational deployment status separate from scientific release readiness.
+- [ ] **BASE-02:** Reconcile `docs/STATUS.md`, catalogue statuses and website wording with actual evidence. The [current repository summary](docs/STATUS.md) now distinguishes nine executable definitions, fourteen pending baseline reviews and historical checkpoints; [catalogue review disclosure](docs/reviews/web-source-review-status-v1/README.md) is locally delivered. Full per-formulation coverage and latest hosted verification remain open. Keep operational deployment status separate from scientific release readiness.
 - [x] **BASE-03:** Define machine-readable review and evidence records, with schema validation and stable IDs. The [record contract](docs/EVIDENCE_RECORDS.md), numerical/review schemas, hashed [elasticity evidence](catalogue/evidence/linear-elastic-analytical-v1.json) and [pending review](catalogue/reviews/linear-elastic-source-v1.json) are implemented. Integrity and current-definition checks are separate; no model is automatically promoted. Experimental scope choices now use [decision records](docs/decisions/0001-sanisand-parent-reset-research.md).
 - [ ] **BASE-04:** Turn the first work package in section 13 into repository issues, with leads and reviewers. Do not assign tasks to either maintainer without agreement.
 
