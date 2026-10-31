@@ -1,3 +1,4 @@
+import {formulationSection} from './formulation-view.mjs';
 import {createLoading,normalizeLoading,verifyReturnedLoading,exportRun,importRunDocument} from './loading.mjs';
 import {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';
 import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
@@ -296,6 +297,7 @@ function showCatalogueModel(entry,spec){
   $('catalogue-detail-status').textContent=spec?'Available to test · '+spec.status:'Research candidate';
   $('catalogue-detail-status').className='catalogue-availability'+(spec?' available':'');
   body.append(element('p',entry.note||spec?.description||'Bibliographic and formulation review pending.','catalogue-detail-note'));
+  body.append(formulationSection(document,spec));
   if(!spec){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);

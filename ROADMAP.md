@@ -285,6 +285,8 @@ Author-source screening on 2026-10-31 identifies a separate PM4Sand3D 1.0 releas
 
 ## 11. M6 — make the website an evidence browser
 
+The [canonical-definition summary](docs/reviews/web-formulation-summary-v1/README.md) now exposes formulation declarations, status, default parameter ranges and state roles in catalogue details. Defaults are labelled as examples; legacy contracts remain undeclared and candidates inherit no runnable metadata. This advances WEB-01/02 without closing source-specific preparation or independent-review requirements. Local checks pass; hosted deployment remains pending.
+
 - [ ] **WEB-01:** Give each formulation a stable shareable URL with source links, variant/lineage, status, review evidence, assumptions, parameters, initial-state requirements and known limitations.
 - [ ] **WEB-02:** Generate catalogue and detail pages from canonical records so hyperlinks, revisions and statuses cannot drift into a separate manually maintained database.
 - [ ] **WEB-03:** Expose reproducible protocol presets and source-backed parameter sets, visibly distinguished from illustrative defaults. Include engine/schema/model revisions in exported runs.

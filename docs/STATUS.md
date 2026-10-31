@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [catalogue definition summary](reviews/web-formulation-summary-v1/README.md)
+now shows canonical status, declared mechanics, parameter examples and state
+roles. Legacy conventions remain undeclared; candidates inherit no runnable
+defaults. Six new browser contracts/18Python checks, nine-model static packaging
+and actual v0.3/legacy/candidate browser inspection pass. Existing Release Wasm
+is reused; no builds, deployment or scientific promotion.
+
 The [TMD2 process-status correction](reviews/tmd2-process-status-v1/README.md)
 closes a reproduced saved exit23 false pass. The supported command requires
 successful, hash-bound process receipts before its unchanged numerical assessor.
