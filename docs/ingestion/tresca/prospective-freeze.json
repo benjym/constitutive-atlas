@@ -1,0 +1,238 @@
+{
+  "version": "tresca-source-only-rational-freeze-v1",
+  "source_sha256": "db7fb284eb9bb622883d5daff6361db37cab912b890b8a24ed99a2428abc7805",
+  "parameters_Pa": {
+    "lame_lambda": "3",
+    "mu": "2",
+    "k": "5"
+  },
+  "cases": [
+    {
+      "id": "elastic",
+      "trial_eigenvalues": [
+        "4",
+        "1",
+        "-2"
+      ],
+      "expected_return_eigenvalues": [
+        "4",
+        "1",
+        "-2"
+      ],
+      "branch": "elastic"
+    },
+    {
+      "id": "hydrostatic-repeat",
+      "trial_eigenvalues": [
+        "20",
+        "20",
+        "20"
+      ],
+      "expected_return_eigenvalues": [
+        "20",
+        "20",
+        "20"
+      ],
+      "branch": "elastic"
+    },
+    {
+      "id": "zero",
+      "trial_eigenvalues": [
+        "0",
+        "0",
+        "0"
+      ],
+      "expected_return_eigenvalues": [
+        "0",
+        "0",
+        "0"
+      ],
+      "branch": "elastic"
+    },
+    {
+      "id": "face",
+      "trial_eigenvalues": [
+        "15",
+        "5",
+        "-5"
+      ],
+      "expected_return_eigenvalues": [
+        "10",
+        "5",
+        "0"
+      ],
+      "branch": "face"
+    },
+    {
+      "id": "upper-edge",
+      "trial_eigenvalues": [
+        "16",
+        "14",
+        "-2"
+      ],
+      "expected_return_eigenvalues": [
+        "38/3",
+        "38/3",
+        "8/3"
+      ],
+      "branch": "upper"
+    },
+    {
+      "id": "lower-edge",
+      "trial_eigenvalues": [
+        "12",
+        "-4",
+        "-6"
+      ],
+      "expected_return_eigenvalues": [
+        "22/3",
+        "-8/3",
+        "-8/3"
+      ],
+      "branch": "lower"
+    },
+    {
+      "id": "upper-trial-repeat",
+      "trial_eigenvalues": [
+        "15",
+        "15",
+        "-5"
+      ],
+      "expected_return_eigenvalues": [
+        "35/3",
+        "35/3",
+        "5/3"
+      ],
+      "branch": "upper"
+    },
+    {
+      "id": "lower-trial-repeat",
+      "trial_eigenvalues": [
+        "15",
+        "-5",
+        "-5"
+      ],
+      "expected_return_eigenvalues": [
+        "25/3",
+        "-5/3",
+        "-5/3"
+      ],
+      "branch": "lower"
+    },
+    {
+      "id": "face-upper-boundary",
+      "trial_eigenvalues": [
+        "12",
+        "10",
+        "-2"
+      ],
+      "expected_return_eigenvalues": [
+        "10",
+        "10",
+        "0"
+      ],
+      "branch": "face"
+    },
+    {
+      "id": "face-lower-boundary",
+      "trial_eigenvalues": [
+        "12",
+        "0",
+        "-2"
+      ],
+      "expected_return_eigenvalues": [
+        "10",
+        "0",
+        "0"
+      ],
+      "branch": "face"
+    },
+    {
+      "id": "yield-hold",
+      "trial_eigenvalues": [
+        "10",
+        "5",
+        "0"
+      ],
+      "expected_return_eigenvalues": [
+        "10",
+        "5",
+        "0"
+      ],
+      "branch": "elastic"
+    },
+    {
+      "id": "hydrostatic-tension",
+      "trial_eigenvalues": [
+        "-20",
+        "-20",
+        "-20"
+      ],
+      "expected_return_eigenvalues": [
+        "-20",
+        "-20",
+        "-20"
+      ],
+      "branch": "elastic"
+    }
+  ],
+  "rotation": [
+    [
+      "1/3",
+      "2/3",
+      "2/3"
+    ],
+    [
+      "2/3",
+      "1/3",
+      "-2/3"
+    ],
+    [
+      "-2/3",
+      "2/3",
+      "-1/3"
+    ]
+  ],
+  "corner_mu_pairs": [
+    [
+      "2",
+      "1"
+    ],
+    [
+      "-2",
+      "-1"
+    ],
+    [
+      "2",
+      "-1/2"
+    ],
+    [
+      "1/2",
+      "-2"
+    ],
+    [
+      "1",
+      "1"
+    ],
+    [
+      "0",
+      "0"
+    ]
+  ],
+  "policy": {
+    "arithmetic": "exact standard-library Fraction; known eigenframes; no numerical eigensolver",
+    "gates": [
+      "exact KKT stationarity/feasibility/complementarity",
+      "zero trace plastic flow and preserved stress trace",
+      "exact returned branch formula",
+      "orthogonal rotation and basis independence at repeated spectra",
+      "strict-branch principal tangent exact linear perturbations",
+      "source Eq108 versus Eq93-99 normal projection; exact Moreau orthogonality"
+    ],
+    "no_classical_tangent_at_switches": true,
+    "fixture_status": "analytical witnesses, not actual stored binary64 numerical spectrum fixtures",
+    "compiled_calls": 0,
+    "Atlas_imports": false,
+    "failure_policy": "retain any failed assertion and no tolerance fit"
+  }
+}

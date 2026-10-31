@@ -1,0 +1,129 @@
+{
+  "version": "tresca-source-crosswalk-v03-v1",
+  "kind": "non-executable-source-crosswalk-not-model-transcription",
+  "schema_version": "0.3",
+  "research_variant_id": "tresca-associated-perfect-bk2022v1-be-research",
+  "status": "draft",
+  "source_url": "https://arxiv.org/abs/2207.12719v1",
+  "source_sha256": "db7fb284eb9bb622883d5daff6361db37cab912b890b8a24ed99a2428abc7805",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "total"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "ep",
+      "shape": "sym",
+      "unit": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "infinitesimal_plastic_strain",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    }
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "ep"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "parameters": [
+    {
+      "name": "lame_lambda",
+      "unit": "Pa",
+      "range": "finite >0",
+      "source": "p7Eq34"
+    },
+    {
+      "name": "mu",
+      "unit": "Pa",
+      "range": "finite >0",
+      "source": "p7Eq34"
+    },
+    {
+      "name": "k",
+      "unit": "Pa",
+      "range": "finite >0",
+      "source": "p16Eq81"
+    }
+  ],
+  "initial_checks": [
+    "all12persistentvaluesfinite",
+    "eigmax(sigma)-eigmin(sigma)<=2k",
+    "positivefiniteparameters",
+    "no initial stress projection or physical preparation inferred"
+  ],
+  "source_host_mapping": {
+    "sigma": "host sigma=-source Cauchy stress",
+    "strain": "host de=-source infinitesimal strain increment",
+    "plastic_strain": "host ep=-source plastic strain",
+    "yield_symmetry": "K=-K; normalcone transforms with sign, both simultaneous flips preserve law",
+    "stress_scope": "total Cauchy,no porepressure coupling"
+  },
+  "mathematical_residuals_not_DSL": {
+    "sigma": "sigma - return_BE(sigma_n + C:de)",
+    "ep": "ep - ep_n - C^-1:(trial - sigma)"
+  },
+  "return_BE": {
+    "elastic": "trial",
+    "face": "trial - ((tmax-tmin-2k)/2)*(Pmax-Pmin)",
+    "upper_double": "((trace(trial)+2k)/3)*I - 2k*Pmin",
+    "lower_double": "((trace(trial)-2k)/3)*I + 2k*Pmax",
+    "corner_equality_policy": "face on exact face-edge transition; elastic on exact initial yield, no classical tangent claim"
+  },
+  "continuum_source": "Eqs1–8,34–37,77–81; associated normal cone, constant yieldset",
+  "algorithm_origin": "BE metric projection and explicitbranches independently derived project discretization; not printed source algorithm",
+  "implementation_route": "existing generic lazy select, value-only principal classifiers and branch-safe isolated extreme projectors; no MC specialization or new model-specific kernel",
+  "numerical_limitations": [
+    "1024epsilon selected spectralisolation guard may reject unresolved physicalstates",
+    "finiteinput does not prove finite intermediate arithmetic",
+    "no floating binary64/compiled/38seed claim",
+    "no finite rotation or creep"
+  ],
+  "tangent_policy": "strictbranch analytic Jacobian; boundary selected/generalized derivative needs separately frozen policy",
+  "transactions": "commit sigma and ep together; failure returns complete incomingstate; project responsibility",
+  "model_schema_validation_executed": false,
+  "Atlas_imports": false,
+  "compiled_calls": 0,
+  "scientific_admission": false
+}

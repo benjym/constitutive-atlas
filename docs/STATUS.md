@@ -1,3 +1,9 @@
+# Cyclic-controller diagnosis and Tresca source closure — 2026-10-31
+
+The [saved-evidence diagnosis](reviews/mc-cyclic-control-diagnostic-v1/README.md) reproduces all15failed parity scalars and accounts exactly for final q offsets as accumulated accepted outer control residuals. Independent local source updates agree to about8.2e-11Pa; this distinguishes selected strain/control drift from a constitutive-law discrepancy without proving the finite-difference/libm cause.242checks and byte-exact coordinator replay pass; an initial coordinator output-path argument mistake is retained. A separately frozen controller trace is in preparation.
+
+The [Tresca source packet](ingestion/tresca/README.md) selects a complete2022associated elastic-perfect-plastic normal-cone law and separately derives the project backward-Euler return. Exact branch/repeated/corner algebra and source/context/fixture checks pass. [Review](ingestion/tresca/COORDINATOR_REVIEW.md) retains full plastic-strain history and total-stress/pore-pressure browser requirements. No new executable definition, root/default change, build, promotion or deployment; hosted five/local nine remain unchanged.
+
 # Mohr–Coulomb source accuracy passes; cyclic parity fails — 2026-10-31
 
 The [separate API-envelope correction](../catalogue/investigations/mc-preview-envelope-v2/README.md) matches the exact pinned serializer and passes20independent source/envelope and19synthetic negative checks. Both original backend journals pass all14paths/834points against unchanged independent source bounds; maximum stress/strain budget fractions remain below.005. No new builds or candidate runs were needed.
