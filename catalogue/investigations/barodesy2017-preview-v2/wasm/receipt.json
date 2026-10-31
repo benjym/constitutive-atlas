@@ -1,0 +1,56 @@
+{
+  "backend": "wasm",
+  "started_utc": "2026-10-31T05:07:19.592914+00:00",
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "manifest_sha256": "170a451dac8b7a0885b7d8f6a82653396237f02c3cd99b99f0e832e55f1c3227",
+  "commands": [
+    {
+      "label": "configure",
+      "argv": [
+        "/opt/homebrew/bin/emcmake",
+        "cmake",
+        "-S",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/barodesy2017-preview-v2",
+        "-B",
+        "/private/tmp/atlas-barodesy-preview-wasm-v2",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-barodesy-preview-wasm-v2",
+        "--target",
+        "atlas_barodesy_preview",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/barodesy2017-preview-v2/observe.mjs",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/barodesy2017-preview-v2",
+        "/private/tmp/atlas-barodesy-preview-wasm-v2",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/barodesy2017-preview-v2/wasm"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas-barodesy-preview.js": {
+      "sha256": "fc84bbf4bef7d5b730daa6fd4ec7b23384dd0e553f8941b75771653bb4badcda",
+      "bytes": 26222
+    },
+    "atlas-barodesy-preview.wasm": {
+      "sha256": "ce79bf235bfd8e41756b0de16634ad167e147d4699fc5e7bb1cd7eddd088257d",
+      "bytes": 640140
+    }
+  },
+  "finished_utc": "2026-10-31T05:07:25.286528+00:00"
+}
