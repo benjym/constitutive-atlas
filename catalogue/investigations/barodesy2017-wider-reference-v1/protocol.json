@@ -1,0 +1,45 @@
+{
+  "version": "barodesy2017-wider-path-protocol-draft-v1",
+  "scope": "Independent source mathematics/reference + predeclared future native/Wasm protocol only; no model admission",
+  "source": "https://doi.org/10.1007/s11440-016-0458-4",
+  "formulation": "zero-spin bodyEqs1-10, body2p density; fixed1000Pa reference scale",
+  "scalar_cases": "Three Table2 soils: off-NCL compression and off-NCL loading/unloading/reloading; supplied binary64 initial values retained",
+  "tensor_cases": "London anisotropic three-segment nonproportional path, plus rotated counterpart; full7state Cartesian rates",
+  "rk4_grids": [
+    8,
+    16,
+    32,
+    64
+  ],
+  "reference_floors": {
+    "stress_pa": 1e-07,
+    "void_ratio": 1e-14
+  },
+  "reference_convergence": {
+    "when_above_floor": "successive stress endpoint differences decrease with ratio8..24 on final pair; fourth-order indicator only, not certified bound",
+    "below_floor": "report floor limited, do not assign convergence order"
+  },
+  "future_common_engine": {
+    "tolerances": [
+      0.0001,
+      1e-06,
+      1e-08
+    ],
+    "caller_partitions": [
+      1,
+      7
+    ],
+    "proposed_endpoint_scaled_stress_bounds": [
+      0.005,
+      0.0003,
+      2e-05
+    ],
+    "status": "predeclared study gates, untested on wider paths; cannot relax after seeing compiled results",
+    "reference_uncertainty_rule": "final RK4 difference must be <=10percent of smallest endpoint budget before use as comparator"
+  },
+  "partition_identity": "Store actual binary64 partition increments; use residual final piece when representable, verify accumulated loading with exact Decimal; preserve each physical reversal knot; never sort by strain",
+  "rollback": "After valid prefix, append isotropic[0.9,0.9,0.9,0,0,0]; endpoint void is(1+e_parent)exp(-2.7)-1. For chosen positive-volume prefix e_parent<0.8, this is bounded above by1.8exp(-2.7)-1<0. Must reject whole caller increment preserving exact committed parent and accepted prefix, even after internal accepted subdivisions",
+  "zero_duplicate": "Exact duplicate target preserves state/history and introduces no material increment; not a zero-loading AD claim",
+  "artifacts": "Actual generated model+fullparameterorder+binary/Wasm hashes, every request/response/increment/partition and failure transcript; retained before numerical acceptance",
+  "public_AD_or_integration_validated": false
+}
