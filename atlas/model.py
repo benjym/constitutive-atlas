@@ -274,8 +274,9 @@ def validate(model):
             raise ValidationError('initialization must require every persistent state field in layout order')
         stress = model['formulation']['stress']
         if not physical:
-            if stress != {'source': 'state', 'name': 'sigma', 'measure': 'cauchy', 'scope': 'effective'}:
-                raise ValidationError('incremental profile requires effective Cauchy stress state sigma')
+            if (stress.get('source') != 'state' or stress.get('name') != 'sigma'
+                    or stress.get('measure') != 'cauchy' or stress.get('scope') not in ('effective', 'total')):
+                raise ValidationError('incremental profile requires explicitly scoped effective/total Cauchy stress state sigma')
             if state_role(model['state'][0]) != 'persistent':
                 raise ValidationError('stress output sigma must be persistent')
             semantics = model['state'][0]['semantics']

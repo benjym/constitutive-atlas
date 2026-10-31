@@ -1,15 +1,11 @@
-"""Restricted synthetic total-elastic lowering for native transport tests only.
+"""Synthetic total-elastic transport fixture, generated through normal validation.
 
-Production validate() deliberately remains effective-only. Never package these
-fixtures as atlas models or use this test adapter as an ingestion path.
+This fixture is not an atlas scientific model or a public catalogue addition.
 """
-import copy
 import json
 from pathlib import Path
-from unittest.mock import patch
 from atlas.compiler import generate
 from atlas.model import ROOT, load, migrate_formulation, validate
-from atlas.structure import check
 
 
 def synthetic_total():
@@ -26,14 +22,7 @@ def generate_transport_fixture(destination):
     for path in sorted((ROOT/'models').glob('*.json')):(fixtures/path.name).write_bytes(path.read_bytes())
     total=synthetic_total();special=fixtures/'scope-synthetic-total-elastic.json'
     special.write_text(json.dumps(total,indent=2)+'\n')
-    schema=json.loads((ROOT/'schemas/model-v0.3.schema.json').read_text())
-    def restricted_load(path):
-        if Path(path)!=special:return load(path)
-        candidate=json.loads(special.read_text());check(candidate,schema)
-        assert candidate==total,'test fixture changed beyond its explicit scope'
-        twin=copy.deepcopy(candidate);twin['formulation']['stress']['scope']='effective'
-        validate(twin) # all mechanics/symbol/dimension/persistence checks unchanged
-        return candidate
-    with patch('atlas.compiler.load',side_effect=restricted_load):
-        generate(destination/'generated',list(fixtures.glob('*.json')))
+    # Exercise the same loader and semantic checks as all other records.
+    validate(total)
+    generate(destination/'generated',list(fixtures.glob('*.json')))
     return total

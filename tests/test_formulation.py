@@ -129,7 +129,7 @@ class FormulationTests(unittest.TestCase):
 
     def test_stress_binding_and_scope(self):
         model = migrate_formulation(load(ROOT/'models/linear-elastic.json'))
-        for key, value in [('name','e'), ('source','observable'), ('scope','total'), ('measure','kirchhoff')]:
+        for key, value in [('name','e'), ('source','observable'), ('scope','unknown'), ('measure','kirchhoff')]:
             bad = copy.deepcopy(model)
             bad['formulation']['stress'][key] = value
             with self.subTest(key=key), self.assertRaises(ValidationError):validate(bad)

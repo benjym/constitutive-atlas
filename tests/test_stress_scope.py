@@ -59,10 +59,10 @@ class StressScopeTests(unittest.TestCase):
             bad=copy.deepcopy(original);bad['schema_version']=version
             with self.assertRaises(ValidationError):stress_scope(bad)
 
-    def test_scope_metadata_does_not_enable_total_incremental_profile(self):
+    def test_explicit_total_incremental_profile_is_supported(self):
         model=scope_fixtures()['scope-explicit-incremental'];model['formulation']['stress']['scope']='total'
         self.assertEqual(stress_scope(model),'total')
-        with self.assertRaisesRegex(ValidationError,'effective Cauchy'):validate(model)
+        self.assertIs(validate(model),model)
 
     def test_catalogue_and_all_generated_numerical_functions_match_prior_generator(self):
         previous=json.loads((ROOT/'docs/reviews/stress-scope-metadata-v1/previous-sources.json').read_text())

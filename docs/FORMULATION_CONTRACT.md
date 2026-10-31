@@ -285,8 +285,9 @@ is unchanged.
 
 `stress` is an output binding, not another equation or an inferred name match:
 
-- Incremental profiles bind effective Cauchy stress to persistent symmetric Pa
-  state `sigma`, occupying the first six state components.
+- Incremental profiles bind Cauchy stress to persistent symmetric Pa state
+  `sigma`, occupying the first six state components, with an explicit `scope`
+  of `effective` or `total`. Legacy v0.1 retains its effective-stress contract.
 - Physical-time profiles bind symmetric Pa observable `stress`, using
   `source: "observable"`, `name: "stress"`, `measure: "cauchy"`, and an explicit
   `scope` of `effective` or `total`.
@@ -298,6 +299,11 @@ These bindings deliberately match the current engine layouts. Arbitrarily named
 stress outputs and other stress measures require future implementation support.
 An effective-stress declaration supplies no pore-pressure evolution or total-stress
 conversion. Total stress does not imply that a coupled poromechanics system exists.
+Scoped incremental laboratory and recorded APIs carry this declaration into
+results. Legacy effective-only APIs reject total models. Total laboratory
+protocols describe mechanical constraints; they supply no drainage assumption,
+pore-pressure reconstruction or effective-stress experiment overlay. Numerical
+qualification and scientific admission remain separate from profile validation.
 A physical-time stress observable may depend on the prescribed rate, so a state
 snapshot alone need not determine stress.
 
