@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-spectral-consumer-checks-v1.py", line 11, in expect
+    try:action()
+        ~~~~~~^^
+  File "/private/tmp/atlas-spectral-consumer-checks-v1.py", line 22, in <lambda>
+    n=copy.deepcopy(m);n['schema_version']='0.2';n['increment_reset']={'updates':[{'target':'sigma','guard':e,'value':'sigma'}]};expect('reset guard '+e,lambda:validate(n),allowed)
+                                                                                                                                                                ~~~~~~~~^^^
+  File "/private/tmp/atlas-spectral-dsl-candidate-v1/atlas/model.py", line 161, in validate
+    check(model,json.loads((ROOT/'schemas'/schema).read_text()))
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-spectral-dsl-candidate-v1/atlas/structure.py", line 27, in check
+    if not set(schema.get('required',[]))<=value.keys():raise ValidationError(f'{path}: required fields missing')
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+atlas.dsl.ValidationError: $: required fields missing
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/atlas-spectral-consumer-checks-v1.py", line 22, in <module>
+    n=copy.deepcopy(m);n['schema_version']='0.2';n['increment_reset']={'updates':[{'target':'sigma','guard':e,'value':'sigma'}]};expect('reset guard '+e,lambda:validate(n),allowed)
+                                                                                                                                 ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-spectral-consumer-checks-v1.py", line 13, in expect
+    assert not allowed,label
+           ^^^^^^^^^^^
+AssertionError: reset guard principal_max(sigma)

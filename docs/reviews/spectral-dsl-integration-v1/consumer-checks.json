@@ -1,0 +1,26 @@
+{
+  "checks": [
+    "model equation select(principal_max_value(sigma)>p_ref,sigma,sigma)",
+    "model equation principal_max_value(sigma)*I",
+    "model equation select(1>0,sigma,principal_max_value(sigma)*I)",
+    "domain predicate",
+    "initial_checks predicate",
+    "reset guard principal_max_value(sigma)",
+    "reset guard select(principal_max_value(sigma)>0*p_ref,p_ref,-p_ref)",
+    "reset guard principal_max(sigma)",
+    "reset guard trace(sigma)",
+    "reset guard indirect predicate alias",
+    "history principal_max_value(A)",
+    "history principal_max_value(A)>p",
+    "history select(principal_max_value(A)>p,p,-p)",
+    "history select(1>0,p,principal_max_value(A))",
+    "initialization term rejects value-only",
+    "initialization state rejects value-only",
+    "initialization rate rejects value-only",
+    "initialization predicate accepted",
+    "history signed event guard select(principal_max_value(tensor)>0*trace(tensor),1,-1)",
+    "history signed event guard select(principal_max(tensor)>0*trace(tensor),1,-1)"
+  ],
+  "count": 20,
+  "compiled_observations": 0
+}
