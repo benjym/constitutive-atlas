@@ -577,3 +577,8 @@ The [bounded source packet](docs/ingestion/hypoplastic-sand-vw96/README.md) adds
 ## Linear elasticity source reconciliation — 2026-11-01
 
 The [bounded elastic packet](docs/ingestion/linear-elastic/README.md) verifies pinned OpenGeoSys material/Kelvin sources and a complete explicit v0.3 state/init crosswalk. Eight contract checks,30 exact stiffness-column identities and29 saved analytical-endpoint residual checks pass. Atlas constant parameters, effective-stress host interpretation and project void bookkeeping are distinguished from the broader source API. Historical native evidence is hash-verified, not rerun; pending v2 scientific review and REV-01 remain open. Root/schema/solver/status and existing evidence are unchanged; no build, push or deployment.
+
+
+## Modified Cam Clay source reconciliation — 2026-11-01
+
+The [bounded MCC packet](docs/ingestion/modified-cam-clay/README.md) adds relevant pinned-report visual inspection, full v0.3 field/init mapping and explicit temporary-multiplier semantics. The printed single-M yield and porosity-balance inconsistencies are retained; endpoint elasticity and exponential volume/log-hardening remain project choices.13 contract observations,three scalar-reference residual cases and four existing Python-only groups pass. Historical failed v1 and passing57-case v2 report hashes are intact; no compiled corpus was rerun. Pending v3 scientific review and REV-03 remain open; no root/schema/solver/status change, build or deployment.

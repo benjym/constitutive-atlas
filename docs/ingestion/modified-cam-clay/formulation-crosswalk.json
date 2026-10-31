@@ -1,0 +1,226 @@
+{
+  "schema_version": "0.3",
+  "kind": "formulation-crosswalk",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e",
+      "pc"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "model_id": "modified-cam-clay",
+  "root_definition_sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+  "root_migrated": false,
+  "scientific_admission_changed": false,
+  "state": [
+    {
+      "name": "sigma",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0
+      ],
+      "shape": "sym",
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "initial": 0.7,
+      "shape": "scalar",
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "pc",
+      "unit": "Pa",
+      "initial": 200000,
+      "shape": "scalar",
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "preconsolidation_pressure",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "gamma",
+      "unit": "1",
+      "initial": 0,
+      "shape": "scalar",
+      "scale": "1",
+      "semantics": {
+        "role": "plastic_multiplier",
+        "quantity": "normalized_plastic_multiplier",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "initialization_notes": "Explicit effective stress,void ratio and preconsolidation pressure required; gamma is a temporary solve variable zero-filled by initializer, never a supplied persistent loading history. Default OCR2 is illustrative. No NCL intercept or specimen preparation is inferred.",
+  "parameter_crosswalk": {
+    "p_ref": {
+      "unit": "Pa",
+      "source_locator": "Project scaling only",
+      "bounds": "Root min/max are project exploration limits; lambda_c>kappa additionally required."
+    },
+    "M": {
+      "unit": "1",
+      "source_locator": "Report Eq30b p6; Eq11 p3 conflicts",
+      "bounds": "Root min/max are project exploration limits; lambda_c>kappa additionally required."
+    },
+    "lambda_c": {
+      "unit": "1",
+      "source_locator": "Report Eqs15\u201316, v versus natural log p convention",
+      "bounds": "Root min/max are project exploration limits; lambda_c>kappa additionally required."
+    },
+    "kappa": {
+      "unit": "1",
+      "source_locator": "Report Eq17/21; Itasca Eq15",
+      "bounds": "Root min/max are project exploration limits; lambda_c>kappa additionally required."
+    },
+    "nu": {
+      "unit": "1",
+      "source_locator": "Report Eq21 constant-Poisson specialization",
+      "bounds": "Root min/max are project exploration limits; lambda_c>kappa additionally required."
+    }
+  },
+  "derived_crosswalk": {
+    "mean": {
+      "source_locator": "Report Eq4 p2, effective-stress footnote; paired sign conversion",
+      "expression": "trace(sigma) / 3"
+    },
+    "q2": {
+      "source_locator": "Report Eq4; Mandel contraction preserves q squared",
+      "expression": "1.5 * dot(dev(sigma),dev(sigma))"
+    },
+    "K": {
+      "source_locator": "Report Eq17 for continuous current v; endpoint choice is project; Eq21 instead linearizes v0. Itasca Eq15",
+      "expression": "(1 + e) * mean / kappa"
+    },
+    "G": {
+      "source_locator": "Report Eq21 constant nu relation, with Atlas current endpoint K",
+      "expression": "3 * K * (1 - 2 * nu) / (2 * (1 + nu))"
+    },
+    "yield_scaled": {
+      "source_locator": "Report Eq30b p6 versus printed single M in Eq11 p3; project p_ref normalization",
+      "expression": "(q2 + M**2 * mean * (mean - pc)) / p_ref**2"
+    },
+    "plastic_volume": {
+      "source_locator": "Report associated flow Eq12 and Eq16; Atlas gamma/pc_n normalization and endpoint evaluation",
+      "expression": "gamma * M**2 * (2 * mean - pc) / pc_n"
+    }
+  },
+  "equation_crosswalk": {
+    "sigma": {
+      "source_locator": "Report Eq10/12 continuous elasticity/associated flow",
+      "project_choice": "Endpoint K,G and normalized multiplier gamma/pc_n; stress residual is not a verbatim source finite-step scheme."
+    },
+    "e": {
+      "source_locator": "Report Eqs8\u20139; Eq7 printed balance conflicts",
+      "project_choice": "Exponential total-volume bookkeeping; differs from report Eq30d porosity step and Itasca Eq8."
+    },
+    "pc": {
+      "source_locator": "Report Eqs14\u201316; Eq30c is different discrete update",
+      "project_choice": "Endpoint coefficient in backward-Euler log(pc) update, exponentiated to pc. Not direct backward Euler on pc or Itasca Eq31."
+    },
+    "gamma": {
+      "source_locator": "Yield inequality Eq11/30b with associated loading",
+      "project_choice": "Fischer\u2013Burmeister complementarity residual; scalar multiplier is increment-local, not accumulated."
+    }
+  },
+  "domain": [
+    "e > 0",
+    "lambda_c > kappa",
+    "mean > p_ref * 1e-8",
+    "pc > p_ref * 1e-8",
+    "gamma > -1e-9"
+  ],
+  "initial_checks": [
+    "yield_scaled <= 1e-8"
+  ],
+  "state_semantics_evidence": {
+    "sigma": "Report p2 footnote2 effective stress, second-rank tensor; passive Q sigma Q^T only.",
+    "e": "Report Eq8 scalar void ratio.",
+    "pc": "Report Eq14 scalar preconsolidation pressure; hardening history invariant under passive basis rotation.",
+    "gamma": "Project normalization of source Eq12 plastic increment; temporary scalar multiplier, reset each internal solve and not persistent plastic strain."
+  },
+  "transactions": {
+    "time": "Rate-independent incremental residual; no elapsed seconds or creep.",
+    "old_new": "Committed sigma_n,e_n,pc_n fixed during an internal solve; K,G,flow and log-hardening coefficient evaluated at current endpoint.",
+    "trial": "Repeated trials start from committed persistent fields; no accumulation across rejected/equilibrium guesses. gamma reset for each internal solve.",
+    "subdivision": "Compose updates on actual accepted increment fractions. gamma in returned layout belongs to final internal step; do not sum or carry it as history. Raw full-step references remain distinct from partition replay.",
+    "failure": "Complete parent rollback, including temporary incoming slots; partial progress is diagnostic only. This packet does not rerun compiled rollback.",
+    "zero_increment": "For admissible committed state,gamma0 yields unchanged persistent fields; no hold evolution.",
+    "tangent": "Nonlinear endpoint elasticity and complementarity; no global branch uniqueness/smoothness is proved.",
+    "events": "No inferred preparation/reset or yield-event location is added."
+  },
+  "source_conflicts": [
+    "Report Eq11 prints M, Eq30b uses M^2; critical slope M and separate Itasca Eq18 support chosen M^2.",
+    "Report printed Eq7 implies phi_dot=(1+phi)*strain_volume_rate; Eqs8\u20139 and later Eq30d instead give (1-phi). Atlas uses Eq9-compatible volume relation.",
+    "Text extraction drops the minus in report Eq14; rendered p3 confirms minus agrees with Eq16. This is an extraction hazard, not a source sign conflict."
+  ],
+  "unsupported": [
+    "finite strain/spin transport",
+    "time-dependent creep",
+    "automatic NCL/preparation inference",
+    "full OGS/MFront or Itasca algorithm equivalence",
+    "proof of scalar branch uniqueness or adaptive accuracy throughout parameter boxes"
+  ],
+  "source_receipts": "source-receipts.json",
+  "sources": [
+    {
+      "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/web/content/docs/benchmarks/small-deformations/ModifiedCamClay/ModifiedCamClay_report.pdf",
+      "locator": "Report relevant Eqs4,8\u201317,21,26\u201330; see receipt inspection scope"
+    },
+    {
+      "url": "https://docs.itascacg.com/itasca930/common/models/camclay/doc/modelcamclay.html",
+      "locator": "Continuous stiffness/yield/flow comparison and different finite-step updates"
+    }
+  ]
+}
