@@ -1,0 +1,89 @@
+{
+  "version": "source-evolution-actual-audit-replay-0.1",
+  "records": [
+    {
+      "id": "preliminary",
+      "capsule_file_sha256": "502bac27ad80d7ce73f2479ca9a9f333e3dd3158651cf1ff5a3434324bf11154",
+      "original_assessor_sha256": "783002f9a5ac2440b497cda4fb20bc3a95cb6064c25a7733bf25ece0b38050c1",
+      "source_files": 10,
+      "returncode": 0,
+      "witnesses": [
+        {
+          "id": "raw-read-hash-race",
+          "vulnerable": true,
+          "contract": "Reject input mutation or retain and hash the exact bytes parsed; do not bind passing values to another raw document."
+        },
+        {
+          "id": "truncated-parity-vectors",
+          "vulnerable": true,
+          "contract": "Require complete typed response vectors and audited assessment provenance before parity."
+        },
+        {
+          "id": "finite-subtraction-overflow",
+          "vulnerable": true,
+          "contract": "Report or reject an unrepresentable difference without constructing nonfinite JSON assessment values."
+        },
+        {
+          "id": "numerical-failure-exit-status",
+          "vulnerable": true,
+          "contract": "CLI writes the failed assessment and exits nonzero."
+        },
+        {
+          "id": "protocol-path-and-empty-pins",
+          "vulnerable": true,
+          "contract": "Require model_file repo-relative and pinned; require minimum generic tool/definition provenance roles."
+        }
+      ],
+      "retained_vulnerability_count": 5,
+      "stdout_sha256": "bfd487cec1d3300393f91deafb6e5f7ed1142255327b26aeed9b078a32f81c2d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "fixed",
+      "capsule_file_sha256": "38da8b22184996480e353b2956787684a74947449d4a325f3145f3c613101697",
+      "original_assessor_sha256": "691a4dc606d0fb7b7ee0c5bc2816004292676eb50c3a4cd2e09e71634d75312a",
+      "source_files": 10,
+      "returncode": 0,
+      "witnesses": [
+        {
+          "id": "raw-read-hash-race",
+          "vulnerable": false,
+          "contract": "Reject input mutation or retain and hash the exact bytes parsed; do not bind passing values to another raw document."
+        },
+        {
+          "id": "truncated-parity-vectors",
+          "vulnerable": false,
+          "contract": "Require complete typed response vectors and audited assessment provenance before parity."
+        },
+        {
+          "id": "finite-subtraction-overflow",
+          "vulnerable": false,
+          "contract": "Report or reject an unrepresentable difference without constructing nonfinite JSON assessment values."
+        },
+        {
+          "id": "numerical-failure-exit-status",
+          "vulnerable": false,
+          "contract": "CLI writes the failed assessment and exits nonzero."
+        },
+        {
+          "id": "protocol-path-and-empty-pins",
+          "vulnerable": false,
+          "contract": "Require model_file repo-relative and pinned; require minimum generic tool/definition provenance roles."
+        }
+      ],
+      "retained_vulnerability_count": 0,
+      "stdout_sha256": "c5b9f2d5ca8d3766ecc52ff105cc801253bd24119d2d4753f018315931d2ff41",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "compiled_execution": false,
+  "claims": {
+    "scientific_validation": false,
+    "compiled_rebuild": false,
+    "git_required": false
+  },
+  "limitations": [
+    "Python interpreter/stdlib remain external; no exact environment or cross-version bit reproduction claimed.",
+    "Explicit import/data closure covers these actual five synthetic witness groups, not every future study or code branch."
+  ]
+}
