@@ -41,13 +41,30 @@ export function setupRecordedView({models,catalogueHash,chart,sourceLinks,defini
   const sources=$('recorded-sources');sources.replaceChildren();sourceLinks(sources,model.sources);sources.append(definitionLink(model.id));
   $('recorded-replay').disabled=false;replay();
  }
- $('recorded-file').onchange=async event=>{
-  try{const file=event.target.files[0];if(!file)return;if(file.size>10*1024*1024)throw Error('File exceeds 10 MB.');load(parseRecordedJSON(await file.text()));}
-  catch(error){message('Import rejected: '+error.message);}finally{event.target.value='';}
+ async function importRecorded(read){
+  // Invalidate both running work and pending reads before awaiting a new source.
+  stop();const id=generation;spec=result=null;exports(false);
+  $('recorded-replay').disabled=true;$('recorded-resolved').textContent='';plot();
+  message('Reading recorded path…');$('recorded-cancel').hidden=false;
+  let doc;
+  try{doc=await read();}
+  catch(error){if(id===generation){$('recorded-cancel').hidden=true;message('Import rejected: '+error.message);}return;}
+  if(id!==generation)return;
+  try{load(doc);}catch(error){$('recorded-cancel').hidden=true;message('Import rejected: '+error.message);}
+ }
+ $('recorded-file').onchange=event=>{
+  const file=event.target.files[0];if(!file)return;event.target.value='';
+  return importRecorded(async()=>{
+   if(file.size>10*1024*1024)throw Error('File exceeds 10 MB.');
+   return parseRecordedJSON(await file.text());
+  });
  };
- $('recorded-example').onclick=async()=>{try{const response=await fetch('./recorded-example.json');if(!response.ok)throw Error('Example unavailable.');load(parseRecordedJSON(await response.text()));}catch(error){message(error.message);}};
+ $('recorded-example').onclick=()=>importRecorded(async()=>{
+  const response=await fetch('./recorded-example.json');if(!response.ok)throw Error('Example unavailable.');
+  return parseRecordedJSON(await response.text());
+ });
  $('recorded-replay').onclick=replay;$('recorded-component').onchange=plot;
- $('recorded-cancel').onclick=()=>{stop();message('Replay cancelled. Run again to restart from the supplied initial state.');};
+ $('recorded-cancel').onclick=()=>{stop();message(spec?'Replay cancelled. Run again to restart from the supplied initial state.':'Import cancelled. Load a recorded path to start again.');};
  $('recorded-export').onclick=()=>download(spec.model+'-recorded.json',JSON.stringify({schema_version:'experimental-recorded-replay-export-0.1',catalogue_hash:catalogueHash,specification:spec,result},null,2),'application/json');
  $('recorded-csv').onclick=()=>{
   const labels=['xx','yy','zz','sqrt2_xy','sqrt2_yz','sqrt2_xz'];

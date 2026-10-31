@@ -1,0 +1,109 @@
+✖ latest file wins even when an older read finishes last (1.820125ms)
+✖ cancel during a pending example body prevents replay (0.242292ms)
+✖ a new file invalidates a pending example download (0.802875ms)
+✖ superseded read errors do not overwrite the latest status (0.356208ms)
+✖ new import stops old worker immediately and ignores its late response (0.273625ms)
+✔ oversize and malformed imports fail without reading or launching a worker (0.1805ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 1
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44.8965
+
+✖ failing tests:
+
+test at tests/test_recorded_import_cancellation.mjs:22:1
+✖ latest file wins even when an older read finishes last (1.820125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  2 !== 1
+
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_recorded_import_cancellation.mjs:27:9)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/test_recorded_import_cancellation.mjs:31:1
+✖ cancel during a pending example body prevents replay (0.242292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  true !== false
+
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_recorded_import_cancellation.mjs:34:9)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/test_recorded_import_cancellation.mjs:40:1
+✖ a new file invalidates a pending example download (0.802875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  2 !== 1
+
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_recorded_import_cancellation.mjs:44:9)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/test_recorded_import_cancellation.mjs:46:1
+✖ superseded read errors do not overwrite the latest status (0.356208ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'Import rejected: Late disk failure'
+  - 'Replaying ordered records…'
+
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_recorded_import_cancellation.mjs:50:9)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Import rejected: Late disk failure',
+    expected: 'Replaying ordered records…',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/test_recorded_import_cancellation.mjs:52:1
+✖ new import stops old worker immediately and ignores its late response (0.273625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + undefined
+  - true
+
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_recorded_import_cancellation.mjs:55:9)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
