@@ -18,6 +18,25 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 **The next major milestone is a reviewed six-model collection, a representation proven against SANISAND-2004, and one reproducible experimental benchmark.** Terracotta (Wiebicke & Einav, 2024) is an additional near-term priority: begin source extraction and the physical-time capability design alongside that work, with a separate execution gate below. Review the existing models before expanding the count. Do not freeze schema v1 until this proof exposes and resolves the necessary history and initialization semantics.
 
+## Delivery focus — 1 November 2026
+
+The next bounded cycle turns existing KFS development work into one reviewed
+model-to-experiment comparison, rather than adding another model or solver
+capability. The [KFS checkpoint](docs/benchmarks/kfs-development-checkpoint-v1/README.md)
+records recovered results, input-information limits, current/archived model
+differences, acceptance gaps and the remaining delivery checklist. Its saved
+summary/figure regeneration and snapshot audit are complete; scientific admission
+is open. Source-to-definition and initialization review come before new fits or
+compiled studies. No new model family, optimizer, data campaign or schema feature
+is part of this cycle unless it demonstrably blocks the chosen comparison.
+
+The immediate six-model/SANISAND and Terracotta goals remain unchanged. The first
+release targets twenty formulations; the paper's 50+ planning ambition is not a
+prerequisite for this increment. Mohr–Coulomb browser integration and historical
+archive repairs remain queued with preserved checkpoints. Complete a reviewed
+figure/table and the corresponding website evidence summary before broadening
+numerical work. Deployment still needs a fresh explicit instruction.
+
 ## 2. Starting point
 
 | Area | Existing foundation | Outstanding evidence or capability |

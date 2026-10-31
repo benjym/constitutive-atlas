@@ -1,3 +1,21 @@
+# Current delivery checkpoint — 1 November 2026
+
+Nine local runnable drafts and five hosted models remain distinct from reviewed
+scientific admission. The exact browser-loading rollout and observable-only q
+correction are installed locally; see [rollout results](reviews/browser-loading-rollout-v1/RESULTS.md).
+Older progress entries below are historical. No push or deployment has occurred.
+The broad historical archive suite still has 19 preexisting binding failures;
+this checkpoint does not claim that suite is green.
+
+The [bounded KFS checkpoint](benchmarks/kfs-development-checkpoint-v1/README.md)
+regenerates an existing matched-count development comparison exactly and verifies
+both runs' local code/model/data/executable snapshots, with no new fits, builds
+or solver calls. It exposes input-information inequalities, unresolved initial
+void ratios and current/archived model differences. M1/M4 and independent review
+remain open. The VW96 input crosswalk is complete: only six parameter labels and sources
+differ from its archived definition; engine equivalence is not claimed. The next
+task is BENCH-01 source-matched baseline selection; new model integration and general numerical expansion are deferred for this delivery cycle.
+
 # Latest progress — browser provenance prototype; invariant failure retained
 
 The [frozen browser loading study](../catalogue/investigations/browser-loading-provenance-v1/README.md) stages versioned exact controls and explicit legacy/current export/import handling. Independent source review and9720cyclic/250ramp bit comparisons,60negative cases and11contract cases pass. Both serial single-target builds finish normally. The strict runtime gate fails11qscalars in exactly isotropic IGS points; complete collection retains101pairs,90import/export replays and90directlegacy comparisons. Seventeen legacy numerical and45/4/2/6 generic regressions pass. Saved-evidence replay reproduces the failed outcome and checks three artifact hashes.
