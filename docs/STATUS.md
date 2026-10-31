@@ -396,3 +396,8 @@ The [new primitive study](../catalogue/investigations/normalized-determinant-v1/
 ## 2026-11-01 — local exact-loading browser rollout
 
 [Versioned loading](LABORATORY_LOADING.md) is integrated: current exact controls, legacy replay and producer-bound0.2saved runs. [Q observable evidence](../catalogue/investigations/laboratory-q-cancellation-v1/README.md) passes35independent cases/backend and101strict pairs while all other raw fields retain exact kinds/bits. [Local packaging/UI checks](reviews/browser-loading-rollout-v1/RESULTS.md) cover nine runnable drafts,628released experiment records, exports/imports, corrupted provenance and failed-run recovery. No deployment or new scientific admission. A broader historical suite retains19preexisting archive-coverage failures, separately tracked on the implementation board.
+
+
+## VW96 full-source reconciliation — 2026-11-01
+
+The [bounded source packet](../docs/ingestion/hypoplastic-sand-vw96/README.md) adds a full21-page original-paper technical read,27 standalone algebra checks and13 explicit v0.3 contract/initialization checks. Rate factors/signs agree in the inspected common domain. Two concrete witnesses distinguish wider algebraic continuation from the AppendixC shape range and principal-stress applicability; original figure-density/preparation ambiguities are preserved. Root definitions and historical failed/passing evidence are unchanged. A pending v2 review replaces the stale source-access gap with specific applicability, initialization and scientific-signoff decisions. REV-04/REV-05 remain open; no build, new calibration, promotion, push or deployment occurred. The next scoped task is a shared-host applicability policy/gap report, not solver expansion.

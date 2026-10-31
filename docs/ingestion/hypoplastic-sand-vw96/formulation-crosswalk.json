@@ -1,0 +1,264 @@
+{
+  "schema_version": "0.3",
+  "kind": "formulation-crosswalk",
+  "model_id": "hypoplastic-sand-vw96",
+  "root_definition_sha256": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "strain_path_rate",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "root_migrated": false,
+  "exact_identity": "General eight-parameter VW96 host, compression-positive Mandel representation restricted to zero spin; project numerical bounds and integration are separate from the source rate law.",
+  "state": [
+    {
+      "name": "sigma",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0
+      ],
+      "shape": "sym",
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "initial": 0.7,
+      "shape": "scalar",
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "parameter_crosswalk": {
+    "p_ref": {
+      "unit": "Pa",
+      "source_locator": "Project numerical scaling only",
+      "bounds": "Root min/max are project exploration bounds; not universal source recommendations."
+    },
+    "phi": {
+      "unit": "1",
+      "source_locator": "Eq41",
+      "bounds": "Root min/max are project exploration bounds; not universal source recommendations."
+    },
+    "hs": {
+      "unit": "Pa",
+      "source_locator": "Eq43,46",
+      "bounds": "Root min/max are project exploration bounds; not universal source recommendations."
+    },
+    "n": {
+      "unit": "1",
+      "source_locator": "Eq43,46",
+      "bounds": "Root min/max are project exploration bounds; not universal source recommendations."
+    },
+    "ed0": {
+      "unit": "1",
+      "source_locator": "Eq43,45,46",
+      "bounds": "Root min/max are project exploration bounds; not universal source recommendations."
+    },
+    "ec0": {
+      "unit": "1",
+      "source_locator": "Eq43,44,45,46",
+      "bounds": "Root min/max are project exploration bounds; not universal source recommendations."
+    },
+    "ei0": {
+      "unit": "1",
+      "source_locator": "Eq43,46",
+      "bounds": "Root min/max are project exploration bounds; not universal source recommendations."
+    },
+    "alpha": {
+      "unit": "1",
+      "source_locator": "Eq45,46",
+      "bounds": "Root min/max are project exploration bounds; not universal source recommendations."
+    },
+    "beta": {
+      "unit": "1",
+      "source_locator": "Eq44,46",
+      "bounds": "Root min/max are project exploration bounds; not universal source recommendations."
+    }
+  },
+  "derived_crosswalk": {
+    "mean": {
+      "source_locator": "Eq40,43; project pressure shorthand",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "hat": {
+      "source_locator": "Eq40 and AppendixC",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "hsdev": {
+      "source_locator": "Eq42 and AppendixC",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "j2": {
+      "source_locator": "Eq42 and AppendixC",
+      "note": "j2<=1e-24 zero-lode branch is a project continuation."
+    },
+    "tanpsi": {
+      "source_locator": "Eq42 and AppendixC",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "lode": {
+      "source_locator": "Eq42 and AppendixC",
+      "note": "j2<=1e-24 zero-lode branch is a project continuation."
+    },
+    "F": {
+      "source_locator": "Eq42 and AppendixC EqC10",
+      "note": "j2<=1e-24 zero-lode branch is a project continuation."
+    },
+    "a": {
+      "source_locator": "Eq41",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "compression": {
+      "source_locator": "Eq43",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "ed": {
+      "source_locator": "Eq43",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "ec": {
+      "source_locator": "Eq43",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "ei": {
+      "source_locator": "Eq43",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "fd": {
+      "source_locator": "Eq45",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "fe": {
+      "source_locator": "Eq44",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "fb": {
+      "source_locator": "Eq46",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "factor": {
+      "source_locator": "Eq40",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "linear": {
+      "source_locator": "Eq40",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    },
+    "nonlinear": {
+      "source_locator": "Eq40; nonlinear tensor sign changes under compression-positive conversion",
+      "note": "Source quantity or algebraic shorthand, with compression-positive sign conversion."
+    }
+  },
+  "equation_crosswalk": {
+    "sigma": {
+      "source_locator": "Eq1 objective rate; Eq40 material law",
+      "note": "Zero-spin restriction permits ordinary rate. Negative nonlinear sign follows stress and strain sign conversion together."
+    },
+    "e": {
+      "source_locator": "Eq2",
+      "note": "e_prime=-(1+e)*trace(de) in compression-positive convention."
+    }
+  },
+  "transactions": {
+    "path": "Positive homogeneity in strain increment; derivatives per normalized path fraction, not per second. No elapsed-time creep or hold evolution.",
+    "trial_commit_rollback": "Trial starts from committed sigma/e; failed increment restores parent. Adaptive integration and defect estimates are project choices, not Eqs40\u201346.",
+    "spin": "Source uses Jaumann objective stress rate; current supported profile restricts spin to zero. Passive tensor covariance does not establish finite-rotation transport.",
+    "tangent": "Norm(de) is nonsmooth at zero; no globally smooth tangent is inferred."
+  },
+  "project_domain": [
+    "e > 0",
+    "mean > p_ref * 1e-8",
+    "ed0 < ec0",
+    "ec0 < ei0",
+    "e > ed",
+    "e < ei",
+    "F > 0",
+    "fb > 0 * p_ref"
+  ],
+  "unsupported": [
+    "finite strain and nonzero spin",
+    "physical-time creep/relaxation",
+    "complete physical applicability throughout the project numerical domain"
+  ],
+  "scientific_admission_changed": false,
+  "initialization_notes": {
+    "source_table_I": {
+      "material": "Hochstetten sand",
+      "phi_degrees": 33,
+      "hs_Pa": 1000000000.0,
+      "n": 0.25,
+      "ed0": 0.55,
+      "ec0": 0.95,
+      "ei0": 1.05,
+      "alpha": 0.25,
+      "beta": 1.5
+    },
+    "root_defaults": "Illustrative Karlsruhe/Fellin-summary constants, not the original TableI or fitted Wichtmann constants. Root sigma=100kPaI,e=.7 are examples only.",
+    "source_ambiguity": "Fig13/14 captions place e=.67 at beginning of shearing at -100kPaI; body p264 gives initial .67 then .633 after isotropic preparation to traceT=-300kPa. Fig10 text/legends also differ. Preserve ambiguity; do not invent a preparation deck."
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "state_semantics_evidence": {
+    "sigma": "Eqs1/40 Cauchy tensor with objective rate; fixed spatial zero-spin restriction. Passive transformation Q sigma Q^T.",
+    "e": "Eq2 scalar void ratio; invariant under passive basis changes."
+  },
+  "sources": [
+    {
+      "url": "https://doi.org/10.1002/%28SICI%291099-1484%28199607%291:3%3C251::AID-CFM13%3E3.0.CO%3B2-3",
+      "locator": "VW96Eqs1\u20132,40\u201346 and AppendixC; general eight-parameter host",
+      "sha256": "70eb1297cd25e67daf8b35b8f8c22f42c3a7fae2c0a62ae9e0079e3b03e64100"
+    }
+  ],
+  "source_domain_notes": [
+    "AppendixC characterizes F on u=tanpsi=0 and 0<u<sqrt(2), with C=cos(3theta) in [-1,1]. Root guards admit some algebraic continuations beyond this stated range. This is not itself a demonstrated Eq40 error or a source-mandated runtime guard.",
+    "No explicit universal principal-compression rejection rule was found. Mixed-sign principal stress can occur even inside u<sqrt(2). Physical applicability needs an explicit reviewed decision.",
+    "Strict root ed<e<ei, positive pressure cutoff, F>0 and fb>0 are the actual executable admission; they do not prove complete physical admissibility."
+  ]
+}

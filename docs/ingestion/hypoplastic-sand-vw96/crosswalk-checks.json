@@ -1,0 +1,119 @@
+{
+  "kind": "vw96-source-contract-diagnostics-v2",
+  "root_sha256": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+  "checks": [
+    "root exact-byte identity",
+    "complete explicit v0.3 candidate validates in memory",
+    "derived_crosswalk covers every root field",
+    "equation_crosswalk covers every root field",
+    "parameter_crosswalk covers every root field",
+    "state values/order/scales unchanged",
+    "example explicit initialization accepted without projection",
+    "missing sigma rejected",
+    "missing e rejected",
+    "zero strain produces zero stress and void-ratio rates",
+    "IGS first18 derived quantities and first8 domain guards exactly match VW96",
+    "host parameter defaults/units/bounds match IGS; label differences explicitly retained",
+    "both exact-source domain witnesses reproduced by current Python initialization without projection"
+  ],
+  "count": 13,
+  "passed": true,
+  "witnesses": [
+    {
+      "id": "outside_appendix_C_range",
+      "state": {
+        "sigma": [
+          450000,
+          -75000,
+          -75000,
+          0,
+          0,
+          0
+        ],
+        "e": 0.7
+      },
+      "parameters": {
+        "p_ref": 100000,
+        "phi": 0.5235987755982988,
+        "hs": 5800000000.0,
+        "n": 0.28,
+        "ed0": 0.53,
+        "ec0": 0.84,
+        "ei0": 1.0,
+        "alpha": 0.13,
+        "beta": 1.05
+      },
+      "accepted_by_current_declared_domain": true,
+      "tanpsi": 2.4748737341529163,
+      "tanpsi_squared": 6.125,
+      "lode_cosine": -1.0000000000000002,
+      "F": 0.9999999999999994,
+      "within_stated_appendix_C_shape_range": false,
+      "all_principal_stresses_compressive": false,
+      "interpretation": "Algebraic domain diagnostic, not evidence of physical applicability or a newly prescribed rejection rule."
+    },
+    {
+      "id": "mixed_sign_inside_appendix_C_range",
+      "state": {
+        "sigma": [
+          -100000,
+          300000,
+          300000,
+          0,
+          0,
+          0
+        ],
+        "e": 0.7
+      },
+      "parameters": {
+        "p_ref": 100000,
+        "phi": 0.5235987755982988,
+        "hs": 5800000000.0,
+        "n": 0.28,
+        "ed0": 0.53,
+        "ec0": 0.84,
+        "ei0": 1.0,
+        "alpha": 0.13,
+        "beta": 1.05
+      },
+      "accepted_by_current_declared_domain": true,
+      "tanpsi": 1.131370849898476,
+      "tanpsi_squared": 1.28,
+      "lode_cosine": 1.0,
+      "F": 0.2,
+      "within_stated_appendix_C_shape_range": true,
+      "all_principal_stresses_compressive": false,
+      "interpretation": "Algebraic domain diagnostic, not evidence of physical applicability or a newly prescribed rejection rule."
+    }
+  ],
+  "host_parameter_label_differences": {
+    "n": {
+      "vw96_label": "Pressure dependency exponent",
+      "igs97_label": "Barotropy exponent"
+    },
+    "ed0": {
+      "vw96_label": "Dense-limit void ratio at zero pressure",
+      "igs97_label": "Minimum void ratio at zero pressure"
+    },
+    "ec0": {
+      "vw96_label": "Critical-state void ratio at zero pressure",
+      "igs97_label": "Critical void ratio at zero pressure"
+    },
+    "ei0": {
+      "vw96_label": "Loose-limit void ratio at zero pressure",
+      "igs97_label": "Maximum void ratio at zero pressure"
+    },
+    "alpha": {
+      "vw96_label": "Density influence exponent",
+      "igs97_label": "Density / dilatancy exponent"
+    },
+    "beta": {
+      "vw96_label": "Stiffness density exponent",
+      "igs97_label": "Pyknotropy exponent"
+    }
+  },
+  "compiled_calls": 0,
+  "root_migrated": false,
+  "model_status": "transcribed",
+  "scientific_admission_changed": false
+}
