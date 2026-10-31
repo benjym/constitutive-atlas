@@ -22,7 +22,9 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 The [current status summary](docs/STATUS.md) separates executable definitions,
 source review, numerical evidence and deployment. Nine top-level models execute
-locally; fourteen formal reviews covering the five baselines remain pending.
+locally; eighteen formal reviews remain pending, with exact current-definition
+coverage of all nine. The [four added draft records](docs/reviews/additional-executable-source-coverage-v1/README.md)
+expose existing source/preparation/numerical questions; this is not scientific signoff.
 These counts do not close scientific admission, the six-model proof or the
 twenty-formulation release target. Historical delivery notes are not new assignments.
 
@@ -114,7 +116,7 @@ Literature screening, data curation and prior-work analysis can proceed alongsid
 ## 5. M0 — establish the baseline
 
 - [x] **BASE-01:** Capture a pinned baseline manifest: source commit, model hashes, schema/compiler source identity, toolchain, checks and known limitations. The [complete clean-export baseline](catalogue/baselines/2026-10-30-r3/manifest.json) passes all fifteen ordered checks; [run history](catalogue/baselines/README.md) retains two failed attempts and [reproduction instructions](docs/SOFTWARE_BASELINE.md) describe the fresh native/Wasm build. This is software verification, not independent scientific review.
-- [ ] **BASE-02:** Reconcile `docs/STATUS.md`, catalogue statuses and website wording with actual evidence. The [current repository summary](docs/STATUS.md) now distinguishes nine executable definitions, fourteen pending baseline reviews and historical checkpoints; [catalogue review disclosure](docs/reviews/web-source-review-status-v1/README.md) is locally delivered. Full per-formulation coverage and latest hosted verification remain open. Keep operational deployment status separate from scientific release readiness.
+- [ ] **BASE-02:** Reconcile `docs/STATUS.md`, catalogue statuses and website wording with actual evidence. The [current repository summary](docs/STATUS.md) now distinguishes nine executable definitions, eighteen pending reviews covering all nine definitions and historical checkpoints; [catalogue review disclosure](docs/reviews/web-source-review-status-v1/README.md) is locally delivered. Completed independent scientific review and latest hosted verification remain open. Keep operational deployment status separate from scientific release readiness.
 - [x] **BASE-03:** Define machine-readable review and evidence records, with schema validation and stable IDs. The [record contract](docs/EVIDENCE_RECORDS.md), numerical/review schemas, hashed [elasticity evidence](catalogue/evidence/linear-elastic-analytical-v1.json) and [pending review](catalogue/reviews/linear-elastic-source-v1.json) are implemented. Integrity and current-definition checks are separate; no model is automatically promoted. Experimental scope choices now use [decision records](docs/decisions/0001-sanisand-parent-reset-research.md).
 - [ ] **BASE-04:** Turn the first work package in section 13 into repository issues, with leads and reviewers. Do not assign tasks to either maintainer without agreement.
 
