@@ -79,11 +79,21 @@ class RegisteredReplay(unittest.TestCase):
 
     def test_source_rate_packet_frozen_files(self):
         import hashlib
-        folder = ROOT / 'catalogue/source-replays/source-rates-v1'
-        manifest = json.loads((folder / 'manifest.json').read_bytes())
-        self.assertFalse(manifest['compiled_execution'])
-        for name, expected in manifest['files'].items():
-            self.assertEqual(hashlib.sha256((folder / name).read_bytes()).hexdigest(), expected, name)
+        for packet in ('source-rates-v1', 'sand-prospective-v1'):
+            folder = ROOT / 'catalogue/source-replays' / packet
+            manifest = json.loads((folder / 'manifest.json').read_bytes())
+            self.assertFalse(manifest['compiled_execution'])
+            for name, expected in manifest['files'].items():
+                self.assertEqual(hashlib.sha256((folder / name).read_bytes()).hexdigest(), expected, name)
+
+    def test_prospective_export_ignores_live_tensor(self):
+        registry = 'catalogue/source-replays/sand-prospective-v1/registry.json'
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); self.export(root, registry)
+            tensor = root / 'cpp/include/atlas/tensor.hpp'
+            tensor.parent.mkdir(parents=True); tensor.write_text('live tensor changed')
+            result = replay.registered(root, registry, 'sand-prospective')
+            self.assertTrue(json.loads(result['stdout'])['original_prospective_audit_exact'])
 
     def test_source_rate_wrong_document_binding_rejects(self):
         registry = 'catalogue/source-replays/source-rates-v1/registry.json'

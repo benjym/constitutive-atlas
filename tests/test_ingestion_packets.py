@@ -116,8 +116,9 @@ class IngestionPackets(unittest.TestCase):
   self.run_python(str(folder/'checks.py'),'--check',str(folder/'check-results.json'))
   self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_checks.py','-v')
  def test_sand_prospective_mapping_review(self):
-  folder=ROOT/'docs/ingestion/barodesy-sand/compiled-plan-review-v1'
-  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_audit.py','-v')
+  from atlas.source_replay import registered
+  result=registered(ROOT,'catalogue/source-replays/sand-prospective-v1/registry.json','sand-prospective')
+  self.assertEqual(json.loads(result['stdout'])['original_mutation_groups'],8)
  def test_collection_identity_gap_remains_documented(self):
   folder=ROOT/'docs/reviews/generic-rate-collection-v1'
   manifest=json.loads((folder/'manifest.json').read_text())
