@@ -78,6 +78,12 @@ Only the journal is bound to the candidate; publisher/Crossref metadata agree on
 the journal CC BY declaration. No preprint relationship or equation equivalence
 is inferred. Full journal page-image reconciliation and TC-01 remain open.
 
+The deferred MC checkpoint has a [bounded saved-JSON correction](docs/reviews/mc-saved-json-v1/README.md):
+three retained false passes now reject under one strict decoder, with valid
+synthetic replay/recovery and source-ideal path frames preserved. No new numerical
+execution or model integration follows; full prospective closure/audit remains
+a resumption gate. This repairs evidence ingestion, not a new solver capability.
+
 ## 2. Starting point
 
 | Area | Existing foundation | Outstanding evidence or capability |

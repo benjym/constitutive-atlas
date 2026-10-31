@@ -1,0 +1,528 @@
+{
+  "passed": true,
+  "scope": "source-only synthetic saved-observation assessment; no numerical or scientific admission",
+  "cases": [
+    {
+      "case": "valid-source-ideal",
+      "backends": {
+        "original": {
+          "accepted": true,
+          "expected_accepted": true,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        },
+        "revised": {
+          "accepted": true,
+          "expected_accepted": true,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        }
+      }
+    },
+    {
+      "case": "duplicate_replay_ok_raw",
+      "backends": {
+        "original": {
+          "accepted": true,
+          "expected_accepted": true,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 47, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n                                                               ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 21, in consume\n    loads(raw)  # Validate every raw call, including describe and otherwise unused fields.\n    ~~~~~^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 40, in loads\n    return json.loads(content, object_pairs_hook=_unique, parse_int=_integer,\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_float=lambda token: _finite(float(token)),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_constant=_constant)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 365, in loads\n    return cls(**kw).decode(s)\n           ~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 15, in _unique\n    raise ValueError('duplicate JSON key: ' + key)\nValueError: duplicate JSON key: ok\n"
+        }
+      }
+    },
+    {
+      "case": "duplicate_failure_ok_raw",
+      "backends": {
+        "original": {
+          "accepted": true,
+          "expected_accepted": true,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 52, in assess\n    consume('atlas_run_controls_with_settings'if req['mode']=='run-controls'else'atlas_run_with_settings',row['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 21, in consume\n    loads(raw)  # Validate every raw call, including describe and otherwise unused fields.\n    ~~~~~^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 40, in loads\n    return json.loads(content, object_pairs_hook=_unique, parse_int=_integer,\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_float=lambda token: _finite(float(token)),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_constant=_constant)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 365, in loads\n    return cls(**kw).decode(s)\n           ~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 15, in _unique\n    raise ValueError('duplicate JSON key: ' + key)\nValueError: duplicate JSON key: ok\n"
+        }
+      }
+    },
+    {
+      "case": "failure_raw_nonfinite_exponent",
+      "backends": {
+        "original": {
+          "accepted": true,
+          "expected_accepted": true,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 52, in assess\n    consume('atlas_run_controls_with_settings'if req['mode']=='run-controls'else'atlas_run_with_settings',row['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 21, in consume\n    loads(raw)  # Validate every raw call, including describe and otherwise unused fields.\n    ~~~~~^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 40, in loads\n    return json.loads(content, object_pairs_hook=_unique, parse_int=_integer,\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_float=lambda token: _finite(float(token)),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_constant=_constant)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 365, in loads\n    return cls(**kw).decode(s)\n           ~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 41, in <lambda>\n    parse_float=lambda token: _finite(float(token)),\n                              ~~~~~~~^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 26, in _finite\n    raise ValueError('JSON number outside finite binary64 range')\nValueError: JSON number outside finite binary64 range\n"
+        }
+      }
+    },
+    {
+      "case": "missing call",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 53, in assess\n    consume('atlas_run_controls_with_settings',row['recovery_raw'],recovery)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 20, in consume\n    c=next(calls);assert c['name']==name and c['raw']==raw\nStopIteration\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 55, in assess\n    consume('atlas_run_controls_with_settings',row['recovery_raw'],recovery)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 22, in consume\n    c=next(calls);assert c['name']==name and c['raw']==raw\nStopIteration\n"
+        }
+      }
+    },
+    {
+      "case": "wrong API name",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 45, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 20, in consume\n    c=next(calls);assert c['name']==name and c['raw']==raw\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 47, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 22, in consume\n    c=next(calls);assert c['name']==name and c['raw']==raw\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "wrong model argument",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 45, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 23, in consume\n    assert type(a[0])is str and a[0]==req['model']and type(a[3])is int and a[3]==req['protocol']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 47, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 25, in consume\n    assert type(a[0])is str and a[0]==req['model']and type(a[3])is int and a[3]==req['protocol']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "boolean protocol argument",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 45, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 23, in consume\n    assert type(a[0])is str and a[0]==req['model']and type(a[3])is int and a[3]==req['protocol']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 47, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 25, in consume\n    assert type(a[0])is str and a[0]==req['model']and type(a[3])is int and a[3]==req['protocol']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "wrong control bits argument",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 45, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 28, in consume\n    if name=='atlas_run_controls_with_settings':assert len(a)==6 and a[4]==req['controls_bits_csv'];setting=a[5]\n                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 47, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 30, in consume\n    if name=='atlas_run_controls_with_settings':assert len(a)==6 and a[4]==req['controls_bits_csv'];setting=a[5]\n                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "wrong settings argument",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 45, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 34, in consume\n    assert all(bits(float(u))==bits(float(v))for u,v in zip(x,y))\n           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 47, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 36, in consume\n    assert all(bits(float(u))==bits(float(v))for u,v in zip(x,y))\n           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "wrong raw binding",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 45, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 20, in consume\n    c=next(calls);assert c['name']==name and c['raw']==raw\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 47, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 22, in consume\n    c=next(calls);assert c['name']==name and c['raw']==raw\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "boolean process status",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 45, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 35, in consume\n    if 'process'in c:assert type(c['process']['status'])is int and c['process']['status']in[0,1]\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 47, in assess\n    consume('atlas_run_controls_with_settings',row['raw'],req);consume('atlas_run_controls_with_settings',replay['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 37, in consume\n    if 'process'in c:assert type(c['process']['status'])is int and c['process']['status']in[0,1]\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "wrong imported target",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 39, in assess\n    assert exact(replay['specification'],spec['specification'])and exact(replay['imported'],spec['specification'])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 41, in assess\n    assert exact(replay['specification'],spec['specification'])and exact(replay['imported'],spec['specification'])\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "wrong export version",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 41, in assess\n    assert exported['schema_version']=='0.2'and exported['catalogue_hash']==catalogue['sha256']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 43, in assess\n    assert exported['schema_version']=='0.2'and exported['catalogue_hash']==catalogue['sha256']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "wrong export catalogue",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 41, in assess\n    assert exported['schema_version']=='0.2'and exported['catalogue_hash']==catalogue['sha256']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 43, in assess\n    assert exported['schema_version']=='0.2'and exported['catalogue_hash']==catalogue['sha256']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "truncated exported result",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 43, in assess\n    assert export_equal(exported['result'],json.loads(row['raw'])), 'export result does not preserve complete computed response'\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: export result does not preserve complete computed response\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 45, in assess\n    assert export_equal(exported['result'],loads(row['raw'])), 'export result does not preserve complete computed response'\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: export result does not preserve complete computed response\n"
+        }
+      }
+    },
+    {
+      "case": "fabricated exported stress",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 43, in assess\n    assert export_equal(exported['result'],json.loads(row['raw'])), 'export result does not preserve complete computed response'\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: export result does not preserve complete computed response\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 45, in assess\n    assert export_equal(exported['result'],loads(row['raw'])), 'export result does not preserve complete computed response'\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: export result does not preserve complete computed response\n"
+        }
+      }
+    },
+    {
+      "case": "wrong export model",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 43, in assess\n    assert export_equal(exported['result'],json.loads(row['raw'])), 'export result does not preserve complete computed response'\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: export result does not preserve complete computed response\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 45, in assess\n    assert export_equal(exported['result'],loads(row['raw'])), 'export result does not preserve complete computed response'\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: export result does not preserve complete computed response\n"
+        }
+      }
+    },
+    {
+      "case": "changed export producer",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 42, in assess\n    assert exact(exported['specification'],spec['specification'])\n           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 44, in assess\n    assert exact(exported['specification'],spec['specification'])\n           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "missing recovery",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 53, in assess\n    consume('atlas_run_controls_with_settings',row['recovery_raw'],recovery)\n                                               ~~~^^^^^^^^^^^^^^^^\nKeyError: 'recovery_raw'\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 55, in assess\n    consume('atlas_run_controls_with_settings',row['recovery_raw'],recovery)\n                                               ~~~^^^^^^^^^^^^^^^^\nKeyError: 'recovery_raw'\n"
+        }
+      }
+    },
+    {
+      "case": "wrong rejection request",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 49, in assess\n    assert row['id']==req['id']and exact(row['request'],req)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 51, in assess\n    assert row['id']==req['id']and exact(row['request'],req)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "wrong replay ID",
+      "backends": {
+        "original": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/original/assess_replays.py\", line 38, in assess\n    assert row['id']==replay['id']==req['id']==spec['id']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 40, in assess\n    assert row['id']==replay['id']==req['id']==spec['id']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      }
+    },
+    {
+      "case": "duplicate describe key",
+      "backends": {
+        "original": {
+          "accepted": true,
+          "expected_accepted": null,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 38, in assess\n    consume('atlas_describe',rows[0]['raw'])\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 21, in consume\n    loads(raw)  # Validate every raw call, including describe and otherwise unused fields.\n    ~~~~~^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 40, in loads\n    return json.loads(content, object_pairs_hook=_unique, parse_int=_integer,\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_float=lambda token: _finite(float(token)),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_constant=_constant)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 365, in loads\n    return cls(**kw).decode(s)\n           ~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 15, in _unique\n    raise ValueError('duplicate JSON key: ' + key)\nValueError: duplicate JSON key: sha256\n"
+        }
+      }
+    },
+    {
+      "case": "duplicate recovery key",
+      "backends": {
+        "original": {
+          "accepted": true,
+          "expected_accepted": null,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 55, in assess\n    consume('atlas_run_controls_with_settings',row['recovery_raw'],recovery)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 21, in consume\n    loads(raw)  # Validate every raw call, including describe and otherwise unused fields.\n    ~~~~~^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 40, in loads\n    return json.loads(content, object_pairs_hook=_unique, parse_int=_integer,\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_float=lambda token: _finite(float(token)),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_constant=_constant)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 365, in loads\n    return cls(**kw).decode(s)\n           ~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 15, in _unique\n    raise ValueError('duplicate JSON key: ' + key)\nValueError: duplicate JSON key: ok\n"
+        }
+      }
+    },
+    {
+      "case": "nested duplicate rejection extra",
+      "backends": {
+        "original": {
+          "accepted": true,
+          "expected_accepted": null,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 52, in assess\n    consume('atlas_run_controls_with_settings'if req['mode']=='run-controls'else'atlas_run_with_settings',row['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 21, in consume\n    loads(raw)  # Validate every raw call, including describe and otherwise unused fields.\n    ~~~~~^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 40, in loads\n    return json.loads(content, object_pairs_hook=_unique, parse_int=_integer,\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_float=lambda token: _finite(float(token)),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_constant=_constant)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 365, in loads\n    return cls(**kw).decode(s)\n           ~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 15, in _unique\n    raise ValueError('duplicate JSON key: ' + key)\nValueError: duplicate JSON key: x\n"
+        }
+      }
+    },
+    {
+      "case": "nonfinite rejection constant",
+      "backends": {
+        "original": {
+          "accepted": true,
+          "expected_accepted": null,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 52, in assess\n    consume('atlas_run_controls_with_settings'if req['mode']=='run-controls'else'atlas_run_with_settings',row['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 21, in consume\n    loads(raw)  # Validate every raw call, including describe and otherwise unused fields.\n    ~~~~~^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 40, in loads\n    return json.loads(content, object_pairs_hook=_unique, parse_int=_integer,\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_float=lambda token: _finite(float(token)),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_constant=_constant)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 365, in loads\n    return cls(**kw).decode(s)\n           ~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 35, in _constant\n    raise ValueError('nonfinite JSON constant: ' + token)\nValueError: nonfinite JSON constant: NaN\n"
+        }
+      }
+    },
+    {
+      "case": "huge rejection integer",
+      "backends": {
+        "original": {
+          "accepted": true,
+          "expected_accepted": null,
+          "returncode": 0,
+          "stdout": "{\"passed\": true, \"export_import_replays\": 14, \"rejection_recovery_pairs\": 12, \"raw_calls_bound\": 53, \"candidate_calls\": 0}\n",
+          "stderr": ""
+        },
+        "revised": {
+          "accepted": false,
+          "expected_accepted": false,
+          "returncode": 1,
+          "stdout": "",
+          "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\n    print(json.dumps(assess_replays.assess(sys.argv[2])))\n                     ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 52, in assess\n    consume('atlas_run_controls_with_settings'if req['mode']=='run-controls'else'atlas_run_with_settings',row['raw'],req)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/assess_replays.py\", line 21, in consume\n    loads(raw)  # Validate every raw call, including describe and otherwise unused fields.\n    ~~~~~^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 40, in loads\n    return json.loads(content, object_pairs_hook=_unique, parse_int=_integer,\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_float=lambda token: _finite(float(token)),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      parse_constant=_constant)\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/__init__.py\", line 365, in loads\n    return cls(**kw).decode(s)\n           ~~~~~~~~~~~~~~~~^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 345, in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py\", line 361, in raw_decode\n    obj, end = self.scan_once(s, idx)\n               ~~~~~~~~~~~~~~^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 31, in _integer\n    return -0.0 if token == '-0' else _finite(int(token))\n                                      ~~~~~~~^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-saved-json-v1/revised/strict_observation_json.py\", line 26, in _finite\n    raise ValueError('JSON number outside finite binary64 range')\nValueError: JSON number outside finite binary64 range\n"
+        }
+      }
+    }
+  ],
+  "valid_frame": {
+    "export_import_replays": 14,
+    "rejection_recovery_pairs": 12,
+    "raw_calls_bound": 53
+  },
+  "known_false_passes_reproduced": 3,
+  "existing_corruption_recipes_retained": 18,
+  "additional_raw_corruptions_rejected": 5,
+  "compiled_calls": 0
+}

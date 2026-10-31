@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [MC saved-JSON correction](reviews/mc-saved-json-v1/README.md) closes three
+retained parser false passes in a separate assessor revision. Valid synthetic
+replay/recovery and14path/834point frames remain accepted; malformed raw JSON
+rejects, including unused overflow fields.19decoder/archive tests pass. Original
+stages are preserved; broader MC execution/integration stays deferred pending
+complete prospective source closure and independent audit. No builds or promotion.
+
 [Terra Cotta publication identities](ingestion/terracotta-2024/publication-records-v1/README.md)
 are integrated: distinct journal/preprint records, journal-only candidate binding,
 primary publisher/Crossref licence agreement, database export and static browser
