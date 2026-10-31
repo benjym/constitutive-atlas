@@ -1,0 +1,134 @@
+{
+  "version": "occ1968-ingestion-design-0.1",
+  "model_id": "original-cam-clay",
+  "executable": false,
+  "scientific_admission_changed": false,
+  "identity": {
+    "work": "Schofield/Wroth Critical State Soil Mechanics1968",
+    "selected_scope": "Chapter6 axisymmetric original Cam-clay",
+    "artifact_scope": "university mirror of2005 electronic transcription;1968 edition fidelity unverified",
+    "MCC_substitution": false,
+    "Appendix_C": "explicit Granta-gravel3D geometry, not an independently complete Cam-clay3D law"
+  },
+  "basis_if_3D": [
+    "xx",
+    "yy",
+    "zz",
+    "sqrt(2)*xy",
+    "sqrt(2)*yz",
+    "sqrt(2)*xz"
+  ],
+  "sign": "compression-positive",
+  "parameters": [
+    {
+      "name": "M",
+      "unit": "1",
+      "domain": ">0"
+    },
+    {
+      "name": "lambda",
+      "unit": "1",
+      "domain": ">kappa"
+    },
+    {
+      "name": "kappa",
+      "unit": "1",
+      "domain": ">0 in bounded analytical checks;zero is separate limit"
+    },
+    {
+      "name": "Gamma",
+      "unit": "1",
+      "domain": "finite intercept at selected p_ref"
+    },
+    {
+      "name": "p_ref",
+      "unit": "Pa",
+      "domain": ">0"
+    }
+  ],
+  "state_proposals": [
+    {
+      "scope": "axisymmetric",
+      "slots": [
+        "p",
+        "q_signed",
+        "v",
+        "w_kappa"
+      ],
+      "redundancy": "w_kappa=v+kappa*ln(p/p_ref);reject inconsistent supplied packing"
+    },
+    {
+      "scope": "proposed3D extension only",
+      "slots": [
+        "sigma6",
+        "v",
+        "w_kappa"
+      ],
+      "components": 8,
+      "requires_separate_variant_review": true
+    }
+  ],
+  "relations": {
+    "p_x": "p_ref*exp((Gamma-w_kappa)/(lambda-kappa))",
+    "p_c": "exp(1)*p_x",
+    "yield": "abs(q)+M*p*ln(p/p_c)<=0",
+    "bulk_recovery": "dv_elastic=-kappa*dp/p",
+    "recoverable_shear": "identically zero; shear-rigid, not zero shear modulus",
+    "volume": "v_prime=-v*Ev_prime",
+    "hardening": "ln(p_c)_prime=v*Ev_plastic_prime/(lambda-kappa)",
+    "plastic_flow_smooth": "Ev_plastic_prime/abs(eps_s_prime)=M-abs(q)/p on yield",
+    "critical": "abs(q)=M*p and v=Gamma-lambda*ln(p/p_ref)"
+  },
+  "initialization": {
+    "required": "positive pressure,explicit v,packing,stress and preparation identity",
+    "virgin_isotropic": "q0=0;v0=Gamma+lambda-kappa-lambda*ln(p0/p_ref);pc0=p0",
+    "restart": "restore packing and all observables;no pc=p reset",
+    "reference_change": "Gamma_new=Gamma_old-lambda*ln(p_ref_new/p_ref_old)"
+  },
+  "time": {
+    "coordinate": "dimensionless monotone path order",
+    "rate_independent": true,
+    "physical_relaxation_law": false,
+    "consolidation": "external hydraulic/transient system, not this effective-stress kernel"
+  },
+  "branches": [
+    "interior: recoverable volume and rigid distortion",
+    "smooth yield:sign(q) required",
+    "q=0,pc=p:normal cone not unique gradient",
+    "critical:zero volumetric hardening,control-dependent mechanism",
+    "dry-side dilation/softening:stability/uniqueness concerns"
+  ],
+  "unsupported_or_unresolved": [
+    "finiteG closure under original label",
+    "general changing-principal-direction extension identity",
+    "hydrostatic corner active-set algorithm",
+    "arbitrary strain-only uniqueness",
+    "return mapping/time-discretization/error estimator",
+    "finite-spin transport",
+    "authenticated1968 print fidelity"
+  ],
+  "transactions": {
+    "evaluation": "immutable complete old snapshot;all trial packing/stress/observables private",
+    "commit": "atomic after full support/residual/error/constraint checks",
+    "failure": "exact old snapshot plus partial attempted coverage;no partial plastic history",
+    "discrete_tangent": "requires chosen finite algorithm;not specified by source yield formula"
+  },
+  "generic_capability_requests": [
+    "zero elastic deviatoric compliance constraints",
+    "absolute-value/norm normal-cone active sets",
+    "branch-aware loading-control rank and critical mechanisms",
+    "domain-safe logarithms with explicit pressure reference",
+    "complete-state transactional mixed control"
+  ],
+  "analytical_fixture": {
+    "source": "6.27-6.31p103",
+    "scope": "virgin undrained conventional monotone compression",
+    "parameter_values": "illustrative choices in checks,not source defaults",
+    "not_claimed": [
+      "general material update",
+      "source-code equivalence",
+      "native/Wasm evidence",
+      "experimental validation"
+    ]
+  }
+}

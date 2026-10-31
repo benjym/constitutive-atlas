@@ -2,7 +2,7 @@
 import hashlib,json,subprocess,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa')
+PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970')
 class IngestionPackets(unittest.TestCase):
  def run_python(self,*args):
   return subprocess.run([sys.executable,'-B',*args],cwd=ROOT,capture_output=True,text=True,timeout=60,check=True)
@@ -30,4 +30,22 @@ class IngestionPackets(unittest.TestCase):
    self.assertTrue(actual['passed']);self.assertFalse(actual['constitutive_evaluator']);self.assertEqual(actual['compiled_calls'],0)
    public=lambda d:[x for x in d['checks'] if not x['name'].startswith('private-source:')]
    self.assertEqual(public(actual),public(stored))
+ def test_original_cam_clay_analytical_packet(self):
+  self.run_python('docs/ingestion/original-cam-clay/test_packet.py')
+  with tempfile.TemporaryDirectory() as tmp:
+   output=Path(tmp)/'checks.json'
+   self.run_python('docs/ingestion/original-cam-clay/check_packet.py','--output',str(output))
+   actual=json.loads(output.read_text());stored=json.loads((ROOT/'docs/ingestion/original-cam-clay/checks.json').read_text())
+   self.assertTrue(actual['passed']);self.assertFalse(actual['general_constitutive_evaluator'])
+   # The private PDF byte check is deliberately optional in a public checkout.
+   public=lambda d:[x for x in d['source_checks'] if x['name']!='source-hash']
+   self.assertEqual(public(actual),public(stored))
+ def test_s_clay1_reports_missing_equations_without_fabricated_closure(self):
+  result=json.loads(self.run_python('docs/ingestion/s-clay1/check_packet.py').stdout)
+  self.assertEqual(result['constitutive_checks_run'],0);self.assertFalse(result['original_equations_verified'])
+ def test_duncan_chang_original_and_correction_remain_unverified(self):
+  folder=ROOT/'docs/ingestion/duncan-chang-1970';manifest=json.loads((folder/'manifest.json').read_text());audit=json.loads((folder/'source-audit.json').read_text())
+  self.assertFalse(manifest['constitutive_equations_verified']);self.assertFalse(manifest['full_source_ingestion_complete'])
+  self.assertEqual(audit['original']['doi'],'10.1061/JSFEAQ.0001458');self.assertEqual(audit['correction']['doi'],'10.1061/JSFEAQ.0001706')
+  self.assertIsNone(audit['original']['pdf_sha256']);self.assertIsNone(audit['correction']['pdf_sha256']);self.assertFalse(audit['correction']['correction_content_verified'])
 if __name__=='__main__':unittest.main()
