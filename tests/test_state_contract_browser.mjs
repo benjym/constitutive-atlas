@@ -34,14 +34,14 @@ test('a v0.3 plastic state supplies temporary slots without editable inputs',()=
 
 import {readFileSync,readdirSync} from 'node:fs';
 const readModel=path=>JSON.parse(readFileSync(new URL(path,import.meta.url),'utf8'));
-test('all seven shipped examples retain declared full state and parameter defaults',()=>{
+test('shipped examples retain declared full state and parameter defaults',()=>{
   const paths=readdirSync(new URL('../models/',import.meta.url)).filter(path=>path.endsWith('.json'));
-  assert.equal(paths.length,7);
+  assert.ok(paths.length>=7);
   for(const path of paths){
     const model=readModel('../models/'+path),example=laboratoryExample(model);
     assert.deepEqual(example.initial,model.state.flatMap(f=>f.shape==='sym'?f.initial:[f.initial]));
     assert.deepEqual(example.parameters,Object.values(model.parameters).map(p=>p.default));
-    assert.equal(example.confinement,100);assert.equal(example.stressRatio,1);
+    assert.equal(example.confinement,model.state[0].initial[1]/1000);assert.equal(example.stressRatio,model.state[0].initial[0]/model.state[0].initial[1]);
   }
 });
 test('a separately declared 10kPa example replaces the universal stress and copies tensor history',()=>{

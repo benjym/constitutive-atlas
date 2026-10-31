@@ -1,5 +1,9 @@
 # Implementation status — 2026-10-30
 
+## Eighth local runnable draft —2026-10-31
+
+[Mašín2013 clay](models/clay2013-laboratory-preview.md) is now the eighth local runnable **draft**, with its declared10kPa complete software example. The [new frozen study](../catalogue/investigations/clay2013-preview-v2/RESULTS.md) passes20calls/598successful caller points per native/Wasm backend; the [production integration](reviews/eight-model-lab-integration/RESULTS.md) passes40model/protocol combinations and exact101point browser-export comparison. The original100kPa drained-default failure remains preserved and explained separately. Preparation/calibration, general boundary support, finite spin, tangent and scientific admission remain open. Discovery stays32entries; hosted remains five, with no deployment.
+
 ## Seventh local runnable draft —2026-10-31
 
 [Barodesy sand2015](models/barodesy2015-laboratory-preview.md) is now the seventh local runnable draft. The [frozen actual-driver study](../catalogue/investigations/barodesy2015-preview-v1/RESULTS.md) passes20calls/backend and835caller points/backend with independent volume/control checks; [production/browser integration](reviews/seven-model-lab-integration/RESULTS.md) passes35model/protocol combinations and the actual settings-aware browser default/export. Primary2015 and separate2019 calibration sources remain linked. All six previous definitions and32 discovery entries are preserved. Hosted count remains five; no deployment or scientific admission.

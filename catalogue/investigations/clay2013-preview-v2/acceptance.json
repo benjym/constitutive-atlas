@@ -1,0 +1,65 @@
+{
+  "version": "clay2013-complete-example-preview-policy-v2",
+  "phase": "prospective_no_compiled_observations",
+  "requests_per_backend": 20,
+  "run_api": "atlas_run_with_settings",
+  "integrate_api": "atlas_integrate_with_settings",
+  "settings_order": [
+    "residual_tolerance",
+    "rate_tolerance",
+    "max_iterations",
+    "max_depth",
+    "max_substeps",
+    "max_backtracks"
+  ],
+  "settings_csv": "2.0000000000000001e-10,9.9999999999999995e-07,45,14,20000,11",
+  "collection": {
+    "catalogue": "full actual descriptor and exact model/hash; preserve positional parameter order",
+    "journal": "descriptor then20literal requests; original17nondefault cases unchanged; default uses complete declared10kPa example; original100kPa failure and same-instance recovery are separately named.",
+    "json": "reject duplicate keys and nonfinite numbers; exact Boolean status",
+    "instance": "one persistent Wasm module with baseline/failure/recovery order; fresh native command per call",
+    "retention": "Reuse exact native/Wasm artifacts from source-identical frozen v1 runtime after hash verification; no new build. Freeze v2 consumer/request/policy/assessment and original artifact/build/source receipt identities before observations."
+  },
+  "success_gates": {
+    "points": "steps+1, initial row exact requested state and zero strain/control",
+    "finite_shapes": "state7,strain6,p,q,q_signed,u,control; all finite real numbers, bool forbidden",
+    "state_domain": "e>=0,p>0; independent Cartesian stress principal minors positive; no near-boundary precision theorem",
+    "loading_curve": "target*i/steps for monotonic; target*sin(2*pi*cycles*i/steps) for cyclic; absolute tolerance1e-12*max(1,abs(target))",
+    "volume_closure": "abs(e-((1+e0)*exp(-sum(strain[:3]))-1))<=1e-6",
+    "strain_controls_absolute": 1e-07,
+    "drained_radial_stress_Pa": "abs(mean(radial)-initial_radial)<=.002+1e-8*max(1,abs(initial_radial))",
+    "stress_control_q_Pa": "abs(q_signed-q0-control)<=.002+i*1e-8*max(1,abs(initial_radial)) at point i",
+    "stress_observable_reconstruction": "p,q,q_signed,u recomputed independently from returned Cartesian stress; scaled absolute discrepancy<=1e-10*max(1,abs(expected))",
+    "zero_update": "all7state binary64 bits unchanged",
+    "recovery": "successful physical channels bitwise identical to same_result_as in same backend; exclude wall time and diagnostic work counters",
+    "settings": "exact returned six settings/version/norm plus echoed model/parameters/initial/request controls and catalogue hash",
+    "axisymmetry": "abs(strain_yy-strain_zz)<=1e-7 and abs(each Mandel shear strain)<=1e-7"
+  },
+  "failure_gates": {
+    "ok": "exact false",
+    "message": "nonempty",
+    "negative_density_integrate": "all7 returned state bits equal supplied invalid incoming state",
+    "omitted_state": "no silent example substitution",
+    "recovery": "subsequent valid calls must match pre-failure baseline",
+    "legacy-100kPa-drained-incompatible": "exact step1 failure message, one bitwise-identical initial point, zero control/strain, exact echoed request/settings/model/catalogue; original v1 prospective success gate remains failed unchanged."
+  },
+  "parity": {
+    "channels": "all successful state/strain/p/q/q_signed/u/control; zero/rollback and recovery have separate exact checks",
+    "scaled_absolute_budget": 1e-10,
+    "formula": "abs(native-wasm)/max(1,abs(native),abs(wasm))",
+    "excluded": "wall time, iteration/substep diagnostic counts"
+  },
+  "claims": {
+    "scientific_admission": false,
+    "experimental_validation": false,
+    "universal_boundary_support": false,
+    "update_tangent": false,
+    "deployment": false
+  },
+  "browser": {
+    "consumer": "select candidate and Load model example use actual declared10kPa and illustrative default parameters with1%drained100increments; no native model-ID branch or constitutive changes",
+    "export": "actual settings-aware browser exported specification equals frozen consumer-default request, successful101points; all physical channels match frozen Wasm within original scaled1e-10parity budget; independent void/control checks unchanged",
+    "rights_and_preparation": "software example only; no specimen preparation/calibration or experimental validation",
+    "scope": "local isolated candidate site; root installation conditional on passing gates"
+  }
+}
