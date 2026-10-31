@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 import unittest
 from tools.build_development import ROOT,LOCKED,REFINED,bundle
-from tools.build_propagation import FOLDERS
+from tools.build_propagation import FOLDERS,CURRENT_FOLDERS
 
 
 class DevelopmentPageTests(unittest.TestCase):
@@ -21,6 +21,7 @@ class DevelopmentPageTests(unittest.TestCase):
             destination=root/folder;destination.mkdir(parents=True)
             for name in ('manifest.json','results.json','policy.json'):
                 shutil.copyfile(ROOT/folder/name,destination/name)
+        for folder in CURRENT_FOLDERS:shutil.copytree(ROOT/folder,root/folder,ignore=shutil.ignore_patterns('__pycache__'))
         (root/'web').mkdir()
         for name in ('development.html','development.mjs','propagation.mjs'):shutil.copyfile(ROOT/'web'/name,root/'web'/name)
         return root

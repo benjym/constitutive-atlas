@@ -20,6 +20,14 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 ## Delivery focus — 1 November 2026
 
+The [website current-build evidence slice](docs/reviews/web-current-tmd7-v1/README.md)
+is locally complete: a separately scoped TMD7 panel displays the seven gates,
+build identity, errors and source links, preserving archived six-test panels
+and the original failed refinement. No private curves, new fits or builds were
+introduced. The numerical-to-website handoff is complete for this slice; focus
+next on original-paper/model review and the existing scientific admission gates,
+not another numerical campaign. Deployment remains a separate user-authorized step.
+
 The [current-source TMD7 replay](docs/benchmarks/current-kfs-tmd7-v1/README.md)
 now connects one complete existing development window to the pinned current
 executable. All seven frozen compatibility gates pass across 44 observations,

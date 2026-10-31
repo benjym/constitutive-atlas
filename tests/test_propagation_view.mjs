@@ -39,3 +39,23 @@ test('unsafe source URL and scientific promotion are rejected',()=>{
   const d=copy();d.sources[0].url='javascript:alert(1)';assert.throws(()=>validatePropagation(d),/Unsafe/);
   const p=copy();p.scientific_admission=true;assert.throws(()=>validatePropagation(p),/Unsupported/);
 });
+
+test('current replay scope and seven gates stay separate from original failure',()=>{
+  validatePropagation(data);const r=data.current_replay;
+  assert.equal(r.passed,true);assert.equal(r.rows.length,7);assert.equal(r.observations,44);
+  assert.equal(data.original_refinement.passed,false);assert.equal(r.diagnostics.current.substeps,380);
+});
+test('current replay cannot be promoted or broadened to the full test',()=>{
+  for(const change of [r=>r.scientific_admission=true,r=>r.observations=100,r=>r.source_commit='unknown']){
+    const d=copy();change(d.current_replay);assert.throws(()=>validatePropagation(d),/current replay/);
+  }
+});
+test('current replay cannot mask a failed gate or use unsafe links',()=>{
+  const d=copy();d.current_replay.rows[0].maximum_difference=11;assert.throws(()=>validatePropagation(d),/current replay gates/);
+  const e=copy();e.current_replay.sources[0].url='javascript:alert(1)';assert.throws(()=>validatePropagation(e),/current replay sources/);
+});
+
+test('a consistent failed current replay remains valid evidence',()=>{
+  const d=copy(),r=d.current_replay;r.rows[0].maximum_difference=11;r.rows[0].passed=false;r.passed=false;
+  validatePropagation(d);assert.equal(r.passed,false);assert.equal(d.original_refinement.passed,false);
+});

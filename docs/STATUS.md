@@ -1,5 +1,15 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [provisional website now exposes the scoped current-source TMD7 connection](reviews/web-current-tmd7-v1/README.md).
+A separate fixed file/file panel shows seven gate values, native build identity,
+counts, measurement errors and evidence links. The archived selectors and original
+failed refinement remain intact. 14 Python checks include 18 JS contracts; actual
+browser disclosure/selector checks pass. 628 public experiments package with the
+unchanged Wasm and no private arrays; six historical source files are archived
+and earlier manifests verify. Local preview only, no material calls/builds/
+deployment/admission. Return to original-paper/model review rather than expanding
+the numerical campaign.
+
 The [current-source TMD7 development replay](benchmarks/current-kfs-tmd7-v1/README.md)
 passes all seven frozen software compatibility gates over the complete existing
 44-observation development window. 43 segments/44 current processes preserve the

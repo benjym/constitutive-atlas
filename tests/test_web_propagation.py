@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 import unittest
 from tools.build_development import ROOT
-from tools.build_propagation import FOLDERS,PROP,REF,NEST,summary
+from tools.build_propagation import FOLDERS,PROP,REF,NEST,REPLAY,CURRENT_FOLDERS,summary
 
 
 class PropagationPageTests(unittest.TestCase):
@@ -16,13 +16,14 @@ class PropagationPageTests(unittest.TestCase):
         for folder in FOLDERS:
             dest=self.root/folder;dest.mkdir(parents=True)
             for name in ('manifest.json','policy.json','results.json'):shutil.copyfile(ROOT/folder/name,dest/name)
+        for folder in CURRENT_FOLDERS:shutil.copytree(ROOT/folder,self.root/folder,ignore=shutil.ignore_patterns('__pycache__'))
         policy=json.loads((self.root/PROP/'policy.json').read_text())
         self.identity=policy['input_sha256']['paper/results/pilot-matched96/models/hypoplastic-sand-vw96.json']
 
     def mutate(self,folder,change):
         path=self.root/folder/'results.json';data=json.loads(path.read_text());change(data);path.write_text(json.dumps(data))
         manifest=self.root/folder/'manifest.json';m=json.loads(manifest.read_text())
-        m['files'][str(folder/'results.json')]=hashlib.sha256(path.read_bytes()).hexdigest();manifest.write_text(json.dumps(m))
+        m['files'][str(folder/'results.json') if str(folder/'results.json') in m['files'] else 'results.json']=hashlib.sha256(path.read_bytes()).hexdigest();manifest.write_text(json.dumps(m))
 
     def test_complete_scalar_projection_without_experiments_or_private_outputs(self):
         self.mutate(NEST,lambda r:r.update(unused={'points':['PRIVATE_SENTINEL'],'command':['solver'],'state':[1,2]}))
@@ -53,6 +54,35 @@ class PropagationPageTests(unittest.TestCase):
         with self.assertRaises(ValueError):summary(self.root,self.identity)
         self.mutate(NEST,lambda r:r.update(gate_passed=True,scientific_admission=True))
         with self.assertRaisesRegex(ValueError,'promotion'):summary(self.root,self.identity)
+
+    def test_current_replay_is_bound_scalar_evidence(self):
+        self.mutate(REPLAY,lambda r:r.update(unused={'points':['PRIVATE_REPLAY'],'command':['solver']}))
+        data=summary(self.root,self.identity)['current_replay']
+        self.assertTrue(data['passed']);self.assertEqual(len(data['rows']),7)
+        self.assertEqual(data['observations'],44);self.assertEqual(data['diagnostics']['current']['rejected'],65)
+        self.assertNotIn('PRIVATE_REPLAY',json.dumps(data))
+        self.assertEqual(len(data['sources']),2)
+
+    def test_current_replay_false_gate_and_promotion_are_rejected(self):
+        self.mutate(REPLAY,lambda r:r.update(overall_compatibility_pass=False))
+        with self.assertRaisesRegex(ValueError,'gate differs'):summary(self.root,self.identity)
+        self.mutate(REPLAY,lambda r:r.update(overall_compatibility_pass=True,scientific_admission=True))
+        with self.assertRaisesRegex(ValueError,'promotion'):summary(self.root,self.identity)
+
+    def test_consistent_failed_current_gate_remains_visible(self):
+        def fail(r):
+            r['maximum_differences']['stress_pa']=11.
+            r['gates']['stress_pa']=False
+            r['overall_compatibility_pass']=False
+        self.mutate(REPLAY,fail)
+        data=summary(self.root,self.identity)
+        self.assertFalse(data['current_replay']['passed'])
+        self.assertFalse(data['current_replay']['rows'][0]['passed'])
+        self.assertFalse(data['original_refinement']['passed'])
+
+    def test_current_replay_rebound_artifact_is_rejected(self):
+        self.mutate(REPLAY,lambda r:r.update(current_artifact_sha256='0'*64))
+        with self.assertRaisesRegex(ValueError,'identity differs'):summary(self.root,self.identity)
 
     def test_browser_contracts(self):
         result=subprocess.run(['node','--test','tests/test_propagation_view.mjs'],cwd=ROOT,capture_output=True,text=True,timeout=30)

@@ -3,6 +3,17 @@ const channels=['q','volumetric_strain'];
 const finite=x=>typeof x==='number'&&Number.isFinite(x)&&x>=0;
 const label=id=>id==='file_initial'?'File':'Original-table alternative';
 const channelLabel=id=>id==='q'?'Stress q':'Volume strain';
+const replayQuantities={stress_pa:'Stress components [Pa]',q_pa:'Deviator stress q [Pa]',void_ratio:'Void ratio',strain:'Strain components',volumetric_strain:'Volume strain',q_scaled_rms:'Scaled q RMS',volumetric_strain_scaled_rms:'Scaled volume RMS'};
+export function validateCurrentReplay(r){
+  if(r?.kind!=='current-kfs-replay-summary'||r.status!=='provisional'||r.scientific_admission!==false||r.test!=='KFS-TMD7'||r.observations!==44||r.segments!==43||r.current_processes!==44||r.maximum_axial_strain!==.02||r.maximum_increment!==.0002)throw Error('Unsupported current replay scope');
+  if(!Array.isArray(r.rows)||r.rows.length!==7||!Object.keys(replayQuantities).every(k=>r.rows.filter(x=>x.quantity===k&&finite(x.maximum_difference)&&finite(x.limit)&&x.limit>0&&x.passed===(x.maximum_difference<=x.limit)).length===1)||r.passed!==r.rows.every(x=>x.passed))throw Error('Inconsistent current replay gates');
+  for(const engine of ['archived','current']){const d=r.diagnostics?.[engine];if(!d||d.caller_increments!==125||!Number.isInteger(d.substeps)||d.substeps<0||!Number.isInteger(d.rejected)||d.rejected<0)throw Error('Missing current replay diagnostics');}
+  if(!Array.isArray(r.experimental_errors)||r.experimental_errors.length!==2||!channels.every(c=>r.experimental_errors.filter(x=>x.channel===c&&finite(x.rmse)).length===1))throw Error('Missing current replay measurement errors');
+  if(!/^[a-f0-9]{40}$/.test(r.source_commit)||!['artifact_sha256','current_definition_sha256','archived_definition_sha256'].every(k=>/^[a-f0-9]{64}$/.test(r[k])))throw Error('Missing current replay identity');
+  if(!Array.isArray(r.limitations)||!r.limitations.length||!r.limitations.every(x=>typeof x==='string'))throw Error('Missing current replay limits');
+  if(!Array.isArray(r.sources)||r.sources.length!==2||!r.sources.every(s=>{try{return typeof s.title==='string'&&new URL(s.url).protocol==='https:';}catch{return false;}}))throw Error('Unsafe current replay sources');
+  return r;
+}
 export function validatePropagation(data){
   if(data?.kind!=='kfs-propagation-summary'||data.schema_version!=='0.1'||data.status!=='provisional'||data.scientific_admission!==false||data.evaluation_tests!==6||!/^[a-f0-9]{64}$/.test(data.definition_sha256))throw Error('Unsupported propagation evidence');
   if(!Array.isArray(data.panels)||data.panels.length!==4||!ids.every(c=>ids.every(e=>data.panels.filter(r=>r.calibration_scenario===c&&r.evaluation_scenario===e&&finite(r.root_scaled_mse)).length===1)))throw Error('Incomplete factorial scores');
@@ -15,6 +26,7 @@ export function validatePropagation(data){
   if(!Array.isArray(n.rows)||n.rows.length!==8||!ids.every(c=>['KFS-TMD7','KFS-TMD9'].every(t=>channels.every(ch=>n.rows.filter(r=>r.calibration_scenario===c&&r.test===t&&r.channel===ch&&finite(r.first_change)&&finite(r.second_change)).length===1))))throw Error('Incomplete nested coverage');
   if(!Array.isArray(data.limitations)||!data.limitations.length||!data.limitations.every(x=>typeof x==='string'))throw Error('Missing propagation limits');
   if(!Array.isArray(data.sources)||!data.sources.length||!data.sources.every(s=>{try{return typeof s.title==='string'&&new URL(s.url).protocol==='https:';}catch{return false;}}))throw Error('Unsafe propagation sources');
+  validateCurrentReplay(data.current_replay);
   return data;
 }
 export function propagationView(data,calibration,evaluation){
@@ -60,7 +72,19 @@ export async function mountPropagation(doc,fetcher=fetch){
     }));
     doc.getElementById('propagation-limits').replaceChildren(...data.limitations.map(x=>element('li',x)));
     doc.getElementById('propagation-sources').replaceChildren(...data.sources.map(s=>{const li=element('li',''),a=element('a',s.title);a.href=s.url;li.append(a);return li;}));
+    const replay=data.current_replay;
+    doc.getElementById('current-replay-status').textContent='Current native / archived compatibility: '+(replay.passed?'PASS':'FAIL')+'. '+replay.observations+' observations, '+replay.segments+' loading segments, '+replay.rows.filter(r=>r.passed).length+' of 7 gates pass.';
+    doc.getElementById('current-replay-rows').replaceChildren(...replay.rows.map(r=>{
+      const tr=element('tr','');for(const value of [replayQuantities[r.quantity],r.maximum_difference.toExponential(3),r.limit.toExponential(1),r.passed?'PASS':'FAIL'])tr.append(element('td',value));return tr;
+    }));
+    const diagnosticText=engine=>{const d=replay.diagnostics[engine];return engine+': '+d.caller_increments+' caller increments, '+d.substeps+' substeps, '+d.rejected+' rejections';};
+    doc.getElementById('current-replay-diagnostics').textContent=diagnosticText('archived')+'; '+diagnosticText('current')+'.';
+    const errors=Object.fromEntries(replay.experimental_errors.map(r=>[r.channel,r.rmse]));
+    doc.getElementById('current-replay-errors').textContent='Agreement between engines does not remove experimental error. Current prediction RMSE: q '+(errors.q/1000).toFixed(3)+' kPa; volume strain '+errors.volumetric_strain.toFixed(6)+'. These descriptive errors remain effectively unchanged.';
+    doc.getElementById('current-replay-identity').textContent='Native source commit: '+replay.source_commit+'. Executable SHA-256: '+replay.artifact_sha256+'.';
+    doc.getElementById('current-replay-limits').replaceChildren(...replay.limitations.map(x=>element('li',x)));
+    doc.getElementById('current-replay-sources').replaceChildren(...replay.sources.map(s=>{const li=element('li',''),a=element('a',s.title);a.href=s.url;li.append(a);return li;}));
     status.textContent='Four saved sensitivity panels loaded. Both selections used calibration only: three starts per scenario, 96 candidates per start; all exhausted the budget. Independent scientific review is pending.';
-  }catch(error){status.textContent='Propagation evidence unavailable: '+error.message;status.setAttribute('role','alert');}
+  }catch(error){const replayStatus=doc.getElementById('current-replay-status');if(replayStatus){replayStatus.textContent='Current replay evidence unavailable.';replayStatus.setAttribute('role','alert');}status.textContent='Propagation evidence unavailable: '+error.message;status.setAttribute('role','alert');}
 }
 if(typeof document!=='undefined')mountPropagation(document);

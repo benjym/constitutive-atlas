@@ -9,6 +9,9 @@ PROP=Path('docs/benchmarks/kfs-tmd13-evaluation-propagation-v1')
 REF=Path('docs/benchmarks/kfs-propagation-refinement-v1')
 NEST=Path('docs/benchmarks/kfs-nested-partitions-v1')
 FOLDERS=(CAL,PROP,REF,NEST)
+REPLAY=Path('docs/benchmarks/current-kfs-tmd7-v1')
+BUILD=Path('docs/benchmarks/current-source-build-v1')
+CURRENT_FOLDERS=(REPLAY,BUILD)
 FILE='file_initial';ALT='original_table_disputed_e0';SCENARIOS=(FILE,ALT)
 CHANNELS=('q','volumetric_strain')
 
@@ -45,6 +48,75 @@ def gates(result,policy,expected):
             'case_channel_checks':len(checks),'separation_passes':sum(c['both_below_separation_threshold'] for c in checks),
             'nonincrease_failures':len(failed),'maximum_fraction':maximum,
             'limit_fraction':policy['gate']['separation_fraction'],'failed':failed}
+
+
+def current_replay(root,archived_definition,propagation):
+    """Project public scalars only; never read experimental/native private files."""
+    pins={}
+    def checked(folder,name):
+        content=(root/folder/name).read_bytes();digest=hashlib.sha256(content).hexdigest()
+        manifest=loads((root/folder/'manifest.json').read_bytes())
+        require(manifest['files'][name]==digest,'current replay evidence hash mismatch: '+str(folder/name))
+        pins[str(folder/name)]=digest;return loads(content)
+    policy=checked(REPLAY,'policy.json');result=checked(REPLAY,'results.json')
+    verification=checked(REPLAY,'verification.json')
+    build=checked(BUILD,'evidence/result.json');source=checked(BUILD,'source-manifest.json')
+    require(result['policy_sha256']==pins[str(REPLAY/'policy.json')],'current replay policy binding differs')
+    require(result['scientific_admission'] is False and result['fits']==0 and result['builds']==0,'unsupported current replay promotion')
+    require(verification['full_saved_prediction_reconstruction']=='exact excluding elapsed_seconds only' and
+            verification['public_scalar_reconstruction']=='exact' and verification['software_checks_passed']==6 and
+            verification['software_checks_skipped']==0 and verification['new_native_calls_in_audit']==0 and
+            verification['raw_arrays_published'] is False,'current replay audit incomplete')
+    current=policy['engines']['current'];archived=policy['engines']['archived']
+    require(result['current_artifact_sha256']==current['artifact_sha256']==build['artifact_sha256'] and
+            result['current_source_commit']==current['source_commit']==build['source_commit']==source['source_commit'],
+            'current replay build identity differs')
+    require(policy['input_sha256'][str(BUILD/'evidence/result.json')]==pins[str(BUILD/'evidence/result.json')] and
+            policy['input_sha256'][str(BUILD/'source-manifest.json')]==pins[str(BUILD/'source-manifest.json')],
+            'current build dependency differs')
+    model='models/hypoplastic-sand-vw96.json'
+    require(source['files'][model]==policy['input_sha256'][model],'current built model identity differs')
+    old='paper/results/pilot-matched96/models/hypoplastic-sand-vw96.json'
+    require(policy['input_sha256'][old]==archived_definition,'archived replay definition differs')
+    baseline=propagation['cases'][2]
+    require(policy['record']==baseline['record'] and policy['record']['experiment_id']=='KFS-TMD7' and
+            policy['baseline_files']['prediction.json']==baseline['prediction_sha256'],'archived replay control differs')
+    require(policy['maximum_axial_strain']==.02 and policy['maximum_increment']==.0002 and
+            result['observations']==policy['observations']==44 and result['segments']==policy['segments']==43 and
+            result['current_processes']==policy['current_process_budget']==44 and result['baseline_receipts_reconstructed']==44,
+            'current replay scope differs')
+    expected={'stress_pa','void_ratio','strain','q_pa','volumetric_strain'}
+    require(set(result['maximum_differences'])==set(policy['maximum_difference_limits'])==expected,'current replay state coverage differs')
+    rows=[];gates={}
+    for key in ('stress_pa','q_pa','void_ratio','strain','volumetric_strain'):
+        value=number(result['maximum_differences'][key]);limit=number(policy['maximum_difference_limits'][key])
+        gates[key]=value<=limit;rows.append({'quantity':key,'maximum_difference':value,'limit':limit,'passed':gates[key]})
+    for channel in CHANNELS:
+        rms=math.sqrt(number(result['response_change'][channel]['scaled_mse']));limit=number(policy['scaled_rms_limits'][channel])
+        gates[channel+'_scaled_rms']=rms<=limit
+        rows.append({'quantity':channel+'_scaled_rms','maximum_difference':rms,'limit':limit,'passed':gates[channel+'_scaled_rms']})
+    require(result['gates']==gates and result['overall_compatibility_pass'] is all(gates.values()),'current replay gate differs')
+    counts={}
+    for engine in ('archived','current'):
+        detail=result['diagnostics'][engine];d=detail['diagnostics']
+        require(detail['caller_increments']==policy['caller_increments']==125 and
+                all(type(d[k]) is int and d[k]>=0 for k in ('substeps','rejected','iterations')),'current replay diagnostics differ')
+        counts[engine]={'caller_increments':detail['caller_increments'],'substeps':d['substeps'],'rejected':d['rejected']}
+    errors=[{'channel':c,'rmse':number(result['experimental_errors']['current'][c]['rmse'])} for c in CHANNELS]
+    return {'kind':'current-kfs-replay-summary','status':'provisional','scientific_admission':False,
+       'test':'KFS-TMD7','observations':44,'segments':43,'current_processes':44,
+       'maximum_axial_strain':.02,'maximum_increment':.0002,'passed':result['overall_compatibility_pass'],
+       'rows':rows,'diagnostics':counts,'experimental_errors':errors,
+       'source_commit':current['source_commit'],'artifact_sha256':current['artifact_sha256'],
+       'current_definition_sha256':policy['input_sha256'][model],'archived_definition_sha256':archived_definition,
+       'sources':[{'title':'Current-source TMD7 replay: fixed inputs, results and audit','url':'https://github.com/benjym/constitutive-atlas/tree/main/'+str(REPLAY)},
+                  {'title':'Current native source and build receipt','url':'https://github.com/benjym/constitutive-atlas/tree/main/'+str(BUILD)}],
+       'limitations':['One fixed density3 vector and recorded-file initialization; complete existing development window, not the full acquired test or blind evaluation.',
+          'Compatibility with an archived prediction does not establish agreement with measurements, general engine equivalence or independent scientific review.',
+          'The historical executable still lacks an exact source/build receipt; the current executable has its own provenance.',
+          'The six-test panels above remain archived results. The website Wasm engine is a separate artifact, not this native executable.',
+          'The original refinement sequence remains failed. Raw curve redistribution rights and scientific admission remain open.'],
+       'evidence_sha256':pins}
 
 
 def summary(root,definition_sha256):
@@ -125,7 +197,9 @@ def summary(root,definition_sha256):
     for title,folder in [('Calibration-only selection and budgets',CAL),('Four-panel evaluation propagation',PROP),
                          ('Original failed refinement study',REF),('Separate nested caller regime',NEST)]:
         links.append({'title':title,'url':'https://github.com/benjym/constitutive-atlas/tree/main/'+str(folder)})
-    return {'kind':'kfs-propagation-summary','schema_version':'0.1','status':'provisional','scientific_admission':False,
+    replay=current_replay(root,definition_sha256,prop)
+    require(loads((root/REPLAY/'policy.json').read_bytes())['parameters']==cal['selected'][FILE]['parameters'],'current replay calibration selection differs')
+    return {'current_replay':replay,'kind':'kfs-propagation-summary','schema_version':'0.1','status':'provisional','scientific_admission':False,
             'definition_sha256':definition_sha256,'evaluation_tests':6,'panels':panels,'selections':selections,
             'calibration':{'starts_per_scenario':3,'candidate_budget_per_start':96,'selection':'calibration_only','all_budget_limited':True},
             'original_refinement':original,'nested':nested,
