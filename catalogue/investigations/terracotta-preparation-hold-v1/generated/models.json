@@ -1,0 +1,300 @@
+{
+  "schema_version": "0.1",
+  "sha256": "fb1c40d2f11abf1f196720f9b9bb35e01ef1e8de43b4d5cde0fc33ecce0f6686",
+  "models": [
+    {
+      "schema_version": "0.2",
+      "id": "terracotta-2024-fig1",
+      "name": "Terracotta (2024), Figure 1 \u2014 axisymmetric research draft",
+      "family": "hydrodynamic clay",
+      "status": "draft",
+      "description": "Source-pinned simplified Figure 1 formulation; four persistent scalar states and algebraic stress. Restricted to fixed x-axis triaxial small-strain kinematics; not a full 3D law, independently reviewed model or public browser model. Author-code kaolin parameters converted to SI. See the transcription dossier for variant, domain, initialization and reference discrepancies.",
+      "sources": [
+        {
+          "url": "https://doi.org/10.1016/j.jmps.2024.105789",
+          "locator": "Figure 1; Eqs. (23),(24),(31),(32),(36)\u2013(38),(42),(43),(48),(51),(54); Appendix C; Table 1",
+          "role": "Journal constitutive equations and units"
+        },
+        {
+          "url": "https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/images/theModel.png",
+          "locator": "All Figure 1 equations, visually inspected",
+          "role": "Pinned author equation summary"
+        },
+        {
+          "url": "https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/code/Terracotta_main.py",
+          "locator": "Kaolin coefficients and initial state, lines 12\u201345",
+          "role": "Pinned parameter and initialization example"
+        }
+      ],
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "axisymmetric_x"
+      },
+      "parameters": {
+        "Kmod": {
+          "unit": "Pa",
+          "default": 13000000000.0,
+          "min": 1,
+          "max": 1000000000000.0,
+          "label": "Intrinsic bulk coefficient (Pa); author kaolin preset"
+        },
+        "Gmod": {
+          "unit": "Pa",
+          "default": 5000000000.0,
+          "min": 1,
+          "max": 1000000000000.0,
+          "label": "Intrinsic shear coefficient (Pa); author kaolin preset"
+        },
+        "Mcrit": {
+          "unit": "1",
+          "default": 0.73,
+          "min": 0.001,
+          "max": 3,
+          "label": "Critical stress ratio"
+        },
+        "omega": {
+          "unit": "1",
+          "default": 0.6,
+          "min": 0.001,
+          "max": 1,
+          "label": "CSL/ICL pressure ratio"
+        },
+        "pOne": {
+          "unit": "Pa",
+          "default": 543000000.0,
+          "min": 1,
+          "max": 1000000000000000.0,
+          "label": "ICL pressure coefficient; rounded author-code value"
+        },
+        "Lambda": {
+          "unit": "1",
+          "default": 10,
+          "min": 0.01,
+          "max": 30,
+          "label": "ICL solid-fraction exponent"
+        },
+        "alpha": {
+          "unit": {
+            "si": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          "default": 600000.0,
+          "min": 1e-12,
+          "max": 1000000000000.0,
+          "label": "Volumetric rheological coefficient (K s)"
+        },
+        "gamma": {
+          "unit": {
+            "si": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          "default": 600000.0,
+          "min": 1e-12,
+          "max": 1000000000000.0,
+          "label": "Shear rheological coefficient (K s)"
+        },
+        "eta": {
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              -1
+            ]
+          },
+          "default": 150,
+          "min": 1e-12,
+          "max": 1000000000000.0,
+          "label": "Temperature sink coefficient (1/(K s))"
+        },
+        "Gamma": {
+          "unit": {
+            "si": [
+              -1,
+              1,
+              2,
+              2
+            ]
+          },
+          "default": 0.001,
+          "min": 1e-12,
+          "max": 1000000.0,
+          "label": "Meso-temperature normalization (K^2/Pa)"
+        }
+      },
+      "state": [
+        {
+          "name": "ev_e",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "0.05",
+          "initial": 0.05182296052058317
+        },
+        {
+          "name": "es_e",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "0.05",
+          "initial": 0
+        },
+        {
+          "name": "Tm",
+          "shape": "scalar",
+          "unit": "K",
+          "scale": "1e-6 * sqrt(Gamma * pOne)",
+          "initial": 0
+        },
+        {
+          "name": "phi",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "1",
+          "initial": 0.423
+        }
+      ],
+      "derived": [
+        {
+          "name": "axial_basis",
+          "expr": "sym(2/3, -1/3, -1/3, 0, 0, 0)"
+        },
+        {
+          "name": "Dv",
+          "expr": "trace(strain_rate)"
+        },
+        {
+          "name": "Ds",
+          "expr": "dot(strain_rate, axial_basis)"
+        },
+        {
+          "name": "pe",
+          "expr": "phi**6 * (Kmod * ev_e**2 + 3 * Gmod * es_e**2) / 2"
+        },
+        {
+          "name": "qe",
+          "expr": "3 * Gmod * phi**6 * ev_e * es_e"
+        },
+        {
+          "name": "pc",
+          "expr": "pOne * phi**Lambda"
+        },
+        {
+          "name": "a",
+          "expr": "sqrt(eta / alpha)"
+        },
+        {
+          "name": "b",
+          "expr": "-a * qe / (Mcrit**2 * pe)"
+        },
+        {
+          "name": "c",
+          "expr": "sqrt(eta / gamma) / (Mcrit * omega) + a / Mcrit**2"
+        },
+        {
+          "name": "pv",
+          "expr": "2 * alpha / Gamma * Tm * Dv"
+        },
+        {
+          "name": "qv",
+          "expr": "2 * gamma / Gamma * Tm * Ds"
+        },
+        {
+          "name": "pt",
+          "expr": "Tm**2 / Gamma"
+        },
+        {
+          "name": "p_total",
+          "expr": "pe + pv + pt"
+        },
+        {
+          "name": "q_total",
+          "expr": "qe + qv"
+        }
+      ],
+      "equations": {
+        "ev_e": "Dv - Tm / pc * (a * pe + b * qe)",
+        "es_e": "Ds - Tm / pc * (b * pe + c * qe)",
+        "Tm": "alpha * Dv**2 + gamma * Ds**2 - eta * Tm**2",
+        "phi": "phi * Dv"
+      },
+      "domain": [
+        "ev_e > 0",
+        "phi > 0",
+        "phi <= 1",
+        "Tm >= 0 * sqrt(Gamma * pOne)",
+        "pe > 0 * pOne",
+        "pc > 0 * pOne",
+        "a * c - b**2 >= 0 * a * c",
+        "Kmod * ev_e**2 >= 3 * Gmod * es_e**2",
+        "Mcrit**2 <= 3 * Gmod / Kmod",
+        "3 * Gmod / Kmod <= Mcrit**2 * (1 + sqrt(alpha/gamma) * Mcrit / omega)"
+      ],
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "1e-4 * pOne",
+          "expr": "p_total * I + q_total * axial_basis"
+        },
+        {
+          "name": "pressure",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "1e-4 * pOne",
+          "expr": "p_total"
+        },
+        {
+          "name": "signed_q",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "1e-4 * pOne",
+          "expr": "q_total"
+        },
+        {
+          "name": "elastic_pressure",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "1e-4 * pOne",
+          "expr": "pe"
+        },
+        {
+          "name": "elastic_q",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "1e-4 * pOne",
+          "expr": "qe"
+        },
+        {
+          "name": "viscous_pressure",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "1e-4 * pOne",
+          "expr": "pv"
+        },
+        {
+          "name": "viscous_q",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "1e-4 * pOne",
+          "expr": "qv"
+        },
+        {
+          "name": "meso_pressure",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "1e-4 * pOne",
+          "expr": "pt"
+        }
+      ]
+    }
+  ]
+}

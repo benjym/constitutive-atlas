@@ -17,3 +17,7 @@ Next: freeze the full model/compiler/C++/collector source closure and generated 
 ```sh
 python3 -B -m unittest tests.test_terracotta_preparation_hold -v
 ```
+
+## Retained compiled outcome
+
+The [completed v1 study](RESULTS.md) retains all eighteen successful executions and passing backend parity, but fails five independent fine component limits per backend. The frozen policy and all original input/reference bytes remain unchanged. See `RESULTS.md` and `assessment.json`; compiled execution is no longer pending for this identity. The earlier prose above records the input-stage state.

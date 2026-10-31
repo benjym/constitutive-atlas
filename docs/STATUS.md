@@ -1,3 +1,9 @@
+# Terra Cotta full-path compiled study — 2026-10-31
+
+The [full preparation/hold v1 study](../catalogue/investigations/terracotta-preparation-hold-v1/RESULTS.md) completes all nine schedules per backend (414points total) with carried state/strain, one physical clock and captured stress controls. Native/Wasm parity passes at maximum scaled difference1.23e-11. Both backends nevertheless fail five unchanged independent fine component limits, by at most17.2%; the failed outcome and every raw result are preserved.
+
+An87file prospective source freeze precedes serial single-worker builds. Isolated source replay regenerates exact declarations/requests and reproduces all physical assessment fields, preserving original failed tracebacks separately from copied-path metadata. A distinct quarter-tolerance refinement is next; no model, solver-default, source-domain, accuracy-bound or public status changed. Journal and scientific/experimental admission remain open.
+
 # Terra Cotta full-path reference — 2026-10-31
 
 The [new preparation/hold reference](ingestion/terracotta-2024/preparation-hold-reference-v1/README.md) carries each computation's own preparation state, accumulated strain, captured stresses and clock through three complete30s paths. A distinct refined source calculation passes957 assertions plus zero-temperature inversion rejection; the original failed convergence attempt remains unchanged. The coordinator reproduces the passing reference exactly and the ten-check corruption/freeze audit passes.

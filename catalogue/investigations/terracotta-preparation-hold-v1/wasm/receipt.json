@@ -1,0 +1,71 @@
+{
+  "backend": "wasm",
+  "started_utc": "2026-10-31T08:45:13.586730+00:00",
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "environment": {
+    "EMCC_CORES": "1",
+    "EM_CACHE": "/Users/bmar5496/code/constitutive-atlas/.cache/emscripten",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "manifest_sha256": "7b822b65ccc7f6ef7e68cda80adc643e111be2d8202396edd264e6b8aeb84cf7",
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "emcc",
+        "--version"
+      ],
+      "returncode": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/terracotta-preparation-hold-v1",
+        "-B",
+        "/private/tmp/atlas-terracotta-preparation-hold-wasm-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-terracotta-preparation-hold-wasm-v1",
+        "--target",
+        "atlas_terracotta_study",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "node",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/terracotta-preparation-hold-v1/observe.mjs",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/terracotta-preparation-hold-v1",
+        "/private/tmp/atlas-terracotta-preparation-hold-wasm-v1",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/terracotta-preparation-hold-v1/wasm"
+      ],
+      "returncode": 0
+    }
+  ],
+  "completed": true,
+  "artifacts": {
+    "terracotta-study.js": {
+      "path": "/private/tmp/atlas-terracotta-preparation-hold-wasm-v1/terracotta-study.js",
+      "sha256": "5865d6569e9b2fe3fe059023f3560d48530d2e64dfdde57243d714bf3eef8799"
+    },
+    "terracotta-study.wasm": {
+      "path": "/private/tmp/atlas-terracotta-preparation-hold-wasm-v1/terracotta-study.wasm",
+      "sha256": "e01d57d9fc81b5e54d99a3807580f772e05366b65223abbad8b8b036f45c28a6"
+    }
+  },
+  "finished_utc": "2026-10-31T08:45:33.707619+00:00",
+  "journal_sha256": "06d3a6bf53581ecfe196c1d9badf716ef099745335460ce0a9d7c9b1a2be0968"
+}
