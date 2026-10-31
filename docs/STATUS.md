@@ -1,5 +1,15 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [provisional propagation website view](reviews/web-kfs-propagation-v1/README.md)
+now exposes all four calibration/evaluation assumption combinations with two
+selectors, original failed refinement and separate passing nested regime.
+Browser checks verify scores, selected alpha, four/eight disclosed rows, sources
+and Methods navigation. A source-bound scalar-only projection excludes private
+arrays;28Python tests (including14JScontracts), nine existing Wasm smoke paths
+and seven local links pass. Historical web source bytes are preserved. Local
+preview only, no build/deployment/admission; independent scientific review,
+source-state resolution and exact source/build identity remain open.
+
 The [bounded nested-count study](benchmarks/kfs-nested-partitions-v1/README.md)
 passes its separate regime: eight serial replays/360segments/368new receipts;
 all9984noninitial caller points remain rejection-free with two reported substeps.

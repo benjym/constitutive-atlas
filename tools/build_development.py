@@ -49,7 +49,7 @@ def summary(root=ROOT):
     maximum=max(max(c['coarse_to_medium'],c['medium_to_fine'])/c['coarse_initialization_signal'] for c in refined['checks'])
     # Construct fields individually: packet siblings, point/state arrays, requests,
     # raw observations, machine paths and per-process commands never enter export.
-    return {'kind':'kfs-development-summary','schema_version':'0.1','status':'provisional',
+    result = {'kind':'kfs-development-summary','schema_version':'0.1','status':'provisional',
         'scientific_admission':False,'model_name':'Base VW96 sand hypoplasticity',
         'definition_sha256':policy['input_sha256']['paper/results/pilot-matched96/models/hypoplastic-sand-vw96.json'],
         'metric':policy['metric'],'evaluation_tests':6,'maximum_axial_strain':0.02,
@@ -68,7 +68,7 @@ def summary(root=ROOT):
                                 for r in refined['initialization_shifts']]},
         'limitations':['Previously inspected development tests; not blind validation.',
           'Four material constants fitted; four limiting-density/compression constants inherited from literature. Additional prior information remains explicit.',
-          'TMD13 calibration-state uncertainty is not propagated. These are conditional evaluation-input results.',
+          'The locked-fit panel holds calibration parameters fixed. The separate factorial panel propagates TMD13 calibration assumptions.',
           'The void-ratio source disagreement remains unresolved. Neither scenario is selected by error.',
           'Archived implementation and one material; no current-engine equivalence, cross-model ranking or scientific admission.'],
         'sources':[{'title':'Wichtmann & Triantafyllidis (2016), Table 3','url':'https://doi.org/10.1007/s11440-015-0402-z'},
@@ -78,12 +78,15 @@ def summary(root=ROOT):
           {'title':'Three-resolution output study','url':'https://github.com/benjym/constitutive-atlas/tree/main/'+str(REFINED)},
           {'title':'Ordered error metric definition','url':'https://github.com/benjym/constitutive-atlas/blob/main/docs/ORDERED_METRICS.md'}],
         'evidence_sha256':pins}
+    from tools.build_propagation import summary as propagation_summary
+    result['propagation']=propagation_summary(root,result['definition_sha256'])
+    return result
 
 
 def bundle(destination,root=ROOT):
     result=summary(root)  # Fail before writing public outputs.
     destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
-    for name in ('development.html','development.mjs'):
+    for name in ('development.html','development.mjs','propagation.mjs'):
         shutil.copyfile(Path(root)/'web'/name,destination/name)
     (destination/'development.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
     return result

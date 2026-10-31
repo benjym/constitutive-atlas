@@ -1,0 +1,378 @@
+{
+  "kind": "kfs-development-summary",
+  "schema_version": "0.1",
+  "status": "provisional",
+  "scientific_admission": false,
+  "model_name": "Base VW96 sand hypoplasticity",
+  "definition_sha256": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31",
+  "metric": "piecewise-linear-residual-axial-travel-v1",
+  "evaluation_tests": 6,
+  "maximum_axial_strain": 0.02,
+  "scenarios": [
+    {
+      "id": "file_initial",
+      "label": "Recorded-file initialization",
+      "description": "Exact file void ratios and effective stresses; original locked development result."
+    },
+    {
+      "id": "original_table_disputed_e0",
+      "label": "Original-table evaluation void ratios",
+      "description": "Change only TMD12 and TMD14 evaluation void ratios. Recorded stresses and fitted parameters stay fixed."
+    }
+  ],
+  "scores": [
+    {
+      "package": "pressure3",
+      "scenario": "file_initial",
+      "root_scaled_mse": 0.1690426791149183
+    },
+    {
+      "package": "pressure3",
+      "scenario": "original_table_disputed_e0",
+      "root_scaled_mse": 0.17421304213791713
+    },
+    {
+      "package": "density3",
+      "scenario": "file_initial",
+      "root_scaled_mse": 0.12934436297532312
+    },
+    {
+      "package": "density3",
+      "scenario": "original_table_disputed_e0",
+      "root_scaled_mse": 0.1367717339283584
+    }
+  ],
+  "refinement": {
+    "passed": true,
+    "limit_fraction": 0.01,
+    "maximum_fraction": 0.0027305732354461587,
+    "levels": [
+      0.0002,
+      0.0001,
+      5e-05
+    ],
+    "shifts": [
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 0.0002,
+        "q": 0.005158114021781854,
+        "volume": 0.0028996451474515256
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 0.0001,
+        "q": 0.005158152656875713,
+        "volume": 0.002899648818193462
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 5e-05,
+        "q": 0.005158224589748331,
+        "volume": 0.0028996560503067085
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 0.0002,
+        "q": 0.019192326435225258,
+        "volume": 0.010476098343116916
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 0.0001,
+        "q": 0.01919260629190171,
+        "volume": 0.010476085074634755
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 5e-05,
+        "q": 0.019192164933961964,
+        "volume": 0.01047609530453502
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 0.0002,
+        "q": 0.008557643471155537,
+        "volume": 0.0042658457947738595
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 0.0001,
+        "q": 0.008557728236851206,
+        "volume": 0.004265886826732348
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 5e-05,
+        "q": 0.008557725069229137,
+        "volume": 0.004265869288052052
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 0.0002,
+        "q": 0.02746739474978918,
+        "volume": 0.014241162538953033
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 0.0001,
+        "q": 0.02746805208886415,
+        "volume": 0.01424122686633488
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 5e-05,
+        "q": 0.02746758283909407,
+        "volume": 0.014241127110235034
+      }
+    ]
+  },
+  "limitations": [
+    "Previously inspected development tests; not blind validation.",
+    "Four material constants fitted; four limiting-density/compression constants inherited from literature. Additional prior information remains explicit.",
+    "The locked-fit panel holds calibration parameters fixed. The separate factorial panel propagates TMD13 calibration assumptions.",
+    "The void-ratio source disagreement remains unresolved. Neither scenario is selected by error.",
+    "Archived implementation and one material; no current-engine equivalence, cross-model ranking or scientific admission."
+  ],
+  "sources": [
+    {
+      "title": "Wichtmann & Triantafyllidis (2016), Table 3",
+      "url": "https://doi.org/10.1007/s11440-015-0402-z"
+    },
+    {
+      "title": "Parameter information and inherited constants",
+      "url": "https://github.com/benjym/constitutive-atlas/tree/main/studies/kfs-development-v1/parameters-v1"
+    },
+    {
+      "title": "Initialization scenarios and source qualifications",
+      "url": "https://github.com/benjym/constitutive-atlas/tree/main/studies/kfs-development-v1/initialization-v1"
+    },
+    {
+      "title": "Locked-parameter sensitivity: frozen inputs and results",
+      "url": "https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-locked-initialization-sensitivity-v1"
+    },
+    {
+      "title": "Three-resolution output study",
+      "url": "https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-initialization-refinement-v1"
+    },
+    {
+      "title": "Ordered error metric definition",
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/ORDERED_METRICS.md"
+    }
+  ],
+  "evidence_sha256": {
+    "docs/benchmarks/kfs-locked-initialization-sensitivity-v1/results.json": "1d1e415edfb7d02877ad8fb9d0ef464b72903adcbd8f45c01e112e1a80e9163f",
+    "docs/benchmarks/kfs-locked-initialization-sensitivity-v1/policy.json": "1d5208a2e47f7576f7ecafaad0270e497def27722d0001818405ed356a635c8d",
+    "docs/benchmarks/kfs-initialization-refinement-v1/results.json": "77482aa76f9649e7f1c30fe45e0e7803e1811a272206a8ffe4eee7cda75e6f7d",
+    "docs/benchmarks/kfs-initialization-refinement-v1/policy.json": "5cdb82f3c7df0e85c66616cf5e0bfae195162ca463adc51af5177ee807302fbf"
+  },
+  "propagation": {
+    "kind": "kfs-propagation-summary",
+    "schema_version": "0.1",
+    "status": "provisional",
+    "scientific_admission": false,
+    "definition_sha256": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31",
+    "evaluation_tests": 6,
+    "panels": [
+      {
+        "calibration_scenario": "file_initial",
+        "evaluation_scenario": "file_initial",
+        "root_scaled_mse": 0.12934436297532312
+      },
+      {
+        "calibration_scenario": "file_initial",
+        "evaluation_scenario": "original_table_disputed_e0",
+        "root_scaled_mse": 0.1367717339283584
+      },
+      {
+        "calibration_scenario": "original_table_disputed_e0",
+        "evaluation_scenario": "file_initial",
+        "root_scaled_mse": 0.12470117631676818
+      },
+      {
+        "calibration_scenario": "original_table_disputed_e0",
+        "evaluation_scenario": "original_table_disputed_e0",
+        "root_scaled_mse": 0.13229439741406743
+      }
+    ],
+    "selections": [
+      {
+        "scenario": "file_initial",
+        "seed": 0,
+        "alpha": 0.12906250000000002
+      },
+      {
+        "scenario": "original_table_disputed_e0",
+        "seed": 0,
+        "alpha": 0.14
+      }
+    ],
+    "calibration": {
+      "starts_per_scenario": 3,
+      "candidate_budget_per_start": 96,
+      "selection": "calibration_only",
+      "all_budget_limited": true
+    },
+    "original_refinement": {
+      "numerical_passed": false,
+      "case_channel_checks": 32,
+      "separation_passes": 32,
+      "nonincrease_failures": 4,
+      "maximum_fraction": 0.008409015614166118,
+      "limit_fraction": 0.01,
+      "failed": [
+        {
+          "test": "KFS-TMD7",
+          "calibration_scenario": "file_initial",
+          "channel": "q",
+          "first_change": 7.396102432171439e-06,
+          "second_change": 9.73446763294032e-06
+        },
+        {
+          "test": "KFS-TMD9",
+          "calibration_scenario": "file_initial",
+          "channel": "q",
+          "first_change": 4.363281906453603e-06,
+          "second_change": 4.725812370561617e-06
+        },
+        {
+          "test": "KFS-TMD7",
+          "calibration_scenario": "original_table_disputed_e0",
+          "channel": "q",
+          "first_change": 7.420572465082913e-06,
+          "second_change": 9.82223950377323e-06
+        },
+        {
+          "test": "KFS-TMD9",
+          "calibration_scenario": "original_table_disputed_e0",
+          "channel": "q",
+          "first_change": 4.328039120531141e-06,
+          "second_change": 4.759960560148732e-06
+        }
+      ],
+      "passed": false
+    },
+    "nested": {
+      "numerical_passed": true,
+      "case_channel_checks": 8,
+      "separation_passes": 8,
+      "nonincrease_failures": 0,
+      "maximum_fraction": 0.00023569865532535546,
+      "limit_fraction": 0.01,
+      "failed": [],
+      "passed": true,
+      "rejection_free": true,
+      "caller_points": 9984,
+      "ratio_min": 0.2410104316599797,
+      "ratio_max": 0.2531930389721783,
+      "rows": [
+        {
+          "test": "KFS-TMD7",
+          "calibration_scenario": "file_initial",
+          "channel": "q",
+          "first_change": 2.7252516082441557e-06,
+          "second_change": 6.82742016756932e-07
+        },
+        {
+          "test": "KFS-TMD7",
+          "calibration_scenario": "file_initial",
+          "channel": "volumetric_strain",
+          "first_change": 3.0934368495681965e-07,
+          "second_change": 7.823825577664774e-08
+        },
+        {
+          "test": "KFS-TMD9",
+          "calibration_scenario": "file_initial",
+          "channel": "q",
+          "first_change": 1.6453069749951287e-06,
+          "second_change": 4.0373795574784717e-07
+        },
+        {
+          "test": "KFS-TMD9",
+          "calibration_scenario": "file_initial",
+          "channel": "volumetric_strain",
+          "first_change": 2.5578204688957374e-07,
+          "second_change": 6.226522396970836e-08
+        },
+        {
+          "test": "KFS-TMD7",
+          "calibration_scenario": "original_table_disputed_e0",
+          "channel": "q",
+          "first_change": 2.737538240003012e-06,
+          "second_change": 6.874319325588631e-07
+        },
+        {
+          "test": "KFS-TMD7",
+          "calibration_scenario": "original_table_disputed_e0",
+          "channel": "volumetric_strain",
+          "first_change": 3.093434230365984e-07,
+          "second_change": 7.83236013646925e-08
+        },
+        {
+          "test": "KFS-TMD9",
+          "calibration_scenario": "original_table_disputed_e0",
+          "channel": "q",
+          "first_change": 1.6588251042701685e-06,
+          "second_change": 4.087524088516464e-07
+        },
+        {
+          "test": "KFS-TMD9",
+          "calibration_scenario": "original_table_disputed_e0",
+          "channel": "volumetric_strain",
+          "first_change": 2.574680022827374e-07,
+          "second_change": 6.205247436879518e-08
+        }
+      ]
+    },
+    "limitations": [
+      "Previously exposed development data; no blind validation or tuning on these evaluation scores.",
+      "Source void ratios remain disputed; neither scenario is selected as physically correct by its error.",
+      "Both calibration selections exhaust their search budgets; unique parameters and a global optimum are not established.",
+      "The original refinement sequence remains failed. The nested result covers four cases in a different caller regime, not a new six-test panel or proof of cause/convergence order.",
+      "Archived executable lacks an exact source-to-build receipt; current-engine equivalence and independent scientific review remain open."
+    ],
+    "sources": [
+      {
+        "title": "von Wolffersdorff (1996): original model publication",
+        "url": "https://doi.org/10.1002/(SICI)1099-1484(199607)1:3<251::AID-CFM13>3.0.CO;2-3"
+      },
+      {
+        "title": "Calibration-only selection and budgets",
+        "url": "https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-tmd13-calibration-sensitivity-v1"
+      },
+      {
+        "title": "Four-panel evaluation propagation",
+        "url": "https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-tmd13-evaluation-propagation-v1"
+      },
+      {
+        "title": "Original failed refinement study",
+        "url": "https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-propagation-refinement-v1"
+      },
+      {
+        "title": "Separate nested caller regime",
+        "url": "https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-nested-partitions-v1"
+      }
+    ],
+    "evidence_sha256": {
+      "docs/benchmarks/kfs-tmd13-calibration-sensitivity-v1/policy.json": "a50f6c94df11ce3ebf935629695c4310bad2776554d92a1962cce75cabe2b29b",
+      "docs/benchmarks/kfs-tmd13-calibration-sensitivity-v1/results.json": "2e7ff78922877be6a1d6cdc47c46aadf3cc4f6cc00a9e61f7afd786ffe91fca2",
+      "docs/benchmarks/kfs-tmd13-evaluation-propagation-v1/policy.json": "05934ac0dce74462f04b316f8293576265a8ea7779f78eb4168087332fef71a8",
+      "docs/benchmarks/kfs-tmd13-evaluation-propagation-v1/results.json": "4383f61f5b010510aeb88ef72d5102eea4403c0c6c35a9950130e82aa5b37498",
+      "docs/benchmarks/kfs-propagation-refinement-v1/policy.json": "9358d4dd4b2de7b00efcf05d0c641992be47592896eb324c0d680df1fa0439b5",
+      "docs/benchmarks/kfs-propagation-refinement-v1/results.json": "3478ea284f3fb7ebeaad46d0644d374c9623391fa2c27fab267964c33a3d8ca2",
+      "docs/benchmarks/kfs-nested-partitions-v1/policy.json": "20e0c6f6f926ee983d1b8e64e8830e5179987d6347ceae64b7f4be903f3a64b5",
+      "docs/benchmarks/kfs-nested-partitions-v1/results.json": "7934498fb6da95660ccb8ab167695302aeb0c80dce3d2e1e486006647eb3a727"
+    }
+  }
+}

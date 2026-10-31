@@ -337,6 +337,16 @@ numerical branch here and deliver the four factorial sensitivity panels and both
 refinement outcomes through the provisional website view. Source conflict,
 exact source/build identity and independent scientific review remain open.
 
+The [provisional website propagation view](docs/reviews/web-kfs-propagation-v1/README.md)
+now delivers the four factorial panels with independent calibration/evaluation
+selectors and both refinement outcomes. The original FAIL and separate nested
+PASS remain explicit, with source links, exhausted budgets and review/build
+limits. All four states, four/eight disclosure rows and Methods navigation are
+verified in browser; source-bound scalar export,28Python tests including14JS
+contracts, nine packaged Wasm paths and seven local links pass. Historical source
+bytes are archived; this is local delivery without deployment or scientific
+promotion. The numerical branch stays stopped; review/source/rights gates remain.
+
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
 ## 10. M5 — expand toward twenty executable formulations

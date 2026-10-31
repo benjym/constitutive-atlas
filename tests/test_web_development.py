@@ -7,6 +7,7 @@ import subprocess
 import tempfile
 import unittest
 from tools.build_development import ROOT,LOCKED,REFINED,bundle
+from tools.build_propagation import FOLDERS
 
 
 class DevelopmentPageTests(unittest.TestCase):
@@ -16,12 +17,12 @@ class DevelopmentPageTests(unittest.TestCase):
 
     def fixture(self):
         root=Path(self.temp.name)/'fixture'
-        for folder in (LOCKED,REFINED):
+        for folder in (LOCKED,REFINED,*FOLDERS):
             destination=root/folder;destination.mkdir(parents=True)
             for name in ('manifest.json','results.json','policy.json'):
                 shutil.copyfile(ROOT/folder/name,destination/name)
         (root/'web').mkdir()
-        for name in ('development.html','development.mjs'):shutil.copyfile(ROOT/'web'/name,root/'web'/name)
+        for name in ('development.html','development.mjs','propagation.mjs'):shutil.copyfile(ROOT/'web'/name,root/'web'/name)
         return root
 
     def repin(self,root,folder,name):
@@ -32,7 +33,7 @@ class DevelopmentPageTests(unittest.TestCase):
     def test_only_explicit_scalar_view_is_exported(self):
         root=self.fixture();(root/LOCKED/'private-response.json').write_text('PRIVATE_SENTINEL')
         data=bundle(self.output,root)
-        self.assertEqual({p.name for p in self.output.iterdir()},{'development.html','development.mjs','development.json'})
+        self.assertEqual({p.name for p in self.output.iterdir()},{'development.html','development.mjs','propagation.mjs','development.json'})
         self.assertEqual(data['status'],'provisional');self.assertFalse(data['scientific_admission'])
         self.assertEqual(len(data['scores']),4);self.assertEqual(len(data['refinement']['shifts']),12)
         text=(self.output/'development.json').read_text()
