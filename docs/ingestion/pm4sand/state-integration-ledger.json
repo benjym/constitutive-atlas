@@ -1,0 +1,899 @@
+{
+  "schema_version": "0.1",
+  "kind": "source-state-integration-inventory",
+  "variant": "PM4Sand2D3.3",
+  "source_complete": false,
+  "parameters": [
+    {
+      "name": "DR_initial",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "user input",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "preparation",
+      "note": ""
+    },
+    {
+      "name": "G0",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "user input",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": ""
+    },
+    {
+      "name": "hpo",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "user input",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": ""
+    },
+    {
+      "name": "pA",
+      "shape": "scalar",
+      "unit": "Pa",
+      "default_or_rule": "101300",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "reference",
+      "note": ""
+    },
+    {
+      "name": "FirstCall",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "initialization command",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "mode",
+      "note": ""
+    },
+    {
+      "name": "PostShake",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "user-selected postshaking flag",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "mode",
+      "note": ""
+    },
+    {
+      "name": "h0",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "max(.30,(.25+DR_initial)/2)",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "emax",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".8",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "emin",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".5",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "nb",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".5",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "nd",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".1",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "Ado",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "dense: Eq45; loose:1.24",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "zmax",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "min(20,.70*exp(-6.1*xiR_initial))",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "cz",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "250",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "Ce",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".5 for DR_initial<=.55; .2 for >=.75; linear between",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "phi_cv",
+      "shape": "scalar",
+      "unit": "degree",
+      "default_or_rule": "33",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "nu",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".30",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "CGD",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "2",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "CDR",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "min(10,5+25*(DR_initial-.35))",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "CKaf",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "min(35,max(4,5+220*(DR_initial-.26)^3))",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "Q",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "10",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "R",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "1.5",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "m",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".01",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "Fsedmin",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".04",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "psed0prime",
+      "shape": "scalar",
+      "unit": "Pa",
+      "default_or_rule": "-pA/5 in FLAC stress convention",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "crhg",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".005",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "chg",
+      "shape": "scalar",
+      "unit": "Pa",
+      "default_or_rule": "parallel-element user strength, bounded below by crhg times compressive pressure",
+      "locator": "Tables4.1/4.2 pp76-78/PDF81-83",
+      "role": "material",
+      "note": "Printed defaults, not asserted universal admissible ranges."
+    },
+    {
+      "name": "CSR0",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".5",
+      "locator": "Eq24/Table2.1 p40",
+      "role": "material",
+      "note": ""
+    },
+    {
+      "name": "mSR",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "4",
+      "locator": "Eq24/Table2.1 p40",
+      "role": "material",
+      "note": ""
+    },
+    {
+      "name": "CKp",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "2",
+      "locator": "Eq60/Table2.1 p41",
+      "role": "material",
+      "note": ""
+    },
+    {
+      "name": "CD",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": ".1",
+      "locator": "Eq81/Table2.1 p44",
+      "role": "material",
+      "note": ""
+    },
+    {
+      "name": "Cgamma1",
+      "shape": "scalar",
+      "unit": "1",
+      "default_or_rule": "h0/200",
+      "locator": "Eq37/Table2.1 p41",
+      "role": "material",
+      "note": ""
+    }
+  ],
+  "fields": [
+    {
+      "name": "sigma",
+      "shape": "sym2",
+      "unit": "Pa",
+      "role": "physical state",
+      "initialization": "current host stress; may be replaced/projected by startup",
+      "update": "trial elastic/plastic stress then penalties",
+      "locator": "Eqs19-20,33,57; Table3.1 pp65-66; Table3.2 pp67-68",
+      "host": "subzone stress/alpha plus zone aggregates",
+      "unresolved": ""
+    },
+    {
+      "name": "alpha",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "physical hardening memory",
+      "initialization": "Table3.2 step4 conditional stress-ratio mapping",
+      "update": "subzone integration; zone averaging and penalties",
+      "locator": "Eqs19-20,33,57; Table3.1 pp65-66; Table3.2 pp67-68",
+      "host": "subzone stress/alpha plus zone aggregates",
+      "unresolved": ""
+    },
+    {
+      "name": "alpha_in",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "path memory",
+      "initialization": "Table3.2 step5 .9Mb conditional",
+      "update": "true reversal anchor; step16/17 order unresolved",
+      "locator": "Eqs19-20,33,57; Table3.1 pp65-66; Table3.2 pp67-68",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "alpha_inP",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "path memory",
+      "initialization": "initial alpha_in",
+      "update": "previous true reversal anchor",
+      "locator": "Eqs19-20,33,57; Table3.1 pp65-66; Table3.2 pp67-68",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "alpha_inMin",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "path memory",
+      "initialization": "initial alpha_in",
+      "update": "componentwise apparent-reversal extrema",
+      "locator": "Eqs19-20,33,57; Table3.1 pp65-66; Table3.2 pp67-68",
+      "host": "zone",
+      "unresolved": "Do not assume componentwise extrema trace-free; zalpha evolution unresolved."
+    },
+    {
+      "name": "alpha_inMax",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "path memory",
+      "initialization": "initial alpha_in",
+      "update": "componentwise apparent-reversal extrema",
+      "locator": "Eqs19-20,33,57; Table3.1 pp65-66; Table3.2 pp67-68",
+      "host": "zone",
+      "unresolved": "Do not assume componentwise extrema trace-free; zalpha evolution unresolved."
+    },
+    {
+      "name": "z",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "physical fabric memory",
+      "initialization": "zero",
+      "update": "Eq57/Table3.1 step14 competing signed updates",
+      "locator": "Eqs19-20,33,57; Table3.1 pp65-66; Table3.2 pp67-68",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "zin",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "path memory",
+      "initialization": "zero",
+      "update": "reversal fabric anchor, step16/17 chronology unresolved",
+      "locator": "Eqs19-20,33,57; Table3.1 pp65-66; Table3.2 pp67-68",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "zalpha",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "unclassified retained label",
+      "initialization": "zero",
+      "update": "not established in inspected core equations",
+      "locator": "Eqs19-20,33,57; Table3.1 pp65-66; Table3.2 pp67-68",
+      "host": "zone",
+      "unresolved": "Do not assume componentwise extrema trace-free; zalpha evolution unresolved."
+    },
+    {
+      "name": "DR",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "physical density",
+      "initialization": "DR_initial",
+      "update": "void/volumetric loading relationship; exact discrete transport must be specified",
+      "locator": "Eqs10-11; Tables4.1/4.3",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "zcum",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "path memory",
+      "initialization": "0",
+      "update": "Eq58 fabric-increment accumulator",
+      "locator": "Eqs58,72,86",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "zpeak",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "path memory",
+      "initialization": "zmax/100000",
+      "update": "max(previous,sqrt(z:z/2))",
+      "locator": "Eq59; Table3.2 step7",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "pzp",
+      "shape": "scalar",
+      "unit": "Pa",
+      "role": "path memory",
+      "initialization": "po/100 (signed host pressure)",
+      "update": "pressure at fabric reversal/peak events; exact ordering unresolved",
+      "locator": "Eqs64,73; Tables3.1-3.2",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "zxp",
+      "shape": "scalar",
+      "unit": "unresolved",
+      "role": "unresolved host memory",
+      "initialization": "printed z:p=0 is not a typed tensor/scalar contraction",
+      "update": "label needs definition before transport",
+      "locator": "Table3.2 step7; Table4.3",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "zxpPk",
+      "shape": "scalar",
+      "unit": "Pa",
+      "role": "unresolved host memory",
+      "initialization": "-zmax*po/50",
+      "update": "peak stress/fabric tracking, formula not fully established here",
+      "locator": "Tables3.1-3.2/4.3",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "pmin",
+      "shape": "scalar",
+      "unit": "Pa",
+      "role": "preparation",
+      "initialization": "min(previous signed pmin, p/200)",
+      "update": "pressure floor/preparation",
+      "locator": "p35; Table3.2 step2",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "pmin2",
+      "shape": "scalar",
+      "unit": "Pa",
+      "role": "preparation",
+      "initialization": "min(previous signed pmin2,p/20)",
+      "update": "second low-pressure scale/preparation",
+      "locator": "Eq74; Table3.2 step2",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "CSR_initial_numerator",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "preparation",
+      "initialization": "1-CSR0*(M/Mb_initial)^mSR",
+      "update": "frozen preparation denominator",
+      "locator": "Eq24",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "G",
+      "shape": "scalar",
+      "unit": "Pa",
+      "role": "lagged tangent/cache",
+      "initialization": "G0*pA*sqrt(-po/pA)",
+      "update": "computed at zone end for next caller step",
+      "locator": "Eqs86-88; Table3.1 step15",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "K",
+      "shape": "scalar",
+      "unit": "Pa",
+      "role": "lagged tangent/cache",
+      "initialization": "2*(1+nu)*G/(3*(1-2nu))",
+      "update": "computed at zone end for next caller step",
+      "locator": "Eqs25,88; Table3.1 step15",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "Kp",
+      "shape": "scalar",
+      "unit": "Pa",
+      "role": "lagged constitutive memory",
+      "initialization": "100*G",
+      "update": "computed using averaged completed increment for next caller step",
+      "locator": "Eqs60-64; Table3.1 step12",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "D",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "lagged constitutive memory",
+      "initialization": "0",
+      "update": "computed using averaged completed increment for next caller step",
+      "locator": "Eqs69-85; Table3.1 step12",
+      "host": "zone",
+      "unresolved": ""
+    },
+    {
+      "name": "n",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "r",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "alpha_b",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "alpha_d",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "alpha_dR",
+      "shape": "sym2",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "Mb",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "Md",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "Mcur",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "xiR",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "L",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    },
+    {
+      "name": "devpl",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "candidate derived/cache; not independent without phase analysis",
+      "initialization": "derive from selected snapshot",
+      "update": "derive at explicitly named phase, not globally eager across branches",
+      "locator": "Eqs10-18,31,65-85",
+      "host": "zone",
+      "unresolved": "Same symbol can mean subzone trial or zone average; pin snapshot before alias elimination."
+    }
+  ],
+  "storage_budget": {
+    "sym2_records_listed": 9,
+    "full_sym2_scalar_slots": 27,
+    "scalar_retained_or_lag_candidates_listed": 13,
+    "derived_or_cache_records_listed": 11,
+    "note": "Conservative inventory, NOT minimal independent state or proposed capacity. Multiply per-subzone records by host multiplicity; additional parallel shear stress, host workspaces and parameter/preparation snapshots are not included in these counts. No alias elimination or scalar transport admitted."
+  },
+  "phases": [
+    {
+      "name": "prepare",
+      "reads": "host current stress; user parameters/modes",
+      "writes": "startup Table3.2 including projection, anchors and nonzero regularizers",
+      "locator": "Tables3.2 pp67-68"
+    },
+    {
+      "name": "subzone_trial",
+      "reads": "committed subzone stress/alpha; previous zone G,K,D,Kp",
+      "writes": "elastic trial; current normal/distance; load factor from stored D,Kp; corrections/penalties",
+      "locator": "Table3.1 steps2-6 pp65-66"
+    },
+    {
+      "name": "subzone_return",
+      "reads": "corrected subzone trial",
+      "writes": "return to host without assuming zone memory recomputed",
+      "locator": "step7"
+    },
+    {
+      "name": "zone_average",
+      "reads": "all four completed triangular subzones, areas, both overlays",
+      "writes": "area-weighted strain/stress/alpha/normal; zone penalties; images",
+      "locator": "steps8-10"
+    },
+    {
+      "name": "classify",
+      "reads": "zone-corrected alpha/normal and prior reversal memory",
+      "writes": "detect true/apparent reversal; ordering relative to resets unresolved",
+      "locator": "step11 and steps16-17"
+    },
+    {
+      "name": "next_coefficients",
+      "reads": "zone average and the selected old/new snapshots",
+      "writes": "compute D,Kp for NEXT caller increment; plastic volumetric increment",
+      "locator": "steps12-13"
+    },
+    {
+      "name": "fabric",
+      "reads": "plastic volumetric increment and selected snapshots",
+      "writes": "dd<0 update; Eq57 vs step14 sign conflict",
+      "locator": "step14"
+    },
+    {
+      "name": "refresh",
+      "reads": "updated zone memory",
+      "writes": "surfaces,G,K for next step",
+      "locator": "step15"
+    },
+    {
+      "name": "anchors",
+      "reads": "classification and accumulators",
+      "writes": "update extrema/true/previous/fabric anchors; steps16 and17 do not fully disambiguate snapshots",
+      "locator": "steps16-17"
+    },
+    {
+      "name": "commit",
+      "reads": "whole accepted host/zone/subzone result",
+      "writes": "publish all durable state",
+      "locator": "step18"
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "PMS-01",
+      "locators": [
+        "Eqs1-8 pp16-17",
+        "Eq28 p23"
+      ],
+      "finding": "2D stress deviator uses /2, displayed strain split and flow use /3. Tracing displayed 2x2 flow does not recover the separately defined plastic volumetric scalar.",
+      "status": "host dimensional reconciliation required"
+    },
+    {
+      "id": "PMS-02",
+      "locators": [
+        "Eq57 p30",
+        "Table3.1 step14 p66"
+      ],
+      "finding": "Body pos(-devpl)/D versus table devpl/D changes fabric-update sign on dilation.",
+      "status": "unresolved printed conflict"
+    },
+    {
+      "id": "PMS-03",
+      "locators": [
+        "Eq64 p32 and adjacent prose",
+        "Table2.1 pp41-42"
+      ],
+      "finding": "Literal pressure factor has a pole at p=pzp+pmin and the activation direction differs from adjacent prose under positive body pressure.",
+      "status": "sign/pressure-adapter unresolved"
+    },
+    {
+      "id": "PMS-04",
+      "locators": [
+        "Eq74 p35",
+        "Table2.1 p43"
+      ],
+      "finding": "Body low-pressure dilation factor uses pmin2; summary uses pmin.",
+      "status": "unresolved printed conflict"
+    },
+    {
+      "id": "PMS-05",
+      "locators": [
+        "Eq89 p38",
+        "Table2.1 p45"
+      ],
+      "finding": "Body postshaking pressure ratio is squared; summary is linear.",
+      "status": "unresolved printed conflict"
+    },
+    {
+      "id": "PMS-06",
+      "locators": [
+        "Eq70 p34",
+        "Table2.1 p42"
+      ],
+      "finding": "Body Dnonrot=-Ad*pos(-dd); summary gives Ad*dd without the guard.",
+      "status": "may coincide only within the negative-dd branch; do not silently generalize"
+    },
+    {
+      "id": "PMS-07",
+      "locators": [
+        "Eq38 p25",
+        "Eq20 p21",
+        "Table3.2 steps4-5 pp67-68"
+      ],
+      "finding": "Zero previous distance changes branch at <= versus <; initial equal anchors give 0/0 if Eq38 evaluated directly. Startup equality branches xi=0, Mfin=Mcut, Mfin=.9Mb are omitted.",
+      "status": "explicit branch policy needed"
+    },
+    {
+      "id": "PMS-08",
+      "locators": [
+        "p35",
+        "pp60-61",
+        "Table3.2 step2"
+      ],
+      "finding": "Positive-pressure formulas, nominal .5kPa floor, and signed host min operations are not interchangeable; pA=101300 gives pA/200=506.5Pa.",
+      "status": "units/sign/default distinction"
+    },
+    {
+      "id": "PMS-09",
+      "locators": [
+        "Table3.1 steps11-17 pp65-66",
+        "Table3.2 step7 p68"
+      ],
+      "finding": "Old/current/reversal chronology and zalpha/zxp definitions not fully specified by inspected tables.",
+      "status": "algorithm/restart identity gap"
+    }
+  ],
+  "host": {
+    "dimensional_scope": "2D plane-strain FLAC, not PM4Sand3D1.0",
+    "stress_convention": "body compression-positive; startup/FLAC compression-negative",
+    "shear": "tensorial xy, double contraction counts xy twice; Mandel2 would use sqrt(2)*xy",
+    "subzones": "four triangular subzones, two overlaid meshes; volumetric correction and area-weighted zone updates",
+    "parallel_shear": "independent elastoplastic shear-only element, modulus .01 prepared PM4 moduli, strength max(chg,crhg*compressive pressure), p60",
+    "standalone_adapter": "not yet defined; a homogeneous point cannot silently remove overlays or parallel shear and claim vendor equivalence"
+  },
+  "transaction_proposal": {
+    "status": "Atlas requirements, not source claims",
+    "parent": "all subzone states, zone lagged/history/preparation/modes and parallel shear state immutable during trials",
+    "trial": "evaluate full caller from original parent; no extra FirstCall or reset selection in internal Newton probes",
+    "commit": "one atomic accepted caller; rejected candidate restores exact entire parent",
+    "subdivision": "source states no constitutive substepping; changing caller partitions changes lag refresh chronology. An adaptive Atlas variant needs separately declared semantics and partition study",
+    "zero_increment": "do not blindly recompute lag/reversal state on duplicate targets; source-specific zero handling not fully specified",
+    "time": "strain increment / global dynamics dt, not intrinsic viscosity; no automatic PostShake or creep law",
+    "tangent": "piecewise gates, projections, reversal branches and lagged coefficients require transaction-consistent derivative and undefined/singular-branch declarations"
+  },
+  "tracking_label_gap": {
+    "locator": "Table4.3 p79/PDF84",
+    "labels": [
+      "MM",
+      "Cka",
+      "eqsum",
+      "evsum",
+      "LoadInd",
+      "Dilat",
+      "zabs",
+      "evol",
+      "eq11",
+      "eq22",
+      "eq12",
+      "epsIncr",
+      "daxn",
+      "maximumG",
+      "maximumK"
+    ],
+    "note": "Diagnostic/property list is not proof of independent physical state. Definitions, dimensions and update snapshots must be pinned before storage."
+  },
+  "initialization_steps": [
+    {
+      "step": 1,
+      "locator": "Table3.2 p67",
+      "reads": "host effective stress, raw input parameters, FirstCall",
+      "writes": "committed startup stress candidate",
+      "unresolved": "caller must explicitly authorize/model preparation; not an invisible trial reset"
+    },
+    {
+      "step": 2,
+      "locator": "Table3.2 p67",
+      "formula": "sigma11<0: po=min(pmin,tr2(sigma)/2), pmin=min(pmin,p/200), pmin2=min(pmin2,p/20); sigma11>0: po=-pA/20, sigma=po*I2",
+      "unresolved": "signed pressure convention; sigma11==0 omitted; mixed principal stresses not classified"
+    },
+    {
+      "step": 3,
+      "locator": "Table3.2 p67",
+      "formula": "xi=R/(Q-ln(-100*p/pA))-DR_initial; xi<0: Mb=M exp(-nb*xi), Md=M exp(nd*xi), Ado=2.5*(asin(Mb/2)-phi_cv)/(Mb-Md); xi>0: Mb=M exp(-nb*xi/4), Md=M exp(4*nd*xi), Ado=1.24",
+      "unresolved": "xi==0 omitted; arcsine and quotient domains; freeze vs subsequent density update must be specified"
+    },
+    {
+      "step": 4,
+      "locator": "Table3.2 pp67-68",
+      "formula": "Mcut=max(Mb,Md); Mfin=-2/po*sqrt((sigma-poI2):(sigma-poI2)/2); if Mfin>Mcut: r=(sigma-poI2)/po*Mcut/Mfin, sigma=poI2+po*r, alpha=r*(Mcut-m)/Mcut; if Mcut>Mfin: r=(sigma-poI2)/po, alpha=r",
+      "unresolved": "equality omitted; table note says update Mfin if stress projected"
+    },
+    {
+      "step": 5,
+      "locator": "Table3.2 p68",
+      "formula": "Mfin<.9Mb: alpha_in=alpha; Mfin>.9Mb: alpha_in=alpha*(.9Mb/Mfin); alpha_inP=alpha_inMin=alpha_inMax=alpha_in",
+      "unresolved": "equality omitted; actual Eq38 initial coincident-anchor limit not defined"
+    },
+    {
+      "step": 6,
+      "locator": "Table3.2 p68",
+      "formula": "G=G0*pA*sqrt(-po/pA); K=G*2*(1+nu)/(3*(1-2nu)); Kp=100G; D=0",
+      "unresolved": "do not replace startup Kp with singular instantaneous Eq38"
+    },
+    {
+      "step": 7,
+      "locator": "Table3.2 p68",
+      "formula": "pzp=po/100; zpeak=zmax/100000; zxp=z:p=0; zxpPk=-zmax*po/50; z=zin=zalpha=zcum=0",
+      "unresolved": "printed scalar/tensor chains are not a typed layout; z:p and zalpha evolution require further source closure"
+    }
+  ]
+}

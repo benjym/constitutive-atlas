@@ -1,0 +1,182 @@
+{
+  "version": "barodesy-sand-2015-ledger-v1",
+  "status": "source-only proposal, no executable model or admission",
+  "source_doi": "10.1680/geot.14.P.151",
+  "variant": "2015 Eq31 sand, fixed-frame nonzero-stress interior candidate",
+  "state": {
+    "count": 7,
+    "proposed_order": [
+      "Sigma_xx",
+      "Sigma_yy",
+      "Sigma_zz",
+      "sqrt2_Sigma_xy",
+      "sqrt2_Sigma_yz",
+      "sqrt2_Sigma_xz",
+      "e"
+    ],
+    "stress_units": "Pa in future Atlas; illustrative algebra uses kPa consistently",
+    "sign": "Sigma=-T compression positive",
+    "additional_history": [],
+    "algebraic_not_state": [
+      "sigma",
+      "T0",
+      "R",
+      "R0",
+      "h",
+      "f",
+      "g",
+      "B",
+      "ec"
+    ]
+  },
+  "parameters": [
+    {
+      "name": "c1",
+      "units": "1",
+      "source": "2015 p53 and Eqs9,23,26,27,29–31",
+      "proposed_interior": "finite and <0"
+    },
+    {
+      "name": "c2",
+      "units": "1",
+      "source": "2015 p53 and Eqs9,23,26,27,29–31",
+      "proposed_interior": "finite; numerical expm envelope must be declared"
+    },
+    {
+      "name": "c3",
+      "units": "1",
+      "source": "2015 p53 and Eqs9,23,26,27,29–31",
+      "proposed_interior": "finite and <0"
+    },
+    {
+      "name": "c4",
+      "units": "stress",
+      "source": "2015 p53 and Eqs9,23,26,27,29–31",
+      "proposed_interior": "finite and >0"
+    },
+    {
+      "name": "c5",
+      "units": "1",
+      "source": "2015 p53 and Eqs9,23,26,27,29–31",
+      "proposed_interior": "finite and >0; zero excluded pending limit"
+    },
+    {
+      "name": "ec0",
+      "units": "1",
+      "source": "2015 p53 and Eqs9,23,26,27,29–31",
+      "proposed_interior": "finite and >emin"
+    },
+    {
+      "name": "emin",
+      "units": "1",
+      "source": "2015 p53 and Eqs9,23,26,27,29–31",
+      "proposed_interior": "finite and >=0"
+    }
+  ],
+  "source_equations": [
+    {
+      "locator": "2015 p54 Eq9",
+      "expression": "R=-expm(c1*exp(c2*delta)*D0)",
+      "kind": "symmetric matrix exponential"
+    },
+    {
+      "locator": "2015 p55 Eq20",
+      "expression": "edot=(1+e)*trace(D)",
+      "kind": "incompressible grains"
+    },
+    {
+      "locator": "2015 p55 Eq23",
+      "expression": "h=-(c4+c5*sigma)/(e-emin)"
+    },
+    {
+      "locator": "2015 p56 Eqs26,27",
+      "expression": "B=(ec0-emin)/(ec0+1)*((c4+c5*sigma)/c4)^(-(1+emin)/c5); ec=(emin+B)/(1-B)"
+    },
+    {
+      "locator": "2015 p56 Eqs29–31",
+      "expression": "f=delta+c3*ec; g=-c3*e; Tdot=h*(f*R0+g*T0)*norm(D)"
+    }
+  ],
+  "inputs": {
+    "loading": "symmetric instantaneous D or compression-positive E=-D; actual norm and direction both needed",
+    "spin": "not included in first fixed-frame scope; later spatial implementation requires explicit objective rate",
+    "evolution_coordinate": "time or monotone path parameter; positive degree1 loading homogeneity; not autonomous physical-time creep",
+    "mixed_control": "unknown lateral stretching solved consistently at each stage under prescribed lateral stress rates; source p59"
+  },
+  "domains": {
+    "source_algebra": [
+      "norm(T)>0",
+      "norm(D)>0",
+      "e!=emin",
+      "power base>0",
+      "1-B!=0"
+    ],
+    "proposed_restricted_support": [
+      "finite quantities at every stage",
+      "Sigma strictly compressive with independently justified conservative numerical interior",
+      "e>emin>=0",
+      "c4>0,c5>0,ec0>emin",
+      "finite positive power base,0<B<1",
+      "matrix expm argument inside current declared operator envelope, not assumed automatically"
+    ],
+    "not_selected": [
+      "T=0 directional continuation or stress seed",
+      "general spatial finite-rotation stress rate",
+      "c5=0 limiting law",
+      "density clipping",
+      "tension regularization",
+      "minimum-density projection"
+    ]
+  },
+  "initialization": {
+    "required": [
+      "full nonzero compressive initial stress tensor",
+      "initial e>emin",
+      "all seven parameters and pressure unit convention",
+      "loading/frame declaration"
+    ],
+    "source_locator": "2015 p58 simulation of element tests",
+    "preparation": "record prescribed consolidation history explicitly; no unique OCR/fabric recipe in selected law",
+    "stress_free_gap": "source discusses zero-stress proportional starts but normalized T0 in full law lacks a unique general continuation"
+  },
+  "branches_events": {
+    "zero_loading": "candidate continuous zero-rate extension for admissible nonzero stress; normalized D0 still undefined literally, general loading Jacobian not unique",
+    "reversal": "evaluate fresh D0 and R; no reset or loading-surface flag",
+    "hold": "no physical-time change with D=0 in candidate extension",
+    "boundary": "reject invalid trial, no clamping; event-location policy separate research decision"
+  },
+  "transaction": {
+    "source_prescribed": false,
+    "proposed": [
+      "derive every algebraic quantity from same trial stage stress/e/loading",
+      "reject invalid/nonfinite intermediate, not merely bad endpoint",
+      "never mutate parent during trial",
+      "atomic complete seven-state commit on successful requested update",
+      "failure returns exact parent state even if attempted accepted substeps exist",
+      "retain accepted fractions/rejections/recovery control and full same-backend state chain"
+    ],
+    "source_numerics": "2015 p58 forward Euler possible for sufficiently small steps; no frozen adaptive algorithm/tolerance"
+  },
+  "operators": [
+    "symmetric tensor trace/norm/scaling",
+    "checked dimensionless symmetric matrix exponential",
+    "scalar exp/log1p or equivalent stable positive-base power",
+    "guarded divisions and normalization",
+    "optional eventual spin commutator outside first scope"
+  ],
+  "numerical_notes": [
+    "Use sigma=norm(T), not mean pressure; c4 pressure units must follow same stress unit conversion",
+    "Normalized matrix exponential may require spectral scalar shift to avoid intermediate overflow; source algebra must remain unchanged; no algorithm selected here",
+    "Repeated eigenvalues of D are admissible physically; expm/AD must avoid eigenspace singularities",
+    "At zero D first directional derivative of stress rate is generally not one Frechet map",
+    "At zero T g*T0 has nonunique directional limits for generic e,c3"
+  ],
+  "next_study": [
+    "full independent Cartesian instantaneous rates, including dense rotations/reflections and stress-unit scaling",
+    "source-calibration provenance decision before experimental plots",
+    "zero-load extension and separate nonzero-hydro/zero-load derivative contracts",
+    "fixed-frame finite paths with independent reference refinement and exact e volume closure",
+    "caller partition, parent rollback, after-progress failure and recovery",
+    "explicit objective-rate study before large-shear spatial admission"
+  ]
+}

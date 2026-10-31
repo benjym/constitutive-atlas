@@ -2,7 +2,7 @@
 import hashlib,json,subprocess,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997')
+PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand')
 class IngestionPackets(unittest.TestCase):
  def run_python(self,*args):
   return subprocess.run([sys.executable,'-B',*args],cwd=ROOT,capture_output=True,text=True,timeout=60,check=True)
@@ -10,11 +10,14 @@ class IngestionPackets(unittest.TestCase):
   for model in PACKETS:
    with self.subTest(model=model):
     folder=ROOT/'docs/ingestion'/model;manifest=json.loads((folder/'manifest.json').read_text());files=manifest['files']
+    if type(files)is list:
+     count=len(files);files={x['path']:x for x in files};self.assertEqual(len(files),count)
     self.assertIn('README.md',files)
     for name,pin in files.items():
      path=Path(name);self.assertFalse(path.is_absolute());self.assertNotIn('..',path.parts)
-     self.assertEqual(hashlib.sha256((folder/path).read_bytes()).hexdigest(),pin)
-    self.assertFalse(any(p.suffix.lower() in ('.pdf','.dll','.zip','.png','.so','.dylib') for p in folder.rglob('*')))
+     blob=(folder/path).read_bytes();self.assertEqual(hashlib.sha256(blob).hexdigest(),pin['sha256'] if type(pin)is dict else pin)
+     if type(pin)is dict:self.assertEqual(len(blob),pin['bytes'])
+    self.assertFalse(any(p.suffix.lower() in ('.pdf','.dll','.zip','.png','.so','.dylib','.pyc','.pyo','.o','.a') for p in folder.rglob('*')))
  def test_hca_source_distinguishing_fixtures(self):
   self.run_python('-m','unittest','discover','-s','docs/ingestion/hca-sand-2005','-p','test_fixtures.py','-v')
  def test_pm4silt_source_distinguishing_fixtures(self):
@@ -52,4 +55,20 @@ class IngestionPackets(unittest.TestCase):
   folder=ROOT/'docs/ingestion/manzari-dafalias-1997';manifest=json.loads((folder/'manifest.json').read_text());audit=json.loads((folder/'source-audit.json').read_text())
   for key in ('original_received','source_complete','equations_verified','executable_added','scientific_admission'):self.assertIs(manifest[key],False)
   self.assertEqual(audit['target']['doi'],'10.1680/geot.1997.47.2.255');self.assertIsNone(audit['target']['sha256']);self.assertEqual(audit['target']['equation_locators'],[])
+ def test_clay2005_available_source_algebra_without_full_kernel_claim(self):
+  folder=ROOT/'docs/ingestion/hypoplastic-clay-2005'
+  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_packet.py','-v')
+  with tempfile.TemporaryDirectory() as tmp:
+   output=Path(tmp)/'checks.json';self.run_python(str(folder/'check_packet.py'),'--output',str(output))
+   actual=json.loads(output.read_text());stored=json.loads((folder/'checks.json').read_text())
+   self.assertEqual(actual,stored);self.assertTrue(actual['passed']);self.assertEqual(actual['count'],40)
+ def test_pm4sand_preserves_partial_source_gate_and_algebra_witnesses(self):
+  folder=ROOT/'docs/ingestion/pm4sand';manifest=json.loads((folder/'manifest.json').read_text())
+  self.run_python(str(folder/'check_packet.py'));self.assertIs(manifest['status']['source_complete'],False)
+  self.assertEqual(len(manifest['unresolved_ids']),9)
+ def test_barodesy2015_interior_algebra_and_fixture_replay(self):
+  folder=ROOT/'docs/ingestion/barodesy-sand'
+  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_algebra.py','-v')
+  self.run_python(str(folder/'algebra.py'),'--check',str(folder/'fixtures.json'))
+  self.assertIs(json.loads((folder/'manifest.json').read_text())['compiled_execution'],False)
 if __name__=='__main__':unittest.main()

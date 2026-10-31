@@ -59,8 +59,8 @@ Read all existing linked material first. The task is to close or precisely docum
 - [ ] **ING-manzari-dafalias-1997** — Acquire DOI10.1680/geot.1997.47.2.255; separate1997 surfaces, memory and initialization from SANISAND2004 changes.
   Owner: — (released after bounded handoff); output: `docs/ingestion/manzari-dafalias-1997/`; partial evidence: [gap packet](docs/ingestion/manzari-dafalias-1997/README.md); BLOCKED: original1997 full text unavailable through tested routes; later2004 and modified variants not substituted.
 
-- [-] **ING-hypoplastic-clay-2005** — Pin exact2005 original and matching implementation, full stiffness/ASBS/density evolution; preserve separate2005 identity despite2013 progress.
-  Owner: `review_vw96`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-clay-2005/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
+- [X] **ING-hypoplastic-clay-2005** — Pin exact2005 original and matching implementation, full stiffness/ASBS/density evolution; preserve separate2005 identity despite2013 progress.
+  Owner: `review_vw96`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-clay-2005/`; evidence: [reviewed packet](docs/ingestion/hypoplastic-clay-2005/README.md); bounded source/schema/integration inventory integrated with40 analytical checks and six test groups. Printed Eq38 conflict, final-publisher reconciliation and full-rate/execution/admission gates remain open.
 
 - [ ] **ING-hypoplastic-clay-2013** — Do not repeat source-rate or exact isotropic integration work. Next nonisotropic finite reference histories, near-boundary precision and physical preparation/source reconciliation.
   Owner: —; output: `docs/ingestion/hypoplastic-clay-2013/`; existing evidence: [clay2013-research-integration.md](docs/models/clay2013-research-integration.md); blocker: see existing dossier, confirm when claimed.
@@ -68,14 +68,14 @@ Read all existing linked material first. The task is to close or precisely docum
 - [ ] **ING-s-clay1** — Acquire Wheeler et al2003 DOI10.1139/t02-119; source-map rotational hardening/anisotropy orientation, parameter/state/input inventory and initialization.
   Owner: — (released after bounded handoff); output: `docs/ingestion/s-clay1/`; partial evidence: [packet](docs/ingestion/s-clay1/README.md); BLOCKED: SC-SOURCE-01: original 2003 full text unavailable; identity/acquisition report delivered.
 
-- [-] **ING-barodesy-sand** — Compare explicitly dated author sand formulations and select one complete identity; directory subroutine identifies clay2017 and cannot pin sand.
-  Owner: `review_igs97`; claimed: 2026-10-31; output: `docs/ingestion/barodesy-sand/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
+- [X] **ING-barodesy-sand** — Compare explicitly dated author sand formulations and select one complete identity; directory subroutine identifies clay2017 and cannot pin sand.
+  Owner: `review_igs97`; claimed: 2026-10-31; output: `docs/ingestion/barodesy-sand/`; evidence: [reviewed packet](docs/ingestion/barodesy-sand/README.md); original2015 interior sand law and separate2019 calibration pinned,13 algebra tests integrated. Zero-stress/frame/calibration and full execution/admission gates remain open.
 
-- [-] **ING-pm4sand** — PM4Sand2D3.3 UCD/CGM-23/01: compare pinned June2023 vendor bytes against May2024 author revision and inventory plane-strain/in-plane-mean-stress constraints separately from3D.
-  Owner: `review_sanisand`; claimed: 2026-10-31; output: `docs/ingestion/pm4sand/`; existing evidence: [pm4sand-versions.md](docs/models/pm4sand-versions.md); blocker: see existing dossier, confirm when claimed.
+- [X] **ING-pm4sand** — PM4Sand2D3.3 UCD/CGM-23/01: compare pinned June2023 vendor bytes against May2024 author revision and inventory plane-strain/in-plane-mean-stress constraints separately from3D.
+  Owner: `review_sanisand`; claimed: 2026-10-31; output: `docs/ingestion/pm4sand/`; evidence: [reviewed packet](docs/ingestion/pm4sand/README.md); author May2024/vendor June2023 receipts, bounded equation/host inventory and eleven algebra groups integrated. Source closure remains partial with nine explicit source/host blockers; full execution/admission open.
 
-- [ ] **ING-extended-mohr-coulomb-2013** — Doherty/Muir Wood2013 Geotechnique63(8)661-673: pin title/DOI/full source; extract complete Cam-Clay flow/asymptotic hardening, then nonsmooth face/edge/apex test plan.
-  Owner: —; output: `docs/ingestion/extended-mohr-coulomb-2013/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
+- [-] **ING-extended-mohr-coulomb-2013** — Doherty/Muir Wood2013 Geotechnique63(8)661-673: pin title/DOI/full source; extract complete Cam-Clay flow/asymptotic hardening, then nonsmooth face/edge/apex test plan.
+  Owner: `review_sanisand`; claimed: 2026-10-31; output: `docs/ingestion/extended-mohr-coulomb-2013/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
 
 - [ ] **ING-hypoplastic-interface-2016** — DOI10.1007/s11440-016-0440-1: existing text-only2016 manuscript is not a received PDF; pin readable equations30-33 and thickness/traction/slip/local-frame contract; separate2017 conversion.
   Owner: —; output: `docs/ingestion/hypoplastic-interface-2016/`; existing evidence: [catalogue entry](catalogue/manifest.json) (supplemental paper-side source record is local/untracked); blocker: see existing dossier, confirm when claimed.
@@ -128,6 +128,10 @@ The integration owner is the coordinating parent agent. Agents report their task
 | ING-hca-sand-2005 | [Packet](docs/ingestion/hca-sand-2005/README.md) | Ten algebraic tests; source/representation review | Bounded reconciliation integrated; full model gate open |
 | ING-pm4silt | [Packet](docs/ingestion/pm4silt/README.md) | Seven witnesses; visual Cpmin cross-check | Equation/host inventory integrated; full model gate open |
 | ING-hypoplastic-isa | [Packet](docs/ingestion/hypoplastic-isa/README.md) | 27 packet checks + three existing tests; Mandel order corrected before freeze | Contract integrated; full model gate open |
+| ING-hypoplastic-clay-2005 | [Packet](docs/ingestion/hypoplastic-clay-2005/README.md) |40 analytical checks and six test groups; printed unloading conflict retained | Bounded source/contract packet; nonisotropic rate follow-up claimed |
+| ING-barodesy-sand | [Packet](docs/ingestion/barodesy-sand/README.md) |13 algebra groups and frozen fixture replay | Original2015 interior contract; nonzero-stress rate follow-up claimed |
+| ING-pm4sand | [Packet](docs/ingestion/pm4sand/README.md) | Eleven algebra groups; distinct author/vendor receipts | Partial equation/host inventory; nine source/host blockers retained |
+| SRC-MD1997-identity-gap | [Packet](docs/ingestion/manzari-dafalias-1997/README.md) | Receipt/missing-source integrity checks only | Full original ingestion blocked |
 | SRC-OCC-transcription | [Packet](docs/ingestion/original-cam-clay/README.md) | Six analytical test groups, portable replay and pinned files | Bounded transcription/reference packet integrated; full ingestion blocked |
 | SRC-SCLAY1-identity | [Packet](docs/ingestion/s-clay1/README.md) | Four metadata/integrity groups, no constitutive checks claimed | Identity/gap packet integrated; original full text needed |
 | SRC-DUNCAN-identity-erratum | [Packet](docs/ingestion/duncan-chang-1970/README.md) | Original/correction identity, missing-source flags and pinned files | Acquisition/gap packet integrated; original and erratum needed |
@@ -152,3 +156,9 @@ These close only the deliverable named here. Their original full-ingestion tasks
 [Current source requests](docs/ingestion/SOURCE_REQUESTS.md) list the exact missing materials without substituting later formulations.
 
 - [X] **SRC-MD1997-identity-gap** — Original identity, conflicting author-page bibliography and bounded source-access/closure-gap report delivered. Evidence: [packet](docs/ingestion/manzari-dafalias-1997/README.md). Original equations remain unavailable; full ingestion remains blocked.
+
+## Source-to-execution follow-up
+
+- [-] **SRC-clay2005-appC-rate** — Prepare a separate non-admitted AppendixC/Eq40 seven-rate draft and independent Cartesian oracle, with exact-isotropy/domain/covariance witnesses; preserve printed Eq38 conflict. Owner: `review_vw96`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-clay-2005/rate-study-v1/`. No shared edits, compiled observations or admission are authorized by this packet task.
+
+- [-] **SRC-barodesy2015-rate** — Prepare a separate non-admitted fixed-frame/nonzero-stress seven-rate draft and independent Cartesian matrix-exponential oracle; preserve zero-stress/frame/calibration limits. Owner: `review_igs97`; claimed: 2026-10-31; output: `docs/ingestion/barodesy-sand/rate-study-v1/`. No shared edits, compiled observations or admission are authorized by this packet task.

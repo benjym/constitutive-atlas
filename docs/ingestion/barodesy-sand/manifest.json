@@ -1,0 +1,47 @@
+{
+  "version": "barodesy-sand-2015-ingestion-manifest-v1",
+  "root": "docs/ingestion/barodesy-sand",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "13769fc0c1febf19c20eae12dd518c7e26bc1b20b99b2a188a45c5cbcbe17b10",
+      "bytes": 9766
+    },
+    {
+      "path": "source-audit.json",
+      "sha256": "b7f6a1a4e3b21ed1b78141ffb3f5a68275208ccfc0176da940e6ad405f8db2d7",
+      "bytes": 4094
+    },
+    {
+      "path": "schema-integration-ledger.json",
+      "sha256": "1c41ea9f6e0f73627a99b4a36d3bc3a884a901865faefb4872d173c46bf73573",
+      "bytes": 6898
+    },
+    {
+      "path": "algebra.py",
+      "sha256": "b50b3ea9046129d64b09bf5376e84b76c30d3711213982e9a4d9f533bf0a814b",
+      "bytes": 3910
+    },
+    {
+      "path": "test_algebra.py",
+      "sha256": "60a92cdcf1b0ee52e131f9d09ecb2d86034c880c419ec7de1bae35bdd72a8b65",
+      "bytes": 4918
+    },
+    {
+      "path": "fixtures.json",
+      "sha256": "e11dc3e06b56406c6dcc82f607de43832aea7865ce793e3bf18bcab1aeec21ec",
+      "bytes": 2654
+    }
+  ],
+  "excluded": [
+    "private PDFs",
+    "source text extractions",
+    "rendered pages",
+    "bytecode"
+  ],
+  "checks": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v test_algebra: 13 passed",
+    "PYTHONDONTWRITEBYTECODE=1 python3 algebra.py --check fixtures.json: PASS"
+  ],
+  "compiled_execution": false
+}

@@ -1,0 +1,385 @@
+{
+  "schema_version": "0.1",
+  "kind": "source-equation-ledger",
+  "model_id": "pm4sand",
+  "variant": "PM4Sand2D3.3 manualJune2023/revisedMay2024",
+  "notation": "All tensors2x2; A:B=AxxBxx+AyyByy+2AxyBxy; norm=sqrt(A:A); pos(x)=max(x,0). Mathematical audit prose, not loadableAtlasDSL.",
+  "source_complete": false,
+  "executable": false,
+  "rows": [
+    {
+      "equations": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "locator": "pp16-17/PDF21-22",
+      "quantity": "2D effective stress and plane-strain strain",
+      "formula": "sigma=[[xx,xy],[xy,yy]]; p=tr2(sigma)/2; s=sigma-pI2; r=s/p; ev=exx+eyy; e2=epsilon2-ev*I2/3; de=deel+depl; dev=devel+devpl",
+      "unit": "stress Pa, strain1",
+      "status": "available-manual-law",
+      "note": "Stress dev uses /2, displayed strain dev uses /3. tr2(e2)=ev/3, not zero. No silent replacement by dev3 or tracefree2."
+    },
+    {
+      "equations": [
+        9
+      ],
+      "locator": "p18/PDF23",
+      "quantity": "DM04 critical state comparator",
+      "formula": "ecs=e0-lambda*(pcs/pA)^m",
+      "unit": "1",
+      "status": "predecessor-not-selected",
+      "note": ""
+    },
+    {
+      "equations": [
+        10,
+        11
+      ],
+      "locator": "p18/PDF23; Table2.1p40",
+      "quantity": "Relative state",
+      "formula": "xiR=DRcs-DR; DRcs=R/(Q-log(100*p/pA))",
+      "unit": "1",
+      "status": "available-manual-law",
+      "note": "Positivecompression body pressure. Denominatorzero at p=pA*exp(Q)/100."
+    },
+    {
+      "equations": [
+        12,
+        13,
+        14
+      ],
+      "locator": "pp18-19/PDF23-24",
+      "quantity": "Surfaces",
+      "formula": "Mb=M*exp(-nb*xiR); Md=M*exp(nd*xiR); M=2*sin(phi_cv)",
+      "unit": "1",
+      "status": "available-manual-law",
+      "note": "Loose branch in startup/Table4.2 uses nb/4 and4nd; retain selection in parameter-resolution contract. No Lode dependence."
+    },
+    {
+      "equations": [
+        15,
+        16
+      ],
+      "locator": "p19/PDF24; Table2.1p40",
+      "quantity": "Yield",
+      "formula": "fPa=norm2(s-p*alpha)-p*m/sqrt(2); f1=norm2(r-alpha)-m/sqrt(2)",
+      "unit": "Pa or1",
+      "status": "available-manual-law",
+      "note": "Two normalized yield expressions; do not use sqrt(2/3) DM04factor."
+    },
+    {
+      "equations": [
+        17,
+        18
+      ],
+      "locator": "p20/PDF25",
+      "quantity": "Image tensors",
+      "formula": "alpha_b=(Mb-m)*n/sqrt(2); alpha_d=(Md-m)*n/sqrt(2)",
+      "unit": "sym2,1",
+      "status": "available-manual-law",
+      "note": ""
+    },
+    {
+      "equations": [
+        19,
+        20
+      ],
+      "locator": "pp20-21/PDF25-26",
+      "quantity": "Reversal and apparent anchors",
+      "formula": "reversal if (alpha-alpha_in):n<0; previous<-oldinitial; initial<-currentalpha; Crev branch uses previous-distance<=0 in Eq38",
+      "unit": "1",
+      "status": "available-manual-law",
+      "note": "Apparentanchor uses componentwise running min/max and loading sign, clipped at zero percomponent. Equality differs between prose20 and Eq38."
+    },
+    {
+      "equations": [
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "locator": "pp21-23/PDF26-28; Table2.1p40",
+      "quantity": "Elasticity",
+      "formula": "deel=ds/(2G); devel=dp/K; G=Go*pA*sqrt(p/pA)*CSR; CSR=min(1,(1-CSRo*(M/Mb)^mSR)/CSR_initial_numerator); K=2*(1+nu)*G/(3*(1-2nu))",
+      "unit": "G,K Pa; CSR1",
+      "status": "available-manual-law",
+      "note": "CSRinitial numerator frozen at preparation; CSRo=.5,mSR=4 tabledefaults, not universal arbitraryparams. FinalG includes Eq86fabric degradation."
+    },
+    {
+      "equations": [
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "locator": "p23/PDF28, p24/PDF29",
+      "quantity": "Plastic flow",
+      "formula": "devpl=pos(L)*D; depl=pos(L)*n; R=n+(D/3)*I2; D=devpl/depl_magnitude=devpl/(dgammapl/sqrt(2))",
+      "unit": "strain1; R sym2,1",
+      "status": "available-manual-law",
+      "note": "Displayed R is inplane, trace2(R)=2D/3; do not derive devpl by tracing only2x2R without reconciling."
+    },
+    {
+      "equations": [
+        31,
+        32
+      ],
+      "locator": "p24/PDF29; Table2.1p45",
+      "quantity": "Loading and stress increment",
+      "formula": "L=(2G*n:de-K*dev*n:r)/(Kp+2G-K*D*n:r); dsigma=2G*de+K*dev*I2-pos(L)*(2G*n+K*D*I2)",
+      "unit": "L1, stressPa",
+      "status": "available-manual-law",
+      "note": "Denominator canvanish; L scaling linear for positive pathscaling only. Table uses positivepart; no implicit complementarity implementation claimed."
+    },
+    {
+      "equations": [
+        33,
+        34,
+        35
+      ],
+      "locator": "p24/PDF29",
+      "quantity": "Hardening consistency",
+      "formula": "dalpha=pos(L)*(2/3)*h*(alpha_b-alpha); Kp=(2/3)*p*h*(alpha_b-alpha):n; h=3*Kp/(2*p*(alpha_b-alpha):n)",
+      "unit": "alpha1; KpPa",
+      "status": "available-manual-law",
+      "note": "Sourceintroduces viaDM04 consistency; exact relation retained, divisionundefined at boundingdistancezero."
+    },
+    {
+      "equations": [
+        36
+      ],
+      "locator": "p25/PDF30",
+      "quantity": "DM04 plasticmodulus comparator",
+      "formula": "DM04 G/voidratio/h0/Ch relation, notselected",
+      "unit": "Pa",
+      "status": "predecessor-not-selected",
+      "note": ""
+    },
+    {
+      "equations": [
+        37,
+        38
+      ],
+      "locator": "p25/PDF30",
+      "quantity": "Base plasticmodulus",
+      "formula": "Kp=G*h0*sqrt(db)/(expm1(dapp)+Cgamma1)*Crev; Crev=dapp/dtrue if dprev<=0 else1; Cgamma1=h0/200; Kp=0 if db<0",
+      "unit": "Pa",
+      "status": "available-manual-law",
+      "note": "db=(alpha_b-alpha):n; dapp=(alpha-alpha_inapp):n; dtrue=(alpha-alpha_intrue):n; dprev=(alpha-alpha_inP):n. FinalEq60supersedes. InitialCrev0/0 requires source resolution."
+    },
+    {
+      "equations": [
+        39
+      ],
+      "locator": "p26/PDF31",
+      "quantity": "Base dilation",
+      "formula": "D=Ado*(alpha_d-alpha):n",
+      "unit": "1",
+      "status": "available-manual-law",
+      "note": "Superseded fabric/rotation branches69-77."
+    },
+    {
+      "equations": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "locator": "pp26-28/PDF31-33",
+      "quantity": "Bolton calibration derivation",
+      "formula": "phi_pk-phi_cv=-.8*psi; psi=atan(devpl/dgammapl); smallangle difference=-.8*D/sqrt(2); Ado=(asin(Mb/2)-asin(M/2))/(.4*(Mb-Md)); alternate sine Taylor cubic approximation Eq47-49",
+      "unit": "anglesrad; Ado1",
+      "status": "calibration-not-extra-state",
+      "note": "Eq40-43 visually checked on vendor p26/PDF31; Eq45 on p27/PDF32. Remaining Eq44/46-49 intermediate calibration factors require a separate full transcription before execution. Startup uses exact asin; critical-state 0/0 and Mb/2 arcsine domain retained."
+    },
+    {
+      "equations": [
+        50
+      ],
+      "locator": "p28/PDF33",
+      "quantity": "DM04 contraction comparator",
+      "formula": "D=Ado*(alpha_d-alpha):n",
+      "unit": "1",
+      "status": "predecessor-not-selected",
+      "note": ""
+    },
+    {
+      "equations": [
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "locator": "pp28-29/PDF33-34",
+      "quantity": "Base contraction",
+      "formula": "D=(Ado/hp)*(dapp+Cin)^2*dd/(dd+CD); hp=hpo*exp(-.7+7*(.5-xiR)^2) if xiR<=.5 else hpo*exp(-.7); D<=1.5*Ado*dd/(dd+CD)",
+      "unit": "1",
+      "status": "available-manual-law",
+      "note": "dd=(alpha_d-alpha):n; finalcontraction79-85supersedes."
+    },
+    {
+      "equations": [
+        56
+      ],
+      "locator": "p30/PDF35",
+      "quantity": "DM04 fabric comparator",
+      "formula": "dz=-cz*pos(-devpl)*(zmax*n+z)",
+      "unit": "sym2,1",
+      "status": "predecessor-not-selected",
+      "note": ""
+    },
+    {
+      "equations": [
+        57,
+        58,
+        59
+      ],
+      "locator": "p30/PDF35; Table2.1p45; Table3.1p66",
+      "quantity": "Fabric",
+      "formula": "if dd<0: dz=-cz/(1+pos(zcum/(2*zmax)-1))*pos(-devpl)/D*(zmax*n+z); dzcum=norm(dz); zpeak=max(oldzpeak,sqrt(z:z/2))",
+      "unit": "sym2/scalar1",
+      "status": "available-with-conflicts",
+      "note": "Body57 signedD versusTable3.1step14uses devpl/D notpos(-devpl)/D. dzcum normnormalization/algorithm conditional must be reconciled."
+    },
+    {
+      "equations": [
+        60,
+        61,
+        62,
+        63,
+        64
+      ],
+      "locator": "pp31-32/PDF36-37; Table2.1pp41-42",
+      "quantity": "Fabric plasticmodulus",
+      "formula": "Kp=Kpbase*CKalpha/[1+CKp*(zpeak/zmax)*pos(db)*sqrt(1-Czpk2)]; CKalpha=1+CKaf/(1+(2.5*pos(dtrue))^2)*Cpzp2*Czpk1; Czpk1=zpeak/(zcum+zmax/5); Czpk2=zpeak/(zcum+zmax/100); Cpzp2=-pos(-(pzp-p))/(-pos(-(pzp-p))+pmin)",
+      "unit": "Pa; factors1",
+      "status": "available-with-conflicts",
+      "note": "CKp=2 table. LiteralCpzp2 has pole at p=pzp+pmin and behavioropposite adjacent prose with positivebodypressure. No sign repair."
+    },
+    {
+      "equations": [
+        65,
+        66,
+        67,
+        68
+      ],
+      "locator": "p33/PDF38; Table2.1p42",
+      "quantity": "Rotated dilatancy",
+      "formula": "MdR=Md/Crot1; Crot1=max(1,1+2*pos(-z:n)/(sqrt(2)*zmax)*(1-Czin1)); Czin1=pos(1-exp(-2*abs((zin-z):n)/zmax)); alpha_dR=(MdR-m)*n/sqrt(2)",
+      "unit": "1,sym2",
+      "status": "available-manual-law",
+      "note": ""
+    },
+    {
+      "equations": [
+        69,
+        70,
+        71,
+        72
+      ],
+      "locator": "p34/PDF39; Table2.1pp42-43",
+      "quantity": "Fabric dilation",
+      "formula": "Drot=Ad*pos(-z:n)/(sqrt(2)*zmax)*((alpha_dR-alpha):n)/CDR; Dnonrot=-Ad*pos(-dd); if Dnonrot<Drot useDnonrot else Dnonrot+(Drot-Dnonrot)*pos(Mb-Mcur)/pos(Mb-Mcur+.01); Ad=Ado*Czin2/[1+(zcum^2/zmax)*(1-pos(-z:n)/(sqrt(2)*zpeak))^3*Ce^2*Cpzp*Cpmin*Czin1]",
+      "unit": "1",
+      "status": "available-with-conflicts",
+      "note": "Table2.1p42Dnonrot lacks negativepartguard printedbody70. Exactzero denominator remains possible in interpolation."
+    },
+    {
+      "equations": [
+        73,
+        74,
+        75,
+        76,
+        77
+      ],
+      "locator": "pp35-36/PDF40-41; Table2.1p43",
+      "quantity": "Dilation factors",
+      "formula": "Cpzp=1/[1+(2.5*p/pzp)^5]; Cpmin=1/[1+(pmin2/p)^2]; Czin1 repeated67; t=(zcum-zpeak)/(3*zmax); Czin2=(1+Czin1*t)/(1+3*Czin1*t); lowpminimumdilation=-3.5*Ado*pos(Mb-Md)*(2*pmin-p)/pmin forpmin<=p<=2pmin",
+      "unit": "1",
+      "status": "available-with-conflicts",
+      "note": "Summaryp43uses pmin notpmin2; lowp expressionis magnitudeconstraint, not automatic unconditionaloverride."
+    },
+    {
+      "equations": [
+        78
+      ],
+      "locator": "p36/PDF41",
+      "quantity": "DM04 fabriccontraction comparator",
+      "formula": "D=Ad*dd*(1+pos(z:n))",
+      "unit": "1",
+      "status": "predecessor-not-selected",
+      "note": ""
+    },
+    {
+      "equations": [
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85
+      ],
+      "locator": "p36/PDF41; Table2.1p44",
+      "quantity": "Fabric contraction",
+      "formula": "D=Adc*(dapp+Cin)^2*dd/(dd+CD)*Cpmin2; Adc=Ado*(1+pos(z:n))/(hp*Cdz); CD=.1; Cin=2*pos(z:n)/(sqrt(2)*zmax); Cdz=max(1/(1+zmax/2),(1-Crot2*sqrt(2)*zpeak/zmax)*zmax/(zmax+Crot2*zcum)); Crot2=1-Czpk2; Cpmin2=0 if p<=2pmin,1 if p>=18pmin,else(p-2pmin)/(16pmin)",
+      "unit": "1",
+      "status": "available-manual-law",
+      "note": "ApplycontractioncapEq55; Cdz floor sourceexplicit. Do not import PM4Silt2..8pmin schedule."
+    },
+    {
+      "equations": [
+        86
+      ],
+      "locator": "p37/PDF42; Table2.1p40",
+      "quantity": "Final elasticity",
+      "formula": "G=Go*pA*sqrt(p/pA)*CSR*(1+zcum/zmax)/(1+CGD*zcum/zmax); K=2*(1+nu)*G/(3*(1-2nu))",
+      "unit": "Pa",
+      "status": "available-manual-law",
+      "note": ""
+    },
+    {
+      "equations": [
+        87,
+        88,
+        89,
+        90,
+        91,
+        92
+      ],
+      "locator": "pp38-39/PDF43-44; Table2.1p45",
+      "quantity": "User postshaking mode",
+      "formula": "Gpost=Fsed*G; Kpost=Fsed*K; Fsed=min(1,Fsedmin+(1-Fsedmin)*(pprime/(20*psedprime))^2); psedprime=psed0prime*zcum/(zcum+zmax)/pos(1-Mcur/Md)^.25; Fsedmin=.04; psed0prime=-pA/5",
+      "unit": "moduli/pressurePa; F1",
+      "status": "available-with-conflicts",
+      "note": "Summaryp45omits square. psedprime0 atzerofabric; denominator0 whenMcur>=Md; do not eagerlyevaluateinactivePostShake. SignedFLACpprimeversusbodypositivep requires adapter."
+    },
+    {
+      "equations": [
+        93
+      ],
+      "locator": "p59/PDF64",
+      "quantity": "Host explicit step",
+      "formula": "sigma(i+1)=sigma(i)+C:dstrain(dt)",
+      "unit": "Pa",
+      "status": "host-update",
+      "note": "dtchangesloadingincrements/globaldynamics, not evidencephysicalviscosity. D,Kp computedzone-end fornextcallerstep."
+    }
+  ],
+  "calibration_appendix_scope": "Chapter4Eq94-101 are estimation/calibration correlations, notadditional evolutionlaws; parameter ledgerpins Table4.1/4.2. NofullChapter4transcriptionclaim."
+}

@@ -1,0 +1,115 @@
+{
+  "version": "barodesy-sand-2015-algebra-v1",
+  "parameters": {
+    "c1": -1.0246,
+    "c2": 1.0,
+    "c3": -2.3,
+    "c4": 465.0,
+    "c5": 28.0,
+    "ec0": 0.87,
+    "emin": 0.35
+  },
+  "parameter_provenance": "2019 manuscript Table1 illustrative kPa values; not asserted exact2015 calibration",
+  "definitions": {
+    "csl": "2015 Eqs26,27; derivative reciprocal Eq25",
+    "diagonal_rate": "2015 Eqs9,20,23,26,27,29\u201331, source tension-positive convention",
+    "matrix_witness": "expm([[0,x,0],[x,0,0],[0,0,0]])=[[cosh(x),sinh(x),0],[sinh(x),cosh(x),0],[0,0,1]]",
+    "origin_witness": "difference of two fixed-norm stress-direction limits, fixed unit loading speed"
+  },
+  "csl": [
+    {
+      "sigma_kPa": 0.0,
+      "ec": 0.87,
+      "dec_dsigma_per_kPa": -0.0020911827956989247
+    },
+    {
+      "sigma_kPa": 1.0,
+      "ec": 0.8679744151839984,
+      "dec_dsigma_per_kPa": -0.0019626023433744486
+    },
+    {
+      "sigma_kPa": 100.0,
+      "ec": 0.8075548918075747,
+      "dec_dsigma_per_kPa": -0.00025330952004816757
+    },
+    {
+      "sigma_kPa": 1000.0,
+      "ec": 0.7487936224644614,
+      "dec_dsigma_per_kPa": -2.4500535522408227e-05
+    },
+    {
+      "sigma_kPa": 1000000000000.0,
+      "ec": 0.47384477942115993,
+      "dec_dsigma_per_kPa": -6.518856485907516e-15
+    }
+  ],
+  "diagonal_input": {
+    "stress_kPa": [
+      -120.0,
+      -80.0,
+      -60.0
+    ],
+    "e": 0.75,
+    "stretch": [
+      -0.002,
+      0.0003,
+      0.0004
+    ]
+  },
+  "diagonal_output": {
+    "stress_rate": [
+      -15.837151530130667,
+      -4.571022897124033,
+      -9.384450534372062
+    ],
+    "void_rate": -0.002275
+  },
+  "matrix_exponential_witness": {
+    "x": 0.4,
+    "matrix": [
+      [
+        1.0810723718384547,
+        0.4107523258028155,
+        0.0
+      ],
+      [
+        0.4107523258028155,
+        1.0810723718384547,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "componentwise_entry00": 1.0,
+    "componentwise_entry01": 1.4918246976412703
+  },
+  "stress_origin_witness": {
+    "directions": [
+      [
+        -0.5773502691896258,
+        -0.5773502691896258,
+        -0.5773502691896258
+      ],
+      [
+        -0.8164965809277261,
+        -0.4082482904638631,
+        -0.4082482904638631
+      ]
+    ],
+    "limiting_rate_difference": [
+      -479.56308825730923,
+      339.10231171350614,
+      339.10231171350614
+    ],
+    "difference_norm": 678.2046234270123
+  },
+  "limitations": [
+    "not a generic tensor exponential",
+    "no finite-path integration",
+    "no canonical zero-stress or zero-loading branch",
+    "no derivative/experimental/native/Wasm admission"
+  ]
+}

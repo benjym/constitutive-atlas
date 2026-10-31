@@ -1,0 +1,264 @@
+{
+  "version": "clay2005-equation-contract-0.1",
+  "executable_schema_instance": false,
+  "scope": "Original five-parameter base, no IGS/structure/anisotropy",
+  "source_ids": [
+    "main2005",
+    "som2005"
+  ],
+  "parameter_order": [
+    "phi_c",
+    "lambda_star",
+    "kappa_star",
+    "N",
+    "r"
+  ],
+  "parameters": {
+    "phi_c": {
+      "unit": "rad",
+      "source": "main Eq77; TableI degrees"
+    },
+    "lambda_star": {
+      "unit": "1",
+      "meaning": "NCL log(1+e)-log(p) slope"
+    },
+    "kappa_star": {
+      "unit": "1",
+      "meaning": "initial isotropic unloading slope at NCL, not globally constant unloading slope"
+    },
+    "N": {
+      "unit": "1",
+      "reference_pressure_Pa": 1000
+    },
+    "r": {
+      "unit": "1",
+      "meaning": "Ki/Gi at isotropic NCL start; not nu"
+    }
+  },
+  "state_order": [
+    "sigma_xx",
+    "sigma_yy",
+    "sigma_zz",
+    "sqrt2_sigma_xy",
+    "sqrt2_sigma_yz",
+    "sqrt2_sigma_xz",
+    "e"
+  ],
+  "state_units": [
+    "Pa",
+    "Pa",
+    "Pa",
+    "Pa",
+    "Pa",
+    "Pa",
+    "1"
+  ],
+  "loading_order": [
+    "E_xx",
+    "E_yy",
+    "E_zz",
+    "sqrt2_E_xy",
+    "sqrt2_E_yz",
+    "sqrt2_E_xz"
+  ],
+  "convention": {
+    "sigma": "-T source; compression positive, effective",
+    "E": "-D source; compression positive symmetric stretching",
+    "rate": "Jaumann; bounded initial research proposal zero spin",
+    "m": "retain printed source m, negative spherical at isotropy"
+  },
+  "definitions": [
+    {
+      "name": "p",
+      "expression": "trace(sigma)/3",
+      "source": "main p8"
+    },
+    {
+      "name": "H",
+      "expression": "sigma/trace(sigma)",
+      "source": "main Eq76"
+    },
+    {
+      "name": "Hdev",
+      "expression": "H-I/3",
+      "source": "main Eq76; stable projection requires explicit numeric policy"
+    },
+    {
+      "name": "a",
+      "expression": "sqrt(3)*(3-sin(phi_c))/(2*sqrt(2)*sin(phi_c))",
+      "source": "main Eq77"
+    },
+    {
+      "name": "Q",
+      "expression": "3+a*a",
+      "source": "derived notation"
+    },
+    {
+      "name": "alpha",
+      "expression": "log(((lambda_star-kappa_star)/(lambda_star+kappa_star))*Q/(a*sqrt(3)))/log(2)",
+      "source": "main Eq84"
+    },
+    {
+      "name": "c1",
+      "expression": "2*(Q-2**alpha*a*sqrt(3))/(9*r)",
+      "source": "main Eq85"
+    },
+    {
+      "name": "c2",
+      "expression": "1+(1-c1)*3/(a*a)",
+      "source": "main Eq85"
+    },
+    {
+      "name": "L(X)",
+      "expression": "3*(c1*X+c2*a*a*H*(H:X))",
+      "source": "main Eq75"
+    },
+    {
+      "name": "I1,I2,I3",
+      "expression": "trace(T), (T:T-trace(T)**2)/2, det(T), with T=-sigma",
+      "source": "main Eq79"
+    },
+    {
+      "name": "Yi",
+      "expression": "sqrt(3)*a/Q",
+      "source": "main Eq20"
+    },
+    {
+      "name": "Y",
+      "expression": "(Yi-1)*(I1*I2+9*I3)*(1-sin(phi_c)**2)/(8*I3*sin(phi_c)**2)+Yi",
+      "source": "main Eq78"
+    },
+    {
+      "name": "tanpsi",
+      "expression": "sqrt(3)*norm(Hdev)",
+      "source": "main Eq82"
+    },
+    {
+      "name": "cos3theta",
+      "expression": "-sqrt(6)*trace(Hdev*Hdev*Hdev)/(Hdev:Hdev)**1.5",
+      "source": "main Eq82; multiplication here is matrix multiplication"
+    },
+    {
+      "name": "F",
+      "expression": "sqrt(tanpsi**2/8+(2-tanpsi**2)/(2+sqrt(2)*tanpsi*cos3theta))-tanpsi/(2*sqrt(2))",
+      "source": "main Eq81"
+    },
+    {
+      "name": "m",
+      "expression": "-a/F*(H+Hdev-(H/3)*(6*(H:H)-1)/((F/a)**2+(H:H)))",
+      "source": "main Eq80"
+    },
+    {
+      "name": "m_unit",
+      "expression": "m/norm(m)",
+      "source": "main Eq74"
+    },
+    {
+      "name": "pe,pcr",
+      "expression": "pe=1000*exp((N-log1p(e))/lambda_star); pcr=pe/2",
+      "source": "main Eq34; companion Eq21"
+    },
+    {
+      "name": "fd",
+      "expression": "(2*p/pe)**alpha",
+      "source": "main Eq83; companion Eq35"
+    },
+    {
+      "name": "fs",
+      "expression": "3*p/(lambda_star*(Q-2**alpha*a*sqrt(3)))",
+      "source": "main Eq83"
+    },
+    {
+      "name": "sigma_rate",
+      "expression": "fs*(L(E)+fd*Y*L(m_unit)*norm(E))",
+      "source": "main Eqs73-74 after sigma=-T,E=-D"
+    },
+    {
+      "name": "e_rate",
+      "expression": "-(1+e)*trace(E)",
+      "source": "companion Eq25"
+    }
+  ],
+  "branches": [
+    {
+      "condition": "exact isotropic sigma",
+      "limit": "F=1; m=-a/Q*I; m_unit=-I/sqrt(3); Y=Yi",
+      "status": "derived from printed equations; do not evaluate raw0/0 Lode"
+    },
+    {
+      "condition": "E=0 and zero spin",
+      "limit": "all7rates zero",
+      "status": "derived; derivative in E not generally unique"
+    },
+    {
+      "condition": "near isotropy",
+      "limit": null,
+      "status": "roundoff/domain handling needs separate reviewed policy"
+    }
+  ],
+  "initialization": {
+    "required": [
+      "explicit sigma0 Mandel6",
+      "explicit e0",
+      "all5materialparameters"
+    ],
+    "optional_ncl": "e0=expm1(N-lambda_star*log(p0/1000))",
+    "no_hidden_history": [
+      "pc",
+      "OCR",
+      "sensitivity",
+      "substep_hint",
+      "evaluation_count"
+    ],
+    "forbidden_inference": "SOM is not exact SBS; do not force allinitialstates onto/inside SOM"
+  },
+  "support_proposal": {
+    "status": "project restrictions, not full source domain proof",
+    "conditions": [
+      "finite numeric inputs; reject bools as numbers",
+      "0<phi_c<pi/2",
+      "0<kappa_star<lambda_star",
+      "r>0",
+      "alpha>0",
+      "sigma strictly SPD",
+      "e>=0; reject outward crossings",
+      "fs,fd,F,norm(m) positive finite",
+      "allrawdenominators nonzero and derivedquantities representable",
+      "c1>0 and c1+c2*a*a*(H:H)>0"
+    ],
+    "no_clipping": true,
+    "no_unconditional_MN_return": true,
+    "optional_SOM_diagnostic": "A inverse separately guarded; singularA doesnotbyitself invalidatethebaseratelaw"
+  },
+  "temporal_contract": {
+    "independent_variable": "dimensionless ordered strain-path coordinate, no physical frequency required",
+    "stage_order": "recompute all stress/density-dependent quantities from same7state stage",
+    "commit": "atomic7state; failedtrialreturns exactinitial7state",
+    "rollback": "alltrialstages, density and numericalhints isolated",
+    "hold": "zero E giveszero rate under zero spin",
+    "reversal": "newdirection only; noreset/event/loadingflag",
+    "tangent": "directional/nonunique atzero; finiteincrementconsistenttangent separately required",
+    "source_transaction_semantics": "unspecified in article; proposed Atlas API policy"
+  },
+  "operations": [
+    "symmetric tensor/identity",
+    "trace",
+    "Frobenius norm/contraction",
+    "dyadic fourth-order action",
+    "3x3 determinant and cubic trace",
+    "log/log1p/exp/pow/sqrt",
+    "checked division/domain",
+    "exact spherical branch",
+    "coupled state rates",
+    "optional independent6x6 linear solve forSOM"
+  ],
+  "remaining_gates": [
+    "publisherEq38 reconciliation",
+    "independent nonisotropic Cartesian rateoracle",
+    "near-isotropic stability and numericaldomain policy",
+    "reviewed nonadmitted Atlasdefinition",
+    "objective rotation beyond zero spin",
+    "objective rotation beyondzeros pin",
+    "experimentalvalidation; no admission implied"
+  ]
+}

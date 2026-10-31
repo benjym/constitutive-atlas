@@ -1,0 +1,180 @@
+{
+  "schema_version": "0.1",
+  "kind": "bounded-independent-algebra-witnesses",
+  "model": "PM4Sand2D3.3",
+  "groups": 11,
+  "all_passed": true,
+  "scope": "Scalar/tensor algebra only; no production DSL, host, compiled model or author implementation evaluated.",
+  "checks": [
+    {
+      "id": "2D-shear-norm",
+      "locator": "Eqs1-8/15 pp16-19",
+      "inputs": {
+        "xx": 3.0,
+        "yy": -2.0,
+        "xy": 4.0
+      },
+      "outputs": {
+        "matrix_norm": 6.708203932499369,
+        "mandel_norm": 6.708203932499369
+      },
+      "interpretation": "Mandel2 needs sqrt(2) shear. This does not establish an Atlas6 embedding."
+    },
+    {
+      "id": "2D-vs-3D",
+      "locator": "Eqs1-8 pp16-17",
+      "inputs": {
+        "sigma": [
+          100.0,
+          60.0,
+          0.0
+        ],
+        "ev": 0.03
+      },
+      "outputs": {
+        "p2": 80.0,
+        "p3_if_zero_zz": 53.333333333333336,
+        "trace2_displayed_e": 0.009999999999999998
+      },
+      "interpretation": "Zero-zz 3D stress mean and trace-free2 strain are different laws."
+    },
+    {
+      "id": "frozen-CSR",
+      "locator": "Eq24 p22",
+      "inputs": {
+        "M": 1.0,
+        "Mb": 1.2,
+        "CSR0": 0.5,
+        "mSR": 4.0
+      },
+      "outputs": {
+        "initial_numerator": 0.7588734567901234,
+        "CSR_initial": 1.0
+      },
+      "interpretation": "Freeze the denominator at preparation; recomputing it every step destroys CSR evolution."
+    },
+    {
+      "id": "dense-critical-limit",
+      "locator": "Eq45 p27; Table3.2 step3",
+      "inputs": {
+        "phi_degrees": 33,
+        "nb": 0.5,
+        "nd": 0.1,
+        "xi": [
+          -0.001,
+          -0.0001,
+          -1e-05
+        ]
+      },
+      "outputs": {
+        "samples": [
+          1.2422382355827877,
+          1.2420644029719832,
+          1.2420470272891608
+        ],
+        "analytical_dense_limit": 1.242045096704112,
+        "loose_default": 1.24
+      },
+      "interpretation": "Eq45 is 0/0 at exact xi=0; dense limit does not choose startup equality or loose branch."
+    },
+    {
+      "id": "low-pressure-scale-conflict",
+      "locator": "Eq74 p35 vs Table2.1 p43",
+      "inputs": {
+        "p": 5000.0,
+        "pmin": 500.0,
+        "pmin2": 5000.0
+      },
+      "outputs": {
+        "body": 0.5,
+        "summary": 0.9900990099009901
+      },
+      "interpretation": "Distinct printed scales give distinct dilation factors; no variant selected."
+    },
+    {
+      "id": "postshake-square-conflict",
+      "locator": "Eq89 p38 vs Table2.1 p45",
+      "inputs": {
+        "pressure_ratio": 0.5,
+        "Fmin": 0.04
+      },
+      "outputs": {
+        "body": 0.27999999999999997,
+        "summary": 0.52
+      },
+      "interpretation": "Square versus linear is consequential even away from zero denominators."
+    },
+    {
+      "id": "fabric-sign-conflict",
+      "locator": "Eq57 p30 vs Table3.1 step14 p66",
+      "inputs": {
+        "D": -0.2,
+        "devpl": -0.002,
+        "cz": 1.0,
+        "zcum": 0.0,
+        "zmax": 1.0
+      },
+      "outputs": {
+        "body_multiplier": 0.01,
+        "table_multiplier": -0.01
+      },
+      "interpretation": "Coefficients of (zmax*n+z) have opposite signs on this negative-D loading. Not a complete admissible material state."
+    },
+    {
+      "id": "pressure-factor-pole",
+      "locator": "Eq64 p32",
+      "inputs": {
+        "pzp": 100.0,
+        "pmin": 1.0
+      },
+      "outputs": {
+        "f_at_99": -0.0,
+        "f_at_100_5": -1.0,
+        "pole_at_p": 101.0
+      },
+      "interpretation": "Literal positive-pressure expression is not a bounded interpolation; sign adapter unresolved."
+    },
+    {
+      "id": "initial-reversal-domain",
+      "locator": "Eq20 p21/Eq38 p25; Table3.2 step5",
+      "inputs": {
+        "dapp": 0.0,
+        "dtrue": 0.0,
+        "dprev": 0.0
+      },
+      "outputs": {
+        "Eq38_enters_division": true,
+        "division_defined": false,
+        "strict_negative_branch": false
+      },
+      "interpretation": "Coincident initial anchors do not define the selected zero-over-zero limit."
+    },
+    {
+      "id": "default-parameter-boundaries",
+      "locator": "p35; pp60-61; Table4.2 pp77-78",
+      "inputs": {
+        "pA": 101300.0,
+        "DR_initial": 0.15
+      },
+      "outputs": {
+        "pA_over_200": 506.5,
+        "nominal_floor_Pa": 500.0,
+        "CDR": 0.0
+      },
+      "interpretation": "A nominal floor is distinct from exact atmosphere scaling; printed CDR rule lacks a positive lower bound."
+    },
+    {
+      "id": "caller-lag-partition",
+      "locator": "Sec3.2 p59; Table3.1 steps6/12",
+      "inputs": {
+        "initial_D": 0.0,
+        "total_load": 1.0
+      },
+      "outputs": {
+        "one_caller": 1.0,
+        "two_callers": 0.75
+      },
+      "interpretation": "Synthetic example shows why changing caller refresh frequency changes a lagged law; not a source-model numerical prediction."
+    }
+  ]
+}
