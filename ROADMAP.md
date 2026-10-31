@@ -510,3 +510,7 @@ This is progress toward M5/M6 software availability. It does not complete M2's n
 ### 2026-10-31: determinant repair reaches complete-law verification
 
 The [whole-rate candidate](catalogue/investigations/clay2005-determinant-rates-v1/RESULTS.md) passes retained109case gates and native/Wasm parity, but fails two of eleven new actual-input source-accuracy cases. This negative result closes the scoped primitive-to-model experiment, not material admission. Independent normalization analysis shows that rounded normalized tensor components lose geometry before determinant evaluation. The implementation board now separately tracks a generic homogeneous determinant ratio on original stored tensor inputs, with independent primal/AD/range references and a subsequent unchanged-budget whole-law study. No model-specific kernel or source-domain restriction is the remedy.
+
+### 2026-10-31: homogeneous determinant arithmetic core verified
+
+The [generic exact ratio core](catalogue/investigations/normalized-determinant-v1/RESULTS.md) now passes155calls/backend,38directional derivative columns and55recovery pairs against independently certified exact-input references. This addresses the arithmetic capability identified by the retained normalization failure. The board keeps DSL/history expression integration and the source-preserving120case clay2005 rate study as separate next gates; no complete-law accuracy or scientific admission is inferred from primitive agreement.
