@@ -1,0 +1,20 @@
+{
+ "identity":"reproducible-cyclic-controls-source-reference-v1",
+ "status":"prospective source-only design; production not implemented",
+ "integer_domain":{"steps_min":1,"steps_max":5000,"cycles_min":0,"cycles_max":100,"index_min":0,"index_max":"steps"},
+ "production_run_validation":"Existing steps>=16*cycles cyclic validation and laboratory target limits remain; helper fixtures can exercise integer combinations outside run admission.",
+ "phase":"(cycles*index)%steps exact integer",
+ "reduction":"quadrant,rem=divmod(4*phase,steps); j=rem for evenquadrant else steps-rem",
+ "pi_over_2_hex":"0x1.921fb54442d18p+0",
+ "rounding":"Each indicated arithmetic operation individually binary64 roundTiesToEven, gradual underflow, noFMA/reassociation/excess precision across operation boundaries.",
+ "operations":["j==0:wave+0","j==steps:wave+1 or-1","ratio=RN(double(j)/double(steps))","x=RN(pi2*ratio)","z=RN(x*x)","term=x;sum=x","for n1..11:term=RN(RN(-term*z)/double(2*n*(2*n+1)));sum=RN(sum+term)","wave=sum with exact quadrant sign","if amplitude==0 orwave==0:control+0 else control=RN(amplitude*wave)"],
+ "signed_zero":"Exact phasezeros and zeroamplitudes canonical+0; nonzero product underflow keeps IEEEproductsign.",
+ "wave_absolute_error_bound":"128*2^-53",
+ "control_absolute_error_bound":"130*2^-53*abs(amplitude)+2^-1074",
+ "mathematical_target":"exact stored amplitude times sin(2*pi*cycles*index/steps)",
+ "reference_precisions":[140,180],
+ "precision_agreement_absolute_normalized":"1e-110 with scale max(1,abs(values))",
+ "backend_gates":"Future supported native/Wasm exact bitidentity to rational-oracle output, same controls+delta bits, unmodified old failed studies preserved, independent error bound and future full model/path/default/browser regressions frozen before observations.",
+ "candidate_calls":0,
+ "compiled_calls":0
+}

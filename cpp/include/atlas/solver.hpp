@@ -143,16 +143,16 @@ inline bool controlled_step(int model,const State&zn,const State&p,int protocol,
     }
     (void)current_axial;return false;
 }
-inline Run run_protocol(int model,const State&initial,const State&p,int protocol,double target,int steps,int cycles,const IntegrationSettings&settings={}){
+inline Run run_protocol_impl(int model,const State&initial,const State&p,int protocol,double target,int steps,int cycles,const IntegrationSettings&settings,const State*controls){
     Run run;run.settings=settings;if(!valid_settings(settings)||model<0||model>=int(models().size())||protocol<0||protocol>4||steps<1||steps>5000||cycles<0||cycles>100||!std::isfinite(target)||!valid_parameters(model,p)||initial.size()!=initial_state(model).size()||!domain(model,initial,p)){
         run.message="invalid run specification";return run;}
     if(std::abs(initial[1]-initial[2])>1e-6||std::abs(initial[3])+std::abs(initial[4])+std::abs(initial[5])>1e-12){run.message="laboratory protocols require axisymmetric initial stress";return run;}
     if(cycles&&steps<16*cycles){run.message="cyclic loading requires at least 16 increments per cycle";return run;}
     if((protocol==3&&std::abs(target)>1e8)||(protocol!=3&&std::abs(target)>.1)){run.message="control amplitude exceeds laboratory limit";return run;}
-    Point committed;committed.state=initial;run.points.push_back(committed);
+    Point committed;committed.control=controls?controls->front():0.;committed.state=initial;run.points.push_back(committed);
     double lateral=.5*(initial[1]+initial[2]);
     for(int i=1;i<=steps;++i){
-        double control=cycles?target*std::sin(2*3.141592653589793*cycles*i/steps):target*i/steps;
+        double control=controls?(*controls)[i]:(cycles?target*std::sin(2*3.141592653589793*cycles*i/steps):target*i/steps);
         auto previous=run.points.back();Sym<double> de;Advance result;
         if(!controlled_step(model,previous.state,p,protocol,control-previous.control,lateral,previous.strain.v[0],de,result,settings)){
             run.message="control or constitutive solve failed at step "+std::to_string(i)+"; last committed point retained";return run;}
@@ -162,4 +162,26 @@ inline Run run_protocol(int model,const State&initial,const State&p,int protocol
     }
     run.ok=true;return run;
 }
+
+// Legacy producers retain their original arithmetic and endpoint semantics.
+inline Run run_protocol(int model,const State&initial,const State&p,int protocol,double target,int steps,int cycles,const IntegrationSettings&settings={}){
+    return run_protocol_impl(model,initial,p,protocol,target,steps,cycles,settings,nullptr);
+}
+// laboratory-controls-0.1: cumulative change relative to the initial point.
+// Protocol 3 specifies deviator stress change (Pa); all others specify strain.
+// The original controller consumes differences of consecutive caller values.
+// No interpolation, resampling, waveform generation or endpoint snapping.
+inline Run run_protocol_controls(int model,const State&initial,const State&p,int protocol,const State&controls,const IntegrationSettings&settings={}){
+    Run invalid;invalid.settings=settings;
+    if(controls.size()<2||controls.size()>5001||controls.front()!=0){
+        invalid.message="explicit controls require 2..5001 points beginning at zero";return invalid;
+    }
+    double amplitude=0;
+    for(double control:controls){
+        if(!std::isfinite(control)){invalid.message="explicit controls must be finite";return invalid;}
+        amplitude=std::max(amplitude,std::abs(control));
+    }
+    return run_protocol_impl(model,initial,p,protocol,amplitude,int(controls.size())-1,0,settings,&controls);
+}
+
 }

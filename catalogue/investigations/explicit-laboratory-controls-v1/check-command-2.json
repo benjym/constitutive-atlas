@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_laboratory_controls.py",
+    "-v"
+  ],
+  "ATLAS_SOLVER": "/private/tmp/atlas-explicit-controls-native-v1/atlas_solver",
+  "started_utc": "2026-10-31T11:53:30.430618+00:00",
+  "finished_utc": "2026-10-31T11:53:30.874785+00:00",
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "test_failure_retains_committed_prefix (test_laboratory_controls.ExplicitLaboratoryControls.test_failure_retains_committed_prefix) ... ok\ntest_five_protocols_against_isotropic_elasticity (test_laboratory_controls.ExplicitLaboratoryControls.test_five_protocols_against_isotropic_elasticity) ... ok\ntest_rejects_malformed_and_nonfinite_whole_files (test_laboratory_controls.ExplicitLaboratoryControls.test_rejects_malformed_and_nonfinite_whole_files) ... ok\ntest_signed_zero_and_subnormal_transport (test_laboratory_controls.ExplicitLaboratoryControls.test_signed_zero_and_subnormal_transport) ... FAIL\n\n======================================================================\nFAIL: test_signed_zero_and_subnormal_transport (test_laboratory_controls.ExplicitLaboratoryControls.test_signed_zero_and_subnormal_transport)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/bmar5496/code/constitutive-atlas/tests/test_laboratory_controls.py\", line 64, in test_signed_zero_and_subnormal_transport\n    self.assertEqual([struct.pack('>d',p['control']).hex() for p in run['points']],expected)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: ['0000000000000000', '0000000000000001', '8000000000000001', '0000000000000000'] != ['8000000000000000', '0000000000000001', '8000000000000001', '0000000000000000']\n\nFirst differing element 0:\n'0000000000000000'\n'8000000000000000'\n\n- ['0000000000000000', '0000000000000001', '8000000000000001', '0000000000000000']\n?   ^\n\n+ ['8000000000000000', '0000000000000001', '8000000000000001', '0000000000000000']\n?   ^\n\n\n----------------------------------------------------------------------\nRan 4 tests in 0.283s\n\nFAILED (failures=1)\n"
+}

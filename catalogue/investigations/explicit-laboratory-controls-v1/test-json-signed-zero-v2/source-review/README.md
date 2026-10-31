@@ -1,0 +1,11 @@
+# Python JSON signed-zero correction review v2
+
+The proposed correction is appropriate. CPython decodes the JSON integer token `-0` through `int`, producing positive zero when later converted to binary64. This test-reader behavior loses information present in the native response; it is not evidence that the C++ explicit-control transport lost the sign.
+
+`json.loads(result.stdout, parse_int=float)` decodes integer-form numeric tokens directly as binary64. In this response, material values originated as binary64, and counts are small bounded integers; the durable tests do not use parsed numeric metadata for indexing. JSON booleans, strings, null, arrays and objects retain their types. Decimal/fraction/exponent tokens already use the default float parser. No implementation, wire contract, request, expected value, tolerance or numeric bound changes.
+
+The corrected test differs from the previously reviewed frozen test by exactly this one reader expression. Its Python AST parses; it has not been imported or run against a solver during this review. The original test SHA remains2f5cb0d433aaae00941e98815a0388c66e005b31492ad4f91083ff42943c419a. Corrected SHA747b7baaba1d204fd523412ab1e4826a1c8389c421116b6b8ee2f3bcb04b330f. Exact copies and pins are in reviewed-source/ and review.json.
+
+Independent pure JSON checks cover nine explicit expected binary64 bit patterns, including signed integer/decimal zero, both minimum subnormals, large exact integer and maximum finite double; original default-parser sign loss and nonnumeric type preservation are also checked. The coordinator's separate JSON witness reproduces12 checks including the single-expression diff. No Atlas imports, compiled calls or builds occurred.
+
+Reproduce the independent pure JSON checks with `python3 check_json.py`. The source-only coordinator witness can be run from its original staged location (its relative parent points to the retained original test). The original four-test failure/log must remain failed and immutable. Freeze this distinct correction before rerunning the four durable checks against the exact same native artifact; no rebuild or numerical-gate relaxation is warranted. No remaining material blocker for this bounded test-reader correction.

@@ -1,0 +1,3 @@
+# Raw signed-zero transport capture
+
+The primary Node assertions pass before recording, but JSON.stringify erases numeric -0 in its structured observation snapshot. Authoritative control bitstrings remain exact. The first saved-evidence verifier incorrectly expected that structured snapshot to retain the numeric sign; its failure is retained. This supplemental diagnostic freezes the same four control values and same binary artifacts, captures the original C/CLI JSON response strings before parsing/re-serialization, and requires exact numeric and authoritative bit equality on both backends. It changes no solver, request semantics, primary numerical gate or old result. The verifier must distinguish structured-snapshot signed-zero loss from raw engine transport.
