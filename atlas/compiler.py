@@ -137,6 +137,10 @@ def generate(destination, model_paths=None):
                    'inline bool explicit_initialization_required(int model) { switch(model) {'+explicit_cases+'default: return false;} }',
                    f'inline const char* catalogue_hash() {{ return "{digest}"; }}',
                    'inline const char* describe_models() { return '+json.dumps(json.dumps(catalogue,separators=(',',':')))+'; }','}']
+    # Existing catalogues retain byte-identical headers until they use the new
+    # operation. Detect emitted calls across every generated context.
+    if any('atlas::determinant_or_mark(' in line for line in lines):
+        lines.insert(2, '#include "atlas/checked_determinant.hpp"')
     (dest/'models.hpp').write_text('\n'.join(lines)+'\n')
     (dest/'models.json').write_text(json.dumps({'schema_version':'0.1','sha256':digest,'models':canonical},indent=2)+'\n')
     return models

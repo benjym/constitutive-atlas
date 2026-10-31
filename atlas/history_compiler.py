@@ -32,6 +32,8 @@ def _expression(node, symbols):
         name = node.func.id
         if name == 'log1p':
             value = f'([&](){{ double result; if (!atlas::scalar_log1p_checked({emit(node.args[0])},result)) throw std::runtime_error("unsupported/nonfinite history log1p"); return result; }}())'
+        elif name == 'determinant':
+            value = f'([&](){{ double result; if (!atlas::determinant_accuracy::checked({emit(node.args[0])},result)) throw std::runtime_error("unsupported/nonfinite history determinant"); return result; }}())'
         elif name == 'expm':
             value = f'([&](){{ Sym<double> result; if (!atlas::tensor_expm_checked({emit(node.args[0])},result)) throw std::runtime_error("unsupported/nonfinite history expm"); return result; }}())'
         elif name == 'select':
@@ -130,6 +132,8 @@ def generate(programs):
     for metadata, index in entries:
         lines += [f'{{{json.dumps(metadata["id"])}, {json.dumps(metadata["program_sha256"])}, {metadata["state_size"]}, {metadata["input_size"]}, &run_{index}}},']
     lines += ['}; return p; }', 'inline const char* description() { return ' + json.dumps(json.dumps([m for m, _ in entries], separators=(',', ':'), allow_nan=False)) + '; }', '}']
+    if any('atlas::determinant_accuracy::checked(' in line for line in lines):
+        lines.insert(2, '#include "atlas/checked_determinant.hpp"')
     return '\n'.join(lines) + '\n'
 
 

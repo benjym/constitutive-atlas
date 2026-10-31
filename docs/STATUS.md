@@ -1,3 +1,9 @@
+# Determinant expression registration — 2026-10-31
+
+The [source registration checkpoint](../catalogue/investigations/determinant-expressions-v1/REGISTRATION.md) adds cubed-unit inference, Python interpretation and checked generated model/history routing.47targeted tests pass, including history rollback/recovery and all independent Python primal cases.59pre-change source receipt bindings are preserved; the143file tagged-v3 capsule reproduces the original failed clay parity study and passing contraction diagnostic through their original raw auditors.
+
+The new compiled expression-context study, trace/AD routing and complete clay-rate follow-up remain open. No model promotion or deployment; eight local runnable drafts and five hosted.
+
 # Exact Mandel determinant core — 2026-10-31
 
 The [generic numerical core study](../catalogue/investigations/symmetric-determinant-v1/RESULTS.md) passes124calls per native/Wasm backend with exact independent result bits, all38derivative columns and46same-instance rejection/recovery pairs. Python primal references and seven corruption/regression tests pass. Independent references certify1326rounding components; read-only review found and closed two structural API gaps before freezing. Exact dyadic/radical arithmetic retains the Mandel irrational coefficient through cancellation.

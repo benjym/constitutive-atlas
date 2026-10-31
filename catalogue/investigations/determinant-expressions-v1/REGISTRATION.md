@@ -1,0 +1,9 @@
+# Registration checkpoint
+
+The typed `determinant(A)` operation is registered in Python inference/interpretation, generated model expressions and generated history expressions. Checked routing records model-context failure or throws into the existing history transaction handler. Includes are emitted when the generated header uses the operation. Regeneration of the original clay2005 study's unchanged model produces byte-identical models.hpp/models.json.
+
+The retained source-only checkpoint passes47tests, including10new registration checks: all124independently specified Python primal calls, dimensions/shapes, eager masking/lazy branches, a real v0.3 synthetic model header, a complete history transaction with rollback/recovery, generated history routing,59historical source receipt bindings and exact archived tagged-v3 raw-audit outcomes. The47test total also includes existing primitive, trace, expression-finiteness, archive, log1p and history regressions. Test output and exact current source hashes are in registration-checks.json.
+
+The historical tagged-v3 capsule captures143coherent files before shared edits and reproduces the original failed109call study and passing109call contraction diagnostic using their original raw auditors. It does not reopen compiled artifacts or rerun the broader original verify_study.py scripts. Original documents, model definitions, numerical values and gates are unchanged.
+
+This is a source-registration checkpoint. No new native/Wasm compiled expression-context observations have been made; no complete clay law has been changed. Freeze and execute the prospective model/history context study next, including all38Jet columns, trace composition, failed contexts, lazy branches and same-instance recovery. The parent determinant and model-integration tasks remain in progress.
