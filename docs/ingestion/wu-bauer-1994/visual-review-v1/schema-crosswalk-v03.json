@@ -1,0 +1,160 @@
+{
+  "version": "wu-bauer-visual-crosswalk-v03-v1",
+  "kind": "non-executable-crosswalk-not-complete-model",
+  "schema_version": "0.3",
+  "research_variant_id": "wu-bauer-1994-eq21-operational-sign-zero-spin-v1-research",
+  "status": "draft",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "strain_path_rate",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "source_selection": {
+    "equation": "printed body Eq21/22",
+    "stress_map": "sigma_source=sigma",
+    "stretching_map": "D_source=-de;operationalp846interpretation,conflictswithp835strainprose",
+    "spin": "zero only; Eq3 otherwise requires commutator",
+    "stress_scope": "effective is project interpretation limited to zero pore pressure where total=effective; source distinction unresolved and requires review",
+    "appendix": "literalL15/L55andsymmetryconflictsretained,notimplemented",
+    "calibration": "supplydirectTableIIconstantsets; no Eqs26-33 converter or density interpolation"
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "initial_value_policy": "explicit complete six components; no implicit initializer"
+    }
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "parameters": [
+    {
+      "name": "c1",
+      "unit": "1",
+      "shape": "scalar",
+      "meaning": "dimensionless Eq21 coefficient",
+      "physical_range": "unresolved; directTableIIsetsidentified"
+    },
+    {
+      "name": "c2",
+      "unit": "1",
+      "shape": "scalar",
+      "meaning": "dimensionless Eq21 coefficient",
+      "physical_range": "unresolved; directTableIIsetsidentified"
+    },
+    {
+      "name": "c3",
+      "unit": "1",
+      "shape": "scalar",
+      "meaning": "dimensionless Eq21 coefficient",
+      "physical_range": "unresolved; directTableIIsetsidentified"
+    },
+    {
+      "name": "c4",
+      "unit": "1",
+      "shape": "scalar",
+      "meaning": "dimensionless Eq21 coefficient",
+      "physical_range": "unresolved; directTableIIsetsidentified"
+    }
+  ],
+  "coordinates": {
+    "host_order": [
+      "xx",
+      "yy",
+      "zz",
+      "sqrt2xy",
+      "sqrt2yz",
+      "sqrt2xz"
+    ],
+    "appendix_raw_order": [
+      "11",
+      "22",
+      "33",
+      "12",
+      "13",
+      "23"
+    ],
+    "appendix_contraction_weights": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2
+    ]
+  },
+  "derived": {
+    "T": "trace(sigma)",
+    "s": "dev(sigma)"
+  },
+  "equations": {
+    "sigma": "-c1*T*de-c2*dot(sigma,de)*sigma/T+(c3*tensor_square(sigma)+c4*tensor_square(s))*norm(de)/T"
+  },
+  "algebraic_requirements": [
+    "finite6stressand6loadingand4coefficients",
+    "nonzero full stress trace",
+    "finite intermediate and final values"
+  ],
+  "physical_domain": "unresolved; no pressure floor/SPD criterion/source-admissibility claim",
+  "temporal": {
+    "same_stage": "stress and full signed straight path input",
+    "hold": "de0 gives exactzero constitutive rate at nonzero trace; no unique generic tangent",
+    "reversal": "split path at reversal; norm term preserves sign while linear term reverses",
+    "source_algorithm": "p846forwardEuler and stage radial solve; project adaptive integration distinct",
+    "trial_commit_rollback": "complete persistent stress trial/commit/restart; failure returns incomingstate is project requirement not author algorithm"
+  },
+  "not_states": [
+    "void_ratio",
+    "relative_density",
+    "plastic_multiplier",
+    "fabric",
+    "IGS"
+  ],
+  "remaining_gates": [
+    "human review of named sign/zero-porepressure interpretation",
+    "declared physical/numerical interior",
+    "independent rate and source finitepath references",
+    "tangent and recovery evidence",
+    "scientific admission"
+  ],
+  "Atlas_validation_executed": false,
+  "installed": false,
+  "scientific_admission": false
+}

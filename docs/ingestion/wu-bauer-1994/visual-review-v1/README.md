@@ -1,0 +1,61 @@
+# Wu-Bauer1994 independent visual review
+
+Task AUDIT-wu-bauer-appendix-visual; 2026-10-31. This additive review confirms the retained printed conflicts and selects a **named research interpretation**, `wu-bauer-1994-eq21-operational-sign-zero-spin-v1-research`, for prospective source-path work. It does not establish an authoritative corrected publication, physical admissibility, executable model or scientific admission. All historical packets remain unchanged. No Atlas helper, author code, integration or compiled code was executed.
+
+## Original and review receipts
+
+Wu and Bauer, [A simple hypoplastic constitutive model for sand](https://doi.org/10.1002/nag.1610181203), IJNAMG18(12),833–862 (1994); [publisher page](https://onlinelibrary.wiley.com/doi/10.1002/nag.1610181203). Exact user Downloads PDF: 1606948 bytes,30pages,SHA256 `c8dfbc3cac0adc8bf3d273ec9e8a08ae9bff2273c696b354f1a4059c2f5bb050`. `source-receipt.json` supplies the original path, complete-page locators and private render hashes. No copyrighted PDF, page image or extracted full text is bundled. Redistribution rights are not established.
+
+Read the retained [dossier](../../../models/wu-bauer-1994-original.md), [appendix reconciliation](../appendix-reconciliation.md), [source receipt](../source-receipt.json), typed source audit and prior algebra before inspecting source. New review independently rendered and inspected complete printed pp834–835,840–843,846,859–861 (PDF2,3,8,9,10,11,14,27,28,29) at1800px. Two300dpi crops of p860 confirm subscripts and the small factor2. This follows the read-only PDF skill; renders remain private. `reviewed-inputs.json` pins retained evidence and the current v0.3 schema/contract; mutable AGENTS/board are read-time context only, not source equations.
+
+A bounded primary-publisher lookup used exact DOI/title plus correction/erratum terms. The Wiley bibliographic result supports article identity; direct article open was inaccessible. No authoritative1994 correction text was readable or adopted. A search result about the2017 Wu/Lin/Wang **basic** model and its correction concerns a different publication and does not resolve this one. This is not an exhaustive absence-of-erratum claim. See `source-receipt.json` for exact queries/URLs.
+
+## Visual findings by equation
+
+| Printed locator | Independently observed | Consequence |
+|---|---|---|
+| p834 Eq1 | Positive symmetric velocity gradient and skew spin definition | Ordinary extension gives positive kinematic stretching under the displayed definition. |
+| p835 prose / Eqs2–4 | Negative tensile stress and elongative strain/rate prose; Jaumann rate = ordinary + sigma W - W sigma; positive homogeneity for positive scale | Prose and kinematic/operational signs cannot all define one canonical convention. Full objective law needs spin; zero spin is an explicit restriction. |
+| p840 Eq21 | All four displayed terms have plus signs; c1..c4 dimensionless; sigma² and deviator² are matrix products; denominators tr(sigma) | Complete stress-only body law is available independently of Appendix L. Do not negate its entire rate when reversing stretching. |
+| p840 Eq22 | dev(sigma)=sigma-tr(sigma)I/3 | Trace is full trace, not mean pressure. |
+| p841 TableI / Eqs23–24 | Six-component symmetric stress; triaxial and oedometer spin zero; simple shear has nonzero spin; axial nonlinear deviator coefficient4/9 and radial1/9 | Zero-spin law does not reproduce source simple-shear simulations. Axisymmetric terms are consistent with the body tensor squares. |
+| p841–842 labels / Eq25 | Ei initial tangent modulus, vi=radial/axial rate at R=1, Rf=max sigma1/sigma3, vf=radial/axial rate at Rf; di=sqrt(1+2vi²), df analogous; printed second row [9vi,-(1-2vi),di,0] | No minus is printed in Poisson-ratio definitions despite the operational compression convention. At vi=0, second row requires c2=c3. |
+| p842 Eqs26–29 | c1=Ei/[3sigma3(1+vi)]; Eqs27/28 have opposite nonzero numerators at vi=0 with common denominator; Eq29 leading minus | Printed closed converter conflicts with Eq25; retain it as negative evidence. |
+| p842 Eqs30–32 | vi=0 specialization; Eq31 explicitly c2=c3 | Supports the inconsistency, not an authoritative replacement of general Eq28. |
+| p843 TableII | Karlsruhe **medium** sand; loose Dr=.10: (-69.4,-673.1,-655.9,699.6); dense Dr=.95: (-101.2,-962.1,-877.3,1229.2) | Separate direct four-coefficient sets, not Wichtmann fine-sand calibrations, density interpolation or c2=c3 sets. |
+| p843 Eq33 | arcsin((Rf+1)/(Rf-1)) | Argument>1 for Rf>1; retain printed relation, do not generate coefficients using a silently reciprocal formula. |
+| p846 §3.3.1 / Eq34 | Compression example prescribes axial stretching -1, radial stress rate0, +100kPa confinement; initial hydrostatic state; forward Euler and radial solve at each step | Operational sign inference D_source=-E_Atlas, sigma_source=sigma_Atlas is identifiable but conflicts with p835 strain prose. Source Euler differs from project adaptive integration. |
+| p859 AppendixI heading / discussion | Matrices are explicitly for Eq21; limitations include closed cycles, postfailure softening and large stress-level variation | No new critical-state/density extension may be inferred. |
+| p860 displayed vectors | Order11,22,33,12,13,23; raw tensor shear inputs; objective stress output; L*d-N | Engineering/Mandel factors are absent from displayed vectors. |
+| p860 upper L entries | 19/21 agree with raw Eq21 action; L15 and L55 conflict (below). L16 and L24 agree, including L24 factor2 | Confirms the previous final reconciliation. Complete ordinary-symmetric fill remains incompatible even after these two edits. |
+| p860 all six N entries | Every Ni has leading minus; Cartesian sigma²/dev² cross products correct | Outer -N gives the **positive** nonlinear term of Eq21. There is no nonlinear sign correction to make. |
+| p861 definitions | p=sigma11+sigma22+sigma33; norm²=D11²+D22²+D33²+2(D12²+D13²+D23²) | Full trace and raw metric G=diag(1,1,1,2,2,2) are explicit. |
+
+The two visually confirmed upper conflicts are printed L15=2c2*sigma11*sigma23/p versus body-derived2c2*sigma11*sigma13/p, and printed L55=2c2*sigma13*sigma11/p+c1p versus body-derived2c2*sigma13²/p+c1p. For (11,7,5,2,3,4),c1=-2,c2=-3, these give (-264/23,-1256/23) printed versus (-198/23,-1112/23) body. These are algebra witnesses, not admissible calibrated soil parameters.
+
+For raw stress vector v and stretching vector d, Eq21's linear action is Lraw=c1*p*I6+(c2/p)*v*(Gv)^T. Thus G Lraw=Lraw^T G, while L14=-132/23 and L41=-66/23 in the witness. Ordinary matrix symmetry is false in these coordinates. Mandel conversion R=diag(1,1,1,sqrt2,sqrt2,sqrt2) gives R Lraw R^-1=c1*p*I6+(c2/p)*(Rv)*(Rv)^T, which is symmetric. That explains a mathematically possible coordinate representation; it is not author intent or a repair of the raw printed vectors. Engineering-shear input scaling would likewise change the displayed coefficients/vectors and is not silently applied.
+
+`algebra.py` independently constructs Cartesian matrices with exact Fraction arithmetic. It checks all36 linear basis entries,36 metric-symmetry entries, all6 nonlinear terms, and a norm3 stretching direction. D reversal preserves nonlinear terms and negates only linear terms; the operational mapped rate differs from negating the full original rate. Stress reversal negates the whole body law; zero stretching gives zero rate at nonzero trace. Eqs25–29 at vi=vf=0,Rf=3,Ei/sigma3=3 give printed coefficients(1,25/8,-25/8,225/16) with exact Eq25 residual(25/12,-25/4,-225/4,-25/4). Changing only that specialization to c3=+25/8 solves the displayed matrix, but is not adopted as a general converter. Eq33's printed argument2 at Rf3 is nonreal; the Mohr-circle reciprocal1/2 is an unadopted geometric candidate.
+
+## Named research variant decision
+
+Select **body-Eq21, operational compression signs, zero spin**, ID `wu-bauer-1994-eq21-operational-sign-zero-spin-v1-research`, draft. Source law H is exactly Eq21; sigma_source=sigma_Atlas, D_source=-de_Atlas on a dimensionless straight strain path. Therefore the host equation is
+
+    sigma' = -c1*T*de - c2*(sigma:de)*sigma/T
+             +(c3*(sigma@sigma)+c4*(dev(sigma)@dev(sigma)))*norm(de)/T.
+
+Persistent state is stress6 only; four supplied coefficients remain constant. No void ratio, density update, pressure floor, stress projection or IGS state is added. Use direct TableII sets with exact specimen labels, not the contradictory closed converters or Eq33. Named choices must remain visible in metadata/source links. The source-scope distinction between total/effective stress is not explicit in the inspected law; the crosswalk restricts the proposed research experiment to zero pore pressure so they coincide and labels effective stress as a **project interpretation requiring review**, not an author claim. It must not enable coupled/pore-pressure use.
+
+The retained historical body extraction in abstract source variables remains unchanged. Alternative IDs would be needed for prose-sign D_source=+de, literal Appendix symmetric fill, or any converter/corrected interpretation; none is selected here. The selected variant is complete as a six-stress algebraic zero-spin rate law, but it is not an authoritative resolution of printed conflicts. Do not present its name as the canonical Wu-Bauer1994 implementation or mark the family source/scientifically closed.
+
+`schema-crosswalk-v03.json` supplies a complete explicit v0.3 formulation, persistent stress semantics and explicit-state initialization; no legacy integration field. It is a non-executable crosswalk, not an installed/schema-validated model. Fixed-spatial objective_rate:none is specifically the zero-spin restriction of the printed Jaumann law, not a claim that Eq21 is nonobjective. Straight increments may be partitioned with same-stage stress; no physical-time scale is supplied. Generic same-stage trial/commit/rollback and adaptive integration are project choices needing separately frozen evidence. At de0 the rate is zero but the norm generally has no unique derivative; special cancellations do not make a generic zero-direction AD claim valid.
+
+## Remaining requirements and next bounded task
+
+Canonical signs/converters/friction relation require authoritative correction or independent human scientific acceptance of a clearly versioned interpretation. The source physical stress cone, parameter-admissibility inequalities and near-zero-trace behavior remain unresolved; finite trace and output alone are algebraic support, not a physical domain. A conservative SPD numerical research interior could be separately proposed and disclosed, but is not extracted or approved here. Stress-free start is undefined. Preserve complete initial stress and selected coefficients and specimen identity; illustrative100kPaI is supported as a source test start, not arbitrary preparation validation.
+
+Next: coordinator reviews this named variant and stress-scope restriction, declares a numerical interior and exact explicit parameter/state examples, then separately freezes independent Cartesian rate references (mixed shear, scaling, coordinate covariance, zero/reversal and trace rejection/recovery), source axisymmetric Eq23/24 consistency, and finite source-path/refinement/control studies. No default converter is needed for direct TableII law. Tangent/nonsmooth policy, finite-stage support/rollback, experimental preparation and independent scientific admission remain open. No new build or source-path reference calculation is requested by this packet.
+
+## Reproduction and status
+
+Run `python3 -B docs/ingestion/wu-bauer-1994/visual-review-v1/check.py --root /Users/bmar5496/code/constitutive-atlas`. It verifies retained input hashes, source PDF hash if available, packet manifest, and exact regeneration of rational witnesses. No numerical failure was observed; printed contradictions are retained in results rather than treated as failed software assertions. The 1800px L24 factor was too small to trust, so300dpi inspection was used before making a finding; no new third conflict was asserted. Complete review outputs are listed in `manifest.json`; private page renders are receipts only.

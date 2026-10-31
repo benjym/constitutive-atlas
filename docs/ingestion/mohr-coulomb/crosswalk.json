@@ -1,0 +1,124 @@
+{
+  "admission_status": "not executable; scientific review open",
+  "capability_gaps": [
+    "generic sorted symmetric eigenvalues in Mandel coordinates",
+    "group-safe isolated extreme eigenspace projectors and reconstruction",
+    "declared repeated-eigenvalue/generalized-directional derivative policy",
+    "primal branch classification without requiring nonexistent classical eigenvalue derivatives",
+    "full tensor consistent tangent through projector variation",
+    "prospective floating branch/equality/admissibility policies"
+  ],
+  "formulation": {
+    "equation_form": "incremental_residual",
+    "frame": "fixed_spatial",
+    "inputs": {
+      "advance": {},
+      "equation": {
+        "de": {
+          "configuration": "current",
+          "constraint": "finite",
+          "measure": "infinitesimal_strain",
+          "quantity": "strain_increment",
+          "sampling": "increment",
+          "shape": "sym",
+          "unit": "1"
+        }
+      }
+    },
+    "kinematics": "small_strain_3d",
+    "objective_rate": "none",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "measure": "cauchy",
+      "name": "sigma",
+      "scope": "effective",
+      "source": "state"
+    },
+    "stress_sign": "compression_positive",
+    "tensor_representation": "mandel",
+    "time_dependence": "strain_path"
+  },
+  "initial_checks": [
+    "complete finite explicit stress",
+    "source/converted yield F<=0",
+    "positive elastic moduli and selected parameter domain",
+    "optional plastic/total strain must satisfy stress elasticity"
+  ],
+  "initialization": {
+    "default_policy": "examples_only",
+    "method": "explicit_state",
+    "required_state": [
+      "sigma"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "kind": "non-executable-source-to-schema-crosswalk",
+  "minimal_persistent_state": [
+    {
+      "name": "sigma",
+      "semantics": {
+        "quantity": "cauchy_stress",
+        "role": "persistent",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "shape": "sym",
+      "unit": "Pa"
+    }
+  ],
+  "minimal_residual": "sigma - declarative_spectral_return(sigma_n+C:de) = 0",
+  "no_inferred_fields": [
+    "density/void ratio",
+    "pore pressure",
+    "temperature",
+    "physical duration",
+    "hardening state influencing stress",
+    "fabric/reset memory"
+  ],
+  "not_in_selected_domain": [
+    "zero dilation",
+    "zero friction",
+    "zero cohesion",
+    "negative dilation"
+  ],
+  "optional_physical_state": [
+    {
+      "equation_meaning": "eps_p_n+C_inverse:(sigma_trial-returned_sigma); source signs converted consistently",
+      "name": "eps_p",
+      "semantics": {
+        "quantity": "plastic_strain",
+        "role": "persistent",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "shape": "sym",
+      "unit": "1"
+    }
+  ],
+  "parameter_domains": {
+    "E": {
+      "condition": "E>0",
+      "unit": "Pa"
+    },
+    "c": {
+      "condition": "c>0 constant",
+      "unit": "Pa"
+    },
+    "nu": {
+      "condition": "-1<nu<1/2",
+      "unit": "1"
+    },
+    "phi": {
+      "condition": "0<phi<pi/2 constant",
+      "meaning": "radians",
+      "unit": "1"
+    },
+    "psi": {
+      "condition": "0<psi<pi/2 constant; psi!=phi selects nonassociated case",
+      "meaning": "radians",
+      "unit": "1"
+    }
+  },
+  "schema_version": "0.3",
+  "source_and_algorithm_boundary": "Continuous source subdifferential law specialized H=0; implicit Euler and branch formulas are specified in selected source. Generic primitive execution tolerances/rollback/AD rules are Atlas responsibilities.",
+  "stress_scope_boundary": "Effective stress is the explicit geomechanical Atlas specialization of source Cauchy stress. The source defines no pore-fluid coupling, saturation or total/effective conversion; host must supply the chosen skeleton stress consistently.",
+  "variant": "MC-Sysala-Cermak-arXiv1508.07435v3-H0"
+}

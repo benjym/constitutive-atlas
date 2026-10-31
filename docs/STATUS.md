@@ -1,3 +1,9 @@
+# Mohr–Coulomb source closure and Wu–Bauer review — 2026-10-31
+
+The [Mohr–Coulomb ingestion](ingestion/mohr-coulomb/README.md) now pins a complete constant-cohesion, nonassociated perfect-plastic law and explicit face/edge/apex return from the exact arXiv v3 source. Fourteen exact rational certificates, eleven rotated Cartesian residuals and two bounded tangent checks reproduce. An initial boundary-tangent diagnostic failure is retained and reproduced. Generic spectral operations and repeated-eigenvalue/tangent semantics remain the next execution dependency; there is no new runnable model or scientific admission.
+
+The [Wu–Bauer visual review](ingestion/wu-bauer-1994/visual-review-v1/README.md) confirms retained printed appendix conflicts and selects a named zero-spin operational-sign research interpretation. Canonical correction, stress scope and physical domain remain unresolved. The [coordinator source-only replay](reviews/source-ingestion-review-v1/README.md) verifies both exact packets and private source hashes when available. No engine/model/catalogue changes, compiled calls, push or deployment; hosted five/local nine remain unchanged.
+
 # Terra Cotta carried preparation/hold refinement — 2026-10-31
 
 The [distinct tighter-tolerance study](../catalogue/investigations/terracotta-preparation-hold-refinement-v2/RESULTS.md) passes all unchanged independent preparation/hold component limits for three new native/Wasm pairs (138points). Each run carries its own preparation state, accumulated strain, incoming-rate captured stresses and one physical clock. Maximum error/limit fraction is.586010; backend parity maximum is6.87e-12. The unchanged100000substep cap contains all runs (86098–92404steps).
