@@ -1,0 +1,272 @@
+{
+  "schema_version": "0.1",
+  "kind": "study-parameter-policy",
+  "id": "kfs-historical-development-parameters-v1",
+  "phase": "historical_development",
+  "allocation_sha256": "ff51779ef552ce944279e5a493798f8820304ca2ce603be1610dc0ff154e0bc9",
+  "models": [
+    {
+      "id": "linear-elastic",
+      "definition_sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+      "parameters": {
+        "p_ref": {
+          "role": "fixed",
+          "category": "numerical_scale",
+          "value": 100000,
+          "unit": "Pa",
+          "provenance": {
+            "kind": "definition_default",
+            "locator": "Exact frozen definition default. Numerical reference scale is fixed project input, not a fitted soil constant."
+          }
+        },
+        "E": {
+          "role": "fitted",
+          "category": "material",
+          "value": 30000000.0,
+          "unit": "Pa",
+          "provenance": {
+            "kind": "definition_default",
+            "locator": "Exact frozen definition default used as exploratory optimization seed; not a source-matched soil calibration."
+          },
+          "bounds": [
+            100000.0,
+            200000000.0
+          ],
+          "transform": "log"
+        },
+        "nu": {
+          "role": "fitted",
+          "category": "material",
+          "value": 0.25,
+          "unit": "1",
+          "provenance": {
+            "kind": "definition_default",
+            "locator": "Exact frozen definition default used as exploratory optimization seed; not a source-matched soil calibration."
+          },
+          "bounds": [
+            0.05,
+            0.45
+          ],
+          "transform": "linear"
+        }
+      }
+    },
+    {
+      "id": "drucker-prager",
+      "definition_sha256": "9eff38d8ba9ea327d9b0590b03c966b7f5797a53f0aff9e1ecd0b923423a346e",
+      "parameters": {
+        "p_ref": {
+          "role": "fixed",
+          "category": "numerical_scale",
+          "value": 100000,
+          "unit": "Pa",
+          "provenance": {
+            "kind": "definition_default",
+            "locator": "Exact frozen definition default. Numerical reference scale is fixed project input, not a fitted soil constant."
+          }
+        },
+        "E": {
+          "role": "fitted",
+          "category": "material",
+          "value": 30000000.0,
+          "unit": "Pa",
+          "provenance": {
+            "kind": "definition_default",
+            "locator": "Exact frozen definition default used as exploratory optimization seed; not a source-matched soil calibration."
+          },
+          "bounds": [
+            100000.0,
+            200000000.0
+          ],
+          "transform": "log"
+        },
+        "nu": {
+          "role": "fitted",
+          "category": "material",
+          "value": 0.25,
+          "unit": "1",
+          "provenance": {
+            "kind": "definition_default",
+            "locator": "Exact frozen definition default used as exploratory optimization seed; not a source-matched soil calibration."
+          },
+          "bounds": [
+            0.05,
+            0.45
+          ],
+          "transform": "linear"
+        },
+        "M": {
+          "role": "fitted",
+          "category": "material",
+          "value": 1.2,
+          "unit": "1",
+          "provenance": {
+            "kind": "definition_default",
+            "locator": "Exact frozen definition default used as exploratory optimization seed; not a source-matched soil calibration."
+          },
+          "bounds": [
+            0.6,
+            1.8
+          ],
+          "transform": "linear"
+        },
+        "Md": {
+          "role": "fitted",
+          "category": "material",
+          "value": 0.2,
+          "unit": "1",
+          "provenance": {
+            "kind": "definition_default",
+            "locator": "Exact frozen definition default used as exploratory optimization seed; not a source-matched soil calibration."
+          },
+          "bounds": [
+            0,
+            0.6
+          ],
+          "transform": "linear"
+        },
+        "c": {
+          "role": "fixed",
+          "category": "specialization",
+          "value": 0,
+          "unit": "Pa",
+          "provenance": {
+            "kind": "analyst_choice",
+            "locator": "Declared cohesionless c=0 specialization; distinct from frozen definition default. c=0 cohesionless specialization; Md>=0 forbids plastic contraction under compression-positive convention. This is an intentionally limited baseline."
+          }
+        }
+      }
+    },
+    {
+      "id": "hypoplastic-sand-vw96",
+      "definition_sha256": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31",
+      "parameters": {
+        "p_ref": {
+          "role": "fixed",
+          "category": "numerical_scale",
+          "value": 100000.0,
+          "unit": "Pa",
+          "provenance": {
+            "kind": "definition_default",
+            "locator": "Exact frozen definition default. Numerical reference scale is fixed project input, not a fitted soil constant."
+          }
+        },
+        "phi": {
+          "role": "fitted",
+          "category": "material",
+          "value": 0.5777039824101231,
+          "unit": "1",
+          "provenance": {
+            "kind": "literature",
+            "url": "https://doi.org/10.1002/nag.70375",
+            "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians; inherited baseline/seed as recorded by completed pilot; not newly verified against primary table here."
+          },
+          "bounds": [
+            0.45,
+            0.7
+          ],
+          "transform": "linear"
+        },
+        "hs": {
+          "role": "fitted",
+          "category": "material",
+          "value": 4000000000.0,
+          "unit": "Pa",
+          "provenance": {
+            "kind": "literature",
+            "url": "https://doi.org/10.1002/nag.70375",
+            "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians; inherited baseline/seed as recorded by completed pilot; not newly verified against primary table here."
+          },
+          "bounds": [
+            500000000.0,
+            20000000000.0
+          ],
+          "transform": "log"
+        },
+        "n": {
+          "role": "fixed",
+          "category": "material",
+          "value": 0.27,
+          "unit": "1",
+          "provenance": {
+            "kind": "literature",
+            "url": "https://doi.org/10.1002/nag.70375",
+            "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians; inherited baseline/seed as recorded by completed pilot; not newly verified against primary table here."
+          }
+        },
+        "ed0": {
+          "role": "fixed",
+          "category": "material",
+          "value": 0.677,
+          "unit": "1",
+          "provenance": {
+            "kind": "literature",
+            "url": "https://doi.org/10.1002/nag.70375",
+            "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians; inherited baseline/seed as recorded by completed pilot; not newly verified against primary table here."
+          }
+        },
+        "ec0": {
+          "role": "fixed",
+          "category": "material",
+          "value": 1.054,
+          "unit": "1",
+          "provenance": {
+            "kind": "literature",
+            "url": "https://doi.org/10.1002/nag.70375",
+            "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians; inherited baseline/seed as recorded by completed pilot; not newly verified against primary table here."
+          }
+        },
+        "ei0": {
+          "role": "fixed",
+          "category": "material",
+          "value": 1.212,
+          "unit": "1",
+          "provenance": {
+            "kind": "literature",
+            "url": "https://doi.org/10.1002/nag.70375",
+            "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians; inherited baseline/seed as recorded by completed pilot; not newly verified against primary table here."
+          }
+        },
+        "alpha": {
+          "role": "fitted",
+          "category": "material",
+          "value": 0.14,
+          "unit": "1",
+          "provenance": {
+            "kind": "literature",
+            "url": "https://doi.org/10.1002/nag.70375",
+            "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians; inherited baseline/seed as recorded by completed pilot; not newly verified against primary table here."
+          },
+          "bounds": [
+            0.05,
+            0.4
+          ],
+          "transform": "linear"
+        },
+        "beta": {
+          "role": "fitted",
+          "category": "material",
+          "value": 2.5,
+          "unit": "1",
+          "provenance": {
+            "kind": "literature",
+            "url": "https://doi.org/10.1002/nag.70375",
+            "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians; inherited baseline/seed as recorded by completed pilot; not newly verified against primary table here."
+          },
+          "bounds": [
+            0.5,
+            4
+          ],
+          "transform": "linear"
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Reconstruction after completed exploratory fits, not prospective CAL-02 freeze.",
+    "Source provenance labels and material/numerical/specialization categories require scientific review; structural checking cannot certify them.",
+    "Historical definitions retain original bytes/schema versions; they are not new model records or migrated current implementations.",
+    "Partial VW96 calibration retains four literature-fixed material inputs and literature-derived starting values.",
+    "Initialization, coupled model-domain constraints, objectives, optimizer and failure budget remain outside this parameter-only contract."
+  ]
+}

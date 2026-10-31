@@ -250,6 +250,8 @@ archived. BENCH-03 local portability is now delivered by the [single-command rep
 
 ### Controlled study
 
+The [parameter-accounting contract](studies/kfs-development-v1/parameters-v1/README.md) now binds fitted/fixed inputs, units, search bounds/transforms and provenance to exact model definitions and the whole-test allocation. The historical example preserves literature-fixed values and seeds, numerical scales and the DP specialization separately. It does not complete CAL-02 initialization, objectives, optimizer/failure budgets or prospective scientific freeze.
+
 The [shared whole-test allocation contract](studies/kfs-development-v1/README.md) now checks calibration/evaluation separation and exact reservation-policy identity without loading responses. Its example reconstructs the existing completed development pilot; it is not a prospective final freeze and does not release reserved tests. CAL-01/02 remain open for the controlled study and its complete information/analysis choices.
 
 - [ ] **CAL-01:** Freeze whole-test calibration and evaluation IDs before optimization, stratified by relevant pressure, density and loading conditions. Keep all samples of a test together; record how previously inspected tests were used and avoid claiming blind evaluation of them.

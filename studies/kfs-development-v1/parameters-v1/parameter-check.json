@@ -1,0 +1,86 @@
+{
+  "kind": "study-parameter-accounting-check",
+  "id": "kfs-historical-development-parameters-v1",
+  "passed": true,
+  "allocation_sha256": "ff51779ef552ce944279e5a493798f8820304ca2ce603be1610dc0ff154e0bc9",
+  "models": [
+    {
+      "id": "linear-elastic",
+      "definition_sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+      "fitted_parameters": [
+        "E",
+        "nu"
+      ],
+      "fitted_parameter_count": 2,
+      "fixed_material_parameters": [],
+      "fixed_literature_material_parameters": [],
+      "literature_seeded_fitted_parameters": [],
+      "numerical_scales": [
+        "p_ref"
+      ],
+      "specializations": []
+    },
+    {
+      "id": "drucker-prager",
+      "definition_sha256": "9eff38d8ba9ea327d9b0590b03c966b7f5797a53f0aff9e1ecd0b923423a346e",
+      "fitted_parameters": [
+        "E",
+        "nu",
+        "M",
+        "Md"
+      ],
+      "fitted_parameter_count": 4,
+      "fixed_material_parameters": [],
+      "fixed_literature_material_parameters": [],
+      "literature_seeded_fitted_parameters": [],
+      "numerical_scales": [
+        "p_ref"
+      ],
+      "specializations": [
+        "c"
+      ]
+    },
+    {
+      "id": "hypoplastic-sand-vw96",
+      "definition_sha256": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31",
+      "fitted_parameters": [
+        "phi",
+        "hs",
+        "alpha",
+        "beta"
+      ],
+      "fitted_parameter_count": 4,
+      "fixed_material_parameters": [
+        "n",
+        "ed0",
+        "ec0",
+        "ei0"
+      ],
+      "fixed_literature_material_parameters": [
+        "n",
+        "ed0",
+        "ec0",
+        "ei0"
+      ],
+      "literature_seeded_fitted_parameters": [
+        "phi",
+        "hs",
+        "alpha",
+        "beta"
+      ],
+      "numerical_scales": [
+        "p_ref"
+      ],
+      "specializations": []
+    }
+  ],
+  "scientific_admission": false,
+  "limitations": [
+    "Reconstruction after completed exploratory fits, not prospective CAL-02 freeze.",
+    "Source provenance labels and material/numerical/specialization categories require scientific review; structural checking cannot certify them.",
+    "Historical definitions retain original bytes/schema versions; they are not new model records or migrated current implementations.",
+    "Partial VW96 calibration retains four literature-fixed material inputs and literature-derived starting values.",
+    "Initialization, coupled model-domain constraints, objectives, optimizer and failure budget remain outside this parameter-only contract."
+  ],
+  "allocation_id": "kfs-matched-development-allocation-v1"
+}

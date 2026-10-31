@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [parameter-accounting check](../studies/kfs-development-v1/parameters-v1/README.md)
+binds complete fitted/fixed input coverage, units, values, bounds/transforms and
+provenance to exact historical definitions and allocation. It retains VW96
+literature-fixed constants and seeds separately from fitted count. Nine new/23
+combined tests pass, including allocation-first metadata-only access. No fits,
+measurements or manuscript edits; full prospective CAL-02 remains open.
+
 The [shared study-allocation check](../studies/kfs-development-v1/README.md)
 validates whole-test separation and exact reservation-policy identity using only
 two metadata files. The historical development example preserves five unique
