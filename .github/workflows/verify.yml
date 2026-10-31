@@ -94,6 +94,8 @@ jobs:
           python tools/fetch_data.py --approved-only
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments
+          node --test tests/test_web_package.mjs
+          node tools/test_web_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
       - name: Configure GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/configure-pages@v6

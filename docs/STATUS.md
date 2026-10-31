@@ -1,3 +1,7 @@
+# Completed-package release check — 2026-10-31
+
+The [new pre-upload gate](reviews/packaged-laboratory-gate-v1/RESULTS.md) passes nine actual packaged-Wasm default runs (909 points), model/catalogue/definition agreement, source-URL and project-prefix asset checks. Eight static contract tests and eight focused Python regressions pass. CI wiring is local only; no push, remote CI or deployment. Hosted five/local nine remain unchanged; no scientific-admission claim.
+
 # Ninth local runnable draft — 2026-10-31
 
 [Mašín2005 clay](models/clay2005-laboratory-preview.md) is now the ninth local runnable draft. The [production integration](reviews/nine-model-lab-integration/RESULTS.md) passes45model/protocol native/Wasm pairs plus rollback/rate/IGS regressions. Its production declarations match the frozen independently referenced27call finite-preview study exactly. Actual production-browser default export has101points and exact frozen physical channels; persistent source/JSON links remain visible. All previous eight definitions and31other catalogue entries are preserved.
