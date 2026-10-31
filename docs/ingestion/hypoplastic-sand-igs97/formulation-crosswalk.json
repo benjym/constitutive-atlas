@@ -1,0 +1,327 @@
+{
+  "schema_version": "0.3",
+  "kind": "formulation-crosswalk",
+  "model_id": "hypoplastic-sand-igs97",
+  "root_definition_sha256": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "strain_path_rate",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "root_migrated": false,
+  "exact_identity": "General VW96eight-parameter host plus NH97continuous IGS overlay, zero spin, with project cap/admission and midpoint integration; not original NH97seven-parameter calibration or author finite-increment implementation",
+  "state": [
+    {
+      "name": "sigma",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0
+      ],
+      "shape": "sym",
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "initial": 0.7,
+      "shape": "scalar",
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "h",
+      "unit": "1",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "shape": "sym",
+      "scale": "R",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "intergranular_strain",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    }
+  ],
+  "parameter_crosswalk": {
+    "p_ref": {
+      "unit": "Pa",
+      "source_scope": "project numerical stress scale"
+    },
+    "phi": {
+      "unit": "1",
+      "source_scope": "VW96host; NH97AppendixA and TableI original specialization"
+    },
+    "hs": {
+      "unit": "Pa",
+      "source_scope": "VW96host; NH97AppendixA and TableI original specialization"
+    },
+    "n": {
+      "unit": "1",
+      "source_scope": "VW96host; NH97AppendixA and TableI original specialization"
+    },
+    "ed0": {
+      "unit": "1",
+      "source_scope": "VW96host; NH97AppendixA and TableI original specialization"
+    },
+    "ec0": {
+      "unit": "1",
+      "source_scope": "VW96host; NH97AppendixA and TableI original specialization"
+    },
+    "ei0": {
+      "unit": "1",
+      "source_scope": "VW96host; NH97AppendixA and TableI original specialization"
+    },
+    "alpha": {
+      "unit": "1",
+      "source_scope": "VW96host; NH97AppendixA and TableI original specialization"
+    },
+    "beta": {
+      "unit": "1",
+      "source_scope": "VW96Eq44/46 density exponent; beta=1 specializes NH97AppendixA"
+    },
+    "R": {
+      "unit": "1",
+      "source_scope": "NH97IGS overlay/Eqs14\u201315"
+    },
+    "mR": {
+      "unit": "1",
+      "source_scope": "NH97IGS overlay/Eqs14\u201315"
+    },
+    "mT": {
+      "unit": "1",
+      "source_scope": "NH97IGS overlay/Eqs14\u201315"
+    },
+    "beta_r": {
+      "unit": "1",
+      "source_scope": "NH97IGS overlay/Eqs14\u201315"
+    },
+    "chi": {
+      "unit": "1",
+      "source_scope": "NH97IGS overlay/Eqs14\u201315"
+    }
+  },
+  "derived_crosswalk": {
+    "mean": {
+      "source_locator": "NH97AppendixA Eq25; VW96Eqs40,42",
+      "scope": "Sign-invariant normalized compression-positive stress, project mean pressure shorthand"
+    },
+    "hat": {
+      "source_locator": "NH97AppendixA Eq25; VW96Eqs40,42",
+      "scope": "Sign-invariant normalized compression-positive stress, project mean pressure shorthand"
+    },
+    "hsdev": {
+      "source_locator": "NH97AppendixA Eq25; VW96Eqs40,42",
+      "scope": "Sign-invariant normalized compression-positive stress, project mean pressure shorthand"
+    },
+    "j2": {
+      "source_locator": "NH97AppendixA Eqs27\u201328; VW96Eq42/AppendixC",
+      "scope": "Invariant/shape expressions; j2<=1e-24 zero-lode branch is a project numerical continuation"
+    },
+    "tanpsi": {
+      "source_locator": "NH97AppendixA Eqs27\u201328; VW96Eq42/AppendixC",
+      "scope": "Invariant/shape expressions; j2<=1e-24 zero-lode branch is a project numerical continuation"
+    },
+    "lode": {
+      "source_locator": "NH97AppendixA Eqs27\u201328; VW96Eq42/AppendixC",
+      "scope": "Invariant/shape expressions; j2<=1e-24 zero-lode branch is a project numerical continuation"
+    },
+    "F": {
+      "source_locator": "NH97AppendixA Eqs27\u201328; VW96Eq42/AppendixC",
+      "scope": "Invariant/shape expressions; j2<=1e-24 zero-lode branch is a project numerical continuation"
+    },
+    "a": {
+      "source_locator": "NH97AppendixA Eq26; VW96Eq41",
+      "scope": "Critical-friction factor"
+    },
+    "compression": {
+      "source_locator": "NH97AppendixA Eq31; VW96Eq43",
+      "scope": "Common pressure-dependent density curves"
+    },
+    "ed": {
+      "source_locator": "NH97AppendixA Eq31; VW96Eq43",
+      "scope": "Common pressure-dependent density curves"
+    },
+    "ec": {
+      "source_locator": "NH97AppendixA Eq31; VW96Eq43",
+      "scope": "Common pressure-dependent density curves"
+    },
+    "ei": {
+      "source_locator": "NH97AppendixA Eq31; VW96Eq43",
+      "scope": "Common pressure-dependent density curves"
+    },
+    "fd": {
+      "source_locator": "NH97AppendixA Eq30; VW96Eq45",
+      "scope": "Density/dilatancy factor"
+    },
+    "fe": {
+      "source_locator": "VW96Eqs44,46; NH97AppendixA Eq29 only at beta=1",
+      "scope": "General eight-parameter host; NH97seven-parameter specialization is beta=1"
+    },
+    "fb": {
+      "source_locator": "VW96Eqs44,46; NH97AppendixA Eq29 only at beta=1",
+      "scope": "General eight-parameter host; NH97seven-parameter specialization is beta=1"
+    },
+    "factor": {
+      "source_locator": "NH97AppendixA Eq23; VW96Eq40",
+      "scope": "Project contracted Cartesian form of linear operator, with general VW96density product"
+    },
+    "linear": {
+      "source_locator": "NH97AppendixA Eq23; VW96Eq40",
+      "scope": "Project contracted Cartesian form of linear operator, with general VW96density product"
+    },
+    "linear_eta": {
+      "source_locator": "NH97AppendixA Eq23; VW96Eq40",
+      "scope": "Project contracted Cartesian form of linear operator, with general VW96density product"
+    },
+    "nonlinear": {
+      "source_locator": "NH97AppendixA Eq24; VW96Eq40",
+      "scope": "Nonlinear host tensor negated under compression-positive rate conversion"
+    },
+    "hn": {
+      "source_locator": "NH97Eqs7\u20138,14\u201315",
+      "scope": "History norm/direction/projection; rho=min(hn/R,1) is a project continuation outside physical ball"
+    },
+    "eta": {
+      "source_locator": "NH97Eqs7\u20138,14\u201315",
+      "scope": "History norm/direction/projection; rho=min(hn/R,1) is a project continuation outside physical ball"
+    },
+    "rho": {
+      "source_locator": "NH97Eqs7\u20138,14\u201315",
+      "scope": "History norm/direction/projection; rho=min(hn/R,1) is a project continuation outside physical ball"
+    },
+    "projection": {
+      "source_locator": "NH97Eqs7\u20138,14\u201315",
+      "scope": "History norm/direction/projection; rho=min(hn/R,1) is a project continuation outside physical ball"
+    },
+    "overlay": {
+      "source_locator": "NH97Eq14",
+      "scope": "Scalar coefficient of contracted linear operator"
+    }
+  },
+  "equation_crosswalk": {
+    "sigma": {
+      "source_locator": "NH97Eq14 with host Eq23/24; VW96Eq40",
+      "note": "Derivative per normalized strain-path fraction; not per second."
+    },
+    "e": {
+      "source_locator": "VW96Eq2; compression-positive conversion",
+      "note": "e_prime=-(1+e)*trace(de); no physical-time compaction at zero de."
+    },
+    "h": {
+      "source_locator": "NH97Eq15; AppendixC ordinary-rate conversion restricted to W=0",
+      "note": "History direction and strain are sign-converted together. At zero h, eta=0 and h_prime=de."
+    }
+  },
+  "transactions": {
+    "time_dependence": "rate independent and positively homogeneous in de; no elapsed seconds or automatic resting decay",
+    "trial_commit_rollback": "Each trial starts from committed state; no history accumulation across equilibrium guesses. Failed parent increment restores committed input.",
+    "events": "Source resting erasure requires an explicit preparation/reset event; not an automatic zero-load side effect.",
+    "spin": "Original objective stress/history rates require spin transport outside W=0; current executable profile omits spin consistently. Printed source spin-sign conflict remains outside scope.",
+    "tangent": "Nonsmooth branch at projection=0 and sublinear history mobilisation near zero; no global smooth consistent tangent is implied."
+  },
+  "project_domain": [
+    "e > 0",
+    "mean > p_ref * 1e-8",
+    "ed0 < ec0",
+    "ec0 < ei0",
+    "e > ed",
+    "e < ei",
+    "F > 0",
+    "fb > 0 * p_ref",
+    "hn < R * 1.01",
+    "mR >= mT"
+  ],
+  "source_parameter_scope": {
+    "strict_original_recommendations": [
+      "mR>mT>1",
+      "chi>1"
+    ],
+    "root_allows_additional_limits": true,
+    "note": "Input bounds are exploratory guards, not original-paper parameter recommendations. Other positive/friction/density conditions remain material/source-specific."
+  },
+  "unsupported": [
+    "finite strain and nonzero-spin transport",
+    "automatic physical-time history decay",
+    "source-specific post-step history projection algorithm",
+    "proof of physical validity throughout the numerical1%history band"
+  ],
+  "scientific_admission_changed": false,
+  "initialization_notes": {
+    "source_examples": "NH97TableI uses beta=1; source Fig16 requires figure-specific preparation. TMD2published case uses complete2019constants, e=.975 and mobilized isotropic h, not root defaults.",
+    "root_defaults": "Illustrative sigma100kPaI,e=.7,h=0; not a source calibration.",
+    "physical_ball": "norm(h)<=R",
+    "numerical_admission": "norm(h)<1.01R; rho capped at1, no projection. Not a physical admissibility claim."
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e",
+      "h"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "state_semantics_evidence": {
+    "sigma": "NH97p280 and AppendixA Eq32 objective Cauchy tensor; restricted W=0.",
+    "e": "VW96Eq2 and NH97density factors: scalar void ratio.",
+    "h": "NH97Eqs7\u20138 and AppendixC: symmetric second-rank history tensor, rotated as QhQ^T under passive basis change. Current runtime zero-spin; this does not implement finite-step transport."
+  },
+  "sources": [
+    {
+      "url": "https://doi.org/10.1002/%28SICI%291099-1484%28199710%292%3A4%3C279%3A%3AAID-CFM29%3E3.0.CO%3B2-8",
+      "locator": "Niemunis\u2013Herle1997,Eqs7\u201317,AppendicesA/C; physical IGS overlay and original host specialization",
+      "sha256": "8fd75de38a5f2c89dcc2cf40c6c2daff03a87153a9e5161c3dfdb91e7a536d8d"
+    },
+    {
+      "url": "https://doi.org/10.1002/%28SICI%291099-1484%28199607%291:3%3C251::AID-CFM13%3E3.0.CO%3B2-3",
+      "locator": "VW96Eqs1\u20132,40\u201346 and AppendixC; general eight-parameter host",
+      "sha256": "70eb1297cd25e67daf8b35b8f8c22f42c3a7fae2c0a62ae9e0079e3b03e64100"
+    }
+  ]
+}

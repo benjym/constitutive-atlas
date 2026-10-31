@@ -25,6 +25,18 @@ remain open. BENCH-01/02 are complete only for this qualified operational
 reconstruction; BENCH-03 local portability is delivered, with its public release gate still open: the [one-command run](benchmarks/kfs-tmd2-portable-v1/README.md) fetched and normalized the pinned archive, built the frozen source serially and reproduced all results byte for byte. Public measurement reuse permission, historical strain conversion and independent review remain open.
 New model integration and general numerical expansion are deferred for this cycle.
 
+# IGS source reconciliation — 1 November 2026
+
+The [bounded IGS review](ingestion/hypoplastic-sand-igs97/README.md) integrates a
+full original-paper technical read, 21 exact algebra checks and a source-linked
+v0.3 crosswalk with explicit persistent sigma/e/h semantics and initialization.
+Nine contract/init checks pass; the 576-case Python-only original-equation replay
+matches its saved report exactly. Historical failed/passed 303-case report hashes
+are intact, with no claim of current native execution. Root model bytes and draft
+status are unchanged. Source numerical-policy/domain differences, general-host
+review, full historical preparation and independent scientific sign-off remain
+open; REV-05 is not closed. No builds, compiled calls, new solver feature or push.
+
 # Latest progress — browser provenance prototype; invariant failure retained
 
 The [frozen browser loading study](../catalogue/investigations/browser-loading-provenance-v1/README.md) stages versioned exact controls and explicit legacy/current export/import handling. Independent source review and9720cyclic/250ramp bit comparisons,60negative cases and11contract cases pass. Both serial single-target builds finish normally. The strict runtime gate fails11qscalars in exactly isotropic IGS points; complete collection retains101pairs,90import/export replays and90directlegacy comparisons. Seventeen legacy numerical and45/4/2/6 generic regressions pass. Saved-evidence replay reproduces the failed outcome and checks three artifact hashes.

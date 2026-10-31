@@ -119,6 +119,14 @@ The [IGS draft dossier](docs/models/hypoplastic-sand-igs97.md) now separates the
 
 The [IGS endpoint-defect correction](docs/models/hypoplastic-sand-igs97.md#endpoint-defect-correction-and-v2-evidence) resolves the analytically confirmed small-cycle error. All 303 checks now pass with unchanged tolerances and analytical-stage history for collinear RK4 references; full-state refinement remains for noncollinear paths. Native/Wasm crossing and cyclic regressions supplement the preserved failed v1 evidence. Independent review and REV-05 remain open.
 
+The [IGS bounded reconciliation](docs/ingestion/hypoplastic-sand-igs97/README.md)
+now adds a full original-paper second-agent technical audit, 21 exact algebra
+checks and a complete explicit-state v0.3 crosswalk. Nine source-contract/init
+checks pass and the 576-case Python rate report reproduces exactly. The root
+remains unchanged/draft; general-host review, numerical-policy assessment,
+complete original preparation and independent signed scientific admission remain
+open. This completes a scoped source/gap-report task, not REV-05 or M1.
+
 **Acceptance:** all five dossiers and evidence records are complete, with review independent of the original transcription. If no suitable independent reference exists, document the gap and keep that model below the reviewed gate. Existing IGS draft status is not promoted solely because CI passes.
 
 ## 7. M2 — SANISAND-2004 and the six-model proof
