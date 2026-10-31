@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [bounded SANISAND source recheck](reviews/sanisand-1986-access-v2/README.md)
+confirms that the advertised 1986 PDF redirects to restricted-access HTML. No
+paper was acquired or equations reviewed. Further acquisition waits for a new
+concrete lead or readable copy; canonical loading-process semantics remain open.
+The TMD2 figure/table and local website summary already exist; independent
+scientific review remains the next delivery gate, with no reviewer assigned.
+
 Nine local runnable drafts and five hosted models remain distinct from reviewed
 scientific admission. The exact browser-loading rollout and observable-only q
 correction are installed locally; see [rollout results](reviews/browser-loading-rollout-v1/RESULTS.md).

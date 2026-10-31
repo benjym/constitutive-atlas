@@ -59,9 +59,12 @@ prerequisite for this increment. Mohr–Coulomb browser integration remains queu
 with its preserved checkpoint. The [bounded archive-coverage repair](docs/reviews/historical-archive-coverage-v1/README.md)
 is complete: the 15 remaining coverage failures are closed, with original bytes
 and reverse bindings preserved. Separate legacy source-availability gaps remain
-open. Complete a reviewed
-figure/table and the corresponding website evidence summary before broadening
-numerical work. Deployment still needs a fresh explicit instruction.
+open. The qualified TMD2 figure/table and local website evidence summary are
+already delivered; their independent scientific review remains unsigned. Finish
+that review before broadening numerical work. A [bounded SANISAND access recheck](docs/reviews/sanisand-1986-access-v2/README.md)
+confirms that the advertised mirror PDF requires login. Resume acquisition only
+with a readable copy or new concrete lead; do not repeat the same searches.
+Deployment still needs a fresh explicit instruction.
 
 ## 2. Starting point
 

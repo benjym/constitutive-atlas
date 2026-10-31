@@ -4,6 +4,8 @@ This is the **live work board** for model ingestion. [ROADMAP.md](ROADMAP.md) re
 
 ## Current bounded delivery cycle — 1 November 2026
 
+- [X] **SRC-sanisand-1986-access-v2** — Owner:coordinating parent; claimed:2026-11-01; output:docs/reviews/sanisand-1986-access-v2/; completed:2026-11-01; [access receipt and focus checkpoint](docs/reviews/sanisand-1986-access-v2/README.md): advertised PDF redirects to restricted-access HTML; no full text acquired. Stop further retries until new source lead/readable copy. Existing TMD2 figure/table/local website summary confirmed; scientific checklist remains unsigned. No equations, model changes or builds.
+
 The KFS checkpoint, qualified TMD2 reproduction and bounded source/initialization
 reconciliations for all five baseline models are complete. Scientific admission
 remains pending for all five. The demonstrated DP dilatancy-domain correction is now implemented and verified
@@ -65,7 +67,7 @@ Three independent source-ingestion packets are assigned below. Each agent owns o
 Read all existing linked material first. The task is to close or precisely document the remaining source/schema gaps, not redo completed numerical studies. Acquisition blockers are historical findings to check, not claims that a fresh search has failed. Each task uses the packet template and completion gate in AGENTS.md.
 
 - [-] **ING-sanisand-2004** — Acquire exact Dafalias1986 PartI pp966-987 and map loading-process/conjugacy; keep existing2004 research event variants separate.
-  Owner: coordinating parent (source worker handoff integrated); claimed:2026-10-31; output: `docs/ingestion/sanisand-2004/`; [source follow-up](docs/ingestion/sanisand-2004/README.md) integrated; exact1986 source remains unavailable; existing evidence: [sanisand-1986-loading-process.md](docs/reviews/sanisand-1986-loading-process.md); blocker: see existing dossier, confirm when claimed.
+  Owner: coordinating parent (source worker handoff integrated); claimed:2026-10-31; output: `docs/ingestion/sanisand-2004/`; [source follow-up](docs/ingestion/sanisand-2004/README.md) integrated; exact1986 source remains unavailable; [fresh public-link check](docs/reviews/sanisand-1986-access-v2/README.md) confirms restricted-resource redirect; resume with readable copy/new concrete lead, not repeated searches; existing evidence: [sanisand-1986-loading-process.md](docs/reviews/sanisand-1986-loading-process.md); blocker: see existing dossier, confirm when claimed.
 
 - [-] **ING-terracotta-2024** — Complete journal/author reconciliation and source-matched external histories; nine-case prepared creep parity already exists.
   Owner: coordinating parent (worker handoff integrated); claimed: 2026-10-31; output: `docs/ingestion/terracotta-2024/`; [bounded packet](docs/ingestion/terracotta-2024/README.md) integrated with17 independent algebra checks. BLOCKED: journal image/PDF, strictness/calibration/Appendix reconciliation and source-matched external histories; source-complete task remains open.
