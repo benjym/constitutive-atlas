@@ -1,3 +1,7 @@
+# Clay2005 compiled-rate parity failure —2026-10-31
+
+The frozen [109call native/Wasm study](../catalogue/investigations/clay2005-rates-v3/RESULTS.md) passes all41independent source cases and29material rejection/recovery pairs per backend, including actual minimum-subnormal echoes. Its unchanged1e-10 parity gate **fails for5finite-only near-singular support cases/17stress components**. Full raw/build/source evidence and the failed assessment are retained; a separate arithmetic/conditioning diagnostic is next. No model promotion or deployment; eight local runnable drafts and five hosted remain.
+
 # Tagged instantaneous-rate transport —2026-10-31
 
 The separately versioned [v3 collection tools](reviews/generic-rate-collection-v3/README.md) now separate source-accuracy, finite-only support and recognized rejection without invented reference vectors.47synthetic checks pass; [independent source-only review](reviews/tagged-rate-transport-review-v3/README.md) has44/44 expected observations, retaining and closing initial lexical/recovery/raw-marker gaps. Historical tools/driver remain unchanged. A distinct subnormal-aware driver is source-reviewed; actual compilation and the frozen109call clay2005 native/Wasm study remain next. No runnable count change: eight local drafts, five hosted; no deployment.

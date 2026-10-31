@@ -1,0 +1,864 @@
+{
+  "version": "clay2005-spd-interior-support-inputs-v2",
+  "cases": [
+    {
+      "id": "safe",
+      "state": [
+        1.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "Diagonal actual inputs; positive tiny eigenvalues may deliberately lie outside conservative numerical interior"
+    },
+    {
+      "id": "tiny-positive-interior",
+      "state": [
+        1.0,
+        1.0,
+        1e-10,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "Diagonal actual inputs; positive tiny eigenvalues may deliberately lie outside conservative numerical interior"
+    },
+    {
+      "id": "tiny-positive-excluded",
+      "state": [
+        1.0,
+        1.0,
+        1e-20,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Diagonal actual inputs; positive tiny eigenvalues may deliberately lie outside conservative numerical interior"
+    },
+    {
+      "id": "rank-loss",
+      "state": [
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Diagonal actual inputs; positive tiny eigenvalues may deliberately lie outside conservative numerical interior"
+    },
+    {
+      "id": "negative-eigenvalue",
+      "state": [
+        1.0,
+        1.0,
+        -1e-20,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Diagonal actual inputs; positive tiny eigenvalues may deliberately lie outside conservative numerical interior"
+    },
+    {
+      "id": "positive-subnormal",
+      "state": [
+        1.0,
+        1.0,
+        5e-324,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Diagonal actual inputs; positive tiny eigenvalues may deliberately lie outside conservative numerical interior"
+    },
+    {
+      "id": "negative-subnormal",
+      "state": [
+        1.0,
+        1.0,
+        -5e-324,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Diagonal actual inputs; positive tiny eigenvalues may deliberately lie outside conservative numerical interior"
+    },
+    {
+      "id": "margin-below",
+      "state": [
+        1.0,
+        1.0,
+        2.0097183471152322e-14,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Diagonal actual inputs; positive tiny eigenvalues may deliberately lie outside conservative numerical interior"
+    },
+    {
+      "id": "margin-above",
+      "state": [
+        1.0,
+        1.0,
+        8.038873388460929e-14,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "Diagonal actual inputs; positive tiny eigenvalues may deliberately lie outside conservative numerical interior"
+    },
+    {
+      "id": "scaled-positive-1e-50",
+      "state": [
+        1e-50,
+        1e-50,
+        1.0000000000000001e-60,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "Same intended diagonal spectrum under finite scale change; source rate accuracy not certified here"
+    },
+    {
+      "id": "scaled-zero-1e-50",
+      "state": [
+        1e-50,
+        1e-50,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Same intended diagonal spectrum under finite scale change; source rate accuracy not certified here"
+    },
+    {
+      "id": "scaled-negative-1e-50",
+      "state": [
+        1e-50,
+        1e-50,
+        -1e-70,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Same intended diagonal spectrum under finite scale change; source rate accuracy not certified here"
+    },
+    {
+      "id": "scaled-positive-1.0",
+      "state": [
+        1.0,
+        1.0,
+        1e-10,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "Same intended diagonal spectrum under finite scale change; source rate accuracy not certified here"
+    },
+    {
+      "id": "scaled-zero-1.0",
+      "state": [
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Same intended diagonal spectrum under finite scale change; source rate accuracy not certified here"
+    },
+    {
+      "id": "scaled-negative-1.0",
+      "state": [
+        1.0,
+        1.0,
+        -1e-20,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Same intended diagonal spectrum under finite scale change; source rate accuracy not certified here"
+    },
+    {
+      "id": "scaled-positive-1e+50",
+      "state": [
+        1e+50,
+        1e+50,
+        1.0000000000000002e+40,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "Same intended diagonal spectrum under finite scale change; source rate accuracy not certified here"
+    },
+    {
+      "id": "scaled-zero-1e+50",
+      "state": [
+        1e+50,
+        1e+50,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Same intended diagonal spectrum under finite scale change; source rate accuracy not certified here"
+    },
+    {
+      "id": "scaled-negative-1e+50",
+      "state": [
+        1e+50,
+        1e+50,
+        -1e+30,
+        0.0,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Same intended diagonal spectrum under finite scale change; source rate accuracy not certified here"
+    },
+    {
+      "id": "oblique-safe",
+      "state": [
+        1.4444444444444444,
+        1.1111111111111112,
+        1.4444444444444444,
+        0.31426968052735443,
+        0.31426968052735443,
+        0.6285393610547089,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "Rounded actual Mandel companion of intended spectrum[1,2,1.0]; intended zero/tiny eigen sign not asserted as actual rounded spectrum"
+    },
+    {
+      "id": "oblique-tiny-positive",
+      "state": [
+        1.0000000000444444,
+        0.6666666667111111,
+        1.3333333333444444,
+        0.9428090415192094,
+        3.142696805273545e-11,
+        0.9428090415506364,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "Rounded actual Mandel companion of intended spectrum[1,2,1e-10]; intended zero/tiny eigen sign not asserted as actual rounded spectrum"
+    },
+    {
+      "id": "oblique-rank-loss",
+      "state": [
+        1.0,
+        0.6666666666666666,
+        1.3333333333333333,
+        0.9428090415820634,
+        0.0,
+        0.9428090415820634,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Rounded actual Mandel companion of intended spectrum[1,2,0.0]; intended zero/tiny eigen sign not asserted as actual rounded spectrum"
+    },
+    {
+      "id": "oblique-rounded-tiny-positive",
+      "state": [
+        1.0,
+        0.6666666666666666,
+        1.3333333333333333,
+        0.9428090415820634,
+        3.1426968052735444e-21,
+        0.9428090415820634,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Rounded actual Mandel companion of intended spectrum[1,2,1e-20]; intended zero/tiny eigen sign not asserted as actual rounded spectrum"
+    },
+    {
+      "id": "oblique-rounded-tiny-negative",
+      "state": [
+        0.9999999999999999,
+        0.6666666666666666,
+        1.3333333333333333,
+        0.9428090415820634,
+        -3.1426968052735444e-21,
+        0.9428090415820634,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "Rounded actual Mandel companion of intended spectrum[1,2,-1e-20]; intended zero/tiny eigen sign not asserted as actual rounded spectrum"
+    },
+    {
+      "id": "shear-safe",
+      "state": [
+        1.0,
+        1.0,
+        1.0,
+        0.7071067811865476,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "All diagonals positive with xy Cartesian shear intended0.5; actual rounded Mandel inputs decide diagnostics"
+    },
+    {
+      "id": "shear-near-positive-interior",
+      "state": [
+        1.0,
+        1.0,
+        1.0,
+        1.4142135622316738,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": true,
+      "explanation": "All diagonals positive with xy Cartesian shear intended0.9999999999; actual rounded Mandel inputs decide diagnostics"
+    },
+    {
+      "id": "shear-one-ulp-inside",
+      "state": [
+        1.0,
+        1.0,
+        1.0,
+        1.414213562373095,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "All diagonals positive with xy Cartesian shear intended0.9999999999999999; actual rounded Mandel inputs decide diagnostics"
+    },
+    {
+      "id": "shear-rank-loss-intent",
+      "state": [
+        1.0,
+        1.0,
+        1.0,
+        1.4142135623730951,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "All diagonals positive with xy Cartesian shear intended1.0; actual rounded Mandel inputs decide diagnostics"
+    },
+    {
+      "id": "shear-one-ulp-outside",
+      "state": [
+        1.0,
+        1.0,
+        1.0,
+        1.4142135623730954,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "All diagonals positive with xy Cartesian shear intended1.0000000000000002; actual rounded Mandel inputs decide diagnostics"
+    },
+    {
+      "id": "shear-negative-eigenvalue",
+      "state": [
+        1.0,
+        1.0,
+        1.0,
+        1.4142135625145165,
+        0.0,
+        0.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "expected_accepted": false,
+      "explanation": "All diagonals positive with xy Cartesian shear intended1.0000000001; actual rounded Mandel inputs decide diagnostics"
+    }
+  ],
+  "scope": "support classification only, not near-singular rate accuracy certification",
+  "rotation": [
+    [
+      0.3333333333333333,
+      0.6666666666666666,
+      0.6666666666666666
+    ],
+    [
+      0.6666666666666666,
+      0.3333333333333333,
+      -0.6666666666666666
+    ],
+    [
+      -0.6666666666666666,
+      0.6666666666666666,
+      -0.3333333333333333
+    ]
+  ]
+}

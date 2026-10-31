@@ -1,0 +1,4422 @@
+{
+  "version": "research-instantaneous-rate-protocol-0.3",
+  "study": "clay2005-rates-v3",
+  "model_file": "catalogue/investigations/clay2005-rates-v3/model.json",
+  "model_definition": {
+    "schema_version": "0.3",
+    "id": "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+    "name": "Ma\u0161\u00edn2005 AppendixC/source-plus conservative SPD interior \u2014 v0.3 rate candidate",
+    "family": "hypoplasticity",
+    "description": "Original five-physical-parameter AppendixC base, zero spin, compression-positive full7rate research draft. Additive correction: pinned manuscript Eq38 has PLUS unloading bracket, consistent withEq40 and AppendixC; previous minus claim is historical extraction error. Same source rate algebra asv1. Separate normalized Cartesian/Mandel diagonal/minor64epsilon guards restrict numerical interior; not certifiedSPD theorem. RawLode margin and j2 floor unchanged; no clipping. No near-isotropic/near-singular rate accuracy, finite integration or admission claim. Explicit v0.3 strain-path contract; persistent effective Cauchy stress and scalar void ratio, infinitesimal fixed spatial zero-spin restriction. Accepted manuscript, not final-publisher equivalence. London-clay source calibration defaults are not universal clay parameters; illustrative stress/e is not a prepared specimen. No inferred initialization, finite-path verification or scientific admission.",
+    "status": "draft",
+    "sources": [
+      {
+        "url": "https://doi.org/10.1002/nag.416",
+        "locator": "Ma\u0161\u00edn2005 accepted manuscript AppendixC Eqs73\u201385 pp24\u201325; p10 Eq38 PLUS bracket consistent withEqs40\u201341. Historical minus claim corrected additively.",
+        "role": "primary publication"
+      },
+      {
+        "url": "https://web.natur.cuni.cz/uhigug/masin/download/MasinIJNAMG05-pp.pdf",
+        "locator": "Accepted manuscript SHA2568650dd58a4b5725dc0176ab9cf3a034ed211847b840524254876c2652bdf9ff3",
+        "role": "pinned author source"
+      },
+      {
+        "url": "https://doi.org/10.1016/j.compgeo.2005.09.001",
+        "locator": "Companion2005 p9 Eq25 density; SOM differs from SBS pp12-14",
+        "role": "density and initialization context"
+      },
+      {
+        "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/ingestion/hypoplastic-clay-2005/rate-study-v2/SOURCE_CORRECTION.md",
+        "role": "Additive correction to earlier Atlas extraction",
+        "locator": "Pinned accepted manuscript p10Eq38 is PLUS, consistent withEq40/AppendixC; no author-equation correction or rate change."
+      },
+      {
+        "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/ingestion/hypoplastic-clay-2005/guard-review-v2/README.md",
+        "role": "Conservative support and compiled-corpus scope",
+        "locator": "41accuracy cases distinct from29support witnesses;10finite-only accepted,19excluded; not an all-SPD or near-boundary accuracy theorem."
+      }
+    ],
+    "parameters": {
+      "p_ref": {
+        "default": 1000,
+        "min": 1000,
+        "max": 1000,
+        "unit": "Pa",
+        "label": "Fixed source reference pressure"
+      },
+      "p_scale": {
+        "default": 100000,
+        "min": 1,
+        "max": 1000000000000.0,
+        "unit": "Pa",
+        "label": "Numerical stress error scale, not material calibration"
+      },
+      "phi_c": {
+        "default": 0.3944444109507185,
+        "min": 0.01,
+        "max": 1.4,
+        "unit": "1",
+        "label": "Critical angle radians"
+      },
+      "lambda_star": {
+        "default": 0.11,
+        "min": 0.0001,
+        "max": 1.0,
+        "unit": "1",
+        "label": "NCL slope"
+      },
+      "kappa_star": {
+        "default": 0.016,
+        "min": 1e-05,
+        "max": 1.0,
+        "unit": "1",
+        "label": "Initial NCL unloading slope"
+      },
+      "N": {
+        "default": 1.375,
+        "min": -10.0,
+        "max": 10.0,
+        "unit": "1",
+        "label": "Log density intercept at1000Pa"
+      },
+      "r": {
+        "default": 0.4,
+        "min": 0.01,
+        "max": 10.0,
+        "unit": "1",
+        "label": "Initial NCL Ki/Gi"
+      },
+      "lode_allowance": {
+        "default": 1.4210854715202004e-14,
+        "min": 1.4210854715202004e-14,
+        "max": 1.4210854715202004e-14,
+        "unit": "1",
+        "label": "Fixed raw Lode admissibility margin, no clipping"
+      },
+      "j2_floor": {
+        "default": 1e-100,
+        "min": 1e-100,
+        "max": 1e-100,
+        "unit": "1",
+        "label": "Project nonzero-deviator support floor; smaller nonzero values rejected"
+      }
+    },
+    "state": [
+      {
+        "name": "sigma",
+        "shape": "sym",
+        "unit": "Pa",
+        "initial": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "scale": "p_scale",
+        "semantics": {
+          "role": "persistent",
+          "quantity": "cauchy_stress",
+          "transformation": "symmetric_spatial_tensor"
+        }
+      },
+      {
+        "name": "e",
+        "shape": "scalar",
+        "unit": "1",
+        "initial": 0.8,
+        "scale": "1",
+        "semantics": {
+          "role": "persistent",
+          "quantity": "void_ratio",
+          "transformation": "scalar_invariant"
+        }
+      }
+    ],
+    "derived": [
+      {
+        "name": "support_scaled_stress",
+        "expr": "sigma/p_ref"
+      },
+      {
+        "name": "support_norm",
+        "expr": "norm(support_scaled_stress)"
+      },
+      {
+        "name": "support_unit",
+        "expr": "select(support_norm > 0,support_scaled_stress/support_norm,0*I)"
+      },
+      {
+        "name": "support_xx",
+        "expr": "dot(support_unit,sym(1,0,0,0,0,0))"
+      },
+      {
+        "name": "support_yy",
+        "expr": "dot(support_unit,sym(0,1,0,0,0,0))"
+      },
+      {
+        "name": "support_zz",
+        "expr": "dot(support_unit,sym(0,0,1,0,0,0))"
+      },
+      {
+        "name": "support_xy",
+        "expr": "dot(support_unit,sym(0,0,0,1,0,0))"
+      },
+      {
+        "name": "support_yz",
+        "expr": "dot(support_unit,sym(0,0,0,0,1,0))"
+      },
+      {
+        "name": "support_xz",
+        "expr": "dot(support_unit,sym(0,0,0,0,0,1))"
+      },
+      {
+        "name": "support_minor2",
+        "expr": "support_xx*support_yy-support_xy**2/2"
+      },
+      {
+        "name": "support_det",
+        "expr": "support_xx*support_yy*support_zz-(support_xx*support_yz**2+support_yy*support_xz**2+support_zz*support_xy**2)/2+support_xy*support_yz*support_xz/sqrt(2)"
+      },
+      {
+        "name": "p",
+        "expr": "trace(sigma)/3"
+      },
+      {
+        "name": "H",
+        "expr": "sigma/trace(sigma)"
+      },
+      {
+        "name": "Hdev",
+        "expr": "dev(dev(sigma))/trace(sigma)"
+      },
+      {
+        "name": "j2",
+        "expr": "dot(Hdev,Hdev)"
+      },
+      {
+        "name": "j3",
+        "expr": "cube_trace(Hdev)"
+      },
+      {
+        "name": "detH",
+        "expr": "1/27-j2/6+j3/3"
+      },
+      {
+        "name": "pairH",
+        "expr": "1/3-j2/2"
+      },
+      {
+        "name": "a",
+        "expr": "sqrt(3)*(3-sin(phi_c))/(2*sqrt(2)*sin(phi_c))"
+      },
+      {
+        "name": "Q",
+        "expr": "3+a*a"
+      },
+      {
+        "name": "alpha",
+        "expr": "log(((lambda_star-kappa_star)/(lambda_star+kappa_star))*Q/(a*sqrt(3)))/log(2)"
+      },
+      {
+        "name": "Delta",
+        "expr": "Q-2**alpha*a*sqrt(3)"
+      },
+      {
+        "name": "c1",
+        "expr": "2*Delta/(9*r)"
+      },
+      {
+        "name": "c2",
+        "expr": "1+(1-c1)*3/(a*a)"
+      },
+      {
+        "name": "Yi",
+        "expr": "sqrt(3)*a/Q"
+      },
+      {
+        "name": "Y",
+        "expr": "Yi+(1-Yi)*(j2-3*j3)*cos(phi_c)**2/(8*detH*sin(phi_c)**2)"
+      },
+      {
+        "name": "raw_lode",
+        "expr": "select(j2 >= j2_floor,-sqrt(6)*j3/j2**(3/2),0)"
+      },
+      {
+        "name": "tanpsi",
+        "expr": "sqrt(3*j2)"
+      },
+      {
+        "name": "F",
+        "expr": "sqrt(tanpsi**2/8+(2-tanpsi**2)/(2+sqrt(2)*tanpsi*raw_lode))-tanpsi/(2*sqrt(2))"
+      },
+      {
+        "name": "m",
+        "expr": "select(j2 > 0,-a/F*(H+Hdev-(H/3)*(6*dot(H,H)-1)/((F/a)**2+dot(H,H))),(-a/Q)*I)"
+      },
+      {
+        "name": "m_unit",
+        "expr": "m/norm(m)"
+      },
+      {
+        "name": "pe",
+        "expr": "p_ref*exp((N-log1p(e))/lambda_star)"
+      },
+      {
+        "name": "fd",
+        "expr": "(2*p/pe)**alpha"
+      },
+      {
+        "name": "fs",
+        "expr": "3*p/(lambda_star*Delta)"
+      },
+      {
+        "name": "LE",
+        "expr": "3*(c1*de+c2*a*a*H*dot(H,de))"
+      },
+      {
+        "name": "Lm",
+        "expr": "3*(c1*m_unit+c2*a*a*H*dot(H,m_unit))"
+      },
+      {
+        "name": "stress_rate",
+        "expr": "fs*(LE+fd*Y*Lm*norm(de))"
+      },
+      {
+        "name": "e_rate",
+        "expr": "-(1+e)*trace(de)"
+      },
+      {
+        "name": "sphere_residual",
+        "expr": "abs(dot(sigma,sym(1,-1,0,0,0,0)))+abs(dot(sigma,sym(0,1,-1,0,0,0)))+abs(dot(sigma,sym(0,0,0,1,0,0)))+abs(dot(sigma,sym(0,0,0,0,1,0)))+abs(dot(sigma,sym(0,0,0,0,0,1)))"
+      }
+    ],
+    "equations": {
+      "sigma": "stress_rate",
+      "e": "e_rate"
+    },
+    "domain": [
+      "support_norm > 0",
+      "support_xx > 0",
+      "support_yy > 0",
+      "support_zz > 0",
+      "support_minor2 > 1.4210854715202004e-14",
+      "support_det > 1.4210854715202004e-14",
+      "e >= 0",
+      "lambda_star > kappa_star",
+      "alpha > 0",
+      "p > 0*p_ref",
+      "pairH > 0",
+      "detH > 0",
+      "c1 > 0",
+      "c1+c2*a*a*dot(H,H) > 0",
+      "select(j2 > 0,j2/j2_floor,1) >= 1",
+      "select(j2 > 0,0*p_ref,sphere_residual) <= 0*p_ref",
+      "raw_lode >= -1-lode_allowance",
+      "raw_lode <= 1+lode_allowance",
+      "F > 0",
+      "Y > 0",
+      "norm(m) > 0",
+      "pe > 0*p_ref",
+      "fd > 0",
+      "fs > 0*p_ref",
+      "abs(j2) <= 1e250",
+      "abs(j3) <= 1e250",
+      "abs(detH) <= 1e250",
+      "abs(pairH) <= 1e250",
+      "abs(a) <= 1e250",
+      "abs(Q) <= 1e250",
+      "abs(alpha) <= 1e250",
+      "abs(Delta) <= 1e250",
+      "abs(c1) <= 1e250",
+      "abs(c2) <= 1e250",
+      "abs(Yi) <= 1e250",
+      "abs(Y) <= 1e250",
+      "abs(raw_lode) <= 1e250",
+      "abs(tanpsi) <= 1e250",
+      "abs(F) <= 1e250",
+      "abs(fd) <= 1e250",
+      "abs(e_rate) <= 1e250",
+      "norm(m) <= 1e250",
+      "norm(m_unit) <= 1e250",
+      "norm(LE) <= 1e250",
+      "norm(Lm) <= 1e250",
+      "abs(p) <= p_ref*1e250",
+      "abs(pe) <= p_ref*1e250",
+      "abs(fs) <= p_ref*1e250",
+      "norm(stress_rate) <= p_ref*1e250"
+    ],
+    "formulation": {
+      "time_dependence": "strain_path",
+      "equation_form": "strain_path_rate",
+      "kinematics": "small_strain_3d",
+      "frame": "fixed_spatial",
+      "objective_rate": "none",
+      "tensor_representation": "mandel",
+      "stress_sign": "compression_positive",
+      "strain_sign": "compression_positive",
+      "stress": {
+        "source": "state",
+        "name": "sigma",
+        "measure": "cauchy",
+        "scope": "effective"
+      },
+      "inputs": {
+        "equation": {
+          "de": {
+            "quantity": "strain_increment",
+            "measure": "infinitesimal_strain",
+            "shape": "sym",
+            "unit": "1",
+            "configuration": "current",
+            "sampling": "increment",
+            "constraint": "finite"
+          }
+        },
+        "advance": {}
+      }
+    },
+    "initialization": {
+      "method": "explicit_state",
+      "default_policy": "examples_only",
+      "required_state": [
+        "sigma",
+        "e"
+      ],
+      "validation": "domain_and_initial_checks"
+    }
+  },
+  "files": {
+    "atlas/__init__.py": "a8fc14bd14c81b692d4875ecea57087edebd75c544f1c26a295731c28bd4a922",
+    "atlas/baseline.py": "0cd58ee44962fd5fe246ecaf6c9ef7ef023987101c9aadd17f66e96e39ed2ba4",
+    "atlas/benchmark.py": "875274308a90408611746dff973a29bfebda9ae497086160a0a801c7ffab19c7",
+    "atlas/cli.py": "36434a33be5fb6f087726c409463d3ed3a0f1a5eb523ae49506e43cc566691b0",
+    "atlas/compiler.py": "93402d9076e0cc0bdb13288e55fd2957881d94a4c80d423fffd10a5a6dbe54b0",
+    "atlas/data.py": "378d05c07fb3697bc44575e54693fccd8d6c654acec868965120035e18280cb2",
+    "atlas/dsl.py": "6eed591e1e4f8ee1a7a28ec07107d2224dde5fea73899a0a7792ddece459bf1e",
+    "atlas/evidence.py": "042a93cbae02248d27e31f3585a1541c5589fa11e77e0bf555c9d1f022f4927d",
+    "atlas/experiment_replay.py": "5ebd8ef363b7fb4bec8850bcee3cf74ac33d6fa6812c15d7ea64b95ed2991926",
+    "atlas/history.py": "1ae77baaf0f5fd30b6e9ff3c8043795e21ae0b83ceac0388627c45986969f28a",
+    "atlas/history_compiler.py": "0747d2e61a5d848a449c47486aad433a8a5de2ef81389883562fd359cf6c7b30",
+    "atlas/history_legacy.py": "3fb111d8b57cde7a17753d62e0da0ce5988018fdaa6f6228b89f118be4212fc9",
+    "atlas/history_native.py": "3f3e927efe886f0ec35e98f690cf5f2557a63aa96957d2df4601dd470c4a0dfe",
+    "atlas/initialization.py": "da45614b7738366e653d06d24da618f4df6def513b63aef36c2d485074d34fc7",
+    "atlas/isotropic_reference.py": "dd657e109d399b42a5fb983f84a98b00398878ee6c79001d3ce979bd99daac34",
+    "atlas/measurement_units.py": "00e8b82bd4ef8f6815b82854855096107114c528871e0b081499f580925e5f12",
+    "atlas/model.py": "f1a8ff24d2d6fdb663436e7e29fa3c1b2a61e5bebca58edd5aa99e0114824d6d",
+    "atlas/opensees.py": "c0f86b37c74a9c7e235b5b8a1cf47f0246b87bd409dbc20759c59ded9e81e31c",
+    "atlas/public_data.py": "776ec23a147811cbc037575427c89fc5429cfc68d1864a90338768f9e6ce98cc",
+    "atlas/recorded.py": "1dfda789714db40a01c29269131dfd69551c4ba596b3a23de64ea94a236c5fd1",
+    "atlas/refinement.py": "4d38af81072fd5c4ac55d47210c81a00c961a1e955f5fd262115a7b44fb8bdee",
+    "atlas/research.py": "1b223596218237960e921383cb6413e4031e0fa0228e76c9e0b3f0a63e225577",
+    "atlas/scalar_math.py": "ed29e8ee35045a4de313accf1fc2bae7ae6f8f09af1ab297fe4c21a5582bef89",
+    "atlas/schedule.py": "919811a0592bae4023614de55531cf211993cba9a2c705a4f9d3a2fd44f72b16",
+    "atlas/source_replay.py": "f67d2f620e8a7e8175db314665a0bef322c039fdfd2cbe2e6047a85c1e32b5bf",
+    "atlas/structure.py": "30b1ef624c642b217e19e0a58e6988c2a2f802f0bfc5f892c6d7a38def1bcd47",
+    "atlas/symmetric_expm.py": "c7ab6549501736bd84da7eca03500f8abd763610b07f2b7de98e6100a0a2c205",
+    "catalogue/investigations/clay2005-rates-v3/README.md": "aa4de5f14850df4514d6dfa3fdb4bc1b60e9a7dbfc651021c6a2b49c8f1512a1",
+    "catalogue/investigations/clay2005-rates-v3/model.json": "d53f38f469e99cd5a49fcc2303d74d542f790cfa9e4dda7d49bf1dc2ceec019d",
+    "catalogue/investigations/clay2005-rates-v3/prepare.py": "ac3c3b6fceb9358924df3f1a0068824e5f0a212f5e146bdda3c94d8143705610",
+    "catalogue/investigations/clay2005-rates-v3/run_build.py": "0bf9c2a2f5f14c1db948b00955b7bdef7001f202813a258aef7f70c275cb5c73",
+    "catalogue/investigations/clay2005-rates-v3/verify_study.py": "31b91fbff3d59b489d98d286e68225218a0577be6dac3a44524ba60361aee350",
+    "cmake/research-v3/CMakeLists.txt": "5a81b57827245c4252783cc13a81e4a270651b5b1b8edca5daf38072f55acea3",
+    "cpp/include/atlas/checked_expression.hpp": "87a63032a8028a54c4261e5c9d5ca5a727293eb87d9506d1c1e3ea4c4c2bbec8",
+    "cpp/include/atlas/checked_trace.hpp": "c7f1cc3a18529ec024c58b2d2b8281a574e2dc4619f0cdb6c7dde33684f2ca65",
+    "cpp/include/atlas/expm.hpp": "267a9044b686082ba4faf9777ec271ea91ec9eed3495219abd3d5559a680c85f",
+    "cpp/include/atlas/history_runtime.hpp": "aecb42fd96c0b5a318ce58680a0d35db7eb8ef8f9f807d695ff2572ae28517af",
+    "cpp/include/atlas/linearize.hpp": "40f8ed4bc722636c3ce0573af150dcbe6afe59618e0dad1542aa9a2b9e7b4319",
+    "cpp/include/atlas/recorded.hpp": "9c0f9fae85a033d1af1c8f6ffc718ea1f04e5f6ac6e94dacda233870d1ffaba6",
+    "cpp/include/atlas/schedule.hpp": "5c90e6cede9f24f124286cf10e2254a47a991e5d62f9bc7b3899ed62e6deb7e9",
+    "cpp/include/atlas/settings.hpp": "3eb1171ae1ef17440b19e8becfc8e9bf92335519a88da8f1e9be407d3488662b",
+    "cpp/include/atlas/solver.hpp": "7842240f542949a1ba547f4a2fea44e4ef1fadf50b35a18fd86f8fe4327164d5",
+    "cpp/include/atlas/tensor.hpp": "966a6a413b8ea4d50f400bc96860644774cabfb15f69e8bfec9c3fb215b7e144",
+    "cpp/include/atlas/time.hpp": "7b9942fbb1eae296201ad12db210c0c767fb3cc53c1f37de37de3e517f13f4d1",
+    "cpp/include/atlas/trace_accuracy.hpp": "5e2c187683372ec56aaeef5cd6aaf3b45ae9fe4605c64d5b728f291fad52d44c",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/README.md": "ae1cedf4a4b7cd9a9d82a0c8b41501efb0e8e2931ed2328e6311df5cdc68c8c9",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/check.py": "39a97712ecf42e8439c379814776b694c103606226b7aa91ae27b79715079961",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/checker-initial-failure.txt": "5e7257a16467cadbd27fc381ddcdcfaa717ef37a5ff3df94845f50a7db4a2c23",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/checks.json": "8b7aba8addcd8c5880e94e7223e9b83e1a05a5c5ffa11061d49f0dfbafd2acec",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/corpus.json": "16096c88ef9f226fcb38c2330091e9e371686efe2fa26c0ebf58a437e132a9f3",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/corpus.py": "500b324a0549397835c3ef47170e9698387540aa18ba3d46d78952606ac81ef8",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/manifest.json": "adb8ceb8a2f168225c9a4b493790db8634e38867f1f933cf147b8fca816ef1a2",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/model.json": "d53f38f469e99cd5a49fcc2303d74d542f790cfa9e4dda7d49bf1dc2ceec019d",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/requests.tsv": "807df35739083ef923a70d75eefe9139cc4642892cf9cfcd5c241484d7af3c5f",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/source-invalid-cases.json": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/source-protocol.json": "0bf177218ef7a06a11e83a963a1c7736beee0f77a60c64d0e4219f06e430db96",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/source-reference.json": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/source-support-inputs.json": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/source-support-reference.json": "04a94eb86eac5e24a62d7edc76eae1bb2b3fdb696f98ca70e9653ce579abd97c",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/transport-v2-gap-witness.json": "66fb00bb47605f8351e85375ba5628d93a622a56b45683dc36b2cd95a52b4231",
+    "docs/reviews/generic-rate-collection-v3/CONTRACT.md": "4db37dc9bb06613c8aa4f7b596dc5904748522fce161f2a06a6df0b101b66c21",
+    "docs/reviews/generic-rate-collection-v3/source-pins.json": "1009bc8f956cb8174c6b7a76fe0f6191262ac0ede773d354ae2611a1580d46bd",
+    "docs/reviews/tagged-rate-transport-review-v3/manifest.json": "c821ba50a3b088dc127151d77c76f7a1519a6a40b0f72a82acdaca917e257cae",
+    "docs/reviews/tagged-rate-transport-review-v3/observations-final.json": "4d2f013dfd46b4f45aa5c0eda76c30c89e7061dc2220855eb9089a785106f9ba",
+    "schemas/drained-replay.schema.json": "58bf7e7294451623d1aa7a041715dc9aa1a1890639488526be2494046e76c27b",
+    "schemas/evidence.schema.json": "69f51ecf54e328269c7ad57df43644dfffa275abcc8c4273289d7d4bd017e6ad",
+    "schemas/experiment.schema.json": "555bf1cb1f9e9cd80f04371a0cf8eba8138502b91bb4a60ead0a394b594c44a3",
+    "schemas/history-program.schema.json": "3553a15511f0166f1cc570d77605e850a6f60ae299f31810c651085831773f9c",
+    "schemas/history-snapshot.schema.json": "456f4bffe860c7bf75f65960f9491f1ca67a86eb7eeeac8caecd737bc0306e92",
+    "schemas/initialization-input.schema.json": "855a874ec4dad889aceb1d9beb84985e13bb6bbc0b4b7d2e7d29b58797d2bc6c",
+    "schemas/initialization-recipe.schema.json": "b2da03cd87b37c1011a92f4fb9bf8330eac73ffd7925118e3fb1e05caa123117",
+    "schemas/model-v0.2.schema.json": "538b081ddcf0843a53d6f75ae2931fd28edc438e199cfeac4f86a512529b0c40",
+    "schemas/model-v0.3.schema.json": "d08e7ed7e060eb3fae4bcd37ceea0b6fee59a19ce31e2d752827beb8af8eb0ab",
+    "schemas/model.schema.json": "85acda14fe4a8dcd12fced802202b7c3a11a60e811e5da2d7db8224d35621ec7",
+    "schemas/publications.schema.json": "68ef4c8842ac7c509f29c820e4929b0ce9e037f7697a7f94815515e4589528ab",
+    "schemas/recorded-path.schema.json": "9240c1f82d65dd2ebfc77f97d5f0e26dfc57368a3cdc4979a1ce81c9d08ae2f0",
+    "schemas/recorded-refinement.schema.json": "e111866f406e257a5ca01766b5eb555f5755e7bcc12575f7d92d7c2d0bec3e9a",
+    "schemas/recorded-run.schema.json": "49d816e03aa430a2642ebfdbcac6210606dd387f66532a0ba39468f545b5a8a2",
+    "schemas/review.schema.json": "fa53511a11050863b6c3a538410739bf1d4db16926cd492eadb3353778cf347d",
+    "schemas/run-v0.2.schema.json": "8d035091d98aa95c392a5ea34f726125b2e043d154e2e984b7791061fc7ff813",
+    "schemas/run.schema.json": "e9d7d81546c610ac682350a997a7b2228a79fb603e46b7f4550e6cf6038ff702",
+    "schemas/screening.schema.json": "19f0952b293e7781b4b315aed46a73c32a0643d4b6b9d222e26f78fe2c040088",
+    "schemas/source-measurement.schema.json": "be79e24bd5544c4fef34725a2a0f6a918c743d3841245c828c9eae2ec636e8c5",
+    "tests/research_rate_driver_v3.cpp": "0abc5dfc1de640401ec36ee24044c4d17fe25d4f2a1e0843588a554986cf2e43",
+    "tools/collect_research_rates_wasm_v3.mjs": "5498904ed8fc327df37127a163110436a16ea284093d334eeb405bc9e349c29a",
+    "tools/research_rate_observations_v3.py": "4577129ddc23376a35ad92ffc19376d456c08f6c257e0dc6dbbc5cba8e63fff8",
+    "tools/research_rate_parity_v3.py": "1a304bbd7c9a03d52e86a65e3159a0403ea3dd639b32a4e2bf58338df80f0358"
+  },
+  "cases": [
+    {
+      "id": "accuracy/nonisotropic-0-mixed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-0-reversed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-reversed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "-0.001,0.00029999999999999997,-0.00020000000000000001,-0.00040000000000000002,0.00020000000000000001,-0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -7743.144665345008,
+          -990.4914451004605,
+          -2840.617139362379,
+          -1861.6289583880912,
+          948.1566793294345,
+          -474.07833966471725,
+          0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-0-zero",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-zero"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0,0,0,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-0-xy_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-xy_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0,0,0,0.001,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -365.6796792111665,
+          -98.69518297334768,
+          -9.700350894074623,
+          4367.240944315611,
+          17.798966415854593,
+          -8.899483207927299,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-0-yz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-yz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0,0,0,0,0.001,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -493.81447544941096,
+          -194.79628015203102,
+          -95.1235483862376,
+          -29.901819529738003,
+          4413.873940292552,
+          -9.967273176579335,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-0-xz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-xz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0,0,0,0,0,0.001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -416.9335977064643,
+          -137.135621844821,
+          -43.86962989093981,
+          -27.979797586164334,
+          18.653198390776225,
+          4384.612794744006,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          4.400823429700519e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-1-mixed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-1-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "80000,110000,140000,-4000,7000,2000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6181.504915143914,
+          -307.02326445044037,
+          2204.448555955205,
+          1998.4704239459143,
+          -997.3232419053493,
+          500.7647880270431,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-1-reversed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-1-reversed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "80000,110000,140000,-4000,7000,2000,0.80000000000000004",
+        "-0.001,0.00029999999999999997,-0.00020000000000000001,-0.00040000000000000002,0.00020000000000000001,-0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -5986.484065572339,
+          -288.00811293528835,
+          -3589.5321602982376,
+          -1893.1301270182735,
+          812.9777222819783,
+          -553.4349364908633,
+          0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          5.523116624629526e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-1-zero",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-1-zero"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "80000,110000,140000,-4000,7000,2000,0.80000000000000004",
+        "0,0,0,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-1-xy_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-1-xy_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "80000,110000,140000,-4000,7000,2000,0.80000000000000004",
+        "0,0,0,0.001,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          24.18108071873519,
+          -339.59016715261635,
+          -703.361415023968,
+          5048.502833049513,
+          -84.8799578366487,
+          -24.251416524756774,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-1-yz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-1-yz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "80000,110000,140000,-4000,7000,2000,0.80000000000000004",
+        "0,0,0,0,0.001,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          189.3325958702503,
+          -112.5068338192831,
+          -414.3462635088166,
+          40.2452572919378,
+          4929.570799739109,
+          -20.1226286459689,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-1-xz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-1-xz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "80000,110000,140000,-4000,7000,2000,0.80000000000000004",
+        "0,0,0,0,0,0.001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          114.26372534683433,
+          -215.72653078898006,
+          -545.7167869247946,
+          43.99870081810859,
+          -76.99772643169003,
+          4978.000649590946,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          4.907377637239585e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-0.3-load",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-0.3-load"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0.29999999999999999,0.29999999999999999,0.29999999999999999,0,0,0,8.6532060097421457",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          0.008181818181818228,
+          0.008181818181818228,
+          0.008181818181818228,
+          0.0,
+          0.0,
+          0.0,
+          -0.028959618029226437
+        ],
+        "absolute_budgets": [
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-0.3-unload",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-0.3-unload"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0.29999999999999999,0.29999999999999999,0.29999999999999999,0,0,0,8.6532060097421457",
+        "-0.001,-0.001,-0.001,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -0.056249999999999946,
+          -0.056249999999999946,
+          -0.056249999999999946,
+          0.0,
+          0.0,
+          0.0,
+          0.028959618029226437
+        ],
+        "absolute_budgets": [
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          1.0000346410161514e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-0.3-mixed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-0.3-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0.29999999999999999,0.29999999999999999,0.29999999999999999,0,0,0,8.6532060097421457",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          0.003147493128053204,
+          -0.014579779599219522,
+          -0.007761597781037704,
+          0.005454545454545454,
+          -0.002727272727272727,
+          0.0013636363636363635,
+          -0.008687885408767932
+        ],
+        "absolute_budgets": [
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-0.3-reversed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-0.3-reversed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0.29999999999999999,0.29999999999999999,0.29999999999999999,0,0,0,8.6532060097421457",
+        "-0.001,0.00029999999999999997,-0.00020000000000000001,-0.00040000000000000002,0.00020000000000000001,-0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -0.035272961417401334,
+          -0.01754568869012861,
+          -0.02436387050831043,
+          -0.005454545454545454,
+          0.002727272727272727,
+          -0.0013636363636363635,
+          0.008687885408767932
+        ],
+        "absolute_budgets": [
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          1.0000231516738057e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-0.3-zero",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-0.3-zero"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0.29999999999999999,0.29999999999999999,0.29999999999999999,0,0,0,8.6532060097421457",
+        "0,0,0,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-0.3-xy_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-0.3-xy_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0.29999999999999999,0.29999999999999999,0.29999999999999999,0,0,0,8.6532060097421457",
+        "0,0,0,0.001,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -0.013876088856091541,
+          -0.013876088856091541,
+          -0.013876088856091541,
+          0.013636363636363634,
+          0.0,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-0.3-yz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-0.3-yz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0.29999999999999999,0.29999999999999999,0.29999999999999999,0,0,0,8.6532060097421457",
+        "0,0,0,0,0.001,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -0.013876088856091541,
+          -0.013876088856091541,
+          -0.013876088856091541,
+          0.0,
+          0.013636363636363634,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-0.3-xz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-0.3-xz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0.29999999999999999,0.29999999999999999,0.29999999999999999,0,0,0,8.6532060097421457",
+        "0,0,0,0,0,0.001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -0.013876088856091541,
+          -0.013876088856091541,
+          -0.013876088856091541,
+          0.0,
+          0.0,
+          0.013636363636363634,
+          -0.0
+        ],
+        "absolute_budgets": [
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          1.0000200000000001e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-100000-load",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-100000-load"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,0,0,0,1.3831693930553501",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          2727.27272727273,
+          2727.27272727273,
+          2727.27272727273,
+          0.0,
+          0.0,
+          0.0,
+          -0.007149508179166051
+        ],
+        "absolute_budgets": [
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-100000-unload",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-100000-unload"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,0,0,0,1.3831693930553501",
+        "-0.001,-0.001,-0.001,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -18749.999999999993,
+          -18749.999999999993,
+          -18749.999999999993,
+          0.0,
+          0.0,
+          0.0,
+          0.007149508179166051
+        ],
+        "absolute_budgets": [
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          7e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-100000-mixed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-100000-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,0,0,0,1.3831693930553501",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          1049.1643760177255,
+          -4859.926533073183,
+          -2587.1992603459107,
+          1818.1818181818182,
+          -909.0909090909091,
+          454.54545454545456,
+          -0.002144852453749815
+        ],
+        "absolute_budgets": [
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-100000-reversed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-100000-reversed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,0,0,0,1.3831693930553501",
+        "-0.001,0.00029999999999999997,-0.00020000000000000001,-0.00040000000000000002,0.00020000000000000001,-0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -11757.653805800453,
+          -5848.562896709546,
+          -8121.290169436818,
+          -1818.1818181818182,
+          909.0909090909091,
+          -454.54545454545456,
+          0.002144852453749815
+        ],
+        "absolute_budgets": [
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          5.009987531152684e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-100000-zero",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-100000-zero"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,0,0,0,1.3831693930553501",
+        "0,0,0,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-100000-xy_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-100000-xy_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,0,0,0,1.3831693930553501",
+        "0,0,0,0.001,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -4625.362952030521,
+          -4625.362952030521,
+          -4625.362952030521,
+          4545.454545454545,
+          0.0,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-100000-yz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-100000-yz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,0,0,0,1.3831693930553501",
+        "0,0,0,0,0.001,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -4625.362952030521,
+          -4625.362952030521,
+          -4625.362952030521,
+          0.0,
+          4545.454545454545,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-100000-xz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-100000-xz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,0,0,0,1.3831693930553501",
+        "0,0,0,0,0,0.001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -4625.362952030521,
+          -4625.362952030521,
+          -4625.362952030521,
+          0.0,
+          0.0,
+          4545.454545454545,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          4.464101615137755e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-9.24701e+06-load",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-9.24701e+06-load"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "9247007.6575399265,9247007.6575399265,9247007.6575399265,0,0,0,0.44842088623062587",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          252191.11793290888,
+          252191.11793290888,
+          252191.11793290888,
+          0.0,
+          0.0,
+          0.0,
+          -0.004345262658691878
+        ],
+        "absolute_budgets": [
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-9.24701e+06-unload",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-9.24701e+06-unload"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "9247007.6575399265,9247007.6575399265,9247007.6575399265,0,0,0,0.44842088623062587",
+        "-0.001,-0.001,-0.001,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -1733813.9357887341,
+          -1733813.9357887341,
+          -1733813.9357887341,
+          0.0,
+          0.0,
+          0.0,
+          0.004345262658691878
+        ],
+        "absolute_budgets": [
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          5.558204594523957e-08,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-9.24701e+06-mixed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-9.24701e+06-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "9247007.6575399265,9247007.6575399265,9247007.6575399265,0,0,0,0.44842088623062587",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          97016.31019054109,
+          -449397.7786640909,
+          -239238.5137200017,
+          168127.4119552714,
+          -84063.7059776357,
+          42031.85298881785,
+          -0.0013035787976075634
+        ],
+        "absolute_budgets": [
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-9.24701e+06-reversed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-9.24701e+06-reversed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "9247007.6575399265,9247007.6575399265,9247007.6575399265,0,0,0,0.44842088623062587",
+        "-0.001,0.00029999999999999997,-0.00020000000000000001,-0.00040000000000000002,0.00020000000000000001,-0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -1087231.1477694015,
+          -540817.0589147697,
+          -750976.3238588589,
+          -168127.4119552714,
+          84063.7059776357,
+          -42031.85298881785,
+          0.0013035787976075634
+        ],
+        "absolute_budgets": [
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          3.7180385407208495e-08,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-9.24701e+06-zero",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-9.24701e+06-zero"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "9247007.6575399265,9247007.6575399265,9247007.6575399265,0,0,0,0.44842088623062587",
+        "0,0,0,0,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          1e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-9.24701e+06-xy_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-9.24701e+06-xy_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "9247007.6575399265,9247007.6575399265,9247007.6575399265,0,0,0,0.44842088623062587",
+        "0,0,0,0.001,0,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -427707.6663632762,
+          -427707.6663632762,
+          -427707.6663632762,
+          420318.52988817845,
+          0.0,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-9.24701e+06-yz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-9.24701e+06-yz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "9247007.6575399265,9247007.6575399265,9247007.6575399265,0,0,0,0.44842088623062587",
+        "0,0,0,0,0.001,0"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -427707.6663632762,
+          -427707.6663632762,
+          -427707.6663632762,
+          0.0,
+          420318.52988817845,
+          0.0,
+          -0.0
+        ],
+        "absolute_budgets": [
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-9.24701e+06-xz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "sphere-9.24701e+06-xz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "9247007.6575399265,9247007.6575399265,9247007.6575399265,0,0,0,0.44842088623062587",
+        "0,0,0,0,0,0.001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -427707.6663632762,
+          -427707.6663632762,
+          -427707.6663632762,
+          0.0,
+          0.0,
+          420318.52988817845,
+          -0.0
+        ],
+        "absolute_budgets": [
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          3.213257416167525e-08,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/rotated-mixed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "rotated-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "88888.888888888876,99831.697930470938,101279.41318064016,18046.817359701065,-19998.877636914815,-7952.0602772137472,0.80000000000000004",
+        "9.809363471940213e-05,0.0006257078722109418,0.00017619849306965609,0.00038316979304709527,-0.00043774410688522208,-0.00075457431383812686"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          2363.70376174351,
+          4819.859025691485,
+          2862.9794173026107,
+          1910.966734154229,
+          -2175.353727741609,
+          -3415.728606591762,
+          -0.00162
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/rotated-reversed",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "rotated-reversed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "88888.888888888876,99831.697930470938,101279.41318064016,18046.817359701065,-19998.877636914815,-7952.0602772137472,0.80000000000000004",
+        "-9.809363471940213e-05,-0.0006257078722109418,-0.00017619849306965609,-0.00038316979304709527,0.00043774410688522208,0.00075457431383812686"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -2701.1525266474728,
+          -5399.002278449762,
+          -3474.0984447106075,
+          -2309.5678851547304,
+          2617.0701526328544,
+          3591.366244860368,
+          0.00162
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/rotated-yz_shear",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "rotated-yz_shear"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "88888.888888888876,99831.697930470938,101279.41318064016,18046.817359701065,-19998.877636914815,-7952.0602772137472,0.80000000000000004",
+        "0.00062853936105470882,-0.00031426968052735441,-0.00031426968052735441,-0.00022222222222222221,-0.00055555555555555545,0.00022222222222222221"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          2578.042327001728,
+          -1673.6734288045336,
+          -1688.1032021848707,
+          -1156.3085350229503,
+          -2241.7431644453272,
+          1055.6913335305906,
+          -0.0
+        ],
+        "absolute_budgets": [
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          4.4008234297005183e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/other-parameters-0",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "other-parameters-0"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.52359877559829882,0.12,0.025000000000000001,1.375,0.69999999999999996,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          3260.1515363812146,
+          312.98030728090805,
+          1478.7380457289537,
+          916.1456943386022,
+          -457.32464278658125,
+          228.66232139329063,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "accuracy/other-parameters-1",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "other-parameters-1"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.31415926535897931,0.20000000000000001,0.02,1.375,0.29999999999999999,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          -14275.400312985363,
+          -4061.7714821263385,
+          2350.178868900745,
+          -151.3628830859024,
+          315.7234035387498,
+          -157.86170176937486,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      }
+    },
+    {
+      "id": "finite_only/safe",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "safe"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "finite_only/tiny-positive-interior",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "tiny-positive-interior"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1e-10,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "finite_only/margin-above",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "margin-above"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,8.0388733884609289e-14,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "finite_only/scaled-positive-1e-50",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "scaled-positive-1e-50"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1e-50,1e-50,1.0000000000000001e-60,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "finite_only/scaled-positive-1.0",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "scaled-positive-1.0"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1e-10,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "finite_only/scaled-positive-1e+50",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "scaled-positive-1e+50"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1.0000000000000001e+50,1.0000000000000001e+50,1.0000000000000002e+40,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "finite_only/oblique-safe",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "oblique-safe"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1.4444444444444444,1.1111111111111112,1.4444444444444444,0.31426968052735443,0.31426968052735443,0.62853936105470887,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "finite_only/oblique-tiny-positive",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "oblique-tiny-positive"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1.0000000000444444,0.66666666671111108,1.3333333333444444,0.94280904151920941,3.1426968052735449e-11,0.94280904155063638,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "finite_only/shear-safe",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "shear-safe"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1,0.70710678118654757,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "finite_only/shear-near-positive-interior",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "shear-near-positive-interior"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1,1.4142135622316738,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "finite_only",
+        "ok": true
+      }
+    },
+    {
+      "id": "historical-invalid/negative-void",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "negative-void"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,-0.10000000000000001",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/negative-void",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/negative-void"
+    },
+    {
+      "id": "historical-invalid/indefinite-stress",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "indefinite-stress"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,-100000,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/indefinite-stress",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/indefinite-stress"
+    },
+    {
+      "id": "historical-invalid/zero-stress",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "zero-stress"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0,0,0,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/zero-stress",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/zero-stress"
+    },
+    {
+      "id": "historical-invalid/zero-phi",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "zero-phi"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/zero-phi",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/zero-phi"
+    },
+    {
+      "id": "historical-invalid/lambda-kappa-order",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "lambda-kappa-order"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.20000000000000001,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/lambda-kappa-order",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/lambda-kappa-order"
+    },
+    {
+      "id": "historical-invalid/zero-r",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "zero-r"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/zero-r",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/zero-r"
+    },
+    {
+      "id": "historical-invalid/negative-alpha",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "negative-alpha"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.10000000000000001,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/negative-alpha",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/negative-alpha"
+    },
+    {
+      "id": "historical-invalid/density-overflow",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "density-overflow"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.0001,1.0000000000000001e-05,-10,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/density-overflow",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/density-overflow"
+    },
+    {
+      "id": "historical-invalid/nonzero-deviator-below-floor",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "nonzero-deviator-below-floor"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,9.9999999999999997e-61,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/nonzero-deviator-below-floor",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/nonzero-deviator-below-floor"
+    },
+    {
+      "id": "historical-invalid/nonzero-deviator-underflow",
+      "origin": {
+        "file": "source-invalid-cases.json",
+        "sha256": "7e46860cf40ed791cba495ee69873569363adb0a82e4d104877cad993b93f1f9",
+        "case_id": "nonzero-deviator-underflow"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,9.9999999999999998e-201,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/historical-invalid/nonzero-deviator-underflow",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "historical-invalid/nonzero-deviator-underflow"
+    },
+    {
+      "id": "support-reject/tiny-positive-excluded",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "tiny-positive-excluded"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,9.9999999999999995e-21,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/tiny-positive-excluded",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/tiny-positive-excluded"
+    },
+    {
+      "id": "support-reject/rank-loss",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "rank-loss"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,0,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/rank-loss",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/rank-loss"
+    },
+    {
+      "id": "support-reject/negative-eigenvalue",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "negative-eigenvalue"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,-9.9999999999999995e-21,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/negative-eigenvalue",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/negative-eigenvalue"
+    },
+    {
+      "id": "support-reject/positive-subnormal",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "positive-subnormal"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,4.9406564584124654e-324,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/positive-subnormal",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/positive-subnormal"
+    },
+    {
+      "id": "support-reject/negative-subnormal",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "negative-subnormal"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,-4.9406564584124654e-324,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/negative-subnormal",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/negative-subnormal"
+    },
+    {
+      "id": "support-reject/margin-below",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "margin-below"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,2.0097183471152322e-14,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/margin-below",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/margin-below"
+    },
+    {
+      "id": "support-reject/scaled-zero-1e-50",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "scaled-zero-1e-50"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1e-50,1e-50,0,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/scaled-zero-1e-50",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/scaled-zero-1e-50"
+    },
+    {
+      "id": "support-reject/scaled-negative-1e-50",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "scaled-negative-1e-50"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1e-50,1e-50,-1e-70,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/scaled-negative-1e-50",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/scaled-negative-1e-50"
+    },
+    {
+      "id": "support-reject/scaled-zero-1.0",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "scaled-zero-1.0"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,0,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/scaled-zero-1.0",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/scaled-zero-1.0"
+    },
+    {
+      "id": "support-reject/scaled-negative-1.0",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "scaled-negative-1.0"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,-9.9999999999999995e-21,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/scaled-negative-1.0",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/scaled-negative-1.0"
+    },
+    {
+      "id": "support-reject/scaled-zero-1e+50",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "scaled-zero-1e+50"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1.0000000000000001e+50,1.0000000000000001e+50,0,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/scaled-zero-1e+50",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/scaled-zero-1e+50"
+    },
+    {
+      "id": "support-reject/scaled-negative-1e+50",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "scaled-negative-1e+50"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1.0000000000000001e+50,1.0000000000000001e+50,-1e+30,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/scaled-negative-1e+50",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/scaled-negative-1e+50"
+    },
+    {
+      "id": "support-reject/oblique-rank-loss",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "oblique-rank-loss"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,0.66666666666666663,1.3333333333333333,0.94280904158206336,0,0.94280904158206336,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/oblique-rank-loss",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/oblique-rank-loss"
+    },
+    {
+      "id": "support-reject/oblique-rounded-tiny-positive",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "oblique-rounded-tiny-positive"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,0.66666666666666663,1.3333333333333333,0.94280904158206336,3.1426968052735444e-21,0.94280904158206336,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/oblique-rounded-tiny-positive",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/oblique-rounded-tiny-positive"
+    },
+    {
+      "id": "support-reject/oblique-rounded-tiny-negative",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "oblique-rounded-tiny-negative"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "0.99999999999999989,0.66666666666666663,1.3333333333333333,0.94280904158206336,-3.1426968052735444e-21,0.94280904158206336,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/oblique-rounded-tiny-negative",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/oblique-rounded-tiny-negative"
+    },
+    {
+      "id": "support-reject/shear-one-ulp-inside",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "shear-one-ulp-inside"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1,1.4142135623730949,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/shear-one-ulp-inside",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/shear-one-ulp-inside"
+    },
+    {
+      "id": "support-reject/shear-rank-loss-intent",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "shear-rank-loss-intent"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1,1.4142135623730951,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/shear-rank-loss-intent",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/shear-rank-loss-intent"
+    },
+    {
+      "id": "support-reject/shear-one-ulp-outside",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "shear-one-ulp-outside"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1,1.4142135623730954,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/shear-one-ulp-outside",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/shear-one-ulp-outside"
+    },
+    {
+      "id": "support-reject/shear-negative-eigenvalue",
+      "origin": {
+        "file": "source-support-inputs.json",
+        "sha256": "7dec7f626867460510bb2b1425cb46bdb83e984329f07cfe8c909ae17c242bd2",
+        "case_id": "shear-negative-eigenvalue"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1,1.4142135625145165,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "reject",
+        "ok": false
+      }
+    },
+    {
+      "id": "recovery/support-reject/shear-negative-eigenvalue",
+      "origin": {
+        "file": "source-reference.json",
+        "sha256": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+        "case_id": "nonisotropic-0-mixed"
+      },
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "expectation": {
+        "kind": "accuracy",
+        "ok": true,
+        "values": [
+          6718.542899963244,
+          628.5015016080024,
+          2699.4978031663563,
+          1795.367776199161,
+          -903.9825578701474,
+          451.9912789350737,
+          -0.0016200000000000001
+        ],
+        "absolute_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ],
+        "parity_budgets": [
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          4.936737735740087e-10,
+          2.01e-13
+        ]
+      },
+      "recovery_of": "accuracy/nonisotropic-0-mixed",
+      "after_rejection": "support-reject/shear-negative-eigenvalue"
+    }
+  ],
+  "finite_only_parity": {
+    "norm": "scaled_component_max",
+    "budget": 1e-10
+  },
+  "policy": {
+    "source": {
+      "stress_relative_to_scale": 2e-12,
+      "stress_absolute_floor_Pa": 1e-10,
+      "void_relative_to_scale": 2e-13,
+      "void_absolute_floor": 1e-15,
+      "nonisotropic_certified_corpus_j2_min": 1e-08,
+      "raw_lode_allowance": 1.4210854715202004e-14,
+      "j2_support_floor": 1e-100
+    },
+    "parity": {
+      "accuracy": "same fixed absolute component budgets as source accuracy, prospectively chosen for backend parity",
+      "finite_only": "abs(native-wasm)/max(1,abs(native),abs(wasm))<=1e-10; backend comparison only, no source expected rate",
+      "finite_only_scaled_budget": 1e-10
+    },
+    "counts": {
+      "original_accuracy": 41,
+      "accepted_finite_only": 10,
+      "historical_reject": 10,
+      "support_reject": 19,
+      "recovery": 29,
+      "calls": 109,
+      "raw_rows_with_descriptor": 110
+    },
+    "failure": "Retain failures; do not refit or remove rows after compiled observation.",
+    "scope": "Instantaneous strain-path rates; no integration/tangent/admission/experimental claim."
+  }
+}
