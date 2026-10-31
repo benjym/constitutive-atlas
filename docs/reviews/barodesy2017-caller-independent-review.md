@@ -1,0 +1,22 @@
+# Independent caller-point review: initial findings
+
+The intended numerical construction is appropriate: exact scalar branches carried from original supplied initial state through actual ordered pieces, and a full7state Cartesian RK4 reference at every caller point. Fixed initial Frobenius stress scale and absolute void budgets are explicit before generated observations. Exact original segment closure is enforced for this bounded corpus, and original reversal knots remain ordered. No native/build/repository edits performed.
+
+Initial9 Python groups pass; this includes one test that currently skips missing evidence, so this count is not nine independently completed evidence gates. Four readiness gaps were sent to author/root before final freeze:
+
+1. `scalar_case` records100/160 rounded differences but does not enforce the protocol's scalar eligibility thresholds. Current differences are zero, so observed numbers are unaffected; add guard and meaningful corruption tests.
+2. `test_frozen_reference_matches` silently skips when the retained file is missing. It must require the final retained reference to exist and replay identically.
+3. `study` pins the base module but not its two actual constitutive dependency bytes. Add direct hashes for the Cartesian rate and scalar source modules, or a verified retained base receipt binding those exact dependencies.
+4. `split_path` calls finite-precision Decimal arithmetic exact. With n1 and successive components2**500 then2**-100, cumulative loading silently rounds at precision180. This does not affect selected corpus values, but its supposedly exact transport helper should preserve exact binary64 rational sums or explicitly reject inexact arithmetic. `test_exact_loading_futureproof.py` is a standalone proposed regression: it allows explicit rejection, forbids silent rounding.
+
+The28/56/112 vs4/8/16 physical meshes match nominal resolutions. Their actual floating step vectors may differ slightly because the seventh residual piece need not equal the firstsix. Actual step records/closure support empirical matching, not a blanket exact mesh-identity statement. Current tensor final successive differences are about1.79e-7Pa, with ratios near15.9; void differences are2–3e-16 and floor limited. Both lie far below the explicitly dimensional reference-eligibility budgets. These remain observed indicators, not rigorous error bounds.
+
+Author is addressing the four readiness gaps. Original wider reference milestone remains separate and unchanged. Final caller-point freeze and exact replay must be reviewed after those fixes; no generated-engine convergence/parity/rollback evidence exists in this review.
+
+## Final post-fix independent check
+
+All four readiness findings are closed in the final frozen caller-point packet. Scalar/tensor precision eligibility is enforced through a common guard; a deliberately corrupt100-digit scalar void output is rejected. Mandatory retained-evidence existence/equality replaces the conditional test. Direct Cartesian and scalar constitutive dependency SHA256 values are retained. Split residuals and cumulative loading now use exact Fraction arithmetic; terminating Decimal serialization uses dynamically sufficient precision and traps Inexact. My standalone2**500+2**-100 regression now passes, as do the author's wide-range and tiny1e-100 cases. No change to selected source law or wider original-reference mathematical selection follows.
+
+Independently reran all14 final packet groups against the installed base reference (not the old path-layout staging copy), plus the standalone exact-loading regression:15 groups pass. Frozen generator SHA256 ff5be8ecff41d3a787976709f57723cf7e6a1d3238c4546bf8b4259128f58f07, frozen reference SHA256172d91dd0206ba0464fb7844ad36e91c4a3adab4425c922a276e3dcb45dbbc89. All displayed scalar100/160 points agree. Final chosen void budgets are5e-5/3e-6/2e-7; these match the final protocol and were fixed before any compiled wider-path observations. Physical-mesh language must still distinguish nominal resolutions from exact floating step identity, as actual residual-piece step values show.
+
+No remaining blocker found to integrating this bounded independent caller-point reference. Actual generated native/Wasm comparison, request/control/coverage verification, raw-transport correspondence, refinement/partition shrink, transaction/recovery checks and scientific/public admission remain separate gates. No compiled execution or repository writes were performed in this review.

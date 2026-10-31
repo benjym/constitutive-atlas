@@ -1,0 +1,41 @@
+{
+  "version": "barodesy2017-wider-caller-point-protocol-v1",
+  "baseline_packet": "atlas-barodesy-wider-path-20261031-v1",
+  "reference_scope": "Independent caller-point oracles only; original three-endpoint packet unchanged",
+  "caller_partitions": [
+    1,
+    7
+  ],
+  "split": "For each original Mandel increment: first n-1 pieces are binary64(component/n); final piece is binary64(exact rational original minus exact rational sum of first pieces), requiring exact representability or rejecting the split. Accumulate binary64 pieces as exact fractions and serialize cumulative strain as terminating Decimal with an Inexact trap; display strain is rounded binary64. Never reset reference from generated state.",
+  "scalar_reference": "Exact signed branch solution carried in Decimal throughactualpieces from originalsuppliedinitial; retain everycallerpoint100/160digits; noNCLreset",
+  "tensor_reference": "IndependentCartesianfull7stateRK4 carriedthroughall21actualpieces fromoriginalinitial;4/8/16stepsperone-seventhcallerpiece,28/56/112stepsperunpartitionedcallerpiece(matchednominalresolution; actualfloatstepsare retainedandmaydiffer); retainallcallerpoints",
+  "ordering": "Originalsegmentorder and everyreversal retained; cumulative strain maydecrease; never sort bystrain",
+  "stress_error": "Frobeniusnorm(generatedsigma\u2212referencesigma)/max(1Pa,Frobeniusnorm(originalinitialsigma)); scale fixedpercase, never generatedstate",
+  "tolerances": [
+    0.0001,
+    1e-06,
+    1e-08
+  ],
+  "stress_scaled_bounds": [
+    0.005,
+    0.0003,
+    2e-05
+  ],
+  "void_absolute_bounds": [
+    5e-05,
+    3e-06,
+    2e-07
+  ],
+  "reference_eligibility": {
+    "stress": "maximumlastgridcallerpointdifferencePa<=0.1*min(stress_scaled_bounds)*fixedinitialstressscalePa",
+    "void": "maximumlastgridcallerpointdifference<=0.1*min(void_absolute_bounds)",
+    "precision": "scalar100/160roundedcallerpointdifferences retained and must be below same eligibility budgets",
+    "comparison": "If eligible, comparegeneratedpoint with independentreference using budget plus observedlastpairreferenceuncertainty separately inPa andabsolutevoid. Scalar uncertainty is100/160difference. These are empiricalreferenceestimators, not rigorouscertificates."
+  },
+  "reference_floors": {
+    "stress_pa": 1e-07,
+    "void_ratio": 1e-14
+  },
+  "native_or_Wasm_observation": false,
+  "admission": false
+}
