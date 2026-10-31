@@ -1,0 +1,22 @@
+{
+  "initial_migration_check": {
+    "command": "python3 -B -m unittest tests.test_stress_scope tests.test_formulation -v",
+    "tests": 12,
+    "failed": 1,
+    "failure": "test_migration_preserves_all_current_definitions: migrated Terra Cotta declares total, legacy timed metadata remains unspecified. Old assertion treated metadata as executable equations.",
+    "resolution": "archive exact prior test; exclude only additive enum/member/initializer tokens from old material-byte comparison and verify scope separately. Complete numerical suffix remains exact."
+  },
+  "overbroad_selection": {
+    "command": "python3 -B -m unittest tests.test_stress_scope tests.test_formulation tests.test_normalized_determinant_dsl tests.test_atlas -v",
+    "tests": 47,
+    "failed": 2,
+    "failures": [
+      "test_interpreter_generated_equations_agree: stale solver returns unknown model",
+      "test_native_description_matches_model_source: stale eight-model descriptor differs from nine current definitions, including DP domain guard"
+    ],
+    "solver_path": "/Users/bmar5496/code/constitutive-atlas/build/atlas_solver",
+    "solver_sha256": "da23f66eda19e4b14c3eea85422572809b87e24d37ca6ebdf8f4a05f21af2a82",
+    "resolution": "No solver or model changed to make these tests pass. Subsequent focused selection explicitly names LanguageTests. This stale-binary run is not validation of the new generator.",
+    "material_processes": "Existing solver evaluations/integrations were unintentionally invoked by NumericalTests; no process receipts were captured. Overall turn is not a zero-material-call claim. New explicit metadata target performs zero material evaluations."
+  }
+}

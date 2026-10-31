@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 from .dsl import Type, cpp, infer, parse
+from .stress import stress_scope
 from .model import ROOT, all_models, field_type, load, physical_time, integration_kind, equation_input_types, state_role
 
 
@@ -31,7 +32,8 @@ def generate(destination, model_paths=None):
            'struct Field { std::string name; int offset; int size; double initial[6]; bool transient; bool multiplier; };',
            'struct Parameter { std::string name; double value, lower, upper; };',
            'struct Observable { std::string name; int offset, size; };',
-           'struct Model { std::string id, name; bool rate; bool physical_time; std::vector<Field> fields; std::vector<Parameter> parameters; std::vector<Observable> observables; int stress_offset; bool axisymmetric; };',
+           'enum class StressScope { unspecified, none, effective, total };',
+           'struct Model { std::string id, name; bool rate; bool physical_time; std::vector<Field> fields; std::vector<Parameter> parameters; std::vector<Observable> observables; int stress_offset; bool axisymmetric; StressScope stress_scope=StressScope::unspecified; };',
            'inline const std::vector<Model>& models() { static const std::vector<Model> data = {']
     canonical=[]
     for m in models:
@@ -48,7 +50,7 @@ def generate(destination, model_paths=None):
             observables.append('{'+json.dumps(obs['name'])+f',{obs_offset},{size}'+'}')
             if obs['name']=='stress':stress_offset=obs_offset
             obs_offset+=size
-        lines.append('{'+json.dumps(m['id'])+','+json.dumps(m['name'])+','+str(integration_kind(m)=='rate').lower()+','+str(physical_time(m)).lower()+',{'+','.join(fields)+'},{'+','.join(params)+'},{'+','.join(observables)+'},'+str(stress_offset)+','+str(m.get('formulation',{}).get('kinematics')=='axisymmetric_x').lower()+'},')
+        lines.append('{'+json.dumps(m['id'])+','+json.dumps(m['name'])+','+str(integration_kind(m)=='rate').lower()+','+str(physical_time(m)).lower()+',{'+','.join(fields)+'},{'+','.join(params)+'},{'+','.join(observables)+'},'+str(stress_offset)+','+str(m.get('formulation',{}).get('kinematics')=='axisymmetric_x').lower()+',StressScope::'+stress_scope(m)+'},')
         canonical.append(m)
     lines+=['}; return data; }', 'template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {', 'bool atlas_eval_ok=true;', 'const auto I = identity<T>();', '(void)evaluation_time;', 'switch(model) {']
     obs_scales=['inline std::vector<double> model_observable_scales(int model,const std::vector<double>& params) { using T=double; bool atlas_eval_ok=true; switch(model) {']

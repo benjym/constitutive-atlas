@@ -1,4 +1,5 @@
 """Normalized determinant typing, independent references and transaction routing."""
+from tests.test_stress_scope import without_stress_scope_metadata
 import copy,json,struct,tempfile,unittest
 from fractions import Fraction as F
 from pathlib import Path
@@ -42,7 +43,8 @@ class NormalizedDeterminantDsl(unittest.TestCase):
    h=ROOT/'catalogue/investigations'/study
    with tempfile.TemporaryDirectory()as tmp:
     generate(tmp,[h/'model.json'])
-    for name in ('models.hpp','models.json'):self.assertEqual((Path(tmp)/name).read_bytes(),(h/'expected-generated'/name).read_bytes())
+    self.assertEqual((Path(tmp)/'models.json').read_bytes(),(h/'expected-generated/models.json').read_bytes())
+    self.assertEqual(without_stress_scope_metadata((Path(tmp)/'models.hpp').read_text()),(h/'expected-generated/models.hpp').read_text())
  def test_history_header_and_transaction(self):
   p=json.loads((ROOT/'tests/fixtures/log1p-history/log1p.json').read_text());p['id']='synthetic-normalized-determinant-history';p['phases'][0]['writes']['A']='select(g>0,normalized_determinant(X)*I,I)';validate_program(p)
   parent=make_snapshot(p,{'A':[0.]*6},generation=7,preparation_epoch=3);before=copy.deepcopy(parent)

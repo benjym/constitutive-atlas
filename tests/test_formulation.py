@@ -11,6 +11,7 @@ from atlas.compiler import generate
 from atlas.dsl import ValidationError
 from atlas.model import ROOT, equation_input_types, integration_kind, interpret, load, migrate_formulation, physical_time, validate
 from atlas.structure import check
+from tests.test_stress_scope import without_stress_scope_metadata
 
 
 class FormulationTests(unittest.TestCase):
@@ -75,7 +76,8 @@ class FormulationTests(unittest.TestCase):
                 self.assertEqual(physical_time(old), physical_time(new))
                 self.assertEqual(integration_kind(old), integration_kind(new))
                 self.assertEqual(migrate_formulation(new), new)
-                # Material-update code is identical; identity and initialization policy differ.
+                # Material-update code is identical; identity, initialization policy and
+                # explicit scope metadata can differ from unscoped legacy timed output.
                 with tempfile.TemporaryDirectory() as directory:
                     base = Path(directory)
                     for label, model in [('old', old), ('new', new)]:
@@ -83,7 +85,7 @@ class FormulationTests(unittest.TestCase):
                         definition.write_text(json.dumps(model))
                         generate(base/label, [definition])
                     def executable(label):
-                        return [line for line in (base/label/'models.hpp').read_text().splitlines()
+                        return [line for line in without_stress_scope_metadata((base/label/'models.hpp').read_text()).splitlines()
                                 if 'inline const char* catalogue_hash()' not in line
                                 and 'inline bool explicit_initialization_required(' not in line
                                 and 'inline const char* describe_models()' not in line]

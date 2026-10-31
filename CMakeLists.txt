@@ -7,7 +7,7 @@ file(GLOB MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/*.json")
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/generated/models.hpp" "${CMAKE_BINARY_DIR}/generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/generated"
-  DEPENDS ${MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json
+  DEPENDS ${MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_models DEPENDS "${CMAKE_BINARY_DIR}/generated/models.hpp" "${CMAKE_BINARY_DIR}/generated/models.json")
 add_executable(atlas_solver cpp/main.cpp)
@@ -46,7 +46,7 @@ file(GLOB TIME_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/tests/fixtures
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/time-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/time-generated" "${CMAKE_SOURCE_DIR}/tests/fixtures/time"
-  DEPENDS ${TIME_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json
+  DEPENDS ${TIME_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_time_models DEPENDS "${CMAKE_BINARY_DIR}/time-generated/models.hpp")
 add_executable(atlas_time_solver cpp/main.cpp)
@@ -78,7 +78,7 @@ file(GLOB RESEARCH_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/res
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/research-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/research-generated" "${CMAKE_SOURCE_DIR}/models/research"
-  DEPENDS ${RESEARCH_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json schemas/model.schema.json
+  DEPENDS ${RESEARCH_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_research_models DEPENDS "${CMAKE_BINARY_DIR}/research-generated/models.hpp")
 add_executable(atlas_research_solver cpp/main.cpp)
@@ -115,7 +115,7 @@ file(GLOB CLAY2013_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/res
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/clay2013-generated" "${CMAKE_SOURCE_DIR}/models/research/clay2013"
-  DEPENDS ${CLAY2013_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  DEPENDS ${CLAY2013_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_clay2013_models DEPENDS "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp")
 add_executable(atlas_clay2013_solver cpp/main.cpp)
@@ -134,7 +134,7 @@ file(GLOB GIS2024_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/rese
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/gis2024-generated" "${CMAKE_SOURCE_DIR}/models/research/gis2024"
-  DEPENDS ${GIS2024_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  DEPENDS ${GIS2024_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_gis2024_models DEPENDS "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp")
 add_executable(atlas_gis2024_solver cpp/main.cpp)
@@ -153,7 +153,7 @@ file(GLOB EXPM_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/tests/fixtures
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/expm-generated/models.hpp" "${CMAKE_BINARY_DIR}/expm-generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/expm-generated" "${CMAKE_SOURCE_DIR}/tests/fixtures/expm"
-  DEPENDS ${EXPM_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json
+  DEPENDS ${EXPM_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/expm-history-generated/history_programs.hpp"
@@ -176,7 +176,7 @@ file(GLOB LOG1P_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/tests/fixture
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/log1p-generated/models.hpp" "${CMAKE_BINARY_DIR}/log1p-generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/log1p-generated" "${CMAKE_SOURCE_DIR}/tests/fixtures/log1p"
-  DEPENDS ${LOG1P_MODEL_FILES} atlas/dsl.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json
+  DEPENDS ${LOG1P_MODEL_FILES} atlas/dsl.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/log1p-history-generated/history_programs.hpp"
@@ -200,7 +200,7 @@ file(GLOB BARODESY_RATE_MODELS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/res
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/barodesy-rate-generated/models.hpp" "${CMAKE_BINARY_DIR}/barodesy-rate-generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/barodesy-rate-generated" "${CMAKE_SOURCE_DIR}/models/research/barodesy2017"
-  DEPENDS ${BARODESY_RATE_MODELS} atlas/dsl.py atlas/scalar_math.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  DEPENDS ${BARODESY_RATE_MODELS} atlas/dsl.py atlas/scalar_math.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_barodesy_models DEPENDS "${CMAKE_BINARY_DIR}/barodesy-rate-generated/models.hpp" "${CMAKE_BINARY_DIR}/barodesy-rate-generated/models.json")
 add_executable(atlas_barodesy_rate_probe tests/barodesy_rate_driver.cpp)
@@ -267,7 +267,7 @@ file(GLOB CLAY2014_MODELS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/clay2014-generated/models.hpp" "${CMAKE_BINARY_DIR}/clay2014-generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/clay2014-generated" "${CMAKE_SOURCE_DIR}/models/research/clay2014"
-  DEPENDS ${CLAY2014_MODELS} atlas/dsl.py atlas/scalar_math.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  DEPENDS ${CLAY2014_MODELS} atlas/dsl.py atlas/scalar_math.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_clay2014_models DEPENDS "${CMAKE_BINARY_DIR}/clay2014-generated/models.hpp" "${CMAKE_BINARY_DIR}/clay2014-generated/models.json")
 add_executable(atlas_clay2014_rate_probe tests/research_rate_driver.cpp)

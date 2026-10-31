@@ -1,0 +1,47 @@
+{
+  "id": "stress-scope-metadata-v1",
+  "scope": "metadata only; no total incremental validation, serializer or API activation",
+  "expected": {
+    "scope-legacy-incremental": [
+      "effective",
+      -1
+    ],
+    "scope-explicit-incremental": [
+      "effective",
+      -1
+    ],
+    "scope-legacy-timed": [
+      "unspecified",
+      0
+    ],
+    "scope-effective-timed": [
+      "effective",
+      0
+    ],
+    "scope-total-timed": [
+      "total",
+      0
+    ],
+    "scope-clock": [
+      "none",
+      -1
+    ],
+    "scope-legacy-clock": [
+      "none",
+      -1
+    ]
+  },
+  "gates": [
+    "all seven descriptors and offsets match exactly in generated native metadata",
+    "all current canonical model catalogue bytes match old generator exactly",
+    "all generated numerical functions match old generator exactly",
+    "total incremental validation still rejects",
+    "malformed/missing v0.3 binding rejects; returned descriptors detached",
+    "one serial metadata-only CMake target; zero material evaluations"
+  ],
+  "build_policy": {
+    "target": "atlas_scope_metadata_tests",
+    "parallel": 1,
+    "material_calls": 0
+  }
+}
