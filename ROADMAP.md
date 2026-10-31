@@ -20,6 +20,14 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 ## Delivery focus — 1 November 2026
 
+A [bounded synthetic VW96 comparison](docs/benchmarks/current-archived-vw96-v1/README.md)
+now passes for the pinned current and archived executables: exact raw-law
+responses, zero-increment preservation and six drained/undrained/reversal
+comparisons at 32/64 caller increments, with matching diagnostic totals. This
+closes only that prospective compatibility slice. Next freeze one complete
+existing acquired-order development replay under the current executable; no
+refit, broad equivalence claim or restart of the completed refinement branch.
+
 The [current source/build receipt](docs/benchmarks/current-source-build-v1/README.md)
 provides a clean serial native executable from 351 pinned source files, with exact
 pre-build/generated/compiled nine-model catalogue checks. No material calls ran.

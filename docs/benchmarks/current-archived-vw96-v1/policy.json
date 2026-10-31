@@ -1,0 +1,137 @@
+{
+  "id": "NUM-current-archived-vw96-v1",
+  "date": "2026-11-01",
+  "model": "hypoplastic-sand-vw96",
+  "input_sha256": {
+    "models/hypoplastic-sand-vw96.json": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+    "paper/results/pilot-matched96/models/hypoplastic-sand-vw96.json": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31",
+    "docs/benchmarks/current-source-build-v1/evidence/result.json": "2a271a5351ff2385281ca6db474beb44cba7dd661c9f73b032b57e25045e2fd7",
+    "docs/benchmarks/current-source-build-v1/evidence/freeze.json": "17b72c0d32908900771c865081968e5123e554b1dc03f5004303daa7fae22e87",
+    "docs/benchmarks/current-source-build-v1/source-manifest.json": "028884d403e3a35ba9fe5e99cfe898abb5b23ba23c3f3acbbd9b0aa2c3bf14a8",
+    "docs/benchmarks/kfs-tmd13-calibration-sensitivity-v1/results.json": "2e7ff78922877be6a1d6cdc47c46aadf3cc4f6cc00a9e61f7afd786ffe91fca2",
+    "tools/benchmark_tmd2.py": "aac32f5668bdc2338489a2cf1da1510cae29327bd37bbb98fe1ce125e78258cd",
+    "tools/strict_observation_json.py": "8199c4f4f4cc731666397b26b79ef455b9473c4066f723d4bc39cc71134fa9ed"
+  },
+  "model_files": {
+    "archived": "paper/results/pilot-matched96/models/hypoplastic-sand-vw96.json",
+    "current": "models/hypoplastic-sand-vw96.json"
+  },
+  "engines": {
+    "archived": {
+      "path": "/Users/bmar5496/code/constitutive-atlas/paper/results/pilot-matched96/solver/atlas_solver",
+      "artifact_sha256": "c075e4010ad3bbaa4e299647d1a86d804b98eb8692f15c5a01e0e65b5db42cd7",
+      "catalogue_hash": "c43016f8f8becb1b9b8fb44be037ee59de09cea9237d026c33f56962025e840c",
+      "source_build_identity": "unresolved; exact artifact only"
+    },
+    "current": {
+      "path": "/private/tmp/atlas-current-source-build-v1/build/atlas_solver",
+      "artifact_sha256": "960d6f8ebcc0c3296555dd6e294a3650a5ec2318108d30850216ee5a69e4f574",
+      "catalogue_hash": "0d2e46841e859ca94bd69fff91020a4516b24f2c50c139f61ece5748b00b3fe7",
+      "source_commit": "6ff25a9fb01de0fa9360c1bd04149877490319ef"
+    }
+  },
+  "parameter_names": [
+    "p_ref",
+    "phi",
+    "hs",
+    "n",
+    "ed0",
+    "ec0",
+    "ei0",
+    "alpha",
+    "beta"
+  ],
+  "parameters": [
+    100000.0,
+    0.5034852324101231,
+    3999999999.999998,
+    0.27,
+    0.677,
+    1.054,
+    1.212,
+    0.12906250000000002,
+    2.609375
+  ],
+  "parameter_selection": "Existing file-initial density3 seed0 candidate95; fixed before this study; no selection from synthetic responses.",
+  "initial": [
+    100000.0,
+    100000.0,
+    100000.0,
+    0.0,
+    0.0,
+    0.0,
+    0.82
+  ],
+  "initial_scope": "Synthetic isotropic compression-positive Mandel stress [Pa], void ratio0.82; not a measured KFS specimen.",
+  "law_directions": {
+    "compression": [
+      0.0001,
+      -5e-05,
+      -5e-05,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extension": [
+      -0.0001,
+      5e-05,
+      5e-05,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mandel-shear": [
+      0.0,
+      0.0,
+      0.0,
+      0.0001,
+      0.0,
+      0.0
+    ]
+  },
+  "paths": [
+    {
+      "id": "drained",
+      "protocol": 1,
+      "target": 0.01,
+      "cycles": 0
+    },
+    {
+      "id": "undrained",
+      "protocol": 2,
+      "target": 0.01,
+      "cycles": 0
+    },
+    {
+      "id": "drained-reversal",
+      "protocol": 1,
+      "target": 0.002,
+      "cycles": 1
+    }
+  ],
+  "caller_steps": [
+    32,
+    64
+  ],
+  "stress_scale_pa": 100000.0,
+  "law_scaled_tolerance": 1e-12,
+  "compatibility_limits": {
+    "stress_pa": 10.0,
+    "void_ratio": 1e-07,
+    "strain": 1e-07,
+    "observable_pa": 10.0
+  },
+  "stress_control_absolute_pa": 0.1,
+  "volume_control_absolute": 1e-12,
+  "limits_reason": "Prospective narrow software-compatibility gate: stress/observables1e-4 of initial100kPa; absolute void/strain1e-7. Not a physical-accuracy or integrator-local-error bound. No empirical tuning.",
+  "integration_settings": "Both engines use their built-in defaults; recorded historical source and current source declare rate1e-6, residual2e-10, max_iterations45, max_depth14, max_substeps20000, max_backtracks11. Archived source/build equivalence remains unresolved.",
+  "native_process_budget": 22,
+  "material_call_budget": 20,
+  "builds": 0,
+  "limits": [
+    "Only these synthetic states, parameters, directions and caller grids are covered.",
+    "Compatibility pass is not exact engine equality, historical binary source identification, experimental replay or independent scientific verification.",
+    "Two caller resolutions provide descriptive sensitivity only, not convergence/order proof.",
+    "No fitting, model migration, data access, scientific admission or deployment; original failed refinement remains failed."
+  ]
+}

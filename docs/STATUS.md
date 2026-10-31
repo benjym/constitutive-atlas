@@ -1,5 +1,15 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [bounded current/archived VW96 comparison](benchmarks/current-archived-vw96-v1/README.md)
+passes its prospective synthetic compatibility gates: 22 serial processes, exact
+raw-law responses, unchanged zero increments and six drained/undrained/reversal
+path comparisons at 32/64 caller increments. Maximum stress difference is
+1.456e-10 Pa; substep/rejection totals match. Public saved-only reconstruction
+and six corruption/gate checks pass. No build, fit or experimental replay ran.
+This is narrow compatibility, not general engine equivalence. Next freeze one
+complete existing development replay with the current executable; review gates
+and the original failed refinement remain unchanged.
+
 A [current native source/build receipt](benchmarks/current-source-build-v1/README.md)
 now pins 351 tracked source files at `6ff25a9` and one clean serial Release build.
 Pre-build/generated catalogue and header bytes match; compiled metadata equals
