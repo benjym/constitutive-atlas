@@ -14,7 +14,11 @@ or solver calls. It exposes input-information inequalities, unresolved initial
 void ratios and current/archived model differences. M1/M4 and independent review
 remain open. The VW96 input crosswalk is complete: only six parameter labels and sources
 differ from its archived definition; engine equivalence is not claimed. The next
-task is BENCH-01 source-matched baseline selection; new model integration and general numerical expansion are deferred for this delivery cycle.
+task is the strain-convention/reference freeze for the [selected published
+TMD2 IGS case](benchmarks/kfs-published-case-selection-v1/README.md). Complete
+material constants and nominal source initialization are pinned; the full 25%
+range is retained. BENCH-01/02 remain open and no runtime observations were made.
+New model integration and general numerical expansion are deferred for this cycle.
 
 # Latest progress — browser provenance prototype; invariant failure retained
 

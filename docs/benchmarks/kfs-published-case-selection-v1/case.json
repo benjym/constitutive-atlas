@@ -1,0 +1,132 @@
+{
+  "study_version": 1,
+  "id": "kfs-tmd2-wichtmann-2019-igs-reproduction-v1",
+  "status": "selected_pending_protocol_and_reference_freeze",
+  "model": "hypoplastic-sand-igs97",
+  "definition_path": "models/hypoplastic-sand-igs97.json",
+  "definition_sha256": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+  "parameter_set": "parameter-set.json",
+  "source_records": "sources.json",
+  "source_case": {
+    "primary": "2019Figure3a,b loose21% curves",
+    "test_identity": "KFS-TMD2",
+    "identity_evidence": "2016Figure4a,b explicitly labelsTMD2/100kPa/.21;2016Table3 gives unique matching pressure/density pair;2019Figure3 gives the same loose pair.",
+    "reproduction_role": "published calibration-example reproduction; previously exposed development data, not held-out validation",
+    "model_scope": "3D tensorial rate law under zero-spin axisymmetric material-point loading; no finite-deformation capability claim"
+  },
+  "initial": {
+    "policy": "published nominal initial state, not first measurement and not current model defaults",
+    "named_state": {
+      "sigma": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "e": 0.975,
+      "h": [
+        5.773502691896258e-05,
+        5.773502691896258e-05,
+        5.773502691896258e-05,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "flat_state": [
+      100000.0,
+      100000.0,
+      100000.0,
+      0.0,
+      0.0,
+      0.0,
+      0.975,
+      5.773502691896258e-05,
+      5.773502691896258e-05,
+      5.773502691896258e-05,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "history_conversion": "Source tension-positive h_ii=-R/sqrt(3) becomes Atlas compression-positive +R/sqrt(3); off-diagonal Mandel components are zero.",
+    "history_binary64": "0x1.e45106b6b3b93p-15",
+    "history_rounding": "Source exact decimal R=1e-4 divided by sqrt(3), independently rounded at80/120decimal digits with identical binary64 result.",
+    "stress_units": "Pa",
+    "void_ratio_source": "2016Table3 TMD2:0.975; rounded published datum, no uncertainty inferred",
+    "measured_initial_state_separate": {
+      "void_ratio": 0.975289261,
+      "effective_stress": [
+        100022.10666666666,
+        100175.15666666666,
+        100175.15666666666,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "loading": {
+    "protocol": "drained axisymmetric compression",
+    "atlas_protocol": 1,
+    "radial_effective_stress_Pa": 100000.0,
+    "spin": "zero",
+    "published_axial_strain_interval": [
+      0.0,
+      0.25
+    ],
+    "physical_time": "not supplied or inferred for this rate-independent case",
+    "history": "initialize directly to published mobilized state; no guessed preconsolidation replay",
+    "strain_mapping_status": "OPEN: establish plotted axial/volume strain versus source driver input before constructing executable controls. Do not silently treat finite engineering strain as accumulated infinitesimal strain."
+  },
+  "outputs": {
+    "stress": "sigma_xx-sigma_yy, compression-positive, kPa in source plot",
+    "volumetric_strain": "source plotted eps_v, percentage points; mapping from engine accumulated strain remains open",
+    "comparison_grid": "must be fixed when source curves are digitized, before any candidate execution"
+  },
+  "prospective_numerics": {
+    "origin": "project choices, not claimed author input-deck settings",
+    "settings": {
+      "version": "incremental-settings-0.1",
+      "norm": "scaled_component_max",
+      "residual_tolerance": 2e-10,
+      "rate_tolerance": 1e-06,
+      "max_iterations": 45,
+      "max_depth": 14,
+      "max_substeps": 20000,
+      "max_backtracks": 11
+    },
+    "outer_step_counts": [
+      400,
+      800,
+      1600
+    ],
+    "maximum_material_calls": 3,
+    "execution_order": "serial native only first; no new build or Wasm matrix in this source task",
+    "admission": "No numerical acceptance policy is frozen yet; source-curve digitization/uncertainty and strain mapping must precede runtime observations."
+  },
+  "experimental_data": {
+    "path": "data/normalized/KFS-TMD2.json",
+    "sha256": "850db2545f3cb8d0f7edfb02919e27416731229e64ffeae9441470a8a12b4207",
+    "raw_member_sha256": "dbd60b1aab4608766e5d002f513ae31e8cda7898a4babe32afea89f997229667",
+    "source_url": "https://www.torsten-wichtmann.de/KFSDB-TMD.htm",
+    "redistribution": "existing local research copy only; no measured rows copied into this packet"
+  },
+  "open_gates": [
+    "Exact source driver/plotted strain mapping over the full25% range",
+    "Independent published-model curve digitization and precision-derived comparison bounds",
+    "Author code/version and numerical procedure equivalence not established",
+    "Independent equation and scientific review",
+    "Clean-checkout source/data/build reproduction and measurement distribution review"
+  ],
+  "not_performed": [
+    "new calibration",
+    "native or Wasm execution",
+    "new build",
+    "source-code execution",
+    "data reservation release",
+    "experimental validation",
+    "deployment"
+  ]
+}

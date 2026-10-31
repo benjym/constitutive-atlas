@@ -183,6 +183,14 @@ Target the original **Terracotta / Terra Cotta model by Max Wiebicke and Itai Ei
 - [ ] **BENCH-02:** Reproduce the published calculation within declared precision or document discrepancies. The existing transfer of extension parameters to the base law remains a separate demonstration.
 - [ ] **BENCH-03:** Publish one end-to-end benchmark command that fetches permitted data, verifies hashes, normalizes, executes, computes errors and generates figures/tables without manual editing.
 
+The [bounded published-case selection](docs/benchmarks/kfs-published-case-selection-v1/README.md)
+now identifies the TMD2 loose-sand VW96+IGS calculation in the 2016/2019 Wichtmann
+papers. Complete parameters and nominal stress, void ratio and mobilized history
+are pinned without fitting or base-law transfer. BENCH-01 remains open until
+the full 0–25% plotted/driver strain mapping and digitized-reference precision
+are frozen; BENCH-02 has not run. Retain the full published range rather than
+substituting the earlier 2% demonstration.
+
 ### Controlled study
 
 - [ ] **CAL-01:** Freeze whole-test calibration and evaluation IDs before optimization, stratified by relevant pressure, density and loading conditions. Keep all samples of a test together; record how previously inspected tests were used and avoid claiming blind evaluation of them.
