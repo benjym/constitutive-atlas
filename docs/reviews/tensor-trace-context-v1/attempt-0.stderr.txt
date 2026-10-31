@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,os;sys.path.insert(0,sys.argv[1]);os.chdir(sys.argv[1]);exec(sys.argv[2])
+                                                                       ~~~~^^^^^^^^^^^^^
+  File "<string>", line 53, in <module>
+  File "/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-trace-candidate-hoxmt1uq/atlas/compiler.py", line 26, in generate
+    models=all_models() if model_paths is None else [load(p) for p in sorted(model_paths)]; dest=Path(destination); dest.mkdir(parents=True,exist_ok=True)
+                                                     ~~~~^^^
+  File "/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-trace-candidate-hoxmt1uq/atlas/model.py", line 32, in load
+    validate(model)
+    ~~~~~~~~^^^^^^^
+  File "/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-trace-candidate-hoxmt1uq/atlas/model.py", line 58, in validate
+    check(model,json.loads((ROOT/'schemas'/schema).read_text()))
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-trace-candidate-hoxmt1uq/atlas/structure.py", line 33, in check
+    elif additional is False:raise ValidationError(f'{path}: unknown field {key}')
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+atlas.dsl.ValidationError: $: unknown field observables

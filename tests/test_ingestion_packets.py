@@ -2,8 +2,15 @@
 import hashlib,json,subprocess,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand','extended-mohr-coulomb-2013','barodesy-sand/rate-study-v1','hypoplastic-clay-2005/rate-study-v1','barodesy-sand/rate-review-v1','hypoplastic-clay-2005/rate-review-v1','barodesy-sand/rate-study-v2','hypoplastic-clay-2005/rate-study-v2','hypoplastic-thermal-ma-2017','hypoplastic-interface-2016','barodesy-sand/compiled-plan-review-v1','hypoplastic-clay-2005/guard-review-v2')
+PACKETS=('wu-bauer-1994','terracotta-2024','hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand','extended-mohr-coulomb-2013','barodesy-sand/rate-study-v1','hypoplastic-clay-2005/rate-study-v1','barodesy-sand/rate-review-v1','hypoplastic-clay-2005/rate-review-v1','barodesy-sand/rate-study-v2','hypoplastic-clay-2005/rate-study-v2','hypoplastic-thermal-ma-2017','hypoplastic-interface-2016','barodesy-sand/compiled-plan-review-v1','hypoplastic-clay-2005/guard-review-v2')
 class IngestionPackets(unittest.TestCase):
+ def assert_source_review_replay(self,family,count):
+  from atlas.source_replay import registered
+  result=registered(ROOT,'catalogue/source-replays/source-reviews-v1/registry.json','source-reviews')
+  report=json.loads(result['stdout'])
+  self.assertEqual(report['original_groups'],11)
+  row=next(x for x in report['families']if x['family']==family)
+  self.assertEqual(row['original_groups'],count);self.assertTrue(row['original_result_exact'])
  def run_python(self,*args):
   return subprocess.run([sys.executable,'-B',*args],cwd=ROOT,capture_output=True,text=True,timeout=60,check=True)
  def test_local_packet_receipts(self):
@@ -82,12 +89,9 @@ class IngestionPackets(unittest.TestCase):
   self.assertIs(manifest['status']['scientifically_admitted'],False)
   self.assertEqual(manifest['unresolved_ids'],['EMC-01','EMC-02','EMC-03','EMC-04','EMC-05','EMC-06'])
  def test_clay2005_additive_source_correction_and_spd_defects(self):
-  folder=ROOT/'docs/ingestion/hypoplastic-clay-2005/rate-review-v1'
-  self.run_python(str(folder/'probe.py'),'--check',str(folder/'evidence.json'))
-  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_audit.py','-v')
+  self.assert_source_review_replay('clay-v1',4)
  def test_barodesy2015_oracle_limits_remain_reproducible(self):
-  folder=ROOT/'docs/ingestion/barodesy-sand/rate-review-v1'
-  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_review.py','-v')
+  self.assert_source_review_replay('sand-v1',3)
  def test_generic_rate_review_current_behavior_remains_fixed(self):
   folder=ROOT/'docs/reviews/generic-rate-transport-v1'
   manifest=json.loads((folder/'manifest.json').read_text())
@@ -116,8 +120,7 @@ class IngestionPackets(unittest.TestCase):
   self.run_python(str(folder/'checks.py'),'--check',str(folder/'check-results.json'))
   self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_checks.py','-v')
  def test_clay2005_v2_independent_guard_review(self):
-  folder=ROOT/'docs/ingestion/hypoplastic-clay-2005/guard-review-v2'
-  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_audit.py','-v')
+  self.assert_source_review_replay('clay-guard-v2',4)
  def test_sand_prospective_mapping_review(self):
   from atlas.source_replay import registered
   result=registered(ROOT,'catalogue/source-replays/sand-prospective-v1/registry.json','sand-prospective')
@@ -130,4 +133,18 @@ class IngestionPackets(unittest.TestCase):
    blob=(folder/path).read_bytes();self.assertEqual(hashlib.sha256(blob).hexdigest(),pin['sha256']);self.assertEqual(len(blob),pin['bytes'])
   actual=json.loads(self.run_python(str(folder/'witnesses.py'),'--repo',str(ROOT)).stdout)
   self.assertEqual(actual,json.loads((folder/'witness-results.json').read_text()))
+
+ def test_terracotta_temporal_packet_independent_algebra(self):
+  folder=ROOT/'docs/ingestion/terracotta-2024'
+  result=json.loads(self.run_python(str(folder/'checks.py')).stdout)
+  self.assertEqual(result,json.loads((folder/'checks.json').read_text()))
+  self.assertEqual(result['checks'],17);self.assertEqual(result['failures'],0)
+ def test_wu_bauer_appendix_conflicts_and_exact_algebra(self):
+  folder=ROOT/'docs/ingestion/wu-bauer-1994'
+  result=json.loads(self.run_python(str(folder/'check_appendix.py')).stdout)
+  self.assertEqual(result,json.loads((folder/'check-results.json').read_text()))
+  self.assertEqual(result['upper_agreement_for_generic_witness'],19)
+  self.assertEqual(set(result['retained_entry_conflicts']),{'L15','L55'})
+  self.assertFalse(result['scientific_admission'])
+
 if __name__=='__main__':unittest.main()

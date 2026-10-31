@@ -32,8 +32,8 @@ Read all existing linked material first. The task is to close or precisely docum
 - [ ] **ING-sanisand-2004** — Acquire exact Dafalias1986 PartI pp966-987 and map loading-process/conjugacy; keep existing2004 research event variants separate.
   Owner: —; output: `docs/ingestion/sanisand-2004/`; existing evidence: [sanisand-1986-loading-process.md](docs/reviews/sanisand-1986-loading-process.md); blocker: see existing dossier, confirm when claimed.
 
-- [ ] **ING-terracotta-2024** — Complete journal/author reconciliation and source-matched external histories; nine-case prepared creep parity already exists.
-  Owner: —; output: `docs/ingestion/terracotta-2024/`; existing evidence: [TERRACOTTA_CREEP_REFERENCE.md](docs/TERRACOTTA_CREEP_REFERENCE.md); blocker: see existing dossier, confirm when claimed.
+- [-] **ING-terracotta-2024** — Complete journal/author reconciliation and source-matched external histories; nine-case prepared creep parity already exists.
+  Owner: coordinating parent (worker handoff integrated); claimed: 2026-10-31; output: `docs/ingestion/terracotta-2024/`; [bounded packet](docs/ingestion/terracotta-2024/README.md) integrated with17 independent algebra checks. BLOCKED: journal image/PDF, strictness/calibration/Appendix reconciliation and source-matched external histories; source-complete task remains open.
 
 - [ ] **ING-mohr-coulomb** — Pin exact elasticity, flow, hardening/perfect-plastic specialization and original source; inventory face/edge/apex algorithms before transcription.
   Owner: —; output: `docs/ingestion/mohr-coulomb/`; existing evidence: [roadmap](ROADMAP.md); blocker: see existing dossier, confirm when claimed.
@@ -117,7 +117,7 @@ These five models already execute. The tasks below concern outstanding review an
 
 ## Additional lineage task
 
-- [ ] **SRC-wu-bauer-1994** — Complete Appendix I and map sign/calibration/friction-angle conflicts against the retained [original-source dossier](docs/models/wu-bauer-1994-original.md). Owner: —; output: `docs/ingestion/wu-bauer-1994/`. This is outside the 32 catalogue entries; it does not increase the executable count.
+- [X] **SRC-wu-bauer-1994** — Complete Appendix I and map sign/calibration/friction-angle conflicts against the retained [original-source dossier](docs/models/wu-bauer-1994-original.md). Owner: `ingest_wu_bauer`; completed: 2026-10-31; output: `docs/ingestion/wu-bauer-1994/`; [Appendix reconciliation](docs/ingestion/wu-bauer-1994/appendix-reconciliation.md). Bounded mapping complete:19/21 upper linear entries agree, L15/L55 and raw-symmetry conflicts retained; six nonlinear terms and200 exact-rational states checked. Canonical signs/calibration/friction-angle reconciliation and admission remain open. This is outside the32 catalogue entries; it does not increase the executable count.
 
 ## Handoff and integration queue
 
@@ -222,3 +222,11 @@ These are independent automated audits of the draft mappings and study machinery
 - [X] **NUM-trace-native-wasm-operator** — Freeze and execute the integrated generic trace operator probe serially on native/Wasm; require exact independent fixture/Jet bits and nonmutation/recovery checks. Owner: coordinating parent; claimed: 2026-10-31; output: `catalogue/investigations/tensor-trace-operator-v1/`; [results](catalogue/investigations/tensor-trace-operator-v1/RESULTS.md):753 checks/backend, all97 fixture rows and38 derivative columns match independently and across native/Wasm; four evidence/archive regression groups pass. Generated DSL/model-rate/integration/AD admission are separate tasks.
 
 - [-] **NUM-trace-generated-context** — Audit and test checked trace/deviator propagation in generated DSL, including invalid predicates and lazy branches, before a new repaired-engine sand-rate study. Owner: coordinating parent; claimed: 2026-10-31; depends on NUM-trace-native-wasm-operator; output: distinct prospective generated-context study. Preserve original failed rate evidence and archive affected Python runtime receipts before changes.
+
+- [X] **SRC-terracotta-contract-consolidation** — Integrate exact author-source receipts, Figure1 schema/physical-time/transaction contract, retained mixed-control temperature conflict and17 independent algebra checks. Owner: `ingest_terracotta`; completed: 2026-10-31; [packet](docs/ingestion/terracotta-2024/README.md). No repeated creep study or new admission; full ING task remains open.
+
+- [X] **AUDIT-trace-generated-candidate** — Retain four live Python failure witnesses, checked-trace/dev candidate and149 source-only checks including six complete model-header generation contexts. Owner: coordinating parent; completed: 2026-10-31; [packet](docs/reviews/tensor-trace-context-v1/README.md). Production DSL unchanged; historical closures and actual generated native/Wasm semantics remain NUM-trace-generated-context dependencies.
+
+- [X] **INT-dsl-historical-review-closures** — Preserve all11 original sand/clay source-review groups and the standalone original clay2014 rate group before DSL evolution. Owner: coordinating parent; completed: 2026-10-31; [reviews replay](catalogue/source-replays/source-reviews-v1/README.md), [rate replay](catalogue/source-replays/clay2014-rate-v1/README.md). Complete original reports/assertions reproduce, exported no-Git/no-live-source replays survive poisoned DSL and reject changed original documents;21 ingestion and one standalone root groups pass. Identity-only DSL receipt migration remains before production edits.
+
+- [ ] **AUDIT-wu-bauer-appendix-visual** — Independently inspect original L15/L55 and raw shear/symmetry notation, then explicitly select a named research variant before source-path reference work; preserve literal printing and calibration/friction-angle conflicts. Owner: —; depends on SRC-wu-bauer-1994.

@@ -1,0 +1,63 @@
+{
+  "version": "trace-context-pre-repair-python-witnesses-v1",
+  "source_sha256": "d98844ee61060aca4ca39198bf261552f29ebc480abcf196cc2e836016e8cb6d",
+  "compiled_execution": false,
+  "records": [
+    {
+      "id": "finite-final-intermediate-overflow",
+      "expression": "trace(A)",
+      "input_hex": [
+        "0x1.fffffffffffffp+1023",
+        "0x1.fffffffffffffp+1023",
+        "-0x1.fffffffffffffp+1023",
+        "0x0.0p+0",
+        "0x0.0p+0",
+        "0x0.0p+0"
+      ],
+      "observed": "inf",
+      "generated_cpp": "trace(A)"
+    },
+    {
+      "id": "overflow-predicate-masked",
+      "expression": "select(trace(A)>0,1,2)",
+      "input_hex": [
+        "0x1.1ccf385ebc8a0p+1023",
+        "0x1.1ccf385ebc8a0p+1023",
+        "0x1.1ccf385ebc8a0p+1023",
+        "0x0.0p+0",
+        "0x0.0p+0",
+        "0x0.0p+0"
+      ],
+      "observed": "1.0",
+      "generated_cpp": "((trace(A) > T(0.0)) ? T(1.0) : T(2.0))"
+    },
+    {
+      "id": "nonfinite-offdiagonal-masked",
+      "expression": "select(trace(A)>0,1,2)",
+      "input_hex": [
+        "0x0.0p+0",
+        "0x0.0p+0",
+        "0x0.0p+0",
+        "inf",
+        "0x0.0p+0",
+        "0x0.0p+0"
+      ],
+      "observed": "2.0",
+      "generated_cpp": "((trace(A) > T(0.0)) ? T(1.0) : T(2.0))"
+    },
+    {
+      "id": "nonfinite-diagonal-masked",
+      "expression": "select(trace(A)>0,1,2)",
+      "input_hex": [
+        "nan",
+        "0x0.0p+0",
+        "0x0.0p+0",
+        "0x0.0p+0",
+        "0x0.0p+0",
+        "0x0.0p+0"
+      ],
+      "observed": "2.0",
+      "generated_cpp": "((trace(A) > T(0.0)) ? T(1.0) : T(2.0))"
+    }
+  ]
+}

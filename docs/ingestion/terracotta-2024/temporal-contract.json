@@ -1,0 +1,110 @@
+{
+  "version": "terracotta-figure1-temporal-contract-v1",
+  "status": "bounded-contract-not-admission",
+  "formulation": "terracotta-2024-fig1",
+  "law": {
+    "independent_variable": "physical time, seconds",
+    "form": "four-state ODE with algebraic rate-dependent stress",
+    "state": [
+      "ev_e",
+      "es_e",
+      "Tm",
+      "phi"
+    ],
+    "inputs": [
+      "current physical stage time",
+      "current axisymmetric_x strain rate",
+      "parameters"
+    ],
+    "required_external_history": [
+      "accumulated strain",
+      "incoming one-sided rate",
+      "physical time",
+      "preparation/initialization provenance"
+    ],
+    "previous_rate_is_constitutive_state": false,
+    "constitutive_acceleration_required": false
+  },
+  "events": {
+    "rate_jump": {
+      "state": "continuous",
+      "accumulated_strain": "continuous",
+      "pressure_jump": "2*alpha*Tm*deltaDv/Gamma",
+      "signed_q_jump": "2*gamma*Tm*deltaDs/Gamma",
+      "requires": "explicit left/right observations and rate convention"
+    },
+    "strain_hold": "zero Dv/Ds; temperature decay and elastic relaxation generally persist",
+    "stress_hold": {
+      "positive_Tm": "algebraic solve for instantaneous rates, coupled ODE integration",
+      "zero_Tm": "instantaneous rate inversion singular; no floor",
+      "capture": "total stress computed from state and preceding one-sided rate"
+    }
+  },
+  "initialization": {
+    "requires": [
+      "total P/Q",
+      "phi",
+      "Tm",
+      "incoming Dv/Ds",
+      "parameter preset identity"
+    ],
+    "branch": "positive stable elastic root after subtracting rate-dependent and mesoscopic stress",
+    "preparation_inferred": false
+  },
+  "atlas_transaction_policy": {
+    "stage": "matching trial state, time, rate; no committed mutation",
+    "commit": "accepted output interval/valid entry transition",
+    "failure": "discard failed interval, retain previously committed points",
+    "restart_requires": [
+      "parameters",
+      "state",
+      "strain",
+      "physical time",
+      "endpoint one-sided rate"
+    ],
+    "null_rate_transition_is_complete_restart": false,
+    "policy_source": "docs/TIMED_SCHEDULES.md; not asserted author API"
+  },
+  "numerics": {
+    "current_atlas": "backward-Euler step doubling with joint AD Newton mixed-control solve",
+    "author": "scipy solve_ivp BDF; differentiated viscous stresses with outer-partition strain acceleration",
+    "equivalence_claimed": false,
+    "stiffness_suitability_generalized": false,
+    "tangent": "derivatives with respect to both persistent state and unknown strain-rate/increment; total stress is rate dependent"
+  },
+  "source_gaps": [
+    "complete journal page images/hash",
+    "strict/non-strict domain boundaries",
+    "Table1 calibration and AppendixC units visual audit",
+    "mixed-control half-temperature conflict",
+    "unmodified author outer-partition history reproduction",
+    "external source-matched creep histories"
+  ],
+  "unsupported": [
+    "general 3D rotations",
+    "finite deformation",
+    "AppendixB variant",
+    "poromechanics",
+    "zero-temperature instantaneous stress inversion"
+  ],
+  "next_study": {
+    "identity": "new end-to-end preparation-hold study, not existing frozen-preparation matrix",
+    "required": [
+      "independent full-path reference",
+      "continuous physical clock",
+      "carry computed preparation state and accumulated strain",
+      "capture hold total P/Q at explicit incoming rate",
+      "predeclare preparation and hold errors separately",
+      "freeze inputs/bounds before compiled observations",
+      "retain original failed/negative results"
+    ],
+    "already_executed": false
+  },
+  "admission": {
+    "source_complete": false,
+    "scientific_review": false,
+    "experimental_validation": false,
+    "public_timed_browser": false,
+    "full3D": false
+  }
+}

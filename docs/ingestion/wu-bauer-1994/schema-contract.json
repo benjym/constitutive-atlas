@@ -1,0 +1,213 @@
+{
+  "contract_version": "wu-bauer-1994-source-contract-v1",
+  "kind": "non-executable-source-crosswalk",
+  "source_url": "https://doi.org/10.1002/nag.1610181203",
+  "source_sha256": "c8dfbc3cac0adc8bf3d273ec9e8a08ae9bff2273c696b354f1a4059c2f5bb050",
+  "status": {
+    "bounded_appendix_inspection": "complete",
+    "complete_formulation_reconciliation": "incomplete",
+    "canonical_signs": "unresolved",
+    "public_executable": "none",
+    "scientific_admission": false
+  },
+  "identity": {
+    "formulation": "1994 four-coefficient Eq21 body law",
+    "distinct_from": [
+      "Wu-Bauer critical-state/density extensions",
+      "VW96",
+      "IGS97"
+    ],
+    "public_model_id": null
+  },
+  "parameters": [
+    {
+      "name": "c1",
+      "shape": "scalar",
+      "units": "1",
+      "source_locator": "Eq21, p840/PDF8",
+      "range": "No canonical admissible range selected; finite algebraic coefficients only."
+    },
+    {
+      "name": "c2",
+      "shape": "scalar",
+      "units": "1",
+      "source_locator": "Eq21, p840/PDF8",
+      "range": "No canonical admissible range selected; finite algebraic coefficients only."
+    },
+    {
+      "name": "c3",
+      "shape": "scalar",
+      "units": "1",
+      "source_locator": "Eq21, p840/PDF8",
+      "range": "No canonical admissible range selected; finite algebraic coefficients only."
+    },
+    {
+      "name": "c4",
+      "shape": "scalar",
+      "units": "1",
+      "source_locator": "Eq21, p840/PDF8",
+      "range": "No canonical admissible range selected; finite algebraic coefficients only."
+    }
+  ],
+  "states": [
+    {
+      "name": "stress",
+      "shape": "symmetric-3D",
+      "components": 6,
+      "units": "Pa",
+      "source_locator": "Eqs2,3,21",
+      "sign_map": "unresolved"
+    }
+  ],
+  "inputs": [
+    {
+      "name": "stretching",
+      "shape": "symmetric-3D",
+      "units": "1/s",
+      "source_locator": "Eq1,p834/PDF2",
+      "sign_map": "unresolved"
+    },
+    {
+      "name": "spin",
+      "shape": "skew-3D",
+      "units": "1/s",
+      "source_locator": "Eqs1,3",
+      "required_if": "ordinary-rate finite-spin support; zero-spin restriction must be explicit"
+    }
+  ],
+  "coordinates": {
+    "appendix_order": [
+      "11",
+      "22",
+      "33",
+      "12",
+      "13",
+      "23"
+    ],
+    "appendix_shear": "raw tensor",
+    "contraction_weights": [
+      1,
+      1,
+      1,
+      2,
+      2,
+      2
+    ],
+    "atlas_fragment_order": [
+      "11",
+      "22",
+      "33",
+      "sqrt(2)12",
+      "sqrt(2)23",
+      "sqrt(2)13"
+    ],
+    "trace_symbol_p": "full trace, not mean pressure",
+    "matrix_squares": "Cartesian products"
+  },
+  "equations": [
+    {
+      "id": "Eq21",
+      "locator": "p840/PDF8",
+      "output": "Jaumann stress rate",
+      "expression": "c1*T*D+c2*(stress:D)*stress/T+(c3*stress@stress+c4*dev(stress)@dev(stress))*norm(D)/T",
+      "units": "Pa/s",
+      "status": "body transcription retained; signs unresolved"
+    },
+    {
+      "id": "Eq3",
+      "locator": "p835/PDF3",
+      "expression": "ordinary_rate=H-stress@spin+spin@stress",
+      "status": "derived rearrangement of printed objective-rate definition"
+    },
+    {
+      "id": "Appendix-L",
+      "locator": "p860/PDF28",
+      "status": "two upper-entry disagreements and raw-coordinate symmetry conflict; no corrected appendix adopted"
+    },
+    {
+      "id": "Appendix-N",
+      "locator": "p860/PDF28",
+      "status": "six components agree with Eq21 including outer/internal minus signs"
+    },
+    {
+      "id": "Appendix-norm",
+      "locator": "p861/PDF29",
+      "expression": "sqrt(D11^2+D22^2+D33^2+2*(D12^2+D13^2+D23^2))",
+      "status": "agrees with Frobenius norm"
+    }
+  ],
+  "published_parameter_sets": [
+    {
+      "id": "karlsruhe-medium-loose-Dr010",
+      "relative_density": 0.1,
+      "coefficients": [
+        -69.4,
+        -673.1,
+        -655.9,
+        699.6
+      ],
+      "locator": "TableII,p843/PDF11"
+    },
+    {
+      "id": "karlsruhe-medium-dense-Dr095",
+      "relative_density": 0.95,
+      "coefficients": [
+        -101.2,
+        -962.1,
+        -877.3,
+        1229.2
+      ],
+      "locator": "TableII,p843/PDF11"
+    }
+  ],
+  "initialization": {
+    "required": [
+      "finite initial stress with nonzero trace",
+      "selected constant coefficient set",
+      "source-to-host sign policy",
+      "material/preparation and path identity",
+      "declared spin scope"
+    ],
+    "not_inferred": [
+      "zero-stress start",
+      "pressure floor",
+      "density interpolation",
+      "void-ratio state",
+      "physical stress cone"
+    ]
+  },
+  "temporal": {
+    "law": "rate-independent ODE",
+    "parameter": "physical time or positively monotone path parameter; complete signed loading path required",
+    "material_time_scale": null,
+    "stage_order": "rate uses same-stage stress, D and W; mixed-control rates recomputed from trial stress",
+    "source_integrator": "one-step Euler forward, Section3.3.1 Eq34,p846/PDF14",
+    "control": "constant-confinement example solves Eq24 for radial strain rate then Eq23 for axial stress increment",
+    "zero_loading": "D=0,W=0 gives zero rate for finite nonzero trace",
+    "rigid_rotation": "D=0,W!=0 requires commutator transport; ordinary components may change",
+    "events": "reversal changes signed D; no independent history reset or plastic activation supplied",
+    "trial_commit_rollback": "unspecified in inspected source; project must use complete transaction and record its algorithm",
+    "lagged_values": "Euler old stress in source one-step reproduction; adaptive same-stage extension is a project algorithm choice",
+    "tangent": "D!=0: L[dD]+B*(D:dD)/norm(D); generally nonunique at D=0; raw-shear metric required",
+    "unsupported": [
+      "creep/relaxation",
+      "unique zero-loading derivative",
+      "finite-spin integration claim",
+      "mixed-control branch uniqueness/global convergence",
+      "finite path reproduction"
+    ]
+  },
+  "remaining_gates": [
+    "canonical sign map",
+    "authoritative or explicitly versioned correction policy",
+    "physical domain/preparation",
+    "complete simulation/calibration inventory",
+    "source-matched finite paths",
+    "independent scientific review"
+  ],
+  "capability_requests": [
+    "per-equation variant/ambiguity provenance",
+    "objective-rate and tensor-coordinate declaration",
+    "nonsmooth tangent policy"
+  ]
+}
