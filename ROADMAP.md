@@ -268,6 +268,10 @@ The [bounded KFS saved-prediction diagnostic](docs/benchmarks/kfs-metric-sensiti
 now verifies72channel comparisons at locked parameters: aggregate changes are
 0.029–0.073% and all within-model contrast signs persist. It adds no fits or
 scientific admission; unresolved initialization still qualifies the comparison.
+The [initialization policy](studies/kfs-development-v1/initialization-v1/README.md)
+now freezes file/original-table scenarios and distinguishes conditional evaluation
+from TMD13 calibration propagation. The source conflict and numerical uncertainty
+study remain open; exact scenario metadata is prepared without solver execution.
 
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 

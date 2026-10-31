@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [KFS initialization scenarios](../studies/kfs-development-v1/initialization-v1/README.md)
+freeze exact file states and a separately qualified original-table alternative.
+Primary Table3 was visually rechecked;22assignments/11development tests preserve
+recorded stresses and change only TMD12–14 void ratios. Metadata/hash/layout checks
+and exact replay pass. TMD13 calibration propagation is distinct from evaluation
+sensitivity; no fit, solver call or source-resolution claim is added.
+
 The [KFS metric-sensitivity diagnostic](benchmarks/kfs-metric-sensitivity-v1/README.md)
 connects the shared metric to36locked saved predictions/72channel comparisons.
 Original scores and the analytical quadrature-gap identity pass; aggregate errors

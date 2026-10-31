@@ -1,0 +1,103 @@
+{
+  "id": "kfs-development-initialization-scenarios-v1",
+  "status": "qualified_scenarios_not_source_resolution",
+  "date": "2026-11-01",
+  "allocation": "studies/kfs-development-v1/allocation.json",
+  "input_sha256": {
+    "studies/kfs-development-v1/allocation.json": "ff51779ef552ce944279e5a493798f8820304ca2ce603be1610dc0ff154e0bc9",
+    "studies/kfs-development-v1/reservation-policy.json": "ba6b58642296ada46d4105dca1b3e0fbcb267a77af20821c259be7caf517a3b3",
+    "studies/kfs-development-v1/parameters-v1/parameter-policy.json": "a837cb8723823d6900c9c902267a78080d9478f0dd4f6f00919c55878e6ed915",
+    "paper/study/metadata_conflicts.json": "ee3753b9bbe22b38649cde720c6aff2668c677c3a42abdca341940c59e0ac993",
+    "paper/study/kfs_void_ratio_followup.json": "3d3086aa53132389004c57e9616dfbe20ed085ed64baf022f2241b2ae5ad8b74",
+    "paper/results/pilot-matched96/report.json": "55db06cf5cf3ba640d25db9ab45825ef0e277c815f9037b667ca3781c25cf8e2",
+    "paper/results/pilot-matched96/source/paper/analysis/atlas_adapter.py": "39db9663717b91ed2726466ee7a2acf05c2baa3bbd0088d2774f8ddcdcf5d6fe"
+  },
+  "experiment_sha256": {
+    "KFS-TMD1": "cd8f820c6ec12b27cda493dcf22929fcba655c44f684046e82daeae0b8d8fa79",
+    "KFS-TMD12": "91be6483d2216fc1e0083a886066070db1620eaebab2c0ee7ab78299d00038df",
+    "KFS-TMD13": "0d0fe3e32b1c8badfdc121744ebccf65e20abd08969a4730b1b1f0ff246a420c",
+    "KFS-TMD14": "380fdcb758a3aa33f2491fecc07bc71596259d604326dd8e04347500c6e6bb92",
+    "KFS-TMD2": "850db2545f3cb8d0f7edfb02919e27416731229e64ffeae9441470a8a12b4207",
+    "KFS-TMD3": "820bf78e1226d24fc82568d93a7ecfdc5615baa3642ac5c3156c58434fdd9de9",
+    "KFS-TMD4": "0ba9701de9712d83b46e876a2cbb6d08c8fafdbd85173e05edcf1a1bc382a817",
+    "KFS-TMD5": "a7206c2c5965d8878c7f70d5a76c1526f78f06f10638492021aba3b3f308a477",
+    "KFS-TMD7": "f83f67ba52249f9d6e25a9838a7b9b13ec5ae80a7e0c4bfec8bf336417871ad8",
+    "KFS-TMD8": "e948e16978db7ff812f2cfe31f3993a015a120ec25852936e5e087468cd47287",
+    "KFS-TMD9": "abfab3a68319ff22d444d974b3ddeaef15f2c880576886bcf00c389fe20f0187"
+  },
+  "source": {
+    "title": "An experimental data base for the development, calibration and verification of constitutive models for sand with focus to cyclic loading. Part I",
+    "doi": "https://doi.org/10.1007/s11440-015-0402-z",
+    "url": "https://www.torsten-wichtmann.de/paper/2016-AG-data-base-part1.pdf",
+    "private_path": "paper/results/sources/wichtmann-2016-part1.pdf",
+    "sha256": "de1cb4945548850539d4b312a1a703a3152bd1836bfdb6f032e19110aa75336c",
+    "locator": "Table3, PDFp5; caption gives state at initial mean pressure prior to shearing",
+    "visual_review": "coordinator rechecked rendered PDFp5 on2026-11-01; independent scientific review remains pending"
+  },
+  "scenarios": {
+    "file_initial": {
+      "void_ratio": "exact existing normalized-file initial value for all eleven development tests",
+      "effective_stress": "exact normalized-file six-component effective stress; Pa, compression positive"
+    },
+    "original_table_disputed_e0": {
+      "void_ratio_overrides": {
+        "KFS-TMD12": 0.819,
+        "KFS-TMD13": 0.824,
+        "KFS-TMD14": 0.822
+      },
+      "all_other_void_ratios": "unchanged file_initial",
+      "effective_stress": "unchanged file_initial; do not replace by nominal isotropic pressures",
+      "meaning": "hybrid sensitivity scenario replacing only disputed e0 values, not reproduction of a full original published initialization"
+    }
+  },
+  "initial_state_binding": {
+    "sigma": "file effective_stress in archived model order",
+    "e": "scenario void ratio",
+    "transient_gamma": "zero if explicitly declared transient by the archived definition",
+    "other_history": "not supplied; this policy cannot initialize additional memory variables or admit IGS/SANISAND/Terra Cotta"
+  },
+  "affected_roles": {
+    "KFS-TMD12": [
+      "evaluation"
+    ],
+    "KFS-TMD13": [
+      "density3_calibration"
+    ],
+    "KFS-TMD14": [
+      "evaluation"
+    ]
+  },
+  "workflows": {
+    "locked_parameter_evaluation": {
+      "parameter_selection": "existing selected budget96 fits only; unchanged",
+      "affected_tests": [
+        "KFS-TMD12",
+        "KFS-TMD14"
+      ],
+      "claim": "conditional evaluation-input sensitivity only; cannot propagate uncertainty in TMD13 calibration or validate its original fit"
+    },
+    "full_scenario_recalibration": {
+      "status": "deferred pending a separate complete prospective numerical freeze",
+      "calibration_change": "density3 TMD13 changes e0; pressure3 states unchanged",
+      "evaluation_change": "TMD12 and TMD14 change e0",
+      "must_hold_fixed": [
+        "whole-test allocation",
+        "model definitions and verified implementation",
+        "fixed/fitted information partition",
+        "channels and scales",
+        "loading coordinates and window",
+        "optimizer seeds, bounds, budgets and failure handling"
+      ],
+      "no_cross_scenario_selection": "report every frozen scenario; never select source/e0 or fitted vector by evaluation error"
+    }
+  },
+  "decision": {
+    "historical_results": "retain file initialization and development-only labels; do not relabel as corrected source initialization",
+    "physical_source_preference": "unresolved; no averaging, voting among secondary publications or inferred correction",
+    "uncertainty": "two discrete assumptions; not a probability distribution, confidence interval or empirical bound on all admissible initial states",
+    "published_baseline": "source-matched nominal TMD2+IGS reproduction is a separate qualified case; not interchangeable with this base-VW96 panel",
+    "scientific_admission": false,
+    "new_fits": 0,
+    "new_solver_calls": 0
+  }
+}
