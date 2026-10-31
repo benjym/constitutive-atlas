@@ -79,7 +79,7 @@ class RegisteredReplay(unittest.TestCase):
 
     def test_source_rate_packet_frozen_files(self):
         import hashlib
-        for packet in ('source-rates-v1', 'sand-prospective-v1'):
+        for packet in ('source-rates-v1', 'sand-prospective-v1', 'finite-tensor-v1'):
             folder = ROOT / 'catalogue/source-replays' / packet
             manifest = json.loads((folder / 'manifest.json').read_bytes())
             self.assertFalse(manifest['compiled_execution'])
@@ -103,6 +103,26 @@ class RegisteredReplay(unittest.TestCase):
             (root / registry).write_text(json.dumps(spec))
             with self.assertRaises(ValueError):
                 replay.registered(root, registry, 'sand')
+
+    def test_compressed_registered_capsule_and_corruption(self):
+        import gzip
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); spec = self.export(root)
+            record = spec['replays']['fixed']
+            capsule = root / record['capsule']['path']
+            encoded = gzip.compress(capsule.read_bytes(), mtime=0)
+            capsule.write_bytes(encoded)
+            record['capsule'].update(sha256=replay.digest(encoded), bytes=len(encoded))
+            record['capsule_encoding'] = 'json-gzip'
+            (root / REGISTRY).write_text(json.dumps(spec))
+            self.assertTrue(replay.registered(root, REGISTRY, 'fixed')['historical_output_reproduced'])
+            # Rebind the outer receipt deliberately; an invalid compressed body
+            # must still be rejected before Python entrypoint execution.
+            capsule.write_bytes(encoded[:-8])
+            record['capsule'].update(sha256=replay.digest(encoded[:-8]), bytes=len(encoded)-8)
+            (root / REGISTRY).write_text(json.dumps(spec))
+            with self.assertRaises((ValueError, OSError, EOFError)):
+                replay.registered(root, REGISTRY, 'fixed')
 
     def test_duplicate_json_members_reject(self):
         with self.assertRaises(ValueError):

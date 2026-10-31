@@ -1,0 +1,38 @@
+{
+  "version": "clay2005-v2-guard-findings-0.1",
+  "blocking_findings": [],
+  "scope": "precompiled bounded instantaneous source/guard audit only",
+  "findings": [
+    {
+      "id": "FINITE-NORMALIZATION",
+      "severity": "scope-limit",
+      "locator": "rate-study-v2/model.json:116\u2013125 vs reference.py:60\u201375",
+      "witnesses": "results.json finite_regime_cases",
+      "finding": "Model norm underflows/overflows at extreme finite sphere scales while max-scaled Cartesian support accepts; no false acceptance observed. Real arithmetic scale independence is not global binary64 admission.",
+      "action": "Retain numerical domain qualification; do not widen claims. No frozen corpus/model change requested."
+    },
+    {
+      "id": "CORPUS-ROLES",
+      "severity": "collector-requirement",
+      "locator": "rate-study-v2/protocol.json:25,37 and support-inputs.json",
+      "finding": "29support statuses are10accepted finite-only and19rejections, separate from41accuracy and10historical invalids.",
+      "action": "Complete persistent numeric matrix110rawrows/backend with all29negative/recovery pairs. No rate-accuracy assertion for support-only accepted cases."
+    },
+    {
+      "id": "GUARD-MAPPING",
+      "severity": "checked",
+      "locator": "rate-study-v2/model.json:152\u2013158,276\u2013282",
+      "finding": "All3diagonal signs and correctly Mandel-scaled leadingminor/cofactor determinant pass91independent adversarial comparisons.",
+      "action": "Do not infer globalSPD or near-singular rate certificate."
+    },
+    {
+      "id": "SOURCE-RATE-PRESERVATION",
+      "severity": "checked",
+      "locator": "rate-study-v2/SOURCE_CORRECTION.md; model.json:260\u2013269; reference.py:110\u2013118",
+      "finding": "Rate algebra and41reference case dictionaries unchanged; additive Eq38 PLUS correction preserved;9independent isotropic NCL signed rates pass.",
+      "action": "Final publisher equivalence, finite paths/AD/experimental admission remain separate."
+    }
+  ],
+  "compiled_execution": false,
+  "scientific_admission": false
+}

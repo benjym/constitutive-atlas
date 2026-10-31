@@ -2,7 +2,7 @@
 import hashlib,json,subprocess,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand','extended-mohr-coulomb-2013','barodesy-sand/rate-study-v1','hypoplastic-clay-2005/rate-study-v1','barodesy-sand/rate-review-v1','hypoplastic-clay-2005/rate-review-v1','barodesy-sand/rate-study-v2','hypoplastic-clay-2005/rate-study-v2','hypoplastic-thermal-ma-2017','hypoplastic-interface-2016','barodesy-sand/compiled-plan-review-v1')
+PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand','extended-mohr-coulomb-2013','barodesy-sand/rate-study-v1','hypoplastic-clay-2005/rate-study-v1','barodesy-sand/rate-review-v1','hypoplastic-clay-2005/rate-review-v1','barodesy-sand/rate-study-v2','hypoplastic-clay-2005/rate-study-v2','hypoplastic-thermal-ma-2017','hypoplastic-interface-2016','barodesy-sand/compiled-plan-review-v1','hypoplastic-clay-2005/guard-review-v2')
 class IngestionPackets(unittest.TestCase):
  def run_python(self,*args):
   return subprocess.run([sys.executable,'-B',*args],cwd=ROOT,capture_output=True,text=True,timeout=60,check=True)
@@ -115,6 +115,9 @@ class IngestionPackets(unittest.TestCase):
   folder=ROOT/'docs/ingestion/hypoplastic-interface-2016'
   self.run_python(str(folder/'checks.py'),'--check',str(folder/'check-results.json'))
   self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_checks.py','-v')
+ def test_clay2005_v2_independent_guard_review(self):
+  folder=ROOT/'docs/ingestion/hypoplastic-clay-2005/guard-review-v2'
+  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_audit.py','-v')
  def test_sand_prospective_mapping_review(self):
   from atlas.source_replay import registered
   result=registered(ROOT,'catalogue/source-replays/sand-prospective-v1/registry.json','sand-prospective')

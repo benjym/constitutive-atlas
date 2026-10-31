@@ -1,7 +1,7 @@
 """Portable source-only replay of explicitly registered trusted project code.
 Explicit trusted Python entrypoints only. No source discovery or pin substitution.
 """
-import base64,hashlib,json,os,pathlib,subprocess,sys,tempfile
+import base64,gzip,hashlib,io,json,os,pathlib,subprocess,sys,tempfile
 VERSION='atlas-source-replay-capsule-0.1'
 
 def digest(blob):return hashlib.sha256(blob).hexdigest()
@@ -106,7 +106,16 @@ def registered(root, registry, replay_id, timeout=30):
     record = spec['replays'][replay_id]
     held = [(pin, pinned_file(root, pin)) for pin in record['documents']]
     capsule_bytes = pinned_file(root, record['capsule'])
-    c = strict_json(capsule_bytes)
+    encoding = record.get('capsule_encoding', 'json')
+    require(encoding in ('json', 'json-gzip'), 'unsupported capsule encoding')
+    decoded = capsule_bytes
+    if encoding == 'json-gzip':
+        # Capsule payloads allow at most64MiB source bytes; base64 plus metadata
+        # must fit this separate96MiB decoded-document ceiling.
+        with gzip.GzipFile(fileobj=io.BytesIO(capsule_bytes)) as stream:
+            decoded = stream.read(96 * 1024 * 1024 + 1)
+        require(len(decoded) <= 96 * 1024 * 1024, 'decoded capsule exceeds limit')
+    c = strict_json(decoded)
     validate(c)
     # Bind the archived assessor to the original review's explicit source identity.
     if 'review_document_index' in record:
@@ -141,5 +150,6 @@ if __name__ == '__main__':
     parser.add_argument('replay_id')
     parser.add_argument('--root', type=pathlib.Path, default=pathlib.Path(__file__).resolve().parents[1])
     parser.add_argument('--registry', default='catalogue/source-replays/transport-audit-v1.json')
+    parser.add_argument('--timeout', type=float, default=30)
     args = parser.parse_args()
-    print(json.dumps(registered(args.root, args.registry, args.replay_id), indent=2, allow_nan=False))
+    print(json.dumps(registered(args.root, args.registry, args.replay_id, timeout=args.timeout), indent=2, allow_nan=False))
