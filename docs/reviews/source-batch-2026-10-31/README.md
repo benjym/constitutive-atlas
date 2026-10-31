@@ -1,0 +1,11 @@
+# Source batch integration,31 October2026
+
+The coordinator verified all three packet manifests and reran their checks after copying the exact staged files into the assigned repository paths. No original model, mathematical source packet, raw PDF, author implementation or admission status was changed. Packet claims remain bounded by readable sources.
+
+- [Clay2013](../../ingestion/hypoplastic-clay-2013/README.md): accessible publisher Appendix43–58 agrees with the readable private manuscript. Explicit v0.3 crosswalk and NCL initialization smoke check pass, including omitted/negative e rejection and unchanged mathematics. Full publisher body, physical preparation and near-SPD precision remain open. Proceed toward a regular-interior zero-spin draft through a separately frozen actual-driver study.
+- [SANISAND2004](../../ingestion/sanisand-2004/README.md): fresh37-PDF first-page inventory and primary-source routes did not produce exact Dafalias1986 PartI. Three rational conditional-mapping witnesses pass, illustrating why unknown image-motion terms cannot be discarded. They are not attributed to1986. Canonical loading/reversal semantics remain unresolved; existing research event variants stay separate.
+- [Terra Cotta](../../ingestion/terracotta-2024/journal-followup-v1/README.md):20 Downloads PDFs and nine ZIP inventories yielded no journal copy. Ten rational assertions isolate determinant-zero acceptance under existing nonstrict domain policies. This is an unresolved source/numerical-policy boundary, not evidence for changing the inequality. The original nine-case creep study was not repeated.
+
+After worker handoff the coordinator also tried the newly located ResearchGate author PDF URL with an escalated read-only `curl -L --fail --max-time35` request. It returned HTTP403 (curl56), confirming that ordinary DNS restrictions were not the only access problem. No readable journal PDF bytes were acquired. No access control was bypassed. Exact URL and prior access receipts remain in the immutable Terra Cotta packet.
+
+All three original ingestion tasks remain open for their full source/execution gates. The separately scoped Terra Cotta acquisition/strictness follow-up is delivered as a bounded report, with the missing journal source explicit. No global project blocker is declared; independent implementation continues.

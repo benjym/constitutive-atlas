@@ -1,0 +1,2664 @@
+{
+  "version": "research-instantaneous-rate-protocol-0.2",
+  "study": "barodesy2015-rates-v2",
+  "model_file": "catalogue/investigations/barodesy2015-rates-v2/model.json",
+  "model_definition": {
+    "schema_version": "0.3",
+    "id": "research-barodesy-sand-2015-fixed-frame-v03",
+    "name": "Barodesy sand2015 fixed-frame interior v0.3 research draft",
+    "family": "barodesy research only",
+    "status": "draft",
+    "description": "Non-admitted2015 Eq31 sand research selection. Compression-positive orthonormal Mandel stress and stretching; W=0. Nonzero stress only; exact zero-loading continuous rate extension selected for research, no unique zero-loading Frechet derivative claimed. Seven physical states. Defaults separately attributed2019 illustrative calibration, not exact2015 validation. Conservative numerical interior and parameter envelope, not complete physical applicability. c4 is a physical stress parameter and also a provisional solver normalization; this does not establish a universal tolerance scale. V2 separates ideal source reference from operational binary64 support and retains exact Fraction volumetric oracle; no source equation change.",
+    "sources": [
+      {
+        "url": "https://doi.org/10.1680/geot.14.P.151",
+        "role": "Primary selected sand law",
+        "locator": "Kolymbas2015 pp53\u201356 Eqs9,20,23,26\u201331; p58 numerical context; p59 frame gap. Received PDF SHA2564d4511bdbb6014c19460bf0c5d7e2072c2c606fa8a5b49db180fc99d0da149da"
+      },
+      {
+        "url": "https://doi.org/10.1002/nag.2984",
+        "role": "Separate illustrative default parameter fixture",
+        "locator": "Kolymbas/Bathaeian2019 author manuscript p5 Table1, Eqs11\u201315; c4 converted465kPa to465000Pa. Not asserted publisher-equivalent."
+      }
+    ],
+    "parameters": {
+      "c1": {
+        "default": -1.0246,
+        "min": -2,
+        "max": -0.1,
+        "unit": "1"
+      },
+      "c2": {
+        "default": 1,
+        "min": 0,
+        "max": 1.5,
+        "unit": "1"
+      },
+      "c3": {
+        "default": -2.3,
+        "min": -5,
+        "max": -0.1,
+        "unit": "1"
+      },
+      "c4": {
+        "default": 465000,
+        "min": 1000,
+        "max": 100000000.0,
+        "unit": "Pa"
+      },
+      "c5": {
+        "default": 28,
+        "min": 0.1,
+        "max": 100,
+        "unit": "1"
+      },
+      "ec0": {
+        "default": 0.87,
+        "min": 0.1,
+        "max": 2,
+        "unit": "1"
+      },
+      "emin": {
+        "default": 0.35,
+        "min": 0,
+        "max": 1,
+        "unit": "1"
+      }
+    },
+    "state": [
+      {
+        "name": "sigma",
+        "shape": "sym",
+        "unit": "Pa",
+        "scale": "c4",
+        "initial": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "semantics": {
+          "role": "persistent",
+          "quantity": "cauchy_stress",
+          "transformation": "symmetric_spatial_tensor"
+        }
+      },
+      {
+        "name": "e",
+        "shape": "scalar",
+        "unit": "1",
+        "scale": "1",
+        "initial": 0.75,
+        "semantics": {
+          "role": "persistent",
+          "quantity": "void_ratio",
+          "transformation": "scalar_invariant"
+        }
+      }
+    ],
+    "derived": [
+      {
+        "name": "scaled_stress",
+        "expr": "sigma/c4"
+      },
+      {
+        "name": "stress_measure",
+        "expr": "norm(scaled_stress)"
+      },
+      {
+        "name": "stress_unit",
+        "expr": "select(stress_measure > 0,scaled_stress/stress_measure,0*I)"
+      },
+      {
+        "name": "stress_value",
+        "expr": "c4*stress_measure"
+      },
+      {
+        "name": "loading_measure",
+        "expr": "norm(de)"
+      },
+      {
+        "name": "loading_abs_sum",
+        "expr": "abs(dot(de,sym(1,0,0,0,0,0)))+abs(dot(de,sym(0,1,0,0,0,0)))+abs(dot(de,sym(0,0,1,0,0,0)))+abs(dot(de,sym(0,0,0,1,0,0)))+abs(dot(de,sym(0,0,0,0,1,0)))+abs(dot(de,sym(0,0,0,0,0,1)))"
+      },
+      {
+        "name": "loading_unit",
+        "expr": "select(loading_measure > 0,de/loading_measure,0*I)"
+      },
+      {
+        "name": "v",
+        "expr": "trace(loading_unit)"
+      },
+      {
+        "name": "a",
+        "expr": "c1*exp(-c2*v)"
+      },
+      {
+        "name": "direction_argument",
+        "expr": "-a*loading_unit"
+      },
+      {
+        "name": "direction_tensor",
+        "expr": "expm(direction_argument)"
+      },
+      {
+        "name": "direction_unit",
+        "expr": "direction_tensor/norm(direction_tensor)"
+      },
+      {
+        "name": "B",
+        "expr": "(ec0-emin)/(ec0+1)*exp(-(1+emin)/c5*log1p(c5*stress_measure))"
+      },
+      {
+        "name": "ec",
+        "expr": "(emin+B)/(1-B)"
+      },
+      {
+        "name": "K",
+        "expr": "(c4+c5*stress_value)/(e-emin)"
+      },
+      {
+        "name": "sxx",
+        "expr": "dot(stress_unit,sym(1,0,0,0,0,0))"
+      },
+      {
+        "name": "syy",
+        "expr": "dot(stress_unit,sym(0,1,0,0,0,0))"
+      },
+      {
+        "name": "szz",
+        "expr": "dot(stress_unit,sym(0,0,1,0,0,0))"
+      },
+      {
+        "name": "sxy",
+        "expr": "dot(stress_unit,sym(0,0,0,1,0,0))"
+      },
+      {
+        "name": "syz",
+        "expr": "dot(stress_unit,sym(0,0,0,0,1,0))"
+      },
+      {
+        "name": "sxz",
+        "expr": "dot(stress_unit,sym(0,0,0,0,0,1))"
+      },
+      {
+        "name": "minor_two",
+        "expr": "sxx*syy-sxy**2/2"
+      },
+      {
+        "name": "stress_det",
+        "expr": "sxx*syy*szz-(sxx*syz**2+syy*sxz**2+szz*sxy**2)/2+sxy*syz*sxz/sqrt(2)"
+      }
+    ],
+    "equations": {
+      "sigma": "select(loading_measure > 0,K*((v-c3*ec)*direction_unit+c3*e*stress_unit)*loading_measure,0*sigma)",
+      "e": "-(1+e)*trace(de)"
+    },
+    "domain": [
+      "ec0 > emin",
+      "e > emin",
+      "e-emin >= 1e-8",
+      "e <= 3",
+      "stress_measure >= 1e-10",
+      "stress_measure <= 1e10",
+      "sxx > 0",
+      "syy > 0",
+      "szz > 0",
+      "minor_two > 1.4210854715202004e-14",
+      "stress_det > 1.4210854715202004e-14",
+      "B > 0",
+      "B < 1",
+      "ec > emin",
+      "loading_measure <= 1000",
+      "select(loading_abs_sum > 0,loading_measure >= 1e-140,loading_measure >= 0)",
+      "norm(direction_argument) <= 64"
+    ],
+    "formulation": {
+      "time_dependence": "strain_path",
+      "equation_form": "strain_path_rate",
+      "kinematics": "small_strain_3d",
+      "frame": "fixed_spatial",
+      "objective_rate": "none",
+      "tensor_representation": "mandel",
+      "stress_sign": "compression_positive",
+      "strain_sign": "compression_positive",
+      "stress": {
+        "source": "state",
+        "name": "sigma",
+        "measure": "cauchy",
+        "scope": "effective"
+      },
+      "inputs": {
+        "equation": {
+          "de": {
+            "quantity": "strain_increment",
+            "measure": "infinitesimal_strain",
+            "shape": "sym",
+            "unit": "1",
+            "configuration": "current",
+            "sampling": "increment",
+            "constraint": "finite"
+          }
+        },
+        "advance": {}
+      }
+    },
+    "initialization": {
+      "method": "explicit_state",
+      "default_policy": "examples_only",
+      "required_state": [
+        "sigma",
+        "e"
+      ],
+      "validation": "domain_and_initial_checks"
+    }
+  },
+  "files": {
+    "atlas/__init__.py": "a8fc14bd14c81b692d4875ecea57087edebd75c544f1c26a295731c28bd4a922",
+    "atlas/baseline.py": "0cd58ee44962fd5fe246ecaf6c9ef7ef023987101c9aadd17f66e96e39ed2ba4",
+    "atlas/benchmark.py": "875274308a90408611746dff973a29bfebda9ae497086160a0a801c7ffab19c7",
+    "atlas/cli.py": "36434a33be5fb6f087726c409463d3ed3a0f1a5eb523ae49506e43cc566691b0",
+    "atlas/compiler.py": "93402d9076e0cc0bdb13288e55fd2957881d94a4c80d423fffd10a5a6dbe54b0",
+    "atlas/data.py": "378d05c07fb3697bc44575e54693fccd8d6c654acec868965120035e18280cb2",
+    "atlas/dsl.py": "6eed591e1e4f8ee1a7a28ec07107d2224dde5fea73899a0a7792ddece459bf1e",
+    "atlas/evidence.py": "042a93cbae02248d27e31f3585a1541c5589fa11e77e0bf555c9d1f022f4927d",
+    "atlas/experiment_replay.py": "5ebd8ef363b7fb4bec8850bcee3cf74ac33d6fa6812c15d7ea64b95ed2991926",
+    "atlas/history.py": "1ae77baaf0f5fd30b6e9ff3c8043795e21ae0b83ceac0388627c45986969f28a",
+    "atlas/history_compiler.py": "0747d2e61a5d848a449c47486aad433a8a5de2ef81389883562fd359cf6c7b30",
+    "atlas/history_legacy.py": "3fb111d8b57cde7a17753d62e0da0ce5988018fdaa6f6228b89f118be4212fc9",
+    "atlas/history_native.py": "3f3e927efe886f0ec35e98f690cf5f2557a63aa96957d2df4601dd470c4a0dfe",
+    "atlas/initialization.py": "da45614b7738366e653d06d24da618f4df6def513b63aef36c2d485074d34fc7",
+    "atlas/isotropic_reference.py": "dd657e109d399b42a5fb983f84a98b00398878ee6c79001d3ce979bd99daac34",
+    "atlas/measurement_units.py": "00e8b82bd4ef8f6815b82854855096107114c528871e0b081499f580925e5f12",
+    "atlas/model.py": "f1a8ff24d2d6fdb663436e7e29fa3c1b2a61e5bebca58edd5aa99e0114824d6d",
+    "atlas/opensees.py": "c0f86b37c74a9c7e235b5b8a1cf47f0246b87bd409dbc20759c59ded9e81e31c",
+    "atlas/public_data.py": "776ec23a147811cbc037575427c89fc5429cfc68d1864a90338768f9e6ce98cc",
+    "atlas/recorded.py": "1dfda789714db40a01c29269131dfd69551c4ba596b3a23de64ea94a236c5fd1",
+    "atlas/refinement.py": "4d38af81072fd5c4ac55d47210c81a00c961a1e955f5fd262115a7b44fb8bdee",
+    "atlas/research.py": "1b223596218237960e921383cb6413e4031e0fa0228e76c9e0b3f0a63e225577",
+    "atlas/scalar_math.py": "ed29e8ee35045a4de313accf1fc2bae7ae6f8f09af1ab297fe4c21a5582bef89",
+    "atlas/schedule.py": "919811a0592bae4023614de55531cf211993cba9a2c705a4f9d3a2fd44f72b16",
+    "atlas/source_replay.py": "f67d2f620e8a7e8175db314665a0bef322c039fdfd2cbe2e6047a85c1e32b5bf",
+    "atlas/structure.py": "30b1ef624c642b217e19e0a58e6988c2a2f802f0bfc5f892c6d7a38def1bcd47",
+    "atlas/symmetric_expm.py": "c7ab6549501736bd84da7eca03500f8abd763610b07f2b7de98e6100a0a2c205",
+    "catalogue/investigations/barodesy2015-rates-v2/README.md": "2ab743b2632d8e847c4dec968e491efdedbd4ae317abe616192a3f3e09abc416",
+    "catalogue/investigations/barodesy2015-rates-v2/model.json": "99d64159451ff788e9a9180e7cff09b03060e84d0c0ff1b7876d99c973e0bb63",
+    "catalogue/investigations/barodesy2015-rates-v2/prepare.py": "ef7cb42ef42d2c7dc9a723200ad85e16c715cf98a69134c331030245b458ead0",
+    "catalogue/investigations/barodesy2015-rates-v2/run_build.py": "9fb5de09cf3fe451ba7ed4bd115a7310dc75c453ccb48f610ffc692388c2b50b",
+    "cmake/research/CMakeLists.txt": "78a4514e337eb646fad35af566ca14270b8dcac54c86d4c671b5c316b4face39",
+    "cpp/include/atlas/checked_expression.hpp": "87a63032a8028a54c4261e5c9d5ca5a727293eb87d9506d1c1e3ea4c4c2bbec8",
+    "cpp/include/atlas/checked_trace.hpp": "c7f1cc3a18529ec024c58b2d2b8281a574e2dc4619f0cdb6c7dde33684f2ca65",
+    "cpp/include/atlas/expm.hpp": "267a9044b686082ba4faf9777ec271ea91ec9eed3495219abd3d5559a680c85f",
+    "cpp/include/atlas/history_runtime.hpp": "aecb42fd96c0b5a318ce58680a0d35db7eb8ef8f9f807d695ff2572ae28517af",
+    "cpp/include/atlas/linearize.hpp": "40f8ed4bc722636c3ce0573af150dcbe6afe59618e0dad1542aa9a2b9e7b4319",
+    "cpp/include/atlas/recorded.hpp": "9c0f9fae85a033d1af1c8f6ffc718ea1f04e5f6ac6e94dacda233870d1ffaba6",
+    "cpp/include/atlas/schedule.hpp": "5c90e6cede9f24f124286cf10e2254a47a991e5d62f9bc7b3899ed62e6deb7e9",
+    "cpp/include/atlas/settings.hpp": "3eb1171ae1ef17440b19e8becfc8e9bf92335519a88da8f1e9be407d3488662b",
+    "cpp/include/atlas/solver.hpp": "7842240f542949a1ba547f4a2fea44e4ef1fadf50b35a18fd86f8fe4327164d5",
+    "cpp/include/atlas/tensor.hpp": "966a6a413b8ea4d50f400bc96860644774cabfb15f69e8bfec9c3fb215b7e144",
+    "cpp/include/atlas/time.hpp": "7b9942fbb1eae296201ad12db210c0c767fb3cc53c1f37de37de3e517f13f4d1",
+    "cpp/include/atlas/trace_accuracy.hpp": "5e2c187683372ec56aaeef5cd6aaf3b45ae9fe4605c64d5b728f291fad52d44c",
+    "docs/ingestion/barodesy-sand/rate-study-v2/README.md": "8dc3a18ef9e608c52dba1f3153e4a04ffaddcffcc331b640577ccce31dfe137b",
+    "docs/ingestion/barodesy-sand/rate-study-v2/check.py": "6a3abb56abea002cf43e1fa38ae9afd5910f88bb9ca15bf11d8838e4d9b41993",
+    "docs/ingestion/barodesy-sand/rate-study-v2/counterexamples.json": "c275cabc6efb2349f50f7852c730ea98af6bbe471d23b006f4399d620b266404",
+    "docs/ingestion/barodesy-sand/rate-study-v2/inputs.json": "c09c955fa638759af64eb9d32d77b6fbc9a9ae7a9ebc52225b131b6f929b7297",
+    "docs/ingestion/barodesy-sand/rate-study-v2/manifest.json": "c6c6d6070dd37f7721959c5261fd43fe92b4a41ea44932183a8c602916356153",
+    "docs/ingestion/barodesy-sand/rate-study-v2/model-draft.json": "bb755018b8a86fb07852c8e5e13ee21bfa01a13488db13817fc1cb52f857c156",
+    "docs/ingestion/barodesy-sand/rate-study-v2/protocol.json": "782a17c34d5857e9741943f5aaeb0b119c6d62e1566ab2b4773f5c7228dea7aa",
+    "docs/ingestion/barodesy-sand/rate-study-v2/provenance.json": "e3aa81759a12386616e41ef341fa84b12ba59f59a8bcece761971b04aca2250e",
+    "docs/ingestion/barodesy-sand/rate-study-v2/python-report.json": "d48847a695d4a0b85538a69a1e01e54bcd6ccc55fd1268d50d32525c243a99a0",
+    "docs/ingestion/barodesy-sand/rate-study-v2/reference.json": "8c5208b86fdc07f1a17f6c9509a9a5bad477d12bd82f7d7ce5f061ed96eea774",
+    "docs/ingestion/barodesy-sand/rate-study-v2/reference.py": "effe7ac4dac09c50244c3c4825df42a08796367bd29bac33d5a205ca640acca8",
+    "docs/ingestion/barodesy-sand/rate-study-v2/support.py": "9e63406ac8586691cee9f1d6c1de5ee19aab1e8a6f434aa086528b3bd040598b",
+    "docs/ingestion/barodesy-sand/rate-study-v2/test_rate_study.py": "ccb4aa051205feb987896866ae22d0445cfea05f1f8737250c2207b1eafd7977",
+    "schemas/drained-replay.schema.json": "58bf7e7294451623d1aa7a041715dc9aa1a1890639488526be2494046e76c27b",
+    "schemas/evidence.schema.json": "69f51ecf54e328269c7ad57df43644dfffa275abcc8c4273289d7d4bd017e6ad",
+    "schemas/experiment.schema.json": "555bf1cb1f9e9cd80f04371a0cf8eba8138502b91bb4a60ead0a394b594c44a3",
+    "schemas/history-program.schema.json": "3553a15511f0166f1cc570d77605e850a6f60ae299f31810c651085831773f9c",
+    "schemas/history-snapshot.schema.json": "456f4bffe860c7bf75f65960f9491f1ca67a86eb7eeeac8caecd737bc0306e92",
+    "schemas/initialization-input.schema.json": "855a874ec4dad889aceb1d9beb84985e13bb6bbc0b4b7d2e7d29b58797d2bc6c",
+    "schemas/initialization-recipe.schema.json": "b2da03cd87b37c1011a92f4fb9bf8330eac73ffd7925118e3fb1e05caa123117",
+    "schemas/model-v0.2.schema.json": "538b081ddcf0843a53d6f75ae2931fd28edc438e199cfeac4f86a512529b0c40",
+    "schemas/model-v0.3.schema.json": "d08e7ed7e060eb3fae4bcd37ceea0b6fee59a19ce31e2d752827beb8af8eb0ab",
+    "schemas/model.schema.json": "85acda14fe4a8dcd12fced802202b7c3a11a60e811e5da2d7db8224d35621ec7",
+    "schemas/publications.schema.json": "68ef4c8842ac7c509f29c820e4929b0ce9e037f7697a7f94815515e4589528ab",
+    "schemas/recorded-path.schema.json": "9240c1f82d65dd2ebfc77f97d5f0e26dfc57368a3cdc4979a1ce81c9d08ae2f0",
+    "schemas/recorded-refinement.schema.json": "e111866f406e257a5ca01766b5eb555f5755e7bcc12575f7d92d7c2d0bec3e9a",
+    "schemas/recorded-run.schema.json": "49d816e03aa430a2642ebfdbcac6210606dd387f66532a0ba39468f545b5a8a2",
+    "schemas/review.schema.json": "fa53511a11050863b6c3a538410739bf1d4db16926cd492eadb3353778cf347d",
+    "schemas/run-v0.2.schema.json": "8d035091d98aa95c392a5ea34f726125b2e043d154e2e984b7791061fc7ff813",
+    "schemas/run.schema.json": "e9d7d81546c610ac682350a997a7b2228a79fb603e46b7f4550e6cf6038ff702",
+    "schemas/screening.schema.json": "19f0952b293e7781b4b315aed46a73c32a0643d4b6b9d222e26f78fe2c040088",
+    "schemas/source-measurement.schema.json": "be79e24bd5544c4fef34725a2a0f6a918c743d3841245c828c9eae2ec636e8c5",
+    "tests/research_rate_driver.cpp": "d5cee213535b478af7bc868b12b1b1ca17fd3a5156cd783a8ec85426bbbad3fc",
+    "tools/collect_research_rates_wasm_v2.mjs": "f4adfdbf3cc044c54e1da1a615de3435822506b23f85197f51dc7e3798a255e6",
+    "tools/research_rate_observations_v2.py": "d18fe2a3853c13d0de5559a68a0bf8d8fa8f13bb16bb293b372eb46b81ee6eb8",
+    "tools/research_rate_parity_v2.py": "48fb81863d487d9190e50e499951cc70ef1fc1be9aaadc702a1c8bffef140e79"
+  },
+  "cases": [
+    {
+      "id": "valid:oblique",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:zero",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.0,0.0,0.0,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "absolute_budgets": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "parity_budgets": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "valid:hydro-compression",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,0.001,0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          18275.55392854437,
+          25172.06142396851,
+          29769.733087584602,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          -0.00525
+        ],
+        "absolute_budgets": [
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:hydro-extension",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "-0.001,-0.001,-0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -26363.53137126207,
+          -19467.02387583793,
+          -14869.352212221838,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          0.00525
+        ],
+        "absolute_budgets": [
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:deviatoric",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.002,-0.001,-0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          14469.601591646984,
+          -14011.009718619787,
+          -7508.920096595437,
+          -6896.50749542414,
+          -2758.602998169656,
+          3678.1373308928746,
+          0.0
+        ],
+        "absolute_budgets": [
+          6.312919984291573e-08,
+          6.312919984291573e-08,
+          6.312919984291573e-08,
+          6.312919984291573e-08,
+          6.312919984291573e-08,
+          6.312919984291573e-08,
+          0.0
+        ],
+        "parity_budgets": [
+          1.2625839968583147e-07,
+          1.2625839968583147e-07,
+          1.2625839968583147e-07,
+          1.2625839968583147e-07,
+          1.2625839968583147e-07,
+          1.2625839968583147e-07,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "valid:reverse",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "-0.001,0.0003,-0.0002,-0.0007,0.0002,-0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -18084.84551092061,
+          -174.68050822409475,
+          -5077.255621674216,
+          -11434.63079812254,
+          3224.4187621428036,
+          -1946.8737571984286,
+          0.001575
+        ],
+        "absolute_budgets": [
+          4.462325180222258e-08,
+          4.462325180222258e-08,
+          4.462325180222258e-08,
+          4.462325180222258e-08,
+          4.462325180222258e-08,
+          4.462325180222258e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          8.924650360444516e-08,
+          8.924650360444516e-08,
+          8.924650360444516e-08,
+          8.924650360444516e-08,
+          8.924650360444516e-08,
+          8.924650360444516e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:homogeneous-quarter",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.00025,-7.5e-05,5e-05,0.000175,-5e-05,0.000125"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          2378.121897191245,
+          637.0529602751802,
+          2504.509978519045,
+          649.0784383361708,
+          -680.7963191197767,
+          1766.611991161033,
+          -0.00039375
+        ],
+        "absolute_budgets": [
+          8.904537184457434e-09,
+          8.904537184457434e-09,
+          8.904537184457434e-09,
+          8.904537184457434e-09,
+          8.904537184457434e-09,
+          8.904537184457434e-09,
+          2.168404344971009e-19
+        ],
+        "parity_budgets": [
+          1.7809074368914868e-08,
+          1.7809074368914868e-08,
+          1.7809074368914868e-08,
+          1.7809074368914868e-08,
+          1.7809074368914868e-08,
+          1.7809074368914868e-08,
+          4.336808689942018e-19
+        ]
+      }
+    },
+    {
+      "id": "valid:homogeneous-four",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.004,-0.0012,0.0008,0.0028,-0.0008,0.002"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          38049.95035505992,
+          10192.847364402884,
+          40072.15965630472,
+          10385.255013378734,
+          -10892.741105916428,
+          28265.79185857653,
+          -0.0063
+        ],
+        "absolute_budgets": [
+          1.4247259495131895e-07,
+          1.4247259495131895e-07,
+          1.4247259495131895e-07,
+          1.4247259495131895e-07,
+          1.4247259495131895e-07,
+          1.4247259495131895e-07,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          2.849451899026379e-07,
+          2.849451899026379e-07,
+          2.849451899026379e-07,
+          2.849451899026379e-07,
+          2.849451899026379e-07,
+          2.849451899026379e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:pure-shear-0",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.0,0.0,0.0,0.001,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -3129.2194150730857,
+          852.4810438783129,
+          753.506004910357,
+          8399.980428958132,
+          -1126.1949580712492,
+          1501.593277428332,
+          0.0
+        ],
+        "absolute_budgets": [
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          0.0
+        ],
+        "parity_budgets": [
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "valid:pure-shear-1",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.0,0.0,0.0,0.0,0.001,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -5882.661426675308,
+          852.4810438783129,
+          3506.9480165125788,
+          -2815.487395178123,
+          10089.272866065006,
+          1501.593277428332,
+          0.0
+        ],
+        "absolute_budgets": [
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          2.5772387914221915e-08,
+          0.0
+        ],
+        "parity_budgets": [
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          5.154477582844383e-08,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "valid:pure-shear-2",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.0,0.0,0.0,0.0,0.0,0.001"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -3129.2194150730857,
+          -1900.9609677239089,
+          3506.9480165125788,
+          -2815.487395178123,
+          -1126.1949580712492,
+          12717.061101564586,
+          0.0
+        ],
+        "absolute_budgets": [
+          2.8044484559779003e-08,
+          2.8044484559779003e-08,
+          2.8044484559779003e-08,
+          2.8044484559779003e-08,
+          2.8044484559779003e-08,
+          2.8044484559779003e-08,
+          0.0
+        ],
+        "parity_budgets": [
+          5.6088969119558006e-08,
+          5.6088969119558006e-08,
+          5.6088969119558006e-08,
+          5.6088969119558006e-08,
+          5.6088969119558006e-08,
+          5.6088969119558006e-08,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "valid:unit-scale-0.01",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,4650.0,28.0,0.87,0.35",
+        "1200.0,900.0,700.0,212.1320343559643,84.85281374238572,-113.13708498984761,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          95.1248758876498,
+          25.48211841100721,
+          100.1803991407618,
+          25.96313753344683,
+          -27.23185276479107,
+          70.66447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.561814873782974e-10,
+          3.561814873782974e-10,
+          3.561814873782974e-10,
+          3.561814873782974e-10,
+          3.561814873782974e-10,
+          3.561814873782974e-10,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565948e-10,
+          7.123629747565948e-10,
+          7.123629747565948e-10,
+          7.123629747565948e-10,
+          7.123629747565948e-10,
+          7.123629747565948e-10,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:unit-scale-100.0",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,46500000.0,28.0,0.87,0.35",
+        "12000000.0,9000000.0,7000000.0,2121320.343559643,848528.1374238571,-1131370.8498984762,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          951248.758876498,
+          254821.1841100721,
+          1001803.991407618,
+          259631.37533446832,
+          -272318.5276479107,
+          706644.7964644133,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829735e-06,
+          3.5618148737829735e-06,
+          3.5618148737829735e-06,
+          3.5618148737829735e-06,
+          3.5618148737829735e-06,
+          3.5618148737829735e-06,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-06,
+          7.123629747565947e-06,
+          7.123629747565947e-06,
+          7.123629747565947e-06,
+          7.123629747565947e-06,
+          7.123629747565947e-06,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--2.0-0.0-compression",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-2.0,0.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,0.001,0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          18275.55392854437,
+          25172.06142396851,
+          29769.733087584602,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          -0.00525
+        ],
+        "absolute_budgets": [
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--2.0-0.0-extension",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-2.0,0.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "-0.001,-0.001,-0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -26363.53137126207,
+          -19467.02387583793,
+          -14869.352212221838,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          0.00525
+        ],
+        "absolute_budgets": [
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--2.0-0.0-oblique",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-2.0,0.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          15224.587458788272,
+          -9430.70610628506,
+          -1538.7782659605523,
+          10673.024713146782,
+          -620.0928668242689,
+          15130.525432303923,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          5.1626539339906644e-08,
+          5.1626539339906644e-08,
+          5.1626539339906644e-08,
+          5.1626539339906644e-08,
+          5.1626539339906644e-08,
+          5.1626539339906644e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          1.0325307867981329e-07,
+          1.0325307867981329e-07,
+          1.0325307867981329e-07,
+          1.0325307867981329e-07,
+          1.0325307867981329e-07,
+          1.0325307867981329e-07,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--2.0-1.5-compression",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-2.0,1.5,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,0.001,0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          18275.55392854437,
+          25172.06142396851,
+          29769.733087584602,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          -0.00525
+        ],
+        "absolute_budgets": [
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--2.0-1.5-extension",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-2.0,1.5,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "-0.001,-0.001,-0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -26363.53137126207,
+          -19467.02387583793,
+          -14869.352212221838,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          0.00525
+        ],
+        "absolute_budgets": [
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--2.0-1.5-oblique",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-2.0,1.5,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          11288.669241631353,
+          -44.44030824372723,
+          8251.275591745289,
+          4754.742680876205,
+          -2749.3768675523224,
+          8915.43448650143,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--0.1-0.0-compression",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-0.1,0.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,0.001,0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          18275.55392854437,
+          25172.06142396851,
+          29769.733087584602,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          -0.00525
+        ],
+        "absolute_budgets": [
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--0.1-0.0-extension",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-0.1,0.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "-0.001,-0.001,-0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -26363.53137126207,
+          -19467.02387583793,
+          -14869.352212221838,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          0.00525
+        ],
+        "absolute_budgets": [
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--0.1-0.0-oblique",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-0.1,0.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          4741.03563362917,
+          7836.588565634814,
+          12393.7216270155,
+          -2603.327015568263,
+          -1898.5942443983186,
+          3008.4750622765737,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--0.1-1.5-compression",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-0.1,1.5,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,0.001,0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          18275.55392854437,
+          25172.06142396851,
+          29769.733087584602,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          -0.00525
+        ],
+        "absolute_budgets": [
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          8.69072092754942e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          1.738144185509884e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--0.1-1.5-extension",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-0.1,1.5,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "-0.001,-0.001,-0.001,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -26363.53137126207,
+          -19467.02387583793,
+          -14869.352212221838,
+          -4876.567216518262,
+          -1950.626886607305,
+          2600.8358488097397,
+          0.00525
+        ],
+        "absolute_budgets": [
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          7.292321003185473e-08,
+          3.469446951953614e-18
+        ],
+        "parity_budgets": [
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          1.4584642006370946e-07,
+          6.938893903907228e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:corner--0.1-1.5-oblique",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-0.1,1.5,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          3952.6461530036095,
+          8551.112391627383,
+          12562.19011092036,
+          -3405.3243090594415,
+          -1691.5593749508341,
+          2424.1169755129386,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:parameter-c3--5.0",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-5.0,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          10954.657758208763,
+          -339.13879473912607,
+          14726.97295086086,
+          3642.88520211256,
+          -5560.040223111771,
+          13822.123010852942,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          4.784303579090733e-08,
+          4.784303579090733e-08,
+          4.784303579090733e-08,
+          4.784303579090733e-08,
+          4.784303579090733e-08,
+          4.784303579090733e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          9.568607158181466e-08,
+          9.568607158181466e-08,
+          9.568607158181466e-08,
+          9.568607158181466e-08,
+          9.568607158181466e-08,
+          9.568607158181466e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:parameter-c3--0.1",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-0.1,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          8337.385969218194,
+          4900.867914748003,
+          6181.1315137331085,
+          1743.5518321264135,
+          -411.6738384821213,
+          1561.8238529184366,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:parameter-c5-0.1",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,0.1,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          443.4500759607167,
+          -31.215925023761052,
+          613.1963351942051,
+          150.95377030753633,
+          -238.02179971284227,
+          589.8912697817982,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.3289458384858122e-09,
+          3.3289458384858122e-09,
+          3.3289458384858122e-09,
+          3.3289458384858122e-09,
+          3.3289458384858122e-09,
+          3.3289458384858122e-09,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          6.6578916769716245e-09,
+          6.6578916769716245e-09,
+          6.6578916769716245e-09,
+          6.6578916769716245e-09,
+          6.6578916769716245e-09,
+          6.6578916769716245e-09,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:parameter-c5-100.0",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,100.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          35872.95269362651,
+          10992.054223024008,
+          36432.36673411615,
+          9515.348908687229,
+          -9245.935812829428,
+          24248.249286734885,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          1.1894512396194307e-07,
+          1.1894512396194307e-07,
+          1.1894512396194307e-07,
+          1.1894512396194307e-07,
+          1.1894512396194307e-07,
+          1.1894512396194307e-07,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          2.3789024792388614e-07,
+          2.3789024792388614e-07,
+          2.3789024792388614e-07,
+          2.3789024792388614e-07,
+          2.3789024792388614e-07,
+          2.3789024792388614e-07,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:parameter-c4-1000.0",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,1000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          4985.156320100949,
+          99.62365958703226,
+          6454.357001586141,
+          1607.1218656701224,
+          -2342.1757963372033,
+          5849.095258187496,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.241184494685795e-08,
+          3.241184494685795e-08,
+          3.241184494685795e-08,
+          3.241184494685795e-08,
+          3.241184494685795e-08,
+          3.241184494685795e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          6.48236898937159e-08,
+          6.48236898937159e-08,
+          6.48236898937159e-08,
+          6.48236898937159e-08,
+          6.48236898937159e-08,
+          6.48236898937159e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:parameter-c4-100000000.0",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,100000000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          237234.47577919348,
+          78373.36345782527,
+          235398.11857021332,
+          61793.689259845145,
+          -56938.678778226094,
+          150494.0186611031,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          7.682285536230427e-07,
+          7.682285536230427e-07,
+          7.682285536230427e-07,
+          7.682285536230427e-07,
+          7.682285536230427e-07,
+          7.682285536230427e-07,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          1.5364571072460855e-06,
+          1.5364571072460855e-06,
+          1.5364571072460855e-06,
+          1.5364571072460855e-06,
+          1.5364571072460855e-06,
+          1.5364571072460855e-06,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:density-0.35001",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.35001",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          850061696.1940908,
+          454100118.126831,
+          674632875.6049052,
+          186860202.78550997,
+          -75724349.99832475,
+          238387170.5045085,
+          -0.001215009
+        ],
+        "absolute_budgets": [
+          0.0024342725213870172,
+          0.0024342725213870172,
+          0.0024342725213870172,
+          0.0024342725213870172,
+          0.0024342725213870172,
+          0.0024342725213870172,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          0.0048685450427740345,
+          0.0048685450427740345,
+          0.0048685450427740345,
+          0.0048685450427740345,
+          0.0048685450427740345,
+          0.0048685450427740345,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:density-1.5",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,1.5",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -4347.405382048727,
+          -4855.737984527159,
+          -981.5207961209081,
+          -450.3538232133746,
+          -1488.562669395604,
+          3179.7186650510625,
+          -0.0022500000000000003
+        ],
+        "absolute_budgets": [
+          1.4962721166838485e-08,
+          1.4962721166838485e-08,
+          1.4962721166838485e-08,
+          1.4962721166838485e-08,
+          1.4962721166838485e-08,
+          1.4962721166838485e-08,
+          1.734723475976807e-18
+        ],
+        "parity_budgets": [
+          2.992544233367697e-08,
+          2.992544233367697e-08,
+          2.992544233367697e-08,
+          2.992544233367697e-08,
+          2.992544233367697e-08,
+          2.992544233367697e-08,
+          3.469446951953614e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:density-3.0",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,3.0",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          -8531.524014747205,
+          -7090.892648867652,
+          -4302.142897312482,
+          -1370.1025255705242,
+          -1115.8464106534143,
+          2006.3664236644754,
+          -0.0036000000000000003
+        ],
+        "absolute_budgets": [
+          2.439048129493314e-08,
+          2.439048129493314e-08,
+          2.439048129493314e-08,
+          2.439048129493314e-08,
+          2.439048129493314e-08,
+          2.439048129493314e-08,
+          1.734723475976807e-18
+        ],
+        "parity_budgets": [
+          4.878096258986628e-08,
+          4.878096258986628e-08,
+          4.878096258986628e-08,
+          4.878096258986628e-08,
+          4.878096258986628e-08,
+          4.878096258986628e-08,
+          3.469446951953614e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:oblique-rotation",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "92888.88888888889,105555.55555555555,81555.55555555555,29384.215129307642,-27655.73188640719,314.26968052735873,0.75",
+        "0.00031808241108855016,0.0004685730319472645,0.00011334455696418528,0.0006387253486026507,-0.0002821885513296666,-0.0010434632027270158"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          7967.027749909478,
+          6193.585666762896,
+          7918.125927269503,
+          1111.450333365203,
+          1630.380144372914,
+          -9644.116516729806,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:reflection",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,-21213.203435596428,8485.281374238572,11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,-0.0006999999999999999,-0.0002,-0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          -2596.3137533446825,
+          -2723.185276479107,
+          -7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:axis-cycle",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "90000.0,70000.0,120000.0,8485.281374238572,-11313.70849898476,21213.203435596428,0.75",
+        "-0.0003,0.0002,0.001,-0.0002,0.0005,0.0006999999999999999"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          2548.211841100721,
+          10018.03991407618,
+          9512.48758876498,
+          -2723.185276479107,
+          7066.447964644132,
+          2596.3137533446825,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          3.5618148737829723e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          7.123629747565945e-08,
+          1.734723475976807e-18
+        ]
+      }
+    },
+    {
+      "id": "valid:audit-trace-cancellation",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "500.0,1e-130,-500.0,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          3395041643.8493466,
+          -1344182391.0485177,
+          -3127947188.3233705,
+          -1990850229.4756994,
+          -796340091.7902799,
+          1061786789.0537063,
+          -1.7500000000000002e-130
+        ],
+        "absolute_budgets": [
+          0.018223830261516537,
+          0.018223830261516537,
+          0.018223830261516537,
+          0.018223830261516537,
+          0.018223830261516537,
+          0.018223830261516537,
+          8.008332380732404e-146
+        ],
+        "parity_budgets": [
+          0.036447660523033075,
+          0.036447660523033075,
+          0.036447660523033075,
+          0.036447660523033075,
+          0.036447660523033075,
+          0.036447660523033075,
+          1.6016664761464807e-145
+        ]
+      }
+    },
+    {
+      "id": "reject:zero-stress",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "0.0,0.0,0.0,0.0,0.0,0.0,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:zero-stress",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:negative-stress",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "-100000.0,-100000.0,-100000.0,0.0,0.0,0.0,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:negative-stress",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:indefinite-stress",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "100000.0,100000.0,100000.0,300000.0,0.0,0.0,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:indefinite-stress",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:rank-loss",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "100000.0,100000.0,0.0,0.0,0.0,0.0,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:rank-loss",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:minimum-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.35",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:minimum-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:below-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.3",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:below-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:negative-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,-0.1",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:negative-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:above-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,3.1",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:above-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:tiny-stress",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "1e-10,1e-10,1e-10,0.0,0.0,0.0,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:tiny-stress",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:tiny-loading",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "1e-200,0.0,0.0,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:tiny-loading",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:excessive-loading",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "1001.0,0.0,0.0,0.0,0.0,0.0"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:excessive-loading",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:bad-parameter-c1",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-2.1,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:bad-parameter-c1",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:bad-parameter-c2",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.6,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:bad-parameter-c2",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:bad-parameter-c5",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,0.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:bad-parameter-c5",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:bad-parameter-ec0",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.2,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:bad-parameter-ec0",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    },
+    {
+      "id": "reject:audit-rounded-critical-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,0.1,0.87,0.35",
+        "268467875173176.0,268467875173176.0,268467875173176.0,0.0,0.0,0.0,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": false
+      }
+    },
+    {
+      "id": "recover:audit-rounded-critical-density",
+      "args": [
+        "research-barodesy-sand-2015-fixed-frame-v03",
+        "-1.0246,1.0,-2.3,465000.0,28.0,0.87,0.35",
+        "120000.0,90000.0,70000.0,21213.203435596428,8485.281374238572,-11313.70849898476,0.75",
+        "0.001,-0.0003,0.0002,0.0007,-0.0002,0.0005"
+      ],
+      "expectation": {
+        "ok": true,
+        "values": [
+          9512.48758876498,
+          2548.211841100721,
+          10018.03991407618,
+          2596.3137533446834,
+          -2723.185276479107,
+          7066.447964644132,
+          -0.001575
+        ],
+        "absolute_budgets": [
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          3.5618148737829737e-08,
+          8.673617379884035e-19
+        ],
+        "parity_budgets": [
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          7.123629747565947e-08,
+          1.734723475976807e-18
+        ]
+      },
+      "recovery_of": "valid:oblique"
+    }
+  ],
+  "policy": {
+    "source_reference": "rate-study-v2/reference.json independent120digit Cartesian source rates; exact rational void channel",
+    "stress_accuracy": "Each component <=2e-12 times max(natural stress scale, reference stress-rate norm); exactly zero on zero load.",
+    "void_accuracy": "Exactly zero for zero reference; otherwise4ULP of exact-Fraction rounded reference.",
+    "parity": "Twice each independent absolute budget, fixed prospectively by triangle bound.",
+    "scope": "38valid +16 numeric rejection/recovery pairs +descriptor =71rows/backend;4Python-only named/type cases excluded; no finite integration, AD, or admission.",
+    "failure_policy": "Retain all raw output and failed gates; do not remove cancellation case or relax budget after observation."
+  }
+}

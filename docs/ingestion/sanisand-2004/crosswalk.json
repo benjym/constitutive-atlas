@@ -1,0 +1,173 @@
+{
+  "alternative_research_discretization": {
+    "additional_state": {
+      "name": "gamma",
+      "semantics": {
+        "quantity": "scaled_incremental_plastic_multiplier",
+        "role": "plastic_multiplier",
+        "transformation": "scalar_invariant"
+      },
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "equation_form": "incremental_residual",
+    "existing_records_unchanged": [
+      "models/research/sanisand-2004-fixed-memory-be.json",
+      "models/research/sanisand-2004-parent-reset-be.json"
+    ],
+    "reason": "Separately named backward-Euler research variants; not original source finite-step equations"
+  },
+  "artifact_kind": "non-executable-source-schema-crosswalk",
+  "event_requirements": {
+    "guard_in_2004": "(alpha-alpha_in):n becomes negative; printed631 after Eq24",
+    "not_inferred": [
+      "parent-increment selection",
+      "substep endpoint reset",
+      "fabric reset",
+      "hardening cap",
+      "pressure floor",
+      "global physical-time evolution"
+    ],
+    "unavailable_1986": [
+      "conjugate points and coordinates",
+      "normal definition and image motion",
+      "new loading-process initiation/end",
+      "nested histories and any prior-process memory",
+      "elastic unloading/re-entry",
+      "equality and zero-distance behavior"
+    ]
+  },
+  "formulation": {
+    "equation_form": "strain_path_rate",
+    "frame": "fixed_spatial",
+    "inputs": {
+      "advance": {},
+      "equation": {
+        "de": {
+          "configuration": "current",
+          "constraint": "finite",
+          "measure": "infinitesimal_strain",
+          "quantity": "strain_increment",
+          "sampling": "increment",
+          "shape": "sym",
+          "unit": "1"
+        }
+      }
+    },
+    "kinematics": "small_strain_3d",
+    "objective_rate": "none",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "measure": "cauchy",
+      "name": "sigma",
+      "scope": "effective",
+      "source": "state"
+    },
+    "stress_sign": "compression_positive",
+    "tensor_representation": "mandel",
+    "time_dependence": "strain_path"
+  },
+  "initialization": {
+    "default_policy": "examples_only",
+    "method": "explicit_state",
+    "required_state": [
+      "sigma",
+      "e",
+      "alpha",
+      "fabric",
+      "alpha_in"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "initialization_blockers": [
+    "source-supported preparation and memory required, not arbitrary zero examples",
+    "alpha_in=alpha singularity needs named branch/limit contract",
+    "deviatoric constraints and elastic interior/yield consistency",
+    "physical initial fabric history unspecified generally"
+  ],
+  "parameter_units": {
+    "Pa": [
+      "p_at"
+    ],
+    "dimensionless": [
+      "G0",
+      "nu",
+      "M",
+      "c",
+      "lambda_c",
+      "e0",
+      "xi",
+      "m",
+      "h0",
+      "ch",
+      "nb",
+      "A0",
+      "nd",
+      "zmax",
+      "cz"
+    ]
+  },
+  "review_status": "partial source mapping; canonical event contract unresolved",
+  "schema_version": "0.3",
+  "scope": "Candidate smooth regular-branch source law restricted to zero spin/fixed-frame small strain. Not globally executable until event/elastic-entry/initialization contract is selected. No finite-objectivity claim.",
+  "solver_requirements": [
+    "finite-product hardening treatment with explicit domain",
+    "elastic entry/location and plastic continuation",
+    "transactional all-state commit/rollback",
+    "separate path-corner boundaries",
+    "branch/event-sensitive full update tangent"
+  ],
+  "states": [
+    {
+      "name": "sigma",
+      "semantics": {
+        "quantity": "cauchy_stress",
+        "role": "persistent",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "shape": "sym",
+      "unit": "Pa"
+    },
+    {
+      "name": "e",
+      "semantics": {
+        "quantity": "void_ratio",
+        "role": "persistent",
+        "transformation": "scalar_invariant"
+      },
+      "shape": "scalar",
+      "unit": "1"
+    },
+    {
+      "name": "alpha",
+      "semantics": {
+        "quantity": "backstress_ratio",
+        "role": "persistent",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "shape": "sym",
+      "unit": "1"
+    },
+    {
+      "name": "fabric",
+      "semantics": {
+        "quantity": "fabric_dilatancy_tensor",
+        "role": "persistent",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "shape": "sym",
+      "unit": "1"
+    },
+    {
+      "name": "alpha_in",
+      "semantics": {
+        "quantity": "loading_process_initial_backstress_ratio",
+        "role": "persistent",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "shape": "sym",
+      "unit": "1"
+    }
+  ],
+  "target_schema": "schemas/model-v0.3.schema.json"
+}

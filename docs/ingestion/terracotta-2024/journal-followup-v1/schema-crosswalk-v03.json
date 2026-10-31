@@ -1,0 +1,120 @@
+{
+  "schema_version": "0.3",
+  "document_kind": "non-executable source crosswalk, not a model record",
+  "variant": "Figure1 simplified axisymmetric fixed-x; AppendixB excluded",
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "ode",
+    "kinematics": "axisymmetric_x",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "strain_rate": {
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite"
+        }
+      },
+      "advance": {
+        "start_time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "start",
+          "constraint": "finite"
+        },
+        "duration": {
+          "quantity": "duration",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "interval",
+          "constraint": "positive_finite"
+        }
+      }
+    },
+    "stress": {
+      "source": "observable",
+      "name": "stress",
+      "measure": "cauchy",
+      "scope": "total"
+    }
+  },
+  "state_crosswalk": [
+    {
+      "name": "ev_e",
+      "source_quantity": "elastic volumetric strain",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "elastic_volumetric_strain",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "es_e",
+      "source_quantity": "signed fixed-axis elastic shear strain",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "axisymmetric_elastic_shear_strain",
+        "transformation": "fixed_components"
+      }
+    },
+    {
+      "name": "Tm",
+      "source_quantity": "meso-related temperature; not ambient temperature",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "mesoscopic_temperature",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "phi",
+      "source_quantity": "solid fraction",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "solid_fraction",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "ev_e",
+      "es_e",
+      "Tm",
+      "phi"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "profile_scope": "Atlas small-strain fixed-frame representation; does not claim finite-strain author generality, arbitrary 3D tensorization or pore-pressure coupling. Total binding describes the Figure1 constitutive output; elastic stress is distinct.",
+  "journal_unverified_gates": [
+    "Figure1/body equation image equivalence",
+    "Strict versus nonstrict determinant/stability/Eq54 boundaries",
+    "Table1 journal kaolin calibration and AppendixC units",
+    "AppendixB variant recalibration and initialization"
+  ]
+}

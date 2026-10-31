@@ -1,5 +1,11 @@
 # Implementation status — 2026-10-30
 
+## Rate verification and source integration —2026-10-31
+
+The distinct [Barodesy sand2015 repaired-engine study](../catalogue/investigations/barodesy2015-rates-v2/RESULTS.md) passes38 independent rates and16 rejection/recovery pairs on each serial native/Wasm build, with all original inputs/reference values/budgets unchanged. The former volumetric cancellation failure now matches the exact rational reference; historical v1 negative evidence remains intact. The [v2 generic transport](reviews/generic-rate-collection-v2/README.md) closes positional parameter-order and duplicate-key gaps under separate identities, with23 synthetic checks and9 original witness groups preserved. Finite-path laboratory-preview testing remains next; no executable count changes.
+
+The [source batch review](reviews/source-batch-2026-10-31/README.md) integrates clay2013 publisher-Appendix agreement and explicit v0.3/preparation crosswalk, SANISAND's still-missing1986 loading-process dependency, and Terra Cotta's bounded journal-access/strictness report. These partial source advances do not close their parent ingestion or scientific admission gates.
+
 ## Local draft laboratory expansion —2026-10-31
 
 The [Barodesy2017 body-law zero-spin draft](models/barodesy2017-laboratory-preview.md) is now the sixth local runnable definition, using explicit schema v0.3. Its prospectively frozen actual-driver native/Wasm study passes13 requests/backend, including all five monotonic/cyclic protocols and330 caller points/backend. Scientific status remains draft; source discrepancies, broader initialization/tangent/experimental gates stay open. The completed v0.3 contract, browser state-role handling and six-model package are integrated locally; the [integration report](reviews/v03-laboratory-integration/RESULTS.md) retains initial regression failures and passing repairs. Historical five-model baselines below remain historical. This change has not been deployed; hosted count remains five until deployment.

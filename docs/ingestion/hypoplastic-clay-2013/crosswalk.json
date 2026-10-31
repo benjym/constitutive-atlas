@@ -1,0 +1,92 @@
+{
+  "version": "clay2013-source-closure-v1",
+  "kind": "contract_fragment_not_executable_model",
+  "research_definition": "models/research/clay2013/hypoplastic-clay-2013-research.json",
+  "research_definition_sha256": "f4437ed4f5e47c94abdbe45920e4146d899a9d72cfb3ee81631b944d2f414d7b",
+  "schema_version": "0.3",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "strain_path_rate",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  },
+  "state_contract": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "parameter_scope": {
+    "source_material_parameters": [
+      "phi_c",
+      "lambda_star",
+      "kappa_star",
+      "N",
+      "nu"
+    ],
+    "fixed_source_reference": {
+      "p_ref": 1000,
+      "unit": "Pa"
+    },
+    "numerical_parameters": [
+      "p_scale"
+    ],
+    "rectangular_bounds": "project_limits_not_source_complete_domain",
+    "current_examples": "illustrative_not_Table1_eval_or_matched_calibration"
+  },
+  "unsupported": [
+    "finite_spin",
+    "certified_arbitrarily_near_SPD_boundary",
+    "universal_initial_state_policy",
+    "source_matched_experimental_validation"
+  ]
+}

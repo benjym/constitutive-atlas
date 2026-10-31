@@ -1,0 +1,13 @@
+# Generic rate evidence v2
+
+The separate `research_rate_observations_v2.py`, `research_rate_parity_v2.py` and `collect_research_rates_wasm_v2.mjs` use protocol/observation/assessment/comparison versions0.2. Historical version0.1 tools and their original negative witnesses are unchanged. These generic tools contain no constitutive equations or model-ID branches.
+
+Version0.2 rejects duplicate keys in held protocol, build, receipt, raw-companion, descriptor and response JSON. It also binds source-to-protocol and compiled-to-source parameter insertion order, because positional CSV interpretation depends on it while canonical model hashing sorts keys. Both standalone auditing and complete native/Wasm bundle comparison enforce these checks. Existing state order remains an ordered-list identity. Opaque Node collection still journals strings before assessment; a malformed response may be retained with transport complete and subsequently rejected by the auditor.
+
+The instantaneous-rate transport supports legacy rate definitions and explicit schema0.3 strain-path-rate definitions. It rejects incremental residual and physical-time ODE definitions; timed models require a distinct transport with actual time/rate inputs. Schema0.3 inputs/states are literal supplied values, without manufactured physical preparation.
+
+`tests.log`:23 synthetic tests pass, covering both old and new tools. New checks reject reversed descriptor parameter layouts and duplicate descriptor/rate keys for both backend roles through standalone and comparison entry points, reversed protocol layout, duplicate protocol keys before import, physical-time/residual profiles, changed recovery controls, and accept an explicit v0.3 strain-path model. Existing tests cover raw journaling, trap/partial receipt, mutation, artifact corruption, overwrite refusal, re-audit and equally wrong backend outputs. The v0.3 synthetic loader is a stub with inert bytes, not compiled material evidence.
+
+`historical-witness-replay.json` reproduces all nine original witness groups, including the two deliberately accepted v1 limitations. This demonstrates preservation of the old evidence, not a claim that those historical defects were fixed in place. `source-pins.json` identifies the exact new and historical inputs.
+
+Reproduce with `python3 -B -m unittest tests.test_research_rate_collection tests.test_research_rate_collection_v2 -v`. Reproduce the historical negative witnesses with the original review script. No scientific admission, finite integration, material-AD or experimental claim follows from this transport verification; no independent reviewer has yet audited version0.2.
