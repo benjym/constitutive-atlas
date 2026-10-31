@@ -1,3 +1,4 @@
+import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
 import {formulationSection} from './formulation-view.mjs';
 import {createLoading,normalizeLoading,verifyReturnedLoading,exportRun,importRunDocument} from './loading.mjs';
 import {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';
@@ -10,6 +11,13 @@ let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
 const experimentCache=new Map();
 let publicationModels=new Set();
+let applicabilityMatrix=null,applicabilityState='loading';
+async function loadApplicability(){
+  try{const response=await fetch('./applicability.json');if(!response.ok)throw Error('Applicability unavailable');applicabilityMatrix=validateApplicability(await response.json());applicabilityState='loaded';}
+  catch{applicabilityState='failed';}
+  const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);
+  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;body.querySelector('.catalogue-applicability')?.replaceWith(applicabilitySection(document,entry.id,applicabilityMatrix,applicabilityState));body.scrollTop=scroll;}
+}
 let evidenceIndex=null,evidenceState='loading';
 async function loadEvidenceIndex(){
   try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());evidenceState='loaded';}
@@ -317,6 +325,7 @@ function showCatalogueModel(entry,spec){
     body.append(section);
   }
   body.append(evidenceSection(document,entry.id,evidenceIndex,evidenceState));
+  body.append(applicabilitySection(document,entry.id,applicabilityMatrix,applicabilityState));
   body.append(publicationReference(entry.id));
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
   $('catalogue-detail-id').textContent=entry.id;
@@ -472,5 +481,5 @@ try{
   const definitions=await response.json();catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   setupRecordedView({models,catalogueHash,chart,sourceLinks,definitionLink});
-  populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadPublicationReferences();loadEvidenceIndex();
+  populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadPublicationReferences();loadEvidenceIndex();loadApplicability();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

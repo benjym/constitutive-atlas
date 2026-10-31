@@ -78,3 +78,27 @@ and numerical evidence, and an independently recorded judgment. Additional
 materials/protocols need separate dataset scopes. The current website continues
 to use protocol/channel matching only; this matrix is not silently installed as
 an overlay eligibility filter and changes no simulation behavior.
+
+
+## Catalogue disclosure
+
+The catalogue details now expose this dataset-specific inventory separately from
+formal source reviews and numerical outcomes. Each covered model shows its pair
+assessment and undetermined scientific eligibility, with expandable prerequisites,
+limitations, exact definition hash and source/study metadata links. Unassessed,
+unindexed and unavailable states have distinct messages. This presentation does
+not alter experiment filtering or assign material suitability.
+
+The regular Pages packager validates the full matrix and copies its exact bytes
+plus the explicitly bound public documents under `applicability-records/`.
+It copies no experimental response arrays or PDFs. The new source bundler checks
+all inputs before modifying its destination. The website reuses the already
+verified Wasm files; no solver rebuild is required for this disclosure.
+
+Local verification: thirteen Python checks pass, including four new JavaScript
+contracts for pending/unknown/failure states, exact source links and literal text
+rendering. The complete nine-model package with 628 existing public experiment
+assets passes static package validation; both engine files are byte-identical to
+the verified release. Actual browser inspection confirmed VW96 conditional evidence,
+expanded source/limit disclosure and elasticity's unassessed state. This is local
+verification only; no deployment or scientific promotion occurred.

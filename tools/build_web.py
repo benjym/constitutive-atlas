@@ -12,6 +12,7 @@ from build_publications import bundle as bundle_publications
 from build_evidence import bundle as bundle_evidence
 from build_benchmark import bundle as bundle_benchmark
 from build_development import bundle as bundle_development
+from build_applicability import bundle as bundle_applicability
 
 def main():
     parser=argparse.ArgumentParser()
@@ -28,7 +29,7 @@ def main():
         generate(check)
         if (Path(check)/'models.json').read_bytes() != (generated/'models.json').read_bytes():
             raise SystemExit('Wasm catalogue is stale: rebuild before packaging.')
-    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','recorded.mjs','recorded-view.mjs','catalogue.mjs','state-contract.mjs','formulation-view.mjs']:
+    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','recorded.mjs','recorded-view.mjs','catalogue.mjs','state-contract.mjs','formulation-view.mjs','applicability-view.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     shutil.copyfile(ROOT/'docs/benchmarks/kfs-tmd2-research-range-v1/results/reproduction.png',dest/'tmd2-reproduction.png')
     shutil.copyfile(ROOT/'protocols/recorded-linear-elastic-run.json',dest/'recorded-example.json')
@@ -36,6 +37,7 @@ def main():
         shutil.copyfile(args.wasm_dir/name,dest/name)
     shutil.copyfile(generated/'models.json',dest/'models.json')
     shutil.copyfile(ROOT/'catalogue/manifest.json',dest/'catalogue.json')
+    bundle_applicability(dest)
     bundle_publications(dest)
     bundle_evidence(dest)
     bundle_benchmark(dest)
