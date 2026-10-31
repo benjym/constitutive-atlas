@@ -326,6 +326,17 @@ receipt and internal accepted trees; causality is not established. Four new/
 19combined tests pass with no native calls/builds. A separately frozen eight-run
 nested caller-count study is proposed; no old gate or scientific status changes.
 
+The [bounded nested-count follow-up](docs/benchmarks/kfs-nested-partitions-v1/README.md)
+now passes for a separately defined regime: eight replays, all9984noninitial
+caller points rejection-free/two-substep, eight passing case/channel gates.
+Maximum adjacent change is0.023570%of its matched calibration-response shift;
+later/earlier ratios0.24101–0.25319 are descriptive, not an asymptotic-order claim.
+368new+1974baseline receipts reconstruct offline; four corruptions reject and
+24software tests pass. The original failed sequence is preserved. Stop this
+numerical branch here and deliver the four factorial sensitivity panels and both
+refinement outcomes through the provisional website view. Source conflict,
+exact source/build identity and independent scientific review remain open.
+
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
 ## 10. M5 — expand toward twenty executable formulations

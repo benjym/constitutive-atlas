@@ -1,5 +1,16 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [bounded nested-count study](benchmarks/kfs-nested-partitions-v1/README.md)
+passes its separate regime: eight serial replays/360segments/368new receipts;
+all9984noninitial caller points remain rejection-free with two reported substeps.
+All eight case/channel gates pass; maximum change is0.023570%of the matched
+calibration-response shift and later/earlier ratios are0.24101–0.25319. Exact
+modified-command/full-prediction reconstruction includes1974baseline receipts;
+four copied corruptions reject and24software tests pass. The original nonnested
+gate stays failed. Stop numerical refinement here; expose both outcomes and
+factorial sensitivity in the existing provisional website view next. No build,
+fit, source-state correction, deployment or scientific admission occurs.
+
 The [saved partition diagnosis](benchmarks/kfs-partition-diagnostic-v1/README.md)
 exactly reaudits1974receipts without native execution. Coarse runs have less
 axial travel per reported substep than medium runs on16/43TMD7 and17/47TMD9
