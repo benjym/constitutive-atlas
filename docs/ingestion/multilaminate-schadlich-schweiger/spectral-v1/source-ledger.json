@@ -1,0 +1,172 @@
+{
+  "id": "multilaminate-spectral-v1",
+  "date": "2026-11-01",
+  "kind": "bounded equation inventory, not model record or complete v0.3 crosswalk",
+  "source": {
+    "title": "A Multilaminate Constitutive Model for Stiff Soils",
+    "author": "Bert Schädlich",
+    "year": 2012,
+    "doi": "10.3217/wmxdh-rg587",
+    "url": "https://repository.tugraz.at/publications/wmxdh-rg587",
+    "sha256": "43d9a82e21523d303a684776580f57943277bc5fa9cb4d77648494e9daa876a9",
+    "reuse_permission": "not established; raw sources private"
+  },
+  "visually_inspected_pages": [
+    {
+      "pdf": 53,
+      "printed": 35,
+      "render_sha256": "1a51d461d5ace654068f3c8423d5d88c0ff1f884b91b56c48f53daf9151a7a42"
+    },
+    {
+      "pdf": 54,
+      "printed": 36,
+      "render_sha256": "be752d3d0fd021679fa0180b95638f7ccdd16c0d00220b8c643ada66cfbb8b89"
+    },
+    {
+      "pdf": 55,
+      "printed": 37,
+      "render_sha256": "dc0a5a8ac85bcb93b6d8ce8b0f240b1c5bb734fd5b3d98131b547ad384412ad0"
+    },
+    {
+      "pdf": 69,
+      "printed": 51,
+      "render_sha256": "cbff22969d13dd44527041631e12dcf44c941a96803d6259e31de2111eda8aee"
+    },
+    {
+      "pdf": 70,
+      "printed": 52,
+      "render_sha256": "8563fc0eaec5fcea7613b114bffc2dd01a32bb816353416aa81cf19eca9a8fb4"
+    },
+    {
+      "pdf": 71,
+      "printed": 53,
+      "render_sha256": "298bb917aefb21659dd4a605156fd3bef9feb0710f0ac3fd2cbd810219738c16"
+    },
+    {
+      "pdf": 72,
+      "printed": 54,
+      "render_sha256": "4f99f0dee902313b3e7aac92d4536956d086a469eb35ef38d58bb3496389783f"
+    },
+    {
+      "pdf": 75,
+      "printed": 57,
+      "render_sha256": "5029469f6b1218ce7d8657e23b3d719e63350cf34fe68301dcd9cdb7735ae775"
+    },
+    {
+      "pdf": 76,
+      "printed": 58,
+      "render_sha256": "ee64a648635e8f98bea3961eca9365b2c42216a7a58977827e221c5f2b9ff9a4"
+    },
+    {
+      "pdf": 78,
+      "printed": 60,
+      "render_sha256": "99cd6cc7e95b032998c90fca171ed4b18aa13e07da79181d14f5ce2f22ca07c9"
+    },
+    {
+      "pdf": 79,
+      "printed": 61,
+      "render_sha256": "6fe867dacd310baa89b9da874ec4444113662812231699cc7646612ded3f9109"
+    },
+    {
+      "pdf": 80,
+      "printed": 62,
+      "render_sha256": "9d837dbc39db34969abda8d7b8a7d5081e54bfea0c49b0dff7f3eb8403ada669"
+    },
+    {
+      "pdf": 81,
+      "printed": 63,
+      "render_sha256": "bada5c1f435d7a2cbd5ad5c676cfdbf666369eec4c0113ce5b4592efd2cc5c64"
+    },
+    {
+      "pdf": 178,
+      "printed": 160,
+      "render_sha256": "b90b1cf3c8e27d7be0fcc610f6aa8305a319ee726734677c201c14ef29d07f1f"
+    },
+    {
+      "pdf": 179,
+      "printed": 161,
+      "render_sha256": "a07754ec92d33f5a64ab5c021954554c57afe42e5cf4011e487fea96c36f35dc"
+    },
+    {
+      "pdf": 208,
+      "printed": 190,
+      "render_sha256": "e1e61b00944c6fed99368940732bc615f1af6b94cc3063e66d15e48e58c1e139"
+    },
+    {
+      "pdf": 209,
+      "printed": 191,
+      "render_sha256": "fbe4de18328da8e8d45ed47d30a6f66d166ee709f31dfb16a291638ce9ea8b4d"
+    }
+  ],
+  "equation_inventory": [
+    {
+      "source": "Eqs66–71",
+      "printed": "35–36",
+      "role": "global engineering compliance, reciprocal Poisson pair, horizontal shear relation and positive-energy domain",
+      "units": "moduli Pa after explicit source-unit conversion; Poisson ratios dimensionless; compliance Pa^-1"
+    },
+    {
+      "source": "Eqs92–98,94; A.1,A.3",
+      "printed": "51–52,160–161",
+      "role": "Kelvin matrix, eigenvalues, projectors, global/local mode sums",
+      "gaps": [
+        "repeated yy in normal-component definitions",
+        "gamma engineering/tensorial conflict across Eq66/93",
+        "eigenvalue degeneracy policy"
+      ]
+    },
+    {
+      "source": "Eqs99–106; D190–191",
+      "printed": "52–54,190–191",
+      "role": "six-component split, local similarity, projection inverse, isotropic diagonal limit",
+      "gaps": [
+        "literal Eq104 last-row factor differs from D",
+        "Kelvin matrix versus raw projection and full assembly work metric",
+        "singular prepared directions and unspecified rotation/conditioning"
+      ]
+    },
+    {
+      "source": "A.2 versus D191",
+      "printed": "160,191",
+      "role": "eigenangle discrepancy",
+      "literal": "tan(2omega)=(-2sqrt(2)*nu_hv/Ev)/((1-nu_hh)/Eh+1/Ev)",
+      "independently_derived_ratio": "2b/(a-d), a=(1-nu_hh)/Eh, d=1/Ev, b=-sqrt(2)*nu_hv/Eh; eigenpair branch required",
+      "status": "retained source failure; no automatic correction"
+    },
+    {
+      "source": "Eqs108–110",
+      "printed": "57–58",
+      "role": "three alternative pressure dependencies; initial stress ratio in approach3",
+      "gaps": [
+        "branch choice not fixed by this packet",
+        "real power and clipped host pressure domains",
+        "preparation/restart retention"
+      ]
+    },
+    {
+      "source": "Section4.4.2 Fig29, D190–191",
+      "printed": "60,190–191",
+      "role": "logarithmic degradation between constant branches and reference-modulus/ratio interpolation",
+      "gaps": [
+        "Fig29 nu_vh versus D nu_hv interpolation",
+        "admissibility through entire interpolation",
+        "pressure/iteration order and tangent consistency"
+      ]
+    },
+    {
+      "source": "Eq111, Section4.4.3 Fig31",
+      "printed": "61–63",
+      "role": "distance from active sphere centre and nested reversal/outer-path history",
+      "gaps": [
+        "shear normalization in distance",
+        "exact event ties/fifth reversal and complete trial transaction refer to prior host packet"
+      ]
+    }
+  ],
+  "retained_gates": [
+    "full Chapter6 Hvorslev/softening/nonlocal equations still needed",
+    "all prior cap sign/hardening and omitted-helper conflicts remain",
+    "full v0.3 formulation absent; no executable integration or scientific admission"
+  ],
+  "verification": "Independent standard-library matrix/rational witnesses only; no author-code execution or compiled calls."
+}
