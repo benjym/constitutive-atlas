@@ -123,6 +123,10 @@ function populate({loadExample=true}={}){
   content.append(element('p','Equation form: '+(m.formulation?.equation_form??m.integration)+'. State equations are residuals for implicit models, or increments per unit path fraction for strain-path rate models.'));
   for(const d of m.derived)content.append(element('pre',d.name+' = '+d.expr));
   for(const [name,expression]of Object.entries(m.equations))content.append(element('pre',name+' : '+expression));
+  if(m.domain?.length){
+    content.append(element('h3','Declared domain'));
+    for(const constraint of m.domain)content.append(element('pre',constraint));
+  }
   sourceLinks(content,m.sources);
   const sources=$('model-sources');sources.replaceChildren();sourceLinks(sources,m.sources);sources.append(definitionLink(m.id),publicationReference(m.id));
   currentResult=null;lastSpec=null;renderCharts();$('export-run').disabled=$('export-csv').disabled=true;syncSliders();

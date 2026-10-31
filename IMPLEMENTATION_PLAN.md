@@ -7,8 +7,9 @@ This is the **live work board** for model ingestion. [ROADMAP.md](ROADMAP.md) re
 The KFS checkpoint, qualified TMD2 reproduction and bounded source/initialization
 reconciliations for all five baseline models are complete. Scientific admission
 remains pending for all five. The demonstrated DP dilatancy-domain correction is now implemented and verified
-natively below. Next priority is its bounded Wasm/browser packaging check, with
-no new model or generic numerical feature.
+natively and in the bounded local Wasm/browser check below. This delivery slice
+is closed; next address independent scientific review of existing inputs and
+references. No new model or generic numerical feature belongs to this slice.
 No new optimizer sweep, catalogue expansion or generic solver extension belongs
 to this cycle without a demonstrated blocker. Keep source review, numerical
 execution and scientific admission separate.
@@ -146,7 +147,7 @@ These five models already execute. The tasks below concern outstanding review an
 
 - [X] **FIX-dp-dilatancy-domain-v1** — Owner: coordinating parent; claimed:2026-11-01; output:catalogue/investigations/dp-dilatancy-domain-v1/; depends on REVIEW-drucker-prager. Archive the exact current definition/evidence identity, freeze source-supported0<=Md<=M parameter-domain correction and unchanged valid-case/regression criteria before compiled observations. Include M=Md=0, Md=M, invalid Md>M, and retained Md0 tensile-apex failure/recovery. No generic solver feature or incidental schema migration; preserve prior failure and passing evidence. Completed:2026-11-01; [native correction study](catalogue/investigations/dp-dilatancy-domain-v1/README.md) archives exact old definition/27receipt bindings, adds only Md<=M and passes83frozen cases plus two native regression groups. Initial incomplete-source configure failure retained; one serial target builds normally after completed freeze.9archive units pass; sibling audit19prior/15remaining/0new failures. No Wasm/hosted claim or promotion.
 
-- [ ] **WEB-dp-dilatancy-domain-v1** — Unassigned coordinator follow-up; depends on FIX-dp-dilatancy-domain-v1. Verify this same source/guard revision in one serial Wasm target and local website packaging; show source scope/rejection behavior and preserve current valid examples. No deploy/push or new solver capability.
+- [X] **WEB-dp-dilatancy-domain-v1** — Owner: coordinating parent; claimed:2026-11-01; output:docs/reviews/dp-dilatancy-web-v1/; depends on FIX-dp-dilatancy-domain-v1. Verify this same source/guard revision in one serial Wasm target and local website packaging; show source scope/rejection behavior and preserve current valid examples. No deploy/push or new solver capability. Completed:2026-11-01; [bounded local result](docs/reviews/dp-dilatancy-web-v1/README.md):83frozen DP cases in Release Wasm,45model/protocol pairs plus4/2/6regressions,9packaged default runs and628measurement checks pass. UI displays declared domains/source links, rejects Md>M and Reset recovers. Debug Wasm first-call memory trap and premature incomplete-package check retained; established Release profile passes unchanged gates. Independent review remains open.
 
 - [X] **REVIEW-linear-elastic** — Reconcile existing dossier/review records, identify unresolved source decisions, and return a bounded closure or gap report. Owner: coordinating parent; claimed:2026-11-01; output: `docs/ingestion/linear-elastic/`; existing evidence: [model dossier](docs/models/linear-elastic.md). Completed:2026-11-01; [bounded source reconciliation](docs/ingestion/linear-elastic/README.md) verifies three pinned OGS primary files, full v0.3 crosswalk, eight contract/init checks,30 exact stiffness columns and29 saved expected-state residuals. Constant-parameter specialization and project void/effective-stress conventions explicit. Pending v2 review; no root/build/status change, REV-01 remains open.
 

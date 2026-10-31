@@ -4,8 +4,17 @@ Nine local runnable drafts and five hosted models remain distinct from reviewed
 scientific admission. The exact browser-loading rollout and observable-only q
 correction are installed locally; see [rollout results](reviews/browser-loading-rollout-v1/RESULTS.md).
 Older progress entries below are historical. No push or deployment has occurred.
-The broad historical archive suite still has 19 preexisting binding failures;
+The broad historical archive suite has 15 remaining preexisting binding failures
+after the native DP correction (previously 19);
 this checkpoint does not claim that suite is green.
+
+The [bounded DP Wasm/package check](reviews/dp-dilatancy-web-v1/README.md)
+passes 83 unchanged DP references, 45 model/protocol pairs and the existing
+rollback, rate and history regressions in Release. Nine packaged default runs and 628 measurement checks pass. The UI shows
+declared domains and source links; Md>M rejection and Reset recovery were
+observed. Debug Wasm traps on its first DP call; logs are retained and that
+profile remains unverified. No hosted update or scientific promotion. This
+slice is closed; independent review remains the next milestone.
 
 The [bounded KFS checkpoint](benchmarks/kfs-development-checkpoint-v1/README.md)
 regenerates an existing matched-count development comparison exactly and verifies

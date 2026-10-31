@@ -37,6 +37,14 @@ descriptive experimental errors. A native research-only range mode leaves the
 interactive limit unchanged. Historical strain conversion and independent
 scientific review remain open. The local [portable command](docs/benchmarks/kfs-tmd2-portable-v1/README.md) now reproduces that result from a fresh author download and serial build. Next address independent model review and public data-reuse permission, not a new numerical framework.
 
+The five baseline source/initialization reconciliation packets are complete to
+their documented scope; independent scientific admission remains pending.
+The source-supported DP dilatancy guard is also [verified in local Release Wasm
+and the nine-model website package](docs/reviews/dp-dilatancy-web-v1/README.md).
+This closes that bounded correction slice. Debug Wasm remains unverified after
+a retained first-call trap. Resume independent review of existing source/input
+and benchmark claims before adding models or numerical capabilities.
+
 The immediate six-model/SANISAND and Terracotta goals remain unchanged. The first
 release targets twenty formulations; the paper's 50+ planning ambition is not a
 prerequisite for this increment. Mohr–Coulomb browser integration and historical

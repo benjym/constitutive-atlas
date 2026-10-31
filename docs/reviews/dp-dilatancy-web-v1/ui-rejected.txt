@@ -1,0 +1,238 @@
+Browser tab: 5, Title: "Constitutive Atlas · Model testing", URL: "http://127.0.0.1:8941/constitutive-atlas/#laboratory".
+1 AXWebArea Constitutive Atlas · Model testing, URL: 127.0.0.1:8941/constitutive-atlas/#laboratory
+	2 container
+		3 link Description: Constitutive Atlas home, Value: 127.0.0.1:8941/constitutive-atlas/#laboratory
+		4 container Main navigation
+			5 link Description: ◫ Model testing, Value: 127.0.0.1:8941/constitutive-atlas/#laboratory
+			6 link Description: ↝ Recorded paths, Value: 127.0.0.1:8941/constitutive-atlas/#recorded
+			7 link Description: ⌕ Model catalogue 32, Value: 127.0.0.1:8941/constitutive-atlas/#catalogue
+			8 link Description: ≋ Methods & evidence, Value: 127.0.0.1:8941/constitutive-atlas/#methods
+			9 link Description: ↗ Publications & lineage, Value: 127.0.0.1:8941/constitutive-atlas/publications.html
+		10 container
+			11 text By
+			12 link Description: Benjy Marks, Value: github.com/benjym
+			13 link Description: François Guillard, Value: github.com/Franzzzzzzzz
+	14 container laboratory
+		15 heading Explore material behaviour., Value: 1
+			16 text Explore material behaviour.
+		17 button ↑ Import run, ID: import-run
+		18 container
+			19 text CONSTITUTIVE MODEL
+			186 text transcribed
+			21 text Select a model
+			22 pop up button (collapsed, settable) Select a model, Value: Drucker–Prager, nonassociated perfect plasticity, ID: model, Secondary Actions: Expand
+				23 menu
+					24 Barodesy clay 2017 — body law, zero spin (draft)
+					25 Barodesy sand (2015) — fixed-frame draft
+					26 (selected) Drucker–Prager, nonassociated perfect plasticity
+					27 Mašín clay hypoplasticity (2005) — zero-spin draft
+					28 Clay hypoplasticity 2013 — Appendix law, zero spin (draft)
+					29 Sand hypoplasticity + intergranular strain (1997)
+					30 Sand hypoplasticity — von Wolffersdorff (1996)
+					31 Linear isotropic elasticity
+					32 Modified Cam Clay
+			187 text Drucker–Prager cone f=q-M p-c with separate dilatancy slope Md. Backward Euler with declarative trial-direction radial return and subgradient apex branch. Constant elasticity; no hardening or tensile cap.
+			34 button (collapsed) Sources & model definition, Secondary Actions: Expand
+				35 text Sources & model definition
+			188 text Elastoplasticity
+			37 text 3D · small strain
+			38 button View equations ↗, ID: equations-button
+		39 container Model testing sections
+			40 link Description: Test controls ↓, Value: 127.0.0.1:8941/constitutive-atlas/#controls
+			41 link Description: Response plots ↓, Value: 127.0.0.1:8941/constitutive-atlas/#response
+			42 link Description: Compare measurements ↓, Value: 127.0.0.1:8941/constitutive-atlas/#measurements
+			43 link Description: Equations & sources ↓, Value: 127.0.0.1:8941/constitutive-atlas/#equations
+		44 container controls
+			45 heading Test controls, Value: 2
+				46 text Test controls
+			47 button Reset, ID: reset
+			48 text  Live updates as you adjust
+			49 container
+				50 text Loading protocol
+				51 pop up button (collapsed, settable) Loading protocol, Value: Drained triaxial, ID: protocol, Secondary Actions: Expand
+					52 menu
+						53 (selected) Drained triaxial
+						54 Undrained triaxial
+						55 Oedometer
+						56 Isotropic compression
+						57 Undrained · stress control
+			58 container
+				59 text Axial strain (%)
+				60 stepper (settable, integer) Axial strain (%), Value: 1, ID: target
+			61 slider (settable, integer) Description: Axial strain (%) slider, Value: 550
+			62 container
+				63 text Loading history
+				64 pop up button (collapsed, settable) Loading history, Value: Monotonic ramp, ID: cycles, Secondary Actions: Expand
+					65 menu
+						66 (selected) Monotonic ramp
+						67 1 sinusoidal cycle
+						68 3 sinusoidal cycles
+						69 10 sinusoidal cycles
+			70 text INITIAL STATE
+			71 button Load model example, ID: load-model-example
+			72 text Selecting a model loads its example parameters and full initial state. These illustrative values do not establish specimen preparation or experimental calibration. Loading an example replaces parameter and state edits.
+			73 container
+				74 text Radial effective stress (kPa)
+				75 stepper (settable, integer) Radial effective stress (kPa), Value: 100, ID: confinement
+			76 slider (settable, integer) Description: Radial effective stress (kPa) slider, Value: 500
+			77 button (collapsed) Initial state details, Secondary Actions: Expand
+				78 text Initial state details
+			220 container
+				221 button (expanded) Material parameters Adjust model constants, Secondary Actions: Collapse
+					222 AXListMarker ▾ 
+					223 text Material parameters
+					224 text Adjust model constants
+				225 text MATERIAL PARAMETERS Units shown per control
+				226 container parameter-fields
+					227 container
+						228 text Reference stress / numerical scaling
+						229 stepper (settable, integer) Reference stress / numerical scaling, Value: 100000, ID: param-p_ref
+					230 slider (settable, integer) Description: Reference stress / numerical scaling slider, Value: 500
+					231 container
+						232 text Young modulus
+						233 stepper (settable, integer) Young modulus, Value: 30000000, ID: param-E
+					234 slider (settable, integer) Description: Young modulus slider, Value: 623
+					235 container
+						236 text Poisson ratio
+						237 stepper (settable, float) Poisson ratio, Value: 0.25, ID: param-nu
+					238 slider (settable, integer) Description: Poisson ratio slider, Value: 833
+					239 container
+						240 text Friction slope
+						241 stepper (settable, float) Friction slope, Value: 1.2000000476837158, Details: 1.2, ID: param-M
+					242 slider (settable, integer) Description: Friction slope slider, Value: 400
+					243 container
+						244 text Dilatancy slope
+						245 stepper (settable, integer) Dilatancy slope, Value: 2, ID: param-Md
+					246 slider (settable, integer) Description: Dilatancy slope slider, Value: 667
+					247 container
+						248 text Yield intercept
+						249 stepper (settable, integer) Yield intercept, Value: 10000, ID: param-c
+					250 slider (settable, integer) Description: Yield intercept slider, Value: 0
+			83 button (collapsed) Solver settings, Secondary Actions: Expand
+				84 text Solver settings
+			251 text invalid run specification
+		86 container Compare with measurements, ID: measurements
+			87 text EXPERIMENTAL COMPARISON
+			88 heading Compare with measurements, Value: 2, ID: experiment-title
+				89 text Compare with measurements
+			90 text Tests are filtered by drainage protocol, loading path and verified plot axes. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.
+			91 text 43 compatible tests · Drained triaxial · monotonic loading. Only verified channel pairs overlay the model. Other source records are available below.
+			92 container
+				93 text Find measurements
+				94 search text field (settable) Find measurements, ID: experiment-search
+			95 container
+				96 text Experimental test
+				97 pop up button (collapsed, settable) Experimental test, Value: No measurements selected, ID: experiment-select, Secondary Actions: Expand
+					98 menu
+						99 (disabled) No measurements selected
+						100 container Baskarp sand No. 15 · drained triaxial
+							101 (disabled) TRIAX-CD-1
+							102 (disabled) TRIAX-CD-2
+							103 (disabled) TRIAX-CD-3
+							104 (disabled) TRIAX-CD-4
+							105 (disabled) TRIAX-CD-5
+							106 (disabled) TRIAX-CD-6
+						107 container Clayey-silty sand (Ullmann et al.) · drained triaxial
+							108 (disabled) OPARA-TXCD-20 · 21 kPa · e₀ 0.458
+							109 (disabled) OPARA-TXCD-40 · 40.8 kPa · e₀ 0.426
+							110 (disabled) OPARA-TXCD-60 · 58.7 kPa · e₀ 0.45
+							111 (disabled) OPARA-TXCD-100 · 104 kPa · e₀ 0.416
+							112 (disabled) OPARA-TXCD-200 · 201 kPa · e₀ 0.511
+							113 (disabled) OPARA-TXCD-300 · 302 kPa · e₀ 0.496
+						114 container Darmstadt sand · drained triaxial
+							115 (disabled) TRIAX-CD-1
+							116 (disabled) TRIAX-CD-2
+							117 (disabled) TRIAX-CD-3
+							118 (disabled) TRIAX-CD-4
+							119 (disabled) TRIAX-CD-5
+							120 (disabled) TRIAX-CD-6
+						121 container Fontainebleau NE34 sand · drained triaxial
+							122 (disabled) TRIAX-CD-1
+							123 (disabled) TRIAX-CD-2
+							124 (disabled) TRIAX-CD-5
+							125 (disabled) TRIAX-CD-6
+							126 (disabled) TRIAX-CD-7
+							127 (disabled) TRIAX-CD-8
+							128 (disabled) TRIAX-CD-9
+							129 (disabled) TRIAX-CD3
+							130 (disabled) TRIAX-CD4
+						131 container Geba sand · drained triaxial
+							132 (disabled) TRIAX-CD-1
+							133 (disabled) TRIAX-CD-2
+							134 (disabled) TRIAX-CD-3
+							135 (disabled) TRIAX-CD-4
+							136 (disabled) TRIAX-CD-5
+						137 container Nevada sand · drained triaxial
+							138 (disabled) TRIAX-CD-1
+							139 (disabled) TRIAX-CD-2
+							140 (disabled) TRIAX-CD-3
+							141 (disabled) TRIAX-CD-4
+							142 (disabled) TRIAX-CD-5
+							143 (disabled) TRIAX-CD-6
+							144 (disabled) TRIAX-CD-7
+						145 container Perth sand · drained triaxial
+							146 (disabled) TRIAX-CD-1
+							147 (disabled) TRIAX-CD-2
+							148 (disabled) TRIAX-CD-3
+							149 (disabled) TRIAX-CD-4
+			150 switch (disabled, settable, boolean) Description: Show measurements, Value: 0, ID: show-experiment
+			151 button (disabled) Use initial state & protocol, ID: match-experiment
+			252 text Select a compatible test to compare measured and predicted behaviour.
+			153 checkbox (settable, integer) Description: Browse all source records (includes tests without model overlays), Value: 0, ID: browse-source-records
+			154 button (collapsed) Compare your own measurements, Secondary Actions: Expand
+				155 text Compare your own measurements
+		156 container response
+			253 text Stopped · last committed state retained
+			254 text invalid run specification
+		159 container Description: Simulation results, ID: response-charts
+			160 container
+				161 heading Stress–strain response, Value: 2
+					162 text Stress–strain response
+				163 container Description: Deviator stress versus axial strain, Help: Deviator stress q (kPa) versus Axial strain ε₁ (%), ID: stress-chart
+				164 text Model prediction
+			165 container
+				166 heading Effective stress path, Value: 2
+					167 text Effective stress path
+				168 container Description: Deviator stress versus effective mean stress, Help: Deviator stress q (kPa) versus Mean effective stress p′ (kPa), ID: path-chart
+				169 text Model prediction
+			170 container
+				171 heading Volumetric response, Value: 2
+					172 text Volumetric response
+				173 container Description: Volumetric versus axial strain, Help: Volumetric strain εᵥ (%) versus Axial strain ε₁ (%), ID: volume-chart
+				174 text Model prediction
+			175 container
+				176 heading Pore-pressure change, Value: 2
+					177 text Pore-pressure change
+				178 container Description: Pore-pressure change versus axial strain, Help: Pore-pressure change Δu (kPa) versus Axial strain ε₁ (%), ID: pore-chart
+				179 text Model prediction
+				255 text Not defined for this drained / mechanical protocol
+		256 text invalid run specification
+		182 button (disabled) ↓ Results CSV, ID: export-csv
+		183 button (disabled) ↓ Reproducible run, ID: export-run
+		195 container equations
+			196 button (expanded) Equations & source provenance, Secondary Actions: Collapse
+				197 text Equations & source provenance
+			198 container equation-content
+				199 text Drucker–Prager cone f=q-M p-c with separate dilatancy slope Md. Backward Euler with declarative trial-direction radial return and subgradient apex branch. Constant elasticity; no hardening or tensile cap.
+				200 text Equation form: residual. State equations are residuals for implicit models, or increments per unit path fraction for strain-path rate models.
+				201 text K = E / (3 * (1 - 2 * nu))
+				202 text G = E / (2 * (1 + nu))
+				203 text mean = trace(sigma) / 3
+				204 text q = sqrt(1.5 * dot(dev(sigma), dev(sigma)))
+				205 text yield_scaled = (q - M * mean - c) / p_ref
+				206 text trial_s = dev(sigma_n) + 2 * G * dev(de)
+				207 text trial_q = sqrt(1.5 * dot(trial_s, trial_s))
+				208 text trial_q_safe = select(trial_q > 0 * p_ref, trial_q, p_ref)
+				209 text sigma : sigma - sigma_n - K * trace(de) * I - 2 * G * dev(de) + min(3 * G * gamma / trial_q_safe, 1) * trial_s - gamma * K * Md * I
+				210 text e : e - (1 + e_n) * exp(-trace(de)) + 1
+				211 text gamma : sqrt(gamma**2 + yield_scaled**2) - gamma + yield_scaled
+				212 heading Declared domain, Value: 3
+					213 text Declared domain
+				214 text e > 0
+				215 text gamma > -1e-9
+				216 text Md <= M
+				217 link Value: opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/DruckerPrager.html, Description: formulation · Drucker–Prager yield and flow conventions; this entry is the explicitly stated perfect-plastic specialization ↗
+				218 link Description: implementation reference · plastic_integrator: smooth-cone correction under zero hardening; atlas omits separate tensile cutoff. Trial-direction elimination and apex subgradient are project derivations documented in docs/models/drucker-prager-apex.md. ↗, Value: github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/DruckerPrager.cpp
+				219 link Value: docs.itascacg.com/itasca930/common/models/drucker/doc/modeldrucker.html, Description: formulation reference · Equations 17–23 (radial scaling) and Apex Stress Correction; comparison source includes a separate tensile cutoff absent from this atlas law. Project derivation: docs/models/drucker-prager-apex.md. ↗
+
+The focused UI element is 246 slider (settable, integer) Description: Dilatancy slope slider, Value: 667
