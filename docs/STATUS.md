@@ -1,3 +1,9 @@
+# Common loading inputs remove observed backend drift — 2026-10-31
+
+The [frozen controller trace](../catalogue/investigations/mc-control-trace-v1/RESULTS.md) passes exact logging/unmodified-baseline and original65point artifact fidelity on native and Wasm. Each backend records two64step/288material-call streams. Common literal inputs produce exact identity in every logged call, accepted physical point and inner diagnostic across backends. Native sine and literal streams also coincide. The original sine inputs differ by one ulp at two controls and retain their15failed parity scalars. This intervention supports control-generation rounding as a cause of this observed drift; no original gate is replaced.
+
+Source reversal/binding audit,12corruptions and exact saved-evidence replay pass; all three local artifact hashes match. A generic reproducible loading contract is the next task. No law, solver/controller default, root model, public admission, push or deployment changed; hosted five/local nine remain unchanged.
+
 # Cyclic-controller diagnosis and Tresca source closure — 2026-10-31
 
 The [saved-evidence diagnosis](reviews/mc-cyclic-control-diagnostic-v1/README.md) reproduces all15failed parity scalars and accounts exactly for final q offsets as accumulated accepted outer control residuals. Independent local source updates agree to about8.2e-11Pa; this distinguishes selected strain/control drift from a constitutive-law discrepancy without proving the finite-difference/libm cause.242checks and byte-exact coordinator replay pass; an initial coordinator output-path argument mistake is retained. A separately frozen controller trace is in preparation.

@@ -1,0 +1,16 @@
+{
+  "identity": "mc-control-trace-diagnostic-policy-v1",
+  "source_controller_changed": false,
+  "model_changed": false,
+  "settings_changed": false,
+  "numerical_bounds_changed": false,
+  "gates": [
+    "exact instrumented/unmodified baseline physical+diagnostic equality",
+    "complete65point original artifact physical equality for backend sine",
+    "exact common64stored controls",
+    "all64accepted parent/de/state/strain links",
+    "all reconstructed accepted residuals below original0.001Pa stoppingthreshold"
+  ],
+  "interpretation": "No diagnostic causal conclusion unless fidelity prerequisites pass; all mismatches retained. No promotion follows.",
+  "new_builds": "serial native thenWasm, atlas_control_trace --parallel1; EMCC_CORES1"
+}

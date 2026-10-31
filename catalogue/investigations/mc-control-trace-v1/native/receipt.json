@@ -1,0 +1,55 @@
+{
+  "backend": "native",
+  "started_utc": "2026-10-31T11:32:29.832296+00:00",
+  "manifest_sha256": "27204b0adc5579d28b2997e4dd47c442050b3f0125557c639c4f987c9e4c149f",
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "c++",
+        "--version"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-mc-control-trace-v1",
+        "-B",
+        "/private/tmp/atlas-control-trace-native-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-control-trace-native-v1",
+        "--target",
+        "atlas_control_trace",
+        "--parallel",
+        "1"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "/private/tmp/atlas-control-trace-native-v1/atlas_control_trace"
+      ],
+      "exit": 0
+    }
+  ],
+  "artifacts": {
+    "atlas_control_trace": {
+      "path": "/private/tmp/atlas-control-trace-native-v1/atlas_control_trace",
+      "sha256": "8294ad6a03a82640fb8d0cb894caad6d7b18768810813df50ee177a011ae34e7"
+    }
+  },
+  "completed": true,
+  "raw_sha256": "17e3f631d7336aedab5ae71c4467e0c0b8ed896a49c349236a13678ede2b9b7e"
+}

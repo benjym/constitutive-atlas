@@ -1,0 +1,244 @@
+{
+  "identity": "post-observation-control-trace-comparison-v1",
+  "numeric_bounds_changed": false,
+  "within_backend": {
+    "native": {
+      "sine_vs_literal_points_identical": true,
+      "sine_vs_literal_calls_identical": true
+    },
+    "wasm": {
+      "sine_vs_literal_points_identical": false,
+      "sine_vs_literal_calls_identical": false
+    }
+  },
+  "between_backends": {
+    "backend-sine": {
+      "controls_identical": false,
+      "first_point_difference": {
+        "step": 9,
+        "native": {
+          "control": 154602.0906725474,
+          "state": [
+            214582.6279407175,
+            59980.53726311332,
+            59980.53726311332,
+            0,
+            0,
+            0
+          ],
+          "strain": [
+            0.005856291574290277,
+            -0.0029281457871451386,
+            -0.0029281457871451386,
+            0,
+            0,
+            0
+          ],
+          "u": 40019.46273688668,
+          "diagnostics": {
+            "iterations": 2,
+            "substeps": 1,
+            "rejected": 0,
+            "error": 0
+          }
+        },
+        "wasm": {
+          "control": 154602.09067254738,
+          "state": [
+            214582.62794071747,
+            59980.53726311331,
+            59980.53726311331,
+            0,
+            0,
+            0
+          ],
+          "strain": [
+            0.005856291574290273,
+            -0.0029281457871451365,
+            -0.0029281457871451365,
+            0,
+            0,
+            0
+          ],
+          "u": 40019.46273688669,
+          "diagnostics": {
+            "iterations": 2,
+            "substeps": 1,
+            "rejected": 0,
+            "error": 0
+          }
+        }
+      },
+      "first_call_difference": {
+        "call_index": 37,
+        "left": {
+          "step": 9,
+          "iteration": 0,
+          "role": "test",
+          "de": [
+            0.001855949143097626,
+            -0.000927974571548813,
+            -0.000927974571548813,
+            0,
+            0,
+            0
+          ],
+          "parent": [
+            194811.52628305685,
+            53390.1700438931,
+            53390.1700438931,
+            0,
+            0,
+            0
+          ],
+          "ok": true,
+          "state": [
+            214582.6279407175,
+            59980.53726311332,
+            59980.53726311332,
+            0,
+            0,
+            0
+          ],
+          "diagnostics": {
+            "iterations": 2,
+            "substeps": 1,
+            "rejected": 0,
+            "error": 0
+          }
+        },
+        "right": {
+          "step": 9,
+          "iteration": 0,
+          "role": "test",
+          "de": [
+            0.0018559491430976218,
+            -0.0009279745715488109,
+            -0.0009279745715488109,
+            0,
+            0,
+            0
+          ],
+          "parent": [
+            194811.52628305685,
+            53390.1700438931,
+            53390.1700438931,
+            0,
+            0,
+            0
+          ],
+          "ok": true,
+          "state": [
+            214582.62794071747,
+            59980.53726311331,
+            59980.53726311331,
+            0,
+            0,
+            0
+          ],
+          "diagnostics": {
+            "iterations": 2,
+            "substeps": 1,
+            "rejected": 0,
+            "error": 0
+          }
+        },
+        "same_parent": true,
+        "same_de": false
+      },
+      "call_counts": [
+        288,
+        288
+      ],
+      "failed_subset_parity_scalars": [
+        {
+          "step": 20,
+          "field": "u",
+          "component": 0,
+          "difference": 1.3699172995984554e-06,
+          "budget_fraction": 1.118682449909805
+        },
+        {
+          "step": 21,
+          "field": "u",
+          "component": 0,
+          "difference": 1.3699172995984554e-06,
+          "budget_fraction": 1.4498639031454061
+        },
+        {
+          "step": 22,
+          "field": "u",
+          "component": 0,
+          "difference": 1.3699172995984554e-06,
+          "budget_fraction": 2.2512469697752864
+        },
+        {
+          "step": 23,
+          "field": "u",
+          "component": 0,
+          "difference": 1.3699172995984554e-06,
+          "budget_fraction": 6.261415356719922
+        },
+        {
+          "step": 24,
+          "field": "u",
+          "component": 0,
+          "difference": 1.3699172995984554e-06,
+          "budget_fraction": 6.210786823337156
+        },
+        {
+          "step": 25,
+          "field": "u",
+          "component": 0,
+          "difference": 1.3699172995984554e-06,
+          "budget_fraction": 1.9422434119387537
+        },
+        {
+          "step": 26,
+          "field": "u",
+          "component": 0,
+          "difference": 1.3699172995984554e-06,
+          "budget_fraction": 1.1130170426869859
+        },
+        {
+          "step": 31,
+          "field": "q_signed",
+          "component": 0,
+          "difference": 2.739834599196911e-06,
+          "budget_fraction": 1.3976303474314962
+        },
+        {
+          "step": 32,
+          "field": "q_signed",
+          "component": 0,
+          "difference": 2.739834599196911e-06,
+          "budget_fraction": 27398.34599196911
+        },
+        {
+          "step": 33,
+          "field": "q_signed",
+          "component": 0,
+          "difference": 2.739834599196911e-06,
+          "budget_fraction": 1.3976303484907129
+        },
+        {
+          "step": 64,
+          "field": "q_signed",
+          "component": 0,
+          "difference": 2.735760062932968e-07,
+          "budget_fraction": 2735.760062932968
+        }
+      ]
+    },
+    "common-literal": {
+      "controls_identical": true,
+      "first_point_difference": null,
+      "first_call_difference": null,
+      "call_counts": [
+        288,
+        288
+      ],
+      "failed_subset_parity_scalars": []
+    }
+  }
+}

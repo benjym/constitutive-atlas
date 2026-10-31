@@ -1,0 +1,63 @@
+{
+  "backend": "wasm",
+  "started_utc": "2026-10-31T11:32:49.792798+00:00",
+  "manifest_sha256": "27204b0adc5579d28b2997e4dd47c442050b3f0125557c639c4f987c9e4c149f",
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "emcc",
+        "--version"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-mc-control-trace-v1",
+        "-B",
+        "/private/tmp/atlas-control-trace-wasm-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-control-trace-wasm-v1",
+        "--target",
+        "atlas_control_trace",
+        "--parallel",
+        "1"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "node",
+        "/private/tmp/atlas-mc-control-trace-v1/observe.mjs",
+        "/private/tmp/atlas-control-trace-wasm-v1",
+        "/private/tmp/atlas-mc-control-trace-v1/wasm/raw.json"
+      ],
+      "exit": 0
+    }
+  ],
+  "artifacts": {
+    "control-trace.js": {
+      "path": "/private/tmp/atlas-control-trace-wasm-v1/control-trace.js",
+      "sha256": "648fad94726b3cb41d7dac5f50433ea72ce683d7b9084f5ddd40794ffb5452cb"
+    },
+    "control-trace.wasm": {
+      "path": "/private/tmp/atlas-control-trace-wasm-v1/control-trace.wasm",
+      "sha256": "6c224015d545356f09ed3d1f69a719a8a60ebfcb02fb85db1d1c2d70cd62bdc7"
+    }
+  },
+  "completed": true,
+  "raw_sha256": "cf7f22de541be51a7da604e049580962d331273ff691264a7daf6aa438fdf2da"
+}
