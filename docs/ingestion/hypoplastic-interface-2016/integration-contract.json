@@ -1,0 +1,31 @@
+{
+  "version": "interface2016-transactions-draft-0.1",
+  "source_facts": {
+    "law": "hypoplastic objective stress rate, source Eq2 text; no explicit physical-time relaxation identified",
+    "kinematics_owner": "FE code supplies Euler stretching and Jaumann–Zaremba rotation correction, manuscript Section4.1 text only",
+    "initialization": "sigma_p introduced before first shear; Jaky relation suggested, exact stress-ratio orientation/preparation not pinned",
+    "thesis_corroboration": "printed76 explicitly allows sigma_p to evolve separately from sigma_n"
+  },
+  "project_choices_not_source_algorithm": {
+    "coordinate": "dimensionless strain-path order for rate-independent fixed-frame research trial; physical slip in m retained separately",
+    "loading_adapter": "must choose angular tan relationship or justified infinitesimal approximation; for fixed d_s exact derivative gamma_dot=(u_dot/d_s)/(1+(u/d_s)^2); variable thickness requires its derivative",
+    "trial": "all traction, in-plane stress, density, frame and slip history copy as one trial state; commit only accepted update",
+    "rollback": "reject entire trial on local Newton/domain/error-control/budget failure; failed stages do not initialize sigma_p again",
+    "order": "initialize state before first slip; evaluate all host/reduced quantities from same trial state, no unrecorded lagging",
+    "hold": "zero stretching yields zero material rate only on regular finite host branch; no claim about spin/contact/creep",
+    "events": "reversal is path change; no source reset inferred. Opening/recontact and roughness/thickness changes unsupported until separately specified",
+    "controls": "CV eps_n_dot=0; CNL sigma_n_dot=0; CNS sigma_n_dot=K_eps eps_n_dot; solve mixed control with source sign convention",
+    "stiffness_units": "K_eps Pa; displacement stiffness K_u Pa/m; fixed signed eps_n=u_n/d_s gives K_eps=d_s*K_u; force stiffness additionally needs area",
+    "tangent": "differentiate reduced constitutive action and mixed-control residual on selected regular branch; no tangent claimed"
+  },
+  "unresolved": [
+    "source mechanical stress sign and contact admissibility",
+    "sigma_p evolution vs constant wording",
+    "finite slip angular strain versus stretching measure",
+    "full host e update and density boundaries",
+    "objective frame transport",
+    "zero-load singular normalized directions"
+  ],
+  "compiled_execution": false,
+  "admission": false
+}

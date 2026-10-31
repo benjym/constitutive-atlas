@@ -1,0 +1,107 @@
+{
+  "kind": "synthetic-collection-review-witnesses",
+  "compiled_execution": false,
+  "source_sha256": {
+    "tools/collect_research_rates_wasm.mjs": "69ce09fb1d3ea5fa05c5f75bba6c4f51b532195f7f5ad7f3485a8275b6214d8d",
+    "tools/research_rate_parity.py": "5d24276ff1a7c281670a378800bd055f9eabd1d872378eab33c97a05487b409c",
+    "tools/research_rate_observations.py": "691a4dc606d0fb7b7ee0c5bc2816004292676eb50c3a4cd2e09e71634d75312a",
+    "tests/test_research_rate_collection.py": "48a92bfaf67c38bf60829daf334aa233a2e39102eb68b61182cd85cd9905c640"
+  },
+  "count": 9,
+  "passed": true,
+  "witnesses": [
+    {
+      "id": "factory-exception-retains-empty-journal",
+      "passed": true,
+      "details": {
+        "exit_nonzero": true,
+        "rows": 0,
+        "receipt_complete": false,
+        "retained_error": "Error: synthetic factory failure"
+      }
+    },
+    {
+      "id": "boolean-rate-is-not-numeric-zero",
+      "passed": true,
+      "details": {
+        "rejected": "rate output shape"
+      }
+    },
+    {
+      "id": "boolean-echo-is-not-numeric-zero",
+      "passed": true,
+      "details": {
+        "rejected": "finite numeric echo increment"
+      }
+    },
+    {
+      "id": "explicit-backend-bundle-role",
+      "passed": true,
+      "details": {
+        "rejected": "pre-execution build binding"
+      }
+    },
+    {
+      "id": "integer-float-serialization-identity",
+      "passed": true,
+      "details": {
+        "outcome": "passed",
+        "note": "Opaque Python-serialized int/float echoes accepted by finite numeric identity, not JSON-text digest."
+      }
+    },
+    {
+      "id": "raw-controls-rebound-hash-still-rejected",
+      "passed": true,
+      "details": {
+        "rejected": "literal CABI controls"
+      }
+    },
+    {
+      "id": "parser-rejection-does-not-accept-domain-shape",
+      "passed": true,
+      "details": {
+        "rejected": "parser rejection shape"
+      }
+    },
+    {
+      "id": "inherited-duplicate-response-key-limit",
+      "passed": true,
+      "details": {
+        "accepted": true,
+        "classification": "Inherited response-parser limitation, not newly introduced collection regression",
+        "raw_contains_conflicting_duplicate_ok": true
+      }
+    },
+    {
+      "id": "reversed-compiled-parameter-layout-accepted",
+      "passed": true,
+      "details": {
+        "accepted": true,
+        "expected_parameter_order": [
+          "p_ref",
+          "p_scale",
+          "phi_c",
+          "lambda_star",
+          "kappa_star",
+          "N",
+          "r",
+          "lode_allowance",
+          "j2_floor"
+        ],
+        "descriptor_parameter_order": [
+          "j2_floor",
+          "lode_allowance",
+          "r",
+          "N",
+          "kappa_star",
+          "lambda_star",
+          "phi_c",
+          "p_scale",
+          "p_ref"
+        ],
+        "same_canonical_model_hash": true,
+        "classification": "Blocking positional parameter-layout identity gap inherited by additive wrapper"
+      }
+    }
+  ]
+}

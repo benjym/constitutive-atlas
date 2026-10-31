@@ -10,8 +10,22 @@ establish finite integration, tangents or experimental validation.
 Native and Wasm collection, journal assessment and an evidence-backed parity
 wrapper are implemented. Synthetic tests use a project-owned ESM factory and
 fabricated journals; they never instantiate compiled Wasm and do not establish
-compiled observations. No model-specific compiled study has been run through
-these tools yet. The previously reviewed Python assessor remains byte-identical.
+compiled observations. The [sand2015 study](../catalogue/investigations/barodesy2015-rates-v1/RESULTS.md)
+now retains71rows/backend from actual native/Wasm builds and remains numerically
+failed on a shared cancellation case. The previously reviewed Python assessor
+remains byte-identical.
+
+## Known identity limitation
+
+The [collection audit](reviews/generic-rate-collection-v1/README.md) found that
+the frozen generic auditor's order-insensitive definition comparison can miss
+reversed parameter-key insertion order, although generated parameter CSV slots
+are positional. Its response parser also accepts duplicate keys. A separately
+versioned fix is pending. The actual sand study's supplemental `check_layout.py`
+strictly verifies actual/generated parameter order and unique response keys;
+both backends pass that check while numerical acceptance still fails. Do not
+interpret the generic wrapper alone as proof of parameter-layout identity for
+arbitrary evidence inputs.
 
 ## Prospective protocol
 

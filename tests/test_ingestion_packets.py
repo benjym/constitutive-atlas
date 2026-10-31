@@ -2,7 +2,7 @@
 import hashlib,json,subprocess,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand','extended-mohr-coulomb-2013','barodesy-sand/rate-study-v1','hypoplastic-clay-2005/rate-study-v1','barodesy-sand/rate-review-v1','hypoplastic-clay-2005/rate-review-v1','barodesy-sand/rate-study-v2','hypoplastic-clay-2005/rate-study-v2','hypoplastic-thermal-ma-2017')
+PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand','extended-mohr-coulomb-2013','barodesy-sand/rate-study-v1','hypoplastic-clay-2005/rate-study-v1','barodesy-sand/rate-review-v1','hypoplastic-clay-2005/rate-review-v1','barodesy-sand/rate-study-v2','hypoplastic-clay-2005/rate-study-v2','hypoplastic-thermal-ma-2017','hypoplastic-interface-2016','barodesy-sand/compiled-plan-review-v1')
 class IngestionPackets(unittest.TestCase):
  def run_python(self,*args):
   return subprocess.run([sys.executable,'-B',*args],cwd=ROOT,capture_output=True,text=True,timeout=60,check=True)
@@ -16,7 +16,7 @@ class IngestionPackets(unittest.TestCase):
     for name,pin in files.items():
      path=Path(name);self.assertFalse(path.is_absolute());self.assertNotIn('..',path.parts)
      blob=(folder/path).read_bytes();self.assertEqual(hashlib.sha256(blob).hexdigest(),pin['sha256'] if type(pin)is dict else pin)
-     if type(pin)is dict:self.assertEqual(len(blob),pin['bytes'])
+     if type(pin)is dict and 'bytes'in pin:self.assertEqual(len(blob),pin['bytes'])
     self.assertFalse(any(p.suffix.lower() in ('.pdf','.dll','.zip','.png','.so','.dylib','.pyc','.pyo','.o','.a') for p in folder.rglob('*')))
  def test_hca_source_distinguishing_fixtures(self):
   self.run_python('-m','unittest','discover','-s','docs/ingestion/hca-sand-2005','-p','test_fixtures.py','-v')
@@ -109,4 +109,19 @@ class IngestionPackets(unittest.TestCase):
   manifest=json.loads((folder/'manifest.json').read_text())
   self.assertEqual(len(manifest['unresolved_ids']),6)
   self.assertFalse(manifest['status']['executable_model_added']);self.assertFalse(manifest['status']['complete_coupled_source'])
+ def test_interface_partial_source_and_exact_representation(self):
+  folder=ROOT/'docs/ingestion/hypoplastic-interface-2016'
+  self.run_python(str(folder/'checks.py'),'--check',str(folder/'check-results.json'))
+  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_checks.py','-v')
+ def test_sand_prospective_mapping_review(self):
+  folder=ROOT/'docs/ingestion/barodesy-sand/compiled-plan-review-v1'
+  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_audit.py','-v')
+ def test_collection_identity_gap_remains_documented(self):
+  folder=ROOT/'docs/reviews/generic-rate-collection-v1'
+  manifest=json.loads((folder/'manifest.json').read_text())
+  for name,pin in manifest['files'].items():
+   path=Path(name);self.assertFalse(path.is_absolute());self.assertNotIn('..',path.parts)
+   blob=(folder/path).read_bytes();self.assertEqual(hashlib.sha256(blob).hexdigest(),pin['sha256']);self.assertEqual(len(blob),pin['bytes'])
+  actual=json.loads(self.run_python(str(folder/'witnesses.py'),'--repo',str(ROOT)).stdout)
+  self.assertEqual(actual,json.loads((folder/'witness-results.json').read_text()))
 if __name__=='__main__':unittest.main()

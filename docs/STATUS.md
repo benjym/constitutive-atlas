@@ -6,6 +6,12 @@ The [clay2005 cross-review](ingestion/hypoplastic-clay-2005/rate-review-v1/READM
 
 The [sand2015 cross-review](ingestion/barodesy-sand/rate-review-v1/README.md) preserves two oracle/support limits outside its frozen37-case corpus. The [transport review](reviews/generic-rate-transport-v1/README.md) records five preliminary collector/assessment failures and their fixes; generic Wasm collection and actual source-study execution remain pending. The [EMC packet](ingestion/extended-mohr-coulomb-2013/README.md) adds exact-source equations and nine bounded diagnostics with six unresolved source/algorithm gates. None increases public executable counts or closes scientific admission.
 
+## 2026-10-31 sand-rate negative and source expansion
+
+The [sand2015 instantaneous study](../catalogue/investigations/barodesy2015-rates-v1/RESULTS.md) retains71rows/backend and one identical void-rate cancellation failure on native and Wasm. Parity passes while independent acceptance fails; this remains a negative study. Builds ran serially, and a native postbuild receipt-packaging failure/recovery is retained. Actual descriptor layouts and unique response keys pass a supplemental check; the generic collection audit records an inherited identity gap for future repair.
+
+Distinct [sand-v2](ingestion/barodesy-sand/rate-study-v2/README.md) and [clay-v2](ingestion/hypoplastic-clay-2005/rate-study-v2/README.md) packets preserve earlier failures/corrections and add exact rational volume or conservative SPD support. [Thermal2017](ingestion/hypoplastic-thermal-ma-2017/README.md) and [interface2016](ingestion/hypoplastic-interface-2016/README.md) packets add source/input/history inventories with explicit unresolved source/host gates. No public executable count or scientific admission changes.
+
 ## Delivered foundation
 
 - A [pinned clean-export software baseline](../catalogue/baselines/2026-10-30-r3/manifest.json) with model/source/product hashes, actual toolchain/configuration, retained logs and all fifteen checks passing; two failed capture attempts are preserved in [the run history](../catalogue/baselines/README.md).

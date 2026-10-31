@@ -1,0 +1,86 @@
+{
+  "version": "interface2016-contract-draft-0.1",
+  "status": "non-executable source-gap contract",
+  "frame": {
+    "source2016": "axis1 normal y; axis2 tangent x; axis3 tangent z",
+    "thesis": "axis1 normal z; axis2 tangent x; axis3 tangent y; do not merge global names",
+    "project": "explicit orthonormal local basis required; local indexing1/2/3 only",
+    "atlas_mandel": "[xx,yy,zz,sqrt2*xy,sqrt2*yz,sqrt2*xz]"
+  },
+  "candidate_state": [
+    {
+      "name": "sigma_n",
+      "unit": "Pa"
+    },
+    {
+      "name": "sigma_p",
+      "unit": "Pa",
+      "role": "independent persistent in-plane stress; unresolved exact evolution closure"
+    },
+    {
+      "name": "tau_x",
+      "unit": "Pa"
+    },
+    {
+      "name": "tau_z",
+      "unit": "Pa"
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "role": "host density; source closure requires review"
+    }
+  ],
+  "kinematics": {
+    "source_vector_T": "[sigma_n,sigma_p,tau_x,tau_z]",
+    "source_vector_D": "[eps_n_dot,0,gamma_x_dot/2,gamma_z_dot/2]",
+    "tensor_embedding": "[[X1,X3,X4],[X3,X2,0],[X4,0,X2]]",
+    "local_atlas_embedding": "[X1,X2,X2,sqrt2*X3,0,sqrt2*X4]",
+    "slip_relation": "tan(gamma_i)=u_i/d_s; thesis5.5 visually checked, manuscript11 text only",
+    "thickness_unit": "m",
+    "thin_interface_not_zero_thickness_strain": "positive d_s needed to turn slip into strain; geometric element thickness is separate"
+  },
+  "host_parameters": {
+    "names": [
+      "phi_c",
+      "h_s",
+      "n",
+      "e_d0",
+      "e_c0",
+      "e_i0",
+      "alpha",
+      "beta"
+    ],
+    "units": [
+      "rad",
+      "Pa",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1"
+    ],
+    "status": "names supported by existing source text/thesis; complete factor/sign transcription NOT established for exact2016",
+    "domains": "must independently review inherited VW96 including compression sign, pressure scale and isotropic Lode branch; no arbitrary bounds invented"
+  },
+  "roughness": {
+    "selected": "fully rough kappa_r=1 only",
+    "others": "Gutjahr and Arnold/Herle schemes separate branches; no merged coefficient or empirical bound inferred"
+  },
+  "not_supported": [
+    "general full3D tensor product as substitute for reduced Eq26/5.31",
+    "arbitrary local rotation without frame transport",
+    "contact opening/tension/recontact",
+    "finite-spin objective update",
+    "IGS",
+    "2017 conversion",
+    "full rate draft"
+  ],
+  "gates": [
+    "Pin original2016PDF and final/manuscript differences.",
+    "Reconcile reduced inner-product closure and in-plane stress evolution.",
+    "Extract and audit full host factors without double-counting fs/fd in printed definitions.",
+    "Declare effective traction signs, normal orientation, e evolution, contact domain and initialization."
+  ]
+}
