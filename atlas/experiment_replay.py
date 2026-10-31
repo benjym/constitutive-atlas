@@ -9,7 +9,7 @@ import json
 import math
 import re
 from .dsl import ValidationError
-from .model import ROOT, load, physical_time, reject_duplicate_keys
+from .model import ROOT, load, physical_time, reject_duplicate_keys, validate
 from .recorded import validate_recorded_run
 from .structure import check
 
@@ -42,6 +42,16 @@ def prepare_replay(experiment, configuration, model=None):
     if not re.fullmatch(r'[a-z][a-z0-9-]*', configuration['model']):
         raise ValidationError('invalid model identifier')
     model = load(ROOT/'models'/f"{configuration['model']}.json") if model is None else model
+    # This consumer reconstructs sigma from measured *effective* p/q. Keep the
+    # guard explicit even when future engine validation admits total stress.
+    if isinstance(model, dict) and model.get('schema_version') == '0.3':
+        formulation = model.get('formulation')
+        binding = formulation.get('stress') if isinstance(formulation, dict) else None
+        if binding != {'source': 'state', 'name': 'sigma', 'measure': 'cauchy', 'scope': 'effective'}:
+            raise ValidationError('normalized drained replay requires state-bound effective Cauchy stress sigma')
+    # A supplied in-memory definition has not passed load(); do not bypass its
+    # version, dimensions, symbols, conventions or capability checks.
+    validate(model)
     if model['id'] != configuration['model'] or physical_time(model):
         raise ValidationError('model must match and use incremental rather than physical-time execution')
     if model['state'][0]['name'] != 'sigma' or model['state'][0].get('shape') != 'sym':

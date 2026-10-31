@@ -17,7 +17,10 @@ def verify(folder):
     for path,h in files.items():assert hashlib.sha256((folder/path).read_bytes()).hexdigest()==h,path
     protocol=read('protocol.json');freeze=read('run/freeze.json');saved=read('run/result.json')
     for path,h in protocol['inputs_sha256'].items():
-        assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==h,path
+        source=ROOT/path
+        if not source.is_file() or hashlib.sha256(source.read_bytes()).hexdigest()!=h:
+            source=ROOT/'catalogue/source-snapshots'/h/path
+        assert source.is_file() and hashlib.sha256(source.read_bytes()).hexdigest()==h,path
     for name,h in freeze['value_sha256'].items():assert digest(freeze[name])==h,name
     assert freeze['solver_sha256']==protocol['solver_sha256']
     metadata=read('run/metadata.json')
