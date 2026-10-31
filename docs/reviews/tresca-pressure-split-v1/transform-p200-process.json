@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "docs/reviews/tresca-pressure-split-v1/transform.py",
+    "--precision",
+    "200",
+    "--output",
+    "docs/reviews/tresca-pressure-split-v1/reference-transformed-p200.json.gz"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/tresca-pressure-split-v1/transform.py\", line 46, in <module>\n    ap=argparse.ArgumentParser();ap.add_argument('--root',type=Path,default=ROOT);ap.add_argument('--precision',type=int,choices=[200,280],required=True);ap.add_argument('--output',type=Path,required=True);args=ap.parse_args();assert not args.output.exists();result=run(args.root,args.precision);args.output.write_bytes(gzip.compress((json.dumps(result,sort_keys=True,separators=(',',':'))+'\\n').encode(),mtime=0));print(json.dumps(result['row_transform_checks']))\n                                                                                                                                                                                                                                                                          ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/tresca-pressure-split-v1/transform.py\", line 36, in run\n    for row in out['cases']:transform_row(row['reference'],cases[row['id']],seeds)\n                            ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/tresca-pressure-split-v1/transform.py\", line 30, in transform_row\n    compare(newres,[x-y for x,y in zip(current,direct['returned_state'])],case['id']+'/value')\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/tresca-pressure-split-v1/transform.py\", line 26, in compare\n    assert error<=D('1e-55'),(path,i,error)\n           ^^^^^^^^^^^^^^^^^\nAssertionError: ('scaled-face--80/value', 6, Decimal('8.6480236051412491957654949368673342144839960174330745199280780089924824989110271708033024557320307764988279687883884628967518201795164659221954131382072944143355976559750199108669329297815216657484639E-51'))\n"
+}

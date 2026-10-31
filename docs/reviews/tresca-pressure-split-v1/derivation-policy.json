@@ -1,0 +1,31 @@
+{
+  "version": "tresca-pressure-split-derivation-policy-0.1",
+  "scope": "New private algebraically equivalent pressure/deviator candidate and independent residual reference transformation; no production material evaluation or compiled build",
+  "preserve": [
+    "Source BK2022v1/project BE physical law and positive parameters",
+    "All12 persistent sigma/ep components and example state",
+    "Exact initial-yield expression and known strict-membership discrepancy",
+    "All61 actual stored cases,38 seed columns and12 history rows",
+    "Original full returned-state, state derivatives, source classifications and committed history bits"
+  ],
+  "algebra": [
+    "D=dev(sigma_n)+2mu*dev(de)",
+    "m=trace(sigma_n)/3+(lambda+2mu/3)*trace(de)",
+    "R(T)=mI+R(D) by hydrostatic invariance",
+    "new stress residual equals old stress residual",
+    "new ep residual=old ep residual-C_inverse(old stress residual)",
+    "new complete residual=current_state-independent_returned_state"
+  ],
+  "reference_gate": "1e-55 component error normalized by max(1,abs(independent direct residual)); same original reference tolerance",
+  "precisions": [
+    200,
+    280
+  ],
+  "independent_check": "Compare compliance row operation with direct current-minus-independent-update and current-seed-minus-update-direction, using unchanged six-plane reference; retain all update/history values from original frozen references.",
+  "limits": [
+    "No claim initial-yield discrepancy resolved",
+    "No selected boundary derivative qualification claim",
+    "No source tolerance, clipping, source-domain narrowing, model-specific core branch or kernel",
+    "No model installation, admission, push or deployment"
+  ]
+}
