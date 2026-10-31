@@ -1,0 +1,11 @@
+# Determinant expression integration — prospective plan
+
+This separate study will test the dimensionally typed `determinant(A)` registration and checked generated expression routing. The numerical core has its own completed exact-reference study. The current model catalogue does not yet use the operation.
+
+`A` must be a six-component symmetric tensor in orthonormal Mandel order. The result is scalar with three times every SI exponent of `A`; no SPD restriction applies to this mathematical primitive. Inputs mean their exact stored binary64 values. The core independently rounds the exact determinant and each cofactor directional derivative to nearest binary64, ties even, with canonical positive rounded zero. Invalid input, invalid Jet seed or final rounded overflow rejects. The derivative is of the exact mathematical determinant at the stored primal, not of a discontinuous rounding map.
+
+Python interpretation converts primitive errors to ValidationError. Generated C++ routes through determinant_or_mark and a context-owned sticky flag. A failure must survive multiplication by zero, finite comparison/selection and other masking arithmetic. An unselected lazy branch must not execute the determinant. All38Jet columns are included in the check. Generated evaluator/reset outputs are scratch and are not promised unchanged on rejection; the numerical core separately promises atomic low-level output.
+
+Before compiled execution, freeze a distinct protocol covering generated model contexts (derived, equations, domain, initial check, observable, scales and reset), successful/failed predicates, lazy branches, all38AD columns and recovery. References must come from the independent primitive packet or analytically specified identities, never from observed compiled results. Dimension tests and interpreter tests are separate evidence. Retain exact frozen source closure, generated headers, opaque native/Wasm raw results and build receipts. Run native/Wasm builds serially with one explicit target and --parallel1.
+
+Historical compiler/DSL identities are archived in dsl-identity-v3; the tagged-rates-v3 source capsule reproduces the original failed clay study and passing contraction diagnostic. No historical receipt, source gate or model definition is changed. This prospective plan is not compiled evidence, a whole-model result or scientific admission.

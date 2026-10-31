@@ -1,3 +1,9 @@
+# Compiled determinant expression contexts — 2026-10-31
+
+The [frozen generated-context study](../catalogue/investigations/determinant-expressions-v1/RESULTS.md) passes1,737calls per native/Wasm backend across55synthetic v0.3models, all ninecontexts,38scalar AD columns,670material rejection/recovery pairs and sixhistory triplets. Expected status/bit/transaction responses match exactly; native/Wasm responses agree. Preparatory errors, source snapshots, actual flags and opaque raw observations are retained.21targeted unit tests pass.
+
+The bounded expression-integration gate is complete. A separate complete-law clay2005 candidate study remains open, preserving all109historical cases/gates and prospectively adding independent boundary accuracy checks. No scientific admission, model promotion or deployment; eight local runnable drafts and five hosted.
+
 # Determinant expression registration — 2026-10-31
 
 The [source registration checkpoint](../catalogue/investigations/determinant-expressions-v1/REGISTRATION.md) adds cubed-unit inference, Python interpretation and checked generated model/history routing.47targeted tests pass, including history rollback/recovery and all independent Python primal cases.59pre-change source receipt bindings are preserved; the143file tagged-v3 capsule reproduces the original failed clay parity study and passing contraction diagnostic through their original raw auditors.

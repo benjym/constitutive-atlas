@@ -1,0 +1,133 @@
+{
+  "schema_version": "0.3",
+  "status": "draft",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "strain_path_rate",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "A",
+      "b"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "family": "synthetic verification",
+  "description": "Determinant generated context fixture; not a constitutive literature model.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_DETERMINANT.md",
+      "role": "synthetic mathematical specification",
+      "locator": "Mandel determinant context conformance"
+    }
+  ],
+  "parameters": {
+    "K": {
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "unit": "Pa"
+    },
+    "r": {
+      "default": 1,
+      "min": 0,
+      "max": 1e+308,
+      "unit": "1"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "K",
+      "initial": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "A",
+      "shape": "sym",
+      "unit": "1",
+      "scale": "1",
+      "initial": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "semantics": {
+        "role": "persistent",
+        "quantity": "synthetic_dimensionless_tensor",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "b",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0.0,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "synthetic_probe",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "probe",
+      "expr": "select(1<0,determinant(A),1)"
+    }
+  ],
+  "domain": [],
+  "equations": {
+    "sigma": "0*K*I",
+    "A": "0*I",
+    "b": "probe"
+  },
+  "id": "det-derived-lazy-else",
+  "name": "det-derived-lazy-else"
+}

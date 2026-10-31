@@ -1,0 +1,169 @@
+{
+  "schema_version": "0.3",
+  "status": "draft",
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "ode",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "none"
+    },
+    "inputs": {
+      "equation": {
+        "time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "strain_rate": {
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite"
+        }
+      },
+      "advance": {
+        "start_time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "start",
+          "constraint": "finite"
+        },
+        "duration": {
+          "quantity": "duration",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "interval",
+          "constraint": "positive_finite"
+        }
+      }
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "A",
+      "b"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "family": "synthetic verification",
+  "description": "Determinant generated context fixture; not a constitutive literature model.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_DETERMINANT.md",
+      "role": "synthetic mathematical specification",
+      "locator": "Mandel determinant context conformance"
+    }
+  ],
+  "parameters": {
+    "K": {
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "unit": "Pa"
+    },
+    "r": {
+      "default": 1,
+      "min": 0,
+      "max": 1e+308,
+      "unit": "1"
+    },
+    "tau": {
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "unit": "s"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "K",
+      "initial": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "A",
+      "shape": "sym",
+      "unit": "1",
+      "scale": "1",
+      "initial": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "semantics": {
+        "role": "persistent",
+        "quantity": "synthetic_dimensionless_tensor",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "b",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0.0,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "synthetic_probe",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [],
+  "domain": [],
+  "equations": {
+    "sigma": "0*K*strain_rate",
+    "A": "0*strain_rate",
+    "b": "0/tau"
+  },
+  "id": "det-observable-scale-eager",
+  "name": "det-observable-scale-eager",
+  "observables": [
+    {
+      "name": "probe",
+      "shape": "scalar",
+      "unit": "1",
+      "expr": "b",
+      "scale": "0*determinant(sym(r,r,r,0,0,0))+1"
+    }
+  ]
+}
