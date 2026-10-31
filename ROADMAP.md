@@ -45,6 +45,14 @@ This closes that bounded correction slice. Debug Wasm remains unverified after
 a retained first-call trap. Resume independent review of existing source/input
 and benchmark claims before adding models or numerical capabilities.
 
+The [TMD2 source-law/input review](docs/benchmarks/kfs-tmd2-appendix-law-v1/README.md)
+now checks the complete 2016 Appendix A composition, including the benchmark's
+general beta = 2.5 host, and binds all frozen inputs to the existing record.
+No transcription correction was identified. Source/project continuations and
+unobserved internal-stage limits are explicit. The scoped scientific checklist
+is unsigned; historical-coordinate, scientific-review and public-rights gates
+remain open. This source-only task adds no material execution or new framework.
+
 The immediate six-model/SANISAND and Terracotta goals remain unchanged. The first
 release targets twenty formulations; the paper's 50+ planning ambition is not a
 prerequisite for this increment. Mohr–Coulomb browser integration and historical

@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-tmd2-binding-review-v1/initial-check_bindings.py", line 48, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/atlas-tmd2-binding-review-v1/initial-check_bindings.py", line 35, in main
+    requests=load(directory/'inputs/requests.json');settings=case['prospective_numerics']['settings'];freeze=load(directory/'inputs/freeze.json')
+  File "/private/tmp/atlas-tmd2-binding-review-v1/initial-check_bindings.py", line 11, in load
+    def load(p):inputs.append({'path':str(p.relative_to(r)),'sha256':sha(p)});return read(p)
+                                                                     ~~~^^^
+  File "/private/tmp/atlas-tmd2-binding-review-v1/initial-check_bindings.py", line 5, in <lambda>
+    sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+                                ~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/bmar5496/code/constitutive-atlas/docs/benchmarks/kfs-tmd2-portable-v1/inputs/requests.json'

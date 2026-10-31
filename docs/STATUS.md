@@ -16,6 +16,12 @@ observed. Debug Wasm traps on its first DP call; logs are retained and that
 profile remains unverified. No hosted update or scientific promotion. This
 slice is closed; independent review remains the next milestone.
 
+The [TMD2 Appendix A review](benchmarks/kfs-tmd2-appendix-law-v1/README.md)
+finds no transcription defect in the general beta = 2.5 VW96+IGS composition.
+The source crosswalk, 24 exact structural fixtures, 10 Cartesian/Mandel checks
+and 26 input bindings are complete. This closes a technical reading gap;
+scientific review remains unsigned. No new material calls or builds.
+
 The [bounded KFS checkpoint](benchmarks/kfs-development-checkpoint-v1/README.md)
 regenerates an existing matched-count development comparison exactly and verifies
 both runs' local code/model/data/executable snapshots, with no new fits, builds
