@@ -514,3 +514,7 @@ The [whole-rate candidate](catalogue/investigations/clay2005-determinant-rates-v
 ### 2026-10-31: homogeneous determinant arithmetic core verified
 
 The [generic exact ratio core](catalogue/investigations/normalized-determinant-v1/RESULTS.md) now passes155calls/backend,38directional derivative columns and55recovery pairs against independently certified exact-input references. This addresses the arithmetic capability identified by the retained normalization failure. The board keeps DSL/history expression integration and the source-preserving120case clay2005 rate study as separate next gates; no complete-law accuracy or scientific admission is inferred from primitive agreement.
+
+### 2026-11-01: reproducible browser loading integrated locally
+
+The [loading contract](docs/LABORATORY_LOADING.md) now has an implemented browser producer, exact-bit wire, versioned0.2exports and explicit legacy0.1replay. A distinct [q observable correction](catalogue/investigations/laboratory-q-cancellation-v1/README.md) resolves the retained isotropic cancellation failure with unchanged numerical gates and no material-law change. The [local rollout](docs/reviews/browser-loading-rollout-v1/RESULTS.md) passes101backend pairs, nine packaged model runs,628measurement checks and actual browser import/reset/recovery observations. Hosted deployment remains separate. Next use the independently frozen new-producer MC references for source-accuracy/parity gates before public MC integration; historical archive coverage gaps remain separately tracked.

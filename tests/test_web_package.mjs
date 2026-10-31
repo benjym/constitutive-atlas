@@ -12,7 +12,7 @@ function fixture(fn){
  const model={id:'example',schema_version:'0.3',sources:[{url:'https://doi.org/10.1002/nag.416'}]};
  const meta={sha256:'test',models:[model]},catalogue={models:[{id:'example',executable:true}]};
  put('models.json',meta);put('catalogue.json',catalogue);put('models/example.json',model);put('schemas/model-v0.3.schema.json','{}');
- for(const name of ['atlas.js','atlas.wasm','worker.js','numerics.mjs','recorded.mjs','state-contract.mjs','.nojekyll'])put(name,'');
+ for(const name of ['atlas.js','atlas.wasm','worker.js','numerics.mjs','loading.mjs','recorded.mjs','state-contract.mjs','.nojekyll'])put(name,'');
  put('index.html','<script src="./atlas.js"></script><a href="./models/example.json">JSON</a><a href="https://doi.org/10.1002/nag.416">Source</a>');
  put('publications.html','<a href="./index.html#catalogue/example">Model</a>');
  try{fn({dir,put,model,meta,catalogue});}finally{rmSync(dir,{recursive:true,force:true});}

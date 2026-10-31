@@ -1,0 +1,13 @@
+{
+ "identity":"laboratory-q-stored-value-reference-v1",
+ "scope":"Serializer-only nonnegative deviator stress magnitude q of an already-stored six-component orthonormal Mandel tensor. No constitutive dev, DSL, AD, model, controller, integration or signed-q change.",
+ "domain":"Six finite binary64 inputs, absolute component <=1e300, including signed zero, normals and subnormals. This finite corpus/bounded helper study does not admit every finite tensor or model state.",
+ "exact_definition":"q_squared=((a-b)^2+(b-c)^2+(c-a)^2)/2+3*(u^2+v^2+w^2)/2; each input interpreted as its exact stored rational binary64 value.",
+ "reference":"Exact Fraction q_squared; independent Decimal sqrt at800 and1200significant digits, matching rounded binary64 bits. Adjacent-float squared midpoints certify nearest/ties-even selection exactly with Fraction.",
+ "accuracy":"abs(candidate-reference exact sqrt)<=32*2^-53*exact sqrt+8*2^-1074; exact isotropic stored tensor with zero shears must return positive zero exactly. Finite nonnegative output required.",
+ "accuracy_gate":"Use candidate binary64 output rational and exact q_squared to test closed [max(0,candidate-budget),candidate+budget] sqrt enclosure with independent high precision; additionally retain exact rounded reference bits and error diagnostics. Bound fixed before reference construction or candidate observations.",
+ "legacy_invariance":"For identical loading, parameters, initialization and integration settings, before/after serializer-only study must preserve parsed state, strain, control, signed-q, mean pressure, pore pressure, diagnostics, settings, model/catalogue/API/loading and success/message exactly. Exclude elapsed_ms and revised q only. All original failed observations retained; no old parity gate relaxed or overwritten.",
+ "backend_gate":"Both native and Wasm q outputs independently satisfy source accuracy and exact isotropic-zero gate. Existing physical parity gate remains1e-10*max(1,abs(native),abs(wasm)); this source accuracy study does not replace parity or demonstrate arbitrary controller identity.",
+ "candidate_calls_at_policy":0,
+ "compiled_calls_at_policy":0
+}

@@ -5,7 +5,7 @@ let engine;
 self.onmessage = async ({data}) => {
   try {
     engine ??= await createAtlas();
-    const result = data.kind==='recorded'?runRecorded(engine,data.specification):runLaboratory(engine,data);
+    const result = data.kind==='recorded'?runRecorded(engine,data.specification):runLaboratory(engine,data,data.catalogue_hash);
     self.postMessage({id:data.id,result});
   } catch (error) { self.postMessage({id:data.id,error:String(error)}); }
 };

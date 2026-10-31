@@ -1,0 +1,95 @@
+{
+  "role": "wasm",
+  "started_utc": "2026-10-31T12:53:38.794433+00:00",
+  "manifest_sha256": "42dd291cf755102d04a8f936b4103ad8367f227a3e29c8b80e5ad44d5f2baeec",
+  "completed": true,
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "emcc",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1",
+        "-B",
+        "/private/tmp/atlas-laboratory-q-wasm-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build-atlas_q_probe",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-laboratory-q-wasm-v1",
+        "--target",
+        "atlas_q_probe",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build-atlas_solver",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-laboratory-q-wasm-v1",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe-probe",
+      "argv": [
+        "node",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/observe_probe.mjs",
+        "wasm",
+        "/private/tmp/atlas-laboratory-q-wasm-v1",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/wasm/probe.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "assess-probe",
+      "argv": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/assess_probe.py",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/wasm/probe.json"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "q-probe.js": {
+      "path": "/private/tmp/atlas-laboratory-q-wasm-v1/q-probe.js",
+      "sha256": "c73ec3ee01c6e590ff11514742241bcb3e3882d25d289aa70337a5ce6bc273c7"
+    },
+    "q-probe.wasm": {
+      "path": "/private/tmp/atlas-laboratory-q-wasm-v1/q-probe.wasm",
+      "sha256": "9cf5ab405b9b6402643bb10004aedad5bc443a42332a9af14ca8989eb0fd6b62"
+    },
+    "atlas.js": {
+      "path": "/private/tmp/atlas-laboratory-q-wasm-v1/atlas.js",
+      "sha256": "3f72f418dbc5e19c6e788403fcaf8907f20ad4e439f0e393366ed924c1ec9cf2"
+    },
+    "atlas.wasm": {
+      "path": "/private/tmp/atlas-laboratory-q-wasm-v1/atlas.wasm",
+      "sha256": "03d5502fc64964e26ea7e41aab38560ffb5fe8b4cdd159c0304be343427d2562"
+    }
+  },
+  "finished_utc": "2026-10-31T12:53:51.967263+00:00"
+}

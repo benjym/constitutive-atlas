@@ -1,3 +1,4 @@
+import {normalizeLoading,verifyReturnedLoading} from './loading.mjs';
 // Browser contract mirrors incremental-settings-0.1; values are dimensionless
 // in the model's state scales. This module does not solve constitutive equations.
 export const settingsVersion='incremental-settings-0.1';
@@ -29,10 +30,14 @@ export function verifyReturnedSettings(result,requested){
   const actual=normalizeSettings(result.integration_settings),expected=normalizeSettings(requested);
   if(Object.keys(expected).some(k=>actual[k]!==expected[k]))throw Error('The engine used different numerical settings. Reload a matching build.');
 }
-export function runLaboratory(engine,s){
+export function runLaboratory(engine,s,catalogueHash){
   const settings=normalizeSettings(s.integration_settings);
-  const result=JSON.parse(engine.ccall('atlas_run_with_settings','string',
+  const loading=normalizeLoading(s);
+  const result=loading?JSON.parse(engine.ccall('atlas_run_controls_with_settings','string',
+    ['string','string','string','number','string','string'],
+    [s.model,s.parameters.join(','),s.initial.join(','),s.protocol,loading.controls_bits.join(','),settingsCsv(settings)])):
+    JSON.parse(engine.ccall('atlas_run_with_settings','string',
     ['string','string','string','number','number','number','number','string'],
     [s.model,s.parameters.join(','),s.initial.join(','),s.protocol,s.target,s.steps,s.cycles,settingsCsv(settings)]));
-  verifyReturnedSettings(result,settings);return result;
+  verifyReturnedSettings(result,settings);verifyReturnedLoading(result,s,catalogueHash);return result;
 }

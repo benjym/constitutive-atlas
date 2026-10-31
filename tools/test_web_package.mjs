@@ -34,7 +34,7 @@ export function validatePackage(directory){
    assert.ok(existsSync(join(directory,decodeURIComponent(url.pathname.slice(base.pathname.length)))),'Missing linked asset: '+href);
   }
  }
- for(const name of ['atlas.js','atlas.wasm','worker.js','numerics.mjs','recorded.mjs','state-contract.mjs','.nojekyll'])assert.ok(existsSync(join(directory,name)),'Missing package asset: '+name);
+ for(const name of ['atlas.js','atlas.wasm','worker.js','numerics.mjs','loading.mjs','recorded.mjs','state-contract.mjs','.nojekyll'])assert.ok(existsSync(join(directory,name)),'Missing package asset: '+name);
  return metadata;
 }
 
@@ -42,13 +42,15 @@ export async function checkPackage(directory){
  const metadata=validatePackage(directory);
  const createAtlas=(await import(pathToFileURL(join(directory,'atlas.js')))).default;
  const {runLaboratory,normalizeSettings}=await import(pathToFileURL(join(directory,'numerics.mjs')));
+ const {createLoading}=await import(pathToFileURL(join(directory,'loading.mjs')));
  const engine=await createAtlas();
  const report={status:'running',scope:'packaged default-run software smoke test; no scientific admission',catalogue_hash:metadata.sha256,models:[]};
  try{for(const model of metadata.models){
   const initial=model.state.flatMap(f=>f.shape==='sym'?f.initial:[f.initial]);
   assert.ok(initial.every(Number.isFinite),'Nonfinite illustrative state');
   const specification={model:model.id,parameters:Object.values(model.parameters).map(p=>p.default),initial,protocol:1,target:0.01,steps:100,cycles:0,integration_settings:normalizeSettings()};
-  const result=runLaboratory(engine,specification);
+  specification.loading=createLoading(specification);
+  const result=runLaboratory(engine,specification,metadata.sha256);
   report.models.push({id:model.id,specification,result});
   assert.equal(result.ok,true,model.id+': '+result.message);
   assert.equal(result.catalogue_hash,metadata.sha256,'Stale packaged engine: '+model.id);

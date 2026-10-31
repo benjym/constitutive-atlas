@@ -1,5 +1,6 @@
 #include "atlas/schedule.hpp"
 #include "atlas/recorded.hpp"
+#include "atlas/stress_observables.hpp"
 #include <fstream>
 #include <cctype>
 #include <chrono>
@@ -85,7 +86,7 @@ static const char* run_response(const char*id,const char*parameters,const char*i
         o<<",\"points\":[";
         for(size_t i=0;i<run.points.size();++i){if(i)o<<',';const auto&point=run.points[i];const auto&v=point.state;auto sigma=atlas::tensor_from(v,0);
             o<<"{\"control\":"<<point.control<<",\"strain\":";array(o,atlas::State(point.strain.v.begin(),point.strain.v.end()));o<<",\"state\":";array(o,v);
-            o<<",\"p\":"<<atlas::trace(sigma)/3<<",\"q\":"<<std::sqrt(1.5*atlas::dot(atlas::dev(sigma),atlas::dev(sigma)))<<",\"q_signed\":"<<v[0]-.5*(v[1]+v[2])<<",\"u\":"<<point.pore_pressure<<",\"iterations\":"<<point.diagnostics.iterations<<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":"<<point.diagnostics.error<<'}';
+            o<<",\"p\":"<<atlas::trace(sigma)/3<<",\"q\":"<<atlas::deviatoric_stress_magnitude(sigma)<<",\"q_signed\":"<<v[0]-.5*(v[1]+v[2])<<",\"u\":"<<point.pore_pressure<<",\"iterations\":"<<point.diagnostics.iterations<<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":"<<point.diagnostics.error<<'}';
         }
         o<<"]}";output=o.str();return output.c_str();
     }catch(const std::exception&e){return failure(e.what());}

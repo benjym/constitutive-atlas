@@ -1,0 +1,86 @@
+{
+  "role": "native",
+  "started_utc": "2026-10-31T12:53:23.457983+00:00",
+  "manifest_sha256": "42dd291cf755102d04a8f936b4103ad8367f227a3e29c8b80e5ad44d5f2baeec",
+  "completed": true,
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "c++",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1",
+        "-B",
+        "/private/tmp/atlas-laboratory-q-native-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build-atlas_q_probe",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-laboratory-q-native-v1",
+        "--target",
+        "atlas_q_probe",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build-atlas_solver",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-laboratory-q-native-v1",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe-probe",
+      "argv": [
+        "node",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/observe_probe.mjs",
+        "native",
+        "/private/tmp/atlas-laboratory-q-native-v1",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/native/probe.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "assess-probe",
+      "argv": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/assess_probe.py",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/native/probe.json"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas_q_probe": {
+      "path": "/private/tmp/atlas-laboratory-q-native-v1/atlas_q_probe",
+      "sha256": "72a186500cc2ffe3c44688c3c2981debb66ffbb0f5abe4bea9026248d77fdee2"
+    },
+    "atlas_solver": {
+      "path": "/private/tmp/atlas-laboratory-q-native-v1/atlas_solver",
+      "sha256": "b5c348f9faa261693b2fb721252212b24095dc7157843261bdeeb1c6c216137f"
+    }
+  },
+  "finished_utc": "2026-10-31T12:53:31.264176+00:00"
+}

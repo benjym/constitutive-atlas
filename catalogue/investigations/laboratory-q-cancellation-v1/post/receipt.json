@@ -1,0 +1,57 @@
+{
+  "role": "post",
+  "started_utc": "2026-10-31T12:54:01.671683+00:00",
+  "manifest_sha256": "42dd291cf755102d04a8f936b4103ad8367f227a3e29c8b80e5ad44d5f2baeec",
+  "completed": true,
+  "commands": [
+    {
+      "label": "browser-contracts",
+      "argv": [
+        "node",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/check_backends.mjs",
+        "/private/tmp/atlas-laboratory-q-native-v1/atlas_solver",
+        "/private/tmp/atlas-laboratory-q-wasm-v1",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/post/backend-results.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "field-invariance",
+      "argv": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/assess_invariance.py",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/post/backend-results.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "legacy-numerics",
+      "argv": [
+        "node",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/tools/test_numerics.mjs",
+        "--native",
+        "/private/tmp/atlas-laboratory-q-native-v1/atlas_solver",
+        "--wasm",
+        "/private/tmp/atlas-laboratory-q-wasm-v1/atlas.js",
+        "--output",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/post/legacy-results.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "generic-regressions",
+      "argv": [
+        "node",
+        "/private/tmp/atlas-laboratory-q-cancellation-v1/tools/test_wasm.mjs",
+        "--native",
+        "/private/tmp/atlas-laboratory-q-native-v1/atlas_solver",
+        "--wasm-dir",
+        "/private/tmp/atlas-laboratory-q-wasm-v1"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {},
+  "finished_utc": "2026-10-31T12:54:13.485141+00:00"
+}
