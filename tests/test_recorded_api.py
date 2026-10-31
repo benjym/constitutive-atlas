@@ -15,7 +15,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from atlas.dsl import ValidationError
-from atlas.model import ROOT
+from atlas.model import ROOT, all_models
 from atlas.recorded import (CONTROL_DEFAULTS, MATERIAL_DEFAULTS, execute_recorded,
                             recorded_wire, validate_recorded_run)
 
@@ -105,10 +105,14 @@ class RecordedNativeAPITests(unittest.TestCase):
 
     def test_all_strain_each_public_model_and_restart(self):
         ids=subprocess.check_output([os.environ['ATLAS_RECORDED_SOLVER'],'--list'],text=True).splitlines()
-        self.assertEqual(len(ids),5)
+        self.assertEqual(ids, [m['id'] for m in all_models()])
         for model in ids:
             with self.subTest(model=model):
                 s=specimen();s['model']=model;p=s['path']
+                definition=next(m for m in all_models() if m['id']==model)
+                # Supply illustrative state explicitly, as v0.3 requires.
+                s['initial']=[value for field in definition['state'] for value in
+                              (field['initial'] if field.get('shape')=='sym' else [field['initial']])]
                 for i,c in enumerate(p['controls']):c['kind']='strain';c['coefficients']=[int(i==j) for j in range(6)]
                 p['knots']=[{'coordinate':k,'targets':[x,0,0,0,0,0]} for k,x in enumerate([0,.0001,-.0001,.0002])]
                 r=self.run_spec(s);self.assertTrue(r['ok'],r['message'])

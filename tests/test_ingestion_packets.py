@@ -116,7 +116,7 @@ class IngestionPackets(unittest.TestCase):
   from atlas.source_replay import registered
   registry='catalogue/source-replays/source-rates-v1/registry.json'
   for name in ('sand','clay'):
-   with self.subTest(model=name):self.assertTrue(registered(ROOT,registry,name)['historical_output_reproduced'])
+   with self.subTest(model=name):self.assertTrue(registered(ROOT,'catalogue/source-replays/source-rates-runtime-v2/registry.json' if name=='sand' else registry,name)['historical_output_reproduced'])
  def test_thermal_packet_diagnostics_and_six_open_gates(self):
   folder=ROOT/'docs/ingestion/hypoplastic-thermal-ma-2017'
   actual=json.loads(self.run_python(str(folder/'check_packet.py')).stdout)

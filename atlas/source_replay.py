@@ -132,7 +132,7 @@ def registered(root, registry, replay_id, timeout=30):
                 'archived source differs from original document binding')
     expected = held[record['expected_stdout_document_index']][1]
     result = replay(c, timeout=timeout)
-    require(result['expected_exit_matched'], 'archived process exit changed')
+    require(result['expected_exit_matched'], 'archived process exit changed: ' + json.dumps({k: result[k] for k in ('returncode', 'expected_exit', 'python', 'stderr')}, ensure_ascii=True))
     require(result['stderr'] == '', 'archived replay emitted stderr')
     require(result['stdout'].encode() == expected, 'original witness output changed')
     for pin, blob in held:

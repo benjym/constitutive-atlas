@@ -1,0 +1,27 @@
+emcmake: cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE=/opt/homebrew/bin/python3.14 -DCMAKE_TOOLCHAIN_FILE=/opt/homebrew/Cellar/emscripten/6.0.8/libexec/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/opt/homebrew/opt/node/bin/node in directory /private/tmp/atlas-ci-followup-v2
+-- Found Python3: /opt/homebrew/bin/python3.14 (found version "3.14.7") found components: Interpreter
+-- Configuring done (0.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /private/tmp/atlas-ci-followup-v2/build-wasm
+[ 33%] Generating barodesy-rate-generated/models.hpp, barodesy-rate-generated/models.json
+[ 33%] Built target atlas_barodesy_models
+[ 66%] Building CXX object CMakeFiles/atlas_barodesy_hydro_ad_probe.dir/tests/barodesy_hydro_ad_driver.cpp.o
+In file included from /private/tmp/atlas-ci-followup-v2/tests/barodesy_hydro_ad_driver.cpp:2:
+In file included from /private/tmp/atlas-ci-followup-v2/cpp/include/atlas/solver.hpp:2:
+/private/tmp/atlas-ci-followup-v2/build-wasm/barodesy-rate-generated/models.hpp:18:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+   18 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+      |                                                                                                                                                                                         ^
+1 warning generated.
+[100%] Linking CXX executable barodesy-hydro-ad.js
+[100%] Built target atlas_barodesy_hydro_ad_probe
+[ 33%] Generating clay2014-generated/models.hpp, clay2014-generated/models.json
+[ 33%] Built target atlas_clay2014_models
+[ 66%] Building CXX object CMakeFiles/atlas_clay2014_rate_probe.dir/tests/research_rate_driver.cpp.o
+In file included from /private/tmp/atlas-ci-followup-v2/tests/research_rate_driver.cpp:2:
+In file included from /private/tmp/atlas-ci-followup-v2/cpp/include/atlas/solver.hpp:2:
+/private/tmp/atlas-ci-followup-v2/build-wasm/clay2014-generated/models.hpp:18:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+   18 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+      |                                                                                                                                                                                         ^
+1 warning generated.
+[100%] Linking CXX executable clay2014-rates.js
+[100%] Built target atlas_clay2014_rate_probe

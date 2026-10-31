@@ -1,0 +1,39 @@
+Historical barodesy: ['cmake', '-S', '/private/tmp/atlas-ci-v2-historical-run/build-project', '-B', '/private/tmp/atlas-ci-v2-historical-run/native', '-DCMAKE_BUILD_TYPE=Release', '-DARCHIVE_ROOT=/private/tmp/atlas-ci-v2-historical-run/source', '-DPython3_EXECUTABLE=/opt/homebrew/opt/python@3.14/bin/python3.14']
+Historical barodesy: ['cmake', '--build', '/private/tmp/atlas-ci-v2-historical-run/native', '--target', 'atlas_barodesy_solver', '--parallel', '1']
+Historical barodesy: ['emcmake', 'cmake', '-S', '/private/tmp/atlas-ci-v2-historical-run/build-project', '-B', '/private/tmp/atlas-ci-v2-historical-run/wasm', '-DCMAKE_BUILD_TYPE=Release', '-DARCHIVE_ROOT=/private/tmp/atlas-ci-v2-historical-run/source', '-DPython3_EXECUTABLE=/opt/homebrew/opt/python@3.14/bin/python3.14']
+Historical barodesy: ['cmake', '--build', '/private/tmp/atlas-ci-v2-historical-run/wasm', '--target', 'atlas_barodesy_solver', '--parallel', '1']
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/em++.py", line 13, in <module>
+    sys.exit(emcc.main(sys.argv))
+             ~~~~~~~~~^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/emcc.py", line 377, in main
+    return link.run(linker_args)
+           ~~~~~~~~^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/link.py", line 3171, in run
+    js_info = get_js_sym_info()
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/link.py", line 244, in get_js_sym_info
+    file_content = emscripten.get_cached_file('symbol_lists', f'{content_hash}.json', generate_json, cache_limit=500)
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/emscripten.py", line 317, in get_cached_file
+    with filelock.FileLock(cache_file + '.lock'):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/filelock.py", line 330, in __enter__
+    self.acquire()
+    ~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/filelock.py", line 278, in acquire
+    self._acquire()
+    ~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/filelock.py", line 391, in _acquire
+    fd = os.open(self._lock_file, open_mode)
+PermissionError: [Errno 1] Operation not permitted: '/opt/homebrew/Cellar/emscripten/6.0.8/libexec/cache/symbol_lists/b0847ac9c15fc1a11b3e8887078210bf4896533c.json.lock'
+make[3]: *** [barodesy-isotropic.js] Error 1
+make[2]: *** [CMakeFiles/atlas_barodesy_solver.dir/all] Error 2
+make[1]: *** [CMakeFiles/atlas_barodesy_solver.dir/rule] Error 2
+make: *** [atlas_barodesy_solver] Error 2
+[ 33%] Generating generated/models.hpp
+[ 33%] Built target historical_models
+[ 66%] Building CXX object CMakeFiles/atlas_barodesy_solver.dir/private/tmp/atlas-ci-v2-historical-run/source/cpp/main.cpp.o
+[100%] Linking CXX executable barodesy-isotropic.js
