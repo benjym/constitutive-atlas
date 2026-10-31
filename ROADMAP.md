@@ -20,6 +20,13 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 ## Delivery focus — 1 November 2026
 
+The [current source/build receipt](docs/benchmarks/current-source-build-v1/README.md)
+provides a clean serial native executable from 351 pinned source files, with exact
+pre-build/generated/compiled nine-model catalogue checks. No material calls ran.
+Historical/current engine equivalence remains unproven because the integrator
+has changed. The next numerical action must be a separately frozen small
+comparison, not an automatic refit or restart of the completed refinement branch.
+
 The next bounded cycle turns existing KFS development work into one reviewed
 model-to-experiment comparison, rather than adding another model or solver
 capability. The [KFS checkpoint](docs/benchmarks/kfs-development-checkpoint-v1/README.md)

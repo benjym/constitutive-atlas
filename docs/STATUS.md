@@ -1,5 +1,14 @@
 # Current delivery checkpoint — 1 November 2026
 
+A [current native source/build receipt](benchmarks/current-source-build-v1/README.md)
+now pins 351 tracked source files at `6ff25a9` and one clean serial Release build.
+Pre-build/generated catalogue and header bytes match; compiled metadata equals
+the expected nine-model catalogue. Six command receipts and four copied
+corruption checks pass. No material calls or fits occurred. This supplies a
+traceable current executable, not historical engine equivalence or scientific
+admission. Next freeze a small discriminating current/archived engine comparison;
+keep the completed historical refinement branch closed.
+
 The [provisional propagation website view](reviews/web-kfs-propagation-v1/README.md)
 now exposes all four calibration/evaluation assumption combinations with two
 selectors, original failed refinement and separate passing nested regime.
