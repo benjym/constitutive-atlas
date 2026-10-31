@@ -1,68 +1,43 @@
-"""Retained negative instantaneous-rate study; no compiled execution in tests."""
-from fractions import Fraction
+"""Original six negative-study checks execute against their immutable source closure."""
 import hashlib
-import importlib.util
 import json
 from pathlib import Path
-import shutil
 import tempfile
 import unittest
-from unittest.mock import patch
-from tools import research_rate_observations as rates
-from tools import research_rate_parity as compare
+from atlas.source_replay import registered
 
 ROOT=Path(__file__).resolve().parents[1]
-STUDY=ROOT/'catalogue/investigations/barodesy2015-rates-v1'
-spec=importlib.util.spec_from_file_location('barodesy_actual_layout',STUDY/'check_layout.py')
-layout=importlib.util.module_from_spec(spec);spec.loader.exec_module(layout)
+REGISTRY='catalogue/source-replays/sand-negative-v1/registry.json'
+
 
 class SandRateEvidence(unittest.TestCase):
- def test_retained_file_manifest_and_frozen_design(self):
-  manifest=json.loads((STUDY/'results-manifest.json').read_text())
-  for name,pin in manifest['files'].items():
-   path=Path(name);self.assertFalse(path.is_absolute());self.assertNotIn('..',path.parts)
-   blob=(STUDY/path).read_bytes();self.assertEqual(hashlib.sha256(blob).hexdigest(),pin)
-  freeze=json.loads((STUDY/'prospective-freeze.json').read_text())
-  self.assertFalse(freeze['compiled_observations_at_freeze'])
-  for name,pin in freeze['files'].items():self.assertEqual(rates.sha(STUDY/name),pin)
-  protocol,_,_=rates.checked_protocol(STUDY/'protocol.json');self.assertEqual(len(protocol['cases']),70)
- def test_fresh_reaudit_retains_exact_same_failure_and_comparison(self):
-  actual=compare.assess(STUDY/'protocol.json',tuple(STUDY/('native-'+name+'.json') for name in ('build','observation','observation.transport')),tuple(STUDY/('wasm-'+name+'.json') for name in ('build','observation','observation.transport')))
-  self.assertEqual(actual,json.loads((STUDY/'comparison.json').read_text()))
-  self.assertEqual(actual['outcome'],'failed');self.assertTrue(actual['parity']['passed']);self.assertFalse(actual['parity']['both_independent_assessments_passed'])
-  for backend in ('native','wasm'):
-   self.assertEqual(actual[backend],json.loads((STUDY/(backend+'-assessment.json')).read_text()))
-   self.assertEqual(len(actual[backend]['failures']),1);self.assertEqual(actual[backend]['failures'][0]['case'],'valid:audit-trace-cancellation');self.assertEqual(actual[backend]['failures'][0]['component'],6)
- def test_lost_void_rate_is_an_exact_actual_input_witness(self):
-  protocol=json.loads((STUDY/'protocol.json').read_text());case=next(c for c in protocol['cases']if c['id']=='valid:audit-trace-cancellation')
-  strain=[float(x)for x in case['args'][3].split(',')];e=float(case['args'][2].split(',')[-1])
-  exact=-(1+Fraction(e))*sum(map(Fraction,strain[:3]),Fraction())
-  expected=float(exact);self.assertNotEqual(expected,0.);self.assertEqual(case['expectation']['values'][6],expected)
-  self.assertEqual(case['expectation']['absolute_budgets'][6],4*__import__('math').ulp(expected))
-  for backend in ('native','wasm'):
-   assessment=json.loads((STUDY/(backend+'-assessment.json')).read_text());row=next(c for c in assessment['cases']if c['id']==case['id'])
-   self.assertEqual(row['response']['values'][6],0.);self.assertGreater(abs(expected),case['expectation']['absolute_budgets'][6])
- def test_serial_build_commands_and_exact_generated_source_parity(self):
-  for backend in ('native','wasm'):
-   receipt=json.loads((STUDY/(backend+'-build.json')).read_text());self.assertTrue(receipt['all_commands_succeeded'])
-   for entry in receipt['commands']:
-    path=ROOT/entry['path'];self.assertEqual(rates.sha(path),entry['sha256']);command=json.loads(path.read_text());self.assertEqual(command['returncode'],0)
-    if '--build'in command['argv']:self.assertEqual(command['argv'][-4:],['--target','atlas_isolated','--parallel','1'])
-  for name in ('models.hpp','models.json'):self.assertEqual((STUDY/('native-generated-'+name)).read_bytes(),(STUDY/('wasm-generated-'+name)).read_bytes())
-  failure=json.loads((STUDY/'native-build-attempt-0.json').read_text());self.assertEqual(failure['compiled_rate_calls'],0);self.assertTrue(failure['build_commands_succeeded'])
- def test_actual_layout_supplement_replays(self):self.assertEqual(layout.verify(),json.loads((STUDY/'layout-check.json').read_text()))
- def test_layout_supplement_rejects_reordered_or_duplicate_descriptors(self):
-  for kind in ('order','duplicate'):
-   with self.subTest(kind=kind),tempfile.TemporaryDirectory()as tmp:
-    folder=Path(tmp)
-    for name in ('protocol.json','native-observation.json','native-observation.transport.json','native-generated-models.json','wasm-observation.json','wasm-observation.transport.json','wasm-generated-models.json'):shutil.copyfile(STUDY/name,folder/name)
-    raw=json.loads((folder/'native-observation.transport.json').read_text());lines=raw['stdout'].splitlines()
-    if kind=='order':
-     desc=json.loads(lines[0]);desc['models'][0]['parameters']=dict(reversed(list(desc['models'][0]['parameters'].items())));lines[0]=json.dumps(desc)
-    else:lines[1]=lines[1].replace('"ok":true','"ok":false,"ok":true',1)
-    raw['stdout']='\n'.join(lines)+'\n';(folder/'native-observation.transport.json').write_text(json.dumps(raw))
-    obs=json.loads((folder/'native-observation.json').read_text());obs['transport_sha256']=rates.sha(folder/'native-observation.transport.json');(folder/'native-observation.json').write_text(json.dumps(obs))
-    with patch.object(layout,'HERE',folder):
-     with self.assertRaises(ValueError):layout.verify()
+    def test_original_six_checks_and_negative_cli_reproduce(self):
+        result=registered(ROOT,REGISTRY,'sand-negative')
+        summary=json.loads(result['stdout'])
+        self.assertTrue(result['historical_output_reproduced'])
+        self.assertEqual(summary,dict(admission=False,compiled_execution=False,
+            failed_case='valid:audit-trace-cancellation',failed_component=6,
+            original_cli_exit=1,original_complete_comparison_exact=True,
+            original_tests=6,outcome='failed',parity_passed=True))
+
+    def test_packet_manifest_and_export_ignore_current_engine(self):
+        folder=ROOT/'catalogue/source-replays/sand-negative-v1'
+        manifest=json.loads((folder/'manifest.json').read_bytes())
+        for name,pin in manifest['files'].items():
+            self.assertEqual(hashlib.sha256((folder/name).read_bytes()).hexdigest(),pin,name)
+        spec=json.loads((ROOT/REGISTRY).read_bytes());record=spec['replays']['sand-negative']
+        names=[REGISTRY,record['capsule']['path'],*(x['path'] for x in record['documents'])]
+        with tempfile.TemporaryDirectory()as tmp:
+            root=Path(tmp)
+            for name in names:
+                target=root/name;target.parent.mkdir(parents=True,exist_ok=True)
+                target.write_bytes((ROOT/name).read_bytes())
+            for name in ('cpp/include/atlas/tensor.hpp','tools/research_rate_observations.py'):
+                target=root/name;target.parent.mkdir(parents=True,exist_ok=True)
+                target.write_text('current file deliberately replaced')
+            result=registered(root,REGISTRY,'sand-negative')
+            self.assertEqual(json.loads(result['stdout'])['outcome'],'failed')
+            self.assertFalse((root/'.git').exists())
+
 
 if __name__=='__main__':unittest.main()
