@@ -64,14 +64,14 @@ atlas::IntegrationSettings settings_for(const char* csv){
     s.max_depth=int(v[3]);s.max_substeps=int(v[4]);s.max_backtracks=int(v[5]);
     if(!atlas::valid_settings(s))throw std::runtime_error("invalid integration settings");return s;
 }
-void require_laboratory_contract(int model,bool scope_aware){
+void require_incremental_stress_contract(int model,bool scope_aware,const std::string& kind="laboratory"){
     const auto& m=atlas::models().at(model);
     if(m.physical_time||m.fields.empty()||m.fields.front().name!="sigma"||m.fields.front().offset!=0||m.fields.front().size!=6||m.fields.front().transient)
-        throw std::runtime_error("laboratory requires incremental persistent Cauchy state sigma");
+        throw std::runtime_error(kind+" requires incremental persistent Cauchy state sigma");
     if(!scope_aware&&m.stress_scope!=atlas::StressScope::effective)
-        throw std::runtime_error("legacy laboratory contract requires effective stress");
+        throw std::runtime_error("legacy "+kind+" contract requires effective stress");
     if(scope_aware&&m.stress_scope!=atlas::StressScope::effective&&m.stress_scope!=atlas::StressScope::total)
-        throw std::runtime_error("scoped laboratory contract requires declared effective or total stress");
+        throw std::runtime_error("scoped "+kind+" contract requires declared effective or total stress");
 }
 void write_laboratory_scope(std::ostream& o,int model,int protocol){
     const auto scope=atlas::models().at(model).stress_scope;
@@ -91,7 +91,7 @@ void write_settings(std::ostream& o,const atlas::IntegrationSettings& s){
 extern "C" ATLAS_EXPORT const char* atlas_describe(){return atlas::describe_models();}
 static const char* run_response(const char*id,const char*parameters,const char*initial,int protocol,double target,int steps,int cycles,const char*settings_csv,const atlas::State*controls=nullptr,bool research_range=false,bool scope_aware=false){
     try{
-        int m=model_index(id);require_laboratory_contract(m,scope_aware);auto p=params_for(m,parameters),z=state_for(m,initial);
+        int m=model_index(id);require_incremental_stress_contract(m,scope_aware);auto p=params_for(m,parameters),z=state_for(m,initial);
         const auto settings=settings_for(settings_csv);
         const auto start=std::chrono::steady_clock::now();auto run=controls?atlas::run_protocol_controls(m,z,p,protocol,*controls,settings,research_range?atlas::LaboratoryRange::ResearchQuarterStrain:atlas::LaboratoryRange::Interactive):atlas::run_protocol(m,z,p,protocol,target,steps,cycles,settings);
         const double elapsed=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count();
@@ -172,9 +172,12 @@ extern "C" ATLAS_EXPORT const char* atlas_linearize_with_settings(const char*id,
 // Numeric wire: 6 rows of (stress tag, six coefficients), and 2..5001
 // rows of (coordinate, six absolute targets). No file I/O in the C/Wasm API.
 static const char* recorded_response(const char*id,const char*parameters,const char*initial,
-        const char*initial_strain,const char*controls,const char*knots,const char*material_settings,const char*control_settings,const char*restart_settings){
+        const char*initial_strain,const char*controls,const char*knots,const char*material_settings,const char*control_settings,const char*restart_settings,const char*requested_scope=nullptr){
     try{
-        int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial);
+        int m=model_index(id);require_incremental_stress_contract(m,requested_scope!=nullptr,"recorded");
+        if(requested_scope&&std::string(requested_scope)!=(atlas::models()[m].stress_scope==atlas::StressScope::effective?"effective":"total"))
+            throw std::runtime_error("recorded stress scope does not match model");
+        auto p=params_for(m,parameters),z=state_for(m,initial);
         auto e=parse_csv(initial_strain),c=parse_csv(controls),k=parse_csv(knots),v=parse_csv(control_settings);
         if(e.size()!=6||c.size()!=42||k.size()<14||k.size()>35007||k.size()%7)
             throw std::runtime_error("invalid recorded wire layout");
@@ -204,9 +207,10 @@ static const char* recorded_response(const char*id,const char*parameters,const c
         if(!atlas::valid_recorded_settings(settings))throw std::runtime_error("invalid recorded settings");
         auto run=atlas::replay_recorded(m,z,p,path,settings);
         std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(run.ok?"true":"false")
-          <<",\"api_version\":\"experimental-recorded-replay-0.1\",\"catalogue_hash\":"<<quote(atlas::catalogue_hash())
+          <<",\"api_version\":"<<quote(requested_scope?"experimental-recorded-replay-0.2":"experimental-recorded-replay-0.1")<<",\"catalogue_hash\":"<<quote(atlas::catalogue_hash())
           <<",\"model\":"<<quote(id)<<",\"message\":"<<quote(run.message)<<",\"failed_knot\":"<<run.failed_knot
           <<",\"parameters\":";array(o,p);o<<",\"initial\":";array(o,z);o<<",\"initial_strain\":";array(o,e);
+        if(requested_scope)o<<",\"stress\":{\"source\":\"state\",\"name\":\"sigma\",\"measure\":\"cauchy\",\"scope\":"<<quote(requested_scope)<<",\"tensor_representation\":\"mandel\",\"sign\":\"compression_positive\"}";
         o<<",\"controls_wire\":";array(o,c);o<<",\"knots_wire\":";array(o,k);
         o<<",\"integration_settings\":";write_settings(o,settings.material);
         o<<",\"control_settings\":{\"control_tolerance\":"<<settings.control_tolerance
@@ -243,6 +247,15 @@ extern "C" ATLAS_EXPORT const char* atlas_replay_recorded(const char*id,const ch
 extern "C" ATLAS_EXPORT const char* atlas_replay_recorded_with_restarts(const char*id,const char*p,const char*z,
         const char*e,const char*c,const char*k,const char*m,const char*control,const char*restarts){
     return recorded_response(id,p,z,e,c,k,m,control,restarts?restarts:"");
+}
+// Scope must be supplied explicitly; a missing scope cannot select legacy.
+extern "C" ATLAS_EXPORT const char* atlas_replay_recorded_scope(const char*id,const char*p,const char*z,
+        const char*e,const char*c,const char*k,const char*m,const char*control,const char*scope){
+    return recorded_response(id,p,z,e,c,k,m,control,nullptr,scope?scope:"");
+}
+extern "C" ATLAS_EXPORT const char* atlas_replay_recorded_scope_with_restarts(const char*id,const char*p,const char*z,
+        const char*e,const char*c,const char*k,const char*m,const char*control,const char*restarts,const char*scope){
+    return recorded_response(id,p,z,e,c,k,m,control,restarts?restarts:"",scope?scope:"");
 }
 extern "C" ATLAS_EXPORT const char* atlas_evaluate_time(const char*id,const char*parameters,const char*current,const char*rate,double time){
     try{int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,current),d=parse_csv(rate);
@@ -316,7 +329,7 @@ int main(int argc,char**argv){
     std::map<std::string,std::string> args;const char*response=nullptr;
     try{
         for(int i=1;i<argc;i+=2){if(i+1>=argc)throw std::runtime_error("arguments require --key value pairs");std::string key=argv[i];if(args.count(key))throw std::runtime_error("duplicate option");args[key]=argv[i+1];}
-        const std::vector<std::string> known={"--model","--parameters","--initial","--protocol","--target","--steps","--cycles","--mode","--current","--strain","--strain-rate","--start-time","--duration","--rtol","--atol","--min-time-step","--max-time-step","--max-substeps","--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts","--laboratory-controls-file","--response-contract"};
+        const std::vector<std::string> known={"--model","--parameters","--initial","--protocol","--target","--steps","--cycles","--mode","--current","--strain","--strain-rate","--start-time","--duration","--rtol","--atol","--min-time-step","--max-time-step","--max-substeps","--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts","--recorded-stress-scope","--laboratory-controls-file","--response-contract"};
         for(const auto&arg:args)if(std::find(known.begin(),known.end(),arg.first)==known.end())throw std::runtime_error("unknown option: "+arg.first);
         auto get=[&](const std::string&key,const std::string&fallback=""){auto i=args.find(key);return i==args.end()?fallback:i->second;};
         auto num=[&](const std::string&key,const std::string&fallback){auto s=get(key,fallback);size_t pos=0;double v=std::stod(s,&pos);if(pos!=s.size()||!std::isfinite(v))throw std::runtime_error("invalid number: "+key);return v;};
@@ -349,11 +362,11 @@ int main(int argc,char**argv){
             if(mode!="schedule"&&!(mode=="recorded"&&arg.first=="--initial-strain")&&std::find(schedule_options.begin(),schedule_options.end(),arg.first)!=schedule_options.end())throw std::runtime_error("schedule option requires schedule mode");
             if(mode=="schedule"&&(arg.first=="--duration"||arg.first=="--strain-rate"))throw std::runtime_error("schedule duration and rates belong to its segments");
         }
-        const std::vector<std::string> recorded_options={"--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts"};
+        const std::vector<std::string> recorded_options={"--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts","--recorded-stress-scope"};
         for(const auto& arg:args)if(mode!="recorded"&&std::find(recorded_options.begin(),recorded_options.end(),arg.first)!=recorded_options.end())
             throw std::runtime_error("recorded option requires recorded mode");
         if(mode=="recorded"){
-            const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--initial-strain","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts"};
+            const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--initial-strain","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts","--recorded-stress-scope"};
             for(const auto& arg:args)if(std::find(allowed.begin(),allowed.end(),arg.first)==allowed.end())throw std::runtime_error("option unsupported by recorded mode: "+arg.first);
             auto read_wire=[&](const char* key){
                 std::ifstream in(get(key),std::ios::binary);if(!in)throw std::runtime_error(std::string("cannot read ")+key);
@@ -363,7 +376,7 @@ int main(int argc,char**argv){
                 if(!in.eof())throw std::runtime_error("recorded wire read failed");return data;
             };
             auto c=read_wire("--recorded-controls-file"),k=read_wire("--recorded-knots-file");
-            response=recorded_response(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),c.c_str(),k.c_str(),get("--integration-settings").c_str(),get("--recorded-settings").c_str(),args.count("--recorded-restarts")?get("--recorded-restarts").c_str():nullptr);
+            response=recorded_response(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),c.c_str(),k.c_str(),get("--integration-settings").c_str(),get("--recorded-settings").c_str(),args.count("--recorded-restarts")?get("--recorded-restarts").c_str():nullptr,args.count("--recorded-stress-scope")?get("--recorded-stress-scope").c_str():nullptr);
         }
         else if(mode=="run-controls"||mode=="run-research-controls"){
             std::ifstream in(get("--laboratory-controls-file"),std::ios::binary);

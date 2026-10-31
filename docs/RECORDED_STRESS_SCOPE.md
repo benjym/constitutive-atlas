@@ -1,6 +1,6 @@
 # Scope-aware recorded request contract
 
-The separate [recorded-run 0.2 schema](../schemas/recorded-run-v0.2.schema.json) defines explicit stress identity for ordered mechanical replay. This is a pure request/codec foundation. Native 0.2 responses, restart exports and browser execution are not activated. The public atlas still has nine executable models and the production incremental validator still rejects total stress.
+The separate [recorded-run 0.2 schema](../schemas/recorded-run-v0.2.schema.json) defines explicit stress identity for ordered mechanical replay. This is a pure request/codec foundation. [Native 0.2 responses and restart exports](reviews/recorded-scope-native-v1/README.md) are implemented behind explicit scope selection. Dedicated Python/JavaScript execution adapters and browser rendering/import/export remain unconnected. The public atlas still has nine executable models and the production incremental validator still rejects total stress.
 
 ## Request
 
@@ -29,8 +29,8 @@ Eight focused Python tests pass. The new cross-language corpus has28cases: all n
 
 The existing Python `execute_recorded` and JavaScript `runRecorded` remain strictly0.1. Tests prove every accepted0.2 request is rejected by those adapters before subprocess/ccall. The existing JavaScript recorded contract suite passes with zero native/Wasm pairs requested. No build, material run, live browser rollout, prior evidence rewrite or model promotion occurs in this task.
 
-## Next execution gate
+## Native status and next execution gate
 
-Implement native scoped recorded endpoints with and without explicit restarts, a required request scope matching generated model metadata, and response version `experimental-recorded-replay-0.2` carrying the same closed stress descriptor as the scoped laboratory response. Retain the existing controller/restart arithmetic and failure prefixes. Guard both legacy recorded exports as effective-only before parameter/state parsing or material evaluation.
+The [native gate](reviews/recorded-scope-native-v1/README.md) implements scoped endpoints with and without restarts, the required scope/model match, response0.2 stress descriptor and effective-only legacy guards. Exact legacy comparisons, synthetic total analytical paths, restart policies and failure prefixes pass its prospective serial gate. This does not enable total models in the production validator or browser.
 
-Then connect dedicated Python/JS execution adapters to those new endpoints with strict response/scope/catalogue/request/settings identity checks and no fallback to legacy calls. Freeze native old/new effective compatibility, synthetic total analytical histories, restart accounting, failure/recovery and mismatch rejection before observations. Keep the current browser view/import/export closed until its labels and scope semantics are implemented together. Recorded and browser gates still precede production total-profile activation and the existing Tresca transcription's source/reference/backend checks.
+Next connect dedicated Python/JavaScript execution adapters to the new endpoints with strict response/scope/catalogue/request/settings identity checks and no fallback to legacy calls. Keep the current browser view/import/export closed until its labels and scope semantics are implemented together. Recorded adapter and browser gates still precede production total-profile activation and the existing Tresca transcription's source/reference/backend checks.

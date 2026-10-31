@@ -1,0 +1,32 @@
+{
+  "id": "recorded-scope-native-v1",
+  "new_api": "experimental-recorded-replay-0.2",
+  "cli": "--mode recorded --recorded-stress-scope effective|total",
+  "compatibility": "exact old/new serialized legacy output and exact scoped mechanical output after removing only stress descriptor and replacing API version",
+  "public_cases": 9,
+  "total_reference": {
+    "E": 30000000,
+    "nu": 0.25,
+    "p0": 100000,
+    "amplitude": 1e-05,
+    "stress_tolerance_Pa": 0.002,
+    "strain_tolerance": 2e-10
+  },
+  "paths": [
+    "all-strain zero for all nine current models",
+    "all-strain deviatoric reversal with hold",
+    "mixed constant radial stress reversal",
+    "all-strain failure at third knot under material-trial budget one"
+  ],
+  "restart_policies": [
+    "absent",
+    "max_restarts=0,restart_step=1e-4,restart_levels=8",
+    "max_restarts=1,restart_step=1e-4,restart_levels=8"
+  ],
+  "negative_policy": "legacy total and mismatch/unknown/missing explicit scope reject before malformed parameters/state; both scoped C exports exercised",
+  "build_policy": {
+    "target": "atlas_recorded_scope_gate",
+    "parallel": 1
+  },
+  "limits": "Restricted synthetic total-elastic fixture only; production total validator remains disabled. No solver/restart arithmetic change; no accepted restart-search claim."
+}
