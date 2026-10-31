@@ -260,6 +260,11 @@ The [shared whole-test allocation contract](studies/kfs-development-v1/README.md
 - [ ] **CAL-04:** Evaluate the locked parameter set on the evaluation subset. Any retuning after inspection creates a new study revision and requires a fresh evaluation strategy.
 - [ ] **CAL-05:** Report curve errors on declared sampling grids, relevant physical features, sensitivity/identifiability and parameter uncertainty. Preserve path order, prohibit extrapolation and avoid weighting results by recording density.
 
+The [shared ordered metric](docs/ORDERED_METRICS.md) now supplies a separately
+identified piecewise-linear residual integral over absolute axial-strain travel,
+with twelve synthetic checks. Historical scores retain their original method.
+Prospective adoption, physical features, sensitivity and uncertainty remain open.
+
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
 ## 10. M5 — expand toward twenty executable formulations

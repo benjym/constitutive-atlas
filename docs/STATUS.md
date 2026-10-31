@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [shared ordered curve metric](ORDERED_METRICS.md) integrates piecewise-linear
+residuals over absolute axial-strain travel, preserving reversals and redundant
+linear sampling. It rejects incomplete predictions and reports holds/max error.
+Twelve synthetic tests pass, including large/tiny contributions. Historical
+endpoint-trapezoid results remain unchanged; no experimental fit or build.
+CAL-05 remains open for study adoption, physical features and uncertainty.
+
 The [parameter-accounting check](../studies/kfs-development-v1/parameters-v1/README.md)
 binds complete fitted/fixed input coverage, units, values, bounds/transforms and
 provenance to exact historical definitions and allocation. It retains VW96
