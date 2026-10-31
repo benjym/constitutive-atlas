@@ -1,3 +1,9 @@
+# Generic spectral primitives: native and Wasm — 2026-10-31
+
+The [frozen standalone study](../catalogue/investigations/symmetric-spectral-primitive-v1/RESULTS.md) passes1136 ordered calls per backend:852 successes,284 expected checked failures,11530 independent accuracy checks and222 exact diagonal eigenvalue checks. Worst error/allowance is.240084. The independent reference packet covers48 actual stored-Mandel tensors and all38 directions;280/360-digit construction checks pass with two failed reference attempts retained unchanged.
+
+Native and Wasm builds ran serially as one explicit target each and completed normally. Copied-source replay verifies the30file prospective freeze, exact literal request regeneration, both assessments and recorded artifact hashes. All1136 statuses agree;14 floating output records differ within their independently checked bounds. No production DSL/compiler/model integration, MC equality policy, scientific admission or deployment claim; hosted five/local nine remain unchanged.
+
 # Prospective spectral contract for Mohr–Coulomb — 2026-10-31
 
 The [analytical design packet](reviews/symmetric-spectral-contract-v1/README.md) separates value-only principal-stress branch selection from differentiable simple-eigenvalue and group-projector expressions. Its static qualifier prototype accepts9 valid output expressions and rejects15 value-only leaks. Independent exact Cartesian checks reproduce152 directional rows,304 rotations and152 pair-sum identities, including complementary repeated spectra. The review retains a mixed-scale cancellation failure in the original middle-value proposal and a selected-repeat nondifferentiability witness.

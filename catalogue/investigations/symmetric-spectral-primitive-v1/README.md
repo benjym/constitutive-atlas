@@ -1,0 +1,13 @@
+# Prospective symmetric spectral primitive study v1
+
+This standalone generic primitive study freezes the candidate scaled cyclic-Jacobi helper, policy, literal requests, independent stored-Mandel references, collector and assessor **before compiled observations**. There is no production DSL/compiler/model integration. The copied tensor/Jet and accurate-trace headers preserve their exact source identities without altering current production files.
+
+The independent reference packet under reference/ uses characteristic cubic brackets and Decimal arithmetic rather than candidate Jacobi rotations. Its48 exact stored-Mandel inputs include actual encoded rotations, repeated pairs, gaps, signed/scaled and subnormal/overflow cases; all38 derivative directions remain literal. Two failed reference studies are retained losslessly. Its internal adequacy criterion differs from candidate acceptance.
+
+policy.json is authoritative for numerical resolution, norm-based accuracy and range/transaction checks. The gap threshold is a diagnosed numerical-resolution limit rather than a constitutive stress bound or tie-merging rule. Diagonal eigenvalues, including the mixed-scale middle, additionally require exact binary64 value equality. Ordinary scalar/projector operations require isolated selected eigenvalues; value-only operations retain repeated/hydrostatic queries. No MC floating classifier policy is asserted.
+
+requests.json.gz contains1136 immutable ordered calls:48 tensors across10 operations in double/Jet modes, plus all-component/nonfinite-column diagnostics with immediate valid recoveries. check_assessor.py accepts ideal synthetic transport and rejects six corruptions; this validates the assessor, not the solver. Each failed primitive call must preserve its prefilled output.
+
+Run `python3 -B execute.py native`, then only after it terminates run `python3 -B execute.py wasm`. Each backend creates a fresh external build directory, configures one explicit target and builds with --parallel1; Wasm sets EMCC_CORES=1. Scripts reject existing output/build directories and do not overwrite historical results. Outputs and any failures must be retained. No endpoint protection is bypassed.
+
+The prospective-freeze.json file pins all source/reference/policy/request/assessor bytes. Runtime logs, artifact hashes and results are added separately. Value-only Jet derivative storage is transport only; production static qualifier enforcement, lazy/sticky generated contexts, MC branch/equality policy, update tangents and solver rollback remain separate gates. This study cannot establish a new runnable model, scientific admission or experimental agreement.
