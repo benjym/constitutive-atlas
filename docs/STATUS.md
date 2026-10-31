@@ -1,5 +1,13 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [locked VW96 initialization study](benchmarks/kfs-locked-initialization-sensitivity-v1/README.md)
+completes eight serial archived-solver replays with four exactly reproduced saved
+controls. Alternative evaluation e0 raises six-test pressure/density errors from
+0.169043/0.129344 to0.174213/0.136772; contrast sign persists.332process receipts,
+four negative controls,26combined tests and exact saved scalar replay pass. No
+build or fit; alternative-state refinement, TMD13 calibration propagation, source
+resolution and scientific admission remain open.
+
 The [KFS initialization scenarios](../studies/kfs-development-v1/initialization-v1/README.md)
 freeze exact file states and a separately qualified original-table alternative.
 Primary Table3 was visually rechecked;22assignments/11development tests preserve

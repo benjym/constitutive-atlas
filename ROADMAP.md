@@ -272,6 +272,11 @@ The [initialization policy](studies/kfs-development-v1/initialization-v1/README.
 now freezes file/original-table scenarios and distinguishes conditional evaluation
 from TMD13 calibration propagation. The source conflict and numerical uncertainty
 study remain open; exact scenario metadata is prepared without solver execution.
+The subsequent [locked-parameter VW96 study](docs/benchmarks/kfs-locked-initialization-sensitivity-v1/README.md)
+completes eight serial archived replays and four exact numeric saved controls.
+Alternative evaluation states raise aggregate errors while preserving the
+within-model contrast sign. TMD13 recalibration propagation and alternative-state
+refinement remain untested; this is conditional sensitivity, not source resolution.
 
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
