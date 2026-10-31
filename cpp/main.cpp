@@ -64,6 +64,23 @@ atlas::IntegrationSettings settings_for(const char* csv){
     s.max_depth=int(v[3]);s.max_substeps=int(v[4]);s.max_backtracks=int(v[5]);
     if(!atlas::valid_settings(s))throw std::runtime_error("invalid integration settings");return s;
 }
+void require_laboratory_contract(int model,bool scope_aware){
+    const auto& m=atlas::models().at(model);
+    if(m.physical_time||m.fields.empty()||m.fields.front().name!="sigma"||m.fields.front().offset!=0||m.fields.front().size!=6||m.fields.front().transient)
+        throw std::runtime_error("laboratory requires incremental persistent Cauchy state sigma");
+    if(!scope_aware&&m.stress_scope!=atlas::StressScope::effective)
+        throw std::runtime_error("legacy laboratory contract requires effective stress");
+    if(scope_aware&&m.stress_scope!=atlas::StressScope::effective&&m.stress_scope!=atlas::StressScope::total)
+        throw std::runtime_error("scoped laboratory contract requires declared effective or total stress");
+}
+void write_laboratory_scope(std::ostream& o,int model,int protocol){
+    const auto scope=atlas::models().at(model).stress_scope;
+    o<<",\"api_version\":\"experimental-laboratory-scope-0.1\",\"stress\":{\"source\":\"state\",\"name\":\"sigma\",\"measure\":\"cauchy\",\"scope\":"
+     <<quote(scope==atlas::StressScope::effective?"effective":"total")<<",\"tensor_representation\":\"mandel\",\"sign\":\"compression_positive\"},\"pore_pressure\":{\"quantity\":\"change\",\"availability\":";
+    if(atlas::laboratory_pore_reconstruction(scope,protocol))
+        o<<"\"reconstructed\",\"assumption\":\"fixed_radial_total_stress_incompressible_fluid_and_grains\"}";
+    else o<<"\"unavailable\",\"reason\":"<<quote(scope==atlas::StressScope::total?"total_stress_without_pore_pressure_law":"not_reconstructed_for_protocol")<<'}';
+}
 void write_settings(std::ostream& o,const atlas::IntegrationSettings& s){
     o<<"{\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":"<<s.residual_tolerance
       <<",\"rate_tolerance\":"<<s.rate_tolerance<<",\"max_iterations\":"<<s.max_iterations<<",\"max_depth\":"<<s.max_depth
@@ -72,22 +89,23 @@ void write_settings(std::ostream& o,const atlas::IntegrationSettings& s){
 }
 
 extern "C" ATLAS_EXPORT const char* atlas_describe(){return atlas::describe_models();}
-static const char* run_response(const char*id,const char*parameters,const char*initial,int protocol,double target,int steps,int cycles,const char*settings_csv,const atlas::State*controls=nullptr,bool research_range=false){
+static const char* run_response(const char*id,const char*parameters,const char*initial,int protocol,double target,int steps,int cycles,const char*settings_csv,const atlas::State*controls=nullptr,bool research_range=false,bool scope_aware=false){
     try{
-        int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial);
+        int m=model_index(id);require_laboratory_contract(m,scope_aware);auto p=params_for(m,parameters),z=state_for(m,initial);
         const auto settings=settings_for(settings_csv);
         const auto start=std::chrono::steady_clock::now();auto run=controls?atlas::run_protocol_controls(m,z,p,protocol,*controls,settings,research_range?atlas::LaboratoryRange::ResearchQuarterStrain:atlas::LaboratoryRange::Interactive):atlas::run_protocol(m,z,p,protocol,target,steps,cycles,settings);
         const double elapsed=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count();
         std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(run.ok?"true":"false")<<",\"message\":"<<quote(run.message)<<",\"schema_version\":\"0.1\",\"catalogue_hash\":"<<quote(atlas::catalogue_hash())<<",\"model\":"<<quote(id)<<",\"elapsed_ms\":"<<elapsed<<",\"parameters\":";array(o,p);o<<",\"initial\":";array(o,z);
         if(settings_csv){o<<",\"integration_settings\":";write_settings(o,run.settings);}
         o<<",\"protocol\":"<<protocol;
+        if(scope_aware)write_laboratory_scope(o,m,protocol);
         if(research_range)o<<",\"research_scope\":{\"version\":\"quarter-strain-operational-0.1\",\"maximum_strain_amplitude\":0.25,\"finite_kinematics_verified\":false}";
-        if(controls){o<<",\"api_version\":\"experimental-laboratory-controls-0.1\",\"loading\":{\"version\":\"laboratory-controls-0.1\",\"controls\":";array(o,*controls);o<<",\"encoding\":\"ieee754-binary64-hex\",\"controls_bits\":";control_bits(o,*controls);o<<"},\"steps\":"<<(controls->empty()?0:controls->size()-1);}
+        if(controls){if(!scope_aware)o<<",\"api_version\":\"experimental-laboratory-controls-0.1\"";o<<",\"loading\":{\"version\":\"laboratory-controls-0.1\",\"controls\":";array(o,*controls);o<<",\"encoding\":\"ieee754-binary64-hex\",\"controls_bits\":";control_bits(o,*controls);o<<"},\"steps\":"<<(controls->empty()?0:controls->size()-1);}
         else o<<",\"target\":"<<target<<",\"steps\":"<<steps<<",\"cycles\":"<<cycles;
         o<<",\"points\":[";
         for(size_t i=0;i<run.points.size();++i){if(i)o<<',';const auto&point=run.points[i];const auto&v=point.state;auto sigma=atlas::tensor_from(v,0);
             o<<"{\"control\":"<<point.control<<",\"strain\":";array(o,atlas::State(point.strain.v.begin(),point.strain.v.end()));o<<",\"state\":";array(o,v);
-            o<<",\"p\":"<<atlas::trace(sigma)/3<<",\"q\":"<<atlas::deviatoric_stress_magnitude(sigma)<<",\"q_signed\":"<<v[0]-.5*(v[1]+v[2])<<",\"u\":"<<point.pore_pressure<<",\"iterations\":"<<point.diagnostics.iterations<<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":"<<point.diagnostics.error<<'}';
+            o<<",\"p\":"<<atlas::trace(sigma)/3<<",\"q\":"<<atlas::deviatoric_stress_magnitude(sigma)<<",\"q_signed\":"<<v[0]-.5*(v[1]+v[2])<<",\"u\":";if(scope_aware&&!atlas::laboratory_pore_reconstruction(atlas::models()[m].stress_scope,protocol))o<<"null";else o<<point.pore_pressure;o<<",\"iterations\":"<<point.diagnostics.iterations<<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":"<<point.diagnostics.error<<'}';
         }
         o<<"]}";output=o.str();return output.c_str();
     }catch(const std::exception&e){return failure(e.what());}
@@ -96,6 +114,13 @@ extern "C" ATLAS_EXPORT const char* atlas_run(const char*id,const char*parameter
 extern "C" ATLAS_EXPORT const char* atlas_run_with_settings(const char*id,const char*parameters,const char*initial,int protocol,double target,int steps,int cycles,const char*settings){return run_response(id,parameters,initial,protocol,target,steps,cycles,settings?settings:"");}
 extern "C" ATLAS_EXPORT const char* atlas_run_controls_with_settings(const char*id,const char*parameters,const char*initial,int protocol,const char*controls_csv,const char*settings){
     try{auto controls=parse_control_bits(controls_csv);return run_response(id,parameters,initial,protocol,0,0,0,settings?settings:"",&controls);}
+    catch(const std::exception&e){return failure(e.what());}
+}
+extern "C" ATLAS_EXPORT const char* atlas_run_scope_with_settings(const char*id,const char*parameters,const char*initial,int protocol,double target,int steps,int cycles,const char*settings){
+    return run_response(id,parameters,initial,protocol,target,steps,cycles,settings?settings:"",nullptr,false,true);
+}
+extern "C" ATLAS_EXPORT const char* atlas_run_controls_scope_with_settings(const char*id,const char*parameters,const char*initial,int protocol,const char*controls_csv,const char*settings){
+    try{auto controls=parse_control_bits(controls_csv);return run_response(id,parameters,initial,protocol,0,0,0,settings?settings:"",&controls,false,true);}
     catch(const std::exception&e){return failure(e.what());}
 }
 extern "C" ATLAS_EXPORT const char* atlas_evaluate(const char*id,const char*parameters,const char*current,const char*previous,const char*strain){
@@ -291,16 +316,19 @@ int main(int argc,char**argv){
     std::map<std::string,std::string> args;const char*response=nullptr;
     try{
         for(int i=1;i<argc;i+=2){if(i+1>=argc)throw std::runtime_error("arguments require --key value pairs");std::string key=argv[i];if(args.count(key))throw std::runtime_error("duplicate option");args[key]=argv[i+1];}
-        const std::vector<std::string> known={"--model","--parameters","--initial","--protocol","--target","--steps","--cycles","--mode","--current","--strain","--strain-rate","--start-time","--duration","--rtol","--atol","--min-time-step","--max-time-step","--max-substeps","--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts","--laboratory-controls-file"};
+        const std::vector<std::string> known={"--model","--parameters","--initial","--protocol","--target","--steps","--cycles","--mode","--current","--strain","--strain-rate","--start-time","--duration","--rtol","--atol","--min-time-step","--max-time-step","--max-substeps","--segments","--segment-ids","--initial-strain","--initial-strain-rate","--nonlinear-tolerance","--max-iterations","--integration-settings","--recorded-controls-file","--recorded-knots-file","--recorded-settings","--recorded-restarts","--laboratory-controls-file","--response-contract"};
         for(const auto&arg:args)if(std::find(known.begin(),known.end(),arg.first)==known.end())throw std::runtime_error("unknown option: "+arg.first);
         auto get=[&](const std::string&key,const std::string&fallback=""){auto i=args.find(key);return i==args.end()?fallback:i->second;};
         auto num=[&](const std::string&key,const std::string&fallback){auto s=get(key,fallback);size_t pos=0;double v=std::stod(s,&pos);if(pos!=s.size()||!std::isfinite(v))throw std::runtime_error("invalid number: "+key);return v;};
         auto integer=[&](const std::string&key,const std::string&fallback){double x=num(key,fallback);if(x!=std::floor(x)||std::abs(x)>1000000)throw std::runtime_error("invalid integer: "+key);return int(x);};
         auto id=get("--model"),p=get("--parameters"),z=get("--initial"),mode=get("--mode","run"),d=get("--strain"),current=get("--current");
+        const bool scope_aware=args.count("--response-contract")!=0;
+        if(scope_aware&&((mode!="run"&&mode!="run-controls")||get("--response-contract")!="stress-scope-0.1"))
+            throw std::runtime_error("response contract requires run/run-controls and stress-scope-0.1");
         if(args.count("--integration-settings")&&mode!="run"&&mode!="integrate"&&mode!="linearize"&&mode!="recorded"&&mode!="run-controls"&&mode!="run-research-controls")throw std::runtime_error("incremental settings require run, run-controls, integrate, linearize or recorded mode");
         if(mode!="run-controls"&&mode!="run-research-controls"&&args.count("--laboratory-controls-file"))throw std::runtime_error("laboratory controls file requires run-controls mode");
         if(mode=="run-controls"||mode=="run-research-controls"){
-            const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--protocol","--integration-settings","--laboratory-controls-file"};
+            const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--protocol","--integration-settings","--laboratory-controls-file","--response-contract"};
             for(const auto& arg:args)if(std::find(allowed.begin(),allowed.end(),arg.first)==allowed.end())throw std::runtime_error("option unsupported by run-controls mode: "+arg.first);
         }
         if(mode=="linearize"){
@@ -347,7 +375,7 @@ int main(int argc,char**argv){
             if(mode=="run-research-controls"){
                 auto values=parse_control_bits(controls.c_str());
                 response=run_response(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),0,0,0,get("--integration-settings").c_str(),&values,true);
-            }else response=atlas_run_controls_with_settings(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),controls.c_str(),get("--integration-settings").c_str());
+            }else response=(scope_aware?atlas_run_controls_scope_with_settings:atlas_run_controls_with_settings)(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),controls.c_str(),get("--integration-settings").c_str());
         }
         else if(mode=="schedule")response=atlas_run_schedule(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),get("--initial-strain-rate").c_str(),get("--segments").c_str(),get("--segment-ids").c_str(),num("--start-time","0"),num("--rtol","1e-6"),num("--atol","1e-9"),num("--min-time-step","1e-12"),num("--max-time-step","1e6"),integer("--max-substeps","20000"),num("--nonlinear-tolerance","1e-10"),integer("--max-iterations","40"));
         else if(mode=="observe-time")response=atlas_observe_time(id.c_str(),p.c_str(),z.c_str(),get("--strain-rate").c_str(),num("--start-time","nan"));
@@ -356,6 +384,7 @@ int main(int argc,char**argv){
         else if(mode=="evaluate")response=atlas_evaluate(id.c_str(),p.c_str(),current.c_str(),z.c_str(),d.c_str());
         else if(mode=="integrate")response=args.count("--integration-settings")?atlas_integrate_with_settings(id.c_str(),p.c_str(),z.c_str(),d.c_str(),get("--integration-settings").c_str()):atlas_integrate(id.c_str(),p.c_str(),z.c_str(),d.c_str());
         else if(mode=="linearize")response=args.count("--integration-settings")?atlas_linearize_with_settings(id.c_str(),p.c_str(),z.c_str(),d.c_str(),get("--integration-settings").c_str()):atlas_linearize(id.c_str(),p.c_str(),z.c_str(),d.c_str());
+        else if(mode=="run"&&scope_aware)response=atlas_run_scope_with_settings(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),num("--target","0.01"),integer("--steps","100"),integer("--cycles","0"),get("--integration-settings").c_str());
         else if(mode=="run")response=args.count("--integration-settings")?atlas_run_with_settings(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),num("--target","0.01"),integer("--steps","100"),integer("--cycles","0"),get("--integration-settings").c_str()):atlas_run(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),num("--target","0.01"),integer("--steps","100"),integer("--cycles","0"));
         else throw std::runtime_error("unknown mode");
     }catch(const std::exception&e){response=failure(e.what());}

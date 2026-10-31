@@ -105,6 +105,11 @@ inline Advance integrate(int model,const State&zn,const Sym<double>&de,const Sta
     return result;
 }
 
+// Pore-pressure change is an external effective-stress boundary reconstruction.
+// A total/unspecified stress tensor supplies no pore-pressure law.
+inline bool laboratory_pore_reconstruction(StressScope scope,int protocol){
+    return scope==StressScope::effective&&(protocol==2||protocol==3);
+}
 struct Point { double control=0; Sym<double> strain; State state; Diagnostics diagnostics; double pore_pressure=0; };
 struct Run { bool ok=false; std::string message;std::vector<Point> points; IntegrationSettings settings; };
 // Mixed axisymmetric control. Trial constitutive evaluations always start from
@@ -160,7 +165,7 @@ inline Run run_protocol_impl(int model,const State&initial,const State&p,int pro
         if(!controlled_step(model,previous.state,p,protocol,control-previous.control,lateral,previous.strain.v[0],de,result,settings)){
             run.message="control or constitutive solve failed at step "+std::to_string(i)+"; last committed point retained";return run;}
         Point point;point.control=control;point.state=result.state;point.strain=previous.strain+de;point.diagnostics=result.diagnostics;
-        if(protocol==2||protocol==3)point.pore_pressure=lateral-.5*(point.state[1]+point.state[2]);
+        if(laboratory_pore_reconstruction(models()[model].stress_scope,protocol))point.pore_pressure=lateral-.5*(point.state[1]+point.state[2]);
         run.points.push_back(point);
     }
     run.ok=true;return run;

@@ -1,0 +1,40 @@
+{
+  "id": "laboratory-scope-contract-v1",
+  "response_api": "experimental-laboratory-scope-0.1",
+  "cli_contract": "stress-scope-0.1",
+  "legacy_policy": "effective-only, reject before parameter/state parsing or material calls",
+  "pore_policy": {
+    "total": "null for all protocols, reason total_stress_without_pore_pressure_law",
+    "effective_2_3": "exact existing reconstruction, including zero initial change",
+    "effective_0_1_4": "null, reason not_reconstructed_for_protocol"
+  },
+  "compatibility_gate": "exact decoded legacy response equality against archived pre-change main/solver for all nine current models, excluding elapsed_ms only; no numerical tolerances",
+  "analytical_gate": {
+    "fixture": "private synthetic total elastic",
+    "E": 30000000,
+    "nu": 0.25,
+    "initial_pressure": 100000,
+    "strain_target": 1e-05,
+    "stress_target": 100,
+    "steps": 2,
+    "stress_absolute_tolerance_Pa": 0.002,
+    "strain_absolute_tolerance": 2e-10
+  },
+  "controls_gate": "numeric controls and binary64 bits echoed exactly; default settings retained",
+  "scope": "No production validator activation or real total-model installation. Restricted total-elastic fixture lowering is test-only; validate its effective mechanical twin then change only declared stress scope before compilation. Both executables use the identical resulting catalogue.",
+  "build_policy": {
+    "explicit_target": "atlas_laboratory_scope_gate",
+    "parallel": 1,
+    "executables": [
+      "new laboratory CLI",
+      "archived laboratory CLI",
+      "direct C API driver"
+    ],
+    "builds_serial": true
+  },
+  "negative_gates": [
+    "total legacy run and explicit-controls APIs reject before malformed parameters/state",
+    "unknown contract value and unsupported mode reject",
+    "invalid loading never yields successful points"
+  ]
+}
