@@ -12,6 +12,7 @@ These authored packets extract available source equations, schema requirements, 
 | [Original Cam Clay](original-cam-clay/README.md) | Chapter6 transcription inventory, rigid-shear/vertex/3D distinctions and analytical source path | Six tests; 38 portable algebra checks (39 with private-source hash) | Authenticated1968 edition and constrained/vertex/3D execution contract |
 | [S-CLAY1](s-clay1/README.md) | Publication correction, acquisition receipts and ten extraction gaps | Four metadata/integrity checks | Original2003 full text missing; no equations transcribed |
 | [Duncan–Chang1970](duncan-chang-1970/README.md) | Original/1971 erratum identities and acquisition/closure-gap ledger | Authored-file integrity only | Both original and correction full text missing; no equations transcribed |
+| [Manzari–Dafalias1997](manzari-dafalias-1997/README.md) | Original identity, author-bibliography discrepancy and acquisition/closure gaps | Authored-file integrity only | Original1997 full text missing; no2004 or modified-law substitution |
 
 Source PDFs, vendor archives, page renders and extracted article text are excluded. Each packet has local-relative exact authored-file hashes; private source receipts describe inspection provenance. Input board/context hashes are historical acquisition snapshots, not claims that the live board never changes. Links to publications and institutions remain persistent.
 

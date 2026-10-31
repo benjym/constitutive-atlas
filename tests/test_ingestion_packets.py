@@ -2,7 +2,7 @@
 import hashlib,json,subprocess,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970')
+PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997')
 class IngestionPackets(unittest.TestCase):
  def run_python(self,*args):
   return subprocess.run([sys.executable,'-B',*args],cwd=ROOT,capture_output=True,text=True,timeout=60,check=True)
@@ -48,4 +48,8 @@ class IngestionPackets(unittest.TestCase):
   self.assertFalse(manifest['constitutive_equations_verified']);self.assertFalse(manifest['full_source_ingestion_complete'])
   self.assertEqual(audit['original']['doi'],'10.1061/JSFEAQ.0001458');self.assertEqual(audit['correction']['doi'],'10.1061/JSFEAQ.0001706')
   self.assertIsNone(audit['original']['pdf_sha256']);self.assertIsNone(audit['correction']['pdf_sha256']);self.assertFalse(audit['correction']['correction_content_verified'])
+ def test_md1997_does_not_substitute_later_formulations(self):
+  folder=ROOT/'docs/ingestion/manzari-dafalias-1997';manifest=json.loads((folder/'manifest.json').read_text());audit=json.loads((folder/'source-audit.json').read_text())
+  for key in ('original_received','source_complete','equations_verified','executable_added','scientific_admission'):self.assertIs(manifest[key],False)
+  self.assertEqual(audit['target']['doi'],'10.1680/geot.1997.47.2.255');self.assertIsNone(audit['target']['sha256']);self.assertEqual(audit['target']['equation_locators'],[])
 if __name__=='__main__':unittest.main()

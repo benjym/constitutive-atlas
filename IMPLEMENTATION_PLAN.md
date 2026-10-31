@@ -56,8 +56,8 @@ Read all existing linked material first. The task is to close or precisely docum
 - [ ] **ING-norsand-1993** — Original equation images remain unavailable; acquire original bytes before certifying rigid-plastic/image-pressure closure.
   Owner: —; output: `docs/ingestion/norsand-1993/`; existing evidence: [norsand-1993-source-packet.md](docs/reviews/norsand-1993-source-packet.md); blocker: see existing dossier, confirm when claimed.
 
-- [-] **ING-manzari-dafalias-1997** — Acquire DOI10.1680/geot.1997.47.2.255; separate1997 surfaces, memory and initialization from SANISAND2004 changes.
-  Owner: `review_igs97`; claimed: 2026-10-31; output: `docs/ingestion/manzari-dafalias-1997/`; existing evidence: [roadmap](ROADMAP.md); blocker: see existing dossier, confirm when claimed.
+- [ ] **ING-manzari-dafalias-1997** — Acquire DOI10.1680/geot.1997.47.2.255; separate1997 surfaces, memory and initialization from SANISAND2004 changes.
+  Owner: — (released after bounded handoff); output: `docs/ingestion/manzari-dafalias-1997/`; partial evidence: [gap packet](docs/ingestion/manzari-dafalias-1997/README.md); BLOCKED: original1997 full text unavailable through tested routes; later2004 and modified variants not substituted.
 
 - [-] **ING-hypoplastic-clay-2005** — Pin exact2005 original and matching implementation, full stiffness/ASBS/density evolution; preserve separate2005 identity despite2013 progress.
   Owner: `review_vw96`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-clay-2005/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
@@ -143,10 +143,12 @@ The [ingestion index](docs/ingestion/README.md) links completed packets and thei
 
 ## Completed bounded acquisition/reference subtasks
 
-These close only the deliverable named here. The three original full-ingestion tasks above remain unstarted/blocked with their partial packets retained; no agent is still working on them.
+These close only the deliverable named here. Their original full-ingestion tasks remain unstarted/blocked with partial packets retained; released owners work on other tasks.
 
 - [X] **SRC-OCC-transcription** — Readable Chapter6/AppendixC inventory, rigid-shear/vertex/3D distinction and bounded analytical fixtures delivered. Evidence: [packet](docs/ingestion/original-cam-clay/README.md). Original1968 edition certification and general execution remain open.
 - [X] **SRC-SCLAY1-identity** — Correct publication identity, source-route receipts and ten extraction gaps delivered. Evidence: [packet](docs/ingestion/s-clay1/README.md). The live catalogue DOI was corrected in f55cf03; the packet preserves the earlier misattached-link context. Original equations remain unavailable.
 - [X] **SRC-DUNCAN-identity-erratum** — Original and1971 correction identities plus bounded source-access/closure-gap report delivered. Evidence: [packet](docs/ingestion/duncan-chang-1970/README.md). No constitutive equation verification claimed.
 
 [Current source requests](docs/ingestion/SOURCE_REQUESTS.md) list the exact missing materials without substituting later formulations.
+
+- [X] **SRC-MD1997-identity-gap** — Original identity, conflicting author-page bibliography and bounded source-access/closure-gap report delivered. Evidence: [packet](docs/ingestion/manzari-dafalias-1997/README.md). Original equations remain unavailable; full ingestion remains blocked.
