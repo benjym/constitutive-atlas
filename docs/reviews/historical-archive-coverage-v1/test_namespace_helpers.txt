@@ -1,0 +1,54 @@
+def _is_active_archive_map(root, sidecar):
+ """Verify copied-map ownership before applying live sibling coverage rules."""
+ relative=sidecar.relative_to(root);parts=relative.parts
+ if parts[:2]==('catalogue','source-snapshots'):
+  expected=parts[2]
+  if len(expected)!=64 or any(c not in '0123456789abcdef'for c in expected):raise ValueError('invalid content-addressed map namespace')
+  if hashlib.sha256(sidecar.read_bytes()).hexdigest()!=expected:raise ValueError('changed content-addressed map copy')
+  return False
+ if 'frozen-sources' not in parts:return True
+ tree=root.joinpath(*parts[:parts.index('frozen-sources')+1]);owner=tree.parent
+ manifest=json.loads((owner/'manifest.json').read_text())['files']
+ # The complete copied subtree, including every sibling JSON, is immutable.
+ prefix=tree.relative_to(owner).as_posix()+'/'
+ expected_files={owner/path:pin for path,pin in manifest.items()if path.startswith(prefix)}
+ actual_files={p for p in tree.rglob('*')if p.is_file()}
+ if not expected_files or actual_files!=set(expected_files):raise ValueError('frozen source tree differs from owner inventory')
+ for path,pin in expected_files.items():
+  if '..'in path.relative_to(owner).parts or not path.resolve().is_relative_to(owner.resolve()):raise ValueError('unsafe frozen source path')
+  if hashlib.sha256(path.read_bytes()).hexdigest()!=pin:raise ValueError('changed owner-pinned frozen source')
+ mapping=json.loads(sidecar.read_text())
+ # Historical documents retain their source-root names, never outer prefixes.
+ for name,pin in mapping['documents'].items():
+  relative_doc=Path(name)
+  if relative_doc.is_absolute()or '..'in relative_doc.parts:raise ValueError('unsafe historical document namespace')
+  document=tree/relative_doc
+  if not document.resolve().is_relative_to(tree.resolve()):raise ValueError('historical document escapes source tree')
+  if document not in expected_files or hashlib.sha256(document.read_bytes()).hexdigest()!=pin:raise ValueError('historical document binding changed')
+ return False
+
+class ArchiveNamespaceTests(unittest.TestCase):
+ def test_frozen_namespace_requires_complete_owner_pins(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   root=Path(tmp);owner=root/'catalogue/investigations/example';tree=owner/'frozen-sources';folder=tree/'docs/review';folder.mkdir(parents=True)
+   receipt=folder/'receipt.json';receipt.write_text('{}')
+   sidecar=folder/'source-archive-map.json';sidecar.write_text(json.dumps({'documents':{'docs/review/receipt.json':hashlib.sha256(receipt.read_bytes()).hexdigest()}}))
+   files={p.relative_to(owner).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()for p in tree.rglob('*')if p.is_file()}
+   (owner/'manifest.json').write_text(json.dumps({'files':files}))
+   self.assertFalse(_is_active_archive_map(root,sidecar))
+   receipt.write_text('{"changed":true}')
+   with self.assertRaises(ValueError):_is_active_archive_map(root,sidecar)
+   receipt.write_text('{}');(folder/'extra.json').write_text('{}')
+   with self.assertRaises(ValueError):_is_active_archive_map(root,sidecar)
+ def test_frozen_map_rejects_rebased_document_even_when_owner_rehashed(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   root=Path(tmp);owner=root/'catalogue/investigations/example';tree=owner/'frozen-sources';tree.mkdir(parents=True)
+   sidecar=tree/'source-archive-map.json';sidecar.write_text(json.dumps({'documents':{'catalogue/investigations/example/frozen-sources/missing.json':'0'*64}}))
+   (owner/'manifest.json').write_text(json.dumps({'files':{'frozen-sources/source-archive-map.json':hashlib.sha256(sidecar.read_bytes()).hexdigest()}}))
+   with self.assertRaises(ValueError):_is_active_archive_map(root,sidecar)
+ def test_content_addressed_map_copy_cannot_be_altered(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   root=Path(tmp);data=b'{}';digest=hashlib.sha256(data).hexdigest();p=root/'catalogue/source-snapshots'/digest/'catalogue/example/source-archive-map.json';p.parent.mkdir(parents=True);p.write_bytes(data)
+   self.assertFalse(_is_active_archive_map(root,p));p.write_bytes(b'bad')
+   with self.assertRaises(ValueError):_is_active_archive_map(root,p)
+

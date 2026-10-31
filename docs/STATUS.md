@@ -4,9 +4,12 @@ Nine local runnable drafts and five hosted models remain distinct from reviewed
 scientific admission. The exact browser-loading rollout and observable-only q
 correction are installed locally; see [rollout results](reviews/browser-loading-rollout-v1/RESULTS.md).
 Older progress entries below are historical. No push or deployment has occurred.
-The broad historical archive suite has 15 remaining preexisting binding failures
-after the native DP correction (previously 19);
-this checkpoint does not claim that suite is green.
+The [historical archive-coverage repair](reviews/historical-archive-coverage-v1/README.md)
+closes the remaining 15 coverage failures: 13 live document pins and two frozen
+namespace mismatches. All 14 archive tests and 45 focused evidence/archive
+regressions pass. Original receipt and frozen source bytes are preserved;
+separate source-availability gaps remain unresolved. This is not a full-project
+or scientific-admission pass.
 
 The [bounded DP Wasm/package check](reviews/dp-dilatancy-web-v1/README.md)
 passes 83 unchanged DP references, 45 model/protocol pairs and the existing

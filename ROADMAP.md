@@ -55,8 +55,11 @@ remain open. This source-only task adds no material execution or new framework.
 
 The immediate six-model/SANISAND and Terracotta goals remain unchanged. The first
 release targets twenty formulations; the paper's 50+ planning ambition is not a
-prerequisite for this increment. Mohr–Coulomb browser integration and historical
-archive repairs remain queued with preserved checkpoints. Complete a reviewed
+prerequisite for this increment. Mohr–Coulomb browser integration remains queued
+with its preserved checkpoint. The [bounded archive-coverage repair](docs/reviews/historical-archive-coverage-v1/README.md)
+is complete: the 15 remaining coverage failures are closed, with original bytes
+and reverse bindings preserved. Separate legacy source-availability gaps remain
+open. Complete a reviewed
 figure/table and the corresponding website evidence summary before broadening
 numerical work. Deployment still needs a fresh explicit instruction.
 
