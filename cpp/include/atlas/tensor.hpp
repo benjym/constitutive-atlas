@@ -37,6 +37,27 @@ inline double aexp(double a){return std::exp(a);}
 inline Jet aexp(const Jet&a){return unary(a,std::exp(a.v),std::exp(a.v));}
 inline double alog(double a){return std::log(a);}
 inline Jet alog(const Jet&a){return unary(a,std::log(a.v),1/a.v);}
+// Stable scalar log(1+x), with full derivative and failure checks.
+inline constexpr const char* scalar_log1p_version = "scalar-log1p-libm-checked-v1";
+inline bool scalar_log1p_checked(double a,double& out) {
+    if(!finite_value(a) || !(a > -1.)) return false;
+    const double candidate=std::log1p(a);
+    if(!finite_value(candidate)) return false;
+    out=candidate; return true;
+}
+inline bool scalar_log1p_checked(const Jet& a,Jet& out) {
+    if(!finite_value(a) || !(a.v > -1.)) return false;
+    Jet candidate(std::log1p(a.v));
+    const double denominator=1.+a.v;
+    for(int i=0;i<max_derivatives;++i) candidate.d[i]=a.d[i]/denominator;
+    if(!finite_value(candidate)) return false;
+    out=candidate; return true;
+}
+template<class T>T scalar_log1p_or_mark(const T& a,bool& ok) {
+    T result{};
+    if(!scalar_log1p_checked(a,result)) ok=false;
+    return result;
+}
 inline double asin(double a){return std::sin(a);}
 inline Jet asin(const Jet&a){return unary(a,std::sin(a.v),std::cos(a.v));}
 inline double acos(double a){return std::cos(a);}

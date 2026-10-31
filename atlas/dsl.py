@@ -9,6 +9,7 @@ import math
 import re
 from dataclasses import dataclass
 from fractions import Fraction
+from .scalar_math import log1p as checked_log1p
 
 ZERO = (Fraction(0),) * 4
 PRESSURE = (Fraction(1), Fraction(-1), Fraction(-2), Fraction(0))
@@ -108,7 +109,7 @@ def tensor_expm(a):
 
 
 FUNCTIONS = {"sym": lambda *values: Sym(tuple(values)), "sqrt": math.sqrt, "exp": math.exp, "log": math.log,
-             "sin": math.sin, "cos": math.cos, "abs": abs,
+             "log1p": checked_log1p, "sin": math.sin, "cos": math.cos, "abs": abs,
              "min": min, "max": max, "trace": trace, "dev": dev,
              "dot": dot, "norm": lambda a: math.sqrt(dot(a, a)),
              "cube_trace": cube_trace, "tensor_square": tensor_square, "expm": tensor_expm}
@@ -204,7 +205,7 @@ def infer(node, symbols):
             raise ValidationError(f"{name} requires scalar")
         if name in ("min", "max") and a != args[1]:
             raise ValidationError(f"{name} arguments must have matching dimensions")
-        if name in ("exp", "log", "sin", "cos") and a.dim != ZERO:
+        if name in ("exp", "log", "log1p", "sin", "cos") and a.dim != ZERO:
             raise ValidationError(f"{name} requires dimensionless argument")
         return Type(dim=tuple(x/2 for x in a.dim)) if name == "sqrt" else a
     raise ValidationError(f"unsupported syntax: {ast.dump(node)}")
@@ -254,6 +255,7 @@ def cpp(node):
         return f"({cpp(node.left)} {op} {cpp(node.comparators[0])})"
     if isinstance(node,ast.Call):
         name=node.func.id
+        if name=='log1p': return f"atlas::scalar_log1p_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='expm': return f"atlas::tensor_expm_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='select': return f"({cpp(node.args[0])} ? {cpp(node.args[1])} : {cpp(node.args[2])})"
         name={'tensor_square':'atlas::tensor_square','sym':'make_sym','min':'amin','max':'amax','sqrt':'asqrt','exp':'aexp','log':'alog','sin':'asin','cos':'acos','abs':'aabs'}.get(name,name)

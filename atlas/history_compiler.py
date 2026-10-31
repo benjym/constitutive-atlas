@@ -30,7 +30,9 @@ def _expression(node, symbols):
         value = f'({emit(node.left)} {op} {emit(node.comparators[0])})'
     elif isinstance(node, ast.Call):
         name = node.func.id
-        if name == 'expm':
+        if name == 'log1p':
+            value = f'([&](){{ double result; if (!atlas::scalar_log1p_checked({emit(node.args[0])},result)) throw std::runtime_error("unsupported/nonfinite history log1p"); return result; }}())'
+        elif name == 'expm':
             value = f'([&](){{ Sym<double> result; if (!atlas::tensor_expm_checked({emit(node.args[0])},result)) throw std::runtime_error("unsupported/nonfinite history expm"); return result; }}())'
         elif name == 'select':
             value = f'({emit(node.args[0])} ? {emit(node.args[1])} : {emit(node.args[2])})'

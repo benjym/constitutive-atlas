@@ -40,8 +40,8 @@ def field_type(field):
 
 
 def validate_scale_operators(node):
-    if any(isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='expm' for n in ast.walk(node)):
-        raise ValidationError('expm is unsupported in state/observable scale expressions; use an explicit positive reference scale')
+    if any(isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id in ('expm','log1p') for n in ast.walk(node)):
+        raise ValidationError('checked expm/log1p are unsupported in state/observable scale expressions; use an explicit positive reference scale')
 
 
 def physical_time(model):

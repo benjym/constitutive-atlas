@@ -70,6 +70,9 @@ jobs:
           python tools/expm_study.py --binary build/atlas_expm_probe --output "$RUNNER_TEMP/expm-native.json"
           node tools/test_expm_wasm.mjs --native-report "$RUNNER_TEMP/expm-native.json" --wasm build-wasm/expm-fixtures.js --output "$RUNNER_TEMP/expm-wasm.json"
           python tools/expm_study.py --verify "$RUNNER_TEMP/expm-wasm.json" --native-report "$RUNNER_TEMP/expm-native.json"
+          python -m tools.log1p_study --binary build/atlas_log1p_probe --output "$RUNNER_TEMP/log1p-native.json"
+          node tools/test_log1p_wasm.mjs --native-report "$RUNNER_TEMP/log1p-native.json" --wasm build-wasm/log1p-fixtures.js --output "$RUNNER_TEMP/log1p-wasm.json"
+          python -m tools.log1p_study --report "$RUNNER_TEMP/log1p-wasm.json" --native-report "$RUNNER_TEMP/log1p-native.json" --output "$RUNNER_TEMP/log1p-assessed.json"
           python tools/fetch_data.py --approved-only
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments

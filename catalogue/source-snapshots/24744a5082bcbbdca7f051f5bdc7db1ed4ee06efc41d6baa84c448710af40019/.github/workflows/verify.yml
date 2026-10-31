@@ -1,0 +1,100 @@
+name: Verify and publish Constitutive Atlas
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m atlas.cli validate
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build build --parallel 2
+      - run: ctest --test-dir build --output-on-failure
+      - name: Verify recorded-path JSON replay
+        env:
+          ATLAS_RECORDED_SOLVER: ${{ github.workspace }}/build/atlas_solver
+        run: python -m unittest tests.test_experiment_replay tests.test_recorded_api tests.test_recorded_path tests.test_web_recorded tests.test_refinement tests.test_isotropic_reference tests.test_resolution_diagnosis tests.test_recorded_restarts -v
+  wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+      - name: Install the official pinned Emscripten SDK
+        run: |
+          git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+          "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+      - name: Build and compare native and Wasm
+        shell: bash
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --parallel 2
+          emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-wasm --parallel 2
+          node tools/test_experiments.mjs
+          node tools/test_wasm.mjs
+          node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+          node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+          python -m tools.history_cases --output "$RUNNER_TEMP/history-cases.json"
+          node tools/test_history_wasm.mjs --cases "$RUNNER_TEMP/history-cases.json"
+          node tools/test_time_wasm.mjs
+          node tools/test_schedule_wasm.mjs
+          node tools/test_terracotta_wasm.mjs
+          node tools/test_terracotta_creep_wasm.mjs --output "$RUNNER_TEMP/terracotta-creep-parity.json"
+          python -m tools.verify_terracotta_creep_wasm "$RUNNER_TEMP/terracotta-creep-parity.json"
+          python -m tools.clay2013_integration_study --output "$RUNNER_TEMP/clay2013-native.json"
+          node tools/test_clay2013_wasm.mjs --native-report "$RUNNER_TEMP/clay2013-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/clay2013-wasm.json"
+          python -m tools.verify_clay2013_wasm "$RUNNER_TEMP/clay2013-wasm.json"
+          python -m tools.clay2013_nonisotropic_study --output "$RUNNER_TEMP/clay2013-path-native.json"
+          node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/clay2013-path-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/clay2013-path-wasm.json"
+          python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/clay2013-path-wasm.json"
+          python -m tools.gis2024_rate_study --output "$RUNNER_TEMP/gis2024-native.json"
+          node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/gis2024-native.json" --wasm build-wasm/gis2024.js --output "$RUNNER_TEMP/gis2024-wasm.json"
+          python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/gis2024-wasm.json"
+          python -m tools.gis2024_integration_study --output "$RUNNER_TEMP/gis2024-path-native.json"
+          node tools/test_gis2024_paths_wasm.mjs --native-report "$RUNNER_TEMP/gis2024-path-native.json" --wasm build-wasm/gis2024.js --output "$RUNNER_TEMP/gis2024-path-wasm.json"
+          python -m tools.verify_gis2024_paths "$RUNNER_TEMP/gis2024-path-wasm.json"
+          python tools/expm_study.py --binary build/atlas_expm_probe --output "$RUNNER_TEMP/expm-native.json"
+          node tools/test_expm_wasm.mjs --native-report "$RUNNER_TEMP/expm-native.json" --wasm build-wasm/expm-fixtures.js --output "$RUNNER_TEMP/expm-wasm.json"
+          python tools/expm_study.py --verify "$RUNNER_TEMP/expm-wasm.json" --native-report "$RUNNER_TEMP/expm-native.json"
+          python tools/fetch_data.py --approved-only
+          python tools/build_web.py
+          node tools/test_experiments.mjs --built-assets web/dist/experiments
+      - name: Configure GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@v6
+      - name: Upload tested website
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: web/dist
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: [native, wasm]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

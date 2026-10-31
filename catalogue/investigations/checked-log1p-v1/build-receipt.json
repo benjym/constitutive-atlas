@@ -1,0 +1,15 @@
+{
+  "version": "checked-log1p-local-build-receipt-v1",
+  "baseline_commit": "650b6c498f82e264c225426b07688df8d946fd99",
+  "commands": [
+    "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build build --target atlas_log1p_probe --parallel 1",
+    "cmake -S . -B build-wasm",
+    "cmake --build build-wasm --target atlas_log1p_probe --parallel 1"
+  ],
+  "native_build_type": "Release",
+  "native_cxx_compiler": "/usr/bin/c++",
+  "wasm_build_type": "Release",
+  "wasm_toolchain": "Emscripten 6.0.8",
+  "execution": "Both targets built serially; native CLI and Wasm C ABI exercised against independent reference. Artifact hashes in raw reports are receipts, not reproducible-build attestation."
+}

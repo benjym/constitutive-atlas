@@ -1,0 +1,19 @@
+# Independent checked-log1p review
+
+No substantive blocker found for this bounded scalar-operator milestone. Reviewed the current core Python/DSL/model/history lowering, C++ primitive and synthetic context probe, independent Decimal oracle, Python transcript verifier, Node collector, and focused tests. No native/Wasm calls, builds or repository edits were made.
+
+Core: scalar shape/dimension and arity checks are retained; Boolean/tensor arguments are rejected. Python admits only finite real scalar x>-1. C++ checks the primal and all38 input derivative channels before evaluation and checks all output channels. Transactional assignment preserves the caller's output on failure, including aliases. The Jet derivative uses seed/(1+x), avoiding unnecessary reciprocal-times-seed overflow; its denominator is positive and finite for every admitted binary64 x. It is the derivative formula evaluated in binary64, not an exact-arithmetic derivative guarantee. Failed checked operations retain the sticky failure flag; history lowering throws before committing. Lazy select remains lazy. Scale contexts are explicitly rejected.
+
+Evidence: fresh Decimal regeneration binds the actual binary64 inputs, including subnormals and the closest value above -1. All38 derivative and6x38 schema channels are independently assessed with a four-step componentwise budget and exact zero/nonzero identity. Signed zero is deliberately represented by the separate Boolean flag because JSON numbers can erase its sign. Request text and hex bind the input sign. Parser and domain failures are distinguished, Boolean aliases are rejected, and every Wasm rejection has a structurally and numerically checked same-instance recovery. Standalone parity reassesses both complete reports before comparison and binds the native transcript SHA.
+
+Independent Python reassessment of the parent's retained native and Wasm reports passed38valid/10invalids each. Maximum native errors were0/1/0/1 ULP for primitive value/derivative/schema value/schema derivative; Wasm was1/1/2/1. Maximum native-Wasm parity distance was2 ULP. All5 study corruption/policy groups,6 Decimal-oracle groups and8 staged DSL/history groups passed. See verification.json for current file/report hashes and complete recorded assessments. I did not rely on the stored assessment fields.
+
+Limits to retain in docs and the milestone manifest:
+
+- The four-ULP policy is a measured acceptance budget for this corpus/platform pair, not a proven universal bound for every libm or arbitrary input.
+- The independent numerical derivative corpus uses unit seeds in each of38channels. Additional fixed C++ contexts cover last-channel NaN, overflow rejection and a large finite seed. This is not exhaustive accuracy evidence for arbitrary seeded AD products.
+- The27 context booleans are fixed synthetic scenario checks repeated on each call, not27 independently varied scenario families per corpus input. They support expression-context and transaction plumbing; constitutive integration is outside scope.
+- The primitive accepts finite rounded outputs, including a seeded derivative that rounds/underflows to zero. The unseeded corpus's zero/nonzero rule must not be generalized to a claim that the primitive rejects all lost nonzero derivative increments.
+- Retain the final source/fixture/runner/test hashes, build commands/settings and actual binary/loader receipts before publishing this milestone. Recorded binary hashes alone do not prove which source generated them. Existing historical archives establish original identity, not current-kernel validity.
+
+The parent plans separate SCALAR_LOG1P documentation and bounded milestone evidence; no constitutive-model admission follows from this review. The original expm receipt documents and inventory must remain unchanged, with historical sources resolved through the new sidecars.

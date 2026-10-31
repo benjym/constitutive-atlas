@@ -31,8 +31,9 @@ class ExpmEvidence(unittest.TestCase):
   from tools.expm_study import ROOT, read, verify_parity
   packet=ROOT/'catalogue/investigations/symmetric-expm-v1'
   manifest=read(packet/'manifest.json')
+  from atlas.evidence import checked_receipt
   for path,pin in manifest['files'].items():
-   with self.subTest(path=path):self.assertEqual(sha(ROOT/path),pin)
+   with self.subTest(path=path):checked_receipt(ROOT,"catalogue/investigations/symmetric-expm-v1/manifest.json",path,pin)
   native=read(packet/'native.json');wasm=read(packet/'wasm.json')
   self.assertEqual(assess(native)['cases'],44);self.assertEqual(assess(wasm)['cases'],44)
   self.assertLessEqual(verify_parity(wasm,native,packet/'native.json'),2e-13)
