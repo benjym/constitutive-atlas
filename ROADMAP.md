@@ -30,6 +30,14 @@ is open. Source-to-definition and initialization review come before new fits or
 compiled studies. No new model family, optimizer, data campaign or schema feature
 is part of this cycle unless it demonstrably blocks the chosen comparison.
 
+The [published TMD2 reference](docs/benchmarks/kfs-tmd2-reference-v1/README.md)
+is now frozen and source-cross-checked. Three native requests were rejected
+before material integration by the existing 10% laboratory amplitude cap; the
+published range remains 25%. The next bounded task is an explicit research-only
+range allowance with preflight and a separate follow-up freeze, then the
+figure/table. No constitutive convergence or source-agreement claim follows
+from the rejected requests. Historical strain conversion remains qualified.
+
 The immediate six-model/SANISAND and Terracotta goals remain unchanged. The first
 release targets twenty formulations; the paper's 50+ planning ambition is not a
 prerequisite for this increment. Mohr–Coulomb browser integration and historical

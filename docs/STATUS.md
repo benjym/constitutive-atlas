@@ -13,11 +13,15 @@ both runs' local code/model/data/executable snapshots, with no new fits, builds
 or solver calls. It exposes input-information inequalities, unresolved initial
 void ratios and current/archived model differences. M1/M4 and independent review
 remain open. The VW96 input crosswalk is complete: only six parameter labels and sources
-differ from its archived definition; engine equivalence is not claimed. The next
-task is the strain-convention/reference freeze for the [selected published
-TMD2 IGS case](benchmarks/kfs-published-case-selection-v1/README.md). Complete
-material constants and nominal source initialization are pinned; the full 25%
-range is retained. BENCH-01/02 remain open and no runtime observations were made.
+differ from its archived definition; engine equivalence is not claimed. The [TMD2 reference packet](benchmarks/kfs-tmd2-reference-v1/README.md) now pins
+an operational strain convention and extracted model curves with prospective
+bounds, supported by six independent raster spot checks. Exact historical strain
+conversion remains unverified. Three frozen 25% native requests were rejected by
+the existing 10% laboratory API cap before material integration; no source,
+refinement or experimental-error result exists. No builds, fits or fourth call
+were made. The original assessor's empty-prefix errors are also retained.
+Next is a bounded research-only range allowance and preflight, then a distinct
+frozen follow-up study. BENCH-01/02 and scientific admission remain open.
 New model integration and general numerical expansion are deferred for this cycle.
 
 # Latest progress — browser provenance prototype; invariant failure retained
