@@ -1,0 +1,66 @@
+{
+  "schema_version": "0.1",
+  "id": "trace-state-scale-lazy-else",
+  "name": "trace-state-scale-lazy-else",
+  "status": "draft",
+  "family": "engine verification only",
+  "description": "Synthetic expression context fixture; not a constitutive model.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas",
+      "role": "synthetic algebra verification specification",
+      "locator": "Checked symmetric scalar log1p conformance, not literature model"
+    }
+  ],
+  "parameters": {
+    "K": {
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "unit": "Pa"
+    },
+    "r": {
+      "default": 1,
+      "min": -1,
+      "max": 1e+308,
+      "unit": "1"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "K*(select(1<0,trace(sym(r,r,r,0,0,0)),1))",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "A",
+      "shape": "sym",
+      "unit": "1",
+      "scale": "1",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "derived": [],
+  "domain": [],
+  "integration": "rate",
+  "equations": {
+    "sigma": "0*K*I",
+    "A": "0*I"
+  }
+}

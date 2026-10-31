@@ -75,12 +75,32 @@ I = Sym((1., 1., 1., 0., 0., 0.))
 
 
 def trace(a):
-    return sum(a.v[:3])
+    """Nearest-even exact sum of binary64 diagonals; validate full tensor."""
+    if not isinstance(a, Sym) or len(a.v) != 6:
+        raise ValidationError("trace requires a six-component symmetric tensor")
+    values = []
+    for value in a.v:
+        if type(value) not in (int, float):
+            raise ValidationError("trace requires finite real components")
+        try:
+            value = float(value)
+        except (OverflowError, ValueError) as exc:
+            raise ValidationError("trace requires finite real components") from exc
+        if not math.isfinite(value):
+            raise ValidationError("trace requires finite real components")
+        values.append(value)
+    try:
+        result = float(sum((Fraction.from_float(v) for v in values[:3]), Fraction()))
+    except OverflowError as exc:
+        raise ValidationError("trace final sum overflows binary64") from exc
+    return 0. if result == 0. else result
 
 
 def dev(a):
-    return a - I * (trace(a) / 3)
-
+    result = a - I * (trace(a) / 3)
+    if not all(math.isfinite(v) for v in result.v):
+        raise ValidationError("deviator result is nonfinite")
+    return result
 
 def dot(a, b):
     return sum(x * y for x, y in zip(a.v, b.v))
@@ -255,6 +275,7 @@ def cpp(node):
         return f"({cpp(node.left)} {op} {cpp(node.comparators[0])})"
     if isinstance(node,ast.Call):
         name=node.func.id
+        if name in ('trace', 'dev'): return f"atlas::{name}_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='log1p': return f"atlas::scalar_log1p_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='expm': return f"atlas::tensor_expm_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='select': return f"({cpp(node.args[0])} ? {cpp(node.args[1])} : {cpp(node.args[2])})"
