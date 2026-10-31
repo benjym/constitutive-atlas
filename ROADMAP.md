@@ -20,6 +20,14 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 ## Delivery focus — 1 November 2026
 
+The [current-source TMD7 replay](docs/benchmarks/current-kfs-tmd7-v1/README.md)
+now connects one complete existing development window to the pinned current
+executable. All seven frozen compatibility gates pass across 44 observations,
+with unchanged parameter/state/control policy and reconstructed full predictions.
+No new build, fit or refinement sweep ran; scientific review and rights remain
+open. Stop numerical expansion and expose the limited current-build connection
+in the provisional website evidence links next.
+
 A [bounded synthetic VW96 comparison](docs/benchmarks/current-archived-vw96-v1/README.md)
 now passes for the pinned current and archived executables: exact raw-law
 responses, zero-increment preservation and six drained/undrained/reversal

@@ -1,5 +1,16 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [current-source TMD7 development replay](benchmarks/current-kfs-tmd7-v1/README.md)
+passes all seven frozen software compatibility gates over the complete existing
+44-observation development window. 43 segments/44 current processes preserve the
+locked file initialization/vector, acquired order and caller ceiling. Maximum
+stress difference is 1.747e-10 Pa; both runs use 125 caller increments, 380 substeps
+and 65 rejections. Full predictions and scalar results reconstruct from 88 receipts;
+six evidence tests pass, none skipped. Raw curves stay private. This connects
+one development prediction to the traceable current build, without general
+equivalence, scientific admission or data-rights claims. Stop numerical expansion
+here; surface this qualified connection in provisional website evidence next.
+
 The [bounded current/archived VW96 comparison](benchmarks/current-archived-vw96-v1/README.md)
 passes its prospective synthetic compatibility gates: 22 serial processes, exact
 raw-law responses, unchanged zero increments and six drained/undrained/reversal
