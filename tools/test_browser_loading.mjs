@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdtempSync,existsSync} from 'node:fs';
-import {resolve} from 'node:path';
+import {resolve,join} from 'node:path';
+import {tmpdir} from 'node:os';
 import {pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {createLoading,exportRun,importRunDocument} from '../web/loading.mjs';
 import {runLaboratory,normalizeSettings,settingsCsv} from '../web/numerics.mjs';
-const [native,wasmdir,outfile]=process.argv.slice(2),tmp=mkdtempSync('/private/tmp/atlas-browser-loading-wire-');let serial=0;
+const [native,wasmdir,outfile]=process.argv.slice(2),tmp=mkdtempSync(join(tmpdir(),'atlas-browser-loading-wire-'));let serial=0;
 assert.ok(!existsSync(outfile)&&!existsSync(outfile+'.raw.json'),'Preserve existing observations');
 const rawJournal=[];
 function raw(role,name,args,output){rawJournal.push({role,name,args,raw:output});writeFileSync(outfile+'.raw.json',JSON.stringify(rawJournal)+'\n');return output;}

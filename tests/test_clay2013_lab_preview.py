@@ -1,4 +1,5 @@
 """Verify limited clay draft identity, preserved failures and frozen acceptance."""
+from tests.historical_sources import preserved_model
 import unittest,json,importlib.util,hashlib,shutil,tempfile
 from pathlib import Path
 from atlas.model import ROOT,load,defaults
@@ -25,7 +26,7 @@ class Clay2013LaboratoryPreview(unittest.TestCase):
   requests=json.loads((S/'requests.json').read_text());default=next(x for x in requests if x['id']=='actual-consumer-default');legacy=next(x for x in requests if x['id']=='legacy-100kPa-drained-incompatible')
   self.assertTrue(default['initial'].startswith('10000,10000,10000,'));self.assertTrue(legacy['initial'].startswith('100000,100000,100000,'));self.assertIs(legacy['expected_ok'],False)
  def test_existing_definitions_and_catalogue_entries_are_preserved(self):
-  for p in(S/'models').glob('*.json'):self.assertEqual(p.read_bytes(),(ROOT/'models'/p.name).read_bytes())
+  for p in(S/'models').glob('*.json'):self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name))
   rows=json.loads((ROOT/'catalogue/manifest.json').read_text())['models'];self.assertEqual(len(rows),32)
   entry=next(x for x in rows if x['id']=='hypoplastic-clay-2013');self.assertIs(entry['executable'],True);self.assertEqual(entry['status'],'draft')
  def test_assessor_rejects_corrupt_success_and_failed_transaction_after_rebinding(self):
