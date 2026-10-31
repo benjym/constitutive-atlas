@@ -1,5 +1,14 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [full factorial refinement study](benchmarks/kfs-propagation-refinement-v1/README.md)
+**fails its prospective gate**: all64adjacent output changes are below1%of the
+matched calibration-response shift (maximum0.840902%), but four TMD7/TMD9 q
+nonincrease checks fail under both vectors. All32replays/1284segments succeed;
+1316new+658coarse receipts reconstruct offline. Exact scalar failure replay,
+four corruption witnesses and23software tests pass. This completes study
+execution/audit only, not numerical closure. Diagnose caller/adaptive partitions
+from the retained receipts next; no new build, fit, deployment or admission.
+
 The [TMD13 evaluation propagation](benchmarks/kfs-tmd13-evaluation-propagation-v1/README.md)
 now measures calibration-only and combined initialization effects at frozen
 calibration-selected vectors. Sixteen serial replays/642segments succeed; six

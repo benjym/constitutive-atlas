@@ -307,6 +307,16 @@ single-resolution development sensitivity, not source selection or admission.
 Next resolve output refinement for the newly selected alternative vector;
 independent review and the original source conflict remain open.
 
+The [complete factorial refinement study](docs/benchmarks/kfs-propagation-refinement-v1/README.md)
+now covers both vectors and all sixteen cases at two finer increment limits.
+Its frozen gate **fails**: all64adjacent comparisons meet1%separation (maximum
+0.840902%of the matched calibration-response shift), but TMD7/TMD9 q changes are
+nonmonotone under both vectors. The32replays succeed;1316new+658coarse receipts
+reconstruct offline, exact scalar failure replay/four corruptions/23software
+tests pass. No threshold changes or numerical admission follow. The next bounded
+action is a saved-receipt diagnosis of caller/adaptive partition behaviour for
+those four failures before any separately frozen further compiled study.
+
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
 ## 10. M5 — expand toward twenty executable formulations
