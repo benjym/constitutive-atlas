@@ -234,3 +234,14 @@ if(EMSCRIPTEN)
     "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-fexceptions" "-sFILESYSTEM=0" "--no-entry")
 endif()
 # No automatic native execution or test registration.
+
+# Integrate after the existing atlas_barodesy_models shared generation target.
+# No second custom command and no automatic native execution.
+add_executable(atlas_barodesy_solver cpp/main.cpp)
+add_dependencies(atlas_barodesy_solver atlas_barodesy_models)
+target_include_directories(atlas_barodesy_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/barodesy-rate-generated")
+if(EMSCRIPTEN)
+  target_compile_options(atlas_barodesy_solver PRIVATE -fexceptions)
+  set_target_properties(atlas_barodesy_solver PROPERTIES OUTPUT_NAME "barodesy-isotropic" SUFFIX ".js")
+  target_link_options(atlas_barodesy_solver PRIVATE ${ATLAS_WASM_OPTIONS})
+endif()
