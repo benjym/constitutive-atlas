@@ -193,3 +193,44 @@ if(EMSCRIPTEN)
 else()
   add_test(NAME atlas_log1p_context COMMAND atlas_log1p_probe "0")
 endif()
+
+# Suggested additive isolated target. Root reviews/inserts after existing targets.
+# Does not alter normal public models/*.json generation or publish research assets.
+file(GLOB BARODESY_RATE_MODELS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research/barodesy2017/*.json")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/barodesy-rate-generated/models.hpp" "${CMAKE_BINARY_DIR}/barodesy-rate-generated/models.json"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/barodesy-rate-generated" "${CMAKE_SOURCE_DIR}/models/research/barodesy2017"
+  DEPENDS ${BARODESY_RATE_MODELS} atlas/dsl.py atlas/scalar_math.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_custom_target(atlas_barodesy_models DEPENDS "${CMAKE_BINARY_DIR}/barodesy-rate-generated/models.hpp" "${CMAKE_BINARY_DIR}/barodesy-rate-generated/models.json")
+add_executable(atlas_barodesy_rate_probe tests/barodesy_rate_driver.cpp)
+add_dependencies(atlas_barodesy_rate_probe atlas_barodesy_models)
+target_include_directories(atlas_barodesy_rate_probe PRIVATE cpp/include "${CMAKE_BINARY_DIR}/barodesy-rate-generated")
+target_compile_options(atlas_barodesy_rate_probe PRIVATE -Wall -Wextra -Wno-unused-variable)
+if(EMSCRIPTEN)
+  target_compile_options(atlas_barodesy_rate_probe PRIVATE -fexceptions)
+  set_target_properties(atlas_barodesy_rate_probe PROPERTIES OUTPUT_NAME "barodesy-rates" SUFFIX ".js")
+  target_link_options(atlas_barodesy_rate_probe PRIVATE
+    "-sMODULARIZE=1" "-sEXPORT_ES6=1" "-sEXPORT_NAME=createBarodesyRates"
+    "-sENVIRONMENT=web,worker,node" "-sALLOW_MEMORY_GROWTH=1"
+    "-sMAXIMUM_MEMORY=268435456" "-sSTACK_SIZE=1048576"
+    "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-fexceptions" "-sFILESYSTEM=0" "--no-entry")
+endif()
+# No automatic native execution is introduced by this suggestion.
+
+# Add after the isolated rate target/custom generation from prior packet.
+# Shares its generated models.hpp, not the production public catalogue.
+add_executable(atlas_barodesy_material_ad_probe tests/barodesy_material_ad_driver.cpp)
+add_dependencies(atlas_barodesy_material_ad_probe atlas_barodesy_models)
+target_include_directories(atlas_barodesy_material_ad_probe PRIVATE cpp/include "${CMAKE_BINARY_DIR}/barodesy-rate-generated")
+target_compile_options(atlas_barodesy_material_ad_probe PRIVATE -Wall -Wextra -Wno-unused-variable)
+if(EMSCRIPTEN)
+  target_compile_options(atlas_barodesy_material_ad_probe PRIVATE -fexceptions)
+  set_target_properties(atlas_barodesy_material_ad_probe PROPERTIES OUTPUT_NAME "barodesy-material-ad" SUFFIX ".js")
+  target_link_options(atlas_barodesy_material_ad_probe PRIVATE
+    "-sMODULARIZE=1" "-sEXPORT_ES6=1" "-sEXPORT_NAME=createBarodesyMaterialAD"
+    "-sENVIRONMENT=web,worker,node" "-sALLOW_MEMORY_GROWTH=1"
+    "-sMAXIMUM_MEMORY=268435456" "-sSTACK_SIZE=1048576"
+    "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-fexceptions" "-sFILESYSTEM=0" "--no-entry")
+endif()
+# No automatic native execution or test registration.

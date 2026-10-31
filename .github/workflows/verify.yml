@@ -73,6 +73,12 @@ jobs:
           python -m tools.log1p_study --binary build/atlas_log1p_probe --output "$RUNNER_TEMP/log1p-native.json"
           node tools/test_log1p_wasm.mjs --native-report "$RUNNER_TEMP/log1p-native.json" --wasm build-wasm/log1p-fixtures.js --output "$RUNNER_TEMP/log1p-wasm.json"
           python -m tools.log1p_study --report "$RUNNER_TEMP/log1p-wasm.json" --native-report "$RUNNER_TEMP/log1p-native.json" --output "$RUNNER_TEMP/log1p-assessed.json"
+          python -m tools.barodesy2017_rate_study --native build/atlas_barodesy_rate_probe --output "$RUNNER_TEMP/barodesy-native.json"
+          node tools/test_barodesy2017_rates_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-native.json" --wasm build-wasm/barodesy-rates.js --output "$RUNNER_TEMP/barodesy-wasm.json"
+          python -m tools.barodesy2017_rate_study --verify "$RUNNER_TEMP/barodesy-wasm.json" --native-report "$RUNNER_TEMP/barodesy-native.json"
+          python -m tools.barodesy2017_material_ad --native build/atlas_barodesy_material_ad_probe --output "$RUNNER_TEMP/barodesy-ad-native.json"
+          node tools/test_barodesy2017_material_ad_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-ad-native.json" --wasm build-wasm/barodesy-material-ad.js --output "$RUNNER_TEMP/barodesy-ad-wasm.json"
+          python -m tools.barodesy2017_material_ad --verify "$RUNNER_TEMP/barodesy-ad-wasm.json" --native-report-path "$RUNNER_TEMP/barodesy-ad-native.json"
           python tools/fetch_data.py --approved-only
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments

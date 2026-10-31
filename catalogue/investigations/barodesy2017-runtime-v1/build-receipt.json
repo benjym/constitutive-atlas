@@ -1,0 +1,20 @@
+{
+  "version": "barodesy2017-runtime-build-receipt-v1",
+  "baseline_commit": "de72f30616680083540d6643db449a286fbc8c24",
+  "build_type": "Release",
+  "native_compiler": "/usr/bin/c++",
+  "wasm_toolchain": "Emscripten 6.0.8",
+  "serial_targets": [
+    "atlas_barodesy_rate_probe",
+    "atlas_barodesy_material_ad_probe"
+  ],
+  "commands": [
+    "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build build --target atlas_barodesy_rate_probe --parallel 1",
+    "cmake --build build --target atlas_barodesy_material_ad_probe --parallel 1",
+    "cmake -S . -B build-wasm",
+    "cmake --build build-wasm --target atlas_barodesy_rate_probe --parallel 1",
+    "cmake --build build-wasm --target atlas_barodesy_material_ad_probe --parallel 1"
+  ],
+  "scope": "One build at a time. Artifact hashes in raw reports are receipts, not reproducible-build attestation. No public admission or finite integration claim."
+}
