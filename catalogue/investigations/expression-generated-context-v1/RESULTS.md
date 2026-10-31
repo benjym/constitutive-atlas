@@ -1,0 +1,7 @@
+# Observed generated v0.3 expression-context results
+
+Native and Wasm each match all10870 material rows and18 history rows against complete independently specified acceptance. Complete typed/finite-bit backend parity passes. This includes all six tensor components and38 derivative columns, poison/recovery, overflowed derivatives with finite input derivatives, eager min/predicate/reciprocal/exp masks, both lazy arms, numeric trace cancellation controls, reset guards/values, domain/initial/observable/check-only routing, state/observable scales and generated history rollback after a prepared phase.
+
+The original trace-generated-context-v1 finite-dev/overflowed-norm scale witness at r=1e308 now returns an entirely NaN scale vector, as frozen prospectively here; unselected lazy scale overflows remain accepted. Original trace v1/v2 evidence is untouched. No production algorithm or acceptance change followed these observations. The native build had no stderr; Emscripten configure emits its retained toolchain command. All compiled calls completed without observation stderr. Single-target builds ran serially, one job with EMCC_CORES=1.
+
+This establishes the bounded generated expression routes in README.md, not arbitrary future schema profiles, general loading/time-name handling, constitutive accuracy, material tangents or scientific admission. Separate solver-rollback-v1 verifies committed legacy/timed transactions. The combined engine work permits a new, separately frozen model-rate investigation; old failed model studies remain negative evidence.
