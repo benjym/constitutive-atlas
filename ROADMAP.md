@@ -250,6 +250,8 @@ archived. BENCH-03 local portability is now delivered by the [single-command rep
 
 ### Controlled study
 
+The [shared whole-test allocation contract](studies/kfs-development-v1/README.md) now checks calibration/evaluation separation and exact reservation-policy identity without loading responses. Its example reconstructs the existing completed development pilot; it is not a prospective final freeze and does not release reserved tests. CAL-01/02 remain open for the controlled study and its complete information/analysis choices.
+
 - [ ] **CAL-01:** Freeze whole-test calibration and evaluation IDs before optimization, stratified by relevant pressure, density and loading conditions. Keep all samples of a test together; record how previously inspected tests were used and avoid claiming blind evaluation of them.
 - [ ] **CAL-02:** Predefine tunable versus fixed parameters, bounds, initialization parameters, objective channels/scales, optimizer, seeds, stopping conditions, budgets and treatment of solver failures.
 - [ ] **CAL-03:** Implement calibration on the frozen calibration subset. Record every candidate evaluation and failure, not only the selected parameter vector.

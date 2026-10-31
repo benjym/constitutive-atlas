@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [shared study-allocation check](../studies/kfs-development-v1/README.md)
+validates whole-test separation and exact reservation-policy identity using only
+two metadata files. The historical development example preserves five unique
+calibration/six evaluation IDs and excludes fourteen reserved IDs. Nine new/five
+strict-reader tests pass. This is not a prospective final freeze; CAL-01/02,
+applicability and scientific review remain open. No fitting or manuscript edits.
+
 The [Original Cam Clay smooth reference](ingestion/original-cam-clay/smooth-reference-v1/README.md)
 adds three source-constraint RK4 paths/115points against the retained analytical
 solution. Frozen gates pass; finest scaled error1.09e-8 and refinement factors
