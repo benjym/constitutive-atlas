@@ -1,0 +1,55 @@
+{
+  "version": "tensor-trace-operator-prospective-v1",
+  "inputs": {
+    "docs/reviews/tensor-trace-implementation-v1/README.md": "72cf364e0690d921d4413d933f9e3d772e16b561293fc6a81a8358897de76aca",
+    "docs/reviews/tensor-trace-implementation-v1/check_source.py": "a311982071d47587ea6565eb48f33ffe2ba4a43552c0f9800699bf86303a9b41",
+    "docs/reviews/tensor-trace-implementation-v1/generate_fixtures.py": "533b5c2066baae0deb54a71648c2f2a864be4c5b1151b2f22d2324f9ec1ba582",
+    "docs/reviews/tensor-trace-implementation-v1/reviewed-inputs.json": "b6e3f9aa58f1732bafacc53ac70a410db594e8d35dbf4fe4a0ca01d8e29a223c",
+    "docs/reviews/tensor-trace-implementation-v1/source-checks.json": "2419451815b6a7d21b3635774a823087db15f99038a285fd996af4caad6f55b4",
+    "docs/reviews/tensor-trace-implementation-v1/tensor-integration.patch": "d3c61852e94697156220e002d41f6d05c1d023989848cc3446849a43a64ec121",
+    "docs/reviews/tensor-trace-implementation-v1/trace_accuracy_candidate.hpp": "5e2c187683372ec56aaeef5cd6aaf3b45ae9fe4605c64d5b728f291fad52d44c",
+    "docs/reviews/tensor-trace-implementation-v1/trace_fixtures.hpp": "0dbcc7870a03c7609c300e691ab956288a38107a88a834ad00e7accdf51e283b",
+    "docs/reviews/tensor-trace-implementation-v1/trace_probe.cpp": "2a83254657adef6d68f2f55db4ec074f19c19ef3c8b9cbc2416849aa51e862c7",
+    "docs/reviews/tensor-trace-implementation-v1/manifest.json": "83c35c1e3834e243041398fbc6ae9fbd7a467a1a07cd438560197d6b19966dd3",
+    "cpp/include/atlas/trace_accuracy.hpp": "5e2c187683372ec56aaeef5cd6aaf3b45ae9fe4605c64d5b728f291fad52d44c",
+    "cpp/include/atlas/tensor.hpp": "966a6a413b8ea4d50f400bc96860644774cabfb15f69e8bfec9c3fb215b7e144",
+    "cmake/operator-trace/CMakeLists.txt": "6315e62a60e212a4cee4c23aa654cc507778ba4cf6d34fd32bfa0ad344c396f5",
+    "docs/reviews/tensor-trace-accuracy-v1/corpus.json": "d6daed20f5a8f765f4ab7205032762fcba8a7ce6b8c9a671fe60a2d38c640226"
+  },
+  "contract": {
+    "rounding": "nearest-even of exact sum of actual binary64 diagonals; zero canonical positive",
+    "finite_final_despite_intermediate_overflow": true,
+    "nonfinite_or_final_overflow": "reject without destination mutation; compatibility trace returns nonfinite",
+    "tensor_finiteness": "all6 components, all38 Jet seed columns",
+    "primal_fixture_rows": 97,
+    "integrated_checks_without_rounding_mode_change": 751,
+    "additional_checks_if_alternate_mode_supported": 2,
+    "fixture_bits": "bitwise against independent Fraction-derived corpus",
+    "jet_derivative_columns": 38,
+    "jet_expected_magnitude_hex": "0x1.1bebdf578b2f4p-432",
+    "jet_sign": "positive even index, negative odd index",
+    "required_failures": 0,
+    "native_wasm": "all fixture rows and38 derivative bits identical; alternate fenv support may differ"
+  },
+  "build": {
+    "cmake_target": "atlas_trace_probe",
+    "parallel": 1,
+    "standard": "C++20",
+    "compile_options": [
+      "-fno-fast-math",
+      "-ffp-contract=off"
+    ],
+    "build_type": "Release",
+    "backends": [
+      "native",
+      "wasm"
+    ]
+  },
+  "scope": {
+    "native_wasm_compiled_observations_at_freeze": false,
+    "generated_DSL_context": false,
+    "constitutive_rates": false,
+    "integration": false,
+    "scientific_admission": false
+  }
+}

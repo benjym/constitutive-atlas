@@ -1,0 +1,7 @@
+# Tensor trace operator study v1 — prospective
+
+Frozen before compiled observations. This generic scalar/Jet operator probe tests97 independently Fraction-derived bit fixtures plus full6/all38 validation, destination nonmutation, recovery, subnormal and final/intermediate-overflow behavior. The common tensor trace route is integrated; the candidate arithmetic source is copied exactly from the reviewed packet. `protocol.json` freezes inputs, exact bit gates, check counts, strict build flags and serial single-target build policy.
+
+Native and Wasm each must report zero failed checks, exactly751 checks plus two when alternate rounding mode is available, complete fixture ids/status/result bits, and38 expected derivative bit strings. Every rejected scalar fixture must retain the original destination123.25. Native/Wasm fixture/derivative bits must agree; ambient rounding-mode support may differ. No result can refresh a gate.
+
+The common trace repair applies to every constitutive model through the shared operator; there is no model-id branch. The original sand cancellation failure is preserved in its frozen re-audit closure. A plain C++ ternary probes lazy evaluation here; it is not generated DSL verification. Separate generated contexts, new model-rate studies, finite integration and material-AD studies remain required. This operator study grants no scientific or experimental admission. No author code is used.

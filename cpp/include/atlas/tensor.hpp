@@ -4,6 +4,7 @@
 #include <array>
 #include <cmath>
 #include <vector>
+#include "atlas/trace_accuracy.hpp"
 
 namespace atlas {
 constexpr int max_state = 32;
@@ -94,7 +95,8 @@ template<class T>Sym<T> operator+(const Sym<T>&a){return a;}
 template<class T>Sym<T> operator*(const T&a,const Sym<T>&b){Sym<T> c;for(int i=0;i<6;++i)c.v[i]=a*b.v[i];return c;}
 template<class T>Sym<T> operator*(const Sym<T>&a,const T&b){return b*a;}
 template<class T>Sym<T> operator/(const Sym<T>&a,const T&b){return (T(1)/b)*a;}
-template<class T>T trace(const Sym<T>&a){return a.v[0]+a.v[1]+a.v[2];}
+template<class T>bool trace_checked(const Sym<T>&a,T& out){return trace_accuracy::trace_checked(a,out);}
+template<class T>T trace(const Sym<T>&a){return trace_accuracy::trace_or_nonfinite(a);}
 template<class T>Sym<T> dev(const Sym<T>&a){return a-(trace(a)/T(3))*identity<T>();}
 template<class T>T dot(const Sym<T>&a,const Sym<T>&b){T c(0);for(int i=0;i<6;++i)c=c+a.v[i]*b.v[i];return c;}
 template<class T>T norm(const Sym<T>&a){return asqrt(dot(a,a));}

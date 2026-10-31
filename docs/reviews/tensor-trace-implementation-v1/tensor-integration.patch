@@ -1,0 +1,8 @@
+--- a/cpp/include/atlas/tensor.hpp
++++ b/cpp/include/atlas/tensor.hpp
+@@ -6,0 +7 @@
++#include "atlas/trace_accuracy_candidate.hpp"
+@@ -97 +98,2 @@
+-template<class T>T trace(const Sym<T>&a){return a.v[0]+a.v[1]+a.v[2];}
++template<class T>bool trace_checked(const Sym<T>&a,T& out){return trace_accuracy::trace_checked(a,out);}
++template<class T>T trace(const Sym<T>&a){return trace_accuracy::trace_or_nonfinite(a);}
