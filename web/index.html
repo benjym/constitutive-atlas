@@ -199,47 +199,83 @@
       <div id="catalogue-grid"></div>
     </section>
     <section id="methods" class="page" hidden>
-      <div class="eyebrow">REPRODUCIBILITY BEFORE RANKINGS</div>
-      <h1>Every claim needs evidence.</h1>
-      <p class="page-lead">An executable model is the start of verification, not the end of validation.</p>
+      <div class="eyebrow">EQUATIONS · ASSUMPTIONS · EXECUTION</div>
+      <h1>A common language for constitutive models.</h1>
+      <p class="page-lead methods-lead">Atlas expresses constitutive models as structured mathematical definitions. Equations, material parameters, internal state and physical conventions live together, so the same description can be inspected, checked and used to generate an executable model.</p>
+      <div class="methods-flow" aria-label="From publication to model response">
+        <span>Published formulation</span><span aria-hidden="true">→</span><strong>Explicit model definition</strong><span aria-hidden="true">→</span><span>Shared solver</span><span aria-hidden="true">→</span><span>Material response</span>
+      </div>
       <div class="method-grid">
-        <article><span class="eyebrow">01 / REPRESENTATION</span>
-          <h2>One mathematical source.</h2>
-          <p>Restricted scalar and symmetric-tensor expressions are dimension checked, interpreted in Python, and compiled into C++. Model definitions contain no native code. The browser executes the generated kernels through Emscripten.</p>
-          <p>SI units. Compression-positive stress and strain. Mandel order: xx, yy, zz, √2xy, √2yz, √2xz. Infinitesimal kinematics, zero spin.</p>
+        <article><span class="eyebrow">01 / THE MODEL RECORD</span>
+          <h2>Describe what makes the model.</h2>
+          <p>A schema specifies the structure of each definition. Named parameters carry units and bounds. State variables record stress and material memory. Derived quantities and governing equations describe how that state changes; domain conditions declare where the expressions are admissible.</p>
+          <p>Source links and locators identify the formulation being represented. A model family, a later extension and a particular parameter set have distinct identities.</p>
+          <p><a href="#catalogue">Explore the model definitions →</a> · <a href="./publications.html">Trace publications and extensions →</a></p>
         </article>
-        <article><span class="eyebrow">02 / NUMERICAL VERIFICATION</span>
-          <h2>Test equations and algorithms.</h2>
-          <p>Analytical elastic tests, yield consistency, hardening and unloading, step refinement, small-strain stiffness, automatic-differentiation Jacobians, and interpreter/native/Wasm agreement. Failed steps retain the last committed state.</p>
+        <article><span class="eyebrow">02 / PHYSICAL MEANING</span>
+          <h2>Make the conventions explicit.</h2>
+          <p>The same symbols can mean different things across publications. The v0.3 formulation contract declares stress measure and effective/total scope, stress and strain signs, tensor representation, kinematics and frame assumptions.</p>
+          <p>It also distinguishes an incremental equation, a rate along a strain path and a rate per second. Required loading inputs and initialization requirements are explicit: choosing a strain increment does not imply a physical duration, and an illustrative state is not a material preparation procedure.</p>
+          <p><a href="https://github.com/benjym/constitutive-atlas/blob/main/docs/FORMULATION_CONTRACT.md" target="_blank" rel="noopener">Read the formulation contract ↗</a></p>
+        </article>
+        <article class="methods-example"><span class="eyebrow">A SMALL EXAMPLE / ISOTROPIC ELASTICITY</span>
+          <h2>Give an equation its context.</h2>
+          <p>For an infinitesimal elastic strain increment, the stress update can be written as:</p>
+          <p class="methods-equation" aria-label="Stress increment equals bulk modulus times the trace of the strain increment times the identity tensor, plus twice the shear modulus times the deviatoric strain increment">Δσ = K tr(Δε) I + 2G dev(Δε)</p>
+          <dl class="methods-definitions">
+            <div><dt>Parameters</dt><dd>Bulk modulus K and shear modulus G, both in pascals; they may be derived from Young’s modulus E and Poisson’s ratio ν.</dd></div>
+            <div><dt>State and input</dt><dd>Stress σ is retained between increments. The supplied strain increment Δε is dimensionless; I is the identity tensor.</dd></div>
+            <div><dt>Conventions</dt><dd>With compression positive, a positive isotropic strain increment raises compressive stress. Tensor storage and stress scope must also be declared.</dd></div>
+            <div><dt>A checkable consequence</dt><dd>For Δε = aI, the deviatoric term vanishes and Δσ = 3KaI. This gives an analytical reference for an isotropic loading test.</dd></div>
+          </dl>
+          <p>The schema gives these ingredients named places. The expression language describes their mathematical relationships.</p>
+          <p><a href="#catalogue/linear-elastic">Inspect the elasticity model →</a></p>
+        </article>
+        <article><span class="eyebrow">03 / EXECUTION</span>
+          <h2>Separate the equations from the solver.</h2>
+          <p>Atlas uses a restricted language of scalar and symmetric-tensor expressions. The definitions describe the mathematics rather than embedding a separate handwritten implementation for each model.</p>
+          <p>After validation, those expressions can be evaluated in Python and compiled into C++ for the shared integration engine. The browser runs generated kernels through WebAssembly. Loading protocols, numerical integration and failure handling belong to the surrounding solver.</p>
+          <p>A shared representation makes formulations easier to inspect and exercise under common loading conditions. Each still needs its own parameters, initial state and applicability checks.</p>
           <p id="build-hash"></p>
         </article>
-        <article><span class="eyebrow">03 / EXPERIMENTAL VALIDATION</span>
-          <h2>Keep calibration separate.</h2>
-          <p>Published parameter baselines precede controlled calibration. Entire tests are assigned to calibration or held-out sets. Comparison requires compatible material, preparation, initial state and loading conditions.</p>
-          <p>This release makes no experimental ranking claim.</p>
+        <article><span class="eyebrow">04 / VERIFICATION</span>
+          <h2>Check structure, mathematics and behaviour.</h2>
+          <p>Automatic validation checks required fields, declared symbols, expression types and dimensional consistency. These checks can detect an undefined variable or incompatible units before a simulation runs.</p>
+          <p>Numerical evidence addresses different questions: agreement with analytical solutions, response to smaller steps, and agreement between Python, native and browser execution. Available checks and their scope are recorded per formulation.</p>
+          <p>A dimensionally correct equation can still be the wrong transcription. Agreement between implementations can preserve the same mistake. Source review and independent references remain necessary.</p>
         </article>
-        <article id="kfs-development"><span class="eyebrow">DEVELOPMENT / INITIALIZATION SENSITIVITY</span>
-          <h2>Inspect a qualified model-to-data comparison.</h2>
-          <p>Base VW96, locked partial fits and two initial-state assumptions. Explore aggregate errors and the numerical refinement evidence; previously exposed tests and unresolved calibration-state uncertainty stay explicit.</p>
-          <p><a href="./development.html">Compare scenarios and inspect the evidence →</a></p>
+        <article><span class="eyebrow">05 / SCOPE</span>
+          <h2>A common structure, with explicit limits.</h2>
+          <p>The v0.3 contract currently supports incremental residuals, strain-path rates and physical-time ordinary differential equations within declared small-strain, fixed-frame profiles. Finite-deformation transport and objective stress-rate updates are outside those profiles.</p>
+          <p>When a formulation needs an unsupported input, tensor type or history mechanism, that is a capability gap to resolve. A catalogue entry does not by itself imply an executable or reviewed model. Existing records retain their versioned definitions while migration proceeds.</p>
+          <p><a href="./schemas/model-v0.3.schema.json">Inspect schema v0.3 (JSON) →</a></p>
         </article>
-        <article id="tmd2-benchmark"><span class="eyebrow">PUBLISHED BASELINE / TMD2</span>
-          <h2>A source-matched sand calculation.</h2>
-          <p><a href="./tmd2.html">Inspect the exact benchmark model, parameters, initial state and protocol →</a></p>
-          <p>VW96 + intergranular strain, loose Karlsruhe fine sand at 100 kPa: three native paths over 0–25% accumulated axial strain agree with the published model curves within frozen figure precision. Adjacent refinement checks pass.</p>
-          <figure><a href="./tmd2-reproduction.png" aria-label="Open full-size TMD2 reproduction figure"><img src="./tmd2-reproduction.png" alt="Three Atlas paths at 400, 800 and 1600 increments overlay the published stress and volume curves and their frozen source precision envelopes." style="width:100%;height:auto" loading="lazy"></a><figcaption>Published model curves and Atlas results; no measured data are shown.</figcaption></figure>
-          <p>The finest-path measured-data RMSE is 23.54 kPa in stress and 0.208 percentage points in volume strain. These are calibration-campaign errors, not held-out validation. Historical strain conversion and independent scientific review remain open. The 25% research path does not change the interactive laboratory limit.</p>
-          <p><a href="https://doi.org/10.1016/j.soildyn.2019.05.001" target="_blank" rel="noopener">Published comparison ↗</a> · <a href="https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-tmd2-research-range-v1" target="_blank" rel="noopener">Inputs, bounds, results and limitations ↗</a></p>
-        </article>
-        <article><span class="eyebrow">04 / ORIGINAL DATA</span>
-          <h2>Wichtmann benchmark sources.</h2>
-          <p><a href="https://www.torsten-wichtmann.de/KFSDB.htm" target="_blank" rel="noopener">Karlsruhe fine sand database ↗</a></p>
-          <p><a href="https://www.torsten-wichtmann.de/database-kaolin-menu.htm" target="_blank" rel="noopener">Karlsruhe kaolin database ↗</a></p>
-          <p><a href="https://doi.org/10.1007/s11440-015-0402-z" target="_blank" rel="noopener">Wichtmann & Triantafyllidis (2016), Part I ↗</a></p>
-          <p><a href="https://doi.org/10.1007/s11440-015-0412-x" target="_blank" rel="noopener">Part II ↗</a></p>
-          <p>Raw files remain with their providers. The importer records checksums and unit transformations. Redistribution terms require review.</p>
+        <article><span class="eyebrow">06 / EVIDENCE</span>
+          <h2>Keep claims attached to their evidence.</h2>
+          <p>Source transcription, executable availability, numerical verification and experimental validation answer separate questions. Each result needs a formulation identity, inputs, protocol and a stated scope.</p>
+          <p>For measured-data comparisons, material preparation and initial state matter alongside the equations. Calibration and evaluation must be distinguished; previously inspected development tests do not become unseen validation data.</p>
+          <p>This release makes no experimental model-ranking claim. Model details in the catalogue link retained numerical records, including limitations and failures.</p>
         </article>
       </div>
+      <section class="methods-studies" aria-labelledby="methods-studies-title">
+        <div class="eyebrow">SEE THE METHODS IN PRACTICE</div>
+        <h2 id="methods-studies-title">Two examples, two different questions.</h2>
+        <div class="method-grid">
+          <article id="tmd2-benchmark"><span class="eyebrow">REPRODUCING A PUBLISHED CALCULATION</span>
+            <h3>Does Atlas recover the published model response?</h3>
+            <p>The TMD2 study uses VW96 with intergranular strain for loose Karlsruhe fine sand at 100 kPa. Three native resolutions over 0–25% accumulated axial strain agree with published model curves within frozen figure precision; adjacent refinement checks pass.</p>
+            <p>This is a published-calculation reproduction. Measured-data errors belong to the calibration campaign; historical strain conversion and independent scientific review remain open.</p>
+            <p><a href="./tmd2.html">Inspect the formulation, inputs and reproduction →</a></p>
+          </article>
+          <article id="kfs-development"><span class="eyebrow">EXAMINING A MODEL–DATA COMPARISON</span>
+            <h3>How much do initialization assumptions change the result?</h3>
+            <p>The separate base-VW96 development study compares locked fits under competing initial-state assumptions. Saved aggregate results expose changes in error, the original failed refinement checks and a separately passing follow-up regime.</p>
+            <p>These previously inspected tests support a development comparison. Source-state uncertainty and independent scientific review remain open.</p>
+            <p><a href="./development.html">Explore assumptions, results and retained checks →</a></p>
+          </article>
+        </div>
+        <p class="methods-source-note">Experimental sources: <a href="https://www.torsten-wichtmann.de/KFSDB.htm" target="_blank" rel="noopener">Karlsruhe fine sand ↗</a> · <a href="https://www.torsten-wichtmann.de/database-kaolin-menu.htm" target="_blank" rel="noopener">Karlsruhe kaolin ↗</a>. Raw files remain with their providers; reuse and redistribution terms require review.</p>
+      </section>
     </section>
   </main>
   <dialog id="catalogue-dialog" class="catalogue-dialog" aria-labelledby="catalogue-detail-title">
