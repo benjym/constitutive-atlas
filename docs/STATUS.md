@@ -1,5 +1,11 @@
 # Implementation status — 2026-10-30
 
+## Seventh local runnable draft —2026-10-31
+
+[Barodesy sand2015](models/barodesy2015-laboratory-preview.md) is now the seventh local runnable draft. The [frozen actual-driver study](../catalogue/investigations/barodesy2015-preview-v1/RESULTS.md) passes20calls/backend and835caller points/backend with independent volume/control checks; [production/browser integration](reviews/seven-model-lab-integration/RESULTS.md) passes35model/protocol combinations and the actual settings-aware browser default/export. Primary2015 and separate2019 calibration sources remain linked. All six previous definitions and32 discovery entries are preserved. Hosted count remains five; no deployment or scientific admission.
+
+A source-only [clay2013 preview candidate/plan](ingestion/hypoplastic-clay-2013/preview-plan-v1/README.md) is integrated separately, without installing the model. Its18prospective requests retain the actual100kPa browser example as explicitly unprepared/outside-ASBS. Compiled verification is the next task.
+
 ## Rate verification and source integration —2026-10-31
 
 The distinct [Barodesy sand2015 repaired-engine study](../catalogue/investigations/barodesy2015-rates-v2/RESULTS.md) passes38 independent rates and16 rejection/recovery pairs on each serial native/Wasm build, with all original inputs/reference values/budgets unchanged. The former volumetric cancellation failure now matches the exact rational reference; historical v1 negative evidence remains intact. The [v2 generic transport](reviews/generic-rate-collection-v2/README.md) closes positional parameter-order and duplicate-key gaps under separate identities, with23 synthetic checks and9 original witness groups preserved. Finite-path laboratory-preview testing remains next; no executable count changes.

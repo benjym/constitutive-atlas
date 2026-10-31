@@ -1,0 +1,68 @@
+{
+  "backend": "wasm",
+  "started_utc": "2026-10-31T05:44:07.655228+00:00",
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "manifest_sha256": "f479df324d3d289fb911820d470aa124d32cb15d0a9d952bff7273ed4d1d687f",
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "emcc",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/barodesy2015-preview-v1",
+        "-B",
+        "/private/tmp/atlas-sand-preview-wasm-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-sand-preview-wasm-v1",
+        "--target",
+        "atlas_barodesy_preview",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "node",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/barodesy2015-preview-v1/observe.mjs",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/barodesy2015-preview-v1",
+        "/private/tmp/atlas-sand-preview-wasm-v1",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/barodesy2015-preview-v1/wasm"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas-barodesy-preview.js": {
+      "path": "/private/tmp/atlas-sand-preview-wasm-v1/atlas-barodesy-preview.js",
+      "sha256": "fc84bbf4bef7d5b730daa6fd4ec7b23384dd0e553f8941b75771653bb4badcda",
+      "bytes": 26222
+    },
+    "atlas-barodesy-preview.wasm": {
+      "path": "/private/tmp/atlas-sand-preview-wasm-v1/atlas-barodesy-preview.wasm",
+      "sha256": "5ec1fbf0bb6e29cf3e14eacc3ab331c04bebe5fcfbb6e5ee14751f9c833e6532",
+      "bytes": 686176
+    }
+  },
+  "completed": true,
+  "finished_utc": "2026-10-31T05:44:13.398455+00:00",
+  "journal_sha256": "144793fcc396b356c74bc41ebd1dae7210e76f94ad10f0fad510826ba566263c"
+}
