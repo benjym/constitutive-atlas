@@ -1,0 +1,16 @@
+--- committed-v1/assess_paths.py
++++ corrected-v2/assess_paths.py
+@@ -32,10 +32,9 @@
+  for row,req in zip(rows[1:],requests):
+   assert row['request']==req and isinstance(row['raw'],str)
+   r=json.loads(row['raw'],object_pairs_hook=unique,parse_constant=lambda x:(_ for _ in ()).throw(ValueError(x)))
+-  assert r['ok']is True and r['model']['id']==req['model'] and r['catalogue_hash']==catalogue['sha256']
+-  expected_model=next(m for m in catalogue['models']if m['id']==req['model'])
+-  assert r['model']==expected_model
+-  assert list(r['model']['parameters'])==list(expected_model['parameters']),'response parameter order'
++  assert r['ok']is True and type(r['model'])is str and r['model']==req['model'] and r['catalogue_hash']==catalogue['sha256']
++  assert any(m['id']==r['model']for m in catalogue['models']),'model ID absent from frozen descriptor'
++  assert r['schema_version']=='0.1'
+   assert vector(r['parameters'],len(req['parameters'].split(',')))==[float(x)for x in req['parameters'].split(',')]
+   assert vector(r['initial'],6)==[float(x)for x in req['initial'].split(',')]
+   assert r['integration_settings']==dict(zip(('version','norm','residual_tolerance','rate_tolerance','max_iterations','max_depth','max_substeps','max_backtracks'),['incremental-settings-0.1','scaled_component_max']+[float(x)for x in req['integration_settings'].split(',')]))

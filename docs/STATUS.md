@@ -1,3 +1,9 @@
+# Mohr–Coulomb source accuracy passes; cyclic parity fails — 2026-10-31
+
+The [separate API-envelope correction](../catalogue/investigations/mc-preview-envelope-v2/README.md) matches the exact pinned serializer and passes20independent source/envelope and19synthetic negative checks. Both original backend journals pass all14paths/834points against unchanged independent source bounds; maximum stress/strain budget fractions remain below.005. No new builds or candidate runs were needed.
+
+The stricter pair parity gate fails15scalar comparisons in cyclic stress control. Maximum failed discrepancy is2.74e-6Pa; near zero q this exceeds the original1e-10Pa limit by27398times. This failure, the original harness failures and all bounds are retained. Exact isolated replay reproduces the failed overall outcome. A separate convergence/control diagnosis is next; no root model, default change, browser admission, push or deployment. Hosted five/local nine remain unchanged.
+
 # Mohr–Coulomb path collection and retained harness failure — 2026-10-31
 
 The [169-file frozen preview](../catalogue/investigations/mc-laboratory-preview-v1/RESULTS.md) builds natively and in Wasm, serially with one worker. Both backends complete14requests/834points. The assessor then fails because it assumes a full model object where the pinned API returns a model-ID string; its synthetic fixtures shared that incorrect assumption. Both failures and all raw observations are retained and reproduced by the installed verifier. No source-accuracy or parity pass is claimed.
