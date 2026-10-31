@@ -1,0 +1,56 @@
+{
+  "id": "occ-undrained-smooth-reference-v1",
+  "created_on": "2026-11-01",
+  "scope": "One source-informed, axisymmetric, positive-q, wet-side, zero-spin undrained compression fixture after a positive analytical shear offset; not a general material update.",
+  "source": {
+    "url": "https://fme.hcmuaf.edu.vn/data/critical_state_soil_mechanics.pdf",
+    "sha256": "638e0ee7dc238ae8922b79983433be7d12ad30450098efe395968f7eeed13cb2",
+    "identity": "Schofield/Wroth electronic transcription created2005; exact1968 printing unauthenticated",
+    "visual_pages_checked": [
+      95,
+      99,
+      103
+    ],
+    "equations": [
+      "6.7",
+      "6.9-6.10",
+      "6.17-6.19",
+      "6.27-6.31"
+    ]
+  },
+  "parameters": {
+    "M": 1.2,
+    "lambda": 0.2,
+    "kappa": 0.04,
+    "Gamma": 2.5,
+    "p_ref_Pa": 1000.0,
+    "virgin_p0_Pa": 100000.0
+  },
+  "parameter_origin": "Illustrative diagnostic choices, not source soil defaults or a calibrated material.",
+  "path": {
+    "coordinate": "compression-positive distortion epsilon_s = 2/3 (epsilon_axial - epsilon_radial)",
+    "units": "1",
+    "start": 0.002,
+    "end": 0.03,
+    "specific_volume": "constant; derived from virgin p0 before positive analytical offset",
+    "preparation": "Analytical virgin-undrained prefix only; no numerical corner integration or experimental preparation inferred.",
+    "steps": [
+      16,
+      32,
+      64
+    ]
+  },
+  "policy": {
+    "pressure_error_scale_Pa": 100000.0,
+    "finest_maximum_scaled_state_error": 2e-06,
+    "minimum_adjacent_error_improvement": 8.0,
+    "maximum_scaled_yield_drift_all_resolutions": 5e-06,
+    "maximum_scaled_dissipation_residual": 5e-14,
+    "every_stage": "finite p>0, q>0, specific_volume>0, lambda>kappa>0, M>0 and 0<q/p<M; no regularization or branch substitution"
+  },
+  "requirements_target_schema": "0.3",
+  "executable_model_profile_selected": false,
+  "compiled_calls": 0,
+  "scientific_admission": false,
+  "acceptance_timing": "Policy written before the first numerical integration of this named fixture; no observed results used to select or revise it."
+}

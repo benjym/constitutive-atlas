@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [Original Cam Clay smooth reference](ingestion/original-cam-clay/smooth-reference-v1/README.md)
+adds three source-constraint RK4 paths/115points against the retained analytical
+solution. Frozen gates pass; finest scaled error1.09e-8 and refinement factors
+17.29/16.64. Six tests pass. The v0.3 crosswalk retains full3D, constrained-shear
+and corner gaps; source-edition fidelity and scientific review remain open. No
+shared engine change, compiled calls, added browser model or admission.
+
 The [catalogue definition summary](reviews/web-formulation-summary-v1/README.md)
 now shows canonical status, declared mechanics, parameter examples and state
 roles. Legacy conventions remain undeclared; candidates inherit no runnable
