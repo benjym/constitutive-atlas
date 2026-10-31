@@ -4,9 +4,9 @@ Formulation ID: `hypoplastic-sand-vw96`. Status: **transcribed; independent revi
 
 ## Sources, availability and variant
 
-The equation transcription is from Wolfgang Fellin's **Equations of the Hypoplastic Law**, dated 1999-10-01, [University of Innsbruck, section 5](https://www.uibk.ac.at/de/geotechnik/bodenmechanik/forschung/hypoplasticity-copy-2/). Images 18–26 were visually inspected. This implementation-author summary supplied the initial transcription. The [original-paper reconciliation](hypoplastic-sand-vw96-original.md) now directly checks Eqs. (40)–(46), continuity, parameter examples and the isotropic limit against the user-supplied journal PDF; independent scientific review remains pending. The [image inventory](../../catalogue/source-audits/hypoplastic-sand-vw96-fellin-1999.json) records exact URLs, SHA-256 values and equation mappings. Images are linked, not bundled.
+The equation transcription is from Wolfgang Fellin's **Equations of the Hypoplastic Law**, dated 1999-10-01, [University of Innsbruck, section 5](https://www.uibk.ac.at/de/geotechnik/bodenmechanik/forschung/hypoplasticity-copy-2/). Images 18–26 were visually inspected. This implementation-author summary supplied the initial transcription. The [first-pass original-paper reconciliation](hypoplastic-sand-vw96-original.md) directly checks Eqs. (40)–(46), continuity and the isotropic limit against the user-supplied journal PDF. The subsequent [full-paper technical review](../ingestion/hypoplastic-sand-vw96/original-equation-review-v2/README.md) covers all 21 pages, including the derivation in Sections 3–5 and Appendices A–C, with 27 standalone algebra checks and recorded qualifications. Its page ledger records visual inspection of PDF pages 1–20. This completes the technical reading coverage; signed independent scientific review remains pending. The [image inventory](../../catalogue/source-audits/hypoplastic-sand-vw96-fellin-1999.json) records exact URLs, SHA-256 values and equation mappings. Images are linked, not bundled.
 
-The original publication is [von Wolffersdorff (1996), A hypoplastic relation for granular materials with a predefined limit state surface](https://doi.org/10.1002/%28SICI%291099-1484%28199607%291%3A3%3C251%3A%3AAID-CFM13%3E3.0.CO%3B2-3), pages 251–271. On 2026-10-30, the publisher PDF route returned the abstract page; [KIT's institutional record](https://publikationen.bibliothek.kit.edu/372196) supplied metadata without a full-text link; the [SoilModels preprint page](https://soilmodels.com/download/von-wolffersdorff-p-a-1996-a-hypoplastic-relation-for-granular-materials-with-a-predefined-limit-state-surface-mechanics-of-cohesive-frictional-materials-13-251-271/) showed a login link and an unexpanded free-download placeholder. On 2026-10-31 the user supplied the complete 21-page original PDF in Downloads. Its title page is visually verified and its bytes are pinned in the [original-paper receipt](../../catalogue/source-audits/original-papers-2026-10-31.json). The access gap is resolved; [rate-law reconciliation](hypoplastic-sand-vw96-original.md) is recorded, with full derivation/benchmark and independent review still pending.
+The original publication is [von Wolffersdorff (1996), A hypoplastic relation for granular materials with a predefined limit state surface](https://doi.org/10.1002/%28SICI%291099-1484%28199607%291%3A3%3C251%3A%3AAID-CFM13%3E3.0.CO%3B2-3), pages 251–271. On 2026-10-30, the publisher PDF route returned the abstract page; [KIT's institutional record](https://publikationen.bibliothek.kit.edu/372196) supplied metadata without a full-text link; the [SoilModels preprint page](https://soilmodels.com/download/von-wolffersdorff-p-a-1996-a-hypoplastic-relation-for-granular-materials-with-a-predefined-limit-state-surface-mechanics-of-cohesive-frictional-materials-13-251-271/) showed a login link and an unexpanded free-download placeholder. On 2026-10-31 the user supplied the complete 21-page original PDF in Downloads. Its title page is visually verified and its bytes are pinned in the [original-paper receipt](../../catalogue/source-audits/original-papers-2026-10-31.json). The access and full-paper technical-reading gaps are resolved. The earlier reconciliation is retained as a historical first-pass record; the subsequent review supersedes its statements that derivation reading remains incomplete. Source-figure benchmark preparation and signed scientific review remain open. The [coverage update receipt](../reviews/vw96-dossier-coverage-v1/README.md) records this documentation correction without changing the model.
 
 ## Complete equations and source mapping
 
@@ -63,7 +63,7 @@ The source defines a corotational stress rate. The atlas equates it to the ordin
 
 ## State, parameters, units and initialization
 
-State consists of six effective Mandel stresses in Pa and dimensionless void ratio `e`. Defaults are `100 kPa I` and `.7`. There is no separate yield surface, accumulated plastic strain or time-dependent creep state.
+State consists of six effective Mandel stresses in Pa and dimensionless void ratio `e`. The legacy record supplies illustrative initial-state defaults of `100 kPa I` and `.7`; these are not measured specimen preparation. The [explicit v0.3 crosswalk](../ingestion/hypoplastic-sand-vw96/formulation-crosswalk.json) requires persistent stress and void ratio to be initialized explicitly. This dossier does not migrate the existing record. There is no separate yield surface, accumulated plastic strain or time-dependent creep state.
 
 | Parameter | Units | Default | Declared bounds |
 | --- | --- | --- | --- |
@@ -81,9 +81,42 @@ The eight physical defaults match the Karlsruhe row on the cited summary page, c
 
 The implementation requires `e>0`, `p>1e-8 p_ref`, `ed0<ec0<ei0`, `ed<e<ei`, `F>0` and `fb>0`. These checks exclude the dense boundary where a fractional-power derivative can become singular. They do not enforce positivity of every principal effective stress or guarantee physical admissibility of all allowed parameters. Specimen state and calibration must be supplied separately. Failed increments roll back to the exact original state.
 
+## Original-figure preparation and applicability
+
+Table I (printed p. 264) is the Hochstetten example: phi=33 degrees,
+hs=1000 MPa, n=.25, ec0=.95, ed0=.55, ei0=1.05, alpha=.25, beta=1.5.
+It is distinct from Karlsruhe illustrative defaults, the NH97 beta=1 host
+specialization, and the density3 Wichtmann development fit. The source's example
+parameters must not be replaced by whichever vector gives a better comparison.
+
+The full-paper review identifies preparation labels that the earlier
+reconciliation did not expose. PDF page number equals printed page minus 250.
+The relevant pages were visually rechecked for this update:
+
+| Source example | Recorded information and unresolved interpretation |
+| --- | --- |
+| Figure 10, pp. 264–265 (PDF 14–15) | Body text describes nominal initial e=.67. Calculation legends instead give e=.66/.67/.69 at lateral-pressure magnitudes 300/200/100 kPa. Experimental legends give .65/.66 at 300, .66/.67 at 200 and .69 at 100. Preserve each curve's label. A preparation-stage explanation is possible, but is not established here; do not initialize every curve at .67. |
+| Figure 11, p. 265 (PDF 15) | Caption specifies source stresses T10=-25 kPa and T20=-12.5 kPa and initial void ratios .73/.695. This is a separate oedometric example. |
+| Figure 12, pp. 264/266 (PDF 14/16) | Curves concern characteristic SOM compression paths; the text says starting characteristic void ratios for some paths are initially unknown. This is not an ordinary triaxial test initialized at e=.67. |
+| Figures 13/14, pp. 264/266–267 (PDF 14/16–17) | Body text gives e=.67 before isotropic preparation and e=.633 at tr(T)=-300 kPa. Captions identify isotropic source stress -100 kPa I at shear start but label initial e=.67. The density/preparation labels remain ambiguous. Neither .67 nor .633 is selected here as a complete shear-start initialization. |
+
+A future original-figure reproduction must declare the curve, parameter set,
+preparation path, state at the start of each segment, loading controls and
+coordinate conversion before simulation. This update creates no reproduction
+deck or experimental-validation claim. The source also reports deficient
+reloading stiffness on some cyclic paths with multiple reversals (p. 266/Figure 15).
+A successful numerical reversal run does not establish applicability to those paths.
+
+[Decision 0004](../decisions/0004-vw96-igs-applicability.md) separates runtime
+admission, declared comparison scope and scientific support. It documents the
+near-isotropic continuation, wider shape-range admission, mixed-sign-stress
+witnesses and strict density endpoints. Its default strictly compressive study
+scope is a project restriction, not a universal source-mandated runtime guard.
+No equation or guard correction follows from this dossier update.
+
 ## Numerical integration and evidence
 
-The legacy rate API supplies a strain increment as the rate over a unit loading interval; it introduces no physical material clock. The common solver uses explicit midpoint with full-step/two-half-step comparison and recursive subdivision. Its error threshold is `1e-6` in model-scaled state coordinates; this is a local integration heuristic, not a validated error bound. The accepted solution is the two-half-step state. These are the defaults used by the retained legacy evidence. The additive [incremental settings interface](../INCREMENTAL_SETTINGS.md) now permits explicit rate tolerance, depth and accepted-substep limits; the browser records selected settings in exported results. Those settings do not retroactively change the historical evidence.
+The legacy rate API supplies a strain increment as the rate over a unit loading interval; it introduces no physical material clock. The common solver uses explicit midpoint with full-step/two-half-step comparison and recursive subdivision. Its error threshold is `1e-6` in model-scaled state coordinates; this is a local integration heuristic, not a validated error bound. The accepted solution is the two-half-step state. These are the defaults used by the retained legacy evidence. The additive [incremental settings interface](../INCREMENTAL_SETTINGS.md) now permits explicit rate tolerance, depth and accepted-substep limits; the browser records selected settings in exported results. Those settings do not retroactively change the historical evidence. The [source-pinned current build](../benchmarks/current-source-build-v1/README.md) additionally uses endpoint-defect checks alongside step doubling. The [current TMD7 replay](../benchmarks/current-kfs-tmd7-v1/README.md) agrees with its archived prediction within its fixed compatibility gates for one development window; this does not identify the historical executable source or establish general engine equivalence.
 
 `tools/verify_hypoplasticity.py` computes references with ordinary 3-by-3 Cartesian matrices in the source's tension-positive convention. It neither evaluates the DSL nor calls the generated tensor operations. Integrated references use fixed-step classical RK4 and successive grid comparisons up to 4,096 steps under unchanged, declared convergence thresholds.
 
@@ -91,4 +124,4 @@ The initial 226-check attempt passed every rate comparison but failed reference 
 
 The expanded suite has **229 checks**: 216 instantaneous rate comparisons across three pressures, two relative densities, four stress shapes and nine stretching directions; three oblique fixed-frame covariance comparisons; seven prescribed-strain histories including reversal; and three invalid-state rollback cases. Rate tolerances are `1e-4 Pa`, `1e-11` for void-ratio rate, and relative `1e-9`. Path tolerances are `1 Pa`, void ratio `1e-8`, and relative `2e-5`; the separate reference-grid thresholds are `.001 Pa`, void ratio `1e-11` and relative `1e-10`. Every path must satisfy the reference convergence test as well as the native comparison.
 
-This is project-authored numerical verification, not independent authorship, an external implementation comparison or experimental validation. Completion of the original derivation/benchmark review, independent review, domain-limit studies and calibration remain open; the separate IGS history law has its own source and numerical evidence. The formulation status is not promoted automatically.
+This is project-authored numerical verification, not independent authorship, an external implementation comparison or experimental validation. The full-paper technical reading is complete, with no material-law correction identified on the inspected common domain. Signed independent scientific review, original-figure preparation/reproduction, broader domain-limit support and calibrated experimental generalization remain open; the separate IGS history law has its own source and numerical evidence. The formulation status is not promoted automatically.

@@ -1,5 +1,13 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [VW96 active dossier now reflects completed technical source reading](reviews/vw96-dossier-coverage-v1/README.md)
+and exposes the existing Figures 10/13/14 density/preparation qualifications.
+PDF 14–17 were visually rechecked against the pinned original. The historical
+first-pass reconciliation and all nine prior review files remain unchanged;
+equations, parameter table and model bytes verify unchanged. This closes stale
+reading-coverage documentation, not scientific admission or figure reproduction.
+No new material run, numerical test, build or model migration was needed.
+
 The [provisional website now exposes the scoped current-source TMD7 connection](reviews/web-current-tmd7-v1/README.md).
 A separate fixed file/file panel shows seven gate values, native build identity,
 counts, measurement errors and evidence links. The archived selectors and original

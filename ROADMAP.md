@@ -20,6 +20,13 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 ## Delivery focus — 1 November 2026
 
+The [active VW96 source dossier](docs/models/hypoplastic-sand-vw96.md) now
+incorporates the already completed full-paper technical reading, adopted
+applicability policy and visually rechecked figure-preparation ambiguities.
+Original-source access/technical reading are complete; independent scientific
+sign-off and source-figure preparation/reproduction remain open. Preserve that
+distinction instead of repeating the equation review or adding calibration runs.
+
 The [website current-build evidence slice](docs/reviews/web-current-tmd7-v1/README.md)
 is locally complete: a separately scoped TMD7 panel displays the seven gates,
 build identity, errors and source links, preserving archived six-test panels
