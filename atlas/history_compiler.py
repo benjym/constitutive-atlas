@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 from .history import _compile, _hash
+from .symmetric_spectral import SPECTRAL_FUNCTIONS
 
 
 def _expression(node, symbols):
@@ -34,6 +35,11 @@ def _expression(node, symbols):
             value = f'([&](){{ double result; if (!atlas::scalar_log1p_checked({emit(node.args[0])},result)) throw std::runtime_error("unsupported/nonfinite history log1p"); return result; }}())'
         elif name == 'normalized_determinant':
             value = f'([&](){{ double result; if (!atlas::normalized_determinant_accuracy::checked({emit(node.args[0])},result)) throw std::runtime_error("unsupported/nonfinite history normalized determinant"); return result; }}())'
+        elif name in SPECTRAL_FUNCTIONS:
+            operation, shape, _ = SPECTRAL_FUNCTIONS[name]
+            result_type = 'Sym<double>' if shape == 'sym' else 'double'
+            helper = 'projector_checked' if shape == 'sym' else 'scalar_checked'
+            value = f'([&](){{ {result_type} result{{}}; atlas::spectral_candidate::Diagnostic diagnostic; if (!atlas::spectral_candidate::{helper}({emit(node.args[0])},atlas::spectral_candidate::Operation::{operation},result,diagnostic)) throw std::runtime_error("unsupported/nonfinite history spectrum"); return result; }}())'
         elif name == 'determinant':
             value = f'([&](){{ double result; if (!atlas::determinant_accuracy::checked({emit(node.args[0])},result)) throw std::runtime_error("unsupported/nonfinite history determinant"); return result; }}())'
         elif name == 'expm':
@@ -136,6 +142,8 @@ def generate(programs):
     lines += ['}; return p; }', 'inline const char* description() { return ' + json.dumps(json.dumps([m for m, _ in entries], separators=(',', ':'), allow_nan=False)) + '; }', '}']
     if any('atlas::determinant_accuracy::checked(' in line for line in lines):
         lines.insert(2, '#include "atlas/checked_determinant.hpp"')
+    if any('atlas::spectral_candidate::' in line for line in lines):
+        lines.insert(2, '#include "atlas/checked_spectral.hpp"')
     if any('atlas::normalized_determinant_accuracy::checked(' in line for line in lines):
         lines.insert(2, '#include "atlas/checked_normalized_determinant.hpp"')
     return '\n'.join(lines) + '\n'

@@ -143,6 +143,8 @@ def generate(destination, model_paths=None):
         lines.insert(2, '#include "atlas/checked_determinant.hpp"')
     if any('atlas::normalized_determinant_or_mark(' in line for line in lines):
         lines.insert(2, '#include "atlas/checked_normalized_determinant.hpp"')
+    if any('atlas::spectral_scalar_or_mark(' in line or 'atlas::spectral_projector_or_mark(' in line for line in lines):
+        lines.insert(2, '#include "atlas/checked_spectral.hpp"')
     (dest/'models.hpp').write_text('\n'.join(lines)+'\n')
     (dest/'models.json').write_text(json.dumps({'schema_version':'0.1','sha256':digest,'models':canonical},indent=2)+'\n')
     return models

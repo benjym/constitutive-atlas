@@ -15,7 +15,7 @@ import math
 import re
 from pathlib import Path
 
-from .dsl import FUNCTIONS, I, Sym, Type, ValidationError, dimensions, evaluate, infer, parse
+from .dsl import has_value_only_dependency, FUNCTIONS, I, Sym, Type, ValidationError, dimensions, evaluate, infer, parse
 from .structure import check
 
 PROGRAM_VERSION = 'experimental-history-0.1'
@@ -153,6 +153,8 @@ def _compile_impl(program):
                     raise ValidationError('binding cannot read pre-reset parent')
                 symbols[alias] = _type(fields[field])
         guard = _tree(phase['guard'], symbols, Type()) if 'guard' in phase else None
+        if guard is not None and has_value_only_dependency(guard):
+            raise ValidationError('history event guards cannot depend on value-only spectral queries')
         writes = {}
         for target, expression in phase['writes'].items():
             if target not in fields:

@@ -5,7 +5,7 @@ import json
 import math
 import re
 from pathlib import Path
-from .dsl import DIMS, TIME, I, Sym, Type, ZERO, dimensions, ValidationError, cpp, evaluate, infer, parse
+from .dsl import has_value_only_dependency, DIMS, TIME, I, Sym, Type, ZERO, dimensions, ValidationError, cpp, evaluate, infer, parse
 
 MAX_STATE_COMPONENTS = 32
 ROOT = Path(__file__).resolve().parents[1]
@@ -222,8 +222,11 @@ def validate(model):
             if role != 'persistent' and (integration_kind(model) != 'residual' or any(v != 0 for v in initial)):
                 raise ValidationError('temporary solve state requires a residual profile and zero initial values')
     if count>MAX_STATE_COMPONENTS: raise ValidationError(f'at most {MAX_STATE_COMPONENTS} state components are supported')
+    value_only_dependencies=set()
     for field in model['derived']:
-        typ=infer(parse(field['expr']),symbols)
+        tree=parse(field['expr'])
+        if has_value_only_dependency(tree,value_only_dependencies):value_only_dependencies.add(field['name'])
+        typ=infer(tree,symbols)
         if typ.shape=='bool': raise ValidationError('derived values must be numeric')
         declare(field['name'],typ)
     reset_targets=set()
@@ -233,7 +236,9 @@ def validate(model):
         if field is None or target in reset_targets or state_role(field) != 'persistent':
             raise ValidationError('increment reset targets must be distinct persistent state fields')
         reset_targets.add(target)
-        if infer(parse(update['guard']),symbols).shape!='scalar':
+        guard_tree=parse(update['guard'])
+        guard_type=infer(guard_tree,symbols)
+        if guard_type.shape!='scalar' or guard_type.value_only or has_value_only_dependency(guard_tree,value_only_dependencies):
             raise ValidationError('increment reset guard must be a signed scalar expression')
         if infer(parse(update['value']),symbols)!=field_type(field):
             raise ValidationError('increment reset value must match target shape and dimensions')

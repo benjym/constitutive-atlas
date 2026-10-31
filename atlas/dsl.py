@@ -10,6 +10,7 @@ import re
 from dataclasses import dataclass
 from fractions import Fraction
 from .scalar_math import log1p as checked_log1p
+from .symmetric_spectral import SPECTRAL_FUNCTIONS, spectral
 
 ZERO = (Fraction(0),) * 4
 PRESSURE = (Fraction(1), Fraction(-1), Fraction(-2), Fraction(0))
@@ -38,6 +39,7 @@ def dimensions(unit):
 class Type:
     shape: str = "scalar"
     dim: tuple = ZERO
+    value_only: bool = False
 
     def __post_init__(self):
         # Existing callers using the v0.1 mass/length/time tuple remain valid.
@@ -158,6 +160,34 @@ FUNCTIONS = {"sym": lambda *values: Sym(tuple(values)), "sqrt": math.sqrt, "exp"
              "determinant": determinant, "normalized_determinant": normalized_determinant}
 
 
+def _spectral_function(operation, shape):
+    def apply(a):
+        if not isinstance(a, Sym):
+            raise ValidationError('spectral operations require a symmetric tensor')
+        try:
+            result = spectral(a.v, operation)
+        except (ValueError, ArithmeticError) as exc:
+            raise ValidationError(str(exc)) from exc
+        return Sym(result) if shape == 'sym' else result
+    return apply
+
+
+FUNCTIONS.update({name: _spectral_function(operation, shape)
+                  for name, (operation, shape, _) in SPECTRAL_FUNCTIONS.items()})
+
+
+def _same_physical_type(a, b):
+    return a.shape == b.shape and a.dim == b.dim
+
+
+def has_value_only_dependency(node, aliases=()):
+    """Include predicate dependencies for reset events, whose policy is stricter."""
+    return any((isinstance(n, ast.Name) and n.id in aliases) or
+               (isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and
+                n.func.id in SPECTRAL_FUNCTIONS and SPECTRAL_FUNCTIONS[n.func.id][2])
+               for n in ast.walk(node))
+
+
 def parse(expression):
     if not isinstance(expression, str) or len(expression) > 10000:
         raise ValidationError("expression must be a string of at most 10000 characters")
@@ -192,67 +222,83 @@ def infer(node, symbols):
             raise ValidationError(f"undefined symbol: {node.id}")
         return symbols[node.id]
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
-        return infer(node.operand, symbols)
+        a = infer(node.operand, symbols)
+        if a.shape not in ('scalar', 'sym'):
+            raise ValidationError('numeric unary operators require numeric operands')
+        return a
     if isinstance(node, ast.BinOp):
         a, b = infer(node.left, symbols), infer(node.right, symbols)
+        if a.shape not in ('scalar', 'sym') or b.shape not in ('scalar', 'sym'):
+            raise ValidationError('arithmetic requires numeric operands')
+        value_only = a.value_only or b.value_only
         if isinstance(node.op, (ast.Add, ast.Sub)):
-            if a != b:
+            if not _same_physical_type(a, b):
                 raise ValidationError(f"addition/subtraction requires equal types: {a}, {b}")
-            return a
+            return Type(a.shape, a.dim, value_only)
         if isinstance(node.op, (ast.Mult, ast.Div)):
             if (a.shape == b.shape == "sym") or (isinstance(node.op, ast.Div) and b.shape != "scalar"):
                 raise ValidationError("tensor multiplication is explicit: use dot; divisor must be scalar")
             sign = -1 if isinstance(node.op, ast.Div) else 1
             return Type("sym" if "sym" in (a.shape, b.shape) else "scalar",
-                        tuple(x + sign*y for x, y in zip(a.dim, b.dim)))
+                        tuple(x + sign*y for x, y in zip(a.dim, b.dim)), value_only)
         if isinstance(node.op, ast.Pow):
-            if a.shape != "scalar" or b != Type():
+            if a.shape != "scalar" or not _same_physical_type(b, Type()):
                 raise ValidationError("power requires scalar base and dimensionless exponent")
             if a.dim == ZERO:
-                return Type()
+                return Type(value_only=value_only)
             try:
                 exponent = constant_fraction(node.right)
             except (ValueError, TypeError, ZeroDivisionError):
                 raise ValidationError("dimensioned power requires a constant exponent")
-            return Type(dim=tuple(x*exponent for x in a.dim))
+            return Type(dim=tuple(x*exponent for x in a.dim), value_only=value_only)
     if isinstance(node, ast.Compare) and len(node.ops) == 1 and isinstance(node.ops[0], (ast.Gt, ast.GtE, ast.Lt, ast.LtE)):
         a, b = infer(node.left, symbols), infer(node.comparators[0], symbols)
-        if a != b or a.shape != "scalar":
+        if not _same_physical_type(a, b) or a.shape != "scalar":
             raise ValidationError("comparison requires equally dimensioned scalars")
+        # A comparison consumes value-only numeric dependencies as primal control.
         return Type("bool")
     if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and not node.keywords:
         name = node.func.id
         args = [infer(a, symbols) for a in node.args]
         if name == "select" and len(args) == 3:
-            if args[0] != Type("bool") or args[1] != args[2]:
+            if args[0] != Type("bool") or not _same_physical_type(args[1], args[2]):
                 raise ValidationError("select requires condition and equally typed branches")
-            return args[1]
+            return Type(args[1].shape, args[1].dim, args[1].value_only or args[2].value_only)
+        value_only = any(a.value_only for a in args)
         if name == "sym":
-            if len(args)!=6 or any(a.shape!="scalar" or a!=args[0] for a in args):
+            if len(args) != 6 or any(a.shape != "scalar" or not _same_physical_type(a, args[0]) for a in args):
                 raise ValidationError("sym requires six equally dimensioned scalars in Mandel order")
-            return Type("sym",args[0].dim)
+            return Type("sym", args[0].dim, value_only)
         arity = 2 if name in ("dot", "min", "max") else 1
         if name not in FUNCTIONS or len(args) != arity:
             raise ValidationError(f"unsupported function or arity: {name}")
         a = args[0]
+        if name in SPECTRAL_FUNCTIONS:
+            _, shape, primitive_value_only = SPECTRAL_FUNCTIONS[name]
+            if a.shape != 'sym':
+                raise ValidationError(f'{name} requires a symmetric tensor')
+            return Type(shape, ZERO if shape == 'sym' else a.dim,
+                        value_only or primitive_value_only)
         if name == "expm":
-            if a != Type("sym"):raise ValidationError("expm requires dimensionless symmetric tensor")
+            if not _same_physical_type(a, Type("sym")):
+                raise ValidationError("expm requires dimensionless symmetric tensor")
             return a
         if name in ("trace", "dev", "norm", "cube_trace", "dot", "tensor_square", "determinant", "normalized_determinant"):
             if a.shape != "sym" or (name == "dot" and args[1].shape != "sym"):
                 raise ValidationError(f"{name} requires symmetric tensors")
             if name == "normalized_determinant":
-                return Type()
+                return Type(value_only=value_only)
             if name == "dot":
-                return Type(dim=tuple(x+y for x,y in zip(a.dim,args[1].dim)))
-            return Type("sym" if name in ("dev", "tensor_square") else "scalar", tuple(x*(3 if name in ("cube_trace", "determinant") else 2 if name == "tensor_square" else 1) for x in a.dim))
+                return Type(dim=tuple(x+y for x,y in zip(a.dim,args[1].dim)), value_only=value_only)
+            return Type("sym" if name in ("dev", "tensor_square") else "scalar",
+                        tuple(x*(3 if name in ("cube_trace", "determinant") else 2 if name == "tensor_square" else 1) for x in a.dim), value_only)
         if a.shape != "scalar":
             raise ValidationError(f"{name} requires scalar")
-        if name in ("min", "max") and a != args[1]:
+        if name in ("min", "max") and not _same_physical_type(a, args[1]):
             raise ValidationError(f"{name} arguments must have matching dimensions")
         if name in ("exp", "log", "log1p", "sin", "cos") and a.dim != ZERO:
             raise ValidationError(f"{name} requires dimensionless argument")
-        return Type(dim=tuple(x/2 for x in a.dim)) if name == "sqrt" else a
+        return Type(dim=tuple(x/2 for x in a.dim) if name == "sqrt" else a.dim, value_only=value_only)
     raise ValidationError(f"unsupported syntax: {ast.dump(node)}")
 
 
@@ -327,6 +373,10 @@ def _cpp_node(node):
     if isinstance(node,ast.Call):
         name=node.func.id
         if name in ('trace', 'dev', 'determinant', 'normalized_determinant'): return f"atlas::{name}_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
+        if name in SPECTRAL_FUNCTIONS:
+            operation, shape, _ = SPECTRAL_FUNCTIONS[name]
+            helper = 'projector' if shape == 'sym' else 'scalar'
+            return f"atlas::spectral_{helper}_or_mark({cpp(node.args[0])}, atlas::spectral_candidate::Operation::{operation}, atlas_eval_ok)"
         if name=='log1p': return f"atlas::scalar_log1p_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='expm': return f"atlas::tensor_expm_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='select': return f"({cpp(node.args[0])} ? {cpp(node.args[1])} : {cpp(node.args[2])})"

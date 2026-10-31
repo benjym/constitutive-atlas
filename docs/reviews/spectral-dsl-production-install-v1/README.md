@@ -1,0 +1,9 @@
+# Spectral DSL production source installation v1
+
+The eight reviewed overlay files from the immutable sibling `spectral-dsl-integration-v1` packet are now installed byte-for-byte. Permanent source regression tests and the public language contract are added. The candidate packet's original `production_installed: false` records its historical observation state and is intentionally unchanged; this is the subsequent installation record.
+
+The installed API adds dimensioned principal values, complementary pair sums, isolated projectors and statically restricted value-only query predicates. It closes the independently reproduced history signed-event bypass. See `docs/SYMMETRIC_SPECTRAL.md` for the API and limitations.
+
+The installed source regression run comprises 53 tests: 52 pass, one compiled-artifact test is skipped, zero fail. Two additional archive regression tests pass. Permanent spectral tests include the 480 frozen independent primal cases. The nine existing model catalogue/header outputs remain byte-identical. The original 341 four-source reference pairs retain their exact prior resolutions (330 archived, 11 historical unresolved); all 30 history bindings now resolve archived bytes. No new compilation or compiled execution occurred, and no new model, scientific admission or remote release is claimed.
+
+Scripts/logs and post-install inventories are retained here; the regression script retains its original absolute checkout path as an execution record. `checks.json` records scope and counts. The packet-local/descriptive secondary inventory repetitions do not represent additional missing source bytes. Compiled generator contexts, 38-column propagation through those contexts, failure transactions and solver rollback still require their own prospective study. Source-level and standalone-primitive evidence do not substitute for those checks.
