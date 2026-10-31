@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 
 from atlas.dsl import ValidationError
-from atlas.research import export_database, load_screening, validate_screening
+from atlas.research import export_database, load_screening, validate_screening, load_publications
 
 
 class ScreeningExportTests(unittest.TestCase):
@@ -30,7 +30,8 @@ class ScreeningExportTests(unittest.TestCase):
                     counts = dict(db.execute('SELECT decision,COUNT(*) FROM publication_screening GROUP BY decision'))
                     self.assertEqual(counts, {'exclude': 34, 'include-for-full-text': 1, 'unresolved': 2})
                     self.assertEqual(len(evidence), 53)
-                    self.assertEqual(db.execute('SELECT COUNT(*) FROM publications').fetchone()[0], 43)
+                    expected_ids = {r['publication_id'] for r in records} | {r['id'] for r in load_publications()['publications']}
+                    self.assertEqual({r[0] for r in db.execute('SELECT id FROM publications')}, expected_ids)
                     # Shared DOI: richer lineage remains canonical, original decision survives unchanged.
                     pid = 'doi:10.1002/nag.1610181203'
                     node = json.loads(db.execute('SELECT record_json FROM publications WHERE id=?', (pid,)).fetchone()[0])

@@ -3,17 +3,19 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
 jobs:
   native:
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: '3.14'
       - run: python -m atlas.cli validate
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-      - run: cmake --build build --parallel 2
+      - run: python tools/build_ci_targets.py build
       - run: ctest --test-dir build --output-on-failure
       - name: Verify recorded-path JSON replay
         env:

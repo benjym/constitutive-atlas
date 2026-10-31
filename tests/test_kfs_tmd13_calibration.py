@@ -1,5 +1,8 @@
 """Synthetic native-failure accounting and unchanged archived optimizer witnesses."""
 import importlib
+import hashlib
+import sys
+import types
 import importlib.util
 import json
 from pathlib import Path
@@ -55,8 +58,13 @@ class CalibrationAccountingTests(unittest.TestCase):
 
     def test_archived_optimizer_counts_failed_candidate_and_all_three_tests(self):
         with tempfile.TemporaryDirectory() as directory:
-            MODULE.OLD.adapter_class(MODULE.CalibrationProcesses(Path(directory),'synthetic')) # Load only Python source; no constructor/native call.
-            pilot=importlib.import_module('frozen_kfs_native.pilot')
+            folder=Path(__file__).parent/'fixtures/kfs-matched96-source'
+            receipt=json.loads((folder/'receipt.json').read_text())
+            for name,pin in receipt['files'].items():
+                self.assertEqual(hashlib.sha256((folder/name).read_bytes()).hexdigest(),pin['sha256'])
+            package=types.ModuleType('fixture_kfs_native');package.__path__=[str(folder)]
+            with patch.dict(sys.modules, {'fixture_kfs_native':package}):
+                pilot=importlib.import_module('fixture_kfs_native.pilot')
             prepared=[{'experiment':{'id':name},'target':0.02,'scales':{'q':1,'volumetric_strain':0.01},
                        'curves':{'q':[(0,0),(0.02,0)],'volumetric_strain':[(0,0),(0.02,0)]}}
                       for name in ('cal-a','cal-b','cal-c')]
