@@ -1,5 +1,4 @@
 """Registered historical source execution; no author binaries or compiler builds."""
-import copy
 import json
 from pathlib import Path
 import shutil
@@ -12,9 +11,9 @@ REGISTRY = 'catalogue/source-replays/transport-audit-v1.json'
 
 
 class RegisteredReplay(unittest.TestCase):
-    def export(self, target):
-        spec = json.loads((ROOT / REGISTRY).read_bytes())
-        names = {REGISTRY}
+    def export(self, target, registry=REGISTRY):
+        spec = json.loads((ROOT / registry).read_bytes())
+        names = {registry}
         for record in spec['replays'].values():
             names.add(record['capsule']['path'])
             names.update(p['path'] for p in record['documents'])
@@ -60,6 +59,40 @@ class RegisteredReplay(unittest.TestCase):
             (root / REGISTRY).write_text(json.dumps(spec))
             with self.assertRaises(ValueError):
                 replay.registered(root, REGISTRY, 'fixed')
+
+    def test_source_rate_exports_reproduce_exact_reports_and_original_groups(self):
+        registry = 'catalogue/source-replays/source-rates-v1/registry.json'
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.export(root, registry)
+            poison = root / 'atlas/dsl.py'
+            poison.parent.mkdir(exist_ok=True)
+            poison.write_text('raise RuntimeError("live DSL must not execute")')
+            for name, count in [('sand', 11), ('clay', 18)]:
+                with self.subTest(model=name):
+                    result = replay.registered(root, registry, name)
+                    original = json.loads(result['stdout'])
+                    self.assertTrue(original['original_report_exact'])
+                    self.assertEqual(original['original_python_groups'], count)
+                    self.assertFalse(original['compiled_execution'])
+                    self.assertFalse(original['admission'])
+
+    def test_source_rate_packet_frozen_files(self):
+        import hashlib
+        folder = ROOT / 'catalogue/source-replays/source-rates-v1'
+        manifest = json.loads((folder / 'manifest.json').read_bytes())
+        self.assertFalse(manifest['compiled_execution'])
+        for name, expected in manifest['files'].items():
+            self.assertEqual(hashlib.sha256((folder / name).read_bytes()).hexdigest(), expected, name)
+
+    def test_source_rate_wrong_document_binding_rejects(self):
+        registry = 'catalogue/source-replays/source-rates-v1/registry.json'
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); spec = self.export(root, registry)
+            spec['replays']['sand']['source_bindings'][0]['source_path'] = 'atlas/dsl.py'
+            (root / registry).write_text(json.dumps(spec))
+            with self.assertRaises(ValueError):
+                replay.registered(root, registry, 'sand')
 
     def test_duplicate_json_members_reject(self):
         with self.assertRaises(ValueError):

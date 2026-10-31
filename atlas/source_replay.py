@@ -109,9 +109,18 @@ def registered(root, registry, replay_id, timeout=30):
     c = strict_json(capsule_bytes)
     validate(c)
     # Bind the archived assessor to the original review's explicit source identity.
-    review = strict_json(held[record['review_document_index']][1])
-    source_pin = c['files'][record['reviewed_source']]['sha256']
-    require(source_pin in review['reviewed_source_hashes'], 'source absent from original review')
+    if 'review_document_index' in record:
+        review = strict_json(held[record['review_document_index']][1])
+        source_pin = c['files'][record['reviewed_source']]['sha256']
+        require(source_pin in review['reviewed_source_hashes'], 'source absent from original review')
+    bindings = record.get('source_bindings', [])
+    require('review_document_index' in record or bindings, 'original source identity binding required')
+    for binding in bindings:
+        value = strict_json(held[binding['document_index']][1])
+        for key in binding['pointer']:
+            value = value[key]
+        require(value == c['files'][relative(binding['source_path'])]['sha256'],
+                'archived source differs from original document binding')
     expected = held[record['expected_stdout_document_index']][1]
     result = replay(c, timeout=timeout)
     require(result['expected_exit_matched'], 'archived process exit changed')

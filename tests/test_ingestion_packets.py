@@ -99,12 +99,11 @@ class IngestionPackets(unittest.TestCase):
   self.assertEqual(actual['input_sha256'],hashlib.sha256((ROOT/'tools/research_rate_observations.py').read_bytes()).hexdigest())
   self.assertEqual(actual['witnesses'],original['witnesses'])
   # Exact historical source/output reproduction is separately registered in test_source_replay.
- def test_revised_sand_exact_volume_and_operational_support(self):
-  folder=ROOT/'docs/ingestion/barodesy-sand/rate-study-v2'
-  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_rate_study.py','-v')
- def test_revised_clay_guard_preserves_historical_rates(self):
-  folder=ROOT/'docs/ingestion/hypoplastic-clay-2005/rate-study-v2'
-  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_*.py','-v')
+ def test_revised_source_studies_preserve_historical_execution(self):
+  from atlas.source_replay import registered
+  registry='catalogue/source-replays/source-rates-v1/registry.json'
+  for name in ('sand','clay'):
+   with self.subTest(model=name):self.assertTrue(registered(ROOT,registry,name)['historical_output_reproduced'])
  def test_thermal_packet_diagnostics_and_six_open_gates(self):
   folder=ROOT/'docs/ingestion/hypoplastic-thermal-ma-2017'
   actual=json.loads(self.run_python(str(folder/'check_packet.py')).stdout)
