@@ -1,0 +1,5 @@
+# Pre-normalized-determinant source identities v6
+
+Ten current receipt/source pairs are preserved through document-bound archive sidecars and exact content-addressed snapshots before shared DSL/compiler/history edits. Original numerical documents, model definitions, values and budgets remain byte-identical. The independent audit expands coverage beyond earlier audits and retains seven pre-existing unresolved older pairs explicitly; this archive does not claim those are resolved.
+
+The existing clay2005 normalized-H study has its own frozen-source replay, which retains its failed source-accuracy outcome. The older tagged-v3 registered replay remains unchanged. The ordinary determinant expression study needs a raw numerical replay with its original source closure because its original assessor hardcodes recorded absolute collection paths; new source-only replay must distinguish numerical-gate reassessment from artifact reopening and rebuilding. No historical ROOT monkeypatch or pin replacement is permitted.

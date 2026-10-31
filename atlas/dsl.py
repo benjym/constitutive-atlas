@@ -132,6 +132,17 @@ def determinant(a):
         raise ValidationError(str(exc)) from exc
 
 
+def normalized_determinant(a):
+    """Exact-input homogeneous determinant ratio; dimensionless result."""
+    from .numerics.normalized_determinant import normalized_determinant as exact_ratio
+    if not isinstance(a, Sym):
+        raise ValidationError('normalized_determinant requires a six-component symmetric tensor')
+    try:
+        return exact_ratio(a.v)
+    except ValueError as exc:
+        raise ValidationError(str(exc)) from exc
+
+
 def tensor_expm(a):
     from .symmetric_expm import symmetric_expm
     if not isinstance(a,Sym):raise ValidationError('expm requires dimensionless symmetric tensor')
@@ -144,7 +155,7 @@ FUNCTIONS = {"sym": lambda *values: Sym(tuple(values)), "sqrt": math.sqrt, "exp"
              "min": min, "max": max, "trace": trace, "dev": dev,
              "dot": dot, "norm": lambda a: math.sqrt(dot(a, a)),
              "cube_trace": cube_trace, "tensor_square": tensor_square, "expm": tensor_expm,
-             "determinant": determinant}
+             "determinant": determinant, "normalized_determinant": normalized_determinant}
 
 
 def parse(expression):
@@ -227,9 +238,11 @@ def infer(node, symbols):
         if name == "expm":
             if a != Type("sym"):raise ValidationError("expm requires dimensionless symmetric tensor")
             return a
-        if name in ("trace", "dev", "norm", "cube_trace", "dot", "tensor_square", "determinant"):
+        if name in ("trace", "dev", "norm", "cube_trace", "dot", "tensor_square", "determinant", "normalized_determinant"):
             if a.shape != "sym" or (name == "dot" and args[1].shape != "sym"):
                 raise ValidationError(f"{name} requires symmetric tensors")
+            if name == "normalized_determinant":
+                return Type()
             if name == "dot":
                 return Type(dim=tuple(x+y for x,y in zip(a.dim,args[1].dim)))
             return Type("sym" if name in ("dev", "tensor_square") else "scalar", tuple(x*(3 if name in ("cube_trace", "determinant") else 2 if name == "tensor_square" else 1) for x in a.dim))
@@ -313,7 +326,7 @@ def _cpp_node(node):
         return f"({cpp(node.left)} {op} {cpp(node.comparators[0])})"
     if isinstance(node,ast.Call):
         name=node.func.id
-        if name in ('trace', 'dev', 'determinant'): return f"atlas::{name}_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
+        if name in ('trace', 'dev', 'determinant', 'normalized_determinant'): return f"atlas::{name}_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='log1p': return f"atlas::scalar_log1p_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='expm': return f"atlas::tensor_expm_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='select': return f"({cpp(node.args[0])} ? {cpp(node.args[1])} : {cpp(node.args[2])})"

@@ -1,3 +1,9 @@
+# Normalized determinant expression integration — 2026-10-31
+
+The [frozen context study](../catalogue/investigations/normalized-determinant-expressions-v1/RESULTS.md) passes all 1,953 calls per native/Wasm backend across 55 synthetic v0.3 definitions and nine contexts. Expected scalar and applicable 38-column derivative bits, 726 material recovery pairs and six history transactions match exactly. A fresh isolated reconstruction of 159 cache-free frozen files regenerates all 64 protocol files exactly. Source registration retains 45 passing targeted tests and ten archived pre-change source bindings; seven pre-existing historical binding gaps remain explicit.
+
+The common expression capability is verified for this corpus. The complete clay2005 original-stress ratio study remains next with all 120 requests and unchanged gates. No model promotion or deployment: eight local runnable drafts and five hosted.
+
 # Compiled determinant expression contexts — 2026-10-31
 
 The [frozen generated-context study](../catalogue/investigations/determinant-expressions-v1/RESULTS.md) passes1,737calls per native/Wasm backend across55synthetic v0.3models, all ninecontexts,38scalar AD columns,670material rejection/recovery pairs and sixhistory triplets. Expected status/bit/transaction responses match exactly; native/Wasm responses agree. Preparatory errors, source snapshots, actual flags and opaque raw observations are retained.21targeted unit tests pass.

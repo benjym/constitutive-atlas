@@ -1,0 +1,9 @@
+# Source registration checkpoint
+
+The dimensionless normalized_determinant(A) operation is registered through Python inference/evaluation, generated model expressions and generated history expressions. Executed failures remain sticky in model evaluation and throw into the existing history transaction handler. Includes are emitted only when used; both prior clay2005 candidates regenerate byte-identical models.hpp/models.json.
+
+45source-level tests pass (41determinant-related plus4source-selection tests). The checkpoint covers all98independent scalar reference fixtures through the interpreter, dimensional/shape typing, eager/lazy failure routing, generated v0.3 model/header wiring, history parent rollback/recovery, ten preserved current source bindings, copied98fixture inputs/38column references in eight generated paths and assessor corruption checks. Compiler/native expression observations are a subsequent frozen study.
+
+The current compiler/DSL/history bytes were archived before shared edits, with exact document-bound maps for all10formerly live bindings. The expanded independent audit retains seven pre-existing historical gaps explicitly. Post-change scan has228pairs:221archived,7pre-existing unresolved,0current live. This is not a claim that the previous59binding audit covered every receipt or that all historical gaps are resolved. The previous ordinary-determinant context verifier passed immediately before changes; its coherent frozen source closure remains intact. The clay normalized-H study's separate frozen-source replay retains its failed source-accuracy outcome.
+
+A new shared explicit source selector excludes caches, bytecode/hidden trees, rejects path escape/selected symlink files, and has4tests. It is used only for new freezes; older chooser implementations and receipt hashes remain unchanged. Generator replay must compare exact bytes in a fresh directory before compilation. No constitutive model or public website changes.
