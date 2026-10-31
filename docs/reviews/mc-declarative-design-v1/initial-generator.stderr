@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-mc-design-generate.py", line 37, in <module>
+    h,catalogue=generate([m]);(P/'models.hpp').write_text(h);(P/'models.json').write_text(json.dumps(catalogue,indent=2)+'\n')
+                ~~~~~~~~^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/atlas/compiler.py", line 26, in generate
+    models=all_models() if model_paths is None else [load(p) for p in sorted(model_paths)]; dest=Path(destination); dest.mkdir(parents=True,exist_ok=True)
+                                                                                                 ~~~~^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 150, in __init__
+    raise TypeError(
+    ...<2 lines>...
+        f"not {type(path).__name__!r}")
+TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'list'

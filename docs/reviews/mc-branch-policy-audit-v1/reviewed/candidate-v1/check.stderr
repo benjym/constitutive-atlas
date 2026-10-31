@@ -1,0 +1,59 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 168, in apply
+    result = spectral(a.v, operation)
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/symmetric_spectral.py", line 72, in spectral
+    if any(not abs(eigen[selected]-eigen[j])>1024*EPS*norm for j in range(3)if j!=selected):raise ValueError('selected_eigenvalue_unresolved')
+                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: selected_eigenvalue_unresolved
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/private/tmp/atlas-mc-declarative-design-v1/check.py", line 35, in <module>
+    hold=evaluation_environment(m,{'sigma':got},{'sigma':got},[0.]*6,parameters)
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/model.py", line 319, in evaluation_environment
+    v=env[f['name']]=evaluate(parse(f['expr']),env)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 323, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 351, in _evaluate_node
+    return evaluate(node.args[1] if evaluate(node.args[0], symbols) else node.args[2], symbols)
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 323, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 351, in _evaluate_node
+    return evaluate(node.args[1] if evaluate(node.args[0], symbols) else node.args[2], symbols)
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 323, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 335, in _evaluate_node
+    a, b = evaluate(node.left, symbols), evaluate(node.right, symbols)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 323, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 335, in _evaluate_node
+    a, b = evaluate(node.left, symbols), evaluate(node.right, symbols)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 323, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 335, in _evaluate_node
+    a, b = evaluate(node.left, symbols), evaluate(node.right, symbols)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 323, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 335, in _evaluate_node
+    a, b = evaluate(node.left, symbols), evaluate(node.right, symbols)
+                                         ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 323, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 352, in _evaluate_node
+    return FUNCTIONS[name](*(evaluate(a, symbols) for a in node.args))
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-mc-declarative-design-v1/frozen/atlas/dsl.py", line 170, in apply
+    raise ValidationError(str(exc)) from exc
+atlas.dsl.ValidationError: selected_eigenvalue_unresolved

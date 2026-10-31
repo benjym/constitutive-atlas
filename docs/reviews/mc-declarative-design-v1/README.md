@@ -1,0 +1,13 @@
+# Mohr–Coulomb declarative design v1: retained failed hold gate
+
+Selected law: MC-Sysala-Cermak-arXiv1508.07435v3-H0, constant-cohesion nonassociated perfect plasticity with positive K,G,c and strict positive friction/dilation. Source: [pinned preprint](https://arxiv.org/abs/1508.07435v3), pp7–13 Eqs3.1–3.6 and4.8–4.29; source receipt/formulas and exact certificates are copied under frozen/docs/ingestion/mohr-coulomb/. No copyrighted PDF is redistributed.
+
+model.json is a complete validated v0.3 incremental-residual research declaration, six persistent stress components, explicit effective Cauchy stress and compression-positive infinitesimal loading. No void ratio law, cap, cutoff, extra hardening or model-specific C++ kernel is introduced. generated/ retains actual generic compiler output. The source classifier and grouped tensor formulas are independently audited in the sibling mc-branch-policy-audit-v1/ packet.
+
+The policy/model were pinned in prospective-policy.json before source-only certificate observations. All25 diagonal/rotated return values pass the bounded4096eps stress-scaled gate; nine invalid parameter limits reject. Four subsequent zero-increment holds fail selected_eigenvalue_unresolved (left/right-to-apex boundary, diagonal/rotated). check.py, its original stdout/stderr and diagnose.py/diagnostic-results.json retain the failed outcome. The non-stopping diagnostic records failures; its exit0 is not a passing hold gate. No gate or reference was relaxed.
+
+The source-exact apex numerator and yield residual use differently rounded arithmetic. Near a rounded hydrostatic apex this can give opposite signs, routing a strict-positive-yield hold to a branch requiring an unresolved gap. A distinct gap-classifier-v2 arithmetic study follows; this candidate remains failed. R1's earlier middle-value subtraction was replaced with direct principal_mid before these observations; the initial generator retains that expression and a separate compiler-call-signature tooling error.
+
+Numerical policy: strict raw Ftrial<=0 classifier, source half-open branch equality ownership, selected-branch AD with no unique boundary classical-tangent claim, explicit256eps initial/returned-yield allowance, no clipping/fallback, selected spectral-gap failure. The yield allowance does not prove tensor or derivative accuracy. Mathematical source-domain validity is separate from binary64 representability and spectral resolution.
+
+Reproduce the negative outcome with `python3 -B check.py`; `python3 -B diagnose.py` records all bounded cases and reproduces failed holds. Imports resolve against the copied frozen source root. No compiled observations, experimental validation, runnable-web promotion or scientific admission.

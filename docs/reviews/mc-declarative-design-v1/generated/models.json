@@ -1,0 +1,264 @@
+{
+  "schema_version": "0.1",
+  "sha256": "92d73fd919e88393e641f30aaadf64adfcafe8297d101a7171ab262d42901082",
+  "models": [
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 100000.0,
+          "min": 1.0,
+          "max": 1000000000000.0,
+          "unit": "Pa",
+          "label": "Numerical reference stress"
+        },
+        "E": {
+          "default": 30000000.0,
+          "min": 0.0,
+          "max": 1.7976931348623157e+308,
+          "unit": "Pa",
+          "label": "Young modulus"
+        },
+        "nu": {
+          "default": 0.25,
+          "min": -1.0,
+          "max": 0.5,
+          "unit": "1",
+          "label": "Poisson ratio (strict interior)"
+        },
+        "c": {
+          "default": 10000.0,
+          "min": 0.0,
+          "max": 1.7976931348623157e+308,
+          "unit": "Pa",
+          "label": "Constant cohesion"
+        },
+        "phi": {
+          "default": 0.5235987755982988,
+          "min": 0.0,
+          "max": 1.5707963267948966,
+          "unit": "1",
+          "label": "Friction angle in radians (strict interior)"
+        },
+        "psi": {
+          "default": 0.17453292519943295,
+          "min": 0.0,
+          "max": 1.5707963267948966,
+          "unit": "1",
+          "label": "Dilation angle in radians (strict interior)"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "K",
+          "expr": "E/(3*(1-2*nu))"
+        },
+        {
+          "name": "G",
+          "expr": "E/(2*(1+nu))"
+        },
+        {
+          "name": "sf",
+          "expr": "sin(phi)"
+        },
+        {
+          "name": "sd",
+          "expr": "sin(psi)"
+        },
+        {
+          "name": "cf",
+          "expr": "cos(phi)"
+        },
+        {
+          "name": "h",
+          "expr": "2*c*cf"
+        },
+        {
+          "name": "aa",
+          "expr": "2*(K-2*G/3)*sd"
+        },
+        {
+          "name": "ds",
+          "expr": "4*K*sd*sf+4*G*(1+sd*sf/3)"
+        },
+        {
+          "name": "dl",
+          "expr": "4*K*sd*sf+G*(3-sf-sd+sd*sf/3)"
+        },
+        {
+          "name": "dr",
+          "expr": "4*K*sd*sf+G*(3+sf+sd+sd*sf/3)"
+        },
+        {
+          "name": "da",
+          "expr": "4*K*sd*sf"
+        },
+        {
+          "name": "trial",
+          "expr": "-(sigma_n+K*trace(de)*I+2*G*dev(de))"
+        },
+        {
+          "name": "v1",
+          "expr": "principal_max_value(trial)"
+        },
+        {
+          "name": "v2",
+          "expr": "principal_mid_value(trial)"
+        },
+        {
+          "name": "v3",
+          "expr": "principal_min_value(trial)"
+        },
+        {
+          "name": "ftrial",
+          "expr": "(1+sf)*v1-(1-sf)*v3-h"
+        },
+        {
+          "name": "gsl",
+          "expr": "(v1-v2)/(2*G*(1+sd))"
+        },
+        {
+          "name": "gsr",
+          "expr": "(v2-v3)/(2*G*(1-sd))"
+        },
+        {
+          "name": "gla",
+          "expr": "(v1+v2-2*v3)/(2*G*(3-sd))"
+        },
+        {
+          "name": "gra",
+          "expr": "(2*v1-v2-v3)/(2*G*(3+sd))"
+        },
+        {
+          "name": "class_ga",
+          "expr": "((2/3)*sf*(v1+v2+v3)-h)/da"
+        },
+        {
+          "name": "class_gs",
+          "expr": "ftrial/ds"
+        },
+        {
+          "name": "branch",
+          "expr": "select(ftrial<=0*p_ref,0,select(class_ga>=max(gla,gra),4,select(class_gs<min(gsl,gsr),1,select(gsl<gsr,2,3))))"
+        },
+        {
+          "name": "face_gamma",
+          "expr": "select(branch<1.5,select(branch>0.5,((1+sf)*principal_max(trial)-(1-sf)*principal_min(trial)-h)/ds,0),0)"
+        },
+        {
+          "name": "left_gamma",
+          "expr": "select(branch<2.5,select(branch>1.5,((1+sf)*principal_upper_sum(trial)/2-(1-sf)*principal_min(trial)-h)/dl,0),0)"
+        },
+        {
+          "name": "right_gamma",
+          "expr": "select(branch<3.5,select(branch>2.5,((1+sf)*principal_max(trial)-(1-sf)*principal_lower_sum(trial)/2-h)/dr,0),0)"
+        },
+        {
+          "name": "returned_source",
+          "expr": "select(branch<0.5,trial,select(branch<1.5,(principal_mid(trial)-face_gamma*aa)*I+((principal_max(trial)-face_gamma*(aa+2*G*(1+sd)))-(principal_mid(trial)-face_gamma*aa))*projector_max(trial)+((principal_min(trial)-face_gamma*(aa-2*G*(1-sd)))-(principal_mid(trial)-face_gamma*aa))*projector_min(trial),select(branch<2.5,(principal_upper_sum(trial)/2-left_gamma*(aa+G*(1+sd)))*I+((principal_min(trial)-left_gamma*(aa-2*G*(1-sd)))-(principal_upper_sum(trial)/2-left_gamma*(aa+G*(1+sd))))*projector_min(trial),select(branch<3.5,(principal_lower_sum(trial)/2-right_gamma*(aa-G*(1-sd)))*I+((principal_max(trial)-right_gamma*(aa+2*G*(1+sd)))-(principal_lower_sum(trial)/2-right_gamma*(aa-G*(1-sd))))*projector_max(trial),c*cf/sf*I))))"
+        }
+      ],
+      "domain": [
+        "E>0*p_ref",
+        "c>0*p_ref",
+        "nu>-1",
+        "nu<0.5",
+        "phi>0",
+        "phi<1.5707963267948966",
+        "psi>0",
+        "psi<1.5707963267948966",
+        "K>0*p_ref",
+        "G>0*p_ref",
+        "ds>0*p_ref",
+        "dl>0*p_ref",
+        "dr>0*p_ref",
+        "da>0*p_ref",
+        "sf>0",
+        "sf<1",
+        "sd>0",
+        "sd<1",
+        "face_gamma>=0",
+        "left_gamma>=0",
+        "right_gamma>=0",
+        "(1+sf)*principal_max_value(returned_source)-(1-sf)*principal_min_value(returned_source)-h<=5.684341886080802e-14*max(h,max(abs(principal_max_value(returned_source)),abs(principal_min_value(returned_source))))"
+      ],
+      "id": "mohr-coulomb-sysala-cermak-h0-research",
+      "name": "Mohr\u2013Coulomb H=0 \u2014 Sysala\u2013Cermak v3 research",
+      "family": "elastoplasticity",
+      "description": "Source-pinned constant-cohesion nonassociated backward-Euler return. Strict positive friction/dilation; no cutoff/cap/hardening. Compression-positive small-strain fixed-frame research record, not a public runnable model or scientific admission.",
+      "sources": [
+        {
+          "url": "https://arxiv.org/abs/1508.07435v3",
+          "locator": "Sysala and Cermak; exact preprint SHA256 bf35ee09d500b8e21aabdddbdfac363c5f68368f150890c60343bc62447c83ca; pp7\u201313 Eqs3.1\u20133.6,4.8\u20134.29 H=0 specialization; grouped return/tangents pp14\u201316. Atlas compression signs reversed; effective stress is explicit host specialization.",
+          "role": "primary formulation and backward-Euler algorithm"
+        }
+      ],
+      "equations": {
+        "sigma": "sigma+returned_source"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "initial_checks": [
+        "(1-sf)*principal_max_value(sigma)-(1+sf)*principal_min_value(sigma)-h<=5.684341886080802e-14*max(h,max(abs(principal_max_value(sigma)),abs(principal_min_value(sigma))))"
+      ]
+    }
+  ]
+}

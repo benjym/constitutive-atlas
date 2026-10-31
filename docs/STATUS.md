@@ -1,3 +1,9 @@
+# Mohr–Coulomb declarative research record — 2026-10-31
+
+The [source-design review](reviews/mc-declarative-coordinator-review-v1/README.md) installs a complete six-component v0.3 stress-only research record for the pinned Sysala–Cermak arXiv v3 H=0 law. Independent exact branch coverage passes19694 cases across96 parameter sets, plus1440 gap identities. Actual generated lazy/grouped expressions and compression signs are reviewed.
+
+The first raw-arithmetic candidate remains failed on four rounded apex holds. A distinct source-equivalent gap-arithmetic revision passes25 diagonal/rotated value cases and their holds, plus9 invalid parameter limits under unchanged bounds. Coordinator source replay passes. No compiled observation, full tensor/38-column model reference, scientific admission or website promotion; hosted five/local nine remain unchanged. Next: independently frozen stored-input values/directions and a serial backend study.
+
 # Generated spectral integration verified — 2026-10-31
 
 The [frozen generated-context study](../catalogue/investigations/spectral-generated-context-v1/RESULTS.md) passes1589 calls per native/Wasm backend:1133 successes and456 expected failures,17496 independent accuracy checks and23484 derivative-column checks each. Actual generated residual/observable/control/reset/history and solver failure/recovery contexts pass, with the same independent stored-Mandel references and unchanged bounds. Worst error/allowance is.240084.

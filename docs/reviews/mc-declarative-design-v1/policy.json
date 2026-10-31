@@ -1,0 +1,25 @@
+{
+  "identity": "mc-declarative-design-v1",
+  "compiled_observations": 0,
+  "classifier_order": [
+    "Ftrial<=0:elastic",
+    "otherwise gamma_apex>=max(gla,gra):apex",
+    "otherwise gamma_face<min(gsl,gsr):face",
+    "otherwise gsl<gsr:left",
+    "otherwise:right"
+  ],
+  "equality": "Exact source arithmetic owns face/edge equality at edge and edge/apex equality at apex. Floating raw comparisons use no tie epsilon. Near-boundary rounded classifier may choose either adjacent branch; no unique boundary classical tangent or bit-identical branch across backends is claimed. Stress still must satisfy prospective accuracy/admissibility gates.",
+  "derivatives": "Differentiate only selected ordinary spectral branch; value-only classification is control, not a numeric derivative. Isolated projectors and paired sums preserve valid complementary repeated spectra. Apex stress derivatives are zero but parameter c/phi derivatives are not generally zero.",
+  "failure": "No clipping, eigenvalue merging, branch retry or fallback on spectral failure. Nonfinite intermediates, unresolved selected gaps, negative selected multipliers or failed checks cause rejected evaluation; caller must discard scratch and retain committed state.",
+  "yield_allowance": {
+    "factor_eps": 256,
+    "meaning": "Initial admissibility and returned yield use F<=256*eps*max(h,abs(lambda_max),abs(lambda_min)); this is numerical roundoff allowance only, no projection or change to strict elastic classifier."
+  },
+  "source_only_certificate_gate": {
+    "factor_eps": 4096,
+    "scale": "max(1 Pa,c,Cartesian Frobenius norm of source trial and expected return)",
+    "scope": "Bounded 14 analytical certificates under binary64 parameter/Mandel conversion; not full numerical-domain or derivative verification."
+  },
+  "representability": "Positive finite moduli/cohesion, resolved 0<sin(phi),sin(psi)<1 and positive denominators. Overflow/underflow can reject mathematically valid unresolved inputs; no full source-domain executable claim.",
+  "next_gate": "Independent exact-stored-input full tensor value/38-column directional references with rotations, near-boundaries, parameter sensitivity and failure/rollback requests must be frozen before compiled model study."
+}
