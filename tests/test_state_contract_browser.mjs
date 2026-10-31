@@ -60,7 +60,8 @@ test('unsupported example stresses reject without projection or lost components'
     assert.throws(()=>laboratoryExample(model),/laboratory|finite/);
     assert.deepEqual(model.state[0].initial,stress);
   }
-  const model=structuredClone(base);model.formulation.stress.scope='total';assert.throws(()=>laboratoryExample(model),/effective/);
+  const model=structuredClone(base);model.formulation.stress.scope='total';assert.deepEqual(laboratoryExample(model),laboratoryExample(base));
+  model.formulation.stress.scope='unknown';assert.throws(()=>laboratoryExample(model),/stress binding/);
 });
 test('invalid persistent fields and parameter defaults cannot become executable examples',()=>{
   const base=readModel('../docs/ingestion/hypoplastic-clay-2013/preview-plan-v1/model.json');

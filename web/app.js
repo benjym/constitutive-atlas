@@ -1,12 +1,16 @@
 import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
 import {formulationSection} from './formulation-view.mjs';
-import {createLoading,normalizeLoading,verifyReturnedLoading,exportRun,importRunDocument} from './loading.mjs';
+import {createLoading,normalizeLoading,verifyReturnedLoading} from './loading.mjs';
+import {laboratoryStress,validateScopedLaboratory,verifyScopedLaboratory} from './laboratory-scope.mjs';
+import {laboratoryPresentation,laboratoryPoreView} from './laboratory-view.mjs';
+import {createLaboratoryDocument,parseLaboratoryDocument,laboratoryDocumentCSV} from './laboratory-document.mjs';
 import {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';
 import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
 import {setupRecordedView} from './recorded-view.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
 const $ = id => document.getElementById(id);
+let compiledCatalogue=null;
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
 const experimentCache=new Map();
@@ -117,8 +121,18 @@ function scheduleUpdate(){
   // Coalesce rapid edits without waiting for a continuous drag to end.
   if(updateTimer===null)updateTimer=setTimeout(()=>{updateTimer=null;simulate();},100);
 }
+function updateScopeLabels(){
+  if(!model())return;
+  const p=laboratoryPresentation(model());
+  $('confinement-label').textContent=p.radialLabel;
+  document.querySelector('[data-for="confinement"]')?.setAttribute('aria-label',p.radialLabel+' slider');
+  for(const option of $('protocol').options)option.textContent=p.protocols[Number(option.value)];
+  $('path-title').textContent=p.pathTitle;$('path-chart').setAttribute('aria-label',p.pathAria);$('stress-chart').setAttribute('aria-label',p.stressAria);
+  $('target-label').textContent=$('protocol').value==='3'?(p.scope==='total'?'Total deviator stress (kPa)':'Deviator stress (kPa)'):'Axial strain (%)';
+  document.querySelector('[data-for="target"]')?.setAttribute('aria-label',$('target-label').textContent+' slider');
+}
 function populate({loadExample=true}={}){
-  const m=model(),example=loadExample?laboratoryExample(m):null;
+  const m=model(),example=loadExample?laboratoryExample(m):null;updateScopeLabels();
   if(example){$('confinement').value=example.confinement;$('stress-ratio').value=example.stressRatio;}
   $('model-description').textContent=m.description;$('model-family').textContent=m.family;$('model-status').textContent=m.status;
   $('parameter-fields').replaceChildren();
@@ -173,13 +187,15 @@ function numericalValues(){
 function setNumericalValues(value){const s=normalizeSettings(value);for(const f of settingFields)$('numerical-'+f.key).value=s[f.key];}
 function specification(){
   const m=model(),protocol=Number($('protocol').value);
-  const s={model:m.id,parameters:Object.keys(m.parameters).map(n=>Number($('param-'+n).value)*Number($('param-'+n).dataset.factor)),initial:valuesForState(m),protocol,target:Number($('target').value)*(protocol===3?1000:.01),steps:Number($('steps').value),cycles:Number($('cycles').value),integration_settings:numericalValues()};
+  const s={response_contract:'stress-scope-0.1',stress_scope:laboratoryStress(m).scope,model:m.id,parameters:Object.keys(m.parameters).map(n=>Number($('param-'+n).value)*Number($('param-'+n).dataset.factor)),initial:valuesForState(m),protocol,target:Number($('target').value)*(protocol===3?1000:.01),steps:Number($('steps').value),cycles:Number($('cycles').value),integration_settings:numericalValues()};
   if($('loading-version').value==='exact')s.loading=createLoading(s);
   return s;
 }
 function validateSpec(s){
   normalizeSettings(s.integration_settings);normalizeLoading(s);
   const m=models.find(m=>m.id===s.model);if(!m)throw Error('This model is not in the executable catalogue.');
+  if(s.response_contract!==undefined)validateScopedLaboratory(s,compiledCatalogue);
+  else if(laboratoryStress(m).scope!=='effective')throw Error('Legacy laboratory inputs require effective stress.');
   if(!Array.isArray(s.parameters)||s.parameters.length!==Object.keys(m.parameters).length)throw Error('Parameter array does not match model.');
   Object.values(m.parameters).forEach((p,i)=>{if(typeof s.parameters[i]!=='number'||!Number.isFinite(s.parameters[i])||s.parameters[i]<p.min||s.parameters[i]>p.max)throw Error('Parameter outside declared bounds.');});
   const size=m.state.reduce((n,f)=>n+(f.shape==='sym'?6:1),0);
@@ -209,7 +225,7 @@ function startRun(job){
     // A completed older calculation must never replace newer slider settings.
     if(data.id===sequence){
       let responseError=data.error;
-      if(!responseError){try{verifyReturnedSettings(data.result,s.integration_settings);verifyReturnedLoading(data.result,s,catalogueHash);}catch(error){responseError=error.message;}}
+      if(!responseError){try{if(s.response_contract!==undefined)verifyScopedLaboratory(data.result,s,compiledCatalogue);else{verifyReturnedSettings(data.result,s.integration_settings);verifyReturnedLoading(data.result,s,catalogueHash);}}catch(error){responseError=error.message;}}
       if(responseError)calculationError(responseError);
       else if(data.result.catalogue_hash!==catalogueHash)calculationError('Wasm and model catalogue differ. Reload a consistent build.');
       else{
@@ -218,16 +234,15 @@ function startRun(job){
         $('response-charts').classList.remove('updating');$('response-charts').setAttribute('aria-busy','false');
         $('run-state').textContent=r.ok?'✓ Response up to date':'Stopped · last committed state retained';
         $('control-status').textContent=r.ok?'Live · changes update automatically.':r.message;
-        $('run-detail').textContent=r.points?.length?`${r.points.length-1} increments · ${r.elapsed_ms.toFixed(1)} ms · ${protocolNames[s.protocol]}`:r.message;
+        $('run-detail').textContent=r.points?.length?`${r.points.length-1} increments · ${Number.isFinite(r.elapsed_ms)?r.elapsed_ms.toFixed(1)+' ms':'duration unavailable'} · ${laboratoryPresentation(model()).protocols[s.protocol]} · ${laboratoryStress(model()).scope} stress`:r.message;
         $('result-note').textContent=r.ok?'Example parameters. No experimental calibration or predictive validity is implied.':r.message;
-        $('pore-caption').textContent=[2,3].includes(s.protocol)?'Fixed radial total stress; incompressible fluid / grains assumption':'Not defined for this drained / mechanical protocol';
       }
     }
     if(pendingRun){const next=pendingRun;pendingRun=null;startRun(next);}
   };
   worker.onerror=e=>{const next=pendingRun;const latest=id===sequence;clearTimeout(timer);worker?.terminate();worker=null;activeId=null;pendingRun=null;busy(false);if(latest)calculationError('Worker error: '+e.message);if(next)startRun(next);};
   timer=setTimeout(()=>{const next=pendingRun;const latest=id===sequence;worker?.terminate();worker=null;activeId=null;pendingRun=null;busy(false);if(latest)calculationError('Calculation exceeded 15 seconds. Reduce increments or check the model domain.');if(next)startRun(next);},15000);
-  worker.postMessage({...s,id,catalogue_hash:catalogueHash});
+  worker.postMessage({id,kind:'laboratory',specification:s,catalogue:compiledCatalogue});
 }
 function simulate(s){
   clearTimeout(updateTimer);updateTimer=null;
@@ -243,7 +258,7 @@ function axisRange(values){
 }
 function numberLabel(v){if(Math.abs(v)<1e-10)return '0';return Number(v.toPrecision(3)).toString();}
 function svgNode(name,attributes,text){const n=document.createElementNS('http://www.w3.org/2000/svg',name);for(const[k,v]of Object.entries(attributes))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n;}
-function chart(id,xLabel,yLabel,predicted,measured=[]){
+function chart(id,xLabel,yLabel,predicted,measured=[],emptyMessage){
   const svg=$(id);svg.replaceChildren();svg.append(svgNode('title',{},yLabel+' versus '+xLabel));
   const left=62,top=27,w=392,h=211,all=[...predicted,...measured].filter(a=>a.every(Number.isFinite));
   const [xmin,xmax]=axisRange(all.map(p=>p[0])),[ymin,ymax]=axisRange(all.map(p=>p[1]));
@@ -253,7 +268,7 @@ function chart(id,xLabel,yLabel,predicted,measured=[]){
     svg.append(svgNode('line',{x1:left,y1:yy,x2:left+w,y2:yy,stroke:'#e6e9df','stroke-dasharray':'3 4'}),svgNode('text',{x:left-10,y:yy+4,'text-anchor':'end'},numberLabel(ymax-i*(ymax-ymin)/4)),svgNode('text',{x:xx,y:top+h+19,'text-anchor':'middle'},numberLabel(xmin+i*(xmax-xmin)/4)));
   }
   svg.append(svgNode('text',{x:left+w/2,y:282,'text-anchor':'middle',class:'axis-label'},xLabel.length>56?xLabel.slice(0,53)+'…':xLabel),svgNode('text',{x:12,y:top-12,class:'axis-label'},yLabel.length>60?yLabel.slice(0,57)+'…':yLabel));
-  if(!all.length)svg.append(svgNode('text',{x:left+w/2,y:top+h/2,'text-anchor':'middle'},(id==='source-chart'?'No paired observations for these channels':id==='pore-chart'&&lastSpec&&![2,3].includes(lastSpec.protocol)?'Available for undrained protocols':'Preparing response…')));
+  if(!all.length)svg.append(svgNode('text',{x:left+w/2,y:top+h/2,'text-anchor':'middle'},(emptyMessage||(id==='source-chart'?'No paired observations for these channels':'Preparing response…'))));
   if(predicted.length)svg.append(svgNode('polyline',{points:predicted.map(([a,b])=>`${x(a)},${y(b)}`).join(' '),fill:'none',stroke:'#bc643e','stroke-width':2,'stroke-linejoin':'round'}));
   const stride=Math.max(1,Math.ceil(measured.length/350));measured.filter((_,i)=>i%stride===0).forEach(([a,b])=>svg.append(svgNode('circle',{cx:x(a),cy:y(b),r:2,fill:'#547a95',opacity:.6,class:'experiment-point'})));
   if(predicted.length){
@@ -278,16 +293,19 @@ function renderCharts(){
   }else delete view.dataset.record;
   const protocol=Number($('protocol').value),cycles=Number($('cycles').value);
   // Do not combine an old solver response with a newly selected test protocol.
-  const pts=lastSpec?.protocol===protocol?currentResult?.points||[]:[];
+  const matching=lastSpec?.protocol===protocol&&lastSpec?.model===model()?.id;
+  const pts=matching?currentResult?.points||[]:[];
+  const presentation=laboratoryPresentation(model()),pore=laboratoryPoreView(matching?currentResult:null,model(),protocol);
+  $('pore-caption').textContent=pore.caption;
   const predicted={
     stress:pts.map(p=>[p.strain[0]*100,p.q_signed/1000]),
     path:pts.map(p=>[p.p/1000,p.q_signed/1000]),
     volume:pts.map(p=>[p.strain[0]*100,p.strain.slice(0,3).reduce((a,b)=>a+b,0)*100]),
-    pore:[2,3].includes(protocol)?pts.map(p=>[p.strain[0]*100,p.u/1000]):[]
+    pore:pore.points
   };
-  for(const [key,axes] of Object.entries(comparisonAxes)){
+  for(const [key,axes] of Object.entries(presentation.axes)){
     const measured=comparisonSeries(experiment,visible,key,protocol,cycles,model());
-    chart(key+'-chart',axes.xLabel,axes.yLabel,predicted[key],measured);
+    chart(key+'-chart',axes.xLabel,axes.yLabel,predicted[key],measured,key==='pore'?pore.caption:undefined);
     const panel=$(key+'-chart').closest('.chart-panel');
     panel.querySelector('.measured-key').hidden=!measured.length;
     panel.querySelector('.measurement-note').textContent=experiment&&experiment.kind==='experiment'&&!measured.length?(visible?'No compatible measured channel pair for these axes.':'Measurements hidden.') : '';
@@ -336,7 +354,7 @@ function showCatalogueModel(entry,spec){
 function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function setProtocol(){
   const input=$('target'),stress=$('protocol').value==='3',wasStress=input.dataset.mode==='stress';
-  $('target-label').textContent=stress?'Deviator stress (kPa)':'Axial strain (%)';
+  $('target-label').textContent=stress?'Deviator stress (kPa)':'Axial strain (%)';updateScopeLabels();
   if(stress!==wasStress)input.value=stress?'20':'1';
   input.dataset.mode=stress?'stress':'strain';input.min=stress?'-100000':'-10';input.max=stress?'100000':'10';
   document.querySelector('[data-for="target"]')?.remove();
@@ -344,7 +362,7 @@ function setProtocol(){
 }
 async function readFile(file){if(!file)return null;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');return JSON.parse(await file.text());}
 async function importRun(file){
-  try{const doc=await readFile(file);if(!doc)return;const imported=importRunDocument(doc,catalogueHash);
+  try{if(!file)return;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');const imported=parseLaboratoryDocument(await file.text(),compiledCatalogue);
     const s={...imported,integration_settings:normalizeSettings(imported.integration_settings)},m=validateSpec(s);$('loading-version').value=s.loading?'exact':'legacy';setNumericalValues(s.integration_settings);$('model').value=m.id;populate({loadExample:false});Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
     $('confinement').value=s.initial[1]/1000;$('stress-ratio').value=s.initial[0]/s.initial[1];let offset=6;
     for(const f of m.state.slice(1)){const size=f.shape==='sym'?6:1;if(persistentState(f)){const input=$('state-'+f.name);input.value=size===6?s.initial.slice(offset,offset+6).join(','):s.initial[offset]/Number(input.dataset.factor);}offset+=size;}
@@ -471,8 +489,8 @@ $('clear-experiments').onclick=()=>{const local=$('experiment-select').value.sta
 $('controls').addEventListener('input',scheduleUpdate);
 $('retry-button').onclick=()=>simulate();
 numericalControls();setProtocol();addSlider($('confinement'),'Radial effective stress (kPa)',1,10000);addSlider($('stress-ratio'),'Axial / radial stress ratio',.01,10);
-$('export-run').onclick=()=>download(lastSpec.model+'-run.json',JSON.stringify(exportRun(catalogueHash,lastSpec,currentResult),null,2),'application/json');
-$('export-csv').onclick=()=>{const rows=['axial_strain,radial_strain,volumetric_strain,p_Pa,q_signed_Pa,pore_pressure_Pa,iterations,substeps'];for(const p of currentResult.points)rows.push([p.strain[0],p.strain[1],p.strain.slice(0,3).reduce((a,b)=>a+b,0),p.p,p.q_signed,p.u,p.iterations,p.substeps].join(','));download(lastSpec.model+'-results.csv',rows.join('\n'),'text/csv');};
+$('export-run').onclick=()=>download(lastSpec.model+'-run.json',JSON.stringify(createLaboratoryDocument(lastSpec,currentResult,compiledCatalogue),null,2),'application/json');
+$('export-csv').onclick=()=>download(lastSpec.model+'-results.csv',laboratoryDocumentCSV(lastSpec,currentResult,compiledCatalogue),'text/csv');
 $('search').oninput=$('availability').onchange=catalogueCards;
 $('catalogue-close').onclick=closeCatalogue;
 // Direct links have no opening control for the native dialog to restore.
@@ -481,7 +499,7 @@ $('catalogue-dialog').addEventListener('cancel',event=>{event.preventDefault();c
 $('catalogue-dialog').onclick=e=>{if(e.target===$('catalogue-dialog')){const box=e.target.getBoundingClientRect();if(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom)closeCatalogue();}};
 try{
   const [response,manifest]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json')]);if(!response.ok||!manifest.ok)throw Error('Catalogue could not be loaded.');
-  const definitions=await response.json();catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
+  const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   setupRecordedView({catalogue:definitions,chart,sourceLinks,definitionLink});
   populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadPublicationReferences();loadEvidenceIndex();loadApplicability();

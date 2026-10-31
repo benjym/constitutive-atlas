@@ -1,3 +1,4 @@
+import {laboratoryStress} from './laboratory-scope.mjs';
 // Storage semantics shared by laboratory fields and run import/export.
 export function stateRole(field){
   if(field.semantics!==undefined){
@@ -20,7 +21,7 @@ export function temporaryStateComponents(field){
 export function laboratoryExample(model){
   const stress=model.state?.[0];
   if(!stress||stress.name!=='sigma'||stress.shape!=='sym'||stress.unit!=='Pa'||!persistentState(stress))throw Error('The laboratory requires a first persistent Mandel stress field in Pa.');
-  if(model.formulation&&(model.formulation.stress?.source!=='state'||model.formulation.stress?.name!==stress.name||model.formulation.stress?.scope!=='effective'||model.formulation.tensor_representation!=='mandel'))throw Error('The laboratory example requires effective Mandel state stress.');
+  laboratoryStress(model);
   const state=model.state.flatMap(field=>{
     if(!persistentState(field))return temporaryStateComponents(field);
     if(field.shape==='sym'&&!Array.isArray(field.initial))throw Error('Model example requires complete finite persistent state.');

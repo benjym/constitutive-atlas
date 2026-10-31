@@ -50,7 +50,7 @@
               <option value="4">Isotropic compression</option>
               <option value="3">Undrained · stress control</option>
             </select></label>
-          <label><span id="target-label">Axial strain (%)</span><input id="target" type="number" value="1" min="-10" max="10" step="0.1" required></label>
+          <label><span id="target-label">Axial strain (%)</span><input id="target" type="number" value="1" min="-10" max="10" step="any" required></label>
           <label>Loading history<select id="cycles">
               <option value="0">Monotonic ramp</option>
               <option value="1">1 sinusoidal cycle</option>
@@ -61,7 +61,7 @@
           <div class="eyebrow">INITIAL STATE</div>
           <button type="button" id="load-model-example" class="text-button">Load model example</button>
           <p class="control-hint">Selecting a model loads its example parameters and full initial state. These illustrative values do not establish specimen preparation or experimental calibration. Loading an example replaces parameter and state edits.</p>
-          <label>Radial effective stress (kPa)<input id="confinement" type="number" value="100" min="0.001" max="1000000" step="any" required></label>
+          <label><span id="confinement-label">Radial effective stress (kPa)</span><input id="confinement" type="number" value="100" min="0.001" max="1000000" step="any" required></label>
           <details class="control-section">
             <summary>Initial state details</summary>
             <label>Axial / radial stress ratio<input id="stress-ratio" type="number" value="1" min="0.01" max="10" step="any" required></label>
@@ -129,7 +129,7 @@
             </section>
             <section class="chart-panel">
               <div class="chart-title">
-                <h2>Effective stress path</h2>
+                <h2 id="path-title">Effective stress path</h2>
               </div><svg id="path-chart" viewBox="0 0 480 290" role="img" aria-label="Deviator stress versus effective mean stress"></svg>
               <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div>
               <p class="measurement-note"></p>
