@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [TMD2 process-status correction](reviews/tmd2-process-status-v1/README.md)
+closes a reproduced saved exit23 false pass. The supported command requires
+successful, hash-bound process receipts before its unchanged numerical assessor.
+The valid replay summary is byte-identical; failed replay stops before assessment.
+28focused tests pass. Original packets and bounds remain unchanged; no builds,
+material calls or scientific admission.
+
 The [bounded prior-work comparison](PRIOR_WORK.md) records eight projects and
 eleven primary documentation sources. Core planned functions have established
 precedents; proposed Atlas distinctions remain hypotheses. PAPER-01 remains open

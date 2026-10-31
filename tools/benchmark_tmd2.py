@@ -19,6 +19,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from atlas.data import normalize_member
+from tools.strict_observation_json import loads as read_observation_json
 
 PACKET = ROOT / 'docs/benchmarks/kfs-tmd2-research-range-v1'
 ARCHIVE_URL = 'https://www.torsten-wichtmann.de/KFSDB/TMD/TMD1-5/TMD1-5.zip'
@@ -67,6 +68,38 @@ def command(args, directory, stem):
     write(directory / (stem + '.json'), receipt)
     if result.returncode:
         raise RuntimeError(f'{stem} failed ({result.returncode}); see retained stdout/stderr')
+
+
+def verify_process_observations(inputs, observations):
+    """Require successful, bound saved processes before the frozen math assessor.
+
+    This guard does not replace response-schema or numerical validation. Receipt
+    hashes detect accidental substitution; they are not signed attestations.
+    """
+    def read(path):
+        return read_observation_json(path.read_text())
+
+    pins = read(inputs / 'source-pins.json')
+    freeze_hash = sha(inputs / 'freeze.json')
+    checked = []
+    for request in read(inputs / 'requests.json'):
+        name = request['id']
+        folder = observations / name
+        receipt = read(folder / 'receipt.json')
+        code = receipt.get('returncode')
+        if type(code) is not int or code != 0:
+            raise ValueError(f'{name}: expected integer zero process returncode, got {code!r}')
+        for key, expected in [('artifact_sha256', pins['artifact']['sha256']),
+                              ('freeze_sha256', freeze_hash),
+                              ('stdout_sha256', sha(folder / 'stdout.json')),
+                              ('stderr_sha256', sha(folder / 'stderr.txt'))]:
+            if receipt.get(key) != expected:
+                raise ValueError(f'{name}: process receipt {key} mismatch')
+        response = read(folder / 'stdout.json')
+        if response.get('ok') is not True:
+            raise ValueError(f'{name}: successful process requires response ok=true')
+        checked.append(name)
+    return checked
 
 
 def unpack_source(archive, output):
@@ -136,7 +169,7 @@ def run(args):
         pins['data'] = {'path': str(normalized), 'sha256': sha(normalized), 'semantic_sha256': SEMANTIC_SHA}
         pins['portable_source_packet_manifest_sha256'] = sha(PACKET / 'packet-manifest.json')
         write(inputs / 'source-pins.json', pins)
-        write(inputs / 'portable-command.json', {'script_sha256': sha(Path(__file__)), 'source_archive_sha256': sha(PACKET / 'source.tar.gz'), 'data': status['data'], 'maximum_material_calls': 3})
+        write(inputs / 'portable-command.json', {'script_sha256': sha(Path(__file__)), 'observation_decoder_sha256': sha(ROOT / 'tools/strict_observation_json.py'), 'source_archive_sha256': sha(PACKET / 'source.tar.gz'), 'data': status['data'], 'maximum_material_calls': 3})
         write(inputs / 'freeze.json', {'frozen_at': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'compiled_tmd2_calls_at_freeze': 0, 'maximum_tmd2_calls': 3, 'files': {f.name: sha(f) for f in sorted(inputs.iterdir()) if f.is_file()}})
         # Original reference, requests, settings and acceptance script remain exact.
         for name in ['reference.json', 'requests.json', 'protocol.json', 'assess.py', 'run_study.py']:
@@ -145,6 +178,8 @@ def run(args):
         write(out / 'run.json', status)
         print('Inputs verified and frozen; executing exactly three serial TMD2 paths.', flush=True)
         command([sys.executable, str(inputs / 'run_study.py'), '--output', str(out / 'observations')], out, 'execute')
+        checked = verify_process_observations(inputs, out / 'observations')
+        write(out / 'process-check.json', {'passed': True, 'paths': checked, 'scientific_admission': False})
         command([sys.executable, str(inputs / 'assess.py'), '--observations', str(out / 'observations'), '--data', str(normalized), '--output', str(out / 'results')], out, 'assess')
         summary = json.loads((out / 'results/summary.json').read_text())
         lines = ['# TMD2 local reproduction', '', 'Source-informed operational reconstruction; historical strain conversion and independent scientific admission remain open.', '', 'Experimental errors are descriptive calibration-campaign errors, not held-out validation. Measured volume is fractional volume change; finite-kinematic equivalence is not verified.', '', '![Source/model reproduction](results/reproduction.png)', '', '| Path | Source envelope | q RMSE (kPa) | Volume RMSE (percentage points) |', '| --- | --- | ---: | ---: |']
