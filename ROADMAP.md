@@ -480,3 +480,10 @@ This advances bounded numerical research evidence without public/experimental ad
 ### 2026-10-31 — Terra Cotta TC-01 source crosswalk
 
 The [bounded Figure1/AppendixB reconciliation](docs/models/terracotta-2024-tc01-reconciliation.md) separates the extra thermodynamic elastic pressure from the changed plastic transport coefficients, documents factored versus dimensional coefficient units and retains the rounded-preset discrepancy. Independent inspection supports the pinned author-image-to-schema transcription; journal equivalence remains unverified. No local journal PDF was found and normal publisher/author PDF routes returned403. TC-01 stays open pending the listed complete equation/table page images. The next numerical study should carry preparation into hold with explicit one-sided rate conventions, rather than repeat frozen-preparation creep comparisons.
+
+
+### 2026-10-31 — Clay2014 fixed-plane base rates
+
+The [printed-Am/proposed-Eq49 research variant](docs/reviews/clay2014-rate-results.md) now represents the complete instantaneous seven-state base rate through the common schema/compiler, with fixed material-plane orientation and noIGS. Independent literal four-index Cartesian references verify37 rates plus16 rejection/recovery pairs in each persistent native/Wasm instance; both70-response opaque transports pass audit. One-target builds ran serially with one job. The original serialization-audit failure is retained and a separately reviewed additive assessment closes finite-int/float JSON identity without changing numerical gates or old source pins.
+
+Source review independently exposed a new Eq14 Am versus trace(L:I) discrepancy, retained alongside the separate AppendixB IGS normalization conflict. No correction or public admission follows. Next are constitutive derivatives and independent finite paths/preparation once this source variant is explicitly selected; final publisher reconciliation, material-axis transport, IGS pairing, physical/experimental/scientific review and the broader catalogue/paper/website milestones remain open.

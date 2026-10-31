@@ -1,0 +1,649 @@
+{
+  "fragment_version": "clay2014-base-rate-0.1",
+  "model_id": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane",
+  "status": "Isolated research transcription only; no integration/IGS/public admission",
+  "source": {
+    "doi": "10.1680/geot.13.P.065",
+    "url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_Geot14-pp.pdf",
+    "sha256": "2eb8598297e3ac9cf245161f56674d6cef622b35fc612adc89dc129568b55202",
+    "locators": "Author manuscript pp2-3 Eqs2-15; pp9-10 AppendixA Eqs34-50"
+  },
+  "scope": {
+    "orientation": "Fixed actual unitaxis n, P=n\u2297n, no normalization/transport",
+    "sign": "Compressionpositive effective stress/stretching; Mandel xx yy zz xy yz xz; zero spin",
+    "density": "Inherited incompressiblegrain e closure",
+    "variant": "PRINTED Eq14 Am and PROPOSED Eq49 alpha_f; no IGS; sourcea0.3",
+    "limitations": [
+      "Source manuscript not reconciled to finalpublisher",
+      "PrintedEq14 differs fromtraceL(I); bothretained no repair",
+      "No sourceIGS Eq17/19/56 normalization repair",
+      "No completeexperimental/initialization/integration/AD admission"
+    ]
+  },
+  "inputs": {
+    "sigma": {
+      "shape": "sym",
+      "unit": "Pa"
+    },
+    "stretching": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "e": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "phi_c": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "lambda_star": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "kappa_star": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "N": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "nu_pp": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "alpha_G": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "alpha_E": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "alpha_nu": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "n1": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "n2": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "n3": {
+      "shape": "scalar",
+      "unit": "1"
+    }
+  },
+  "constants": {
+    "p_ref": {
+      "shape": "scalar",
+      "unit": "Pa",
+      "value": 1000
+    },
+    "source_a": {
+      "shape": "scalar",
+      "unit": "1",
+      "value": 0.3
+    },
+    "lode_roundoff_allowance": {
+      "shape": "scalar",
+      "unit": "1",
+      "value": 1.4210854715202004e-14
+    },
+    "orientation_allowance": {
+      "shape": "scalar",
+      "unit": "1",
+      "value": 1.4210854715202004e-14
+    },
+    "stress_interior_margin": {
+      "shape": "scalar",
+      "unit": "1",
+      "value": 1.4210854715202004e-14
+    }
+  },
+  "terms": [
+    {
+      "name": "axis_norm2",
+      "expression": "n1*n1+n2*n2+n3*n3",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction",
+      "checks": [
+        "abs(axis_norm2-1) <= orientation_allowance"
+      ]
+    },
+    {
+      "name": "P",
+      "expression": "sym(n1*n1,n2*n2,n3*n3,sqrt(2)*n1*n2,sqrt(2)*n2*n3,sqrt(2)*n1*n3)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "B",
+      "expression": "1-nu_pp-2*alpha_E*nu_pp**2/alpha_nu**2",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq4 bracket; conservative positive elastic bracket support",
+      "checks": [
+        "B > 0"
+      ]
+    },
+    {
+      "name": "a1",
+      "expression": "alpha_E*B",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq4"
+    },
+    {
+      "name": "a2",
+      "expression": "alpha_E*nu_pp*(1+alpha_E*nu_pp/alpha_nu**2)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq5"
+    },
+    {
+      "name": "a3",
+      "expression": "alpha_E*nu_pp*(1/alpha_nu+nu_pp/alpha_nu-1-alpha_E*nu_pp/alpha_nu**2)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq6"
+    },
+    {
+      "name": "a4",
+      "expression": "alpha_E*B*(1-alpha_G)/alpha_G",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq7"
+    },
+    {
+      "name": "a5",
+      "expression": "alpha_E*(1-alpha_E*nu_pp**2/alpha_nu**2)+1-nu_pp**2-2*alpha_E*nu_pp*(1+nu_pp)/alpha_nu-2*alpha_E*B/alpha_G",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq8"
+    },
+    {
+      "name": "Am",
+      "expression": "nu_pp**2*(4*alpha_E/alpha_nu-2*alpha_E**2+2*alpha_E**2/alpha_nu**2-1)+nu_pp*(4*alpha_E/alpha_nu+2*alpha_E)+2*alpha_E+1",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq14 PRINTED variant; differs from trace(L:I), no repair selected",
+      "checks": [
+        "Am > 0"
+      ]
+    },
+    {
+      "name": "Am_trace",
+      "expression": "3*a1+9*a2+6*a3+2*a4+a5",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Independent contraction trace(L:I), diagnostic only; never replaces printed Eq14"
+    },
+    {
+      "name": "Am_discrepancy",
+      "expression": "Am-Am_trace",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Printed Eq14 minus contraction; retained source discrepancy"
+    },
+    {
+      "name": "elastic_scale",
+      "expression": "abs(a1)+3*abs(a2)+2*abs(a3)+2*abs(a4)+abs(a5)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Independent Eqs2-8 canonical unitaxis stiffness Sylvester numericalinterior; not new constitutive formula",
+      "checks": [
+        "elastic_scale > 0"
+      ]
+    },
+    {
+      "name": "elastic_xx",
+      "expression": "(a1+a2)/elastic_scale",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Independent Eqs2-8 canonical unitaxis stiffness Sylvester numericalinterior; not new constitutive formula"
+    },
+    {
+      "name": "elastic_xy",
+      "expression": "a2/elastic_scale",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Independent Eqs2-8 canonical unitaxis stiffness Sylvester numericalinterior; not new constitutive formula"
+    },
+    {
+      "name": "elastic_xz",
+      "expression": "(a2+a3)/elastic_scale",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Independent Eqs2-8 canonical unitaxis stiffness Sylvester numericalinterior; not new constitutive formula"
+    },
+    {
+      "name": "elastic_zz",
+      "expression": "(a1+a2+2*a3+2*a4+a5)/elastic_scale",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Independent Eqs2-8 canonical unitaxis stiffness Sylvester numericalinterior; not new constitutive formula"
+    },
+    {
+      "name": "elastic_minor",
+      "expression": "elastic_xx**2-elastic_xy**2",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Independent Eqs2-8 canonical unitaxis stiffness Sylvester numericalinterior; not new constitutive formula",
+      "checks": [
+        "elastic_xx > 1.4210854715202004e-14",
+        "elastic_minor > 1.4210854715202004e-14"
+      ]
+    },
+    {
+      "name": "elastic_det",
+      "expression": "(elastic_xx-elastic_xy)*((elastic_xx+elastic_xy)*elastic_zz-2*elastic_xz**2)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Independent Eqs2-8 canonical unitaxis stiffness Sylvester numericalinterior; not new constitutive formula",
+      "checks": [
+        "elastic_det > 1.4210854715202004e-14",
+        "a1/elastic_scale > 1.4210854715202004e-14",
+        "(a1+a4)/elastic_scale > 1.4210854715202004e-14"
+      ]
+    },
+    {
+      "name": "friction_a",
+      "expression": "sqrt(3)*(3-sin(phi_c))/(2*sqrt(2)*sin(phi_c))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq50"
+    },
+    {
+      "name": "alpha_argument",
+      "expression": "((lambda_star-kappa_star)/(lambda_star+kappa_star))*(3+friction_a**2)/(friction_a*sqrt(3))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq49 logarithm argument",
+      "checks": [
+        "alpha_argument > 0"
+      ]
+    },
+    {
+      "name": "alpha_f",
+      "expression": "log(alpha_argument)/log(2)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Proposed Eq49 exponent selected, not optionalcalibrated exponent; positiveexponentresearchsupport, notsourceuniversalnecessity",
+      "checks": [
+        "alpha_f > 0"
+      ]
+    },
+    {
+      "name": "stress_norm",
+      "expression": "norm(sigma)",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Numerical stress normalization, not source constitutive modification",
+      "checks": [
+        "stress_norm > 0*p_ref"
+      ]
+    },
+    {
+      "name": "stress_unit",
+      "expression": "sigma/stress_norm",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Numerical stress normalization"
+    },
+    {
+      "name": "s0",
+      "expression": "dot(stress_unit,sym(1,0,0,0,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Mandel stress component for conservative support"
+    },
+    {
+      "name": "s1",
+      "expression": "dot(stress_unit,sym(0,1,0,0,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Mandel stress component for conservative support"
+    },
+    {
+      "name": "s2",
+      "expression": "dot(stress_unit,sym(0,0,1,0,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Mandel stress component for conservative support"
+    },
+    {
+      "name": "s3",
+      "expression": "dot(stress_unit,sym(0,0,0,1,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Mandel stress component for conservative support"
+    },
+    {
+      "name": "s4",
+      "expression": "dot(stress_unit,sym(0,0,0,0,1,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Mandel stress component for conservative support"
+    },
+    {
+      "name": "s5",
+      "expression": "dot(stress_unit,sym(0,0,0,0,0,1))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Mandel stress component for conservative support"
+    },
+    {
+      "name": "stress_minor",
+      "expression": "s0*s1-s3*s3/2",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Conservative normalized leading Cartesian minor",
+      "checks": [
+        "stress_minor > stress_interior_margin"
+      ]
+    },
+    {
+      "name": "stress_det",
+      "expression": "s0*s1*s2-(s0*s4*s4+s1*s5*s5+s2*s3*s3)/2+s3*s4*s5/sqrt(2)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Conservative normalized Cartesian determinant",
+      "checks": [
+        "s0 > 0",
+        "s1 > 0",
+        "s2 > 0",
+        "stress_det > stress_interior_margin"
+      ]
+    },
+    {
+      "name": "p",
+      "expression": "trace(sigma)/3",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq35",
+      "checks": [
+        "p > p*0"
+      ]
+    },
+    {
+      "name": "a",
+      "expression": "dev(dev(sigma))/trace(sigma)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq48, stable doubledev before normalization"
+    },
+    {
+      "name": "j2",
+      "expression": "dot(a,a)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Stable Eq39/48 reduction"
+    },
+    {
+      "name": "j3",
+      "expression": "cube_trace(a)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Stable Eq39/48 reduction"
+    },
+    {
+      "name": "fm",
+      "expression": "(j2-3*j3)/(8/27-(j2+j3)/3)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq39, reduced invariant expression",
+      "checks": [
+        "fm >= 0",
+        "fm < 1"
+      ]
+    },
+    {
+      "name": "omega",
+      "expression": "-log(cos(phi_c)**2)/log(2)+source_a*(fm-sin(phi_c)**2)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq40, a=0.3 selected",
+      "checks": [
+        "omega > 0"
+      ]
+    },
+    {
+      "name": "pe",
+      "expression": "p_ref*exp((N-log(1+e))/lambda_star)",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq37",
+      "checks": [
+        "pe > pe*0"
+      ]
+    },
+    {
+      "name": "fd",
+      "expression": "(2*p/pe)**alpha_f",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq36",
+      "checks": [
+        "fd > 0"
+      ]
+    },
+    {
+      "name": "fdA",
+      "expression": "2**alpha_f*(1-fm)**(alpha_f/omega)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq38",
+      "checks": [
+        "fdA > 0"
+      ]
+    },
+    {
+      "name": "fs",
+      "expression": "9*p/(2*Am)*(1/lambda_star+1/kappa_star)",
+      "shape": "scalar",
+      "unit": "Pa",
+      "locator": "Eq15",
+      "checks": [
+        "fs > fs*0"
+      ]
+    },
+    {
+      "name": "cos3theta",
+      "expression": "select(j2 > 0,-sqrt(6)*j3/j2**(3/2),0)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq46",
+      "checks": [
+        "cos3theta >= -1-lode_roundoff_allowance",
+        "cos3theta <= 1+lode_roundoff_allowance"
+      ]
+    },
+    {
+      "name": "xi",
+      "expression": "1.7+3.9*sin(phi_c)**2",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Eq47"
+    },
+    {
+      "name": "dA",
+      "expression": "-a+I*(2/3-(cos3theta+1)*fm**(1/4)/4)*(fm**(xi/2)-sin(phi_c)**xi)/(1-sin(phi_c)**xi)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq45",
+      "checks": [
+        "norm(dA) > 0"
+      ]
+    },
+    {
+      "name": "d",
+      "expression": "dA/norm(dA)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "Eq44"
+    },
+    {
+      "name": "E0",
+      "expression": "dot(stretching,sym(1,0,0,0,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "E1",
+      "expression": "dot(stretching,sym(0,1,0,0,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "E2",
+      "expression": "dot(stretching,sym(0,0,1,0,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "E3",
+      "expression": "dot(stretching,sym(0,0,0,1,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "E4",
+      "expression": "dot(stretching,sym(0,0,0,0,1,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "E5",
+      "expression": "dot(stretching,sym(0,0,0,0,0,1))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "mixed_E",
+      "expression": "sym(2*n1*n1*E0+sqrt(2)*n1*n2*E3+sqrt(2)*n1*n3*E5,2*n2*n2*E1+sqrt(2)*n1*n2*E3+sqrt(2)*n2*n3*E4,2*n3*n3*E2+sqrt(2)*n1*n3*E5+sqrt(2)*n2*n3*E4,(n1*n1+n2*n2)*E3+sqrt(2)*n1*n2*(E0+E1)+n1*n3*E4+n2*n3*E5,(n2*n2+n3*n3)*E4+sqrt(2)*n2*n3*(E1+E2)+n1*n2*E5+n1*n3*E3,(n1*n1+n3*n3)*E5+sqrt(2)*n1*n3*(E0+E2)+n1*n2*E4+n2*n3*E3)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "LE",
+      "expression": "a1*stretching+a2*trace(stretching)*I+a3*(P*trace(stretching)+I*dot(P,stretching))+a4*mixed_E+a5*P*dot(P,stretching)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "d0",
+      "expression": "dot(d,sym(1,0,0,0,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "d1",
+      "expression": "dot(d,sym(0,1,0,0,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "d2",
+      "expression": "dot(d,sym(0,0,1,0,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "d3",
+      "expression": "dot(d,sym(0,0,0,1,0,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "d4",
+      "expression": "dot(d,sym(0,0,0,0,1,0))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "d5",
+      "expression": "dot(d,sym(0,0,0,0,0,1))",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "mixed_d",
+      "expression": "sym(2*n1*n1*d0+sqrt(2)*n1*n2*d3+sqrt(2)*n1*n3*d5,2*n2*n2*d1+sqrt(2)*n1*n2*d3+sqrt(2)*n2*n3*d4,2*n3*n3*d2+sqrt(2)*n1*n3*d5+sqrt(2)*n2*n3*d4,(n1*n1+n2*n2)*d3+sqrt(2)*n1*n2*(d0+d1)+n1*n3*d4+n2*n3*d5,(n2*n2+n3*n3)*d4+sqrt(2)*n2*n3*(d1+d2)+n1*n2*d5+n1*n3*d3,(n1*n1+n3*n3)*d5+sqrt(2)*n1*n3*(d0+d2)+n1*n2*d4+n2*n3*d3)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "Ld",
+      "expression": "a1*d+a2*trace(d)*I+a3*(P*trace(d)+I*dot(P,d))+a4*mixed_d+a5*P*dot(P,d)",
+      "shape": "sym",
+      "unit": "1",
+      "locator": "2014manuscript Eqs2-3, explicit Mandel contraction"
+    },
+    {
+      "name": "linear_stress_rate",
+      "expression": "fs*LE",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "Eqs2,15 linear contribution, not complete law"
+    },
+    {
+      "name": "Ad",
+      "expression": "fs*Ld-(sigma/lambda_star)*trace(d)",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "Eq35"
+    },
+    {
+      "name": "stress_rate",
+      "expression": "linear_stress_rate+(fd/fdA)*Ad*norm(stretching)",
+      "shape": "sym",
+      "unit": "Pa",
+      "locator": "Eq34 with compressionpositive sign map"
+    },
+    {
+      "name": "e_rate",
+      "expression": "-(1+e)*trace(stretching)",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Inherited incompressiblegrain host closure; not newlyprinted2014"
+    },
+    {
+      "name": "asbs",
+      "expression": "fm+(p/pe)**omega-1",
+      "shape": "scalar",
+      "unit": "1",
+      "locator": "Inherited Eq39/40 asymptotic surface diagnostic"
+    }
+  ],
+  "outputs": [
+    "stress_rate",
+    "e_rate",
+    "linear_stress_rate",
+    "Am",
+    "Am_trace",
+    "Am_discrepancy",
+    "alpha_f"
+  ]
+}

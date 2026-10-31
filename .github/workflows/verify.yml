@@ -88,6 +88,9 @@ jobs:
           python -m tools.barodesy2017_wider_study --solver build/atlas_barodesy_solver --output "$RUNNER_TEMP/barodesy-wider-native.json"
           node tools/test_barodesy2017_wider_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-wider-native.json" --wasm build-wasm/barodesy-isotropic.js --output "$RUNNER_TEMP/barodesy-wider-wasm.json"
           python -m tools.barodesy2017_wider_study --report "$RUNNER_TEMP/barodesy-wider-wasm.json" --transport "$RUNNER_TEMP/barodesy-wider-wasm.transport.jsonl" --native-report "$RUNNER_TEMP/barodesy-wider-native.json" --native-transport "$RUNNER_TEMP/barodesy-wider-native.transport.jsonl" --output "$RUNNER_TEMP/barodesy-wider-assessed.json"
+          python -m tools.clay2014_rate_study --native build/atlas_clay2014_rate_probe --output "$RUNNER_TEMP/clay2014-native.json"
+          node tools/test_clay2014_rates_wasm.mjs --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-wasm.json"
+          python -m tools.clay2014_rate_assessment --wasm-report "$RUNNER_TEMP/clay2014-wasm.json" --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm-transport "$RUNNER_TEMP/clay2014-wasm.transport.json" --native-transport "$RUNNER_TEMP/clay2014-native.transport.json" --artifact build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-assessment.json"
           python tools/fetch_data.py --approved-only
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments

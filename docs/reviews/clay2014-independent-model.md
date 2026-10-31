@@ -1,0 +1,13 @@
+# Independent installed-model review
+
+No blocking algebra or contract discrepancy found for the explicitly selected printed-Eq14/proposed-Eq49 clay2014 full7state zero-spin, fixed-material-plane research variant. Reviewed installed bytes are pinned in reviewed-hashes.json; the independent oracle/reference packet remains frozen separately at /private/tmp/atlas-clay2014-independent-20261031-v1.
+
+The literal four-index independent oracle agrees in scope with production coefficient/action construction, compression-sign mapping, actual supplied n tensor product, printed Am selection with separately observable trace contraction, both proposed exponent substitutions, exact spherical-stress branch and e closure. The normalized stress and canonical stiffness minor checks, positive proposed alpha_f, fixed policies and finite-factor guards are explicit research numerical support. The oracle does not reproduce every production margin and the selected reference corpus is strictly interior.
+
+The exact ideal-unit-axis stiffness normal determinant is AE^2 B^2 (1+nu)^2; its shear eigenvalues are AE B and AE B/AG twice. This independently supports the production canonical positive-definiteness checks. A nearly unit accepted input is used unchanged; no normalization or objective axis evolution is inferred.
+
+Author tests compare components to the declared component-scale budget; the independent frozen policy requires the stronger stress Frobenius error gate. Root's runtime collector should use that declared norm gate. This observation is not a blocker for the independently declared collector policy.
+
+The printed Eq14 Am versus trace(L:I) discrepancy remains present and intentional. This packet supports comparison of an explicitly identified source variant; it cannot establish source-consistent anisotropic unloading calibration. Appendix-B IGS normalization is excluded. Publisher reconciliation, near-isotropic/all-domain qualification, finite integration/rollback, material AD, experimental calibration and scientific/public admission remain unresolved gates. No native/Wasm calls or builds were performed by this reviewer.
+
+The preceding independent reference packet contains 37 valid fixtures,16 finite invalid fixtures and12 passing Python test groups. Root separately reports26 installed Python groups passing, including all37 generic interpreted rates; that report is not a native observation. Generic transport was glanced earlier; its stream descriptor handling was added by root. Native/Wasm source-bound collection and malformed/domain/recovery transport coverage remain root-owned subsequent work.

@@ -1,0 +1,7502 @@
+{
+  "version": "clay2014-instantaneous-rates-v1",
+  "backend": "wasm",
+  "model_definition": {
+    "schema_version": "0.1",
+    "id": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+    "name": "Clay hypoplasticity2014 — printedAm/proposedalpha fixedplane research",
+    "family": "hypoplasticity",
+    "description": "Isolated7state rate transcription of2014author manuscript Eqs2-15,34-50; printedEq14Am selected despite discrepancy fromtraceL(I), proposedEq49alpha_f andfixedsourcea0.3; compressionpositive/zero-spin/fixedactualmaterialplane, noIGS. Illustrativefixtures,notcalibration. No experimental/integration/tangent/publicadmission; sourcefinalreconciliationopen.",
+    "status": "draft",
+    "sources": [
+      {
+        "url": "https://doi.org/10.1680/geot.13.P.065",
+        "locator": "2014 publication; source manuscript pp2-3 Eqs2-15,pp9-10 Eqs34-50; printedAm/proposedalpha selected",
+        "role": "primary publication"
+      },
+      {
+        "url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_Geot14-pp.pdf",
+        "locator": "16pageauthormanuscript SHA256 2eb8598297e3ac9cf245161f56674d6cef622b35fc612adc89dc129568b55202",
+        "role": "pinned author manuscript"
+      }
+    ],
+    "integration": "rate",
+    "parameters": {
+      "p_ref": {
+        "default": 1000,
+        "min": 1000,
+        "max": 1000,
+        "unit": "Pa",
+        "label": "Fixed source reference pressure; not a calibration parameter"
+      },
+      "p_scale": {
+        "default": 100000,
+        "min": 1,
+        "max": 1000000000000,
+        "unit": "Pa",
+        "label": "Numerical stress error scale"
+      },
+      "phi_c": {
+        "default": 0.5235987755982988,
+        "min": 0.01,
+        "max": 1.4,
+        "unit": "1",
+        "label": "Critical friction angle, radians; illustrative"
+      },
+      "lambda_star": {
+        "default": 0.12,
+        "min": 0.0001,
+        "max": 1,
+        "unit": "1",
+        "label": "Logarithmic compression slope; illustrative"
+      },
+      "kappa_star": {
+        "default": 0.025,
+        "min": 0.00001,
+        "max": 1,
+        "unit": "1",
+        "label": "Logarithmic swelling slope; illustrative"
+      },
+      "N": {
+        "default": 1.1,
+        "min": -10,
+        "max": 10,
+        "unit": "1",
+        "label": "Logarithmic density intercept at 1000Pa; illustrative"
+      },
+      "nu_pp": {
+        "default": 0.1,
+        "min": -0.9,
+        "max": 0.49,
+        "unit": "1",
+        "label": "Illustrative inplane Poissonratio; notcalibration"
+      },
+      "alpha_G": {
+        "default": 2,
+        "min": 0.01,
+        "max": 100,
+        "unit": "1",
+        "label": "Explicit independent anisotropy ratio; illustrative"
+      },
+      "alpha_E": {
+        "default": 2.378414230005442,
+        "min": 0.01,
+        "max": 100,
+        "unit": "1",
+        "label": "Explicit independent anisotropy ratio; illustrative"
+      },
+      "alpha_nu": {
+        "default": 2,
+        "min": 0.01,
+        "max": 100,
+        "unit": "1",
+        "label": "Explicit independent anisotropy ratio; illustrative"
+      },
+      "n1": {
+        "default": 0,
+        "min": -1,
+        "max": 1,
+        "unit": "1",
+        "label": "Fixed actual unitaxis component; no normalization"
+      },
+      "n2": {
+        "default": 0,
+        "min": -1,
+        "max": 1,
+        "unit": "1",
+        "label": "Fixed actual unitaxis component; no normalization"
+      },
+      "n3": {
+        "default": 1,
+        "min": -1,
+        "max": 1,
+        "unit": "1",
+        "label": "Fixed actual unitaxis component; no normalization"
+      },
+      "source_a": {
+        "default": 0.3,
+        "min": 0.3,
+        "max": 0.3,
+        "unit": "1",
+        "label": "Fixed declared source/numerical policy"
+      },
+      "lode_roundoff_allowance": {
+        "default": 1.4210854715202004e-14,
+        "min": 1.4210854715202004e-14,
+        "max": 1.4210854715202004e-14,
+        "unit": "1",
+        "label": "Fixed declared source/numerical policy"
+      },
+      "orientation_allowance": {
+        "default": 1.4210854715202004e-14,
+        "min": 1.4210854715202004e-14,
+        "max": 1.4210854715202004e-14,
+        "unit": "1",
+        "label": "Fixed declared source/numerical policy"
+      },
+      "stress_interior_margin": {
+        "default": 1.4210854715202004e-14,
+        "min": 1.4210854715202004e-14,
+        "max": 1.4210854715202004e-14,
+        "unit": "1",
+        "label": "Fixed declared source/numerical policy"
+      }
+    },
+    "state": [
+      {
+        "name": "sigma",
+        "shape": "sym",
+        "unit": "Pa",
+        "initial": [
+          10000,
+          10000,
+          10000,
+          0,
+          0,
+          0
+        ],
+        "scale": "p_scale"
+      },
+      {
+        "name": "e",
+        "shape": "scalar",
+        "unit": "1",
+        "initial": 0.8,
+        "scale": "1"
+      }
+    ],
+    "derived": [
+      {
+        "name": "axis_norm2",
+        "expr": "n1*n1+n2*n2+n3*n3"
+      },
+      {
+        "name": "P",
+        "expr": "sym(n1*n1,n2*n2,n3*n3,sqrt(2)*n1*n2,sqrt(2)*n2*n3,sqrt(2)*n1*n3)"
+      },
+      {
+        "name": "B",
+        "expr": "1-nu_pp-2*alpha_E*nu_pp**2/alpha_nu**2"
+      },
+      {
+        "name": "a1",
+        "expr": "alpha_E*B"
+      },
+      {
+        "name": "a2",
+        "expr": "alpha_E*nu_pp*(1+alpha_E*nu_pp/alpha_nu**2)"
+      },
+      {
+        "name": "a3",
+        "expr": "alpha_E*nu_pp*(1/alpha_nu+nu_pp/alpha_nu-1-alpha_E*nu_pp/alpha_nu**2)"
+      },
+      {
+        "name": "a4",
+        "expr": "alpha_E*B*(1-alpha_G)/alpha_G"
+      },
+      {
+        "name": "a5",
+        "expr": "alpha_E*(1-alpha_E*nu_pp**2/alpha_nu**2)+1-nu_pp**2-2*alpha_E*nu_pp*(1+nu_pp)/alpha_nu-2*alpha_E*B/alpha_G"
+      },
+      {
+        "name": "Am",
+        "expr": "nu_pp**2*(4*alpha_E/alpha_nu-2*alpha_E**2+2*alpha_E**2/alpha_nu**2-1)+nu_pp*(4*alpha_E/alpha_nu+2*alpha_E)+2*alpha_E+1"
+      },
+      {
+        "name": "Am_trace",
+        "expr": "3*a1+9*a2+6*a3+2*a4+a5"
+      },
+      {
+        "name": "Am_discrepancy",
+        "expr": "Am-Am_trace"
+      },
+      {
+        "name": "elastic_scale",
+        "expr": "abs(a1)+3*abs(a2)+2*abs(a3)+2*abs(a4)+abs(a5)"
+      },
+      {
+        "name": "elastic_xx",
+        "expr": "(a1+a2)/elastic_scale"
+      },
+      {
+        "name": "elastic_xy",
+        "expr": "a2/elastic_scale"
+      },
+      {
+        "name": "elastic_xz",
+        "expr": "(a2+a3)/elastic_scale"
+      },
+      {
+        "name": "elastic_zz",
+        "expr": "(a1+a2+2*a3+2*a4+a5)/elastic_scale"
+      },
+      {
+        "name": "elastic_minor",
+        "expr": "elastic_xx**2-elastic_xy**2"
+      },
+      {
+        "name": "elastic_det",
+        "expr": "(elastic_xx-elastic_xy)*((elastic_xx+elastic_xy)*elastic_zz-2*elastic_xz**2)"
+      },
+      {
+        "name": "friction_a",
+        "expr": "sqrt(3)*(3-sin(phi_c))/(2*sqrt(2)*sin(phi_c))"
+      },
+      {
+        "name": "alpha_argument",
+        "expr": "((lambda_star-kappa_star)/(lambda_star+kappa_star))*(3+friction_a**2)/(friction_a*sqrt(3))"
+      },
+      {
+        "name": "alpha_f",
+        "expr": "log(alpha_argument)/log(2)"
+      },
+      {
+        "name": "stress_norm",
+        "expr": "norm(sigma)"
+      },
+      {
+        "name": "stress_unit",
+        "expr": "sigma/stress_norm"
+      },
+      {
+        "name": "s0",
+        "expr": "dot(stress_unit,sym(1,0,0,0,0,0))"
+      },
+      {
+        "name": "s1",
+        "expr": "dot(stress_unit,sym(0,1,0,0,0,0))"
+      },
+      {
+        "name": "s2",
+        "expr": "dot(stress_unit,sym(0,0,1,0,0,0))"
+      },
+      {
+        "name": "s3",
+        "expr": "dot(stress_unit,sym(0,0,0,1,0,0))"
+      },
+      {
+        "name": "s4",
+        "expr": "dot(stress_unit,sym(0,0,0,0,1,0))"
+      },
+      {
+        "name": "s5",
+        "expr": "dot(stress_unit,sym(0,0,0,0,0,1))"
+      },
+      {
+        "name": "stress_minor",
+        "expr": "s0*s1-s3*s3/2"
+      },
+      {
+        "name": "stress_det",
+        "expr": "s0*s1*s2-(s0*s4*s4+s1*s5*s5+s2*s3*s3)/2+s3*s4*s5/sqrt(2)"
+      },
+      {
+        "name": "p",
+        "expr": "trace(sigma)/3"
+      },
+      {
+        "name": "a",
+        "expr": "dev(dev(sigma))/trace(sigma)"
+      },
+      {
+        "name": "j2",
+        "expr": "dot(a,a)"
+      },
+      {
+        "name": "j3",
+        "expr": "cube_trace(a)"
+      },
+      {
+        "name": "fm",
+        "expr": "(j2-3*j3)/(8/27-(j2+j3)/3)"
+      },
+      {
+        "name": "omega",
+        "expr": "-log(cos(phi_c)**2)/log(2)+source_a*(fm-sin(phi_c)**2)"
+      },
+      {
+        "name": "pe",
+        "expr": "p_ref*exp((N-log(1+e))/lambda_star)"
+      },
+      {
+        "name": "fd",
+        "expr": "(2*p/pe)**alpha_f"
+      },
+      {
+        "name": "fdA",
+        "expr": "2**alpha_f*(1-fm)**(alpha_f/omega)"
+      },
+      {
+        "name": "fs",
+        "expr": "9*p/(2*Am)*(1/lambda_star+1/kappa_star)"
+      },
+      {
+        "name": "cos3theta",
+        "expr": "select(j2 > 0,-sqrt(6)*j3/j2**(3/2),0)"
+      },
+      {
+        "name": "xi",
+        "expr": "1.7+3.9*sin(phi_c)**2"
+      },
+      {
+        "name": "dA",
+        "expr": "-a+I*(2/3-(cos3theta+1)*fm**(1/4)/4)*(fm**(xi/2)-sin(phi_c)**xi)/(1-sin(phi_c)**xi)"
+      },
+      {
+        "name": "d",
+        "expr": "dA/norm(dA)"
+      },
+      {
+        "name": "E0",
+        "expr": "dot(de,sym(1,0,0,0,0,0))"
+      },
+      {
+        "name": "E1",
+        "expr": "dot(de,sym(0,1,0,0,0,0))"
+      },
+      {
+        "name": "E2",
+        "expr": "dot(de,sym(0,0,1,0,0,0))"
+      },
+      {
+        "name": "E3",
+        "expr": "dot(de,sym(0,0,0,1,0,0))"
+      },
+      {
+        "name": "E4",
+        "expr": "dot(de,sym(0,0,0,0,1,0))"
+      },
+      {
+        "name": "E5",
+        "expr": "dot(de,sym(0,0,0,0,0,1))"
+      },
+      {
+        "name": "mixed_E",
+        "expr": "sym(2*n1*n1*E0+sqrt(2)*n1*n2*E3+sqrt(2)*n1*n3*E5,2*n2*n2*E1+sqrt(2)*n1*n2*E3+sqrt(2)*n2*n3*E4,2*n3*n3*E2+sqrt(2)*n1*n3*E5+sqrt(2)*n2*n3*E4,(n1*n1+n2*n2)*E3+sqrt(2)*n1*n2*(E0+E1)+n1*n3*E4+n2*n3*E5,(n2*n2+n3*n3)*E4+sqrt(2)*n2*n3*(E1+E2)+n1*n2*E5+n1*n3*E3,(n1*n1+n3*n3)*E5+sqrt(2)*n1*n3*(E0+E2)+n1*n2*E4+n2*n3*E3)"
+      },
+      {
+        "name": "LE",
+        "expr": "a1*de+a2*trace(de)*I+a3*(P*trace(de)+I*dot(P,de))+a4*mixed_E+a5*P*dot(P,de)"
+      },
+      {
+        "name": "d0",
+        "expr": "dot(d,sym(1,0,0,0,0,0))"
+      },
+      {
+        "name": "d1",
+        "expr": "dot(d,sym(0,1,0,0,0,0))"
+      },
+      {
+        "name": "d2",
+        "expr": "dot(d,sym(0,0,1,0,0,0))"
+      },
+      {
+        "name": "d3",
+        "expr": "dot(d,sym(0,0,0,1,0,0))"
+      },
+      {
+        "name": "d4",
+        "expr": "dot(d,sym(0,0,0,0,1,0))"
+      },
+      {
+        "name": "d5",
+        "expr": "dot(d,sym(0,0,0,0,0,1))"
+      },
+      {
+        "name": "mixed_d",
+        "expr": "sym(2*n1*n1*d0+sqrt(2)*n1*n2*d3+sqrt(2)*n1*n3*d5,2*n2*n2*d1+sqrt(2)*n1*n2*d3+sqrt(2)*n2*n3*d4,2*n3*n3*d2+sqrt(2)*n1*n3*d5+sqrt(2)*n2*n3*d4,(n1*n1+n2*n2)*d3+sqrt(2)*n1*n2*(d0+d1)+n1*n3*d4+n2*n3*d5,(n2*n2+n3*n3)*d4+sqrt(2)*n2*n3*(d1+d2)+n1*n2*d5+n1*n3*d3,(n1*n1+n3*n3)*d5+sqrt(2)*n1*n3*(d0+d2)+n1*n2*d4+n2*n3*d3)"
+      },
+      {
+        "name": "Ld",
+        "expr": "a1*d+a2*trace(d)*I+a3*(P*trace(d)+I*dot(P,d))+a4*mixed_d+a5*P*dot(P,d)"
+      },
+      {
+        "name": "linear_stress_rate",
+        "expr": "fs*LE"
+      },
+      {
+        "name": "Ad",
+        "expr": "fs*Ld-(sigma/lambda_star)*trace(d)"
+      },
+      {
+        "name": "stress_rate",
+        "expr": "linear_stress_rate+(fd/fdA)*Ad*norm(de)"
+      },
+      {
+        "name": "e_rate",
+        "expr": "-(1+e)*trace(de)"
+      },
+      {
+        "name": "asbs",
+        "expr": "fm+(p/pe)**omega-1"
+      },
+      {
+        "name": "spherical_residual",
+        "expr": "abs(dot(sigma,sym(1,-1,0,0,0,0)))+abs(dot(sigma,sym(0,1,-1,0,0,0)))+abs(dot(sigma,sym(0,0,0,1,0,0)))+abs(dot(sigma,sym(0,0,0,0,1,0)))+abs(dot(sigma,sym(0,0,0,0,0,1)))"
+      }
+    ],
+    "equations": {
+      "sigma": "stress_rate",
+      "e": "e_rate"
+    },
+    "domain": [
+      "e >= 0",
+      "lambda_star > kappa_star",
+      "alpha_G > 0",
+      "alpha_E > 0",
+      "alpha_nu > 0",
+      "select(j2 > 0,0*p_ref,spherical_residual) <= 0*p_ref",
+      "abs(axis_norm2-1) <= orientation_allowance",
+      "B > 0",
+      "Am > 0",
+      "elastic_scale > 0",
+      "elastic_xx > 1.4210854715202004e-14",
+      "elastic_minor > 1.4210854715202004e-14",
+      "elastic_det > 1.4210854715202004e-14",
+      "a1/elastic_scale > 1.4210854715202004e-14",
+      "(a1+a4)/elastic_scale > 1.4210854715202004e-14",
+      "alpha_argument > 0",
+      "stress_norm > 0*p_ref",
+      "stress_minor > stress_interior_margin",
+      "s0 > 0",
+      "s1 > 0",
+      "s2 > 0",
+      "stress_det > stress_interior_margin",
+      "p > p*0",
+      "fm >= 0",
+      "fm < 1",
+      "omega > 0",
+      "pe > pe*0",
+      "fd > 0",
+      "fdA > 0",
+      "fs > fs*0",
+      "cos3theta >= -1-lode_roundoff_allowance",
+      "cos3theta <= 1+lode_roundoff_allowance",
+      "norm(dA) > 0",
+      "abs(axis_norm2) <= 1e300",
+      "norm(P) <= 1e300",
+      "abs(B) <= 1e300",
+      "abs(a1) <= 1e300",
+      "abs(a2) <= 1e300",
+      "abs(a3) <= 1e300",
+      "abs(a4) <= 1e300",
+      "abs(a5) <= 1e300",
+      "abs(Am) <= 1e300",
+      "abs(Am_trace) <= 1e300",
+      "abs(Am_discrepancy) <= 1e300",
+      "abs(elastic_scale) <= 1e300",
+      "abs(elastic_xx) <= 1e300",
+      "abs(elastic_xy) <= 1e300",
+      "abs(elastic_xz) <= 1e300",
+      "abs(elastic_zz) <= 1e300",
+      "abs(elastic_minor) <= 1e300",
+      "abs(elastic_det) <= 1e300",
+      "abs(friction_a) <= 1e300",
+      "abs(alpha_argument) <= 1e300",
+      "abs(alpha_f) <= 1e300",
+      "abs(stress_norm) <= p_ref*1e300",
+      "norm(stress_unit) <= 1e300",
+      "abs(s0) <= 1e300",
+      "abs(s1) <= 1e300",
+      "abs(s2) <= 1e300",
+      "abs(s3) <= 1e300",
+      "abs(s4) <= 1e300",
+      "abs(s5) <= 1e300",
+      "abs(stress_minor) <= 1e300",
+      "abs(stress_det) <= 1e300",
+      "abs(p) <= p_ref*1e300",
+      "norm(a) <= 1e300",
+      "abs(j2) <= 1e300",
+      "abs(j3) <= 1e300",
+      "abs(fm) <= 1e300",
+      "abs(omega) <= 1e300",
+      "abs(pe) <= p_ref*1e300",
+      "abs(fd) <= 1e300",
+      "abs(fdA) <= 1e300",
+      "abs(fs) <= p_ref*1e300",
+      "abs(cos3theta) <= 1e300",
+      "abs(xi) <= 1e300",
+      "norm(dA) <= 1e300",
+      "norm(d) <= 1e300",
+      "abs(E0) <= 1e300",
+      "abs(E1) <= 1e300",
+      "abs(E2) <= 1e300",
+      "abs(E3) <= 1e300",
+      "abs(E4) <= 1e300",
+      "abs(E5) <= 1e300",
+      "norm(mixed_E) <= 1e300",
+      "norm(LE) <= 1e300",
+      "abs(d0) <= 1e300",
+      "abs(d1) <= 1e300",
+      "abs(d2) <= 1e300",
+      "abs(d3) <= 1e300",
+      "abs(d4) <= 1e300",
+      "abs(d5) <= 1e300",
+      "norm(mixed_d) <= 1e300",
+      "norm(Ld) <= 1e300",
+      "norm(linear_stress_rate) <= p_ref*1e300",
+      "norm(Ad) <= p_ref*1e300",
+      "norm(stress_rate) <= p_ref*1e300",
+      "abs(e_rate) <= 1e300",
+      "abs(asbs) <= 1e300",
+      "alpha_f > 0"
+    ]
+  },
+  "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+  "reference_sha256": "ba30669499024f8134631253e4a0b1f1e225f5f0145bf225091762fe0db82a6a",
+  "source_sha256": "2eb8598297e3ac9cf245161f56674d6cef622b35fc612adc89dc129568b55202",
+  "policy": {
+    "stress_scaled_bound": 2e-12,
+    "stress_absolute_floor_Pa": 1e-10,
+    "stress_scale": "max(1Pa,Frobenius(actual supplied stress))*Frobenius(actual supplied loading)",
+    "void_scaled_bound": 2e-13,
+    "void_absolute_floor": 1e-15,
+    "void_scale": "max(1, (1+e)*Frobenius(actual supplied loading))",
+    "zero_loading_rates": "all seven exactly zero",
+    "observable_scaled_bound": 2e-12,
+    "covariance_scaled_bound": 2e-12,
+    "purpose": "instantaneous zero-spin printed-Eq14/Eq49 base research only; no IGS/AD/integration/admission"
+  },
+  "parity_policy": {
+    "stress_scaled_bound": 5e-13,
+    "stress_absolute_floor_Pa": 2e-11,
+    "void_scaled_bound": 2e-14,
+    "void_absolute_floor": 2e-16
+  },
+  "artifact_scope": "Collector before/after artifact stability; portable archival assessment does not reopen artifacts.",
+  "source_pins": {
+    "tools/clay2014_rate_study.py": "75757e5aa3b996c76add9d4974b8c18348d9c2f27b88c437eb6e86ed1123a938",
+    "tools/test_clay2014_rates_wasm.mjs": "48852d8d5fd6f5913cd9d8ab85d258d0ab79fc5ac66d7dea92ae4f35326c5904",
+    "tools/reference_clay2014_cartesian.py": "0bc6e129d836fbe9f17b176eb1bcfe6728c4a9293db37c3449d67a39d044465c",
+    "tests/research_rate_driver.cpp": "d5cee213535b478af7bc868b12b1b1ca17fd3a5156cd783a8ec85426bbbad3fc",
+    "atlas/compiler.py": "4c7ffb54a59ec2f0ad8afc90e755243ea100d4172790de7ae4466f1e749c9292",
+    "atlas/dsl.py": "d98844ee61060aca4ca39198bf261552f29ebc480abcf196cc2e836016e8cb6d",
+    "atlas/model.py": "b7ee41dfe6f6d12a87f963256ab5a09f1eb6e66a5a5fb181b14e18fd69614276",
+    "atlas/structure.py": "30b1ef624c642b217e19e0a58e6988c2a2f802f0bfc5f892c6d7a38def1bcd47",
+    "atlas/scalar_math.py": "ed29e8ee35045a4de313accf1fc2bae7ae6f8f09af1ab297fe4c21a5582bef89",
+    "atlas/symmetric_expm.py": "c7ab6549501736bd84da7eca03500f8abd763610b07f2b7de98e6100a0a2c205",
+    "cpp/include/atlas/solver.hpp": "7842240f542949a1ba547f4a2fea44e4ef1fadf50b35a18fd86f8fe4327164d5",
+    "cpp/include/atlas/tensor.hpp": "62a7456ed71910033b165df6479b52cd416425614d5aa354f13501228c794a08",
+    "models/research/clay2014/hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane.json": "9077e7d5d7cdb42a7cc5c2ab49c29c1643543c54310caad26c17b5f256236de5",
+    "catalogue/investigations/clay2014-rates-v1/reference.json": "bdf967e0bdf91cae530801b39cc75162691c649a536bb5fe648cd52857a03d38"
+  },
+  "claims": {
+    "public_admission": false,
+    "experimental_validation": false,
+    "integration": false,
+    "AD": false,
+    "source_repair": false
+  },
+  "descriptor": {
+    "schema_version": "0.1",
+    "sha256": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+    "models": [
+      {
+        "schema_version": "0.1",
+        "id": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "name": "Clay hypoplasticity2014 — printedAm/proposedalpha fixedplane research",
+        "family": "hypoplasticity",
+        "description": "Isolated7state rate transcription of2014author manuscript Eqs2-15,34-50; printedEq14Am selected despite discrepancy fromtraceL(I), proposedEq49alpha_f andfixedsourcea0.3; compressionpositive/zero-spin/fixedactualmaterialplane, noIGS. Illustrativefixtures,notcalibration. No experimental/integration/tangent/publicadmission; sourcefinalreconciliationopen.",
+        "status": "draft",
+        "sources": [
+          {
+            "url": "https://doi.org/10.1680/geot.13.P.065",
+            "locator": "2014 publication; source manuscript pp2-3 Eqs2-15,pp9-10 Eqs34-50; printedAm/proposedalpha selected",
+            "role": "primary publication"
+          },
+          {
+            "url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_Geot14-pp.pdf",
+            "locator": "16pageauthormanuscript SHA256 2eb8598297e3ac9cf245161f56674d6cef622b35fc612adc89dc129568b55202",
+            "role": "pinned author manuscript"
+          }
+        ],
+        "integration": "rate",
+        "parameters": {
+          "p_ref": {
+            "default": 1000,
+            "min": 1000,
+            "max": 1000,
+            "unit": "Pa",
+            "label": "Fixed source reference pressure; not a calibration parameter"
+          },
+          "p_scale": {
+            "default": 100000,
+            "min": 1,
+            "max": 1000000000000,
+            "unit": "Pa",
+            "label": "Numerical stress error scale"
+          },
+          "phi_c": {
+            "default": 0.5235987755982988,
+            "min": 0.01,
+            "max": 1.4,
+            "unit": "1",
+            "label": "Critical friction angle, radians; illustrative"
+          },
+          "lambda_star": {
+            "default": 0.12,
+            "min": 0.0001,
+            "max": 1,
+            "unit": "1",
+            "label": "Logarithmic compression slope; illustrative"
+          },
+          "kappa_star": {
+            "default": 0.025,
+            "min": 0.00001,
+            "max": 1,
+            "unit": "1",
+            "label": "Logarithmic swelling slope; illustrative"
+          },
+          "N": {
+            "default": 1.1,
+            "min": -10,
+            "max": 10,
+            "unit": "1",
+            "label": "Logarithmic density intercept at 1000Pa; illustrative"
+          },
+          "nu_pp": {
+            "default": 0.1,
+            "min": -0.9,
+            "max": 0.49,
+            "unit": "1",
+            "label": "Illustrative inplane Poissonratio; notcalibration"
+          },
+          "alpha_G": {
+            "default": 2,
+            "min": 0.01,
+            "max": 100,
+            "unit": "1",
+            "label": "Explicit independent anisotropy ratio; illustrative"
+          },
+          "alpha_E": {
+            "default": 2.378414230005442,
+            "min": 0.01,
+            "max": 100,
+            "unit": "1",
+            "label": "Explicit independent anisotropy ratio; illustrative"
+          },
+          "alpha_nu": {
+            "default": 2,
+            "min": 0.01,
+            "max": 100,
+            "unit": "1",
+            "label": "Explicit independent anisotropy ratio; illustrative"
+          },
+          "n1": {
+            "default": 0,
+            "min": -1,
+            "max": 1,
+            "unit": "1",
+            "label": "Fixed actual unitaxis component; no normalization"
+          },
+          "n2": {
+            "default": 0,
+            "min": -1,
+            "max": 1,
+            "unit": "1",
+            "label": "Fixed actual unitaxis component; no normalization"
+          },
+          "n3": {
+            "default": 1,
+            "min": -1,
+            "max": 1,
+            "unit": "1",
+            "label": "Fixed actual unitaxis component; no normalization"
+          },
+          "source_a": {
+            "default": 0.3,
+            "min": 0.3,
+            "max": 0.3,
+            "unit": "1",
+            "label": "Fixed declared source/numerical policy"
+          },
+          "lode_roundoff_allowance": {
+            "default": 1.4210854715202004e-14,
+            "min": 1.4210854715202004e-14,
+            "max": 1.4210854715202004e-14,
+            "unit": "1",
+            "label": "Fixed declared source/numerical policy"
+          },
+          "orientation_allowance": {
+            "default": 1.4210854715202004e-14,
+            "min": 1.4210854715202004e-14,
+            "max": 1.4210854715202004e-14,
+            "unit": "1",
+            "label": "Fixed declared source/numerical policy"
+          },
+          "stress_interior_margin": {
+            "default": 1.4210854715202004e-14,
+            "min": 1.4210854715202004e-14,
+            "max": 1.4210854715202004e-14,
+            "unit": "1",
+            "label": "Fixed declared source/numerical policy"
+          }
+        },
+        "state": [
+          {
+            "name": "sigma",
+            "shape": "sym",
+            "unit": "Pa",
+            "initial": [
+              10000,
+              10000,
+              10000,
+              0,
+              0,
+              0
+            ],
+            "scale": "p_scale"
+          },
+          {
+            "name": "e",
+            "shape": "scalar",
+            "unit": "1",
+            "initial": 0.8,
+            "scale": "1"
+          }
+        ],
+        "derived": [
+          {
+            "name": "axis_norm2",
+            "expr": "n1*n1+n2*n2+n3*n3"
+          },
+          {
+            "name": "P",
+            "expr": "sym(n1*n1,n2*n2,n3*n3,sqrt(2)*n1*n2,sqrt(2)*n2*n3,sqrt(2)*n1*n3)"
+          },
+          {
+            "name": "B",
+            "expr": "1-nu_pp-2*alpha_E*nu_pp**2/alpha_nu**2"
+          },
+          {
+            "name": "a1",
+            "expr": "alpha_E*B"
+          },
+          {
+            "name": "a2",
+            "expr": "alpha_E*nu_pp*(1+alpha_E*nu_pp/alpha_nu**2)"
+          },
+          {
+            "name": "a3",
+            "expr": "alpha_E*nu_pp*(1/alpha_nu+nu_pp/alpha_nu-1-alpha_E*nu_pp/alpha_nu**2)"
+          },
+          {
+            "name": "a4",
+            "expr": "alpha_E*B*(1-alpha_G)/alpha_G"
+          },
+          {
+            "name": "a5",
+            "expr": "alpha_E*(1-alpha_E*nu_pp**2/alpha_nu**2)+1-nu_pp**2-2*alpha_E*nu_pp*(1+nu_pp)/alpha_nu-2*alpha_E*B/alpha_G"
+          },
+          {
+            "name": "Am",
+            "expr": "nu_pp**2*(4*alpha_E/alpha_nu-2*alpha_E**2+2*alpha_E**2/alpha_nu**2-1)+nu_pp*(4*alpha_E/alpha_nu+2*alpha_E)+2*alpha_E+1"
+          },
+          {
+            "name": "Am_trace",
+            "expr": "3*a1+9*a2+6*a3+2*a4+a5"
+          },
+          {
+            "name": "Am_discrepancy",
+            "expr": "Am-Am_trace"
+          },
+          {
+            "name": "elastic_scale",
+            "expr": "abs(a1)+3*abs(a2)+2*abs(a3)+2*abs(a4)+abs(a5)"
+          },
+          {
+            "name": "elastic_xx",
+            "expr": "(a1+a2)/elastic_scale"
+          },
+          {
+            "name": "elastic_xy",
+            "expr": "a2/elastic_scale"
+          },
+          {
+            "name": "elastic_xz",
+            "expr": "(a2+a3)/elastic_scale"
+          },
+          {
+            "name": "elastic_zz",
+            "expr": "(a1+a2+2*a3+2*a4+a5)/elastic_scale"
+          },
+          {
+            "name": "elastic_minor",
+            "expr": "elastic_xx**2-elastic_xy**2"
+          },
+          {
+            "name": "elastic_det",
+            "expr": "(elastic_xx-elastic_xy)*((elastic_xx+elastic_xy)*elastic_zz-2*elastic_xz**2)"
+          },
+          {
+            "name": "friction_a",
+            "expr": "sqrt(3)*(3-sin(phi_c))/(2*sqrt(2)*sin(phi_c))"
+          },
+          {
+            "name": "alpha_argument",
+            "expr": "((lambda_star-kappa_star)/(lambda_star+kappa_star))*(3+friction_a**2)/(friction_a*sqrt(3))"
+          },
+          {
+            "name": "alpha_f",
+            "expr": "log(alpha_argument)/log(2)"
+          },
+          {
+            "name": "stress_norm",
+            "expr": "norm(sigma)"
+          },
+          {
+            "name": "stress_unit",
+            "expr": "sigma/stress_norm"
+          },
+          {
+            "name": "s0",
+            "expr": "dot(stress_unit,sym(1,0,0,0,0,0))"
+          },
+          {
+            "name": "s1",
+            "expr": "dot(stress_unit,sym(0,1,0,0,0,0))"
+          },
+          {
+            "name": "s2",
+            "expr": "dot(stress_unit,sym(0,0,1,0,0,0))"
+          },
+          {
+            "name": "s3",
+            "expr": "dot(stress_unit,sym(0,0,0,1,0,0))"
+          },
+          {
+            "name": "s4",
+            "expr": "dot(stress_unit,sym(0,0,0,0,1,0))"
+          },
+          {
+            "name": "s5",
+            "expr": "dot(stress_unit,sym(0,0,0,0,0,1))"
+          },
+          {
+            "name": "stress_minor",
+            "expr": "s0*s1-s3*s3/2"
+          },
+          {
+            "name": "stress_det",
+            "expr": "s0*s1*s2-(s0*s4*s4+s1*s5*s5+s2*s3*s3)/2+s3*s4*s5/sqrt(2)"
+          },
+          {
+            "name": "p",
+            "expr": "trace(sigma)/3"
+          },
+          {
+            "name": "a",
+            "expr": "dev(dev(sigma))/trace(sigma)"
+          },
+          {
+            "name": "j2",
+            "expr": "dot(a,a)"
+          },
+          {
+            "name": "j3",
+            "expr": "cube_trace(a)"
+          },
+          {
+            "name": "fm",
+            "expr": "(j2-3*j3)/(8/27-(j2+j3)/3)"
+          },
+          {
+            "name": "omega",
+            "expr": "-log(cos(phi_c)**2)/log(2)+source_a*(fm-sin(phi_c)**2)"
+          },
+          {
+            "name": "pe",
+            "expr": "p_ref*exp((N-log(1+e))/lambda_star)"
+          },
+          {
+            "name": "fd",
+            "expr": "(2*p/pe)**alpha_f"
+          },
+          {
+            "name": "fdA",
+            "expr": "2**alpha_f*(1-fm)**(alpha_f/omega)"
+          },
+          {
+            "name": "fs",
+            "expr": "9*p/(2*Am)*(1/lambda_star+1/kappa_star)"
+          },
+          {
+            "name": "cos3theta",
+            "expr": "select(j2 > 0,-sqrt(6)*j3/j2**(3/2),0)"
+          },
+          {
+            "name": "xi",
+            "expr": "1.7+3.9*sin(phi_c)**2"
+          },
+          {
+            "name": "dA",
+            "expr": "-a+I*(2/3-(cos3theta+1)*fm**(1/4)/4)*(fm**(xi/2)-sin(phi_c)**xi)/(1-sin(phi_c)**xi)"
+          },
+          {
+            "name": "d",
+            "expr": "dA/norm(dA)"
+          },
+          {
+            "name": "E0",
+            "expr": "dot(de,sym(1,0,0,0,0,0))"
+          },
+          {
+            "name": "E1",
+            "expr": "dot(de,sym(0,1,0,0,0,0))"
+          },
+          {
+            "name": "E2",
+            "expr": "dot(de,sym(0,0,1,0,0,0))"
+          },
+          {
+            "name": "E3",
+            "expr": "dot(de,sym(0,0,0,1,0,0))"
+          },
+          {
+            "name": "E4",
+            "expr": "dot(de,sym(0,0,0,0,1,0))"
+          },
+          {
+            "name": "E5",
+            "expr": "dot(de,sym(0,0,0,0,0,1))"
+          },
+          {
+            "name": "mixed_E",
+            "expr": "sym(2*n1*n1*E0+sqrt(2)*n1*n2*E3+sqrt(2)*n1*n3*E5,2*n2*n2*E1+sqrt(2)*n1*n2*E3+sqrt(2)*n2*n3*E4,2*n3*n3*E2+sqrt(2)*n1*n3*E5+sqrt(2)*n2*n3*E4,(n1*n1+n2*n2)*E3+sqrt(2)*n1*n2*(E0+E1)+n1*n3*E4+n2*n3*E5,(n2*n2+n3*n3)*E4+sqrt(2)*n2*n3*(E1+E2)+n1*n2*E5+n1*n3*E3,(n1*n1+n3*n3)*E5+sqrt(2)*n1*n3*(E0+E2)+n1*n2*E4+n2*n3*E3)"
+          },
+          {
+            "name": "LE",
+            "expr": "a1*de+a2*trace(de)*I+a3*(P*trace(de)+I*dot(P,de))+a4*mixed_E+a5*P*dot(P,de)"
+          },
+          {
+            "name": "d0",
+            "expr": "dot(d,sym(1,0,0,0,0,0))"
+          },
+          {
+            "name": "d1",
+            "expr": "dot(d,sym(0,1,0,0,0,0))"
+          },
+          {
+            "name": "d2",
+            "expr": "dot(d,sym(0,0,1,0,0,0))"
+          },
+          {
+            "name": "d3",
+            "expr": "dot(d,sym(0,0,0,1,0,0))"
+          },
+          {
+            "name": "d4",
+            "expr": "dot(d,sym(0,0,0,0,1,0))"
+          },
+          {
+            "name": "d5",
+            "expr": "dot(d,sym(0,0,0,0,0,1))"
+          },
+          {
+            "name": "mixed_d",
+            "expr": "sym(2*n1*n1*d0+sqrt(2)*n1*n2*d3+sqrt(2)*n1*n3*d5,2*n2*n2*d1+sqrt(2)*n1*n2*d3+sqrt(2)*n2*n3*d4,2*n3*n3*d2+sqrt(2)*n1*n3*d5+sqrt(2)*n2*n3*d4,(n1*n1+n2*n2)*d3+sqrt(2)*n1*n2*(d0+d1)+n1*n3*d4+n2*n3*d5,(n2*n2+n3*n3)*d4+sqrt(2)*n2*n3*(d1+d2)+n1*n2*d5+n1*n3*d3,(n1*n1+n3*n3)*d5+sqrt(2)*n1*n3*(d0+d2)+n1*n2*d4+n2*n3*d3)"
+          },
+          {
+            "name": "Ld",
+            "expr": "a1*d+a2*trace(d)*I+a3*(P*trace(d)+I*dot(P,d))+a4*mixed_d+a5*P*dot(P,d)"
+          },
+          {
+            "name": "linear_stress_rate",
+            "expr": "fs*LE"
+          },
+          {
+            "name": "Ad",
+            "expr": "fs*Ld-(sigma/lambda_star)*trace(d)"
+          },
+          {
+            "name": "stress_rate",
+            "expr": "linear_stress_rate+(fd/fdA)*Ad*norm(de)"
+          },
+          {
+            "name": "e_rate",
+            "expr": "-(1+e)*trace(de)"
+          },
+          {
+            "name": "asbs",
+            "expr": "fm+(p/pe)**omega-1"
+          },
+          {
+            "name": "spherical_residual",
+            "expr": "abs(dot(sigma,sym(1,-1,0,0,0,0)))+abs(dot(sigma,sym(0,1,-1,0,0,0)))+abs(dot(sigma,sym(0,0,0,1,0,0)))+abs(dot(sigma,sym(0,0,0,0,1,0)))+abs(dot(sigma,sym(0,0,0,0,0,1)))"
+          }
+        ],
+        "equations": {
+          "sigma": "stress_rate",
+          "e": "e_rate"
+        },
+        "domain": [
+          "e >= 0",
+          "lambda_star > kappa_star",
+          "alpha_G > 0",
+          "alpha_E > 0",
+          "alpha_nu > 0",
+          "select(j2 > 0,0*p_ref,spherical_residual) <= 0*p_ref",
+          "abs(axis_norm2-1) <= orientation_allowance",
+          "B > 0",
+          "Am > 0",
+          "elastic_scale > 0",
+          "elastic_xx > 1.4210854715202004e-14",
+          "elastic_minor > 1.4210854715202004e-14",
+          "elastic_det > 1.4210854715202004e-14",
+          "a1/elastic_scale > 1.4210854715202004e-14",
+          "(a1+a4)/elastic_scale > 1.4210854715202004e-14",
+          "alpha_argument > 0",
+          "stress_norm > 0*p_ref",
+          "stress_minor > stress_interior_margin",
+          "s0 > 0",
+          "s1 > 0",
+          "s2 > 0",
+          "stress_det > stress_interior_margin",
+          "p > p*0",
+          "fm >= 0",
+          "fm < 1",
+          "omega > 0",
+          "pe > pe*0",
+          "fd > 0",
+          "fdA > 0",
+          "fs > fs*0",
+          "cos3theta >= -1-lode_roundoff_allowance",
+          "cos3theta <= 1+lode_roundoff_allowance",
+          "norm(dA) > 0",
+          "abs(axis_norm2) <= 1e300",
+          "norm(P) <= 1e300",
+          "abs(B) <= 1e300",
+          "abs(a1) <= 1e300",
+          "abs(a2) <= 1e300",
+          "abs(a3) <= 1e300",
+          "abs(a4) <= 1e300",
+          "abs(a5) <= 1e300",
+          "abs(Am) <= 1e300",
+          "abs(Am_trace) <= 1e300",
+          "abs(Am_discrepancy) <= 1e300",
+          "abs(elastic_scale) <= 1e300",
+          "abs(elastic_xx) <= 1e300",
+          "abs(elastic_xy) <= 1e300",
+          "abs(elastic_xz) <= 1e300",
+          "abs(elastic_zz) <= 1e300",
+          "abs(elastic_minor) <= 1e300",
+          "abs(elastic_det) <= 1e300",
+          "abs(friction_a) <= 1e300",
+          "abs(alpha_argument) <= 1e300",
+          "abs(alpha_f) <= 1e300",
+          "abs(stress_norm) <= p_ref*1e300",
+          "norm(stress_unit) <= 1e300",
+          "abs(s0) <= 1e300",
+          "abs(s1) <= 1e300",
+          "abs(s2) <= 1e300",
+          "abs(s3) <= 1e300",
+          "abs(s4) <= 1e300",
+          "abs(s5) <= 1e300",
+          "abs(stress_minor) <= 1e300",
+          "abs(stress_det) <= 1e300",
+          "abs(p) <= p_ref*1e300",
+          "norm(a) <= 1e300",
+          "abs(j2) <= 1e300",
+          "abs(j3) <= 1e300",
+          "abs(fm) <= 1e300",
+          "abs(omega) <= 1e300",
+          "abs(pe) <= p_ref*1e300",
+          "abs(fd) <= 1e300",
+          "abs(fdA) <= 1e300",
+          "abs(fs) <= p_ref*1e300",
+          "abs(cos3theta) <= 1e300",
+          "abs(xi) <= 1e300",
+          "norm(dA) <= 1e300",
+          "norm(d) <= 1e300",
+          "abs(E0) <= 1e300",
+          "abs(E1) <= 1e300",
+          "abs(E2) <= 1e300",
+          "abs(E3) <= 1e300",
+          "abs(E4) <= 1e300",
+          "abs(E5) <= 1e300",
+          "norm(mixed_E) <= 1e300",
+          "norm(LE) <= 1e300",
+          "abs(d0) <= 1e300",
+          "abs(d1) <= 1e300",
+          "abs(d2) <= 1e300",
+          "abs(d3) <= 1e300",
+          "abs(d4) <= 1e300",
+          "abs(d5) <= 1e300",
+          "norm(mixed_d) <= 1e300",
+          "norm(Ld) <= 1e300",
+          "norm(linear_stress_rate) <= p_ref*1e300",
+          "norm(Ad) <= p_ref*1e300",
+          "norm(stress_rate) <= p_ref*1e300",
+          "abs(e_rate) <= 1e300",
+          "abs(asbs) <= 1e300",
+          "alpha_f > 0"
+        ]
+      }
+    ]
+  },
+  "calls": [
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ],
+        "values": [
+          -76.14635333844588,
+          12.103083755674088,
+          -9.29675890320898,
+          -26.82689032671658,
+          6.712646344707812,
+          -3.356323172353906,
+          0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p1.0-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          2139.775309394511,
+          -3887.4656601888933,
+          651.2474440508493,
+          2402.918758688799,
+          -590.7888570271618,
+          295.3944285135809,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p1.0-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ],
+        "values": [
+          -12473.694920643327,
+          -1165.7280365260199,
+          -1176.7873059633187,
+          -2930.9913501421893,
+          742.6886701805852,
+          -371.3443350902926,
+          0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p1.0-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p10.0-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          -138596.95434008646,
+          -117110.62877195815,
+          -1624.186150510539,
+          15853.314060491752,
+          -3556.1026962736014,
+          1778.0513481368007,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p10.0-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ],
+        "values": [
+          -284731.6566404648,
+          -89893.2525353294,
+          -19904.533650652214,
+          -37485.78702781813,
+          9778.672575803868,
+          -4889.336287901934,
+          0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p10.0-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "oblique-p0.01-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          58.08352734393137,
+          -5.472260729768498,
+          16.43197965590804,
+          12.342457296879804,
+          -8.64319460829733,
+          -11.782308203741335,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "oblique-p0.01-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ],
+        "values": [
+          -63.44710378310631,
+          3.547459995372824,
+          -17.875415388377828,
+          -11.257051806436955,
+          9.90205635992262,
+          12.876834875477696,
+          0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "oblique-p0.01-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "oblique-p1.0-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          1576.1476363095908,
+          -2066.017046366509,
+          504.2347877574846,
+          2090.7001313794644,
+          129.00303273959514,
+          -314.57922285469533,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "oblique-p1.0-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ],
+        "values": [
+          -10576.915476394177,
+          -1164.0449738523769,
+          -2926.504716671103,
+          -269.25077895221136,
+          1983.52812956159,
+          2151.335085067208,
+          0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "oblique-p1.0-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "oblique-p10.0-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          -123592.7349555603,
+          -70669.54225674071,
+          -32460.39872603965,
+          49107.555141432495,
+          33997.252559871544,
+          25291.744336237694,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "oblique-p10.0-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ],
+        "values": [
+          -245123.366082598,
+          -61649.82153159939,
+          -66767.79377032552,
+          25508.04603811574,
+          52542.50352809149,
+          49950.88741545673,
+          0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "oblique-p10.0-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0.3333333333333333,
+          0.6666666666666666,
+          0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "negative-oblique-p0.01-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          58.08352734393137,
+          -5.472260729768498,
+          16.43197965590804,
+          12.342457296879804,
+          -8.64319460829733,
+          -11.782308203741335,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "negative-oblique-p0.01-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ],
+        "values": [
+          -63.44710378310631,
+          3.547459995372824,
+          -17.875415388377828,
+          -11.257051806436955,
+          9.90205635992262,
+          12.876834875477696,
+          0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "negative-oblique-p0.01-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "negative-oblique-p1.0-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          1576.1476363095908,
+          -2066.017046366509,
+          504.2347877574846,
+          2090.7001313794644,
+          129.00303273959514,
+          -314.57922285469533,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "negative-oblique-p1.0-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ],
+        "values": [
+          -10576.915476394177,
+          -1164.0449738523769,
+          -2926.504716671103,
+          -269.25077895221136,
+          1983.52812956159,
+          2151.335085067208,
+          0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "negative-oblique-p1.0-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          120000,
+          90000,
+          80000,
+          3000,
+          -2000,
+          1000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "negative-oblique-p10.0-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          -123592.7349555603,
+          -70669.54225674071,
+          -32460.39872603965,
+          49107.555141432495,
+          33997.252559871544,
+          25291.744336237694,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "negative-oblique-p10.0-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          0.0003,
+          -0.0002,
+          -0.0004,
+          0.0002,
+          -0.0001
+        ],
+        "values": [
+          -245123.366082598,
+          -61649.82153159939,
+          -66767.79377032552,
+          25508.04603811574,
+          52542.50352809149,
+          49950.88741545673,
+          0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "negative-oblique-p10.0-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          -0.3333333333333333,
+          -0.6666666666666666,
+          -0.6666666666666666,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200000,
+          900000,
+          800000,
+          30000,
+          -20000,
+          10000,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "canonical-xy",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0.001,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0.001,
+          0,
+          0
+        ],
+        "values": [
+          -2944.787520993728,
+          -2944.787520993728,
+          -722.2893652264079,
+          6897.297554522828,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "canonical-yz",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0.001,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0.001,
+          0
+        ],
+        "values": [
+          -2944.787520993728,
+          -2944.787520993728,
+          -722.2893652264079,
+          0,
+          3448.648777261414,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "canonical-xz",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.001
+        ],
+        "values": [
+          -2944.787520993728,
+          -2944.787520993728,
+          -722.2893652264079,
+          0,
+          0,
+          3448.648777261414,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "canonical-hydro-compression",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          0.001,
+          0.001,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          0.001,
+          0.001,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          3869.535319056208,
+          3869.535319056208,
+          2835.915847647455,
+          0,
+          0,
+          0,
+          -0.0049499999999999995
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "canonical-hydro-expansion",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          -0.001,
+          -0.001,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          -0.001,
+          -0.001,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          -14070.578526768084,
+          -14070.578526768084,
+          -5337.9996043250785,
+          0,
+          0,
+          0,
+          0.0049499999999999995
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "isotropic-ratios-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          3363.306606926641,
+          -3491.2388476188144,
+          -854.8752112551774,
+          2109.0909090909095,
+          -1054.5454545454547,
+          527.2727272727274,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "isotropic-ratios-hydro",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          0.001,
+          0.001,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          0.001,
+          0.001,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          3505.44598649203,
+          3505.44598649203,
+          3505.44598649203,
+          0,
+          0,
+          0,
+          -0.0049499999999999995
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "isotropic-ratios-reverse",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          -0.001,
+          -0.001,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          -0.001,
+          -0.001,
+          -0.001,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          -10994.554013507974,
+          -10994.554013507974,
+          -10994.554013507974,
+          0,
+          0,
+          0,
+          0.0049499999999999995
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "isotropic-ratios-zero",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "values": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "rotated-oblique-mixed",
+        "role": "valid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          1,
+          0,
+          0,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          88888.88888888888,
+          99831.69793047094,
+          101279.41318064016,
+          18046.817359701065,
+          -19998.877636914815,
+          -7952.060277213747,
+          0.65
+        ],
+        "increment": [
+          0.00009809363471940213,
+          0.0006257078722109418,
+          0.0001761984930696561,
+          0.00038316979304709527,
+          -0.0004377441068852221,
+          -0.0007545743138381269
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          1,
+          0,
+          0,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          88888.88888888888,
+          99831.69793047094,
+          101279.41318064016,
+          18046.817359701065,
+          -19998.877636914815,
+          -7952.060277213747,
+          0.65
+        ],
+        "increment": [
+          0.00009809363471940213,
+          0.0006257078722109418,
+          0.0001761984930696561,
+          0.00038316979304709527,
+          -0.0004377441068852221,
+          -0.0007545743138381269
+        ],
+        "values": [
+          120.26650114713163,
+          1509.2843053153651,
+          -1615.1854287619315,
+          592.0437240947239,
+          -1158.4664560145363,
+          -2213.5406077049865,
+          -0.0014849999999999998
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-axis-zero",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          0,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          0,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-axis-not-unit",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          2,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          2,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-axis-near-invalid",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1.0000000001,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1.0000000001,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-negative-void",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          -0.1
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          -0.1
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-zero-stress",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-indefinite",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          -100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          100000,
+          100000,
+          -100000,
+          0,
+          0,
+          0,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-alpha_G",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          0,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          0,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-alpha_E",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          0,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          0,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-alpha_nu",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          0,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          0,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-kappa_star",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-nu_pp",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.5,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.5,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-phi_c",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-source_a",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.4,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.4,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-p_ref",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          999,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          999,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-p_scale",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          0,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          0,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    },
+    {
+      "request": {
+        "id": "invalid-lambda-equals-kappa",
+        "role": "invalid",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.12,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": false,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.12,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": null,
+        "message": "unsupported research rate request"
+      }
+    },
+    {
+      "request": {
+        "id": "vertical-p0.01-mixed",
+        "role": "recovery",
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ]
+      },
+      "response": {
+        "ok": true,
+        "model": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+        "catalogue_hash": "3105d6045e43553e7c4166dde80cd8b681696d7c9cac5e8ab7359e6e04dd001a",
+        "parameters": [
+          1000,
+          100000,
+          0.5235987755982988,
+          0.12,
+          0.025,
+          1.1,
+          0.1,
+          2,
+          2.378414230005442,
+          2,
+          0,
+          0,
+          1,
+          0.3,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14,
+          1.4210854715202004e-14
+        ],
+        "state": [
+          1200,
+          900,
+          800,
+          30,
+          -20,
+          10,
+          0.65
+        ],
+        "increment": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0004,
+          -0.0002,
+          0.0001
+        ],
+        "values": [
+          69.98834896193249,
+          -15.114292480954646,
+          8.9835885969327,
+          26.512210761593295,
+          -6.622128927369657,
+          3.3110644636848283,
+          -0.001485
+        ],
+        "message": ""
+      }
+    }
+  ],
+  "persistent_instance": true,
+  "transport_sha256": "a7ce3983a45407650d5508d0100321ac1ab728754ce0d4f2f24caab77fe25e7e",
+  "native_report_sha256": "7e1e8d10d427d224c1ffdbe6d3f859dc97305312f5ffb5e267e2b310d56628c9",
+  "wasm_loader_sha256": "49e1acd5839a038906e8bbe949683b92d6833530f0d1da1b0c97f7b08096b492",
+  "wasm_binary_sha256": "781bb25e79915e817f46d071caa15c277586ffb1a74cbacda552988bdbbe4983"
+}

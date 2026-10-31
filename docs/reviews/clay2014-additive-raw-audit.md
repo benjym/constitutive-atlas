@@ -1,0 +1,11 @@
+# Additive opaque-Wasm identity audit review
+
+Read-only review31October2026; no native/Wasm request, rebuild, repository edit or original receipt mutation. Inspected staged `clay2014_rate_assessment.py` and the unchanged production v1 collector. Parent reports numerical collection already exists; this review does not independently claim those material outcomes.
+
+The additive approach is appropriate. Original `verify` still replays the full independent reference and applies all original numerical/source/request/status/zero/recovery gates. Native raw audit delegates unchanged. Wasm raw audit differs only in comparing parsed JSON using the original strict recursive finite integer/float identity instead of JSON spelling-sensitive digest; opaque raw bytes remain SHA-bound. Booleans cannot stand in for numeric zero. The parity loop keeps the pre-observation original PARITY_POLICY and audits both backends. It does not invoke the old compare method that nests the failing raw auditor. Original collector, model, oracle, reports and historical source hashes remain untouched; the original negative CLI outcome should be retained.
+
+A new review finding was resolved before assessment: all four input files and both assessor source files are hashed before reads/checks and checked again afterward; the compact assessment records those original hashes. This prevents a changed file's bytes from being falsely pinned as the checked input. The accompanying mutation regression verifies rejection.
+
+Eight pure Python tests pass: old auditor's 0.0-versus0 failure retained; additive acceptance in both numeric representation directions; rejection of false-versus0 in both directions; rejection of changed numeric values; rejection of changed opaque raw bytes; rejection of an input-file mutation during the assessment checks. Tests use a minimal synthetic descriptor and mocked assessment gates for mutation, not compiled material calls. They import actual tool modules without fake oracle injection.
+
+No remaining blocker found in this bounded representation/receipt correction. The same original instantaneous-rate scientific scope applies; this is neither a constitutive correction nor relaxation of an error budget. It does not admit the model or claim complete integration/physical validity.

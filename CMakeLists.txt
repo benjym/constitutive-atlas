@@ -261,3 +261,21 @@ if(EMSCRIPTEN)
     "-sMAXIMUM_MEMORY=268435456" "-sSTACK_SIZE=1048576"
     "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-fexceptions" "-sFILESYSTEM=0" "--no-entry")
 endif()
+
+# Isolated fixed-plane clay2014 research definition; excluded from public models.
+file(GLOB CLAY2014_MODELS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research/clay2014/*.json")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/clay2014-generated/models.hpp" "${CMAKE_BINARY_DIR}/clay2014-generated/models.json"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/clay2014-generated" "${CMAKE_SOURCE_DIR}/models/research/clay2014"
+  DEPENDS ${CLAY2014_MODELS} atlas/dsl.py atlas/scalar_math.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_custom_target(atlas_clay2014_models DEPENDS "${CMAKE_BINARY_DIR}/clay2014-generated/models.hpp" "${CMAKE_BINARY_DIR}/clay2014-generated/models.json")
+add_executable(atlas_clay2014_rate_probe tests/research_rate_driver.cpp)
+add_dependencies(atlas_clay2014_rate_probe atlas_clay2014_models)
+target_include_directories(atlas_clay2014_rate_probe PRIVATE cpp/include "${CMAKE_BINARY_DIR}/clay2014-generated")
+target_compile_options(atlas_clay2014_rate_probe PRIVATE -Wall -Wextra -Wno-unused-variable)
+if(EMSCRIPTEN)
+  target_compile_options(atlas_clay2014_rate_probe PRIVATE -fexceptions)
+  set_target_properties(atlas_clay2014_rate_probe PROPERTIES OUTPUT_NAME "clay2014-rates" SUFFIX ".js")
+  target_link_options(atlas_clay2014_rate_probe PRIVATE ${ATLAS_WASM_OPTIONS})
+endif()
