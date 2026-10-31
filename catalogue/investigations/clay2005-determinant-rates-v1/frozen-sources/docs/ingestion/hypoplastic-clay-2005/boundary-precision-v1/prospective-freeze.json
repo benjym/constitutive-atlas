@@ -1,0 +1,1719 @@
+{
+  "version": "clay2005-actual-binary64-boundary-precision-v1",
+  "frozen_before_high_precision_evaluation": true,
+  "files": {
+    "catalogue/investigations/clay2005-rates-v3/protocol.json": "161893b9003dca463506305f304f90e0b66f851c50b81bc4a8ae6e55c3ab582b",
+    "catalogue/investigations/clay2005-rates-v3/model.json": "d53f38f469e99cd5a49fcc2303d74d542f790cfa9e4dda7d49bf1dc2ceec019d",
+    "catalogue/investigations/clay2005-rates-v3/comparison.json": "d71391813e4cf6442627c1933f7cf9900ec945bd156c982cf5a5b26896e679c7",
+    "catalogue/investigations/clay2005-rates-v3/native-observation.transport.json": "f6309679d3713be5899bb5fc10b11f7680d634e095c97bcf99f6d66be174abbe",
+    "catalogue/investigations/clay2005-rates-v3/wasm-observation.transport.json": "06fcafc05d8ac1b34045f03f33fd9ea065d95e2f42752ce36607ab58256763f3",
+    "docs/ingestion/hypoplastic-clay-2005/rate-study-v2/reference.py": "cb51c426313b83ffbd367c5929cec863805fbf186f3b86ed814f67510c4936b5",
+    "docs/ingestion/hypoplastic-clay-2005/rate-study-v2/reference.json": "56cb800fbcafe1336124f0192575c129e781a299c06ecc4bd2701d4817f3b918",
+    "docs/ingestion/hypoplastic-clay-2005/rate-study-v2/SOURCE_CORRECTION.md": "0188694134d33d4f44eea5baac467ce17776f2917d51c09d41ea2bfe22f66e7d",
+    "docs/ingestion/hypoplastic-clay-2005/compiled-plan-v3/corpus.json": "16096c88ef9f226fcb38c2330091e9e371686efe2fa26c0ebf58a437e132a9f3"
+  },
+  "source": {
+    "title": "A hypoplastic constitutive model for clays",
+    "author": "David Ma\u0161\u00edn",
+    "year": 2005,
+    "doi": "https://doi.org/10.1002/nag.416",
+    "url": "https://web.natur.cuni.cz/uhigug/masin/download/MasinIJNAMG05-pp.pdf",
+    "version": "accepted author manuscript; final publisher equivalence unverified",
+    "sha256": "8650dd58a4b5725dc0176ab9cf3a034ed211847b840524254876c2652bdf9ff3",
+    "locators": [
+      "p10Eq38PLUS,40,41",
+      "pp24\u201325AppendixC73\u201385"
+    ],
+    "private_pdf": "/private/tmp/atlas-ingest-clay2005-20261031/private/masin-2005-author.pdf"
+  },
+  "policy": {
+    "decimal_precisions": [
+      80,
+      160,
+      240
+    ],
+    "construction": "each literal first parsed to binary64, then exact integer ratio at every precision; Cartesian off-diagonals divide exact Mandel values by high-precision sqrt(2)",
+    "source_route": "Cartesian AppendixC; T=-sigma,D=-E; zero spin; Eq38 PLUS agrees with40/84; no ideal eigenvalues or Atlas evaluation",
+    "trigonometry": "stdlib Decimal Taylor sin/cos on exact binary64 phi; stop when term abs<10^(-precision-5)",
+    "convergence": [
+      {
+        "pair": [
+          80,
+          160
+        ],
+        "scaled_rate_tolerance": "1e-50",
+        "relative_detH_tolerance": "1e-50"
+      },
+      {
+        "pair": [
+          160,
+          240
+        ],
+        "scaled_rate_tolerance": "1e-120",
+        "relative_detH_tolerance": "1e-120"
+      }
+    ],
+    "scaled_rate_norm": "max_i abs(a_i-b_i)/max(1,abs(a_i),abs(b_i))",
+    "conditioning": "determinant relative Frobenius derivative amplification ||sigma||F ||adj(sigma)||F / abs(det sigma); determinant cancellation sum(abs(cofactor-expansion terms))/abs(det); adjacent-binary64 perturb each nonzero one of6Mandel stress entries up/down at240digits, record SPD and source-rate changes",
+    "perturbation_qualification": "adjacent stored inputs only, not evaluation error certificate; no ideal-spectrum perturbations; no domain changes",
+    "backend_diagnostic": "compare retained backend rates to converged240digit source estimates componentwise; descriptive only, no new retroactive accuracy gate",
+    "failure_policy": "retain source/convergence/domain failures; do not relax tolerances, rescale ideal input, rewrite references or change support"
+  },
+  "cases": [
+    {
+      "id": "finite_only/tiny-positive-interior",
+      "selection": "retained-parity-failure",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1e-10,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1e-10",
+            "hex": "0x1.b7cdfd9d7bdbbp-34",
+            "numerator": "7737125245533627",
+            "denominator": "77371252455336267181195264"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "-0.00029999999999999997",
+            "hex": "-0x1.3a92a30553261p-12",
+            "numerator": "-5534023222112865",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "0.00020000000000000001",
+            "hex": "0x1.a36e2eb1c432dp-13",
+            "numerator": "7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.00040000000000000002",
+            "hex": "0x1.a36e2eb1c432dp-12",
+            "numerator": "7378697629483821",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00020000000000000001",
+            "hex": "-0x1.a36e2eb1c432dp-13",
+            "numerator": "-7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.0001",
+            "hex": "0x1.a36e2eb1c432dp-14",
+            "numerator": "7378697629483821",
+            "denominator": "73786976294838206464"
+          }
+        ]
+      }
+    },
+    {
+      "id": "finite_only/margin-above",
+      "selection": "retained-parity-failure",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,8.0388733884609289e-14,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "8.0388733884609289e-14",
+            "hex": "0x1.6a09e667f3bcdp-44",
+            "numerator": "6369051672525773",
+            "denominator": "79228162514264337593543950336"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "-0.00029999999999999997",
+            "hex": "-0x1.3a92a30553261p-12",
+            "numerator": "-5534023222112865",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "0.00020000000000000001",
+            "hex": "0x1.a36e2eb1c432dp-13",
+            "numerator": "7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.00040000000000000002",
+            "hex": "0x1.a36e2eb1c432dp-12",
+            "numerator": "7378697629483821",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00020000000000000001",
+            "hex": "-0x1.a36e2eb1c432dp-13",
+            "numerator": "-7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.0001",
+            "hex": "0x1.a36e2eb1c432dp-14",
+            "numerator": "7378697629483821",
+            "denominator": "73786976294838206464"
+          }
+        ]
+      }
+    },
+    {
+      "id": "finite_only/scaled-positive-1.0",
+      "selection": "retained-parity-failure",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1e-10,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1e-10",
+            "hex": "0x1.b7cdfd9d7bdbbp-34",
+            "numerator": "7737125245533627",
+            "denominator": "77371252455336267181195264"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "-0.00029999999999999997",
+            "hex": "-0x1.3a92a30553261p-12",
+            "numerator": "-5534023222112865",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "0.00020000000000000001",
+            "hex": "0x1.a36e2eb1c432dp-13",
+            "numerator": "7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.00040000000000000002",
+            "hex": "0x1.a36e2eb1c432dp-12",
+            "numerator": "7378697629483821",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00020000000000000001",
+            "hex": "-0x1.a36e2eb1c432dp-13",
+            "numerator": "-7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.0001",
+            "hex": "0x1.a36e2eb1c432dp-14",
+            "numerator": "7378697629483821",
+            "denominator": "73786976294838206464"
+          }
+        ]
+      }
+    },
+    {
+      "id": "finite_only/scaled-positive-1e+50",
+      "selection": "retained-parity-failure",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1.0000000000000001e+50,1.0000000000000001e+50,1.0000000000000002e+40,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "1.0000000000000001e+50",
+            "hex": "0x1.11b0ec57e649ap+166",
+            "numerator": "100000000000000007629769841091887003294964970946560",
+            "denominator": "1"
+          },
+          {
+            "literal": "1.0000000000000001e+50",
+            "hex": "0x1.11b0ec57e649ap+166",
+            "numerator": "100000000000000007629769841091887003294964970946560",
+            "denominator": "1"
+          },
+          {
+            "literal": "1.0000000000000002e+40",
+            "hex": "0x1.d6329f1c35ca6p+132",
+            "numerator": "10000000000000001512711848041632841596928",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "-0.00029999999999999997",
+            "hex": "-0x1.3a92a30553261p-12",
+            "numerator": "-5534023222112865",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "0.00020000000000000001",
+            "hex": "0x1.a36e2eb1c432dp-13",
+            "numerator": "7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.00040000000000000002",
+            "hex": "0x1.a36e2eb1c432dp-12",
+            "numerator": "7378697629483821",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00020000000000000001",
+            "hex": "-0x1.a36e2eb1c432dp-13",
+            "numerator": "-7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.0001",
+            "hex": "0x1.a36e2eb1c432dp-14",
+            "numerator": "7378697629483821",
+            "denominator": "73786976294838206464"
+          }
+        ]
+      }
+    },
+    {
+      "id": "finite_only/oblique-tiny-positive",
+      "selection": "retained-parity-failure",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1.0000000000444444,0.66666666671111108,1.3333333333444444,0.94280904151920941,3.1426968052735449e-11,0.94280904155063638,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "1.0000000000444444",
+            "hex": "0x1.0000000030de0p+0",
+            "numerator": "140737488361583",
+            "denominator": "140737488355328"
+          },
+          {
+            "literal": "0.66666666671111108",
+            "hex": "0x1.55555555b7115p-1",
+            "numerator": "6004799503560981",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.3333333333444444",
+            "hex": "0x1.55555555618cdp+0",
+            "numerator": "6004799503210701",
+            "denominator": "4503599627370496"
+          },
+          {
+            "literal": "0.94280904151920941",
+            "hex": "0x1.e2b7dddf656ecp-1",
+            "numerator": "2123017224033723",
+            "denominator": "2251799813685248"
+          },
+          {
+            "literal": "3.1426968052735449e-11",
+            "hex": "0x1.146f3da5739fcp-35",
+            "numerator": "1215771939556991",
+            "denominator": "38685626227668133590597632"
+          },
+          {
+            "literal": "0.94280904155063638",
+            "hex": "0x1.e2b7dddfaa8a9p-1",
+            "numerator": "8492068896417961",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "-0.00029999999999999997",
+            "hex": "-0x1.3a92a30553261p-12",
+            "numerator": "-5534023222112865",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "0.00020000000000000001",
+            "hex": "0x1.a36e2eb1c432dp-13",
+            "numerator": "7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.00040000000000000002",
+            "hex": "0x1.a36e2eb1c432dp-12",
+            "numerator": "7378697629483821",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00020000000000000001",
+            "hex": "-0x1.a36e2eb1c432dp-13",
+            "numerator": "-7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.0001",
+            "hex": "0x1.a36e2eb1c432dp-14",
+            "numerator": "7378697629483821",
+            "denominator": "73786976294838206464"
+          }
+        ]
+      }
+    },
+    {
+      "id": "accuracy/nonisotropic-0-mixed",
+      "selection": "predeclared-control",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "120000,90000,80000,3000,-2000,1000,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "120000",
+            "hex": "0x1.d4c0000000000p+16",
+            "numerator": "120000",
+            "denominator": "1"
+          },
+          {
+            "literal": "90000",
+            "hex": "0x1.5f90000000000p+16",
+            "numerator": "90000",
+            "denominator": "1"
+          },
+          {
+            "literal": "80000",
+            "hex": "0x1.3880000000000p+16",
+            "numerator": "80000",
+            "denominator": "1"
+          },
+          {
+            "literal": "3000",
+            "hex": "0x1.7700000000000p+11",
+            "numerator": "3000",
+            "denominator": "1"
+          },
+          {
+            "literal": "-2000",
+            "hex": "-0x1.f400000000000p+10",
+            "numerator": "-2000",
+            "denominator": "1"
+          },
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "-0.00029999999999999997",
+            "hex": "-0x1.3a92a30553261p-12",
+            "numerator": "-5534023222112865",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "0.00020000000000000001",
+            "hex": "0x1.a36e2eb1c432dp-13",
+            "numerator": "7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.00040000000000000002",
+            "hex": "0x1.a36e2eb1c432dp-12",
+            "numerator": "7378697629483821",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00020000000000000001",
+            "hex": "-0x1.a36e2eb1c432dp-13",
+            "numerator": "-7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.0001",
+            "hex": "0x1.a36e2eb1c432dp-14",
+            "numerator": "7378697629483821",
+            "denominator": "73786976294838206464"
+          }
+        ]
+      }
+    },
+    {
+      "id": "accuracy/sphere-100000-load",
+      "selection": "predeclared-control",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "100000,100000,100000,0,0,0,1.3831693930553501",
+        "0.001,0.001,0.001,0,0,0"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "1.3831693930553501",
+            "hex": "0x1.621763ac003aep+0",
+            "numerator": "3114620581577175",
+            "denominator": "2251799813685248"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "accuracy/rotated-mixed",
+      "selection": "predeclared-control",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "88888.888888888876,99831.697930470938,101279.41318064016,18046.817359701065,-19998.877636914815,-7952.0602772137472,0.80000000000000004",
+        "9.809363471940213e-05,0.0006257078722109418,0.00017619849306965609,0.00038316979304709527,-0.00043774410688522208,-0.00075457431383812686"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "88888.888888888876",
+            "hex": "0x1.5b38e38e38e38p+16",
+            "numerator": "763549741511111",
+            "denominator": "8589934592"
+          },
+          {
+            "literal": "99831.697930470938",
+            "hex": "0x1.85f7b2ab92439p+16",
+            "numerator": "6860382043448377",
+            "denominator": "68719476736"
+          },
+          {
+            "literal": "101279.41318064016",
+            "hex": "0x1.8b9f69c634d8dp+16",
+            "numerator": "6959868277902733",
+            "denominator": "68719476736"
+          },
+          {
+            "literal": "18046.817359701065",
+            "hex": "0x1.19fb44f9f1049p+14",
+            "numerator": "4960671382835273",
+            "denominator": "274877906944"
+          },
+          {
+            "literal": "-19998.877636914815",
+            "hex": "-0x1.387b82b3405b9p+14",
+            "numerator": "-5497249626064313",
+            "denominator": "274877906944"
+          },
+          {
+            "literal": "-7952.0602772137472",
+            "hex": "-0x1.f100f6e53d5bdp+12",
+            "numerator": "-8743382739572157",
+            "denominator": "1099511627776"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "9.809363471940213e-05",
+            "hex": "0x1.9b6f3cff06de3p-14",
+            "numerator": "7238032699715043",
+            "denominator": "73786976294838206464"
+          },
+          {
+            "literal": "0.0006257078722109418",
+            "hex": "0x1.480d16c8b1fdep-11",
+            "numerator": "2885568245895151",
+            "denominator": "4611686018427387904"
+          },
+          {
+            "literal": "0.00017619849306965609",
+            "hex": "0x1.7183d87da77e0p-13",
+            "numerator": "203143031739327",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "0.00038316979304709527",
+            "hex": "0x1.91c85bade2874p-12",
+            "numerator": "1767058777279005",
+            "denominator": "4611686018427387904"
+          },
+          {
+            "literal": "-0.00043774410688522208",
+            "hex": "-0x1.cb0209f82beabp-12",
+            "numerator": "-8074953509486251",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00075457431383812686",
+            "hex": "-0x1.8b9d4000b05e3p-11",
+            "numerator": "-6959719625983459",
+            "denominator": "9223372036854775808"
+          }
+        ]
+      }
+    },
+    {
+      "id": "finite_only/safe",
+      "selection": "predeclared-control",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1,0,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "-0.00029999999999999997",
+            "hex": "-0x1.3a92a30553261p-12",
+            "numerator": "-5534023222112865",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "0.00020000000000000001",
+            "hex": "0x1.a36e2eb1c432dp-13",
+            "numerator": "7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.00040000000000000002",
+            "hex": "0x1.a36e2eb1c432dp-12",
+            "numerator": "7378697629483821",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00020000000000000001",
+            "hex": "-0x1.a36e2eb1c432dp-13",
+            "numerator": "-7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.0001",
+            "hex": "0x1.a36e2eb1c432dp-14",
+            "numerator": "7378697629483821",
+            "denominator": "73786976294838206464"
+          }
+        ]
+      }
+    },
+    {
+      "id": "finite_only/oblique-safe",
+      "selection": "predeclared-control",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1.4444444444444444,1.1111111111111112,1.4444444444444444,0.31426968052735443,0.31426968052735443,0.62853936105470887,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "1.4444444444444444",
+            "hex": "0x1.71c71c71c71c7p+0",
+            "numerator": "6505199461757383",
+            "denominator": "4503599627370496"
+          },
+          {
+            "literal": "1.1111111111111112",
+            "hex": "0x1.1c71c71c71c72p+0",
+            "numerator": "2501999792983609",
+            "denominator": "2251799813685248"
+          },
+          {
+            "literal": "1.4444444444444444",
+            "hex": "0x1.71c71c71c71c7p+0",
+            "numerator": "6505199461757383",
+            "denominator": "4503599627370496"
+          },
+          {
+            "literal": "0.31426968052735443",
+            "hex": "0x1.41cfe93ff5199p-2",
+            "numerator": "5661379264467353",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.31426968052735443",
+            "hex": "0x1.41cfe93ff5199p-2",
+            "numerator": "5661379264467353",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.62853936105470887",
+            "hex": "0x1.41cfe93ff5199p-1",
+            "numerator": "5661379264467353",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "-0.00029999999999999997",
+            "hex": "-0x1.3a92a30553261p-12",
+            "numerator": "-5534023222112865",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "0.00020000000000000001",
+            "hex": "0x1.a36e2eb1c432dp-13",
+            "numerator": "7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.00040000000000000002",
+            "hex": "0x1.a36e2eb1c432dp-12",
+            "numerator": "7378697629483821",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00020000000000000001",
+            "hex": "-0x1.a36e2eb1c432dp-13",
+            "numerator": "-7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.0001",
+            "hex": "0x1.a36e2eb1c432dp-14",
+            "numerator": "7378697629483821",
+            "denominator": "73786976294838206464"
+          }
+        ]
+      }
+    },
+    {
+      "id": "finite_only/shear-near-positive-interior",
+      "selection": "predeclared-control",
+      "args": [
+        "hypoplastic-clay-2005-appc-plus-spd-interior-v3-research",
+        "1000,100000,0.39444441095071853,0.11,0.016,1.375,0.40000000000000002,1.4210854715202004e-14,1e-100",
+        "1,1,1,1.4142135622316738,0,0,0.80000000000000004",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00020000000000000001,0.0001"
+      ],
+      "exact_binary64": {
+        "parameters": [
+          {
+            "literal": "1000",
+            "hex": "0x1.f400000000000p+9",
+            "numerator": "1000",
+            "denominator": "1"
+          },
+          {
+            "literal": "100000",
+            "hex": "0x1.86a0000000000p+16",
+            "numerator": "100000",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.39444441095071853",
+            "hex": "0x1.93e93c547e47bp-2",
+            "numerator": "7105678808704123",
+            "denominator": "18014398509481984"
+          },
+          {
+            "literal": "0.11",
+            "hex": "0x1.c28f5c28f5c29p-4",
+            "numerator": "7926335344172073",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "0.016",
+            "hex": "0x1.0624dd2f1a9fcp-6",
+            "numerator": "1152921504606847",
+            "denominator": "72057594037927936"
+          },
+          {
+            "literal": "1.375",
+            "hex": "0x1.6000000000000p+0",
+            "numerator": "11",
+            "denominator": "8"
+          },
+          {
+            "literal": "0.40000000000000002",
+            "hex": "0x1.999999999999ap-2",
+            "numerator": "3602879701896397",
+            "denominator": "9007199254740992"
+          },
+          {
+            "literal": "1.4210854715202004e-14",
+            "hex": "0x1.0000000000000p-46",
+            "numerator": "1",
+            "denominator": "70368744177664"
+          },
+          {
+            "literal": "1e-100",
+            "hex": "0x1.bff2ee48e0530p-333",
+            "numerator": "492525077454931",
+            "denominator": "4925250774549309901534880012517951725634967408808180833493536675530715221437151326426783281860614455100828498788352"
+          }
+        ],
+        "state": [
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1",
+            "hex": "0x1.0000000000000p+0",
+            "numerator": "1",
+            "denominator": "1"
+          },
+          {
+            "literal": "1.4142135622316738",
+            "hex": "0x1.6a09e667583e4p+0",
+            "numerator": "1592262917972217",
+            "denominator": "1125899906842624"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0",
+            "hex": "0x0.0p+0",
+            "numerator": "0",
+            "denominator": "1"
+          },
+          {
+            "literal": "0.80000000000000004",
+            "hex": "0x1.999999999999ap-1",
+            "numerator": "3602879701896397",
+            "denominator": "4503599627370496"
+          }
+        ],
+        "increment": [
+          {
+            "literal": "0.001",
+            "hex": "0x1.0624dd2f1a9fcp-10",
+            "numerator": "1152921504606847",
+            "denominator": "1152921504606846976"
+          },
+          {
+            "literal": "-0.00029999999999999997",
+            "hex": "-0x1.3a92a30553261p-12",
+            "numerator": "-5534023222112865",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "0.00020000000000000001",
+            "hex": "0x1.a36e2eb1c432dp-13",
+            "numerator": "7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.00040000000000000002",
+            "hex": "0x1.a36e2eb1c432dp-12",
+            "numerator": "7378697629483821",
+            "denominator": "18446744073709551616"
+          },
+          {
+            "literal": "-0.00020000000000000001",
+            "hex": "-0x1.a36e2eb1c432dp-13",
+            "numerator": "-7378697629483821",
+            "denominator": "36893488147419103232"
+          },
+          {
+            "literal": "0.0001",
+            "hex": "0x1.a36e2eb1c432dp-14",
+            "numerator": "7378697629483821",
+            "denominator": "73786976294838206464"
+          }
+        ]
+      }
+    }
+  ],
+  "claims": {
+    "new_source_accuracy_gate": false,
+    "scientific_admission": false,
+    "compiled_execution": false
+  }
+}

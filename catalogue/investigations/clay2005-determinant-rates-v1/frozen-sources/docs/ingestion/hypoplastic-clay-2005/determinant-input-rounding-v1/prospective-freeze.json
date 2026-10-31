@@ -1,0 +1,595 @@
+{
+  "version": "clay2005-determinant-input-rounding-v1-prospective-freeze",
+  "files": {
+    "docs/ingestion/hypoplastic-clay-2005/boundary-precision-v1/prospective-freeze.json": "0572dfb4a7c3fefbe5935be1ac7b0b9eb46ffbfb1acd0e2e4082bb64f1ad2ca7",
+    "docs/ingestion/hypoplastic-clay-2005/boundary-precision-v1/results.json": "be6c791d2ddfca25a5f3e18346bf2fb6c5e7bc1971493a772cae37382a1556c9",
+    "docs/ingestion/hypoplastic-clay-2005/boundary-precision-v1/README.md": "0125f33e965e331aba78d1b8cee9990e21f79aafc4f571f5d962b9b189d6c65c",
+    "docs/ingestion/hypoplastic-clay-2005/rate-study-v2/SOURCE_CORRECTION.md": "0188694134d33d4f44eea5baac467ce17776f2917d51c09d41ea2bfe22f66e7d",
+    "catalogue/investigations/clay2005-rates-v3/protocol.json": "161893b9003dca463506305f304f90e0b66f851c50b81bc4a8ae6e55c3ab582b",
+    "catalogue/investigations/clay2005-rates-v3/model.json": "d53f38f469e99cd5a49fcc2303d74d542f790cfa9e4dda7d49bf1dc2ceec019d",
+    "cpp/include/atlas/tensor.hpp": "966a6a413b8ea4d50f400bc96860644774cabfb15f69e8bfec9c3fb215b7e144",
+    "atlas/dsl.py": "8a9da4dd24fa554991c691330069b18251cceb79f5cece1153943fc79aded02b",
+    "cpp/include/atlas/trace_accuracy.hpp": "5e2c187683372ec56aaeef5cd6aaf3b45ae9fe4605c64d5b728f291fad52d44c"
+  },
+  "source": {
+    "title": "A hypoplastic constitutive model for clays",
+    "author": "David Ma\u0161\u00edn",
+    "year": 2005,
+    "doi": "https://doi.org/10.1002/nag.416",
+    "url": "https://web.natur.cuni.cz/uhigug/masin/download/MasinIJNAMG05-pp.pdf",
+    "version": "accepted author manuscript; final publisher equivalence unverified",
+    "sha256": "8650dd58a4b5725dc0176ab9cf3a034ed211847b840524254876c2652bdf9ff3",
+    "locators": [
+      "p10Eq38PLUS,40,41",
+      "pp24\u201325AppendixC73\u201385"
+    ],
+    "private_pdf": "/private/tmp/atlas-ingest-clay2005-20261031/private/masin-2005-author.pdf"
+  },
+  "cases": [
+    {
+      "id": "finite_only/tiny-positive-interior",
+      "stress_literals": [
+        "1",
+        "1",
+        "1e-10",
+        "0",
+        "0",
+        "0"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1e-10",
+          "hex": "0x1.b7cdfd9d7bdbbp-34",
+          "numerator": "7737125245533627",
+          "denominator": "77371252455336267181195264"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        }
+      ]
+    },
+    {
+      "id": "finite_only/margin-above",
+      "stress_literals": [
+        "1",
+        "1",
+        "8.0388733884609289e-14",
+        "0",
+        "0",
+        "0"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "8.0388733884609289e-14",
+          "hex": "0x1.6a09e667f3bcdp-44",
+          "numerator": "6369051672525773",
+          "denominator": "79228162514264337593543950336"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        }
+      ]
+    },
+    {
+      "id": "finite_only/scaled-positive-1.0",
+      "stress_literals": [
+        "1",
+        "1",
+        "1e-10",
+        "0",
+        "0",
+        "0"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1e-10",
+          "hex": "0x1.b7cdfd9d7bdbbp-34",
+          "numerator": "7737125245533627",
+          "denominator": "77371252455336267181195264"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        }
+      ]
+    },
+    {
+      "id": "finite_only/scaled-positive-1e+50",
+      "stress_literals": [
+        "1.0000000000000001e+50",
+        "1.0000000000000001e+50",
+        "1.0000000000000002e+40",
+        "0",
+        "0",
+        "0"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "1.0000000000000001e+50",
+          "hex": "0x1.11b0ec57e649ap+166",
+          "numerator": "100000000000000007629769841091887003294964970946560",
+          "denominator": "1"
+        },
+        {
+          "literal": "1.0000000000000001e+50",
+          "hex": "0x1.11b0ec57e649ap+166",
+          "numerator": "100000000000000007629769841091887003294964970946560",
+          "denominator": "1"
+        },
+        {
+          "literal": "1.0000000000000002e+40",
+          "hex": "0x1.d6329f1c35ca6p+132",
+          "numerator": "10000000000000001512711848041632841596928",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        }
+      ]
+    },
+    {
+      "id": "finite_only/oblique-tiny-positive",
+      "stress_literals": [
+        "1.0000000000444444",
+        "0.66666666671111108",
+        "1.3333333333444444",
+        "0.94280904151920941",
+        "3.1426968052735449e-11",
+        "0.94280904155063638"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "1.0000000000444444",
+          "hex": "0x1.0000000030de0p+0",
+          "numerator": "140737488361583",
+          "denominator": "140737488355328"
+        },
+        {
+          "literal": "0.66666666671111108",
+          "hex": "0x1.55555555b7115p-1",
+          "numerator": "6004799503560981",
+          "denominator": "9007199254740992"
+        },
+        {
+          "literal": "1.3333333333444444",
+          "hex": "0x1.55555555618cdp+0",
+          "numerator": "6004799503210701",
+          "denominator": "4503599627370496"
+        },
+        {
+          "literal": "0.94280904151920941",
+          "hex": "0x1.e2b7dddf656ecp-1",
+          "numerator": "2123017224033723",
+          "denominator": "2251799813685248"
+        },
+        {
+          "literal": "3.1426968052735449e-11",
+          "hex": "0x1.146f3da5739fcp-35",
+          "numerator": "1215771939556991",
+          "denominator": "38685626227668133590597632"
+        },
+        {
+          "literal": "0.94280904155063638",
+          "hex": "0x1.e2b7dddfaa8a9p-1",
+          "numerator": "8492068896417961",
+          "denominator": "9007199254740992"
+        }
+      ]
+    },
+    {
+      "id": "accuracy/nonisotropic-0-mixed",
+      "stress_literals": [
+        "120000",
+        "90000",
+        "80000",
+        "3000",
+        "-2000",
+        "1000"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "120000",
+          "hex": "0x1.d4c0000000000p+16",
+          "numerator": "120000",
+          "denominator": "1"
+        },
+        {
+          "literal": "90000",
+          "hex": "0x1.5f90000000000p+16",
+          "numerator": "90000",
+          "denominator": "1"
+        },
+        {
+          "literal": "80000",
+          "hex": "0x1.3880000000000p+16",
+          "numerator": "80000",
+          "denominator": "1"
+        },
+        {
+          "literal": "3000",
+          "hex": "0x1.7700000000000p+11",
+          "numerator": "3000",
+          "denominator": "1"
+        },
+        {
+          "literal": "-2000",
+          "hex": "-0x1.f400000000000p+10",
+          "numerator": "-2000",
+          "denominator": "1"
+        },
+        {
+          "literal": "1000",
+          "hex": "0x1.f400000000000p+9",
+          "numerator": "1000",
+          "denominator": "1"
+        }
+      ]
+    },
+    {
+      "id": "accuracy/sphere-100000-load",
+      "stress_literals": [
+        "100000",
+        "100000",
+        "100000",
+        "0",
+        "0",
+        "0"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "100000",
+          "hex": "0x1.86a0000000000p+16",
+          "numerator": "100000",
+          "denominator": "1"
+        },
+        {
+          "literal": "100000",
+          "hex": "0x1.86a0000000000p+16",
+          "numerator": "100000",
+          "denominator": "1"
+        },
+        {
+          "literal": "100000",
+          "hex": "0x1.86a0000000000p+16",
+          "numerator": "100000",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        }
+      ]
+    },
+    {
+      "id": "accuracy/rotated-mixed",
+      "stress_literals": [
+        "88888.888888888876",
+        "99831.697930470938",
+        "101279.41318064016",
+        "18046.817359701065",
+        "-19998.877636914815",
+        "-7952.0602772137472"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "88888.888888888876",
+          "hex": "0x1.5b38e38e38e38p+16",
+          "numerator": "763549741511111",
+          "denominator": "8589934592"
+        },
+        {
+          "literal": "99831.697930470938",
+          "hex": "0x1.85f7b2ab92439p+16",
+          "numerator": "6860382043448377",
+          "denominator": "68719476736"
+        },
+        {
+          "literal": "101279.41318064016",
+          "hex": "0x1.8b9f69c634d8dp+16",
+          "numerator": "6959868277902733",
+          "denominator": "68719476736"
+        },
+        {
+          "literal": "18046.817359701065",
+          "hex": "0x1.19fb44f9f1049p+14",
+          "numerator": "4960671382835273",
+          "denominator": "274877906944"
+        },
+        {
+          "literal": "-19998.877636914815",
+          "hex": "-0x1.387b82b3405b9p+14",
+          "numerator": "-5497249626064313",
+          "denominator": "274877906944"
+        },
+        {
+          "literal": "-7952.0602772137472",
+          "hex": "-0x1.f100f6e53d5bdp+12",
+          "numerator": "-8743382739572157",
+          "denominator": "1099511627776"
+        }
+      ]
+    },
+    {
+      "id": "finite_only/safe",
+      "stress_literals": [
+        "1",
+        "1",
+        "1",
+        "0",
+        "0",
+        "0"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        }
+      ]
+    },
+    {
+      "id": "finite_only/oblique-safe",
+      "stress_literals": [
+        "1.4444444444444444",
+        "1.1111111111111112",
+        "1.4444444444444444",
+        "0.31426968052735443",
+        "0.31426968052735443",
+        "0.62853936105470887"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "1.4444444444444444",
+          "hex": "0x1.71c71c71c71c7p+0",
+          "numerator": "6505199461757383",
+          "denominator": "4503599627370496"
+        },
+        {
+          "literal": "1.1111111111111112",
+          "hex": "0x1.1c71c71c71c72p+0",
+          "numerator": "2501999792983609",
+          "denominator": "2251799813685248"
+        },
+        {
+          "literal": "1.4444444444444444",
+          "hex": "0x1.71c71c71c71c7p+0",
+          "numerator": "6505199461757383",
+          "denominator": "4503599627370496"
+        },
+        {
+          "literal": "0.31426968052735443",
+          "hex": "0x1.41cfe93ff5199p-2",
+          "numerator": "5661379264467353",
+          "denominator": "18014398509481984"
+        },
+        {
+          "literal": "0.31426968052735443",
+          "hex": "0x1.41cfe93ff5199p-2",
+          "numerator": "5661379264467353",
+          "denominator": "18014398509481984"
+        },
+        {
+          "literal": "0.62853936105470887",
+          "hex": "0x1.41cfe93ff5199p-1",
+          "numerator": "5661379264467353",
+          "denominator": "9007199254740992"
+        }
+      ]
+    },
+    {
+      "id": "finite_only/shear-near-positive-interior",
+      "stress_literals": [
+        "1",
+        "1",
+        "1",
+        "1.4142135622316738",
+        "0",
+        "0"
+      ],
+      "exact_binary64_stress": [
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1",
+          "hex": "0x1.0000000000000p+0",
+          "numerator": "1",
+          "denominator": "1"
+        },
+        {
+          "literal": "1.4142135622316738",
+          "hex": "0x1.6a09e667583e4p+0",
+          "numerator": "1592262917972217",
+          "denominator": "1125899906842624"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        },
+        {
+          "literal": "0",
+          "hex": "0x0.0p+0",
+          "numerator": "0",
+          "denominator": "1"
+        }
+      ]
+    }
+  ],
+  "policy": {
+    "precisions": [
+      160,
+      320
+    ],
+    "convergence": "each route Cartesian determinant and target ratio relative discrepancy160/320<=1e-120; retain zeros/sign changes/unresolvedfailures ratherthanrepair",
+    "target": "det(exact stored sigma)/(exactsum first3sigma)^3, Cartesian offdiags exactMandel/sqrt2; exactratio input construction",
+    "actual_normalization": "trace_exactsum_to_RNE; reciprocal=RNE(1/trace_RNE); H_i=RNE(sigma_i*reciprocal), matching current operator/ source, not executingAtlas",
+    "comparison_routes": [
+      "exacttrace/no componentrounding target",
+      "traceRNE but exactcomponentdivision (traceonlyeffect)",
+      "RNE(exactsigma/exacttrace) components",
+      "RNE(exactsigma/traceRNE) directcomponentdivisions",
+      "RNE(exactsigma*RNE(1/traceRNE)) actualreciprocalmultiply"
+    ],
+    "power2_diagnostic": "choosek=frexp(maxabsstoredsigma).exponent; K=sigma/2^k exactFraction. Assert representablebinary64 withoutvaluechange; compute detK/(exacttraceK)^3 atbothprecisions. Also descriptive RNE(detK)/(RNE(traceK))^3 withexactFraction denominator to isolate determinant/trace scalarroundings, nofullkernel",
+    "factor_metrics": "relative and signed determinantfactor error; source reciprocal factor sensitivity target/route-1; exacttrace androundedtrace ratios; nofullY/source-rate evaluation",
+    "failure_policy": "retain allinput/domain/precision failures; no clipping, tolerancefitting, originalbudgetchanges, supportreclassification or source-rate claim",
+    "source_homogeneity": "AppendixC76 H=T/trT;79cubicdet;78ratio homogeneousdegree0. For T=-sigma, H=sigma/trsigma exactly; det scalescubically. Historical Eq38PLUS retained."
+  },
+  "claims": {
+    "compiled_calls": 0,
+    "Atlas_math_execution": false,
+    "full_source_rate": false,
+    "new_acceptance_gate": false
+  }
+}

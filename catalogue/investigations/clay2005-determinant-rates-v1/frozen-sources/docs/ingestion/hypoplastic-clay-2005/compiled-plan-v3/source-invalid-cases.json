@@ -1,0 +1,295 @@
+{
+  "version": "clay2005-rate-invalids-0.1",
+  "cases": [
+    {
+      "id": "negative-void",
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "state": [
+        120000.0,
+        90000.0,
+        80000.0,
+        3000.0,
+        -2000.0,
+        1000.0,
+        -0.1
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "e<0"
+    },
+    {
+      "id": "indefinite-stress",
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "state": [
+        100000.0,
+        100000.0,
+        -100000.0,
+        0,
+        0,
+        0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "stress not SPD"
+    },
+    {
+      "id": "zero-stress",
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "state": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "zero pressure"
+    },
+    {
+      "id": "zero-phi",
+      "parameters": {
+        "phi_c": 0,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "state": [
+        120000.0,
+        90000.0,
+        80000.0,
+        3000.0,
+        -2000.0,
+        1000.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "angle boundary"
+    },
+    {
+      "id": "lambda-kappa-order",
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.2,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "state": [
+        120000.0,
+        90000.0,
+        80000.0,
+        3000.0,
+        -2000.0,
+        1000.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "kappa>=lambda"
+    },
+    {
+      "id": "zero-r",
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0
+      },
+      "state": [
+        120000.0,
+        90000.0,
+        80000.0,
+        3000.0,
+        -2000.0,
+        1000.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "r boundary"
+    },
+    {
+      "id": "negative-alpha",
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.1,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "state": [
+        120000.0,
+        90000.0,
+        80000.0,
+        3000.0,
+        -2000.0,
+        1000.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "alpha<0 despite kappa<lambda"
+    },
+    {
+      "id": "density-overflow",
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.0001,
+        "kappa_star": 1e-05,
+        "N": -10,
+        "r": 0.4
+      },
+      "state": [
+        120000.0,
+        90000.0,
+        80000.0,
+        3000.0,
+        -2000.0,
+        1000.0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "nonrepresentable density factor"
+    },
+    {
+      "id": "nonzero-deviator-below-floor",
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "state": [
+        100000.0,
+        100000.0,
+        100000.0,
+        1e-60,
+        0,
+        0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "nonzero j2 below1e-100"
+    },
+    {
+      "id": "nonzero-deviator-underflow",
+      "parameters": {
+        "phi_c": 0.3944444109507185,
+        "lambda_star": 0.11,
+        "kappa_star": 0.016,
+        "N": 1.375,
+        "r": 0.4
+      },
+      "state": [
+        100000.0,
+        100000.0,
+        100000.0,
+        1e-200,
+        0,
+        0,
+        0.8
+      ],
+      "increment": [
+        0.001,
+        -0.0003,
+        0.0002,
+        0.0004,
+        -0.0002,
+        0.0001
+      ],
+      "expected": "reject declared support; no clipping or accepted rate",
+      "reason": "nonzero stress cannot become exactsphere"
+    }
+  ]
+}
