@@ -4,6 +4,8 @@ This is the **live work board** for model ingestion. [ROADMAP.md](ROADMAP.md) re
 
 ## Current bounded delivery cycle — 1 November 2026
 
+- [X] **WEB-tmd2-snapshot-v1** — Owner:coordinating parent; claimed:2026-11-01; output:docs/reviews/tmd2-web-snapshot-v1/; package a read-only exact benchmark model/input snapshot from existing frozen evidence and link it from Methods. Validate file identities, exclude original measurements and preserve pending review. No solver changes, builds, new material calls or deployment. Completed:2026-11-01; [integrated snapshot](docs/reviews/tmd2-web-snapshot-v1/README.md): exact archived model and six allowlisted assets;18focused tests, full static package and10project-relative links pass; Methods navigation and figure checked in browser. Scientific review remains pending.
+
 - [X] **SRC-sanisand-1986-access-v2** — Owner:coordinating parent; claimed:2026-11-01; output:docs/reviews/sanisand-1986-access-v2/; completed:2026-11-01; [access receipt and focus checkpoint](docs/reviews/sanisand-1986-access-v2/README.md): advertised PDF redirects to restricted-access HTML; no full text acquired. Stop further retries until new source lead/readable copy. Existing TMD2 figure/table/local website summary confirmed; scientific checklist remains unsigned. No equations, model changes or builds.
 
 The KFS checkpoint, qualified TMD2 reproduction and bounded source/initialization

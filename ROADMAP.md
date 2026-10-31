@@ -66,6 +66,12 @@ confirms that the advertised mirror PDF requires login. Resume acquisition only
 with a readable copy or new concrete lead; do not repeat the same searches.
 Deployment still needs a fresh explicit instruction.
 
+The [read-only TMD2 website snapshot](docs/reviews/tmd2-web-snapshot-v1/README.md)
+now connects the Methods figure to its exact archived definition, published-case
+parameters, nominal initial state, controls and numerical settings. Regular Pages
+packaging validates and includes these assets; local browser navigation passes.
+This advances WEB-04 provenance, with scientific review and deployment still open.
+
 ## 2. Starting point
 
 | Area | Existing foundation | Outstanding evidence or capability |

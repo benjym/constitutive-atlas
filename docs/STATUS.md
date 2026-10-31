@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [TMD2 read-only website snapshot](reviews/tmd2-web-snapshot-v1/README.md)
+connects the Methods figure to its exact archived model, constants, initialization,
+requests, numerical settings and reproduction guide.18focused packaging/archive
+tests and static nine-model package validation pass;10local links remain under
+the Pages prefix and actual browser navigation/figure inspection pass. No new
+builds, material calls or scientific admission; hosted deployment remains open.
+
 The [bounded SANISAND source recheck](reviews/sanisand-1986-access-v2/README.md)
 confirms that the advertised 1986 PDF redirects to restricted-access HTML. No
 paper was acquired or equations reviewed. Further acquisition waits for a new
