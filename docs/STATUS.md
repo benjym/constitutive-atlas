@@ -1,3 +1,9 @@
+# Generated Mohr–Coulomb native/Wasm gate — 2026-10-31
+
+The [prospectively frozen study](../catalogue/investigations/mc-stored-backends-v1/RESULTS.md) passes862 calls per backend under unchanged source/branch/error gates:652 successes and210 expected rejections each.17974 six-component directional vectors spanning all38 incoming columns,76 separate analytic elastic vectors, nine tight mixed-middle checks,39 source solver updates and three accepted-state transactions pass per backend. Statuses/branches agree;42 numerical records differ within independently assessed bounds. Worst error/budget ratio is0.000142379.
+
+Ten conditional requests remain explicit numerical coverage gaps: two retained-v1 near-apex hold states in double/Jet/off-parent and two supplementary finite unresolved-gap states in double/Jet. No unrestricted source-domain execution claim follows. Independent pre-build review retains an accepted assessor corruption and the repaired rejection; copied-source replay reproduces both assessments. A195file freeze precedes compilation. Native succeeds normally; original Wasm cache-write permission failure and separate same-freeze successful retry are both preserved. Builds are serial single-target/one-worker. No production code/model changes, public promotion, push or deployment: hosted five/local nine remain unchanged. Next: separate intended-use finite-path laboratory preview and integration gates.
+
 # Independent Mohr–Coulomb stored-input references — 2026-10-31
 
 The [frozen input corpus](reviews/mc-stored-input-v1/README.md) and [independent audit](reviews/mc-stored-input-audit-v1/README.md) establish140 named cases/115 unique bitwise inputs and38 directions spanning18 current/parent/loading variables. Exact corpus replay and875 construction assertions pass; historical negative-v1 hold states and the original137/140 audit mismatch remain preserved.

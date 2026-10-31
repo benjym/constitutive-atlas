@@ -1,0 +1,17 @@
+# MC backend assessor source audit v1
+
+Reviewed driver/generator/assessor/preflight source and frozen source reference/policy inputs only. No candidate Python model evaluation, compiled call, build or shared edit. Both reviewed source versions are retained under baseline/ and latest/ with SHA pins. Data symlinks are convenience read-only dependencies on the parent's staged study; they are not immutable archive payloads. The parent must freeze its actual source/reference closure before backend execution.
+
+Material findings and disposition:
+
+1. Initial-valid/initial-unchecked analytic checks ignored32 of38 derivative columns. Exact zero-trial elastic derivative is dcurrent−dparent−C:dloading, not just identity in current coordinates. Parent fixed assessor and ideal frames using independent exact Fraction moduli and all stored seeds; current-only basis remains exact identity. Extra column37 corruption rejects in both copied versions, which were taken after this fix.
+2. JSON bools could masquerade as integer branch1/iteration1. Parent added exact integer type validation. Extra bool-as-face probe rejects.
+3. A genuine false pass remained after those fixes: replacing a conditional selected multiplier by−1e300 and rejecting at the domain site passed because only canonical gamma proximity was bounded. `extra-probe-results.json` preserves that accepted corruption. Parent now bounds actual selected gamma against its canonical source gamma and requires both actual and canonical magnitude nearzero for negative-multiplier rejection permission. The identical probe now rejects in `extra-probe-results-latest.json` (selected-multiplier-outside-source-budget and conditional-rejection-without-allowed-witness).
+4. Selected-gap rejection must not accept unsorted actual eigenvalues or arbitrary nonselected multipliers. Parent added sorted-spectrum and nonselected-gamma-zero checks plus corruption probes. Actual gamma values are no longer silently treated as fully bounded by the original21-field table.
+5. Successful max_depth0 solver rows should require rejected==0 as well as substeps1, finite integer diagnostics and iterations>=1. Parent notified; this small protocol tightening was pending at the pinned latest source version. It does not alter source accuracy bounds.
+
+Latest source-only preflight: ideal frames pass;29 deliberate corruptions reject, including an explicitly accepted finite selected-gap failure witness and rejected missing-site/unordered-spectrum/nonselected-gamma mutations. Independent extra probes reject initial column37 corruption, bool branch and the preserved arbitrary-negative-gamma false-pass reproducer. No numerical backend observation was used to revise a gate.
+
+The source-only precision/interval policy limitations remain: declared accuracy contracts are falsifiable budgets rather than a universal theorem; conditional failure requires actual branch/site/gap or nearzero multiplier evidence; bool-only spectral wrappers do not uniquely identify their internal cause. Fixed-branch boundary derivatives are compared by selected branch, with no claim of a unique classical boundary tangent. Five scientific parameter sensitivities remain outside the production double-parameter interface.
+
+Reproduce `python3 -B latest/preflight.py` and `python3 -B extra_probes_latest.py` with dependency links pointing to the frozen parent study. These scripts execute assessor/reference-frame logic only. Original accepted corruption and all latest outcomes are retained. The parent owns final byte freeze and serial backend runs.
