@@ -1,0 +1,31 @@
+{
+  "version": "barodesy2017-exact-hydro-build-receipt-v1",
+  "baseline_commit": "bb0aa7dc9e7725afde7af8ea0f945236698ccb45",
+  "date": "2026-10-31",
+  "build_type": "Release",
+  "native_compiler": "/usr/bin/c++",
+  "wasm_toolchain": "Emscripten6.0.8",
+  "serial_target": "atlas_barodesy_hydro_ad_probe",
+  "parallel_jobs": 1,
+  "commands": [
+    "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build build --target atlas_barodesy_hydro_ad_probe --parallel 1",
+    "cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build build-wasm --target atlas_barodesy_hydro_ad_probe --parallel 1"
+  ],
+  "files": {
+    "CMakeLists.txt": "7127d37d56a1b4efa1f7e006b7fe23bb6935ea2c5ac896fcd37d6a20f90d1fcf",
+    "tests/barodesy_hydro_ad_driver.cpp": "8bfb77cbd33e3671d76ae76cffc7f37f5a364d3c244495947901c983c204bbdf",
+    "cpp/include/atlas/solver.hpp": "7842240f542949a1ba547f4a2fea44e4ef1fadf50b35a18fd86f8fe4327164d5",
+    "cpp/include/atlas/tensor.hpp": "62a7456ed71910033b165df6479b52cd416425614d5aa354f13501228c794a08",
+    "models/research/barodesy2017/body-zero-spin.json": "16e0ef4de35ea1b47c4dc9122f01a264c56993d6851ba2387e974c0ff5f0af4f",
+    "build/barodesy-rate-generated/models.hpp": "2d0a1152c6a84bea0e8f155c796e250b5ee9b600e3724151045b9ca48c7750cc",
+    "build/barodesy-rate-generated/models.json": "e053144467341e724e49e1efecb62283d8c2e87afe20935dfc58d4b87dea03bf",
+    "build-wasm/barodesy-rate-generated/models.hpp": "2d0a1152c6a84bea0e8f155c796e250b5ee9b600e3724151045b9ca48c7750cc",
+    "build-wasm/barodesy-rate-generated/models.json": "e053144467341e724e49e1efecb62283d8c2e87afe20935dfc58d4b87dea03bf",
+    "build/atlas_barodesy_hydro_ad_probe": "d8796bb0adf7c1b6fdecd4d9fca4faf46a2f40e9b6359283249bd41dfb3819c8",
+    "build-wasm/barodesy-hydro-ad.js": "7e2a674695129eeddabf0c3ceea0d294551dca4cb80a0ee2f38847492ca929f2",
+    "build-wasm/barodesy-hydro-ad.wasm": "1a1f68a4aecc843bb2486be1b9ca9c06ccfa45a3dcb0e09add28cbd9e0fb27df"
+  },
+  "scope": "Observed local source/build/artifact identity; no reproducible-build attestation, remote CI result or model admission."
+}

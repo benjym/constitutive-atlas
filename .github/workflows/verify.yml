@@ -82,6 +82,9 @@ jobs:
           python -m tools.barodesy2017_integration_study --solver build/atlas_barodesy_solver --output "$RUNNER_TEMP/barodesy-path-native.json"
           node tools/test_barodesy2017_paths_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-path-native.json" --wasm build-wasm/barodesy-isotropic.js --output "$RUNNER_TEMP/barodesy-path-wasm.json"
           python -m tools.barodesy2017_integration_study --report "$RUNNER_TEMP/barodesy-path-wasm.json" --native-report "$RUNNER_TEMP/barodesy-path-native.json" --output "$RUNNER_TEMP/barodesy-path-assessed.json"
+          python -m tools.barodesy2017_hydro_ad --native build/atlas_barodesy_hydro_ad_probe --output "$RUNNER_TEMP/barodesy-hydro-native.json"
+          node tools/test_barodesy2017_hydro_ad_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-hydro-native.json" --wasm build-wasm/barodesy-hydro-ad.js --output "$RUNNER_TEMP/barodesy-hydro-wasm.json"
+          python -m tools.barodesy2017_hydro_ad --verify "$RUNNER_TEMP/barodesy-hydro-wasm.json" --native-report-path "$RUNNER_TEMP/barodesy-hydro-native.json"
           python tools/fetch_data.py --approved-only
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments

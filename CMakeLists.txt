@@ -245,3 +245,19 @@ if(EMSCRIPTEN)
   set_target_properties(atlas_barodesy_solver PROPERTIES OUTPUT_NAME "barodesy-isotropic" SUFFIX ".js")
   target_link_options(atlas_barodesy_solver PRIVATE ${ATLAS_WASM_OPTIONS})
 endif()
+
+# Add after shared isolated atlas_barodesy_models generation.
+# No production model, regular driver, or normal catalogue changes.
+add_executable(atlas_barodesy_hydro_ad_probe tests/barodesy_hydro_ad_driver.cpp)
+add_dependencies(atlas_barodesy_hydro_ad_probe atlas_barodesy_models)
+target_include_directories(atlas_barodesy_hydro_ad_probe PRIVATE cpp/include "${CMAKE_BINARY_DIR}/barodesy-rate-generated")
+target_compile_options(atlas_barodesy_hydro_ad_probe PRIVATE -Wall -Wextra -Wno-unused-variable)
+if(EMSCRIPTEN)
+  target_compile_options(atlas_barodesy_hydro_ad_probe PRIVATE -fexceptions)
+  set_target_properties(atlas_barodesy_hydro_ad_probe PROPERTIES OUTPUT_NAME "barodesy-hydro-ad" SUFFIX ".js")
+  target_link_options(atlas_barodesy_hydro_ad_probe PRIVATE
+    "-sMODULARIZE=1" "-sEXPORT_ES6=1" "-sEXPORT_NAME=createBarodesyHydroAD"
+    "-sENVIRONMENT=web,worker,node" "-sALLOW_MEMORY_GROWTH=1"
+    "-sMAXIMUM_MEMORY=268435456" "-sSTACK_SIZE=1048576"
+    "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-fexceptions" "-sFILESYSTEM=0" "--no-entry")
+endif()
