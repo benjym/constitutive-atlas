@@ -1,0 +1,150 @@
+{
+  "kind": "dp-source-contract-check-v3",
+  "root_sha256": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+  "contract_checks": [
+    "root identity",
+    "complete v0.3 profile/state/init validate",
+    "all parameters,derived and equations mapped",
+    "persistent fields preserved,temporary gamma zero-filled",
+    "missing sigma rejected",
+    "missing e rejected",
+    "supplied gamma rejected",
+    "initial outside yield rejected",
+    "e0 rejected",
+    "Md>M negative-plastic-work witness remains admitted by current guards",
+    "zero-load residual vanishes with gamma0",
+    "Md0 beyond-apex reference correctly has no hydrostatic correction"
+  ],
+  "contract_check_count": 12,
+  "negative_work_witness": {
+    "parameters": {
+      "p_ref": 100000,
+      "E": 30000000.0,
+      "nu": 0.25,
+      "M": 1.2,
+      "Md": 2.0,
+      "c": 10000
+    },
+    "sigma": [
+      186666.66666666666,
+      56666.666666666664,
+      56666.666666666664,
+      0,
+      0,
+      0
+    ],
+    "p_exact": "100000",
+    "q_exact": "130000",
+    "gamma_exact": "1/1000",
+    "plastic_work_Pa_exact": "-70",
+    "runtime_initialization_accepted": true,
+    "interpretation": "Hypothetical smooth plastic increment at this yield state; not a newly executed trajectory or a physical-admission pass."
+  },
+  "reference_residual_budgets": [
+    0.0001,
+    0.0001,
+    0.0001,
+    0.0001,
+    0.0001,
+    0.0001,
+    1e-09,
+    1e-09
+  ],
+  "scalar_reference_residuals": [
+    {
+      "id": "elastic",
+      "branch": "elastic",
+      "reference_state": [
+        103600.0,
+        101200.0,
+        101200.0,
+        0.0,
+        0.0,
+        0.0,
+        0.6998300084997167,
+        0
+      ],
+      "residual": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_absolute_budget_fraction": 0.0
+    },
+    {
+      "id": "smooth",
+      "branch": "smooth-plastic",
+      "reference_state": [
+        227254.9019607843,
+        70196.07843137255,
+        70196.07843137255,
+        0.0,
+        0.0,
+        0.0,
+        0.7,
+        0.005637254901960784
+      ],
+      "residual": [
+        -3.637978807091713e-12,
+        -3.637978807091713e-12,
+        -3.637978807091713e-12,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_absolute_budget_fraction": 3.637978807091713e-08
+    },
+    {
+      "id": "apex",
+      "branch": "apex-limit",
+      "reference_state": [
+        -8333.333333333334,
+        -8333.333333333334,
+        -8333.333333333334,
+        0,
+        0,
+        0,
+        0.7102306612919103,
+        0.0029166666666666664
+      ],
+      "residual": [
+        5.4569682106375694e-12,
+        5.4569682106375694e-12,
+        5.4569682106375694e-12,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_absolute_budget_fraction": 5.4569682106375694e-08
+    }
+  ],
+  "historical_artifacts": [
+    {
+      "record": "drucker-prager-investigation-v1",
+      "outcome": "failed",
+      "path": "catalogue/evidence/reports/drucker-prager-investigation-v1.json",
+      "sha256": "ae27dd88a2110e54b68aa73ea618508a9227bc407e98bdc39810005d98092cad",
+      "rerun": false
+    },
+    {
+      "record": "drucker-prager-apex-v2",
+      "outcome": "passed",
+      "path": "catalogue/evidence/reports/drucker-prager-apex-v2.json",
+      "sha256": "9601c68ff84676825201e57c28a955d104cb962f3b79bd311faead230ecb656d",
+      "rerun": false
+    }
+  ],
+  "compiled_calls": 0,
+  "root_migrated": false,
+  "scientific_admission_changed": false,
+  "passed": true
+}

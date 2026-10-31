@@ -416,3 +416,8 @@ The [bounded elastic packet](ingestion/linear-elastic/README.md) verifies pinned
 ## Modified Cam Clay source reconciliation — 2026-11-01
 
 The [bounded MCC packet](ingestion/modified-cam-clay/README.md) adds relevant pinned-report visual inspection, full v0.3 field/init mapping and explicit temporary-multiplier semantics. The printed single-M yield and porosity-balance inconsistencies are retained; endpoint elasticity and exponential volume/log-hardening remain project choices.13 contract observations,three scalar-reference residual cases and four existing Python-only groups pass. Historical failed v1 and passing57-case v2 report hashes are intact; no compiled corpus was rerun. Pending v3 scientific review and REV-03 remain open; no root/schema/solver/status change, build or deployment.
+
+
+## Drucker–Prager review closes the bounded baseline pass — 2026-11-01
+
+The [DP packet](ingestion/drucker-prager/README.md) reconciles source parameter/sign scaling, ideal-cone specialization, apex derivation and complete v0.3 state/init semantics.12 contract/reference-limit observations and three scalar-reference residual cases pass. Source0<=rhoBar<=rho maps to0<=Md<=M; a retained admitted Md>M witness has negative plastic work, so a separately frozen parameter-domain correction is next. Historical failed v1 and passing73-case v2 artifacts are intact, not rerun. All five bounded baseline reconciliation tasks now have packets; none supplies independent scientific sign-off or closes M1. No root/schema/solver change, build, promotion or deployment occurred.
