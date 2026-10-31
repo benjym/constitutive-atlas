@@ -1,3 +1,9 @@
+# Exact Mandel determinant core — 2026-10-31
+
+The [generic numerical core study](../catalogue/investigations/symmetric-determinant-v1/RESULTS.md) passes124calls per native/Wasm backend with exact independent result bits, all38derivative columns and46same-instance rejection/recovery pairs. Python primal references and seven corruption/regression tests pass. Independent references certify1326rounding components; read-only review found and closed two structural API gaps before freezing. Exact dyadic/radical arithmetic retains the Mandel irrational coefficient through cancellation.
+
+Expression-language registration, dimension/trace/failure routing and a new complete clay2005 source-rate study remain open. Historical failures and gates remain intact. No model promotion or deployment: eight local runnable drafts and five hosted.
+
 # Clay2005 arithmetic and conditioning diagnosis — 2026-10-31
 
 The [separate contraction diagnostic](../catalogue/investigations/clay2005-boundary-parity-v1/RESULTS.md) passes all 109 original requests and unchanged gates with implicit contraction disabled. Wasm outputs are unchanged; 24 native vectors change, and native fused instructions drop from 119 to zero. The original failed study is retained, and production flags remain unchanged.
