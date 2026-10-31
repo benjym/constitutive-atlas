@@ -5,7 +5,7 @@ import {persistentState,temporaryStateComponents,laboratoryExample} from './stat
 import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
 import {setupRecordedView} from './recorded-view.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
-import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries} from './experiments.mjs';
+import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
 const $ = id => document.getElementById(id);
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
@@ -145,7 +145,7 @@ function populate({loadExample=true}={}){
   }
   sourceLinks(content,m.sources);
   const sources=$('model-sources');sources.replaceChildren();sourceLinks(sources,m.sources);sources.append(definitionLink(m.id),publicationReference(m.id));
-  currentResult=null;lastSpec=null;renderCharts();$('export-run').disabled=$('export-csv').disabled=true;syncSliders();
+  currentResult=null;lastSpec=null;experimentOptions($('experiment-select').value);renderCharts();$('export-run').disabled=$('export-csv').disabled=true;syncSliders();
 }
 function valuesForState(m){
   const p=Number($('confinement').value)*1000,ratio=Number($('stress-ratio').value);const z=[p*ratio,p,p,0,0,0];
@@ -286,7 +286,7 @@ function renderCharts(){
     pore:[2,3].includes(protocol)?pts.map(p=>[p.strain[0]*100,p.u/1000]):[]
   };
   for(const [key,axes] of Object.entries(comparisonAxes)){
-    const measured=comparisonSeries(experiment,visible,key,protocol,cycles);
+    const measured=comparisonSeries(experiment,visible,key,protocol,cycles,model());
     chart(key+'-chart',axes.xLabel,axes.yLabel,predicted[key],measured);
     const panel=$(key+'-chart').closest('.chart-panel');
     panel.querySelector('.measured-key').hidden=!measured.length;
@@ -354,17 +354,19 @@ async function importRun(file){
   }catch(e){toast(e.message);}
 }
 function describeExperiment(){
+  $('match-experiment').disabled=!experiment||experiment.kind!=='experiment'||!supportsEffectiveExperiment(model());
   const sourceNotes=Array.isArray(experiment?.warnings)?experiment.warnings:[];
   $('experiment-details').hidden=!sourceNotes.length;$('experiment-warnings').textContent=sourceNotes.join(' ');
   if(!experiment){$('experiment-status').textContent=$('experiment-select').value?'Loading selected measurements…':(builtinExperiments.length?($('experiment-select').options.length>1?'Select a protocol-matched test to compare measured and predicted behaviour.':'No measurement overlays match this protocol and loading path. You can browse source records or load your own measurements.'):'No built-in tests are available in this build. You can compare your own measurements below.');return;}
   const stress=experiment.initial?.effective_stress,p=Array.isArray(stress)?stress.slice(0,3).reduce((a,b)=>a+b,0)/3000:null,e=experiment.initial?.void_ratio;
   const label=[experiment.kind==='test-summary'?'Test summary':null,experiment.id,experiment.material,experiment.protocol,Number.isFinite(p)?`initial p′ ${numberLabel(p)} kPa`:null,Number.isFinite(e)?`e₀ ${numberLabel(e)}`:'e₀ unavailable'].filter(Boolean).join(' · ');
-  const notes=[`${experiment.rows.length} measured rows. ${$('show-experiment').checked&&compatibleExperiment(experiment,Number($('protocol').value),Number($('cycles').value))?'Matching measured channel pairs are overlaid.':'No model overlay is shown.'} Simulation settings are unchanged.`,...(sourceNotes.length?['Source limitations apply; see data notes.']:[])];
+  const notes=[`${experiment.rows.length} measured rows. ${$('show-experiment').checked&&compatibleExperiment(experiment,Number($('protocol').value),Number($('cycles').value),model())?'Matching measured channel pairs are overlaid.':'No model overlay is shown.'} Simulation settings are unchanged.`,...(sourceNotes.length?['Source limitations apply; see data notes.']:[])];
   if(experiment.kind!=='experiment'){
     notes[0]=`${experiment.rows.length} source rows. ${$('show-experiment').checked?'Source chart shown.':'Source chart hidden.'} Standardized units where verified; no model overlay.`;
     $('experiment-status').textContent=label+'. '+notes.join(' ');return;
   }
-  if(lastSpec){
+  if(!supportsEffectiveExperiment(model()))notes.push('Normalized overlays and initial-state matching require an effective-stress model. Source measurements remain available.');
+  if(lastSpec&&supportsEffectiveExperiment(model())){
     const expected=lastSpec.protocol===1?'drained-triaxial':[2,3].includes(lastSpec.protocol)?'undrained-triaxial':null;
     if(experiment.protocol!==expected)notes.push('Loading protocol differs from the plotted simulation.');
     if(Array.isArray(stress)&&Math.abs(stress[1]-lastSpec.initial[1])>Math.max(100,.02*Math.abs(stress[1])))notes.push('Initial radial effective stress differs from the plotted simulation.');
@@ -377,9 +379,9 @@ function experimentOptions(selected=''){
   const groups=new Map();
   const query=$('experiment-search').value.trim().toLowerCase();
   const browse=$('browse-source-records').checked,protocol=Number($('protocol').value),cycles=Number($('cycles').value);
-  const relevant=entry=>browse||compatibleExperiment(entry,protocol,cycles);
-  const count=builtinExperiments.filter(entry=>compatibleExperiment(entry,protocol,cycles)).length;
-  $('experiment-filter-note').textContent=`${count} protocol-matched tests · ${protocolNames[protocol]} · ${cycles>0?'reversing':'monotonic'} loading. Matching plot axes permit overlays. Other source records are available below.`;
+  const relevant=entry=>browse||compatibleExperiment(entry,protocol,cycles,model());
+  const count=builtinExperiments.filter(entry=>compatibleExperiment(entry,protocol,cycles,model())).length;
+  $('experiment-filter-note').textContent=!supportsEffectiveExperiment(model())?'Normalized overlays require an effective-stress model. Browse source records to view measurements.':`${count} protocol-matched tests · ${protocolNames[protocol]} · ${cycles>0?'reversing':'monotonic'} loading. Matching plot axes permit overlays. Other source records are available below.`;
   for(const entry of [...builtinExperiments].filter(relevant).sort((a,b)=>a.material.localeCompare(b.material)||a.protocol.localeCompare(b.protocol)||a.id.localeCompare(b.id,undefined,{numeric:true}))){if(query&&'builtin:'+entry.id!==selected&&!(entry.id+' '+entry.material+' '+entry.protocol).toLowerCase().includes(query))continue;const key=entry.material+' · '+entry.protocol;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(entry);}
   for(const [label,entries] of groups){
     const group=element('optgroup');group.label=label.replace('drained-triaxial','drained triaxial').replace('undrained-triaxial','undrained triaxial');
@@ -394,7 +396,7 @@ function experimentOptions(selected=''){
 function showExperiment(data){
   experiment=data;$('retry-experiment').hidden=true;
   $('match-experiment').hidden=!!data&&data.kind!=='experiment';
-  $('show-experiment').disabled=!data;$('show-experiment').checked=!!data;$('match-experiment').disabled=!data||data.kind!=='experiment';
+  $('show-experiment').disabled=!data;$('show-experiment').checked=!!data;$('match-experiment').disabled=!data||data.kind!=='experiment'||!supportsEffectiveExperiment(model());
   $('match-experiment').textContent=data&&!data.initial?.effective_stress&&!Number.isFinite(data.initial?.void_ratio)?'Use drainage protocol':'Use initial state & protocol';
   const link=$('experiment-source'),url=data?.provenance?.source_url;link.hidden=true;
   if(typeof url==='string'&&/^https?:\/\//i.test(url)){link.href=url;link.hidden=false;}
@@ -428,6 +430,7 @@ async function loadExperimentCatalogue(){
 }
 function matchExperiment(){
   if(!experiment)return;
+  if(!supportsEffectiveExperiment(model())){toast('Initial-state matching requires an effective-stress model.');return;}
   const stress=experiment.initial?.effective_stress,e=experiment.initial?.void_ratio;
   if(experiment.protocol==='drained-triaxial')$('protocol').value='1';
   else if(experiment.protocol==='undrained-triaxial')$('protocol').value='2';
@@ -448,7 +451,7 @@ async function loadExperiments(files){
       if(loaded.some(x=>x.id===data.id))throw Error('Duplicate experiment ID: '+data.id);loaded.push(data);
     }
     if(id!==experimentLoadSequence)return;
-    experiments=loaded;const first=loaded.findIndex(e=>compatibleExperiment(e,Number($('protocol').value),Number($('cycles').value)));experimentOptions(first<0?'':'local:'+first);$('clear-experiments').disabled=false;selectExperiment();
+    experiments=loaded;const first=loaded.findIndex(e=>compatibleExperiment(e,Number($('protocol').value),Number($('cycles').value),model()));experimentOptions(first<0?'':'local:'+first);$('clear-experiments').disabled=false;selectExperiment();
   }catch(e){if(id===experimentLoadSequence)toast(e.message);}
   finally{$('experiment-file').value='';}
 }

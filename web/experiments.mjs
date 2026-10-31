@@ -88,13 +88,25 @@ export function comparisonMetadata(record){
   for(const row of record.rows){const value=row.axial_strain;rising||=value-low>tolerance;falling||=high-value>tolerance;low=Math.min(low,value);high=Math.max(high,value);}
   const result={plots,loading:rising&&falling?'reversing':'monotonic'};comparisonCache.set(record,result);return result;
 }
-export function compatibleExperiment(record,protocol,cycles=0){
+// Normalized comparisons and initial-state matching use effective Cauchy sigma.
+// This is a consumer guard, not full model validation or material suitability.
+export function supportsEffectiveExperiment(model){
+  const state=model?.state?.[0];
+  if(state?.name!=='sigma'||state.shape!=='sym'||state.unit!=='Pa')return false;
+  if(model.schema_version==='0.1')return !model.formulation; // preserved legacy contract
+  if(model.schema_version!=='0.3')return false;
+  const f=model.formulation,b=f?.stress;
+  return f?.tensor_representation==='mandel'&&f?.stress_sign==='compression_positive'&&
+    b?.source==='state'&&b.name==='sigma'&&b.measure==='cauchy'&&b.scope==='effective';
+}
+export function compatibleExperiment(record,protocol,cycles=0,model=null){
+  if(!supportsEffectiveExperiment(model))return false;
   const expected={1:'drained-triaxial',2:'undrained-triaxial',3:'undrained-triaxial'}[protocol];
   const meta=record?.rows instanceof Array?comparisonMetadata(record):record?.comparison;
   return !!expected&&record?.kind==='experiment'&&record.protocol===expected&&!!meta?.plots?.length&&meta.loading===(Number(cycles)>0?'reversing':'monotonic');
 }
-export function comparisonSeries(record,visible,plot,protocol,cycles=0){
+export function comparisonSeries(record,visible,plot,protocol,cycles=0,model=null){
   const axes=comparisonAxes[plot];
-  if(!axes||!compatibleExperiment(record,protocol,cycles)||plot==='pore'&&![2,3].includes(Number(protocol)))return [];
+  if(!axes||!compatibleExperiment(record,protocol,cycles,model)||plot==='pore'&&![2,3].includes(Number(protocol)))return [];
   return measuredSeries(record,visible,axes.x,axes.y).map(([x,y])=>[x*axes.xScale,y*axes.yScale]);
 }

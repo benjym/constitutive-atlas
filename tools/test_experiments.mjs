@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
-import {normalizeWichtmann,validateExperiment,measuredSeries,decodeExperiment,fetchExperiment,comparisonMetadata,compatibleExperiment,comparisonSeries} from '../web/experiments.mjs';
+import {normalizeWichtmann,validateExperiment,measuredSeries,decodeExperiment,fetchExperiment,comparisonMetadata,compatibleExperiment as scopedCompatibleExperiment,comparisonSeries as scopedComparisonSeries} from '../web/experiments.mjs';
+
+// Existing unit/ordering cases explicitly use the preserved legacy effective contract.
+const effectiveModel=JSON.parse(await readFile(new URL('../models/linear-elastic.json',import.meta.url)));
+const compatibleExperiment=(record,protocol,cycles=0)=>scopedCompatibleExperiment(record,protocol,cycles,effectiveModel);
+const comparisonSeries=(record,visible,plot,protocol,cycles=0)=>scopedComparisonSeries(record,visible,plot,protocol,cycles,effectiveModel);
 
 const tmd='eps1 epsv eps3 epsq Void ratio q p eta = q/p\n[%] [%] [%] [%] [%] [kPa] [kPa] [-]\n\n0 0 0 0 .8 0 100 0\n1 .2 -.4 .8 .796 30 110 .27\n';
 const tmu="eps1 u sigma3 sigma3' sigma1 sigma1' p q\n[%] [kPa] [kPa] [kPa] [kPa] [kPa] [kPa] [kPa]\n\n0 200 300 100 300 100 100 0\n1 220 300 80 330 110 90 30\n";
