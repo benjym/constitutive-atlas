@@ -1,5 +1,11 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [bounded prior-work comparison](PRIOR_WORK.md) records eight projects and
+eleven primary documentation sources. Core planned functions have established
+precedents; proposed Atlas distinctions remain hypotheses. PAPER-01 remains open
+for broader full-text coverage, pinned comparisons and independent review. No
+competitor execution, builds, manuscript edits or scientific promotion.
+
 The [MC saved-JSON correction](reviews/mc-saved-json-v1/README.md) closes three
 retained parser false passes in a separate assessor revision. Valid synthetic
 replay/recovery and14path/834point frames remain accepted; malformed raw JSON

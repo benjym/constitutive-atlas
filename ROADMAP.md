@@ -300,7 +300,7 @@ The next local increment adds stable `#catalogue/<id>` model links and a generat
 
 ## 12. M7 — paper, reproducibility package and research release
 
-- [ ] **PAPER-01:** Prepare a source-backed prior-work comparison covering constitutive DSLs/code generation, material-point verification tools, calibration systems and model/data repositories. Assess novelty before making a novelty claim.
+- [ ] **PAPER-01:** Prepare a source-backed prior-work comparison covering constitutive DSLs/code generation, material-point verification tools, calibration systems and model/data repositories. Assess novelty before making a novelty claim. Initial [bounded eight-project documentary comparison](docs/PRIOR_WORK.md) is delivered; full-text literature coverage, pinned comparator studies and independent review remain open.
 - [ ] **PAPER-02:** Freeze study questions and analysis around faithful representation, reproducibility, numerical robustness and applicability-dependent experimental performance. Document what the study cannot answer.
 - [ ] **PAPER-03:** Generate all quantitative tables and scientific figures from versioned result manifests, including failed cases and uncertainty. Keep the manuscript synchronized with the actual release scope.
 - [ ] **PAPER-04:** Have equation transcriptions, numerical evidence, data mappings and scientific conclusions independently reviewed. Resolve or disclose every material discrepancy.
