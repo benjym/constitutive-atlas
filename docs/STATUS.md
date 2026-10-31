@@ -1,5 +1,15 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [TMD13 evaluation propagation](benchmarks/kfs-tmd13-evaluation-propagation-v1/README.md)
+now measures calibration-only and combined initialization effects at frozen
+calibration-selected vectors. Sixteen serial replays/642segments succeed; six
+historical and two prior alternative controls reproduce. Offline reconstruction
+verifies all658process receipts and full predictions; four copied corruption
+witnesses reject and19tests pass. Six-test root scaled MSE is0.129344 file/file,
+0.124701 calibration-only,0.136772 evaluation-only and0.132294 combined. No retuning,
+fit, build or deployment occurs. Refinement for the newly selected vector and
+independent scientific review remain open; these scores do not resolve sources.
+
 The [TMD13 calibration sensitivity](benchmarks/kfs-tmd13-calibration-sensitivity-v1/README.md)
 completes six serial archived VW96 fits: two e0 scenarios and three original
 seeds, each with 96 candidates. All three file-control traces reproduce,

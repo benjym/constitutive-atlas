@@ -297,6 +297,16 @@ This closes recalibration only. Next freeze these selected vectors and separatel
 measure calibration-only and combined calibration/evaluation state propagation;
 no evaluation-based retuning or scientific admission is implied.
 
+The subsequent [factorial evaluation propagation](docs/benchmarks/kfs-tmd13-evaluation-propagation-v1/README.md)
+now uses those frozen selections without retuning. Sixteen serial replays cover
+four six-test panels; eight controls reproduce and658native receipts reconstruct
+all commands/full predictions offline. Four corruption witnesses and19tests pass.
+Root scaled MSE changes0.129344→0.124701 with calibration alone and→0.132294 with
+both calibration/evaluation alternatives (evaluation alone0.136772). This is
+single-resolution development sensitivity, not source selection or admission.
+Next resolve output refinement for the newly selected alternative vector;
+independent review and the original source conflict remain open.
+
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
 ## 10. M5 — expand toward twenty executable formulations
