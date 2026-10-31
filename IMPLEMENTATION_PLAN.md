@@ -60,7 +60,7 @@ Read all existing linked material first. The task is to close or precisely docum
   Owner: — (released after bounded handoff); output: `docs/ingestion/manzari-dafalias-1997/`; partial evidence: [gap packet](docs/ingestion/manzari-dafalias-1997/README.md); BLOCKED: original1997 full text unavailable through tested routes; later2004 and modified variants not substituted.
 
 - [X] **ING-hypoplastic-clay-2005** — Pin exact2005 original and matching implementation, full stiffness/ASBS/density evolution; preserve separate2005 identity despite2013 progress.
-  Owner: `review_vw96`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-clay-2005/`; evidence: [reviewed packet](docs/ingestion/hypoplastic-clay-2005/README.md); bounded source/schema/integration inventory integrated with40 analytical checks and six test groups. Printed Eq38 conflict, final-publisher reconciliation and full-rate/execution/admission gates remain open.
+  Owner: `review_vw96`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-clay-2005/`; evidence: [reviewed packet](docs/ingestion/hypoplastic-clay-2005/README.md); bounded source/schema/integration inventory integrated with40 analytical checks and six test groups. The [additive correction](docs/ingestion/hypoplastic-clay-2005/rate-review-v1/README.md) supersedes the historical Eq38 conflict claim; final-publisher equivalence and full-rate/execution/admission gates remain open.
 
 - [ ] **ING-hypoplastic-clay-2013** — Do not repeat source-rate or exact isotropic integration work. Next nonisotropic finite reference histories, near-boundary precision and physical preparation/source reconciliation.
   Owner: —; output: `docs/ingestion/hypoplastic-clay-2013/`; existing evidence: [clay2013-research-integration.md](docs/models/clay2013-research-integration.md); blocker: see existing dossier, confirm when claimed.
@@ -74,8 +74,8 @@ Read all existing linked material first. The task is to close or precisely docum
 - [X] **ING-pm4sand** — PM4Sand2D3.3 UCD/CGM-23/01: compare pinned June2023 vendor bytes against May2024 author revision and inventory plane-strain/in-plane-mean-stress constraints separately from3D.
   Owner: `review_sanisand`; claimed: 2026-10-31; output: `docs/ingestion/pm4sand/`; evidence: [reviewed packet](docs/ingestion/pm4sand/README.md); author May2024/vendor June2023 receipts, bounded equation/host inventory and eleven algebra groups integrated. Source closure remains partial with nine explicit source/host blockers; full execution/admission open.
 
-- [-] **ING-extended-mohr-coulomb-2013** — Doherty/Muir Wood2013 Geotechnique63(8)661-673: pin title/DOI/full source; extract complete Cam-Clay flow/asymptotic hardening, then nonsmooth face/edge/apex test plan.
-  Owner: `review_sanisand`; claimed: 2026-10-31; output: `docs/ingestion/extended-mohr-coulomb-2013/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
+- [X] **ING-extended-mohr-coulomb-2013** — Doherty/Muir Wood2013 Geotechnique63(8)661-673: pin title/DOI/full source; extract complete Cam-Clay flow/asymptotic hardening, then nonsmooth face/edge/apex test plan.
+  Owner: `review_sanisand`; claimed: 2026-10-31; output: `docs/ingestion/extended-mohr-coulomb-2013/`; evidence: [reviewed source packet](docs/ingestion/extended-mohr-coulomb-2013/README.md). Exact publisher source, equation/state/integration inventory and nine diagnostic groups integrated. Six source/algorithm reconciliation gates remain open; no executable model or scientific admission.
 
 - [ ] **ING-hypoplastic-interface-2016** — DOI10.1007/s11440-016-0440-1: existing text-only2016 manuscript is not a received PDF; pin readable equations30-33 and thickness/traction/slip/local-frame contract; separate2017 conversion.
   Owner: —; output: `docs/ingestion/hypoplastic-interface-2016/`; existing evidence: [catalogue entry](catalogue/manifest.json) (supplemental paper-side source record is local/untracked); blocker: see existing dossier, confirm when claimed.
@@ -83,8 +83,8 @@ Read all existing linked material first. The task is to close or precisely docum
 - [ ] **ING-multilaminate-schadlich-schweiger** — Acquire2012 thesis and2013/2014 extensions; select complete variant and tabulate number-of-planes times state-per-plane, quadrature/orientation/active surfaces.
   Owner: —; output: `docs/ingestion/multilaminate-schadlich-schweiger/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
 
-- [ ] **ING-hypoplastic-thermal-ma-2017** — Ma/Ng/Masin/Zhou2017 CGJ54(6)896-901: pin title/DOI/host/full equations; determine temperature-increment versus physical-time evolution and mechanically constrained thermal cycle.
-  Owner: —; output: `docs/ingestion/hypoplastic-thermal-ma-2017/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
+- [-] **ING-hypoplastic-thermal-ma-2017** — Ma/Ng/Masin/Zhou2017 CGJ54(6)896-901: pin title/DOI/host/full equations; determine temperature-increment versus physical-time evolution and mechanically constrained thermal cycle.
+  Owner: `review_sanisand`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-thermal-ma-2017/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md). Bounded exact-source, thermal-input/history and mechanical-host inventory; confirm source availability before equation claims.
 
 - [ ] **ING-vibe-2026** — DOI10.1016/j.enggeo.2026.108827: acquire original/model release and double-structure dependencies, thermal/hydraulic/time/initialization table. Dataset umat.f is SANISAND, not VIBE. Keep data private.
   Owner: —; output: `docs/ingestion/vibe-2026/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
@@ -136,6 +136,8 @@ The integration owner is the coordinating parent agent. Agents report their task
 | SRC-SCLAY1-identity | [Packet](docs/ingestion/s-clay1/README.md) | Four metadata/integrity groups, no constitutive checks claimed | Identity/gap packet integrated; original full text needed |
 | SRC-DUNCAN-identity-erratum | [Packet](docs/ingestion/duncan-chang-1970/README.md) | Original/correction identity, missing-source flags and pinned files | Acquisition/gap packet integrated; original and erratum needed |
 
+| ING-extended-mohr-coulomb-2013 | [Packet](docs/ingestion/extended-mohr-coulomb-2013/README.md) | Exact source receipts and nine bounded algebra groups | Partial source closure; six reconciliation gates, no execution or admission |
+
 A shared engine/schema request becomes a separate coordinator-owned task with dependencies on the relevant model packet. Do not block unrelated source ingestion while it is resolved. Integration, reference execution, public admission and deployment require their own recorded gates; no ingestion checkbox closes them implicitly.
 
 ## Coordinator integration lane
@@ -159,6 +161,26 @@ These close only the deliverable named here. Their original full-ingestion tasks
 
 ## Source-to-execution follow-up
 
-- [-] **SRC-clay2005-appC-rate** — Prepare a separate non-admitted AppendixC/Eq40 seven-rate draft and independent Cartesian oracle, with exact-isotropy/domain/covariance witnesses; preserve printed Eq38 conflict. Owner: `review_vw96`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-clay-2005/rate-study-v1/`. No shared edits, compiled observations or admission are authorized by this packet task.
+- [X] **SRC-clay2005-appC-rate** — Prepare a separate non-admitted AppendixC/Eq40 seven-rate draft and independent Cartesian oracle, with exact-isotropy/domain/covariance witnesses; preserve the historical Eq38 conflict claim pending review. Owner: `review_vw96`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-clay-2005/rate-study-v1/`. No shared edits, compiled observations or admission are authorized by this packet task. Integrated [draft/oracle packet](docs/ingestion/hypoplastic-clay-2005/rate-study-v1/README.md):41 seven-rate comparisons and ten test groups; the [additive audit correction](docs/ingestion/hypoplastic-clay-2005/rate-review-v1/README.md) supersedes its false Eq38 conflict claim and identifies an unsafe SPD guard. Compiled study held for a new revision; near-isotropic gates remain open.
 
-- [-] **SRC-barodesy2015-rate** — Prepare a separate non-admitted fixed-frame/nonzero-stress seven-rate draft and independent Cartesian matrix-exponential oracle; preserve zero-stress/frame/calibration limits. Owner: `review_igs97`; claimed: 2026-10-31; output: `docs/ingestion/barodesy-sand/rate-study-v1/`. No shared edits, compiled observations or admission are authorized by this packet task.
+- [X] **SRC-barodesy2015-rate** — Prepare a separate non-admitted fixed-frame/nonzero-stress seven-rate draft and independent Cartesian matrix-exponential oracle; preserve zero-stress/frame/calibration limits. Owner: `review_igs97`; claimed: 2026-10-31; output: `docs/ingestion/barodesy-sand/rate-study-v1/`. No shared edits, compiled observations or admission are authorized by this packet task. Integrated [draft/oracle packet](docs/ingestion/barodesy-sand/rate-study-v1/README.md):37 valid rates,19 Python input rejections and13 test groups; compiled numeric proposal excludes four named/type-only cases.
+
+## Shared research build infrastructure
+
+- [-] **INT-isolated-research-build** — Add a reusable single-file rate/material transport target over the common compiler and engine; no public catalogue or model-specific CMake edits. Owner: coordinating parent; claimed: 2026-10-31; output: `cmake/research/`; [usage](docs/ISOLATED_RESEARCH_BUILDS.md). Configure/generation checked against the existing clay2014 generated files; first source-study build pending.
+
+- [-] **INT-clay2005-instantaneous-rates** — Freeze a generic rate corpus, source/artifact receipts and rejection/recovery assessment, then run isolated serial native/Wasm studies against the independent AppendixC oracle. Owner: coordinating parent; claimed: 2026-10-31; output: `catalogue/investigations/clay2005-rates-v1/`. Depends on the new guarded clay revision and transport completion; v1 draft must not be compiled as an accepted study. No finite-integration, material-AD or admission claim.
+
+## Automated cross-review before compiled rate observations
+
+These are independent automated audits of the draft mappings and study machinery; they do not confer the charter’s signed scientific review/admission. Each reviewer preserves author packets and reports exact input hashes.
+
+- [X] **AUDIT-barodesy2015-rate** — Audit the2015 source/sign/Cartesian-vs-DSL mapping, matrix-exponential support and protocol claims. Owner: `review_vw96`; claimed: 2026-10-31; output: `docs/ingestion/barodesy-sand/rate-review-v1/`; [audit](docs/ingestion/barodesy-sand/rate-review-v1/README.md) integrated: three independent groups; frozen37 corpus replay passes, two wider-envelope oracle/domain findings retained.
+- [X] **AUDIT-clay2005-rate** — Audit AppendixC/Eq40 sign/invariant/Cartesian-vs-DSL mapping, isotropic branches and protocol claims. Owner: `review_igs97`; claimed: 2026-10-31; output: `docs/ingestion/hypoplastic-clay-2005/rate-review-v1/`; [audit/correction](docs/ingestion/hypoplastic-clay-2005/rate-review-v1/README.md) integrated: four groups reproduce false source-conflict claim and unsafe SPD guard. New revision required before compilation.
+- [X] **AUDIT-generic-rate-transport** — Audit literal controls, frozen identity, raw evidence, rejection/recovery and numerical-gate handling in the generic collector/assessor before its source-study execution. Owner: `review_sanisand`; claimed: 2026-10-31; output: `docs/reviews/generic-rate-transport-v1/`; [audit](docs/reviews/generic-rate-transport-v1/README.md) integrated: five initial failure witnesses retained and all five close against the installed revised Python tool. Node/protocol/build/source execution outside scope.
+
+## Corrected rate revisions and transport follow-up
+
+- [-] **SRC-barodesy2015-rate-v2** — Preserve v1 and its two audit findings; make a distinct oracle/draft revision with exact actual-binary64 volumetric summation and explicitly separated ideal-source versus binary64 operational support. Owner: `review_vw96`; claimed: 2026-10-31; depends on AUDIT-barodesy2015-rate; output: `docs/ingestion/barodesy-sand/rate-study-v2/`. Add the retained cancellation/domain witnesses and conservative acceptance policy; no shared edits, builds, commits or admission.
+- [-] **SRC-clay2005-rate-v2** — Preserve all v1 bytes; correct Eq38 provenance and add independently justified conservative Cartesian SPD support in a distinct declarative draft/oracle revision. Owner: `review_igs97`; claimed: 2026-10-31; depends on AUDIT-clay2005-rate; output: `docs/ingestion/hypoplastic-clay-2005/rate-study-v2/`. Include tiny positive/zero/negative and rotated rank-loss adversaries, same historical41 comparisons and declared support margins. No shared edits, builds, commits or admission.
+- [-] **INT-generic-rate-transport** — Integrate reusable frozen-corpus evidence collection/assessment and source protocols. Owner: coordinating parent; claimed: 2026-10-31; output: `tools/research_rate_observations.py`; [contract](docs/RESEARCH_RATE_TRANSPORT.md). Native collector/assessment installed,11 synthetic tests and five reviewer witnesses pass; Wasm collector, authenticated parity wrapper and actual source protocols/build receipts pending.

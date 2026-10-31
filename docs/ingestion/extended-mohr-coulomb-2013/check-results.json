@@ -1,0 +1,245 @@
+{
+  "schema_version": "0.1",
+  "kind": "independent-bounded-source-diagnostics",
+  "groups": 9,
+  "all_passed": true,
+  "scope": "Algebra and inconsistency witnesses only. No full constitutive integration, production DSL, author code, native or Wasm checks.",
+  "development_failure": "Initial repeated-principal value witness used asin of a rounded endpoint argument and failed the 2e-15 value-identity gate. Exact endpoint angles are now supplied only for analytically repeated-principal fixtures; no tolerance change or material continuation.",
+  "checks": [
+    {
+      "id": "engineering-Mandel-work",
+      "source_locator": "Eqs1-3 p662",
+      "inputs": {
+        "G": 4000000.0,
+        "mu": 0.25,
+        "strain_engineering_named_order": "xx yy zz xy yz xz",
+        "strain": [
+          0.001,
+          -0.002,
+          0.003,
+          0.004,
+          -0.005,
+          0.006
+        ]
+      },
+      "outputs": {
+        "stress": [
+          16000.0,
+          -8000.0,
+          32000.0,
+          16000.0,
+          -20000.0,
+          24000.0
+        ],
+        "engineering_work": 436.0,
+        "mandel_work": 436.0
+      },
+      "interpretation": "Independent linear elasticity and work mapping; Appendix shear permutation must be handled by names."
+    },
+    {
+      "id": "hardening-inverse-and-derivative",
+      "source_locator": "Eqs12-15 p664",
+      "inputs": {
+        "peak": 0.5235987755982988,
+        "initial": 0.017453292519943295,
+        "beta": 0.005,
+        "plastic_scalar": 0.007
+      },
+      "outputs": {
+        "phi": 0.30852279128738286,
+        "inverse": 0.006999999999999998,
+        "derivative": 17.669131855571,
+        "centered_difference": 17.669131856523634,
+        "half_condition_ratio": 0.5084745762711864
+      },
+      "interpretation": "Rational hardening identity and derivative; no finite-path material integration claimed."
+    },
+    {
+      "id": "hardening-asymptote",
+      "source_locator": "Eqs12/15 p664",
+      "inputs": {
+        "plastic_scalar": [
+          0.0,
+          0.005,
+          0.05,
+          0.5
+        ]
+      },
+      "outputs": {
+        "phi": [
+          0.017453292519943295,
+          0.26623666555845704,
+          0.476147636559703,
+          0.5184163986384521
+        ],
+        "gaps": [
+          0.5061454830783555,
+          0.2573621100398418,
+          0.047451139038595824,
+          0.005182376959846691
+        ]
+      },
+      "interpretation": "Monotone asymptotic peak for beta>0; exact peak remains a separate singular endpoint in Eq12."
+    },
+    {
+      "id": "printed-Lode-dimensions",
+      "source_locator": "Eqs20-21 p671",
+      "inputs": {
+        "deviator": [
+          -0.2,
+          0.05,
+          0.15
+        ],
+        "scale": 10.0
+      },
+      "outputs": {
+        "J": 0.18027756377319948,
+        "determinant": -0.0015000000000000002,
+        "printed_argument": 0.021617300763686766,
+        "printed_scaled_argument": 2.1617300763686766,
+        "derived_dimensionless_argument": 0.6651477158057465
+      },
+      "interpretation": "The printed denominator2J changes the argument by scale squared. Cubic denominator shown only as diagnostic alternative, not admitted source correction."
+    },
+    {
+      "id": "printed-third-basis-hydrostatic-defect",
+      "source_locator": "Eq26c p672 vs Eq21 p671",
+      "inputs": {
+        "deviator": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "outputs": {
+        "printed_diagonal": [
+          0.3333333333333333,
+          -0.16666666666666669,
+          0.3333333333333333
+        ],
+        "printed_hydrostatic_directional_derivative": 0.49999999999999994,
+        "independent_det_dev_gradient": [
+          0.3333333333333333,
+          -0.6666666666666667,
+          0.3333333333333333
+        ],
+        "correct_hydrostatic_derivative": -1.1102230246251565e-16
+      },
+      "interpretation": "det(dev(sigma)) cannot change under a hydrostatic stress shift; the printed vector does."
+    },
+    {
+      "id": "potential-angle-conflict",
+      "source_locator": "Eq41 p672 vs Eq11 p664",
+      "inputs": {
+        "theta": 0.1,
+        "J": 2.0,
+        "phi_y": 0.17453292519943295,
+        "phi_cv": 0.6108652381980153
+      },
+      "outputs": {
+        "printed_phi_y_value": -0.39917675449977946,
+        "derived_phi_cv_value": -0.8586670667517874,
+        "finite_difference_JK_cv": -0.8586670667831697
+      },
+      "interpretation": "Printed potential theta derivative uses a different angle from the potential and adjacent instruction."
+    },
+    {
+      "id": "face-and-edge-value-diagnostic",
+      "source_locator": "Eqs4-5/18-21 pp663/671",
+      "inputs": {
+        "phi_y": 0.5235987755982988
+      },
+      "outputs": {
+        "samples": [
+          {
+            "principal_compression_positive": [
+              3.0,
+              2.0,
+              1.0
+            ],
+            "raw_invariant_argument": 0.0,
+            "theta_source": 0.0,
+            "invariant_value": 1.1102230246251565e-16,
+            "principal_face_value": 1.1102230246251565e-16
+          },
+          {
+            "principal_compression_positive": [
+              3.0,
+              1.0,
+              1.0
+            ],
+            "raw_invariant_argument": 0.9999999999999997,
+            "theta_source": 0.5235987755982988,
+            "invariant_value": 2.220446049250313e-16,
+            "principal_face_value": 1.1102230246251565e-16
+          },
+          {
+            "principal_compression_positive": [
+              3.0,
+              3.0,
+              1.0
+            ],
+            "raw_invariant_argument": -0.9999999999999999,
+            "theta_source": -0.5235987755982988,
+            "invariant_value": 2.220446049250313e-16,
+            "principal_face_value": 1.1102230246251565e-16
+          }
+        ]
+      },
+      "interpretation": "Cubic-denominator diagnostic matches independent principal face criterion, both repeated-principal edges. This is a criterion identity only, not a full EMC model or edge return."
+    },
+    {
+      "id": "rounding-threshold-and-hydrostatic-normal",
+      "source_locator": "Eqs33-38 p672",
+      "inputs": {
+        "theta_t": 0.4363323129985824,
+        "phi_y": 0.5235987755982988,
+        "interior_corner_theta": 0.5061454830783556
+      },
+      "outputs": {
+        "threshold_checks": [
+          {
+            "theta": -0.4363323129985824,
+            "K": 1.0283071706268723,
+            "Ka": 1.0283071706268723,
+            "derivative_exact": 0.16098973933356753,
+            "derivative_round": 0.16098973933356753
+          },
+          {
+            "theta": 0.4363323129985824,
+            "K": 0.7843084034464277,
+            "Ka": 0.7843084034464278,
+            "derivative_exact": -0.6842467841478314,
+            "derivative_round": -0.6842467841478314
+          }
+        ],
+        "C1_exact": 0.49999999999999994,
+        "C1_source_rescaled": 0.5141705594088148
+      },
+      "interpretation": "Rounded Ka is C1 at threshold, but rescaled C1 outside differs from actual hydrostatic derivative of exact yield value."
+    },
+    {
+      "id": "nonradial-shear-scalar-distinction",
+      "source_locator": "Eqs8-11 pp663-664; Eq51 p672",
+      "inputs": {
+        "source_sigma": [
+          -3.0,
+          -2.0,
+          -1.0
+        ],
+        "phi_cv": 0.3490658503988659,
+        "Lambda": 1.0
+      },
+      "outputs": {
+        "derived_diagonal_potential_flow": [
+          -0.3903366905542781,
+          -0.061346762217112466,
+          0.6096633094457218
+        ],
+        "work_conjugate_scalar": 0.9999999999999999,
+        "positive_norm_scalar_Eq9": 1.0193098610400586
+      },
+      "interpretation": "Even the dimensionally consistent differentiated potential has nonradial deviatoric flow. Work scalar Lambda*Q_J and Euclidean norm differ; accumulator semantics require a declared source decision."
+    }
+  ]
+}

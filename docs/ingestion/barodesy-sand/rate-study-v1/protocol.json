@@ -1,0 +1,72 @@
+{
+  "version": "barodesy-sand-2015-rate-protocol-v1",
+  "valid_count": 37,
+  "invalid_count": 19,
+  "frozen_inputs": {
+    "model-draft.json": "8acca0c82e5d9bb5b75cfb6a33af7acb56f804edd532fdf422879f412b278d1d",
+    "inputs.json": "defd4fc77cd517fb66d7e7f3f08e33270a3a5864ac29036a8d3b72db55577073",
+    "reference.py": "9efed023f997570e10b450fab6ae6c8b253f632352b272a5a506991547be8608"
+  },
+  "precision_grids": [
+    80,
+    120
+  ],
+  "stress_accuracy": {
+    "definition": "max_abs_component_error / max((c4+c5*norm(state_stress))*norm(loading)/(e-emin),norm(reference_stress_rate))",
+    "limit": 2e-12
+  },
+  "void_accuracy": {
+    "zero": "exact zero",
+    "nonzero": "4ULP of correctly rounded120digit oracle"
+  },
+  "zero_loading": "all7rates exactzero; no zero-loading material ADclaim",
+  "reference_precision": "80/120 Decimal empirical refinement, no certified bound; all binary64 outputs within4ULP required",
+  "compiled_execution": false,
+  "gates_frozen_before_compiled_observation": true,
+  "next_compiled_matrix": {
+    "valid_count": 37,
+    "numeric_invalid_count": 15,
+    "python_only_invalid_ids": [
+      "boolean-loading",
+      "nonfinite-text",
+      "extra-parameter",
+      "missing-parameter"
+    ],
+    "numeric_invalid_ids": [
+      "zero-stress",
+      "negative-stress",
+      "indefinite-stress",
+      "rank-loss",
+      "minimum-density",
+      "below-density",
+      "negative-density",
+      "above-density",
+      "tiny-stress",
+      "tiny-loading",
+      "excessive-loading",
+      "bad-parameter-c1",
+      "bad-parameter-c2",
+      "bad-parameter-c5",
+      "bad-parameter-ec0"
+    ],
+    "parameter_order": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "ec0",
+      "emin"
+    ],
+    "native_wasm_request_rules": "Use exact full numeric state7/loading6/parameters7, no JSON boolean/string coercion. Check arity and normal domain responses separately. The4Python-only requests are not in compiled numeric count.",
+    "persistent_recovery": "same admissible oblique control after each numeric rejection in same process/instance",
+    "raw_parser_cases": "not selected; future literal malformed CSV protocol must be frozen separately",
+    "not_in_scope": [
+      "material AD",
+      "finite integration",
+      "experimental validation",
+      "zero-stress continuation",
+      "finite spin"
+    ]
+  }
+}

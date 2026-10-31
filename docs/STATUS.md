@@ -1,5 +1,11 @@
 # Implementation status — 2026-10-30
 
+## 2026-10-31 source and draft corrections
+
+The [clay2005 cross-review](ingestion/hypoplastic-clay-2005/rate-review-v1/README.md) corrects our earlier source-reading error: the pinned manuscript's Eq38 has a plus sign, consistent with Eq40. The old minus-sign conflict is not a source fact. Historical hash-pinned packets and their counterfactual algebra check are retained; the correction supersedes that interpretation. The audit also reproduces an unsafe floating-point SPD guard in the research draft, so its compiled study waits for a new guarded revision.
+
+The [sand2015 cross-review](ingestion/barodesy-sand/rate-review-v1/README.md) preserves two oracle/support limits outside its frozen37-case corpus. The [transport review](reviews/generic-rate-transport-v1/README.md) records five preliminary collector/assessment failures and their fixes; generic Wasm collection and actual source-study execution remain pending. The [EMC packet](ingestion/extended-mohr-coulomb-2013/README.md) adds exact-source equations and nine bounded diagnostics with six unresolved source/algorithm gates. None increases public executable counts or closes scientific admission.
+
 ## Delivered foundation
 
 - A [pinned clean-export software baseline](../catalogue/baselines/2026-10-30-r3/manifest.json) with model/source/product hashes, actual toolchain/configuration, retained logs and all fifteen checks passing; two failed capture attempts are preserved in [the run history](../catalogue/baselines/README.md).

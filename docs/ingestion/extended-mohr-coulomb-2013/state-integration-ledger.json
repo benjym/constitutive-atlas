@@ -1,0 +1,256 @@
+{
+  "schema_version": "0.1",
+  "model_id": "extended-mohr-coulomb-2013",
+  "parameters": [
+    {
+      "name": "G",
+      "shape": "scalar",
+      "unit": "Pa",
+      "source": "Table1 p664/PDF4",
+      "meaning": "constant isotropic shear modulus; table uses kPa",
+      "source_range": "not supplied as a universal admissible interval"
+    },
+    {
+      "name": "mu",
+      "shape": "scalar",
+      "unit": "1",
+      "source": "Table1 p664/PDF4",
+      "meaning": "Poisson ratio",
+      "source_range": "not supplied as a universal admissible interval"
+    },
+    {
+      "name": "phi_p",
+      "shape": "scalar",
+      "unit": "rad",
+      "source": "Table1 p664/PDF4",
+      "meaning": "peak friction angle; table input degrees",
+      "source_range": "not supplied as a universal admissible interval"
+    },
+    {
+      "name": "phi_cv",
+      "shape": "scalar",
+      "unit": "rad",
+      "source": "Table1 p664/PDF4",
+      "meaning": "mobilized angle at zero volume rate, not necessarily ultimate critical-state angle",
+      "source_range": "not supplied as a universal admissible interval"
+    },
+    {
+      "name": "a",
+      "shape": "scalar",
+      "unit": "Pa",
+      "source": "Table1 p664/PDF4",
+      "meaning": "constant attraction; source relates cohesion c=a*tan(phi_y), hence not constant c during hardening",
+      "source_range": "not supplied as a universal admissible interval"
+    },
+    {
+      "name": "beta",
+      "shape": "scalar",
+      "unit": "1",
+      "source": "Table1 p664/PDF4",
+      "meaning": "plastic shear-strain hardening scale",
+      "source_range": "not supplied as a universal admissible interval"
+    }
+  ],
+  "additional_algorithm_input": {
+    "name": "theta_t",
+    "unit": "rad",
+    "value_degrees": 25,
+    "source": "Appendix2 p672",
+    "role": "rounding threshold, distinguish numerical algorithm from material constants"
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym3",
+      "unit": "Pa",
+      "role": "physical effective stress",
+      "initialization": "explicit supplied initial state; do not erase stress to prepare"
+    },
+    {
+      "name": "phi_y",
+      "shape": "scalar",
+      "unit": "rad",
+      "role": "isotropic friction hardening memory",
+      "initialization": "phi_y0 initial maximum previously mobilized friction; elastic unloading retains this current yield size",
+      "evolution": "Eq55, no reverse softening/reset law supplied"
+    },
+    {
+      "name": "phi_y0",
+      "shape": "scalar",
+      "unit": "rad",
+      "role": "preparation/restart provenance",
+      "initialization": "user/history input, not inferred solely from current stress",
+      "evolution": "fixed preparation reference in Eq12"
+    },
+    {
+      "name": "eps_J_pl",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "optional derived accumulator or explicit diagnostic; not simultaneously independent without a declared contract",
+      "initialization": "zero measured from initially specified yield-size threshold",
+      "evolution": "Eq12 inversion or Eq51; EMC-04 must be settled before calling it full tensor plastic norm"
+    },
+    {
+      "name": "plastic_strain_tensor",
+      "shape": "sym3",
+      "unit": "1",
+      "role": "optional retained output, not shown necessary to close rate law",
+      "initialization": "explicit origin if retained",
+      "evolution": "Lambda gradQ; engineering-to-Mandel map needed"
+    },
+    {
+      "name": "alpha_Eq13",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "derivable preparation cache, not kinematic backstress",
+      "initialization": "phi_y0/(phi_p-phi_y0)",
+      "evolution": "fixed if preparation unchanged"
+    }
+  ],
+  "conservative_budget": {
+    "physical_rate_closure": "6 stress components plus1 hardening angle, subject to source closure; not executable admission",
+    "preparation": "phi_y0 and material/algorithm choices; explicit strain origin for path replay",
+    "optional_retained": "scalar accumulated strain and six plastic-strain components must not be mistaken for independent closure requirements",
+    "absent_in_selected_model": [
+      "density/void-ratio state law",
+      "kinematic backstress",
+      "postpeak softening",
+      "physical time/creep variable"
+    ]
+  },
+  "source_conflicts": [
+    {
+      "id": "EMC-01",
+      "source": "Eq20/21 p671",
+      "fact": "Printed denominator2J versus cubic determinant J3 makes Lode argument dimensionful.",
+      "gate": "Independently review and explicitly name any corrected-invariant research variant."
+    },
+    {
+      "id": "EMC-02",
+      "source": "Eqs22-26 pp671-672",
+      "fact": "Third-invariant chain basis conflicts with determinant units; printed Eq26c changes under hydrostatic directions.",
+      "gate": "Establish exact intended normalized basis and full derivatives; do not simply replace one denominator."
+    },
+    {
+      "id": "EMC-03",
+      "source": "Eq41 and prose below p672 vs Eq11 p664",
+      "fact": "Plastic-potential theta derivative prints phi_y; subsequent prose uses phi_cv.",
+      "gate": "Retain alternative and decide explicitly before constitutive implementation."
+    },
+    {
+      "id": "EMC-04",
+      "source": "Eqs8-9 p663; Eq51/55 p672",
+      "fact": "Work-conjugate shear scalar and positive Euclidean deviatoric strain norm are not generally identical. Full Lode-dependent potential can produce non-radial deviatoric flow.",
+      "gate": "Distinguish accumulator definition from tensor norm; derive general-stress flow/hardening compatibility."
+    },
+    {
+      "id": "EMC-05",
+      "source": "Eq1 p662 versus Eq26 pp671-672",
+      "fact": "Last two engineering shear slots are permuted between equation lists.",
+      "gate": "Use named matrix components and test unequal xy/yz/zx entries."
+    },
+    {
+      "id": "EMC-06",
+      "source": "Appendix2 p672 Eqs33-43",
+      "fact": "Exact criterion value with rounded and rescaled normals is the printed numerical algorithm. It is not a supplied exact nonsmooth face/edge/apex return map.",
+      "gate": "Choose separately declared original-algorithm and/or exact-active-set variants, with independent consistency tests."
+    }
+  ],
+  "domain": {
+    "source_facts": [
+      "Compression-negative effective stress p; J>=0.",
+      "phi_cv may exceed phi_p: source illustrates20,30,40degrees with peak30degrees.",
+      "Elastic region inside current friction yield locus; hardening only for active plastic loading.",
+      "phi_y approaches phi_p asymptotically; Eq12 singular at equality.",
+      "Attraction a shifts apex to p=a,J=0; source supplies no tensile cutoff or apex update algorithm."
+    ],
+    "proposed_mathematical_checks_not_source_ranges": [
+      "G>0, -1<mu<.5 for positive definite linear elasticity.",
+      "beta>0, phi_p>0, phi_y0<phi_p for regular hardening branch.",
+      "Log argument (p-a)/p_r positive when explicit potential used.",
+      "J>0 and valid dimensionless Lode argument on regular invariant branch; do not clip a dimensionful argument.",
+      "Nonzero p-a and consistency denominator; finite source expressions and selected gradient branches.",
+      "At exact zero/hydrostatic/apex loading select explicitly supported branch before evaluating1/J."
+    ]
+  },
+  "initialization": {
+    "source": "p664; pp667-668/671 initial-state discussion",
+    "required": [
+      "initial effective stress",
+      "initial yield-size maximum phi_y0",
+      "six material parameters",
+      "declared numerical threshold if reproducing paper algorithm"
+    ],
+    "policy": "No universal preparation algorithm or hidden consolidation path supplied. Initial yield size may be selected above currently mobilized friction to represent prior history. Reject inconsistent unsupported supplied states; do not silently project.",
+    "examples": "p664 single-element demonstration sets phi_y0=1degree, G4MPa, mu.25, peak30degrees, a0,beta.005, phi_cv20/30/40degrees; not universal defaults.",
+    "perfect_plastic_endpoint": "p666 sets phi_y=phi_p=phi_cv to obtain zero-dilatancy perfectly plastic MC. This is a distinct endpoint branch; do not evaluate singular Eq12 there."
+  },
+  "integration": {
+    "source": "p664 and Appendix3 p672",
+    "method": "Forward Euler with adaptive substepping/error control citing Sloan1987 and Abbo1997, not a complete executable algorithm listing.",
+    "law_type": "time-independent incremental elastoplasticity; strain path variable; p671 says observed creep cannot be captured.",
+    "phases": [
+      {
+        "name": "parent",
+        "reads": "committed stress,current yield angle,preparation,optional accumulated outputs",
+        "writes": "none"
+      },
+      {
+        "name": "elastic_trial",
+        "reads": "parent and proposed total strain increment",
+        "writes": "candidate elastic stress; locate first yield crossing if needed"
+      },
+      {
+        "name": "active_branch",
+        "reads": "candidate stress, angle, declared exact/rounded gradient policy",
+        "writes": "normal,flow,H,Lambda; source gives algebra but not complete loading/intersection/apex decisions"
+      },
+      {
+        "name": "material_substep",
+        "reads": "accepted previous internal substep plus candidate derivatives",
+        "writes": "candidate sigma,phi_y,optional strain outputs"
+      },
+      {
+        "name": "error_control",
+        "reads": "candidate estimates and budget",
+        "writes": "accept internal point or retry from its immutable parent; tolerances/controller unspecified in paper"
+      },
+      {
+        "name": "commit",
+        "reads": "successful entire caller result",
+        "writes": "one durable update; full rollback on caller failure is Atlas requirement, not paper-proven behavior"
+      }
+    ],
+    "zero_or_hold": "No intrinsic time evolution; a zero strain increment should not invent hardening. Exact active-apex/zero-invariant continuation still needs a defined numerical branch.",
+    "failure_contract_proposal": "Failed substep/candidate must not update the parent; failed full increment returns exact original caller state, preparation and diagnostics origin. Retain accepted external prefix only.",
+    "tangent": "Derivative of mathematical criterion differs from source rounded-normal recipe; require chosen-variant tangent, branch-boundary declarations and rollback tests before using mixed controls.",
+    "large_rotation": "Paper gives Cartesian small-increment equations; objective stress rotation/finite-strain host handling not established by this packet."
+  },
+  "nonsmooth_acceptance_plan": [
+    {
+      "case": "face",
+      "construction": "distinct principal stresses on one MC face; outward and inward perturbations",
+      "requirements": "exact selected criterion residual, nonnegative active plastic multiplier, nondecreasing yield angle, elastic unloading, rotated matrix/Mandel consistency"
+    },
+    {
+      "case": "compression/extension edges",
+      "construction": "two equal principals, both Lode signs; approach from each adjacent sector and cross theta_t",
+      "requirements": "compare exact value and rounded normals separately; finite boundary limits, continuity and stated derivatives; no exact-active-set claim from rounded recipe"
+    },
+    {
+      "case": "apex",
+      "construction": "p=a,J=0 in source sign, a0 and a>0; hydrostatic tension/compression approaches",
+      "requirements": "explicit support/rejection before invariant evaluation; positivity/admissibility; no random eigenvector/hidden epsilon"
+    },
+    {
+      "case": "unloading/reloading",
+      "construction": "load to phi_y>phi_y0, unload then reverse/reload",
+      "requirements": "retain maximum yield size and preparation; plastic accumulation only on active loading; no invented kinematic/reset law"
+    },
+    {
+      "case": "subdivision/rollback",
+      "construction": "same source initial parent, refinement grids, failed late substep and successful control",
+      "requirements": "every caller reference from independent original state; full rollback and identical recovery; freeze controller/error/scales before compiled observations"
+    }
+  ]
+}

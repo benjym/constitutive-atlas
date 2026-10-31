@@ -2,7 +2,7 @@
 import hashlib,json,subprocess,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand')
+PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand','extended-mohr-coulomb-2013','barodesy-sand/rate-study-v1','hypoplastic-clay-2005/rate-study-v1','barodesy-sand/rate-review-v1','hypoplastic-clay-2005/rate-review-v1')
 class IngestionPackets(unittest.TestCase):
  def run_python(self,*args):
   return subprocess.run([sys.executable,'-B',*args],cwd=ROOT,capture_output=True,text=True,timeout=60,check=True)
@@ -71,4 +71,29 @@ class IngestionPackets(unittest.TestCase):
   self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_algebra.py','-v')
   self.run_python(str(folder/'algebra.py'),'--check',str(folder/'fixtures.json'))
   self.assertIs(json.loads((folder/'manifest.json').read_text())['compiled_execution'],False)
+ def test_emc2013_retains_source_reconciliation_gates(self):
+  folder=ROOT/'docs/ingestion/extended-mohr-coulomb-2013'
+  result=self.run_python(str(folder/'check_packet.py'))
+  self.assertIn('9 bounded diagnostic groups pass',result.stdout)
+  manifest=json.loads((folder/'manifest.json').read_text())
+  self.assertIs(manifest['status']['primary_pdf_obtained'],True)
+  self.assertIs(manifest['status']['source_complete'],False)
+  self.assertIs(manifest['status']['executable_model_added'],False)
+  self.assertIs(manifest['status']['scientifically_admitted'],False)
+  self.assertEqual(manifest['unresolved_ids'],['EMC-01','EMC-02','EMC-03','EMC-04','EMC-05','EMC-06'])
+ def test_clay2005_additive_source_correction_and_spd_defects(self):
+  folder=ROOT/'docs/ingestion/hypoplastic-clay-2005/rate-review-v1'
+  self.run_python(str(folder/'probe.py'),'--check',str(folder/'evidence.json'))
+  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_audit.py','-v')
+ def test_barodesy2015_oracle_limits_remain_reproducible(self):
+  folder=ROOT/'docs/ingestion/barodesy-sand/rate-review-v1'
+  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_review.py','-v')
+ def test_generic_rate_review_remains_bound_to_installed_fix(self):
+  folder=ROOT/'docs/reviews/generic-rate-transport-v1'
+  manifest=json.loads((folder/'manifest.json').read_text())
+  for name,pin in manifest['files'].items():
+   path=Path(name);self.assertFalse(path.is_absolute());self.assertNotIn('..',path.parts)
+   blob=(folder/path).read_bytes();self.assertEqual(hashlib.sha256(blob).hexdigest(),pin['sha256']);self.assertEqual(len(blob),pin['bytes'])
+  result=self.run_python(str(folder/'witnesses.py'),'--repo',str(ROOT),'--source',str(ROOT/'tools/research_rate_observations.py'),'--require-fixed')
+  self.assertEqual(json.loads(result.stdout),json.loads((folder/'final-witness-results.json').read_text()))
 if __name__=='__main__':unittest.main()

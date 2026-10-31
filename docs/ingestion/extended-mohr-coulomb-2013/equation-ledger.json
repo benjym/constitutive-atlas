@@ -1,0 +1,220 @@
+{
+  "schema_version": "0.1",
+  "kind": "available-source-equation-crosswalk",
+  "variant": "Doherty\u2013Muir Wood EMC2013 publisher paper",
+  "source_complete": false,
+  "executable": false,
+  "notation": "Source compression-negative sigma/epsilon; p means p-prime effective pressure, not Atlas positive mean. All angles inside formulas are radians. Vectors use engineering shear unless explicitly mapped.",
+  "rows": [
+    {
+      "equations": [
+        1,
+        2,
+        3
+      ],
+      "locator": "p662/PDF2",
+      "formula": "dsigma=D*deps_engineering; E=2G(1+mu); D normal diagonal=E(1-mu)/[(1+mu)(1-2mu)], normal offdiag=E*mu/[(1+mu)(1-2mu)], engineering shear diagonal=G",
+      "unit": "D,G,E Pa",
+      "status": "visually verified printed formula",
+      "note": "Eq1 order xx,yy,zz,xy,xz,zy; Appendix26 order xx,yy,zz,xy,yz,zx. Reconcile permutation and engineering/Mandel duality explicitly."
+    },
+    {
+      "equations": [
+        4,
+        5
+      ],
+      "locator": "p663/PDF3",
+      "formula": "F=(p-a)*sin(phi_y)+J*K(theta,phi_y); K(theta,phi)=cos(theta)-sin(theta)*sin(phi)/sqrt(3)",
+      "unit": "F Pa, K1",
+      "status": "visually verified printed formula",
+      "note": "Compression-negative effective stress. Exact Mohr\u2013Coulomb yield value is used for all theta in Appendix2, even where rounded gradients are used."
+    },
+    {
+      "equations": [
+        6
+      ],
+      "locator": "p663/PDF3",
+      "formula": "deps_p/deps_J=sin(phi_y)/K(theta,phi_y)",
+      "unit": "1",
+      "status": "comparison, NOT selected flow",
+      "note": "Associated Mohr\u2013Coulomb normality is a rejected alternative in this paper."
+    },
+    {
+      "equations": [
+        7,
+        8,
+        9
+      ],
+      "locator": "p663/PDF3",
+      "formula": "deps_p=sum(normal plastic strains); p*deps_p+J*deps_J=sigma:deps_plastic; deps_J=sqrt((2/3)*[(deps_x-deps_y)^2+(deps_y-deps_z)^2+(deps_z-deps_x)^2]+dgamma_xy^2+dgamma_yz^2+dgamma_zx^2)",
+      "unit": "strain1",
+      "status": "visually verified printed formula",
+      "note": "Work-conjugate scalar and Euclidean deviatoric norm are not generally identical for arbitrary nonproportional directions. Keep as separate source statements pending closure."
+    },
+    {
+      "equations": [
+        10
+      ],
+      "locator": "p664/PDF4",
+      "formula": "deps_p/deps_J=-J/(p-a)-sin(phi_cv)/K(theta,phi_cv)",
+      "unit": "1",
+      "status": "visually verified printed formula",
+      "note": "Attraction-shifted original Cam Clay style flow, not a constant dilation-angle flow."
+    },
+    {
+      "equations": [
+        11
+      ],
+      "locator": "p664/PDF4",
+      "formula": "Q=J*K(theta,phi_cv)-log((p-a)/p_r)*(p-a)*sin(phi_cv)=0",
+      "unit": "Pa",
+      "status": "visually verified printed formula",
+      "note": "p_r is arbitrary chosen to pass potential through current state; not an independent material/history parameter. Need positive log argument. Do not differentiate with p_r re-fitted as a function of stress."
+    },
+    {
+      "equations": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "locator": "p664/PDF4",
+      "formula": "eps_J_pl=beta*phi_y/(phi_p-phi_y)-beta*phi_y0/(phi_p-phi_y0); alpha=phi_y0/(phi_p-phi_y0); eps_J_pl=beta when phi_y/phi_p=(1+alpha)/(2+alpha); dphi_y/deps_J_pl=(phi_p-phi_y)^2/(beta*phi_p)",
+      "unit": "phi rad; beta and eps1",
+      "status": "visually verified printed formula",
+      "note": "Only invoked once current mobilized angle reaches initial maximum phi_y0. Rational asymptote at phi_p, despite exponential wording in source prose. phi_y0 is preparation history, not a seventh fitted material parameter."
+    },
+    {
+      "equations": [
+        16
+      ],
+      "locator": "pp666-667/PDF6-7",
+      "formula": "G/G0ref=((lambda*z+beta1)/beta2)^m",
+      "unit": "1",
+      "status": "visually verified spatial application profile, not evolution law",
+      "note": "Spatial stiffness assignment, not stress-dependent elasticity or internal constitutive history. Profile parameters must be separate from material response."
+    },
+    {
+      "equations": [
+        17
+      ],
+      "locator": "p667/PDF7",
+      "formula": "deps_J_el=dJ/G",
+      "unit": "strain1",
+      "status": "triaxial calibration relation, text located not newly visually transcribed",
+      "note": "Specific triaxial comparison, not an arbitrary full-tensor identity."
+    },
+    {
+      "equations": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "locator": "p671/PDF11",
+      "formula": "p=(sigma_x+sigma_y+sigma_z)/3; J=sqrt((sx^2+sy^2+sz^2)/2+tau_xy^2+tau_yz^2+tau_zx^2); printed theta=asin(-3*sqrt(3)*J3/(2*J))/3; J3=sx*sy*sz+2*tau_xy*tau_yz*tau_zx-sx*tau_yz^2-sy*tau_zx^2-sz*tau_xy^2; si=sigma_i-p",
+      "unit": "p,J Pa; J3 Pa^3",
+      "status": "printed conflict EMC-01",
+      "note": "Printed Eq20 denominator is 2J, not 2J^3. It has units Pa^2 and fails stress-scale invariance with Eq21. The dimensionally homogeneous cubic-denominator alternative is a diagnostic derivation, not an adopted correction."
+    },
+    {
+      "equations": [
+        22,
+        23,
+        24,
+        25
+      ],
+      "locator": "p671/PDF11",
+      "formula": "grad(f)=C1*grad(p)+C2*grad(J)+C3*grad(J3); C1=f_p; C2=f_J-tan(3theta)/J*f_theta; C3=-sqrt(3)/(2*cos(3theta)*J)*f_theta",
+      "unit": "mixed as printed",
+      "status": "basis/units unresolved EMC-02",
+      "note": "Together with the printed Eq21/26c these cannot all be the ordinary chain rule for determinant J3. No silent basis relabeling."
+    },
+    {
+      "equations": [
+        "26a",
+        "26b",
+        "26c"
+      ],
+      "locator": "pp671-672/PDF11-12",
+      "formula": "grad(p)=(1,1,1,0,0,0)/3; grad(J)=(sx,sy,sz,2tau_xy,2tau_yz,2tau_zx)/(2J); printed grad(J3)=cofactor_vector/(2J^2)+(1,1,1,0,0,0)/3",
+      "unit": "J gradients1; printed J3 gradient1",
+      "status": "printed conflict EMC-02",
+      "note": "cofactor_vector=(sy*sz-tau_yz^2,sx*sz-tau_zx^2,sx*sy-tau_xy^2,2(tau_yz*tau_zx-sz*tau_xy),2(tau_zx*tau_xy-sx*tau_yz),2(tau_xy*tau_yz-sy*tau_zx)). Hydrostatic derivative sum is1/2, whereas det(dev sigma) is hydrostatic-invariant."
+    },
+    {
+      "equations": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "locator": "p672/PDF12",
+      "formula": "F_p=sin(phi_y); F_J=K(theta,phi_y); F_theta=-J*(sin(theta)+cos(theta)*sin(phi_y)/sqrt(3)); C1=sin(phi_y); C2=K+tan(3theta)*(sin(theta)+cos(theta)*sin(phi_y)/sqrt(3)); C3=sqrt(3)/(2*cos(3theta))*(sin(theta)+cos(theta)*sin(phi_y)/sqrt(3))",
+      "unit": "1",
+      "status": "visually verified printed formula",
+      "note": "Unrounded coefficient branch abs(theta)<=theta_t in potential prose. Singular at +/-30 degrees and J=0 remains separate."
+    },
+    {
+      "equations": [
+        33,
+        34,
+        35,
+        36,
+        37,
+        38
+      ],
+      "locator": "p672/PDF12",
+      "formula": "Ka=A-B*sin(3theta); A=cos(theta_t)/3*[3+tan(theta_t)*tan(3theta_t)+sign(theta)/sqrt(3)*(tan(3theta_t)-3*tan(theta_t))*sin(phi)]; B=[sign(theta)*sin(theta_t)+sin(phi)*cos(theta_t)/sqrt(3)]/[3*cos(3theta_t)]; C2=A+2B*sin(3theta); C3=3*sqrt(3)*B/2; C1=(Ka/K)*sin(phi_y)",
+      "unit": "1",
+      "status": "visually verified printed formula",
+      "note": "Rounded gradient branch abs(theta)>theta_t; theta_t=25degrees for all analyses. Exact K retained in yield value. Rescaled C1 is the source algorithm, not proven exact gradient of exact F."
+    },
+    {
+      "equations": [
+        39,
+        40,
+        41,
+        42,
+        43
+      ],
+      "locator": "p672/PDF12",
+      "formula": "Q_p=-J*K(theta,phi_cv)/(p-a)-sin(phi_cv); Q_J=K(theta,phi_cv); printed Q_theta=-J*(sin(theta)+cos(theta)*sin(phi_y)/sqrt(3)); potential C2/C3 use phi_cv in31/32 or36/37; C1=-J*K(theta,phi_cv)/(p-a)-sin(phi_cv) inside threshold; outside C1=-J*K(theta,phi_cv)/(p-a)-(Ka(theta,phi_cv)/K(theta,phi_cv))*sin(phi_cv)",
+      "unit": "1",
+      "status": "printed phi_y vs phi_cv conflict EMC-03",
+      "note": "Eq41 prints phi_y but Eq11 and adjacent prose require examining phi_cv. No choice made. Modified outside C1 is not simply the derivative of Eq11."
+    },
+    {
+      "equations": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ],
+      "locator": "p672/PDF12",
+      "formula": "deps=deps_el+deps_pl; dsigma=D*deps_el; deps_pl=Lambda*grad(Q); dsigma=D*deps-Lambda*D*grad(Q); grad(F):dsigma+F_phi*dphi=0; Lambda=(grad(F):D*deps)/(grad(F):D*grad(Q)+H); H=-(F_phi*dphi)/Lambda=-F_phi*(dphi/deps_J_pl)*Q_J; dphi=(dphi/deps_J_pl)*Lambda*Q_J",
+      "unit": "Lambda strain; H Pa",
+      "status": "visually verified printed formula",
+      "note": "Elastic/plastic loading selection, elastic-to-plastic intersection, positivity/complementarity, endpoint and error-control details are not fully specified by these algebraic equations."
+    },
+    {
+      "equations": [
+        53,
+        54,
+        55
+      ],
+      "locator": "p672/PDF12",
+      "formula": "F_phi=(p-a)*cos(phi_y)-J*sin(theta)*cos(phi_y)/sqrt(3); H=-F_phi*(phi_p-phi_y)^2/(beta*phi_p)*K(theta,phi_cv); dphi=Lambda*(phi_p-phi_y)^2/(beta*phi_p)*K(theta,phi_cv)",
+      "unit": "H Pa; phi rad",
+      "status": "visually verified printed formula",
+      "note": "These use exact-K invariant Q_J. Full engineering-vector plastic strain norm need not equal Lambda*Q_J when Q_theta nonzero; check EMC-04 before selecting accumulator semantics."
+    }
+  ]
+}

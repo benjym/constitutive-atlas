@@ -2,6 +2,8 @@
 
 [Live assignments](../../IMPLEMENTATION_PLAN.md) · [Agent instructions](../../AGENTS.md) · [Packet template](TEMPLATE.md)
 
+**Current corrections:** the [clay2005 audit](hypoplastic-clay-2005/rate-review-v1/README.md) corrects our false Eq38 minus-sign claim and reproduces an unsafe draft SPD guard. The [sand2015 audit](barodesy-sand/rate-review-v1/README.md) records two wider-envelope oracle/support issues. Frozen historical packet checks preserve their original assertions; passing them is not confirmation of those superseded assertions. Both revised drafts are in progress.
+
 These authored packets extract available source equations, schema requirements, temporal/transaction semantics and explicit gaps. Completion means the named bounded ingestion task was reviewed and integrated. It does not confer complete-model, executable, numerical-trajectory or scientific admission.
 
 | Formulation | Delivered scope | Replayed evidence | Remaining source/execution gate |
@@ -13,9 +15,10 @@ These authored packets extract available source equations, schema requirements, 
 | [S-CLAY1](s-clay1/README.md) | Publication correction, acquisition receipts and ten extraction gaps | Four metadata/integrity checks | Original2003 full text missing; no equations transcribed |
 | [Duncan–Chang1970](duncan-chang-1970/README.md) | Original/1971 erratum identities and acquisition/closure-gap ledger | Authored-file integrity only | Both original and correction full text missing; no equations transcribed |
 | [Manzari–Dafalias1997](manzari-dafalias-1997/README.md) | Original identity, author-bibliography discrepancy and acquisition/closure gaps | Authored-file integrity only | Original1997 full text missing; no2004 or modified-law substitution |
-| [Mašín clay2005](hypoplastic-clay-2005/README.md) | Original AppendixC base-law and SOM companion inventory, five parameters/seven states, source conflicts and integration contract |40 analytical checks and six test groups | Publisher Eq38/Eq40 reconciliation, nonisotropic oracle/stable branches, common-schema execution and review |
+| [Mašín clay2005](hypoplastic-clay-2005/README.md) | Original AppendixC base-law and SOM companion inventory, five parameters/seven states, source conflicts and integration contract |40 analytical checks and six test groups | Historical Eq38 claim corrected by linked audit; conservative SPD support, revised oracle, common-schema execution and review |
 | [PM4Sand2D3.3](pm4sand/README.md) | Distinct vendor/author-revision receipts, available equation/parameter/state/startup/lagged-phase ledgers | Eleven algebra witness groups | Nine explicit source/host conflicts; full2D update and admission open |
 | [Sand barodesy2015](barodesy-sand/README.md) | Original2015 interior sand law; separate2019 constants; seven-state integration and boundary contract |13 algebra groups and fixture replay | Nonunique zero-stress initialization, finite-rotation convention, calibration and executable reference gates |
+| [Extended Mohr–Coulomb2013](extended-mohr-coulomb-2013/README.md) | Exact publisher source, Eqs1–55, parameter/state/initialization and nonsmooth integration inventory | Nine independent diagnostic groups and exact result replay | Six invariant/gradient/flow/normal reconciliation gates; full execution and admission open |
 
 Source PDFs, vendor archives, page renders and extracted article text are excluded. Each packet has local-relative exact authored-file hashes; private source receipts describe inspection provenance. Input board/context hashes are historical acquisition snapshots, not claims that the live board never changes. Links to publications and institutions remain persistent.
 
