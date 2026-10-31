@@ -1,0 +1,120 @@
+{
+  "kind": "source-capability-inventory-not-executable-model-or-full-crosswalk",
+  "schema_version": "0.3",
+  "catalogue_id": "multilaminate-schadlich-schweiger",
+  "source_identity": "schaedlich-2012-tugraz-thesis-v1",
+  "exact_implementation_selection": "Pending complete equations and variant decision; do not substitute Basic for the family with softening/anisotropy/recovery.",
+  "formulation_status": "No admissible complete formulation declaration yet. Inventory targets v0.3, not a legacy integration field.",
+  "source_declarations": {
+    "incremental_inputs": "Previous stress/history and current strain increment; Appendix B p162/PDF180",
+    "dimensional_scope": "Source describes a 3D formulation, including an implementation hosted in PLAXIS2D2010; p162/PDF180",
+    "time_dependence": "Implementation flags time independent; B.4 p165/PDF183. No constitutive creep inferred.",
+    "stress_measure_scope": "Effective stresses in framework Eqs3-5 p8-9/PDF26-27; exact sign/objective/finite-kinematics mapping remains to be reviewed.",
+    "coordinates": "Global raw symmetric stress [xx,yy,zz,xy,yz,xz]; global strain uses engineering shears; Eqs3,16. Local normal + two shear components.",
+    "matrix": "Source host flag: symmetric, stress dependent, not tangent; B.4 p165. Does not prove a consistent algorithmic derivative.",
+    "initialization": "Plane-specific initial cap/cone from current and historical stress; POP/OCR/K0nc; B.5 pp165-166. Signs/choice precedence not yet mapped."
+  },
+  "state_allocation": {
+    "status": "Source implementation allocation, not proved minimal mathematical state",
+    "numcp_example": 33,
+    "numcp_source": "Table1 has33 rows; TableB.3 defines NUMCP as integration-plane count. Exact source-code indexing/orientation-count contract remains a separate review.",
+    "stress_separate_from_vendor_history": true,
+    "atlas_current_limit": 32,
+    "atlas_limit_source": "atlas/model.py MAX_STATE_COMPONENTS; includes stress slots in model layout",
+    "variants": [
+      {
+        "id": "Basic",
+        "per_plane": 3,
+        "global_history": 3,
+        "history_at_33": 102,
+        "source": "Table B.3, printed p165/PDF183",
+        "meaning": "No softening or small-strain stiffness"
+      },
+      {
+        "id": "MMSS",
+        "per_plane": 7,
+        "global_history": 0,
+        "history_at_33": 231,
+        "source": "Table B.3, printed p165/PDF183",
+        "meaning": "Hvorslev shear strength/softening, no small-strain stiffness"
+      },
+      {
+        "id": "MMSC",
+        "per_plane": 8,
+        "global_history": 0,
+        "history_at_33": 264,
+        "source": "Table B.3, printed p165/PDF183",
+        "meaning": "Galavi2007 softening, no small-strain stiffness"
+      },
+      {
+        "id": "*_sss",
+        "per_plane": 12,
+        "global_history": 0,
+        "history_at_33": 396,
+        "source": "Table B.3, printed p165/PDF183",
+        "meaning": "Each listed branch with small-strain stiffness, without recovery"
+      },
+      {
+        "id": "*_sss_lh",
+        "per_plane": 32,
+        "global_history": 0,
+        "history_at_33": 1056,
+        "source": "Table B.3, printed p165/PDF183",
+        "meaning": "Each listed branch with small-strain stiffness and recovery"
+      }
+    ],
+    "do_not_claim": "Not a proof that no compressed equivalent representation exists; none has been established."
+  },
+  "history_events": {
+    "source": "Section4.4.3 pp61-62/PDF79-80",
+    "per_plane_coordinates": [
+      "normal_deviatoric_strain",
+      "shear_strain_s",
+      "shear_strain_t"
+    ],
+    "sphere_capacity_implemented": 4,
+    "events": [
+      "Create a new inner sphere on local degradation-distance decrease",
+      "Move/expand active sphere with loading",
+      "Erase inner spheres and reactivate outer sphere on previous-path intersection"
+    ],
+    "not_a_cycle_count_limit": true,
+    "remaining": [
+      "Ordering/ties/tolerances at sphere events",
+      "Source-code correspondence and restart serialization of all per-plane data",
+      "Full-capacity nested-reversal behavior"
+    ]
+  },
+  "nonlocal_dependency": {
+    "source": "B.2 p164/PDF182",
+    "requires": [
+      "neighbour coordinates and weighting",
+      "neighbour damage strains",
+      "calculation phase and iteration identity"
+    ],
+    "current_local_point_api_sufficient": false,
+    "note": "Not closed by increasing state capacity. Do not silently turn off regularization in a claimed full variant."
+  },
+  "capability_gaps": [
+    "Complete indexed per-plane state/layout and bounded history containers; current flat32-component budget is insufficient for direct source allocation",
+    "Weighted plane-to-bulk compliance/plastic reconstruction with explicit raw/engineering-to-Mandel work mapping",
+    "Multiple plane-local surfaces and global control solve with atomic history trial/commit/rollback",
+    "Host-neighbour and iteration contract for nonlocal regularization",
+    "Complete source-located parameter/domain/initialization and sign/frame/objective declarations before any executable v0.3 model"
+  ],
+  "reading_not_complete": [
+    "Chapter3 yield/flow/hardening",
+    "Chapter4 full elasticity/degradation and event details",
+    "Chapter6 Hvorslev/regularization constitutive closure",
+    "AppendixB complete state-layout/parameters and AppendixD static reconciliation",
+    "Exact2013/2014 publication relations"
+  ],
+  "status": {
+    "source_acquired": true,
+    "source_reading_complete": false,
+    "executable_added": false,
+    "compiled_checks": false,
+    "independent_scientific_review": false
+  },
+  "source_url": "https://doi.org/10.3217/wmxdh-rg587"
+}
