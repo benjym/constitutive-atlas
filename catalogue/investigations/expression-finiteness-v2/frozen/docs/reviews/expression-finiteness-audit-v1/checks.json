@@ -1,0 +1,195 @@
+{
+  "version": "expression-finiteness-contract-oracle-v1",
+  "expression_checks": 31,
+  "malformed_value_checks": 9,
+  "compiled": false,
+  "production_runtime_executed": false,
+  "rows": [
+    {
+      "id": "overflow-product-predicate",
+      "expression": "select(h*h > 0, 1, 2)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "overflow-sum-predicate",
+      "expression": "select(h+h > 0, 1, 2)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "overflow-division-predicate",
+      "expression": "select(h/t > 0, 1, 2)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "overflow-power-predicate",
+      "expression": "select(h**2 > 0, 1, 2)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "overflow-norm-predicate",
+      "expression": "select(norm(a) > 0, 1, 2)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "overflow-dot-predicate",
+      "expression": "select(dot(a,a) > 0, 1, 2)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "exp-negative-overflow",
+      "expression": "exp(-h*h)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "reciprocal-overflow-product",
+      "expression": "1/(h*h)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "min-invalid-first",
+      "expression": "min(h*h, 1)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "min-invalid-second",
+      "expression": "min(1, h*h)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "max-invalid-first",
+      "expression": "max(-h*h, 1)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "max-invalid-second",
+      "expression": "max(1, -h*h)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "sqrt-invalid-min",
+      "expression": "min(1, sqrt(-1))",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "exp-invalid-min",
+      "expression": "min(1, exp(1000))",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "log-invalid-max",
+      "expression": "max(1, log(0))",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "division-zero-min",
+      "expression": "min(1, 1/z)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "invalid-tensor-unused-shear",
+      "expression": "trace(bad)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "nan-name-predicate",
+      "expression": "select(nan < 0, 1, 2)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "inf-name-predicate",
+      "expression": "select(inf > 0, 1, 2)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "lazy-unselected-true",
+      "expression": "select(1 > 0, 7, exp(1000))",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "lazy-unselected-false",
+      "expression": "select(1 < 0, 1/z, 7)",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "lazy-nested",
+      "expression": "select(1 > 0, select(2 > 0, 7, h*h), 1/z)",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "selected-invalid",
+      "expression": "select(1 > 0, h*h, 7)",
+      "expected_accepted": false,
+      "observed_accepted": false
+    },
+    {
+      "id": "finite-min",
+      "expression": "min(1, 2)",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "finite-max",
+      "expression": "max(1, 2)",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "underflow-permitted",
+      "expression": "t*t",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "subnormal-permitted",
+      "expression": "sub",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "negative-zero-permitted",
+      "expression": "-z",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "finite-bool",
+      "expression": "1 < 2",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "finite-tensor",
+      "expression": "sym(1,2,3,4,5,6)",
+      "expected_accepted": true,
+      "observed_accepted": true
+    },
+    {
+      "id": "finite-transcendentals",
+      "expression": "sin(1)+cos(1)+log1p(1)+sqrt(4)+abs(-1)",
+      "expected_accepted": true,
+      "observed_accepted": true
+    }
+  ]
+}

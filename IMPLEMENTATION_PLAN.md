@@ -2,6 +2,10 @@
 
 This is the **live work board** for model ingestion. [ROADMAP.md](ROADMAP.md) remains the milestone/research plan; [AGENTS.md](AGENTS.md) defines how agents claim and deliver this work. The older [source queue](catalogue/research-queues/parallel-source-queue-2026-10-31.json) is a historical evidence snapshot, not the live assignment board.
 
+## Schema baseline
+
+New model records and ingestion crosswalks target [schema v0.3](schemas/model-v0.3.schema.json) and its [explicit formulation contract](docs/FORMULATION_CONTRACT.md). Read both before starting. Existing-record migration belongs to a separate agent; ingestion workers must not duplicate it or rewrite historical evidence. Unsupported source requirements become explicit capability requests, not guessed conventions or legacy-schema fallbacks.
+
 ## Status and ownership
 
 - `[ ]` Unstarted / available. Existing research may already exist; the marker refers to the next task below.
@@ -237,4 +241,18 @@ These are independent automated audits of the draft mappings and study machinery
 
 - [-] **NUM-trace-solver-transactions** — After generated-context study, freeze legacy/timed integrator rollback, invalid-scale handling and remaining independent context-routing/numeric-witness coverage identified by the audit. Owner: coordinating parent; claimed: 2026-10-31; no constitutive admission claim.
 
-- [ ] **NUM-general-expression-finiteness** — Inventory and close nonfinite intermediate values masked by predicates/arithmetic beyond the checked trace/dev/log1p/expm operators; retain the v1 finite-dev/overflowed-norm witness. Specify checked AST semantics and compatibility before new model-rate studies. Owner: —; depends on NUM-trace-generated-context.
+- [-] **NUM-general-expression-finiteness** — Inventory and close nonfinite intermediate values masked by predicates/arithmetic beyond the checked trace/dev/log1p/expm operators; retain the v1 finite-dev/overflowed-norm witness. Specify checked AST semantics and compatibility before new model-rate studies. Owner: coordinating parent; claimed: 2026-10-31; depends on NUM-trace-generated-context.
+
+- [X] **AUDIT-expression-finiteness-contract** — Independently audit executed-node finiteness, lazy/eager semantics, full Jet validation and scale/history compatibility before new compiled observations. Owner: `expression_audit`; claimed: 2026-10-31; output: `docs/reviews/expression-finiteness-audit-v1/`; independent contract integrated;31 oracle witnesses and9 malformed-value checks, with bounded native/Wasm follow-up linked below.
+
+- [X] **DESIGN-solver-rollback-corpus** — Prepare a bounded independent legacy/timed solver transaction corpus with exact expectations and source-backed API calls; no builds or shared edits. Owner: `solver_transaction_design`; claimed: 2026-10-31; output: `docs/reviews/solver-rollback-design-v1/`; bounded independent design reviewed and integrated; compiled v0.3 study linked below.
+
+- [X] **NUM-expression-primitive-study-v2** — Executed-node helper/emitter acceptance on1620 ordered rows/backend, native/Wasm parity; all6 tensor components and38 derivative columns, eager masks and lazy controls. Owner: coordinating parent; completed:2026-10-31; [results](catalogue/investigations/expression-finiteness-v2/RESULTS.md). Original v1 harness compile failure retained; full generated-context routing and solver rollback remain open under NUM-general-expression-finiteness / NUM-trace-solver-transactions.
+
+- [X] **NUM-solver-rollback-v1** — Native/Wasm eleven ordered API rows plus three preparation witnesses pass exact committed state/time bits and complete raw parity. Seven explicit v0.3 synthetic fixtures; [results](catalogue/investigations/solver-rollback-v1/RESULTS.md). Owner: coordinating parent; completed:2026-10-31. Bounded legacy/timed reset/scale/late-failure transaction proof; parent NUM-trace-solver-transactions remains open for remaining routing/numeric witnesses.
+
+- [X] **NUM-expression-generated-context-v1** — Freeze explicit v0.3 generated models for generic arithmetic/predicate/eager/lazy failures across equation, derived, domain, initial, observable, reset and scale routes; retain all38-column poison/recovery and independent trace numeric controls. Owner: coordinating parent; claimed:2026-10-31; output: [retained results](catalogue/investigations/expression-generated-context-v1/RESULTS.md);10870 material and18 history rows/backend match complete typed/bit expectations and parity. Scope remains bounded; loading/time-name edge routes and new constitutive studies are separate.
+
+- [X] **INT-barodesy2017-laboratory-preview** — Prepare explicit v0.3 draft of independently reviewed body-Eqs1–10 zero-spin selection; freeze and test actual browser C-ABI protocols, source links, initialization and rejection before adding a sixth runnable definition. Owner: coordinating parent; claimed:2026-10-31; output: `catalogue/investigations/barodesy2017-preview-v1/` and combined six-model `barodesy2017-preview-v2/`; [draft dossier](docs/models/barodesy2017-laboratory-preview.md):13 requests/backend and330 caller points/backend pass; sixth local runnable draft added. Evidence committed independently in522b12c; completed shared v0.3 contract and packaged-browser state-role integration now verified locally. Scientific admission and deployment remain separate.
+
+- [X] **INT-v03-six-model-catalogue** — Integrate the completed formulation/state/initialization contract with the source-linked sixth draft; repair browser role consumers and preserve original source/queue identities. Owner: coordinating parent; completed:2026-10-31; [integration results](docs/reviews/v03-laboratory-integration/RESULTS.md). Serial production builds, packaged six-model browser response/source links and targeted regression repairs pass. Existing-record migration, scientific admission, experimental benchmarks and deployment remain open.

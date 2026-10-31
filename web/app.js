@@ -1,3 +1,4 @@
+import {persistentState,temporaryStateComponents} from './state-contract.mjs';
 import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
 import {setupRecordedView} from './recorded-view.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
@@ -110,13 +111,13 @@ function populate(){
   }
   $('state-fields').replaceChildren();
   for(const s of m.state.slice(1)){
-    if(s.transient)continue;
+    if(!persistentState(s))continue;
     if(s.shape==='sym'){
       const lab=element('label',s.name+' · 6 Mandel components');const input=document.createElement('input');input.type='text';input.id='state-'+s.name;input.value=s.initial.join(',');input.required=true;lab.append(input);$('state-fields').append(lab);
     }else field($('state-fields'),'state-'+s.name,s.name+(s.unit==='Pa'?' (kPa)':''),s.initial,undefined,undefined,s.unit==='Pa'?1000:1);
   }
   const content=$('equation-content');content.replaceChildren(element('p',m.description));
-  content.append(element('p','Integration: '+m.integration+'. State equations are residuals for implicit models, or increments per unit path fraction for rate models.'));
+  content.append(element('p','Equation form: '+(m.formulation?.equation_form??m.integration)+'. State equations are residuals for implicit models, or increments per unit path fraction for strain-path rate models.'));
   for(const d of m.derived)content.append(element('pre',d.name+' = '+d.expr));
   for(const [name,expression]of Object.entries(m.equations))content.append(element('pre',name+' : '+expression));
   sourceLinks(content,m.sources);
@@ -126,7 +127,7 @@ function populate(){
 function valuesForState(m){
   const p=Number($('confinement').value)*1000,ratio=Number($('stress-ratio').value);const z=[p*ratio,p,p,0,0,0];
   for(const s of m.state.slice(1)){
-    if(s.transient)z.push(s.initial);
+    if(!persistentState(s))z.push(...temporaryStateComponents(s));
     else if(s.shape==='sym'){
       const text=$('state-'+s.name).value;const tokens=text.split(',');if(tokens.length!==6||tokens.some(x=>x.trim()===''))throw Error(s.name+' requires 6 Mandel components');
       z.push(...tokens.map(Number));
@@ -319,7 +320,7 @@ async function importRun(file){
   try{const doc=await readFile(file);if(!doc)return;if(doc.schema_version!=='0.1')throw Error('Unsupported run schema version.');if(doc.catalogue_hash!==catalogueHash)throw Error('Run was created with a different model catalogue. Use the matching release.');
     const s={...doc.specification,integration_settings:normalizeSettings(doc.specification?.integration_settings)},m=validateSpec(s);setNumericalValues(s.integration_settings);$('model').value=m.id;populate();Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
     $('confinement').value=s.initial[1]/1000;$('stress-ratio').value=s.initial[0]/s.initial[1];let offset=6;
-    for(const f of m.state.slice(1)){const size=f.shape==='sym'?6:1;if(!f.transient){const input=$('state-'+f.name);input.value=size===6?s.initial.slice(offset,offset+6).join(','):s.initial[offset]/Number(input.dataset.factor);}offset+=size;}
+    for(const f of m.state.slice(1)){const size=f.shape==='sym'?6:1;if(persistentState(f)){const input=$('state-'+f.name);input.value=size===6?s.initial.slice(offset,offset+6).join(','):s.initial[offset]/Number(input.dataset.factor);}offset+=size;}
     $('protocol').value=s.protocol;setProtocol();$('target').value=s.target/(s.protocol===3?1000:.01);$('steps').value=s.steps;
     if(![...$('cycles').options].some(o=>Number(o.value)===s.cycles))$('cycles').append(new Option(s.cycles+' sinusoidal cycles',s.cycles));$('cycles').value=s.cycles;
     refreshExperimentFilter();location.hash='laboratory';simulate(s);

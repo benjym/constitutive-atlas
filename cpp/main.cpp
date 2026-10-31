@@ -22,7 +22,7 @@ atlas::State parse_csv(const char*s){atlas::State v;if(!s||!*s)return v;std::ist
 int model_index(const char*id){if(!id)throw std::runtime_error("missing model");const auto&ms=atlas::models();for(size_t i=0;i<ms.size();++i)if(ms[i].id==id)return int(i);throw std::runtime_error("unknown model");}
 const char* failure(const std::string&message){output="{\"ok\":false,\"message\":"+quote(message)+"}";return output.c_str();}
 atlas::State params_for(int m,const char*s){auto p=parse_csv(s);if(p.empty())p=atlas::default_parameters(m);if(!atlas::valid_parameters(m,p))throw std::runtime_error("parameter length, bounds or finiteness invalid");return p;}
-atlas::State state_for(int m,const char*s){auto z=parse_csv(s);if(z.empty())z=atlas::initial_state(m);if(z.size()!=atlas::initial_state(m).size())throw std::runtime_error("state length invalid");return z;}
+atlas::State state_for(int m,const char*s){auto z=parse_csv(s);if(z.empty()){if(atlas::explicit_initialization_required(m))throw std::runtime_error("v0.3 requires explicit state; initial literals are examples only");z=atlas::initial_state(m);}if(z.size()!=atlas::initial_state(m).size())throw std::runtime_error("state length invalid");return z;}
 atlas::IntegrationSettings settings_for(const char* csv){
     atlas::IntegrationSettings s;auto v=parse_csv(csv);if(v.empty())return s;
     if(v.size()!=6)throw std::runtime_error("six integration settings required");

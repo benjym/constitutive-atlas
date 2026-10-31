@@ -6,6 +6,12 @@ Read [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) for the live model-ingesti
 
 The user authorizes parallel model ingestion. Work on different model packets concurrently. The coordinating parent agent is the integration owner; do not assign work to Benjy or François without their agreement.
 
+## Schema target for new work
+
+Use [model-v0.3.schema.json](schemas/model-v0.3.schema.json) and [FORMULATION_CONTRACT.md](docs/FORMULATION_CONTRACT.md) for all new model records and ingestion crosswalks. Declare `schema_version: "0.3"` and the complete explicit `formulation`; do not use the legacy top-level `integration` field or infer convention defaults. Map the source-supported equation form, time dependence, kinematics, frame/objective rate, tensor/sign conventions and stress binding/scope. If a source needs an unsupported profile, record the capability gap rather than force it into a supported one or guess missing conventions.
+
+Another agent owns migration of existing records. Do not migrate existing model JSON, rewrite hash-pinned evidence, or modify the shared schema/compiler as part of ingestion. Historical packets and receipts retain their original identities; new crosswalks target v0.3. Read the current schema and contract before starting because this version is being integrated concurrently.
+
 ## Claiming and coordination
 
 1. Ask the coordinator to claim one unstarted task. The coordinator alone edits the shared board: set `[ ]` to `[-]`, record owner, date, scope and output directory **before dispatch**. Re-read the board before starting. A queued owner starts after handing off prior work; do not run two unrelated assignments simultaneously in one worker.

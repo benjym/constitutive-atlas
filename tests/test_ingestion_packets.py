@@ -34,7 +34,16 @@ class IngestionPackets(unittest.TestCase):
  def test_isa_supplied_host_contract_and_checks(self):
   with tempfile.TemporaryDirectory() as tmp:
    output=Path(tmp)/'checks.json'
-   self.run_python('docs/ingestion/hypoplastic-isa/check_packet.py','--repo',str(ROOT),'--output',str(output))
+   # The original checker hashes its historical host dependencies directly.
+   # Supply the exact archived bytes; do not reinterpret these as current-code checks.
+   from atlas.evidence import checked_receipt
+   receipt='docs/ingestion/hypoplastic-isa/source-receipt.json'
+   archived_root=Path(tmp)/'historical-host'
+   for record in json.loads((ROOT/receipt).read_text())['repository_dependencies']:
+    original=checked_receipt(ROOT,receipt,record['path'],record['sha256'])
+    target=archived_root/record['path'];target.parent.mkdir(parents=True,exist_ok=True)
+    target.write_bytes(original.read_bytes())
+   self.run_python('docs/ingestion/hypoplastic-isa/check_packet.py','--repo',str(archived_root),'--output',str(output))
    actual=json.loads(output.read_text());stored=json.loads((ROOT/'docs/ingestion/hypoplastic-isa/checks.json').read_text())
    # Private source availability is provenance; portable algebra must still run without PDFs.
    self.assertTrue(actual['passed']);self.assertFalse(actual['constitutive_evaluator']);self.assertEqual(actual['compiled_calls'],0)

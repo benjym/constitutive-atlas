@@ -45,21 +45,125 @@ def validate_scale_operators(node):
 
 
 def physical_time(model):
-    return model.get('schema_version') == '0.2'
+    return (model.get('formulation', {}).get('time_dependence') == 'physical_time'
+            if model.get('schema_version') == '0.3' else model.get('schema_version') == '0.2')
+
+
+def integration_kind(model):
+    """Engine dispatch; equation meaning is explicit in v0.3 documents."""
+    if model.get('schema_version') == '0.3':
+        return {'incremental_residual': 'residual', 'strain_path_rate': 'rate',
+                'ode': 'rate'}[model['formulation']['equation_form']]
+    return 'rate' if physical_time(model) else model['integration']
+
+
+def formulation_inputs(*, physical):
+    """Canonical input descriptors for the currently executable profiles.
+
+    Equation symbols and update-call arguments are separate namespaces. Every
+    listed input is required, even when a particular equation does not use it.
+    """
+    if not physical:
+        return {'equation': {'de': {
+            'quantity': 'strain_increment', 'measure': 'infinitesimal_strain',
+            'shape': 'sym', 'unit': '1', 'configuration': 'current',
+            'sampling': 'increment', 'constraint': 'finite',
+        }}, 'advance': {}}
+    return {'equation': {
+        'time': {'quantity': 'time', 'shape': 'scalar', 'unit': 's',
+                 'sampling': 'stage', 'constraint': 'finite'},
+        'strain_rate': {'quantity': 'strain_rate', 'measure': 'infinitesimal_strain_rate',
+                        'shape': 'sym', 'unit': {'si': [0, 0, -1, 0]},
+                        'configuration': 'current', 'sampling': 'stage', 'constraint': 'finite'},
+    }, 'advance': {
+        'start_time': {'quantity': 'time', 'shape': 'scalar', 'unit': 's',
+                       'sampling': 'start', 'constraint': 'finite'},
+        'duration': {'quantity': 'duration', 'shape': 'scalar', 'unit': 's',
+                     'sampling': 'interval', 'constraint': 'positive_finite'},
+    }}
+
+
+def equation_input_types(model):
+    """Expression input types from a validated contract (legacy profiles included)."""
+    inputs = (model['formulation']['inputs'] if model.get('schema_version') == '0.3'
+              else formulation_inputs(physical=physical_time(model)))
+    return {name: field_type(field) for name, field in inputs['equation'].items()}
+
+
+def state_role(field):
+    """Storage/solve role, with legacy flag support for preserved definitions."""
+    if 'semantics' in field:
+        return field['semantics']['role']
+    return ('plastic_multiplier' if field.get('multiplier') else
+            'increment_unknown' if field.get('transient') else 'persistent')
+
+
+def migrate_formulation(model, *, stress_scope=None):
+    """Return a validated v0.3 copy; never rewrite a hash-pinned definition.
+
+    Physical-time stress scope must be supplied by the caller from source evidence.
+    """
+    import copy
+    validate(model)
+    result = copy.deepcopy(model)
+    if model['schema_version'] == '0.3':
+        if stress_scope is not None and model['formulation']['stress'].get('scope') != stress_scope:
+            raise ValidationError('stress scope conflicts with existing formulation')
+        return result
+    physical = physical_time(model)
+    if physical:
+        has_stress = any(f['name'] == 'stress' for f in model.get('observables', []))
+        if has_stress and stress_scope not in ('effective', 'total'):
+            raise ValidationError('physical-time stress migration requires explicit effective/total scope')
+        if not has_stress and stress_scope is not None:
+            raise ValidationError('cannot assign stress scope without a stress observable')
+        stress = ({'source': 'observable', 'name': 'stress', 'measure': 'cauchy', 'scope': stress_scope}
+                  if has_stress else {'source': 'none'})
+    else:
+        if stress_scope not in (None, 'effective'):
+            raise ValidationError('v0.1 stress is effective stress')
+        stress = {'source': 'state', 'name': 'sigma', 'measure': 'cauchy', 'scope': 'effective'}
+    result['formulation'] = {
+        'time_dependence': 'physical_time' if physical else 'strain_path',
+        'equation_form': 'ode' if physical else {'residual': 'incremental_residual', 'rate': 'strain_path_rate'}[model['integration']],
+        'kinematics': model.get('formulation', {}).get('kinematics', 'small_strain_3d'),
+        'frame': 'fixed_spatial', 'objective_rate': 'none', 'tensor_representation': 'mandel',
+        'stress_sign': 'compression_positive', 'strain_sign': 'compression_positive', 'stress': stress,
+        'inputs': formulation_inputs(physical=physical),
+    }
+    result.pop('integration', None)
+    for field in result['state']:
+        role = state_role(field)
+        is_stress = not physical and field['name'] == 'sigma'
+        field['semantics'] = {
+            'role': role,
+            'quantity': 'cauchy_stress' if is_stress else 'unspecified',
+            'transformation': 'symmetric_spatial_tensor' if is_stress else 'fixed_components',
+        }
+        field.pop('transient', None)
+        field.pop('multiplier', None)
+    result['initialization'] = {
+        'method': 'explicit_state', 'default_policy': 'examples_only',
+        'required_state': [f['name'] for f in result['state'] if state_role(f) == 'persistent'],
+        'validation': 'domain_and_initial_checks',
+    }
+    result['schema_version'] = '0.3'
+    validate(result)
+    return result
 
 
 def validate(model):
     from .structure import check
     version=model.get('schema_version')
-    if version not in ('0.1','0.2'):
+    if version not in ('0.1','0.2','0.3'):
         raise ValidationError('unsupported schema version')
-    physical=physical_time(model)
-    schema='model-v0.2.schema.json' if physical else 'model.schema.json'
+    schema=f'model-v{version}.schema.json' if version != '0.1' else 'model.schema.json'
     check(model,json.loads((ROOT/'schemas'/schema).read_text()))
+    physical=physical_time(model)
     required = {'schema_version','id','name','family','status','sources','parameters','state', 'derived','equations','domain','description'}
     if not required <= model.keys():
         raise ValidationError(f"missing fields: {sorted(required-model.keys())}")
-    if not physical and model['integration'] not in ('residual','rate'):
+    if not physical and integration_kind(model) not in ('residual','rate'):
         raise ValidationError('unsupported schema version or integration kind')
     if not re.fullmatch(r'[a-z][a-z0-9-]*',model['id']):
         raise ValidationError('invalid model ID')
@@ -67,10 +171,11 @@ def validate(model):
         raise ValidationError('invalid review status')
     if not model['sources'] or any(not {'url','locator','role'} <= s.keys() for s in model['sources']):
         raise ValidationError('source URL, locator and role are required')
-    symbols = {'I':Type('sym'), 'time':Type(dim=TIME), 'strain_rate':Type('sym',tuple(-v for v in TIME))} if physical else {'I':Type('sym'),'de':Type('sym')}
+    symbols = {'I':Type('sym'), **equation_input_types(model)}
+    advance_inputs = set(model['formulation']['inputs']['advance']) if version == '0.3' else set()
     names = set()
     def declare(name, typ):
-        if not IDENT.fullmatch(name) or name in RESERVED or name.endswith('_n') or name in names:
+        if not IDENT.fullmatch(name) or name in RESERVED or name in advance_inputs or name.endswith('_n') or name in names:
             raise ValidationError(f'invalid, duplicate or reserved identifier: {name}')
         names.add(name)
         symbols[name]=typ
@@ -88,7 +193,8 @@ def validate(model):
     for field in model['state']:
         typ=field_type(field); name=field['name']
         declare(name,typ)
-        if not physical: symbols[name+'_n']=typ
+        role = state_role(field)
+        if not physical and (version != '0.3' or role == 'persistent'): symbols[name+'_n']=typ
         initial=field['initial']
         if typ.shape=='sym':
             if not isinstance(initial,list) or len(initial)!=6: raise ValidationError(f'{name}: six Mandel components required')
@@ -102,10 +208,19 @@ def validate(model):
         scale_value=evaluate(scale,env)
         if not math.isfinite(scale_value) or scale_value<=0: raise ValidationError('state scale must be finite and positive')
         count+=6 if typ.shape=='sym' else 1
-        if physical and (field.get('transient') or field.get('multiplier')):
+        if physical and role != 'persistent':
             raise ValidationError('physical-time ODE state must be persistent; incremental multipliers are unsupported')
-        if field.get('multiplier') and (typ!=Type() or not field.get('transient') or model['integration']!='residual'):
+        if role == 'plastic_multiplier' and (typ!=Type() or (version != '0.3' and not field.get('transient')) or integration_kind(model)!='residual'):
             raise ValidationError('multipliers must be dimensionless transient scalars in residual models')
+        if version == '0.3':
+            transformation = field['semantics']['transformation']
+            if ((transformation == 'scalar_invariant' and typ.shape != 'scalar') or
+                    (transformation == 'symmetric_spatial_tensor' and typ.shape != 'sym')):
+                raise ValidationError('state transformation must match declared shape')
+            if not field['semantics']['quantity'].strip():
+                raise ValidationError('state physical quantity must be nonempty; use unspecified for unresolved meaning')
+            if role != 'persistent' and (integration_kind(model) != 'residual' or any(v != 0 for v in initial)):
+                raise ValidationError('temporary solve state requires a residual profile and zero initial values')
     if count>MAX_STATE_COMPONENTS: raise ValidationError(f'at most {MAX_STATE_COMPONENTS} state components are supported')
     for field in model['derived']:
         typ=infer(parse(field['expr']),symbols)
@@ -115,7 +230,7 @@ def validate(model):
     state_fields={f['name']:f for f in model['state']}
     for update in model.get('increment_reset',{}).get('updates',[]):
         target=update['target'];field=state_fields.get(target)
-        if field is None or target in reset_targets or field.get('transient') or field.get('multiplier'):
+        if field is None or target in reset_targets or state_role(field) != 'persistent':
             raise ValidationError('increment reset targets must be distinct persistent state fields')
         reset_targets.add(target)
         if infer(parse(update['guard']),symbols).shape!='scalar':
@@ -148,6 +263,26 @@ def validate(model):
         if not IDENT.fullmatch(field['name']) or field['name'] in RESERVED or field['name'].endswith('_n') or field['name'] in names:
             raise ValidationError('invalid or duplicate observable name')
         names.add(field['name'])
+    if version == '0.3':
+        persistent = [f['name'] for f in model['state'] if state_role(f) == 'persistent']
+        if model['initialization']['required_state'] != persistent:
+            raise ValidationError('initialization must require every persistent state field in layout order')
+        stress = model['formulation']['stress']
+        if not physical:
+            if stress != {'source': 'state', 'name': 'sigma', 'measure': 'cauchy', 'scope': 'effective'}:
+                raise ValidationError('incremental profile requires effective Cauchy stress state sigma')
+            if state_role(model['state'][0]) != 'persistent':
+                raise ValidationError('stress output sigma must be persistent')
+            semantics = model['state'][0]['semantics']
+            if semantics['quantity'] != 'cauchy_stress' or semantics['transformation'] != 'symmetric_spatial_tensor':
+                raise ValidationError('stress sigma must declare Cauchy-stress spatial-tensor semantics')
+        else:
+            outputs = {f['name']: f for f in model.get('observables', [])}
+            if stress['source'] == 'none':
+                if 'stress' in outputs:
+                    raise ValidationError('stress observable must be bound by the formulation')
+            elif stress['name'] != 'stress' or stress['name'] not in outputs or field_type(outputs[stress['name']]) != Type('sym', DIMS['Pa']):
+                raise ValidationError('physical-time stress must bind the symmetric Pa observable stress')
     return model
 
 
@@ -162,6 +297,9 @@ def axisymmetric_x(values):
 
 
 def evaluation_environment(model, state, previous, increment, parameters=None, *, time=None, _check_domain=True):
+    if model.get('schema_version') == '0.3' and (len(increment) != 6 or any(
+            type(v) not in (int, float) or not math.isfinite(v) for v in increment)):
+        raise ValueError('declared loading input requires six finite Mandel components')
     if physical_time(model) and (type(time) not in (int,float) or not math.isfinite(time)):
         raise ValueError('physical-time evaluation requires finite stage time')
     if model.get('formulation',{}).get('kinematics')=='axisymmetric_x' and not axisymmetric_x(increment):

@@ -14,6 +14,11 @@ Link prior dossiers, schema definitions, reviews and evidence. Explain what this
 
 ## Equations and schema crosswalk
 
+Target: [schema v0.3](../../schemas/model-v0.3.schema.json); read the [formulation contract](../FORMULATION_CONTRACT.md). New records use `schema_version: "0.3"` with an explicit `formulation`, without top-level `integration`. Existing-record migration is separately owned.
+
+Record source-backed values or explicit gaps for time dependence, equation form, kinematics, frame, objective rate, tensor representation, stress/strain signs and stress output binding/scope. Cite source locators for these decisions. Identify unsupported profiles without inventing defaults.
+
+
 | Source locator | Equation / quantity | Schema representation / units | Status / ambiguity |
 | --- | --- | --- | --- |
 | | | | |

@@ -2,7 +2,23 @@
 
 `models/*.json` → structural checks → typed/dimensioned expression AST → Python reference evaluation + generated templated C++ → shared integration engine → native CLI / Emscripten Worker. Catalogue pages, SQLite and source displays derive from the definitions. No model ID controls constitutive mathematics inside the engine.
 
-## Representation v0.1
+## Formulation contract v0.3
+
+New definitions can use the explicit [formulation contract](FORMULATION_CONTRACT.md)
+and [v0.3 schema](../schemas/model-v0.3.schema.json). It replaces `integration`
+with declared time dependence, equation form, kinematics, frame, tensor/sign
+conventions, required equation/advancement inputs and a stress-output binding.
+State fields explicitly distinguish persistent history from temporary solve
+variables and declare basis-transformation semantics. An initialization contract
+requires supplied persistent state, with illustrative values kept separate from
+consistency checking; newly compiled v0.3 CLI/C ABI models reject omitted state.
+Three supported profiles preserve the
+existing incremental-residual, strain-path-rate and physical-time-ODE semantics.
+Finite rotations and objective rates remain unsupported. Existing v0.1/v0.2
+definitions remain accepted unchanged; migration creates a new validated copy
+without rewriting evidence-bound definitions or inferring physical-time stress scope.
+
+## Legacy representation v0.1
 
 JSON is the canonical JSON-compatible subset of YAML. Arbitrary YAML is not parsed in this first implementation. `schemas/model.schema.json` defines structure; `atlas.model.validate` adds semantic checks. SI dimension vectors use rational mass/length/time exponents, with `1` and `Pa` as the v0.1 declaration units. The separate experimental [physical-time ODE subset](TIME_ODE_API.md) adds v0.2 definitions with time/temperature dimensions and bounded rational SI exponent declarations. State types are scalar or symmetric second-order tensor. General vector/fourth-order types, algebraic observables, timed mixed-control schedules and constitutive events remain outstanding. The [temporal integration design draft](TEMPORAL_INTEGRATION.md) specifies the proposed extension, migration rules and verification gates; its broader schedule/constraint proposal is not yet an accepted runtime capability.
 

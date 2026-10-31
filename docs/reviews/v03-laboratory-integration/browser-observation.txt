@@ -1,0 +1,19 @@
+### Result
+{
+  "model": "barodesy-clay-2017",
+  "modelCount": 6,
+  "status": "✓ Response up to date",
+  "detail": "100 increments · 20.6 ms · Drained triaxial",
+  "draft": "draft",
+  "sourceUrls": [
+    "https://doi.org/10.1007/s11440-016-0458-4",
+    "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/barodesy2017-research-rates.md",
+    "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/barodesy2017-wider-integration-results.md",
+    "http://127.0.0.1:8873/models/barodesy-clay-2017.json"
+  ],
+  "exportEnabled": true
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({model: document.querySelector("#model").value, modelCount: document.querySelector("#model").options.length, status: document.querySelector("#run-state").textContent, detail: document.querySelector("#run-detail").textContent, draft: document.querySelector("#model-status").textContent, sourceUrls: [...document.querySelectorAll("#model-sources a")].map(x=>x.href), exportEnabled: !document.querySelector("#export-run").disabled})');
+```

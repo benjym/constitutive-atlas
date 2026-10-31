@@ -231,7 +231,28 @@ def infer(node, symbols):
     raise ValidationError(f"unsupported syntax: {ast.dump(node)}")
 
 
+def _finite_expression_value(value):
+    """Validate executed AST results; primitive-internal arithmetic is separate."""
+    if isinstance(value, bool):
+        return value
+    components = value.v if isinstance(value, Sym) else (value,)
+    if isinstance(value, Sym) and len(components) != 6:
+        raise ValidationError("expression tensor must have six components")
+    for component in components:
+        try:
+            finite = type(component) in (int, float) and math.isfinite(component)
+        except OverflowError:
+            finite = False
+        if not finite:
+            raise ValidationError("nonfinite or invalid executed expression value")
+    return value
+
+
 def evaluate(node, symbols):
+    return _finite_expression_value(_evaluate_node(node, symbols))
+
+
+def _evaluate_node(node, symbols):
     if isinstance(node, ast.Constant):
         return float(node.value)
     if isinstance(node, ast.Name):
@@ -262,6 +283,11 @@ def evaluate(node, symbols):
 
 
 def cpp(node):
+    # Function-body flag writes are sequenced; the false flag is sticky.
+    return f"atlas::expression_or_mark({_cpp_node(node)}, atlas_eval_ok)"
+
+
+def _cpp_node(node):
     if isinstance(node, ast.Constant): return f"T({float(node.value)!r})"
     if isinstance(node, ast.Name): return node.id
     if isinstance(node, ast.UnaryOp): return f"({'-' if isinstance(node.op,ast.USub) else '+'}{cpp(node.operand)})"

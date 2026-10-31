@@ -1,5 +1,9 @@
 # Implementation status — 2026-10-30
 
+## Local draft laboratory expansion —2026-10-31
+
+The [Barodesy2017 body-law zero-spin draft](models/barodesy2017-laboratory-preview.md) is now the sixth local runnable definition, using explicit schema v0.3. Its prospectively frozen actual-driver native/Wasm study passes13 requests/backend, including all five monotonic/cyclic protocols and330 caller points/backend. Scientific status remains draft; source discrepancies, broader initialization/tangent/experimental gates stay open. The completed v0.3 contract, browser state-role handling and six-model package are integrated locally; the [integration report](reviews/v03-laboratory-integration/RESULTS.md) retains initial regression failures and passing repairs. Historical five-model baselines below remain historical. This change has not been deployed; hosted count remains five until deployment.
+
 ## 2026-10-31 source and draft corrections
 
 The [clay2005 cross-review](ingestion/hypoplastic-clay-2005/rate-review-v1/README.md) corrects our earlier source-reading error: the pinned manuscript's Eq38 has a plus sign, consistent with Eq40. The old minus-sign conflict is not a source fact. Historical hash-pinned packets and their counterfactual algebra check are retained; the correction supersedes that interpretation. The audit also reproduces an unsafe floating-point SPD guard in the research draft, so its compiled study waits for a new guarded revision.

@@ -29,6 +29,7 @@ For the browser build, see [web/README.md](web/README.md) (Node.js 24 and Emscri
 - [Agent instructions](AGENTS.md) and [ingestion template](docs/ingestion/TEMPLATE.md) — start here before claiming model work.
 - [Models](models/) and [schemas](schemas/) — authoritative definitions and file formats.
 - [Architecture](docs/ARCHITECTURE.md) — engine design, mathematical language and conventions.
+- [Formulation contract](docs/FORMULATION_CONTRACT.md) — explicit equation, kinematic and stress-output semantics; v0.3 schema and migration.
 - [Experimental data](docs/DATA_REUSE.md) — sources, attribution and reuse terms.
 - [Literature screening](docs/LITERATURE_SCREENING.md) — discovery and review process.
 - [Working manuscript](paper/article/main.tex) and [research charter](docs/RESEARCH_CHARTER.md).

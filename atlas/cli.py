@@ -9,6 +9,10 @@ def main():
     parser=argparse.ArgumentParser(description='Constitutive Atlas research and simulation tools')
     sub=parser.add_subparsers(dest='command',required=True)
     sub.add_parser('validate',help='Validate every executable definition')
+    migrate=sub.add_parser('migrate-model',help='Write an explicit v0.3 formulation without changing the source')
+    migrate.add_argument('definition',type=Path)
+    migrate.add_argument('--output',type=Path,required=True)
+    migrate.add_argument('--stress-scope',choices=('effective','total'))
     evidence=sub.add_parser('evidence',help='Validate numerical evidence integrity; does not confer review status');evidence.add_argument('record',type=Path);evidence.add_argument('--current',action='store_true')
     generate=sub.add_parser('generate');generate.add_argument('destination',type=Path)
     db=sub.add_parser('database');db.add_argument('destination',type=Path)
@@ -22,6 +26,12 @@ def main():
     benchmark=sub.add_parser('benchmark');benchmark.add_argument('configuration',type=Path);benchmark.add_argument('--solver',type=Path,default=ROOT/'build/atlas_solver');benchmark.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     if args.command=='validate':print(f'{len(all_models())} declarative models passed structural and semantic validation')
+    elif args.command=='migrate-model':
+        from .model import load, migrate_formulation
+        model=migrate_formulation(load(args.definition),stress_scope=args.stress_scope)
+        with args.output.open('x') as stream:
+            stream.write(json.dumps(model,indent=2,allow_nan=False)+'\n')
+        print(args.output)
     elif args.command=='evidence':
         from .evidence import validate_record
         record=validate_record(args.record,current=args.current);print(f"{record['id']}: record verified ({record.get('outcome',record.get('status'))}); no automatic model promotion")

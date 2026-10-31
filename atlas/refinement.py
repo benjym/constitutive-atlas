@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 from .compiler import generate
 from .dsl import evaluate, parse, ValidationError
-from .model import ROOT, all_models
+from .model import ROOT, all_models, state_role
 from .recorded import execute_recorded, validate_recorded_run
 from .structure import check
 
@@ -50,7 +50,7 @@ def state_layout(model,parameters):
         size=6 if field['shape']=='sym' else 1;scale=evaluate(parse(field['scale']),env)
         if not math.isfinite(scale) or scale<=0:raise ValueError('invalid comparison state scale')
         fields.append(dict(name=field['name'],unit=field['unit'],offset=offset,size=size,scale=scale,
-                           transient=bool(field.get('transient',False))))
+                           transient=state_role(field) != 'persistent'))
         offset+=size
     return fields
 

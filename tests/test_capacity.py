@@ -19,7 +19,8 @@ class CapacityTests(unittest.TestCase):
             base=Path(directory)
             generate(base/'generated',[ROOT/'tests/fixtures/time/capacity-32.json'])
             include=base/'include/atlas';include.mkdir(parents=True)
-            shutil.copyfile(ROOT/'cpp/include/atlas/expm.hpp', include/'expm.hpp')
+            for name in ('expm.hpp', 'checked_trace.hpp', 'checked_expression.hpp', 'trace_accuracy.hpp'):
+                shutil.copyfile(ROOT/'cpp/include/atlas'/name, include/name)
             (base/'check.cpp').write_text('#include "models.hpp"\n')
             original=(ROOT/'cpp/include/atlas/tensor.hpp').read_text()
             for header in (original.replace('max_state = 32','max_state = 24'),

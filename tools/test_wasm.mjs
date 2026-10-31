@@ -13,12 +13,14 @@ const wasm=await createAtlas();
 const catalogue=JSON.parse(readFileSync(resolve(wasmDir,'generated/models.json'),'utf8'));
 let runs=0;
 for(const model of catalogue.models){
+  // Examples are explicit test fixtures; v0.3 never substitutes them in the engine.
+  const initial=model.state.flatMap(field=>field.shape==='sym'?field.initial:[field.initial]).join(',');
   for(const protocol of [0,1,2,3,4]){
     const target=protocol===3?10000:.002,steps=64,cycles=protocol===3?1:0;
-    const native=spawnSync(nativeSolver,['--model',model.id,'--protocol',String(protocol),'--target',String(target),'--steps',String(steps),'--cycles',String(cycles)],{encoding:'utf8',timeout:30000});
+    const native=spawnSync(nativeSolver,['--model',model.id,'--initial',initial,'--protocol',String(protocol),'--target',String(target),'--steps',String(steps),'--cycles',String(cycles)],{encoding:'utf8',timeout:30000});
     assert.equal(native.status,0,model.id+': '+native.stdout+native.stderr);
     const expected=JSON.parse(native.stdout);
-    const actual=JSON.parse(wasm.ccall('atlas_run','string',['string','string','string','number','number','number','number'],[model.id,'','',protocol,target,steps,cycles]));
+    const actual=JSON.parse(wasm.ccall('atlas_run','string',['string','string','string','number','number','number','number'],[model.id,'',initial,protocol,target,steps,cycles]));
     assert.equal(actual.ok,true,model.id+': '+actual.message);assert.equal(actual.catalogue_hash,expected.catalogue_hash);assert.equal(actual.points.length,expected.points.length);
     for(let i=0;i<actual.points.length;i++)for(const key of ['state','strain'])actual.points[i][key].forEach((v,j)=>{
       const wanted=expected.points[i][key][j];assert.ok(Math.abs(v-wanted)<=1e-7*Math.max(1,Math.abs(wanted)),`${model.id} protocol ${protocol} step ${i} ${key}[${j}]: ${v} != ${wanted}`);

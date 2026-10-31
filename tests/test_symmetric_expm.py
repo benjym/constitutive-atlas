@@ -19,7 +19,7 @@ class SymmetricExpm(unittest.TestCase):
   for expr in ('expm(x)','expm(S)','expm()','expm(A,A)','expm(A=I)','expm(1>0)','exp(A)'):
    with self.subTest(expr=expr),self.assertRaises(ValidationError):infer(parse(expr),symbols)
   self.assertEqual(evaluate(parse('exp(1)'),{}),math.exp(1))
-  self.assertEqual(cpp(parse('expm(A)')),'atlas::tensor_expm_or_mark(A, atlas_eval_ok)')
+  self.assertEqual(cpp(parse('expm(A)')),'atlas::expression_or_mark(atlas::tensor_expm_or_mark(atlas::expression_or_mark(A, atlas_eval_ok), atlas_eval_ok), atlas_eval_ok)')
  def test_exact_cases_and_implementation_range(self):
   self.assertEqual(tensor_expm(Sym((0.,)*6)),I)
   a=tensor_expm(Sym((1.,1.,1.,0.,0.,0.)))

@@ -14,7 +14,7 @@ class Log1pDslHistory(unittest.TestCase):
   self.assertEqual(infer(parse('log1p(x)'),symbols),Type())
   for expr in ('log1p()','log1p(x,x)','log1p(x=1)','log1p(S)','log1p(p)','log1p(flag)','log1p(1>0)'):
    with self.subTest(expr=expr),self.assertRaises(ValidationError):infer(parse(expr),symbols)
-  self.assertEqual(cpp(parse('log1p(x)')),'atlas::scalar_log1p_or_mark(x, atlas_eval_ok)')
+  self.assertEqual(cpp(parse('log1p(x)')),'atlas::expression_or_mark(atlas::scalar_log1p_or_mark(atlas::expression_or_mark(x, atlas_eval_ok), atlas_eval_ok), atlas_eval_ok)')
  def test_checked_scalar_domain_and_types(self):
   for x in (True,False,None,'0',complex(0),[0],Sym((0,)*6),float('nan'),float('inf'),-float('inf'),-1.,math.nextafter(-1.,-math.inf),10**1000):
    with self.subTest(x=repr(x)),self.assertRaises(ValueError):log1p(x)

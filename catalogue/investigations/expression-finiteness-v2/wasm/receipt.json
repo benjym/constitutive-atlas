@@ -1,0 +1,62 @@
+{
+  "backend": "wasm",
+  "started_utc": "2026-10-31T04:47:12.128223+00:00",
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "inputs": {
+    "atlas/dsl.py": "6eed591e1e4f8ee1a7a28ec07107d2224dde5fea73899a0a7792ddece459bf1e",
+    "cpp/include/atlas/tensor.hpp": "966a6a413b8ea4d50f400bc96860644774cabfb15f69e8bfec9c3fb215b7e144",
+    "cpp/include/atlas/trace_accuracy.hpp": "5e2c187683372ec56aaeef5cd6aaf3b45ae9fe4605c64d5b728f291fad52d44c",
+    "cpp/include/atlas/expm.hpp": "267a9044b686082ba4faf9777ec271ea91ec9eed3495219abd3d5559a680c85f",
+    "cpp/include/atlas/checked_trace.hpp": "c7f1cc3a18529ec024c58b2d2b8281a574e2dc4619f0cdb6c7dde33684f2ca65",
+    "cpp/include/atlas/checked_expression.hpp": "87a63032a8028a54c4261e5c9d5ca5a727293eb87d9506d1c1e3ea4c4c2bbec8",
+    "docs/reviews/expression-finiteness-audit-v1/checks.json": "96b9bca671b72de7db8f61b930e49a22cf458885993229effaf7e403cabe27ce"
+  },
+  "commands": [
+    {
+      "label": "configure",
+      "argv": [
+        "/opt/homebrew/bin/emcmake",
+        "cmake",
+        "-S",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/expression-finiteness-v2",
+        "-B",
+        "/private/tmp/atlas-expression-v2-wasm-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-expression-v2-wasm-v1",
+        "--target",
+        "atlas_expression",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "/private/tmp/atlas-expression-v2-wasm-v1/observe.mjs"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "build_dir": "/private/tmp/atlas-expression-v2-wasm-v1",
+  "artifacts": {
+    "atlas-expression.js": {
+      "sha256": "8cd60cbacfc6905c4705cfed4af075ba8e89be0efb1292ed744659917ed4462f",
+      "bytes": 18759
+    },
+    "atlas-expression.wasm": {
+      "sha256": "cbb26d24ee061d6b232ea2643af6160eeb9b274bba302db84ed8f1300a0864c4",
+      "bytes": 263297
+    }
+  },
+  "finished_utc": "2026-10-31T04:47:15.387728+00:00"
+}

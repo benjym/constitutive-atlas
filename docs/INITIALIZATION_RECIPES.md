@@ -1,5 +1,14 @@
 # Experimental initialization recipes
 
+The [v0.3 initialization contract](FORMULATION_CONTRACT.md#initialization-contract)
+now distinguishes illustrative values from required persistent state. The generic
+`atlas.initialization.initialize_state` entry point checks explicit incremental
+or physical-time state without constructing it. Existing physical-time recipes
+can target v0.3 after explicit model-hash reconciliation; their output passes
+through that same initializer at time zero. Original recipes and pins remain
+unchanged. This does not extend the recipe language to incremental models or add
+preparation-history execution.
+
 Initialization is separate from constitutive evolution and specimen preparation. The new [recipe schema](../schemas/initialization-recipe.schema.json) describes typed inputs, ordered guarded expressions, named state outputs and an initial strain-rate tensor using the existing restricted expression language. The Python preprocessor checks dimensions, finite results, parameter bounds, model domain and model `initial_checks` before returning fields for the common timed driver. It adds no material-specific solver kernel. Native/Wasm recipe execution and general numerical initialization solves are not implemented.
 
 Every parameter and input is supplied explicitly under the [input schema](../schemas/initialization-input.schema.json). Recipes pin the canonical model hash, and outputs retain recipe/configuration/model/run-field hashes. CLI outputs also hash the exact input-file bytes parsed. Model changes require recipe reconciliation; changing a pin without review does not establish equation equivalence. Initialization runs at time zero. Its output is not proof of admissibility at another start time, a nonlinear solver, a consolidation/reversal history or a calibrated parameter set.

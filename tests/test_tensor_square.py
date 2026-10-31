@@ -64,7 +64,7 @@ class TensorSquareTests(unittest.TestCase):
         for expr in ('tensor_square(1)','tensor_square(A,A)','tensor_square()','A*A'):
             with self.subTest(expr=expr),self.assertRaises(ValidationError):infer(parse(expr),{'A':Type('sym')})
         # A pre-existing model name cannot shadow the generated function call.
-        self.assertEqual(cpp(parse('tensor_square(A)')),'atlas::tensor_square(A)')
+        self.assertEqual(cpp(parse('tensor_square(A)')),'atlas::expression_or_mark(atlas::tensor_square(atlas::expression_or_mark(A, atlas_eval_ok)), atlas_eval_ok)')
         with self.assertRaises(ValidationError):infer(parse('tensor_square(A) + A'),{'A':Type('sym',DIMS['Pa'])})
 
     def test_generated_fixture_matches_cartesian_reference(self):

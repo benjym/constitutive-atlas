@@ -27,7 +27,12 @@ class ResearchEvidence(unittest.TestCase):
   self.assertEqual(native['reference_sha256'],digest(receipt));self.assertEqual(native['model_sha256'],canonical_hash(model));assess(native['records'],model,reference);verify(wasm,reference_receipt=receipt)
   self.assertEqual(wasm['native_report_sha256'],hashlib.sha256((folder/'native.json').read_bytes()).hexdigest())
  def test_parallel_queue_exact_candidate_coverage(self):
-  catalogue=json.loads((ROOT/'catalogue/manifest.json').read_text())['models'];queue=json.loads((ROOT/'catalogue/research-queues/parallel-source-queue-2026-10-31.json').read_text())
+  document='catalogue/research-queues/parallel-source-queue-2026-10-31.json'
+  queue=json.loads((ROOT/document).read_text())
+  pin=next(row['sha256']for row in queue['evidence_snapshot']if row['path']=='catalogue/manifest.json')
+  # This queue is a historical snapshot, not the mutable ingestion board.
+  original=checked_receipt(ROOT,document,'catalogue/manifest.json',pin)
+  catalogue=json.loads(original.read_text())['models']
   expected={m['id']for m in catalogue if m['status']=='candidate'};actual=[m['formulation_id']for m in queue['formulations']]
   self.assertEqual(len(actual),len(set(actual)));self.assertEqual(set(actual),expected)
   self.assertEqual(queue['snapshot_counts']['candidates'],len(expected));self.assertEqual(queue['snapshot_counts']['public_executable'],sum(m['executable']for m in catalogue))

@@ -26,7 +26,7 @@ def main():
         generate(check)
         if (Path(check)/'models.json').read_bytes() != (generated/'models.json').read_bytes():
             raise SystemExit('Wasm catalogue is stale: rebuild before packaging.')
-    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','recorded.mjs','recorded-view.mjs','catalogue.mjs']:
+    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','recorded.mjs','recorded-view.mjs','catalogue.mjs','state-contract.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     shutil.copyfile(ROOT/'protocols/recorded-linear-elastic-run.json',dest/'recorded-example.json')
     for name in ['atlas.js','atlas.wasm']:

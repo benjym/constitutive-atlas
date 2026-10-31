@@ -137,7 +137,9 @@ class LegacyHistoryTests(unittest.TestCase):
         with self.assertRaises(ValidationError):make_legacy_snapshot(timed,{}, {},[0.]*6)
 
     def test_all_five_public_layouts_roundtrip_without_reinterpretation(self):
-        paths=sorted((ROOT/'models').glob('*.json'));self.assertEqual(len(paths),5)
+        baseline=['drucker-prager','hypoplastic-sand-igs97','hypoplastic-sand-vw96','linear-elastic','modified-cam-clay']
+        paths=[ROOT/'models'/(name+'.json') for name in baseline]
+        self.assertTrue(all(path.is_file() for path in paths))
         for path in paths:
             model=load(path)
             with self.subTest(model=model['id']):
@@ -147,6 +149,13 @@ class LegacyHistoryTests(unittest.TestCase):
                 result=advance_legacy(model,restored,[0.]*6,identity)
                 self.assertTrue(result['ok']);self.assertEqual(named(result['snapshot']),state)
                 self.assertEqual(result['snapshot']['binding']['parameter_order'],list(model['parameters']))
+
+    def test_explicit_v03_draft_is_rejected_by_legacy_transport(self):
+        model=load(ROOT/'models/barodesy-clay-2017.json')
+        self.assertEqual(model['schema_version'],'0.3')
+        state={f['name']:copy.deepcopy(f['initial']) for f in model['state']}
+        with self.assertRaisesRegex(ValidationError,'model schema 0.1'):
+            make_legacy_snapshot(model,state,defaults(model),[0.]*6)
 
     def test_transient_transport_is_not_reclassified_as_physical_history(self):
         model=load(ROOT/'models/drucker-prager.json')
