@@ -1,0 +1,19 @@
+{
+  "all_points_required": true,
+  "all_requests_expected_success": true,
+  "backend_physical_channel_budget": "1e-10 * max(1, abs(native value), abs(wasm value))",
+  "claims": "Illustrative default100kPa spherical effective stress; no specimen preparation simulation, Wichtmann fit, calibration, experimental validation or scientific admission. Small strain, fixed frame, zero spin; strictly positive cohesion/friction/dilation only.",
+  "control_absolute_budget": "1e-12 * max(1, abs(request target))",
+  "control_uncertainty": "Frozen intended binary64 control targets/deltas are independent of backend libm. Check each backend control against frozen target. Physical path budgets include this small discrepancy and actual outer-controller tolerance; do not call these exact backend stored inputs.",
+  "finite_required": true,
+  "identity": "mc-laboratory-path-policy-v1",
+  "known_gaps": "Instantaneous selected-gap failures retained by mc-stored-backends-v1; this finite-path gate does not close them.",
+  "negative_mean_stress": "allowed by source; isotropic tensile apex is inherent to this law",
+  "settings": "default literal values in requests; no post-observation relaxation",
+  "source_strain_norm_absolute_budget": "2e-9 * (1 + source strain Euclidean norm)",
+  "source_stress_norm_absolute_budget": "2e-8 * max(p_ref, source stress Euclidean norm)",
+  "states": 6,
+  "status": "prospective; no compiled observations",
+  "strict_shear_zero": true,
+  "zero_hold": "incoming six stresses and zero accumulated strains exactly preserved"
+}

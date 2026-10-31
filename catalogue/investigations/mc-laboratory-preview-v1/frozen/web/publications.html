@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Trace constitutive model publications, versions, corrections and source evidence in Constitutive Atlas.">
+  <title>Constitutive Atlas · Publications &amp; lineage</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="rail">
+    <a class="brand" href="./#laboratory" aria-label="Constitutive Atlas home"><svg viewBox="0 0 42 48" aria-hidden="true"><path d="M21 2 40 13v22L21 46 2 35V13Z M2 13l19 11 19-11M21 24v22" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Constitutive<br><b>Atlas</b></span></a>
+    <nav aria-label="Main navigation">
+      <a href="./#laboratory">◫ <span>Model testing</span></a>
+      <a href="./#catalogue">⌕ <span>Model catalogue</span></a>
+      <a href="./#methods">≋ <span>Methods &amp; evidence</span></a>
+      <a href="./publications.html" class="active" aria-current="page">↗ <span>Publications &amp; lineage</span></a>
+    </nav>
+    <footer><p>By<br><a href="https://github.com/benjym">Benjy Marks</a><br><a href="https://github.com/Franzzzzzzzz">François Guillard</a></p></footer>
+  </aside>
+  <main>
+    <header class="topbar"><b>PUBLICATIONS &amp; LINEAGE</b></header>
+    <section class="page">
+      <div class="eyebrow">FOLLOW THE SOURCE</div>
+      <h1>Publications &amp; lineage.</h1>
+      <p class="page-lead">Trace original papers, preprints, journal versions and corrections. A publication link does not establish an executable or independently reviewed model.</p>
+      <p id="publication-scope" class="publication-notice">Loading publication records…</p>
+      <p><a href="./publications.json" download>Download publication records (JSON)</a> · <a href="./schemas/publications.schema.json">Record schema</a></p>
+      <form id="publication-filters" class="catalogue-tools publication-filters" role="search">
+        <label>Search publications<input id="publication-search" type="search" placeholder="Title, author, DOI or year…"></label>
+        <label>Publication version<select id="publication-version"><option value="all">All versions</option><option value="version-of-record">Journal versions</option><option value="preprint">Preprints</option><option value="correction">Corrections</option></select></label>
+        <label>Formulation link<select id="publication-model"><option value="all">All publications</option></select></label>
+        <button id="publication-reset" type="button" class="secondary">Reset filters</button>
+      </form>
+      <p id="publication-count" role="status" aria-live="polite"></p>
+      <div id="publication-error" role="alert" hidden><p>Publication records could not be loaded. Reload this page to retry.</p></div>
+      <div id="publication-grid" aria-label="Publication records"></div>
+      <noscript><p>Enable JavaScript to browse the records, or download the JSON using the link above.</p></noscript>
+    </section>
+  </main>
+  <script type="module" src="publications.mjs"></script>
+</body>
+</html>

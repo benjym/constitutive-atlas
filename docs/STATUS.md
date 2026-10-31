@@ -1,3 +1,9 @@
+# Mohr–Coulomb path collection and retained harness failure — 2026-10-31
+
+The [169-file frozen preview](../catalogue/investigations/mc-laboratory-preview-v1/RESULTS.md) builds natively and in Wasm, serially with one worker. Both backends complete14requests/834points. The assessor then fails because it assumes a full model object where the pinned API returns a model-ID string; its synthetic fixtures shared that incorrect assumption. Both failures and all raw observations are retained and reproduced by the installed verifier. No source-accuracy or parity pass is claimed.
+
+A separately identified envelope correction will preserve the original freeze and all numerical bounds while testing the actual API contract. Browser/export/recovery and nine-model regression gates remain open. No root model, solver/default change, push or deployment; hosted five/local nine remain unchanged.
+
 # Mohr–Coulomb independent finite-path references — 2026-10-31
 
 The [new source-only path packet](reviews/mc-axisymmetric-paths-v1/README.md) covers all five protocols,14 paths/834points and elastic/compression/extension/apex regimes. Both280/360precision reference files reproduce byte for byte under [coordinator replay](reviews/mc-axisymmetric-paths-review-v1/README.md);21711precision fields,12000exact rational identities and3883input/adequacy checks pass. Intended Python binary64 controls are distinguished from actual backend libm controls. Two coordinator manifest-reader mistakes were corrected before source replay, with their scripts retained.
