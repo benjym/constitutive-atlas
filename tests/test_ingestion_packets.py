@@ -88,14 +88,17 @@ class IngestionPackets(unittest.TestCase):
  def test_barodesy2015_oracle_limits_remain_reproducible(self):
   folder=ROOT/'docs/ingestion/barodesy-sand/rate-review-v1'
   self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_review.py','-v')
- def test_generic_rate_review_remains_bound_to_installed_fix(self):
+ def test_generic_rate_review_current_behavior_remains_fixed(self):
   folder=ROOT/'docs/reviews/generic-rate-transport-v1'
   manifest=json.loads((folder/'manifest.json').read_text())
   for name,pin in manifest['files'].items():
    path=Path(name);self.assertFalse(path.is_absolute());self.assertNotIn('..',path.parts)
    blob=(folder/path).read_bytes();self.assertEqual(hashlib.sha256(blob).hexdigest(),pin['sha256']);self.assertEqual(len(blob),pin['bytes'])
   result=self.run_python(str(folder/'witnesses.py'),'--repo',str(ROOT),'--source',str(ROOT/'tools/research_rate_observations.py'),'--require-fixed')
-  self.assertEqual(json.loads(result.stdout),json.loads((folder/'final-witness-results.json').read_text()))
+  actual=json.loads(result.stdout);original=json.loads((folder/'final-witness-results.json').read_text())
+  self.assertEqual(actual['input_sha256'],hashlib.sha256((ROOT/'tools/research_rate_observations.py').read_bytes()).hexdigest())
+  self.assertEqual(actual['witnesses'],original['witnesses'])
+  # Exact historical source/output reproduction is separately registered in test_source_replay.
  def test_revised_sand_exact_volume_and_operational_support(self):
   folder=ROOT/'docs/ingestion/barodesy-sand/rate-study-v2'
   self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_rate_study.py','-v')
