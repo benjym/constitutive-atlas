@@ -1,0 +1,206 @@
+{
+  "task": "DECIDE-multilaminate-correction-ledger-v1/algebra-choice-review",
+  "date": "2026-11-01",
+  "review_kind": "AI technical review of existing pinned evidence; not independent scientific signoff",
+  "source": {
+    "doi": "10.3217/wmxdh-rg587",
+    "sha256": "43d9a82e21523d303a684776580f57943277bc5fa9cb4d77648494e9daa876a9"
+  },
+  "input_pins": [
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/spectral-v1/README.md",
+      "sha256": "3e4c76c44c3e5e9a7725177cda68767261ffea91606fce726f0369217e82b291"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/spectral-v1/source-ledger.json",
+      "sha256": "b44cbc4aa6d329ff48e78e92c05ba81b602afac6b58893a08e96dfc421e4653f"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/spectral-v1/check.py",
+      "sha256": "a87f70278e8d7339ed06cb6fc9821b7232e5e21430886e103534ad5d79d5dad0"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/spectral-v1/checks.json",
+      "sha256": "48c7bd7efdb47503880d1fe510691414403522ec2b45c9c8b0b26b9dfd1369e1"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/spectral-v1/manifest.json",
+      "sha256": "7dd06dba51be3bb62d7d83abd113fac557da1851c939c957ed04bd67b25c777d"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/hvorslev-v1/README.md",
+      "sha256": "5f90cea41d924cc054a942c8a87046e32f8856d891a0d0948eb5fe4baba203f7"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/hvorslev-v1/source-ledger.json",
+      "sha256": "313ac398bdc0d9d93946014ff445c86d097a9ee9dadd90ba187f00915c6cf894"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/hvorslev-v1/check.py",
+      "sha256": "e32fdd4c0487e46bd0b95d092fe275b526ed2845fab209f70810fdb6206de632"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/hvorslev-v1/checks.json",
+      "sha256": "00c1181ccca78e49a47352a0347f1b23d9574b5f08424061c6c03e56ab780532"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/hvorslev-v1/manifest.json",
+      "sha256": "382bf5e2828bb542ed816ba3456a07488aac1574a8f488d3e23892867a84f812"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/README.md",
+      "sha256": "4430c9e08f363e366e064fddfb49a3d371fe556965950c26e165daef8bacfb03"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/decision-register.json",
+      "sha256": "6c7df1f492090c11c467d41079d25380815e0f8fda4f95a7284016b43c94c1f0"
+    },
+    {
+      "path": "docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/manifest.json",
+      "sha256": "a2443be3fe83a5bf55d94854bc23ff7d1598096b7306a86846257585c2be1aa5"
+    }
+  ],
+  "findings": [
+    {
+      "id": "LAW-01",
+      "disposition": "unresolved_here; separate cap/hardening decision required",
+      "scope": "Dependency only, not an independent cap-algebra review",
+      "not_implied": [
+        "No choice of Eq36 versus AppendixD denominator",
+        "No selection of GetAcap root, POP/prestress branch or prepared Q",
+        "Bcs intersection does not determine Q evolution"
+      ],
+      "evidence": [
+        "docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/decision-register.json LAW-01",
+        "docs/ingestion/multilaminate-schadlich-schweiger/hvorslev-v1/README.md Eq132 dependency"
+      ]
+    },
+    {
+      "id": "LAW-02",
+      "disposition": "conditionally_derived_proposed_corrections; scientific_approval_pending",
+      "assumptions": [
+        "Eq94 symmetric Kelvin compliance is authoritative",
+        "y vertical, x-z horizontal; u=(xx+zz)/sqrt2,v=yy",
+        "source lambda2 low and lambda3 high",
+        "raw symmetric stress in tensor traction; positive admissible elastic compliance"
+      ],
+      "eigenangle": {
+        "block": "H=[[a,b],[b,d]], a=(1-nu_hh)/Eh, d=1/Ev, b=-sqrt2*nu_hv/Eh",
+        "literal_A2": "tan(2omega)=(-2sqrt2*nu_hv/Ev)/((1-nu_hh)/Eh+1/Ev)",
+        "compelled_ratio": "tan(2omega)=2b/(a-d), where this tangent is defined; ratio alone does not select ordering",
+        "Delta": "sqrt((a-d)^2+4b^2)",
+        "lambda2": "(a+d-Delta)/2",
+        "lambda3": "(a+d+Delta)/2",
+        "low_projector": "P2=(I-(2H-(a+d)I)/Delta)/2 for Delta>0",
+        "high_projector": "P3=I-P2",
+        "equivalent_low_angle": "omega=atan2(-2b,d-a)/2 modulo pi",
+        "high_angle_warning": "atan2(2b,a-d)/2 points (cos,sin) along lambda3, not lambda2",
+        "zero_coupling": "b=0,a<d: P2=diag(1,0); b=0,a>d: P2=diag(0,1)",
+        "equal_diagonal_nonzero_coupling": "a=d,b!=0: projectors remain defined; do not divide by a-d",
+        "repeated_block": "Delta=0 gives H=aI; only combined projector is unique; elastic basis freedom does not settle whole nonlinear mode/history continuation"
+      },
+      "projection": {
+        "compelled_raw_c2_xz": "2*n_x*n_z",
+        "reason": "n.S.n=sum(n_i^2*S_ii)+2sum_{i<j}(n_i*n_j*S_ij)",
+        "retained_witness": "n=(-2/3,2/3,1/3), raw Sxz=1: actual sigma_nd=-4/9; literal Eq104=-2/9",
+        "Kelvin_map": "M=diag(1,1,1,sqrt2,sqrt2,sqrt2); sigma_K=M*sigma_raw; P_K=P_raw*M^-1",
+        "strain_map": "epsilon_K=M^-1*epsilon_engineering",
+        "normal_labels": "With explicit xx,yy,zz basis, third repeated yy in Eqs92/93 is zz",
+        "local_compliance": "C_local=P_K*C*P_K^-1 remains the stated similarity, not an orthogonal transform/congruence"
+      },
+      "not_determined": [
+        "Complete source shear/local work metric and nonlinear coupled assembly",
+        "Actual prepared rotations/quadrature or conditioning threshold",
+        "Repeated-eigenspace history continuation or mode-tracking",
+        "A pseudoinverse or perturbation for singular local transforms"
+      ],
+      "singular_witness": "n=(3/5,4/5,0),s=(-4/5,3/5,0),t=(0,0,1): t normal-stress traction contribution row identically zero; P singular despite non-axis normal",
+      "evidence": [
+        "docs/ingestion/multilaminate-schadlich-schweiger/spectral-v1/README.md Eqs94/102/104,A.1\u2013A.3,D190\u2013191",
+        "docs/ingestion/multilaminate-schadlich-schweiger/spectral-v1/checks.json A1-A3-projectors-and-D-angle-reconstruction; literal-A2-reconstruction; Eq104-xz-normal-versus-tensor-traction; axis-and-coordinate-plane-singularity",
+        "Thesis PDF69\u201372/178\u2013179/208\u2013209, printed51\u201354/160\u2013161/190\u2013191, visual receipts in spectral source-ledger"
+      ]
+    },
+    {
+      "id": "LAW-03",
+      "disposition": "underdetermined_source_choice; reciprocity_and_basis_conversion_compelled",
+      "reciprocity": "nu_hv/Eh=nu_vh/Ev",
+      "listing_option": [
+        "nu_hv(z)=(1-z)*nu_hv0+z*nu_ur",
+        "nu_vh(z)=nu_hv(z)*Ev(z)/Eh(z)"
+      ],
+      "figure_option": [
+        "nu_vh(z)=(1-z)*nu_vh0+z*nu_ur",
+        "nu_hv(z)=nu_vh(z)*Eh(z)/Ev(z)"
+      ],
+      "retained_witness": "Eh0=20,Ev0=10,nu_hv0=1/10,Eur=5,nu_ur=1/5,z=1/2 gives listing nu_vh=9/100 versus figure1/8",
+      "admissibility": [
+        "Eh>0",
+        "Ev>0",
+        "Gvh>0",
+        "-1<nu_hh<1",
+        "2*nu_hv^2<(1-nu_hh)*Eh/Ev",
+        "Check at every interpolated/pressure-scaled state; reciprocal endpoints alone are insufficient"
+      ],
+      "not_compelled": [
+        "Which reciprocal member is linearly interpolated",
+        "An endpoint-only positivity guarantee",
+        "Any change to the already defined log-degradation z"
+      ],
+      "possible_explicit_proposal": "Select AppendixD nu_hv interpolation for listing-lineage fidelity, labeled as a variant decision, not algebraic inevitability or Figure29 equivalence",
+      "evidence": [
+        "docs/ingestion/multilaminate-schadlich-schweiger/spectral-v1/README.md Eqs66\u201371/92\u201394 and Fig29 versus D190",
+        "docs/ingestion/multilaminate-schadlich-schweiger/spectral-v1/checks.json log-degradation-endpoints-and-Poisson-label",
+        "Thesis printed35\u201336/60/190\u2013191"
+      ]
+    },
+    {
+      "id": "LAW-04",
+      "disposition": "conditionally_derived_proposed_signed_correction; scientific_approval_pending",
+      "assumptions": [
+        "p=-sigma_n>0,Q=-sigma_nc>0,qe=-sigma_ne>0,tau>=0",
+        "M_CP>0,tcs=tan(phi_cs)>0",
+        "te=tan(phi_e)!=tcs for determination from this intersection",
+        "m!=1 as printed; strictly positive equivalent-pressure inner base",
+        "Local cap/HV/CSL intersection, not simultaneous macroscopic intersection"
+      ],
+      "expressions": {
+        "p_cs": "M_CP*Q/sqrt(M_CP^2+tcs^2)",
+        "tau_cs": "p_cs*tcs",
+        "s": "1-m",
+        "A": "3*Eoed_ref*(1-2*nu_ur)/Eur_ref",
+        "qe_cs": "[Q^s+A*(p_cs^s-Q^s)]^(1/s)",
+        "fHV": "tau-p*te-Bcs*(1-te/tcs)*qe",
+        "intersection_factorization": "fHV_cs=(tcs-te)*(p_cs-Bcs*qe_cs/tcs)",
+        "compelled_Bcs": "p_cs*tcs/qe_cs>0",
+        "corrected_signed_C5": "Bcs=-tau_cs/sigma_ne_cs=sigma_n_cs*tcs/sigma_ne_cs",
+        "equivalent_magnitude": "Bcs=tau_cs/abs(sigma_ne_cs)"
+      },
+      "degenerate_branch": "At te=tcs, Bcs cancels and this one intersection supplies no Bcs value; generic positive coefficient there requires declared continuous extension",
+      "retained_witness": "p=60,Q=100,qe=80,tau=48 gives first printed C5=-3/5 but positive/intersection/second ratio=+3/5",
+      "not_determined": [
+        "Prepared Q/M_CP and missing cap initialization",
+        "Cap hardening denominator",
+        "m=1 implementation or limiting-definition adoption",
+        "Macroscopic plane intersection or complete post-peak evolution"
+      ],
+      "evidence": [
+        "docs/ingestion/multilaminate-schadlich-schweiger/hvorslev-v1/README.md Eqs129\u2013132 and C.5\u2013C.7",
+        "docs/ingestion/multilaminate-schadlich-schweiger/hvorslev-v1/checks.json cap-CSL-Hvorslev-intersection-and-C5-sign",
+        "Thesis PDF122\u2013125/196\u2013197, printed104\u2013107/178\u2013179, visual receipts in Hvorslev source-ledger"
+      ]
+    }
+  ],
+  "execution": {
+    "existing_packet_reruns": 0,
+    "new_micro_audits": 0,
+    "source_expansion": 0,
+    "fresh_pdf_inspection": 0,
+    "author_program_calls": 0,
+    "model_backend_calls": 0,
+    "builds": 0,
+    "shared_edits": 0
+  },
+  "checks": "Symbolic/manual algebra against existing retained witnesses only; no new numerical pass claim. Output JSON parse and input file hashes checked.",
+  "smallest_next_action": "Parent consolidates these conditional repairs and unresolved choices with separate LAW-01 cap review into a named proposed corrected-variant ledger. Preserve printed alternatives; scientific approval and complete formulation remain open."
+}

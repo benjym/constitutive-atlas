@@ -1,0 +1,129 @@
+{
+  "identity": "multilaminate-cap-choice-v1",
+  "task": "DECIDE-multilaminate-correction-ledger-v1",
+  "date": "2026-11-01",
+  "review_kind": "AI technical analysis; not independent scientific signoff",
+  "source": {
+    "title": "A Multilaminate Constitutive Model for Stiff Soils",
+    "author": "Bert Schädlich",
+    "year": 2012,
+    "doi": "10.3217/wmxdh-rg587",
+    "sha256": "43d9a82e21523d303a684776580f57943277bc5fa9cb4d77648494e9daa876a9",
+    "private_path": "/Users/bmar5496/Library/Application Support/Constitutive Atlas/private-sources/43d9a82e21523d303a684776580f57943277bc5fa9cb4d77648494e9daa876a9/schaedlich-2012-multilaminate.pdf"
+  },
+  "equations": {
+    "a": "(p_ref/Q)^m",
+    "Cp_from_Eq35": "a/(K*p_ref)",
+    "Ce_from_NT_C2": "a*(1-2*nu_ur)/Eur_ref",
+    "Ct_from_C3": "a/(3*Eoed_ref)",
+    "additivity": "Ct=Ce+Cp",
+    "K_minus": "3/(p_ref*(1/Eoed_ref-3*(1-2*nu_ur)/Eur_ref))",
+    "K_plus_printed": "3/(p_ref*(1/Eoed_ref+3*(1-2*nu_ur)/Eur_ref))",
+    "plus_total_compliance": "a*(1/(3*Eoed_ref)+2*(1-2*nu_ur)/Eur_ref)",
+    "signed_cap_root": "sigma_nc=-sqrt(sigma_n^2+tau^2/M_CP^2)",
+    "POP_magnitude_conversion": "P>=0; sigma_pv=sigma_v0-P; p_pv=p_v0+P"
+  },
+  "locators": [
+    "Eq35-37 printed20/PDF38",
+    "N-T Eq24 printed15/PDF33",
+    "AppendixC.2 printed178/PDF196",
+    "AppendixC.3 printed179/PDF197 (targeted visual recheck)",
+    "AppendixD HARDCAP printed192/PDF210",
+    "Eq32 printed19/PDF37; B.5 printed166/PDF184; AppendixD printed188/PDF206",
+    "B.1-B.4 printed166/PDF184; AppendixD printed186-187/PDF204-205"
+  ],
+  "assumptions": [
+    "scalar cap loading, tau=0, no competing plastic surface",
+    "C.3 is total local normal primary-compression relation, not plastic-only",
+    "additive local elastic/plastic strain on identical scalar stress coordinate",
+    "reference isotropic N-T elasticity and same moduli/Poisson definitions",
+    "Q,p_ref,Eoed_ref,Eur_ref>0; m!=1; positive power base",
+    "1-2nu>0 for positive elastic scalar compliance"
+  ],
+  "hardening_positive_domain": "Eur_ref>3*(1-2*nu_ur)*Eoed_ref",
+  "witnesses_exact_rational": [
+    {
+      "Eur_ref": 3000,
+      "Ce": "1/5000",
+      "Ct_target": "1/3000",
+      "Cp_required": "1/7500",
+      "K_minus": "75",
+      "K_plus": "75/4",
+      "Ct_plus": "11/15000"
+    },
+    {
+      "Eur_ref": 1800,
+      "Ce": "1/3000",
+      "Ct_target": "1/3000",
+      "Cp_required": "0",
+      "K_minus": "undefined",
+      "K_plus": "15",
+      "Ct_plus": "1/1000"
+    },
+    {
+      "Eur_ref": 1500,
+      "Ce": "1/2500",
+      "Ct_target": "1/3000",
+      "Cp_required": "-1/15000",
+      "K_minus": "-150",
+      "K_plus": "150/11",
+      "Ct_plus": "17/15000"
+    }
+  ],
+  "checks": {
+    "all_3_plus_compliance_identities": true,
+    "both_nonsingular_minus_compliance_identities": true,
+    "runtime_model_calls": 0,
+    "builds": 0,
+    "author_code_execution": 0,
+    "failures": []
+  },
+  "disposition": {
+    "hardening": "derived_correction_conditional: propose MINUS in corrected variant, preserve PLUS conflict",
+    "cap_root": "convention_repair_conditional: negative signed intercept or positive magnitude; not full preparation closure",
+    "POP": "explicit_convention_choice: magnitude P>=0 with subtractive signed-stress mapping; historical input encoding and precedence unresolved"
+  },
+  "remaining_questions": [
+    "Scientific reviewer affirm C.3 total-strain and factor-three interpretation",
+    "Adopt/reject hardening admissibility inequality and limiting/degenerate policies",
+    "Reconcile full anisotropic/degraded elastic compliance with reference-law calibration; no unique correction derived here",
+    "Approve cap shape/helper, cohesion/minimum state and prestress selection separately",
+    "Specify historical POP encoding or explicitly corrected magnitude interface, OCR/POP precedence and restart semantics"
+  ],
+  "input_receipts": [
+    {
+      "path": "/Users/bmar5496/code/constitutive-atlas/docs/ingestion/multilaminate-schadlich-schweiger/base-laws-v1/README.md",
+      "sha256": "a8a99d1c59e696a9a199af27a8263721bd4290cd2cc7b9a9bd9a754bcf154479"
+    },
+    {
+      "path": "/Users/bmar5496/code/constitutive-atlas/docs/ingestion/multilaminate-schadlich-schweiger/host-contract-v1/README.md",
+      "sha256": "0a92495056ae370229952d427d19e8f82545051c0f8ca141d1fee63b74c927c3"
+    },
+    {
+      "path": "/Users/bmar5496/code/constitutive-atlas/docs/ingestion/multilaminate-schadlich-schweiger/hvorslev-v1/README.md",
+      "sha256": "5f90cea41d924cc054a942c8a87046e32f8856d891a0d0948eb5fe4baba203f7"
+    },
+    {
+      "path": "/Users/bmar5496/code/constitutive-atlas/docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/README.md",
+      "sha256": "4430c9e08f363e366e064fddfb49a3d371fe556965950c26e165daef8bacfb03"
+    },
+    {
+      "path": "/Users/bmar5496/code/constitutive-atlas/docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/decision-register.json",
+      "sha256": "6c7df1f492090c11c467d41079d25380815e0f8fda4f95a7284016b43c94c1f0"
+    },
+    {
+      "path": "/private/tmp/atlas-multilaminate-cap-choice-v1/private/page-197.png",
+      "sha256": "6230312a49e9df3d43a9f5dd85b476beeb6be20df2711f2bb1a3c3b87a4fda62"
+    }
+  ],
+  "outputs": [
+    "README.md",
+    "findings.json"
+  ],
+  "private_not_redistributed": [
+    "PDF",
+    "render",
+    "extracted text"
+  ],
+  "readme_sha256": "16108b0dd93d55244028d8e8e596c730fc7d0e15b9c0ee9660e8654e9d459711"
+}

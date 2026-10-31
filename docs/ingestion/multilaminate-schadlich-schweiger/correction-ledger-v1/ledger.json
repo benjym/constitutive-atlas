@@ -1,0 +1,220 @@
+{
+  "id": "multilaminate-correction-ledger-v1",
+  "date": "2026-11-01",
+  "kind": "proposed_correction_and_choice_ledger",
+  "is_model_or_schema_crosswalk": false,
+  "proposed_identity": "Atlas Schädlich-2012 corrected candidate v1 (incomplete proposal)",
+  "source": {
+    "doi": "10.3217/wmxdh-rg587",
+    "url": "https://doi.org/10.3217/wmxdh-rg587",
+    "sha256": "43d9a82e21523d303a684776580f57943277bc5fa9cb4d77648494e9daa876a9"
+  },
+  "target": "2012 thesis spectral cross-anisotropic stiffness, logarithmic degradation, four-contour recovery, Hvorslev strength and regular post-peak spatial nonlocal formulation",
+  "scientific_review": {
+    "status": "unsigned",
+    "reviewer": null
+  },
+  "admission": "not_admitted",
+  "source_equivalence": "Neither exact thesis transcription nor journal equation equivalence is claimed.",
+  "patches": [
+    {
+      "id": "PATCH-01",
+      "gate": "LAW-01",
+      "kind": "conditionally_derived_correction",
+      "source_locator": "Eq35–37 printed20/PDF38; C.2–C.3 printed178–179/PDF196–197; Appendix D printed192/PDF210",
+      "original": "Eq36 PLUS denominator versus Appendix D MINUS",
+      "proposal": "3/(p_ref*(1/Eoed_ref-3*(1-2*nu_ur)/Eur_ref))",
+      "assumptions": [
+        "scalar cap loading, tau=0, no competing plastic surface",
+        "C.3 is total local normal primary-compression relation, not plastic-only",
+        "additive local elastic/plastic strain on identical scalar stress coordinate",
+        "reference isotropic N-T elasticity and same moduli/Poisson definitions",
+        "Q,p_ref,Eoed_ref,Eur_ref>0; m!=1; positive power base",
+        "1-2nu>0 for positive elastic scalar compliance"
+      ],
+      "domain": "Eur_ref>3*(1-2*nu_ur)*Eoed_ref",
+      "derivation": "Ct=Ce+Cp on the identical local cap coordinate. PLUS instead gives Ct_actual=Ct+2Ce.",
+      "unresolved": "Confirm total-strain reading and reference-law calibration alongside full anisotropic/degraded elasticity; equality/negative compliance and m=1 policies remain undefined.",
+      "technical_evidence": "technical-reviews/cap-choice/findings.json",
+      "status": "proposed_unapproved",
+      "scientific_reviewer": null
+    },
+    {
+      "id": "PATCH-02",
+      "gate": "LAW-01",
+      "kind": "conditional_convention_repair",
+      "source_locator": "Eq32 printed19/PDF37; B.5 printed166/PDF184; Appendix D printed188/PDF206",
+      "original": "B.5 positive square root versus negative signed compressive cap intercept in Appendix D",
+      "proposal": "sigma_nc=-sqrt(sigma_n^2+tau^2/M_CP^2)",
+      "assumptions": [
+        "sigma_nc is signed tension-positive intercept, not magnitude; M_CP>0"
+      ],
+      "domain": "Q=-sigma_nc>0; cap magnitude and real root admitted",
+      "unresolved": "GetAcap, cohesion/minimum state and prestress selection not specified.",
+      "technical_evidence": "technical-reviews/cap-choice/findings.json",
+      "status": "proposed_unapproved",
+      "scientific_reviewer": null
+    },
+    {
+      "id": "PATCH-03",
+      "gate": "LAW-01",
+      "kind": "explicit_interface_choice",
+      "source_locator": "B.1–B.4 printed166/PDF184; Appendix D printed186–187/PDF204–205",
+      "original": "B.1/B.3 add POP; listing subtracts abs(POP)",
+      "proposal": "Propose nonnegative overburden magnitude P>=0; signed sigma_pv=sigma_v0-P and sigma_ph=K0nc*(sigma_v0-P). Convert legacy signed inputs explicitly.",
+      "assumptions": [
+        "P denotes additional prior compressive overburden magnitude"
+      ],
+      "domain": "P>=0; full prestress admissibility remains to be specified",
+      "unresolved": "Historical encoding and OCR/POP precedence are not determined by the sign derivation; no complete preparation policy is selected.",
+      "technical_evidence": "technical-reviews/cap-choice/findings.json",
+      "status": "proposed_unapproved",
+      "scientific_reviewer": null
+    },
+    {
+      "id": "PATCH-04",
+      "gate": "LAW-02",
+      "kind": "conditionally_derived_correction",
+      "source_locator": "Eq94, Appendix A.1–A.3 and Appendix D printed190–191/PDF208–209",
+      "original": "tan(2omega)=(-2sqrt2*nu_hv/Ev)/((1-nu_hh)/Eh+1/Ev)",
+      "proposal": {
+        "block": "H=[[a,b],[b,d]], a=(1-nu_hh)/Eh, d=1/Ev, b=-sqrt2*nu_hv/Eh",
+        "literal_A2": "tan(2omega)=(-2sqrt2*nu_hv/Ev)/((1-nu_hh)/Eh+1/Ev)",
+        "compelled_ratio": "tan(2omega)=2b/(a-d), where this tangent is defined; ratio alone does not select ordering",
+        "Delta": "sqrt((a-d)^2+4b^2)",
+        "lambda2": "(a+d-Delta)/2",
+        "lambda3": "(a+d+Delta)/2",
+        "low_projector": "P2=(I-(2H-(a+d)I)/Delta)/2 for Delta>0",
+        "high_projector": "P3=I-P2",
+        "equivalent_low_angle": "omega=atan2(-2b,d-a)/2 modulo pi",
+        "high_angle_warning": "atan2(2b,a-d)/2 points (cos,sin) along lambda3, not lambda2",
+        "zero_coupling": "b=0,a<d: P2=diag(1,0); b=0,a>d: P2=diag(0,1)",
+        "equal_diagonal_nonzero_coupling": "a=d,b!=0: projectors remain defined; do not divide by a-d",
+        "repeated_block": "Delta=0 gives H=aI; only combined projector is unique; elastic basis freedom does not settle whole nonlinear mode/history continuation"
+      },
+      "assumptions": [
+        "Eq94 symmetric Kelvin compliance is authoritative",
+        "y vertical, x-z horizontal; u=(xx+zz)/sqrt2,v=yy",
+        "source lambda2 low and lambda3 high",
+        "raw symmetric stress in tensor traction; positive admissible elastic compliance"
+      ],
+      "domain": "Delta>0 for individual low/high block projectors; repeated eigenspaces require a separate nonlinear history policy",
+      "unresolved": "No repeated-eigenspace continuation or mode tracking rule is selected.",
+      "technical_evidence": "technical-reviews/algebra-choice/findings.json",
+      "status": "proposed_unapproved",
+      "scientific_reviewer": null
+    },
+    {
+      "id": "PATCH-05",
+      "gate": "LAW-02",
+      "kind": "conditionally_derived_correction",
+      "source_locator": "Eq104 c2 final coefficient; Appendix D printed190/PDF208",
+      "original": "n_x*n_z multiplying raw S_xz",
+      "proposal": "2*n_x*n_z multiplying raw S_xz",
+      "assumptions": [
+        "Raw symmetric stress and n.S.n contraction under the stated six-component basis"
+      ],
+      "domain": "unit plane normal",
+      "unresolved": "Does not repair singular local transformations or specify actual prepared directions.",
+      "technical_evidence": "technical-reviews/algebra-choice/findings.json",
+      "status": "proposed_unapproved",
+      "scientific_reviewer": null
+    },
+    {
+      "id": "PATCH-06",
+      "gate": "LAW-03",
+      "kind": "explicit_basis_contract_proposal",
+      "source_locator": "Eqs66–68,92–94,102–104",
+      "original": "Repeated yy label and incompatible printed engineering/Kelvin shear expressions",
+      "proposal": {
+        "compelled_raw_c2_xz": "2*n_x*n_z",
+        "reason": "n.S.n=sum(n_i^2*S_ii)+2sum_{i<j}(n_i*n_j*S_ij)",
+        "retained_witness": "n=(-2/3,2/3,1/3), raw Sxz=1: actual sigma_nd=-4/9; literal Eq104=-2/9",
+        "Kelvin_map": "M=diag(1,1,1,sqrt2,sqrt2,sqrt2); sigma_K=M*sigma_raw; P_K=P_raw*M^-1",
+        "strain_map": "epsilon_K=M^-1*epsilon_engineering",
+        "normal_labels": "With explicit xx,yy,zz basis, third repeated yy in Eqs92/93 is zz",
+        "local_compliance": "C_local=P_K*C*P_K^-1 remains the stated similarity, not an orthogonal transform/congruence"
+      },
+      "assumptions": [
+        "Global order xx,yy,zz,xy,yz,xz; source raw stress and engineering strain converted explicitly to Kelvin"
+      ],
+      "domain": "Reciprocal positive-definite global compliance; transformation inverse only if nonsingular",
+      "unresolved": "Full local work metric and coupled compliance assembly still require reconciliation; no pseudoinverse or rotation substitute.",
+      "technical_evidence": "technical-reviews/algebra-choice/findings.json",
+      "status": "proposed_unapproved",
+      "scientific_reviewer": null
+    },
+    {
+      "id": "PATCH-07",
+      "gate": "LAW-03",
+      "kind": "underdetermined_variant_choice_proposed",
+      "source_locator": "Fig29 versus Appendix D printed190/PDF208",
+      "original": "Fig29 labels nu_vh interpolation; listing interpolates nu_hv",
+      "proposal": [
+        "nu_hv(z)=(1-z)*nu_hv0+z*nu_ur",
+        "nu_vh(z)=nu_hv(z)*Ev(z)/Eh(z)"
+      ],
+      "alternative_preserved": [
+        "nu_vh(z)=(1-z)*nu_vh0+z*nu_ur",
+        "nu_hv(z)=nu_vh(z)*Eh(z)/Ev(z)"
+      ],
+      "reason": "Propose Appendix D lineage explicitly, without claiming it is forced or equivalent to Fig29.",
+      "assumptions": [
+        "Existing source log-degradation fraction z and modulus interpolation retained"
+      ],
+      "domain": [
+        "Eh>0",
+        "Ev>0",
+        "Gvh>0",
+        "-1<nu_hh<1",
+        "2*nu_hv^2<(1-nu_hh)*Eh/Ev",
+        "Check at every interpolated/pressure-scaled state; reciprocal endpoints alone are insufficient"
+      ],
+      "unresolved": "Independent scientific reviewer must accept or reject which reciprocal member is interpolated. Endpoint positivity alone is insufficient.",
+      "technical_evidence": "technical-reviews/algebra-choice/findings.json",
+      "status": "proposed_unapproved",
+      "scientific_reviewer": null
+    },
+    {
+      "id": "PATCH-08",
+      "gate": "LAW-04",
+      "kind": "conditionally_derived_correction",
+      "source_locator": "Appendix C.5–C.6 printed178–179/PDF196–197; Eqs129–132",
+      "original": "Bcs=tau_cs/sigma_ne_cs=sigma_n_cs*tan(phi_cs)/sigma_ne_cs has inconsistent signed ratios",
+      "proposal": {
+        "p_cs": "M_CP*Q/sqrt(M_CP^2+tcs^2)",
+        "tau_cs": "p_cs*tcs",
+        "s": "1-m",
+        "A": "3*Eoed_ref*(1-2*nu_ur)/Eur_ref",
+        "qe_cs": "[Q^s+A*(p_cs^s-Q^s)]^(1/s)",
+        "fHV": "tau-p*te-Bcs*(1-te/tcs)*qe",
+        "intersection_factorization": "fHV_cs=(tcs-te)*(p_cs-Bcs*qe_cs/tcs)",
+        "compelled_Bcs": "p_cs*tcs/qe_cs>0",
+        "corrected_signed_C5": "Bcs=-tau_cs/sigma_ne_cs=sigma_n_cs*tcs/sigma_ne_cs",
+        "equivalent_magnitude": "Bcs=tau_cs/abs(sigma_ne_cs)"
+      },
+      "assumptions": [
+        "p=-sigma_n>0,Q=-sigma_nc>0,qe=-sigma_ne>0,tau>=0",
+        "M_CP>0,tcs=tan(phi_cs)>0",
+        "te=tan(phi_e)!=tcs for determination from this intersection",
+        "m!=1 as printed; strictly positive equivalent-pressure inner base",
+        "Local cap/HV/CSL intersection, not simultaneous macroscopic intersection"
+      ],
+      "domain": "Strictly positive equivalent-pressure power base; te!=tcs to determine Bcs from this intersection",
+      "unresolved": "At te=tcs, Bcs cancels and this one intersection supplies no Bcs value; generic positive coefficient there requires declared continuous extension",
+      "technical_evidence": "technical-reviews/algebra-choice/findings.json",
+      "status": "proposed_unapproved",
+      "scientific_reviewer": null
+    }
+  ],
+  "remaining_gates": [
+    "SCOPE-01: complete reviewed corrected identity, not this partial proposal",
+    "BRANCH-01: pressure approach 1 remains provisional; strength/research parameters undecided",
+    "PREP-01: GetAcap, actual directions, transformation conditioning, prestress/OCR/POP branches",
+    "TIME-01: four-contour creation/deletion/fifth-contour and parent/substep/outer-reset semantics",
+    "TIME-02: damage definition, first-contact sentinel, nonlocal helper and restart semantics",
+    "CAP-01/CAP-02: separately scoped retained-memory/solve layout and coupled multipoint capability design after coherent definition",
+    "VERIFY-01: independent reference before serial backend parity; scientific admission separate"
+  ],
+  "stop_rule": "Review this finite proposal set and unresolved choices. No further source micro-audit or journal retry absent a new lead; no executable model or capacity implementation from this ledger alone."
+}
