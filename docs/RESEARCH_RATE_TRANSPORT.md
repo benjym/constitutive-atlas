@@ -7,11 +7,11 @@ establish finite integration, tangents or experimental validation.
 
 ## Current scope
 
-Native collection and native/Wasm journal assessment are implemented. The
-matching generic Wasm collector is still pending; a Wasm journal cannot be
-accepted without the actual pinned collector source. Synthetic tests use
-fabricated journals to verify assessment contracts, not compiled observations.
-No model-specific compiled study has been run through this tool yet.
+Native and Wasm collection, journal assessment and an evidence-backed parity
+wrapper are implemented. Synthetic tests use a project-owned ESM factory and
+fabricated journals; they never instantiate compiled Wasm and do not establish
+compiled observations. No model-specific compiled study has been run through
+these tools yet. The previously reviewed Python assessor remains byte-identical.
 
 ## Prospective protocol
 
@@ -75,3 +75,47 @@ Retain both raw inputs and assessments as provenance.
 
 Run `python3 -B -m unittest tests.test_research_rate_observations -v` for synthetic
 corruption/recovery/overflow tests. These never execute a compiled artifact.
+
+## Wasm collection and evidence-backed comparison
+
+After a serial isolated Wasm build and a frozen source-study protocol:
+
+```sh
+node tools/collect_research_rates_wasm.mjs \
+  /absolute/path/protocol.json /absolute/path/wasm-build.json \
+  /absolute/path/fresh-wasm-observation.json
+```
+
+The collector validates the generic protocol through the existing Python
+validator before importing the loader, holds all pinned bytes, supplies the
+held Wasm bytes to the modular factory, and records the literal C-ABI function,
+types, argument strings and opaque returned string after each call. It retains
+partial journals and an incomplete receipt if initialization, a call, or the
+lifetime byte check fails. Output paths must be fresh. `ATLAS_PYTHON` can select
+the Python interpreter used for validation; the default is `python3`.
+
+Use the comparison wrapper with both original bundles:
+
+```sh
+python3 -B -m tools.research_rate_parity \
+  --protocol /absolute/path/protocol.json \
+  --native-build /absolute/path/native-build.json \
+  --native-observation /absolute/path/native-observation.json \
+  --native-transport /absolute/path/native-observation.transport.json \
+  --wasm-build /absolute/path/wasm-build.json \
+  --wasm-observation /absolute/path/wasm-observation.json \
+  --wasm-transport /absolute/path/wasm-observation.transport.json \
+  --output /absolute/path/fresh-comparison.json
+```
+
+It audits both receipt/raw pairs against held inputs, checks the explicit
+backend roles, retains both independent assessments and computes parity.
+Matching wrong answers fail the independent numerical gates even when parity
+passes. A failed numerical comparison is written and returns exit status 1.
+Caller-created assessment JSON is not an accepted input to this wrapper.
+
+`python3 -B -m unittest tests.test_research_rate_collection -v` runs eight
+synthetic checks covering literal journals, partial traps, mutation, nonstring
+responses, fresh outputs, artifact tampering, re-auditing and matching wrong
+answers. Neither these tests nor the five earlier review witnesses replace
+source-model, toolchain or compiled-study evidence.
