@@ -69,4 +69,5 @@ class PublicationTests(unittest.TestCase):
                     rows = db.execute('SELECT publication_id,model_id FROM publication_models').fetchall()
                     expected = [(n['id'], m) for n in graph['publications'] for m in n['model_ids']]
                     self.assertCountEqual(rows, expected)
-                    self.assertEqual(len(rows), 1)
+                    self.assertIn(('doi:10.1016/j.jmps.2024.105789', 'terracotta-2024'), rows)
+                    self.assertNotIn(('doi:10.2139/ssrn.4699137', 'terracotta-2024'), rows)

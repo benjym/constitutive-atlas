@@ -72,6 +72,12 @@ parameters, nominal initial state, controls and numerical settings. Regular Page
 packaging validates and includes these assets; local browser navigation passes.
 This advances WEB-04 provenance, with scientific review and deployment still open.
 
+The [Terra Cotta publication increment](docs/ingestion/terracotta-2024/publication-records-v1/README.md)
+adds separate journal and preprint records to the canonical database/source browser.
+Only the journal is bound to the candidate; publisher/Crossref metadata agree on
+the journal CC BY declaration. No preprint relationship or equation equivalence
+is inferred. Full journal page-image reconciliation and TC-01 remain open.
+
 ## 2. Starting point
 
 | Area | Existing foundation | Outstanding evidence or capability |

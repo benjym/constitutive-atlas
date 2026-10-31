@@ -1,5 +1,11 @@
 # Current delivery checkpoint — 1 November 2026
 
+[Terra Cotta publication identities](ingestion/terracotta-2024/publication-records-v1/README.md)
+are integrated: distinct journal/preprint records, journal-only candidate binding,
+primary publisher/Crossref licence agreement, database export and static browser
+checks. Eleven canonical publication nodes and seven relations;45exported DOI
+identities. Full journal PDF remains unavailable; no equation/admission upgrade.
+
 The [TMD2 read-only website snapshot](reviews/tmd2-web-snapshot-v1/README.md)
 connects the Methods figure to its exact archived model, constants, initialization,
 requests, numerical settings and reproduction guide.18focused packaging/archive
