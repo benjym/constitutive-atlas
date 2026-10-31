@@ -1,0 +1,1103 @@
+{
+  "version": "tresca-backend-negative-input-freeze-0.1",
+  "status": "prospective; zero backend observations",
+  "source_inputs_sha256": "42a9fe8445e263317dc717fe53b39d09c5af76490b7219873d45fb7a03f204ab",
+  "baseline_id": "elastic",
+  "recovery": "Same engine instance, repeat unmodified baseline before and immediately after every rejection. Compare every returned persistent component; no failed attempt may modify committed history.",
+  "cases": [
+    {
+      "id": "missing-sigma-component",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "missing-ep-component",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "outside-initial",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x1.c000000000000p+2",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "p_ref-0.0",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 0.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "p_ref--1.0",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": -1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "lame_lambda-0.0",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 0.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "lame_lambda--1.0",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": -1.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "mu-0.0",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 0.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "mu--1.0",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": -1.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "k-0.0",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 0.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "k--1.0",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": -1.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "parent-nan",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "nan"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "parent-inf",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "inf"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "parent--inf",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-inf"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "current-nan",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "nan"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "current-inf",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "inf"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "current--inf",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-inf"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "loading-nan",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "nan"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "loading-inf",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "inf"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "loading--inf",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "-0x1.0000000000000p-1",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "-inf"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "finite-input-trial-overflow",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 1e+308,
+          "mu": 1e+308,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x1.0000000000000p-3",
+          "-0x1.0000000000000p-2",
+          "0x1.8000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.4000000000000p-1",
+          "-0x1.8000000000000p-1"
+        ],
+        "loading": [
+          "0x1.0000000000000p+0",
+          "0x1.0000000000000p+0",
+          "0x1.0000000000000p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    },
+    {
+      "id": "rounded-history-parent-outside-exact-yield",
+      "input": {
+        "id": "elastic",
+        "parameters": {
+          "p_ref": 1.0,
+          "lame_lambda": 3.0,
+          "mu": 2.0,
+          "k": 3.0
+        },
+        "current": [
+          "0x1.0000000000000p-2",
+          "-0x1.0000000000000p-1",
+          "0x1.8000000000000p-1",
+          "0x1.999999999999ap-4",
+          "-0x1.999999999999ap-3",
+          "0x1.3333333333333p-2",
+          "0x1.47ae147ae147bp-7",
+          "-0x1.47ae147ae147bp-6",
+          "0x1.eb851eb851eb8p-6",
+          "-0x1.47ae147ae147bp-5",
+          "0x1.999999999999ap-5",
+          "-0x1.eb851eb851eb8p-5"
+        ],
+        "parent": [
+          "-0x1.cb95690319863p+1",
+          "0x1.c34f96ec84d78p+0",
+          "0x1.d3db3b19ae34fp+0",
+          "-0x1.7fdd8720fd547p+0",
+          "-0x1.b49d49c39b811p-3",
+          "0x1.77b466589f65cp-1",
+          "-0x1.a354b7e733ce6p-4",
+          "-0x1.069f2dd909af0p-3",
+          "0x1.ec24c4e651cb1p-2",
+          "-0x1.802278df02ab9p-2",
+          "0x1.5b49d49c39b82p-1",
+          "-0x1.9ded199627d97p-1"
+        ],
+        "loading": [
+          "0x1.8000000000000p+1",
+          "-0x1.8000000000000p+0",
+          "-0x1.8000000000000p+0",
+          "0x0.0p+0",
+          "0x0.0p+0",
+          "0x0.0p+0"
+        ]
+      },
+      "expected": "reject with all12 incoming persistent components unchanged; immediate same-instance baseline recovery"
+    }
+  ],
+  "seed_poison": {
+    "case_id": "face",
+    "column": 37,
+    "input_group": "loading",
+    "component": 5,
+    "value": "nan",
+    "expected": "reject nonfinite seeded tensor before result publication"
+  },
+  "near_isolation": {
+    "case_id": "near-isolation-upper",
+    "expectation": "Mathematically valid reference case; separately report selected spectral support, loss of small deviatoric information against hydrostatic offset, values/derivatives or honest rejection. Do not silently count rejection as full-domain coverage."
+  },
+  "initial_yield_boundary": {
+    "history_step": 7,
+    "exact_rounded_yield_excess": "2.099845597944192853763573692538477528336703107489755382297948521666286664E-17",
+    "policy": "Do not clip the parent or add a yield tolerance. An accepted backend restart here must be recorded as a source-membership discrepancy. This source-invalid row is a negative gate, not an accepted path baseline."
+  },
+  "further_freeze_required": "Bind exact native/Wasm driver bytes, API mode/settings, backend accuracy/branch-adjacency/conditioning budgets, accepted history partitioning and all call counts before the first candidate run. This reference task does not claim that gate executed."
+}
