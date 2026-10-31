@@ -22,7 +22,7 @@ errors. Figure/table and a website evidence summary are saved. The original
 without changing public limits. One serial native build and six focused tests
 passed. Historical coordinate conversion and independent scientific admission
 remain open. BENCH-01/02 are complete only for this qualified operational
-reconstruction; next is BENCH-03 portability/data rights and scientific review.
+reconstruction; BENCH-03 local portability is delivered, with its public release gate still open: the [one-command run](benchmarks/kfs-tmd2-portable-v1/README.md) fetched and normalized the pinned archive, built the frozen source serially and reproduced all results byte for byte. Public measurement reuse permission, historical strain conversion and independent review remain open.
 New model integration and general numerical expansion are deferred for this cycle.
 
 # Latest progress — browser provenance prototype; invariant failure retained

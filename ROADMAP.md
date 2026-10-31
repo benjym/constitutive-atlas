@@ -35,8 +35,7 @@ now completes the bounded three-resolution operational reconstruction, with
 unchanged prospective source bounds, a model-only figure, refinement table and
 descriptive experimental errors. A native research-only range mode leaves the
 interactive limit unchanged. Historical strain conversion and independent
-scientific review remain open. Next address benchmark portability/data rights
-and review, not a new numerical framework.
+scientific review remain open. The local [portable command](docs/benchmarks/kfs-tmd2-portable-v1/README.md) now reproduces that result from a fresh author download and serial build. Next address independent model review and public data-reuse permission, not a new numerical framework.
 
 The immediate six-model/SANISAND and Terracotta goals remain unchanged. The first
 release targets twenty formulations; the paper's 50+ planning ambition is not a
@@ -189,7 +188,7 @@ Target the original **Terracotta / Terra Cotta model by Max Wiebicke and Itai Ei
 
 - [X] **BENCH-01:** Select a complete published model/parameter/material example that matches an available implementation and dataset. Freeze its source, initial state, protocol, output channels and numerical settings.
 - [X] **BENCH-02:** Reproduce the published calculation within declared precision or document discrepancies. The existing transfer of extension parameters to the base law remains a separate demonstration.
-- [ ] **BENCH-03:** Publish one end-to-end benchmark command that fetches permitted data, verifies hashes, normalizes, executes, computes errors and generates figures/tables without manual editing.
+- [ ] **BENCH-03:** Publish one end-to-end benchmark command that fetches permitted data, verifies hashes, normalizes, executes, computes errors and generates figures/tables without manual editing. Local research pipeline delivered and verified by the [portable TMD2 command](docs/benchmarks/kfs-tmd2-portable-v1/README.md), including a fresh download, one serial native build and three paths. The public benchmark release gate remains open because original-measurement redistribution terms are unresolved.
 
 The [full-range TMD2 study](docs/benchmarks/kfs-tmd2-research-range-v1/README.md)
 freezes complete published constants, nominal initialization, literal accumulated
@@ -199,7 +198,7 @@ experimental errors are saved. BENCH-01/02 are complete for this explicitly
 qualified operational reconstruction. Exact historical coordinate conversion,
 original-code equivalence and independent scientific review remain open; these
 are not implied by the checked boxes. The original API-range failures remain
-archived. BENCH-03 portability/data rights is the next delivery gap.
+archived. BENCH-03 local portability is now delivered by the [single-command reproduction](docs/benchmarks/kfs-tmd2-portable-v1/README.md). Public data-reuse permission, historical coordinate provenance and independent model review remain open.
 
 ### Controlled study
 

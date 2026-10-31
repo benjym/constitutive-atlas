@@ -10,6 +10,10 @@ The [author's general remarks](https://www.torsten-wichtmann.de/KFSDB-general.ht
 
 The associated publications are [Wichtmann & Triantafyllidis (2016), Part I](https://doi.org/10.1007/s11440-015-0402-z) and [Part II](https://doi.org/10.1007/s11440-015-0412-x). A licence attached to a different publication or dataset must not be assumed to cover these archives.
 
+## Local TMD2 reproduction — 1 November 2026
+
+The [single-command benchmark](benchmarks/kfs-tmd2-portable-v1/README.md) verifies and downloads the original archive into a fresh local research directory, then normalizes and executes the fixed TMD2 calculation. A fresh download matched the original archive/member hashes. The author's general and TMD pages were checked again: no explicit redistribution declaration was found on those inspected pages. Local acquisition does not resolve public rehosting permission. The command's full output contains private measurements and is not a website asset; only model curves and aggregate errors are committed. The separately licensed compilation remains paused per the existing project review. No new measurement grant or public release is recorded here.
+
 ## Expanded licence search: 30 October 2026
 
 **A separately published compilation has an explicit CC BY 4.0 declaration. The original Wichtmann archives remain unresolved.** The search covered author-site frame contents, original dataset download pages, the SoilModels package description and comments, SoilModels terms, both original companion-paper PDFs, publisher pages, archive contents/comments and DOI registry metadata.

@@ -17,11 +17,22 @@ Requires Python 3.10+, CMake 3.20+ and a C++20 compiler.
 ```sh
 python3 -m atlas.cli validate
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --parallel 2
+cmake --build build --parallel 1
 ctest --test-dir build --output-on-failure
 ```
 
 For the browser build, see [web/README.md](web/README.md) (Node.js 24 and Emscripten required).
+
+## Published benchmark
+
+Reproduce the fixed Karlsruhe fine sand TMD2 calculation locally (Python, CMake, C++20 and Matplotlib):
+
+```sh
+python3 -m pip install -e '.[benchmark]'
+python3 tools/benchmark_tmd2.py --output /private/tmp/tmd2-local-reproduction
+```
+
+The command downloads the pinned source data, builds the archived Atlas solver serially, runs three resolutions and generates the figure, error table and receipts. [Benchmark guide and limitations](docs/benchmarks/kfs-tmd2-portable-v1/README.md). Original measurements remain local; their public redistribution terms are unresolved.
 
 ## Documentation
 
