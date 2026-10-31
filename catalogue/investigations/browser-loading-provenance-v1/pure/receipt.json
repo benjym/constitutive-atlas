@@ -1,0 +1,44 @@
+{
+  "role": "pure",
+  "started_utc": "2026-10-31T12:29:51.313775+00:00",
+  "manifest_sha256": "4cac017f50328798bbc1d74e0e0376c0a18cd4cee23a60377543db282ea942c2",
+  "completed": true,
+  "commands": [
+    {
+      "label": "producer-contracts",
+      "argv": [
+        "node",
+        "/private/tmp/atlas-browser-loading-provenance-v1/test_loading.mjs",
+        "/private/tmp/atlas-browser-loading-provenance-v1/pure/results.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "markup",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/private/tmp/atlas-browser-loading-provenance-v1/tests",
+        "-p",
+        "test_browser_numerics.py",
+        "-v"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "package-unit",
+      "argv": [
+        "node",
+        "--test",
+        "/private/tmp/atlas-browser-loading-provenance-v1/tests/test_web_package.mjs"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {},
+  "finished_utc": "2026-10-31T12:29:51.649014+00:00"
+}

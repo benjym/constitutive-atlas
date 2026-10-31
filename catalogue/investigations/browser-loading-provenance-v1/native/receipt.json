@@ -1,0 +1,48 @@
+{
+  "role": "native",
+  "started_utc": "2026-10-31T12:29:57.994480+00:00",
+  "manifest_sha256": "4cac017f50328798bbc1d74e0e0376c0a18cd4cee23a60377543db282ea942c2",
+  "completed": true,
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "c++",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-browser-loading-provenance-v1",
+        "-B",
+        "/private/tmp/atlas-browser-loading-native-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-browser-loading-native-v1",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas_solver": {
+      "path": "/private/tmp/atlas-browser-loading-native-v1/atlas_solver",
+      "sha256": "5cfa6ecd0e4ee3e4e8344f56b723e94a648790746944eb69a80f992e6f28575a"
+    }
+  },
+  "finished_utc": "2026-10-31T12:30:04.647510+00:00"
+}

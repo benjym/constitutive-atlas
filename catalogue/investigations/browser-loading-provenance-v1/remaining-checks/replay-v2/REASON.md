@@ -1,0 +1,1 @@
+The first remaining-checks collector accidentally used legacy-numerics.json for both detailed tool output and command receipt; receipt overwrote the detailed result. Original receipt is retained. Repeat unchanged17-case suite into separate result/receipt filenames; numerical policy and artifacts unchanged.

@@ -1,0 +1,1 @@
+Complete collection after the original collector stops at first strict parity failure. Same requests, modules, artifacts and numerical gates; catch/retain each row parity failure and continue observations. Exit nonzero if any parity gate fails. This is not a pass or a relaxed assessment. Freeze precedes supplementary calls; original partial run remains unchanged.

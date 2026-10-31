@@ -1,0 +1,53 @@
+{
+  "role": "wasm",
+  "started_utc": "2026-10-31T12:30:30.790936+00:00",
+  "manifest_sha256": "4cac017f50328798bbc1d74e0e0376c0a18cd4cee23a60377543db282ea942c2",
+  "completed": true,
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "emcc",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-browser-loading-provenance-v1",
+        "-B",
+        "/private/tmp/atlas-browser-loading-wasm-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-browser-loading-wasm-v1",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas.js": {
+      "path": "/private/tmp/atlas-browser-loading-wasm-v1/atlas.js",
+      "sha256": "3f72f418dbc5e19c6e788403fcaf8907f20ad4e439f0e393366ed924c1ec9cf2"
+    },
+    "atlas.wasm": {
+      "path": "/private/tmp/atlas-browser-loading-wasm-v1/atlas.wasm",
+      "sha256": "a2049276c390b015ca9ad3911256ad9705c979bfef7a07ce81cb3a58f6449e10"
+    }
+  },
+  "finished_utc": "2026-10-31T12:30:42.533770+00:00"
+}
