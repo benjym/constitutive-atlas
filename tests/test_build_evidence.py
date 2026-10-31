@@ -53,4 +53,25 @@ class Export(unittest.TestCase):
  def test_schema_invalid_record_rejected(self):
   bad=copy.deepcopy(self.record);bad['executor']['independent_review']=True;self.write('catalogue/evidence/old.json',bad)
   with self.assertRaises(ValueError):self.export()
+ def review(self):
+  self.write('docs/models/elastic.md',{'synthetic':'dossier'})
+  record={'schema_version':'0.1','kind':'source-review','id':'elastic-review-v1','created_at':'2026-11-01','source_commit':'a'*40,'model':{'id':'elastic','definition_sha256':self.sha('models/elastic.json')},'status':'pending','independent':False,'dossier':'docs/models/elastic.md','evidence_ids':['elastic-old-v1'],'unresolved':['Independent scientific review pending.']}
+  path='catalogue/reviews/elastic.json';self.write(path,record);return path,record
+ def test_source_review_preserves_pending_questions_and_verbatim_receipt(self):
+  path,review=self.review();x=self.export();self.assertEqual(len(x['records']),1);self.assertEqual(len(x['reviews']),1);item=x['reviews'][0]
+  self.assertEqual(item['status'],'pending');self.assertFalse(item['independent']);self.assertIsNone(item['reviewer']);self.assertIsNone(item['reviewed_at']);self.assertEqual(item['unresolved'],review['unresolved']);self.assertEqual(item['evidence_ids'],review['evidence_ids']);self.assertTrue(item['definition_current'])
+  self.assertEqual((self.dest/'evidence-records'/path).read_bytes(),(self.root/path).read_bytes());self.assertFalse((self.dest/'docs').exists())
+ def test_multiple_reviews_and_historical_acceptance_do_not_promote_current_definition(self):
+  path,review=self.review();old=copy.deepcopy(review);old.update(id='elastic-review-old',status='accepted',independent=True,reviewer='Synthetic test fixture',reviewed_at='2026-10-30',unresolved=[]);old['model']['definition_sha256']='f'*64;self.write('catalogue/reviews/old.json',old)
+  x=self.export();self.assertEqual(len(x['reviews']),2);accepted=next(v for v in x['reviews']if v['status']=='accepted');self.assertFalse(accepted['definition_current']);self.assertEqual(x['records'][0]['outcome'],'failed');self.assertEqual(json.loads((self.root/'catalogue/manifest.json').read_text())['models'][0]['status'],'transcribed')
+ def test_unsigned_acceptance_and_unknown_review_model_fail_before_write(self):
+  path,review=self.review();review.update(status='accepted',unresolved=[]);self.write(path,review)
+  with self.assertRaises(ValueError):self.export()
+  self.assertFalse(self.dest.exists())
+  review.update(status='pending',unresolved=['Still pending']);review['model']['id']='absent';self.write(path,review)
+  with self.assertRaises(ValueError):self.export()
+  self.assertFalse(self.dest.exists())
+ def test_review_definition_symlink_cannot_escape_repository(self):
+  self.review();outside=pathlib.Path(self.tmp.name)/'outside.json';outside.write_text('{}');(self.root/'models/elastic.json').unlink();(self.root/'models/elastic.json').symlink_to(outside)
+  with self.assertRaises(ValueError):self.export()
 if __name__=='__main__':unittest.main()

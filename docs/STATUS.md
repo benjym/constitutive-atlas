@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [catalogue now exposes formal source-review records](reviews/web-source-review-status-v1/README.md)
+separately from numerical evidence: 14 retained reviews, all pending, with exact
+current/historical definition bindings and unresolved questions. All 19 numerical
+entries remain unchanged. 21 focused Python checks, full packaging and actual
+VW96/DP browser inspection pass using the existing Wasm release. This advances
+review visibility; no model is scientifically promoted or deployed.
+
 The [VW96 active dossier now reflects completed technical source reading](reviews/vw96-dossier-coverage-v1/README.md)
 and exposes the existing Figures 10/13/14 density/preparation qualifications.
 PDF 14–17 were visually rechecked against the pinned original. The historical

@@ -88,8 +88,26 @@ def bundle(destination,root=ROOT,*,bindings=RESEARCH_BINDINGS):
   e['limitations']=strings(manifest.get('limitations',manifest.get('limits',[])),'limitations')
   if 'replay_policy'in manifest:e['limitations'].append(text(manifest['replay_policy'],'replay_policy'))
   e['details']={k:copy.deepcopy(v)for k,v in manifest.items()if k not in ('files','dependencies','scope','source_variant','variant','limitations','limits',*FLAGS,'outcome')}
+ # Source reviews are a separate collection: status is never a numerical outcome
+ # and revision ordering never implies that a reviewer accepted the current law.
+ reviews=[]
+ for path in sorted((root/'catalogue/reviews').glob('*.json')):
+  relative=path.relative_to(root).as_posix();raw=read_bytes(root,relative);record=parse(raw)
+  if record.get('kind')!='source-review':raise ValueError('unsupported review record: '+relative)
+  checked=validate_record(path,root=root,current=False)
+  if checked!=record or read_bytes(root,relative)!=raw:raise ValueError('review changed during validation')
+  mid=record['model']['id']
+  if mid not in by_id:raise ValueError('review has no canonical catalogue entry: '+mid)
+  definition='models/'+mid+'.json';expected=record['model']['definition_sha256']
+  match,actual=current_definition(root,definition,expected)
+  reviews.append(dict(catalogue_id=mid,record_path=relative,record_sha256=sha_bytes(raw),
+   definition_path=definition,definition_sha256=expected,current_definition_sha256=actual,
+   definition_current=match,id=record['id'],status=record['status'],independent=record['independent'],
+   reviewer=record.get('reviewer'),reviewed_at=record.get('reviewed_at'),dossier=record['dossier'],
+   evidence_ids=copy.deepcopy(record['evidence_ids']),unresolved=copy.deepcopy(record['unresolved'])))
+  originals[relative]=raw
  omitted=sorted(p.relative_to(root).as_posix()for p in(root/'catalogue/investigations').glob('*/manifest.json')if p.relative_to(root).as_posix()not in selected)
- index={'schema_version':'0.1','kind':'catalogue-evidence-index','coverage_note':'Top-level numerical evidence envelopes are auto-discovered, including historical failed outcomes. Research coverage is restricted to explicit canonical-catalogue/definition/manifest bindings; other investigation manifests and source-review records are omitted. Checked receipts establish retained-file integrity only: no scientific checker, binary, experimental validation or admission is rerun. Missing manifest scope/limitations are left empty; complete retained metadata is supplied in details.','coverage':{'numerical_record_directory':'catalogue/evidence','research_manifest_allowlist':sorted(selected),'omitted_investigation_manifests':omitted,'scientific_rerun':False},'records':records}
+ index={'schema_version':'0.1','kind':'catalogue-evidence-index','coverage_note':'Top-level numerical evidence envelopes are auto-discovered, including historical failed outcomes. Research coverage is restricted to explicit canonical-catalogue/definition/manifest bindings; other investigation manifests are omitted. Source-review envelopes from catalogue/reviews are separately indexed verbatim; recorded identity, status and independence are not authenticated or inferred. No latest-review selection or automatic admission is performed. Checked receipts establish retained-file integrity only: no scientific checker, binary, experimental validation or admission is rerun. Missing manifest scope/limitations are left empty; complete retained metadata is supplied in details.','coverage':{'numerical_record_directory':'catalogue/evidence','research_manifest_allowlist':sorted(selected),'omitted_investigation_manifests':omitted,'scientific_rerun':False,'source_review_directory':'catalogue/reviews'},'records':records,'reviews':reviews}
  encoded=(json.dumps(index,indent=2,allow_nan=False)+'\n').encode()
  # Replace only this exporter's private subtree; preserve builder-owned assets.
  if destination.is_symlink()or(destination/'evidence.json').is_symlink():raise ValueError('evidence export destination is a symlink')

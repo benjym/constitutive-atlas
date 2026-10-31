@@ -20,6 +20,12 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 ## Delivery focus — 1 November 2026
 
+[Formal source-review status is now visible in catalogue details](docs/reviews/web-source-review-status-v1/README.md),
+including pending questions and historical/current definition binding. All 14
+retained records remain pending; numerical passes do not close scientific gates.
+The [KFS review handoff](docs/benchmarks/kfs-development-review-v1/README.md)
+is prepared and unsigned. Keep independent review separate from further fits.
+
 The [active VW96 source dossier](docs/models/hypoplastic-sand-vw96.md) now
 incorporates the already completed full-paper technical reading, adopted
 applicability policy and visually rechecked figure-preparation ambiguities.
