@@ -1,0 +1,111 @@
+{
+  "schema_version": "0.3",
+  "id": "reset-late-guard",
+  "name": "reset-late-guard",
+  "family": "engine verification only",
+  "status": "draft",
+  "description": "Synthetic transaction fixture; no constitutive or scientific admission.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas",
+      "locator": "solver-rollback-design-v1 synthetic API specification",
+      "role": "engine verification only"
+    }
+  ],
+  "parameters": {
+    "K": {
+      "unit": "Pa",
+      "default": 1,
+      "min": 1,
+      "max": 1
+    },
+    "M": {
+      "unit": "1",
+      "default": 1,
+      "min": 1,
+      "max": 1.7976931348623157e+308
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "K",
+      "initial": [
+        2,
+        3,
+        4,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "x",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 2
+    },
+    {
+      "name": "y",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 5
+    }
+  ],
+  "derived": [],
+  "domain": [],
+  "equations": {
+    "sigma": "sigma-sigma_n",
+    "x": "x-x_n",
+    "y": "y-y_n"
+  },
+  "increment_reset": {
+    "scope": "parent_increment",
+    "updates": [
+      {
+        "target": "x",
+        "guard": "-1",
+        "value": "11"
+      },
+      {
+        "target": "y",
+        "guard": "-1*(select(trace(sym(M,M,M,0,0,0))>0,1,1))",
+        "value": "7"
+      }
+    ]
+  },
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  }
+}

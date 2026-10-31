@@ -1,0 +1,5 @@
+# Coordinator integration
+
+The original worker packet's fourteen manifest files remain unchanged. The seven original synthetic v0.1/v0.2 fixtures document the historical design, while the compiled study uses explicit v0.3 copies under catalogue/investigations/solver-rollback-v1. Effective stress is explicitly selected for those synthetic definitions, which have no pore-pressure variable; this is not an inferred external model convention. The independent expected.json is byte-identical in the study.
+
+The coordinator strengthened the future runtime assessor before compilation to distinguish bool from integer and check complete root/preparation field sets. Frozen acceptance was not relaxed. Both native and Wasm pass eleven API rows and three preparation witnesses, exact state/time bits and complete raw parity. See the study's RESULTS.md and assessment.json. Original source-only import failure is retained. Full model-context expression routing and constitutive reference studies remain separate tasks.

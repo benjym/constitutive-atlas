@@ -1,0 +1,7 @@
+# Observed solver transaction results
+
+Both native and Wasm Release builds pass all eleven complete ordered consuming-API rows and three low-level preparation witnesses. Complete raw JSON parity also passes, including the otherwise unspecified failed-value scratch slot. Passing this stronger incidental parity does not change the prospective partial-scratch contract. Exact committed-state/time bits, input immutability, accepted substep counts and scale rejection meet the frozen independent expectations.
+
+The timed late-domain rejection retains clock2 and original state after four accepted internal substeps. The identical bounded success control reaches clock3 after eight. Late reset guard/value failures preserve original committed x2,y5 although scratch already contains x11. Simultaneous parent reads produce x5,y2. Invalid state scales reject in legacy/timed integration; invalid observable scales reject in schedule before any point is emitted.
+
+Seven synthetic v0.3 records, generated headers, frozen production headers/Python/schema sources, complete command logs and source/build/binary hashes are retained. Binaries remain in private temporary build directories; no author code was executed. No production solver changes were needed. This is a bounded engine conformance result, not constitutive accuracy, experimental verification or admission. Full generated expression-context routing remains open.
