@@ -4,6 +4,8 @@ This is the **live work board** for model ingestion. [ROADMAP.md](ROADMAP.md) re
 
 ## Current bounded delivery cycle — 1 November 2026
 
+- [X] **SRC-lade-duncan-identity-v1** — Owner: coordinating parent; completed: 2026-11-01; [primary metadata correction](docs/ingestion/lade-duncan-1975/identity-v1/README.md) replaces the unrelated Das/Seeley pile-uplift DOI0000208 with Lade/Duncan constitutive-paper DOI0000204. Two exact Crossref records and prior catalogue bytes retained; five focused tests verify identity/hashes/SQLite source propagation. Corrected publisher PDF still403; full ingestion remains open. No equations inferred, model added, build, fit or admission.
+
 - [X] **CAL-complete-objective-v1** — Owner: coordinating parent; completed: 2026-11-01; [complete-candidate objective](docs/STUDY_OBJECTIVE.md) binds ordered metrics, explicit SI channel scales/weights and equal whole-test aggregation to one exact calibration allocation. Failed/truncated/extra/evaluation candidates reject; CLI validates metadata before response access and hashes all five inputs. Eight new/29 combined synthetic tests pass. No real data, fits, historical score changes, builds or admission; CAL-02/05 remain open for full scientific study policy.
 
 - [X] **DOC-current-status-v1** — Owner: coordinating parent; completed: 2026-11-01; [current status](docs/STATUS.md) now distinguishes nine executable definitions (four transcribed/five draft), fourteen pending baseline reviews, source gaps and unverified latest hosted revision. Prior checkpoints are labeled history; roadmap focus removes superseded next actions. Exact prior document bytes preserved. BASE-02 remains open for full coverage/hosted verification; no builds, simulations, model changes or scientific promotion.
@@ -170,7 +172,7 @@ Read all existing linked material first. The task is to close or precisely docum
 - [ ] **ING-duncan-chang-1970** — Acquire DOI10.1061/JSFEAQ.0001458 and separate original loading/unloading/triaxial stress-dependent moduli from any later complete3D closure.
   Owner: — (released after bounded handoff); output: `docs/ingestion/duncan-chang-1970/`; partial evidence: [packet](docs/ingestion/duncan-chang-1970/README.md); BLOCKED: original 1970 article and 1971 erratum full text unavailable; acquisition report delivered.
 
-- [ ] **ING-lade-duncan-1975** — Acquire DOI10.1061/AJGEB6.0000208; extract full flow/hardening/elasticity and initialization, not just failure criterion.
+- [ ] **ING-lade-duncan-1975** — Acquire corrected DOI10.1061/AJGEB6.0000204 ([identity correction](docs/ingestion/lade-duncan-1975/identity-v1/README.md)); extract full flow/hardening/elasticity and initialization, not just failure criterion.
   Owner: —; output: `docs/ingestion/lade-duncan-1975/`; existing evidence: [manifest.json](catalogue/manifest.json); blocker: see existing dossier, confirm when claimed.
 
 - [ ] **ING-matsuoka-nakai** — Select a named complete constitutive law/publication, then pin flow/hardening/elasticity; criterion alone is not executable coverage.
