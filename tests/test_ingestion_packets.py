@@ -2,7 +2,7 @@
 import hashlib,json,subprocess,sys,tempfile,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand','extended-mohr-coulomb-2013','barodesy-sand/rate-study-v1','hypoplastic-clay-2005/rate-study-v1','barodesy-sand/rate-review-v1','hypoplastic-clay-2005/rate-review-v1')
+PACKETS=('hca-sand-2005','pm4silt','hypoplastic-isa','original-cam-clay','s-clay1','duncan-chang-1970','manzari-dafalias-1997','hypoplastic-clay-2005','pm4sand','barodesy-sand','extended-mohr-coulomb-2013','barodesy-sand/rate-study-v1','hypoplastic-clay-2005/rate-study-v1','barodesy-sand/rate-review-v1','hypoplastic-clay-2005/rate-review-v1','barodesy-sand/rate-study-v2','hypoplastic-clay-2005/rate-study-v2','hypoplastic-thermal-ma-2017')
 class IngestionPackets(unittest.TestCase):
  def run_python(self,*args):
   return subprocess.run([sys.executable,'-B',*args],cwd=ROOT,capture_output=True,text=True,timeout=60,check=True)
@@ -96,4 +96,17 @@ class IngestionPackets(unittest.TestCase):
    blob=(folder/path).read_bytes();self.assertEqual(hashlib.sha256(blob).hexdigest(),pin['sha256']);self.assertEqual(len(blob),pin['bytes'])
   result=self.run_python(str(folder/'witnesses.py'),'--repo',str(ROOT),'--source',str(ROOT/'tools/research_rate_observations.py'),'--require-fixed')
   self.assertEqual(json.loads(result.stdout),json.loads((folder/'final-witness-results.json').read_text()))
+ def test_revised_sand_exact_volume_and_operational_support(self):
+  folder=ROOT/'docs/ingestion/barodesy-sand/rate-study-v2'
+  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_rate_study.py','-v')
+ def test_revised_clay_guard_preserves_historical_rates(self):
+  folder=ROOT/'docs/ingestion/hypoplastic-clay-2005/rate-study-v2'
+  self.run_python('-m','unittest','discover','-s',str(folder),'-p','test_*.py','-v')
+ def test_thermal_packet_diagnostics_and_six_open_gates(self):
+  folder=ROOT/'docs/ingestion/hypoplastic-thermal-ma-2017'
+  actual=json.loads(self.run_python(str(folder/'check_packet.py')).stdout)
+  self.assertEqual(actual,json.loads((folder/'check-results.json').read_text()))
+  manifest=json.loads((folder/'manifest.json').read_text())
+  self.assertEqual(len(manifest['unresolved_ids']),6)
+  self.assertFalse(manifest['status']['executable_model_added']);self.assertFalse(manifest['status']['complete_coupled_source'])
 if __name__=='__main__':unittest.main()

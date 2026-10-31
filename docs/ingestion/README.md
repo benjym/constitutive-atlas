@@ -2,7 +2,7 @@
 
 [Live assignments](../../IMPLEMENTATION_PLAN.md) · [Agent instructions](../../AGENTS.md) · [Packet template](TEMPLATE.md)
 
-**Current corrections:** the [clay2005 audit](hypoplastic-clay-2005/rate-review-v1/README.md) corrects our false Eq38 minus-sign claim and reproduces an unsafe draft SPD guard. The [sand2015 audit](barodesy-sand/rate-review-v1/README.md) records two wider-envelope oracle/support issues. Frozen historical packet checks preserve their original assertions; passing them is not confirmation of those superseded assertions. Both revised drafts are in progress.
+**Current corrections:** the [clay2005 audit](hypoplastic-clay-2005/rate-review-v1/README.md) corrects our false Eq38 minus-sign claim and reproduces an unsafe draft SPD guard. The [sand2015 audit](barodesy-sand/rate-review-v1/README.md) records two wider-envelope oracle/support issues. Frozen historical packet checks preserve their original assertions; passing them is not confirmation of those superseded assertions. Distinct [clay v2](hypoplastic-clay-2005/rate-study-v2/README.md) and [sand v2](barodesy-sand/rate-study-v2/README.md) packets preserve those records and provide corrected source/support contracts. Compiled and scientific gates remain open.
 
 These authored packets extract available source equations, schema requirements, temporal/transaction semantics and explicit gaps. Completion means the named bounded ingestion task was reviewed and integrated. It does not confer complete-model, executable, numerical-trajectory or scientific admission.
 
@@ -19,6 +19,7 @@ These authored packets extract available source equations, schema requirements, 
 | [PM4Sand2D3.3](pm4sand/README.md) | Distinct vendor/author-revision receipts, available equation/parameter/state/startup/lagged-phase ledgers | Eleven algebra witness groups | Nine explicit source/host conflicts; full2D update and admission open |
 | [Sand barodesy2015](barodesy-sand/README.md) | Original2015 interior sand law; separate2019 constants; seven-state integration and boundary contract |13 algebra groups and fixture replay | Nonunique zero-stress initialization, finite-rotation convention, calibration and executable reference gates |
 | [Extended Mohr–Coulomb2013](extended-mohr-coulomb-2013/README.md) | Exact publisher source, Eqs1–55, parameter/state/initialization and nonsmooth integration inventory | Nine independent diagnostic groups and exact result replay | Six invariant/gradient/flow/normal reconciliation gates; full execution and admission open |
+| [Thermal hypoplasticity2017](hypoplastic-thermal-ma-2017/README.md) | Exact accepted manuscript, Eqs1–10/Table1 and mechanical/thermal host contract | Nine independent scalar diagnostics | Six temperature-coordinate, reference singularity, anchor chronology and host-reconciliation gates; coupled execution open |
 
 Source PDFs, vendor archives, page renders and extracted article text are excluded. Each packet has local-relative exact authored-file hashes; private source receipts describe inspection provenance. Input board/context hashes are historical acquisition snapshots, not claims that the live board never changes. Links to publications and institutions remain persistent.
 

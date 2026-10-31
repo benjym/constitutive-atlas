@@ -1,0 +1,131 @@
+{
+  "schema_version": "0.1",
+  "kind": "bounded-state-integration-ledger",
+  "candidate_only": true,
+  "state_inventory": [
+    {
+      "name": "effective_sigma",
+      "shape": "sym6",
+      "unit": "Pa",
+      "role": "physical state",
+      "source": "M17 Eqs8–9 p10",
+      "initialization": "Supply full effective stress, no inferred isotropic stress or OCR preparation."
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "role": "physical state",
+      "source": "M17 Eq10;MK11 Eq8",
+      "initialization": "Supply e and preparation path; thermal solid-volume correction required."
+    },
+    {
+      "name": "temperature",
+      "shape": "scalar",
+      "unit": "temperature with explicit coordinate zero",
+      "role": "prescribed endpoint or state advanced by input",
+      "source": "M17 Eqs2–3;MK11 p13 explicitly names added temperature state",
+      "initialization": "Supply initial value on same scale as Tr; do not interpret elapsed time as temperature."
+    },
+    {
+      "name": "p_o,e_o",
+      "shape": "two scalars if independently retained",
+      "unit": "Pa,1",
+      "role": "unresolved anchor/preparation versus derived state",
+      "source": "M17 Eqs4–5/Fig1",
+      "initialization": "Source does not specify update/commit timing; do not silently freeze or recompute."
+    },
+    {
+      "name": "pSBS,pe,Nstar,lambda,e_T,e_T_star,fu,ci",
+      "shape": "scalars",
+      "unit": "mixed",
+      "role": "stage-dependent derived quantities; cache only if exact model/state/loading-bound",
+      "source": "M17 Eqs1–10;MK11 Eqs10,30–31",
+      "initialization": "Recompute from consistent stage snapshot and exact host."
+    }
+  ],
+  "not_established_states": [
+    "Cycle counter",
+    "historical maximum temperature",
+    "time-dependent viscosity/creep clock",
+    "IGS tensor",
+    "unsaturated suction/retention state:2017 selected drained examples do not establish these as required"
+  ],
+  "domains": [
+    "p>0,pr>0,p_o>0,pSBS>0;1+e>0;positive temperature ratio on chosen coordinate;lambda(T)>0 for cited pe/HT",
+    "e_T-e_T_star nonzero with branch orientation established; source0<=fu<=1 follows only when e lies between ordered bounds",
+    "gamma>0 proposed regular support; .1 leads unbounded one-sided derivative at positive-part threshold",
+    "full mechanical host admissibility and its inverse/denominators remain separate gates"
+  ],
+  "integration": {
+    "classification": "Joint mechanical/temperature increment law, no verified independent physical-time creep mechanism",
+    "independent_coordinate": "A monotone path coordinate s may drive E=d(epsilon)/ds and theta=dT/ds; source dots do not alone require physical seconds",
+    "homogeneity": "Host thermal terms are homogeneous degree1 under jointly multiplying E and theta by positive c; fu depends on stage state/T, not c. Conditional on selected exact host; not a numerical constitutive proof.",
+    "hold": "E=0,theta=0 should have zero RHS for regular host; zero mechanical increment with theta!=0 is not a hold and can produce stress/volume change. Source does not establish creep at fixed T/stress.",
+    "reversal": "Split temperature extrema so heating/cooling gate max(theta,0) is unambiguous. Crossing e=e_T_star needs branch-aware integration; no arbitrary epsilon/upper cap.",
+    "transactions": "Every mixed-control trial must start from same committed parent, including T and unresolved anchors; internal accepted substeps update a local candidate only. Failed segment restores parent and accepted prefix. No hidden NC preload or history-max reset.",
+    "ordering": "At each stage evaluate T,N,lambda and exact host map, then both bounding void ratios, then fu and stress/e RHS from same snapshot. This is required proposal, not source-prescribed discrete algorithm.",
+    "spin": "M17 objective rate; first implementation can explicitly restrict zero spin. General rotations require stress-rate/spin transformation.",
+    "tangent": "Joint mechanical and thermal columns; constrained tangent must include T dependence, e correction and fu branches. gamma=.1 threshold not differentiable; source does not prescribe AD continuation.",
+    "unspecified": "No discrete scheme, substep tolerances, algorithmic tangent, rollback, anchor-update chronology or boundary zero-denominator continuation specified in inspected2017 paper."
+  },
+  "constrained_protocol": {
+    "status": "proposed source-shaped protocol; not run and no numeric prediction claimed",
+    "isotropic": {
+      "source": "M17 pp13–14/Fig5 p26",
+      "preparation": "Drained isotropic consolidation to200kPa, initial about20C; record actual e and consolidation route, do not default parameters Nil to0",
+      "controls": "Prescribe all six effective stresses (hydrostatic200000Pa and zero shear), ordered temperature20→60→5→60→5→60→5 C; source says about60/5, so exact knot values are proposal until plot/data pinned",
+      "unknowns": "Six total-strain increments; volumetric strain output distinct from e, due thermal solid expansion",
+      "blockers": "Exact host + temp convention + first/reference NC branch + anchor chronology; no initial e from paper."
+    },
+    "one_dimensional": {
+      "source": "M17 p14/Fig6 p27",
+      "preparation": "Source describes in-situ NC vertical149kPa then specimen loaded1D to125kPa, initial about20C; lateral effective stresses and e need actual preparation",
+      "controls": "Fixed vertical effective stress125000Pa, zero lateral normal strains and shear controls, temperature cycles60↔5C after initial20C; lateral stresses respond",
+      "blockers": "Do not reconstruct lateral stresses by arbitrary K0; preserve149vs125 wording."
+    }
+  },
+  "capabilities": [
+    {
+      "id": "TH-INPUT",
+      "request": "Typed prescribed scalar temperature path coordinated with mechanical controls, actual endpoint validation and transaction history",
+      "minimal_witness": "Heating at E=0 is nontrivial; current de-only zero increment bypass cannot apply."
+    },
+    {
+      "id": "TH-COORD",
+      "request": "Temperature coordinate semantics distinguishes affine Celsius coordinate from absolute Kelvin and increments",
+      "minimal_witness": "log(60/20) != log(333.15/293.15); converting endpoints alone changes calibration."
+    },
+    {
+      "id": "TH-VOID",
+      "request": "Thermal-corrected void-rate expression, never automatic isothermal e update",
+      "minimal_witness": "E=E_TE yields e_dot0 although total volumetric strain changes."
+    }
+  ],
+  "blockers": [
+    {
+      "id": "THERM-01",
+      "description": "Final2017 vs accepted manuscript and final2012 vs2011preprint comparison not completed;2005 exact host not transcribed."
+    },
+    {
+      "id": "THERM-02",
+      "description": "Temperature ratio coordinate unspecified beyond Celsius table/plots; cannot silently Kelvin convert."
+    },
+    {
+      "id": "THERM-03",
+      "description": "p_o/e_o current versus preparation anchor and update lifetime not specified."
+    },
+    {
+      "id": "THERM-04",
+      "description": "Reference-temperature NC Eq10 becomes0/0 under NCL anchor reading; cT0/kT=lambda limiting coincidence also singular. Need source-backed continuation."
+    },
+    {
+      "id": "THERM-05",
+      "description": "Positive-part Eq10 has no upper cap while prose boundsfu; above-NCL/support restrictions or saturation cannot be invented."
+    },
+    {
+      "id": "THERM-06",
+      "description": "Full constrained preparation/init and measured data not pinned; gamma threshold tangent singular, integration algorithm absent."
+    }
+  ]
+}

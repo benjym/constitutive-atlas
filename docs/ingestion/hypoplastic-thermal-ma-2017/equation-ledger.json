@@ -1,0 +1,158 @@
+{
+  "schema_version": "0.1",
+  "kind": "bounded-source-equation-ledger",
+  "not_executable_schema": true,
+  "sources": "source-receipts.json",
+  "equations": [
+    {
+      "equations": "1",
+      "locator": "M17 p8",
+      "algebra": "log(1+e_T_iso)=N(T)-lambda(T)*log(p/pr)",
+      "type_units": "scalar1; p,pr Pa; pr=1000Pa",
+      "qualification": "Requires p>0; not an evolution law."
+    },
+    {
+      "equations": "2–3",
+      "locator": "M17 p8",
+      "algebra": "N(T)=Nr+nT*log(T/Tr); lambda(T)=lambda_r+lT*log(T/Tr)",
+      "type_units": "N,lambda,nT,lT dimensionless; T and Tr temperature coordinate",
+      "qualification": "Table1 labels Tr Celsius; zero-point convention must be explicit, not silently Kelvin converted."
+    },
+    {
+      "equations": "4–5",
+      "locator": "M17 pp8–9;Fig1 p22",
+      "algebra": "log(1+e_T_star)=log(1+e_o)+cT*nT*log(T/Tr)-kT*log(p/p_o)",
+      "type_units": "e,e_o,kT,cT dimensionless; p_o Pa",
+      "qualification": "p_o and e_o anchor timing/update absent; e_o lies on NCL at p_o in Fig1 but source supplies no explicit state update."
+    },
+    {
+      "equations": "6–7",
+      "locator": "M17 p9",
+      "algebra": "Nstar=N(T)-(lambda(T)-kappa)*log(p_o/pSBS); log(1+e_T)=Nstar-lambda(T)*log(p/pr)",
+      "type_units": "pSBS,p_o,p,pr Pa; other terms dimensionless",
+      "qualification": "pSBS radial mapping supplied by exact mechanical host; isotropic p_o=pSBS recovers Eq1. Do not equate p_o to pSBS generally."
+    },
+    {
+      "equations": "8",
+      "locator": "M17 p10",
+      "algebra": "sigma_objective_dot=fs*(L:E+fd*N_tensor*norm(E))",
+      "type_units": "sigma Pa; E 1/time or joint path rate; L,N host-dependent dimensions",
+      "qualification": "Compression-positive2017; Jaumann effective stress rate and Euler stretching. Host2005 not interchangeable with2013/2014."
+    },
+    {
+      "equations": "9",
+      "locator": "M17 p10",
+      "algebra": "sigma_objective_dot=fs*(L:(E-E_TE)+fd*N_tensor*norm(E-E_TE))+fu*H_T",
+      "type_units": "stress-rate Pa/time; H_T Pa/time",
+      "qualification": "H_T and E_TE delegated to2012; requires transformed host signs, not just copied tensile-positive tensor formula."
+    },
+    {
+      "equations": "10",
+      "locator": "M17 p11",
+      "algebra": "fu=max((e-e_T_star)/(e_T-e_T_star),0)^gamma",
+      "type_units": "dimensionless",
+      "qualification": "Positive part, no upper cap printed. Prose p10 says0<=fu<=1; valid e range or additional branch needed. Denominator can vanish."
+    },
+    {
+      "equations": "6–8",
+      "locator": "MK11 PDF10/printed9",
+      "algebra": "E_TE_host=alpha_s*Tdot*I/3; e_dot=(1+e)*tr(E_host-E_TE_host)",
+      "type_units": "alpha_s inverse temperature; e_dot1/time",
+      "qualification": "Host compression-negative. In compression-positive coordinates E_TE=-alpha_s*Tdot*I/3; e_dot=-(1+e)*tr(E-E_TE). Thermal expansion changes solid and total volume together, not void ratio."
+    },
+    {
+      "equations": "10,18,30–31",
+      "locator": "MK11 PDF10/printed9;PDF11/printed10;PDF14/printed13",
+      "algebra": "pe=pr*exp((N(T)-log(1+e))/lambda(T)); H_T_host=ci*sigma_host*(nT-lT*log(pe/pr))*max(Tdot,0)/(T*lambda(T)); ci=(3+a^2-fd*a*sqrt(3))/(3+a^2-fdSBS*a*sqrt(3))",
+      "type_units": "pe Pa; ci1; H_T Pa/time",
+      "qualification": "Eq31 final saturated host formula includes ci (Eq18 earlier does not). a,fd,fdSBS and L/N require exact2005/2012 dependencies. Replacing fu does not authorize dropping ci. Preprint/final comparison remains."
+    }
+  ],
+  "parameters": {
+    "mechanical_host": [
+      "phi_c [angle;Table1 degrees]",
+      "lambda_r [1]",
+      "kappa [1]",
+      "Nr [1]",
+      "r [1; shear stiffness]"
+    ],
+    "thermal_host": [
+      "nT [1]",
+      "lT [1]",
+      "alpha_s [temperature^-1;volumetric skeletal coefficient]",
+      "Tr [temperature coordinate]"
+    ],
+    "new2017": [
+      "kT [1]",
+      "cT [1]",
+      "gamma [1]"
+    ],
+    "reference": [
+      "pr=1000Pa, source1kPa"
+    ],
+    "range_note": "Table1 calibrations do not establish global bounds; gamma=.1 suggested p12, not a universal fixed model constant."
+  },
+  "table1": {
+    "locator": "M17 p21",
+    "columns": [
+      "phi_c_deg",
+      "lambda_r",
+      "kappa",
+      "Nr",
+      "r",
+      "lT",
+      "nT",
+      "alpha_s_per_C",
+      "Tr_C",
+      "kT",
+      "cT",
+      "gamma"
+    ],
+    "rows": {
+      "Uchaipichat-Khalili2009-silt": [
+        29.5,
+        0.06,
+        0.002,
+        0.772,
+        0.2,
+        0,
+        -0.01,
+        3.5e-05,
+        25,
+        0.01,
+        0.5,
+        0.1
+      ],
+      "Campanella-Mitchell1968-clay": [
+        22,
+        0.092,
+        0.027,
+        1.178,
+        null,
+        0,
+        -0.009,
+        3.5e-05,
+        20,
+        null,
+        0.4,
+        0.1
+      ],
+      "DiDonna-Laloui2015-silty-clay": [
+        24,
+        0.023,
+        0.01,
+        0.676,
+        0.6,
+        0,
+        -0.0055,
+        1.8e-05,
+        20,
+        0.015,
+        0.4,
+        0.1
+      ]
+    },
+    "null_note": "Printed Nil*, explicitly irrelevant for simulations shown; not zero and not a generic default."
+  },
+  "typed_draft_gate": "A supplied-anchor scalar TSL/fu fragment is possible after explicit nonzero denominator and temperature-coordinate support choices. Full model remains unclosed."
+}

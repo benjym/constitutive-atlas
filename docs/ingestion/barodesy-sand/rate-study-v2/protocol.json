@@ -1,0 +1,143 @@
+{
+  "version": "barodesy-sand-2015-exact-volume-rate-protocol-v2",
+  "valid_count": 38,
+  "invalid_count": 20,
+  "frozen_inputs": {
+    "model-draft.json": "bb755018b8a86fb07852c8e5e13ee21bfa01a13488db13817fc1cb52f857c156",
+    "inputs.json": "c09c955fa638759af64eb9d32d77b6fbc9a9ae7a9ebc52225b131b6f929b7297",
+    "reference.py": "effe7ac4dac09c50244c3c4825df42a08796367bd29bac33d5a205ca640acca8",
+    "support.py": "9e63406ac8586691cee9f1d6c1de5ee19aab1e8a6f434aa086528b3bd040598b"
+  },
+  "precision_grids": [
+    80,
+    120
+  ],
+  "stress_accuracy": {
+    "definition": "max_abs_component_error / max((c4+c5*norm(state_stress))*norm(loading)/(e-emin),norm(reference_stress_rate))",
+    "limit": 2e-12
+  },
+  "void_accuracy": {
+    "reference": "Exact Fraction sum of actual binary64 loading diagonals and exact multiplication by1+e; correctly rounded via Fraction.__float__",
+    "zero": "exact zero",
+    "nonzero": "4ULP of exact-rational nearest binary64 result"
+  },
+  "zero_loading": "all7rates exactzero; no zero-loading material ADclaim",
+  "reference_precision": "Stress:80/120 Decimal empirical agreement within4ULP; not certified. Void: independent exact rational result, not inferred from Decimal agreement.",
+  "compiled_execution": false,
+  "gates_frozen_before_compiled_observation": true,
+  "next_compiled_matrix": {
+    "valid_count": 38,
+    "numeric_invalid_count": 16,
+    "python_only_invalid_ids": [
+      "boolean-loading",
+      "nonfinite-text",
+      "extra-parameter",
+      "missing-parameter"
+    ],
+    "numeric_invalid_ids": [
+      "zero-stress",
+      "negative-stress",
+      "indefinite-stress",
+      "rank-loss",
+      "minimum-density",
+      "below-density",
+      "negative-density",
+      "above-density",
+      "tiny-stress",
+      "tiny-loading",
+      "excessive-loading",
+      "bad-parameter-c1",
+      "bad-parameter-c2",
+      "bad-parameter-c5",
+      "bad-parameter-ec0",
+      "audit-rounded-critical-density"
+    ],
+    "parameter_order": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "ec0",
+      "emin"
+    ],
+    "native_wasm_request_rules": "Use exact full numeric state7/loading6/parameters7, no JSON boolean/string coercion. Check arity and normal domain responses separately. The4Python-only requests are not in compiled numeric count.",
+    "persistent_recovery": "same admissible oblique control after each numeric rejection in same process/instance",
+    "raw_parser_cases": "not selected; future literal malformed CSV protocol must be frozen separately",
+    "not_in_scope": [
+      "material AD",
+      "finite integration",
+      "experimental validation",
+      "zero-stress continuation",
+      "finite spin"
+    ],
+    "persistent_raw_rows_per_backend": 71,
+    "source_only_risk": "Cancellation void witness may expose naive compiled trace summation. Failure must be retained; no gate relaxation or model-specific bypass."
+  },
+  "domain_contract": "Ideal-source domain and operational Python binary64 classifier distinct. Paired model comparisons require operational support; classifiers near floating boundaries not proved crosscompiler-equivalent.",
+  "legacy_mapping": {
+    "valid_ids": [
+      "oblique",
+      "zero",
+      "hydro-compression",
+      "hydro-extension",
+      "deviatoric",
+      "reverse",
+      "homogeneous-quarter",
+      "homogeneous-four",
+      "pure-shear-0",
+      "pure-shear-1",
+      "pure-shear-2",
+      "unit-scale-0.01",
+      "unit-scale-100.0",
+      "corner--2.0-0.0-compression",
+      "corner--2.0-0.0-extension",
+      "corner--2.0-0.0-oblique",
+      "corner--2.0-1.5-compression",
+      "corner--2.0-1.5-extension",
+      "corner--2.0-1.5-oblique",
+      "corner--0.1-0.0-compression",
+      "corner--0.1-0.0-extension",
+      "corner--0.1-0.0-oblique",
+      "corner--0.1-1.5-compression",
+      "corner--0.1-1.5-extension",
+      "corner--0.1-1.5-oblique",
+      "parameter-c3--5.0",
+      "parameter-c3--0.1",
+      "parameter-c5-0.1",
+      "parameter-c5-100.0",
+      "parameter-c4-1000.0",
+      "parameter-c4-100000000.0",
+      "density-0.35001",
+      "density-1.5",
+      "density-3.0",
+      "oblique-rotation",
+      "reflection",
+      "axis-cycle"
+    ],
+    "invalid_ids": [
+      "zero-stress",
+      "negative-stress",
+      "indefinite-stress",
+      "rank-loss",
+      "minimum-density",
+      "below-density",
+      "negative-density",
+      "above-density",
+      "tiny-stress",
+      "tiny-loading",
+      "excessive-loading",
+      "boolean-loading",
+      "nonfinite-text",
+      "bad-parameter-c1",
+      "bad-parameter-c2",
+      "bad-parameter-c5",
+      "bad-parameter-ec0",
+      "extra-parameter",
+      "missing-parameter"
+    ],
+    "legacy_inputs_sha256": "defd4fc77cd517fb66d7e7f3f08e33270a3a5864ac29036a8d3b72db55577073",
+    "legacy_reference_sha256": "04e4ba99253a9022d7b6152cd67739a4a0281965f4fb75006c7430ed7bafb44b",
+    "preservation": "All original valid/invalid case documents retained exactly; ideal-source acceptance is separately recorded for numerical-only invalids. No v1bytes changed."
+  }
+}

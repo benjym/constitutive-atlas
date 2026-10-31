@@ -1,0 +1,151 @@
+{
+  "version": "barodesy2015-v2-audit-counterexamples-0.1",
+  "original_audit_findings_sha256": "417181d5d45a1c62b24d97e28e12aec741bef9820542ebfa9d138fbdbec31d6a",
+  "original_findings": [
+    {
+      "id": "F1-trace-cancellation",
+      "severity": "P2",
+      "scope": "wider accepted input envelope; frozen37 unchanged",
+      "input": {
+        "id": "review-trace-cancellation",
+        "state": [
+          120000.0,
+          90000.0,
+          70000.0,
+          21213.203435596428,
+          8485.281374238572,
+          -11313.70849898476,
+          0.75
+        ],
+        "loading": [
+          500.0,
+          1e-130,
+          -500.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "parameters": {
+          "c1": -1.0246,
+          "c2": 1.0,
+          "c3": -2.3,
+          "c4": 465000.0,
+          "c5": 28.0,
+          "ec0": 0.87,
+          "emin": 0.35
+        }
+      },
+      "oracle_values": {
+        "80": [
+          3395041643.8493466,
+          -1344182391.0485177,
+          -3127947188.3233705,
+          -1990850229.4756994,
+          -796340091.7902799,
+          1061786789.0537063,
+          0.0
+        ],
+        "120": [
+          3395041643.8493466,
+          -1344182391.0485177,
+          -3127947188.3233705,
+          -1990850229.4756994,
+          -796340091.7902799,
+          1061786789.0537063,
+          0.0
+        ],
+        "200": [
+          3395041643.8493466,
+          -1344182391.0485177,
+          -3127947188.3233705,
+          -1990850229.4756994,
+          -796340091.7902799,
+          1061786789.0537063,
+          -1.7500000000000002e-130
+        ]
+      },
+      "exact_fraction_rounded_void": -1.7500000000000002e-130,
+      "dsl_values": [
+        3395041643.8493457,
+        -1344182391.0485177,
+        -3127947188.323371,
+        -1990850229.4756994,
+        -796340091.79028,
+        1061786789.0537065,
+        -1.7500000000000002e-130
+      ],
+      "assessor": {
+        "rejected": true,
+        "message": "exact zero void rate required"
+      },
+      "action": "Use exact sum of actual binary64 diagonal values (Fraction or dynamically sufficient precision), then exact scalar multiplication before final rounding; do not label fixed120digit result correctly rounded across unrestricted cancellation. Revise as separate packet preserving v1."
+    },
+    {
+      "id": "F2-critical-density-domain",
+      "severity": "P2",
+      "scope": "wider source-oracle vs operational DSL acceptance contract",
+      "input": {
+        "id": "review-rounded-critical-density",
+        "state": [
+          268467875173176.0,
+          268467875173176.0,
+          268467875173176.0,
+          0.0,
+          0.0,
+          0.0,
+          0.75
+        ],
+        "loading": [
+          0.001,
+          -0.0003,
+          0.0002,
+          0.0007,
+          -0.0002,
+          0.0005
+        ],
+        "parameters": {
+          "c1": -1.0246,
+          "c2": 1.0,
+          "c3": -2.3,
+          "c4": 465000.0,
+          "c5": 0.1,
+          "ec0": 0.87,
+          "emin": 0.35
+        }
+      },
+      "oracle_ec_binary64": 0.35,
+      "oracle120_values": [
+        7105169144.276846,
+        -58984631180.98088,
+        -38833509755.77924,
+        34390578920.190765,
+        -6185118757.614676,
+        26459068410.644817,
+        -0.001575
+      ],
+      "dsl": {
+        "rejected": true,
+        "message": "state outside model domain"
+      },
+      "action": "Separate ideal source-domain calculation from binary64 model domain; explicitly check/report rounded ec>emin for paired operational oracle or declare nonmatching support. Preserve this negative witness."
+    }
+  ],
+  "v2_decisions": [
+    {
+      "id": "F1-trace-cancellation",
+      "input_id": "audit-trace-cancellation",
+      "old_oracle80_void": 0.0,
+      "old_oracle120_void": 0.0,
+      "v2_exact_fraction_rounded_void": -1.7500000000000002e-130,
+      "operationally_supported": true,
+      "next_compiled": "must compare nonzero void, retain any backend failure"
+    },
+    {
+      "id": "F2-critical-density-domain",
+      "input_id": "audit-rounded-critical-density",
+      "ideal_source_evaluable": true,
+      "operationally_supported": false,
+      "next_compiled": "numeric domain rejection followed by original oblique recovery"
+    }
+  ]
+}

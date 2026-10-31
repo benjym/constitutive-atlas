@@ -1,0 +1,205 @@
+{
+  "schema_version": "0.1",
+  "id": "research-barodesy-sand-2015-fixed-frame-v2",
+  "name": "Barodesy sand2015 fixed-frame interior rate research draft v2",
+  "family": "barodesy research only",
+  "status": "draft",
+  "description": "Non-admitted2015 Eq31 sand research selection. Compression-positive orthonormal Mandel stress and stretching; W=0. Nonzero stress only; exact zero-loading continuous rate extension selected for research, no unique zero-loading Frechet derivative claimed. Seven physical states. Defaults separately attributed2019 illustrative calibration, not exact2015 validation. Conservative numerical interior and parameter envelope, not complete physical applicability. c4 is a physical stress parameter and also a provisional solver normalization; this does not establish a universal tolerance scale. V2 separates ideal source reference from operational binary64 support and retains exact Fraction volumetric oracle; no source equation change.",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1680/geot.14.P.151",
+      "role": "Primary selected sand law",
+      "locator": "Kolymbas2015 pp53\u201356 Eqs9,20,23,26\u201331; p58 numerical context; p59 frame gap. Received PDF SHA2564d4511bdbb6014c19460bf0c5d7e2072c2c606fa8a5b49db180fc99d0da149da"
+    },
+    {
+      "url": "https://doi.org/10.1002/nag.2984",
+      "role": "Separate illustrative default parameter fixture",
+      "locator": "Kolymbas/Bathaeian2019 author manuscript p5 Table1, Eqs11\u201315; c4 converted465kPa to465000Pa. Not asserted publisher-equivalent."
+    }
+  ],
+  "integration": "rate",
+  "parameters": {
+    "c1": {
+      "default": -1.0246,
+      "min": -2,
+      "max": -0.1,
+      "unit": "1"
+    },
+    "c2": {
+      "default": 1,
+      "min": 0,
+      "max": 1.5,
+      "unit": "1"
+    },
+    "c3": {
+      "default": -2.3,
+      "min": -5,
+      "max": -0.1,
+      "unit": "1"
+    },
+    "c4": {
+      "default": 465000,
+      "min": 1000,
+      "max": 100000000.0,
+      "unit": "Pa"
+    },
+    "c5": {
+      "default": 28,
+      "min": 0.1,
+      "max": 100,
+      "unit": "1"
+    },
+    "ec0": {
+      "default": 0.87,
+      "min": 0.1,
+      "max": 2,
+      "unit": "1"
+    },
+    "emin": {
+      "default": 0.35,
+      "min": 0,
+      "max": 1,
+      "unit": "1"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "c4",
+      "initial": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0.75
+    }
+  ],
+  "derived": [
+    {
+      "name": "scaled_stress",
+      "expr": "sigma/c4"
+    },
+    {
+      "name": "stress_measure",
+      "expr": "norm(scaled_stress)"
+    },
+    {
+      "name": "stress_unit",
+      "expr": "select(stress_measure > 0,scaled_stress/stress_measure,0*I)"
+    },
+    {
+      "name": "stress_value",
+      "expr": "c4*stress_measure"
+    },
+    {
+      "name": "loading_measure",
+      "expr": "norm(de)"
+    },
+    {
+      "name": "loading_abs_sum",
+      "expr": "abs(dot(de,sym(1,0,0,0,0,0)))+abs(dot(de,sym(0,1,0,0,0,0)))+abs(dot(de,sym(0,0,1,0,0,0)))+abs(dot(de,sym(0,0,0,1,0,0)))+abs(dot(de,sym(0,0,0,0,1,0)))+abs(dot(de,sym(0,0,0,0,0,1)))"
+    },
+    {
+      "name": "loading_unit",
+      "expr": "select(loading_measure > 0,de/loading_measure,0*I)"
+    },
+    {
+      "name": "v",
+      "expr": "trace(loading_unit)"
+    },
+    {
+      "name": "a",
+      "expr": "c1*exp(-c2*v)"
+    },
+    {
+      "name": "direction_argument",
+      "expr": "-a*loading_unit"
+    },
+    {
+      "name": "direction_tensor",
+      "expr": "expm(direction_argument)"
+    },
+    {
+      "name": "direction_unit",
+      "expr": "direction_tensor/norm(direction_tensor)"
+    },
+    {
+      "name": "B",
+      "expr": "(ec0-emin)/(ec0+1)*exp(-(1+emin)/c5*log1p(c5*stress_measure))"
+    },
+    {
+      "name": "ec",
+      "expr": "(emin+B)/(1-B)"
+    },
+    {
+      "name": "K",
+      "expr": "(c4+c5*stress_value)/(e-emin)"
+    },
+    {
+      "name": "sxx",
+      "expr": "dot(stress_unit,sym(1,0,0,0,0,0))"
+    },
+    {
+      "name": "syy",
+      "expr": "dot(stress_unit,sym(0,1,0,0,0,0))"
+    },
+    {
+      "name": "szz",
+      "expr": "dot(stress_unit,sym(0,0,1,0,0,0))"
+    },
+    {
+      "name": "sxy",
+      "expr": "dot(stress_unit,sym(0,0,0,1,0,0))"
+    },
+    {
+      "name": "syz",
+      "expr": "dot(stress_unit,sym(0,0,0,0,1,0))"
+    },
+    {
+      "name": "sxz",
+      "expr": "dot(stress_unit,sym(0,0,0,0,0,1))"
+    },
+    {
+      "name": "minor_two",
+      "expr": "sxx*syy-sxy**2/2"
+    },
+    {
+      "name": "stress_det",
+      "expr": "sxx*syy*szz-(sxx*syz**2+syy*sxz**2+szz*sxy**2)/2+sxy*syz*sxz/sqrt(2)"
+    }
+  ],
+  "equations": {
+    "sigma": "select(loading_measure > 0,K*((v-c3*ec)*direction_unit+c3*e*stress_unit)*loading_measure,0*sigma)",
+    "e": "-(1+e)*trace(de)"
+  },
+  "domain": [
+    "ec0 > emin",
+    "e > emin",
+    "e-emin >= 1e-8",
+    "e <= 3",
+    "stress_measure >= 1e-10",
+    "stress_measure <= 1e10",
+    "sxx > 0",
+    "syy > 0",
+    "szz > 0",
+    "minor_two > 1.4210854715202004e-14",
+    "stress_det > 1.4210854715202004e-14",
+    "B > 0",
+    "B < 1",
+    "ec > emin",
+    "loading_measure <= 1000",
+    "select(loading_abs_sum > 0,loading_measure >= 1e-140,loading_measure >= 0)",
+    "norm(direction_argument) <= 64"
+  ]
+}
