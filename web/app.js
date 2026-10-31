@@ -483,6 +483,6 @@ try{
   const [response,manifest]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json')]);if(!response.ok||!manifest.ok)throw Error('Catalogue could not be loaded.');
   const definitions=await response.json();catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
-  setupRecordedView({models,catalogueHash,chart,sourceLinks,definitionLink});
+  setupRecordedView({catalogue:definitions,chart,sourceLinks,definitionLink});
   populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadPublicationReferences();loadEvidenceIndex();loadApplicability();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

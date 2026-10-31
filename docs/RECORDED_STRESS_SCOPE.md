@@ -1,6 +1,6 @@
 # Scope-aware recorded request contract
 
-The separate [recorded-run 0.2 schema](../schemas/recorded-run-v0.2.schema.json) defines explicit stress identity for ordered mechanical replay. This is a pure request/codec foundation. [Native 0.2 responses and restart exports](reviews/recorded-scope-native-v1/README.md) are implemented behind explicit scope selection. [Dedicated Python/JavaScript execution adapters](reviews/recorded-scope-adapters-v1/README.md) now connect the scoped endpoints with strict identity checks. Browser rendering/import/export remains unconnected. The public atlas still has nine executable models and the production incremental validator still rejects total stress.
+The separate [recorded-run 0.2 schema](../schemas/recorded-run-v0.2.schema.json) defines explicit stress identity for ordered mechanical replay. This is a pure request/codec foundation. [Native 0.2 responses and restart exports](reviews/recorded-scope-native-v1/README.md) are implemented behind explicit scope selection. [Dedicated Python/JavaScript execution adapters](reviews/recorded-scope-adapters-v1/README.md) now connect the scoped endpoints with strict identity checks. The [recorded browser view](reviews/recorded-scope-view-v1/README.md) now connects scoped imports, worker routing, labels and JSON/CSV exports, qualified locally with an isolated Wasm fixture. The public atlas still has nine executable models and the production incremental validator still rejects total stress.
 
 ## Request
 
@@ -35,4 +35,4 @@ The [native gate](reviews/recorded-scope-native-v1/README.md) implements scoped 
 
 The [dedicated adapters](reviews/recorded-scope-adapters-v1/README.md) now enforce response version/stress/catalogue/request/settings/restart identity and complete success or retained failure prefixes, with no legacy fallback. Three explicit native requests reproduce the prior saved outputs exactly; browser-side checks use returned native data, not a newly built Wasm engine.
 
-Next connect browser scope labels, CSV/JSON import/export and the new engine APIs together under a frozen native/Wasm/browser gate. Keep the current browser view on its effective-only legacy contract until that gate passes. Browser support still precedes production total-profile activation and the existing Tresca transcription's source/reference/backend checks.
+Next complete laboratory scope labels, pore-availability plots, CSV/JSON import/export and the new laboratory APIs together under a frozen native/Wasm/browser gate. The recorded portion now passes its local isolated Wasm/browser gate; the laboratory portion remains open. Browser support still precedes production total-profile activation and the existing Tresca transcription's source/reference/backend checks.

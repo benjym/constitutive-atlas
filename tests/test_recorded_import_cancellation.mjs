@@ -2,19 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {setupRecordedView} from '../web/recorded-view.mjs';
+const catalogue=JSON.parse(readFileSync(new URL('../docs/reviews/recorded-scope-native-v1/generated-models.json',import.meta.url)));
 const example=JSON.parse(readFileSync(new URL('../protocols/recorded-linear-elastic-run.json',import.meta.url)));
 const deferred=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};};
 function harness(t){
  const saved=Object.fromEntries(['document','Worker','fetch','setTimeout','clearTimeout'].map(k=>[k,globalThis[k]]));
  t.after(()=>{for(const [key,value] of Object.entries(saved))globalThis[key]=value;});
  const elements=new Map(),workers=[],timers=new Map();let timerId=0;
- const get=id=>{if(!elements.has(id))elements.set(id,{value:'0',textContent:'',hidden:true,disabled:true,selectedOptions:[{textContent:'Axial'}],replaceChildren(){},append(){}});return elements.get(id);};
+ const get=id=>{if(!elements.has(id))elements.set(id,{value:'0',textContent:'',hidden:true,disabled:true,selectedOptions:[{textContent:'Axial'}],replaceChildren(){},append(){},setAttribute(){}});return elements.get(id);};
  globalThis.document={getElementById:get};
  globalThis.Worker=class{constructor(){workers.push(this);}postMessage(data){this.request=data;}terminate(){this.terminated=true;}};
  globalThis.setTimeout=(fn)=>{timers.set(++timerId,fn);return timerId;};
  globalThis.clearTimeout=id=>timers.delete(id);
  globalThis.fetch=()=>{throw Error('Unexpected fetch');};
- setupRecordedView({models:[{id:example.model,name:'Test model',sources:[]}],catalogueHash:'fixture-catalogue',chart(){},sourceLinks(){},definitionLink(){return {};}});
+ setupRecordedView({catalogue,chart(){},sourceLinks(){},definitionLink(){return {};}});
  function file(read,size=1){const target={files:[{size,text:read}],value:'selected.json'};return {target,done:get('recorded-file').onchange({target})};}
  const doc=name=>{const d=structuredClone(example);d.path.coordinate.name=name;return JSON.stringify(d);};
  return {get,workers,timers,file,doc};

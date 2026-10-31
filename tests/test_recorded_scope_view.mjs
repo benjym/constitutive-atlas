@@ -1,0 +1,43 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {setupRecordedView} from '../web/recorded-view.mjs';
+import {replayRecorded} from '../web/recorded-worker.mjs';
+const {catalogue,rows}=JSON.parse(readFileSync(0,'utf8'));
+const elements=new Map(),workers=[],charts=[],downloads=[];
+const get=id=>{if(!elements.has(id))elements.set(id,{value:'0',textContent:'',selectedOptions:[{textContent:'xx'}],attributes:{},setAttribute(k,v){this.attributes[k]=v;},replaceChildren(){},append(){}});return elements.get(id);};
+globalThis.document={getElementById:get,createElement(){return {click(){}};}};
+globalThis.Worker=class {constructor(){workers.push(this);}postMessage(data){this.request=data;}terminate(){this.terminated=true;}};
+globalThis.setTimeout=()=>1;globalThis.clearTimeout=()=>{};
+URL.createObjectURL=blob=>{downloads.push(blob);return 'blob:test';};URL.revokeObjectURL=()=>{};
+setupRecordedView({catalogue,chart(...args){charts.push(args);},sourceLinks(){},definitionLink(){return {};}});
+async function load(doc){await get('recorded-file').onchange({target:{value:'file.json',files:[{size:1,text:async()=>JSON.stringify(doc)}]}});}
+let runs=0;
+for(const label of ['scope-reversal','scope-failed-1','total-mixed']){
+ const row=rows.find(r=>r.label===label),s=row.request,r=row.response;
+ await load(s);const worker=workers.at(-1);assert.deepEqual(worker.request.catalogue,catalogue);
+ const calls=[],engine={ccall(name){calls.push(name);return JSON.stringify(name==='atlas_describe'?catalogue:r);}};
+ const result=replayRecorded(engine,s,catalogue);
+ assert.deepEqual(calls,['atlas_describe',s.restart_settings?'atlas_replay_recorded_scope_with_restarts':'atlas_replay_recorded_scope']);
+ worker.onmessage({data:{id:worker.request.id,result}});
+ assert.equal(worker.terminated,true);assert.equal(get('recorded-export').disabled,false);
+ assert.match(get('recorded-summary').textContent,new RegExp(s.stress_scope,'i'));
+ assert.match(get('recorded-stress-title').textContent,new RegExp(s.stress_scope,'i'));
+ assert.match(get('recorded-stress-chart').attributes['aria-label'],new RegExp(s.stress_scope));
+ assert.match(charts.at(-1)[2],new RegExp(s.stress_scope));
+ assert.match(get('recorded-status').textContent,r.ok?/Replay complete/:/Stopped at record 2/);
+ get('recorded-export').onclick();const exported=JSON.parse(await downloads.at(-1).text());
+ assert.equal(exported.schema_version,'experimental-recorded-replay-export-0.2');assert.deepEqual(exported.result,r);assert.deepEqual(exported.specification,s);
+ get('recorded-csv').onclick();const csv=await downloads.at(-1).text();assert.match(csv,new RegExp(s.stress_scope+'_stress_xx_Pa'));assert.ok(csv.split('\n').slice(1).every(line=>line.endsWith(','+s.stress_scope+',unavailable,')));
+ const oldCount=workers.length;exported.result.stress.scope=s.stress_scope==='effective'?'total':'effective';await load(exported);
+ assert.equal(workers.length,oldCount);assert.match(get('recorded-status').textContent,/Import rejected/);assert.equal(get('recorded-export').disabled,true);
+ runs++;
+}
+const effective=rows.find(r=>r.label==='scope-reversal'),s=structuredClone(effective.request),r=structuredClone(effective.response);
+s.version='experimental-recorded-run-0.1';delete s.stress_scope;r.api_version='experimental-recorded-replay-0.1';delete r.stress;
+await load(s);const w=workers.at(-1),calls=[];
+const result=replayRecorded({ccall(name){calls.push(name);return JSON.stringify(r);}},s,catalogue);
+assert.deepEqual(calls,['atlas_replay_recorded']);w.onmessage({data:{id:w.request.id,result}});
+get('recorded-export').onclick();assert.equal(JSON.parse(await downloads.at(-1).text()).schema_version,'experimental-recorded-replay-export-0.1');
+const missing=[];assert.throws(()=>replayRecorded({ccall(name){missing.push(name);if(name==='atlas_describe')return JSON.stringify(catalogue);throw Error('Missing scoped export');}},effective.request,catalogue));assert.deepEqual(missing,['atlas_describe','atlas_replay_recorded_scope']);
+const bad=structuredClone(effective.request);bad.stress_scope='total';let count=workers.length;await load(bad);assert.equal(workers.length,count);assert.match(get('recorded-status').textContent,/Import rejected/);assert.equal(get('recorded-summary').textContent,'');assert.equal(get('recorded-model').textContent,'Load a recorded run');
+process.stdout.write(JSON.stringify({scoped_view_runs:runs,legacy_view_runs:1,missing_export_no_fallback:true}));

@@ -29,7 +29,7 @@ def main():
         generate(check)
         if (Path(check)/'models.json').read_bytes() != (generated/'models.json').read_bytes():
             raise SystemExit('Wasm catalogue is stale: rebuild before packaging.')
-    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','recorded.mjs','recorded-view.mjs','catalogue.mjs','state-contract.mjs','formulation-view.mjs','applicability-view.mjs']:
+    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','recorded.mjs','recorded-scope.mjs','recorded-scope-execution.mjs','recorded-document.mjs','recorded-worker.mjs','recorded-view.mjs','catalogue.mjs','state-contract.mjs','formulation-view.mjs','applicability-view.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     shutil.copyfile(ROOT/'docs/benchmarks/kfs-tmd2-research-range-v1/results/reproduction.png',dest/'tmd2-reproduction.png')
     shutil.copyfile(ROOT/'protocols/recorded-linear-elastic-run.json',dest/'recorded-example.json')
