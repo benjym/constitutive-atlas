@@ -1,5 +1,13 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [provisional development web summary](reviews/web-kfs-development-summary-v1/README.md)
+now exposes locked VW96 scores, initialization scenarios, refinement and source
+links from Methods. Its explicit scalar projection excludes curves/private
+records; pending review and TMD13 propagation limits stay visible. Both scenarios
+and disclosure/navigation pass actual browser checks.22Python checks including
+six new JS contracts, prefix links and nine packaged Wasm paths pass. Existing
+Wasm reused, historical receipts preserved; local only, no deployment/admission.
+
 The [KFS initialization refinement](benchmarks/kfs-initialization-refinement-v1/README.md)
 adds16serial archived replays covering both states at two finer increments. All
 16case/channel gates/32adjacent comparisons pass: largest change is0.2731%of the

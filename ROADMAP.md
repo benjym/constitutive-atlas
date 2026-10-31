@@ -282,6 +282,10 @@ now closes that bounded refinement gap for both scenarios: maximum adjacent
 change is0.2731%of the matching initialization shift, below the prospective1%
 criterion, with nonincreasing finer changes. TMD13 calibration propagation and
 independent scientific review remain open.
+The [website evidence view](docs/reviews/web-kfs-development-summary-v1/README.md)
+now makes the conditional scores, scenario selector, refinement and open gates
+inspectable from Methods using an explicit scalar-only export. Browser/package
+checks pass locally; deployment and scientific promotion have not occurred.
 
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 

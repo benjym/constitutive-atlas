@@ -11,6 +11,7 @@ from build_experiments import bundle
 from build_publications import bundle as bundle_publications
 from build_evidence import bundle as bundle_evidence
 from build_benchmark import bundle as bundle_benchmark
+from build_development import bundle as bundle_development
 
 def main():
     parser=argparse.ArgumentParser()
@@ -38,6 +39,7 @@ def main():
     bundle_publications(dest)
     bundle_evidence(dest)
     bundle_benchmark(dest)
+    bundle_development(dest)
     shutil.copytree(ROOT/'schemas',dest/'schemas',dirs_exist_ok=True)
     shutil.copytree(ROOT/'models',dest/'models',dirs_exist_ok=True)
     experiment_manifest=bundle(dest/'experiments', preview=args.preview_experiments)

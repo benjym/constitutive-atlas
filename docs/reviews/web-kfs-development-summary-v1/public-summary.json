@@ -1,0 +1,180 @@
+{
+  "kind": "kfs-development-summary",
+  "schema_version": "0.1",
+  "status": "provisional",
+  "scientific_admission": false,
+  "model_name": "Base VW96 sand hypoplasticity",
+  "definition_sha256": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31",
+  "metric": "piecewise-linear-residual-axial-travel-v1",
+  "evaluation_tests": 6,
+  "maximum_axial_strain": 0.02,
+  "scenarios": [
+    {
+      "id": "file_initial",
+      "label": "Recorded-file initialization",
+      "description": "Exact file void ratios and effective stresses; original locked development result."
+    },
+    {
+      "id": "original_table_disputed_e0",
+      "label": "Original-table evaluation void ratios",
+      "description": "Change only TMD12 and TMD14 evaluation void ratios. Recorded stresses and fitted parameters stay fixed."
+    }
+  ],
+  "scores": [
+    {
+      "package": "pressure3",
+      "scenario": "file_initial",
+      "root_scaled_mse": 0.1690426791149183
+    },
+    {
+      "package": "pressure3",
+      "scenario": "original_table_disputed_e0",
+      "root_scaled_mse": 0.17421304213791713
+    },
+    {
+      "package": "density3",
+      "scenario": "file_initial",
+      "root_scaled_mse": 0.12934436297532312
+    },
+    {
+      "package": "density3",
+      "scenario": "original_table_disputed_e0",
+      "root_scaled_mse": 0.1367717339283584
+    }
+  ],
+  "refinement": {
+    "passed": true,
+    "limit_fraction": 0.01,
+    "maximum_fraction": 0.0027305732354461587,
+    "levels": [
+      0.0002,
+      0.0001,
+      5e-05
+    ],
+    "shifts": [
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 0.0002,
+        "q": 0.005158114021781854,
+        "volume": 0.0028996451474515256
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 0.0001,
+        "q": 0.005158152656875713,
+        "volume": 0.002899648818193462
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 5e-05,
+        "q": 0.005158224589748331,
+        "volume": 0.0028996560503067085
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 0.0002,
+        "q": 0.019192326435225258,
+        "volume": 0.010476098343116916
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 0.0001,
+        "q": 0.01919260629190171,
+        "volume": 0.010476085074634755
+      },
+      {
+        "package": "pressure3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 5e-05,
+        "q": 0.019192164933961964,
+        "volume": 0.01047609530453502
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 0.0002,
+        "q": 0.008557643471155537,
+        "volume": 0.0042658457947738595
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 0.0001,
+        "q": 0.008557728236851206,
+        "volume": 0.004265886826732348
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD12",
+        "maximum_increment": 5e-05,
+        "q": 0.008557725069229137,
+        "volume": 0.004265869288052052
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 0.0002,
+        "q": 0.02746739474978918,
+        "volume": 0.014241162538953033
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 0.0001,
+        "q": 0.02746805208886415,
+        "volume": 0.01424122686633488
+      },
+      {
+        "package": "density3",
+        "test": "KFS-TMD14",
+        "maximum_increment": 5e-05,
+        "q": 0.02746758283909407,
+        "volume": 0.014241127110235034
+      }
+    ]
+  },
+  "limitations": [
+    "Previously inspected development tests; not blind validation.",
+    "Four material constants fitted; four limiting-density/compression constants inherited from literature. Additional prior information remains explicit.",
+    "TMD13 calibration-state uncertainty is not propagated. These are conditional evaluation-input results.",
+    "The void-ratio source disagreement remains unresolved. Neither scenario is selected by error.",
+    "Archived implementation and one material; no current-engine equivalence, cross-model ranking or scientific admission."
+  ],
+  "sources": [
+    {
+      "title": "Wichtmann & Triantafyllidis (2016), Table 3",
+      "url": "https://doi.org/10.1007/s11440-015-0402-z"
+    },
+    {
+      "title": "Parameter information and inherited constants",
+      "url": "https://github.com/benjym/constitutive-atlas/tree/main/studies/kfs-development-v1/parameters-v1"
+    },
+    {
+      "title": "Initialization scenarios and source qualifications",
+      "url": "https://github.com/benjym/constitutive-atlas/tree/main/studies/kfs-development-v1/initialization-v1"
+    },
+    {
+      "title": "Locked-parameter sensitivity: frozen inputs and results",
+      "url": "https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-locked-initialization-sensitivity-v1"
+    },
+    {
+      "title": "Three-resolution output study",
+      "url": "https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-initialization-refinement-v1"
+    },
+    {
+      "title": "Ordered error metric definition",
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/ORDERED_METRICS.md"
+    }
+  ],
+  "evidence_sha256": {
+    "docs/benchmarks/kfs-locked-initialization-sensitivity-v1/results.json": "1d1e415edfb7d02877ad8fb9d0ef464b72903adcbd8f45c01e112e1a80e9163f",
+    "docs/benchmarks/kfs-locked-initialization-sensitivity-v1/policy.json": "1d5208a2e47f7576f7ecafaad0270e497def27722d0001818405ed356a635c8d",
+    "docs/benchmarks/kfs-initialization-refinement-v1/results.json": "77482aa76f9649e7f1c30fe45e0e7803e1811a272206a8ffe4eee7cda75e6f7d",
+    "docs/benchmarks/kfs-initialization-refinement-v1/policy.json": "5cdb82f3c7df0e85c66616cf5e0bfae195162ca463adc51af5177ee807302fbf"
+  }
+}

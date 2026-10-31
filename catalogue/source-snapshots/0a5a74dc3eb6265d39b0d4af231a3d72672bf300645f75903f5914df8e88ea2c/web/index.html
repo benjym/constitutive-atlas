@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A source-linked geomechanics model atlas and WebAssembly material-point laboratory.">
+  <title>Constitutive Atlas · Model testing</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23274e40'/%3E%3Cpath d='M20 5 34 13v15l-14 8-14-8V13Z M6 13l14 8 14-8M20 21v15' fill='none' stroke='%23d8e1d8' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <aside class="rail">
+    <a class="brand" href="#laboratory" aria-label="Constitutive Atlas home"><svg viewBox="0 0 42 48" aria-hidden="true">
+        <path d="M21 2 40 13v22L21 46 2 35V13Z M2 13l19 11 19-11M21 24v22" fill="none" stroke="currentColor" stroke-width="2" />
+      </svg><span>Constitutive<br><b>Atlas</b></span></a>
+    <nav aria-label="Main navigation"><a href="#laboratory" class="active">◫ <span>Model testing</span></a><a href="#recorded">↝ <span>Recorded paths</span></a><a href="#catalogue">⌕ <span>Model catalogue</span><small id="catalogue-count">32</small></a><a href="#methods">≋ <span>Methods & evidence</span></a><a href="./publications.html">↗ <span>Publications &amp; lineage</span></a></nav>
+    <footer>
+      <p>By<br><a href="https://github.com/benjym" target="_blank" rel="noopener">Benjy Marks</a><br><a href="https://github.com/Franzzzzzzzz" target="_blank" rel="noopener">François Guillard</a></p>
+    </footer>
+  </aside>
+  <main>
+    <section id="laboratory" class="page">
+      <div class="intro">
+        <div>
+          <h1>Explore material behaviour.</h1>
+        </div><button id="import-run" class="secondary">↑ Import run</button><input id="run-file" type="file" accept="application/json,.json" hidden>
+      </div>
+      <section class="model-card">
+        <div class="model-card-top"><span class="eyebrow">CONSTITUTIVE MODEL</span><span class="badge" id="model-status">Loading</span></div><label class="sr-only" for="model">Select a model</label><select id="model"></select>
+        <p id="model-description"></p>
+        <details class="model-references">
+          <summary>Sources &amp; model definition</summary>
+          <div id="model-sources" aria-label="Model sources"></div>
+        </details>
+        <div class="model-meta"><span id="model-family"></span><span>3D · small strain</span><button id="equations-button" class="text-button">View equations ↗</button></div>
+      </section>
+      <nav class="workspace-links" aria-label="Model testing sections"><a href="#controls">Test controls ↓</a><a href="#response">Response plots ↓</a><a href="#measurements">Compare measurements ↓</a><a href="#equations">Equations &amp; sources ↓</a></nav>
+      <div class="lab-layout">
+        <form id="controls" class="controls">
+          <div class="control-heading">
+            <h2>Test controls</h2><button type="button" id="reset" class="text-button">Reset</button>
+          </div>
+          <p class="control-hint"><span class="dot"></span> Live updates as you adjust</p>
+          <label>Loading protocol<select id="protocol">
+              <option value="1">Drained triaxial</option>
+              <option value="2">Undrained triaxial</option>
+              <option value="0">Oedometer</option>
+              <option value="4">Isotropic compression</option>
+              <option value="3">Undrained · stress control</option>
+            </select></label>
+          <label><span id="target-label">Axial strain (%)</span><input id="target" type="number" value="1" min="-10" max="10" step="0.1" required></label>
+          <label>Loading history<select id="cycles">
+              <option value="0">Monotonic ramp</option>
+              <option value="1">1 sinusoidal cycle</option>
+              <option value="3">3 sinusoidal cycles</option>
+              <option value="10">10 sinusoidal cycles</option>
+            </select></label>
+          <div class="divider"></div>
+          <div class="eyebrow">INITIAL STATE</div>
+          <button type="button" id="load-model-example" class="text-button">Load model example</button>
+          <p class="control-hint">Selecting a model loads its example parameters and full initial state. These illustrative values do not establish specimen preparation or experimental calibration. Loading an example replaces parameter and state edits.</p>
+          <label>Radial effective stress (kPa)<input id="confinement" type="number" value="100" min="0.001" max="1000000" step="any" required></label>
+          <details class="control-section">
+            <summary>Initial state details</summary>
+            <label>Axial / radial stress ratio<input id="stress-ratio" type="number" value="1" min="0.01" max="10" step="any" required></label>
+            <div id="state-fields"></div>
+          </details>
+          <div class="divider"></div>
+          <details class="control-section">
+            <summary>Material parameters <span>Adjust model constants</span></summary>
+            <div class="parameter-title"><span class="eyebrow">MATERIAL PARAMETERS</span><span>Units shown per control</span></div>
+            <div id="parameter-fields"></div>
+          </details>
+          <details class="control-section">
+            <summary>Solver settings</summary><label>Increments<input id="steps" type="number" value="100" min="1" max="5000" step="1" required></label>
+            <p class="control-hint">More increments improve resolution and take longer. Cyclic histories need at least 16 per cycle.</p>
+            <label>Loading version<select id="loading-version">
+              <option value="exact">Reproducible · current</option>
+              <option value="legacy">Legacy · earlier saved runs</option>
+            </select></label>
+            <p class="control-hint">Current runs save exact loading values. Earlier saved runs keep their legacy loading version; changing this selection creates a new run.</p>
+            <div id="numerical-fields"></div>
+            <p class="control-hint">Tolerances use model state scales. Smaller values usually require more work; they do not bound total error. Limits apply to each material increment.</p>
+          </details>
+          <div class="run-actions">
+            <p id="control-status" role="status">Changes update the plots automatically.</p><button type="button" id="cancel-button" class="secondary" hidden>Stop calculation</button><button type="button" id="retry-button" class="secondary" hidden>Retry calculation</button>
+          </div>
+        </form>
+        <div class="results-column">
+          <section id="measurements" class="experiment-card" aria-labelledby="experiment-title">
+            <div class="eyebrow">EXPERIMENTAL COMPARISON</div>
+            <h2 id="experiment-title">Compare with measurements</h2>
+            <p>Tests are filtered by drainage protocol, loading path and verified plot axes. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.</p>
+            <p id="experiment-filter-note" class="comparison-filter-note"></p>
+            <label>Find measurements<input id="experiment-search" type="search" placeholder="Material or test ID" autocomplete="off"></label>
+            <label class="experiment-selector">Experimental test<select id="experiment-select" disabled>
+                <option value="">Loading available tests…</option>
+              </select></label>
+            <div class="experiment-toolbar"><label class="experiment-toggle"><input id="show-experiment" type="checkbox" role="switch" disabled> Show measurements</label><button id="match-experiment" class="text-button" disabled>Use initial state &amp; protocol</button><button id="retry-experiment" class="text-button" hidden>Retry loading measurements</button></div>
+            <p id="experiment-status" role="status" aria-live="polite">Loading available tests…</p>
+            <details id="experiment-details" hidden>
+              <summary>Data notes &amp; limitations</summary>
+              <p id="experiment-warnings"></p>
+            </details>
+            <p id="experiment-attribution" hidden></p><a id="experiment-source" target="_blank" rel="noopener noreferrer" hidden>Data source &amp; citation ↗</a>
+            <a id="experiment-license" target="_blank" rel="noopener noreferrer" hidden></a>
+            <section id="source-record-view" hidden aria-label="Source measurement channels">
+              <p><span id="source-unit-note"></span></p>
+              <div class="source-axis-controls"><label>X channel <select id="source-x"></select></label><label>Y channel <select id="source-y"></select></label></div>
+              <svg id="source-chart" viewBox="0 0 480 290" role="img" aria-label="Selected source measurement channels"></svg>
+            </section>
+            <label class="experiment-toggle"><input id="browse-source-records" type="checkbox"> Browse all source records (includes tests without model overlays)</label>
+            <details class="local-experiments">
+              <summary>Compare your own measurements</summary>
+              <p>Load original TMD/TMU .dat files or Atlas experiment JSON. Your files stay in this browser.</p>
+              <div class="experiment-toolbar"><label class="secondary file-label">Load local measurements<input id="experiment-file" type="file" accept=".dat,.json,application/json,text/plain" multiple hidden></label><button id="clear-experiments" class="text-button" disabled>Clear local files</button></div>
+            </details>
+          </section>
+          <div class="run-summary" id="response" role="status" aria-live="polite"><span id="run-state"><span class="dot"></span> Preparing live response</span><span id="run-detail">Double precision · compression positive</span></div>
+          <div class="charts" id="response-charts" aria-label="Simulation results">
+            <section class="chart-panel">
+              <div class="chart-title">
+                <h2>Stress–strain response</h2>
+              </div><svg id="stress-chart" viewBox="0 0 480 290" role="img" aria-label="Deviator stress versus axial strain"></svg>
+              <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key">● Experiment</span></div>
+              <p class="measurement-note"></p>
+            </section>
+            <section class="chart-panel">
+              <div class="chart-title">
+                <h2>Effective stress path</h2>
+              </div><svg id="path-chart" viewBox="0 0 480 290" role="img" aria-label="Deviator stress versus effective mean stress"></svg>
+              <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div>
+              <p class="measurement-note"></p>
+            </section>
+            <section class="chart-panel">
+              <div class="chart-title">
+                <h2>Volumetric response</h2>
+              </div><svg id="volume-chart" viewBox="0 0 480 290" role="img" aria-label="Volumetric versus axial strain"></svg>
+              <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div>
+              <p class="measurement-note"></p>
+            </section>
+            <section class="chart-panel">
+              <div class="chart-title">
+                <h2>Pore-pressure change</h2>
+              </div><svg id="pore-chart" viewBox="0 0 480 290" role="img" aria-label="Pore-pressure change versus axial strain"></svg>
+              <div class="chart-caption"><span class="line-key"></span> Model prediction <span class="measured-key" hidden>● Experiment</span></div>
+              <p class="measurement-note"></p>
+              <p id="pore-caption" class="pore-protocol-note">Reconstructed only for undrained protocols</p>
+            </section>
+          </div>
+          <div class="result-footer">
+            <p id="result-note">Parameters are examples. Numerical verification does not establish experimental validity.</p>
+            <div><button id="export-csv" class="text-button" disabled>↓ Results CSV</button><button id="export-run" class="text-button" disabled>↓ Reproducible run</button></div>
+          </div>
+
+          <details id="equations">
+            <summary>Equations & source provenance</summary>
+            <div id="equation-content"></div>
+          </details>
+        </div>
+
+      </div>
+    </section>
+    <section id="recorded" class="page" hidden>
+      <div class="intro"><h1>Replay a recorded path.</h1><button id="recorded-example" class="secondary">Load elastic example</button></div>
+      <section class="model-card">
+        <span class="eyebrow">EXPERIMENTAL · ORDERED INCREMENTAL REPLAY</span>
+        <h2 id="recorded-model">Load a recorded run</h2>
+        <p>Import a recorded-run JSON file with six linear stress or strain controls and 2–5,001 ordered observations. Reversals and repeated targets remain in their supplied order. Files stay on this device.</p>
+        <label for="recorded-file">Recorded run or exported replay</label><input id="recorded-file" type="file" accept=".json,application/json">
+        <p id="recorded-summary"></p>
+        <p>Coordinates express path order, not physical time. Stress constraints apply at record endpoints; lines connect the accepted observations. Refining the records can change the response. These plots do not establish experimental accuracy.</p>
+        <p><a href="./schemas/recorded-run.schema.json" target="_blank" rel="noopener">Run schema ↗</a> · <a href="./recorded-example.json" download>Download example</a></p>
+        <details><summary>Model sources &amp; definition</summary><div id="recorded-sources"></div></details>
+      </section>
+      <div class="model-card">
+        <label for="recorded-component">Mandel component</label><select id="recorded-component"><option value="0">xx</option><option value="1">yy</option><option value="2">zz</option><option value="3">√2 xy</option><option value="4">√2 yz</option><option value="5">√2 xz</option></select>
+        <p id="recorded-status" role="status" aria-live="polite">Load the example or import a run to begin.</p>
+        <button id="recorded-replay" disabled>Replay from initial state</button><button id="recorded-cancel" class="secondary" hidden>Cancel</button>
+        <button id="recorded-export" class="secondary" disabled>Export replay JSON</button><button id="recorded-csv" class="secondary" disabled>Export observations CSV</button>
+        <details><summary>Resolved initial state, parameters &amp; numerical settings</summary><pre id="recorded-resolved"></pre></details>
+      </div>
+      <section class="chart-panel"><h2>Strain by record order</h2><svg id="recorded-strain-chart" viewBox="0 0 560 320" role="img" aria-label="Recorded strain component versus ordered coordinate"></svg></section>
+      <section class="chart-panel"><h2>Effective stress by record order</h2><svg id="recorded-stress-chart" viewBox="0 0 560 320" role="img" aria-label="Recorded effective stress component versus ordered coordinate"></svg></section>
+    </section>
+    <section id="catalogue" class="page" hidden>
+      <div class="eyebrow">A LIVING LITERATURE MAP</div>
+      <h1>The model catalogue.</h1>
+      <p class="page-lead">Choose a model to explore its formulation and sources. Research candidates are not yet available for testing.</p>
+      <p><a href="./publications.html">Browse publication versions, corrections &amp; lineage →</a></p>
+      <div class="catalogue-tools"><label>Search models<input id="search" type="search" placeholder="Name, family, or formulation…"></label><label>Availability<select id="availability">
+            <option value="all">All entries</option>
+            <option value="executable">Available to test</option>
+            <option value="candidate">Research candidates</option>
+          </select></label></div>
+      <p id="catalogue-results" class="catalogue-results" role="status"></p>
+      <div id="catalogue-grid"></div>
+    </section>
+    <section id="methods" class="page" hidden>
+      <div class="eyebrow">REPRODUCIBILITY BEFORE RANKINGS</div>
+      <h1>Every claim needs evidence.</h1>
+      <p class="page-lead">An executable model is the start of verification, not the end of validation.</p>
+      <div class="method-grid">
+        <article><span class="eyebrow">01 / REPRESENTATION</span>
+          <h2>One mathematical source.</h2>
+          <p>Restricted scalar and symmetric-tensor expressions are dimension checked, interpreted in Python, and compiled into C++. Model definitions contain no native code. The browser executes the generated kernels through Emscripten.</p>
+          <p>SI units. Compression-positive stress and strain. Mandel order: xx, yy, zz, √2xy, √2yz, √2xz. Infinitesimal kinematics, zero spin.</p>
+        </article>
+        <article><span class="eyebrow">02 / NUMERICAL VERIFICATION</span>
+          <h2>Test equations and algorithms.</h2>
+          <p>Analytical elastic tests, yield consistency, hardening and unloading, step refinement, small-strain stiffness, automatic-differentiation Jacobians, and interpreter/native/Wasm agreement. Failed steps retain the last committed state.</p>
+          <p id="build-hash"></p>
+        </article>
+        <article><span class="eyebrow">03 / EXPERIMENTAL VALIDATION</span>
+          <h2>Keep calibration separate.</h2>
+          <p>Published parameter baselines precede controlled calibration. Entire tests are assigned to calibration or held-out sets. Comparison requires compatible material, preparation, initial state and loading conditions.</p>
+          <p>This release makes no experimental ranking claim.</p>
+        </article>
+        <article id="tmd2-benchmark"><span class="eyebrow">PUBLISHED BASELINE / TMD2</span>
+          <h2>A source-matched sand calculation.</h2>
+          <p><a href="./tmd2.html">Inspect the exact benchmark model, parameters, initial state and protocol →</a></p>
+          <p>VW96 + intergranular strain, loose Karlsruhe fine sand at 100 kPa: three native paths over 0–25% accumulated axial strain agree with the published model curves within frozen figure precision. Adjacent refinement checks pass.</p>
+          <figure><a href="./tmd2-reproduction.png" aria-label="Open full-size TMD2 reproduction figure"><img src="./tmd2-reproduction.png" alt="Three Atlas paths at 400, 800 and 1600 increments overlay the published stress and volume curves and their frozen source precision envelopes." style="width:100%;height:auto" loading="lazy"></a><figcaption>Published model curves and Atlas results; no measured data are shown.</figcaption></figure>
+          <p>The finest-path measured-data RMSE is 23.54 kPa in stress and 0.208 percentage points in volume strain. These are calibration-campaign errors, not held-out validation. Historical strain conversion and independent scientific review remain open. The 25% research path does not change the interactive laboratory limit.</p>
+          <p><a href="https://doi.org/10.1016/j.soildyn.2019.05.001" target="_blank" rel="noopener">Published comparison ↗</a> · <a href="https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-tmd2-research-range-v1" target="_blank" rel="noopener">Inputs, bounds, results and limitations ↗</a></p>
+        </article>
+        <article><span class="eyebrow">04 / ORIGINAL DATA</span>
+          <h2>Wichtmann benchmark sources.</h2>
+          <p><a href="https://www.torsten-wichtmann.de/KFSDB.htm" target="_blank" rel="noopener">Karlsruhe fine sand database ↗</a></p>
+          <p><a href="https://www.torsten-wichtmann.de/database-kaolin-menu.htm" target="_blank" rel="noopener">Karlsruhe kaolin database ↗</a></p>
+          <p><a href="https://doi.org/10.1007/s11440-015-0402-z" target="_blank" rel="noopener">Wichtmann & Triantafyllidis (2016), Part I ↗</a></p>
+          <p><a href="https://doi.org/10.1007/s11440-015-0412-x" target="_blank" rel="noopener">Part II ↗</a></p>
+          <p>Raw files remain with their providers. The importer records checksums and unit transformations. Redistribution terms require review.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+  <dialog id="catalogue-dialog" class="catalogue-dialog" aria-labelledby="catalogue-detail-title">
+    <div class="catalogue-dialog-layout">
+      <header class="catalogue-dialog-header">
+        <div class="catalogue-detail-meta"><span id="catalogue-detail-family" class="catalogue-family"></span><span id="catalogue-detail-status" class="catalogue-availability"></span></div>
+        <button id="catalogue-close" class="catalogue-close" type="button" aria-label="Close model details" autofocus>×</button>
+        <h2 id="catalogue-detail-title"></h2>
+      </header>
+      <div id="catalogue-detail-body" class="catalogue-detail-body"></div>
+      <footer class="catalogue-dialog-footer"><span id="catalogue-detail-id"></span><a id="catalogue-permalink">Link to this model</a><button id="catalogue-explore" type="button" class="primary">Test this model →</button></footer>
+    </div>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+
+</html>
