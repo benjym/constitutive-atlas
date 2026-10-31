@@ -1,0 +1,173 @@
+{
+  "version": "hca2005-polarization-ledger-v1",
+  "source_audit": "source-audit.json",
+  "model_identity": "2005 author manuscript; source alternatives remain separate",
+  "conventions": {
+    "source_stress": "tension positive; explicit mapping required for Atlas compression-positive hosts",
+    "strain": "logarithmic strain ln(U); D not generally its ordinary derivative",
+    "source_shear_order": [
+      "11",
+      "22",
+      "33",
+      "sqrt2*12",
+      "sqrt2*13",
+      "sqrt2*23"
+    ],
+    "atlas_shear_order": [
+      "11",
+      "22",
+      "33",
+      "sqrt2*12",
+      "sqrt2*23",
+      "sqrt2*13"
+    ],
+    "frame": "Declared fixed or consistently corotated orthonormal physical frame; polarization-space rotation is not frame transport"
+  },
+  "parameters": [
+    {
+      "name": "Cpi1",
+      "units": "dimensionless",
+      "source": "p11 Eq27; p9 Table1",
+      "illustrative_value": 4,
+      "domain": "No universal upper range inferred; table typical fpi range is not a hard bound"
+    },
+    {
+      "name": "Cpi2",
+      "units": "inverse cycle-count times inverse strain squared (both dimensionless in SI)",
+      "source": "p10 Eq24; p9 Table1",
+      "illustrative_value": 200,
+      "domain": "positive"
+    }
+  ],
+  "states": [
+    {
+      "name": "pi",
+      "shape": "self-adjoint fourth-order polarization",
+      "source": "p10\u201311 Eqs24\u201329",
+      "initializers": [
+        "known-preloading r outer r, ||r||=1",
+        "literal full9 J/3"
+      ],
+      "required_invariant": "full declared Frobenius norm1; nonnegative amplitude contraction; unresolved printed update sign"
+    },
+    {
+      "name": "sigma,e,gA",
+      "components": 8,
+      "scope": "Existing full-HCA inventory context only, not reimplemented or closed here"
+    },
+    {
+      "name": "N",
+      "ownership": "driver coordinate; continuous cycle count, not physical time"
+    }
+  ],
+  "conditional_reduction": {
+    "components": 22,
+    "coordinates": "21 orthonormally packed entries of symmetric B6 plus w=sqrt(3)*c",
+    "reconstruction": "pi=blockdiag(B6,c*I3) in Sym(3) direct-sum Skew(3)",
+    "norm_squared": "B6:B6+3*c*c",
+    "amplitude_embedding": "blockdiag(A6,0)",
+    "assumptions": [
+      "Initial pi is Eq28 symmetric rank-one or literal Eq29 J9/3 (or explicitly declared member of same block class)",
+      "All supplied amplitudes act only on symmetric strain space",
+      "Every polarization update is in span{old pi,Ahat}",
+      "Same orthonormal fixed or consistently transported physical frame",
+      "No anisotropic skew block or symmetric/skew cross memory introduced"
+    ],
+    "update": "Bnew=u*B+v*A6; cnew=u*c",
+    "not_claimed": [
+      "General fourth-order histories",
+      "Chosen sign repair",
+      "Normalization of restricted histories"
+    ]
+  },
+  "capacity_alternatives": {
+    "restricted_polarization": 22,
+    "general_self_adjoint_full9": 45,
+    "unrestricted_fourth_order": 81,
+    "sigma6_e1_gA1_plus_restricted_pi": 30,
+    "with_stored_N": 31,
+    "with_additional_cumulative_strain6_without_N": 36,
+    "general_self_adjoint_plus_base8": 53,
+    "unrestricted_plus_base8": 89,
+    "warning": "Capacity32 only suffices for the explicitly restricted base state; buffers and companion histories are extra"
+  },
+  "inputs": [
+    {
+      "name": "A",
+      "shape": "PSD self-adjoint operator on six-dimensional symmetric strain;21packed components",
+      "units": "strain",
+      "domain": "Ahat=A/||A|| defined only at positive amplitude"
+    },
+    {
+      "name": "DeltaN",
+      "units": "cycle count",
+      "domain": "positive accumulation block; zero analytic identity only"
+    },
+    {
+      "name": "recorded samples",
+      "shape": "ordered variable-length full symmetric strain path",
+      "ownership": "driver; immutable originals and versioned selected indices"
+    }
+  ],
+  "branches": [
+    {
+      "case": "alpha=0",
+      "requirement": "matched direction identity; printed normalized nu undefined"
+    },
+    {
+      "case": "amplitude=0",
+      "requirement": "Ahat undefined; bounded angle tendency zero does not close mechanical branch"
+    },
+    {
+      "case": "D=0, amplitude>0",
+      "requirement": "May accumulate/relax; not an automatic identity"
+    },
+    {
+      "case": "filter current increment=0",
+      "requirement": "Angle undefined if radius condition passes; no invented decision"
+    },
+    {
+      "case": "filter radius<=1e-5",
+      "requirement": "Strict radius test fails"
+    }
+  ],
+  "integration": {
+    "coordinate": "continuous cycle count",
+    "frozen_amplitude_angle_solution": "alpha_new=alpha_old*exp(-Cpi2*epsilon_ampl^2*DeltaN)",
+    "selection": "Derived Eq24 diagnostic only, not certified Eq26 equivalence",
+    "trial": "Every trial reads immutable increment-start material/companion/phase/recorder state",
+    "commit": "Accept material, pi, scalar history, count, recorder anchor/buffer and refresh decision atomically",
+    "rollback": "Failed trial retains all parent histories",
+    "amplitude_refresh": "Resolved initial/control-cycle phase; no implicit per-substep refresh",
+    "unsettled": [
+      "Full stage-consistent coupled HCA update",
+      "Cross-mode count/companion handoff",
+      "Trial endpoint and mandatory final recorder sample",
+      "Objective physical-frame transport",
+      "Tangent and numerical domain policies"
+    ]
+  },
+  "capability_requests": [
+    {
+      "name": "Guarded polarization angle",
+      "example": "acos(Ahat::pi) with explicit unit metric, matched branch and no silent clipping",
+      "current_gap": "sin/cos available; acos absent from current DSL"
+    },
+    {
+      "name": "Fixed-size packed self-adjoint action",
+      "example": "22-coordinate reduction only after source variant is selected",
+      "note": "No need to materialize eighth-order6561 coefficients"
+    },
+    {
+      "name": "Recorder/phase transactions",
+      "example": "Rollback anchor and variable-length selected-index buffer together with material state",
+      "current_gap": "Separate companion/driver history contract needed"
+    }
+  ],
+  "next_action": "Compare exact journal equations and dated author implementation statically; freeze explicit initialization/sign/filter variant before supplied-amplitude polarization fragment",
+  "claims": {
+    "full_model_implemented": false,
+    "source_correction_selected": false,
+    "scientific_admission": false
+  }
+}

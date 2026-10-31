@@ -1,0 +1,597 @@
+{
+  "kind": "model-ingestion-packet",
+  "task": "ING-pm4silt",
+  "date": "2026-10-31",
+  "formulation_id": "pm4silt",
+  "source_identity": {
+    "authors": [
+      "Ross W. Boulanger",
+      "Katerina Ziotopoulou"
+    ],
+    "title": "PM4Silt (Version 1): A Silt Plasticity Model for Earthquake Engineering Applications",
+    "report": "UCD/CGM-18/01",
+    "edition": "First edition January 2018; no later revision inferred",
+    "pdf_pages": 109,
+    "dimension": "plane strain; source in-plane 2x2 stress",
+    "no_latest_release_claim": true
+  },
+  "primary_url": "https://pm4silt.engr.ucdavis.edu/pm4silt-files",
+  "source_receipts": [
+    {
+      "file": "manual-author.pdf",
+      "url": "https://ucdavis.box.com/shared/static/3b0vysopws6tsl96akj8y1mcdr05sqz1.pdf",
+      "content_type": "application/pdf",
+      "bytes": 3452953,
+      "sha256": "7eccd740249d72861e9727bc17d26fc07d382cfe4624902371e744d559b317ea",
+      "verified_date": "2026-10-31",
+      "public_redistribution": "not authorized by this dossier",
+      "private_relative_path": "private/manual-author.pdf"
+    },
+    {
+      "file": "dll-v1.zip",
+      "url": "https://ucdavis.box.com/shared/static/q355r76ncqwnn6c1qht6hw5m9lyt6sm0.zip",
+      "content_type": "application/zip",
+      "bytes": 25234,
+      "sha256": "b95f240380e42beafab5e7901c64770349cb39bdcd9aab41c72edc40b464c15a",
+      "verified_date": "2026-10-31",
+      "public_redistribution": "not authorized by this dossier",
+      "private_relative_path": "private/dll-v1.zip",
+      "members": [
+        {
+          "path": "modelpm4silt005_64.dll",
+          "bytes": 61952,
+          "sha256": "96f5852fd7e46acb05d45c9f9982f92aba2b53ba2440473dccf25b49e33e95a3"
+        }
+      ]
+    },
+    {
+      "file": "drivers-v1.zip",
+      "url": "https://ucdavis.box.com/shared/static/y4eqo72m3g5w2y1bwewhqe4qf4o6m12a.zip",
+      "content_type": "application/zip",
+      "bytes": 28312,
+      "sha256": "55508c587432684e7f5cc5cfe8a952bdb778e7b6999d7ff7276f77e2e9b32b8c",
+      "verified_date": "2026-10-31",
+      "public_redistribution": "not authorized by this dossier",
+      "private_relative_path": "private/drivers-v1.zip",
+      "members": [
+        {
+          "path": "Cyclic_DSS/DSS_undrained_uniform_cyclic.fis",
+          "bytes": 25632,
+          "sha256": "196f41bb5e333c22abceda616fe0a8a42e9fb159e5d931fd6bddcabdf00e3cdb"
+        },
+        {
+          "path": "Cyclic_DSS/DSS_uniform_cyclic_stress.prj",
+          "bytes": 4408,
+          "sha256": "e45bfccdfc146d8f31fc12afb630975d6a2a71bf457c85f0f775d0cab8a7fc33"
+        },
+        {
+          "path": "Modulus_reduction_DSS/DSS_modulus_reduction.fis",
+          "bytes": 20816,
+          "sha256": "77ff4f73f4e2ed70f2f31b595799e9096a7b1c44447d8e27c711642b6ea2db64"
+        },
+        {
+          "path": "Modulus_reduction_DSS/DSS_modulus_reduction.prj",
+          "bytes": 4461,
+          "sha256": "6879f211d83295641a944a43b77cd7433adb0c4694907501754bd1f97fbdfcd4"
+        },
+        {
+          "path": "Monotonic_DSS/DSS_monotonic.fis",
+          "bytes": 17952,
+          "sha256": "a9906157d0092681ea2a72af8bf4bc322c1623496c867a20f3604670b526f8bc"
+        },
+        {
+          "path": "Monotonic_DSS/DSS_monotonic.prj",
+          "bytes": 3870,
+          "sha256": "0d9990ba6f41cdd176b509e0d384322e8e46a5f60ca6e4fca7e7e5a5e075e008"
+        },
+        {
+          "path": "Reconsolidation/DSS_post_cyclic_reconsol.fis",
+          "bytes": 28321,
+          "sha256": "3d1c429d567ea5d8f534ee631848d3c041d97e8fb88bbcb2a12d60166c874b2e"
+        },
+        {
+          "path": "Reconsolidation/DSS_reconsol.prj",
+          "bytes": 4551,
+          "sha256": "a815cd3b76432ecd0708e588bca67130b11e45f7d8796800fb5f60733f83d83d"
+        }
+      ]
+    }
+  ],
+  "private_payload_root": "/private/tmp/atlas-pm4silt-v1-source-20261031-v1",
+  "status": {
+    "source_completeness": "partial-conflicted manual-only",
+    "executable": false,
+    "scientific_admission": false,
+    "checks": "7 scalar discrepancy groups only"
+  },
+  "visual_inspection_this_packet": {
+    "printed_pages": [
+      13,
+      14,
+      16,
+      17,
+      24,
+      26,
+      30,
+      31,
+      33,
+      35,
+      36,
+      37,
+      38,
+      39,
+      56,
+      57,
+      58,
+      59,
+      66,
+      67,
+      68
+    ],
+    "pdf_page_offset": 5,
+    "method": "Poppler full-pagePNG view; no images redistributed"
+  },
+  "fields": [
+    {
+      "names": [
+        "sigma"
+      ],
+      "shape": "sym2",
+      "unit": "Pa",
+      "proposed_role": "material-state",
+      "source_locator": "Eqs1-4; Table3.1 steps4-9,18",
+      "initialization": "host stresses; Table3.2 tension/bounding corrections",
+      "update_or_lifetime": "subzone trial then averaged/corrected zone publish",
+      "unresolved": "omitted zz/host sign adapter"
+    },
+    {
+      "names": [
+        "e"
+      ],
+      "shape": "scalar",
+      "unit": "1",
+      "proposed_role": "material-state",
+      "source_locator": "Eqs9-10; Table4.3",
+      "initialization": "e_o explicit/default.90",
+      "update_or_lifetime": "state parameter after step15",
+      "unresolved": "complete finite void update not provided in inspected tables; do not assign continuity by analogy"
+    },
+    {
+      "names": [
+        "alpha"
+      ],
+      "shape": "sym2",
+      "unit": "1",
+      "proposed_role": "material-state",
+      "source_locator": "Eqs18-21,36-38; Table3.2 step4",
+      "initialization": "r or bounding-correctedr*(Mb-m)/Mb",
+      "update_or_lifetime": "hardening/penalty and averaged zone commit",
+      "unresolved": "exact penalty projection not given"
+    },
+    {
+      "names": [
+        "alpha_in",
+        "alpha_in_true"
+      ],
+      "shape": "sym2",
+      "unit": "1",
+      "proposed_role": "reversal-history",
+      "source_locator": "Sec2.5 pp15-16; Table3.2 step5",
+      "initialization": "alpha0",
+      "update_or_lifetime": "on source reversal (alpha-alpha_in):n<0",
+      "unresolved": "possible aliases, exact snapshot ordering"
+    },
+    {
+      "names": [
+        "alpha_in_previous"
+      ],
+      "shape": "sym2",
+      "unit": "1",
+      "proposed_role": "reversal-history",
+      "source_locator": "Sec2.5; Table3.2 step5",
+      "initialization": "alpha_in",
+      "update_or_lifetime": "previous <- old initial on reversal",
+      "unresolved": "Table3.1 steps16/17 overlap"
+    },
+    {
+      "names": [
+        "alpha_in_apparent"
+      ],
+      "shape": "sym2",
+      "unit": "1",
+      "proposed_role": "history-derived",
+      "source_locator": "Sec2.5 p16",
+      "initialization": "source extrema-based construction",
+      "update_or_lifetime": "positive direction min boundedbelow0, negative max boundedabove0",
+      "unresolved": "loading-direction tie and multidimensional component policy"
+    },
+    {
+      "names": [
+        "alpha_in_max",
+        "alpha_in_min"
+      ],
+      "shape": "sym2",
+      "unit": "1",
+      "proposed_role": "extrema-history",
+      "source_locator": "Sec2.5; Table3.2 step5",
+      "initialization": "alpha_in",
+      "update_or_lifetime": "componentwise retained extrema",
+      "unresolved": "coordinate dependence, possible derivation of apparent"
+    },
+    {
+      "names": [
+        "z"
+      ],
+      "shape": "sym2",
+      "unit": "1",
+      "proposed_role": "fabric-history",
+      "source_locator": "Eqs55-57; Table2.1 p39",
+      "initialization": "zero",
+      "update_or_lifetime": "only when (alpha_d-alpha):n<0",
+      "unresolved": "Table3.1 grouping conflict; D0"
+    },
+    {
+      "names": [
+        "z_in"
+      ],
+      "shape": "sym2",
+      "unit": "1",
+      "proposed_role": "reversal-history",
+      "source_locator": "Sec2.8 p25; Table3.2 step7",
+      "initialization": "zero",
+      "update_or_lifetime": "capture on stress-ratio reversal",
+      "unresolved": "capture old/new fabric phase unresolved"
+    },
+    {
+      "names": [
+        "z_d"
+      ],
+      "shape": "sym2",
+      "unit": "1",
+      "proposed_role": "unresolved-source-storage",
+      "source_locator": "Table3.2 step7",
+      "initialization": "zero",
+      "update_or_lifetime": "unspecified in inspected table",
+      "unresolved": "no speculative alias or evolution"
+    },
+    {
+      "names": [
+        "z_cum"
+      ],
+      "shape": "scalar",
+      "unit": "1",
+      "proposed_role": "fabric-history",
+      "source_locator": "Eq56; Table3.2 step7",
+      "initialization": "zero",
+      "update_or_lifetime": "add norm(dz)",
+      "unresolved": "Table3.1 prose appearsconditional only when exceedingformer value; conflicts with cumulative variation reading"
+    },
+    {
+      "names": [
+        "z_peak"
+      ],
+      "shape": "scalar",
+      "unit": "1",
+      "proposed_role": "peak-history",
+      "source_locator": "Eq57; Table3.2 step7",
+      "initialization": "zmax/100000",
+      "update_or_lifetime": "runningmax norm(z)/sqrt2",
+      "unresolved": "peak operand old/new not specified in summary"
+    },
+    {
+      "names": [
+        "p_zp"
+      ],
+      "shape": "scalar",
+      "unit": "Pa",
+      "proposed_role": "fabric-pressure-history",
+      "source_locator": "Sec2.8 p25; Table3.2 step7",
+      "initialization": "signedp0/100",
+      "update_or_lifetime": "meanp at maximum fabric-pressure product",
+      "unresolved": "scalarproduct definition/sign and ordering unresolved"
+    },
+    {
+      "names": [
+        "zxp"
+      ],
+      "shape": "scalar",
+      "unit": "Pa",
+      "proposed_role": "tracked-product-or-cache",
+      "source_locator": "Table3.2 step7; Table4.3 tracking",
+      "initialization": "0 (printed z:p)",
+      "update_or_lifetime": "pressure-fabric product",
+      "unresolved": "p scalar contracted with tensor is not defined as written"
+    },
+    {
+      "names": [
+        "zxp_peak"
+      ],
+      "shape": "scalar",
+      "unit": "Pa",
+      "proposed_role": "peak-history",
+      "source_locator": "Table3.2 step7; Table4.3 tracking",
+      "initialization": "-zmax*p0/50",
+      "update_or_lifetime": "maximum pressure-fabric product",
+      "unresolved": "definition and p sign unresolved"
+    },
+    {
+      "names": [
+        "Gamma"
+      ],
+      "shape": "scalar",
+      "unit": "1",
+      "proposed_role": "preparation",
+      "source_locator": "Table3.2 step3; Table4.1",
+      "initialization": "from e,strength,M,pA",
+      "update_or_lifetime": "retained CSL intercept; Fsu enters xi separately",
+      "unresolved": "signed p log needs adapter"
+    },
+    {
+      "names": [
+        "su_cs_eq",
+        "consolidation_vertical_stress"
+      ],
+      "shape": "scalar",
+      "unit": "Pa",
+      "proposed_role": "preparation",
+      "source_locator": "Table4.1 pp64-65",
+      "initialization": "explicitstrength orratio*currentverticalstress; explicitstrengthwins",
+      "update_or_lifetime": "refresh on FirstCall0",
+      "unresolved": "do not reinitialize every increment"
+    },
+    {
+      "names": [
+        "p_min"
+      ],
+      "shape": "scalar",
+      "unit": "Pa",
+      "proposed_role": "preparation",
+      "source_locator": "Eqs75-76; Table3.2 step2; Table4.2 p67",
+      "initialization": "from ru orpcs/8 and floor",
+      "update_or_lifetime": "retained since last FirstCall0",
+      "unresolved": "opposite min/max default bounds; .5kPa vs pA/200 numerical difference"
+    },
+    {
+      "names": [
+        "D"
+      ],
+      "shape": "scalar",
+      "unit": "1",
+      "proposed_role": "caller-lag",
+      "source_locator": "Sec3.1 p52; Table3.1 step12",
+      "initialization": "0",
+      "update_or_lifetime": "computedafter zoneaverage, used nextcaller byall4subzones",
+      "unresolved": "which old/new normal/anchor operands"
+    },
+    {
+      "names": [
+        "Kp",
+        "G",
+        "K"
+      ],
+      "shape": "scalar",
+      "unit": "Pa",
+      "proposed_role": "caller-lag",
+      "source_locator": "Sec3.1 p52; Table3.1 steps12,15",
+      "initialization": "Kp100G; startupGsqrt;Kfromnu",
+      "update_or_lifetime": "nextzone-step coefficients",
+      "unresolved": "nG exponent/CSR and reset policies"
+    },
+    {
+      "names": [
+        "G_hourglass",
+        "K_hourglass",
+        "c_hourglass"
+      ],
+      "shape": "scalar",
+      "unit": "Pa",
+      "proposed_role": "preparation-and-host-workspace",
+      "source_locator": "Sec3.1 p53; Table4.2",
+      "initialization": "moduli .1*initialPM4; strengthmax(userchg,crhg*p)",
+      "update_or_lifetime": "parallel per-subzone shearresistance",
+      "unresolved": "complete independent elasticplastic parallel-state/algorithm not in summary"
+    },
+    {
+      "names": [
+        "FirstCall",
+        "PostShake"
+      ],
+      "shape": "scalar-enum",
+      "unit": "1",
+      "proposed_role": "user-mode",
+      "source_locator": "Tables3.1-3.2,4.1-4.2",
+      "initialization": "FirstCall0 then1;PostShake0",
+      "update_or_lifetime": "explicitreset /postshakecommand",
+      "unresolved": "snapshot commands separately from continuation"
+    },
+    {
+      "names": [
+        "Fsu"
+      ],
+      "shape": "scalar",
+      "unit": "1",
+      "proposed_role": "user-input",
+      "source_locator": "Eq89; Table4.1",
+      "initialization": "1",
+      "update_or_lifetime": "explicitpostshake strength shift",
+      "unresolved": "not an elapsedtime law"
+    },
+    {
+      "names": [
+        "strain_accumulators"
+      ],
+      "shape": "sym2-and-scalars",
+      "unit": "1",
+      "proposed_role": "tracked-or-numerical-history",
+      "source_locator": "Table3.1 step16; Table4.3 eqsum,evsum,eq_11,eq_22,eq_12,epsIncr,evol",
+      "initialization": "unspecified",
+      "update_or_lifetime": "accumulate/track",
+      "unresolved": "exact definitions/reset/independence missing"
+    },
+    {
+      "names": [
+        "r",
+        "n",
+        "alpha_b",
+        "alpha_d",
+        "alpha_dR",
+        "Mb",
+        "Md",
+        "Mcur",
+        "xi",
+        "LoadInd",
+        "daxn"
+      ],
+      "shape": "mixed-derived",
+      "unit": "1",
+      "proposed_role": "derived-or-tracked-cache",
+      "source_locator": "Tables2.1,3.1,4.3",
+      "initialization": "from initializedstate",
+      "update_or_lifetime": "specificsubzone/zone stage",
+      "unresolved": "averaged n nonunit; exact lags and aliases unknown"
+    },
+    {
+      "names": [
+        "subzone_areas",
+        "subzone_strain",
+        "zone_average_workspace"
+      ],
+      "shape": "host-context",
+      "unit": "mixed",
+      "proposed_role": "host-workspace",
+      "source_locator": "Sec3.1 p52; Table3.1 steps7-10",
+      "initialization": "hostprovided",
+      "update_or_lifetime": "four-subzone area-weighted reduction",
+      "unresolved": "no default equalareas or singlepoint equivalence"
+    }
+  ],
+  "blockers": [
+    {
+      "id": "S01",
+      "locator": "body12/14 pp13-14 vs Table2.1 pp36-37",
+      "issue": "Exponential xi versus xi/lambda",
+      "evidence": "verified visual",
+      "required_decision": "two formula variants; no coefficient renaming inferred"
+    },
+    {
+      "id": "S02",
+      "locator": "body26 p17; Table4.2 p66; Table2.1 p35; Table3.2 p59",
+      "issue": "General nG/default.75 versus halfpower, startupalso omitsCSR/fabric",
+      "evidence": "verified visual",
+      "required_decision": "distinguish intendedstartup specialization from summary discrepancy"
+    },
+    {
+      "id": "S03",
+      "locator": "body87 p31 vs Table2.1 p38",
+      "issue": "Contraction Cpmin piecewise0/linear/1 versus smooth dilation factor",
+      "evidence": "verified visual",
+      "required_decision": "no shared coefficient alias selected"
+    },
+    {
+      "id": "S04",
+      "locator": "bodyp30 after76 vs Table4.2 p67",
+      "issue": "Default pmin no greater vs not smaller than ru0 value",
+      "evidence": "verified visual",
+      "required_decision": "opposite inequality; .5kPa vs pA/200 also not exactlysame withpA101.3kPa"
+    },
+    {
+      "id": "S05",
+      "locator": "body74 p30 vs Table2.1 p39",
+      "issue": "Lowp minimum-magnitude dilation constraint versus apparentoverride p<2pmin",
+      "evidence": "verified visual",
+      "required_decision": "belowpmin behavior/order missing"
+    },
+    {
+      "id": "S06",
+      "locator": "Table2.1 p39 vs Table3.1 step14 p57",
+      "issue": "Fabric(zmax*n+z) bracket versus printed +z outside product",
+      "evidence": "verified visual",
+      "required_decision": "literal zeroincrement doublesz in Table3.1; not selected"
+    },
+    {
+      "id": "S07",
+      "locator": "body90-91 p33 vs Table2.1 p39",
+      "issue": "Fconsol versus Fsed multiplier",
+      "evidence": "verified visual",
+      "required_decision": "alias/typo not assumed"
+    },
+    {
+      "id": "S08",
+      "locator": "body23 p16 vs41/Table2.1 p36",
+      "issue": "strict<0 versus <=0 previous-anchor branch",
+      "evidence": "verified visual",
+      "required_decision": "initialcoincident anchors0/0; exactcontinuationunknown"
+    },
+    {
+      "id": "S09",
+      "locator": "Eqs1-6 pp11-12; Table3.2 pp58-59",
+      "issue": "inplane /2stress and /3strain; FLACnegativep versus bodypositivep",
+      "evidence": "existingvisualscope+newstartupvisual",
+      "required_decision": "mustsource sign/dimensional adapter beforekernel"
+    },
+    {
+      "id": "S10",
+      "locator": "Table3.1 steps5-6,8-18",
+      "issue": "normalbeforeyieldcheck; distance0; averagednormal; penalty and old/new order",
+      "evidence": "verified visual",
+      "required_decision": "no clipping/normalizing/return algorithm invented"
+    },
+    {
+      "id": "S11",
+      "locator": "Table2.1 p36 Cpzp2; Table3.2 p59 z:p",
+      "issue": "pressure/fabric product and negative ramp",
+      "evidence": "verified visual",
+      "required_decision": "denominatorzero atp-pzp=pmin; pscalartensorcontraction undefined asprinted"
+    },
+    {
+      "id": "S12",
+      "locator": "Table2.1 p37 Ado; bodyp22; Table4.2 p67",
+      "issue": "Ado calibrationformula0/0 atcritical versus suppliedparameter",
+      "evidence": "tableparameter visual; bodyp22text-located",
+      "required_decision": "keepcalibrationderivation separate fromdynamicdefinition"
+    },
+    {
+      "id": "S13",
+      "locator": "Eq84/Table2.1 p38",
+      "issue": "Cwet printed<=1 requirescap, rawreciprocal canexceed1",
+      "evidence": "verified visual",
+      "required_decision": "zero-bounddistance limitingbranch stillneeded"
+    },
+    {
+      "id": "S14",
+      "locator": "Sec3.1 pp52-53",
+      "issue": "4subzone averaging/laggedD,Kp/hourglass model",
+      "evidence": "sourceexplicitimplementation",
+      "required_decision": "standalonehomogeneouspoint reduction is a projectvariant, not proved sourceequivalence"
+    }
+  ],
+  "storage_budget": {
+    "minimal_independent_count": null,
+    "capacity_increase_requested": false,
+    "reason": "sym2 tracefree aliases, actual anchoraliases, lags, fourhostsubzones and additionalparallelresistance history unresolved"
+  },
+  "integration": {
+    "independent_variable": "strain increments; no intrinsic physical-time creep",
+    "source_discretization": "explicit FLAC4subzone zoneaveraged; D/Kp lagcallerzone step",
+    "substepping": "absent in retained implementation; future commonengine cutbacks must retain callerlag identity",
+    "rollback": "Atlas proposal atomicfullparent includingpreparation/modes/allhostmemory; noDLLAPIclaim",
+    "zero_hold": "undefined-normal branches and explicit userreset/postshakemodes require separate handling",
+    "unsupported": [
+      "unrestricted3D",
+      "arbitrary spin/objective rate",
+      "implicit source-matchedreturnmap",
+      "authoralgorithmic tangent",
+      "fullstandaloneinitialization",
+      "physicaltimecreep",
+      "unresolvedprintedalternatives"
+    ]
+  },
+  "rights": {
+    "redistribution_granted": false,
+    "source_license_acquired": false,
+    "archive_license_members_found": [],
+    "bounded_scan": "four FISH files for license/copyright/permission; no matching notice",
+    "all_original_payloads_private": true
+  },
+  "source_redistribution": false
+}

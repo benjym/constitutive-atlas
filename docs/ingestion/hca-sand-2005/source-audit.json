@@ -1,0 +1,84 @@
+{
+  "version": "hca2005-ingestion-source-audit-v1",
+  "task": "ING-hca-sand-2005",
+  "review_date": "2026-10-31",
+  "source": {
+    "authors": [
+      "A. Niemunis",
+      "T. Wichtmann",
+      "Th. Triantafyllidis"
+    ],
+    "title": "A high-cycle accumulation model for sand",
+    "year": 2005,
+    "journal": "Computers and Geotechnics",
+    "volume": 32,
+    "issue": 4,
+    "pages": "245\u2013263",
+    "doi": "10.1016/j.compgeo.2005.03.002",
+    "doi_url": "https://doi.org/10.1016/j.compgeo.2005.03.002",
+    "author_url": "https://www.torsten-wichtmann.de/paper/journal/2005-CG-a-high-cycle-model.pdf",
+    "received_version": "16-page author manuscript; exact publisher equivalence not established",
+    "local_private_context_path": "paper/results/sources/niemunis-2005-hca.pdf",
+    "bytes": 2545347,
+    "sha256": "ecf856384f0c77d5440a2aeb28c96420e609ed7cefffab9f19a0b8e141a796ce",
+    "access_kind": "Existing pinned local source; no fresh download claimed",
+    "portable_required_input": false,
+    "visual_review_pdf_pages": [
+      1,
+      3,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ]
+  },
+  "inspection": {
+    "method": "PDF skill; Poppler page rendering and visual equation/title inspection",
+    "downloads_check": "No matching HCA original located in Downloads; existing pinned author manuscript inspected",
+    "copyright": "PDF, extracted text and renders excluded from public packet; redistribution permission not established",
+    "author_code": "Not acquired or executed",
+    "web_verification": "No fresh remote verification in this bounded existing-source review"
+  },
+  "findings": [
+    {
+      "id": "identity-space",
+      "source": "PDF p11 Eqs28\u201329; p14 Appendix A",
+      "established": "Literal J/3 has full nine-dimensional unit norm; symmetric restriction loses skew-sector norm",
+      "unresolved": "Whether journal or dated implementation selects a six-dimensional normalization"
+    },
+    {
+      "id": "sphere-average",
+      "source": "PDF p11 discussion after Eq29",
+      "derived": "Uniform unit symmetric-six-space outer-product average is S/6; normalizing it yields S/sqrt(6), not J/3"
+    },
+    {
+      "id": "rotation-sign",
+      "source": "PDF p10 Eqs24\u201326",
+      "conditional_witness": "Conventional left action, nu=Ahat-pi, and negative printed angle increment rotate orthogonal positive rank-one pi away from Ahat",
+      "unresolved": "Action/transposition/sign/angle interpretation; no correction selected"
+    },
+    {
+      "id": "filter",
+      "source": "PDF p12 Eq36 versus p13 Fig22",
+      "established": "cos(beta)>.9 and beta>10 degrees are different conditions; both additionally require ||epsilon_R||>1e-5"
+    },
+    {
+      "id": "trial-state",
+      "source": "PDF p12 Section4; p3 Fig3",
+      "established": "Beginning-of-increment trial histories, resolved-cycle recording and frozen-amplitude accumulation are distinct modes",
+      "unresolved": "Exact companion history/count transfer and filter endpoint policy"
+    }
+  ],
+  "private_context_not_dependencies": [
+    "paper/study/source_formulations/hca-sand-2005.json",
+    "paper/results/sources/niemunis-2005-hca-crossref.json"
+  ],
+  "status": {
+    "bounded_reconciliation_complete": true,
+    "full_model_source_closure": false,
+    "executable_added": false,
+    "scientific_admission": false
+  }
+}

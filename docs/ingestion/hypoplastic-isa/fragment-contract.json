@@ -1,0 +1,167 @@
+{
+  "contract_version": "isa2020-supplied-host-design-0.1",
+  "model_id": "hypoplastic-isa",
+  "scope": "zero-spin instantaneous supplied-host branch fragment; design only",
+  "executable": false,
+  "admission_changed": false,
+  "state_layout": [
+    {
+      "name": "sigma",
+      "components": 6,
+      "unit": "Pa"
+    },
+    {
+      "name": "e",
+      "components": 1,
+      "unit": "1"
+    },
+    {
+      "name": "h",
+      "components": 6,
+      "unit": "strain"
+    },
+    {
+      "name": "c",
+      "components": 6,
+      "unit": "strain"
+    },
+    {
+      "name": "eps_acc",
+      "components": 1,
+      "unit": "1"
+    },
+    {
+      "name": "Z",
+      "components": 6,
+      "unit": "1"
+    }
+  ],
+  "basis": [
+    "11",
+    "22",
+    "33",
+    "sqrt(2)*12",
+    "sqrt(2)*23",
+    "sqrt(2)*13"
+  ],
+  "sign": "compression-positive for sigma, D, h, c, Z; all source tensors reversed consistently",
+  "parameter_names": [
+    "phi_c",
+    "h_s",
+    "n_B",
+    "e_d0",
+    "e_c0",
+    "e_i0",
+    "alpha",
+    "beta",
+    "m_R",
+    "R",
+    "beta_h0",
+    "beta_hmax",
+    "chi0",
+    "chimax",
+    "c_a",
+    "c_z"
+  ],
+  "loading": {
+    "input": "D: six finite symmetric Mandel values per dimensionless path coordinate",
+    "physical_time": false,
+    "zero_spin_required": true,
+    "rate_independence_claimed": false
+  },
+  "host_stage_inputs": [
+    "exact_host_definition_sha256",
+    "sigma",
+    "e",
+    "phi_c",
+    "baseline_F",
+    "baseline_e_c",
+    "baseline_e_d",
+    "baseline_f_e0",
+    "baseline_f_d0"
+  ],
+  "host_stage_outputs": [
+    "L_hyp_action(D) with same-stage modified f_e",
+    "N_hyp with same-stage modified f_e and f_d"
+  ],
+  "scalar_stage_order": [
+    "validate full supplied state and explicit branch",
+    "derive N/rho where required",
+    "current stress/e host baseline F and f_d0",
+    "F_d using baseline f_d0 and f_z using current Z,N",
+    "modified f_e/f_d",
+    "host actions",
+    "main beta_h using current strain-image mapping",
+    "c_bar,lambda and simultaneous derivatives"
+  ],
+  "branches": {
+    "elastic": "F_H<0; h_prime=D,c_prime=0,stress_prime=m_R*L_hyp(D); full Z/eps_acc require separately valid dependencies",
+    "boundary": "F_H=0; source lambda positive-part; unloading lambda zero does not silently change printed boundary M",
+    "outside": "F_H>0 unsupported; predictor overshoot needs independently defined algorithm"
+  },
+  "initialization": {
+    "require_all_26_explicit": true,
+    "require_preparation_identity": true,
+    "virgin_default": null,
+    "restarts": "restore every state and variant; never reset or reinitialize on ordinary restart",
+    "FE_example_not_universal": "Sec5.2p1526/Eq22"
+  },
+  "required_mathematical_checks": [
+    "finite real numbers; reject bool and nonfinite",
+    "R>0 and host domains",
+    "all evaluated normalization denominators nonzero",
+    "1+N:c_bar>0",
+    "positive baseline f_d0,M_c,F,p in F_d",
+    "noninteger power bases/exponents supported",
+    "finite derivative output"
+  ],
+  "project_bounded_support_not_source_theorem": [
+    "0<=eps_acc<=1",
+    "norm(Z)<=1",
+    "F_H<=0",
+    "0<=rho<=1",
+    "0<=f_z<=1",
+    "strict positive pressure and e>e_d"
+  ],
+  "unresolved_choices": [
+    "literal Eq29 or source-authorized normalization",
+    "Appendix38 exponent",
+    "Appendix39 F and Appendix40 Lode convention",
+    "zero strain/current image/elastic midpoint continuation",
+    "full initialization",
+    "event localization/return and tolerances",
+    "objective tensor histories"
+  ],
+  "transaction": {
+    "evaluate": "immutable input; no state changes until complete accepted result",
+    "commit": "all 26 states atomically",
+    "rollback": "exact original snapshot on any trial-domain,budget,event,normalization or solver failure; retain attempted coverage diagnostics",
+    "recursively_persistent_beta_h": false
+  },
+  "source_locators": {
+    "base": "main3-5p1514;App25-35pp1528-29",
+    "extension": "main6-12pp1515-17",
+    "host": "App36-41p1529;VW96Eqs40-46pp262-63",
+    "integration": "Sec4p1519",
+    "initialization": "Sec5.2p1526"
+  },
+  "nonclaims": [
+    "complete ISA source algorithm",
+    "finite path integrator",
+    "physical hold response",
+    "finite-spin objectivity",
+    "reference implementation equivalence",
+    "experimental validation"
+  ],
+  "literal_source_scalar_equations": {
+    "y_h": "rho**chi * positive(N:D); App29 literal unnormalized D, not authorized as rate-independent repair",
+    "rho": "1-norm(R*N-h)/(2*R)",
+    "chi": "chi0+eps_acc*(chimax-chi0)",
+    "f_e0": "(e_c/e)**beta",
+    "f_d0": "((e-e_d)/(e_c-e_d))**alpha",
+    "M_c": "6*sin(phi_c)/(3-sin(phi_c))",
+    "f_z": "positive(-Z:N)",
+    "beta_h": "beta_hmax+(beta_h0-beta_hmax)*(1-f_z)*f_h",
+    "f_h": "abs(unit(D):unit(R*unit(D)-h))"
+  }
+}
