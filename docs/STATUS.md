@@ -1,3 +1,9 @@
+# Terra Cotta full-path reference — 2026-10-31
+
+The [new preparation/hold reference](ingestion/terracotta-2024/preparation-hold-reference-v1/README.md) carries each computation's own preparation state, accumulated strain, captured stresses and clock through three complete30s paths. A distinct refined source calculation passes957 assertions plus zero-temperature inversion rejection; the original failed convergence attempt remains unchanged. The coordinator reproduces the passing reference exactly and the ten-check corruption/freeze audit passes.
+
+The [prospective backend study](../catalogue/investigations/terracotta-preparation-hold-v1/README.md) now has nine validated schedules and six passing request/evidence-contract tests. Full compiled-source freeze and serial native/Wasm observations remain pending. No model bytes, source inequalities or acceptance bounds changed. Journal PDF acquisition remains403/inaccessible; no source-complete, experimental, public timed-browser or scientific-admission claim. Hosted five/local nine remain unchanged.
+
 # Completed-package release check — 2026-10-31
 
 The [new pre-upload gate](reviews/packaged-laboratory-gate-v1/RESULTS.md) passes nine actual packaged-Wasm default runs (909 points), model/catalogue/definition agreement, source-URL and project-prefix asset checks. Eight static contract tests and eight focused Python regressions pass. CI wiring is local only; no push, remote CI or deployment. Hosted five/local nine remain unchanged; no scientific-admission claim.

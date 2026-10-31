@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "scope": "independent reference and prospective request stage only",
+  "compiled_observations": 0,
+  "source_packet_original_manifest_files": 15,
+  "source_reference_replay": {
+    "status": "passed",
+    "commands": [
+      {
+        "argv": [
+          "python3",
+          "-B",
+          "/private/tmp/atlas-terracotta-reference-v2-coordinator-replay/reference.py",
+          "--output",
+          "/private/tmp/atlas-terracotta-reference-v2-coordinator-replay/regenerated.json"
+        ],
+        "returncode": 0,
+        "stdout": "Generated three full paths, three RK4 levels and midpoint;22 points per path.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "python3",
+          "-B",
+          "/private/tmp/atlas-terracotta-reference-v2-coordinator-replay/check.py"
+        ],
+        "returncode": 0,
+        "stdout": "pass 957 assertions []\n",
+        "stderr": ""
+      }
+    ],
+    "references_exact_bytes": true,
+    "checks_exact_except_runtime": true,
+    "references_sha256": "8ad0e88c36b955b39bd7635c1f223ebc880de5e66069344997c8f4096de99377",
+    "compiled_execution": false
+  },
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-terracotta-coordinator-audit-v1/audit.py"
+      ],
+      "returncode": 0,
+      "stdout": "{'identity': 'terracotta-preparation-hold-transport-audit-v1', 'checks': {'atlas-terracotta-coordinator-audit-v1:transport': True, 'atlas-terracotta-coordinator-audit-v1:freeze': True, 'refinement-v2:transport': True, 'refinement-v2:freeze': True, 'reject:changed fine alias': True, 'reject:missing observation': True, 'reject:nonfinite scalar': True, 'reject:boolean scalar': True, 'reject:bad binary64': True, 'only identity and resolutions changed': True}, 'status': 'pass'}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "tests.test_terracotta_preparation_hold",
+        "-v"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_missing_phase_or_request_is_rejected (tests.test_terracotta_preparation_hold.PreparationHoldContracts.test_missing_phase_or_request_is_rejected) ... ok\ntest_moving_capture_target_is_rejected (tests.test_terracotta_preparation_hold.PreparationHoldContracts.test_moving_capture_target_is_rejected) ... ok\ntest_perfect_reference_transport_is_accepted (tests.test_terracotta_preparation_hold.PreparationHoldContracts.test_perfect_reference_transport_is_accepted) ... ok\ntest_replacing_hold_entry_state_is_rejected (tests.test_terracotta_preparation_hold.PreparationHoldContracts.test_replacing_hold_entry_state_is_rejected) ... ok\ntest_requests_are_one_full_schedule_and_validate (tests.test_terracotta_preparation_hold.PreparationHoldContracts.test_requests_are_one_full_schedule_and_validate) ... ok\ntest_resetting_hold_clock_is_rejected (tests.test_terracotta_preparation_hold.PreparationHoldContracts.test_resetting_hold_clock_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.007s\n\nOK\n"
+    }
+  ],
+  "files": {
+    "catalogue/investigations/terracotta-preparation-hold-v1/request-freeze.json": "cd0f744add9efd290f2f9c0aa84d39d5b53b30e40e720c1c46d1827387455edf",
+    "tests/test_terracotta_preparation_hold.py": "2b605877c26130e91cce69088e6892791c120b6fcfda161e15f6753a563c5bd7",
+    "docs/ingestion/terracotta-2024/preparation-hold-reference-v1/coordinator-replay.json": "ff56d9abbf8808a251146a7a3184c79170424aa79e5829478e3644f9924e9784"
+  }
+}

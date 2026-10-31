@@ -1,0 +1,70 @@
+{
+  "identity": "terracotta-preparation-hold-v1",
+  "status": "prospective; no compiled execution",
+  "variant": "existing Figure1 axisymmetric research draft; no model/schema migration",
+  "preparation": {
+    "duration_seconds": 10,
+    "samples": 10,
+    "rates_Dv_Ds": {
+      "compression": [
+        0,
+        2e-05
+      ],
+      "extension": [
+        0,
+        -2e-05
+      ],
+      "isotropic": [
+        6e-05,
+        0
+      ]
+    }
+  },
+  "hold": {
+    "duration_seconds": 20,
+    "samples": 10,
+    "controls": "capture incoming total stress on all three normal components, hold zero shear strain",
+    "initialization": "carry actual computed preparation state, strain, time and incoming-rate stress; do not reset to reference endpoint"
+  },
+  "tolerances": [
+    0.0001,
+    1e-06,
+    1e-08
+  ],
+  "absolute_scale_fraction": 1e-11,
+  "maximum_substeps": 100000,
+  "fine_bounds": {
+    "state": [
+      2e-09,
+      2e-10,
+      1e-07,
+      1e-08
+    ],
+    "strain": 1e-08,
+    "rate": 1e-09,
+    "elastic_stress_Pa": 0.01,
+    "total_stress_Pa": 0.01
+  },
+  "bound_basis": "Carry prior prepared-creep-v1 fine component limits into each complete phase, separately. The newly accumulated preparation error must fit the same limits; failures are retained, never relaxed after compiled observation.",
+  "parity_scaled_max": 1e-07,
+  "controls_held_residual_Pa": 0.0001,
+  "required_checks": [
+    "all nine requests and both backends retained, including failed runs",
+    "exact ordered23point engine grid including initial/preparation and preparation/hold boundaries",
+    "one physical clock 0..30 seconds",
+    "exact persistent state/strain continuity at both transitions",
+    "incoming-rate captured stress retained at hold entry; do not replace with reference target",
+    "masked hold-entry instantaneous normal rates remain null",
+    "finite values and declared diagnostics/settings/hash identity",
+    "separate preparation and hold source-reference errors",
+    "fine component bounds apply independently to both phases and both backends",
+    "report every coarse/medium/fine per-phase component error; require fine bounds and fine errors no larger than coarse plus 1e-12*max(1,reference channel magnitude), preserving nonmonotonic intermediate results"
+  ],
+  "scope_exclusions": [
+    "final journal equivalence",
+    "author mixed-control reproduction",
+    "source strictness resolution",
+    "experimental calibration/validation",
+    "general3D or scientific/public admission"
+  ]
+}
