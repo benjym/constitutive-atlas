@@ -1,0 +1,3414 @@
+{
+  "schema_version": "0.1",
+  "sha256": "c430fea720ae127009c363a9209c8117c0162fad74d17bd82ae3c9a27c20b6c9",
+  "models": [
+    {
+      "schema_version": "0.1",
+      "id": "trace-derived-dev-predicate",
+      "name": "trace-derived-dev-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [
+        {
+          "name": "probe",
+          "expr": "select(norm(dev(A))>0,1,2)"
+        }
+      ],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-derived-direct",
+      "name": "trace-derived-direct",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [
+        {
+          "name": "probe",
+          "expr": "trace(A)"
+        }
+      ],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-derived-eager",
+      "name": "trace-derived-eager",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [
+        {
+          "name": "probe",
+          "expr": "0*trace(A)+1"
+        }
+      ],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-derived-lazy-else",
+      "name": "trace-derived-lazy-else",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [
+        {
+          "name": "probe",
+          "expr": "select(1<0,trace(A),1)"
+        }
+      ],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-derived-lazy-then",
+      "name": "trace-derived-lazy-then",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [
+        {
+          "name": "probe",
+          "expr": "select(1>0,1,trace(A))"
+        }
+      ],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-derived-predicate",
+      "name": "trace-derived-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [
+        {
+          "name": "probe",
+          "expr": "select(trace(A)>0,1,2)"
+        }
+      ],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-domain-dev-predicate",
+      "name": "trace-domain-dev-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [
+        "(select(norm(dev(A))>0,1,2))>=0"
+      ],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-domain-direct",
+      "name": "trace-domain-direct",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [
+        "(trace(A))>=0"
+      ],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-domain-eager",
+      "name": "trace-domain-eager",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [
+        "(0*trace(A)+1)>=0"
+      ],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-domain-lazy-else",
+      "name": "trace-domain-lazy-else",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [
+        "(select(1<0,trace(A),1))>=0"
+      ],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-domain-lazy-then",
+      "name": "trace-domain-lazy-then",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [
+        "(select(1>0,1,trace(A)))>=0"
+      ],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-domain-predicate",
+      "name": "trace-domain-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [
+        "(select(trace(A)>0,1,2))>=0"
+      ],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-equation-dev-predicate",
+      "name": "trace-equation-dev-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "K*(select(norm(dev(A))>0,1,2))*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-equation-direct",
+      "name": "trace-equation-direct",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "K*(trace(A))*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-equation-eager",
+      "name": "trace-equation-eager",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "K*(0*trace(A)+1)*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-equation-lazy-else",
+      "name": "trace-equation-lazy-else",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "K*(select(1<0,trace(A),1))*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-equation-lazy-then",
+      "name": "trace-equation-lazy-then",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "K*(select(1>0,1,trace(A)))*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-equation-predicate",
+      "name": "trace-equation-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "K*(select(trace(A)>0,1,2))*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-initial-dev-predicate",
+      "name": "trace-initial-dev-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "initial_checks": [
+        "(select(norm(dev(A))>0,1,2))>=0"
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-initial-direct",
+      "name": "trace-initial-direct",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "initial_checks": [
+        "(trace(A))>=0"
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-initial-eager",
+      "name": "trace-initial-eager",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "initial_checks": [
+        "(0*trace(A)+1)>=0"
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-initial-lazy-else",
+      "name": "trace-initial-lazy-else",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "initial_checks": [
+        "(select(1<0,trace(A),1))>=0"
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-initial-lazy-then",
+      "name": "trace-initial-lazy-then",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "initial_checks": [
+        "(select(1>0,1,trace(A)))>=0"
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-initial-predicate",
+      "name": "trace-initial-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "initial_checks": [
+        "(select(trace(A)>0,1,2))>=0"
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-dev-predicate",
+      "name": "trace-observable-dev-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "0*K*strain_rate",
+        "A": "0*strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "expr": "K*(select(norm(dev(A))>0,1,2))*I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-direct",
+      "name": "trace-observable-direct",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "0*K*strain_rate",
+        "A": "0*strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "expr": "K*(trace(A))*I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-eager",
+      "name": "trace-observable-eager",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "0*K*strain_rate",
+        "A": "0*strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "expr": "K*(0*trace(A)+1)*I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-lazy-else",
+      "name": "trace-observable-lazy-else",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "0*K*strain_rate",
+        "A": "0*strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "expr": "K*(select(1<0,trace(A),1))*I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-lazy-then",
+      "name": "trace-observable-lazy-then",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "0*K*strain_rate",
+        "A": "0*strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "expr": "K*(select(1>0,1,trace(A)))*I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-predicate",
+      "name": "trace-observable-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "0*K*strain_rate",
+        "A": "0*strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "expr": "K*(select(trace(A)>0,1,2))*I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-scale-dev",
+      "name": "trace-observable-scale-dev",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic expression context fixture; not a constitutive model.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        },
+        "r": {
+          "default": 1,
+          "min": -1,
+          "max": 1.7976931348623157e+308,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "select(time > tau, K * (1 + log1p(-2)) * I / tau, 0 * K * strain_rate)",
+        "A": "0 * strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K*(select(norm(dev(sym(r,-r,-r,0,0,0)))>0,1,2))",
+          "expr": "K * (1 + log1p(trace(A))) * I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-scale-lazy-else",
+      "name": "trace-observable-scale-lazy-else",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic expression context fixture; not a constitutive model.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        },
+        "r": {
+          "default": 1,
+          "min": -1,
+          "max": 1e+308,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "select(time > tau, K * (1 + log1p(-2)) * I / tau, 0 * K * strain_rate)",
+        "A": "0 * strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K*(select(1<0,trace(sym(r,r,r,0,0,0)),1))",
+          "expr": "K * (1 + log1p(trace(A))) * I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-scale-lazy-then",
+      "name": "trace-observable-scale-lazy-then",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic expression context fixture; not a constitutive model.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        },
+        "r": {
+          "default": 1,
+          "min": -1,
+          "max": 1e+308,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "select(time > tau, K * (1 + log1p(-2)) * I / tau, 0 * K * strain_rate)",
+        "A": "0 * strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K*(select(1>0,1,trace(sym(r,r,r,0,0,0))))",
+          "expr": "K * (1 + log1p(trace(A))) * I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.2",
+      "id": "trace-observable-scale-trace",
+      "name": "trace-observable-scale-trace",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic expression context fixture; not a constitutive model.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "s"
+        },
+        "r": {
+          "default": 1,
+          "min": -1,
+          "max": 1e+308,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "equations": {
+        "sigma": "select(time > tau, K * (1 + log1p(-2)) * I / tau, 0 * K * strain_rate)",
+        "A": "0 * strain_rate"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode"
+      },
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K*(select(trace(sym(r,r,r,0,0,0))>0,1,2))",
+          "expr": "K * (1 + log1p(trace(A))) * I"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-guard-dev-predicate",
+      "name": "trace-reset-guard-dev-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1*(select(norm(dev(A))>0,1,2))",
+            "value": "I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-guard-direct",
+      "name": "trace-reset-guard-direct",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1*(trace(A))",
+            "value": "I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-guard-eager",
+      "name": "trace-reset-guard-eager",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1*(0*trace(A)+1)",
+            "value": "I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-guard-lazy-else",
+      "name": "trace-reset-guard-lazy-else",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1*(select(1<0,trace(A),1))",
+            "value": "I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-guard-lazy-then",
+      "name": "trace-reset-guard-lazy-then",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1*(select(1>0,1,trace(A)))",
+            "value": "I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-guard-predicate",
+      "name": "trace-reset-guard-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1*(select(trace(A)>0,1,2))",
+            "value": "I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-value-dev-predicate",
+      "name": "trace-reset-value-dev-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1",
+            "value": "(select(norm(dev(A))>0,1,2))*I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-value-direct",
+      "name": "trace-reset-value-direct",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1",
+            "value": "(trace(A))*I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-value-eager",
+      "name": "trace-reset-value-eager",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1",
+            "value": "(0*trace(A)+1)*I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-value-lazy-else",
+      "name": "trace-reset-value-lazy-else",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1",
+            "value": "(select(1<0,trace(A),1))*I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-value-lazy-then",
+      "name": "trace-reset-value-lazy-then",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1",
+            "value": "(select(1>0,1,trace(A)))*I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-reset-value-predicate",
+      "name": "trace-reset-value-predicate",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic generated expression conformance; not constitutive literature.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "A",
+            "guard": "-1",
+            "value": "(select(trace(A)>0,1,2))*I"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-state-scale-dev",
+      "name": "trace-state-scale-dev",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic expression context fixture; not a constitutive model.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "r": {
+          "default": 1,
+          "min": -1,
+          "max": 1.7976931348623157e+308,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K*(select(norm(dev(sym(r,-r,-r,0,0,0)))>0,1,2))",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-state-scale-lazy-else",
+      "name": "trace-state-scale-lazy-else",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic expression context fixture; not a constitutive model.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "r": {
+          "default": 1,
+          "min": -1,
+          "max": 1e+308,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K*(select(1<0,trace(sym(r,r,r,0,0,0)),1))",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-state-scale-lazy-then",
+      "name": "trace-state-scale-lazy-then",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic expression context fixture; not a constitutive model.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "r": {
+          "default": 1,
+          "min": -1,
+          "max": 1e+308,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K*(select(1>0,1,trace(sym(r,r,r,0,0,0))))",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    },
+    {
+      "schema_version": "0.1",
+      "id": "trace-state-scale-trace",
+      "name": "trace-state-scale-trace",
+      "status": "draft",
+      "family": "engine verification only",
+      "description": "Synthetic expression context fixture; not a constitutive model.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "role": "synthetic algebra verification specification",
+          "locator": "Checked symmetric scalar log1p conformance, not literature model"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 1,
+          "min": 1,
+          "max": 1,
+          "unit": "Pa"
+        },
+        "r": {
+          "default": 1,
+          "min": -1,
+          "max": 1e+308,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "K*(select(trace(sym(r,r,r,0,0,0))>0,1,2))",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "A",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "integration": "rate",
+      "equations": {
+        "sigma": "0*K*I",
+        "A": "0*I"
+      }
+    }
+  ]
+}

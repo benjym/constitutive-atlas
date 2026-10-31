@@ -1,0 +1,17 @@
+# Generated trace/dev context study v2 — prospective
+
+Acceptance is frozen before compiled observations. This synthetic study executes50 complete material headers produced by the production compiler, plus six history programs produced by the production history compiler. Independent expected values/statuses are frozen in expected.json and history-expected.json; no shared-interpreter output is used as an equation oracle.
+
+Require exact complete ordered row equality, including ids/status/output bits, selected trace derivative bits, immutable inputs, history values/counters/events/failed phase, and native/Wasm semantic and bit parity. There are10820 material rows and18 history rows per backend. All selected failures have recovery controls. Parameter-scale NaN output is represented as the semantic string nan rather than a backend payload. Messages are not a parity gate.
+
+Material contexts: equation, unused eager derived, domain, initial-check enabled/disabled, observable/normal routing, increment-reset guard and value; each has predicate, eager mask, both lazy arms, dev predicate and direct trace variants. Every predicate context exercises all6 components times38 derivative columns times3 nonfinite forms, each followed by recovery. All seven contexts exercise each derivative-column final-trace/dev-result overflow with finite primals, plus numeric cancellation/intermediate-overflow trace values and all38 derivative bits in equation/observable/reset-value outputs. Scales cover state/observable parameter-only trace, both lazy branches and dev rejection.
+
+History contexts guard/write/check/dev/lazy and late failure after prepare execute the actual generated Program.advance entry points. Failure must restore parent values, generation7, epoch3 and empty events; the late case must retain failed phase1. Success increments generation; successful prepare increments epoch. Material low-level out vectors are scratch on false; this study checks immutable inputs rather than claiming transactional output semantics.
+
+Native and Wasm builds run serially, one explicit atlas_trace_context target with --parallel1, Release C++20, no fast math or FP contraction. Original operator study/tensor bytes and original failed sand-rate study remain unchanged. The independent audit recommends additional solver-level legacy/timed rollback, integrator invalid-scale handling, broader context-routing and across-context numeric witness studies; those remain a distinct follow-up, not claimed here. No finite constitutive integration or scientific admission is granted.
+
+Generate-study.py is the retained construction script with fixed local paths and creates a fresh study directory; do not run it over frozen evidence. Source-only checks and both generated headers were inspected before compiling. protocol.json pins source/generation inputs and prospective-freeze.json pins this policy before observations.
+
+## Additive correction before v2 observations
+
+The original v1 remains failed with two incorrect dev-overflow expectations. Only the two dev-scale extreme inputs change from1e308 to DBL_MAX and their parameter upper bounds increase accordingly. The gate remains exact NaN-scale output on checked dev-result overflow, with no relaxed budget. All other complete corpus rows and expectations are retained. No v2 compiled observations exist at freeze.

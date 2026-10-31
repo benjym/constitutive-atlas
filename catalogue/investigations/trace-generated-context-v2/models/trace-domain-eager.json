@@ -1,0 +1,62 @@
+{
+  "schema_version": "0.1",
+  "id": "trace-domain-eager",
+  "name": "trace-domain-eager",
+  "status": "draft",
+  "family": "engine verification only",
+  "description": "Synthetic generated expression conformance; not constitutive literature.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas",
+      "role": "synthetic algebra verification specification",
+      "locator": "Checked symmetric scalar log1p conformance, not literature model"
+    }
+  ],
+  "parameters": {
+    "K": {
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "unit": "Pa"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "K",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "A",
+      "shape": "sym",
+      "unit": "1",
+      "scale": "1",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "derived": [],
+  "domain": [
+    "(0*trace(A)+1)>=0"
+  ],
+  "integration": "rate",
+  "equations": {
+    "sigma": "0*K*I",
+    "A": "0*I"
+  }
+}
