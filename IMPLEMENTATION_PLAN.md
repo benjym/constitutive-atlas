@@ -128,3 +128,8 @@ The integration owner is the coordinating parent agent. Agents report their task
 | — | No batch-1 packet integrated yet | — | — |
 
 A shared engine/schema request becomes a separate coordinator-owned task with dependencies on the relevant model packet. Do not block unrelated source ingestion while it is resolved. Integration, reference execution, public admission and deployment require their own recorded gates; no ingestion checkbox closes them implicitly.
+
+## Coordinator integration lane
+
+- [X] **INT-clay2014-path-results** — Integrate immutable failed native/Wasm finite-path evidence, independent whole-matrix and scalar diagnostics, and the website evidence binding. Owner: coordinating parent; started: 2026-10-31; evidence: [result review](docs/reviews/clay2014-path-results.md). Integrated: 70 focused Python groups, retained-manifest integrity and real website evidence export pass; original numerical study remains failed. This task records a negative study; it does not close model admission.
+- [ ] **INT-clay2014-controlled-resolution** — Freeze a separate actual-resolution hydrostatic order study, then execute serially against independent scalar references. Depends on INT-clay2014-path-results; preserve the original failed study. Owner: —.

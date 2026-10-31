@@ -1,0 +1,36 @@
+{
+  "version": "clay2014-path-result-integration-checks-v1",
+  "scope": "Local integration checks; these passing regression groups preserve the failed frozen study outcome. No new compiled execution or remote CI.",
+  "checks": [
+    {
+      "command": "python3 -B -m unittest discover -s tests -p 'test_clay2014_path*.py' -v",
+      "groups": 47,
+      "exit_status": 0
+    },
+    {
+      "command": "python3 -B -m unittest discover -s tests -p test_clay2014_midpoint_diagnostic.py -v",
+      "groups": 7,
+      "exit_status": 0
+    },
+    {
+      "command": "python3 -B -m unittest discover -s tests -p test_build_evidence.py -v",
+      "groups": 14,
+      "exit_status": 0
+    },
+    {
+      "command": "python3 -B -m unittest discover -s tests -p test_web_catalogue.py -v",
+      "groups": 2,
+      "exit_status": 0
+    }
+  ],
+  "total_python_groups": 70,
+  "retained_manifest_integrity": "passed",
+  "website_evidence_export": {
+    "records": 18,
+    "clay2014_path_outcome": "failed",
+    "definition_current": true,
+    "finite_integration_verified": false
+  },
+  "compiled_execution": false,
+  "remote_ci": false
+}

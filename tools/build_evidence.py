@@ -12,6 +12,7 @@ RESEARCH_BINDINGS=(
  ('barodesy-clay-2017','models/research/barodesy2017/body-zero-spin.json','barodesy2017-wider-integration-v1'),
  ('hypoplastic-clay-2013','models/research/clay2013/hypoplastic-clay-2013-research.json','clay2013-integration-v1'),
  ('hypoplastic-clay-2014','models/research/clay2014/hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane.json','clay2014-rates-v1'),
+ ('hypoplastic-clay-2014','models/research/clay2014/hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane.json','clay2014-paths-v1'),
  ('hypoplastic-generalized-igs-2024','models/research/gis2024/hp-extracted-asbs-gis-2024-research.json','gis2024-coupled-rates-v1'),
  ('hypoplastic-generalized-igs-2024','models/research/gis2024/hp-extracted-asbs-gis-2024-research.json','gis2024-integration-v1'),
 )

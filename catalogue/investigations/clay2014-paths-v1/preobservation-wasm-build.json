@@ -1,0 +1,48 @@
+{
+  "version": "clay2014-path-build-receipt-v1",
+  "backend": "wasm",
+  "source_commit": "3acb9dd6e4b8080a71d043ccfc52382d1c47ac36",
+  "preobservation_sha256": "6c48b365ed3910373fa56da9fa81aa3b025c6401b7b52a8be54024693972e449",
+  "commands": [
+    {
+      "argv": [
+        "cmake",
+        "-S",
+        ".",
+        "-B",
+        "build-wasm",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "log": "catalogue/investigations/clay2014-paths-v1/logs/wasm-configure.txt",
+      "log_sha256": "2a3b2a8ad322c0cae40235e098ff51d42f3999441eba9f2ba742f06db04be53d",
+      "command_record": "catalogue/investigations/clay2014-paths-v1/logs/wasm-configure-command.json",
+      "command_record_sha256": "6176056ca41b4eee856bb9e3721ef500d5d5f2778c52815815fd6ac3e8c90934"
+    },
+    {
+      "argv": [
+        "cmake",
+        "--build",
+        "build-wasm",
+        "--target",
+        "atlas_clay2014_solver",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0,
+      "log": "catalogue/investigations/clay2014-paths-v1/logs/wasm-build.txt",
+      "log_sha256": "3fd7a4f36dc896b38d539da59eefb2b7048e757fed8eaff869ae569a5ae7cf9a",
+      "command_record": "catalogue/investigations/clay2014-paths-v1/logs/wasm-build-command.json",
+      "command_record_sha256": "6e4197c6afff06369b0f225ec185a2dc40b7fc71468de04c690f0bfacd7d63b3"
+    }
+  ],
+  "all_commands_succeeded": true,
+  "files": {
+    "build-wasm/clay2014-generated/models.hpp": "6c6f03f2f09900ab5bedd6a300ba7c2a04a52776b828438d9f1c578de23a89a6",
+    "build-wasm/clay2014-generated/models.json": "da57295a4e1268cfba49e995eb47c5960d6c94b69861e17b57da365cf4749e08",
+    "build-wasm/CMakeCache.txt": "d3d866f706cdea99d26b9c44391c72f0e8c501438b49d6d389d1c8ae62609fce",
+    "build-wasm/clay2014-paths.js": "0100cc8d8682cef4bda38291361a3bd9bbfd0aaa1ac77de80955ebea42eac92f",
+    "build-wasm/clay2014-paths.wasm": "51d95914a56d33302c3d2a32e950079aa713f7d07a9fc1506970d4bcc63dd588"
+  },
+  "scope": "Local narrowly targeted serial build and exact artifact receipts; no reproducible-build, equation review or numerical acceptance claim."
+}
