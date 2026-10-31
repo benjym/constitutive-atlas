@@ -1,6 +1,7 @@
 """Bind retained numerical results to source/code and independent references."""
 import hashlib,json,unittest
 from atlas.model import ROOT,load
+from atlas.evidence import checked_receipt
 from atlas.initialization import canonical_hash
 from tools.verify_research_matrix_wasm import verify
 
@@ -10,7 +11,7 @@ class ResearchEvidence(unittest.TestCase):
    m=json.loads((ROOT/'catalogue/investigations'/name/'manifest.json').read_text())
    self.assertFalse(m['public_admission']);self.assertFalse(m['complete_model'])
    for path,expected in (m.get('dependencies',{})|m['files']).items():
-    self.assertEqual(hashlib.sha256((ROOT/path).read_bytes()).hexdigest(),expected,path)
+    checked_receipt(ROOT, 'catalogue/investigations/'+name+'/manifest.json', path, expected)
  def test_retained_gis_native_and_wasm_against_cartesian_rates(self):
   from tools.gis2024_rate_study import MODEL_PATH,REFERENCE_PATH,assess
   model=load(MODEL_PATH);cases=json.loads(REFERENCE_PATH.read_text())['cases'];folder=ROOT/'catalogue/investigations/gis2024-coupled-rates-v1'

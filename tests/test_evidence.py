@@ -87,4 +87,8 @@ class EvidenceTests(unittest.TestCase):
     def test_committed_records_have_valid_integrity(self):
         for directory in ('evidence','reviews'):
             for path in (ROOT/'catalogue'/directory).glob('*.json'):
+                # This named archive map is verified by test_evidence_archives;
+                # every other JSON file must remain a typed evidence envelope.
+                if path.name == 'source-archive-map.json':
+                    continue
                 with self.subTest(record=path.name): validate_record(path)

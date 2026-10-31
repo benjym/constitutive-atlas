@@ -8,6 +8,7 @@ from pathlib import Path
 import random
 import unittest
 
+from atlas.evidence import checked_receipt
 from atlas.dsl import Sym
 from atlas.model import ROOT, load
 from tools.clay2013_integration_study import MODEL_PATH, native_call, request, assess
@@ -95,7 +96,7 @@ class RetainedEvidence(unittest.TestCase):
         for folder in (self.folder,ROOT/'catalogue/investigations/clay2013-initialization-v1'):
             manifest=json.loads((folder/'manifest.json').read_text())
             for name,digest in (manifest.get('dependencies',{})|manifest['files']).items():
-                self.assertEqual(hashlib.sha256((ROOT/name).read_bytes()).hexdigest(),digest,name)
+                checked_receipt(ROOT, (folder/'manifest.json').relative_to(ROOT).as_posix(), name, digest)
         self.assertFalse(json.loads((self.folder/'manifest.json').read_text())['complete_model'])
 
 if __name__=='__main__':unittest.main()

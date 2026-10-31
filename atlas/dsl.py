@@ -100,11 +100,18 @@ def tensor_square(a):
                 (y+z)*v+u*w/r, (x+z)*w+u*v/r))
 
 
+def tensor_expm(a):
+    from .symmetric_expm import symmetric_expm
+    if not isinstance(a,Sym):raise ValidationError('expm requires dimensionless symmetric tensor')
+    try:return Sym(tuple(symmetric_expm(a.v)))
+    except (ValueError,ArithmeticError) as exc:raise ValidationError(str(exc)) from exc
+
+
 FUNCTIONS = {"sym": lambda *values: Sym(tuple(values)), "sqrt": math.sqrt, "exp": math.exp, "log": math.log,
              "sin": math.sin, "cos": math.cos, "abs": abs,
              "min": min, "max": max, "trace": trace, "dev": dev,
              "dot": dot, "norm": lambda a: math.sqrt(dot(a, a)),
-             "cube_trace": cube_trace, "tensor_square": tensor_square}
+             "cube_trace": cube_trace, "tensor_square": tensor_square, "expm": tensor_expm}
 
 
 def parse(expression):
@@ -184,6 +191,9 @@ def infer(node, symbols):
         if name not in FUNCTIONS or len(args) != arity:
             raise ValidationError(f"unsupported function or arity: {name}")
         a = args[0]
+        if name == "expm":
+            if a != Type("sym"):raise ValidationError("expm requires dimensionless symmetric tensor")
+            return a
         if name in ("trace", "dev", "norm", "cube_trace", "dot", "tensor_square"):
             if a.shape != "sym" or (name == "dot" and args[1].shape != "sym"):
                 raise ValidationError(f"{name} requires symmetric tensors")
@@ -244,6 +254,7 @@ def cpp(node):
         return f"({cpp(node.left)} {op} {cpp(node.comparators[0])})"
     if isinstance(node,ast.Call):
         name=node.func.id
+        if name=='expm': return f"atlas::tensor_expm_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name=='select': return f"({cpp(node.args[0])} ? {cpp(node.args[1])} : {cpp(node.args[2])})"
         name={'tensor_square':'atlas::tensor_square','sym':'make_sym','min':'amin','max':'amax','sqrt':'asqrt','exp':'aexp','log':'alog','sin':'asin','cos':'acos','abs':'aabs'}.get(name,name)
         return f"{name}({', '.join(cpp(a) for a in node.args)})"

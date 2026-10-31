@@ -1,0 +1,38 @@
+{
+  "version": "checked-expm-local-build-v1",
+  "platform": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "cmake": "cmake version 4.4.3",
+  "node": "v26.7.0",
+  "native_cxx": "Apple clang version 21.0.0 (clang-2100.4.1.1)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+  "commands": [
+    "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build build --target atlas_expm_probe --parallel 1",
+    "cmake -S . -B build-wasm",
+    "cmake --build build-wasm --target atlas_expm_probe --parallel 1"
+  ],
+  "configuration": {
+    "build": [
+      "CMAKE_BUILD_TYPE:STRING=Release",
+      "CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++",
+      "_Python3_EXECUTABLE:INTERNAL=/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14"
+    ],
+    "build-wasm": [
+      "CMAKE_BUILD_TYPE:STRING=Release",
+      "CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/opt/homebrew/Cellar/emscripten/6.0.8/libexec/cmake/Modules/Platform/Emscripten.cmake",
+      "_Python3_EXECUTABLE:INTERNAL=/opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14"
+    ]
+  },
+  "artifacts": {
+    "build/atlas_expm_probe": "2ac166116944eed47701a08de11251c822f6dfbf4933018473a0d2bd27b02b0c",
+    "build/expm-generated/models.hpp": "24a7964f22f4d896336d7ae856e7f0bdcdf62e2dfb98a419efe441562d6a207e",
+    "build/expm-generated/models.json": "485d1a72e61b39ce18ec74b5c7e33ea5fa2b9ad4f6b2f8c68a4527887d1c2ed7",
+    "build/expm-history-generated/history_programs.hpp": "fd52571aa401bd94820b1138b08ac908e8885c7d8992fbed6d6aa7e4690b7b9e",
+    "build-wasm/expm-fixtures.js": "f743e9c8a25073ea5dbdb062c32ef2fcdb9addb5a054b6da2cadedca145b1f61",
+    "build-wasm/expm-fixtures.wasm": "94c767aa8d66050bae29c858de2af7f94f0fc0711a39728a2585c88801a9cf9d",
+    "build-wasm/expm-generated/models.hpp": "24a7964f22f4d896336d7ae856e7f0bdcdf62e2dfb98a419efe441562d6a207e",
+    "build-wasm/expm-generated/models.json": "485d1a72e61b39ce18ec74b5c7e33ea5fa2b9ad4f6b2f8c68a4527887d1c2ed7",
+    "build-wasm/expm-history-generated/history_programs.hpp": "fd52571aa401bd94820b1138b08ac908e8885c7d8992fbed6d6aa7e4690b7b9e"
+  },
+  "limits": "Local serial builds only; no author implementation execution; no push/deployment. Host output is a build receipt, not a clean-checkout release certificate."
+}

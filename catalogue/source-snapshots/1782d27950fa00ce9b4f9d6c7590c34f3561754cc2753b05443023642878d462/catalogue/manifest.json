@@ -1,0 +1,442 @@
+{
+  "schema_version": "0.1",
+  "release_target": 20,
+  "search_cutoff": "2026-10-30",
+  "coverage_claim": "Seed catalogue, not a systematic or exhaustive literature review.",
+  "models": [
+    {
+      "id": "drucker-prager",
+      "name": "Drucker–Prager, nonassociated perfect plasticity",
+      "family": "elastoplasticity",
+      "status": "transcribed",
+      "executable": true,
+      "note": "Smooth Drucker–Prager cone f=q-M p-c with separate dilatancy slope Md. Backward Euler; q direction regularized at 1e-12 p_ref. No tensile cap."
+    },
+    {
+      "id": "hypoplastic-sand-igs97",
+      "name": "Sand hypoplasticity + intergranular strain (1997)",
+      "family": "hypoplasticity",
+      "status": "draft",
+      "executable": true,
+      "note": "Draft IGS overlay on the von Wolffersdorff base law; compression-positive h and strain. Equation transcription requires independent review before scientific use.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/istrain/",
+          "role": "SoilModels discovery",
+          "locator": "Intergranular Strain Extensions; description and references (accessed 2026-10-30); 2024 generalized concept is explicitly referenced. Existing IGS and ISA entries are related lineage candidates, not claims of identical formulations or implementations."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-sand-vw96",
+      "name": "Sand hypoplasticity — von Wolffersdorff (1996)",
+      "family": "hypoplasticity",
+      "status": "transcribed",
+      "executable": true,
+      "note": "Compression-positive transcription of the von Wolffersdorff stress-rate law. Uses the published Karlsruhe sand parameter example (not Wichtmann calibration). Infinitesimal kinematics; zero spin.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hyposand/",
+          "role": "SoilModels discovery",
+          "locator": "Sand Hypoplasticity (von Wolffersdorff, 1996); description and references (accessed 2026-10-30); Existing transcription retained; directory coverage does not constitute independent review."
+        }
+      ]
+    },
+    {
+      "id": "linear-elastic",
+      "name": "Linear isotropic elasticity",
+      "family": "elasticity",
+      "status": "transcribed",
+      "executable": true,
+      "note": "Infinitesimal isotropic elasticity. Demonstration parameters, not calibrated to a soil."
+    },
+    {
+      "id": "modified-cam-clay",
+      "name": "Modified Cam Clay",
+      "family": "critical-state plasticity",
+      "status": "transcribed",
+      "executable": true,
+      "note": "Associated Modified Cam Clay with pressure/void-ratio dependent elasticity, exponential hardening, and backward-Euler integration. Demonstration parameters; finite rotation is unsupported."
+    },
+    {
+      "id": "sanisand-2004",
+      "name": "SANISAND — Dafalias & Manzari (2004)",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1061/(ASCE)0733-9399(2004)130:6(622)",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Needs source-complete extraction, reversal-memory events, backstress/fabric evolution and independent reference comparisons.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/sanisand/",
+          "role": "SoilModels discovery",
+          "locator": "SANISAND (Dafalias and Manzari, 2004); description and references (accessed 2026-10-30); Existing candidate retained."
+        }
+      ]
+    },
+    {
+      "id": "terracotta-2024",
+      "name": "Terracotta (Terra Cotta) — Wiebicke & Einav (2024)",
+      "family": "rate-dependent hydrodynamic clay model",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1016/j.jmps.2024.105789",
+      "priority": "near-term",
+      "reference_implementation_url": "https://github.com/MaxWiebicke/Terracotta-pq",
+      "reference_implementation_commit": "a4039d0124d8ff61e766f5201f44ddc163c4cff5",
+      "note": "A source-pinned Figure 1 research draft now runs in a separate native/Wasm catalogue, with five author-RHS reference histories and analytical checks. Restricted to axisymmetric small strain; independent review and public laboratory admission remain pending.",
+      "capability_gap": "Source-complete journal visual review, original outer-step and mixed-control reconciliation, creep references, independent review and timed browser controls remain open. The draft is not a full 3D law and does not count toward the twenty-model 3D release gate.",
+      "research_sources": [
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/models/research/terracotta-2024-fig1.json",
+          "role": "Research draft JSON",
+          "locator": "Figure 1; restricted axisymmetric scope; not independently reviewed"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/terracotta-2024-transcription.md",
+          "role": "Transcription and numerical evidence",
+          "locator": "Source mapping, reference boundary adaptation and remaining gates"
+        }
+      ]
+    },
+    {
+      "id": "mohr-coulomb",
+      "name": "Mohr–Coulomb, nonassociated plasticity",
+      "family": "elastoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://opensees.github.io/OpenSeesDocumentation/",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Requires reviewed principal-stress formulation and robust edge/apex return."
+    },
+    {
+      "id": "tresca",
+      "name": "Tresca perfect plasticity",
+      "family": "elastoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://www.opengeosys.org/",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Requires nonsmooth multisurface formulation and edge/apex tests."
+    },
+    {
+      "id": "original-cam-clay",
+      "name": "Original Cam Clay",
+      "family": "critical-state plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://www.icevirtuallibrary.com/doi/book/10.1680/cssm.02041",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Source extraction and logarithmic yield-domain treatment pending."
+    },
+    {
+      "id": "duncan-chang-1970",
+      "name": "Duncan–Chang hyperbolic model (1970)",
+      "family": "nonlinear elasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1061/JSFEAQ.0001458",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Pin loading/unloading and 3D generalization; the triaxial relation alone is insufficient."
+    },
+    {
+      "id": "lade-duncan-1975",
+      "name": "Lade–Duncan elastoplastic model (1975)",
+      "family": "elastoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1061/AJGEB6.0000208",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Full hardening/flow transcription and source checks pending; yield criterion alone is not a complete model."
+    },
+    {
+      "id": "matsuoka-nakai",
+      "name": "Matsuoka–Nakai plasticity",
+      "family": "elastoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://www.jstage.jst.go.jp/browse/sandf",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Choose and pin a complete flow/hardening formulation; distinguish the failure criterion from constitutive models."
+    },
+    {
+      "id": "norsand-1993",
+      "name": "NorSand — Jefferies (1993)",
+      "family": "critical-state plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1680/geot.1993.43.1.91",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Pin the original formulation separately from subsequent variants; complete extraction pending."
+    },
+    {
+      "id": "manzari-dafalias-1997",
+      "name": "Manzari–Dafalias sand model (1997)",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1680/geot.1997.47.2.255",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Backstress memory, surfaces and source-specific initialization pending."
+    },
+    {
+      "id": "hypoplastic-clay-2005",
+      "name": "Clay hypoplasticity — Mašín (2005)",
+      "family": "hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://web.natur.cuni.cz/uhigug/masin/plaxumat/node2.html",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Full tensor stiffness and asymptotic-state transcription pending."
+    },
+    {
+      "id": "hypoplastic-clay-2013",
+      "name": "Clay hypoplasticity with explicit asymptotic states — Mašín (2013)",
+      "family": "hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://web.natur.cuni.cz/uhigug/masin/plaxumat/node2.html",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Extract the explicit asymptotic-state formulation (Acta Geotechnica 8(5), 481–496); distinguish the separate 2014 stiffness-anisotropy extension.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hypoclay/",
+          "role": "SoilModels discovery",
+          "locator": "Clay Hypoplasticity; description and references (accessed 2026-10-30); Description names the 2014 law; references distinguish the 2013 base formulation. The older 2005 candidate remains separate."
+        }
+      ]
+    },
+    {
+      "id": "s-clay1",
+      "name": "S-CLAY1 — Wheeler et al. (2003)",
+      "family": "anisotropic critical-state plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1680/geot.2003.53.1.41",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Source-pinned rotational-hardening transcription pending."
+    },
+    {
+      "id": "barodesy-sand",
+      "name": "Barodesy for sand — formulation to be pinned",
+      "family": "barodesy",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://www.uibk.ac.at/en/geotechnik/",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Review candidate: select exact original formulation before admission.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/barodesy/",
+          "role": "SoilModels discovery",
+          "locator": "Barodesy (Kolymbas, Medicus, Schneider-Muntau, Fellin); description and references (accessed 2026-10-30); Directory implementation explicitly names clay 2017; existing sand placeholder remains unpinned. Other cited extensions need further screening."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-isa",
+      "name": "Hypoplasticity + ISA — Fuentes et al.",
+      "family": "hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1007/s11440-019-00846-2",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Pin the 2020 cyclic-mobility variant; intergranular backstrain and evolution checks pending.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/istrain/",
+          "role": "SoilModels discovery",
+          "locator": "Intergranular Strain Extensions; description and references (accessed 2026-10-30); 2024 generalized concept is explicitly referenced. Existing IGS and ISA entries are related lineage candidates, not claims of identical formulations or implementations."
+        }
+      ]
+    },
+    {
+      "id": "hca-sand-2005",
+      "name": "High-cycle accumulation — Niemunis et al. (2005)",
+      "family": "cycle-averaged accumulation",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1016/j.compgeo.2005.03.002",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Requires a cycle-count driver, amplitude/history representation and suitable long-cycle data; not an instantaneous stress-rate law.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hca/",
+          "role": "SoilModels discovery",
+          "locator": "A High-Cycle Accumulation Model for Sand (Niemunis et al., 2005); description and references (accessed 2026-10-30); Existing cycle-averaged candidate retained."
+        }
+      ]
+    },
+    {
+      "id": "pm4sand",
+      "name": "PM4Sand — Boulanger & Ziotopoulou",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/pm4sand/",
+      "note": "Sand model for earthquake loading; the directory cites the 2013 plane-strain formulation and subsequent developments.",
+      "capability_gap": "Pin a numbered release and its manual, dimensional scope, initialization, reversal/fabric memory and integration rules; do not assume a complete 3D law.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/pm4sand/",
+          "role": "SoilModels discovery",
+          "locator": "PM4Sand (Boulanger & Ziotopoulou); description and references (accessed 2026-10-30); Exact numbered release remains to be pinned; original sources discuss plane strain."
+        }
+      ]
+    },
+    {
+      "id": "pm4silt",
+      "name": "PM4Silt — Boulanger & Ziotopoulou",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/pm4silt/",
+      "note": "Low-plasticity silt/clay earthquake model; Version 1 (2018), report UCD/CGM-18/01, is listed as a source.",
+      "capability_gap": "Pin the implementation release and manual; extract stress-history initialization, cyclic memory and dimensional restrictions separately from PM4Sand.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/pm4silt/",
+          "role": "SoilModels discovery",
+          "locator": "PM4Silt (Boulanger & Ziotopoulou); description and references (accessed 2026-10-30); Version 1 (2018) is cited; exact implementation release remains to be pinned."
+        }
+      ]
+    },
+    {
+      "id": "extended-mohr-coulomb-2013",
+      "name": "Extended Mohr–Coulomb (EMC) — Doherty & Muir Wood (2013)",
+      "family": "hardening elastoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/emc/",
+      "note": "Géotechnique 63(8), 661–673: Mohr–Coulomb yielding with Cam Clay flow and asymptotic hardening. Distinct from the perfect-plastic Mohr–Coulomb candidate.",
+      "capability_gap": "Extract the complete flow/hardening law and calibrations; establish edge/apex integration and unloading behavior.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/emc/",
+          "role": "SoilModels discovery",
+          "locator": "Extended Mohr–Coulomb (EMC); description and references (accessed 2026-10-30); Distinct hardening law; not merged with generic Mohr–Coulomb."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-interface-2016",
+      "name": "Hypoplastic interface — Stutz, Mašín & Wuttke (2016)",
+      "family": "interface hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/hypointerface/",
+      "note": "Enhanced soil–structure interface formulation, Acta Geotechnica 11(6), 1249–1261; the related 2017 general conversion approach requires separate reconciliation.",
+      "capability_gap": "Needs an interface contract for traction, slip, in-plane stress and shear-zone thickness, reduced tensor operations and objective frame treatment.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hypointerface/",
+          "role": "SoilModels discovery",
+          "locator": "Hypoplastic Interface Model (Stutz et al., 2016); description and references (accessed 2026-10-30); 2016 enhancement selected as candidate; 2017 conversion approach needs lineage review."
+        }
+      ]
+    },
+    {
+      "id": "multilaminate-schadlich-schweiger",
+      "name": "Multilaminate model — Schädlich & Schweiger",
+      "family": "multilaminate plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/multilaminate/",
+      "note": "Stiff-soil formulation described in Schädlich’s 2012 thesis and the 2013/2014 papers; includes small-strain anisotropy and overconsolidation extensions.",
+      "capability_gap": "Pin the exact thesis/paper variant, plane quadrature, per-plane states, Hvorslev surface and small-strain memory; reconcile the implementation documentation.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/multilaminate/",
+          "role": "SoilModels discovery",
+          "locator": "Multilaminate Model (Schädlich & Schweiger); description and references (accessed 2026-10-30); Thesis and 2013/2014 extensions require variant reconciliation."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-thermal-ma-2017",
+      "name": "Thermal-cycle hypoplasticity — Ma et al. (2017)",
+      "family": "thermomechanical hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/hypotherm/",
+      "note": "Ma, Ng, Mašín & Zhou, Canadian Geotechnical Journal 54(6), 896–901; thermal-cycle volume-change extension for fine-grained soils.",
+      "capability_gap": "Needs prescribed temperature paths, thermal strain and stabilization history; determine from equations whether evolution uses temperature increments or physical time.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hypotherm/",
+          "role": "SoilModels discovery",
+          "locator": "Hypoplastic Model for Thermal Cycles (Ma et al., 2017); description and references (accessed 2026-10-30); Thermal inputs and history require a distinct capability contract."
+        }
+      ]
+    },
+    {
+      "id": "vibe-2026",
+      "name": "Viscohypoplastic bentonite (VIBE) — Mašín (2026)",
+      "family": "thermo-hydro-mechanical viscohypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1016/j.enggeo.2026.108827",
+      "note": "Double-structure bentonite model with creep and relaxation; Engineering Geology 370, 108827.",
+      "capability_gap": "Needs coupled thermal/hydraulic inputs, double-structure state initialization, physical-time evolution and source-matched creep/relaxation references.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/vibe/",
+          "role": "SoilModels discovery",
+          "locator": "Viscohypoplastic bentonite (VIBE) model; description and references (accessed 2026-10-30); Physical-time THM candidate; model/data/code reuse rights require individual review."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-generalized-igs-2024",
+      "name": "Generalized intergranular strain — Mugele, Stutz & Mašín (2024)",
+      "family": "hypoplasticity extension",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/istrain/",
+      "note": "Computers and Geotechnics 173, 106480. Specific extension identified within the Intergranular Strain Extensions overview; not interchangeable with IGS-1997 or ISA.",
+      "capability_gap": "Pin the host constitutive law and extension pairing; extract additional memory, evolution, initialization and reversal rules before defining executable variants.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/istrain/",
+          "role": "SoilModels discovery",
+          "locator": "Intergranular Strain Extensions; description and references (accessed 2026-10-30); 2024 generalized concept is explicitly referenced. Existing IGS and ISA entries are related lineage candidates, not claims of identical formulations or implementations."
+        }
+      ]
+    },
+    {
+      "id": "barodesy-clay-2017",
+      "name": "Barodesy for clay — Medicus & Fellin (2017)",
+      "family": "barodesy",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/barodesy/",
+      "note": "An improved version of barodesy for clay, Acta Geotechnica 12(2), 365–376. This is the formulation named for the directory’s user subroutine.",
+      "capability_gap": "Extract the objective stress-rate equation, void-ratio evolution, domain restrictions and initialization; keep sand and intergranular-strain variants separate.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/barodesy/",
+          "role": "SoilModels discovery",
+          "locator": "Barodesy (Kolymbas, Medicus, Schneider-Muntau, Fellin); description and references (accessed 2026-10-30); Directory implementation explicitly names clay 2017; existing sand placeholder remains unpinned. Other cited extensions need further screening."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-clay-2014",
+      "name": "Anisotropic clay hypoplasticity — Mašín (2014)",
+      "family": "hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/hypoclay/",
+      "note": "Clay hypoplasticity model including stiffness anisotropy, Géotechnique 64(3), 232–238; separate from the 2013 asymptotic-state formulation.",
+      "capability_gap": "Extract anisotropic stiffness, its state representation and initialization; reconcile dependencies on the 2013 base law and optional intergranular strain.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hypoclay/",
+          "role": "SoilModels discovery",
+          "locator": "Clay Hypoplasticity; description and references (accessed 2026-10-30); Description names the 2014 law; references distinguish the 2013 base formulation. The older 2005 candidate remains separate."
+        }
+      ]
+    }
+  ]
+}

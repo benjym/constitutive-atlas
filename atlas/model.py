@@ -1,5 +1,6 @@
 """Model loading and semantic validation. JSON is the canonical YAML subset."""
 from __future__ import annotations
+import ast
 import json
 import math
 import re
@@ -13,7 +14,7 @@ RESERVED = {"I", "de", "dt", "time", "time_n", "strain_rate", "loading", "evalua
             "double", "auto", "if", "else", "return", "const", "class", "struct", "template",
             "int", "float", "void", "bool", "new", "delete", "switch", "case", "default",
             "for", "while", "do", "break", "continue", "throw", "try", "catch", "namespace",
-            "make_sym", "axisymmetric_x", "using", "typename", "static", "virtual", "public", "private", "protected"}
+            "make_sym", "axisymmetric_x", "atlas_eval_ok", "using", "typename", "static", "virtual", "public", "private", "protected"}
 
 
 def reject_duplicate_keys(pairs):
@@ -36,6 +37,11 @@ def field_type(field):
     if field.get('shape', 'scalar') not in ('scalar', 'sym'):
         raise ValidationError('unsupported shape')
     return Type(field.get('shape','scalar'), dimensions(field.get('unit','1')))
+
+
+def validate_scale_operators(node):
+    if any(isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='expm' for n in ast.walk(node)):
+        raise ValidationError('expm is unsupported in state/observable scale expressions; use an explicit positive reference scale')
 
 
 def physical_time(model):
@@ -89,6 +95,7 @@ def validate(model):
         else: initial=[initial]
         if any(type(v) not in (float,int) or not math.isfinite(v) for v in initial): raise ValidationError('nonfinite initial value')
         scale=parse(field['scale'])
+        validate_scale_operators(scale)
         param_symbols={key:field_type(value) for key,value in model['parameters'].items()}
         if infer(scale,param_symbols)!=Type(dim=typ.dim): raise ValidationError(f'{name}: scale must have matching units and reference parameters only')
         env={k:v['default'] for k,v in model['parameters'].items()}
@@ -132,6 +139,7 @@ def validate(model):
         if field['name']=='stress' and typ!=Type('sym',DIMS['Pa']):
             raise ValidationError('stress observable must be a symmetric tensor in Pa')
         scale=parse(field['scale'])
+        validate_scale_operators(scale)
         param_symbols={name:field_type(value) for name,value in model['parameters'].items()}
         scale_value=evaluate(scale,defaults(model)) if infer(scale,param_symbols)==Type(dim=typ.dim) else float('nan')
         if not math.isfinite(scale_value) or scale_value<=0:
@@ -166,8 +174,8 @@ def evaluation_environment(model, state, previous, increment, parameters=None, *
         if not physical_time(model): env[name+'_n']=wrap(previous[name])
     for f in model['derived']:
         v=env[f['name']]=evaluate(parse(f['expr']),env)
-        if model.get('increment_reset') and any(not math.isfinite(x) for x in (v.v if isinstance(v,Sym) else [v])):
-            raise ValueError('nonfinite derived value in reset-enabled model')
+        if any(not math.isfinite(x) for x in (v.v if isinstance(v,Sym) else [v])):
+            raise ValueError('nonfinite derived value')
     if _check_domain and not all(evaluate(parse(c),env) for c in model['domain']): raise ValueError('state outside model domain')
     return env
 

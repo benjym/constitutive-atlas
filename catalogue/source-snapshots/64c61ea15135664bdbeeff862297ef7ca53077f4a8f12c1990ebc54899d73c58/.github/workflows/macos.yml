@@ -1,0 +1,21 @@
+name: Manual macOS check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m atlas.cli validate
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build build --parallel 2
+      - run: ctest --test-dir build --output-on-failure
+      - name: Verify recorded-path JSON replay
+        env:
+          ATLAS_RECORDED_SOLVER: ${{ github.workspace }}/build/atlas_solver
+        run: python -m unittest tests.test_recorded_api tests.test_recorded_path -v

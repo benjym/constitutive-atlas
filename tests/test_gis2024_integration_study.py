@@ -1,3 +1,4 @@
+from atlas.evidence import checked_receipt
 """GIS finite-path evidence integrity and corruption checks; no native execution."""
 import copy,hashlib,json,unittest
 from pathlib import Path
@@ -95,6 +96,6 @@ class GISIntegrationEvidence(unittest.TestCase):
   for folder in ('gis2024-integration-v1','gis2024-path-reference-v1','barodesy2017-source-v1','isa2020-source-v1','norsand1993-source-v1','clay2014-source-v1','pm4silt-v1-source-v1'):
    manifest=json.loads((ROOT/'catalogue/investigations'/folder/'manifest.json').read_text())
    for name,pin in manifest['files'].items():
-    with self.subTest(packet=folder,path=name):self.assertEqual(hashlib.sha256((ROOT/name).read_bytes()).hexdigest(),pin)
+    with self.subTest(packet=folder,path=name):checked_receipt(ROOT, 'catalogue/investigations/'+folder+'/manifest.json', name, pin)
 
 if __name__=='__main__':unittest.main()

@@ -16,6 +16,10 @@ struct Jet {
 };
 inline double value(double x) { return x; }
 inline double value(const Jet& x) { return x.v; }
+inline bool finite_value(double x) { return std::isfinite(x); }
+inline bool finite_value(const Jet& x) {
+    return std::isfinite(x.v) && std::all_of(x.d.begin(),x.d.end(),[](double v){return std::isfinite(v);});
+}
 inline Jet operator+(const Jet& a,const Jet& b) { Jet c(a.v+b.v); for(int i=0;i<max_derivatives;++i)c.d[i]=a.d[i]+b.d[i]; return c; }
 inline Jet operator-(const Jet& a,const Jet& b) { Jet c(a.v-b.v); for(int i=0;i<max_derivatives;++i)c.d[i]=a.d[i]-b.d[i]; return c; }
 inline Jet operator-(const Jet& a) { return Jet(0)-a; }
@@ -52,6 +56,9 @@ inline Jet apow(const Jet&a,const Jet&b){
 template<class T>T amin(const T&a,const T&b){return a<b?a:b;}
 template<class T>T amax(const T&a,const T&b){return a>b?a:b;}
 template<class T>struct Sym { std::array<T,6> v{}; };
+template<class T>bool finite_value(const Sym<T>& a) {
+    return std::all_of(a.v.begin(),a.v.end(),[](const auto& x){return finite_value(x);});
+}
 template<class T>Sym<T> make_sym(T xx,T yy,T zz,T xy,T yz,T xz){return Sym<T>{{xx,yy,zz,xy,yz,xz}};}
 template<class T>bool axisymmetric_x(const Sym<T>& a){
     double scale=0;for(const auto& v:a.v){if(!std::isfinite(value(v)))return false;scale=std::max(scale,std::abs(value(v)));}

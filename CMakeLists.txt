@@ -7,7 +7,7 @@ file(GLOB MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/*.json")
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/generated/models.hpp" "${CMAKE_BINARY_DIR}/generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/generated"
-  DEPENDS ${MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json
+  DEPENDS ${MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_models DEPENDS "${CMAKE_BINARY_DIR}/generated/models.hpp" "${CMAKE_BINARY_DIR}/generated/models.json")
 add_executable(atlas_solver cpp/main.cpp)
@@ -46,7 +46,7 @@ file(GLOB TIME_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/tests/fixtures
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/time-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/time-generated" "${CMAKE_SOURCE_DIR}/tests/fixtures/time"
-  DEPENDS ${TIME_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json
+  DEPENDS ${TIME_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_time_models DEPENDS "${CMAKE_BINARY_DIR}/time-generated/models.hpp")
 add_executable(atlas_time_solver cpp/main.cpp)
@@ -78,7 +78,7 @@ file(GLOB RESEARCH_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/res
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/research-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/research-generated" "${CMAKE_SOURCE_DIR}/models/research"
-  DEPENDS ${RESEARCH_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model-v0.2.schema.json schemas/model.schema.json
+  DEPENDS ${RESEARCH_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model-v0.2.schema.json schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_research_models DEPENDS "${CMAKE_BINARY_DIR}/research-generated/models.hpp")
 add_executable(atlas_research_solver cpp/main.cpp)
@@ -115,7 +115,7 @@ file(GLOB CLAY2013_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/res
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/clay2013-generated" "${CMAKE_SOURCE_DIR}/models/research/clay2013"
-  DEPENDS ${CLAY2013_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  DEPENDS ${CLAY2013_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_clay2013_models DEPENDS "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp")
 add_executable(atlas_clay2013_solver cpp/main.cpp)
@@ -134,7 +134,7 @@ file(GLOB GIS2024_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/rese
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/gis2024-generated" "${CMAKE_SOURCE_DIR}/models/research/gis2024"
-  DEPENDS ${GIS2024_MODEL_FILES} atlas/dsl.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
+  DEPENDS ${GIS2024_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_custom_target(atlas_gis2024_models DEPENDS "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp")
 add_executable(atlas_gis2024_solver cpp/main.cpp)
@@ -146,4 +146,27 @@ if(EMSCRIPTEN)
   target_link_options(atlas_gis2024_solver PRIVATE ${ATLAS_WASM_OPTIONS})
 else()
   set_property(TEST atlas_python APPEND PROPERTY ENVIRONMENT "ATLAS_GIS2024_SOLVER=$<TARGET_FILE:atlas_gis2024_solver>")
+endif()
+
+# Bounded checked matrix-function conformance has an isolated synthetic catalogue.
+file(GLOB EXPM_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/tests/fixtures/expm/*.json")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/expm-generated/models.hpp" "${CMAKE_BINARY_DIR}/expm-generated/models.json"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/expm-generated" "${CMAKE_SOURCE_DIR}/tests/fixtures/expm"
+  DEPENDS ${EXPM_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/model.py atlas/compiler.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/expm-history-generated/history_programs.hpp"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.history_compiler "${CMAKE_BINARY_DIR}/expm-history-generated" "${CMAKE_SOURCE_DIR}/tests/fixtures/expm-history"
+  DEPENDS tests/fixtures/expm-history/expm.json atlas/history.py atlas/history_compiler.py atlas/dsl.py atlas/symmetric_expm.py atlas/structure.py
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_executable(atlas_expm_probe tests/expm_driver.cpp "${CMAKE_BINARY_DIR}/expm-generated/models.hpp" "${CMAKE_BINARY_DIR}/expm-history-generated/history_programs.hpp")
+target_include_directories(atlas_expm_probe PRIVATE cpp/include "${CMAKE_BINARY_DIR}/expm-generated" "${CMAKE_BINARY_DIR}/expm-history-generated")
+target_compile_options(atlas_expm_probe PRIVATE -Wall -Wextra -Wno-unused-variable)
+if(EMSCRIPTEN)
+  target_compile_options(atlas_expm_probe PRIVATE -fexceptions)
+  set_target_properties(atlas_expm_probe PROPERTIES OUTPUT_NAME "expm-fixtures" SUFFIX ".js")
+  target_link_options(atlas_expm_probe PRIVATE ${ATLAS_WASM_OPTIONS})
+else()
+  add_test(NAME atlas_expm_context COMMAND atlas_expm_probe "0,0,0,0,0,0" "1")
 endif()
