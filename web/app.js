@@ -17,7 +17,14 @@ async function loadEvidenceIndex(){
   const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);
   if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;body.querySelector('.catalogue-evidence')?.replaceWith(evidenceSection(document,entry.id,evidenceIndex,evidenceState));body.scrollTop=scroll;}
 }
-function closeCatalogue(){if(catalogueRoute(location.hash).modelId||catalogueRoute(location.hash).invalid){history.replaceState(null,'','#catalogue');route();}else $('catalogue-dialog').close();}
+function restoreCatalogueFocus(){
+  if(!$('catalogue').hidden&&!$('catalogue').contains(document.activeElement)){
+    const hash=catalogueModelHash($('catalogue-detail-id').textContent);
+    const link=[...document.querySelectorAll('#catalogue-grid .catalogue-open')].find(x=>x.hash===hash);
+    (link||$('search')).focus({preventScroll:true});
+  }
+}
+function closeCatalogue(){if(catalogueRoute(location.hash).modelId||catalogueRoute(location.hash).invalid){history.replaceState(null,'','#catalogue');route();}else $('catalogue-dialog').close();restoreCatalogueFocus();}
 function publicationReference(id){const row=document.createElement('p');row.dataset.publicationModel=id;updatePublicationReference(row);return row;}
 function updatePublicationReference(row){
   row.replaceChildren();if(!publicationModels.has(row.dataset.publicationModel))return;
@@ -456,6 +463,8 @@ $('export-run').onclick=()=>download(lastSpec.model+'-run.json',JSON.stringify(e
 $('export-csv').onclick=()=>{const rows=['axial_strain,radial_strain,volumetric_strain,p_Pa,q_signed_Pa,pore_pressure_Pa,iterations,substeps'];for(const p of currentResult.points)rows.push([p.strain[0],p.strain[1],p.strain.slice(0,3).reduce((a,b)=>a+b,0),p.p,p.q_signed,p.u,p.iterations,p.substeps].join(','));download(lastSpec.model+'-results.csv',rows.join('\n'),'text/csv');};
 $('search').oninput=$('availability').onchange=catalogueCards;
 $('catalogue-close').onclick=closeCatalogue;
+// Direct links have no opening control for the native dialog to restore.
+$('catalogue-dialog').addEventListener('close',restoreCatalogueFocus);
 $('catalogue-dialog').addEventListener('cancel',event=>{event.preventDefault();closeCatalogue();});
 $('catalogue-dialog').onclick=e=>{if(e.target===$('catalogue-dialog')){const box=e.target.getBoundingClientRect();if(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom)closeCatalogue();}};
 try{
