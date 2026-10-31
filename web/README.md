@@ -83,3 +83,13 @@ For isolated local verification, `tools/test_wasm.mjs` accepts `--wasm-dir DIREC
 
 
 The **Recorded paths** view accepts the [experimental recorded-run contract](../docs/RECORDED_PATHS.md#browser-recorded-paths), with ordered mixed controls, six component plots, cancellation and exact-request exports. Run `node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver` to check the shared native/Wasm entry point. The view recalculates imported runs locally; it does not infer a loading path from a measured curve.
+
+## Catalogue links and retained evidence
+
+In the local packaged preview, every catalogue entry has a project-relative shareable hash URL, for example [linear elasticity](https://benjym.github.io/constitutive-atlas/#catalogue/linear-elastic). The local version uses the same route beneath its preview path. Close and Escape return to the catalogue; browser Back/Forward preserve navigation. Unknown model links leave the catalogue usable.
+
+`tools/build_evidence.py` generates `evidence.json` from original numerical records and explicit research-definition/manifest bindings. Packaging checks artifact receipts before writing the index and copies original record JSON under `evidence-records/`; it does not copy raw numerical reports, compiled binaries or historical source snapshots into that directory. Public definitions and research definitions remain under `models/`.
+
+The view preserves recorded failures and scope/limitations. A current-definition match means exact definition bytes, without claiming a match to the current solver binary. Historical definition hashes stay visible and are never relabelled as the current definition. Receipt integrity checks do not rerun numerical assertions or provide independent scientific or experimental validation. Research studies remain separate from the browser's executable model list. The index states its coverage gaps, and a failed evidence fetch leaves model/source navigation usable.
+
+Run `python3 -B -m unittest tests.test_build_evidence tests.test_web_catalogue tests.test_browser_numerics tests.test_web_publications tests.test_web_recorded` and `node --test tests/test_catalogue_browser.mjs` for focused checks. Package with `python3 -B tools/build_web.py --output /private/tmp/atlas-preview/constitutive-atlas` after an up-to-date public Wasm build. A website-only change needs no native rebuild when the generated definition catalogue still matches.

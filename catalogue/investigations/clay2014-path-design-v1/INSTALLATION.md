@@ -1,0 +1,5 @@
+# Retained design/review snapshot
+
+These files preserve the original staged design and independent review byte-for-byte. `manifest.json` records the staging-time installation flag and checksums; installation does not rewrite that historical record. The reference generator, tests and reference packet are now installed at their normal repository paths.
+
+`review_probe.py` retains its original absolute `/private/tmp/atlas-clay2014-path-reference-20261031-v1` root. It is a historical review script, not a portable repository command. To reproduce it unchanged on another checkout, recreate that temporary root with the five files named by the installed reference packet (the four `manifest.json` file-map entries and the manifest itself), preserving repository-relative paths, then run the retained probe. It checks all four file hashes before reading the retained data. Preserve the original script and checksums. The installed `tests.test_clay2014_path_reference` suite provides the normal repository-based reference replay. Neither command runs the common C++ solver.

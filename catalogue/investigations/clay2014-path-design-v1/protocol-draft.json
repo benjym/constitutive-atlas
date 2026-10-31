@@ -1,0 +1,100 @@
+{
+  "version": "clay2014-finite-path-design-draft-v1",
+  "scope": "Design only; no collector/build/native/Wasm/admission",
+  "model_id": "hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane-research",
+  "model_sha256": "9077e7d5d7cdb42a7cc5c2ab49c29c1643543c54310caad26c17b5f256236de5",
+  "paths": [
+    "vertical-nonproportional",
+    "oblique-reversal",
+    "rotated-oblique-reversal",
+    "isotropic-ratios-hydro-reversal"
+  ],
+  "original_segments": 3,
+  "tolerances": [
+    0.0001,
+    1e-06,
+    1e-08
+  ],
+  "caller_partitions": [
+    1,
+    7
+  ],
+  "trajectories": 24,
+  "actual_updates": 288,
+  "transport_rows_per_backend": 295,
+  "stress_scaled_budgets": [
+    0.002,
+    0.0001,
+    8e-06
+  ],
+  "void_absolute_budgets": [
+    5e-06,
+    3e-07,
+    2e-08
+  ],
+  "production_reference_floors": {
+    "stress_relative_to_fixed_scale": 5e-12,
+    "void_ratio": 5e-13
+  },
+  "reference_uncertainty": "empirical max adjacentRK4differences percallerpoint, <=10percent tightbudget; no certificate",
+  "reference_grids": {
+    "n1": [
+      28,
+      56,
+      112
+    ],
+    "n7": [
+      4,
+      8,
+      16
+    ]
+  },
+  "refinement": {
+    "successive": 0.65,
+    "loose_to_tight": 0.35,
+    "offset": "2*(productionfloor+max empiricaluncertainty)"
+  },
+  "partition": {
+    "loose_to_tight": 0.35,
+    "offset": "2productionfloor only; no reference uncertainty"
+  },
+  "stress_scale": "max(1Pa,Frobenius initial stress6); p_scale same fixedvalue",
+  "settings": [
+    2e-10,
+    "rate_tolerance",
+    45,
+    20,
+    20000,
+    11
+  ],
+  "parity_scaled_bound": 5e-11,
+  "transactions": {
+    "case": "oblique-reversal",
+    "tolerance": 1e-08,
+    "partitions": 1,
+    "actual_committed_prefix_calls": [
+      1,
+      2
+    ],
+    "control_call": 3,
+    "probes": [
+      "thirdincrement,budget3,acceptedprogress+rollback",
+      "0.9I,domainfailure+rollback",
+      "zero,success+unchanged"
+    ],
+    "recoveries": "same committedsecondstate actualthirdcall perbackend"
+  },
+  "reference_contract_status": "Frozen source-only packet independently reviewed; 11 Python groups pass",
+  "unresolved": [
+    "Future collector exact request/echo/counter/transport protocol and isolated solver build",
+    "Production finite-path, rollback and cross-platform observations not yet performed"
+  ],
+  "no_repo_writes": true,
+  "no_build": true,
+  "no_native": true,
+  "no_wasm": true,
+  "reference_pins": {
+    "generator": "04cb9be360cde48a5cb64768e10129b90c10ac33d3d1c3b1a34dc75b683d315a",
+    "reference": "7f7b2f8fb0eb04294fcd9959470a4dd7d342a38ea403dc1b18bc6d338cd5f301"
+  }
+}

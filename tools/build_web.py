@@ -9,6 +9,7 @@ sys.path.insert(0,str(ROOT))
 from atlas.compiler import generate
 from build_experiments import bundle
 from build_publications import bundle as bundle_publications
+from build_evidence import bundle as bundle_evidence
 
 def main():
     parser=argparse.ArgumentParser()
@@ -25,7 +26,7 @@ def main():
         generate(check)
         if (Path(check)/'models.json').read_bytes() != (generated/'models.json').read_bytes():
             raise SystemExit('Wasm catalogue is stale: rebuild before packaging.')
-    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','recorded.mjs','recorded-view.mjs']:
+    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','recorded.mjs','recorded-view.mjs','catalogue.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     shutil.copyfile(ROOT/'protocols/recorded-linear-elastic-run.json',dest/'recorded-example.json')
     for name in ['atlas.js','atlas.wasm']:
@@ -33,6 +34,7 @@ def main():
     shutil.copyfile(generated/'models.json',dest/'models.json')
     shutil.copyfile(ROOT/'catalogue/manifest.json',dest/'catalogue.json')
     bundle_publications(dest)
+    bundle_evidence(dest)
     shutil.copytree(ROOT/'schemas',dest/'schemas',dirs_exist_ok=True)
     shutil.copytree(ROOT/'models',dest/'models',dirs_exist_ok=True)
     experiment_manifest=bundle(dest/'experiments', preview=args.preview_experiments)

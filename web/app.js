@@ -1,3 +1,4 @@
+import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
 import {setupRecordedView} from './recorded-view.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries} from './experiments.mjs';
@@ -6,6 +7,14 @@ let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
 const experimentCache=new Map();
 let publicationModels=new Set();
+let evidenceIndex=null,evidenceState='loading';
+async function loadEvidenceIndex(){
+  try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());evidenceState='loaded';}
+  catch{evidenceState='failed';}
+  const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);
+  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;body.querySelector('.catalogue-evidence')?.replaceWith(evidenceSection(document,entry.id,evidenceIndex,evidenceState));body.scrollTop=scroll;}
+}
+function closeCatalogue(){if(catalogueRoute(location.hash).modelId||catalogueRoute(location.hash).invalid){history.replaceState(null,'','#catalogue');route();}else $('catalogue-dialog').close();}
 function publicationReference(id){const row=document.createElement('p');row.dataset.publicationModel=id;updatePublicationReference(row);return row;}
 function updatePublicationReference(row){
   row.replaceChildren();if(!publicationModels.has(row.dataset.publicationModel))return;
@@ -19,7 +28,10 @@ async function loadPublicationReferences(){
 const protocolNames=['Oedometer','Drained triaxial','Undrained triaxial','Undrained stress control','Isotropic compression'];
 function toast(message){$('toast').textContent=message;$('toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').style.display='none',7000);}
 function route(){
-  const anchor=location.hash.slice(1),page=['catalogue','methods','recorded'].includes(anchor)?anchor:'laboratory';
+  const anchor=location.hash.slice(1),selection=catalogueRoute(location.hash),page=selection.page;
+  const entry=catalogue.find(x=>x.id===selection.modelId);
+  if(entry)showCatalogueModel(entry,models.find(x=>x.id===entry.id));
+  else{if($('catalogue-dialog').open)$('catalogue-dialog').close();if(selection.modelId||selection.invalid)toast('That model link is not in this catalogue.');}
   document.querySelectorAll('.page').forEach(x=>x.hidden=x.id!==page);
   document.querySelectorAll('.rail nav a').forEach(x=>{const active=x.hash==='#'+page;x.classList.toggle('active',active);if(active)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current');});
   if($('breadcrumb'))$('breadcrumb').textContent={laboratory:'MODEL TESTING',catalogue:'MODEL CATALOGUE',methods:'METHODS & EVIDENCE',recorded:'RECORDED PATHS'}[page];
@@ -260,7 +272,7 @@ function catalogueCards(){
   for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec;if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
-    const heading=element('h2'),open=element('button',entry.name,'catalogue-open');open.type='button';open.setAttribute('aria-haspopup','dialog');open.onclick=()=>showCatalogueModel(entry,spec);heading.append(open);
+    const heading=element('h2'),open=element('a',entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
     const hint=element('span',undefined,'catalogue-card-hint');hint.setAttribute('aria-hidden','true');hint.append(element('span','View details'),element('span','↗','catalogue-arrow'));
     card.append(meta,heading,hint);
     grid.append(card);
@@ -285,11 +297,13 @@ function showCatalogueModel(entry,spec){
     }
     body.append(section);
   }
+  body.append(evidenceSection(document,entry.id,evidenceIndex,evidenceState));
   body.append(publicationReference(entry.id));
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
   $('catalogue-detail-id').textContent=entry.id;
+  $('catalogue-permalink').href=catalogueModelHash(entry.id);
   const explore=$('catalogue-explore');explore.hidden=!spec;explore.onclick=()=>{dialog.close();$('model').value=entry.id;populate();location.hash='laboratory';simulate();$('model').focus({preventScroll:true});};
-  dialog.showModal();body.scrollTop=0;
+  if(!dialog.open)dialog.showModal();body.scrollTop=0;
 }
 function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function setProtocol(){
@@ -428,12 +442,13 @@ numericalControls();setProtocol();addSlider($('confinement'),'Radial effective s
 $('export-run').onclick=()=>download(lastSpec.model+'-run.json',JSON.stringify({schema_version:'0.1',catalogue_hash:catalogueHash,specification:lastSpec,result:currentResult},null,2),'application/json');
 $('export-csv').onclick=()=>{const rows=['axial_strain,radial_strain,volumetric_strain,p_Pa,q_signed_Pa,pore_pressure_Pa,iterations,substeps'];for(const p of currentResult.points)rows.push([p.strain[0],p.strain[1],p.strain.slice(0,3).reduce((a,b)=>a+b,0),p.p,p.q_signed,p.u,p.iterations,p.substeps].join(','));download(lastSpec.model+'-results.csv',rows.join('\n'),'text/csv');};
 $('search').oninput=$('availability').onchange=catalogueCards;
-$('catalogue-close').onclick=()=>$('catalogue-dialog').close();
-$('catalogue-dialog').onclick=e=>{if(e.target===$('catalogue-dialog')){const box=e.target.getBoundingClientRect();if(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom)e.target.close();}};
+$('catalogue-close').onclick=closeCatalogue;
+$('catalogue-dialog').addEventListener('cancel',event=>{event.preventDefault();closeCatalogue();});
+$('catalogue-dialog').onclick=e=>{if(e.target===$('catalogue-dialog')){const box=e.target.getBoundingClientRect();if(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom)closeCatalogue();}};
 try{
   const [response,manifest]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json')]);if(!response.ok||!manifest.ok)throw Error('Catalogue could not be loaded.');
   const definitions=await response.json();catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   setupRecordedView({models,catalogueHash,chart,sourceLinks,definitionLink});
-  populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadPublicationReferences();
+  populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadPublicationReferences();loadEvidenceIndex();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}
