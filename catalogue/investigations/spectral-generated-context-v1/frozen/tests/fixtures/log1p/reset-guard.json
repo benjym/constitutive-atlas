@@ -1,0 +1,70 @@
+{
+  "schema_version": "0.1",
+  "id": "test-log1p-reset-guard",
+  "name": "Synthetic log1p reset-guard",
+  "status": "draft",
+  "family": "engine verification only",
+  "description": "Synthetic expression context fixture; not a constitutive model.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas",
+      "role": "synthetic algebra verification specification",
+      "locator": "Checked symmetric scalar log1p conformance, not literature model"
+    }
+  ],
+  "parameters": {
+    "K": {
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "unit": "Pa"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "K",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "A",
+      "shape": "sym",
+      "unit": "1",
+      "scale": "1",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "derived": [],
+  "domain": [],
+  "integration": "rate",
+  "equations": {
+    "sigma": "0 * K * I",
+    "A": "de"
+  },
+  "increment_reset": {
+    "scope": "parent_increment",
+    "updates": [
+      {
+        "target": "A",
+        "guard": "trace(0 * (1 + log1p(trace(A))) * I)-1",
+        "value": "0 * I"
+      }
+    ]
+  }
+}

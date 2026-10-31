@@ -1,0 +1,2866 @@
+{
+  "schema_version": "0.1",
+  "sha256": "5c4c8bb9b4c9f1f6a046ae11205edce663bdba0d4de3a929b4db67efdc120d02",
+  "models": [
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-check-only",
+      "name": "Synthetic spectral check-only",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "principal_max(sigma)*I",
+        "e": "0*e"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [
+        "principal_max(sigma)>=0*p_ref"
+      ],
+      "id": "synthetic-spectral-domain-ordinary",
+      "name": "Synthetic spectral domain-ordinary",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma",
+        "e": "0*e"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [
+        "principal_max_value(sigma)>=0*p_ref"
+      ],
+      "id": "synthetic-spectral-domain-value",
+      "name": "Synthetic spectral domain-value",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma",
+        "e": "0*e"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "eager",
+          "expr": "projector_max(sigma)"
+        }
+      ],
+      "domain": [],
+      "id": "synthetic-spectral-eager-derived",
+      "name": "Synthetic spectral eager-derived",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "select(1>0,sigma,p_ref*eager)",
+        "e": "0*e"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-eager-mask",
+      "name": "Synthetic spectral eager-mask",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*principal_max(sigma)*I",
+        "e": "0*e"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-initial",
+      "name": "Synthetic spectral initial",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma",
+        "e": "0*e"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "initial_checks": [
+        "principal_max(sigma)>=0*p_ref"
+      ]
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "threshold": {
+          "default": 4.0,
+          "min": -10.0,
+          "max": 10.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-lazy",
+      "name": "Synthetic spectral lazy",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "p_ref*select(principal_max_value(sigma)>threshold,projector_max(sigma),I)",
+        "e": "0*e"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 100.0,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-lower-sum-observable",
+      "name": "Synthetic spectral lower_sum",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma/tau",
+        "e": "0*e/tau",
+        "q": "0*q/tau"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "none"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite"
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "observables": [
+        {
+          "name": "probe",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "expr": "principal_lower_sum(sigma)"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-lower-sum",
+      "name": "Synthetic spectral lower_sum",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma",
+        "e": "0*e",
+        "q": "q-principal_lower_sum(sigma)"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 100.0,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-max-observable",
+      "name": "Synthetic spectral max",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma/tau",
+        "e": "0*e/tau",
+        "q": "0*q/tau"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "none"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite"
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "observables": [
+        {
+          "name": "probe",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "expr": "principal_max(sigma)"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-max",
+      "name": "Synthetic spectral max",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma",
+        "e": "0*e",
+        "q": "q-principal_max(sigma)"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 100.0,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-mid-observable",
+      "name": "Synthetic spectral mid",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma/tau",
+        "e": "0*e/tau",
+        "q": "0*q/tau"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "none"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite"
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "observables": [
+        {
+          "name": "probe",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "expr": "principal_mid(sigma)"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-mid",
+      "name": "Synthetic spectral mid",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma",
+        "e": "0*e",
+        "q": "q-principal_mid(sigma)"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 100.0,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-min-observable",
+      "name": "Synthetic spectral min",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma/tau",
+        "e": "0*e/tau",
+        "q": "0*q/tau"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "none"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite"
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "observables": [
+        {
+          "name": "probe",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "expr": "principal_min(sigma)"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-min",
+      "name": "Synthetic spectral min",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma",
+        "e": "0*e",
+        "q": "q-principal_min(sigma)"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 100.0,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-projector-max-observable",
+      "name": "Synthetic spectral projector_max",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma/tau",
+        "e": "0*e/tau"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "none"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite"
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "observables": [
+        {
+          "name": "probe",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "expr": "projector_max(sigma)"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 100.0,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-projector-min-observable",
+      "name": "Synthetic spectral projector_min",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma/tau",
+        "e": "0*e/tau"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "none"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite"
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "observables": [
+        {
+          "name": "probe",
+          "shape": "sym",
+          "unit": "1",
+          "scale": "1",
+          "expr": "projector_min(sigma)"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "threshold": {
+          "default": 1.0,
+          "min": -1.0,
+          "max": 1.0,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-reset",
+      "name": "Synthetic spectral reset",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma",
+        "e": "0*e"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "sigma",
+            "guard": "-threshold",
+            "value": "p_ref*projector_max(sigma)"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 100.0,
+          "unit": "s"
+        },
+        "shape": {
+          "default": 2.0,
+          "min": 1.0,
+          "max": 3.0,
+          "unit": "1"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "principal_max(sym(p_ref,shape*p_ref,3*p_ref,0*p_ref,0*p_ref,0*p_ref))",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-scales",
+      "name": "Synthetic spectral scales",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma/tau",
+        "e": "0*e/tau"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "none"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite"
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "observables": [
+        {
+          "name": "probe",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "principal_max(sym(1,shape,3,0,0,0))",
+          "expr": "e"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "memory",
+          "unit": "1",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic reset memory",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "trialA",
+          "expr": "sigma_n+p_ref*de"
+        }
+      ],
+      "domain": [],
+      "id": "synthetic-spectral-solver",
+      "name": "Synthetic spectral solver",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "sigma-sigma_n+0*p_ref*projector_max(trialA)",
+        "e": "e-e_n",
+        "memory": "memory-memory_n"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "memory"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "increment_reset": {
+        "scope": "parent_increment",
+        "updates": [
+          {
+            "target": "memory",
+            "guard": "-1",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-sticky",
+      "name": "Synthetic spectral sticky",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "p_ref*select(principal_max(sigma)>=0*p_ref,I,I)+0*p_ref*projector_min(sym(3,2,1,0,0,0))",
+        "e": "0*e"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        },
+        "tau": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 100.0,
+          "unit": "s"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-upper-sum-observable",
+      "name": "Synthetic spectral upper_sum",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma/tau",
+        "e": "0*e/tau",
+        "q": "0*q/tau"
+      },
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "none"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite"
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "observables": [
+        {
+          "name": "probe",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "expr": "principal_upper_sum(sigma)"
+        }
+      ]
+    },
+    {
+      "schema_version": "0.3",
+      "status": "transcribed",
+      "parameters": {
+        "p_ref": {
+          "default": 1.0,
+          "min": 1.0,
+          "max": 1000000000.0,
+          "unit": "Pa"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "unit": "Pa",
+          "initial": [
+            7.0,
+            2.0,
+            -3.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "shape": "sym",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "unit": "1",
+          "initial": 0.7,
+          "shape": "scalar",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "unspecified",
+            "transformation": "fixed_components"
+          }
+        },
+        {
+          "name": "q",
+          "unit": "Pa",
+          "initial": 0.0,
+          "shape": "scalar",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic scalar output",
+            "transformation": "fixed_components"
+          }
+        }
+      ],
+      "derived": [],
+      "domain": [],
+      "id": "synthetic-spectral-upper-sum",
+      "name": "Synthetic spectral upper_sum",
+      "family": "synthetic arithmetic verification",
+      "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+          "locator": "Synthetic integration verification; no material/source equation claim",
+          "role": "test specification"
+        }
+      ],
+      "equations": {
+        "sigma": "0*sigma",
+        "e": "0*e",
+        "q": "q-principal_upper_sum(sigma)"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "q"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    }
+  ]
+}

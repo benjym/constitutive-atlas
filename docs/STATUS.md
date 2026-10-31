@@ -1,3 +1,9 @@
+# Generated spectral integration verified — 2026-10-31
+
+The [frozen generated-context study](../catalogue/investigations/spectral-generated-context-v1/RESULTS.md) passes1589 calls per native/Wasm backend:1133 successes and456 expected failures,17496 independent accuracy checks and23484 derivative-column checks each. Actual generated residual/observable/control/reset/history and solver failure/recovery contexts pass, with the same independent stored-Mandel references and unchanged bounds. Worst error/allowance is.240084.
+
+A213file prospective freeze precedes serial one-target native then Wasm builds, both completing normally. Independent assessor ideal-frame and29 corruption probes pass; copied-source replay regenerates32 files exactly, validates literal wire,36 static consumer checks and both recorded assessments. This closes the bounded generic spectral integration gate. Mohr–Coulomb return-map declarations and floating branch/equality policy remain open; no new model, scientific admission or deployment. Hosted five/local nine remain unchanged.
+
 # Generic spectral primitives: native and Wasm — 2026-10-31
 
 The [frozen standalone study](../catalogue/investigations/symmetric-spectral-primitive-v1/RESULTS.md) passes1136 ordered calls per backend:852 successes,284 expected checked failures,11530 independent accuracy checks and222 exact diagonal eigenvalue checks. Worst error/allowance is.240084. The independent reference packet covers48 actual stored-Mandel tensors and all38 directions;280/360-digit construction checks pass with two failed reference attempts retained unchanged.

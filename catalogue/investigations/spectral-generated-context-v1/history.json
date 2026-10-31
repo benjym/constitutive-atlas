@@ -1,0 +1,57 @@
+{
+  "schema_version": "experimental-history-0.1",
+  "id": "synthetic-spectral-history",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+      "locator": "Synthetic two-phase history rollback fixture"
+    }
+  ],
+  "fields": {
+    "count": {
+      "shape": "scalar",
+      "unit": "1",
+      "storage": "state"
+    },
+    "tensor": {
+      "shape": "sym",
+      "unit": "1",
+      "storage": "state"
+    }
+  },
+  "inputs": {
+    "A": {
+      "shape": "sym",
+      "unit": "1"
+    }
+  },
+  "phases": [
+    {
+      "name": "tentative",
+      "kind": "advance",
+      "base": "parent",
+      "bindings": {
+        "oldcount": {
+          "snapshot": "parent",
+          "field": "count"
+        }
+      },
+      "writes": {
+        "count": "oldcount+1"
+      }
+    },
+    {
+      "name": "project",
+      "kind": "advance",
+      "base": "tentative",
+      "bindings": {
+        "A": {
+          "input": "A"
+        }
+      },
+      "writes": {
+        "tensor": "projector_max(A)"
+      }
+    }
+  ]
+}

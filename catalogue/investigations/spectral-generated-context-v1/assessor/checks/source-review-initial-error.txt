@@ -1,0 +1,10 @@
+Source-only request crosswalk check, initial failed assumption:
+Traceback (most recent call last):
+  File "<stdin>", line 8, in <module>
+KeyError: 'case'
+
+Correction: 88 original intentionally invalid-input primitive requests have no
+case metadata. Compare case when present, and always compare operation, kind,
+values, seeds, identity and expected status. This changes no request, reference,
+expected numeric value, gate or policy. Corrected reusable check_sources.py
+preserves this limitation explicitly. No compiled execution occurred.

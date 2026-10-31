@@ -1,0 +1,26 @@
+{
+  "identity": "symmetric-spectral-primitive-study-v1",
+  "compiled_observations_before_freeze": 0,
+  "candidate": "symmetric3-scaled-cyclic-jacobi24-v1-candidate",
+  "arithmetic": "IEEE binary64; no fast math; contraction disabled; Mandel shears mathematical sqrt2 in reference, binary64 sqrt2 decode in candidate",
+  "candidate_sweeps": 24,
+  "candidate_residual_and_orthogonality_eps_factor": 128,
+  "selected_gap_resolution_eps_factor": 1024,
+  "gap_meaning": "Numerical resolution diagnostic relative to full Frobenius input norm, never physical-domain clipping or eigenvalue merging",
+  "value_absolute_error_eps_factor": 512,
+  "projector_absolute_error_eps_factor": 2048,
+  "scalar_derivative_absolute_error_eps_factor": 2048,
+  "projector_derivative_absolute_error_eps_factor": 8192,
+  "subnormal_absolute_allowance_ulps": 2,
+  "metrics": {
+    "value": "abs(y-yref) <=512*eps*||A||F +2*denorm_min; diagonal eigenvalues additionally exact binary64 equality",
+    "projector": "Mandel Frobenius error <=2048*eps*||A||F/gap +2*denorm_min",
+    "scalar_derivative": "abs(d-dref) <=2048*eps*||H||F*(1+||A||F/gap)+2*denorm_min",
+    "projector_derivative": "Mandel Frobenius error <=8192*eps*(||H||F/gap)*(1+||A||F/gap)+2*denorm_min",
+    "value_only_derivatives": "exact zero transport storage; qualifier enforcement is a separate unimplemented gate, these are not claimed derivatives",
+    "failure": "Frozen expected status and unchanged prefilled output; valid recovery after injected nonfinite failures"
+  },
+  "range": "Required representable outputs; highprecision reference output rounding to nonfinite binary64 requires output_range or derivative_range. Non-diagonal common-scale underflow is a diagnosed numerical failure, not an accepted material restriction.",
+  "reference": "Independent centered cubic root brackets and polynomial projectors from exact stored-Mandel binary64 values; dual Decimal precision adequacy is not a rigorous interval proof",
+  "not_covered": ["production DSL qualifier enforcement", "generated expression lazy/sticky contexts", "MC branch floating equality policy", "solver transactions", "scientific admission", "experimental agreement"]
+}

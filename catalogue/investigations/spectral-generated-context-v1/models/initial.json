@@ -1,0 +1,104 @@
+{
+  "schema_version": "0.3",
+  "status": "transcribed",
+  "parameters": {
+    "p_ref": {
+      "default": 1.0,
+      "min": 1.0,
+      "max": 1000000000.0,
+      "unit": "Pa"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "unit": "Pa",
+      "initial": [
+        7.0,
+        2.0,
+        -3.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "shape": "sym",
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "initial": 0.7,
+      "shape": "scalar",
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "unspecified",
+        "transformation": "fixed_components"
+      }
+    }
+  ],
+  "derived": [],
+  "domain": [],
+  "id": "synthetic-spectral-initial",
+  "name": "Synthetic spectral initial",
+  "family": "synthetic arithmetic verification",
+  "description": "Generated spectral integration fixture, not a constitutive model or calibrated material.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SYMMETRIC_SPECTRAL.md",
+      "locator": "Synthetic integration verification; no material/source equation claim",
+      "role": "test specification"
+    }
+  ],
+  "equations": {
+    "sigma": "0*sigma",
+    "e": "0*e"
+  },
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "initial_checks": [
+    "principal_max(sigma)>=0*p_ref"
+  ]
+}

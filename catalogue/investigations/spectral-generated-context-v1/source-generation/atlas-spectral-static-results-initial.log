@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-spectral-generated-context-v1/static_checks.py", line 13, in check
+    try:validator(value)
+        ~~~~~~~~~^^^^^^^
+  File "/private/tmp/atlas-spectral-generated-context-v1/static_checks.py", line 57, in <lambda>
+    check('initialization '+mode,lambda x:validate_recipe(x,timed),item,mode=='predicate','initialization')
+                                          ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/private/tmp/atlas-spectral-generated-context-v1/frozen/atlas/initialization.py", line 115, in validate_recipe
+    raise ValidationError('initial strain rate must be a symmetric tensor per second')
+atlas.dsl.ValidationError: initial strain rate must be a symmetric tensor per second
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/private/tmp/atlas-spectral-generated-context-v1/static_checks.py", line 70, in <module>
+    report=run();print(json.dumps(report,indent=2))
+  File "/private/tmp/atlas-spectral-generated-context-v1/static_checks.py", line 57, in run
+    check('initialization '+mode,lambda x:validate_recipe(x,timed),item,mode=='predicate','initialization')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-spectral-generated-context-v1/static_checks.py", line 15, in check
+    if allowed or (marker and marker not in str(exc)):raise AssertionError((label,str(exc)))from exc
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('initialization rate', 'initial strain rate must be a symmetric tensor per second')
