@@ -35,6 +35,17 @@ These are contribution hypotheses. This screening has not established that other
 
 A suitable working description is **an auditable geomechanics model atlas and reproducible comparative study**. Avoid claims of a first constitutive language, first online comparison, new constitutive law, superior numerical performance or exhaustive literature coverage.
 
+## Primary-publication follow-up
+
+The [MFront/MGIS primary-text comparison](reviews/prior-work-mfront-mgis-v1/README.md)
+adds section-located reading and reusable bibliographic records. MFront's SIRIUS
+example means source-linked law storage and review procedures also have a direct
+precedent; the traceability hypothesis above is not an established distinction.
+The author manuscript and published MGIS PDF have different access/preservation
+boundaries, recorded in that packet. No executable comparison or superiority
+claim was made. This supplements, rather than revises, the historical eleven
+project-document reading notes.
+
 ## Remaining PAPER-01 work
 
 1. Extend the literature search to peer-reviewed software and comparative-method papers, record search dates, inclusion boundaries and model/data repositories, and inspect full texts for claimed distinctions.
