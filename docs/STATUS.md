@@ -1,3 +1,9 @@
+# Latest progress — exact-control Mohr–Coulomb paths
+
+The [separate frozen study](../catalogue/investigations/mc-explicit-controls-paths-v1/README.md) passes all14source-reference paths/834points per native and Wasm backend through identical exact-bit loading inputs. All14178physical parity scalars meet the original gate; worst budget fraction is .03859. Each backend passes12invalid/recovery pairs, with same-instance Wasm recovery. The generic initial-state guard now checks admissibility before committing the first laboratory point. Four native unittest subcases and90unchanged legacy backend runs pass, plus50model/protocol,4rollback,2rate and6IGS regressions. Builds finish serially with one target/worker. Saved-evidence replay and three artifact hashes pass.
+
+The original sine-input parity failure remains preserved. Browser versioned loading provenance/producer/import compatibility, MC browser integration and admission remain open. Hosted five/local nine are unchanged; no push/deployment. A [total-stress source design](reviews/total-stress-profile-v1/README.md) and archived-source replay define scope-aware consumer work for Tresca; no total model is admitted.
+
 # Latest progress — explicit caller loading foundation
 
 The [additive exact-bit C/CLI API](EXPLICIT_LABORATORY_CONTROLS.md) shares the unchanged axisymmetric controller while supplying identical cumulative loading values to both backends. Legacy APIs, sine generation and browser imports/defaults retain their semantics. The [frozen software study](../catalogue/investigations/explicit-laboratory-controls-v1/README.md) passes90legacy backend runs,90explicit replay equivalences,40independent elastic points,33negative cases, signedzero/minsub transport, valid5001-point boundaries and failed-prefix/recovery checks. Unchanged45model/protocol,4rollback,2rate and6IGS regressions pass. Both single-target/one-worker builds finish normally.

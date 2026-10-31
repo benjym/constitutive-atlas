@@ -1,0 +1,86 @@
+{
+  "backend": "wasm",
+  "started_utc": "2026-10-31T12:17:23.463776+00:00",
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "EMCC_CORES": "1",
+  "manifest_sha256": "7c404e1497af83e5681746550ce6057004cfd4d3b5fd3c460ec1a07717e5e121",
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "emcc",
+        "--version"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1",
+        "-B",
+        "/private/tmp/atlas-mc-explicit-paths-wasm-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-mc-explicit-paths-wasm-v1",
+        "--target",
+        "atlas_laboratory_preview",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "node",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1/observe.mjs",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1",
+        "wasm",
+        "/private/tmp/atlas-mc-explicit-paths-wasm-v1",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1/wasm"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    },
+    {
+      "label": "assess",
+      "argv": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1/assess_paths.py",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1/wasm/journal.json"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    }
+  ],
+  "artifacts": {
+    "atlas-preview.js": {
+      "path": "/private/tmp/atlas-mc-explicit-paths-wasm-v1/atlas-preview.js",
+      "sha256": "591f46a9abeec187bde7cd21d36316d6e07309354b8f0b0deed643a3d5b432d2",
+      "bytes": 26783
+    },
+    "atlas-preview.wasm": {
+      "path": "/private/tmp/atlas-mc-explicit-paths-wasm-v1/atlas-preview.wasm",
+      "sha256": "b0a0315437f32fdf8f67951175cddb16f361d0bc9bddd19ac164692d08ef890f",
+      "bytes": 978350
+    }
+  },
+  "completed": true,
+  "finished_utc": "2026-10-31T12:17:43.067776+00:00",
+  "journal_sha256": "2cf238dfc88e0ba2514965220d3a569ba025703f0a89601043e50bcaebb773ac",
+  "rejections_sha256": "021f81ea3c38ae87c429401046ac7a8483999410bd3470a762e817c5ed94916b"
+}

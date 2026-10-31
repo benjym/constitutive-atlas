@@ -1,0 +1,15 @@
+# Mohr–Coulomb explicit-control finite paths, v1
+
+The isolated ten-model native and WebAssembly builds pass all 14 source-reference paths (834 points per backend), using identical literal cumulative controls through the exact-bit API. The 213-file prospective freeze precedes both builds. References, material equations and numerical limits are unchanged from the original path study. The original sine-input parity failure remains preserved in mc-preview-envelope-v2; this is a distinct loading contract and does not supersede that result.
+
+Both backends pass 12 invalid request/recovery pairs. Wasm recovery reuses one instance; native requests use fresh processes. Invalid initial states produce no committed points. The only shared solver change is enabling existing initial checks before committing the first laboratory point. Four native unittest subcases cover inadmissible Drucker–Prager and Modified Cam Clay initials with legacy and explicit APIs. No yield or parameter policy changes.
+
+All 14,178 physical scalar parity comparisons pass the original 1e-10 relative/absolute gate. Worst budget fraction is 0.03859. Source stress/strain errors consume at most 0.004850/0.003915 of their original budgets. Ninety old-model legacy backend runs are exactly unchanged apart from elapsed time and the deliberately different isolated catalogue hash. The unchanged generic tool passes 50 model/protocol pairs, four rollback cases, two rate states and six IGS increments. Both single-target, one-worker builds finish normally.
+
+Independent source audit is in assessor-audit/. It retains original harness weaknesses and source-only negative witnesses, with all raised findings closed before freeze. verify.py rechecks frozen/evidence hashes and replays saved source/path/parity/recovery/legacy assessments without executing compiled artifacts. Optional --artifacts also hashes the three local build artifacts while they exist. Evidence replay is supplementary verification, not a prospective acceptance policy.
+
+Run `python3 -B verify.py` from any directory. The original collection commands and environment are recorded in native/receipt.json and wasm/receipt.json. They are historical coordinator-only execution scripts with original absolute staging paths, not automatic rebuild instructions. Do not rerun collectors over existing results.
+
+This closes the bounded exact-control finite-path study and initial-check fix. Browser loading provenance, versioned producers/import compatibility, browser recovery/export checks, public model installation and scientific admission remain separate. The browser still calls the legacy loading API; this study alone does not change its cyclic inputs. Hosted five/local nine remain unchanged. No push or deployment.
+
+The prior foundation verifier pins the prior solver source by design. historical-foundation-replay.json records its successful replay against its own archived source plus its separately frozen test-reader correction after the new guard change; all seven old artifact hashes match. Its original source pins and failed receipts remain unchanged.

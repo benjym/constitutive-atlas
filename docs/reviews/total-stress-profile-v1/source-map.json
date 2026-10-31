@@ -1,0 +1,446 @@
+{
+  "version": "total-stress-source-map-v1",
+  "entries": [
+    {
+      "path": "atlas/model.py",
+      "anchors": [
+        {
+          "text": "incremental profile requires effective Cauchy stress state sigma",
+          "lines": [
+            278
+          ]
+        },
+        {
+          "text": "v0.1 stress is effective stress",
+          "lines": [
+            124
+          ]
+        }
+      ],
+      "proposed_action": "Allow explicit total binding only for supported v0.3 incremental profile; retain all layout/semantics/sign checks and legacy migration prohibition."
+    },
+    {
+      "path": "schemas/model-v0.3.schema.json",
+      "anchors": [
+        {
+          "text": "effective",
+          "lines": [
+            359,
+            789,
+            1246
+          ]
+        },
+        {
+          "text": "total",
+          "lines": [
+            360,
+            790,
+            1247
+          ]
+        }
+      ],
+      "proposed_action": "Already permits total scope; no model schema version bump required."
+    },
+    {
+      "path": "docs/FORMULATION_CONTRACT.md",
+      "anchors": [
+        {
+          "text": "Incremental profiles bind effective Cauchy stress",
+          "lines": [
+            288
+          ]
+        },
+        {
+          "text": "Total stress does not imply",
+          "lines": [
+            300
+          ]
+        }
+      ],
+      "proposed_action": "Update implemented incremental scope rule and retain no-coupling caveat."
+    },
+    {
+      "path": "atlas/compiler.py",
+      "anchors": [
+        {
+          "text": "struct Model {",
+          "lines": [
+            34
+          ]
+        },
+        {
+          "text": "stress_offset=-1",
+          "lines": [
+            45
+          ]
+        },
+        {
+          "text": "describe_models()",
+          "lines": [
+            139
+          ]
+        }
+      ],
+      "proposed_action": "Generate explicit scope enum independently of observable stress_offset; canonical JSON already retains formulation."
+    },
+    {
+      "path": "cpp/include/atlas/solver.hpp",
+      "anchors": [
+        {
+          "text": "double pore_pressure=0",
+          "lines": [
+            108
+          ]
+        },
+        {
+          "text": "point.pore_pressure=lateral-",
+          "lines": [
+            160
+          ]
+        }
+      ],
+      "proposed_action": "Mechanical controllers shared; scope-aware u assignment/availability, no constitutive tolerance change."
+    },
+    {
+      "path": "cpp/main.cpp",
+      "anchors": [
+        {
+          "text": "experimental-laboratory-controls-0.1",
+          "lines": [
+            83
+          ]
+        },
+        {
+          "text": "experimental-recorded-replay-0.1",
+          "lines": [
+            180
+          ]
+        },
+        {
+          "text": "point.pore_pressure",
+          "lines": [
+            88
+          ]
+        }
+      ],
+      "proposed_action": "Legacy effective-only wrappers; separately versioned scope-aware serializers/entrypoints, explicit null and descriptor."
+    },
+    {
+      "path": "cpp/include/atlas/recorded.hpp",
+      "anchors": [
+        {
+          "text": "recorded incremental replay requires an untimed stress-first model",
+          "lines": [
+            51
+          ]
+        },
+        {
+          "text": "const auto stress=tensor_from(state,0)",
+          "lines": [
+            85
+          ]
+        }
+      ],
+      "proposed_action": "Keep absolute projection controller arithmetic; binding decides meaning, not a stress conversion."
+    },
+    {
+      "path": "atlas/recorded.py",
+      "anchors": [
+        {
+          "text": "experimental-recorded-replay-0.1",
+          "lines": [
+            140
+          ]
+        },
+        {
+          "text": "recorded solver response does not match request",
+          "lines": [
+            147
+          ]
+        }
+      ],
+      "proposed_action": "Add explicit version2 request/response verification and scope match without weakening old closed contract."
+    },
+    {
+      "path": "atlas/cli.py",
+      "anchors": [
+        {
+          "text": "recorded",
+          "lines": [
+            22,
+            25,
+            69,
+            71,
+            105
+          ]
+        },
+        {
+          "text": "schema_version",
+          "lines": [
+            53,
+            64
+          ]
+        }
+      ],
+      "proposed_action": "Expose explicit response-contract selection; preserve old CLI default."
+    },
+    {
+      "path": "atlas/experiment_replay.py",
+      "anchors": [
+        {
+          "text": "stress-first Mandel state required",
+          "lines": [
+            48
+          ]
+        },
+        {
+          "text": "every observation requires mean effective stress p",
+          "lines": [
+            87
+          ]
+        }
+      ],
+      "proposed_action": "Require effective scope before any measured effective p/q initial state conversion."
+    },
+    {
+      "path": "web/state-contract.mjs",
+      "anchors": [
+        {
+          "text": "laboratory example requires effective Mandel state stress",
+          "lines": [
+            23
+          ]
+        },
+        {
+          "text": "complete finite persistent state",
+          "lines": [
+            26,
+            28
+          ]
+        }
+      ],
+      "proposed_action": "Permit declared total with supported layout only in scoped consumer; retain complete parameter/state loading."
+    },
+    {
+      "path": "web/numerics.mjs",
+      "anchors": [
+        {
+          "text": "atlas_run_with_settings",
+          "lines": [
+            34
+          ]
+        },
+        {
+          "text": "verifyReturnedSettings",
+          "lines": [
+            27,
+            37
+          ]
+        }
+      ],
+      "proposed_action": "Select new API and verify scope/pore availability as well as settings; no missing-API fallback for total."
+    },
+    {
+      "path": "web/worker.js",
+      "anchors": [
+        {
+          "text": "runRecorded",
+          "lines": [
+            2,
+            8
+          ]
+        },
+        {
+          "text": "runLaboratory",
+          "lines": [
+            3,
+            8
+          ]
+        }
+      ],
+      "proposed_action": "Dispatch versioned request adapters; propagate missing capability as error."
+    },
+    {
+      "path": "web/app.js",
+      "anchors": [
+        {
+          "text": "const protocolNames=",
+          "lines": [
+            29
+          ]
+        },
+        {
+          "text": "Fixed radial total stress; incompressible fluid / grains assumption",
+          "lines": [
+            200
+          ]
+        },
+        {
+          "text": "p.u/1000",
+          "lines": [
+            263
+          ]
+        },
+        {
+          "text": "effective_stress",
+          "lines": [
+            335,
+            361,
+            373,
+            406
+          ]
+        },
+        {
+          "text": "pore_pressure_Pa",
+          "lines": [
+            447
+          ]
+        }
+      ],
+      "proposed_action": "Scope-aware protocol/axes/aria/slider labels, strict non-null plotting, versioned export/import, total experiment guard."
+    },
+    {
+      "path": "web/index.html",
+      "anchors": [
+        {
+          "text": "Radial effective stress",
+          "lines": [
+            64
+          ]
+        },
+        {
+          "text": "versus effective mean stress",
+          "lines": [
+            128
+          ]
+        },
+        {
+          "text": "Effective stress by record order",
+          "lines": [
+            181
+          ]
+        }
+      ],
+      "proposed_action": "Dynamic visible and accessible scope labels including recorded view."
+    },
+    {
+      "path": "web/recorded.mjs",
+      "anchors": [
+        {
+          "text": "experimental-recorded-run-0.1",
+          "lines": [
+            3
+          ]
+        },
+        {
+          "text": "experimental-recorded-replay-0.1",
+          "lines": [
+            66
+          ]
+        }
+      ],
+      "proposed_action": "Add explicit version2 scoped request, expected model binding and response descriptor validation."
+    },
+    {
+      "path": "web/recorded-view.mjs",
+      "anchors": [
+        {
+          "text": "effective_stress_",
+          "lines": [
+            54
+          ]
+        },
+        {
+          "text": "experimental-recorded-replay-export-0.1",
+          "lines": [
+            51
+          ]
+        }
+      ],
+      "proposed_action": "Scope-specific CSV, title/aria, new export envelope; legacy effective-only import."
+    },
+    {
+      "path": "web/experiments.mjs",
+      "anchors": [
+        {
+          "text": "Mean effective stress",
+          "lines": [
+            77
+          ]
+        },
+        {
+          "text": "compatibleExperiment(record,protocol,cycles=0)",
+          "lines": [
+            91
+          ]
+        }
+      ],
+      "proposed_action": "Preserve source viewers; prevent total-model paired overlays and state matching absent independent mapping."
+    },
+    {
+      "path": "atlas/data.py",
+      "anchors": [
+        {
+          "text": "effective_stress",
+          "lines": [
+            47,
+            48,
+            51
+          ]
+        },
+        {
+          "text": "CONVENTIONS=",
+          "lines": [
+            11
+          ]
+        }
+      ],
+      "proposed_action": "Wichtmann normalization already constructs effective initial state; preserve original records."
+    },
+    {
+      "path": "schemas/experiment.schema.json",
+      "anchors": [
+        {
+          "text": "total_axial_stress",
+          "lines": [
+            141
+          ]
+        },
+        {
+          "text": "radial_effective_stress",
+          "lines": [
+            120
+          ]
+        }
+      ],
+      "proposed_action": "Per-channel data exist but generic p scope is not universally explicit; no new total overlay inference."
+    },
+    {
+      "path": "web/README.md",
+      "anchors": [
+        {
+          "text": "Live laboratory controls",
+          "lines": [
+            25
+          ]
+        }
+      ],
+      "proposed_action": "Document mechanical total controls, unavailable u, versioning, comparison restriction."
+    },
+    {
+      "path": "CMakeLists.txt",
+      "anchors": [
+        {
+          "text": "-sEXPORTED_RUNTIME_METHODS",
+          "lines": [
+            24,
+            217,
+            234,
+            262
+          ]
+        }
+      ],
+      "proposed_action": "Review exported new symbols in actual build; serial parent-owned build only."
+    }
+  ]
+}

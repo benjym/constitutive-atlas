@@ -1,0 +1,97 @@
+{
+  "backend": "native",
+  "started_utc": "2026-10-31T12:17:09.017121+00:00",
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "EMCC_CORES": "1",
+  "manifest_sha256": "7c404e1497af83e5681746550ce6057004cfd4d3b5fd3c460ec1a07717e5e121",
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "c++",
+        "--version"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1",
+        "-B",
+        "/private/tmp/atlas-mc-explicit-paths-native-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-mc-explicit-paths-native-v1",
+        "--target",
+        "atlas_laboratory_preview",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "node",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1/observe.mjs",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1",
+        "native",
+        "/private/tmp/atlas-mc-explicit-paths-native-v1",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1/native"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    },
+    {
+      "label": "assess",
+      "argv": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1/assess_paths.py",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1/native/journal.json"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": null
+    },
+    {
+      "label": "initial-checks",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "/private/tmp/atlas-mc-explicit-controls-paths-v1/tests",
+        "-p",
+        "test_laboratory_initial_checks.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "ATLAS_SOLVER": "/private/tmp/atlas-mc-explicit-paths-native-v1/atlas_laboratory_preview"
+    }
+  ],
+  "artifacts": {
+    "atlas_laboratory_preview": {
+      "path": "/private/tmp/atlas-mc-explicit-paths-native-v1/atlas_laboratory_preview",
+      "sha256": "9e5df1234ed3eb206b4cf3b1d1a0ce4ae47380da96703879199eb6db6218b2b0",
+      "bytes": 967240
+    }
+  },
+  "completed": true,
+  "finished_utc": "2026-10-31T12:17:18.075765+00:00",
+  "journal_sha256": "9a9e9993c0d620b5d145409fa596a816d61e1f7a3815ec485f265a6172d56495",
+  "rejections_sha256": "7d6bd219eaa41e3af4a518d17f5fe4562f6b14a12e3cc766ab0233696f6cd500"
+}
