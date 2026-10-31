@@ -1,0 +1,61 @@
+{
+  "checks": [
+    {
+      "argv": [
+        "node",
+        "tools/test_wasm.mjs",
+        "--wasm-dir",
+        "/private/tmp/atlas-nine-model-wasm-v1",
+        "--native",
+        "/private/tmp/atlas-nine-model-native-v1/atlas_solver"
+      ],
+      "returncode": 0,
+      "stdout": "Native/WebAssembly parity passed for 45 model/protocol combinations.\nNative/WebAssembly increment diagnostics and rollback parity passed for 4 cases.\nNative/WebAssembly Cartesian-rate parity passed for 2 hypoplastic states.\nNative/WebAssembly IGS analytical crossing and cyclic history passed for 6 increments.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_state_contract.py"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "sss........\n----------------------------------------------------------------------\nRan 11 tests in 0.117s\n\nOK (skipped=3)\n"
+    },
+    {
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_formulation.py"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.464s\n\nOK\n"
+    },
+    {
+      "argv": [
+        "node",
+        "--test",
+        "tests/test_state_contract_browser.mjs"
+      ],
+      "returncode": 0,
+      "stdout": "\u2714 legacy and explicit roles select the same editable persistent state (0.807875ms)\n\u2714 temporary state flattens complete tensor slots and preserves legacy examples (0.931666ms)\n\u2714 a v0.3 plastic state supplies temporary slots without editable inputs (0.120709ms)\n\u2714 shipped examples retain declared full state and parameter defaults (1.561625ms)\n\u2714 a separately declared 10kPa example replaces the universal stress and copies tensor history (0.994667ms)\n\u2714 unsupported example stresses reject without projection or lost components (0.798916ms)\n\u2714 invalid persistent fields and parameter defaults cannot become executable examples (0.427667ms)\n\u2139 tests 7\n\u2139 suites 0\n\u2139 pass 7\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 55.533375\n",
+      "stderr": ""
+    }
+  ],
+  "skipped_native_fixture_tests": 3,
+  "skip_reason": "dedicated mixed-version state-contract fixture not supplied; production solver is covered by parity and actual-driver studies"
+}

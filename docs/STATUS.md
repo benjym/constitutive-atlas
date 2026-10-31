@@ -1,3 +1,9 @@
+# Ninth local runnable draft — 2026-10-31
+
+[Mašín2005 clay](models/clay2005-laboratory-preview.md) is now the ninth local runnable draft. The [production integration](reviews/nine-model-lab-integration/RESULTS.md) passes45model/protocol native/Wasm pairs plus rollback/rate/IGS regressions. Its production declarations match the frozen independently referenced27call finite-preview study exactly. Actual production-browser default export has101points and exact frozen physical channels; persistent source/JSON links remain visible. All previous eight definitions and31other catalogue entries are preserved.
+
+Preparation, full publisher equivalence, general-domain/path accuracy, finite spin, tangent and scientific/experimental admission remain open. Nothing was pushed or deployed; the hosted preview remains at five models.
+
 # Clay2005 finite-path draft preview — 2026-10-31
 
 The [frozen finite-preview study](../catalogue/investigations/clay2005-preview-v1/RESULTS.md) passes 27 calls and 975 successful caller points per native/Wasm backend, including all five monotonic/cyclic controls, unchanged 100 kPa default, partition/hold checks and five failure/recovery pairs. Five independently derived high-precision isotropic stress/void endpoints pass. Actual isolated browser export has 101 points and exact frozen-Wasm physical channels; source/definition links remain visible. The isolated source reconstruction reproduces references and raw assessment without ambient repository sources.
