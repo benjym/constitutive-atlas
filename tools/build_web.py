@@ -28,6 +28,7 @@ def main():
             raise SystemExit('Wasm catalogue is stale: rebuild before packaging.')
     for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','recorded.mjs','recorded-view.mjs','catalogue.mjs','state-contract.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
+    shutil.copyfile(ROOT/'docs/benchmarks/kfs-tmd2-research-range-v1/results/reproduction.png',dest/'tmd2-reproduction.png')
     shutil.copyfile(ROOT/'protocols/recorded-linear-elastic-run.json',dest/'recorded-example.json')
     for name in ['atlas.js','atlas.wasm']:
         shutil.copyfile(args.wasm_dir/name,dest/name)

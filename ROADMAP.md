@@ -30,13 +30,13 @@ is open. Source-to-definition and initialization review come before new fits or
 compiled studies. No new model family, optimizer, data campaign or schema feature
 is part of this cycle unless it demonstrably blocks the chosen comparison.
 
-The [published TMD2 reference](docs/benchmarks/kfs-tmd2-reference-v1/README.md)
-is now frozen and source-cross-checked. Three native requests were rejected
-before material integration by the existing 10% laboratory amplitude cap; the
-published range remains 25%. The next bounded task is an explicit research-only
-range allowance with preflight and a separate follow-up freeze, then the
-figure/table. No constitutive convergence or source-agreement claim follows
-from the rejected requests. Historical strain conversion remains qualified.
+The [TMD2 result](docs/benchmarks/kfs-tmd2-research-range-v1/README.md)
+now completes the bounded three-resolution operational reconstruction, with
+unchanged prospective source bounds, a model-only figure, refinement table and
+descriptive experimental errors. A native research-only range mode leaves the
+interactive limit unchanged. Historical strain conversion and independent
+scientific review remain open. Next address benchmark portability/data rights
+and review, not a new numerical framework.
 
 The immediate six-model/SANISAND and Terracotta goals remain unchanged. The first
 release targets twenty formulations; the paper's 50+ planning ambition is not a
@@ -187,17 +187,19 @@ Target the original **Terracotta / Terra Cotta model by Max Wiebicke and Itai Ei
 
 ### Published baselines before fitting
 
-- [ ] **BENCH-01:** Select a complete published model/parameter/material example that matches an available implementation and dataset. Freeze its source, initial state, protocol, output channels and numerical settings.
-- [ ] **BENCH-02:** Reproduce the published calculation within declared precision or document discrepancies. The existing transfer of extension parameters to the base law remains a separate demonstration.
+- [X] **BENCH-01:** Select a complete published model/parameter/material example that matches an available implementation and dataset. Freeze its source, initial state, protocol, output channels and numerical settings.
+- [X] **BENCH-02:** Reproduce the published calculation within declared precision or document discrepancies. The existing transfer of extension parameters to the base law remains a separate demonstration.
 - [ ] **BENCH-03:** Publish one end-to-end benchmark command that fetches permitted data, verifies hashes, normalizes, executes, computes errors and generates figures/tables without manual editing.
 
-The [bounded published-case selection](docs/benchmarks/kfs-published-case-selection-v1/README.md)
-now identifies the TMD2 loose-sand VW96+IGS calculation in the 2016/2019 Wichtmann
-papers. Complete parameters and nominal stress, void ratio and mobilized history
-are pinned without fitting or base-law transfer. BENCH-01 remains open until
-the full 0–25% plotted/driver strain mapping and digitized-reference precision
-are frozen; BENCH-02 has not run. Retain the full published range rather than
-substituting the earlier 2% demonstration.
+The [full-range TMD2 study](docs/benchmarks/kfs-tmd2-research-range-v1/README.md)
+freezes complete published constants, nominal initialization, literal accumulated
+strain coordinates and figure precision. All three 400/800/1600 paths pass the
+source envelopes and adjacent-refinement gates; a figure/table and descriptive
+experimental errors are saved. BENCH-01/02 are complete for this explicitly
+qualified operational reconstruction. Exact historical coordinate conversion,
+original-code equivalence and independent scientific review remain open; these
+are not implied by the checked boxes. The original API-range failures remain
+archived. BENCH-03 portability/data rights is the next delivery gap.
 
 ### Controlled study
 

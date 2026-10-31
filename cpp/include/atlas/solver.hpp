@@ -143,12 +143,15 @@ inline bool controlled_step(int model,const State&zn,const State&p,int protocol,
     }
     (void)current_axial;return false;
 }
-inline Run run_protocol_impl(int model,const State&initial,const State&p,int protocol,double target,int steps,int cycles,const IntegrationSettings&settings,const State*controls){
+// Research range is an explicit caller choice, not a kinematic validity claim.
+enum class LaboratoryRange { Interactive, ResearchQuarterStrain };
+inline Run run_protocol_impl(int model,const State&initial,const State&p,int protocol,double target,int steps,int cycles,const IntegrationSettings&settings,const State*controls,LaboratoryRange range=LaboratoryRange::Interactive){
     Run run;run.settings=settings;if(!valid_settings(settings)||model<0||model>=int(models().size())||protocol<0||protocol>4||steps<1||steps>5000||cycles<0||cycles>100||!std::isfinite(target)||!valid_parameters(model,p)||initial.size()!=initial_state(model).size()||!domain(model,initial,p,true)){
         run.message="invalid run specification";return run;}
     if(std::abs(initial[1]-initial[2])>1e-6||std::abs(initial[3])+std::abs(initial[4])+std::abs(initial[5])>1e-12){run.message="laboratory protocols require axisymmetric initial stress";return run;}
     if(cycles&&steps<16*cycles){run.message="cyclic loading requires at least 16 increments per cycle";return run;}
-    if((protocol==3&&std::abs(target)>1e8)||(protocol!=3&&std::abs(target)>.1)){run.message="control amplitude exceeds laboratory limit";return run;}
+    const double strain_limit=range==LaboratoryRange::ResearchQuarterStrain?.25:.1;
+    if((protocol==3&&std::abs(target)>1e8)||(protocol!=3&&std::abs(target)>strain_limit)){run.message="control amplitude exceeds laboratory limit";return run;}
     Point committed;committed.control=controls?controls->front():0.;committed.state=initial;run.points.push_back(committed);
     double lateral=.5*(initial[1]+initial[2]);
     for(int i=1;i<=steps;++i){
@@ -171,7 +174,7 @@ inline Run run_protocol(int model,const State&initial,const State&p,int protocol
 // Protocol 3 specifies deviator stress change (Pa); all others specify strain.
 // The original controller consumes differences of consecutive caller values.
 // No interpolation, resampling, waveform generation or endpoint snapping.
-inline Run run_protocol_controls(int model,const State&initial,const State&p,int protocol,const State&controls,const IntegrationSettings&settings={}){
+inline Run run_protocol_controls(int model,const State&initial,const State&p,int protocol,const State&controls,const IntegrationSettings&settings={},LaboratoryRange range=LaboratoryRange::Interactive){
     Run invalid;invalid.settings=settings;
     if(controls.size()<2||controls.size()>5001||controls.front()!=0){
         invalid.message="explicit controls require 2..5001 points beginning at zero";return invalid;
@@ -181,7 +184,7 @@ inline Run run_protocol_controls(int model,const State&initial,const State&p,int
         if(!std::isfinite(control)){invalid.message="explicit controls must be finite";return invalid;}
         amplitude=std::max(amplitude,std::abs(control));
     }
-    return run_protocol_impl(model,initial,p,protocol,amplitude,int(controls.size())-1,0,settings,&controls);
+    return run_protocol_impl(model,initial,p,protocol,amplitude,int(controls.size())-1,0,settings,&controls,range);
 }
 
 }

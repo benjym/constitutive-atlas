@@ -12,14 +12,14 @@ SOLVER = os.environ.get('ATLAS_SOLVER')
 
 @unittest.skipUnless(SOLVER, 'ATLAS_SOLVER required for native integration checks')
 class ExplicitLaboratoryControls(unittest.TestCase):
-    def run_controls(self, protocol, values=None, *, wire=None, initial=None):
+    def run_controls(self, protocol, values=None, *, wire=None, initial=None, mode="run-controls"):
         if wire is None:
             wire = ','.join(struct.pack('>d', value).hex() for value in values)
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'controls.csv'
             path.write_bytes(wire.encode())
             result = subprocess.run([
-                SOLVER, '--mode', 'run-controls', '--model', 'linear-elastic',
+                SOLVER, '--mode', mode, '--model', 'linear-elastic',
                 '--initial', ','.join(map(str, initial or [100000,100000,100000,0,0,0,.7])),
                 '--protocol', str(protocol), '--laboratory-controls-file', str(path),
             ], capture_output=True, text=True, timeout=30)
@@ -46,6 +46,23 @@ class ExplicitLaboratoryControls(unittest.TestCase):
                         expected = 100000+12000000*volume+24000000*strain[j] if j<3 else 0
                         self.assertAlmostEqual(point['state'][j],expected,delta=.003)
                     self.assertAlmostEqual(point['state'][6],1.7*math.exp(-volume)-1,delta=2e-10)
+
+    def test_explicit_research_range_and_analytic_elastic_endpoint(self):
+        ordinary=self.run_controls(1,[0,.25])
+        self.assertFalse(ordinary['ok'])
+        self.assertEqual(ordinary['points'],[])
+        self.assertNotIn('research_scope',ordinary)
+        research=self.run_controls(1,[i/400 for i in range(101)],mode='run-research-controls')
+        self.assertTrue(research['ok'],research.get('message'))
+        self.assertEqual(research['research_scope'],{'version':'quarter-strain-operational-0.1','maximum_strain_amplitude':.25,'finite_kinematics_verified':False})
+        endpoint=research['points'][-1]
+        self.assertAlmostEqual(endpoint['q_signed'],7500000,delta=.01)
+        self.assertAlmostEqual(endpoint['strain'][1],-.0625,delta=2e-10)
+        self.assertAlmostEqual(endpoint['state'][6],1.7*math.exp(-.125)-1,delta=2e-10)
+        for value in [.25000000000000006,-.25000000000000006]:
+            rejected=self.run_controls(1,[0,value],mode='run-research-controls')
+            self.assertFalse(rejected['ok'])
+            self.assertEqual(rejected['points'],[])
 
     def test_rejects_malformed_and_nonfinite_whole_files(self):
         zero = '0000000000000000'

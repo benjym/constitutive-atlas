@@ -72,15 +72,16 @@ void write_settings(std::ostream& o,const atlas::IntegrationSettings& s){
 }
 
 extern "C" ATLAS_EXPORT const char* atlas_describe(){return atlas::describe_models();}
-static const char* run_response(const char*id,const char*parameters,const char*initial,int protocol,double target,int steps,int cycles,const char*settings_csv,const atlas::State*controls=nullptr){
+static const char* run_response(const char*id,const char*parameters,const char*initial,int protocol,double target,int steps,int cycles,const char*settings_csv,const atlas::State*controls=nullptr,bool research_range=false){
     try{
         int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial);
         const auto settings=settings_for(settings_csv);
-        const auto start=std::chrono::steady_clock::now();auto run=controls?atlas::run_protocol_controls(m,z,p,protocol,*controls,settings):atlas::run_protocol(m,z,p,protocol,target,steps,cycles,settings);
+        const auto start=std::chrono::steady_clock::now();auto run=controls?atlas::run_protocol_controls(m,z,p,protocol,*controls,settings,research_range?atlas::LaboratoryRange::ResearchQuarterStrain:atlas::LaboratoryRange::Interactive):atlas::run_protocol(m,z,p,protocol,target,steps,cycles,settings);
         const double elapsed=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count();
         std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(run.ok?"true":"false")<<",\"message\":"<<quote(run.message)<<",\"schema_version\":\"0.1\",\"catalogue_hash\":"<<quote(atlas::catalogue_hash())<<",\"model\":"<<quote(id)<<",\"elapsed_ms\":"<<elapsed<<",\"parameters\":";array(o,p);o<<",\"initial\":";array(o,z);
         if(settings_csv){o<<",\"integration_settings\":";write_settings(o,run.settings);}
         o<<",\"protocol\":"<<protocol;
+        if(research_range)o<<",\"research_scope\":{\"version\":\"quarter-strain-operational-0.1\",\"maximum_strain_amplitude\":0.25,\"finite_kinematics_verified\":false}";
         if(controls){o<<",\"api_version\":\"experimental-laboratory-controls-0.1\",\"loading\":{\"version\":\"laboratory-controls-0.1\",\"controls\":";array(o,*controls);o<<",\"encoding\":\"ieee754-binary64-hex\",\"controls_bits\":";control_bits(o,*controls);o<<"},\"steps\":"<<(controls->empty()?0:controls->size()-1);}
         else o<<",\"target\":"<<target<<",\"steps\":"<<steps<<",\"cycles\":"<<cycles;
         o<<",\"points\":[";
@@ -296,9 +297,9 @@ int main(int argc,char**argv){
         auto num=[&](const std::string&key,const std::string&fallback){auto s=get(key,fallback);size_t pos=0;double v=std::stod(s,&pos);if(pos!=s.size()||!std::isfinite(v))throw std::runtime_error("invalid number: "+key);return v;};
         auto integer=[&](const std::string&key,const std::string&fallback){double x=num(key,fallback);if(x!=std::floor(x)||std::abs(x)>1000000)throw std::runtime_error("invalid integer: "+key);return int(x);};
         auto id=get("--model"),p=get("--parameters"),z=get("--initial"),mode=get("--mode","run"),d=get("--strain"),current=get("--current");
-        if(args.count("--integration-settings")&&mode!="run"&&mode!="integrate"&&mode!="linearize"&&mode!="recorded"&&mode!="run-controls")throw std::runtime_error("incremental settings require run, run-controls, integrate, linearize or recorded mode");
-        if(mode!="run-controls"&&args.count("--laboratory-controls-file"))throw std::runtime_error("laboratory controls file requires run-controls mode");
-        if(mode=="run-controls"){
+        if(args.count("--integration-settings")&&mode!="run"&&mode!="integrate"&&mode!="linearize"&&mode!="recorded"&&mode!="run-controls"&&mode!="run-research-controls")throw std::runtime_error("incremental settings require run, run-controls, integrate, linearize or recorded mode");
+        if(mode!="run-controls"&&mode!="run-research-controls"&&args.count("--laboratory-controls-file"))throw std::runtime_error("laboratory controls file requires run-controls mode");
+        if(mode=="run-controls"||mode=="run-research-controls"){
             const std::vector<std::string> allowed={"--mode","--model","--parameters","--initial","--protocol","--integration-settings","--laboratory-controls-file"};
             for(const auto& arg:args)if(std::find(allowed.begin(),allowed.end(),arg.first)==allowed.end())throw std::runtime_error("option unsupported by run-controls mode: "+arg.first);
         }
@@ -336,14 +337,17 @@ int main(int argc,char**argv){
             auto c=read_wire("--recorded-controls-file"),k=read_wire("--recorded-knots-file");
             response=recorded_response(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),c.c_str(),k.c_str(),get("--integration-settings").c_str(),get("--recorded-settings").c_str(),args.count("--recorded-restarts")?get("--recorded-restarts").c_str():nullptr);
         }
-        else if(mode=="run-controls"){
+        else if(mode=="run-controls"||mode=="run-research-controls"){
             std::ifstream in(get("--laboratory-controls-file"),std::ios::binary);
             if(!in)throw std::runtime_error("cannot read --laboratory-controls-file");
             std::string controls;char ch;
             while(in.get(ch)){if(controls.size()>=2000000)throw std::runtime_error("laboratory controls file exceeds 2 MB");controls+=ch;}
             if(!in.eof())throw std::runtime_error("laboratory controls read failed");
             if(controls.find('\0')!=std::string::npos)throw std::runtime_error("laboratory controls file contains NUL");
-            response=atlas_run_controls_with_settings(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),controls.c_str(),get("--integration-settings").c_str());
+            if(mode=="run-research-controls"){
+                auto values=parse_control_bits(controls.c_str());
+                response=run_response(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),0,0,0,get("--integration-settings").c_str(),&values,true);
+            }else response=atlas_run_controls_with_settings(id.c_str(),p.c_str(),z.c_str(),integer("--protocol","1"),controls.c_str(),get("--integration-settings").c_str());
         }
         else if(mode=="schedule")response=atlas_run_schedule(id.c_str(),p.c_str(),z.c_str(),get("--initial-strain").c_str(),get("--initial-strain-rate").c_str(),get("--segments").c_str(),get("--segment-ids").c_str(),num("--start-time","0"),num("--rtol","1e-6"),num("--atol","1e-9"),num("--min-time-step","1e-12"),num("--max-time-step","1e6"),integer("--max-substeps","20000"),num("--nonlinear-tolerance","1e-10"),integer("--max-iterations","40"));
         else if(mode=="observe-time")response=atlas_observe_time(id.c_str(),p.c_str(),z.c_str(),get("--strain-rate").c_str(),num("--start-time","nan"));

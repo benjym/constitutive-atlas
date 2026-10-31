@@ -13,15 +13,16 @@ both runs' local code/model/data/executable snapshots, with no new fits, builds
 or solver calls. It exposes input-information inequalities, unresolved initial
 void ratios and current/archived model differences. M1/M4 and independent review
 remain open. The VW96 input crosswalk is complete: only six parameter labels and sources
-differ from its archived definition; engine equivalence is not claimed. The [TMD2 reference packet](benchmarks/kfs-tmd2-reference-v1/README.md) now pins
-an operational strain convention and extracted model curves with prospective
-bounds, supported by six independent raster spot checks. Exact historical strain
-conversion remains unverified. Three frozen 25% native requests were rejected by
-the existing 10% laboratory API cap before material integration; no source,
-refinement or experimental-error result exists. No builds, fits or fourth call
-were made. The original assessor's empty-prefix errors are also retained.
-Next is a bounded research-only range allowance and preflight, then a distinct
-frozen follow-up study. BENCH-01/02 and scientific admission remain open.
+differ from its archived definition; engine equivalence is not claimed. The [full-range TMD2 study](benchmarks/kfs-tmd2-research-range-v1/README.md)
+completes three native paths with unchanged source bounds: all source-envelope
+and adjacent-refinement checks pass. Finest-path measured-data RMSE is 23.54 kPa
+and .208 volume percentage points; these are descriptive calibration-campaign
+errors. Figure/table and a website evidence summary are saved. The original
+10% API rejections remain archived; explicit native research mode permits 25%
+without changing public limits. One serial native build and six focused tests
+passed. Historical coordinate conversion and independent scientific admission
+remain open. BENCH-01/02 are complete only for this qualified operational
+reconstruction; next is BENCH-03 portability/data rights and scientific review.
 New model integration and general numerical expansion are deferred for this cycle.
 
 # Latest progress — browser provenance prototype; invariant failure retained
