@@ -1,4 +1,4 @@
-import {persistentState,temporaryStateComponents} from './state-contract.mjs';
+import {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';
 import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
 import {setupRecordedView} from './recorded-view.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
@@ -100,8 +100,10 @@ function scheduleUpdate(){
   // Coalesce rapid edits without waiting for a continuous drag to end.
   if(updateTimer===null)updateTimer=setTimeout(()=>{updateTimer=null;simulate();},100);
 }
-function populate(){
-  const m=model();$('model-description').textContent=m.description;$('model-family').textContent=m.family;$('model-status').textContent=m.status;
+function populate({loadExample=true}={}){
+  const m=model(),example=loadExample?laboratoryExample(m):null;
+  if(example){$('confinement').value=example.confinement;$('stress-ratio').value=example.stressRatio;}
+  $('model-description').textContent=m.description;$('model-family').textContent=m.family;$('model-status').textContent=m.status;
   $('parameter-fields').replaceChildren();
   for(const [name,p] of Object.entries(m.parameters)){
     const angle=p.unit==='rad'||/\[rad\]/.test(p.label||''),factor=angle?Math.PI/180:1;
@@ -318,7 +320,7 @@ function setProtocol(){
 async function readFile(file){if(!file)return null;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');return JSON.parse(await file.text());}
 async function importRun(file){
   try{const doc=await readFile(file);if(!doc)return;if(doc.schema_version!=='0.1')throw Error('Unsupported run schema version.');if(doc.catalogue_hash!==catalogueHash)throw Error('Run was created with a different model catalogue. Use the matching release.');
-    const s={...doc.specification,integration_settings:normalizeSettings(doc.specification?.integration_settings)},m=validateSpec(s);setNumericalValues(s.integration_settings);$('model').value=m.id;populate();Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
+    const s={...doc.specification,integration_settings:normalizeSettings(doc.specification?.integration_settings)},m=validateSpec(s);setNumericalValues(s.integration_settings);$('model').value=m.id;populate({loadExample:false});Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
     $('confinement').value=s.initial[1]/1000;$('stress-ratio').value=s.initial[0]/s.initial[1];let offset=6;
     for(const f of m.state.slice(1)){const size=f.shape==='sym'?6:1;if(persistentState(f)){const input=$('state-'+f.name);input.value=size===6?s.initial.slice(offset,offset+6).join(','):s.initial[offset]/Number(input.dataset.factor);}offset+=size;}
     $('protocol').value=s.protocol;setProtocol();$('target').value=s.target/(s.protocol===3?1000:.01);$('steps').value=s.steps;
@@ -427,6 +429,7 @@ async function loadExperiments(files){
 }
 window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{cancel('');populate();simulate();};$('protocol').onchange=()=>{setProtocol();refreshExperimentFilter();scheduleUpdate();};
 $('cycles').onchange=()=>{refreshExperimentFilter();const minimum=16*Number($('cycles').value);if(Number($('steps').value)<minimum)$('steps').value=minimum;scheduleUpdate();};
+$('load-model-example').onclick=()=>{try{cancel('');populate();simulate();}catch(e){toast(e.message);}};
 $('reset').onclick=()=>{cancel('');HTMLFormElement.prototype.reset.call($('controls'));populate();setProtocol();refreshExperimentFilter();simulate();};$('equations-button').onclick=()=>{$('equations').open=true;$('equations').scrollIntoView({behavior:'smooth'});};
 $('import-run').onclick=()=>$('run-file').click();$('run-file').onchange=e=>importRun(e.target.files[0]);$('experiment-file').onchange=e=>loadExperiments(e.target.files);
 function refreshExperimentFilter(){experimentOptions($('experiment-select').value);renderCharts();}

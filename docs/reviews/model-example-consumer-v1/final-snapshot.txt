@@ -1,0 +1,329 @@
+### Page
+- Page URL: http://127.0.0.1:8875/#laboratory
+- Page Title: Constitutive Atlas · Model testing
+### Snapshot
+```yaml
+- generic [ref=f3e1]:
+  - complementary [ref=f3e2]:
+    - link "Constitutive Atlas home" [ref=f3e3] [cursor=pointer]:
+      - /url: "#laboratory"
+      - generic [ref=f3e6]: ConstitutiveAtlas
+    - navigation "Main navigation" [ref=f3e7]:
+      - link "◫ Model testing" [ref=f3e8] [cursor=pointer]:
+        - /url: "#laboratory"
+        - text: ◫
+        - generic [ref=f3e9]: Model testing
+      - link "↝ Recorded paths" [ref=f3e10] [cursor=pointer]:
+        - /url: "#recorded"
+        - text: ↝
+        - generic [ref=f3e11]: Recorded paths
+      - link "⌕ Model catalogue 32" [ref=f3e12] [cursor=pointer]:
+        - /url: "#catalogue"
+        - text: ⌕
+        - generic [ref=f3e13]: Model catalogue
+        - generic [ref=f3e14]: "32"
+      - link "≋ Methods & evidence" [ref=f3e15] [cursor=pointer]:
+        - /url: "#methods"
+        - text: ≋
+        - generic [ref=f3e16]: Methods & evidence
+      - link "↗ Publications & lineage" [ref=f3e17] [cursor=pointer]:
+        - /url: ./publications.html
+        - text: ↗
+        - generic [ref=f3e18]: Publications & lineage
+    - paragraph [ref=f3e20]:
+      - text: By
+      - link "Benjy Marks" [ref=f3e21] [cursor=pointer]:
+        - /url: https://github.com/benjym
+      - link "François Guillard" [ref=f3e22] [cursor=pointer]:
+        - /url: https://github.com/Franzzzzzzzz
+  - main [ref=f3e23]:
+    - generic [ref=f3e24]:
+      - generic [ref=f3e25]:
+        - heading "Explore material behaviour." [level=1] [ref=f3e27]
+        - button "↑ Import run" [ref=f3e28] [cursor=pointer]
+      - generic [ref=f3e29]:
+        - generic [ref=f3e30]:
+          - generic [ref=f3e31]: CONSTITUTIVE MODEL
+          - generic [ref=f3e32]: transcribed
+        - generic [ref=f3e33]: Select a model
+        - combobox "Select a model" [ref=f3e34]:
+          - option "Barodesy clay 2017 — body law, zero spin (draft)"
+          - option "Barodesy sand (2015) — fixed-frame draft"
+          - option "Drucker–Prager, nonassociated perfect plasticity"
+          - option "Sand hypoplasticity + intergranular strain (1997)"
+          - option "Sand hypoplasticity — von Wolffersdorff (1996)"
+          - option "Linear isotropic elasticity"
+          - option "Modified Cam Clay" [selected]
+        - paragraph [ref=f3e35]: Associated Modified Cam Clay with endpoint pressure/void-ratio dependent elasticity, exponential log-pc hardening and exponential volume bookkeeping. Project finite-step choices documented in the source dossier; demonstration initialization; finite rotation unsupported.
+        - group [ref=f3e36]:
+          - generic "Sources & model definition" [ref=f3e37] [cursor=pointer]
+          - generic "Model sources" [ref=f3e694]:
+            - paragraph [ref=f3e1573]:
+              - 'link "formulation · Silbermann & Nagel, 28 June 2023: equations 14–17 and 30b; equation 11 prints M while 30b uses M squared. Section 3.1 hardening differs from atlas exponential log-pc update. Project discretization and normalization: docs/models/modified-cam-clay.md. ↗" [ref=f3e1574] [cursor=pointer]':
+                - /url: https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/web/content/docs/benchmarks/small-deformations/ModifiedCamClay/ModifiedCamClay_report.pdf
+            - paragraph [ref=f3e1575]:
+              - 'link "formulation reference · Equations 15, 18–25: stiffness, yield and associated flow; 31 and 8 have different finite-step hardening/volume updates. Initialization: 32 and 42. Not an executed cross-code comparison. ↗" [ref=f3e1576] [cursor=pointer]':
+                - /url: https://docs.itascacg.com/itasca930/common/models/camclay/doc/modelcamclay.html
+            - link "Model definition (JSON) ↗" [ref=f3e1577] [cursor=pointer]:
+              - /url: ./models/modified-cam-clay.json
+            - paragraph
+        - generic [ref=f3e38]:
+          - generic [ref=f3e39]: critical-state plasticity
+          - generic [ref=f3e40]: 3D · small strain
+          - button "View equations ↗" [ref=f3e41] [cursor=pointer]
+      - navigation "Model testing sections" [ref=f3e42]:
+        - link "Test controls ↓" [ref=f3e43] [cursor=pointer]:
+          - /url: "#controls"
+        - link "Response plots ↓" [ref=f3e44] [cursor=pointer]:
+          - /url: "#response"
+        - link "Compare measurements ↓" [ref=f3e45] [cursor=pointer]:
+          - /url: "#measurements"
+        - link "Equations & sources ↓" [ref=f3e46] [cursor=pointer]:
+          - /url: "#equations"
+      - generic [ref=f3e47]:
+        - generic [ref=f3e48]:
+          - generic [ref=f3e49]:
+            - heading "Test controls" [level=2] [ref=f3e50]
+            - button "Reset" [ref=f3e51] [cursor=pointer]
+          - paragraph [ref=f3e52]: Live updates as you adjust
+          - generic [ref=f3e54]:
+            - text: Loading protocol
+            - combobox "Loading protocol" [ref=f3e55]:
+              - option "Drained triaxial" [selected]
+              - option "Undrained triaxial"
+              - option "Oedometer"
+              - option "Isotropic compression"
+              - option "Undrained · stress control"
+          - generic [ref=f3e56]:
+            - generic [ref=f3e57]: Axial strain (%)
+            - spinbutton "Axial strain (%)" [ref=f3e58]: "1"
+          - slider "Axial strain (%) slider" [ref=f3e625] [cursor=pointer]: "550"
+          - generic [ref=f3e60]:
+            - text: Loading history
+            - combobox "Loading history" [ref=f3e61]:
+              - option "Monotonic ramp" [selected]
+              - option "1 sinusoidal cycle"
+              - option "3 sinusoidal cycles"
+              - option "10 sinusoidal cycles"
+          - generic [ref=f3e63]: INITIAL STATE
+          - button "Load model example" [ref=f3e64] [cursor=pointer]
+          - paragraph [ref=f3e65]: Selecting a model loads its example parameters and full initial state. These illustrative values do not establish specimen preparation or experimental calibration. Loading an example replaces parameter and state edits.
+          - generic [ref=f3e66]:
+            - text: Radial effective stress (kPa)
+            - spinbutton "Radial effective stress (kPa)" [ref=f3e67]: "100"
+          - slider "Radial effective stress (kPa) slider" [ref=f3e68] [cursor=pointer]: "500"
+          - group [ref=f3e69]:
+            - generic "Initial state details" [ref=f3e70] [cursor=pointer]
+            - generic [ref=f3e290]:
+              - text: Axial / radial stress ratio
+              - spinbutton "Axial / radial stress ratio" [ref=f3e291]: "1"
+            - slider "Axial / radial stress ratio slider" [ref=f3e292] [cursor=pointer]: "667"
+            - generic [ref=f3e293]:
+              - generic [ref=f3e1578]:
+                - generic "e" [ref=f3e1579]
+                - spinbutton "e" [ref=f3e1580]: "0.7"
+              - slider "e slider" [ref=f3e1581] [cursor=pointer]: "333"
+              - generic [ref=f3e1582]:
+                - generic "pc (kPa)" [ref=f3e1583]
+                - spinbutton "pc (kPa)" [ref=f3e1584]: "200"
+              - slider "pc (kPa) slider" [ref=f3e1585] [cursor=pointer]: "333"
+          - group [ref=f3e71]:
+            - generic "Material parameters Adjust model constants" [ref=f3e72] [cursor=pointer]:
+              - text: Material parameters
+              - generic [ref=f3e73]: Adjust model constants
+            - generic [ref=f3e350]:
+              - generic [ref=f3e351]: MATERIAL PARAMETERS
+              - generic [ref=f3e352]: Units shown per control
+            - generic [ref=f3e353]:
+              - generic [ref=f3e1586]:
+                - generic "Reference stress / numerical scaling" [ref=f3e1587]
+                - spinbutton "Reference stress / numerical scaling" [ref=f3e1588]: "100000"
+              - slider "Reference stress / numerical scaling slider" [ref=f3e1589] [cursor=pointer]: "500"
+              - generic [ref=f3e1590]:
+                - generic "Critical-state slope" [ref=f3e1591]
+                - spinbutton "Critical-state slope" [ref=f3e1592]: "1.2"
+              - slider "Critical-state slope slider" [ref=f3e1593] [cursor=pointer]: "379"
+              - generic [ref=f3e1594]:
+                - generic "Virgin compression index" [ref=f3e1595]
+                - spinbutton "Virgin compression index" [ref=f3e1596]: "0.2"
+              - slider "Virgin compression index slider" [ref=f3e1597] [cursor=pointer]: "767"
+              - generic [ref=f3e1598]:
+                - generic "Swelling index" [ref=f3e1599]
+                - spinbutton "Swelling index" [ref=f3e1600]: "0.04"
+              - slider "Swelling index slider" [ref=f3e1601] [cursor=pointer]: "703"
+              - generic [ref=f3e1602]:
+                - generic "Poisson ratio" [ref=f3e1603]
+                - spinbutton "Poisson ratio" [ref=f3e1604]: "0.25"
+              - slider "Poisson ratio slider" [ref=f3e1605] [cursor=pointer]: "827"
+          - group [ref=f3e74]:
+            - generic "Solver settings" [ref=f3e75] [cursor=pointer]
+            - generic [ref=f3e366]:
+              - text: Increments
+              - spinbutton "Increments" [ref=f3e367]: "100"
+            - paragraph [ref=f3e368]: More increments improve resolution and take longer. Cyclic histories need at least 16 per cycle.
+            - generic [ref=f3e369]:
+              - generic [ref=f3e370]:
+                - text: Residual tolerance
+                - spinbutton "Residual tolerance" [ref=f3e371]: "2e-10"
+              - generic [ref=f3e372]:
+                - text: Rate integration tolerance
+                - spinbutton "Rate integration tolerance" [ref=f3e373]: "0.000001"
+              - generic [ref=f3e374]:
+                - text: Newton iterations per candidate
+                - spinbutton "Newton iterations per candidate" [ref=f3e375]: "45"
+              - generic [ref=f3e376]:
+                - text: Maximum subdivision depth
+                - spinbutton "Maximum subdivision depth" [ref=f3e377]: "14"
+              - generic [ref=f3e378]:
+                - text: Accepted substeps per increment
+                - spinbutton "Accepted substeps per increment" [ref=f3e379]: "20000"
+              - generic [ref=f3e380]:
+                - text: Newton line search halvings
+                - spinbutton "Newton line search halvings" [ref=f3e381]: "11"
+            - paragraph [ref=f3e382]: Tolerances use model state scales. Smaller values usually require more work; they do not bound total error. Limits apply to each material increment.
+          - status [ref=f3e77]: Live · changes update automatically.
+        - generic [ref=f3e79]:
+          - region [ref=f3e80]:
+            - generic [ref=f3e81]: EXPERIMENTAL COMPARISON
+            - heading "Compare with measurements" [level=2] [ref=f3e82]
+            - paragraph [ref=f3e83]: Tests are filtered by drainage protocol, loading path and verified plot axes. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.
+            - paragraph [ref=f3e84]: 43 compatible tests · Drained triaxial · monotonic loading. Only verified channel pairs overlay the model. Other source records are available below.
+            - generic [ref=f3e85]:
+              - text: Find measurements
+              - searchbox "Find measurements" [ref=f3e86]
+            - generic [ref=f3e87]:
+              - text: Experimental test
+              - combobox "Experimental test" [ref=f3e88]:
+                - option "No measurements selected" [selected]
+                - option "TRIAX-CD-1"
+                - option "TRIAX-CD-2"
+                - option "TRIAX-CD-3"
+                - option "TRIAX-CD-4"
+                - option "TRIAX-CD-5"
+                - option "TRIAX-CD-6"
+                - option "OPARA-TXCD-20 · 21 kPa · e₀ 0.458"
+                - option "OPARA-TXCD-40 · 40.8 kPa · e₀ 0.426"
+                - option "OPARA-TXCD-60 · 58.7 kPa · e₀ 0.45"
+                - option "OPARA-TXCD-100 · 104 kPa · e₀ 0.416"
+                - option "OPARA-TXCD-200 · 201 kPa · e₀ 0.511"
+                - option "OPARA-TXCD-300 · 302 kPa · e₀ 0.496"
+                - option "TRIAX-CD-1"
+                - option "TRIAX-CD-2"
+                - option "TRIAX-CD-3"
+                - option "TRIAX-CD-4"
+                - option "TRIAX-CD-5"
+                - option "TRIAX-CD-6"
+                - option "TRIAX-CD-1"
+                - option "TRIAX-CD-2"
+                - option "TRIAX-CD-5"
+                - option "TRIAX-CD-6"
+                - option "TRIAX-CD-7"
+                - option "TRIAX-CD-8"
+                - option "TRIAX-CD-9"
+                - option "TRIAX-CD3"
+                - option "TRIAX-CD4"
+                - option "TRIAX-CD-1"
+                - option "TRIAX-CD-2"
+                - option "TRIAX-CD-3"
+                - option "TRIAX-CD-4"
+                - option "TRIAX-CD-5"
+                - option "TRIAX-CD-1"
+                - option "TRIAX-CD-2"
+                - option "TRIAX-CD-3"
+                - option "TRIAX-CD-4"
+                - option "TRIAX-CD-5"
+                - option "TRIAX-CD-6"
+                - option "TRIAX-CD-7"
+                - option "TRIAX-CD-1"
+                - option "TRIAX-CD-2"
+                - option "TRIAX-CD-3"
+                - option "TRIAX-CD-4"
+            - generic [ref=f3e89]:
+              - generic [ref=f3e90]:
+                - switch "Show measurements" [disabled] [ref=f3e91]
+                - text: Show measurements
+              - button "Use initial state & protocol" [disabled] [ref=f3e92]
+            - status [ref=f3e93]: Select a compatible test to compare measured and predicted behaviour.
+            - generic [ref=f3e94]:
+              - checkbox "Browse all source records (includes tests without model overlays)" [ref=f3e95]
+              - text: Browse all source records (includes tests without model overlays)
+            - group [ref=f3e96]:
+              - generic "Compare your own measurements" [ref=f3e97] [cursor=pointer]
+          - status [ref=f3e98]:
+            - generic [ref=f3e99]: ✓ Response up to date
+            - generic [ref=f3e100]: 100 increments · 43.2 ms · Drained triaxial
+          - generic "Simulation results" [ref=f3e101]:
+            - generic [ref=f3e102]:
+              - heading "Stress–strain response" [level=2] [ref=f3e104]
+              - img "Deviator stress versus axial strain" [ref=f3e105]:
+                - generic [ref=f3e1658]: "75.9"
+                - generic [ref=f3e1659]: "-0.07"
+                - generic [ref=f3e1660]: "55.7"
+                - generic [ref=f3e1661]: "0.215"
+                - generic [ref=f3e1662]: "35.5"
+                - generic [ref=f3e1663]: "0.5"
+                - generic [ref=f3e1664]: "15.2"
+                - generic [ref=f3e1665]: "0.785"
+                - generic [ref=f3e1666]: "-4.96"
+                - generic [ref=f3e1667]: "1.07"
+                - generic [ref=f3e1668]: Axial strain ε₁ (%)
+                - generic [ref=f3e1669]: Deviator stress q (kPa)
+              - generic [ref=f3e119]: Model prediction
+            - generic [ref=f3e121]:
+              - heading "Effective stress path" [level=2] [ref=f3e123]
+              - img "Deviator stress versus effective mean stress" [ref=f3e124]:
+                - generic [ref=f3e1671]: "75.9"
+                - generic [ref=f3e1672]: "98.3"
+                - generic [ref=f3e1673]: "55.7"
+                - generic [ref=f3e1674]: "105"
+                - generic [ref=f3e1675]: "35.5"
+                - generic [ref=f3e1676]: "112"
+                - generic [ref=f3e1677]: "15.2"
+                - generic [ref=f3e1678]: "119"
+                - generic [ref=f3e1679]: "-4.96"
+                - generic [ref=f3e1680]: "125"
+                - generic [ref=f3e1681]: Mean effective stress p′ (kPa)
+                - generic [ref=f3e1682]: Deviator stress q (kPa)
+              - generic [ref=f3e138]: Model prediction
+            - generic [ref=f3e140]:
+              - heading "Volumetric response" [level=2] [ref=f3e142]
+              - img "Volumetric versus axial strain" [ref=f3e143]:
+                - generic [ref=f3e1684]: "0.535"
+                - generic [ref=f3e1685]: "-0.07"
+                - generic [ref=f3e1686]: "0.393"
+                - generic [ref=f3e1687]: "0.215"
+                - generic [ref=f3e1688]: "0.25"
+                - generic [ref=f3e1689]: "0.5"
+                - generic [ref=f3e1690]: "0.108"
+                - generic [ref=f3e1691]: "0.785"
+                - generic [ref=f3e1692]: "-0.035"
+                - generic [ref=f3e1693]: "1.07"
+                - generic [ref=f3e1694]: Axial strain ε₁ (%)
+                - generic [ref=f3e1695]: Volumetric strain εᵥ (%)
+              - generic [ref=f3e157]: Model prediction
+            - generic [ref=f3e159]:
+              - heading "Pore-pressure change" [level=2] [ref=f3e161]
+              - img "Pore-pressure change versus axial strain" [ref=f3e162]:
+                - generic [ref=f3e1697]: "1"
+                - generic [ref=f3e1698]: "0"
+                - generic [ref=f3e1699]: "0.75"
+                - generic [ref=f3e1700]: "0.25"
+                - generic [ref=f3e1701]: "0.5"
+                - generic [ref=f3e1702]: "0.5"
+                - generic [ref=f3e1703]: "0.25"
+                - generic [ref=f3e1704]: "0.75"
+                - generic [ref=f3e1705]: "0"
+                - generic [ref=f3e1706]: "1"
+                - generic [ref=f3e1707]: Axial strain ε₁ (%)
+                - generic [ref=f3e1708]: Pore-pressure change Δu (kPa)
+                - generic [ref=f3e1709]: Available for undrained protocols
+              - generic [ref=f3e176]: Model prediction
+              - paragraph [ref=f3e178]: Not defined for this drained / mechanical protocol
+          - generic [ref=f3e179]:
+            - paragraph [ref=f3e180]: Example parameters. No experimental calibration or predictive validity is implied.
+            - generic [ref=f3e181]:
+              - button "↓ Results CSV" [ref=f3e182] [cursor=pointer]
+              - button "↓ Reproducible run" [active] [ref=f3e183] [cursor=pointer]
+          - group [ref=f3e184]:
+            - generic "Equations & source provenance" [ref=f3e185] [cursor=pointer]
+```
