@@ -401,3 +401,8 @@ The [new primitive study](../catalogue/investigations/normalized-determinant-v1/
 ## VW96 full-source reconciliation — 2026-11-01
 
 The [bounded source packet](../docs/ingestion/hypoplastic-sand-vw96/README.md) adds a full21-page original-paper technical read,27 standalone algebra checks and13 explicit v0.3 contract/initialization checks. Rate factors/signs agree in the inspected common domain. Two concrete witnesses distinguish wider algebraic continuation from the AppendixC shape range and principal-stress applicability; original figure-density/preparation ambiguities are preserved. Root definitions and historical failed/passing evidence are unchanged. A pending v2 review replaces the stale source-access gap with specific applicability, initialization and scientific-signoff decisions. REV-04/REV-05 remain open; no build, new calibration, promotion, push or deployment occurred. The next scoped task is a shared-host applicability policy/gap report, not solver expansion.
+
+
+## Shared-host applicability policy — 2026-11-01
+
+[Decision0004](decisions/0004-vw96-igs-applicability.md) records the VW96/IGS claim boundary without changing numerical admission.19 pinned Python initialization observations reproduce mixed-sign, isotropic/cutoff, density/pressure and IGS history boundary behavior. These diagnostics establish neither full-path physical confinement nor scientific applicability. No compiled calls, new guards, promotion or deployment occurred.

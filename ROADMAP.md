@@ -567,3 +567,8 @@ The [loading contract](docs/LABORATORY_LOADING.md) now has an implemented browse
 ## VW96 full-source reconciliation — 2026-11-01
 
 The [bounded source packet](docs/ingestion/hypoplastic-sand-vw96/README.md) adds a full21-page original-paper technical read,27 standalone algebra checks and13 explicit v0.3 contract/initialization checks. Rate factors/signs agree in the inspected common domain. Two concrete witnesses distinguish wider algebraic continuation from the AppendixC shape range and principal-stress applicability; original figure-density/preparation ambiguities are preserved. Root definitions and historical failed/passing evidence are unchanged. A pending v2 review replaces the stale source-access gap with specific applicability, initialization and scientific-signoff decisions. REV-04/REV-05 remain open; no build, new calibration, promotion, push or deployment occurred. The next scoped task is a shared-host applicability policy/gap report, not solver expansion.
+
+
+## Shared VW96/IGS applicability decision — 2026-11-01
+
+[Decision0004](docs/decisions/0004-vw96-igs-applicability.md) closes the bounded host-applicability policy task. Numerical acceptance, prospectively declared comparison scope and scientific support are distinct claims. Default compressive-soil comparisons use an explicitly project-chosen stress/density restriction; exact isotropy remains included, while invariant regularization and IGS overshoot remain identified numerical continuations.19 Python initialization diagnostics reproduce current boundary behavior. No root/solver change or retrospective benchmark certification is made; REV-04/REV-05 remain open. Subsequent work returns to the existing review/benchmark lanes rather than extending numerical infrastructure.
