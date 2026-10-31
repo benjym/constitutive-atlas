@@ -1,5 +1,13 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [KFS initialization refinement](benchmarks/kfs-initialization-refinement-v1/README.md)
+adds16serial archived replays covering both states at two finer increments. All
+16case/channel gates/32adjacent comparisons pass: largest change is0.2731%of the
+matching coarse initialization shift, below the frozen1%limit; finer changes
+are nonincreasing.664new+332coarse receipts, exact saved replay and32combined
+tests pass. No fit/build/admission; TMD13 calibration propagation and source
+resolution remain open.
+
 The [locked VW96 initialization study](benchmarks/kfs-locked-initialization-sensitivity-v1/README.md)
 completes eight serial archived-solver replays with four exactly reproduced saved
 controls. Alternative evaluation e0 raises six-test pressure/density errors from

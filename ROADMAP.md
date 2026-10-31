@@ -277,6 +277,11 @@ completes eight serial archived replays and four exact numeric saved controls.
 Alternative evaluation states raise aggregate errors while preserving the
 within-model contrast sign. TMD13 recalibration propagation and alternative-state
 refinement remain untested; this is conditional sensitivity, not source resolution.
+The subsequent [three-resolution output study](docs/benchmarks/kfs-initialization-refinement-v1/README.md)
+now closes that bounded refinement gap for both scenarios: maximum adjacent
+change is0.2731%of the matching initialization shift, below the prospective1%
+criterion, with nonincreasing finer changes. TMD13 calibration propagation and
+independent scientific review remain open.
 
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
