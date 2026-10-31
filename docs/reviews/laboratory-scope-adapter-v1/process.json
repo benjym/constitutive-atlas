@@ -1,0 +1,9 @@
+{
+  "command": [
+    "node",
+    "/private/tmp/atlas-laboratory-scope-adapter-v1/exercise.mjs"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "file:///private/tmp/atlas-laboratory-scope-adapter-v1/exercise.mjs:16\nfor(const p of result.points){const a=p.control,expectedStress=[request.initial[0]+parameters.E*a,request.initial[1],request.initial[2],0,0,0],expectedStrain=[a,-parameters.nu*a,-parameters.nu*a,0,0,0];for(let i=0;i<6;i++){stressError=Math.max(stressError,Math.abs(p.state[i]-expectedStress[i]));strainError=Math.max(strainError,Math.abs(p.strain[i]-expectedStrain[i]));}if(JSON.stringify(p.state.slice(6))!==JSON.stringify(request.initial.slice(6)))throw Error('history changed');}\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ^\n\nError: history changed\n    at file:///private/tmp/atlas-laboratory-scope-adapter-v1/exercise.mjs:16:457\n\nNode.js v26.7.0\n"
+}

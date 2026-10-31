@@ -1,0 +1,11 @@
+{
+  "version": "laboratory-scope-adapter-gate-0.1",
+  "engine_packet": "docs/reviews/recorded-scope-view-v1/artifacts.json",
+  "maximum_wasm_material_requests": 11,
+  "builds": 0,
+  "saved_native_cases": "scoped-elastic-0..4 and total-analytical-0..4",
+  "comparison": {"relative_tolerance": 1e-9, "exact": "structure, metadata, settings, loading bits, status and integer counters", "excluded": ["elapsed_ms"]},
+  "independent_case": {"model": "linear-elastic", "scope": "effective", "protocol": 1, "target": 0.00001, "steps": 16, "cycles": 1, "loading": "existing cyclic-sine-rne12-v1 binary64 producer", "stress_tolerance_Pa": 0.002, "strain_tolerance": 2e-10, "reference": "radial stress stays initial; axial increment E*axial strain; radial strain -nu*axial; elastic reversal returns to initial"},
+  "negative_checks": ["request/model scope mismatch before any ccall", "catalogue or parameter order mismatch before material call", "missing new export without fallback", "incorrect API/stress/pore descriptor", "null or nonfinite reconstructed u", "numeric u when unavailable", "settings, loading or vector mismatch", "malformed result prefix"],
+  "limits": ["live laboratory remains legacy-only", "production total validation stays disabled", "no new public model or scientific admission", "saved native evidence is reused, not rerun"]
+}
