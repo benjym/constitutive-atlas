@@ -1,0 +1,45 @@
+{
+  "id": "kfs-development-review-v1-verification",
+  "date": "2026-11-01",
+  "scope": "documentation and existing saved evidence only",
+  "initial_authoring_failure": {
+    "reason": "Nonexistent guessed crosswalk filename rejected before writing claims.json.",
+    "correction": "Used existing formulation-crosswalk.json and checked all referenced evidence paths.",
+    "evidence_changed": false
+  },
+  "checks": {
+    "claims": 7,
+    "local_links_resolved": 25,
+    "unique_dependency_hashes_verified": 29,
+    "four_displayed_scores_match_existing_results": true,
+    "original_failed_gate_preserved": true,
+    "separate_nested_pass_preserved": true,
+    "single_current_replay_pass_preserved": true
+  },
+  "saved_only_audits": [
+    {
+      "command": "python3 docs/benchmarks/current-source-build-v1/verify.py",
+      "returncode": 0,
+      "output": "PASS: 351 source pins; six successful command receipts; nine-model catalogue; metadata only"
+    },
+    {
+      "command": "python3 docs/benchmarks/current-archived-vw96-v1/check_saved.py",
+      "returncode": 0,
+      "result": {
+        "saved_reconstruction": "pass",
+        "native_processes_reconstructed": 22,
+        "overall_compatibility_pass": true,
+        "new_native_calls": 0
+      }
+    },
+    {
+      "command": "python3 docs/benchmarks/current-kfs-tmd7-v1/check_saved.py --private-dir /private/tmp/atlas-current-kfs-tmd7-v1",
+      "returncode": 0,
+      "output": "PASS: complete prediction/command reconstruction;44current+44baseline receipts; scalar result exact; no native calls"
+    }
+  ],
+  "new_native_calls": 0,
+  "new_builds": 0,
+  "new_fits": 0,
+  "new_scientific_review": false
+}
