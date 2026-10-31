@@ -1,6 +1,7 @@
 """Opt-in bounded restart contract, retained regression and serial native checks."""
 import copy
 import gzip
+import hashlib
 import json
 import math
 import os
@@ -10,7 +11,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from atlas.dsl import ValidationError
-from atlas.model import ROOT
+from atlas.model import ROOT, all_models
 from atlas.refinement import validate_study
 from atlas.recorded import execute_recorded,validate_recorded_run,recorded_wire,RESTART_DEFAULTS
 from tools.diagnose_dp_recorded_apex import scalar_return
@@ -98,11 +99,19 @@ class RestartNativeTests(unittest.TestCase):
         # Work partitions/iteration counts can depend on compiler floating point.
         # Retained local evidence below additionally proves bitwise JSON equality.
         a,b=copy.deepcopy(actual),copy.deepcopy(expected)
+        # A catalogue addition changes its identity, not the legacy response law.
+        # Validate the current identity independently before comparing old behavior.
+        current_models=all_models()
+        current_hash=hashlib.sha256(json.dumps(current_models,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+        self.assertEqual(a.pop('catalogue_hash'),current_hash)
+        self.assertEqual(len(b.pop('catalogue_hash')),64)
         for r in (a,b):
             for key in ('material_trials','attempted_substeps','finite_difference_probes'):r.pop(key)
             for point in r['points']:point.pop('diagnostics')
         def compare(x,y):
-            if type(y) is float:self.assertTrue(math.isfinite(x));self.assertLessEqual(abs(x-y),1e-9*max(1,abs(y)))
+            if type(x) is float or type(y) is float:
+                self.assertIn(type(x),(int,float));self.assertIn(type(y),(int,float))
+                self.assertTrue(math.isfinite(x));self.assertLessEqual(abs(x-y),1e-9*max(1,abs(y)))
             elif isinstance(y,list):
                 self.assertEqual(len(x),len(y))
                 for v,w in zip(x,y):compare(v,w)

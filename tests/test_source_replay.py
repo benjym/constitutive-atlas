@@ -65,21 +65,24 @@ class RegisteredReplay(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             self.export(root, registry)
+            runtime_registry='catalogue/source-replays/source-rates-runtime-v2/registry.json'
+            self.export(root, runtime_registry)
             poison = root / 'atlas/dsl.py'
             poison.parent.mkdir(exist_ok=True)
             poison.write_text('raise RuntimeError("live DSL must not execute")')
             for name, count in [('sand', 11), ('clay', 18)]:
                 with self.subTest(model=name):
-                    result = replay.registered(root, registry, name)
+                    result = replay.registered(root, runtime_registry if name=='sand' else registry, name)
                     original = json.loads(result['stdout'])
-                    self.assertTrue(original['original_report_exact'])
+                    self.assertTrue(original['original_numerical_report_exact'] if name=='sand' else original['original_report_exact'])
+                    if name=='sand':self.assertTrue(original['runtime_metadata_separate'])
                     self.assertEqual(original['original_python_groups'], count)
                     self.assertFalse(original['compiled_execution'])
                     self.assertFalse(original['admission'])
 
     def test_source_rate_packet_frozen_files(self):
         import hashlib
-        for packet in ('source-rates-v1', 'sand-prospective-v1', 'finite-tensor-v1'):
+        for packet in ('source-rates-v1', 'source-rates-runtime-v2', 'sand-prospective-v1', 'finite-tensor-v1'):
             folder = ROOT / 'catalogue/source-replays' / packet
             manifest = json.loads((folder / 'manifest.json').read_bytes())
             self.assertFalse(manifest['compiled_execution'])
