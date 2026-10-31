@@ -1,3 +1,9 @@
+# Clay2005 arithmetic and conditioning diagnosis — 2026-10-31
+
+The [separate contraction diagnostic](../catalogue/investigations/clay2005-boundary-parity-v1/RESULTS.md) passes all 109 original requests and unchanged gates with implicit contraction disabled. Wasm outputs are unchanged; 24 native vectors change, and native fused instructions drop from 119 to zero. The original failed study is retained, and production flags remain unchanged.
+
+The [independent actual-input source study](ingestion/hypoplastic-clay-2005/boundary-precision-v1/README.md) passes 22 frozen convergence checks across 11 cases at 80/160/240 digits. Agreeing backend rates still have scaled source discrepancies up to about 0.001488; naive Cartesian cofactors also lose accuracy for oblique inputs. Next is a generic robust determinant with Mandel/AD/trace verification, before a new source-preserving model study. No model promotion or deployment; eight local runnable drafts and five hosted remain.
+
 # Clay2005 compiled-rate parity failure —2026-10-31
 
 The frozen [109call native/Wasm study](../catalogue/investigations/clay2005-rates-v3/RESULTS.md) passes all41independent source cases and29material rejection/recovery pairs per backend, including actual minimum-subnormal echoes. Its unchanged1e-10 parity gate **fails for5finite-only near-singular support cases/17stress components**. Full raw/build/source evidence and the failed assessment are retained; a separate arithmetic/conditioning diagnostic is next. No model promotion or deployment; eight local runnable drafts and five hosted remain.
