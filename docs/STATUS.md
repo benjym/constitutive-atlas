@@ -1,3 +1,9 @@
+# Mohr–Coulomb independent finite-path references — 2026-10-31
+
+The [new source-only path packet](reviews/mc-axisymmetric-paths-v1/README.md) covers all five protocols,14 paths/834points and elastic/compression/extension/apex regimes. Both280/360precision reference files reproduce byte for byte under [coordinator replay](reviews/mc-axisymmetric-paths-review-v1/README.md);21711precision fields,12000exact rational identities and3883input/adequacy checks pass. Intended Python binary64 controls are distinguished from actual backend libm controls. Two coordinator manifest-reader mistakes were corrected before source replay, with their scripts retained.
+
+The isolated ten-model preview catalogue is staged; constitutive mathematics matches the research law, with only identity/description and a100kPa illustrative initial example changed. Backend path accuracy, browser/default export and rejection/recovery gates remain open. No new root model, build, push or deployment; hosted five/local nine remain unchanged.
+
 # Generated Mohr–Coulomb native/Wasm gate — 2026-10-31
 
 The [prospectively frozen study](../catalogue/investigations/mc-stored-backends-v1/RESULTS.md) passes862 calls per backend under unchanged source/branch/error gates:652 successes and210 expected rejections each.17974 six-component directional vectors spanning all38 incoming columns,76 separate analytic elastic vectors, nine tight mixed-middle checks,39 source solver updates and three accepted-state transactions pass per backend. Statuses/branches agree;42 numerical records differ within independently assessed bounds. Worst error/budget ratio is0.000142379.
