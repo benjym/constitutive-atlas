@@ -1,3 +1,9 @@
+# Clay2005 finite-path draft preview — 2026-10-31
+
+The [frozen finite-preview study](../catalogue/investigations/clay2005-preview-v1/RESULTS.md) passes 27 calls and 975 successful caller points per native/Wasm backend, including all five monotonic/cyclic controls, unchanged 100 kPa default, partition/hold checks and five failure/recovery pairs. Five independently derived high-precision isotropic stress/void endpoints pass. Actual isolated browser export has 101 points and exact frozen-Wasm physical channels; source/definition links remain visible. The isolated source reconstruction reproduces references and raw assessment without ambient repository sources.
+
+The candidate is ready for a separate local production integration gate. No root definition or deployment changed: eight installed local drafts, five hosted; scientific/experimental admission remains open.
+
 # Clay2005 homogeneous-ratio complete rates — 2026-10-31
 
 The [new original-stress candidate study](../catalogue/investigations/clay2005-homogeneous-rates-v1/RESULTS.md) passes all 120 calls per native/Wasm backend with every prior request, reference, label and budget unchanged. All 81 accuracy rows, ten finite-only support rows and 29 rejection/recovery pairs pass. Both previously failed boundary cases now pass; the maximum eleven-case source-budget fraction is 0.001713 and parity fraction is 0.014293. The 125-file cache-free frozen-source replay reproduces the complete verification report. Earlier negative studies remain intact.

@@ -1,0 +1,72 @@
+{
+  "backend": "wasm",
+  "started_utc": "2026-10-31T08:14:22.684770+00:00",
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "environment": {
+    "EMCC_CORES": "1",
+    "EM_CACHE": "/Users/bmar5496/code/constitutive-atlas/.cache/emscripten"
+  },
+  "manifest_sha256": "e5ceffc187f07fe63a2c4e07ad03bbf9940cef6a65c020b36d7178d998d8372c",
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "emcc",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/clay2005-preview-v1",
+        "-B",
+        "/private/tmp/atlas-clay2005-preview-wasm-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-clay2005-preview-wasm-v1",
+        "--target",
+        "atlas_laboratory_preview",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "node",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/clay2005-preview-v1/observe.mjs",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/clay2005-preview-v1",
+        "/private/tmp/atlas-clay2005-preview-wasm-v1",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/clay2005-preview-v1/wasm"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas-preview.js": {
+      "path": "/private/tmp/atlas-clay2005-preview-wasm-v1/atlas-preview.js",
+      "sha256": "e214656adcc39b8b193c50d82f8519e3eae69d405e93c5f8d309fcf45cdda79f",
+      "bytes": 26396
+    },
+    "atlas-preview.wasm": {
+      "path": "/private/tmp/atlas-clay2005-preview-wasm-v1/atlas-preview.wasm",
+      "sha256": "630c710e04a447ee58e2f1c63295a757ab084c4b55dccc46dcf3b378341310a6",
+      "bytes": 867780
+    }
+  },
+  "completed": true,
+  "finished_utc": "2026-10-31T08:14:36.906383+00:00",
+  "journal_sha256": "4389bd516700e2c0c1beab59887322fa07c9684c37e50920702fa7bc7cc7e158"
+}
