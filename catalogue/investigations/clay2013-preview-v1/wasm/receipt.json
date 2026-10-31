@@ -1,0 +1,68 @@
+{
+  "backend": "wasm",
+  "started_utc": "2026-10-31T05:56:33.690387+00:00",
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "manifest_sha256": "8a967b21659e7948d8d56c8aec14a549af100b2d66c9f861fa3dfa071c9c2808",
+  "commands": [
+    {
+      "label": "toolchain",
+      "argv": [
+        "emcc",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/clay2013-preview-v1",
+        "-B",
+        "/private/tmp/atlas-clay2013-preview-wasm-v1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-clay2013-preview-wasm-v1",
+        "--target",
+        "atlas_laboratory_preview",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "node",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/clay2013-preview-v1/observe.mjs",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/clay2013-preview-v1",
+        "/private/tmp/atlas-clay2013-preview-wasm-v1",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/clay2013-preview-v1/wasm"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas-preview.js": {
+      "path": "/private/tmp/atlas-clay2013-preview-wasm-v1/atlas-preview.js",
+      "sha256": "487473176b0ac3d96f5857fa64260bf5627dc2a15b6c57f05c16de0f4ab7fbd7",
+      "bytes": 26204
+    },
+    "atlas-preview.wasm": {
+      "path": "/private/tmp/atlas-clay2013-preview-wasm-v1/atlas-preview.wasm",
+      "sha256": "13302118771c5dfc4ade162f8d96fb9963c2a20c77d7d47ebc4dfb8af6604fe7",
+      "bytes": 747779
+    }
+  },
+  "completed": true,
+  "finished_utc": "2026-10-31T05:56:40.357257+00:00",
+  "journal_sha256": "9a75823e6dfecc78b91121e17601f016a690a8bc0750f429567ced33812f85e3"
+}
