@@ -1,0 +1,163 @@
+{
+  "schema_version": "0.3",
+  "kind": "formulation-crosswalk",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0
+      ],
+      "shape": "sym",
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "initial": 0.7,
+      "shape": "scalar",
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "model_id": "linear-elastic",
+  "root_definition_sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+  "parameter_crosswalk": {
+    "E": {
+      "unit": "Pa",
+      "source": "LinearElasticIsotropic.h MaterialProperties Young modulus",
+      "scope": "Constant Atlas parameter; source API may vary with t,x. Bounds1Pa\u20131TPa are project exploration limits."
+    },
+    "nu": {
+      "unit": "1",
+      "source": "LinearElasticIsotropic.h MaterialProperties Poisson ratio",
+      "scope": "Constant Atlas parameter; -.99<=nu<=.499 is a project restriction inside -1<nu<.5 positive-definite range."
+    },
+    "p_ref": {
+      "unit": "Pa",
+      "source": "Atlas solver scaling only",
+      "scope": "Not an elastic material parameter; no effect on exact stress update."
+    }
+  },
+  "derived_crosswalk": {
+    "K": {
+      "source": "LinearElasticIsotropic.h MaterialProperties::bulk_modulus",
+      "unit": "Pa",
+      "expression": "E / (3 * (1 - 2 * nu))"
+    },
+    "G": {
+      "source": "LinearElasticIsotropic.h MaterialProperties::mu",
+      "unit": "Pa",
+      "expression": "E / (2 * (1 + nu))"
+    }
+  },
+  "equation_crosswalk": {
+    "sigma": {
+      "source": "LinearElasticIsotropic.cpp integrateStress; header elasticTangentStiffness",
+      "conversion": "Source C=lambda*I_tensor_product_I+2G*I_sym equals K trace(de) I+2G dev(de). Both stress and strain signs reversed together. Mechanical strain increment in fixed frame.",
+      "scope": "Constant-parameter, zero-spin infinitesimal stress residual. Not full OGS process equivalence."
+    },
+    "e": {
+      "source": "Atlas project bookkeeping; not in OGS elasticity",
+      "conversion": "(1+e_new)=(1+e_old)exp(-trace(de)); multiplicative composition for additive volumetric increments.",
+      "scope": "Positive scalar bookkeeping only; exponential volume convention does not make the stress update finite-strain."
+    }
+  },
+  "stress_scope_decision": "Effective Cauchy stress is the Atlas soil-laboratory interpretation. The inspected stand-alone OGS material files expose mechanical stress, not a complete pore-pressure/effective-stress process. This declaration does not attribute an effective-stress coupling law to those files.",
+  "state_semantics_evidence": {
+    "sigma": "Persistent Cauchy stress offset; passive transformation Q sigma Q^T, source incremental stress storage. No finite-step transport.",
+    "e": "Persistent Atlas scalar void ratio, invariant under passive basis changes; no stiffness coupling."
+  },
+  "initialization_notes": "Explicit sigma and e required; examples100kPaI,e=.7 do not describe a preparation history or calibrated specimen. e>0; tensile stress allowed. Missing state is rejected, not defaulted.",
+  "project_domain": [
+    "e > 0"
+  ],
+  "transactions": {
+    "type": "Incremental residual with committed sigma_n/e_n and supplied strain increment. No clock/duration or elapsed-time relaxation.",
+    "zero_load": "sigma_new=sigma_old and e_new=e_old; arbitrary holds do not evolve state.",
+    "commit_rollback": "Trial starts from committed input; successful increments commit both persistent fields, failure restores input. No yield event, reset or plastic multiplier.",
+    "subdivision": "Constant elastic stress is additive; (1+e) bookkeeping is multiplicative for additive trace. Partition independence holds analytically, apart from numerical solution/rounding and domain failure.",
+    "tangent": "Stress tangent C is constant for fixed E,nu. e derivative is -(1+e_new)trace(dde). Bulk/shear positivity holds for E>0,-1<nu<.5; near-incompressible conditioning is not guaranteed."
+  },
+  "unsupported": [
+    "finite strain or finite rotations",
+    "varying E(t,x),nu(t,x), temperature or additional source process fields",
+    "poroelasticity, time-dependent relaxation or calibrated soil prediction",
+    "source equivalence for Atlas void-ratio state"
+  ],
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/ufz/ogs/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticIsotropic.h",
+      "sha256": "b3439a410a0f2fbe29dfb822d2d3afc789910b3e7fe2fee001377cda8d34e084",
+      "bytes": 4329,
+      "retrieved_at": "2026-11-01"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ufz/ogs/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticIsotropic.cpp",
+      "sha256": "cad7e15785981c2ccb06557c7deffc9d0d627e03865c60cd65ecf49f126f1231",
+      "bytes": 2224,
+      "retrieved_at": "2026-11-01"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ufz/ogs/b5d0f115c75ee74a7cdbfad533625a550a416fda/MathLib/KelvinVector.h",
+      "sha256": "99154a87de67c78730bbe8db528e0085997e2e177b4a07aea0c2a92ab83268ed",
+      "bytes": 10833,
+      "retrieved_at": "2026-11-01"
+    }
+  ],
+  "root_migrated": false,
+  "scientific_admission_changed": false
+}

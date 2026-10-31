@@ -572,3 +572,8 @@ The [bounded source packet](docs/ingestion/hypoplastic-sand-vw96/README.md) adds
 ## Shared VW96/IGS applicability decision — 2026-11-01
 
 [Decision0004](docs/decisions/0004-vw96-igs-applicability.md) closes the bounded host-applicability policy task. Numerical acceptance, prospectively declared comparison scope and scientific support are distinct claims. Default compressive-soil comparisons use an explicitly project-chosen stress/density restriction; exact isotropy remains included, while invariant regularization and IGS overshoot remain identified numerical continuations.19 Python initialization diagnostics reproduce current boundary behavior. No root/solver change or retrospective benchmark certification is made; REV-04/REV-05 remain open. Subsequent work returns to the existing review/benchmark lanes rather than extending numerical infrastructure.
+
+
+## Linear elasticity source reconciliation — 2026-11-01
+
+The [bounded elastic packet](docs/ingestion/linear-elastic/README.md) verifies pinned OpenGeoSys material/Kelvin sources and a complete explicit v0.3 state/init crosswalk. Eight contract checks,30 exact stiffness-column identities and29 saved analytical-endpoint residual checks pass. Atlas constant parameters, effective-stress host interpretation and project void bookkeeping are distinguished from the broader source API. Historical native evidence is hash-verified, not rerun; pending v2 scientific review and REV-01 remain open. Root/schema/solver/status and existing evidence are unchanged; no build, push or deployment.

@@ -406,3 +406,8 @@ The [bounded source packet](../docs/ingestion/hypoplastic-sand-vw96/README.md) a
 ## Shared-host applicability policy — 2026-11-01
 
 [Decision0004](decisions/0004-vw96-igs-applicability.md) records the VW96/IGS claim boundary without changing numerical admission.19 pinned Python initialization observations reproduce mixed-sign, isotropic/cutoff, density/pressure and IGS history boundary behavior. These diagnostics establish neither full-path physical confinement nor scientific applicability. No compiled calls, new guards, promotion or deployment occurred.
+
+
+## Linear elasticity source reconciliation — 2026-11-01
+
+The [bounded elastic packet](ingestion/linear-elastic/README.md) verifies pinned OpenGeoSys material/Kelvin sources and a complete explicit v0.3 state/init crosswalk. Eight contract checks,30 exact stiffness-column identities and29 saved analytical-endpoint residual checks pass. Atlas constant parameters, effective-stress host interpretation and project void bookkeeping are distinguished from the broader source API. Historical native evidence is hash-verified, not rerun; pending v2 scientific review and REV-01 remain open. Root/schema/solver/status and existing evidence are unchanged; no build, push or deployment.
