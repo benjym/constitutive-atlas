@@ -1,0 +1,152 @@
+{
+  "schema_version": "source-audit-draft-0.1",
+  "id": "hypoplastic-clay-2014-original",
+  "status": "candidate-source-dossier",
+  "scientific_admission": false,
+  "identity": {
+    "title": "Clay hypoplasticity model including stiffness anisotropy",
+    "authors": [
+      "David Mašín"
+    ],
+    "doi": "10.1680/geot.13.P.065",
+    "issue_year": 2014,
+    "journal": "Géotechnique",
+    "volume": 64,
+    "issue": 3,
+    "pages": "232–238",
+    "inspected_version": "author manuscript dated2013-11-26,16pages",
+    "publisher_equivalence_verified": false
+  },
+  "sources": [
+    {
+      "url": "https://doi.org/10.1680/geot.13.P.065",
+      "locator": "publisher identity/abstract; PDF access redirects to abstract"
+    },
+    {
+      "url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_Geot14-pp.pdf",
+      "final_url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_Geot14-pp.pdf",
+      "content_type": "application/pdf",
+      "bytes": 1095956,
+      "sha256": "2eb8598297e3ac9cf245161f56674d6cef622b35fc612adc89dc129568b55202",
+      "locator": "PDFpp2–6,9–11,13 visually inspected"
+    }
+  ],
+  "host": {
+    "doi": "10.1007/s11440-012-0199-y",
+    "dependency": "explicit ASBS direction,density and incompressible-grain void-ratio closure",
+    "identical_host": false,
+    "changes": [
+      "anisotropic L Eq2–11",
+      "fs Eq14–15",
+      "alpha_f Eq49–50 replaces fixed2"
+    ]
+  },
+  "variants": [
+    {
+      "id": "anisotropic-base",
+      "retained_scalarized_count": 7,
+      "state": [
+        "effective_stress_sym6_Pa",
+        "e_scalar_1"
+      ],
+      "parameters": [
+        "phi_c",
+        "lambda_star",
+        "kappa_star",
+        "N",
+        "nu_pp",
+        "alpha_G",
+        "alpha_E",
+        "alpha_nu"
+      ],
+      "explicit_choices": [
+        "a=.3 or calibrated variant",
+        "alpha_f Eq49 or calibrated variant"
+      ],
+      "preparation": [
+        "unit material-plane normal n or rank-one projector P"
+      ],
+      "locator": "pp2–3Eqs2–15,pp9–10Eqs34–50"
+    },
+    {
+      "id": "anisotropic-with-manuscript-IGS",
+      "retained_scalarized_count": 13,
+      "extra_state": [
+        "full_symmetric_delta6"
+      ],
+      "extra_parameters": [
+        "R",
+        "Ag",
+        "ng",
+        "m_rat",
+        "beta_r",
+        "chi"
+      ],
+      "derived_not_independent": [
+        "mR Eq56",
+        "mT Eq57",
+        "rho",
+        "delta_hat"
+      ],
+      "locator": "p10Eqs51–55,p11Eqs56–57,p13Table1",
+      "source_normalization_unresolved": true
+    }
+  ],
+  "findings": [
+    {
+      "id": "MR-NORMALIZATION",
+      "severity": "source-blocker",
+      "locator": "p4Eqs17–19,p11Eq56",
+      "fact": "Printed inversion gives shear stiffness4.5times prescribed Eq18 value.",
+      "selected_repair": null,
+      "gate": "Obtain final publisher equation/corrigendum or source resolution."
+    },
+    {
+      "id": "AC-PREP-LABEL",
+      "severity": "replay-blocker",
+      "locator": "p6first paragraph",
+      "fact": "AC initial condition prints two values labelled p,323kPa and-166kPa.",
+      "selected_repair": null
+    },
+    {
+      "id": "PLANE-TRANSPORT",
+      "severity": "scope-gap",
+      "locator": "p2Eq3,p10objective rates",
+      "fact": "Unit material-plane normal specified; no inspected evolution law for material axis.",
+      "supported_interpretation": "Explicitly scoped zero-spin fixed-plane fragment only."
+    },
+    {
+      "id": "R-OMISSION",
+      "severity": "inventory-note",
+      "locator": "p11parameter sentence vs p10Eq53,p13Table1",
+      "fact": "R required in rho and table though omitted from final parameter-list sentence."
+    }
+  ],
+  "capabilities": {
+    "generic_fourth_order_required": false,
+    "derived_action": "a1*D+a2*I*trace(D)+a3*(P*trace(D)+I*dot(P,D))+a4*(P D+D P)+a5*P*dot(P,D)",
+    "dsl_gaps": [
+      "typed preparation/orientation validation",
+      "dimensionally valid mixed symmetric action strategy; do not add dimensionless P to rate-dimensional D",
+      "explicit hydrostatic and zero-rate continuations",
+      "integration/domain/rollback acceptance for selected exact variant"
+    ],
+    "history_gaps": [
+      "explicit initial IGS preparation",
+      "no source-defined caller-increment resets or lagged writes should be invented"
+    ]
+  },
+  "tests": {
+    "file": "tests/test_clay2014_algebra.py",
+    "groups": 6,
+    "result": "pass",
+    "scope": "independent stdlib Cartesian/algebra witnesses,not model or integration validation",
+    "known_conflict_asserted": "Gtp0/Gtarget=4.5 for printed Eq19"
+  },
+  "private_material_excluded": [
+    "PDF",
+    "extracted text",
+    "renderings",
+    "receipt metadata file (public summary separately includes hash)"
+  ]
+}

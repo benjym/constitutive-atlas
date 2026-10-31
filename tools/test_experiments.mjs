@@ -77,6 +77,8 @@ if(process.argv[2]==='--built-assets'){
   const directory=process.argv[3];
   assert.ok(directory,'Provide the built experiments directory.');
   const manifest=JSON.parse(await readFile(directory+'/index.json','utf8'));
+  const registry=JSON.parse(await readFile(new URL('../data/public_sources.json',import.meta.url),'utf8'));
+  const approvedSources=new Map(registry.sources.filter(source=>source.public_hosting===true).map(source=>[source.id,source]));
   for(const entry of manifest.experiments){
     const content=await readFile(directory+'/'+entry.path);
     const actual=await fetchExperiment(entry,async()=>new Response(content));
@@ -87,7 +89,11 @@ if(process.argv[2]==='--built-assets'){
       assert.equal(typeof column.source_unit,'string');
       if(column.unit_status==='standardized')assert.ok(Number.isFinite(column.unit_conversion.scale)&&Number.isFinite(column.unit_conversion.offset));
     }
-    assert.ok(['https://creativecommons.org/licenses/by/4.0/','https://opendatacommons.org/licenses/by/1-0/'].includes(actual.provenance.license_url));
+    const source=approvedSources.get(actual.provenance.source_id);
+    assert.ok(source,`Unapproved built experiment source: ${actual.provenance.source_id}`);
+    assert.ok(source.license_evidence,`Missing recorded license evidence for ${source.id}`);
+    assert.equal(actual.provenance.license,source.license);
+    assert.equal(actual.provenance.license_url,source.license_url);
   }
   console.log(`All ${manifest.experiments.length} built experiments passed browser decoding and checksum checks.`);
 }

@@ -1,0 +1,143 @@
+{
+  "packet_version": 1,
+  "formulation": "barodesy-clay-2017",
+  "status": "source_inventory_only",
+  "public_executable": false,
+  "scientific_review_complete": false,
+  "bibliography": {
+    "authors": [
+      "Gertraud Medicus",
+      "Wolfgang Fellin"
+    ],
+    "title": "An improved version of barodesy for clay",
+    "journal": "Acta Geotechnica",
+    "volume": 12,
+    "issue": 2,
+    "pages": "365–376",
+    "issue_year": 2017,
+    "online_date": "2016-05-02",
+    "doi": "10.1007/s11440-016-0458-4",
+    "url": "https://doi.org/10.1007/s11440-016-0458-4"
+  },
+  "source_receipt": {
+    "kind": "publisher_version_of_record",
+    "requested_url": "https://link.springer.com/content/pdf/10.1007/s11440-016-0458-4.pdf",
+    "retrieved_date": "2026-10-31",
+    "http_status": 200,
+    "bytes": 1492680,
+    "sha256": "bd049a3fd874c9e4945e1c77f5af5b84ac14c26a08cee1b953428b4312e6af15",
+    "pdf_pages": 12,
+    "printed_pages": "365–376",
+    "publisher_license": "CC BY 4.0 (printed p373)",
+    "redistributed": false
+  },
+  "visual_verification": {
+    "pdf_pages_one_based": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      9,
+      10,
+      11
+    ],
+    "scope": [
+      "notation/objective-rate print",
+      "Eqs1–10 and Table1",
+      "Table2",
+      "calibration Eqs11–22",
+      "Appendices1–3 Eqs23–43",
+      "license"
+    ],
+    "private_renders_not_deliverables": true
+  },
+  "state": [
+    {
+      "name": "T",
+      "type": "symmetric_tensor_6",
+      "unit": "Pa",
+      "source": "effective Cauchy stress, compression negative; §2 p366"
+    },
+    {
+      "name": "e",
+      "type": "scalar",
+      "unit": "1",
+      "source": "void ratio; footnote13 p374, de/dt=(1+e)trD"
+    }
+  ],
+  "parameters": {
+    "independent": [
+      "phi_c",
+      "N",
+      "lambda_star",
+      "kappa_star"
+    ],
+    "fixed_reference_pressure_Pa": 1000,
+    "derived": [
+      "c1",
+      "c2",
+      "c3",
+      "c4=1",
+      "c5",
+      "c6"
+    ],
+    "locators": "Table1 p367; Table2 p368; Eqs17,21,23,25,29"
+  },
+  "inputs": [
+    "symmetric stretching D (s^-1), compression negative",
+    "spin W for finite rotations; objective-rate printed definition unresolved"
+  ],
+  "operators": [
+    {
+      "operator": "symmetric tensor exponential",
+      "source": "Eq3 and footnote5 p366; Eq37 p375",
+      "available_in_current_dsl": false
+    },
+    {
+      "operator": "trace/Frobenius norm/normalization/scalar log/exp/powers",
+      "source": "Eqs1–10",
+      "available_in_current_dsl": true
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "ec-body-appendix",
+      "source": "Eq8 p367 versus Eq41 p375; p=-trT/3 p366; Eq32 p374",
+      "detail": "Body uses2p/sigma*, appendix uses−2trT/sigma*=6p/sigma*. No N, p, or sigma* redefinition found in appendix. Explicit body-law research selection may proceed with discrepancy retained; final-source equivalence not established."
+    },
+    {
+      "id": "objective-rate-print",
+      "source": "§2 p366",
+      "detail": "Printed Tdot=Tcircle−WT+WT repeats WT; finite-spin convention needs independent authority, zero-spin scope avoids ambiguity."
+    },
+    {
+      "id": "singular-direction-branches",
+      "source": "Eqs3–5 p366–367",
+      "detail": "D=0, delta=±sqrt3 and m=c2 require explicit limiting/domain policies; no finite algorithm supplied."
+    },
+    {
+      "id": "author-code",
+      "source": "https://soilmodels.com/download/barodesy-umat-plaxis-zip/",
+      "detail": "2018 base package page accessible, advertises6.65MB, login required; no archive/version/license source inspected. No source-code hash exists."
+    },
+    {
+      "id": "author-fulltext",
+      "source": "https://resolver.obvsg.at/urn%3Anbn%3Aat%3Aat-ubi%3A3-6399",
+      "detail": "Linked by author institutional profile for exact paper; resolver returned HTTP403 during private acquisition attempt."
+    }
+  ],
+  "excluded_variants": [
+    "2012 clay barodesy",
+    "sand barodesy",
+    "2020 intergranular strain/strength reduction",
+    "later reloading/ISA variants"
+  ],
+  "next_actions": [
+    "Review explicit body-Eq8 research-law choice; retain Eq41 discrepancy and analytic distinguishing fixture.",
+    "Transcribe zero-spin seven-state rate only after independently checking Table1 and sign/unit mapping.",
+    "Design and verify tensor exponential/normalized exponential operator and singular-direction policies before common-engine execution.",
+    "Acquire matching author source/manual by ordinary authorized access if needed; static comparison of ec and objective rotation; record archive/version/license/hash.",
+    "Independent isotropic scalar and full3D Cartesian covariance/rate checks before integration; no scientific/public admission implied."
+  ]
+}
