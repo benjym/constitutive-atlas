@@ -1,0 +1,12 @@
+--- original/mixed_scale.py
++++ portable/mixed_scale.py
+@@ -3,7 +3,8 @@
+ from fractions import Fraction as F
+ from decimal import Decimal as D,localcontext
+ import json
+-P=Path('/private/tmp/atlas-mc-stored-input-v1');OUT=Path(__file__).resolve().parent
++import sys
++P=Path(sys.argv[1]).resolve();OUT=Path(sys.argv[2]).resolve();OUT.mkdir(parents=True,exist_ok=True)
+ 
+ def sincos(x):
+  s=x;t=x;k=1

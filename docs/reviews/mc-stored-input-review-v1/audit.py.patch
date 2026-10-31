@@ -1,0 +1,12 @@
+--- original/audit.py
++++ portable/audit.py
+@@ -7,7 +7,8 @@
+ import math
+ from decimal import Decimal as D, localcontext
+ 
+-P=Path('/private/tmp/atlas-mc-stored-input-v1');OUT=Path(__file__).resolve().parent
++import sys
++P=Path(sys.argv[1]).resolve();OUT=Path(sys.argv[2]).resolve();OUT.mkdir(parents=True,exist_ok=True)
+ 
+ def run():
+  d=json.loads((P/'inputs.json').read_text());cert=json.loads((P/'frozen/docs/ingestion/mohr-coulomb/results.json').read_text());cap=json.loads((P/'retained-v1-holds.json').read_text())

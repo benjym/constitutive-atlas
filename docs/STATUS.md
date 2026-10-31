@@ -1,3 +1,11 @@
+# Independent Mohr–Coulomb stored-input references — 2026-10-31
+
+The [frozen input corpus](reviews/mc-stored-input-v1/README.md) and [independent audit](reviews/mc-stored-input-audit-v1/README.md) establish140 named cases/115 unique bitwise inputs and38 directions spanning18 current/parent/loading variables. Exact corpus replay and875 construction assertions pass; historical negative-v1 hold states and the original137/140 audit mismatch remain preserved.
+
+The [independent source references](reviews/mc-stored-reference-v1/README.md) provide571 mathematically defined branch expressions,21698 directional vectors and2855 separate parameter-sensitivity vectors. The280/360-digit constructions agree across327888 numerical fields under the frozen1e-60 normalized gate. Two-step derivative self-checks pass15264 components, plus260376 directional-linearity checks,4200 apex parameter identities and six mixed-scale middle assertions. The [coordinator replay](reviews/mc-stored-reference-review-v1/README.md) regenerates both gzip files byte for byte and reproduces both full check reports. Its initial source-location error is retained separately; no numerical policy changed.
+
+This closes the independent-reference deliverable, not the full REF task or candidate numerical gate. Explicit rejection/recovery requests, off-parent current-value sweeps, prospective branch/error/rollback policy, generated-model native/Wasm checks and public admission remain open under NUM-mc-stored-backends-v1. No candidate calls or compiled observations in reference construction; no build, push or deployment. Hosted five/local nine remain unchanged.
+
 # Mohr–Coulomb declarative research record — 2026-10-31
 
 The [source-design review](reviews/mc-declarative-coordinator-review-v1/README.md) installs a complete six-component v0.3 stress-only research record for the pinned Sysala–Cermak arXiv v3 H=0 law. Independent exact branch coverage passes19694 cases across96 parameter sets, plus1440 gap identities. Actual generated lazy/grouped expressions and compression signs are reviewed.
