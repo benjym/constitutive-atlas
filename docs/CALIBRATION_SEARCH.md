@@ -69,8 +69,10 @@ it cannot authenticate those external identities or ensure a callback's runtime
 limits. The adapter must reset preparation/state for every candidate and whole test,
 and produce deterministic predictions from the frozen inputs; duplicate suppression
 assumes that contract. It supplies no durable journal/resume protocol. Historical study policies,
-model bytes and results remain unchanged. Prospective scientific choices and the
-actual model-runner connection remain open under CAL-01/02/03/05.
+model bytes and results remain unchanged. Prospective scientific choices remain open under CAL-01/02/03/05. The
+[fixed-preparation drained recorded runner](CALIBRATION_RECORDED.md) now supplies
+one native connection with persistent request/response/assessment receipts; its
+source/provenance and preparation limitations remain explicit.
 
 ```sh
 python3 -B -m unittest tests.test_calibration_search tests.test_study_objective tests.test_curve_metrics tests.test_study_allocation -v

@@ -1,0 +1,211 @@
+{
+  "test_id": "synthetic-elastic",
+  "request": {
+    "version": "experimental-recorded-run-0.1",
+    "model": "linear-elastic",
+    "parameters": [
+      100000,
+      10000000.0,
+      0.25
+    ],
+    "initial": [
+      103000.0,
+      100000.0,
+      100000.0,
+      0,
+      0,
+      0,
+      0.7
+    ],
+    "path": {
+      "version": "experimental-recorded-path-0.1",
+      "coordinate": {
+        "name": "source_row_index",
+        "unit": "1",
+        "meaning": "path_order"
+      },
+      "initial_strain": [
+        0.001,
+        0.002,
+        0.002,
+        0,
+        0,
+        0
+      ],
+      "controls": [
+        {
+          "kind": "strain",
+          "coefficients": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "stress",
+          "coefficients": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "stress",
+          "coefficients": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "strain",
+          "coefficients": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "strain",
+          "coefficients": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "kind": "strain",
+          "coefficients": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      ],
+      "knots": [
+        {
+          "coordinate": 0,
+          "targets": [
+            0.001,
+            100000.0,
+            100000.0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "coordinate": 1,
+          "targets": [
+            0.002000000000000001,
+            102000.0,
+            102000.0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "coordinate": 2,
+          "targets": [
+            0.0008000000000000012,
+            99000.0,
+            99000.0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "coordinate": 3,
+          "targets": [
+            0.0008000000000000012,
+            99000.0,
+            99000.0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "coordinate": 4,
+          "targets": [
+            0.0016999999999999993,
+            101000.0,
+            101000.0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "coordinate": 5,
+          "targets": [
+            0.001,
+            100000.0,
+            100000.0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "version": "experimental-drained-replay-provenance-0.1",
+    "experiment_id": "synthetic-elastic",
+    "experiment_sha256": "2322514093e3baf7ad9f20d84fa9512835cfc62cf9be507abb6e31169dc0f6f5",
+    "configuration_sha256": "62632e2a8134aa1a1c9d2e531d1ab33bc177e02709614fd77120c74f6aaed811",
+    "model_sha256": "fc3874f33677ff66daece43fc7d85f7c5cd1318ab92b5549ee61a2367c24cfec",
+    "request_sha256": "1f954058c33788813b0bd0d05ab908629e753c6c6353c8a4b393423e0f856195",
+    "source": {
+      "source_url": "https://github.com/benjym/constitutive-atlas",
+      "member_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "archive_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "declarations": {
+      "kinematics": "fixed-frame-axisymmetric-x",
+      "p": "mean-effective-stress",
+      "q": "signed-axial-minus-radial-effective-stress",
+      "strain_origin": "first-observation",
+      "radial_control": "replay-measured-effective-stress",
+      "evidence_url": "https://github.com/benjym/constitutive-atlas",
+      "evidence_locator": "tests/test_experiment_replay.py synthetic()",
+      "initialization_note": "Analytical fixture; e=.7 at row zero."
+    },
+    "observation_count": 6,
+    "row_mapping": "knot i corresponds to input rows[i], zero-based; no filtering",
+    "source_axial_strain_origin": 0.02,
+    "initial_void_ratio_comparison": {
+      "source": null,
+      "supplied_e": 0.7,
+      "override_note": null
+    },
+    "limitations": [
+      "Measured radial effective stress is replayed; this is not an apparatus-control classification.",
+      "Coordinate is observation order, not elapsed time.",
+      "All history is caller supplied; no preparation or calibration is inferred.",
+      "q enters the radial constraint through p-q/3; its curve is not an independent input channel.",
+      "Conversion does not establish model applicability, source agreement or redistribution permission."
+    ]
+  }
+}
