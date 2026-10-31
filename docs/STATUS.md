@@ -1,5 +1,14 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [TMD13 calibration sensitivity](benchmarks/kfs-tmd13-calibration-sensitivity-v1/README.md)
+completes six serial archived VW96 fits: two e0 scenarios and three original
+seeds, each with 96 candidates. All three file-control traces reproduce,
+including the historical failed candidate. The audit reconstructs 576 candidates
+from 1734 process receipts; four corruption witnesses and 13 targeted tests pass.
+Both scenarios select seed 0, changing selected alpha from 0.1290625 to 0.14.
+All fits are budget-limited. Evaluation propagation is the next bounded step;
+no evaluation replay, build, deployment or scientific admission occurs here.
+
 The [provisional development web summary](reviews/web-kfs-development-summary-v1/README.md)
 now exposes locked VW96 scores, initialization scenarios, refinement and source
 links from Methods. Its explicit scalar projection excludes curves/private

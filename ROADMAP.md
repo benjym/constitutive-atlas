@@ -287,6 +287,16 @@ now makes the conditional scores, scenario selector, refinement and open gates
 inspectable from Methods using an explicit scalar-only export. Browser/package
 checks pass locally; deployment and scientific promotion have not occurred.
 
+The [TMD13 calibration-state study](docs/benchmarks/kfs-tmd13-calibration-sensitivity-v1/README.md)
+now completes six archived density3 fits under the two scenarios and original
+three seeds. All three full file-control traces reproduce, including the retained
+failure; 576 candidate objectives are reconstructed from 1734 process receipts.
+Both scenarios select seed0, with alpha changing0.1290625→0.14; all starts exhaust
+the96candidate budget. Four corruption witnesses and13targeted tests pass.
+This closes recalibration only. Next freeze these selected vectors and separately
+measure calibration-only and combined calibration/evaluation state propagation;
+no evaluation-based retuning or scientific admission is implied.
+
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
 ## 10. M5 — expand toward twenty executable formulations

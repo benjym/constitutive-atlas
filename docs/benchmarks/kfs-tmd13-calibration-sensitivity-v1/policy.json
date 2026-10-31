@@ -1,0 +1,169 @@
+{
+  "id": "kfs-tmd13-calibration-sensitivity-v1",
+  "date": "2026-11-01",
+  "phase": "development_initialization_scenario_recalibration",
+  "model": {
+    "id": "hypoplastic-sand-vw96",
+    "baseline_parameters": {
+      "p_ref": 100000.0,
+      "phi": 0.5777039824101231,
+      "hs": 4000000000.0,
+      "n": 0.27,
+      "ed0": 0.677,
+      "ec0": 1.054,
+      "ei0": 1.212,
+      "alpha": 0.14,
+      "beta": 2.5
+    },
+    "fit": {
+      "phi": {
+        "bounds": [
+          0.45,
+          0.7
+        ],
+        "transform": "linear"
+      },
+      "hs": {
+        "bounds": [
+          500000000.0,
+          20000000000.0
+        ],
+        "transform": "log"
+      },
+      "alpha": {
+        "bounds": [
+          0.05,
+          0.4
+        ],
+        "transform": "linear"
+      },
+      "beta": {
+        "bounds": [
+          0.5,
+          4
+        ],
+        "transform": "linear"
+      }
+    },
+    "fixed_parameters": {
+      "p_ref": 100000.0,
+      "n": 0.27,
+      "ed0": 0.677,
+      "ec0": 1.054,
+      "ei0": 1.212
+    },
+    "note": "Partial calibration only: n, ed0, ec0, ei0 fixed to the existing literature transfer set; their source information is additional prior knowledge, not data learned by this pilot.",
+    "bounds_status": "exploratory analyst choices within current implementation bounds; sensitivity not established",
+    "baseline_source": {
+      "url": "https://doi.org/10.1002/nag.70375",
+      "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians"
+    }
+  },
+  "calibration_package": "density3",
+  "calibration_ids": [
+    "KFS-TMD3",
+    "KFS-TMD8",
+    "KFS-TMD13"
+  ],
+  "experiment_sha256": {
+    "KFS-TMD3": "820bf78e1226d24fc82568d93a7ecfdc5615baa3642ac5c3156c58434fdd9de9",
+    "KFS-TMD8": "e948e16978db7ff812f2cfe31f3993a015a120ec25852936e5e087468cd47287",
+    "KFS-TMD13": "0d0fe3e32b1c8badfdc121744ebccf65e20abd08969a4730b1b1f0ff246a420c"
+  },
+  "input_sha256": {
+    "paper/results/pilot-matched96/report.json": "55db06cf5cf3ba640d25db9ab45825ef0e277c815f9037b667ca3781c25cf8e2",
+    "paper/results/pilot-matched96/solver/atlas_solver": "c075e4010ad3bbaa4e299647d1a86d804b98eb8692f15c5a01e0e65b5db42cd7",
+    "paper/results/pilot-matched96/models/hypoplastic-sand-vw96.json": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31",
+    "paper/results/pilot-matched96/reservation-policy.json": "ba6b58642296ada46d4105dca1b3e0fbcb267a77af20821c259be7caf517a3b3",
+    "studies/kfs-development-v1/initialization-v1/policy.json": "625e82a084c7bdfe17181060be1334d955048a7271e6991b94d4eef119c5e4a4",
+    "studies/kfs-development-v1/initialization-v1/states.json": "b849961474e3f2c01b0bc20b7514f52fa3c1502a5f0c1dfe67e28bde10ca84e5",
+    "docs/benchmarks/kfs-locked-initialization-sensitivity-v1/run_case.py": "d79ea3471321aa959cb0f298f2f93420bb6dbe46f60c809c51d9615d1971a3bf",
+    "docs/benchmarks/kfs-locked-initialization-sensitivity-v1/policy.json": "1d5208a2e47f7576f7ecafaad0270e497def27722d0001818405ed356a635c8d",
+    "docs/benchmarks/kfs-locked-initialization-sensitivity-v1/freeze.json": "4defac3ef89adc8a4d75cf9426222dcd0d1c0a8e5d4f04a58f0973eae12eeebb",
+    "paper/results/pilot-matched96/source/paper/analysis/__init__.py": "ebe91dc4619e2a375ff75cdeaee63122d1985164c5ac4e0ab8ac3e1c559e188f",
+    "paper/results/pilot-matched96/source/paper/analysis/atlas_adapter.py": "39db9663717b91ed2726466ee7a2acf05c2baa3bbd0088d2774f8ddcdcf5d6fe",
+    "paper/results/pilot-matched96/source/paper/analysis/common.py": "c487164efdfc25e672bf88a1c6c7e683a51b2a22fa739e803e3b702063755c6a",
+    "paper/results/pilot-matched96/source/paper/analysis/contrasts.py": "b241b1bcefa2b7ce2c5ba31d704fc21f0459fba36de7d7941bf634c4d8ccf942",
+    "paper/results/pilot-matched96/source/paper/analysis/evaluation.py": "9e98450a299b13937a2770a01ede7b0a1f195ba6b63086fc637ee328a452f899",
+    "paper/results/pilot-matched96/source/paper/analysis/metrics.py": "dc457106b8a63112b7e04f822569fed680ca9ad53fea79741562028f131e3569",
+    "paper/results/pilot-matched96/source/paper/analysis/pilot.py": "28ed6ee4fc1ff424160e2527ad058a2ff9424eb3da86f03b32b4b0fb07d5de33",
+    "paper/results/pilot-matched96/source/paper/analysis/reservations.py": "dacbf677bdc45b6d6a8c54727e2cdb4e5914716c99e81fc8cfe5c2220a6891f7"
+  },
+  "objective": {
+    "channels": [
+      "q",
+      "volumetric_strain"
+    ],
+    "q_scale": "initial_mean_effective_stress",
+    "volumetric_strain_scale": 0.01,
+    "aggregation": "equal channel MSE within test, equal tests"
+  },
+  "optimizer": {
+    "method": "bounded_coordinate_pattern_search",
+    "seeds": [
+      0,
+      17,
+      41
+    ],
+    "max_evaluations": 96,
+    "initial_step": 0.25,
+    "minimum_step": 0.001,
+    "failure_objective": 1e+30,
+    "selection": "lowest calibration objective across all seeds; no evaluation access"
+  },
+  "maximum_axial_strain": 0.02,
+  "steps": 100,
+  "samples": 101,
+  "timeout_seconds_per_test": 30,
+  "calibration_loading": "unchanged archived monotonic drained ramp to last monotonic measured coordinate <=2%; duplicates collapsed last, decreasing coordinate rejects",
+  "calibration_metric": "unchanged archived uniform101axial-strain point squared-error average, not the new evaluation linear-residual integral",
+  "initialization": {
+    "file_initial": "exact normalized-file effective stress/e0 for all three tests; archived transient-state policy unchanged",
+    "original_table_disputed_e0": {
+      "KFS-TMD13": 0.824,
+      "all_other_inputs": "unchanged file_initial including all effective stresses; hybrid sensitivity assumption only"
+    }
+  },
+  "runs": [
+    {
+      "index": 0,
+      "seed": 0,
+      "scenario": "file_initial"
+    },
+    {
+      "index": 1,
+      "seed": 0,
+      "scenario": "original_table_disputed_e0"
+    },
+    {
+      "index": 2,
+      "seed": 17,
+      "scenario": "file_initial"
+    },
+    {
+      "index": 3,
+      "seed": 17,
+      "scenario": "original_table_disputed_e0"
+    },
+    {
+      "index": 4,
+      "seed": 41,
+      "scenario": "file_initial"
+    },
+    {
+      "index": 5,
+      "seed": 41,
+      "scenario": "original_table_disputed_e0"
+    }
+  ],
+  "control_gate": "every calibration row, parameter candidate, completion, objective and test metric must equal archived same-seed trace numerically after removing elapsed_seconds only; retain failure and stop later fits if mismatch",
+  "native_outcomes": "finite unique-key JSON and exact catalogue required; valid constitutive failures/nonzero exit or timeout become failed test, candidate objective1e30 as archived; retain all three test attempts; malformed JSON/launch/catalogue failure aborts workflow rather than inventing a constitutive score",
+  "selection": "lowest calibration objective among successful starts within each scenario; ties retain listed seed order; no evaluation responses are loaded for fitting or selection",
+  "limits": [
+    "Same partial-fit prior information and exploratory bounds as the historical study; no common-information or universal ranking claim.",
+    "An original-table alternative is not a source correction, probabilistic uncertainty model or full published nominal initialization.",
+    "No evaluation replay here; sensitivity of selected evaluation outcomes requires a separate frozen continuation.",
+    "This protocol fixes a development numerical comparison, not blind evaluation or scientific admission.",
+    "No source changes, model migration, compilation, new data or optimizer expansion."
+  ]
+}
