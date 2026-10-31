@@ -1,0 +1,14 @@
+{
+  "identity": "terracotta-preparation-hold-refinement-v2",
+  "parent_policy_sha256": "2585616ccd0bd325deea219b117fc339d51dfa8342426675fb5a78427e2aef0c",
+  "physical_input_changes": [],
+  "acceptance_bound_changes": [],
+  "added_relative_tolerance": 2.5e-09,
+  "budget": 100000,
+  "expected_old_records": 9,
+  "expected_new_records": 3,
+  "fine_policy": "all parent fine component bounds apply to each new phase/backend; error no worse than parent coarse plus unchanged numerical-noise allowance",
+  "rationale": "Quarter the local relative tolerance to approximately halve first-order backward-Euler accumulated error under step doubling. Original fine runs took43106/46276substeps, so doubled work may remain within the unchanged100000budget; no guarantee of success.",
+  "reuse": "exact parent source/artifact identities only; no rebuild or changed engine defaults",
+  "retain_parent_accuracy_outcome": "failed; never relabelled passed"
+}

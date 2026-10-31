@@ -1,3 +1,9 @@
+# Terra Cotta carried preparation/hold refinement — 2026-10-31
+
+The [distinct tighter-tolerance study](../catalogue/investigations/terracotta-preparation-hold-refinement-v2/RESULTS.md) passes all unchanged independent preparation/hold component limits for three new native/Wasm pairs (138points). Each run carries its own preparation state, accumulated strain, incoming-rate captured stresses and one physical clock. Maximum error/limit fraction is.586010; backend parity maximum is6.87e-12. The unchanged100000substep cap contains all runs (86098–92404steps).
+
+All original parent requests, results and five fine component failures remain unchanged and failed. The refinement only quarters the local relative tolerance, reusing exact source/artifact-pinned binaries with no rebuild or default changes. Isolated source replay reproduces the new assessment exactly and retains the parent's negative outcome. Six evidence-contract regressions pass. Journal-source closure, author mixed-control equivalence, experimental matching, general3D and public timed-browser admission remain open; hosted five/local nine are unchanged.
+
 # Terra Cotta full-path compiled study — 2026-10-31
 
 The [full preparation/hold v1 study](../catalogue/investigations/terracotta-preparation-hold-v1/RESULTS.md) completes all nine schedules per backend (414points total) with carried state/strain, one physical clock and captured stress controls. Native/Wasm parity passes at maximum scaled difference1.23e-11. Both backends nevertheless fail five unchanged independent fine component limits, by at most17.2%; the failed outcome and every raw result are preserved.
