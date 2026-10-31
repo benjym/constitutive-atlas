@@ -68,8 +68,8 @@ Read all existing linked material first. The task is to close or precisely docum
 - [ ] **ING-s-clay1** — Acquire Wheeler et al2003 DOI10.1139/t02-119; source-map rotational hardening/anisotropy orientation, parameter/state/input inventory and initialization.
   Owner: — (released after bounded handoff); output: `docs/ingestion/s-clay1/`; partial evidence: [packet](docs/ingestion/s-clay1/README.md); BLOCKED: SC-SOURCE-01: original 2003 full text unavailable; identity/acquisition report delivered.
 
-- [ ] **ING-barodesy-sand** — Compare explicitly dated author sand formulations and select one complete identity; directory subroutine identifies clay2017 and cannot pin sand.
-  Owner: —; output: `docs/ingestion/barodesy-sand/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
+- [-] **ING-barodesy-sand** — Compare explicitly dated author sand formulations and select one complete identity; directory subroutine identifies clay2017 and cannot pin sand.
+  Owner: `review_igs97`; claimed: 2026-10-31; output: `docs/ingestion/barodesy-sand/`; existing evidence: [parallel-candidate-triage.md](docs/reviews/parallel-candidate-triage.md); blocker: see existing dossier, confirm when claimed.
 
 - [-] **ING-pm4sand** — PM4Sand2D3.3 UCD/CGM-23/01: compare pinned June2023 vendor bytes against May2024 author revision and inventory plane-strain/in-plane-mean-stress constraints separately from3D.
   Owner: `review_sanisand`; claimed: 2026-10-31; output: `docs/ingestion/pm4sand/`; existing evidence: [pm4sand-versions.md](docs/models/pm4sand-versions.md); blocker: see existing dossier, confirm when claimed.
@@ -137,7 +137,7 @@ A shared engine/schema request becomes a separate coordinator-owned task with de
 ## Coordinator integration lane
 
 - [X] **INT-clay2014-path-results** — Integrate immutable failed native/Wasm finite-path evidence, independent whole-matrix and scalar diagnostics, and the website evidence binding. Owner: coordinating parent; started: 2026-10-31; evidence: [result review](docs/reviews/clay2014-path-results.md). Integrated: 70 focused Python groups, retained-manifest integrity and real website evidence export pass; original numerical study remains failed. This task records a negative study; it does not close model admission.
-- [ ] **INT-clay2014-controlled-resolution** — Freeze a separate actual-resolution hydrostatic order study, then execute serially against independent scalar references. Depends on INT-clay2014-path-results; preserve the original failed study. Owner: —.
+- [-] **INT-clay2014-controlled-resolution** — Freeze a separate actual-resolution hydrostatic order study, then execute serially against independent scalar references. Depends on INT-clay2014-path-results; preserve the original failed study. Owner: coordinating parent; claimed: 2026-10-31; output: `catalogue/investigations/clay2014-controlled-resolution-v1/`; [prospective protocol/reference](docs/reviews/clay2014-controlled-resolution.md) prepared; compiled collector/assessment pending.
 
 The [ingestion index](docs/ingestion/README.md) links completed packets and their [generic capability follow-up](docs/ingestion/CAPABILITIES.md).
 
