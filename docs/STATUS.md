@@ -1,3 +1,9 @@
+# Prospective spectral contract for Mohr–Coulomb — 2026-10-31
+
+The [analytical design packet](reviews/symmetric-spectral-contract-v1/README.md) separates value-only principal-stress branch selection from differentiable simple-eigenvalue and group-projector expressions. Its static qualifier prototype accepts9 valid output expressions and rejects15 value-only leaks. Independent exact Cartesian checks reproduce152 directional rows,304 rotations and152 pair-sum identities, including complementary repeated spectra. The review retains a mixed-scale cancellation failure in the original middle-value proposal and a selected-repeat nondifferentiability witness.
+
+NUM-symmetric-spectral-contract remains WIP: no floating eigensolver/policy or stored-Mandel corpus is frozen, and no production helper, compiler/DSL, model or compiled result changed. Equality ownership selects a branch, not a proven unique classical/generalized tangent at every boundary. There is no new runnable-model, scientific-admission or deployment claim; hosted five/local nine remain unchanged.
+
 # Mohr–Coulomb source closure and Wu–Bauer review — 2026-10-31
 
 The [Mohr–Coulomb ingestion](ingestion/mohr-coulomb/README.md) now pins a complete constant-cohesion, nonassociated perfect-plastic law and explicit face/edge/apex return from the exact arXiv v3 source. Fourteen exact rational certificates, eleven rotated Cartesian residuals and two bounded tangent checks reproduce. An initial boundary-tangent diagnostic failure is retained and reproduced. Generic spectral operations and repeated-eigenvalue/tangent semantics remain the next execution dependency; there is no new runnable model or scientific admission.
