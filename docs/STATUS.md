@@ -1,5 +1,12 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [KFS metric-sensitivity diagnostic](benchmarks/kfs-metric-sensitivity-v1/README.md)
+connects the shared metric to36locked saved predictions/72channel comparisons.
+Original scores and the analytical quadrature-gap identity pass; aggregate errors
+change0.029–0.073%, retaining every within-model contrast sign. Seven new/19combined
+synthetic tests and exact saved-result replay pass. No new fit, solver call, build
+or scientific admission; initialization conflicts and prospective policy stay open.
+
 The [shared ordered curve metric](ORDERED_METRICS.md) integrates piecewise-linear
 residuals over absolute axial-strain travel, preserving reversals and redundant
 linear sampling. It rejects incomplete predictions and reports holds/max error.

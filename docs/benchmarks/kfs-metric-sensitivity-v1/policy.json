@@ -1,0 +1,83 @@
+{
+  "id": "kfs-metric-sensitivity-v1",
+  "phase": "retrospective_development_diagnostic",
+  "date": "2026-11-01",
+  "report": "paper/results/pilot-matched96/report.json",
+  "input_sha256": {
+    "paper/results/pilot-matched96/report.json": "55db06cf5cf3ba640d25db9ab45825ef0e277c815f9037b667ca3781c25cf8e2",
+    "atlas/curve_metrics.py": "d847eef772d5b96640a0cb9379e340c83ce243109a0bd48d6be2772bb391d900",
+    "tools/strict_observation_json.py": "8199c4f4f4cc731666397b26b79ef455b9473c4066f723d4bc39cc71134fa9ed",
+    "atlas/study_allocation.py": "7dc31fa318cd3c50eb291aa0ebc4a9c0ab12db6ff68925eef5fd422fbe5e19fd",
+    "atlas/study_parameters.py": "1f9a3cce8f6961e62cff6efa2ba888694b98b82d73475999c7aa0705a7173aa4",
+    "tools/check_study_allocation.py": "74e4db05ed66e2337613b4bf077c46cff90e0eabb1aee2a7f0adc37c982d940e",
+    "tools/check_study_parameters.py": "04e50892717a0dd8cfdf78cc02fc689637666bff5d291078e68fd1de1fd9234b",
+    "studies/kfs-development-v1/allocation.json": "ff51779ef552ce944279e5a493798f8820304ca2ce603be1610dc0ff154e0bc9",
+    "studies/kfs-development-v1/reservation-policy.json": "ba6b58642296ada46d4105dca1b3e0fbcb267a77af20821c259be7caf517a3b3",
+    "studies/kfs-development-v1/parameters-v1/parameter-policy.json": "a837cb8723823d6900c9c902267a78080d9478f0dd4f6f00919c55878e6ed915",
+    "studies/kfs-development-v1/parameters-v1/models/linear-elastic.json": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+    "studies/kfs-development-v1/parameters-v1/models/drucker-prager.json": "9eff38d8ba9ea327d9b0590b03c966b7f5797a53f0aff9e1ecd0b923423a346e",
+    "studies/kfs-development-v1/parameters-v1/models/hypoplastic-sand-vw96.json": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31"
+  },
+  "experiment_sha256": {
+    "KFS-TMD1": "cd8f820c6ec12b27cda493dcf22929fcba655c44f684046e82daeae0b8d8fa79",
+    "KFS-TMD5": "a7206c2c5965d8878c7f70d5a76c1526f78f06f10638492021aba3b3f308a477",
+    "KFS-TMD7": "f83f67ba52249f9d6e25a9838a7b9b13ec5ae80a7e0c4bfec8bf336417871ad8",
+    "KFS-TMD9": "abfab3a68319ff22d444d974b3ddeaef15f2c880576886bcf00c389fe20f0187",
+    "KFS-TMD12": "91be6483d2216fc1e0083a886066070db1620eaebab2c0ee7ab78299d00038df",
+    "KFS-TMD14": "380fdcb758a3aa33f2491fecc07bc71596259d604326dd8e04347500c6e6bb92"
+  },
+  "model_sha256": {
+    "linear-elastic": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+    "drucker-prager": "9eff38d8ba9ea327d9b0590b03c966b7f5797a53f0aff9e1ecd0b923423a346e",
+    "hypoplastic-sand-vw96": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31"
+  },
+  "evaluation_ids": [
+    "KFS-TMD1",
+    "KFS-TMD5",
+    "KFS-TMD7",
+    "KFS-TMD9",
+    "KFS-TMD12",
+    "KFS-TMD14"
+  ],
+  "packages": {
+    "pressure3": [
+      "KFS-TMD2",
+      "KFS-TMD3",
+      "KFS-TMD4"
+    ],
+    "density3": [
+      "KFS-TMD3",
+      "KFS-TMD8",
+      "KFS-TMD13"
+    ]
+  },
+  "channels": [
+    "q",
+    "volumetric_strain"
+  ],
+  "maximum_axial_strain": 0.02,
+  "q_scale": "initial_mean_effective_stress",
+  "volumetric_strain_scale": 0.01,
+  "initialization": "unchanged saved file effective stress and void ratio; no new preparation or initialization",
+  "new_method": "piecewise-linear-residual-axial-travel-v1",
+  "legacy_method": "trapezoidal endpoint error over absolute axial-strain travel",
+  "aggregation": "root mean of scaled MSE, equal channels within test and equal tests",
+  "contrast": "density3 minus pressure3 within each model; no cross-model ranking",
+  "selection": "all 36 selected predictions from the existing budget96 report, no reselection or retuning",
+  "absolute_score_tolerance": 1e-15,
+  "relative_score_tolerance": 1e-12,
+  "checks": [
+    "exact file hashes and development allocation before experimental-file access",
+    "complete unique model/package/evaluation-ID coverage; selected seed and parameters match saved successful best fit",
+    "same original rows through first upper-window crossing; no interpolation at crossing",
+    "recomputed legacy scaled MSE agrees with retained score",
+    "legacy minus new MSE equals sum(w*(a-b)^2)/(6*travel*scale^2) within frozen arithmetic tolerance"
+  ],
+  "limitations": [
+    "Protocol freezes a new diagnostic before observing its rescores, not a blind or prospective calibration study.",
+    "TMD12-14 void-ratio conflict remains unresolved; file-based initialization is retained without selection by error.",
+    "Lower exact metric scores follow quadrature algebra, not better model predictions.",
+    "Saved solver outcomes and historical source/input qualifications remain unchanged.",
+    "No measured curves or raw observation arrays will be bundled."
+  ]
+}

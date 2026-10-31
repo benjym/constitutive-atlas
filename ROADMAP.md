@@ -264,6 +264,10 @@ The [shared ordered metric](docs/ORDERED_METRICS.md) now supplies a separately
 identified piecewise-linear residual integral over absolute axial-strain travel,
 with twelve synthetic checks. Historical scores retain their original method.
 Prospective adoption, physical features, sensitivity and uncertainty remain open.
+The [bounded KFS saved-prediction diagnostic](docs/benchmarks/kfs-metric-sensitivity-v1/README.md)
+now verifies72channel comparisons at locked parameters: aggregate changes are
+0.029–0.073% and all within-model contrast signs persist. It adds no fits or
+scientific admission; unresolved initialization still qualifies the comparison.
 
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
