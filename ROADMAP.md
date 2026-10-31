@@ -317,6 +317,15 @@ tests pass. No threshold changes or numerical admission follow. The next bounded
 action is a saved-receipt diagnosis of caller/adaptive partition behaviour for
 those four failures before any separately frozen further compiled study.
 
+The [saved-only partition diagnosis](docs/benchmarks/kfs-partition-diagnostic-v1/README.md)
+now identifies nonmonotone mean travel/reported-substep ordering on16/43TMD7 and
+17/47TMD9 intervals under both vectors, with exact1974receipt reconstruction.
+No single acquisition interval dominates the q difference. Source inspection
+is consistent with adaptive midpoint bisection but lacks an exact binary build
+receipt and internal accepted trees; causality is not established. Four new/
+19combined tests pass with no native calls/builds. A separately frozen eight-run
+nested caller-count study is proposed; no old gate or scientific status changes.
+
 **Acceptance:** at least one source-matched published baseline is reproduced and a controlled study is fully reproducible. All results identify model, parameters, experiment, protocol, solver settings, hashes, eligibility and failures. Unit tests remain distinct from scientific error thresholds. No universal ranking is inferred from one material or test family.
 
 ## 10. M5 — expand toward twenty executable formulations

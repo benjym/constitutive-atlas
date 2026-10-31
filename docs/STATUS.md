@@ -1,5 +1,14 @@
 # Current delivery checkpoint — 1 November 2026
 
+The [saved partition diagnosis](benchmarks/kfs-partition-diagnostic-v1/README.md)
+exactly reaudits1974receipts without native execution. Coarse runs have less
+axial travel per reported substep than medium runs on16/43TMD7 and17/47TMD9
+intervals under both vectors (up to20%inversion). This supports a caller/adaptive
+partition explanation, not causal proof; internal trees and a binary/source
+build receipt are missing. No single interval dominates the q difference.
+Four new/19combined tests and exact saved replay pass. A separate eight-replay
+nested-count proposal is queued; the original refinement gate stays failed.
+
 The [full factorial refinement study](benchmarks/kfs-propagation-refinement-v1/README.md)
 **fails its prospective gate**: all64adjacent output changes are below1%of the
 matched calibration-response shift (maximum0.840902%), but four TMD7/TMD9 q
