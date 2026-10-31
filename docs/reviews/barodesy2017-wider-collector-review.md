@@ -1,0 +1,27 @@
+# Independent wider collector review
+
+No remaining numerical, state-chaining or transaction blocker found in the corrected bounded collector. Reviewed staged Python assessor/collector, Node C ABI collector and corruption suite. No builds, native/Wasm runs or authoritative edits performed. Existing model, reference or scientific status was not modified.
+
+## Numerical gates and independent reference
+
+The fixed48-trajectory matrix covers eight paths, three rate tolerances and both caller partitions, with576 actual update calls. Every actual caller point is compared against original-initial independent references. Stress uses the fixed initial Frobenius scale; e uses absolute .01 times the stress tolerance budget. Exact volume closure is checked independently. The final RK4 pair difference/rounded scalar precision difference is an observed uncertainty estimate added pointwise and to refinement offsets; it is explicitly not a rigorous bound. Its eligibility is checked before use. Actual refinement and caller-partition shrink criteria are fixed policy fields before any generated observation. Production partition discrepancies receive no RK4 uncertainty allowance. This is appropriate for the selected bounded study, with roundoff floors and no universal convergence-order claim.
+
+Fresh reference replay and24 source/dependency pins bind the source law, core/compiler, actual caller pieces, protocol and independent numerical target. The source selection remains body2p/zero spin with unresolved Appendix/spin differences. The collector does not substitute a generated state into the independent oracle.
+
+## Genuine chaining and transaction prefix
+
+Both native and Node collectors forward their own actual response.state to the next request at every call. Node does not copy native intermediate states. The first tensor tight n1 trajectory provides two actual successful prefix calls and its third successful call as control. Each budget/domain/zero probe starts from the exact second committed state, and its recovery replays that third control from the same parent. Prefix and control must equal the recorded actual matrix calls and be chained. Budget3 must fail after accepted diagnostic progress; failed state must exactly roll back. Domain0.9I must reject and preserve that parent. Zero must preserve it exactly. These remain generated-run gates; synthetic fixtures do not prove native transaction behavior. Native CLI recovery uses separate processes; only Node one-module execution supports a persistent-instance claim. The7-state API has no external strain/history memory, and scope text correctly avoids inventing such coverage.
+
+## Raw transport and provenance findings resolved
+
+Originally Wasm parity audited its own log but verified only native parsed content/hash. Author changed parity to require and independently audit both raw companions; CLI now requires --native-transport for Wasm full assessment. Each583-row log binds descriptor plus576 trajectory calls plus six probe/recovery calls, complete ordered request/response, raw JSON, native argv/status/stderr or C ABI names/types/CSV arguments, and exact file SHA. Opaque outputs are saved before parsing/status acceptance, preserving malformed/partial failures. Canonical numeric equality accommodates JS integer token serialization without weakening finite/type checks.
+
+Originally report source pins omitted this assessor and Node collector. Author added current studySHA and NodecollectorSHA metadata, binding both. External immutable packet/build receipts remain necessary to establish historical replay and source-to-binary lineage; a report's artifact SHA alone cannot establish which source built it.
+
+## Independent tests and evidence scope
+
+Before the final provenance-only changes, independently ran18 packet groups including full fresh reference replay, raw583-row corruptions, all7 channels, chaining, prefix/rollback/recovery, refinement and partition rejection. An additional independently staged regression constructs complete raw583-row logs for both synthetic backends, accepts both numerically, then requires a well-chained1e-4Pa backend bias to fail5e-11 parity. That regression passes with the new two-log parity gate, without mocking raw verification. It executes no compiled engine. Its sole staging alias reads the exact sibling Node collector SHA because ROOT's installed Node file does not yet exist; all other source pins and actual raw log checks remain active. Author was advised to use a sibling-path source lookup so staged and installed verification share behavior.
+
+No actual wider generated observations have been reviewed. Required next evidence is actual full native/Wasm collection, independent fresh numerical and both-raw-log assessment, artifact/build receipts, all transaction/recovery gates, retained failed runs if any, and a final frozen source manifest. Near-hydro production AD, finite spin, experiments, general material-domain support and scientific/public admission remain outside scope. No thresholds should be relaxed after observing those runs.
+
+Final independent post-freeze rerun: all18 packet groups pass after the provenance changes too. The only staging alias maps the missing installed Node path to its actual frozen sibling file for SHA reads; all24 literal dependency pins, fresh numerical replay and raw audits run against real bytes. Combined with the additional independently constructed both-log parity regression,19 groups pass. No changes to the frozen packet were made by this reviewer.

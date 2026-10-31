@@ -85,6 +85,9 @@ jobs:
           python -m tools.barodesy2017_hydro_ad --native build/atlas_barodesy_hydro_ad_probe --output "$RUNNER_TEMP/barodesy-hydro-native.json"
           node tools/test_barodesy2017_hydro_ad_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-hydro-native.json" --wasm build-wasm/barodesy-hydro-ad.js --output "$RUNNER_TEMP/barodesy-hydro-wasm.json"
           python -m tools.barodesy2017_hydro_ad --verify "$RUNNER_TEMP/barodesy-hydro-wasm.json" --native-report-path "$RUNNER_TEMP/barodesy-hydro-native.json"
+          python -m tools.barodesy2017_wider_study --solver build/atlas_barodesy_solver --output "$RUNNER_TEMP/barodesy-wider-native.json"
+          node tools/test_barodesy2017_wider_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-wider-native.json" --wasm build-wasm/barodesy-isotropic.js --output "$RUNNER_TEMP/barodesy-wider-wasm.json"
+          python -m tools.barodesy2017_wider_study --report "$RUNNER_TEMP/barodesy-wider-wasm.json" --transport "$RUNNER_TEMP/barodesy-wider-wasm.transport.jsonl" --native-report "$RUNNER_TEMP/barodesy-wider-native.json" --native-transport "$RUNNER_TEMP/barodesy-wider-native.transport.jsonl" --output "$RUNNER_TEMP/barodesy-wider-assessed.json"
           python tools/fetch_data.py --approved-only
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments

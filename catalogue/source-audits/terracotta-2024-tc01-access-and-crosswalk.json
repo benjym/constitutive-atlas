@@ -1,0 +1,168 @@
+{
+  "record_version": 1,
+  "id": "terracotta-2024-tc01-access-and-crosswalk",
+  "status": "partial-source-reconciliation-not-admission",
+  "doi": "10.1016/j.jmps.2024.105789",
+  "target": "simplified Figure1, fixed-axis axisymmetric research variant",
+  "journal_pdf": {
+    "acquired": false,
+    "sha256": null,
+    "reason": "No matching downloaded PDF; publisher and author-upload PDF endpoints returned HTTP403"
+  },
+  "sources": [
+    {
+      "url": "https://www.researchgate.net/publication/382467665_A_simple_hydrodynamic_model_for_clay",
+      "scope": "author-uploaded journal full-text web extraction; no equation-image verification"
+    },
+    {
+      "url": "https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/images/theModel.png",
+      "sha256": "e019012545c5fb0bb80c8f95bad68d35f458c9094ea471d8f42616a170dcc071",
+      "scope": "visual equation-image inspection this packet"
+    },
+    {
+      "url": "https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/code/Terracotta_functions.py",
+      "sha256": "6f1d7bbc9e805cfa38230b1277a1b55a02f27ab4581e973f5a61c495262a0711",
+      "scope": "read-only source; no execution"
+    }
+  ],
+  "crosswalk": [
+    {
+      "quantity": "elastic stresses",
+      "journal_locator": "23–24",
+      "figure1_expression_or_difference": "pe=phi^6*(K*ev_e^2+3*G*es_e^2)/2; qe=3*G*phi^6*ev_e*es_e",
+      "atlas_locator": "pe,qe",
+      "verification": "author-image-visual; journal-image-pending"
+    },
+    {
+      "quantity": "viscous stresses",
+      "journal_locator": "29–31",
+      "figure1_expression_or_difference": "pd=2*alpha*Tm*Dv/Gamma; qd=2*gamma*Tm*Ds/Gamma",
+      "atlas_locator": "pv,qv",
+      "verification": "author-image-visual; journal-image-pending"
+    },
+    {
+      "quantity": "elastic strain rates",
+      "journal_locator": "32",
+      "figure1_expression_or_difference": "[Dv,Ds]-Tm/pc*[[a,b],[b,c]]*[pe,qe]",
+      "atlas_locator": "equations.ev_e,es_e",
+      "verification": "author-image-visual; journal-image-pending"
+    },
+    {
+      "quantity": "meso-temperature",
+      "journal_locator": "36, p10",
+      "figure1_expression_or_difference": "alpha*Dv^2+gamma*Ds^2-eta*Tm^2",
+      "atlas_locator": "equations.Tm",
+      "verification": "author-image-visual; journal-text-unhalved; journal-image-pending"
+    },
+    {
+      "quantity": "meso-pressure",
+      "journal_locator": "37, p10",
+      "figure1_expression_or_difference": "Tm^2/Gamma",
+      "atlas_locator": "pt",
+      "verification": "author-image-visual; journal-image-pending"
+    },
+    {
+      "quantity": "Figure1 total pressure",
+      "journal_locator": "38, p10; Fig1 p2",
+      "figure1_expression_or_difference": "pe+pd+Tm^2/Gamma",
+      "atlas_locator": "p_total",
+      "verification": "author-image-visual; journal-text-approximation-confirmed; journal-image-pending"
+    },
+    {
+      "quantity": "density evolution",
+      "journal_locator": "Fig1 p2",
+      "figure1_expression_or_difference": "phi*Dv",
+      "atlas_locator": "equations.phi",
+      "verification": "author-image-visual; journal-image-pending"
+    },
+    {
+      "quantity": "compression line",
+      "journal_locator": "43",
+      "figure1_expression_or_difference": "pc=p1*phi^Lambda",
+      "atlas_locator": "pc",
+      "verification": "author-image-visual; journal-image-pending"
+    },
+    {
+      "quantity": "factored transport",
+      "journal_locator": "42,48,51",
+      "figure1_expression_or_difference": "a=sqrt(eta/alpha); b=-a*qe/(M^2*pe); c=sqrt(eta/gamma)/(M*omega)+a/M^2",
+      "atlas_locator": "a,b,c",
+      "verification": "author-image-visual; journal-image-pending"
+    },
+    {
+      "quantity": "stress-ratio order",
+      "journal_locator": "54, p16",
+      "figure1_expression_or_difference": "M<=sqrt(3*G/K)<=M*sqrt(1+sqrt(alpha/gamma)*M/omega)",
+      "atlas_locator": "domain",
+      "verification": "existing-repository-map; inequality-images-pending"
+    },
+    {
+      "quantity": "AppendixB pressure",
+      "journal_locator": "B.1, p26",
+      "figure1_expression_or_difference": "pe+pd+pTe+pTm",
+      "atlas_locator": "absent; separate-variant-required",
+      "verification": "journal-text-only; journal-image-pending"
+    },
+    {
+      "quantity": "AppendixB plastic coefficients",
+      "journal_locator": "B.2–B.4, p26",
+      "figure1_expression_or_difference": "Not admitted as expressions: verify fractions/powers visually first",
+      "atlas_locator": "absent; cannot reuse factored Fig1 coefficients",
+      "verification": "journal-text-only; journal-image-pending"
+    },
+    {
+      "quantity": "parameter calibration",
+      "journal_locator": "Table1 p14; Eq43",
+      "figure1_expression_or_difference": "p1 code rounding differs from phi1-derived value",
+      "atlas_locator": "parameters.pOne",
+      "verification": "repository-evidence; table-image-pending"
+    },
+    {
+      "quantity": "units",
+      "journal_locator": "AppendixC p27–28",
+      "figure1_expression_or_difference": "Tm K; alpha,gamma K*s; eta 1/(K*s); Gamma K^2/Pa; p1,K,G Pa",
+      "atlas_locator": "parameter/state units",
+      "verification": "dimensional-analysis; journal-text-only; table-image-pending"
+    }
+  ],
+  "dependencies": {
+    "models/research/terracotta-2024-fig1.json": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+    "docs/models/terracotta-2024-transcription.md": "ff8c114a243e1664d6a0d57c7ef32ba96dd41ee274be08394e9dce73955ff229",
+    "docs/models/terracotta-2024-source-audit.md": "496de5ba90397cdaf7d5fb4126d00a6f1f73518ae87c1642b44e1ae8e0ddd97f",
+    "docs/TERRACOTTA_CREEP_REFERENCE.md": "f43b0bf45bc4126e39cd0ff7b5158f63b2c870a7ede5273b14b00d6ae0b34840"
+  },
+  "source_image_request": {
+    "pages": [
+      2,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      26,
+      27,
+      28
+    ],
+    "minimum_first_packet": [
+      2,
+      10,
+      14,
+      16,
+      26,
+      27,
+      28
+    ],
+    "requirement": "Complete legible journal pages, including all equation/table captions and footnotes; exact PDF preferred for byte receipt."
+  },
+  "closure": {
+    "TC-01": false,
+    "Figure1-versus-AppendixB-equivalence": false,
+    "scientific_review": false,
+    "author_mixed_control_correction_selected": false,
+    "full3D": false
+  }
+}
