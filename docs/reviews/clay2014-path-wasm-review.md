@@ -1,0 +1,15 @@
+# Final source-only Python / Wasm transport review
+
+Reviewed frozen Python collector `tools/clay2014_path_study.py` SHA256 `4f46dac83551fa1a7c2bba852972fb7a3fc71f219d3c0875b8239e265357a7af` at `/private/tmp/atlas-clay2014-path-runtime-20261031-v1`, against Wasm collector SHA256 `5638719eee8ab604383ab6786010a1ccb84774fd6ad883cc054a6250c9d49ba0` staged here. No compiled execution or scientific rerun performed for this review.
+
+No remaining blocker for this bounded transport/parity interface was found.
+
+* `parity()` holds exact native-report bytes, hashes those bytes, parses them with nonfinite-literal rejection and requires strict recursive numeric identity with the supplied native object. This closes the earlier possibility of checking one object while binding a different file. Harmless JSON integer/float spelling is accepted; Boolean aliases are rejected.
+* Both explicit raw companion files are hashed before checks. Each `verify_transport()` independently holds the bytes it hashes and parses, binds that exact hash to its report, checks all295 rows and each raw request/response, and rechecks the file after audit. Parity also rechecks both original raw hashes and the native report at completion.
+* Wasm `native_report_sha256` and `native_transport_sha256` match the exact supplied native file and explicit native companion. These names match the frozen Node collector. Full numerical/transaction verification is required for both backends before the parity bound can pass.
+* Raw CABI entry names, type vectors, finite CSV values and model IDs match the Node calls. Native rows instead bind the persistent-stream request line. Descriptor identity uses strict recursive numeric comparison, avoiding the previous digest-of-reformatted-numbers discrepancy. Response vectors/settings/counters receive independent finite/type checks.
+* All24 trajectories,288 actual parent-chained calls and six probe/recovery calls align with the295-row protocol. Node derives its own committed two-call prefix, not native states. Python validates these against its own backend's matrix and requires identical same-parent recovery.
+* Metadata pins the exact Python and Node collector source, source dependencies, model definition, reference and policy. Node verifies source and loader/Wasm hashes before and after execution. Python receipt validation does not itself reopen archived binaries or rebuild; retain the separate artifact/build receipts and both original raw reports.
+* The final Python source checks refinement separately at each of the three original physical endpoints, rather than allowing a maximum over endpoints to hide a failing segment. Full all-caller accuracy checks remain in place.
+
+This is acceptance of source/interface consistency before observation, not a prediction that the frozen numerical, budget-after-progress or parity gates will pass. Preserve every failed/partial result and do not weaken the frozen budgets after observation. The manuscript printed-Am discrepancy, proposed-alpha choice, fixed axis/noIGS and lack of experimental/public/AD admission remain unchanged.
