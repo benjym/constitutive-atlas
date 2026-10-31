@@ -1,3 +1,7 @@
+# Tagged instantaneous-rate transport —2026-10-31
+
+The separately versioned [v3 collection tools](reviews/generic-rate-collection-v3/README.md) now separate source-accuracy, finite-only support and recognized rejection without invented reference vectors.47synthetic checks pass; [independent source-only review](reviews/tagged-rate-transport-review-v3/README.md) has44/44 expected observations, retaining and closing initial lexical/recovery/raw-marker gaps. Historical tools/driver remain unchanged. A distinct subnormal-aware driver is source-reviewed; actual compilation and the frozen109call clay2005 native/Wasm study remain next. No runnable count change: eight local drafts, five hosted; no deployment.
+
 # Implementation status — 2026-10-30
 
 ## Eighth local runnable draft —2026-10-31
