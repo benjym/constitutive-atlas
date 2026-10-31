@@ -1,0 +1,222 @@
+{
+  "schema_version": "0.3",
+  "kind": "formulation-crosswalk",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "model_id": "drucker-prager",
+  "root_definition_sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+  "root_migrated": false,
+  "scientific_admission_changed": false,
+  "state": [
+    {
+      "name": "sigma",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0
+      ],
+      "shape": "sym",
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "initial": 0.7,
+      "shape": "scalar",
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "gamma",
+      "unit": "1",
+      "initial": 0,
+      "shape": "scalar",
+      "scale": "1",
+      "semantics": {
+        "role": "plastic_multiplier",
+        "quantity": "plastic_increment_multiplier",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "initialization_notes": "Explicit sigma and e only; temporary gamma is zero-filled, not supplied history. Example100kPaI,e=.7 is not material preparation. Initial yield tolerance is numerical, not exact physical admissibility.",
+  "source_parameter_mapping": {
+    "OpenSees_smooth_cone": "After zero hardening/backstress and paired sign conversion: M=3*sqrt(3/2)*rho, Md=3*sqrt(3/2)*rhoBar, c=sigmaY; Atlas gamma=sqrt(2/3)*OpenSees shear multiplier. Separate tensile surface omitted, not equivalent full algorithm.",
+    "Itasca_shear_branch": "M=sqrt(3)*q_phi,Md=sqrt(3)*q_psi,c=sqrt(3)*k_phi; Atlas gamma=lambda_s/sqrt(3). Tensile surface omitted."
+  },
+  "parameter_crosswalk": {
+    "p_ref": {
+      "unit": "Pa",
+      "source_locator": "Project numerical scaling"
+    },
+    "E": {
+      "unit": "Pa",
+      "source_locator": "Constant isotropic elasticity, equivalent K/G input in reference"
+    },
+    "nu": {
+      "unit": "1",
+      "source_locator": "Constant isotropic elasticity; project exploration bound"
+    },
+    "M": {
+      "unit": "1",
+      "source_locator": "Mapped OpenSees rho or Itasca q_phi"
+    },
+    "Md": {
+      "unit": "1",
+      "source_locator": "Mapped OpenSees rhoBar or Itasca q_psi"
+    },
+    "c": {
+      "unit": "Pa",
+      "source_locator": "Mapped OpenSees sigmaY at zero hardening or Itasca k_phi; yield intercept, not Mohr\u2013Coulomb cohesion"
+    }
+  },
+  "derived_crosswalk": {
+    "K": {
+      "source_locator": "Constant isotropic bulk modulus",
+      "expression": "E / (3 * (1 - 2 * nu))"
+    },
+    "G": {
+      "source_locator": "Constant isotropic shear modulus",
+      "expression": "E / (2 * (1 + nu))"
+    },
+    "mean": {
+      "source_locator": "Paired sign conversion; p=trace(sigma)/3 compression positive",
+      "expression": "trace(sigma) / 3"
+    },
+    "q": {
+      "source_locator": "sqrt(3/2) times source deviator norm; Mandel contraction",
+      "expression": "sqrt(1.5 * dot(dev(sigma), dev(sigma)))"
+    },
+    "yield_scaled": {
+      "source_locator": "Selected uncapped ideal cone; project p_ref normalization",
+      "expression": "(q - M * mean - c) / p_ref"
+    },
+    "trial_s": {
+      "source_locator": "Project constant-elasticity backward-Euler trial-direction elimination",
+      "expression": "dev(sigma_n) + 2 * G * dev(de)"
+    },
+    "trial_q": {
+      "source_locator": "Invariant of elastic trial; source radial return comparison",
+      "expression": "sqrt(1.5 * dot(trial_s, trial_s))"
+    },
+    "trial_q_safe": {
+      "source_locator": "Project select branch avoids division by0; at q_trial0 trial_s0, no stress regularization floor",
+      "expression": "select(trial_q > 0 * p_ref, trial_q, p_ref)"
+    }
+  },
+  "equation_crosswalk": {
+    "sigma": {
+      "source_locator": "Smooth-cone zero-hardening reference; Itasca Eq17\u201323 and Apex Stress Correction",
+      "project_choice": "Constant-elastic radial-return elimination with min(3Ggamma/q_trial_safe,1) and norm subgradient at apex. No separate tensile cutoff."
+    },
+    "e": {
+      "source_locator": "Atlas bookkeeping only",
+      "project_choice": "Exponential total-volume convention; no effect on elastic/plastic stress law; not full finite-strain kinematics."
+    },
+    "gamma": {
+      "source_locator": "Ideal cone loading/unloading conditions",
+      "project_choice": "Fischer\u2013Burmeister residual with scaled yield. Temporary increment-local multiplier, reset per internal solve."
+    }
+  },
+  "domain": [
+    "e > 0",
+    "gamma > -1e-9",
+    "Md <= M"
+  ],
+  "initial_checks": [
+    "yield_scaled <= 1e-8"
+  ],
+  "domain_review": {
+    "source_recommendation": "OpenSees0<=rhoBar<=rho maps to0<=Md<=M; this revision enforces the upper relation through Md<=M and retains nonnegative parameter boxes.",
+    "dissipation": "Prior-definition witness retained in the immutable source review; gamma*((M-Md)*p+c) is nonnegative over the ideal cone for the stated nonnegative parameters and Md<=M.",
+    "scope": "Prior Md>M negative-work witness is excluded by this revision. Frozen native evidence is in this packet; no global applicability or convergence guarantee.",
+    "nondilatant_tension": "M>0,Md0 trial pressure beyond -c/M has no admissible apex volumetric correction; transactional failure expected.",
+    "degenerate_case": "M0,Md0 is pressure-independent J2 yield q<=c. M0,Md>0 lies outside the documented dilatancy restriction."
+  },
+  "state_semantics_evidence": {
+    "sigma": "Persistent symmetric effective Cauchy stress under Atlas soil-host interpretation; passive QsigmaQ^T, no spin update. Reference files describe stress and broader material processes.",
+    "e": "Persistent project void-ratio scalar, not coupled plastic hardening history.",
+    "gamma": "Temporary plastic increment; not accumulated equivalent plastic strain or source hardening state."
+  },
+  "transactions": {
+    "type": "Rate-independent incremental residual, no elapsed clock or hold relaxation.",
+    "trial": "Committed sigma_n,e_n fixed; trial_s uses committed stress and supplied increment; gamma resets each internal solve.",
+    "commit": "Commit sigma/e after success; temporary gamma may appear in returned diagnostics but is not persistent loading history.",
+    "rollback": "Failure restores entire incoming layout after tentative internal work. No compiled rollback rerun here.",
+    "subdivision": "Returned gamma belongs to last internal solve; full-step and composed solutions must not be conflated.",
+    "zero_load": "Admissible unchanged state,gamma0 solves zero-increment residual.",
+    "tangent": "Nonsmooth yield/apex and norm at zero; no global smooth tangent/convergence guarantee."
+  },
+  "unsupported": [
+    "finite strain/spin transport",
+    "hardening/backstress or separate tensile cutoff",
+    "automatic calibrated preparation",
+    "general physical admissibility across existing parameter boxes",
+    "OpenSees/Itasca full-algorithm equivalence"
+  ],
+  "source_receipts": "source-receipts.json",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/OpenSees/OpenSees/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/DruckerPrager.cpp",
+      "locator": "Static source or documented smooth-cone/radial-return comparison; see parameter mapping and source receipts"
+    },
+    {
+      "url": "https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/DruckerPrager.html",
+      "locator": "Static source or documented smooth-cone/radial-return comparison; see parameter mapping and source receipts"
+    },
+    {
+      "url": "https://docs.itascacg.com/itasca930/common/models/drucker/doc/modeldrucker.html",
+      "locator": "Static source or documented smooth-cone/radial-return comparison; see parameter mapping and source receipts"
+    }
+  ]
+}

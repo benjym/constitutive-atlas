@@ -1,0 +1,49 @@
+{
+  "schema_version": "0.2",
+  "status": "draft",
+  "id": "test-clock",
+  "name": "Synthetic nonautonomous clock verification fixture",
+  "family": "engine verification only",
+  "description": "Scalar ODE with a known quadratic solution; no stress-first state requirement.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/TEMPORAL_INTEGRATION.md",
+      "role": "analytical verification specification",
+      "locator": "Maxwell deviatoric law; not Terracotta"
+    }
+  ],
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "ode"
+  },
+  "parameters": {
+    "tau": {
+      "default": 2,
+      "min": 1e-06,
+      "max": 1000000.0,
+      "unit": "s"
+    },
+    "time_limit": {
+      "default": 1000000000.0,
+      "min": 0.001,
+      "max": 1000000000000.0,
+      "unit": "s"
+    }
+  },
+  "state": [
+    {
+      "name": "x",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    }
+  ],
+  "derived": [],
+  "equations": {
+    "x": "time / tau**2"
+  },
+  "domain": [
+    "time < time_limit"
+  ]
+}

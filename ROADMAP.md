@@ -587,3 +587,8 @@ The [bounded MCC packet](docs/ingestion/modified-cam-clay/README.md) adds releva
 ## Drucker–Prager review closes the bounded baseline pass — 2026-11-01
 
 The [DP packet](docs/ingestion/drucker-prager/README.md) reconciles source parameter/sign scaling, ideal-cone specialization, apex derivation and complete v0.3 state/init semantics.12 contract/reference-limit observations and three scalar-reference residual cases pass. Source0<=rhoBar<=rho maps to0<=Md<=M; a retained admitted Md>M witness has negative plastic work, so a separately frozen parameter-domain correction is next. Historical failed v1 and passing73-case v2 artifacts are intact, not rerun. All five bounded baseline reconciliation tasks now have packets; none supplies independent scientific sign-off or closes M1. No root/schema/solver change, build, promotion or deployment occurred.
+
+
+## DP dilatancy-domain correction — 2026-11-01
+
+The [native study](catalogue/investigations/dp-dilatancy-domain-v1/README.md) adds only Md<=M, preserving valid equations/defaults and exact prior definition with27historical receipt bindings. All83prospectively frozen cases and two native regression groups pass. The initial incomplete-source configuration failure is retained; the completed source closure builds one serial target normally.9archive units pass; broader sibling-binding failures are19before/15after/0new. Native numerical evidence v3 and pending review v4 bind the new guard; old failed/passed reports remain historical. Wasm/browser packaging and scientific admission remain open; no deployment.
