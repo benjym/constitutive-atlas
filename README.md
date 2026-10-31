@@ -25,6 +25,8 @@ For the browser build, see [web/README.md](web/README.md) (Node.js 24 and Emscri
 
 ## Documentation
 
+- [Live implementation board](IMPLEMENTATION_PLAN.md) — task status, owners, bounded scope and handoffs.
+- [Agent instructions](AGENTS.md) and [ingestion template](docs/ingestion/TEMPLATE.md) — start here before claiming model work.
 - [Models](models/) and [schemas](schemas/) — authoritative definitions and file formats.
 - [Architecture](docs/ARCHITECTURE.md) — engine design, mathematical language and conventions.
 - [Experimental data](docs/DATA_REUSE.md) — sources, attribution and reuse terms.

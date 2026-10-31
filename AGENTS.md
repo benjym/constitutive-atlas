@@ -14,6 +14,12 @@ The user authorizes parallel model ingestion. Work on different model packets co
 4. Keep the coordinator informed of progress and exact blockers. If source access is blocked, produce a useful bounded gap report and work on all independent sections. Never invent missing equations. Do not reclaim an apparently idle task without coordination.
 5. Submit exact files and checks to the coordinator. Only the coordinator marks `[X]` after reviewing and integrating the agreed deliverable. Preserve partial results and failed checks; a gap report may complete an explicitly scoped acquisition task but never a source-complete ingestion task.
 
+## Worker status and handoff
+
+A worker reports the task ID, understood scope and owned output path when starting. Send the coordinator a short update at a meaningful milestone, when scope changes, or when blocked. A final handoff lists exact files, reproducible checks, retained failures, blockers and the smallest next action. A submitted packet remains `[-]` until the coordinator reviews and integrates it; completion of an agent run alone does not change the checkbox.
+
+Dependencies belong on the task row. Keep source acquisition, transcription, executable integration and scientific admission as separately scoped tasks, so unrelated model ingestion can continue while a shared capability is pending.
+
 ## Ingestion deliverable
 
 Copy [the packet template](docs/ingestion/TEMPLATE.md) to `docs/ingestion/<model-id>/README.md`. Deliver:

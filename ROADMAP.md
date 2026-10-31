@@ -4,6 +4,8 @@ Last updated: 30 October 2026. Maintainers: [Benjy Marks](https://github.com/ben
 
 This is the implementation and research plan for the [repository](https://github.com/benjym/constitutive-atlas) and [public laboratory](https://benjym.github.io/constitutive-atlas/). Progress is milestone-based, without a fixed deadline. Unchecked work below is planned, not delivered. The [research charter](docs/RESEARCH_CHARTER.md) governs admission and scientific claims; [architecture](docs/ARCHITECTURE.md) describes the current implementation.
 
+Live model-ingestion assignments are tracked in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). Agents must read [AGENTS.md](AGENTS.md) before starting; the coordinator records exclusive ownership before dispatch.
+
 ## 1. Destination and immediate priority
 
 The project has three final products:
