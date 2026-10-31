@@ -1,3 +1,9 @@
+# Clay2005 homogeneous-ratio complete rates — 2026-10-31
+
+The [new original-stress candidate study](../catalogue/investigations/clay2005-homogeneous-rates-v1/RESULTS.md) passes all 120 calls per native/Wasm backend with every prior request, reference, label and budget unchanged. All 81 accuracy rows, ten finite-only support rows and 29 rejection/recovery pairs pass. Both previously failed boundary cases now pass; the maximum eleven-case source-budget fraction is 0.001713 and parity fraction is 0.014293. The 125-file cache-free frozen-source replay reproduces the complete verification report. Earlier negative studies remain intact.
+
+The generic exact-input normalized determinant and its expression integration are complete for their declared corpora. A separate intended-use finite-path/default-example study is next. No production model, scientific admission or deployment change: eight local runnable drafts and five hosted.
+
 # Normalized determinant expression integration — 2026-10-31
 
 The [frozen context study](../catalogue/investigations/normalized-determinant-expressions-v1/RESULTS.md) passes all 1,953 calls per native/Wasm backend across 55 synthetic v0.3 definitions and nine contexts. Expected scalar and applicable 38-column derivative bits, 726 material recovery pairs and six history transactions match exactly. A fresh isolated reconstruction of 159 cache-free frozen files regenerates all 64 protocol files exactly. Source registration retains 45 passing targeted tests and ten archived pre-change source bindings; seven pre-existing historical binding gaps remain explicit.
