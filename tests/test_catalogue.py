@@ -8,6 +8,7 @@ from pathlib import Path
 
 from atlas.model import ROOT, all_models
 from atlas.research import export_database
+from atlas.evidence import checked_receipt
 
 
 class CatalogueTests(unittest.TestCase):
@@ -30,7 +31,7 @@ class CatalogueTests(unittest.TestCase):
         for entry in entries.values():
             self.assertEqual(entry['executable'], entry['id'] in definitions)
             if not entry['executable']:
-                if entry.get('timed_laboratory'):
+                if entry.get('definition_path'):
                     self.assert_timed_provenance(entry)
                 else:
                     self.assertEqual(entry['status'], 'candidate')
@@ -38,10 +39,10 @@ class CatalogueTests(unittest.TestCase):
 
     def assert_timed_provenance(self, entry, approvals=None):
         self.assertIn(entry['status'], ('numerically-tested', 'reviewed'))
-        page = Path(entry['timed_laboratory'])
-        self.assertFalse(page.is_absolute())
-        self.assertNotIn('..', page.parts)
-        self.assertTrue((ROOT / 'web' / page).is_file())
+        self.assertFalse(entry['executable'])
+        self.assertNotIn('timed_laboratory', entry)
+        self.assertNotIn('material_laboratory', entry)
+        self.assertTrue(entry['capability_gap'])
         if approvals is None:
             approvals = json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models']
         records = [r for r in approvals if r['model_id'] == entry['id'] and r['status'] == 'approved']
@@ -53,16 +54,23 @@ class CatalogueTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), definition['sha256'])
             model = json.loads(path.read_text())
             self.assertEqual(model['id'], entry['id'])
-            self.assertEqual(model['formulation']['time_dependence'], 'physical_time')
+            self.assertEqual(definition['path'], entry['definition_path'])
             self.assertTrue(record['supporting_files'])
             for evidence in record['supporting_files']:
+                documents = [doc for doc in entry['approval_records'] if json.loads((ROOT / doc).read_text()) == record]
+                self.assertEqual(len(documents), 1)
                 path = ROOT / evidence['path']
+                if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != evidence['sha256']:
+                    try:
+                        path = checked_receipt(ROOT, documents[0], evidence['path'], evidence['sha256'])
+                    except ValueError as exc:
+                        self.fail(str(exc))
                 self.assertTrue(path.resolve().is_relative_to(ROOT))
                 self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), evidence['sha256'])
 
     def test_timed_catalogue_claim_requires_bound_approval_and_evidence(self):
         manifest = json.loads((ROOT / 'catalogue/manifest.json').read_text())
-        entry = next(e for e in manifest['models'] if e.get('timed_laboratory'))
+        entry = next(e for e in manifest['models'] if e.get('definition_path'))
         records = json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models']
         records = [r for r in records if r['model_id'] == entry['id']]
         with self.assertRaises(AssertionError):
@@ -83,7 +91,8 @@ class CatalogueTests(unittest.TestCase):
             for _ in range(2):
                 export_database(path)
                 with sqlite3.connect(path) as db:
-                    self.assertEqual(db.execute('SELECT COUNT(*) FROM models').fetchone()[0], len(manifest['models']))
+                    expected_ids = {entry['id'] for entry in manifest['models']} | {record['model_id'] for record in json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models'] if record['status'] == 'approved'}
+                    self.assertEqual({row[0] for row in db.execute('SELECT id FROM models')}, expected_ids)
                     for entry in manifest['models']:
                         urls = {r[0] for r in db.execute('SELECT url FROM sources WHERE model_id=?', (entry['id'],))}
                         expected = [s['url'] for s in entry.get('catalogue_sources', []) + entry.get('research_sources', [])]

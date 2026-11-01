@@ -41,7 +41,7 @@ def main():
     for name in ['engine-j2', 'engine-sls', 'engine']:
         if (dest/name).is_dir():
             shutil.rmtree(dest/name)
-    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','laboratory-scope.mjs','laboratory-document.mjs','laboratory-view.mjs','laboratory-worker.mjs','recorded.mjs','recorded-scope.mjs','recorded-scope-execution.mjs','recorded-document.mjs','recorded-worker.mjs','catalogue.mjs','state-contract.mjs','laboratory-examples.mjs','laboratory-examples-view.mjs','formulation-view.mjs','applicability-view.mjs']:
+    for name in ['index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','laboratory-scope.mjs','laboratory-document.mjs','laboratory-view.mjs','laboratory-worker.mjs','recorded.mjs','recorded-scope.mjs','recorded-scope-execution.mjs','recorded-document.mjs','recorded-worker.mjs','catalogue.mjs','state-contract.mjs','laboratory-examples.mjs','laboratory-examples-view.mjs','laboratory-support.mjs','formulation-view.mjs','applicability-view.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     shutil.copyfile(ROOT/'docs/benchmarks/kfs-tmd2-research-range-v1/results/reproduction.png',dest/'tmd2-reproduction.png')
     for name in ['atlas.js','atlas.wasm']:
@@ -49,6 +49,18 @@ def main():
     shutil.copyfile(generated/'models.json',dest/'models.json')
     subprocess.run(['node',str(ROOT/'tools/build_laboratory_examples.mjs'),str(ROOT),str(dest),str(generated/'models.json')],check=True)
     shutil.copyfile(ROOT/'catalogue/manifest.json',dest/'catalogue.json')
+    import hashlib
+    support=json.loads((ROOT/'catalogue/laboratory-control-support.json').read_text())
+    for declaration in support['models']:
+        mid=declaration['model']
+        if mid not in {m['id'] for m in json.loads((generated/'models.json').read_text())['models']} or hashlib.sha256((ROOT/'models'/(mid+'.json')).read_bytes()).hexdigest()!=declaration['definition_sha256']:raise ValueError('Stale laboratory support definition')
+    shutil.copyfile(ROOT/'catalogue/laboratory-control-support.json',dest/'laboratory-control-support.json')
+    from build_evidence import dossier_view
+    for entry in json.loads((ROOT/'catalogue/manifest.json').read_text())['models']:
+        if 'dossier' not in entry:continue
+        relative=Path(entry['dossier'])
+        if relative.is_absolute() or '..' in relative.parts or relative.parts[:2]!=('docs','models') or relative.suffix!='.md':raise ValueError('Unsafe public dossier path')
+        raw=(ROOT/relative).read_bytes();target=dest/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw);target.with_name(target.name+'.html').write_bytes(dossier_view(relative,raw))
     bundle_applicability(dest)
     bundle_evidence(dest)
     bundle_benchmark(dest)

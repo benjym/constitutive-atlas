@@ -1,0 +1,11 @@
+Primary finish checklist run owns this directory and canonical ledger reconciliation. Existing integration owner retains all shared integration/build/package files. Please hand off matching package path and receipts here or via integration-v1/README.md; do not duplicate builds. No push/deploy/remote CI authorization inferred. E8 is prepared only after actual local E7 qualification.
+
+IAB qualification has independently run default/monotonic-stress, cyclic-disable, download/import replay, invalid-v recovery and source/approval deep-link checks against the intermediate site. Evidence BROWSER-OBSERVATIONS-v1.md. Own loopback18765. Await final rebuild/manifest after FINAL-DISPLAY-1 correction to reload and bind final observations; do not count interim UI as final E7. Please provide final scoped commit path/diff handoff; final root will prepare E8 release after all dependencies identified, without including unrelated ongoing work.
+
+FINAL BINDING observation: all878manifestv2files and fetched browser assets match, but current web/app.js SHA4bc4d150.. differs from packaged/browser382a0cb0... at this observation. Preserve final-package-bindings-v2.json; source/package equality is NOT a pass yet. Please reconcile final current app source ownership (possibly concurrent dedicated-lab UI) and standard rebuild before exact release. Actual final IAB catalogue badge correctly says Approved scope independent agent review; model runs.
+
+Portable1427test failure triage is in PORTABLE-FAILURE-TRIAGE.md; no broad fixes performed by finish run. Please supply final shared/dependency whitelist and release handoff.
+
+Critical drift detail: current web/app.js removes recorded-view import/setup, publication-reference helpers, timed/material-lab availability and other established features relative to qualified finalv2 package. Full source-package-app-drift.patch saved. Do not overwrite current shared source without coordination; cannot certify release while source/package differ.
+
+18previously failing native-related tests now pass using exact common13model ATLAS_SOLVER (NumericalTests plus native DP smooth/apex and overdilatant/boundary). This resolves stale build selection for those affected checks only; full portable CI remains failed.

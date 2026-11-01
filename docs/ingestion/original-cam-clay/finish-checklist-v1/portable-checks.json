@@ -1,0 +1,26 @@
+{
+  "checks": [
+    {
+      "command": "python3 -B -m atlas.agent_review catalogue/agent-reviews/original-cam-clay-sw-electronic-log-recovery-agent-v1.json --for-approval",
+      "result": "accepted independent checklist verified"
+    },
+    {
+      "command": "python3 -B -m unittest tests.test_occ_ingestion tests.test_approved_export -q",
+      "tests": 4,
+      "passed": true
+    },
+    {
+      "command": "node --test tests/test_laboratory_support.mjs tests/test_laboratory_profile_policy.mjs",
+      "tests": 18,
+      "passed": true
+    }
+  ],
+  "scope": "Portable evidence/export/policy checks only; no compiled/browser/remote calls",
+  "files": {
+    "models/original-cam-clay-sw-electronic-log-recovery-v1.json": "637ba72335c3464fec427c773d214d21d06e9e26bc737d15307aae2f67111b34",
+    "catalogue/agent-reviews/original-cam-clay-sw-electronic-log-recovery-agent-v1.json": "a02f6524ee34d98d293453973aec3598251c34adc5ffd9b18082d19edfe0b790",
+    "docs/ingestion/original-cam-clay/finish-checklist-v1/database-identity.json": "d54af3366d104f2f3e95ba57669b5380e947db194f19b2ec1ed17921882eea74",
+    "docs/ingestion/original-cam-clay/finish-checklist-v1/BROWSER-PLAN.md": "7ead12af9aad86194c2bbfaa6241c5fc31dcbd5e7a78ebc3372f79a732c9183f",
+    "docs/ingestion/original-cam-clay/finish-checklist-v1/recorded-source-diagnostic.json": "26139c0599e741ed93b02d0a88d784d034df024be0897b8dc45b6049a85aeef9"
+  }
+}

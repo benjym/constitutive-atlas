@@ -1,0 +1,16 @@
+# Actual final isolated-release browser qualification
+
+2026-11-01, IAB browser2/tab1, dedicated loopback18767 serving /private/tmp/atlas-occ-release-v1-site. Reload after final standard rebuild; final-package-manifest.json binds838files and web source equality. Navigation preserves the simplified three-section site from f51113bd; no unrelated Burgers/J2 page additions.
+
+Observed through actual UI:
+- OCC selectable; exact shareable catalogue URL opens Approved scope · independent agent review dialog. Nine-item accepted record matches current bytes, registry/definition/dossier/source links and all limitations visible. Test this model enters the laboratory. Frozen model draft/pending text remains historical and is explained by the accepted scope summary/review.
+- Default drained100increments succeeds62.2ms; meaningful q/axial, p/q and volume plots in kPa/%; mechanical porepressure explicitly unavailable. Undrained100/5.0ms, oedometer100/4.8ms, isotropic100/5.6ms, monotonic stress100/31.0ms succeed. Stress cycles1/3/10 all disabled with shear-rigid/nonunique-unloading explanation. These are illustrative UI cases, not broader scientific coverage.
+- Full exposed initial v control: -1 rejects as invalid run specification / last committed state retained. Load model example restores valid100increment response68.7ms.
+- Actual previously browser-downloaded browser-export-v1.json imported through real file chooser in final package. Replay succeeds100increments75.8ms; original export has101points/all7state and exact catalogue e50da3a8.. . Exact full-state replay also independently qualified in integration-v1 final browser evidence; no hidden page state or synthetic event injection used here.
+- OPARA-TXCD-100 protocol-matched1438row public overlay displays honest material/state mismatch and no calibration claim. Toggle off says no overlay shown, toggle on says measured channel pairs overlaid; simulation settings unchanged. Reset selection to no measurements afterward.
+- Equivalent pref100/Gamma2.960517018598809 edit succeeds100increments34.1ms. Rapid axial.8 then1 latest request succeeds100increments33.0ms with final1% control. Source-consistent90kPa/v1.760038065933947 edit and final Reset are checked separately below.
+- Browser console warnings/errors empty after default/replay. Source/support/catalogue resource URLs observed by pageAssets inventory; browser-observed-assets.json binds served bytes, not direct browser-response-body digests. Server confirms atlas.wasm304 after reload; file is byte-identical to the already qualified Wasm/cache. No stale different model engine is claimed.
+
+Screenshots browser-final.jpg shows OCC selected, scope and simplified navigation; browser-response.jpg shows the successful100increment plots. Earlier BROWSER-OBSERVATIONS-v1.md and integration owner browser v3 preserve additional full-state/export/cycle evidence. The final site differs only in unrelated navigation/availability/receipt integration; the relevant unchanged source/engine identities are explicitly bound. This is local preview qualification, not deployment.
+
+Final UI observation: source-consistent edited request remains successful100increments33.0ms; Reset restores reviewed default100increments63.0ms. Final console warn/error array empty.

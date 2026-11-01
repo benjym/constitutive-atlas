@@ -1,0 +1,445 @@
+{
+  "schema_version": "0.3",
+  "id": "original-cam-clay-sw-electronic-log-recovery-v1",
+  "name": "Original Cam Clay \u2014 invariant log-recovery endpoint",
+  "family": "critical-state plasticity",
+  "description": "Source-derived fixed-frame invariant continuation of Schofield/Wroth Chapter6 electronic text with zero elastic shear compliance and p101 normal cone. Project BE-volume/log-recovery endpoint and nearest-admissible zero-distortion stress selection; explicit state required. Strain-induced stress jumps, nonsmooth tangents and unqualified stress controls disclosed. Numerical/source qualification pending; no finite rotation or experimental claim.",
+  "status": "draft",
+  "sources": [
+    {
+      "url": "https://fme.hcmuaf.edu.vn/data/critical_state_soil_mechanics.pdf",
+      "locator": "Schofield/Wroth electronic transcription, work attributed1968; artifact2005 SHA256638e0ee7dc238ae8922b79983433be7d12ad30450098efe395968f7eeed13cb2. Chapter6 pp94-103 Eqs6.3-6.31; p101 normal cone; p114 OCC Eq6.17 invariant generalization; AppendixC pp216-218 geometry. Retain OCC packing, not Granta-gravel pressure history. Project numerics: control-selection-v1/CONTRACT.md.",
+      "role": "governing source and disclosed invariant continuation"
+    }
+  ],
+  "parameters": {
+    "pref": {
+      "default": 1000.0,
+      "min": 1.0,
+      "max": 10000000000.0,
+      "unit": "Pa",
+      "label": "Pressure reference for Gamma; convert together"
+    },
+    "M": {
+      "default": 1.2,
+      "min": 0.001,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Critical-state stress ratio"
+    },
+    "lambda_c": {
+      "default": 0.2,
+      "min": 0.0001,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Specific-volume natural-log compression slope"
+    },
+    "kappa": {
+      "default": 0.04,
+      "min": 1e-05,
+      "max": 5.0,
+      "unit": "1",
+      "label": "Specific-volume natural-log recovery slope"
+    },
+    "Gamma": {
+      "default": 2.5,
+      "min": -100.0,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Critical specific volume intercept at pref"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "pref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "v",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 1.7389659628023817,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "specific_volume",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "loading0",
+      "expr": "dot(de, sym(1, 0, 0, 0, 0, 0))"
+    },
+    {
+      "name": "loading1",
+      "expr": "dot(de, sym(0, 1, 0, 0, 0, 0))"
+    },
+    {
+      "name": "loading2",
+      "expr": "dot(de, sym(0, 0, 1, 0, 0, 0))"
+    },
+    {
+      "name": "loading3",
+      "expr": "dot(de, sym(0, 0, 0, 1, 0, 0))"
+    },
+    {
+      "name": "loading4",
+      "expr": "dot(de, sym(0, 0, 0, 0, 1, 0))"
+    },
+    {
+      "name": "loading5",
+      "expr": "dot(de, sym(0, 0, 0, 0, 0, 1))"
+    },
+    {
+      "name": "loading_max",
+      "expr": "max(max(max(max(max(abs(loading0), abs(loading1)), abs(loading2)), abs(loading3)), abs(loading4)), abs(loading5))"
+    },
+    {
+      "name": "deviator0",
+      "expr": "dot(de, sym(1, -1, 0, 0, 0, 0))"
+    },
+    {
+      "name": "deviator1",
+      "expr": "dot(de, sym(0, 1, -1, 0, 0, 0))"
+    },
+    {
+      "name": "deviator2",
+      "expr": "dot(de, sym(-1, 0, 1, 0, 0, 0))"
+    },
+    {
+      "name": "deviator3",
+      "expr": "dot(de, sym(0, 0, 0, 1, 0, 0))"
+    },
+    {
+      "name": "deviator4",
+      "expr": "dot(de, sym(0, 0, 0, 0, 1, 0))"
+    },
+    {
+      "name": "deviator5",
+      "expr": "dot(de, sym(0, 0, 0, 0, 0, 1))"
+    },
+    {
+      "name": "deviator_max",
+      "expr": "max(max(max(max(max(abs(deviator0), abs(deviator1)), abs(deviator2)), abs(deviator3)), abs(deviator4)), abs(deviator5))"
+    },
+    {
+      "name": "deviator_safe",
+      "expr": "select(deviator_max > 0, deviator_max, 1)"
+    },
+    {
+      "name": "deviator_u0",
+      "expr": "deviator0 / deviator_safe"
+    },
+    {
+      "name": "deviator_u1",
+      "expr": "deviator1 / deviator_safe"
+    },
+    {
+      "name": "deviator_u2",
+      "expr": "deviator2 / deviator_safe"
+    },
+    {
+      "name": "deviator_u3",
+      "expr": "deviator3 / deviator_safe"
+    },
+    {
+      "name": "deviator_u4",
+      "expr": "deviator4 / deviator_safe"
+    },
+    {
+      "name": "deviator_u5",
+      "expr": "deviator5 / deviator_safe"
+    },
+    {
+      "name": "deviator_unitbox",
+      "expr": "sym((deviator_u0 - deviator_u2) / 3, (deviator_u1 - deviator_u0) / 3, (deviator_u2 - deviator_u1) / 3, deviator_u3, deviator_u4, deviator_u5)"
+    },
+    {
+      "name": "deviator_length",
+      "expr": "select(deviator_max > 0, norm(deviator_unitbox), 1)"
+    },
+    {
+      "name": "rmag",
+      "expr": "sqrt(2 / 3) * deviator_max * deviator_length"
+    },
+    {
+      "name": "Ev",
+      "expr": "trace(de)"
+    },
+    {
+      "name": "v_end",
+      "expr": "select(Ev > -1, v_n / (1 + Ev), v_n)"
+    },
+    {
+      "name": "pn",
+      "expr": "trace(sigma_n) / 3"
+    },
+    {
+      "name": "xn",
+      "expr": "log(pn / pref)"
+    },
+    {
+      "name": "alpha",
+      "expr": "kappa / v_end"
+    },
+    {
+      "name": "beta",
+      "expr": "M * rmag / (lambda_c - kappa)"
+    },
+    {
+      "name": "xc",
+      "expr": "(Gamma + lambda_c - kappa - v_end) / lambda_c"
+    },
+    {
+      "name": "xs",
+      "expr": "(Ev + alpha * xn + beta * (Gamma - v_end)) / (alpha + beta * lambda_c)"
+    },
+    {
+      "name": "x_end",
+      "expr": "min(xs, xc)"
+    },
+    {
+      "name": "p_end",
+      "expr": "pref * exp(x_end)"
+    },
+    {
+      "name": "q_capacity",
+      "expr": "max(0 * pref, M * p_end * lambda_c / (lambda_c - kappa) * (xc - x_end))"
+    },
+    {
+      "name": "olddeviator0",
+      "expr": "dot(sigma_n, sym(1, -1, 0, 0, 0, 0))"
+    },
+    {
+      "name": "olddeviator1",
+      "expr": "dot(sigma_n, sym(0, 1, -1, 0, 0, 0))"
+    },
+    {
+      "name": "olddeviator2",
+      "expr": "dot(sigma_n, sym(-1, 0, 1, 0, 0, 0))"
+    },
+    {
+      "name": "olddeviator3",
+      "expr": "dot(sigma_n, sym(0, 0, 0, 1, 0, 0))"
+    },
+    {
+      "name": "olddeviator4",
+      "expr": "dot(sigma_n, sym(0, 0, 0, 0, 1, 0))"
+    },
+    {
+      "name": "olddeviator5",
+      "expr": "dot(sigma_n, sym(0, 0, 0, 0, 0, 1))"
+    },
+    {
+      "name": "olddeviator_max",
+      "expr": "max(max(max(max(max(abs(olddeviator0), abs(olddeviator1)), abs(olddeviator2)), abs(olddeviator3)), abs(olddeviator4)), abs(olddeviator5))"
+    },
+    {
+      "name": "olddeviator_safe",
+      "expr": "select(olddeviator_max > 0 * pref, olddeviator_max, pref)"
+    },
+    {
+      "name": "olddeviator_u0",
+      "expr": "olddeviator0 / olddeviator_safe"
+    },
+    {
+      "name": "olddeviator_u1",
+      "expr": "olddeviator1 / olddeviator_safe"
+    },
+    {
+      "name": "olddeviator_u2",
+      "expr": "olddeviator2 / olddeviator_safe"
+    },
+    {
+      "name": "olddeviator_u3",
+      "expr": "olddeviator3 / olddeviator_safe"
+    },
+    {
+      "name": "olddeviator_u4",
+      "expr": "olddeviator4 / olddeviator_safe"
+    },
+    {
+      "name": "olddeviator_u5",
+      "expr": "olddeviator5 / olddeviator_safe"
+    },
+    {
+      "name": "olddeviator_unitbox",
+      "expr": "sym((olddeviator_u0 - olddeviator_u2) / 3, (olddeviator_u1 - olddeviator_u0) / 3, (olddeviator_u2 - olddeviator_u1) / 3, olddeviator_u3, olddeviator_u4, olddeviator_u5)"
+    },
+    {
+      "name": "olddeviator_length",
+      "expr": "select(olddeviator_max > 0 * pref, norm(olddeviator_unitbox), 1)"
+    },
+    {
+      "name": "q_old",
+      "expr": "sqrt(3 / 2) * olddeviator_max * olddeviator_length"
+    },
+    {
+      "name": "elastic_s",
+      "expr": "(sqrt(2 / 3) * min(q_old, q_capacity) / olddeviator_length) * olddeviator_unitbox"
+    },
+    {
+      "name": "plastic_s",
+      "expr": "(sqrt(2 / 3) * q_capacity / deviator_length) * deviator_unitbox"
+    },
+    {
+      "name": "s_end",
+      "expr": "select(deviator_max > 0, plastic_s, elastic_s)"
+    },
+    {
+      "name": "sigma_end",
+      "expr": "select(loading_max > 0, p_end * I + s_end, sigma_n)"
+    },
+    {
+      "name": "mean",
+      "expr": "trace(sigma) / 3"
+    },
+    {
+      "name": "packing",
+      "expr": "v + kappa * log(mean / pref)"
+    },
+    {
+      "name": "logpc",
+      "expr": "1 + (Gamma - packing) / (lambda_c - kappa)"
+    },
+    {
+      "name": "currentdeviator0",
+      "expr": "dot(sigma, sym(1, -1, 0, 0, 0, 0))"
+    },
+    {
+      "name": "currentdeviator1",
+      "expr": "dot(sigma, sym(0, 1, -1, 0, 0, 0))"
+    },
+    {
+      "name": "currentdeviator2",
+      "expr": "dot(sigma, sym(-1, 0, 1, 0, 0, 0))"
+    },
+    {
+      "name": "currentdeviator3",
+      "expr": "dot(sigma, sym(0, 0, 0, 1, 0, 0))"
+    },
+    {
+      "name": "currentdeviator4",
+      "expr": "dot(sigma, sym(0, 0, 0, 0, 1, 0))"
+    },
+    {
+      "name": "currentdeviator5",
+      "expr": "dot(sigma, sym(0, 0, 0, 0, 0, 1))"
+    },
+    {
+      "name": "currentdeviator_max",
+      "expr": "max(max(max(max(max(abs(currentdeviator0), abs(currentdeviator1)), abs(currentdeviator2)), abs(currentdeviator3)), abs(currentdeviator4)), abs(currentdeviator5))"
+    },
+    {
+      "name": "currentdeviator_safe",
+      "expr": "select(currentdeviator_max > 0 * pref, currentdeviator_max, pref)"
+    },
+    {
+      "name": "currentdeviator_u0",
+      "expr": "currentdeviator0 / currentdeviator_safe"
+    },
+    {
+      "name": "currentdeviator_u1",
+      "expr": "currentdeviator1 / currentdeviator_safe"
+    },
+    {
+      "name": "currentdeviator_u2",
+      "expr": "currentdeviator2 / currentdeviator_safe"
+    },
+    {
+      "name": "currentdeviator_u3",
+      "expr": "currentdeviator3 / currentdeviator_safe"
+    },
+    {
+      "name": "currentdeviator_u4",
+      "expr": "currentdeviator4 / currentdeviator_safe"
+    },
+    {
+      "name": "currentdeviator_u5",
+      "expr": "currentdeviator5 / currentdeviator_safe"
+    },
+    {
+      "name": "currentdeviator_unitbox",
+      "expr": "sym((currentdeviator_u0 - currentdeviator_u2) / 3, (currentdeviator_u1 - currentdeviator_u0) / 3, (currentdeviator_u2 - currentdeviator_u1) / 3, currentdeviator_u3, currentdeviator_u4, currentdeviator_u5)"
+    },
+    {
+      "name": "currentdeviator_length",
+      "expr": "select(currentdeviator_max > 0 * pref, norm(currentdeviator_unitbox), 1)"
+    },
+    {
+      "name": "yield_value",
+      "expr": "sqrt(3 / 2) * currentdeviator_max * currentdeviator_length + M * mean * (log(mean / pref) - logpc)"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma - sigma_end",
+    "v": "v - v_end"
+  },
+  "domain": [
+    "lambda_c > kappa",
+    "v > 0",
+    "v_n > 0",
+    "mean > 0 * pref",
+    "pn > 0 * pref",
+    "Ev > -1"
+  ],
+  "initial_checks": [
+    "yield_value <= 1e-9 * pref"
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "v"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  }
+}

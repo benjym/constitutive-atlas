@@ -1,0 +1,97 @@
+{
+  "identity": "occ-delivery-gates-v1-existing-evidence-replay",
+  "date": "2026-11-01",
+  "owner": "/root contributor",
+  "scope": "Python source/algebra/reference checks only; no compiled call",
+  "dependencies": [
+    {
+      "path": "docs/ingestion/original-cam-clay/README.md",
+      "sha256": "e3890578f69aba136ba4cbfb8f42e6b573995723d21da9291024358435982884"
+    },
+    {
+      "path": "docs/ingestion/original-cam-clay/check_packet.py",
+      "sha256": "0dc7224d9afd240463e6504d5b9815dffc3f9e50800d1fb32af14b6193fb4475"
+    },
+    {
+      "path": "docs/ingestion/original-cam-clay/test_packet.py",
+      "sha256": "2aa5aa1462f737c5cee821a523a17a59dc9547824cc9b7a355f7e920262616a3"
+    },
+    {
+      "path": "docs/ingestion/original-cam-clay/contract.json",
+      "sha256": "338dacc47516cf112bb986445bda015952e45624d0ec31fcd542f7285db6b3d4"
+    },
+    {
+      "path": "docs/ingestion/original-cam-clay/source-receipt.json",
+      "sha256": "b494142a31d3eb3108d171de6b7b7be60e9ac90999c5cf35987782c812477967"
+    },
+    {
+      "path": "docs/ingestion/original-cam-clay/smooth-reference-v1/reference.py",
+      "sha256": "14e477fdcb4fb3d994dd30ff4e8212e3a16cf4c72d5d50a232999702f05abf17"
+    },
+    {
+      "path": "docs/ingestion/original-cam-clay/smooth-reference-v1/prospective.json",
+      "sha256": "374aaa520b50701a3bcda4aa7ed22628a7079c9b25985bc90c214abde559c8ea"
+    },
+    {
+      "path": "docs/ingestion/original-cam-clay/smooth-reference-v1/results.json",
+      "sha256": "f17f884689c7f3fe64c5ae747a37263bcfb2c8c2e01c8cb8aeffd895e3b28ad8"
+    },
+    {
+      "path": "tests/test_occ_smooth_reference.py",
+      "sha256": "499313657640e6cffc4e65906d0b2037c9f4f49ab19db921dc6b85eccc12d484"
+    },
+    {
+      "path": "schemas/model-v0.3.schema.json",
+      "sha256": "5a0f732e2fd2dae90aeb77ec9fa332e125907f61d74614b60af3f77abf798c6a"
+    },
+    {
+      "path": "docs/FORMULATION_CONTRACT.md",
+      "sha256": "16bfcf37e51ca3ad42b89ea989ed6640a666aa4998023a12e4ca5a2d31fffbc9"
+    },
+    {
+      "path": "cpp/include/atlas/solver.hpp",
+      "sha256": "9f9df81222c267dcb228d557fbbf08a0fbc3c5670d97c672ab7337a25cceb28c"
+    }
+  ],
+  "runs": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "docs/ingestion/original-cam-clay/check_packet.py",
+        "--source",
+        "/private/tmp/atlas-ingest-occ-20261031/private/schofield-wroth-1968.pdf",
+        "--output",
+        "/private/tmp/occ-delivery-gates-checks.json"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "docs/ingestion/original-cam-clay/test_packet.py"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_complete_algebra (__main__.AnalyticalPacketTests.test_complete_algebra) ... ok\ntest_invalid_parameters (__main__.AnalyticalPacketTests.test_invalid_parameters) ... ok\ntest_invalid_path_domain (__main__.AnalyticalPacketTests.test_invalid_path_domain) ... ok\ntest_no_MCC_critical_pressure_substitution (__main__.AnalyticalPacketTests.test_no_MCC_critical_pressure_substitution) ... ok\ntest_small_positive_distortion_not_lost (__main__.AnalyticalPacketTests.test_small_positive_distortion_not_lost) ... ok\ntest_source_hash_corruption (__main__.AnalyticalPacketTests.test_source_hash_corruption) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.002s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "tests.test_occ_smooth_reference",
+        "-v"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_boolean_nonfinite_and_invalid_step_inputs_rejected (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_boolean_nonfinite_and_invalid_step_inputs_rejected) ... ok\ntest_corrupted_hardening_is_not_hidden_by_exact_pressure_and_q (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_corrupted_hardening_is_not_hidden_by_exact_pressure_and_q) ... ok\ntest_frozen_three_resolution_study_passes (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_frozen_three_resolution_study_passes) ... ok\ntest_incomplete_or_reordered_coordinate_frames_are_rejected (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_incomplete_or_reordered_coordinate_frames_are_rejected) ... ok\ntest_no_undrained_volume_change_is_silently_reinitialized (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_no_undrained_volume_change_is_silently_reinitialized) ... ok\ntest_source_vertex_and_critical_mechanism_are_excluded (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_source_vertex_and_critical_mechanism_are_excluded) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.003s\n\nOK\n"
+    }
+  ],
+  "all_commands_pass": true,
+  "historical_bytes_unchanged": true
+}
