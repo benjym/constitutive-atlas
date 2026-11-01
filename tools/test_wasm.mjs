@@ -1,23 +1,31 @@
 // End-to-end native/Wasm parity: the exact same generated models and protocols.
 import assert from 'node:assert/strict';
+import {loadProfileAllocation}from './laboratory_profile_policy.mjs';
 import {readFileSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
-const options={};for(let i=2;i<process.argv.length;i+=2){assert.ok(['--wasm-dir','--native'].includes(process.argv[i]));assert.ok(process.argv[i+1]);assert.ok(!options[process.argv[i]]);options[process.argv[i]]=process.argv[i+1];}
+const options={};for(let i=2;i<process.argv.length;i+=2){assert.ok(['--wasm-dir','--native','--profile-policy'].includes(process.argv[i]));assert.ok(process.argv[i+1]);assert.ok(!options[process.argv[i]]);options[process.argv[i]]=process.argv[i+1];}
 const wasmDir=resolve(options['--wasm-dir']||resolve(root,'build-wasm'));
 const nativeSolver=resolve(options['--native']||resolve(root,'build/atlas_solver'));
 const createAtlas=(await import(pathToFileURL(resolve(wasmDir,'atlas.js')))).default;
 const wasm=await createAtlas();
 const catalogue=JSON.parse(readFileSync(resolve(wasmDir,'generated/models.json'),'utf8'));
-let runs=0;
+const allocation=options['--profile-policy']?loadProfileAllocation(resolve(options['--profile-policy']),catalogue):null;
+let runs=0,rejectedContracts=0;
 for(const model of catalogue.models){
   // Examples are explicit test fixtures; v0.3 never substitutes them in the engine.
   const initial=model.state.flatMap(field=>field.shape==='sym'?field.initial:[field.initial]).join(',');
   for(const protocol of [0,1,2,3,4]){
     const target=protocol===3?10000:.002,steps=64,cycles=protocol===3?1:0;
     const native=spawnSync(nativeSolver,['--model',model.id,'--initial',initial,'--protocol',String(protocol),'--target',String(target),'--steps',String(steps),'--cycles',String(cycles)],{encoding:'utf8',timeout:30000});
+    const rejection=allocation?.policy.legacy_contract_rejections.find(e=>e.model===model.id);
+    if(rejection){
+      assert.equal(native.status,1);assert.equal(native.stderr,'');assert.equal(native.signal,null);assert.equal(native.error,undefined);
+      const expected=JSON.parse(native.stdout),actual=JSON.parse(wasm.ccall('atlas_run','string',['string','string','string','number','number','number','number'],[model.id,'',initial,protocol,target,steps,cycles]));
+      assert.deepEqual(expected,{ok:false,message:rejection.message});assert.deepEqual(actual,expected);rejectedContracts++;continue;
+    }
     assert.equal(native.status,0,model.id+': '+native.stdout+native.stderr);
     const expected=JSON.parse(native.stdout);
     const actual=JSON.parse(wasm.ccall('atlas_run','string',['string','string','string','number','number','number','number'],[model.id,'',initial,protocol,target,steps,cycles]));
@@ -28,7 +36,8 @@ for(const model of catalogue.models){
     runs++;
   }
 }
-console.log(`Native/WebAssembly parity passed for ${runs} model/protocol combinations.`);
+assert.equal(runs+rejectedContracts,5*catalogue.models.length);
+console.log(`Native/WebAssembly parity passed for ${runs} positive model/protocol combinations and ${rejectedContracts} explicit legacy-contract rejections.`);
 
 // Increment diagnostics are public in native and Wasm, including failed transactions.
 for (const [id,initial,strain] of [

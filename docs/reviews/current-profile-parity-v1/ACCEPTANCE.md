@@ -1,0 +1,9 @@
+# Prospective current-profile CI allocation
+
+Retain all60legacy parity requests and all134browser loading pairs for twelve models (including two original elastic transaction checks). Keep1e-7legacy and1e-10current comparison bounds and all4diagnostic,2Cartesian-rate and6IGS checks. No model is filtered out. The original unflagged strict behavior stays available.
+
+An explicit policy may recognize only the exact total-stress model's legacy effective-only API rejection. Every such request must reject natively and in Wasm with the precise minimal contract response; it does not produce a legacy import/replay. Every successful effective request retains its full existing checks and replay. The known GIS ordinary request may only match the exact specification, first-point failure and evidence already bound by the supported-package policy; all other ordinary defaults must succeed. No new exception is inferred.
+
+The additional26case scoped corpus is hash-bound to already-qualified inputs/outcomes, covers every model and requires a successful case for each. Use the production scoped browser helper and strict native raw process receipts. Compare physical numeric channels at the existing1e-10relative bound; transport identity, metadata, integers, exact controls, statuses and lengths remain exact. Add a direct wrong-scope rejection test. Pin every current definition via the supported policy. Reject missing/duplicate/stale policies/cases, uncovered models, unreviewed negatives and relaxed budgets before compiled calls. Preserve all partial logs and original failures.
+
+Only after pure policy tests and actual serial reused-engine runs pass may workflow commands select this policy and the tested supported-package gate. No build, source/model/default change, discarded old case or scientific promotion belongs to this task.
