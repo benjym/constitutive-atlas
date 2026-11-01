@@ -76,8 +76,18 @@ class OparaMappingTests(unittest.TestCase):
 
 
 class PublicAssetTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Every test reads this same pinned corpus without mutating it. Validate
+        # once per class rather than decompressing all public histories per test.
+        cls.records = load_curated(ROOT)
+
+    @classmethod
+    def tearDownClass(cls):
+        del cls.records
+
     def test_geolab_native_observations_and_missingness_are_preserved(self):
-        records = [r for r in load_curated(ROOT) if r['provenance']['source_id'] == 'geolab-v2' and r['kind'] == 'experiment']
+        records = [r for r in self.records if r['provenance']['source_id'] == 'geolab-v2' and r['kind'] == 'experiment']
         self.assertEqual(len(records), 37)
         signatures = set()
         for record in records:
@@ -98,7 +108,7 @@ class PublicAssetTests(unittest.TestCase):
             signatures.add(signature)
 
     def test_committed_records_and_public_projection_are_consistent(self):
-        records = load_curated(ROOT)
+        records = self.records
         opara = [r for r in records if r['provenance']['source_id'] == 'opara-sand-fines']
         self.assertEqual(len(opara), 12)
         self.assertEqual(sum(len(r['rows']) for r in opara), 13628)
@@ -108,7 +118,10 @@ class PublicAssetTests(unittest.TestCase):
                              {20000, 40000, 60000, 100000, 200000, 300000})
         with tempfile.TemporaryDirectory() as temp:
             dest = Path(temp)
-            index = bundle(dest)
+            # Reuse the already fully verified corpus instead of loading a second
+            # multi-gigabyte copy while checking the exact same projection.
+            with patch("tools.build_experiments.load_curated", return_value=records):
+                index = bundle(dest)
             by_id = {r['id']: r for r in records}
             self.assertEqual(set(by_id), {r['id'] for r in index['experiments']})
             for entry in index['experiments']:
@@ -140,12 +153,23 @@ class PublicAssetTests(unittest.TestCase):
                 self.assertEqual(packed['metadata']['provenance']['license'], source['provenance']['license'])
                 if source['provenance']['source_id'] == 'opara-sand-fines':
                     self.assertEqual(source['rows'][0]['pore_pressure'], 0)
-            before = {p.name: p.read_bytes() for p in dest.iterdir()}
-            bundle(dest)
-            self.assertEqual(before, {p.name: p.read_bytes() for p in dest.iterdir()})
+            # Compare exact bytes one file at a time, with both on-disk builds
+            # retained. Avoid holding two whole uncompressed exports in RAM.
+            first = dest.parent / (dest.name + '-first')
+            dest.rename(first)
+            try:
+                dest.mkdir()
+                with patch("tools.build_experiments.load_curated", return_value=records):
+                    bundle(dest)
+                self.assertEqual({p.name for p in first.iterdir()}, {p.name for p in dest.iterdir()})
+                for path in first.iterdir():
+                    self.assertEqual(path.read_bytes(), (dest/path.name).read_bytes())
+            finally:
+                import shutil
+                shutil.rmtree(first)
 
     def test_geolab_remaining_protocols_and_source_context(self):
-        records = load_curated(ROOT)
+        records = self.records
         geba = [r for r in records if r['id'].startswith('GEOLAB-GEBA-BE-')]
         self.assertEqual(len(geba),5)
         self.assertEqual(sum(len(r['rows']) for r in geba),15)
@@ -162,7 +186,7 @@ class PublicAssetTests(unittest.TestCase):
         self.assertTrue(all('c1' not in r['rows'][0] for r in direct))
 
     def test_castlegate_trigger_blocks_and_summary_are_distinct(self):
-        records = [r for r in load_curated(ROOT) if r['provenance']['source_id'] == 'castlegate']
+        records = [r for r in self.records if r['provenance']['source_id'] == 'castlegate']
         blocks = [r for r in records if r['kind'] == 'measurement-series']
         self.assertEqual(len(blocks), 68)
         hydro = [r for r in blocks if r['id'].startswith('CASTLEGATE-4AT-HYDRO-')]
@@ -179,7 +203,7 @@ class PublicAssetTests(unittest.TestCase):
         self.assertEqual(summary['source_table']['original_rows'][1][1], '4at42')
 
     def test_leap_campaigns_preserve_full_histories_and_unlabelled_channels(self):
-        records = load_curated(ROOT)
+        records = self.records
         for source, count in [('leap-2015',36),('leap-2017',26),('leap-2020',66),('leap-2022',54)]:
             selected = [r for r in records if r['provenance']['source_id'] == source]
             self.assertEqual(len(selected),count)
@@ -197,7 +221,7 @@ class PublicAssetTests(unittest.TestCase):
         self.assertTrue(all('Phase' not in row.values() for row in footer['rows']))
 
     def test_rockfill_material_identity_and_hurley_population_separation(self):
-        records = load_curated(ROOT)
+        records = self.records
         rock = [r for r in records if r['provenance']['source_id'] == 'rockfills']
         self.assertEqual(len(rock), 33)
         self.assertEqual(sum(len(r['rows']) for r in rock), 158)
@@ -217,7 +241,7 @@ class PublicAssetTests(unittest.TestCase):
         self.assertTrue(all(not r['initial'] for r in hurley))
 
     def test_native_collections_cover_specimens_and_independent_curves(self):
-        records = load_curated(ROOT)
+        records = self.records
         finnish = [r for r in records if r['provenance']['source_id'] == 'finnish-oedometer']
         self.assertEqual(len(finnish), 50)
         self.assertEqual(sum(r['id'].startswith('FI-HAARAJOKI-') for r in finnish), 24)
