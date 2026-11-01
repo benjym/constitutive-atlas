@@ -65,6 +65,18 @@ jobs:
           cmake --build build-burgers --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
           node --test tests/test_burgers_web_contract.mjs
+      - name: Build and qualify Hill anisotropic plasticity
+        run: |
+          cmake -S cmake/hill -B build-hill -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-hill --target atlas_hill_solver --parallel 1
+          python tools/test_hill_native.py --solver build-hill/atlas_hill_solver --output "$RUNNER_TEMP/hill-native"
+          node --test tests/test_hill_contract.mjs
+      - name: Retain Hill native qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hill-native-${{ matrix.os }}
+          path: ${{ runner.temp }}/hill-native/
       - name: Native checks and full exact archival replay
         if: runner.os == 'macOS'
         run: |
@@ -187,6 +199,9 @@ jobs:
           cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
           node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
           python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
+          emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
+          node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
           python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package
@@ -201,6 +216,12 @@ jobs:
         with:
           name: orthotropic-wasm-macos
           path: ${{ runner.temp }}/orthotropic-wasm-raw.json
+      - name: Retain Hill macos Wasm qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hill-wasm-macos
+          path: ${{ runner.temp }}/hill-wasm/
       - name: Configure GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/configure-pages@v6
@@ -263,6 +284,9 @@ jobs:
           cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
           node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
           python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
+          emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
+          node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
           python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package
@@ -277,6 +301,12 @@ jobs:
         with:
           name: orthotropic-wasm-linux
           path: ${{ runner.temp }}/orthotropic-wasm-raw.json
+      - name: Retain Hill linux Wasm qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hill-wasm-linux
+          path: ${{ runner.temp }}/hill-wasm/
 
   controlled-path:
     needs: [native, wasm, wasm-linux]
