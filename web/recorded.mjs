@@ -15,13 +15,33 @@ function rank(rows){
  }return true;
 }
 export function parseRecordedJSON(text){
- // JSON.parse rounds integer literals beyond binary64 precision. Reject such
- // literals before parsing, matching Python's explicit integer transport check.
- for(const token of text.matchAll(/"(?:[^"\\]|\\.)*"|-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/g)){
-  const value=token[0];if(value[0]!=='"'&&!/[.eE]/.test(value)&&(!Number.isFinite(Number(value))||BigInt(value)!==BigInt(Number(value))))throw Error('Integer input is not exactly representable in binary64.');
+ // Let the native parser validate JSON grammar and preserve its value semantics.
+ // Scan the same valid tokens before returning: JSON.parse alone loses duplicate
+ // names and accepts overflowing numbers even in fields consumers do not use.
+ if(typeof text!=='string')throw Error('Expected JSON text.');
+ const result=JSON.parse(text),stack=[];
+ for(const token of text.matchAll(/"(?:[^"\\]|\\.)*"|-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?|[{}[\],:]/g)){
+  const value=token[0],frame=stack.at(-1);
+  if(value==='{')stack.push({names:new Set(),key:true});
+  else if(value==='[')stack.push(null);
+  else if(value==='}'||value===']')stack.pop();
+  else if(value===','){if(frame)frame.key=true;}
+  else if(value===':'){if(frame)frame.key=false;}
+  else if(value[0]==='"'){
+   if(frame?.key){
+    const name=JSON.parse(value);
+    if(frame.names.has(name))throw Error('Duplicate JSON key: '+name);
+    frame.names.add(name);
+   }
+  }else{
+   const number=Number(value);
+   if(!Number.isFinite(number))throw Error('JSON number outside finite binary64 range.');
+   if(!/[.eE]/.test(value)&&BigInt(value)!==BigInt(number))throw Error('Integer input is not exactly representable in binary64.');
+  }
  }
- return JSON.parse(text);
+ return result;
 }
+
 export function recordedSettings(s){
  const materialKeys=settingFields.map(f=>f.key),m=s.integration_settings===undefined?{}:s.integration_settings;object(m,materialKeys,[]);
  const material=normalizeSettings({...normalizeSettings(),...m});

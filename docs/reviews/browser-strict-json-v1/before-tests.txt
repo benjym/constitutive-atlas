@@ -1,0 +1,49 @@
+✖ reject duplicate decoded names at every depth (0.7015ms)
+✖ reject nonfinite numbers including unused fields (0.353208ms)
+✔ preserve exact integer transport policy (0.272375ms)
+✔ native values, escapes, signed zero and finite extremes survive (0.389792ms)
+✔ malformed JSON remains rejected (0.101416ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 42.6205
+
+✖ failing tests:
+
+test at tests/test_strict_json.mjs:4:1
+✖ reject duplicate decoded names at every depth (0.7015ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception: {"a":1,"a":2}
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_strict_json.mjs:5:179)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /duplicate/i,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at tests/test_strict_json.mjs:7:1
+✖ reject nonfinite numbers including unused fields (0.353208ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception: 1e999
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_strict_json.mjs:8:84)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /finite/i,
+    operator: 'throws',
+    diff: 'simple'
+  }
