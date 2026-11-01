@@ -15,3 +15,9 @@ Local checks on this repair:
 - Public profile coverage remains 46/46.
 
 These are local repair checks, not a claim that the subsequent complete remote workflow or deployment has passed. The original failed log is retained privately at `.local/private-evidence/public-model-profiles-ci-v1/failed-ci.log.gz`; its uncompressed SHA-256 is `91e4fb817d13844b85833655ad5a05754e50a493f0151f28e608eca34afc0f53`.
+
+## Follow-up from the repaired workflow
+
+[Run 41353004018](https://github.com/benjym/constitutive-atlas/actions/runs/41353004018) passes the J2 gate on both native platforms and advances beyond Maxwell provisioning. Linux website packaging then exposes a second historical policy pin: VW96’s accepted review requires the pre-profile `AGENTS.md`, SHA-256 `af554aa5c12e4f3706efdf20399a283e7a09bda8be748b1f394b4d0c78c3709e`. The exact bytes from `8cab145b` are retained in the source snapshots, with an explicit document pin and artifact mapping for that existing review. The review itself is unchanged.
+
+A complete artifact audit of all 19 current scientific reviews finds zero unresolved artifacts after this repair. All 19 validate for approval. The actual `tools/build_database.py` bundle now passes, including the public SQLite integrity, exact definitions, 23 approvals and 19 review records. The 33 focused Node tests still pass. This is a local packaging replay, not a claim about the next remote run.
