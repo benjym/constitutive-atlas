@@ -18,16 +18,16 @@ Use the [canonical E0–E8 checklist](../../MODEL_DELIVERY_CHECKLIST.md). These 
 - [-] **E2 — Contract:** [crosswalk](formulation-crosswalk.json) checks the v0.3 interpretation in memory; actual candidate is still0.1. Separately owned migration and current integration/control contract must be verified before claiming this gate.
 - [-] **E3 — Transcription:** exact legacy definition has analytical/source checks and unchanged identity; current v0.3 candidate generation awaits E2. No new production kernel is needed.
 - [-] **E4 — Native/Wasm:** historical 29-case analytical evidence and saved backend/transaction evidence are review inputs. Fresh current-candidate/current-package qualification and applicable regressions are not proved by their existence.
-- [-] **E5 — Agent approval:** independent review underway; no verdict or approval entry inferred. Accepted review must pass the new validator and bind this exact definition before coordinator integration.
-- [ ] **E6 — Atlas:** existing public inclusion is distinct from exact approved-definition integration. Verify approval, source/evidence export and current registry/catalogue identities after E5; preserve all legacy reviews.
+- [X] **E5 — Agent approval:** actual separate review accepted the exact legacy scope; canonical record validates for approval, all output-manifest hashes verify, parent static reproduction passes, and [approval entry is generated](../../admission/linear-elastic-agent-v1/README.md). Registry integration/visibility remains E6; no current-build or migration claim.
+- [-] **E6 — Atlas:** existing public inclusion is distinct from exact approved-definition integration. Verify approval, source/evidence export and current registry/catalogue identities after E5; preserve all legacy reviews.
 - [ ] **E7 — Packaged website:** qualify the actual release package, visible bounded approval/source links, controls/plots, reset/import/export and failure recovery. Existing screenshots or prior packages do not prove the next release.
 - [ ] **E8 — Live delivery:** release gates and live artifact/model-run identity remain unverified. The earlier 12-model refresh run failed native jobs and skipped deployment; do not call this model fully delivered on that basis.
 
 ## Current handoff
 
-- State: working; current gate E5 review, with the E2 migration dependency recorded; E1 private retention verified.
-- Next reviewer action: deliver actual nine-item checklist verdict, reproducible source/algebra/saved-evidence checks and exact artifact hashes.
-- Next coordinator action: validate that record; resolve any findings; coordinate migration without modifying historical evidence. Scope a release only after required current-definition/package checks.
+- State: working; E5 accepted; E6 registry handoff pending, with the E2 migration dependency recorded; E1 private retention verified.
+- Reviewer handoff: accepted; [review and source/numerical checks](../../reviews/linear-elastic-agent-v1/README.md) retained unchanged.
+- Next coordinator action: hand off the generated entry to the current registry owner, then verify exact integration; coordinate migration without modifying historical evidence. Scope a release only after required current-definition/package checks.
 - Retained failure: reviewer rerun of the historical admission preflight reports `pinned input changed: docs/FORMULATION_CONTRACT.md`. Preserve the failed invocation and assess the document delta separately; do not repin it to make the old check pass.
 
 ## Evidence index
@@ -37,10 +37,10 @@ Use the [canonical E0–E8 checklist](../../MODEL_DELIVERY_CHECKLIST.md). These 
 | Source mapping, conventions and initialization | `python3 -B docs/ingestion/linear-elastic/check_crosswalk.py --repo .` | [Crosswalk checks](crosswalk-checks.json): eight contract checks and30 rational stiffness columns; in-memory v0.3 validation is not migration. |
 | Native analytical cases | unchanged legacy model | [Evidence envelope](../../../catalogue/evidence/linear-elastic-analytical-v1.json), [saved report](../../../catalogue/evidence/reports/linear-elastic-analytical-v1.json):29 cases; historical execution, not fresh current-package qualification. |
 | Admission questions | EL-01–05 | [Decision sheet](../../admission/production-readiness-v1/linear-elastic.md): unsigned historical questions, superseded approval mechanism; retain original bytes. |
-| Independent agent review | actual separate run | Output pending in `docs/reviews/linear-elastic-agent-v1/`; do not infer acceptance from partial progress messages. |
+| Independent agent review | actual separate run | [Accepted actual record](../../../catalogue/agent-reviews/linear-elastic-agent-v1.json) validated by reviewer and coordinator; parent replay is static/saved evidence only. |
 
 ## Review, integration and deployment receipts
 
-Accepted record/hash, generated approval entry, current native/Wasm receipts, packaged catalogue/engine identity, release commit, successful Actions/deployment URL and live browser evidence: **pending**. Record each separately as it becomes authoritative.
+Accepted canonical record SHA-256: `ff9fef9bc608fbe276d70253f68d648201e4df05a99e4b1f24023072c1652f39`. Generated entry: `docs/admission/linear-elastic-agent-v1/approval-entry.json`. Registry insertion, current native/Wasm receipts, packaged catalogue/engine identity, release commit, successful Actions/deployment URL and live browser evidence remain **pending**.
 
 Experimental validation remains unassessed. This baseline is an illustrative material-point law, not an experimentally calibrated soil model.

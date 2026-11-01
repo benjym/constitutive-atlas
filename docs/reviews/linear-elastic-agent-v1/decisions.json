@@ -1,0 +1,93 @@
+{
+  "kind": "independent-ai-technical-decisions",
+  "task_id": "SCI-linear-elastic-agent-v1",
+  "reviewer_run_id": "/root/linear_elastic_agent_review",
+  "model_sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+  "decisions": [
+    {
+      "id": "EL-01",
+      "question": "Constant E/nu specialization and paired stress/strain sign with Mandel map",
+      "judgment": "supported",
+      "rationale": "Read exact original coefficients, C assembly, incremental stress and shear order/scaling; independent rational columns verify C equivalence. Variable source fields excluded.",
+      "evidence": [
+        "README.md",
+        "check-results.json",
+        "crosswalk-rerun.json",
+        "inputs.json"
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "general FE/finite-rotation/poroelastic/experimental/current release qualification"
+      ],
+      "follow_up": "Coordinator integrate exact accepted legacy scope; migration and release qualification separately."
+    },
+    {
+      "id": "EL-02",
+      "question": "Atlas host effective stress and exponential void bookkeeping",
+      "judgment": "supported",
+      "rationale": "Both are explicitly Atlas choices. No OGS void evolution or complete poromechanics process attributed; pore output is a host constraint reconstruction. Domain violation must reject, not clip.",
+      "evidence": [
+        "README.md",
+        "check-results.json",
+        "crosswalk-rerun.json",
+        "inputs.json"
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "general FE/finite-rotation/poroelastic/experimental/current release qualification"
+      ],
+      "follow_up": "Coordinator integrate exact accepted legacy scope; migration and release qualification separately."
+    },
+    {
+      "id": "EL-03",
+      "question": "Named independent analytical numerical scope",
+      "judgment": "supported",
+      "rationale": "29 saved native actual/expected endpoints independently recomputed, distinct from 30 rational columns and crosswalk residuals. Additional saved backend control points checked independently. No all-parameter theorem.",
+      "evidence": [
+        "README.md",
+        "check-results.json",
+        "crosswalk-rerun.json",
+        "inputs.json"
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "general FE/finite-rotation/poroelastic/experimental/current release qualification"
+      ],
+      "follow_up": "Coordinator integrate exact accepted legacy scope; migration and release qualification separately."
+    },
+    {
+      "id": "EL-04",
+      "question": "Explicit sigma/e initialization with examples-only convention",
+      "judgment": "supported",
+      "rationale": "Complete persistent state accepted with finite/positive domain checks; eight current crosswalk-copy tests pass. Mechanical offsets carry no specimen preparation. Legacy low-level defaults unchanged.",
+      "evidence": [
+        "README.md",
+        "check-results.json",
+        "crosswalk-rerun.json",
+        "inputs.json"
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "general FE/finite-rotation/poroelastic/experimental/current release qualification"
+      ],
+      "follow_up": "Coordinator integrate exact accepted legacy scope; migration and release qualification separately."
+    },
+    {
+      "id": "EL-05",
+      "question": "Retained parameter/control/release boundaries",
+      "judgment": "supported",
+      "rationale": "Analytical tensor nu=-.2,.25,.49 plus specified controls; historical backend default-parameter protocols0-4 and failure/recovery only. Positive moduli outside those points are algebraic. Migration/current-build/browser/release, FE tangents and near-incompressible conditioning require separately bound work.",
+      "evidence": [
+        "README.md",
+        "check-results.json",
+        "crosswalk-rerun.json",
+        "inputs.json"
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "general FE/finite-rotation/poroelastic/experimental/current release qualification"
+      ],
+      "follow_up": "Coordinator integrate exact accepted legacy scope; migration and release qualification separately."
+    }
+  ]
+}

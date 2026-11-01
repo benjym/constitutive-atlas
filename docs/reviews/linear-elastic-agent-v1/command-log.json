@@ -1,0 +1,84 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "docs/reviews/linear-elastic-agent-v1/check_review.py",
+        "--repo",
+        ".",
+        "--output",
+        "/private/tmp/elastic-review-final-reproduction.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"kind\": \"independent-linear-elastic-agent-check-v1\",\n  \"passed\": true,\n  \"candidate_calls\": 0,\n  \"model_sha256\": \"33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041\",\n  \"exact_rational_stiffness_column_checks\": 30,\n  \"nu_regimes\": [\n    \"-99/100\",\n    \"-1/5\",\n    \"1/4\",\n    \"49/100\",\n    \"499/1000\"\n  ],\n  \"exact_oblique_covariance_check\": true,\n  \"paired_sign_reversal\": \"C*(-de)=-C*de; stress and strain signs change together\",\n  \"algebraic_restart\": {\n    \"stress_error_Pa\": 0.0,\n    \"void_error\": 2.220446049250313e-16,\n    \"runtime_restart_executed\": false\n  },\n  \"void_derivative_central_difference_error\": 1.6676571235052506e-10,\n  \"bookkeeping\": {\n    \"composition_error\": 0.0,\n    \"domain_boundary_trace\": 0.5306282510621704,\n    \"negative_e_counterexample_trace\": 0.5406282510621704,\n    \"negative_e\": -0.009950166250831893,\n    \"required_behavior\": \"reject complete increment and retain committed parent; not a physical compaction prediction\"\n  },\n  \"historical_freeze_manifest_entries_verified\": 246,\n  \"historical_backend_elastic_point_checks\": 1634,\n  \"historical_backend_worst_budget_fraction\": 9.915710529085339e-05,\n  \"limitations\": [\n    \"Saved data only; no fresh compiled/interface/browser execution.\",\n    \"Independent oracle references use retained net/control inputs, not solver reported strain to construct elastic expected state.\",\n    \"No all-parameter conditioning or finite-rotation qualification.\"\n  ]\n}\n",
+      "stderr": "",
+      "output_matches_retained_check_results_sha256": "9f2531d7d571e93e3f8e653929fc48559d035c669fa547d22ec2218aafc51783"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "docs/ingestion/linear-elastic/check_crosswalk.py",
+        "--repo",
+        ".",
+        "--output",
+        "/private/tmp/linear-elastic-crosswalk-review-rerun.json"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "docs/admission/production-readiness-v1/check.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Admission packet preflight failed: pinned input changed: docs/FORMULATION_CONTRACT.md\n"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "catalogue/investigations/solver-rollback-v1/assess.py",
+        "catalogue/investigations/solver-rollback-v1/native/observe.stdout.txt"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"version\": \"solver-rollback-assessment-v1\",\n  \"passed\": true,\n  \"errors\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "catalogue/investigations/solver-rollback-v1/assess.py",
+        "catalogue/investigations/solver-rollback-v1/wasm/observe.stdout.txt"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"version\": \"solver-rollback-assessment-v1\",\n  \"passed\": true,\n  \"errors\": []\n}\n",
+      "stderr": ""
+    }
+  ],
+  "compiled_calls": 0,
+  "historical_preflight_mismatches": [
+    {
+      "path": "docs/FORMULATION_CONTRACT.md",
+      "expected": "bbeda817fc0f0dc6108a92eb327c6cd0ea6ca0496cc31c6be43ffb42e95db38f",
+      "actual": "16bfcf37e51ca3ad42b89ea989ed6640a666aa4998023a12e4ca5a2d31fffbc9"
+    },
+    {
+      "path": "docs/RESEARCH_CHARTER.md",
+      "expected": "29a15c0fc60e70691861b69f067de7334868244464cf0170dfe5b2c3c2a23ecd",
+      "actual": "457218ae318a0fb6b2a0d35271047ea790d69e24f9bd3f35c9d760aecf152532"
+    },
+    {
+      "path": "schemas/model-v0.3.schema.json",
+      "expected": "d08e7ed7e060eb3fae4bcd37ceea0b6fee59a19ce31e2d752827beb8af8eb0ab",
+      "actual": "5a0f732e2fd2dae90aeb77ec9fa332e125907f61d74614b60af3f77abf798c6a"
+    }
+  ],
+  "interpretation": "Historical preflight remains failed; no repinning. Only three shared policy/schema files differ. Exact legacy model, source packet and numerical artifact pins match. Current crosswalk validation passes under current schema; new scientific review binds current inputs independently. This does not complete migration or release."
+}
