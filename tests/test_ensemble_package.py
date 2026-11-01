@@ -37,4 +37,5 @@ class EnsemblePackageTests(unittest.TestCase):
         self.assertNotIn("bundle_power_creep(dest",text)
         manifest=json.loads((ROOT/"catalogue/manifest.json").read_text())
         for entry in manifest["models"]:
-            self.assertNotIn(entry.get("timed_laboratory"),["j2.html","sls.html","power-creep.html"])
+            if entry.get("public_timed_laboratory") is True:
+                self.assertNotIn(entry.get("timed_laboratory"),["j2.html","sls.html","power-creep.html"])

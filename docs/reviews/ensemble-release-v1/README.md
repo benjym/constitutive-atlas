@@ -65,3 +65,13 @@ run `python3 -B tools/build_web.py`, then `tools/test_supported_package.mjs`,
 the same checks can be applied beneath the GitHub Pages project prefix.
 
 Deployment status will be recorded separately after CI and exact hosted checks.
+
+A broader catalogue check subsequently found that removing all timed-source metadata
+made the retained approved power-creep record look like an unqualified discovery
+candidate to its existing provenance check. The private source-tool path remains
+with explicit `public_timed_laboratory: false`; the public packager still omits it.
+The scientific status, approval checks and evidence thresholds are unchanged.
+The original failure and15passing combined Python checks are retained in
+`catalogue-release-tests*.log`; actual package link/identity and supported-input
+checks pass with this metadata. The updated catalogue hash is recorded separately
+in `retirement-metadata-v2.json`; the earlier local asset receipt stays historical.
