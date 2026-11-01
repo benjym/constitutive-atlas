@@ -1,0 +1,26 @@
+from pathlib import Path
+import json,hashlib,subprocess,tarfile,shutil
+r=Path('/Users/bmar5496/code/constitutive-atlas');plan=r/'docs/reviews/mc-browser-plan-v3';stage=Path('/private/tmp/atlas-mc-private-package-v3')
+assert not stage.exists(),'Refuse overwrite'
+stage.mkdir();src=stage/'source';src.mkdir();engine=stage/'engine';engine.mkdir();(engine/'generated').mkdir()
+sha=lambda f:hashlib.sha256(f.read_bytes()).hexdigest()
+base=json.loads((plan/'baseline.json').read_text())
+archive=stage/'source.tar'
+with archive.open('wb')as out:subprocess.run(['git','archive',base['source_commit']],cwd=r,stdout=out,check=True)
+with tarfile.open(archive)as t:t.extractall(src,filter='data')
+for f in (plan/'proposed').rglob('*'):
+ if f.is_file():dest=src/f.relative_to(plan/'proposed');dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(f,dest)
+qualified=Path('/private/tmp/atlas-mc-execution-v3/wasm')
+policy=json.loads((plan/'protocol.json').read_text())
+for name,expected in policy['qualified_engine'].items():
+ f=qualified/'build'/name;assert sha(f)==expected;shutil.copyfile(f,engine/name)
+shutil.copyfile(qualified/'generated/models.json',engine/'generated/models.json')
+receipt={'source_commit':base['source_commit'],'source_archive_sha256':sha(archive),'plan_manifest_sha256':sha(plan/'manifest.json'),'qualified_engine':policy['qualified_engine'],'generated_catalogue_sha256':sha(engine/'generated/models.json'),'overlays':{str(f.relative_to(plan/'proposed')):sha(f) for f in (plan/'proposed').rglob('*')if f.is_file()},'new_build':False}
+(stage/'prepackage.json').write_text(json.dumps(receipt,indent=2)+'\n')
+cmd=['python3','-B',str(src/'tools/build_web.py'),'--wasm-dir',str(engine),'--output',str(stage/'site/constitutive-atlas')]
+with (stage/'package.stdout').open('w')as out,(stage/'package.stderr').open('w')as err:result=subprocess.run(cmd,cwd=src,stdout=out,stderr=err)
+receipt.update(command=cmd,returncode=result.returncode)
+(stage/'package-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps({'returncode':result.returncode,'stdout':(stage/'package.stdout').read_text()[-3000:],'stderr':(stage/'package.stderr').read_text()[-4000:]}))
+if result.returncode==0:
+ site=stage/'site/constitutive-atlas';files={str(f.relative_to(site)):sha(f)for f in sorted(site.rglob('*'))if f.is_file()};(stage/'package-files.json').write_text(json.dumps({'files':files},indent=2)+'\n');print(f'Packaged {len(files)} files')

@@ -1,0 +1,23 @@
+file:///private/tmp/atlas-mc-private-package-v3/source/web/laboratory-document.mjs:6
+const require=(v,message)=>{if(!v)throw Error(message);};
+                                        ^
+
+Error: Invalid scoped laboratory envelope or catalogue.
+    at require (file:///private/tmp/atlas-mc-private-package-v3/source/web/laboratory-document.mjs:6:41)
+    at parseLaboratoryDocument (file:///private/tmp/atlas-mc-private-package-v3/source/web/laboratory-document.mjs:42:2)
+    at prepareExample (file:///private/tmp/atlas-mc-private-package-v3/source/web/laboratory-examples.mjs:24:83)
+    at async bundle (file:///private/tmp/atlas-mc-private-package-v3/source/tools/build_laboratory_examples.mjs:17:36)
+    at async file:///private/tmp/atlas-mc-private-package-v3/source/tools/build_laboratory_examples.mjs:24:170
+
+Node.js v26.7.0
+Traceback (most recent call last):
+  File "/private/tmp/atlas-mc-private-package-v3/source/tools/build_web.py", line 54, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/atlas-mc-private-package-v3/source/tools/build_web.py", line 40, in main
+    subprocess.run(['node',str(ROOT/'tools/build_laboratory_examples.mjs'),str(ROOT),str(dest),str(generated/'models.json')],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['node', '/private/tmp/atlas-mc-private-package-v3/source/tools/build_laboratory_examples.mjs', '/private/tmp/atlas-mc-private-package-v3/source', '/private/tmp/atlas-mc-private-package-v3/site/constitutive-atlas', '/private/tmp/atlas-mc-private-package-v3/engine/generated/models.json']' returned non-zero exit status 1.
