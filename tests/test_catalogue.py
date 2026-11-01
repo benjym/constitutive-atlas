@@ -7,7 +7,8 @@ import unittest
 from pathlib import Path
 
 from atlas.model import ROOT, all_models
-from atlas.research import export_database
+from atlas.evidence import checked_receipt
+from atlas.research import approved_definitions, export_database
 
 
 class CatalogueTests(unittest.TestCase):
@@ -56,7 +57,14 @@ class CatalogueTests(unittest.TestCase):
             self.assertEqual(model['formulation']['time_dependence'], 'physical_time')
             self.assertTrue(record['supporting_files'])
             for evidence in record['supporting_files']:
-                path = ROOT / evidence['path']
+                if (record.get('review', {}).get('kind') == 'agent-model-review' and
+                        hashlib.sha256((ROOT / evidence['path']).read_bytes()).hexdigest() != evidence['sha256']):
+                    try:
+                        path = checked_receipt(ROOT, record['review']['path'], evidence['path'], evidence['sha256'])
+                    except ValueError as exc:
+                        self.fail(str(exc))
+                else:
+                    path = ROOT / evidence['path']
                 self.assertTrue(path.resolve().is_relative_to(ROOT))
                 self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), evidence['sha256'])
 
@@ -83,7 +91,8 @@ class CatalogueTests(unittest.TestCase):
             for _ in range(2):
                 export_database(path)
                 with sqlite3.connect(path) as db:
-                    self.assertEqual(db.execute('SELECT COUNT(*) FROM models').fetchone()[0], len(manifest['models']))
+                    self.assertEqual({r[0] for r in db.execute('SELECT id FROM models')},
+                                     {e['id'] for e in manifest['models']} | set(approved_definitions()[0]))
                     for entry in manifest['models']:
                         urls = {r[0] for r in db.execute('SELECT url FROM sources WHERE model_id=?', (entry['id'],))}
                         expected = [s['url'] for s in entry.get('catalogue_sources', []) + entry.get('research_sources', [])]

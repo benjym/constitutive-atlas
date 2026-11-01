@@ -1,0 +1,26 @@
+.F.
+======================================================================
+FAIL: test_directory_coverage_has_resolvable_provenance (tests.test_catalogue.CatalogueTests.test_directory_coverage_has_resolvable_provenance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_catalogue.py", line 62, in assert_timed_provenance
+    path = checked_receipt(ROOT, record['review']['path'], evidence['path'], evidence['sha256'])
+  File "/Users/bmar5496/code/constitutive-atlas/atlas/evidence.py", line 93, in checked_receipt
+    raise ValueError('original evidence document changed after archival')
+ValueError: original evidence document changed after archival
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_catalogue.py", line 35, in test_directory_coverage_has_resolvable_provenance
+    self.assert_timed_provenance(entry)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_catalogue.py", line 64, in assert_timed_provenance
+    self.fail(str(exc))
+    ~~~~~~~~~^^^^^^^^^^
+AssertionError: original evidence document changed after archival
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.238s
+
+FAILED (failures=1)

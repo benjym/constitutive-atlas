@@ -1,0 +1,136 @@
+...................................................F...F........................../opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py:361: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x1097b0040>
+  obj, end = self.scan_once(s, idx)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+......................................................................................................................................................................................FF./opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/json/decoder.py:361: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x108a74040>
+  obj, end = self.scan_once(s, idx)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....................................................................................................................................................................................................................F......................................s..........................................................................................................F.................................................................FF.................s.......................................................................sssss.s...........................................................................................E...............................................................ssssssss........................sssss..............................................................................................................................................................................................................................sss.................................................................................s...........................................................E..........................................................................F.....
+======================================================================
+ERROR: test_native_dp_smooth_and_apex_returns (test_plasticity_oracles.PlasticityOracleTests.test_native_dp_smooth_and_apex_returns)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_plasticity_oracles.py", line 39, in test_native_dp_smooth_and_apex_returns
+    report = oracle.execute(Path(os.environ.get('ATLAS_SOLVER', ROOT/'build/atlas_solver')), 'drucker-prager')
+  File "/Users/bmar5496/code/constitutive-atlas/tools/verify_plasticity.py", line 151, in execute
+    raise ValueError('Rebuild solver: embedded definition differs from current source')
+ValueError: Rebuild solver: embedded definition differs from current source
+
+======================================================================
+ERROR: test_complete_saved_gate_without_build_or_material_execution (test_tresca_mixed_catalogue.MixedCatalogueTests.test_complete_saved_gate_without_build_or_material_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_tresca_mixed_catalogue.py", line 10, in test_complete_saved_gate_without_build_or_material_execution
+    with patch('subprocess.run',side_effect=AssertionError('no execution')):self.assertTrue(module('mixed_saved',P/'verify.py').verify()['overall_pass'])
+                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/tresca-mixed-catalogue-v1/verify.py", line 17, in verify
+    if isinstance(h,str)and len(h)==64:checked_receipt(ROOT,(P/name).relative_to(ROOT),path,h)
+                                       ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/atlas/evidence.py", line 111, in checked_receipt
+    raise ValueError('evidence source hash mismatch: ' + str(selected))
+ValueError: evidence source hash mismatch: /Users/bmar5496/code/constitutive-atlas/tests/test_catalogue_browser.mjs
+
+======================================================================
+FAIL: test_interpreter_generated_equations_agree (test_atlas.NumericalTests.test_interpreter_generated_equations_agree)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_atlas.py", line 151, in test_interpreter_generated_equations_agree
+    result=self.require(run(m['id'],mode='evaluate',current=csv(flat(current)),initial=csv(flat(previous)),strain=csv(de)))
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_atlas.py", line 75, in require
+    self.assertTrue(data['ok'],data.get('message'));return data
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : unknown model
+
+======================================================================
+FAIL: test_native_description_matches_model_source (test_atlas.NumericalTests.test_native_description_matches_model_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_atlas.py", line 143, in test_native_description_matches_model_source
+    self.assertEqual(data['models'],all_models())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'sc[14220 chars]1e-9'], 'integration': 'residual', 'id': 'druc[22694 chars]8']}] != [{'sc[14220 chars]1e-9', 'Md <= M'], 'integration': 'residual', [62824 chars])']}]
+
+First differing element 2:
+{'sch[1497 chars]1e-9'], 'integration': 'residual', 'id': 'druc[1653 chars]-8']}
+{'sch[1497 chars]1e-9', 'Md <= M'], 'integration': 'residual', [1664 chars]-8']}
+
+Second list contains 5 additional elements.
+First extra element 8:
+{'schema_version': '0.1', 'status': 'transcribed', 'parameters': {'p_ref': {'default': 100000, 'min': 1, 'max': 10000000000.0, 'unit': 'Pa', 'label': 'Reference stress / numerical scaling'}, 'M': {'default': 1.2, 'min': 0.1, 'max': 3, 'unit': '1', 'label': 'Critical-state slope'}, 'lambda_c': {'default': 0.2, 'min': 0.001, 'max': 1, 'unit': '1', 'label': 'Virgin compression index'}, 'kappa': {'default': 0.04, 'min': 0.0001, 'max': 0.5, 'unit': '1', 'label': 'Swelling index'}, 'nu': {'default': 0.25, 'min': -0.9, 'max': 0.49, 'unit': '1', 'label': 'Poisson ratio'}}, 'state': [{'name': 'sigma', 'unit': 'Pa', 'initial': [100000.0, 100000.0, 100000.0, 0, 0, 0], 'shape': 'sym', 'scale': 'p_ref'}, {'name': 'e', 'unit': '1', 'initial': 0.7, 'shape': 'scalar', 'scale': '1'}, {'name': 'pc', 'unit': 'Pa', 'initial': 200000, 'shape': 'scalar', 'scale': 'p_ref'}, {'name': 'gamma', 'unit': '1', 'initial': 0, 'shape': 'scalar', 'scale': '1', 'transient': True, 'multiplier': True}], 'derived': [{'name': 'mean', 'expr': 'trace(sigma) / 3'}, {'name': 'q2', 'expr': '1.5 * dot(dev(sigma),dev(sigma))'}, {'name': 'K', 'expr': '(1 + e) * mean / kappa'}, {'name': 'G', 'expr': '3 * K * (1 - 2 * nu) / (2 * (1 + nu))'}, {'name': 'yield_scaled', 'expr': '(q2 + M**2 * mean * (mean - pc)) / p_ref**2'}, {'name': 'plastic_volume', 'expr': 'gamma * M**2 * (2 * mean - pc) / pc_n'}], 'domain': ['e > 0', 'lambda_c > kappa', 'mean > p_ref * 1e-8', 'pc > p_ref * 1e-8', 'gamma > -1e-9'], 'integration': 'residual', 'id': 'modified-cam-clay', 'name': 'Modified Cam Clay', 'family': 'critical-state plasticity', 'description': 'Associated Modified Cam Clay with endpoint pressure/void-ratio dependent elasticity, exponential log-pc hardening and exponential volume bookkeeping. Project finite-step choices documented in the source dossier; demonstration initialization; finite rotation unsupported.', 'sources': [{'url': 'https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/web/content/docs/benchmarks/small-deformations/ModifiedCamClay/ModifiedCamClay_report.pdf', 'locator': 'Silbermann & Nagel, 28 June 2023: equations 14–17 and 30b; equation 11 prints M while 30b uses M squared. Section 3.1 hardening differs from atlas exponential log-pc update. Project discretization and normalization: docs/models/modified-cam-clay.md.', 'role': 'formulation'}, {'url': 'https://docs.itascacg.com/itasca930/common/models/camclay/doc/modelcamclay.html', 'locator': 'Equations 15, 18–25: stiffness, yield and associated flow; 31 and 8 have different finite-step hardening/volume updates. Initialization: 32 and 42. Not an executed cross-code comparison.', 'role': 'formulation reference'}], 'equations': {'sigma': 'sigma - sigma_n - K * trace(de) * I - 2 * G * dev(de) + gamma * (6 * G * dev(sigma) / pc_n + K * M**2 * (2 * mean - pc) / pc_n * I)', 'e': 'e - (1 + e_n) * exp(-trace(de)) + 1', 'pc': 'pc - pc_n * exp((1 + e) * plastic_volume / (lambda_c - kappa))', 'gamma': 'sqrt(gamma**2 + yield_scaled**2) - gamma + yield_scaled'}, 'initial_checks': ['yield_scaled <= 1e-8']}
+
+Diff is 119918 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_database_keeps_candidate_and_executable_sources (test_catalogue.CatalogueTests.test_database_keeps_candidate_and_executable_sources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_catalogue.py", line 92, in test_database_keeps_candidate_and_executable_sources
+    self.assertEqual(db.execute('SELECT COUNT(*) FROM models').fetchone()[0], len(manifest['models']))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 41 != 38
+
+======================================================================
+FAIL: test_directory_coverage_has_resolvable_provenance (test_catalogue.CatalogueTests.test_directory_coverage_has_resolvable_provenance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_catalogue.py", line 35, in test_directory_coverage_has_resolvable_provenance
+    self.assert_timed_provenance(entry)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_catalogue.py", line 67, in assert_timed_provenance
+    self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), evidence['sha256'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '769f96e8ef296c9fbcee78455be60e62d923f3b0e0820df62f6db2fa6b0dba06' != '2fca21267f0e38b66adee62313f317e2e45e92e9c20b0cd32ac74409514049de'
+- 769f96e8ef296c9fbcee78455be60e62d923f3b0e0820df62f6db2fa6b0dba06
++ 2fca21267f0e38b66adee62313f317e2e45e92e9c20b0cd32ac74409514049de
+
+
+======================================================================
+FAIL: test_native_overdilatant_rejection_and_valid_boundary_response (test_dp_dilatancy_domain.DPDilatancyDomainTests.test_native_overdilatant_rejection_and_valid_boundary_response)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_dp_dilatancy_domain.py", line 16, in test_native_overdilatant_rejection_and_valid_boundary_response
+    self.assertNotEqual(process.returncode,0);self.assertFalse(result['ok']);self.assertEqual(result['state'],initial)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_current_generation_contains_every_live_definition_and_scope (test_historical_generation.HistoricalGenerationTests.test_current_generation_contains_every_live_definition_and_scope)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_historical_generation.py", line 44, in test_current_generation_contains_every_live_definition_and_scope
+    self.assertEqual(set(paths), set((ROOT / 'models').glob('*.json')))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Items in the second set but not the first:
+PosixPath('/Users/bmar5496/code/constitutive-atlas/models/original-cam-clay-sw-electronic-log-recovery-v1.json')
+
+======================================================================
+FAIL: test_local_packet_receipts (test_ingestion_packets.IngestionPackets.test_local_packet_receipts) (model='original-cam-clay')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_ingestion_packets.py", line 27, in test_local_packet_receipts
+    self.assertFalse(any(p.suffix.lower() in ('.pdf','.dll','.zip','.png','.so','.dylib','.pyc','.pyo','.o','.a') for p in folder.rglob('*')))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_local_packet_receipts (test_ingestion_packets.IngestionPackets.test_local_packet_receipts) (model='hypoplastic-clay-2005')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_ingestion_packets.py", line 27, in test_local_packet_receipts
+    self.assertFalse(any(p.suffix.lower() in ('.pdf','.dll','.zip','.png','.so','.dylib','.pyc','.pyo','.o','.a') for p in folder.rglob('*')))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_static_recorded_targets_and_packaging (test_web_recorded.RecordedBrowserTests.test_static_recorded_targets_and_packaging)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_web_recorded.py", line 53, in test_static_recorded_targets_and_packaging
+    self.assertNotIn('setupRecordedView',(ROOT/'web/app.js').read_text())
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'recorded-stress-title', 'recorded-status', 'recorded-csv', 'recorded-example', 'recorded-summary', 'recorded-stress-chart', 'recorded-file', 'recorded-sources', 'recorded-cancel', 'recorded-resolved', 'recorded-export', 'recorded-model', 'recorded-component', 'recorded-replay'} is not false
+
+----------------------------------------------------------------------
+Ran 1427 tests in 477.525s
+
+FAILED (failures=9, errors=2, skipped=25)
+failed
