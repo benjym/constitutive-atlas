@@ -174,6 +174,8 @@ def generate(destination, model_paths=None):
     # operation. Detect emitted calls across every generated context.
     if any('atlas::determinant_or_mark(' in line for line in lines):
         lines.insert(2, '#include "atlas/checked_determinant.hpp"')
+    if any('atlas::principal_centered_mid_gt_or_mark(' in line for line in lines):
+        lines.insert(2, '#include "atlas/checked_centered_middle.hpp"')
     if any('atlas::principal_range_le_or_mark(' in line for line in lines):
         lines.insert(2, '#include "atlas/checked_principal_range.hpp"')
     if any('atlas::normalized_determinant_or_mark(' in line for line in lines):

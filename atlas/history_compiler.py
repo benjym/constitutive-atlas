@@ -33,6 +33,8 @@ def _expression(node, symbols):
         name = node.func.id
         if name == 'log1p':
             value = f'([&](){{ double result; if (!atlas::scalar_log1p_checked({emit(node.args[0])},result)) throw std::runtime_error("unsupported/nonfinite history log1p"); return result; }}())'
+        elif name == 'principal_centered_mid_gt':
+            value = f'([&](){{ bool result; if (!atlas::centered_middle_accuracy::checked({emit(node.args[0])},{emit(node.args[1])},result)) throw std::runtime_error("unsupported/nonfinite history centered middle"); return result; }}())'
         elif name == 'principal_range_le':
             value = f'([&](){{ bool result; if (!atlas::principal_range_accuracy::checked({emit(node.args[0])},{emit(node.args[1])},result)) throw std::runtime_error("unsupported/nonfinite history principal range"); return result; }}())'
         elif name == 'normalized_determinant':
@@ -146,6 +148,8 @@ def generate(programs):
         lines.insert(2, '#include "atlas/checked_determinant.hpp"')
     if any('atlas::spectral_candidate::' in line for line in lines):
         lines.insert(2, '#include "atlas/checked_spectral.hpp"')
+    if any('atlas::centered_middle_accuracy::checked(' in line for line in lines):
+        lines.insert(2, '#include "atlas/checked_centered_middle.hpp"')
     if any('atlas::principal_range_accuracy::checked(' in line for line in lines):
         lines.insert(2, '#include "atlas/checked_principal_range.hpp"')
     if any('atlas::normalized_determinant_accuracy::checked(' in line for line in lines):

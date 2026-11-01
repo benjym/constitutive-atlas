@@ -1,0 +1,45 @@
+{
+  "schema_version": "experimental-history-0.1",
+  "id": "synthetic-centered-middle-history",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SCALAR_LOG1P.md",
+      "locator": "Synthetic checked operator transaction; not a constitutive law"
+    }
+  ],
+  "fields": {
+    "A": {
+      "shape": "sym",
+      "unit": "1",
+      "storage": "state"
+    }
+  },
+  "inputs": {
+    "X": {
+      "shape": "sym",
+      "unit": "1"
+    },
+    "gate": {
+      "shape": "scalar",
+      "unit": "1"
+    }
+  },
+  "phases": [
+    {
+      "name": "advanced",
+      "kind": "advance",
+      "base": "parent",
+      "bindings": {
+        "X": {
+          "input": "X"
+        },
+        "g": {
+          "input": "gate"
+        }
+      },
+      "writes": {
+        "A": "select(g>0,select(principal_centered_mid_gt(X,g),I,2*I),I)"
+      }
+    }
+  ]
+}
