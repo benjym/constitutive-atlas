@@ -1,5 +1,5 @@
 """Package checked evidence envelopes only; never rerun scientific checkers or copy raw artifacts."""
-import copy,hashlib,json,shutil,sys
+import copy,hashlib,html,json,shutil,sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from atlas.evidence import validate_record,verify_manifest_files
@@ -24,6 +24,11 @@ def read_bytes(root,relative):
  target=(root/p).resolve()
  if not target.is_relative_to(root)or not target.is_file():raise ValueError('missing/unsafe evidence export file: '+str(relative))
  return target.read_bytes()
+def dossier_view(path, raw):
+    # Present public Markdown as escaped text; preserve original download bytes.
+    name=Path(path).name
+    body='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Source dossier · Constitutive Atlas</title><style>body{font:16px/1.6 system-ui;max-width:85ch;margin:2rem auto;padding:0 1rem}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}</style><h1>Source dossier</h1><p><a href="../../index.html#catalogue">Model catalogue</a> · <a download href="'+html.escape(name,quote=True)+'">Download original Markdown</a></p><pre>'+html.escape(raw.decode('utf-8'))+'</pre></html>'
+    return body.encode('utf-8')
 def parse(value):return json.loads(value,parse_constant=lambda x:(_ for _ in()).throw(ValueError('nonfinite evidence JSON')))
 def text(value,label):
  if type(value)is not str:raise ValueError(label+' must be a string')
@@ -52,7 +57,7 @@ def bundle(destination,root=ROOT,*,bindings=RESEARCH_BINDINGS):
  if type(models)is not list:raise ValueError('catalogue model list missing')
  ids=[m.get('id')for m in models]
  if any(type(x)is not str for x in ids)or len(set(ids))!=len(ids):raise ValueError('invalid/duplicate catalogue IDs')
- by_id={m['id']:m for m in models};records=[];originals={};selected=set()
+ by_id={m['id']:m for m in models};records=[];originals={};selected=set();dossiers={}
  def entry(catalogue_id,definition,path,raw,kind,expected,record):
   if catalogue_id not in by_id:raise ValueError('evidence has no canonical catalogue entry: '+catalogue_id)
   if Path(definition).is_absolute()or '..'in Path(definition).parts:raise ValueError('unsafe definition binding')
@@ -106,8 +111,10 @@ def bundle(destination,root=ROOT,*,bindings=RESEARCH_BINDINGS):
    reviewer=record.get('reviewer'),reviewed_at=record.get('reviewed_at'),dossier=record['dossier'],
    evidence_ids=copy.deepcopy(record['evidence_ids']),unresolved=copy.deepcopy(record['unresolved'])))
   originals[relative]=raw
+  dossiers[record['dossier']]=read_bytes(root,record['dossier'])
  omitted=sorted(p.relative_to(root).as_posix()for p in(root/'catalogue/investigations').glob('*/manifest.json')if p.relative_to(root).as_posix()not in selected)
  index={'schema_version':'0.1','kind':'catalogue-evidence-index','coverage_note':'Top-level numerical evidence envelopes are auto-discovered, including historical failed outcomes. Research coverage is restricted to explicit canonical-catalogue/definition/manifest bindings; other investigation manifests are omitted. Source-review envelopes from catalogue/reviews are separately indexed verbatim; recorded identity, status and independence are not authenticated or inferred. No latest-review selection or automatic admission is performed. Checked receipts establish retained-file integrity only: no scientific checker, binary, experimental validation or admission is rerun. Missing manifest scope/limitations are left empty; complete retained metadata is supplied in details.','coverage':{'numerical_record_directory':'catalogue/evidence','research_manifest_allowlist':sorted(selected),'omitted_investigation_manifests':omitted,'scientific_rerun':False,'source_review_directory':'catalogue/reviews'},'records':records,'reviews':reviews}
+ views={path:dossier_view(path,raw)for path,raw in dossiers.items()}
  encoded=(json.dumps(index,indent=2,allow_nan=False)+'\n').encode()
  # Replace only this exporter's private subtree; preserve builder-owned assets.
  if destination.is_symlink()or(destination/'evidence.json').is_symlink():raise ValueError('evidence export destination is a symlink')
@@ -116,6 +123,9 @@ def bundle(destination,root=ROOT,*,bindings=RESEARCH_BINDINGS):
  if record_dest.exists():shutil.rmtree(record_dest)
  for path,raw in originals.items():
   target=record_dest/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+ for path,raw in dossiers.items():
+  target=destination/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)
+  target.with_name(target.name+'.html').write_bytes(views[path])
  (destination/'evidence.json').write_bytes(encoded)
  return index
 

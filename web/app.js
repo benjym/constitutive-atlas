@@ -75,7 +75,7 @@ function sourceLinks(container,sources){
 function definitionLink(id){const link=element('a','Model definition (JSON) ↗');link.href='./models/'+encodeURIComponent(id)+'.json';link.target='_blank';link.rel='noopener';return link;}
 function field(container,name,label,value,min,max,factor=1){
   const lab=element('label');const span=element('span',label);span.title=label;lab.append(span);
-  const input=document.createElement('input');input.type='number';input.id=name;input.value=value/factor;input.step='any';input.required=true;input.dataset.factor=factor;
+  const input=document.createElement('input');input.type='number';input.id=name;input.name=model().id+':'+name;input.autocomplete='off';input.value=value/factor;input.step='any';input.required=true;input.dataset.factor=factor;
   if(min!==undefined)input.min=min/factor;if(max!==undefined)input.max=max/factor;lab.append(input);container.append(lab);
   const low=min===undefined?Math.min(0,value/factor):min/factor,high=max===undefined?Math.max(1,value/factor*3):max/factor;addSlider(input,label,low,high);
 }
@@ -83,7 +83,7 @@ function field(container,name,label,value,min,max,factor=1){
 function addSlider(input, label, min=Number(input.min), max=Number(input.max)){
   if(!Number.isFinite(min)||!Number.isFinite(max)||max<=min)return;
   const slider=element('input');slider.type='range';slider.min=0;slider.max=1000;slider.step=1;
-  slider.dataset.for=input.id;slider.setAttribute('aria-label',label+' slider');
+  slider.name=(input.name||input.id)+':slider';slider.dataset.for=input.id;slider.setAttribute('aria-label',label+' slider');
   const logarithmic=min>0&&max/min>=1000;
   slider.toValue=t=>logarithmic?min*Math.pow(max/min,t):min+(max-min)*t;
   slider.toPosition=v=>logarithmic?Math.log(Math.max(min,v)/min)/Math.log(max/min):(v-min)/(max-min);
@@ -146,7 +146,7 @@ function populate({loadExample=true}={}){
   for(const s of m.state.slice(1)){
     if(!persistentState(s))continue;
     if(s.shape==='sym'){
-      const lab=element('label',s.name+' · 6 Mandel components');const input=document.createElement('input');input.type='text';input.id='state-'+s.name;input.value=s.initial.join(',');input.required=true;lab.append(input);$('state-fields').append(lab);
+      const lab=element('label',s.name+' · 6 Mandel components');const input=document.createElement('input');input.type='text';input.id='state-'+s.name;input.name=m.id+':'+input.id;input.autocomplete='off';input.value=s.initial.join(',');input.required=true;lab.append(input);$('state-fields').append(lab);
     }else field($('state-fields'),'state-'+s.name,s.name+(s.unit==='Pa'?' (kPa)':''),s.initial,undefined,undefined,s.unit==='Pa'?1000:1);
   }
   const content=$('equation-content');content.replaceChildren(element('p',m.description));
@@ -175,7 +175,7 @@ function valuesForState(m){
 function numericalControls(){
   const container=$('numerical-fields');
   for(const f of settingFields){
-    const label=element('label',f.label),input=element('input');input.type='number';input.id='numerical-'+f.key;
+    const label=element('label',f.label),input=element('input');input.type='number';input.id='numerical-'+f.key;input.name=input.id;input.autocomplete='off';
     input.value=input.defaultValue=f.value;input.required=true;input.min=f.min;input.step=f.integer?'1':'any';
     if(f.max!==undefined)input.max=f.max;label.append(input);container.append(label);
   }

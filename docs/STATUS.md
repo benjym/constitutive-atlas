@@ -7,17 +7,17 @@ and the [roadmap](../ROADMAP.md) for milestone acceptance.
 
 | Area | Current evidence | Still open |
 | --- | --- | --- |
-| Executable definitions | Nine top-level [model records](../models/): four `transcribed`, five `draft`; the existing browser package contains nine models. Research records are separate. | Twenty-formulation release target; source-complete SANISAND and Terra Cotta; independent scientific admission. |
-| Source review | Eighteen [formal review records](../catalogue/reviews/), all `pending`, with at least one exact current-definition record for each of the nine executable formulations; [additional coverage](reviews/additional-executable-source-coverage-v1/README.md) binds the four newer drafts to existing dossiers. [Catalogue disclosure](reviews/web-source-review-status-v1/README.md) distinguishes current and historical definition bindings. | Signed independent judgments; complete scientific/source decisions and broader evidence coverage. Pending record coverage is not completed review. Numerical passes do not promote status. |
+| Executable definitions | Ten top-level [model records](../models/): four `transcribed`, six `draft`, including associated Tresca BK2022v1 with project BE. The [mixed native/Wasm catalogue](../catalogue/investigations/tresca-mixed-catalogue-v1/README.md) is qualified; packaged-browser checks are recorded in the [local integration packet](reviews/tresca-draft-integration-v1/README.md). Research records are separate. | Twenty-formulation release target; source-complete SANISAND and Terra Cotta; independent scientific admission. |
+| Source review | Nineteen [formal review records](../catalogue/reviews/), all `pending`, with at least one exact current-definition record for each of the ten executable formulations; [additional coverage](reviews/additional-executable-source-coverage-v1/README.md) binds the four newer drafts to existing dossiers. [Catalogue disclosure](reviews/web-source-review-status-v1/README.md) distinguishes current and historical definition bindings. | Signed independent judgments; complete scientific/source decisions and broader evidence coverage. Pending record coverage is not completed review. Numerical passes do not promote status. |
 | Representation | [v0.3 contract](FORMULATION_CONTRACT.md): explicit incremental-residual, strain-path-rate and physical-time ODE profiles; Mandel/kinematic/stress declarations. Current engine limit is 32 scalar state components. | Stable v1 representation, source-specific preparation/history contracts and demonstrated extensions. Physical-time research support does not establish Terra Cotta correctness. |
 | KFS comparison | [Scientific-review handoff](benchmarks/kfs-development-review-v1/README.md), existing qualified TMD2 reproduction and one [current-source TMD7 replay](benchmarks/current-kfs-tmd7-v1/README.md). The [local website panel](reviews/web-current-tmd7-v1/README.md) exposes the scoped connection. | Independent scientific review, historical-coordinate/preparation qualifications and original-measurement reuse permission. Evaluation tests were previously exposed during development. |
 | Model ingestion | [Multilaminate consolidation](ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/README.md) closes the current reading pass with ordered source/lifecycle/capability gates. [Terra Cotta publication identities](ingestion/terracotta-2024/publication-records-v1/README.md) are distinct. | Independent review of the [proposed multilaminate correction ledger](ingestion/multilaminate-schadlich-schweiger/correction-ledger-v1/README.md) and remaining preparation/lifecycle decisions; Terra Cotta full journal reconciliation; SANISAND missing exact source. None is admitted by inventory alone. |
 | Website and distribution | [GitHub Pages](https://benjym.github.io/constitutive-atlas/) is the public entry point. Local preview evidence documents recent catalogue/evidence improvements. | Latest hosted revision and deployment checks are not reverified here. A local preview is not proof of hosted availability or scientific readiness. |
 | Paper and release | [Research charter](RESEARCH_CHARTER.md), [prior-work comparison](PRIOR_WORK.md), working manuscript and retained reproducibility evidence. | Completed study, independent review, permitted release contents and an archived scientific release. |
 
-The nine executable definitions are linear elasticity, Drucker–Prager, Modified
+The ten executable definitions are linear elasticity, Drucker–Prager, Modified
 Cam Clay, VW96 sand, VW96+IGS97, hypoplastic clay 2005 and 2013, and barodesy sand
-and clay 2017. “Executable” means a local software capability, not reviewed status
+and clay 2017, plus associated Tresca BK2022v1/project BE. “Executable” means a local software capability, not reviewed status
 or demonstrated experimental applicability. Catalogue discovery entries and
 restricted research variants do not increase this count.
 
@@ -28,9 +28,10 @@ source-derived requirement. Independent review remains unassigned; no maintainer
 has been assigned a review by this status update. Other bounded roadmap work can
 proceed when it does not depend on those judgments.
 
-This reconciliation checked the nine model JSON statuses, eighteen review JSON
-statuses and linked delivery records. It ran no new build or material simulation
-and does not assert a fresh whole-project test pass. Older test totals below
+This reconciliation checks ten model definitions and nineteen pending review
+records. Tresca remains draft. Its mixed-catalogue build and local integration
+have separately scoped evidence; no fresh whole-project test or hosted
+deployment is asserted. Older test totals below
 apply only to their recorded revisions and scopes.
 
 # Delivery history

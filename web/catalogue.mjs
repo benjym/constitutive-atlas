@@ -52,7 +52,7 @@ export function evidenceSection(document,id,index,state='loading'){
     if(r.status==='pending')entry.append(el('p','Scientific decision pending. Technical checks and numerical passes do not supply acceptance.'));
     if(r.unresolved.length){entry.append(el('p','Recorded unresolved questions'));const list=el('ul');for(const question of r.unresolved)list.append(el('li',question));entry.append(list);}
     const receipt=el('a','Original source-review record');receipt.href='./evidence-records/'+r.record_path;entry.append(receipt);
-    const metadata=el('details');metadata.append(el('summary','Review identity and evidence references'),el('p','Definition SHA-256: '+r.definition_sha256),el('p','Record SHA-256: '+r.record_sha256),el('p','Dossier path: '+r.dossier),el('pre',JSON.stringify({evidence_ids:r.evidence_ids},null,2)));entry.append(metadata);section.append(entry);
+    const metadata=el('details');metadata.append(el('summary','Review identity and evidence references'),el('p','Definition SHA-256: '+r.definition_sha256),el('p','Record SHA-256: '+r.record_sha256),Object.assign(el('a','Source dossier'),{href:'./'+r.dossier+'.html',target:'_blank',rel:'noopener'}),el('pre',JSON.stringify({evidence_ids:r.evidence_ids},null,2)));entry.append(metadata);section.append(entry);
   }
   section.append(el('h4','Retained numerical evidence'));
   const records=index.records.filter(r=>r.catalogue_id===id);

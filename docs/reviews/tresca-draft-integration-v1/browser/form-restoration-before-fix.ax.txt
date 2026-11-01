@@ -1,0 +1,168 @@
+Browser tab: 17, Title: "Constitutive Atlas · Model testing", URL: "http://127.0.0.1:8948/constitutive-atlas/#laboratory".
+1 AXWebArea Constitutive Atlas · Model testing, URL: 127.0.0.1:8948/constitutive-atlas/#laboratory
+	2 container
+		3 link Description: Constitutive Atlas home, Value: 127.0.0.1:8948/constitutive-atlas/#laboratory
+		4 container Main navigation
+			5 link Description: ◫ Model testing, Value: 127.0.0.1:8948/constitutive-atlas/#laboratory
+			6 link Description: ↝ Recorded paths, Value: 127.0.0.1:8948/constitutive-atlas/#recorded
+			7 link Description: ⌕ Model catalogue 33, Value: 127.0.0.1:8948/constitutive-atlas/#catalogue
+			8 link Description: ≋ Methods & evidence, Value: 127.0.0.1:8948/constitutive-atlas/#methods
+			9 link Description: ↗ Publications & lineage, Value: 127.0.0.1:8948/constitutive-atlas/publications.html
+		10 container
+			11 text By
+			12 link Description: Benjy Marks, Value: github.com/benjym
+			13 link Description: François Guillard, Value: github.com/Franzzzzzzzz
+	14 container laboratory
+		15 heading Explore material behaviour., Value: 1
+			16 text Explore material behaviour.
+		17 button ↑ Import run, ID: import-run
+		18 container
+			19 text CONSTITUTIVE MODEL
+			20 text draft
+			21 text Select a model
+			22 pop up button (collapsed, settable) Select a model, Value: Associated Tresca perfect plasticity — BK2022v1, project BE (draft), ID: model, Secondary Actions: Expand
+				23 menu
+					24 Barodesy clay 2017 — body law, zero spin (draft)
+					25 Barodesy sand (2015) — fixed-frame draft
+					26 Drucker–Prager, nonassociated perfect plasticity
+					27 Mašín clay hypoplasticity (2005) — zero-spin draft
+					28 Clay hypoplasticity 2013 — Appendix law, zero spin (draft)
+					29 Sand hypoplasticity + intergranular strain (1997)
+					30 Sand hypoplasticity — von Wolffersdorff (1996)
+					31 Linear isotropic elasticity
+					32 Modified Cam Clay
+					33 (selected) Associated Tresca perfect plasticity — BK2022v1, project BE (draft)
+			34 text Draft full-state associated Tresca perfect plasticity from the BK2022v1 continuum closure, with a separately derived project backward-Euler projection. Constant positive Lame moduli and shear strength, infinitesimal fixed-frame compression-positive Mandel convention, total Cauchy stress and explicit sigma6/ep6 preparation. Certified strict corner comparisons and physical solution constraints are numerically qualified on bounded independent reference/history/laboratory corpora. Example parameters and preparation are not a soil calibration; no pore-pressure law, experimental validation, finite-rotation or independent scientific admission claim. Spectral isolation, representability and finite-expression limits remain explicit.
+			35 button (collapsed) Sources & model definition, Secondary Actions: Expand
+				36 text Sources & model definition
+			37 text Elastoplasticity
+			38 text 3D · small strain
+			39 button View equations ↗, ID: equations-button
+		40 container Model testing sections
+			41 link Description: Test controls ↓, Value: 127.0.0.1:8948/constitutive-atlas/#controls
+			42 link Description: Response plots ↓, Value: 127.0.0.1:8948/constitutive-atlas/#response
+			43 link Description: Compare measurements ↓, Value: 127.0.0.1:8948/constitutive-atlas/#measurements
+			44 link Description: Equations & sources ↓, Value: 127.0.0.1:8948/constitutive-atlas/#equations
+		45 container controls
+			46 heading Test controls, Value: 2
+				47 text Test controls
+			48 button Reset, ID: reset
+			49 text  Live updates as you adjust
+			50 container
+				51 text Loading protocol
+				52 pop up button (collapsed, settable) Loading protocol, Value: Fixed radial total stress, ID: protocol, Secondary Actions: Expand
+					53 menu
+						54 (selected) Fixed radial total stress
+						55 Zero volumetric strain
+						56 One-dimensional strain
+						57 Isotropic strain
+						58 Signed q control · zero volumetric strain
+			59 container
+				60 text Axial strain (%)
+				61 stepper (settable, integer) Axial strain (%), Value: 1, ID: target
+			62 slider (settable, integer) Description: Axial strain (%) slider, Value: 550
+			63 container
+				64 text Loading history
+				65 pop up button (collapsed, settable) Loading history, Value: Monotonic ramp, ID: cycles, Secondary Actions: Expand
+					66 menu
+						67 (selected) Monotonic ramp
+						68 1 sinusoidal cycle
+						69 3 sinusoidal cycles
+						70 10 sinusoidal cycles
+			71 text INITIAL STATE
+			72 button Load model example, ID: load-model-example
+			73 text Selecting a model loads its example parameters and full initial state. These illustrative values do not establish specimen preparation or experimental calibration. Loading an example replaces parameter and state edits.
+			74 container
+				75 text Radial total stress (kPa)
+				76 stepper (settable, integer) Radial total stress (kPa), Value: 100, ID: confinement
+			77 slider (settable, integer) Description: Radial total stress (kPa) slider, Value: 500
+			78 button (collapsed) Initial state details, Secondary Actions: Expand
+				79 text Initial state details
+			80 button (collapsed) Material parameters Adjust model constants, Secondary Actions: Expand
+				81 AXListMarker ▸ 
+				82 text Material parameters
+				83 text Adjust model constants
+			137 container
+				138 button (expanded) Solver settings, Secondary Actions: Collapse
+					139 text Solver settings
+				140 text Increments
+				141 stepper (settable, float) Increments, Value: 0.699999988079071, Details: 0.7, ID: steps
+				142 text More increments improve resolution and take longer. Cyclic histories need at least 16 per cycle. Loading version
+				143 pop up button (collapsed, settable) Loading version, Value: Reproducible · current, ID: loading-version, Secondary Actions: Expand
+					144 menu
+						145 (selected) Reproducible · current
+						146 Legacy · earlier saved runs
+				147 text Current runs save exact loading values. Earlier saved runs keep their legacy loading version; changing this selection creates a new run.
+				148 container numerical-fields
+					149 container
+						150 text Residual tolerance
+						151 stepper (settable, integer) Residual tolerance, Value: 100000, ID: numerical-residual_tolerance
+					152 container
+						153 text Rate integration tolerance
+						154 stepper (settable, integer) Rate integration tolerance, Value: 30, ID: numerical-rate_tolerance
+					155 container
+						156 text Newton iterations per candidate
+						157 stepper (settable, integer) Newton iterations per candidate, Value: 5800000000, ID: numerical-max_iterations
+					158 container
+						159 text Maximum subdivision depth
+						160 stepper (settable, float) Maximum subdivision depth, Value: 0.2800000011920929, Details: 0.28, ID: numerical-max_depth
+					161 container
+						162 text Accepted substeps per increment
+						163 stepper (settable, float) Accepted substeps per increment, Value: 0.5299999713897705, Details: 0.53, ID: numerical-max_substeps
+					164 container
+						165 text Newton line search halvings
+						166 stepper (settable, float) Newton line search halvings, Value: 0.8399999737739563, Details: 0.84, ID: numerical-max_backtracks
+				167 text Tolerances use model state scales. Smaller values usually require more work; they do not bound total error. Limits apply to each material increment.
+			86 text Increments: Value must be greater than or equal to 1.
+		87 container Compare with measurements, ID: measurements
+			88 text EXPERIMENTAL COMPARISON
+			89 heading Compare with measurements, Value: 2, ID: experiment-title
+				90 text Compare with measurements
+			91 text Tests are filtered by drainage protocol, loading path and verified plot axes. Assess model–material suitability, parameter calibration and specimen preparation separately. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.
+			92 text Normalized overlays require an effective-stress model. Browse source records to view measurements.
+			93 container
+				94 text Find measurements
+				95 search text field (settable) Find measurements, ID: experiment-search
+			96 container
+				97 text Experimental test
+				98 pop up button (collapsed, settable) Experimental test, Value: No measurements selected, ID: experiment-select, Secondary Actions: Expand
+					99 menu
+						100 (selected) No measurements selected
+			101 switch (disabled, settable, boolean) Description: Show measurements, Value: 0, ID: show-experiment
+			102 button (disabled) Use initial state & protocol, ID: match-experiment
+			103 text No measurement overlays match this protocol and loading path. You can browse source records or load your own measurements.
+			104 checkbox (settable, integer) Description: Browse all source records (includes tests without model overlays), Value: 0, ID: browse-source-records
+			105 button (collapsed) Compare your own measurements, Secondary Actions: Expand
+				106 text Compare your own measurements
+		107 container response
+			108 text Waiting for a valid input
+			109 text Double precision · compression positive
+		110 container Description: Simulation results, ID: response-charts
+			111 container
+				112 heading Stress–strain response, Value: 2
+					113 text Stress–strain response
+				114 container Description: Total deviator stress versus axial strain, Help: Total deviator stress q (kPa) versus Axial strain ε₁ (%), ID: stress-chart
+				115 text Model prediction
+			116 container
+				117 heading Total stress path, Value: 2, ID: path-title
+					118 text Total stress path
+				119 container Description: Deviator stress versus total mean stress, Help: Total deviator stress q (kPa) versus Mean total stress p (kPa), ID: path-chart
+				120 text Model prediction
+			121 container
+				122 heading Volumetric response, Value: 2
+					123 text Volumetric response
+				124 container Description: Volumetric versus axial strain, Help: Volumetric strain εᵥ (%) versus Axial strain ε₁ (%), ID: volume-chart
+				125 text Model prediction
+			126 container
+				127 heading Pore-pressure change, Value: 2
+					128 text Pore-pressure change
+				129 container Description: Pore-pressure change versus axial strain, Help: Pore-pressure change Δu (kPa) versus Axial strain ε₁ (%), ID: pore-chart
+				130 text Model prediction
+				131 text Unavailable: total stress has no pore-pressure law.
+		132 text Parameters are examples. Numerical verification does not establish experimental validity.
+		133 button (disabled) ↓ Results CSV, ID: export-csv
+		134 button (disabled) ↓ Reproducible run, ID: export-run
+		135 button (collapsed) Equations & source provenance, Secondary Actions: Expand
+			136 text Equations & source provenance
+
+The focused UI element is 138 button (expanded) Solver settings, Secondary Actions: Collapse

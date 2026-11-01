@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from atlas.applicability import load_matrix, validate_matrix
-from atlas.model import ROOT
+from atlas.model import ROOT, all_models
 
 MATRIX = ROOT/'catalogue/applicability/kfs-development-v1.json'
 
@@ -18,9 +18,9 @@ class ApplicabilityMatrixTests(unittest.TestCase):
 
     def test_complete_current_inventory_with_no_eligibility_promotion(self):
         report = load_matrix(MATRIX)
-        self.assertEqual(report['model_count'], 9)
+        self.assertEqual(report['model_count'], len(all_models()))
         self.assertEqual(report['whole_test_count'], 11)
-        self.assertEqual(report['assessment_counts'], {'not_assessed': 8, 'conditional_development_evidence': 1})
+        self.assertEqual(report['assessment_counts'], {'not_assessed': len(all_models())-1, 'conditional_development_evidence': 1})
         self.assertEqual(report['scientific_eligibility'], 'undetermined')
         self.assertEqual(report['independent_review'], 'pending')
         self.assertEqual(report['matrix_sha256'], hashlib.sha256(MATRIX.read_bytes()).hexdigest())

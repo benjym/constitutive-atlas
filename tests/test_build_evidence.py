@@ -60,7 +60,7 @@ class Export(unittest.TestCase):
  def test_source_review_preserves_pending_questions_and_verbatim_receipt(self):
   path,review=self.review();x=self.export();self.assertEqual(len(x['records']),1);self.assertEqual(len(x['reviews']),1);item=x['reviews'][0]
   self.assertEqual(item['status'],'pending');self.assertFalse(item['independent']);self.assertIsNone(item['reviewer']);self.assertIsNone(item['reviewed_at']);self.assertEqual(item['unresolved'],review['unresolved']);self.assertEqual(item['evidence_ids'],review['evidence_ids']);self.assertTrue(item['definition_current'])
-  self.assertEqual((self.dest/'evidence-records'/path).read_bytes(),(self.root/path).read_bytes());self.assertFalse((self.dest/'docs').exists())
+  self.assertEqual((self.dest/'evidence-records'/path).read_bytes(),(self.root/path).read_bytes());self.assertEqual((self.dest/review['dossier']).read_bytes(),(self.root/review['dossier']).read_bytes());self.assertTrue((self.dest/(review['dossier']+'.html')).is_file())
  def test_multiple_reviews_and_historical_acceptance_do_not_promote_current_definition(self):
   path,review=self.review();old=copy.deepcopy(review);old.update(id='elastic-review-old',status='accepted',independent=True,reviewer='Synthetic test fixture',reviewed_at='2026-10-30',unresolved=[]);old['model']['definition_sha256']='f'*64;self.write('catalogue/reviews/old.json',old)
   x=self.export();self.assertEqual(len(x['reviews']),2);accepted=next(v for v in x['reviews']if v['status']=='accepted');self.assertFalse(accepted['definition_current']);self.assertEqual(x['records'][0]['outcome'],'failed');self.assertEqual(json.loads((self.root/'catalogue/manifest.json').read_text())['models'][0]['status'],'transcribed')
@@ -74,4 +74,15 @@ class Export(unittest.TestCase):
  def test_review_definition_symlink_cannot_escape_repository(self):
   self.review();outside=pathlib.Path(self.tmp.name)/'outside.json';outside.write_text('{}');(self.root/'models/elastic.json').unlink();(self.root/'models/elastic.json').symlink_to(outside)
   with self.assertRaises(ValueError):self.export()
-if __name__=='__main__':unittest.main()
+
+
+ def test_public_dossier_view_preserves_original_and_escapes_markup(self):
+  _,review=self.review();raw=b'# Dossier <script>alert(1)</script>'
+  (self.root/review['dossier']).write_bytes(raw);self.export()
+  self.assertEqual((self.dest/review['dossier']).read_bytes(),raw)
+  viewer=(self.dest/(review['dossier']+'.html')).read_text()
+  self.assertNotIn('<script>',viewer);self.assertIn('&lt;script&gt;',viewer);self.assertIn('Download original Markdown',viewer)
+ def test_invalid_dossier_encoding_rejects_before_destination_writes(self):
+  _,review=self.review();(self.root/review['dossier']).write_bytes(b'\xff')
+  with self.assertRaises(UnicodeDecodeError):self.export()
+  self.assertFalse(self.dest.exists())

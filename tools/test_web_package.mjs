@@ -41,16 +41,17 @@ export function validatePackage(directory){
 export async function checkPackage(directory){
  const metadata=validatePackage(directory);
  const createAtlas=(await import(pathToFileURL(join(directory,'atlas.js')))).default;
- const {runLaboratory,normalizeSettings}=await import(pathToFileURL(join(directory,'numerics.mjs')));
+ const {normalizeSettings}=await import(pathToFileURL(join(directory,'numerics.mjs')));
+ const {runScopedLaboratory,laboratoryStress}=await import(pathToFileURL(join(directory,'laboratory-scope.mjs')));
  const {createLoading}=await import(pathToFileURL(join(directory,'loading.mjs')));
  const engine=await createAtlas();
  const report={status:'running',scope:'packaged default-run software smoke test; no scientific admission',catalogue_hash:metadata.sha256,models:[]};
  try{for(const model of metadata.models){
   const initial=model.state.flatMap(f=>f.shape==='sym'?f.initial:[f.initial]);
   assert.ok(initial.every(Number.isFinite),'Nonfinite illustrative state');
-  const specification={model:model.id,parameters:Object.values(model.parameters).map(p=>p.default),initial,protocol:1,target:0.01,steps:100,cycles:0,integration_settings:normalizeSettings()};
+  const specification={response_contract:'stress-scope-0.1',stress_scope:laboratoryStress(model).scope,model:model.id,parameters:Object.values(model.parameters).map(p=>p.default),initial,protocol:1,target:0.01,steps:100,cycles:0,integration_settings:normalizeSettings()};
   specification.loading=createLoading(specification);
-  const result=runLaboratory(engine,specification,metadata.sha256);
+  const result=runScopedLaboratory(engine,specification,metadata);
   report.models.push({id:model.id,specification,result});
   assert.equal(result.ok,true,model.id+': '+result.message);
   assert.equal(result.catalogue_hash,metadata.sha256,'Stale packaged engine: '+model.id);
@@ -58,7 +59,9 @@ export async function checkPackage(directory){
   assert.deepEqual(result.points[0].state,initial,'Unexpected initial state: '+model.id);
   for(const point of result.points){
    assert.equal(point.state.length,initial.length);assert.equal(point.strain.length,6);
-   for(const value of [...point.state,...point.strain,point.p,point.q,point.u])assert.ok(Number.isFinite(value),'Nonfinite plot channel: '+model.id);
+   for(const value of [...point.state,...point.strain,point.p,point.q])assert.ok(Number.isFinite(value),'Nonfinite plot channel: '+model.id);
+   if(result.pore_pressure.availability==='unavailable')assert.equal(point.u,null,'Fabricated pore pressure: '+model.id);
+   else assert.ok(Number.isFinite(point.u),'Invalid available pore pressure: '+model.id);
   }
  }
  }catch(error){report.status='failed';report.error=String(error);error.report=report;throw error;}
