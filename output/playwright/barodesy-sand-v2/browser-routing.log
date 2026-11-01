@@ -1,0 +1,23 @@
+### Result
+{"ordinaryInvalidatedBeforeSwitch":true,"orthotropicStatus":"Completed 3 increment rows.","returnedModel":"barodesy-sand","returnedStatus":"✓ Response up to date","returnedInitialE":"0.75","returnedParameterC1":"-1.0246"}
+### Ran Playwright code
+```js
+await (async(page)=>{
+ const base='/Users/bmar5496/code/constitutive-atlas/output/playwright/barodesy-sand-v2/';
+ await page.locator('#target').fill('0.5');const invalidated=await page.locator('#export-run').isDisabled();
+ await page.locator('#model').selectOption('orthotropic-linear-elastic-ogs');
+ const panel=page.locator('#orthotropic-material-laboratory');await panel.waitFor({state:'visible'});
+ await page.waitForFunction(()=>document.querySelector('#orthotropic-material-laboratory').shadowRoot.querySelector('#status').textContent.startsWith('Completed'));
+ const orthotropicStatus=await panel.locator('#status').innerText();await page.screenshot({path:base+'routing-orthotropic.png',fullPage:true});
+ await page.locator('#model').selectOption('barodesy-sand');
+ await page.waitForFunction(()=>document.querySelector('#orthotropic-material-laboratory').hidden&&!document.querySelector('#export-run').disabled&&document.querySelector('#model').value==='barodesy-sand');
+ const d=page.waitForEvent('download');await page.locator('#export-run').click();await(await d).saveAs(base+'route-recovered.json');
+ return {ordinaryInvalidatedBeforeSwitch:invalidated,orthotropicStatus,returnedModel:await page.locator('#model').inputValue(),returnedStatus:await page.locator('#run-state').innerText(),returnedInitialE:await page.locator('#state-e').inputValue(),returnedParameterC1:await page.locator('#param-c1').inputValue()};
+})(page);
+```
+### Page
+- Page URL: http://127.0.0.1:56013/constitutive-atlas/#laboratory?model=barodesy-sand
+- Page Title: Constitutive Atlas · Model testing
+### Events
+- Downloading file barodesy-sand-run.json ...
+- Downloaded file barodesy-sand-run.json to ".playwright-cli/barodesy-sand-run.json"

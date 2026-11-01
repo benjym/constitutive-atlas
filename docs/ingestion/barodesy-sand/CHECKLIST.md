@@ -142,7 +142,7 @@ Use the current workflow's other parity/profile/browser commands for the actual 
 
 ## E8 — Publish and verify the live website
 
-- [ ] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
+- [X] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
 - [ ] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
 - [ ] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
 - [ ] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
@@ -163,3 +163,5 @@ Full-delivery dispatch prompt:
 ## E6/E7 verification — 2 November2026
 
 Independent interface review accepted both stages, receipt c20d35b39ac6102855106a6d88c65ffee822a4f3f89093d3979c665f5cc3cd43. See DELIVERY.md and delivery-v1/interface-review-v1/REVIEW.md for each item, exact package/SQLite/preservation receipts and actual Chrome default/allprotocol/edit/import/recovery/overlay evidence. E8 remains open pending new remote authorization.
+
+Current merged package E6/E7 independently accepted by interface-review-v2/receipt.json (8de6a21e),1000files/16actualbrowserdownloads/19fetchedhashes; unchanged packet-layout gate passes and exact duplicates preserved. See DELIVERY.md current merged checkpoint. E8 first scoped-local-commit item completed; all remote/live items remain open.

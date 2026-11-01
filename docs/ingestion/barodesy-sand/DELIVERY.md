@@ -47,11 +47,11 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 ## Review and integration identity
 
-- Accepted agent-review record / hash: catalogue/agent-reviews/barodesy-sand-agent-v1.json / df0e95028f38e4af94665ea8689d58b37a92d8c84b33f6aec4c503cbbd84efc6; separate interface receipt delivery-v1/interface-review-v1/receipt.json / c20d35b39ac6102855106a6d88c65ffee822a4f3f89093d3979c665f5cc3cd43.
+- Accepted agent-review record / hash: catalogue/agent-reviews/barodesy-sand-agent-v1.json / df0e95028f38e4af94665ea8689d58b37a92d8c84b33f6aec4c503cbbd84efc6; separate current interface receipt delivery-v1/interface-review-v2/receipt.json / 8de6a21ef56a73aed6c39386667a0272ad3d7fc3c8bf652b5e7f3037054e02d2. Original v1 receipt c20d35b3 remains immutable for its historical package.
 - Approved model path / hash / scope: models/barodesy-sand.json / 3a61b5373404d6973a2957bd0fa21692e10b49e974cdf87eff047d5531851239; exact scoped interior law and separately2019 illustrative calibration.
 - Registry entry: barodesy-sand-agent-v1-approval; exact generated docs/admission/barodesy-sand-agent-v1/approval.json.
 - Native / Wasm toolchain and artifact receipts: delivery-v1/native-build-receipt.json and wasm-build-receipt.json.
-- Packaged engine / catalogue hash: catalogue_hash 38f03e0099cfee9c89deaa59e729ac43563d4d39b17d321721a199e58d3b77d4; all984 files pinned by delivery-v1/package-manifest-v3.json,13 actual browser asset hashes agree.
+- Packaged engine / catalogue hash: catalogue_hash 38f03e0099cfee9c89deaa59e729ac43563d4d39b17d321721a199e58d3b77d4; current1000file merged package pinned by delivery-v1/release-v2/package-manifest.json;19 actual browser asset hashes agree. Original984file package remains historical.
 - Changed bytes after review (none, or new review/qualification): no model/runtime/compiler/schema changes. Exact scientific review installed; additive approval/dossier/discovery, current regression, historical sidecars and tracking changes only. E6/E7 separately accepted; tracking receipt finalization correction retained separately.
 
 ## Deployment receipt
@@ -59,7 +59,7 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 - Release commit: scoped local branch delivery/barodesy-sand-v1 in /private/tmp/atlas-barodesysand-delivery-v1; exact prepared commit recorded in final handoff/local release receipt.
 - Actions run URL and terminal result: pending authorization; no remote run triggered.
 - Pages deployment revision/result: pending; local preview is not live delivery.
-- Tested upload / live asset comparison: not yet applicable; exact local984file package and browser identities recorded.
+- Tested upload / live asset comparison: not yet applicable; exact local1000file merged package and browser identities recorded.
 - Live model URL / actual browser run evidence: pending E8; packaged preview http://127.0.0.1:56013/constitutive-atlas/#laboratory?model=barodesy-sand; actual Chrome receipts under output/playwright/barodesy-sand-v1/.
 - Source/review link checks: DOI attribution, accepted current checklist, exact reviewed definition and current dossier visible; local HTTP200 model/review/dossier identities verified.
 - Remaining limitations: declared numerical/kinematic/experimental restrictions above; remote CI and live verification remain open.
@@ -79,3 +79,13 @@ Source complete; exact declared executable scope and independent numerical quali
 
 - E6: delivery-v1/integration-check.json, supported-package-final.json, preservation.json and exact SQLite/current evidence; independent interface review accepts.
 - E7: delivery-v1/package-manifest-v3.json, browser-numerical-check-final.json and output/playwright/barodesy-sand-v1/ receipts; interface-review-v1/receipt.json seals E6/E7 acceptance.
+
+## Current merged release checkpoint — 2 November2026
+
+The original qualified candidate0e9bb50d is merged with published main d1c3a194, preserving concurrent Maxwell, NorSand and orthotropic work. All156 original scientific source pins and the approved model remain exact. Only published app/builder routing changed; the unchanged standard builder reran all guards including orthotropic, passed supported-input policy and finalized1000files. Current catalogue has14ordinary definitions and44discovery rows; SQLite has45model/192source rows and all19exact registry approvals. All18remote approvals are preserved plus the one barodesy entry.
+
+The same browser/source-reference/parity gates pass16actual downloaded runs (ten original histories, default, edits, latest, reset, exact imported replay and routing recovery). Original ten histories+default retain exact native point equality; edited/routing roundoff stays within the original1e-10scaled parity gate. Ordinary→orthotropic→ordinary cancellation/recovery passes; recovery loads example parameters/e=.75 and retains the .5% target control. Actual fresh reload records69HTTP200/noerrors, mobile390px without overflow and19fetched asset-body hashes matching the package. Compatible measured-channel toggling is interface qualification only, with calibration/preparation warnings.
+
+Current evidence: delivery-v1/release-v2/{prospective-plan.json,integration-check.json,package-manifest.json,supported-package.json,browser-numerical-check.json,ci-regression.log}; output/playwright/barodesy-sand-v2/; separate interface-review-v2/receipt.json accepted all affected E6/E7 scope,101pins. Source-only packet check passes after eight redundant screenshot copies were removed while exact canonical output bytes remain; independent packet-layout-addendum accepts preservation. Original failures, policies, scientific approval and v1 receipts remain immutable.
+
+**Ready to publish.** E8 remote instruction/CI/Pages/live verification remains pending. No push, deploy, experimental validation or broader scientific scope is claimed.

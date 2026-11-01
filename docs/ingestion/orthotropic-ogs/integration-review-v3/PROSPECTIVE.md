@@ -1,0 +1,23 @@
+# Orthotropic current-runtime integration V3 — prospective addendum
+
+Reviewer `/root/orthotropic_review`, 2026-11-02. Scope is source/prospective review of the isolated orthotropic branch merged with origin revision dd7de01fa1695e1858de03a26aea1acabb5fa98e. Prior scientific-review-v1 and interface-review-v1 remain immutable. The original scientific approval and local V2 browser qualification do not prove behavior of this newly merged runtime.
+
+**Prospective decision: no remaining source blocker to the coordinator's authorized push and CI qualification of these exact corrected inputs. Final current-runtime/backend/browser/live acceptance is pending.** No new compiled artifact was executed by this reviewer.
+
+The app delta retains origin Maxwell, NorSand, Lade, ordinary14-model/OCC/Duncan behavior and adds Orthotropic import/controller/metadata and an explicit material-laboratory catalogue route. Existing controller constructors are retained exactly, the original continuation after special selection is preserved, ordinary support/route safeguards remain, and the Maxwell packager is byte-identical to origin. Catalogue preserves all43prior entries and appends one Orthotropic entry. Registry preserves all17prior approvals and appends the exact unchanged approved Orthotropic record. Model SHA remains60a734a0c40fb0f03642752d22c046d4a05ea66bbf53a3c8e7be06fe71287c14 and structurally/semantically validates under the merged Python runtime.
+
+Workflow audit proves every original workflow line survives in order, preserving its existing qualification/publication gates. Additions build/qualify the common dedicated orthotropic target with explicit --parallel1, run unchanged121case references/648state/144tangent/13rejection gates and pure interface tests, and retain raw outputs in native matrix jobs and both actual Wasm jobs. Native artifact is orthotropic-native-${{ matrix.os }}, macOS Wasm artifact orthotropic-wasm-macos in job wasm, Linux artifact orthotropic-wasm-linux in job wasm-linux. The three affected run blocks pass bash -n. No upload was left in controlled-path. Artifact retention does not waive a failed job, and all native/Wasm/controlled-path/deploy terminal gates must still pass. Future reviewers can independently audit saved raw results without local compiled execution or build-slot overlap.
+
+Two reviewer findings were resolved before compiled observation/push, preserving exact old bytes and histories. V3-F1 found the merged registry omitted Orthotropic: the coordinator's selector used approval ID rather than model_id. The exact unchanged approval was appended; all origin entries remain unchanged. V3-F2 found a genuine pure regression failure: existing J2 source-routing fixture hardcoded the complete router initializer and omitted the intentionally added Orthotropic controller. The coordinator claimed the fixture path, archived original bytes and extended precisely that one expected initializer; every previous controller and all behavior assertions remain. I independently compared the updated fixture to archived original and reran the same five-file command:11/11test groups pass, including14ordinary model256deeplink checks/36profile transitions, J2 active/routing/import safeguards, controller composition, support policy and Orthotropic contract. Original failing merged-pure-routing-tests.log remains intact. Neither correction changes a constitutive equation or numerical gate.
+
+The coordinator additionally reported correcting an early return before origin Lade/ordinary continuation and an intermediate wrongly placed upload step before this source handoff. The reviewer checked final source and confirms both hazards are absent; they are not silently endorsed as acceptable drafts.
+
+Reproduce without compiled execution:
+
+```
+python3 -B docs/ingestion/orthotropic-ogs/integration-review-v3/check_source.py /private/tmp/atlas-orthotropic-release-v1
+cd /private/tmp/atlas-orthotropic-release-v1
+node --test tests/test_orthotropic_contract.mjs tests/test_laboratory_controller_router.mjs tests/test_laboratory_deeplinks.mjs tests/test_laboratory_support.mjs tests/test_j2_main_routing.mjs
+```
+
+The prospective manifest binds this report/checker, source hashes and corrected/failing pure-test evidence. Parent may push the authorized reviewed source to obtain fresh current-runtime CI results. This is not a blanket acceptance of changed compiler/runtime behavior or permission to skip terminal CI, exact tested-upload browser or live verification. Continue with an independently bound raw-output assessment and actual new-package/live evidence before closing E8.

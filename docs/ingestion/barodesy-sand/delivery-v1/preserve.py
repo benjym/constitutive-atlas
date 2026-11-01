@@ -13,7 +13,7 @@ def has(node,name,pin):
         return node.get(name)==pin or (node.get('path')==name and any(node.get(k)==pin for k in ['sha256','hash'])) or any(has(v,name,pin) for v in node.values())
     return isinstance(node,list) and any(has(v,name,pin) for v in node)
 
-def preserve(names,report_name='preservation.json'):
+def preserve(names,report_name='preservation.json',raw_inputs=None):
     documents={}
     for base in ['docs','catalogue','tests','benchmarks']:
         for p in (ROOT/base).rglob('*.json'):
@@ -21,7 +21,7 @@ def preserve(names,report_name='preservation.json'):
             if '/source-snapshots/' in rel or '/barodesy-sand/delivery-v1/' in rel:continue
             try:documents[rel]=(p.read_bytes(),json.loads(p.read_bytes()))
             except (ValueError,UnicodeError):continue
-    queue=[(n,(ROOT/n).read_bytes()) for n in names];seen=set();changes={};bindings=[]
+    queue=list(raw_inputs) if raw_inputs is not None else [(n,(ROOT/n).read_bytes()) for n in names];seen=set();changes={};bindings=[]
     while queue:
         name,raw=queue.pop(0);pin=sha(raw)
         if (name,pin) in seen:continue
