@@ -49,10 +49,13 @@ class RecordedBrowserTests(unittest.TestCase):
             def __init__(self):super().__init__();self.ids=[]
             def handle_starttag(self,tag,attrs):self.ids.extend(v for k,v in attrs if k=='id')
         p=Ids();p.feed((ROOT/'web/index.html').read_text());self.assertEqual(len(p.ids),len(set(p.ids)))
-        refs=set(re.findall(r"\$\('([^']+)'\)",(ROOT/'web/recorded-view.mjs').read_text()))
-        self.assertFalse(refs-set(p.ids))
+        self.assertNotIn('recorded',p.ids)
+        self.assertNotIn('setupRecordedView',(ROOT/'web/app.js').read_text())
         builder=(ROOT/'tools/build_web.py').read_text()
-        for name in ['recorded.mjs','recorded-view.mjs','recorded-example.json']:self.assertIn(name,builder)
+        self.assertIn("'recorded.mjs'",builder)
+        self.assertNotIn('bundle_j2(dest',builder)
+        self.assertNotIn('bundle_sls(dest',builder)
+        self.assertNotIn('bundle_power_creep(dest',builder)
 
 
 if __name__=='__main__':unittest.main()

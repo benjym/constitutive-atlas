@@ -14,7 +14,6 @@ function fixture(fn){
  put('models.json',meta);put('catalogue.json',catalogue);put('models/example.json',model);put('schemas/model-v0.3.schema.json','{}');
  for(const name of ['atlas.js','atlas.wasm','worker.js','numerics.mjs','loading.mjs','recorded.mjs','state-contract.mjs','.nojekyll'])put(name,'');
  put('index.html','<script src="./atlas.js"></script><a href="./models/example.json">JSON</a><a href="https://doi.org/10.1002/nag.416">Source</a>');
- put('publications.html','<a href="./index.html#catalogue/example">Model</a>');
  try{fn({dir,put,model,meta,catalogue});}finally{rmSync(dir,{recursive:true,force:true});}
 }
 test('complete local package resolves beneath project prefix',()=>fixture(({dir})=>assert.equal(validatePackage(dir).models.length,1)));

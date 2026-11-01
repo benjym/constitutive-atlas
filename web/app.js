@@ -7,7 +7,6 @@ import {laboratoryPresentation,laboratoryPoreView} from './laboratory-view.mjs';
 import {createLaboratoryDocument,parseLaboratoryDocument,laboratoryDocumentCSV} from './laboratory-document.mjs';
 import {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';
 import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
-import {setupRecordedView} from './recorded-view.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
 const $ = id => document.getElementById(id);
@@ -15,7 +14,6 @@ let compiledCatalogue=null, laboratoryExamples=null;
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
 const experimentCache=new Map();
-let publicationModels=new Set();
 let applicabilityMatrix=null,applicabilityState='loading';
 async function loadApplicability(){
   try{const response=await fetch('./applicability.json');if(!response.ok)throw Error('Applicability unavailable');applicabilityMatrix=validateApplicability(await response.json());applicabilityState='loaded';}
@@ -38,16 +36,6 @@ function restoreCatalogueFocus(){
   }
 }
 function closeCatalogue(){if(catalogueRoute(location.hash).modelId||catalogueRoute(location.hash).invalid){history.replaceState(null,'','#catalogue');route();}else $('catalogue-dialog').close();restoreCatalogueFocus();}
-function publicationReference(id){const row=document.createElement('p');row.dataset.publicationModel=id;updatePublicationReference(row);return row;}
-function updatePublicationReference(row){
-  row.replaceChildren();if(!publicationModels.has(row.dataset.publicationModel))return;
-  const link=document.createElement('a');link.textContent='Publications, versions & lineage →';link.href='./publications.html?'+new URLSearchParams({model:row.dataset.publicationModel});row.append(link);
-}
-async function loadPublicationReferences(){
-  try{const response=await fetch('./publications.json');if(!response.ok)return;const graph=await response.json();if(graph.kind!=='publication-lineage'||graph.schema_version!=='0.1')return;
-    publicationModels=new Set(graph.publications.flatMap(node=>node.model_ids));document.querySelectorAll('[data-publication-model]').forEach(updatePublicationReference);
-  }catch{/* The separate publication page reports evidence-loading errors. */}
-}
 const protocolNames=['Oedometer','Drained triaxial','Undrained triaxial','Undrained stress control','Isotropic compression'];
 function toast(message){$('toast').textContent=message;$('toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').style.display='none',7000);}
 function route(){
@@ -57,7 +45,7 @@ function route(){
   else{if($('catalogue-dialog').open)$('catalogue-dialog').close();if(selection.modelId||selection.invalid)toast('That model link is not in this catalogue.');}
   document.querySelectorAll('.page').forEach(x=>x.hidden=x.id!==page);
   document.querySelectorAll('.rail nav a').forEach(x=>{const active=x.hash==='#'+page;x.classList.toggle('active',active);if(active)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current');});
-  if($('breadcrumb'))$('breadcrumb').textContent={laboratory:'MODEL TESTING',catalogue:'MODEL CATALOGUE',methods:'METHODS & EVIDENCE',recorded:'RECORDED PATHS'}[page];
+  if($('breadcrumb'))$('breadcrumb').textContent={laboratory:'MODEL TESTING',catalogue:'MODEL CATALOGUE',methods:'METHODS & EVIDENCE'}[page];
   const target=$(anchor);
   if(target&&target!==$(page)){
     if(target.tagName==='DETAILS')target.open=true;
@@ -160,7 +148,7 @@ function populate({loadExample=true}={}){
     for(const constraint of m.domain)content.append(element('pre',constraint));
   }
   sourceLinks(content,m.sources);
-  const sources=$('model-sources');sources.replaceChildren();sourceLinks(sources,m.sources);sources.append(definitionLink(m.id),publicationReference(m.id));
+  const sources=$('model-sources');sources.replaceChildren();sourceLinks(sources,m.sources);sources.append(definitionLink(m.id));
   currentResult=null;lastSpec=null;experimentOptions($('experiment-select').value);renderCharts();$('export-run').disabled=$('export-csv').disabled=true;syncSliders();
 }
 function valuesForState(m){
@@ -315,7 +303,7 @@ function renderCharts(){
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!entry.timed_laboratory;if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
+  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec;if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
     const heading=element('h2'),open=element('a',entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
@@ -329,12 +317,11 @@ function catalogueCards(){
 function showCatalogueModel(entry,spec){
   const dialog=$('catalogue-dialog'),body=$('catalogue-detail-body');body.replaceChildren();
   $('catalogue-detail-title').textContent=entry.name;$('catalogue-detail-family').textContent=entry.family;
-  $('catalogue-detail-status').textContent=entry.timed_laboratory?'Approved scope · timed laboratory':spec?'Available to test · '+spec.status:'Research candidate';
-  $('catalogue-detail-status').className='catalogue-availability'+(spec||entry.timed_laboratory?' available':'');
+  $('catalogue-detail-status').textContent=spec?'Available to test · '+spec.status:'Research candidate';
+  $('catalogue-detail-status').className='catalogue-availability'+(spec?' available':'');
   body.append(element('p',entry.note||spec?.description||'Bibliographic and formulation review pending.','catalogue-detail-note'));
   body.append(formulationSection(document,spec));
-  if(entry.timed_laboratory&&/^[a-z0-9-]+\.html$/.test(entry.timed_laboratory)){const link=element('a','Open physical-time laboratory ↗');link.href='./'+entry.timed_laboratory;body.append(link);}
-  if(!spec&&!entry.timed_laboratory){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
+  if(!spec){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);
   if(sources.length){
@@ -347,7 +334,6 @@ function showCatalogueModel(entry,spec){
   }
   body.append(evidenceSection(document,entry.id,evidenceIndex,evidenceState));
   body.append(applicabilitySection(document,entry.id,applicabilityMatrix,applicabilityState));
-  body.append(publicationReference(entry.id));
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
   $('catalogue-detail-id').textContent=entry.id;
   $('catalogue-permalink').href=catalogueModelHash(entry.id);
@@ -506,7 +492,6 @@ try{
   const [response,manifest]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json')]);if(!response.ok||!manifest.ok)throw Error('Catalogue could not be loaded.');
   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
-  setupRecordedView({catalogue:definitions,chart,sourceLinks,definitionLink});
   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:applyRunSpecification,onError:toast});
-  populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadPublicationReferences();loadEvidenceIndex();loadApplicability();
+  populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

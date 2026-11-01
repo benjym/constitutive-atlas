@@ -65,9 +65,7 @@ Rebuilding originals uses `tools/ingest_public_data.py --download` with the opti
 
 ## Publication evidence browser
 
-`publications.html` renders the canonical publication lineage records with search, version/formulation filters, correction notices, DOI/source hyperlinks, evidence locators and shareable anchors. Its assets are included by the existing Pages packaging. Bound model source panels link directly to the corresponding publication records; publication identity remains separate from executable model admission. All current lineage evidence awaits independent review.
-
-To review this static page without compiling or running the solver, use `python3 tools/build_publications.py --output /private/tmp/atlas-publication-preview` and serve that directory locally. This page loads no Wasm; the standalone preview does not contain the laboratory. The full website still requires its existing native/Wasm verification and packaging workflow. See [publication lineage](../docs/PUBLICATION_LINEAGE.md) for source coverage and verification limits.
+The Publications & lineage page is no longer included in the public website. Canonical publication records and the standalone research preview tools remain in the repository.
 
 LEAP 2018 adds 17 simple-shear acquisitions and nine torsion specimens. Torsion raw acquisitions, calibrated phase histories and cycle summaries remain separate records because they overlap and use different coordinates. Repeated raw files are checksum-deduplicated. To rebuild just these sources while verifying and retaining the rest of the catalogue, use `python3 tools/ingest_public_data.py --raw-dir PATH --source leap-2018-dss --source leap-2018-torsion` (add `--download` to retrieve pinned originals). XLS reading additionally requires the optional `xlrd` dependency. Hosted records are limited to 32 MiB; the longest full-resolution torsion history is 26.5 MB.
 
@@ -82,7 +80,7 @@ The worker uses `atlas_run_controls_with_settings` for current exact loading and
 For isolated local verification, `tools/test_wasm.mjs` accepts `--wasm-dir DIRECTORY --native EXECUTABLE`, and `tools/build_web.py` accepts `--wasm-dir DIRECTORY --output DIRECTORY`. Defaults retain the normal build/package paths; an isolated engine directory must contain `atlas.js`, `atlas.wasm`, and the exact current `generated/models.json`. Packaging still checks canonical model equality and measurement release permissions. No build is implied by either option.
 
 
-The **Recorded paths** view accepts the [experimental recorded-run contract](../docs/RECORDED_PATHS.md#browser-recorded-paths), with ordered mixed controls, six component plots, cancellation and exact-request exports. Run `node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver` to check the shared native/Wasm entry point. The view recalculates imported runs locally; it does not infer a loading path from a measured curve.
+The public website no longer includes Recorded paths or the dedicated J2, Standard Linear Solid and power creep laboratories. Their source tools and scientific evidence remain available in the repository.
 
 ## Catalogue links and retained evidence
 

@@ -25,7 +25,7 @@ export function validatePackage(directory){
   }
  }
  const base=new URL('https://example.invalid/constitutive-atlas/');
- for(const file of ['index.html','publications.html']){
+ for(const file of ['index.html']){
   const html=readFileSync(join(directory,file),'utf8');
   for(const match of html.matchAll(/(?:src|href)=["']([^"']+)["']/g)){
    const href=match[1];if(href.startsWith('#'))continue;
