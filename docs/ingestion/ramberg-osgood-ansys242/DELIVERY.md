@@ -14,7 +14,7 @@ Copy to `docs/ingestion/ramberg-osgood-ansys242/DELIVERY.md`. Follow `docs/MODEL
 - Implementation run ID(s):
 - Independent review run ID:
 - Build/execution owner and handoff:
-- Remote authorization reference (or pending): current session explicit “accept ... website, commit and push” loop continued by “another ... end to end”.
+- Remote authorization reference (or pending): prior explicit loop authorization was judged insufficient by automatic approval review under current AGENTS.md new-explicit-instruction rule. New push/CI/deploy authorization requested; pending.
 
 Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidence beside each phase and link the detailed check results. Keep MODEL-ramberg-osgood-ansys242 open until E8 is verified; specialist task completion closes only that task.
 
@@ -30,7 +30,7 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 ## Current handoff
 
-- Current phase / overall state: E0–E7 verified; E8 commit/push/CI/live underway
+- Current phase / overall state: E0–E7 verified; E8 ready to publish, awaiting new explicit remote authorization after automatic approval review rejected the push.
 - Current owner:
 - Blocker / missing evidence:
 - Smallest next action / next owner:
@@ -54,7 +54,7 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 ## Deployment receipt
 
-- Release commit:
+- Release commit: local reviewed release58ce5ebaf1bd44cc5f286c6a86b6c549c68660a0; not pushed.
 - Actions run URL and terminal result:
 - Pages deployment revision/result:
 - Tested upload / live asset comparison:
