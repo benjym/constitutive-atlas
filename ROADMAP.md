@@ -2,7 +2,7 @@
 
 Current Burgers delivery: the exact restricted continuous dry zero-spin timed formulation is source-mapped and independently approved, with fresh bounded native/Wasm qualification and main-laboratory creep/relaxation controls. It remains separate from the twelve ordinary strain-path formulations and does not claim experimental validation. Local package/browser evidence and remaining CI/live gates are tracked in [the Burgers ledger](docs/ingestion/burgers-itasca900/DELIVERY.md). Historical Burgers packets retain their original scope/metadata.
 
-Last updated: 30 October 2026. Maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
+Last updated: 1 November 2026. Maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
 
 This is the implementation and research plan for the [repository](https://github.com/benjym/constitutive-atlas) and [public laboratory](https://benjym.github.io/constitutive-atlas/). Progress is milestone-based, without a fixed deadline. Unchecked work below is planned, not delivered. The [research charter](docs/RESEARCH_CHARTER.md) governs admission and scientific claims; [architecture](docs/ARCHITECTURE.md) describes the current implementation.
 
@@ -32,61 +32,72 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 ## Delivery focus — 1 November 2026
 
-The [current status summary](docs/STATUS.md) separates executable definitions,
-source review, numerical evidence and deployment. Eleven top-level models execute
-locally, including the draft associated Tresca BK2022v1/project BE; twenty
-formal reviews remain pending, with exact current-definition coverage of all
-eleven. The [local Tresca integration](docs/reviews/tresca-draft-integration-v1/README.md)
-retains its bounded numerical and browser checks separately from admission. The [four added draft records](docs/reviews/additional-executable-source-coverage-v1/README.md)
-expose existing source/preparation/numerical questions; this is not scientific signoff.
-The exact [GIS2024 draft installation](docs/reviews/gis2024-draft-installation-v1/README.md) adds a separately labelled small run example, pending source review and unassessed applicability. Its ordinary global-default run still fails. [Local B01–B12 browser gates](docs/reviews/gis2024-browser-closure-v1/README.md) are complete for the bounded draft, including explicit full-history replay/preparation disclosure; scientific admission and deployment remain separate. No new build, fit or deployment is implied.
-These counts do not close scientific admission, the six-model proof or the
-twenty-formulation release target. Historical delivery notes are not new assignments.
+The working tree contains thirteen top-level strain-path definitions: twelve are
+committed and Original Cam Clay is undergoing shared integration. Research and
+physical-time definitions are separate. These are implementation counts, not
+scientific admission or live-delivery counts. Historical `draft` labels and pending
+legacy reviews remain preserved; current exact-definition agent approvals live in
+[the approval registry](catalogue/approved-models.json). Consult each
+[delivery ledger](docs/MODEL_DELIVERY_CHECKLIST.md) and the
+[live board](IMPLEMENTATION_PLAN.md) for its actual E0–E8 evidence. The status
+summary and older packets contain earlier counts; they do not override current
+model identities or delivery gates.
 
-The immediate scientific deliverable remains a qualified model-to-experiment
-comparison. The [KFS scientific-review handoff](docs/benchmarks/kfs-development-review-v1/README.md)
-is assembled; an independent checklist review agent remains to be assigned. Original VW96 technical
-reading and baseline source/initialization reconciliations are complete to their
-recorded scopes. Independent judgment, historical coordinate/preparation issues
-and public data-reuse permission remain open. Do not repeat the technical review
-or launch more fits to avoid those gates.
+The immediate engineering priority is to finish existing model delivery handoffs,
+including common-engine integration, current package/browser qualification and
+exact CI/live verification. [Original Cam Clay](docs/ingestion/original-cam-clay/DELIVERY.md),
+[Burgers](docs/ingestion/burgers-itasca900/DELIVERY.md) and
+[SLS](docs/ingestion/sls-comsol63/DELIVERY.md) have separate integration/release
+owners; preserve those handoffs rather than start competing release work.
+[Barodesy clay](docs/ingestion/barodesy-clay-2017/DELIVERY.md) has accepted exact
+agent approval and a qualified candidate NCL example, with root example/package
+integration still open. Baseline elasticity, Drucker–Prager and Modified Cam Clay
+also have bounded exact agent approvals; their migration, current package and
+live gates remain distinct. Approval alone does not deliver the website.
 
-The bounded KFS numerical campaign and its website handoff are delivered:
-[current build receipt](docs/benchmarks/current-source-build-v1/README.md),
-[synthetic comparison](docs/benchmarks/current-archived-vw96-v1/README.md),
-[current-source TMD7 replay](docs/benchmarks/current-kfs-tmd7-v1/README.md) and
-[local evidence panel](docs/reviews/web-current-tmd7-v1/README.md).
-The [original failed refinement](docs/benchmarks/kfs-propagation-refinement-v1/README.md)
+The scientific comparison milestone remains open, but its reporting review is no
+longer unassigned. The separate [KFS C1–C7 review](docs/benchmarks/kfs-development-agent-v1/README.md)
+accepts qualified development reporting. Its scalar-only website projection has
+[local browser evidence](docs/reviews/web-kfs-reporting-agent-v1/README.md).
+The [full private campaign retention](docs/benchmarks/kfs-full-private-retention-v1/README.md)
+and [relocated saved-audit replay](docs/benchmarks/kfs-relocated-audit-v1/README.md)
+are complete within their stated scopes. This does not establish blind validation,
+resolve specimen-state conflicts or the archived source/build association, grant
+measurement redistribution rights, or certify new numerical trajectories. The
+[original failed refinement](docs/benchmarks/kfs-propagation-refinement-v1/README.md)
 and [separate passing nested regime](docs/benchmarks/kfs-nested-partitions-v1/README.md)
-remain distinct. The [portable TMD2 command](docs/benchmarks/kfs-tmd2-portable-v1/README.md)
-and [read-only website snapshot](docs/reviews/tmd2-web-snapshot-v1/README.md)
-are available with their stated qualifications. Stop numerical expansion here;
-none of these deliveries constitutes scientific signoff.
+remain distinct. Do not launch additional fits or sweeps to bypass these limits.
 
-The [catalogue review disclosure](docs/reviews/web-source-review-status-v1/README.md)
-shows pending reviews independently of numerical passes. Latest local website
-changes still require separate hosted verification; deployment needs a fresh
-explicit instruction. Existing Pages availability does not establish that those
-changes are deployed. The [archive-coverage repair](docs/reviews/historical-archive-coverage-v1/README.md)
-is complete; separate exact-source availability gaps stay on the live board.
+For new common-engine capability, [NorSand](docs/ingestion/norsand-1993/DELIVERY.md)
+now has its original source and independently reviewed staged path-control
+implementation, with 58 requests per native/Wasm backend passing. Installation
+of that generic profile, durable CI coverage and final model approval/browser
+integration remain open under their own ownership. Staged capability success is
+not public atlas support.
 
-For source ingestion, the [multilaminate full-formulation decision](docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/README.md)
-closes the current reading pass. Next resolve the ordered equation, branch and
-lifecycle questions or prepare an independently reviewed corrected-variant ledger,
-then scope a generic capability design. No capacity shortcut or reduced variant.
-[Terra Cotta journal/preprint identities](docs/ingestion/terracotta-2024/publication-records-v1/README.md)
-are now canonical; full journal page reconciliation remains open. The
-[SANISAND access checkpoint](docs/reviews/sanisand-1986-access-v2/README.md)
-requires a readable copy or concrete new lead before further retries.
+SANISAND and Terra Cotta remain near-term scientific targets, not completed
+formulations. [SANISAND's source-scope decision](docs/reviews/sanisand-source-scope-v1/decision.json)
+keeps the current candidate research-only with retained failed accuracy/refinement
+gates and unresolved loading-process/source choices; resume only on the named
+source or discriminating-evidence triggers. [Terra Cotta journal follow-up](docs/ingestion/terracotta-2024/journal-followup-v1/README.md)
+records the exact missing journal page reconciliation and strictness/preset
+questions. Its author-image/code evidence must not be substituted for complete
+journal verification. Multilaminate work retains its
+[full-formulation questions](docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/README.md)
+and separately reviewed correction/capability handoffs.
 
-SANISAND and Terra Cotta remain near-term targets. Mohr–Coulomb browser integration
-is deferred with its [saved-JSON correction checkpoint](docs/reviews/mc-saved-json-v1/README.md);
-full prospective closure/audit precedes resumption. The first release still targets
-twenty distinct formulations; the paper's 50+ ambition is not a prerequisite.
-Use the live implementation board to claim bounded work and preserve completed
-source, numerical and website deliveries rather than restarting them.
+Keep the twenty-formulation release target, SANISAND representation proof and one
+qualified experimental benchmark as the roadmap gates. Current additions and
+agent approvals do not close those milestones. Complete bounded existing work,
+keep the paper's claims aligned with its evidence and require an exact delivered
+revision for website claims. This reconciliation is documentation only: no new
+build, model promotion, fit or deployment is implied.
 
 ## 2. Starting point
+
+The following table records the original project baseline, not current model counts
+or current admission status. The delivery focus above and linked ledgers describe
+subsequent progress.
 
 | Area | Existing foundation | Outstanding evidence or capability |
 | --- | --- | --- |
