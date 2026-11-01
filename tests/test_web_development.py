@@ -22,8 +22,11 @@ class DevelopmentPageTests(unittest.TestCase):
             for name in ('manifest.json','results.json','policy.json'):
                 shutil.copyfile(ROOT/folder/name,destination/name)
         for folder in CURRENT_FOLDERS:shutil.copytree(ROOT/folder,root/folder,ignore=shutil.ignore_patterns('__pycache__'))
+        from tools.build_reporting_review import PACKET
+        for folder in (PACKET,Path('docs/benchmarks/kfs-development-review-v1')):
+            shutil.copytree(ROOT/folder,root/folder)
         (root/'web').mkdir()
-        for name in ('development.html','development.mjs','propagation.mjs'):shutil.copyfile(ROOT/'web'/name,root/'web'/name)
+        for name in ('development.html','development.mjs','propagation.mjs','reporting-review.mjs'):shutil.copyfile(ROOT/'web'/name,root/'web'/name)
         return root
 
     def repin(self,root,folder,name):
@@ -34,7 +37,7 @@ class DevelopmentPageTests(unittest.TestCase):
     def test_only_explicit_scalar_view_is_exported(self):
         root=self.fixture();(root/LOCKED/'private-response.json').write_text('PRIVATE_SENTINEL')
         data=bundle(self.output,root)
-        self.assertEqual({p.name for p in self.output.iterdir()},{'development.html','development.mjs','propagation.mjs','development.json'})
+        self.assertEqual({p.name for p in self.output.iterdir()},{'development.html','development.mjs','propagation.mjs','reporting-review.mjs','development.json','reporting-review'})
         self.assertEqual(data['status'],'provisional');self.assertFalse(data['scientific_admission'])
         self.assertEqual(len(data['scores']),4);self.assertEqual(len(data['refinement']['shifts']),12)
         text=(self.output/'development.json').read_text()

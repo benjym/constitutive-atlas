@@ -112,7 +112,7 @@ def current_replay(root,archived_definition,propagation):
        'sources':[{'title':'Current-source TMD7 replay: fixed inputs, results and audit','url':'https://github.com/benjym/constitutive-atlas/tree/main/'+str(REPLAY)},
                   {'title':'Current native source and build receipt','url':'https://github.com/benjym/constitutive-atlas/tree/main/'+str(BUILD)}],
        'limitations':['One fixed density3 vector and recorded-file initialization; complete existing development window, not the full acquired test or blind evaluation.',
-          'Compatibility with an archived prediction does not establish agreement with measurements, general engine equivalence or independent scientific review.',
+          'Compatibility with an archived prediction does not establish agreement with measurements, general engine equivalence or model admission.',
           'The historical executable still lacks an exact source/build receipt; the current executable has its own provenance.',
           'The six-test panels above remain archived results. The website Wasm engine is a separate artifact, not this native executable.',
           'The original refinement sequence remains failed. Raw curve redistribution rights and scientific admission remain open.'],
@@ -207,5 +207,5 @@ def summary(root,definition_sha256):
              'Source void ratios remain disputed; neither scenario is selected as physically correct by its error.',
              'Both calibration selections exhaust their search budgets; unique parameters and a global optimum are not established.',
              'The original refinement sequence remains failed. The nested result covers four cases in a different caller regime, not a new six-test panel or proof of cause/convergence order.',
-             'Archived executable lacks an exact source-to-build receipt; current-engine equivalence and independent scientific review remain open.'],
+             'Archived executable lacks an exact source-to-build receipt; current-engine equivalence and model admission remain open.'],
             'sources':links,'evidence_sha256':pins}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KFS development evidence · Constitutive Atlas</title><link rel="stylesheet" href="./style.css">
+<style>main{max-width:1050px;margin:auto;padding:24px}.development-panel{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:24px;margin:24px 0}.table-scroll{overflow:auto}table{width:100%;border-collapse:collapse}th,td{padding:12px;text-align:left;border-bottom:1px solid var(--line)}select{max-width:100%;padding:10px;margin:10px 0}p,li{line-height:1.7}li{margin:8px 0}code{overflow-wrap:anywhere}#model-identity{overflow-wrap:anywhere;font-size:12px}h1{font-size:clamp(28px,5vw,44px)}.development-panel h2{font-size:23px}caption{text-align:left;padding:12px 0}@media(max-width:600px){main{padding:16px}.development-panel{padding:16px}th,td{padding:9px;font-size:12px}}.propagation-selectors{display:flex;flex-wrap:wrap;gap:24px}tr[aria-current="true"]{background:rgba(76,125,170,.14)}#propagation-selection{font-weight:600}h3{margin-top:28px}</style>
+</head><body><main>
+<header><a href="./index.html#methods">← Methods &amp; evidence</a></header>
+<div class="eyebrow" style="margin-top:28px">PROVISIONAL / PREVIOUSLY EXPOSED DEVELOPMENT TESTS</div>
+<h1>How much does initialization change the comparison?</h1>
+<p class="page-lead">Base VW96 sand hypoplasticity on Karlsruhe fine sand. Archived development fits, competing calibration and evaluation initialization assumptions, and qualified numerical refinement checks.</p>
+<p id="development-status" role="status">Loading scalar evidence…</p>
+<noscript><p>JavaScript is needed for the selector. <a href="./development.json">Download the aggregate evidence JSON</a>.</p></noscript>
+<section class="development-panel" aria-labelledby="score-title"><h2 id="score-title">Locked parameters: change evaluation inputs.</h2>
+<p>Pressure3 and density3 each use three calibration tests, with different pressure/density coverage. Evaluation tests were excluded from those fits but had already been inspected. This is a within-model development contrast.</p>
+<label for="scenario">Evaluation initialization</label><br><select id="scenario" disabled><option>Loading…</option></select>
+<p id="scenario-description"></p>
+<div class="table-scroll"><table><caption>Root scaled mean squared error; lower is better for this declared objective</caption><thead><tr><th scope="col">Locked calibration package</th><th scope="col">Error</th><th scope="col">Change from file scenario</th></tr></thead><tbody id="scores"></tbody></table></div>
+<p id="contrast" aria-live="polite"></p>
+<p>The selector changes saved scalar reporting. It does not fit parameters or run a model. Stress errors use initial mean effective pressure; volume strain uses a scale of 0.01. Tests and channels have equal weights. The acquisition window ends at the first crossing of 2% axial strain; errors integrate the piecewise-linear residual over absolute axial-strain travel.</p>
+</section>
+<section class="development-panel" aria-labelledby="refinement-title"><h2 id="refinement-title">Refinement of the locked-parameter comparison.</h2>
+<p id="refinement-summary"></p>
+<p>TMD12 and TMD14 under both original locked pressure3/density3 fits were checked at maximum axial increments 0.0002, 0.0001 and 0.00005. Adjacent changes must decrease under the frozen numerical rule. This checks output sensitivity over those increments, not physical accuracy or constitutive equations.</p>
+<details><summary>Inspect initialization shifts at each resolution</summary><p>Normalized RMS response difference between the two scenarios at the same resolution. These values are not experimental errors.</p><div class="table-scroll"><table><thead><tr><th scope="col">Package / test</th><th scope="col">Maximum increment</th><th scope="col">Stress shift</th><th scope="col">Volume shift</th></tr></thead><tbody id="refinement-rows"></tbody></table></div></details>
+</section>
+<section class="development-panel" aria-labelledby="propagation-title"><h2 id="propagation-title">What changes when calibration inputs change too?</h2>
+<p>This separate density3 study changes only TMD13’s calibration void ratio, selects parameters using calibration error, then evaluates the locked selection on the same six development tests. The evaluation alternative changes only TMD12/TMD14 void ratios. Recorded effective stresses stay fixed. These are competing assumptions, not source corrections.</p>
+<p id="propagation-status" role="status">Loading calibration propagation evidence…</p>
+<div class="propagation-selectors"><div><label for="calibration-scenario">Calibration initialization (TMD13)</label><br><select id="calibration-scenario" disabled><option>Loading…</option></select></div><div><label for="evaluation-scenario">Evaluation initialization (TMD12/TMD14)</label><br><select id="evaluation-scenario" disabled><option>Loading…</option></select></div></div>
+<p id="propagation-selection" aria-live="polite"></p>
+<div class="table-scroll"><table><caption>Four six-test root scaled MSE panels; selected combination is highlighted</caption><thead><tr><th scope="col">Calibration assumption</th><th scope="col">Evaluation assumption</th><th scope="col">Error</th></tr></thead><tbody id="propagation-panels"></tbody></table></div>
+<p>The selectors change saved reporting only. Calibration retains its historical uniform-strain-grid objective; evaluation uses the ordered linear-residual metric described above. The two objectives are distinct. A lower evaluation error does not identify the physically correct source state.</p>
+<h3>Two refinement outcomes, with different scopes.</h3>
+<p id="propagation-original"></p>
+<p>The original three nominal increment limits cover all sixteen factorial cases. Small output changes did not satisfy the complete frozen gate.</p>
+<details><summary>Inspect the original failed checks</summary><div class="table-scroll"><table><thead><tr><th scope="col">Test / calibration assumption</th><th scope="col">Channel</th><th scope="col">Coarse→medium</th><th scope="col">Medium→fine</th></tr></thead><tbody id="propagation-failures"></tbody></table></div></details>
+<p id="propagation-nested"></p>
+<p>The follow-up covers only TMD7/TMD9 under both selected vectors. It doubles per-segment caller step counts from the saved finest run, then doubles again. It supports a separately tested rejection-free regime. It does not pass the original sequence, establish an asymptotic order, or create a new six-test error panel.</p>
+<details><summary>Inspect the eight nested-regime checks</summary><div class="table-scroll"><table><thead><tr><th scope="col">Test / calibration assumption</th><th scope="col">Channel</th><th scope="col">N→2N</th><th scope="col">2N→4N</th></tr></thead><tbody id="nested-rows"></tbody></table></div></details>
+<ul id="propagation-limits"></ul><h3>Sources and reproducible evidence</h3><ul id="propagation-sources"></ul>
+</section>
+<section class="development-panel" aria-labelledby="current-replay-title"><h2 id="current-replay-title">One replay with a traceable current build.</h2>
+<p>A source-pinned native executable replays the existing TMD7 development window with the same density3 parameters, file initialization and acquired loading order. The window ends before the first crossing of 2% axial strain; it is not the full experimental test. This fixed file/file replay is independent of the selectors above. This panel reports saved evidence and runs no calculations.</p>
+<p id="current-replay-status" role="status">Loading current-build replay evidence…</p>
+<p id="current-replay-diagnostics"></p>
+<details><summary>Inspect all seven compatibility gates</summary><p>Maximum state differences and ordered curve-RMS differences compare current and archived predictions. These limits test software compatibility, not physical accuracy.</p><div class="table-scroll"><table><thead><tr><th scope="col">Quantity</th><th scope="col">Difference</th><th scope="col">Limit</th><th scope="col">Outcome</th></tr></thead><tbody id="current-replay-rows"></tbody></table></div></details>
+<p id="current-replay-errors"></p><ul id="current-replay-limits"></ul>
+<details><summary>Inspect native build identity</summary><p id="current-replay-identity" style="overflow-wrap:anywhere"></p></details>
+<h3>Reproducible evidence</h3><ul id="current-replay-sources"></ul>
+</section>
+<section class="development-panel"><h2>What remains open?</h2><ul id="limitations"><li>Independent scientific review remains pending.</li></ul><p>No measured or predicted curves are included here. Raw data reuse rights remain under review. The <a href="./tmd2.html">source-matched TMD2 + IGS reproduction</a> is a separate published-case calculation.</p><p id="model-identity"></p></section>
+<section class="development-panel"><h2>Inspect the evidence and sources.</h2><ul id="sources"></ul><p><a href="./development.json">Download scalar evidence and source hashes (JSON)</a></p></section>
+</main><script type="module" src="./development.mjs"></script><script type="module" src="./propagation.mjs"></script></body></html>

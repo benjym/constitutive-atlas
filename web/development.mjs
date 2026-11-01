@@ -50,7 +50,7 @@ export async function mount(doc,fetcher=fetch){
     doc.getElementById('limitations').replaceChildren(...data.limitations.map(x=>element('li',x)));
     doc.getElementById('sources').replaceChildren(...data.sources.map(s=>{const li=doc.createElement('li'),link=element('a',s.title);link.href=s.url;li.append(link);return li;}));
     doc.getElementById('model-identity').textContent='Archived definition SHA-256: '+data.definition_sha256;
-    status.textContent='Provisional development evidence loaded. Independent scientific review is pending.';
+    status.textContent='Provisional development evidence loaded. Model admission remains pending; see the separate reporting review.';
   }catch(error){status.textContent='Development evidence unavailable: '+error.message;status.setAttribute('role','alert');}
 }
 if(typeof document!=='undefined')mount(document);

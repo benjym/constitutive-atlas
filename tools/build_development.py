@@ -80,15 +80,19 @@ def summary(root=ROOT):
         'evidence_sha256':pins}
     from tools.build_propagation import summary as propagation_summary
     result['propagation']=propagation_summary(root,result['definition_sha256'])
+    from tools.build_reporting_review import projection
+    result['reporting_review']=projection(root)
     return result
 
 
 def bundle(destination,root=ROOT):
     result=summary(root)  # Fail before writing public outputs.
     destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
-    for name in ('development.html','development.mjs','propagation.mjs'):
+    for name in ('development.html','development.mjs','propagation.mjs','reporting-review.mjs'):
         shutil.copyfile(Path(root)/'web'/name,destination/name)
     (destination/'development.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
+    from tools.build_reporting_review import bundle as review_bundle
+    review_bundle(destination,root)
     return result
 
 

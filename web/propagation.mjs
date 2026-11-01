@@ -84,7 +84,7 @@ export async function mountPropagation(doc,fetcher=fetch){
     doc.getElementById('current-replay-identity').textContent='Native source commit: '+replay.source_commit+'. Executable SHA-256: '+replay.artifact_sha256+'.';
     doc.getElementById('current-replay-limits').replaceChildren(...replay.limitations.map(x=>element('li',x)));
     doc.getElementById('current-replay-sources').replaceChildren(...replay.sources.map(s=>{const li=element('li',''),a=element('a',s.title);a.href=s.url;li.append(a);return li;}));
-    status.textContent='Four saved sensitivity panels loaded. Both selections used calibration only: three starts per scenario, 96 candidates per start; all exhausted the budget. Independent scientific review is pending.';
+    status.textContent='Four saved sensitivity panels loaded. Both selections used calibration only: three starts per scenario, 96 candidates per start; all exhausted the budget. Model admission remains pending; see the separate reporting review.';
   }catch(error){const replayStatus=doc.getElementById('current-replay-status');if(replayStatus){replayStatus.textContent='Current replay evidence unavailable.';replayStatus.setAttribute('role','alert');}status.textContent='Propagation evidence unavailable: '+error.message;status.setAttribute('role','alert');}
 }
 if(typeof document!=='undefined')mountPropagation(document);
