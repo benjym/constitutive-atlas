@@ -2,6 +2,7 @@
 // or integrate() call is used to construct an expected state.
 #include "atlas/recorded.hpp"
 #include <algorithm>
+#include <cstdlib>
 #include <cmath>
 #include <iostream>
 #include <iomanip>
@@ -10,6 +11,7 @@
 using namespace atlas;
 namespace {
 int checks=0, cases=0;
+bool explicit_fixtures=false;
 void require(bool value,const std::string& label){++checks;if(!value)throw std::runtime_error(label);}
 void close(double a,double b,double absolute,double relative,const std::string& label){
  require(std::isfinite(a)&&std::isfinite(b)&&std::abs(a-b)<=absolute+relative*std::max(std::abs(a),std::abs(b)),label);
@@ -117,15 +119,24 @@ void additional_recorded_cases(){
   double amplitude=models()[m].id=="drucker-prager"?.012:models()[m].id=="modified-cam-clay"?.02:.0002;
   const double factors[]={0.,1.,-.6,-.6,.2};
   for(int k=0;k<5;++k){RecordedKnot knot;knot.coordinate=k;knot.targets[0]=factors[k]*amplitude;knot.targets[1]=knot.targets[2]=-.2*knot.targets[0];knot.targets[3]=.15*knot.targets[0];cyclic.knots.push_back(knot);}
-  auto run=replay_recorded(int(m),z,p,cyclic);++cases;require(run.ok,"nonlinear recorded replay failed: "+models()[m].id+" "+run.message);
+  RecordedSettings fixture_settings;
+  if(explicit_fixtures&&models()[m].id=="research-hp-extracted-asbs-gis-2024-v03"){
+   require(fixture_settings.material.max_depth==14,"original default depth changed; review fixture allocation");
+   const auto original=replay_recorded(int(m),z,p,cyclic);++cases;
+   require(!original.ok&&original.failed_knot==1&&original.points.size()==1&&original.state==z&&original.strain.v==Sym<double>{}.v&&original.attempted_substeps==0,"original GIS default failure/rollback changed");
+   Sym<double> first;first.v=cyclic.knots[1].targets;const auto rejected=integrate(int(m),z,first,p);++cases;
+   require(!rejected.ok&&rejected.state==z&&rejected.diagnostics.substeps==0,"original GIS direct rollback changed");
+   fixture_settings.material.max_depth=20;
+  }
+  auto run=replay_recorded(int(m),z,p,cyclic,fixture_settings);++cases;require(run.ok,"nonlinear recorded replay failed: "+models()[m].id+" "+run.message);
   auto continuation=cyclic;continuation.initial_strain=run.points[2].strain;
   continuation.knots.erase(continuation.knots.begin(),continuation.knots.begin()+2);
-  auto resumed=replay_recorded(int(m),run.points[2].state,p,continuation);++cases;
+  auto resumed=replay_recorded(int(m),run.points[2].state,p,continuation,fixture_settings);++cases;
   require(resumed.ok&&resumed.state==run.state&&resumed.strain.v==run.strain.v,"recorded restart differs from uninterrupted path");
   State parent=z;Sym<double> previous;
   for(size_t k=1;k<cyclic.knots.size();++k){
    Sym<double> de;for(int j=0;j<6;++j)de.v[j]=cyclic.knots[k].targets[j]-previous.v[j];
-   if(k!=3){auto direct=integrate(int(m),parent,de,p);require(direct.ok,"direct nonlinear replay failed");parent=direct.state;}
+   if(k!=3){auto direct=integrate(int(m),parent,de,p,fixture_settings.material);require(direct.ok,"direct nonlinear replay failed");parent=direct.state;}
    else require(run.points[k].state==run.points[k-1].state&&run.points[k].diagnostics.substeps==0,"duplicate changed nonlinear history");
    const auto scales=model_scales(int(m),p);
    for(size_t j=0;j<parent.size();++j)close(run.points[k].state[j],parent[j],1e-10*scales[j],1e-10,"nonlinear parent replay mismatch");
@@ -134,17 +145,20 @@ void additional_recorded_cases(){
   // Match existing drained control endpoints using a different outer solver.
   auto drained=path;drained.knots.clear();drained.controls[1].stress=drained.controls[2].stress=true;
   for(int k=0;k<5;++k){RecordedKnot knot;knot.coordinate=k;knot.targets[0]=factors[k]*1e-4;knot.targets[1]=z[1];knot.targets[2]=z[2];drained.knots.push_back(knot);}
-  auto controlled=replay_recorded(int(m),z,p,drained);++cases;if(!controlled.ok)std::cerr<<std::setprecision(17)<<"failed knot "<<controlled.failed_knot<<" residual "<<controlled.last_control_error<<" trials "<<controlled.material_trials<<" de0 "<<controlled.last_trial_increment.v[0]<<" de1 "<<controlled.last_trial_increment.v[1]<<"\n";require(controlled.ok,"drained replay failed: "+models()[m].id+" "+controlled.message);
+  auto controlled=replay_recorded(int(m),z,p,drained,fixture_settings);++cases;if(!controlled.ok)std::cerr<<std::setprecision(17)<<"failed knot "<<controlled.failed_knot<<" residual "<<controlled.last_control_error<<" trials "<<controlled.material_trials<<" de0 "<<controlled.last_trial_increment.v[0]<<" de1 "<<controlled.last_trial_increment.v[1]<<"\n";require(controlled.ok,"drained replay failed: "+models()[m].id+" "+controlled.message);
   parent=z;double axial=0;
   for(size_t k=1;k<drained.knots.size();++k){
    if(k!=3){Sym<double> de;Advance direct;double next=drained.knots[k].targets[0];
-    require(controlled_step(int(m),parent,p,1,next-axial,z[1],axial,de,direct),"legacy drained replay failed");parent=direct.state;axial=next;}
+    require(controlled_step(int(m),parent,p,1,next-axial,z[1],axial,de,direct,fixture_settings.material),"legacy drained replay failed");parent=direct.state;axial=next;}
    const auto scales=model_scales(int(m),p);
    for(size_t j=0;j<parent.size();++j)close(controlled.points[k].state[j],parent[j],2e-7*scales[j],2e-7,"drained endpoint mismatch");
   }
  }
 }
 int main(){try{
+ const char* profile=std::getenv("ATLAS_NATIVE_FIXTURES");
+ require(!profile||std::string(profile)=="explicit-gis20-v2","unknown native fixture profile");explicit_fixtures=profile!=nullptr;
+ std::cout<<(explicit_fixtures?"Explicit valid-domain/GIS-depth20 fixtures":"Strict original default fixtures")<<"; models="<<models().size()<<'\n';
  int model=-1;for(size_t i=0;i<models().size();++i)if(models()[i].id=="linear-elastic")model=int(i);
  require(model>=0,"linear-elastic absent");auto parameters=default_parameters(model);auto parent=initial_state(model);
  // Anisotropic prestress and a nonzero laboratory strain origin expose hidden

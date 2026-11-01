@@ -29,9 +29,15 @@ jobs:
       - name: Native checks and full exact archival replay
         if: runner.os == 'macOS'
         run: ctest --test-dir build --output-on-failure
+        env:
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-v2
       - name: Linux native checks
         if: runner.os == 'Linux'
         run: ctest --test-dir build --output-on-failure -E atlas_python
+        env:
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-v2
+      - name: Retain strict original native failures and reject unknown fixtures
+        run: python tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
       - name: Linux portable Python suite
         if: runner.os == 'Linux'
         env:

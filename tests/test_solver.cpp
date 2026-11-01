@@ -1,16 +1,32 @@
 #include "atlas/solver.hpp"
 #include <iostream>
+#include <cstdlib>
+#include <string>
 #include <stdexcept>
 
 void require(bool value,const char*message){if(!value)throw std::runtime_error(message);}
 int main(){
     try{
+        const char* profile=std::getenv("ATLAS_NATIVE_FIXTURES");
+        require(!profile||std::string(profile)=="explicit-gis20-v2","unknown native fixture profile");
+        const bool explicit_fixtures=profile!=nullptr;
+        std::cout<<(explicit_fixtures?"Explicit valid-domain/GIS-depth20 fixtures":"Strict original default fixtures")<<"; models="<<atlas::models().size()<<'\n';
         // Independently finite-difference each generated residual/rate Jacobian.
         // This checks the AD implementation rather than merely matching its code.
         for(size_t model=0;model<atlas::models().size();++model){
             auto p=atlas::default_parameters(int(model)),z=atlas::initial_state(int(model)),zn=z;
             auto scales=atlas::model_scales(int(model),p);z[0]=110000;z[1]=95000;z[2]=100000;z[3]=500;
             for(const auto&f:atlas::models()[model].fields){if(f.multiplier)z[f.offset]=.0001;if(f.name=="h"){z[f.offset]=.00002;z[f.offset+1]=-.00001;}}
+            if(explicit_fixtures&&atlas::models()[model].id=="research-hp-extracted-asbs-gis-2024-v03"){
+                bool found=false;
+                for(const auto& f:atlas::models()[model].fields)if(f.name=="Omega"){
+                    auto invalid=z;invalid[f.offset]=-1e-6*scales[f.offset];atlas::State values;
+                    atlas::Sym<double> probe;probe.v={.00001,-.000005,-.000005,.000003,0,0};
+                    require(!atlas::evaluate_model(int(model),invalid,zn,probe,p,values),"original negative Omega probe accepted");
+                    z[f.offset]=.5;found=true;
+                }
+                require(found,"GIS derivative fixture requires declared Omega state");
+            }
             const int n=int(z.size());std::vector<atlas::Jet>x(n),xn(n),r;atlas::Sym<double>de;de.v={.00001,-.000005,-.000005,.000003,0,0};atlas::Sym<atlas::Jet>d;
             for(int i=0;i<n;++i){x[i]=atlas::Jet(z[i]);x[i].d[i]=scales[i];xn[i]=atlas::Jet(zn[i]);}
             for(int i=0;i<6;++i)d.v[i]=atlas::Jet(de.v[i]);
@@ -28,7 +44,9 @@ int main(){
             auto p=atlas::default_parameters(int(m)),z=atlas::initial_state(int(m));z[0]=105000;z[1]=95000;z[3]=1000;
             atlas::Sym<double>de;de.v={.0001,-.00002,.00001,.00003,.00001,-.00001};auto zr=z;
             atlas::put_tensor(zr,0,rotate(atlas::tensor_from(z,0)));
-            auto a=atlas::integrate(int(m),z,de,p),b=atlas::integrate(int(m),zr,rotate(de),p);require(a.ok&&b.ok,"rotation integration failed");
+            atlas::IntegrationSettings fixture_settings;
+            if(explicit_fixtures&&atlas::models()[m].id=="research-hp-extracted-asbs-gis-2024-v03")fixture_settings.max_depth=20;
+            auto a=atlas::integrate(int(m),z,de,p,fixture_settings),b=atlas::integrate(int(m),zr,rotate(de),p,fixture_settings);require(a.ok&&b.ok,"rotation integration failed");
             auto want=rotate(atlas::tensor_from(a.state,0));for(int i=0;i<6;++i)require(std::abs(want.v[i]-b.state[i])<.01,"fixed-frame rotation covariance failed");
         }
         // Hidden zero-history crossing: both midpoint estimates sample unloading
