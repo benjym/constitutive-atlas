@@ -18,14 +18,14 @@ This ledger records current evidence without rewriting historical stage receipts
 - [X] **E2 — Contract:** explicit v0.3 crosswalk, state/time/loading/zero/transactions and source interpretations; prospective execution/refinement/reference/website plans retained.
 - [X] **E3 — Transcription:** current exact nested definition validation and isolated generation pass;29 ingestion checks and9 independent interpreter cases; reference refinement and prior failures preserved.
 - [X] **E4 — Native/Wasm:** refined27/27 requests each with parity, explicit rejection/rollback/recovery, independent hold/control references;29 additional native history/invariance/dissipation checks; current shared main-engine parity and supported-input package checks pass. Bounds are the exact tested cases/settings, not full parameter-range qualification.
-- [X] **E5 — Agent approval:** the actual separate reviewer authored `catalogue/agent-reviews/power-creep-agent-v2.json`, accepted all9 bounded items with no blockers. Coordinator `--for-approval` validation passes and generated the exact approval entry under checklist-audit-v1. Existing explicit-user registry approval remains valid; generated independent-agent entry awaits E6 registry/consumer integration. Review record SHA-256: `04fa4c142bfc477ca5cb4f1adaac530b582c9a10129479cb52a44d0bd17668cd`.
+- [X] **E5 — Agent approval:** the actual separate reviewer authored `catalogue/agent-reviews/power-creep-agent-v2.json`, accepted all9 bounded items with no blockers. Coordinator `--for-approval` validation passes and generated the exact approval entry under checklist-audit-v1. Existing explicit-user registry approval remains valid; generated independent-agent entry is now integrated in the registry and ordinary export consumer. Review record SHA-256: `04fa4c142bfc477ca5cb4f1adaac530b582c9a10129479cb52a44d0bd17668cd`.
 - [X] **E6 — Atlas:** exact nested definition, original draft metadata, distinct current user/agent approvals, accepted review JSON and source links survive ordinary SQLite export. Canonical discovery and dedicated timed route remain accurate. Current status/roadmap summarize one restricted timed formulation separately from ordinary strain-path counts. Additive source archives preserve historical evidence; current checker passes76 receipt edges.
 - [X] **E7 — Packaged website:** standard full builder and exact power package pass unchanged analytical gates. Real browser checks default/changed controls, full state, reset, invalid input recovery, strict identity rejection, actual downloaded export/import/re-execution, stale-result invalidation and recovery. All21 exported points replay exactly; independent changed creep strain.001616 agrees. Separate delivery source review accepts final page after correcting one low stale-import status race. No compatible calibrated measurement exists; explanation is visible.
-- [-] **E8 — Live delivery:** scoped final release is being prepared. Prior release run41285822877 was terminal cancelled (native/deploy gates did not pass); original pending/404 audit retained. Final exact CI/deployment/upload/live qualification remains required.
+- [X] **E8 — Live delivery:** revision61b8635a03b4c0405199cd839716116487354f19 passed all four verification jobs and deployment in run41293300951. Actual tested upload passes the unchanged analytical power gate;19 live assets match that upload exactly. Both10s experiments complete in the actual live browser, full state/engine identity visible and no console errors/warnings. See delivery-v2/live-release-v3/. Earlier cancelled/failed/pending/404 receipts remain historical evidence.
 
 ## Current handoff
 
-E0–E7 complete within exact both-active scope. E7 was reopened and corrected in separately reviewed builder-route-v3: the actual uploaded 51a9ef72 package omitted power-creep after concurrent standard-builder retirement f51113bd; earlier working-copy builder checks do not establish committed integration. The isolated corrected standard build, mandatory package/analytical gates and actual catalogue-to-laboratory browser run now pass. See delivery-v2/builder-route-v3/README.md. Parent owns final scoped commit/push, terminal workflow and exact upload/live comparison. Independent delivery review accepted the final interface8d54d550; no constitutive changes. See [closure evidence](delivery-v2/README.md). E8 remains open until actual live success.
+E0–E8 complete for the exact restricted both-active formulation. Verified live implementation release61b8635a and all terminal gates are recorded in [live-release-v3](delivery-v2/live-release-v3/README.md). The separately reviewed catalogue-copy-v4 text correction and this closure receipt undergo normal final publication CI; no model, controller or numerical policy changes. Full threshold switching and material calibration remain outside scope.
 
 ## Evidence index
 
@@ -34,9 +34,9 @@ E0–E7 complete within exact both-active scope. E7 was reopened and corrected i
 | E1–E3 | source-receipts.json, formulation-crosswalk.json, check-results.json; admission source-retention.json | Exact definition validates/generates; source limits explicit |
 | E4 | execution-v1/refinement-v2/{native,wasm}-report.json; verification-v1/report.json | Passing bounded evidence; original22/27 native failure retained |
 | E5 | review-v2/README.md and catalogue/agent-reviews/power-creep-agent-v2.json; generated-agent-approval.json | Nine items accepted; coordinator validator passes |
-| E6 | checklist-audit-v1/check-results.json and check.py |475 historical manifest file hashes pass; SQLite omission confirmed |
-| E7 | docs/admission/power-creep-approved-v1/results.json and website-creep.png | Defaults/package/browser pass within narrow coverage; lifecycle gaps retained |
-| E8 | checklist-audit-v1/release-status.json | Exact run pending; live URL404 at recorded checkpoint |
+| E6 | delivery-v2/check.py, approved export tests and registry | Exact model/source/approval/review SQLite identity passes; initial omission retained in checklist audit |
+| E7 | delivery-v2 browser/export evidence, builder-route-v3 and catalogue-copy-v4 | Complete bounded lifecycle, analytical package and catalogue route pass; original gaps retained |
+| E8 | delivery-v2/live-release-v3/release-run.json and live-assets.json | All verification/deploy jobs pass;19 exact live/upload matches and both actual live experiments |
 
 ## Review and integration identity
 
@@ -46,14 +46,13 @@ Original user approval: `catalogue/approved-models.json` entry `power-creep-user
 
 ## Deployment receipt
 
-- Release commit: b151987fa0e63d5135ffb85c5c168f50eedd1e1a.
-- Actions: https://github.com/benjym/constitutive-atlas/actions/runs/41285822877 .
-- Terminal outcome: cancelled; this historical release did not establish live delivery.
-- Intended live page: https://benjym.github.io/constitutive-atlas/power-creep.html .
-- Live upload/model/engine hash comparison and actual live run: outstanding.
+- Verified implementation release:61b8635a03b4c0405199cd839716116487354f19.
+- Actions: https://github.com/benjym/constitutive-atlas/actions/runs/41293300951 ; all four verification jobs and deployment succeeded.
+- Live page: https://benjym.github.io/constitutive-atlas/power-creep.html .
+- Actual upload artifact13078038642;19 live assets byte-match, including approved definition67f3fabd6aec, catalogue/module/Wasm and review/approval.
+- Actual live10s relaxation and creep passed; full state and engine revision shown, console clean.
+- Receipts: [live-release-v3](delivery-v2/live-release-v3/README.md). Prior release b151987/run41285822877 remained cancelled, and initial51a9 upload omission is retained separately.
 
 ## Completion statement
 
-Selected-law source mapping, execution, bounded independent numerical qualification
-and explicit user acceptance are supported. Complete browser lifecycle is now qualified in delivery-v2. Full checklist delivery awaits final exact CI and live deployment proof. Experimental
-validation remains unassessed. Full threshold family remains excluded.
+The exact both-active law is source-mapped, declarative, independently numerically qualified and separately agent-approved. Atlas export retains its definition, sources and distinct approvals. The packaged and live website exercise it through the dedicated physical-time laboratory, with all required verification/deployment gates passing for the recorded release. Full threshold switching, finite-spin/coupled hosts, broad parameter-range qualification, material calibration and experimental validation remain excluded.

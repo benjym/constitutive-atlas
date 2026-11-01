@@ -1,0 +1,27 @@
+2026-11-01T09:27:08.4481558Z
+2026-11-01T09:27:08.4481806Z ======================================================================
+2026-11-01T09:27:08.4483368Z ERROR: test_complete_saved_gate_without_build_or_material_execution (test_tresca_mixed_catalogue.MixedCatalogueTests.test_complete_saved_gate_without_build_or_material_execution)
+2026-11-01T09:27:08.4484515Z ----------------------------------------------------------------------
+2026-11-01T09:27:08.4485779Z Traceback (most recent call last):
+2026-11-01T09:27:08.4494850Z   File "/home/runner/work/constitutive-atlas/constitutive-atlas/tests/test_tresca_mixed_catalogue.py", line 10, in test_complete_saved_gate_without_build_or_material_execution
+2026-11-01T09:27:08.4496574Z     with patch('subprocess.run',side_effect=AssertionError('no execution')):self.assertTrue(module('mixed_saved',P/'verify.py').verify()['overall_pass'])
+2026-11-01T09:27:08.4497637Z                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-01T09:27:08.4498551Z   File "/home/runner/work/constitutive-atlas/constitutive-atlas/catalogue/investigations/tresca-mixed-catalogue-v1/verify.py", line 17, in verify
+2026-11-01T09:27:08.4499442Z     if isinstance(h,str)and len(h)==64:checked_receipt(ROOT,(P/name).relative_to(ROOT),path,h)
+2026-11-01T09:27:08.4499969Z                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-11-01T09:27:08.4500647Z   File "/home/runner/work/constitutive-atlas/constitutive-atlas/atlas/evidence.py", line 111, in checked_receipt
+2026-11-01T09:27:08.4501397Z     raise ValueError('evidence source hash mismatch: ' + str(selected))
+2026-11-01T09:27:08.4502159Z ValueError: evidence source hash mismatch: /home/runner/work/constitutive-atlas/constitutive-atlas/tests/test_catalogue_browser.mjs
+2026-11-01T09:27:08.4502716Z
+2026-11-01T09:27:08.4502881Z ----------------------------------------------------------------------
+2026-11-01T09:27:08.4503238Z Ran 1412 tests in 836.178s
+2026-11-01T09:27:08.4503393Z
+2026-11-01T09:27:08.4503499Z FAILED (errors=1, skipped=50)
+2026-11-01T09:27:08.4503747Z failed
+2026-11-01T09:27:09.0419171Z ##[error]Process completed with exit code 1.
+2026-11-01T09:27:09.0561873Z Post job cleanup.
+2026-11-01T09:27:09.1623417Z [command]/usr/bin/git version
+2026-11-01T09:27:09.1664700Z git version 2.56.0
+2026-11-01T09:27:09.1735135Z Temporarily overriding HOME='/home/runner/work/_temp/ce12d9ef-a304-4dc8-8dfa-6921e69f7fe8' before making global git config changes
+2026-11-01T09:27:09.1737415Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T09:27:09.1740735Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/constitutive-atlas/constitutive-atlas

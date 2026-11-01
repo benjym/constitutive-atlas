@@ -343,7 +343,7 @@ function showCatalogueModel(entry,spec){
   $('catalogue-detail-status').textContent=timedView?.supports(entry.id)?'Approved bounded scope · physical-time laboratory':spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
   $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute||timedView?.supports(entry.id)?' available':'');
   body.append(element('p',recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',entry.id,evidenceIndex),'catalogue-detail-note'));
-  body.append(formulationSection(document,spec,{evidenceIndex}));
+  if(timedRoute){const section=element('section');section.append(element('h3','Physical-time formulation'),element('p','Open the dedicated laboratory for supported controls, conventions and source/review links.'));body.append(section);}else body.append(formulationSection(document,spec,{evidenceIndex}));
   if(!spec&&!timedRoute&&!timedView?.supports(entry.id)){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);

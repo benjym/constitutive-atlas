@@ -1,0 +1,3 @@
+# Accurate public timed-model catalogue copy v4
+
+The actual released catalogue reaches and runs the approved timed laboratory, but its generic formulationSection(undefined) incorrectly says no browser definition is packaged for this candidate. Replace only that generic candidate section when an explicitly published timed route exists, with accurate text directing users to supported controls, conventions and source/review links in the dedicated laboratory. Preserve ordinary-model formulation rendering and all controls, scientific scope, model/engine bytes and numerical gates. Separate source review and actual browser inspection of the changed catalogue sentence required. This copy correction accompanies the E8 delivery receipts; no model change or new numerical study.

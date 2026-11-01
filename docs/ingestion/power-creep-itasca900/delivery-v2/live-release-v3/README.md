@@ -1,0 +1,11 @@
+# Verified power-creep live delivery
+
+Release61b8635a03b4c0405199cd839716116487354f19 passed every required job and Pages deployment in Actions41293300951: https://github.com/benjym/constitutive-atlas/actions/runs/41293300951 . release-run.json records all five terminal successes. Linux native8/8 checks and portable Python1412 tests pass,50 declared skips. Both platform Wasm/package jobs and macOS native archival replay pass.
+
+Downloaded the actual github-pages upload (artifact13078038642). tested-upload.json binds its tar SHA and19 extracted public assets; uploaded-power-package.json and uploaded-engine-identity.json retain exact release/model/catalogue/module/Wasm identities. The unchanged analytical creep/relaxation assessor passes against that uploaded engine, see upload-power-gate.log.
+
+check.py fetched19 live assets at https://benjym.github.io/constitutive-atlas/ and required exact byte equality with the actual tested upload, including index/app/timed-route/style/catalogue, model definition, engine, metadata, review and approval. live-assets.json records all hashes and successful comparisons.
+
+Actual live browser followed the catalogue entry and Test this model button to power-creep.html. Both10s experiments completed20 intervals with all6stress/strain components and exact engine identity visible. Relaxation q143585.2478061828Pa, zero strain; creep held stress[1200000,900000,900000,0,0,0]Pa and axial strain0.006269999999999969. See live-*-state.txt and screenshots. live-console.json is empty. The visible measurement disclaimer remains; no calibration/experimental-validation claim. Earlier browser export/import/reset/invalid-recovery/latest-request proof remains in delivery-v2.
+
+Prior failures are retained: original22/27native execution, old cancelled release, bb1f historical binding failure, and the51a9 uploaded missing-page regression. No test, source/model byte, numerical tolerance or acceptance policy was weakened. builder-route-v3 closes the upload regression. catalogue-copy-v4 separately corrects one misleading generic catalogue sentence after this successful release, with independent source review and local actual-browser proof; no model/controller/numerical change. Final receipt/copy publication must still pass its own normal CI before the parent reports completion.
