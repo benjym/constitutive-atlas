@@ -1,0 +1,9 @@
+# Independent CI fixture repair review
+
+Accepted for the two exact JavaScript VM fixture changes, with no blocking findings. The failed Linux log records `specialLaboratoryActive is not defined` in both fixtures. The production handlers already call this real helper; the fixtures extracted handlers without supplying that dependency.
+
+The fix extracts the actual helper from `web/app.js` and supplies inactive J2/timed contexts during the existing ordinary-handler cases. It adds one early-return exercise for each active profile in each fixture. Those active contexts omit downstream dependencies, so proceeding into ordinary behavior would fail rather than silently pass. All original assertion lines remain byte-for-byte present. Each old file loses only one VM scaffolding line, replaced by a context that includes the helper. Existing effective/total-scope, chart/label, pore-pressure, worker-call and negative assertions remain unchanged.
+
+Independent replay of `python3 -B -m unittest tests.test_laboratory_view tests.test_web_effective_scope` passed both wrappers. They consume frozen responses and stub engine calls; this reviewer ran no compiled engine, browser or builder. `check_review.py` verifies the exact input/output receipts, preserved old assertions and focused replay. `manifest.json` binds the originals, revised fixtures, app dependency, wrappers and retained failed CI log.
+
+This is a bounded automated technical acceptance of fixture correctness, not an assertion that remote CI or delivery has completed. Canonical source archives and archive-map redirects are outside this particular verdict and retain their own provenance gates. No production law, engine, reference or numerical budget changes are included. The smallest next action is the coordinator's exact scoped commit and remote CI/release verification.

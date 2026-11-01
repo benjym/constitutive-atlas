@@ -41,12 +41,14 @@ test('missing, total, unknown and observable bindings cannot overlay rows or cac
 });
 test('actual browser match handler rejects total scope before any input mutation',()=>{
  const app=read('web/app.js');
+ const specialGuard=app.match(/^function specialLaboratoryActive\(\).*$/m)[0];
  const handler=app.slice(app.indexOf('function matchExperiment(){'),app.indexOf('async function loadExperiments('));
+ for(const profile of ['j2View','timedView'])vm.runInNewContext(specialGuard+';'+handler+';matchExperiment();',{j2View:null,timedView:null,[profile]:{active:true}});
  for(const model of [total,effective]){
   const fields=new Map();const field=id=>{if(!fields.has(id))fields.set(id,{value:'untouched'});return fields.get(id);};
   const messages=[];let refreshes=0,updates=0,protocols=0;
-  vm.runInNewContext(handler+';matchExperiment();',{
-   specialLaboratoryActive:()=>false,experiment:structuredClone(record),model:()=>model,supportsEffectiveExperiment,toast:s=>messages.push(s),$:field,
+  vm.runInNewContext(specialGuard+';'+handler+';matchExperiment();',{j2View:null,timedView:null,
+   experiment:structuredClone(record),model:()=>model,supportsEffectiveExperiment,toast:s=>messages.push(s),$:field,
    comparisonMetadata,setProtocol:()=>protocols++,refreshExperimentFilter:()=>refreshes++,scheduleUpdate:()=>updates++
   });
   if(model===total){assert.equal(fields.size,0);assert.equal(refreshes+updates+protocols,0);assert.match(messages[0],/effective-stress/);}

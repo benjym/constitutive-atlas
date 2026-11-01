@@ -68,6 +68,8 @@ def main():
         relative=Path(entry['dossier'])
         if relative.is_absolute() or '..' in relative.parts or relative.parts[:2]!=('docs','models') or relative.suffix!='.md':raise ValueError('Unsafe public dossier path')
         raw=(ROOT/relative).read_bytes();target=dest/relative;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw);target.with_name(target.name+'.html').write_bytes(dossier_view(relative,raw))
+    from build_database import bundle as bundle_database
+    bundle_database(dest)
     bundle_applicability(dest)
     bundle_evidence(dest)
     bundle_benchmark(dest)
