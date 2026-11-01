@@ -1,0 +1,7 @@
+# Final merged preview qualification
+
+Actual IAB CUA at http://127.0.0.1:18813/ using standard packagev3. Catalogue deep link resolves exact OCC definition and asynchronously displays Approved scope · independent agent review; dossier/source links preserved. Test this model runs100increments drained,34.8ms. Monotonic undrained stress control runs100increments,30.7ms; all three cyclic options disabled and retained unloading failure explained. Reset restores100increment drained response,60.4ms. Saved screenshot browser-preview-v3.jpg.
+
+Preserved delivered routes: Burgers completed8outputintervals; SLS completed8physicalseconds/4intervals relaxation; J2 completed3incrementrows. Ensemble explorer displays fixed OPARA source/preparation and completes15runs. Return to OCC restores normal controls and complete response. No warnings/errors recorded for18813 page URLs. Standard package includes887files and42rootwebsource equalities. Source/engine and supported-input results are separate hash-bound receipts; not all-default success or experimental validation.
+
+Portablev3:1424tests pass,49skips.31exact archived checks recovered separately;18remaining optional-build/private-source checks unexecuted locally. Required remote native/macOS/Linux/Wasm matrix remains required. Earlier failures (harness omission, missing archive redirect, wrong older local Burgers artifact, wrong ensemble checker path) retained; no scientific gates relaxed.
