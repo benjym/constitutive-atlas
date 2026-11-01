@@ -315,7 +315,7 @@ function renderCharts(){
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec;if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
+  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!entry.timed_laboratory;if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
     const heading=element('h2'),open=element('a',entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
@@ -329,11 +329,12 @@ function catalogueCards(){
 function showCatalogueModel(entry,spec){
   const dialog=$('catalogue-dialog'),body=$('catalogue-detail-body');body.replaceChildren();
   $('catalogue-detail-title').textContent=entry.name;$('catalogue-detail-family').textContent=entry.family;
-  $('catalogue-detail-status').textContent=spec?'Available to test · '+spec.status:'Research candidate';
-  $('catalogue-detail-status').className='catalogue-availability'+(spec?' available':'');
+  $('catalogue-detail-status').textContent=entry.timed_laboratory?'Approved scope · timed laboratory':spec?'Available to test · '+spec.status:'Research candidate';
+  $('catalogue-detail-status').className='catalogue-availability'+(spec||entry.timed_laboratory?' available':'');
   body.append(element('p',entry.note||spec?.description||'Bibliographic and formulation review pending.','catalogue-detail-note'));
   body.append(formulationSection(document,spec));
-  if(!spec){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
+  if(entry.timed_laboratory&&/^[a-z0-9-]+\.html$/.test(entry.timed_laboratory)){const link=element('a','Open physical-time laboratory ↗');link.href='./'+entry.timed_laboratory;body.append(link);}
+  if(!spec&&!entry.timed_laboratory){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);
   if(sources.length){

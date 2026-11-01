@@ -1,0 +1,214 @@
+{
+  "schema_version": "0.3",
+  "artifact_type": "source-to-schema crosswalk, not an executable model record",
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "ode",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "strain_rate": {
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite"
+        }
+      },
+      "advance": {
+        "start_time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "start",
+          "constraint": "finite"
+        },
+        "duration": {
+          "quantity": "duration",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "interval",
+          "constraint": "positive_finite"
+        }
+      }
+    },
+    "stress": {
+      "source": "observable",
+      "name": "stress",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "scope": "Proposed fixed-spatial, zero-spin, infinitesimal-strain effective-stress continuous interpretation of manual Eqs (2)-(6). No claim of equivalence to vendor discrete Eq (7). Effective/total distinction is not defined by a pore-pressure relation on the page; proposed effective binding is restricted to an uncoupled u=0 host, where total and effective coincide.",
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "components": 6,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "initial": "explicit finite user tensor; no material default chosen",
+      "scale": "positive user stress scale to be selected in a future record"
+    }
+  ],
+  "parameters": [
+    {
+      "name": "K",
+      "unit": "Pa",
+      "restriction": "K>0, finite; proposed physical admissibility",
+      "locator": "power Eqs (4),(6), properties"
+    },
+    {
+      "name": "G",
+      "unit": "Pa",
+      "restriction": "G>0, finite; proposed physical admissibility",
+      "locator": "power Eq (2), properties"
+    },
+    {
+      "name": "A1,A2",
+      "unit": "Pa^(-n_i) s^(-1)",
+      "restriction": "A_i>=0, finite; proposed dissipative scope; source gives no numeric bounds",
+      "locator": "power Eqs (1),(5)"
+    },
+    {
+      "name": "n1,n2",
+      "unit": "1",
+      "restriction": "n_i>0 proposed continuous zero-stress extension; source gives no numeric bounds",
+      "locator": "power Eqs (1),(5)"
+    },
+    {
+      "name": "r1,r2",
+      "unit": "Pa",
+      "restriction": "0<=r1<=r2 proposed scope; reversed ordering explicitly discouraged by source",
+      "locator": "power Eq (5), regime discussion"
+    }
+  ],
+  "equation_ledger": [
+    {
+      "locator": "power Eq (1)",
+      "meaning": "one mechanism scalar intensity",
+      "math": "f=A*q^n"
+    },
+    {
+      "locator": "power pre-Eq (2)",
+      "meaning": "von Mises stress and deviator",
+      "math": "s=dev(sigma); q=sqrt(3*(s:s)/2)"
+    },
+    {
+      "locator": "power Eq (2)",
+      "meaning": "deviatoric stress increment",
+      "math": "Delta_s=2*G*(dev(D)-Dc)*Delta_t"
+    },
+    {
+      "locator": "power Eq (3)",
+      "meaning": "coaxial isochoric creep, q>0",
+      "math": "Dc=3*f*s/(2*q)"
+    },
+    {
+      "locator": "power Eqs (4),(6)",
+      "meaning": "elastic volume",
+      "math": "trace(Delta_sigma)=3*K*trace(Delta_epsilon)"
+    },
+    {
+      "locator": "power Eq (5)",
+      "meaning": "two inclusive switches",
+      "math": "f=A1*q^n1*1[q>=r1]+A2*q^n2*1[q<=r2]"
+    },
+    {
+      "locator": "derived from power Eqs (2)-(6)",
+      "meaning": "proposed continuous stress ODE",
+      "math": "dot_sigma=K*trace(D)*I+2*G*dev(D)-3*G*f*s/q"
+    },
+    {
+      "locator": "power Eq (7), as printed",
+      "meaning": "deviator update uses unprojected total strain rate",
+      "math": "s_new=s_old+2*G*(D-Dc)*Delta_t",
+      "status": "trace inconsistency for volumetric loading; not silently adopted"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "PC-01",
+      "issue": "Eq (7) omits dev on strain rate relative to Eq (2)",
+      "next": "Review source-derived pure-volume witness before any discrete transcription"
+    },
+    {
+      "id": "PC-02",
+      "issue": "Inclusive Eq (5) activates both at common threshold; simplified regime prose omits equality or implies one component",
+      "next": "Choose literal Eq (5) or obtain vendor clarification; event policy must be prospective"
+    },
+    {
+      "id": "PC-03",
+      "issue": "q=0 has undefined direction in Eq (3)",
+      "next": "Review zero extension for n_i>0; do not use source-unbounded n<=0"
+    },
+    {
+      "id": "PC-04",
+      "issue": "A_i units depend on variable n_i; current typed declarations have fixed units",
+      "next": "Review equivalent nondimensional expression f=b_i*(q/p_ref)^n_i with b_i in 1/s; bind p_ref and conversion exactly"
+    },
+    {
+      "id": "PC-05",
+      "issue": "Discontinuous switches have no source event location or equality evolution policy",
+      "next": "Generic event/branch capability study after source decision; split callbacks alone does not locate stress crossings"
+    },
+    {
+      "id": "PC-06",
+      "issue": "Stress sampling in Eq (3), vendor time-step control, tangent and transaction semantics unspecified on inspected model page",
+      "next": "Separate algorithm/host source acquisition, no executable-equivalence claim"
+    },
+    {
+      "id": "PC-07",
+      "issue": "Finite rotation, pore pressure coupling and physical preparation outside inspected equation scope; the phrase effective deviatoric-stress does not establish a pore-pressure stress split",
+      "next": "Keep zero-spin uncoupled scope; review host before expansion"
+    }
+  ],
+  "status": {
+    "source_completeness": "complete inspected HTML equation/property inventory; unresolved contradictions and host algorithm",
+    "executable": "not transcribed or integrated",
+    "numerical_verification": "independent analytical checks only",
+    "scientific_admission": "not assessed"
+  },
+  "observables": [
+    {
+      "name": "stress",
+      "shape": "sym",
+      "unit": "Pa",
+      "expr": "sigma",
+      "scale": "positive stress scale to be chosen"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": "0.2",
+  "units": "SI",
+  "model": "power-creep-itasca900-both-active-ode",
+  "parameters": [
+    20000000.0,
+    12000000.0,
+    1000000.0,
+    0.002,
+    1,
+    0.001,
+    3,
+    1
+  ],
+  "initial": [
+    1200000,
+    900000,
+    900000,
+    0,
+    0,
+    0
+  ],
+  "initial_strain": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "initial_strain_rate": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "start_time": 0,
+  "segments": [
+    {
+      "id": "creep",
+      "duration": 10,
+      "samples": 20,
+      "controls": [
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        }
+      ]
+    }
+  ],
+  "solver": {
+    "method": "backward-euler-step-doubling",
+    "relative_tolerance": 1e-06,
+    "absolute_scale_fraction": 1e-09,
+    "maximum_substeps": 200000
+  }
+}

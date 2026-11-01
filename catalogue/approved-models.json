@@ -234,7 +234,7 @@
         "immutable_identity_policy": "Exact qualified bytes preserved. This registry supplies current bounded user approval; historical draft metadata and reports remain unchanged."
       },
       "scope": {
-        "law": "Nakai–Hinokio2004 full one-a clay with Appendix V, project endpoint backward Euler",
+        "law": "Nakai\u2013Hinokio2004 full one-a clay with Appendix V, project endpoint backward Euler",
         "kinematics": "small_strain_3d",
         "frame": "fixed_spatial",
         "objective_rate": "none",
@@ -284,6 +284,85 @@
         {
           "path": "docs/reviews/nh2004-scientific-v1/check-results.json",
           "sha256": "fc8307c0ce87900272f7ac5f9ed6c896ca05eaf0164d322c6125ba4a10cda778"
+        }
+      ]
+    },
+    {
+      "id": "power-creep-user-approval-v1",
+      "model_id": "power-creep-itasca900-both-active-ode",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "explicit-user-instruction",
+        "identity": "requesting user in this conversation",
+        "instruction": "Ok let's accept into the atlas and put it on the website, then commit and push",
+        "basis": "User acceptance after separate-agent technical review; no human scientific signature inferred"
+      },
+      "definition": {
+        "path": "models/research/power-creep/power-creep-itasca900-both-active-ode.json",
+        "sha256": "67f3fabd6aecfda19b977bf3baeae2dce45f9081fa81a4436a750a41825a4bef",
+        "schema_version": "0.3",
+        "embedded_status": "draft",
+        "immutable_identity_policy": "Approval attaches to exact tested bytes; historical draft metadata remains unchanged."
+      },
+      "scope": {
+        "law": "Itasca9.0 both-components-active two-component Norton power creep; elastic volume",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "stress_scope": "effective",
+        "material_assumption": "dry uncoupled zero pore pressure, n_i>=1",
+        "use": "bounded tested cases/settings; illustrative parameters",
+        "interfaces": [
+          "native physical-time CLI",
+          "Wasm physical-time ABI",
+          "ordered timed strain/stress schedules",
+          "dedicated browser creep/relaxation laboratory"
+        ],
+        "build_target": "atlas_power_creep_solver",
+        "qualification_policy": "docs/ingestion/power-creep-itasca900/execution-v1/PLAN.md",
+        "qualification_requests": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/study.json"
+      },
+      "review": {
+        "kind": "independent separate-agent technical review",
+        "path": "docs/ingestion/power-creep-itasca900/review-v1/README.md",
+        "human_scientific_signature": false,
+        "bounded_source_and_saved_numerical_claims_supported": true
+      },
+      "limitations": [
+        "Thresholded full family, equality/event behavior and vendor finite-step equivalence are excluded.",
+        "Only named frozen cases/settings qualified; parameter ranges and arbitrary solver tolerances are not qualified.",
+        "Earlier loose-setting failures retained; no unconditional discrete dissipation guarantee.",
+        "Additional history clock test qualifies stress-response invariance; execution-v1 separately asserts endpoint times.",
+        "No experimental calibration/prediction, finite-rotation, pore-pressure or FE/MPM host qualification."
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": true,
+      "dossier": "docs/models/power-creep-itasca900-both-active-ode.md",
+      "supporting_files": [
+        {
+          "path": "docs/ingestion/power-creep-itasca900/manifest.json",
+          "sha256": "dc9001e7e6eb29e8ac311743dc25344c7f93790591a6c2b7f290573a0829a547"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/manifest.json",
+          "sha256": "4780730fffe128eed162e9f48d90193a6bbb3645985b4aa8d249c665e1d90c30"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/native-report.json",
+          "sha256": "315e9eeb4afc20f300fcf11c32f08234e849111144aa6c2177406beca1f40341"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/wasm-report.json",
+          "sha256": "f00bfba440b36738abfe30bb53f59789db5a93eb39f3d9b68e8f5c50021bd46e"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/verification-v1/manifest.json",
+          "sha256": "3ca21b77f095da1259d569f9085bd985f0f64f73efc2ea328c62888f5bc3b142"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/review-v1/manifest.json",
+          "sha256": "0569adee222cc04123165107febda4340daff6378fa0b4a622b7252357587e47"
         }
       ]
     }

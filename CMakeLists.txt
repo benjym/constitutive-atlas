@@ -3,6 +3,30 @@ project(ConstitutiveAtlas VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
+# Physical-time power-creep research law: opt-in, separate from public catalogue.
+# Build explicitly with --target atlas_power_creep_solver --parallel 1.
+file(GLOB POWER_CREEP_MODELS CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research/power-creep/*.json")
+file(GLOB POWER_CREEP_COMPILER CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/atlas/*.py")
+add_custom_command(
+  OUTPUT "${CMAKE_BINARY_DIR}/power-creep-generated/models.hpp" "${CMAKE_BINARY_DIR}/power-creep-generated/models.json"
+  COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/power-creep-generated" "${CMAKE_SOURCE_DIR}/models/research/power-creep"
+  DEPENDS ${POWER_CREEP_MODELS} ${POWER_CREEP_COMPILER} schemas/model-v0.3.schema.json
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+add_custom_target(atlas_power_creep_models DEPENDS "${CMAKE_BINARY_DIR}/power-creep-generated/models.hpp" "${CMAKE_BINARY_DIR}/power-creep-generated/models.json")
+add_executable(atlas_power_creep_solver EXCLUDE_FROM_ALL cpp/main.cpp)
+add_dependencies(atlas_power_creep_solver atlas_power_creep_models)
+target_include_directories(atlas_power_creep_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/power-creep-generated")
+if(EMSCRIPTEN)
+  target_compile_options(atlas_power_creep_solver PRIVATE -fexceptions)
+  set_target_properties(atlas_power_creep_solver PROPERTIES OUTPUT_NAME "power-creep" SUFFIX ".js")
+  target_link_options(atlas_power_creep_solver PRIVATE
+    "-sMODULARIZE=1" "-sEXPORT_ES6=1" "-sEXPORT_NAME=createPowerCreep"
+    "-sENVIRONMENT=web,worker,node" "-sALLOW_MEMORY_GROWTH=1"
+    "-sMAXIMUM_MEMORY=268435456" "-sSTACK_SIZE=1048576"
+    "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-fexceptions"
+    "-sFILESYSTEM=0" "--no-entry")
+endif()
 file(GLOB MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/*.json")
 add_custom_command(
   OUTPUT "${CMAKE_BINARY_DIR}/generated/models.hpp" "${CMAKE_BINARY_DIR}/generated/models.json"

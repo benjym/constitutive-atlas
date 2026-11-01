@@ -1,0 +1,2003 @@
+{
+  "study_id": "power-creep-continuous-v1",
+  "policy": {
+    "source_scope": "Both components active, n>=1, no threshold events, dry zero-spin small strain",
+    "rate_budget": "1e-7 Pa/s + 1e-11 relative",
+    "midpoint_hold_budget": "0.06 Pa absolute",
+    "schedule_state_budget": "15 Pa absolute",
+    "creep_strain_budget": "1e-10 absolute",
+    "parity": "1e-8 absolute + 1e-10 relative for physical state/time/strain/rate/observables; diagnostic counts may differ",
+    "gate_policy": "Every request, expected return status, frozen check, diagnostic bound and source hash must pass. Never modify this study after observation."
+  },
+  "model_sha256": "67f3fabd6aecfda19b977bf3baeae2dce45f9081fa81a4436a750a41825a4bef",
+  "requests": [
+    {
+      "id": "rate-0",
+      "function": "atlas_evaluate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0
+      ],
+      "command": [
+        "--mode",
+        "evaluate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "values"
+          ],
+          "value": [
+            -15048.000000000002,
+            7524.000000000001,
+            7524.000000000001,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 1e-07,
+          "rtol": 1e-11
+        }
+      ]
+    },
+    {
+      "id": "rate-1",
+      "function": "atlas_evaluate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1000000,1000000,1000000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0
+      ],
+      "command": [
+        "--mode",
+        "evaluate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1000000,1000000,1000000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "values"
+          ],
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 1e-07,
+          "rtol": 1e-11
+        }
+      ]
+    },
+    {
+      "id": "rate-2",
+      "function": "atlas_evaluate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "0,0,0,0,0,0",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00069999999999999999,0.0001",
+        7.0
+      ],
+      "command": [
+        "--mode",
+        "evaluate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "0,0,0,0,0,0",
+        "--strain-rate",
+        "0.001,-0.00029999999999999997,0.00020000000000000001,0.00040000000000000002,-0.00069999999999999999,0.0001",
+        "--start-time",
+        "7"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "values"
+          ],
+          "value": [
+            34800.0,
+            3599.999999999998,
+            15600.0,
+            9600.000000000002,
+            -16799.999999999996,
+            2400.0000000000005
+          ],
+          "atol": 1e-07,
+          "rtol": 1e-11
+        }
+      ]
+    },
+    {
+      "id": "rate-3",
+      "function": "atlas_evaluate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1300000,800000,-200000,200000,-300000,100000",
+        "0.001,-0.00050000000000000001,0,0.00020000000000000001,0,-0.0001",
+        7.0
+      ],
+      "command": [
+        "--mode",
+        "evaluate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1300000,800000,-200000,200000,-300000,100000",
+        "--strain-rate",
+        "0.001,-0.00050000000000000001,0,0.00020000000000000001,0,-0.0001",
+        "--start-time",
+        "7"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "values"
+          ],
+          "value": [
+            -65040.0,
+            -29760.0,
+            124800.00000000001,
+            -23712.000000000004,
+            42768.00000000001,
+            -16656.000000000004
+          ],
+          "atol": 1e-07,
+          "rtol": 1e-11
+        }
+      ]
+    },
+    {
+      "id": "rate-4",
+      "function": "atlas_evaluate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "-1200000,-900000,-900000,-0,-0,-0",
+        "0,0,0,0,0,0",
+        7.0
+      ],
+      "command": [
+        "--mode",
+        "evaluate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "-1200000,-900000,-900000,-0,-0,-0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "values"
+          ],
+          "value": [
+            15048.000000000002,
+            -7524.000000000001,
+            -7524.000000000001,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 1e-07,
+          "rtol": 1e-11
+        }
+      ]
+    },
+    {
+      "id": "rate-5",
+      "function": "atlas_evaluate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "0,0,0,200000,0,0",
+        "0,0,0,0,0,0",
+        7.0
+      ],
+      "command": [
+        "--mode",
+        "evaluate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "0,0,0,200000,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "values"
+          ],
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            -14832.000000000002,
+            0.0,
+            0.0
+          ],
+          "atol": 1e-07,
+          "rtol": 1e-11
+        }
+      ]
+    },
+    {
+      "id": "rate-6",
+      "function": "atlas_evaluate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1.5,0.001,2.2000000000000002,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0
+      ],
+      "command": [
+        "--mode",
+        "evaluate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1.5,0.001,2.2000000000000002,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "values"
+          ],
+          "value": [
+            -9584.971492963097,
+            4792.485746481549,
+            4792.485746481549,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 1e-07,
+          "rtol": 1e-11
+        }
+      ]
+    },
+    {
+      "id": "rate-7",
+      "function": "atlas_evaluate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0,1,0,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0.001,0.001,0.001,0,0,0",
+        7.0
+      ],
+      "command": [
+        "--mode",
+        "evaluate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0,1,0,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0.001,0.001,0.001,0,0,0",
+        "--start-time",
+        "7"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "values"
+          ],
+          "value": [
+            60000.0,
+            60000.0,
+            60000.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 1e-07,
+          "rtol": 1e-11
+        }
+      ]
+    },
+    {
+      "id": "hold-mixed-13",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1137951.2872471665,
+            931024.3563764167,
+            931024.3563764167,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 0.06,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "time"
+          ],
+          "value": 12.0,
+          "atol": 0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "hold-linear",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1139535.2652142062,
+            930232.3673928969,
+            930232.3673928969,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 0.06,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "time"
+          ],
+          "value": 12.0,
+          "atol": 0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "hold-cubic",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1196836.664794739,
+            901581.6676026304,
+            901581.6676026304,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 0.06,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "time"
+          ],
+          "value": 12.0,
+          "atol": 0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "hydro-hold",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1000000,1000000,1000000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1000000,1000000,1000000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            0,
+            0,
+            0
+          ],
+          "atol": 0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "constant-rate-linear",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,1,1",
+        "1200000,900000,900000,0,0,0",
+        "0.001,-0.00020000000000000001,-0.0001,0.00040000000000000002,-0.00029999999999999997,0.00020000000000000001",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,1,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0.001,-0.00020000000000000001,-0.0001,0.00040000000000000002,-0.00029999999999999997,0.00020000000000000001",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1257636.9852555257,
+            971545.3768430593,
+            980817.6379014151,
+            37089.04423342315,
+            -27816.783175067354,
+            18544.522116711574
+          ],
+          "atol": 0.06,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "volume-elastic",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1000000,1000000,1000000,0,0,0",
+        "0.001,0.001,0.001,0,0,0",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1000000,1000000,1000000,0,0,0",
+        "--strain-rate",
+        "0.001,0.001,0.001,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1300000.0,
+            1300000.0,
+            1300000.0,
+            0,
+            0,
+            0
+          ],
+          "atol": 1e-06,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "budget-rollback",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        2
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "2"
+      ],
+      "ok": false,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1200000.0,
+            900000.0,
+            900000.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 0,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "time"
+          ],
+          "value": 7.0,
+          "atol": 0,
+          "rtol": 0
+        }
+      ],
+      "minimum_substeps": 2
+    },
+    {
+      "id": "zero-duration",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0,
+        0.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "0.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": false,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1200000.0,
+            900000.0,
+            900000.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 0,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "time"
+          ],
+          "value": 7.0,
+          "atol": 0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "negative-duration",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0,
+        -1.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "-1.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": false,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1200000.0,
+            900000.0,
+            900000.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 0,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "time"
+          ],
+          "value": 7.0,
+          "atol": 0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "unsupported-sublinear-exponent",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,0.5,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,0.5,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": false,
+      "checks": []
+    },
+    {
+      "id": "missing-explicit-state",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "",
+        "0,0,0,0,0,0",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": false,
+      "checks": []
+    },
+    {
+      "id": "recovery-after-failures",
+      "function": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0,
+        5.0,
+        1e-08,
+        1e-11,
+        1e-12,
+        0.1,
+        200000
+      ],
+      "command": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7",
+        "--duration",
+        "5.0",
+        "--rtol",
+        "1e-8",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "state"
+          ],
+          "value": [
+            1137951.2872471665,
+            931024.3563764167,
+            931024.3563764167,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 0.06,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "creep",
+      "function": "atlas_run_schedule",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        "0,0,0,0,0,0",
+        "5,4,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0",
+        "creep",
+        0.0,
+        1e-07,
+        1e-10,
+        1e-12,
+        0.1,
+        200000,
+        1e-10,
+        40
+      ],
+      "command": [
+        "--mode",
+        "schedule",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--initial-strain",
+        "0,0,0,0,0,0",
+        "--initial-strain-rate",
+        "0,0,0,0,0,0",
+        "--segments",
+        "5,4,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0",
+        "--segment-ids",
+        "creep",
+        "--start-time",
+        "0",
+        "--rtol",
+        "1e-7",
+        "--atol",
+        "1e-10",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000",
+        "--nonlinear-tolerance",
+        "1e-10",
+        "--max-iterations",
+        "40"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "points",
+            -1,
+            "state"
+          ],
+          "value": [
+            1200000.0,
+            900000.0,
+            900000.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 0.01,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "points",
+            -1,
+            "strain"
+          ],
+          "value": [
+            0.003135,
+            -0.0015675,
+            -0.0015675,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 1e-10,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "points",
+            -1,
+            "time"
+          ],
+          "value": 5.0,
+          "atol": 0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "creep-general-tensor",
+      "function": "atlas_run_schedule",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1300000,800000,900000,200000,-100000,300000",
+        "0,0,0,0,0,0",
+        "0,0,0,0,0,0",
+        "5,4,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0",
+        "creep-general-tensor",
+        0.0,
+        1e-07,
+        1e-10,
+        1e-12,
+        0.1,
+        200000,
+        1e-10,
+        40
+      ],
+      "command": [
+        "--mode",
+        "schedule",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1300000,800000,900000,200000,-100000,300000",
+        "--initial-strain",
+        "0,0,0,0,0,0",
+        "--initial-strain-rate",
+        "0,0,0,0,0,0",
+        "--segments",
+        "5,4,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0",
+        "--segment-ids",
+        "creep-general-tensor",
+        "--start-time",
+        "0",
+        "--rtol",
+        "1e-7",
+        "--atol",
+        "1e-10",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000",
+        "--nonlinear-tolerance",
+        "1e-10",
+        "--max-iterations",
+        "40"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "points",
+            -1,
+            "state"
+          ],
+          "value": [
+            1300000.0,
+            800000.0,
+            900000.0,
+            200000.0,
+            -100000.0,
+            300000.0
+          ],
+          "atol": 0.01,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "points",
+            -1,
+            "strain"
+          ],
+          "value": [
+            0.005445,
+            -0.0036300000000000004,
+            -0.0018150000000000002,
+            0.0036300000000000004,
+            -0.0018150000000000002,
+            0.005445
+          ],
+          "atol": 1e-10,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "points",
+            -1,
+            "time"
+          ],
+          "value": 5.0,
+          "atol": 0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "hydrostatic-creep",
+      "function": "atlas_run_schedule",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1000000,1000000,1000000,0,0,0",
+        "0,0,0,0,0,0",
+        "0,0,0,0,0,0",
+        "5,4,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0",
+        "hydrostatic-creep",
+        0.0,
+        1e-07,
+        1e-10,
+        1e-12,
+        0.1,
+        200000,
+        1e-10,
+        40
+      ],
+      "command": [
+        "--mode",
+        "schedule",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1000000,1000000,1000000,0,0,0",
+        "--initial-strain",
+        "0,0,0,0,0,0",
+        "--initial-strain-rate",
+        "0,0,0,0,0,0",
+        "--segments",
+        "5,4,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0",
+        "--segment-ids",
+        "hydrostatic-creep",
+        "--start-time",
+        "0",
+        "--rtol",
+        "1e-7",
+        "--atol",
+        "1e-10",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000",
+        "--nonlinear-tolerance",
+        "1e-10",
+        "--max-iterations",
+        "40"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "points",
+            -1,
+            "state"
+          ],
+          "value": [
+            1000000.0,
+            1000000.0,
+            1000000.0,
+            0,
+            0,
+            0
+          ],
+          "atol": 0.01,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "points",
+            -1,
+            "strain"
+          ],
+          "value": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 1e-10,
+          "rtol": 0
+        },
+        {
+          "path": [
+            "points",
+            -1,
+            "time"
+          ],
+          "value": 5.0,
+          "atol": 0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "schedule-nonlinear-relaxation",
+      "function": "atlas_run_schedule",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        "0,0,0,0,0,0",
+        "5,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+        "schedule-nonlinear-relaxation",
+        0.0,
+        1e-07,
+        1e-10,
+        1e-12,
+        0.1,
+        200000,
+        1e-10,
+        40
+      ],
+      "command": [
+        "--mode",
+        "schedule",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--initial-strain",
+        "0,0,0,0,0,0",
+        "--initial-strain-rate",
+        "0,0,0,0,0,0",
+        "--segments",
+        "5,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+        "--segment-ids",
+        "schedule-nonlinear-relaxation",
+        "--start-time",
+        "0",
+        "--rtol",
+        "1e-7",
+        "--atol",
+        "1e-10",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000",
+        "--nonlinear-tolerance",
+        "1e-10",
+        "--max-iterations",
+        "40"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "points",
+            -1,
+            "state"
+          ],
+          "value": [
+            1137951.2872471665,
+            931024.3563764167,
+            931024.3563764167,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 15.0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "schedule-load-from-hydrostatic",
+      "function": "atlas_run_schedule",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1000000,1000000,1000000,0,0,0",
+        "0,0,0,0,0,0",
+        "0,0,0,0,0,0",
+        "5,4,0,1,0.001,0,1,0.001,0,1,0.001,0,0,0,0,0,0,0,0,0",
+        "schedule-load-from-hydrostatic",
+        0.0,
+        1e-07,
+        1e-10,
+        1e-12,
+        0.1,
+        200000,
+        1e-10,
+        40
+      ],
+      "command": [
+        "--mode",
+        "schedule",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1000000,1000000,1000000,0,0,0",
+        "--initial-strain",
+        "0,0,0,0,0,0",
+        "--initial-strain-rate",
+        "0,0,0,0,0,0",
+        "--segments",
+        "5,4,0,1,0.001,0,1,0.001,0,1,0.001,0,0,0,0,0,0,0,0,0",
+        "--segment-ids",
+        "schedule-load-from-hydrostatic",
+        "--start-time",
+        "0",
+        "--rtol",
+        "1e-7",
+        "--atol",
+        "1e-10",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000",
+        "--nonlinear-tolerance",
+        "1e-10",
+        "--max-iterations",
+        "40"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "points",
+            -1,
+            "state"
+          ],
+          "value": [
+            1300000.0,
+            1300000.0,
+            1300000.0,
+            0,
+            0,
+            0
+          ],
+          "atol": 1e-05,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "schedule-deviator-from-origin",
+      "function": "atlas_run_schedule",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,1,1",
+        "1000000,1000000,1000000,0,0,0",
+        "0,0,0,0,0,0",
+        "0,0,0,0,0,0",
+        "5,4,0,1,0.001,0,1,-0.00050000000000000001,0,1,-0.00050000000000000001,0,1,0,0,1,0,0,1,0",
+        "schedule-deviator-from-origin",
+        0.0,
+        1e-07,
+        1e-10,
+        1e-12,
+        0.1,
+        200000,
+        1e-10,
+        40
+      ],
+      "command": [
+        "--mode",
+        "schedule",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,1,1",
+        "--initial",
+        "1000000,1000000,1000000,0,0,0",
+        "--initial-strain",
+        "0,0,0,0,0,0",
+        "--initial-strain-rate",
+        "0,0,0,0,0,0",
+        "--segments",
+        "5,4,0,1,0.001,0,1,-0.00050000000000000001,0,1,-0.00050000000000000001,0,1,0,0,1,0,0,1,0",
+        "--segment-ids",
+        "schedule-deviator-from-origin",
+        "--start-time",
+        "0",
+        "--rtol",
+        "1e-7",
+        "--atol",
+        "1e-10",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".1",
+        "--max-substeps",
+        "200000",
+        "--nonlinear-tolerance",
+        "1e-10",
+        "--max-iterations",
+        "40"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "points",
+            -1,
+            "state"
+          ],
+          "value": [
+            1092722.6105835577,
+            953638.6947082211,
+            953638.6947082211,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 15.0,
+          "rtol": 0
+        }
+      ]
+    },
+    {
+      "id": "rate-replay",
+      "function": "atlas_evaluate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number"
+      ],
+      "args": [
+        "power-creep-itasca900-both-active-ode",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "1200000,900000,900000,0,0,0",
+        "0,0,0,0,0,0",
+        7.0
+      ],
+      "command": [
+        "--mode",
+        "evaluate-time",
+        "--model",
+        "power-creep-itasca900-both-active-ode",
+        "--parameters",
+        "20000000,12000000,1000000,0.002,1,0.001,3,1",
+        "--initial",
+        "1200000,900000,900000,0,0,0",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "7"
+      ],
+      "ok": true,
+      "checks": [
+        {
+          "path": [
+            "values"
+          ],
+          "value": [
+            -15048.000000000002,
+            7524.000000000001,
+            7524.000000000001,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "atol": 1e-07,
+          "rtol": 1e-11
+        }
+      ]
+    }
+  ]
+}

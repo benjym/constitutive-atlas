@@ -157,6 +157,7 @@ jobs:
           cmake --build build --target atlas_solver --parallel 1
           emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-wasm --target atlas_solver --parallel 1
+          cmake --build build-wasm --target atlas_power_creep_solver --parallel 1
           node tools/test_experiments.mjs
           node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
           node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
