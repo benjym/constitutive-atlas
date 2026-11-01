@@ -73,3 +73,9 @@ Local qualified current-main integration:46afadb723a2c8cf00fedee413b2718c944b1da
 Original unchanged OCC release82a5961d branch CI41295905872 completed success: both native and both Wasm jobs green; deployment skipped on nonmain branch. This does not qualify the later merged main revision remotely.
 
 Main push was rejected before execution by automatic approval review because it could not verify the prior Yes authorization context for public deployment. Explicit renewed approval requested; no workaround/push/deployment occurred. E8 remains open pending authorized nonforce main push, required exact all-green CI, Pages artifact/live asset comparison and actual live project-path run. See [block receipt](live-delivery-v1/approval-review-block-v1.json). No scientific gate or source claim changed.
+
+## Latest qualified local checkpoint —2026-11-02
+
+Final preservation merge7b17cdfb incorporates remote8e060a42; actual renewed independent review accepts registry/archive exact unions, with no app/builder/engine/modelsource delta. Final full portablev5 passes1434tests with49skips;31canonical exact replays already pass separately. Affected15Python/43JS checks pass. Standardpackagev5 includes889files; supported-input policy and actual IAB exactOCC100increment drained response63.7ms pass, no page-scoped warnings/errors. All proof retained in live-delivery-v1/.
+
+User replied Yes again to the explicit push/CI/publicdeployment question. Automatic approval review nevertheless rejected the main push before command execution, requiring a trusted instruction naming those effects directly. No workaround, main push or deployment occurred. Await literal user instruction to push qualified OCC integration to main, run CI and deploy publicly to GitHub Pages. E8 remains open; exact main CI/Pages/upload/live verification are still required. Prior rejected authorization receipts remain unchanged.
