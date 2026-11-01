@@ -1,0 +1,46 @@
+{
+  "id": "barodesy2017-london-ncl-100kpa-analytical-v1",
+  "kind": "analytical-explicit-initial-state-example",
+  "model": {
+    "path": "models/barodesy-clay-2017.json",
+    "sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477"
+  },
+  "provenance": {
+    "doi": "https://doi.org/10.1007/s11440-016-0458-4",
+    "source_pdf_sha256": "bd049a3fd874c9e4945e1c77f5af5b84ac14c26a08cee1b953428b4312e6af15",
+    "soil_parameter_locator": "Table2 p368 London clay: phi_c22.6degrees,N1.375,lambda_star0.11,kappa_star0.016",
+    "equation_locator": "Source NCL relation/body-law analytical reduction, with sigma_star=1kPa; see source packet Sec4.3 and Eq8/32 distinction",
+    "pressure_choice": "Atlas illustrative p0=100kPa, not a cited experiment",
+    "preparation": "Analytical NCL state assignment; no simulated consolidation history or measured preparation",
+    "drainage_saturation_pore_pressure": "not assigned; effective-stress local law only",
+    "experimental_validation": false
+  },
+  "parameters": {
+    "phi_c": 0.3944444109507185,
+    "N": 1.375,
+    "lambda_star": 0.11,
+    "kappa_star": 0.016,
+    "sigma_star": 1000
+  },
+  "inputs": {
+    "p0_pa": 100000.0
+  },
+  "state": {
+    "sigma": [
+      100000.0,
+      100000.0,
+      100000.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "e": 1.3831693930553504
+  },
+  "analytical_reference": {
+    "formula": "v0=exp(N-lambda_star*ln(p0/sigma_star)); e0=v0-1",
+    "specific_volume_decimal70": "2.383169393055350258265763286303234927617442322794810045372355638653597",
+    "void_ratio_decimal70": "1.383169393055350258265763286303234927617442322794810045372355638653597"
+  },
+  "scope": "Explicit stress/e initial-state example; body2p law, compression-positive Mandel effective stress, infinitesimal fixed-frame zero spin; no material trajectory, matched experiment, finite rotation or author-code equivalence.",
+  "default_model_state_changed": false
+}
