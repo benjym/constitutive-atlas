@@ -1,0 +1,24 @@
+{
+  "identity": "kelvin-voigt-production-release-build-v2",
+  "observations_at_freeze": "No Release builds or v3 materialcalls",
+  "source_baseline": "b529a0efc3415b2bc567178a68174575c220cadc",
+  "unchanged_source_files": 160,
+  "build_type": "Release",
+  "reason": "Optimize production performance for tighter independently reviewed solver settings; no material/compiler/runtime change",
+  "pins": {
+    "build-v1/source-freeze.json": "2853c59d497f979e9e97c7c0ea21d27b56d51f13c4527da20286c05684ec43a7",
+    "build-v1/toolchain-freeze.json": "4110ffa4f2c08dbbc5ba8f0bc5da002dc8cef8a2127fd6609086377ec857bdcf",
+    "execution-v3/freeze.json": "62a23fab6346c3c505dde9cc27081223c8ba83c8341ac86eab2b4d7915a84a50",
+    "interface-v3/freeze.json": "3d67da2ba141eae8e96a15a31c58831537b73ae68955012681061043036c75c2"
+  },
+  "configurations": {
+    "native-release/CMakeCache.txt": "667ba57ac89457c4664f63144fa346b288c95e004de316ab55abc8884386fd0d",
+    "native-release/CMakeFiles/atlas_kelvin_voigt_solver.dir/flags.make": "23743df68da024272c5f5cb96e6cc9104a1b93b99f4c884509f019942beb9a86",
+    "wasm-release/CMakeCache.txt": "8df8c3559e59b3638e61fb957d64f16ee3427a9dcc126814462a04a08fbac6b0",
+    "wasm-release/CMakeFiles/atlas_kelvin_voigt_solver.dir/flags.make": "9e6c24c937cbab4429b0a4458510a8e78abd002c12f951bc0a3a812fc4f42aad"
+  },
+  "commands": [
+    "cmake --build isolated/native-release --target atlas_kelvin_voigt_solver --parallel 1",
+    "EM_CACHE=isolated/emcache EMCC_CORES=1 cmake --build isolated/wasm-release --target atlas_kelvin_voigt_solver --parallel 1"
+  ]
+}

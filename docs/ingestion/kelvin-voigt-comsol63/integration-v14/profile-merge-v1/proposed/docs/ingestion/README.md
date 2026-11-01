@@ -1,0 +1,38 @@
+# Model ingestion packets
+
+[Live assignments](../../IMPLEMENTATION_PLAN.md) · [Agent instructions](../../AGENTS.md) · [Packet template](TEMPLATE.md)
+
+## Start a full model-delivery assignment
+
+Use [the agent assignment brief](AGENT_ASSIGNMENT_TEMPLATE.md) to dispatch a lead, then follow [the complete E0–E8 checklist](../MODEL_DELIVERY_CHECKLIST.md). Copy [the delivery ledger](DELIVERY_TEMPLATE.md) to `docs/ingestion/<model-id>/DELIVERY.md` and maintain detailed model-local checkboxes with evidence. The lead continues through source acquisition, schema/temporal integration, implementation, numerical qualification, separate-agent approval, atlas integration, browser testing and live release when authorized.
+
+Use `[ ]` unstarted, `[-]` working or blocked, and `[X]` verified complete. Keep a next owner/action and resumption condition for blockers. Source packets below are bounded specialist deliverables; their completion does not close a full delivery assignment.
+
+Every entry also needs a [public model profile](../PUBLIC_MODEL_PROFILES.md). Draft the explanation from sources, have the coordinator integrate it at E6, and inspect the packaged/live profile and its laboratory links at E7–E8. Keep behaviour, parameters and starting-state guidance prominent; retain curation/check details in the technical disclosure.
+
+
+**Current corrections:** the [clay2005 audit](hypoplastic-clay-2005/rate-review-v1/README.md) corrects our false Eq38 minus-sign claim and reproduces an unsafe draft SPD guard. The [sand2015 audit](barodesy-sand/rate-review-v1/README.md) records two wider-envelope oracle/support issues. Frozen historical packet checks preserve their original assertions; passing them is not confirmation of those superseded assertions. Distinct [clay v2](hypoplastic-clay-2005/rate-study-v2/README.md) and [sand v2](barodesy-sand/rate-study-v2/README.md) packets preserve those records and provide corrected source/support contracts. Compiled and scientific gates remain open.
+
+These authored packets extract available source equations, schema requirements, temporal/transaction semantics and explicit gaps. Completion means the named bounded ingestion task was reviewed and integrated. It does not confer complete-model, executable, numerical-trajectory or scientific admission.
+
+| Formulation | Delivered scope | Replayed evidence | Remaining source/execution gate |
+| --- | --- | --- | --- |
+| [HCA-2005](hca-sand-2005/README.md) | Polarization-space/initializer/operator/filter reconciliation; conditional 22-component representation and cycle-phase contract | Ten independent algebraic tests | Exact journal/author implementation decisions, complete coupled model and companion handoff |
+| [PM4Silt V1](pm4silt/README.md) | Available equation crosswalk, state/lifetime inventory, startup and lagged host phases | Seven independent scalar discrepancy tests | Printed alternatives, 2D/host/sign adapter, penalties and exact author algorithm |
+| [ISA-2020](hypoplastic-isa/README.md) | Main/appendix/host reconciliation, full 26-state initialization and supplied-host contract | 27 packet assertions plus three retained diagnostic tests | Source conflicts, base dependencies, zero directions, event/return algorithm and preparation |
+| [Original Cam Clay](original-cam-clay/README.md) | Chapter6 transcription inventory, rigid-shear/vertex/3D distinctions and analytical source path | Six tests; 38 portable algebra checks (39 with private-source hash) | Authenticated1968 edition and constrained/vertex/3D execution contract |
+| [S-CLAY1](s-clay1/README.md) | Publication correction, acquisition receipts and ten extraction gaps | Four metadata/integrity checks | Original2003 full text missing; no equations transcribed |
+| [Duncan–Chang1970](duncan-chang-1970/README.md) | Original/1971 erratum identities and acquisition/closure-gap ledger | Authored-file integrity only | Both original and correction full text missing; no equations transcribed |
+| [Manzari–Dafalias1997](manzari-dafalias-1997/README.md) | Original identity, author-bibliography discrepancy and acquisition/closure gaps | Authored-file integrity only | Original1997 full text missing; no2004 or modified-law substitution |
+| [Mašín clay2005](hypoplastic-clay-2005/README.md) | Original AppendixC base-law and SOM companion inventory, five parameters/seven states, source conflicts and integration contract |40 analytical checks and six test groups | Historical Eq38 claim corrected by linked audit; conservative SPD support, revised oracle, common-schema execution and review |
+| [PM4Sand2D3.3](pm4sand/README.md) | Distinct vendor/author-revision receipts, available equation/parameter/state/startup/lagged-phase ledgers | Eleven algebra witness groups | Nine explicit source/host conflicts; full2D update and admission open |
+| [Sand barodesy2015](barodesy-sand/README.md) | Original2015 interior sand law; separate2019 constants; seven-state integration and boundary contract |13 algebra groups and fixture replay | Nonunique zero-stress initialization, finite-rotation convention, calibration and executable reference gates |
+| [Extended Mohr–Coulomb2013](extended-mohr-coulomb-2013/README.md) | Exact publisher source, Eqs1–55, parameter/state/initialization and nonsmooth integration inventory | Nine independent diagnostic groups and exact result replay | Six invariant/gradient/flow/normal reconciliation gates; full execution and admission open |
+| [Thermal hypoplasticity2017](hypoplastic-thermal-ma-2017/README.md) | Exact accepted manuscript, Eqs1–10/Table1 and mechanical/thermal host contract | Nine independent scalar diagnostics | Six temperature-coordinate, reference singularity, anchor chronology and host-reconciliation gates; coupled execution open |
+| [Hypoplastic interface2016](hypoplastic-interface-2016/README.md) | Exact primary thesis receipt, reduced operators, traction/slip/thickness/frame and history inventory |100 exact rational representation checks and three groups | Original2016 article/Eqs30–33 visual verification unavailable; reduced-product closure and full host/integration gates remain open |
+
+Source PDFs, vendor archives, page renders and extracted article text are excluded. Each packet has local-relative exact authored-file hashes; private source receipts describe inspection provenance. Input board/context hashes are historical acquisition snapshots, not claims that the live board never changes. Links to publications and institutions remain persistent.
+
+[Capability follow-up](CAPABILITIES.md) separates generic engine work from unresolved source decisions. The existing shared solver and public executable counts are unchanged by these packets. Run `python3 -B -m unittest tests.test_ingestion_packets -v` to check packet integrity and replay their portable diagnostics; private PDFs and author software are not required or executed.
+
+[Exact source requests](SOURCE_REQUESTS.md) identify the current missing materials. Acquisition gap reports preserve partial progress; their full-ingestion checkboxes remain open.

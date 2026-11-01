@@ -1,0 +1,15 @@
+--- /private/tmp/atlas-control-partition-support-v3/source/tools/test_burgers_native.py
++++ adapters/test_burgers_native.py
+@@ -1,9 +1,11 @@
+ """Run prospectively frozen Burgers reference/transaction suite on a fresh engine."""
+ import argparse,copy,json,sys
+ from pathlib import Path
+-ROOT=Path(__file__).resolve().parents[1]
++import os
++ROOT=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()
+ PACKET=ROOT/'docs/ingestion/burgers-itasca900/integration-v1'
+ sys.path.insert(0,str(PACKET));sys.path.insert(0,str(ROOT))
++sys.path.insert(0,str(Path(__file__).resolve().parent))
+ from study import Backend,execute,assess
+ 
+ def refinement(calls):

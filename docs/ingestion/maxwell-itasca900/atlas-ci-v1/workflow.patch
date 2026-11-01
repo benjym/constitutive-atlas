@@ -1,0 +1,20 @@
+--- .github/workflows/verify.yml
++++ .github/workflows/verify.yml
+@@ -150,6 +150,8 @@
+           emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+           cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
++          python -B -m unittest tests.test_provision_maxwell_assets
++          python -B tools/provision_maxwell_assets.py
+           python tools/build_web.py
+           node tools/test_experiments.mjs --built-assets web/dist/experiments
+           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+@@ -204,6 +206,8 @@
+           emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+           cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
++          python -B -m unittest tests.test_provision_maxwell_assets
++          python -B tools/provision_maxwell_assets.py
+           python tools/build_web.py
+           node tools/test_experiments.mjs --built-assets web/dist/experiments
+           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs

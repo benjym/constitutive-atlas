@@ -1,0 +1,300 @@
+{
+  "schema_version": "0.1",
+  "sha256": "651fc41ef98219923adabf36ad187363428fe7a560777a276319e409ab657f18",
+  "models": [
+    {
+      "schema_version": "0.3",
+      "id": "hypoplastic-clay-2013",
+      "name": "Clay hypoplasticity 2013 \u2014 Appendix law, zero spin (draft)",
+      "family": "hypoplasticity",
+      "description": "Draft laboratory candidate of Ma\u0161\u00edn2013 author-manuscript Appendix Eqs43\u201358 at zero spin, with effective compression-positive Cauchy stress and void ratio. Fixed spatial infinitesimal3D restriction; no finite objective transport, IGS or 2014 anisotropy. Illustrative parameters are software fixtures, distinct from Table1 fictitious eval. and material calibrations; require explicit stress/e, with no inferred specimen preparation. Exact isotropic continuation and conservative unresolved-arithmetic rejection are project choices. Existing invariant guards do not certify eigenvalue signs arbitrarily close to singular stress; no clipping or stress floor. ASBS is diagnostic rather than a yield barrier; an evaluable initial state need not have a verified physical preparation. No universal-SPD accuracy, experimental validation, human scientific admission or validated zero/near-isotropic update tangent. See linked source, preparation and precision limitations.",
+      "status": "draft",
+      "sources": [
+        {
+          "url": "https://doi.org/10.1007/s11440-012-0199-y",
+          "locator": "Masin 2013, Appendix Eqs43\u201358; density Eq7, ASBS Eq17. Author-manuscript/final reconciliation remains open.",
+          "role": "primary publication"
+        },
+        {
+          "url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_AG12-pp.pdf",
+          "locator": "author manuscript PDF pp13\u201314 Eqs43\u201358; density p3 Eq7; SHA256 21834ab9da81ec2cdebdf3a3d7f97b691d47bf481a24432bc0562aca9f503281",
+          "role": "pinned author manuscript"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/ingestion/hypoplastic-clay-2013/README.md",
+          "role": "Atlas source, preparation and precision scope",
+          "locator": "Publisher HTML Appendix43\u201358 compared with pinned manuscript; full final-body equivalence and universal physical initial-state policy remain open."
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/clay2013-research-integration.md",
+          "role": "Separately bounded historical implementation evidence",
+          "locator": "Original immutable research definition; exact isotropic/Cartesian nonisotropic histories. Those receipts do not identify this new candidate hash."
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/clay2013-initialization-policy.md",
+          "role": "ASBS and explicit initial-state policy",
+          "locator": "ASBS outward-rate witness; no continuous yield barrier, no inferred preparation or universal OCR conversion."
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/clay2013-algebra-review.md",
+          "role": "Numerical continuation and precision limitations",
+          "locator": "Stable invariant reduction, exact isotropy, near-SPD/angle finite-arithmetic limits; no universal-SPD coverage."
+        }
+      ],
+      "parameters": {
+        "p_ref": {
+          "default": 1000,
+          "min": 1000,
+          "max": 1000,
+          "unit": "Pa",
+          "label": "Fixed source reference pressure; not a calibration parameter"
+        },
+        "p_scale": {
+          "default": 100000,
+          "min": 1,
+          "max": 1000000000000.0,
+          "unit": "Pa",
+          "label": "Numerical stress error scale"
+        },
+        "phi_c": {
+          "default": 0.5235987755982988,
+          "min": 0.01,
+          "max": 1.4,
+          "unit": "1",
+          "label": "Critical friction angle, radians; illustrative"
+        },
+        "lambda_star": {
+          "default": 0.12,
+          "min": 0.0001,
+          "max": 1.0,
+          "unit": "1",
+          "label": "Logarithmic compression slope; illustrative"
+        },
+        "kappa_star": {
+          "default": 0.025,
+          "min": 1e-05,
+          "max": 1.0,
+          "unit": "1",
+          "label": "Logarithmic swelling slope; illustrative"
+        },
+        "N": {
+          "default": 1.1,
+          "min": -10.0,
+          "max": 10.0,
+          "unit": "1",
+          "label": "Logarithmic density intercept at 1000Pa; illustrative"
+        },
+        "nu": {
+          "default": 0.2,
+          "min": -0.9,
+          "max": 0.49,
+          "unit": "1",
+          "label": "Hypoelastic Poisson parameter; illustrative"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "initial": [
+            10000.0,
+            10000.0,
+            10000.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": "p_scale",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "shape": "scalar",
+          "unit": "1",
+          "initial": 0.8,
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "void_ratio",
+            "transformation": "scalar_invariant"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "p",
+          "expr": "trace(sigma)/3"
+        },
+        {
+          "name": "a",
+          "expr": "dev(dev(sigma))/trace(sigma)"
+        },
+        {
+          "name": "j2",
+          "expr": "dot(a,a)"
+        },
+        {
+          "name": "j3",
+          "expr": "cube_trace(a)"
+        },
+        {
+          "name": "fm",
+          "expr": "(j2-3*j3)/(8/27-(j2+j3)/3)"
+        },
+        {
+          "name": "omega",
+          "expr": "-log(cos(phi_c)**2)/log(2)+0.3*(fm-sin(phi_c)**2)"
+        },
+        {
+          "name": "pe",
+          "expr": "p_ref*exp((N-log(1+e))/lambda_star)"
+        },
+        {
+          "name": "fd",
+          "expr": "(2*p/pe)**2"
+        },
+        {
+          "name": "fdA",
+          "expr": "4*(1-fm)**(2/omega)"
+        },
+        {
+          "name": "fs",
+          "expr": "(3*p/2)*(1/lambda_star+1/kappa_star)*(1-2*nu)/(1+nu)"
+        },
+        {
+          "name": "cos3theta",
+          "expr": "select(j2 > 0,-sqrt(6)*j3/j2**(3/2),0)"
+        },
+        {
+          "name": "xi",
+          "expr": "1.7+3.9*sin(phi_c)**2"
+        },
+        {
+          "name": "dA",
+          "expr": "-a+I*(2/3-(cos3theta+1)*fm**(1/4)/4)*(fm**(xi/2)-sin(phi_c)**xi)/(1-sin(phi_c)**xi)"
+        },
+        {
+          "name": "d",
+          "expr": "dA/norm(dA)"
+        },
+        {
+          "name": "c",
+          "expr": "nu/(1-2*nu)"
+        },
+        {
+          "name": "Ld",
+          "expr": "d+c*trace(d)*I"
+        },
+        {
+          "name": "Ad",
+          "expr": "fs*Ld-(sigma/lambda_star)*trace(d)"
+        },
+        {
+          "name": "stress_rate",
+          "expr": "fs*(de+c*trace(de)*I)+(fd/fdA)*Ad*norm(de)"
+        },
+        {
+          "name": "e_rate",
+          "expr": "-(1+e)*trace(de)"
+        },
+        {
+          "name": "principal_pair",
+          "expr": "1/3-j2/2"
+        },
+        {
+          "name": "principal_det",
+          "expr": "1/27-j2/6+j3/3"
+        },
+        {
+          "name": "spherical_residual",
+          "expr": "abs(dot(sigma,sym(1,-1,0,0,0,0)))+abs(dot(sigma,sym(0,1,-1,0,0,0)))+abs(dot(sigma,sym(0,0,0,1,0,0)))+abs(dot(sigma,sym(0,0,0,0,1,0)))+abs(dot(sigma,sym(0,0,0,0,0,1)))"
+        }
+      ],
+      "equations": {
+        "sigma": "stress_rate",
+        "e": "e_rate"
+      },
+      "domain": [
+        "e >= 0",
+        "lambda_star > kappa_star",
+        "p > 0*p_ref",
+        "principal_pair > 0",
+        "principal_det > 0",
+        "select(j2 > 0,0*p_ref,spherical_residual) <= 0*p_ref",
+        "fm >= 0",
+        "fm < 1",
+        "omega > 0",
+        "pe > 0*p_ref",
+        "fd > 0",
+        "fdA > 0",
+        "fs > 0*p_ref",
+        "norm(dA) > 0",
+        "cos3theta >= -1-1.4210854715202004e-14",
+        "cos3theta <= 1+1.4210854715202004e-14",
+        "abs(p) <= p_ref*1e300",
+        "norm(a) <= 1e300",
+        "abs(j2) <= 1e300",
+        "abs(j3) <= 1e300",
+        "abs(fm) <= 1e300",
+        "abs(omega) <= 1e300",
+        "abs(pe) <= p_ref*1e300",
+        "abs(fd) <= 1e300",
+        "abs(fdA) <= 1e300",
+        "abs(fs) <= p_ref*1e300",
+        "abs(cos3theta) <= 1e300",
+        "abs(xi) <= 1e300",
+        "norm(dA) <= 1e300",
+        "norm(d) <= 1e300",
+        "abs(c) <= 1e300",
+        "norm(Ld) <= 1e300",
+        "norm(Ad) <= p_ref*1e300",
+        "norm(stress_rate) <= p_ref*1e300",
+        "abs(e_rate) <= 1e300"
+      ],
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "strain_path_rate",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    }
+  ]
+}

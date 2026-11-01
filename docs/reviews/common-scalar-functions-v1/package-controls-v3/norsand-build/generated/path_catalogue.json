@@ -1,0 +1,521 @@
+{
+  "profile": "controlled-path-ode-v1",
+  "models": [
+    {
+      "id": "norsand-jefferies-1993-active-axial",
+      "controls": [
+        "pressure_control",
+        "stress_ratio_control"
+      ],
+      "state": [
+        {
+          "name": "eta",
+          "offset": 0,
+          "size": 1
+        },
+        {
+          "name": "e",
+          "offset": 1,
+          "size": 1
+        },
+        {
+          "name": "ev",
+          "offset": 2,
+          "size": 1
+        },
+        {
+          "name": "eq",
+          "offset": 3,
+          "size": 1
+        }
+      ],
+      "observables": [
+        {
+          "name": "stress",
+          "offset": 0,
+          "size": 6
+        },
+        {
+          "name": "mean_pressure",
+          "offset": 6,
+          "size": 1
+        },
+        {
+          "name": "deviatoric_stress",
+          "offset": 7,
+          "size": 1
+        },
+        {
+          "name": "image_pressure",
+          "offset": 8,
+          "size": 1
+        },
+        {
+          "name": "image_state_parameter",
+          "offset": 9,
+          "size": 1
+        },
+        {
+          "name": "dilatancy",
+          "offset": 10,
+          "size": 1
+        },
+        {
+          "name": "axial_strain",
+          "offset": 11,
+          "size": 1
+        },
+        {
+          "name": "radial_strain",
+          "offset": 12,
+          "size": 1
+        }
+      ],
+      "parameters": [
+        "M",
+        "N",
+        "h",
+        "lam",
+        "Gamma",
+        "pref"
+      ],
+      "inputs": {
+        "path_coordinate": {
+          "quantity": "path_coordinate",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "C": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "pressure_control",
+            "derivative_order": 0
+          }
+        },
+        "Cs": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "pressure_control",
+            "derivative_order": 1
+          }
+        },
+        "K": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "stress_ratio_control",
+            "derivative_order": 0
+          }
+        },
+        "Ks": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "stress_ratio_control",
+            "derivative_order": 1
+          }
+        }
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "path_ode",
+        "kinematics": "axisymmetric_x",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "inputs": {
+          "equation": {
+            "path_coordinate": {
+              "quantity": "path_coordinate",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "C": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "Pa",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "pressure_control",
+                "derivative_order": 0
+              }
+            },
+            "Cs": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "Pa",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "pressure_control",
+                "derivative_order": 1
+              }
+            },
+            "K": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "stress_ratio_control",
+                "derivative_order": 0
+              }
+            },
+            "Ks": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "stress_ratio_control",
+                "derivative_order": 1
+              }
+            }
+          },
+          "advance": {
+            "start_coordinate": {
+              "quantity": "path_coordinate",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "progress": {
+              "quantity": "path_progress",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "interval",
+              "constraint": "nonnegative_finite"
+            }
+          }
+        },
+        "stress": {
+          "source": "observable",
+          "name": "stress",
+          "measure": "cauchy",
+          "scope": "effective"
+        }
+      },
+      "model_sha256": "cc05def093a4481a1df1c499b00d886619fcc1b5200a60c4270d87f6c15b7f51"
+    },
+    {
+      "id": "synthetic-curved-path",
+      "controls": [
+        "load",
+        "unused"
+      ],
+      "state": [
+        {
+          "name": "vscalar",
+          "offset": 0,
+          "size": 1
+        },
+        {
+          "name": "A",
+          "offset": 1,
+          "size": 6
+        }
+      ],
+      "observables": [
+        {
+          "name": "stress",
+          "offset": 0,
+          "size": 6
+        }
+      ],
+      "parameters": [
+        "pref"
+      ],
+      "inputs": {
+        "path_coordinate": {
+          "quantity": "path_coordinate",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "u": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "load",
+            "derivative_order": 0
+          }
+        },
+        "du": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "load",
+            "derivative_order": 1
+          }
+        },
+        "unused": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "unused",
+            "derivative_order": 0
+          }
+        }
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "path_ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "inputs": {
+          "equation": {
+            "path_coordinate": {
+              "quantity": "path_coordinate",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "u": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "load",
+                "derivative_order": 0
+              }
+            },
+            "du": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "load",
+                "derivative_order": 1
+              }
+            },
+            "unused": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "unused",
+                "derivative_order": 0
+              }
+            }
+          },
+          "advance": {
+            "start_coordinate": {
+              "quantity": "path_coordinate",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "progress": {
+              "quantity": "path_progress",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "interval",
+              "constraint": "nonnegative_finite"
+            }
+          }
+        },
+        "stress": {
+          "source": "observable",
+          "name": "stress",
+          "measure": "cauchy",
+          "scope": "effective"
+        }
+      },
+      "model_sha256": "a10fc1dc930fd9c64ef8c36f43492a093a7255d1617016c25117787f0d581f74"
+    },
+    {
+      "id": "synthetic-controlled-path",
+      "controls": [
+        "load",
+        "unused"
+      ],
+      "state": [
+        {
+          "name": "vscalar",
+          "offset": 0,
+          "size": 1
+        },
+        {
+          "name": "A",
+          "offset": 1,
+          "size": 6
+        }
+      ],
+      "observables": [
+        {
+          "name": "stress",
+          "offset": 0,
+          "size": 6
+        }
+      ],
+      "parameters": [
+        "pref"
+      ],
+      "inputs": {
+        "path_coordinate": {
+          "quantity": "path_coordinate",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "u": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "load",
+            "derivative_order": 0
+          }
+        },
+        "du": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "load",
+            "derivative_order": 1
+          }
+        },
+        "unused": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "unused",
+            "derivative_order": 0
+          }
+        }
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "path_ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "inputs": {
+          "equation": {
+            "path_coordinate": {
+              "quantity": "path_coordinate",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "u": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "load",
+                "derivative_order": 0
+              }
+            },
+            "du": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "load",
+                "derivative_order": 1
+              }
+            },
+            "unused": {
+              "quantity": "control",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "unused",
+                "derivative_order": 0
+              }
+            }
+          },
+          "advance": {
+            "start_coordinate": {
+              "quantity": "path_coordinate",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "progress": {
+              "quantity": "path_progress",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "interval",
+              "constraint": "nonnegative_finite"
+            }
+          }
+        },
+        "stress": {
+          "source": "observable",
+          "name": "stress",
+          "measure": "cauchy",
+          "scope": "effective"
+        }
+      },
+      "model_sha256": "437b9f9af5e0b6c29c5529ec98d133154ab7be1715b5040fb2815769a39e5a05"
+    }
+  ]
+}

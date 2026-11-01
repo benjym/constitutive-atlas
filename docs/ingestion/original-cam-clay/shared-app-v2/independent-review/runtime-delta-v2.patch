@@ -1,0 +1,181 @@
+--- /private/tmp/atlas-occ-ci-recovery-v2/source/cpp/main.cpp
++++ /Users/bmar5496/code/constitutive-atlas/cpp/main.cpp
+@@ -86,6 +86,18 @@
+       <<",\"rate_tolerance\":"<<s.rate_tolerance<<",\"max_iterations\":"<<s.max_iterations<<",\"max_depth\":"<<s.max_depth
+       <<",\"max_substeps\":"<<s.max_substeps<<",\"max_backtracks\":"<<s.max_backtracks<<'}';
+ }
++void write_partition_diagnostics(std::ostream& o,const atlas::Diagnostics& d,bool committed){
++    o<<",\"partition_committed\":"<<(committed?"true":"false")
++     <<",\"attempted_substeps\":"<<d.attempted_substeps<<",\"discarded_substeps\":"<<d.discarded_substeps
++     <<",\"partition_retries\":"<<d.partition_retries<<",\"first_attempt_substeps\":"<<d.first_attempt_substeps
++     <<",\"partition_defect\":";array(o,d.partition_defect);
++    o<<",\"accepted_increment_tensors\":[";
++    if(d.partition_retries)for(size_t i=0;i<d.accepted_increments.size();++i){if(i)o<<',';array(o,d.accepted_increments[i]);}
++    o<<"],\"discarded_increment_fractions\":";array(o,d.discarded_increment_fractions);
++    o<<",\"discarded_increment_tensors\":[";
++    for(size_t i=0;i<d.discarded_increments.size();++i){if(i)o<<',';array(o,d.discarded_increments[i]);}
++    o<<']';
++}
+ }
+ 
+ extern "C" ATLAS_EXPORT const char* atlas_describe(){return atlas::describe_models();}
+@@ -105,7 +117,7 @@
+         o<<",\"points\":[";
+         for(size_t i=0;i<run.points.size();++i){if(i)o<<',';const auto&point=run.points[i];const auto&v=point.state;auto sigma=atlas::tensor_from(v,0);
+             o<<"{\"control\":"<<point.control<<",\"strain\":";array(o,atlas::State(point.strain.v.begin(),point.strain.v.end()));o<<",\"state\":";array(o,v);
+-            o<<",\"p\":"<<atlas::trace(sigma)/3<<",\"q\":"<<atlas::deviatoric_stress_magnitude(sigma)<<",\"q_signed\":"<<v[0]-.5*(v[1]+v[2])<<",\"u\":";if(scope_aware&&!atlas::laboratory_pore_reconstruction(atlas::models()[m].stress_scope,protocol))o<<"null";else o<<point.pore_pressure;o<<",\"iterations\":"<<point.diagnostics.iterations<<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":"<<point.diagnostics.error<<'}';
++            o<<",\"p\":"<<atlas::trace(sigma)/3<<",\"q\":"<<atlas::deviatoric_stress_magnitude(sigma)<<",\"q_signed\":"<<v[0]-.5*(v[1]+v[2])<<",\"u\":";if(scope_aware&&!atlas::laboratory_pore_reconstruction(atlas::models()[m].stress_scope,protocol))o<<"null";else o<<point.pore_pressure;o<<",\"iterations\":"<<point.diagnostics.iterations<<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":"<<point.diagnostics.error;write_partition_diagnostics(o,point.diagnostics,true);o<<'}';
+         }
+         o<<"]}";output=o.str();return output.c_str();
+     }catch(const std::exception&e){return failure(e.what());}
+@@ -131,7 +143,7 @@
+ }
+ static const char* integrate_response(const char*id,const char*parameters,const char*initial,const char*strain,const char*settings_csv){
+     try{int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial),d=parse_csv(strain);if(d.size()!=6)throw std::runtime_error("six Mandel strain components required");auto settings=settings_for(settings_csv);auto result=atlas::integrate(m,z,atlas::tensor_from(d,0),p,settings);
+-        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"message\":"<<quote(result.message)<<",\"state\":";array(o,result.state);o<<",\"diagnostics\":{\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"rejected\":"<<result.diagnostics.rejected<<",\"increment_fractions\":";array(o,result.diagnostics.increment_fractions);o<<'}';
++        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"message\":"<<quote(result.message)<<",\"state\":";array(o,result.state);o<<",\"diagnostics\":{\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"rejected\":"<<result.diagnostics.rejected<<",\"increment_fractions\":";array(o,result.diagnostics.increment_fractions);write_partition_diagnostics(o,result.diagnostics,result.ok);o<<'}';
+         if(settings_csv){o<<",\"integration_settings\":";write_settings(o,result.settings);
+             o<<",\"catalogue_hash\":"<<quote(atlas::catalogue_hash())<<",\"model\":"<<quote(id)<<",\"parameters\":";array(o,p);
+             o<<",\"initial\":";array(o,z);o<<",\"strain\":";array(o,d);}
+@@ -160,7 +172,7 @@
+         if(!result.tangent_ok)o<<"null";
+         else{ o<<'[';for(size_t i=0;i<result.state_tangent.size();++i){if(i)o<<',';array(o,result.state_tangent[i]);}o<<']'; }
+         o<<",\"diagnostics\":{\"iterations\":"<<diag.iterations<<",\"substeps\":"<<diag.substeps<<",\"rejected\":"<<diag.rejected<<",\"increment_fractions\":";
+-        array(o,diag.increment_fractions);o<<",\"error\":";if(std::isfinite(diag.error))o<<diag.error;else o<<"null";
++        array(o,diag.increment_fractions);write_partition_diagnostics(o,diag,a.ok);o<<",\"error\":";if(std::isfinite(diag.error))o<<diag.error;else o<<"null";
+         o<<'}';if(settings_csv){o<<",\"integration_settings\":";write_settings(o,a.settings);}o<<'}';output=o.str();return output.c_str();
+     }catch(const std::exception& e){
+         output="{\"ok\":false,\"tangent_ok\":false,\"state_tangent\":null,\"message\":"+quote(e.what())+"}";
+@@ -233,7 +245,7 @@
+             o<<",\"control_error\":"<<point.control_error<<",\"diagnostics\":{\"iterations\":"<<point.diagnostics.iterations
+               <<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":";
+             if(std::isfinite(point.diagnostics.error))o<<point.diagnostics.error;else o<<"null";
+-            o<<",\"increment_fractions\":";array(o,point.diagnostics.increment_fractions);o<<"}}";
++            o<<",\"increment_fractions\":";array(o,point.diagnostics.increment_fractions);write_partition_diagnostics(o,point.diagnostics,true);o<<"}}";
+         }
+         o<<"]}";output=o.str();return output.c_str();
+     }catch(const std::exception&e){return failure(e.what());}
+--- /private/tmp/atlas-occ-ci-recovery-v2/source/cpp/include/atlas/solver.hpp
++++ /Users/bmar5496/code/constitutive-atlas/cpp/include/atlas/solver.hpp
+@@ -8,7 +8,13 @@
+ 
+ namespace atlas {
+ using State=std::vector<double>;
+-struct Diagnostics { int iterations=0, substeps=0, rejected=0, nonmonotone_restarts=0, rounding_corrections=0; double error=0; std::vector<double> increment_fractions; };
++struct Diagnostics {
++    int iterations=0, substeps=0, rejected=0, nonmonotone_restarts=0, rounding_corrections=0;
++    int attempted_substeps=0, discarded_substeps=0, partition_retries=0, first_attempt_substeps=0;
++    double error=0;
++    State increment_fractions, partition_defect=State(6,0.), discarded_increment_fractions;
++    std::vector<State> accepted_increments, discarded_increments;
++};
+ struct Advance { bool ok=false; State state; Diagnostics diagnostics; std::string message; IntegrationSettings settings; };
+ inline State default_parameters(int model) { State p;for(const auto&v:models().at(model).parameters)p.push_back(v.value);return p; }
+ inline State initial_state(int model){State z;for(const auto&f:models().at(model).fields)for(int i=0;i<f.size;++i)z.push_back(f.initial[i]);return z;}
+@@ -102,7 +108,7 @@
+ inline bool advance_recursive(int model,const State&zn,const Sym<double>&de,const State&p,State&z,Diagnostics&diag,int depth,const IntegrationSettings&settings={}){
+     if(depth>settings.max_depth||diag.substeps>=settings.max_substeps)return false;
+     const bool rate=models().at(model).rate;
+-    if(!rate){if(implicit_step(model,zn,de,p,z,diag,settings)){++diag.substeps;diag.increment_fractions.push_back(std::ldexp(1.,-depth));return true;}}
++    if(!rate){if(implicit_step(model,zn,de,p,z,diag,settings)){++diag.substeps;diag.increment_fractions.push_back(std::ldexp(1.,-depth));diag.accepted_increments.emplace_back(de.v.begin(),de.v.end());return true;}}
+     else {
+         State full,half,two,half_defect,two_defect;const auto halfde=.5*de;
+         if(midpoint(model,zn,de,p,full)&&midpoint(model,zn,halfde,p,half,&half_defect)&&midpoint(model,half,halfde,p,two,&two_defect)){
+@@ -119,6 +125,22 @@
+     ++diag.rejected;State half;
+     if(!advance_recursive(model,zn,.5*de,p,half,diag,depth+1,settings))return false;
+     return advance_recursive(model,half,.5*de,p,z,diag,depth+1,settings);
++}
++// One non-dyadic alternative, with an error-free audit of its binary loading sum.
++inline bool alternate_partition(const Sym<double>&de,Sym<double>&left,Sym<double>&right,State&defect){
++    defect.assign(6,0.);
++    for(int i=0;i<6;++i){
++        const double incoming=de.v[i];
++        if(!std::isfinite(incoming))return false;
++        if(incoming==0.){left.v[i]=incoming;right.v[i]=incoming;continue;}
++        const double a=incoming/3.,b=incoming-a,sum=a+b;
++        if(!std::isfinite(a)||!std::isfinite(b)||a==0.||b==0.||sum!=incoming)return false;
++        const double virtual_b=sum-a;
++        const double remainder=(a-(sum-virtual_b))+(b-virtual_b);
++        if(!std::isfinite(remainder)||std::abs(remainder)/std::abs(incoming)>2*std::numeric_limits<double>::epsilon())return false;
++        left.v[i]=a;right.v[i]=b;defect[i]=remainder;
++    }
++    return true;
+ }
+ inline Advance integrate(int model,const State&zn,const Sym<double>&de,const State&p,const IntegrationSettings&settings={}){
+     Advance result;result.state=zn;result.settings=settings;
+@@ -133,7 +155,36 @@
+     }
+     State trial;
+     result.ok=advance_recursive(model,prepared,de,p,trial,result.diagnostics,0,settings);
++    auto&diag=result.diagnostics;
++    diag.attempted_substeps=diag.substeps;diag.first_attempt_substeps=diag.substeps;
++    if(!result.ok)diag.discarded_substeps=diag.substeps;
++    if(!result.ok&&!models()[model].rate&&settings.max_depth>0&&diag.substeps<settings.max_substeps){
++        Sym<double> left,right;State defect;
++        if(alternate_partition(de,left,right,defect)){
++            const Diagnostics first=diag;Diagnostics retry;State midpoint_state;
++            auto remaining=settings;remaining.max_substeps-=first.substeps;
++            bool ok=advance_recursive(model,prepared,left,p,midpoint_state,retry,1,remaining);
++            const size_t left_steps=retry.increment_fractions.size();
++            if(ok)ok=advance_recursive(model,midpoint_state,right,p,trial,retry,1,remaining);
++            constexpr double left_fraction=1./3.,right_fraction=1.-left_fraction;
++            for(size_t i=0;i<retry.increment_fractions.size();++i)retry.increment_fractions[i]*=2*(i<left_steps?left_fraction:right_fraction);
++            retry.iterations+=first.iterations;retry.rejected+=first.rejected;
++            retry.nonmonotone_restarts+=first.nonmonotone_restarts;retry.rounding_corrections+=first.rounding_corrections;
++            retry.partition_retries=1;retry.first_attempt_substeps=first.substeps;retry.partition_defect=defect;
++            retry.attempted_substeps=first.substeps+retry.substeps;
++            if(ok){
++                retry.discarded_substeps=first.substeps;
++                retry.discarded_increment_fractions=first.increment_fractions;retry.discarded_increments=first.accepted_increments;
++            }else{
++                retry.increment_fractions.insert(retry.increment_fractions.begin(),first.increment_fractions.begin(),first.increment_fractions.end());
++                retry.accepted_increments.insert(retry.accepted_increments.begin(),first.accepted_increments.begin(),first.accepted_increments.end());
++                retry.substeps=retry.attempted_substeps;retry.discarded_substeps=retry.attempted_substeps;
++            }
++            diag=std::move(retry);result.ok=ok;
++        }
++    }
+     if(result.ok && !solution_admissible(model,trial,p))result.ok=false;
++    if(!result.ok)diag.discarded_substeps=diag.attempted_substeps;
+     if(result.ok)result.state=trial;else result.message="integration failed: domain boundary, singular system or substep limit; state rolled back";
+     return result;
+ }
+--- /private/tmp/atlas-occ-ci-recovery-v2/source/cpp/include/atlas/linearize.hpp
++++ /Users/bmar5496/code/constitutive-atlas/cpp/include/atlas/linearize.hpp
+@@ -26,10 +26,21 @@
+     if(!prepare_model_increment(model,previous,total,parameters,prepared,&result.reset_guard_at_zero)){
+         result.message="AD preparation failed";return result;
+     }
+-    previous=prepared;double covered=0.;
++    previous=prepared;double covered=0.;size_t partition_index=0;
++    if(result.advance.diagnostics.partition_retries && result.advance.diagnostics.accepted_increments.size()!=result.advance.diagnostics.increment_fractions.size()){
++        result.message="actual accepted partition is incomplete";return result;
++    }
+     for(double fraction:result.advance.diagnostics.increment_fractions){
+         if(!std::isfinite(fraction)||fraction<=0){result.message="invalid accepted partition";return result;}
+-        covered+=fraction;const auto de=Jet(fraction)*total;
++        covered+=fraction;auto de=Jet(fraction)*total;
++        // Fixed affine extension of the actual binary subincrement, not a
++        // derivative of rounding or of adaptive partition selection.
++        if(result.advance.diagnostics.partition_retries){
++            const auto&actual=result.advance.diagnostics.accepted_increments[partition_index];
++            if(actual.size()!=6||!finite(actual)){result.message="invalid actual accepted subincrement";return result;}
++            for(int j=0;j<6;++j)de.v[j].v=actual[j];
++        }
++        ++partition_index;
+         if(models().at(model).rate){
+             std::vector<Jet> k1,k2,mid=previous;
+             if(!evaluate_model(model,previous,previous,de,parameters,k1)){result.message="rate replay failed";return result;}
+@@ -65,7 +76,10 @@
+     if(std::abs(covered-1.)>1e-12){result.message="accepted partition does not cover the increment";return result;}
+     result.state_tangent.assign(n,State(6));
+     for(int i=0;i<n;++i){
+-        if(!std::isfinite(previous[i].v)||std::abs(previous[i].v-result.advance.state[i])/scales[i]>1e-9){
++        const bool differs=result.advance.diagnostics.partition_retries
++            ? previous[i].v!=result.advance.state[i]
++            : std::abs(previous[i].v-result.advance.state[i])/scales[i]>1e-9;
++        if(!std::isfinite(previous[i].v)||differs){
+             result.state_tangent.clear();result.message="AD replay endpoint differs from accepted update";return result;
+         }
+         for(int j=0;j<6;++j){

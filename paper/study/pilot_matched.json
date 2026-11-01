@@ -1,0 +1,260 @@
+{
+  "paper_record_version": 1,
+  "id": "kfs-matched-count-development-v1",
+  "phase": "development_only",
+  "claim": "Development contrast of three pressure-spanning versus three density-spanning calibration tests within each model; partial calibration, inherited literature information and previously inspected evaluation tests. No final predictive-validity or cross-model ranking claim.",
+  "experiment_paths": {
+    "KFS-TMD1": "data/normalized/KFS-TMD1.json",
+    "KFS-TMD2": "data/normalized/KFS-TMD2.json",
+    "KFS-TMD3": "data/normalized/KFS-TMD3.json",
+    "KFS-TMD4": "data/normalized/KFS-TMD4.json",
+    "KFS-TMD5": "data/normalized/KFS-TMD5.json",
+    "KFS-TMD7": "paper/results/development-data/normalized/KFS-TMD7.json",
+    "KFS-TMD8": "paper/results/development-data/normalized/KFS-TMD8.json",
+    "KFS-TMD9": "paper/results/development-data/normalized/KFS-TMD9.json",
+    "KFS-TMD12": "paper/results/development-data/normalized/KFS-TMD12.json",
+    "KFS-TMD13": "paper/results/development-data/normalized/KFS-TMD13.json",
+    "KFS-TMD14": "paper/results/development-data/normalized/KFS-TMD14.json"
+  },
+  "packages": {
+    "pressure3": [
+      "KFS-TMD2",
+      "KFS-TMD3",
+      "KFS-TMD4"
+    ],
+    "density3": [
+      "KFS-TMD3",
+      "KFS-TMD8",
+      "KFS-TMD13"
+    ]
+  },
+  "evaluation_ids": [
+    "KFS-TMD1",
+    "KFS-TMD5",
+    "KFS-TMD7",
+    "KFS-TMD9",
+    "KFS-TMD12",
+    "KFS-TMD14"
+  ],
+  "maximum_axial_strain": 0.02,
+  "steps": 100,
+  "refinement_steps": [
+    200,
+    400
+  ],
+  "samples": 101,
+  "objective": {
+    "channels": [
+      "q",
+      "volumetric_strain"
+    ],
+    "q_scale": "initial_mean_effective_stress",
+    "volumetric_strain_scale": 0.01,
+    "aggregation": "equal channel MSE within test, equal tests"
+  },
+  "optimizer": {
+    "method": "bounded_coordinate_pattern_search",
+    "seeds": [
+      0,
+      17,
+      41
+    ],
+    "max_evaluations": 96,
+    "initial_step": 0.25,
+    "minimum_step": 0.001,
+    "failure_objective": 1e+30,
+    "selection": "lowest calibration objective across all seeds; no evaluation access"
+  },
+  "timeout_seconds": 30,
+  "models": [
+    {
+      "id": "linear-elastic",
+      "baseline_parameters": {
+        "p_ref": 100000,
+        "E": 30000000.0,
+        "nu": 0.25
+      },
+      "fit": {
+        "E": {
+          "bounds": [
+            100000.0,
+            200000000.0
+          ],
+          "transform": "log"
+        },
+        "nu": {
+          "bounds": [
+            0.05,
+            0.45
+          ],
+          "transform": "linear"
+        }
+      },
+      "fixed_parameters": {
+        "p_ref": 100000
+      },
+      "note": "Hooke-law diagnostic baseline; cannot represent irreversible sand behaviour.",
+      "bounds_status": "exploratory analyst choices within current implementation bounds; sensitivity not established",
+      "baseline_source": {
+        "path": "models/linear-elastic.json",
+        "locator": "default parameters with stated c=0 specialization for Drucker-Prager"
+      }
+    },
+    {
+      "id": "drucker-prager",
+      "baseline_parameters": {
+        "p_ref": 100000,
+        "E": 30000000.0,
+        "nu": 0.25,
+        "M": 1.2,
+        "Md": 0.2,
+        "c": 0
+      },
+      "fit": {
+        "E": {
+          "bounds": [
+            100000.0,
+            200000000.0
+          ],
+          "transform": "log"
+        },
+        "nu": {
+          "bounds": [
+            0.05,
+            0.45
+          ],
+          "transform": "linear"
+        },
+        "M": {
+          "bounds": [
+            0.6,
+            1.8
+          ],
+          "transform": "linear"
+        },
+        "Md": {
+          "bounds": [
+            0,
+            0.6
+          ],
+          "transform": "linear"
+        }
+      },
+      "fixed_parameters": {
+        "p_ref": 100000,
+        "c": 0
+      },
+      "note": "c=0 cohesionless specialization; Md>=0 forbids plastic contraction under compression-positive convention. This is an intentionally limited baseline.",
+      "bounds_status": "exploratory analyst choices within current implementation bounds; sensitivity not established",
+      "baseline_source": {
+        "path": "models/drucker-prager.json",
+        "locator": "default parameters with stated c=0 specialization for Drucker-Prager"
+      }
+    },
+    {
+      "id": "hypoplastic-sand-vw96",
+      "baseline_parameters": {
+        "p_ref": 100000.0,
+        "phi": 0.5777039824101231,
+        "hs": 4000000000.0,
+        "n": 0.27,
+        "ed0": 0.677,
+        "ec0": 1.054,
+        "ei0": 1.212,
+        "alpha": 0.14,
+        "beta": 2.5
+      },
+      "fit": {
+        "phi": {
+          "bounds": [
+            0.45,
+            0.7
+          ],
+          "transform": "linear"
+        },
+        "hs": {
+          "bounds": [
+            500000000.0,
+            20000000000.0
+          ],
+          "transform": "log"
+        },
+        "alpha": {
+          "bounds": [
+            0.05,
+            0.4
+          ],
+          "transform": "linear"
+        },
+        "beta": {
+          "bounds": [
+            0.5,
+            4
+          ],
+          "transform": "linear"
+        }
+      },
+      "fixed_parameters": {
+        "p_ref": 100000.0,
+        "n": 0.27,
+        "ed0": 0.677,
+        "ec0": 1.054,
+        "ei0": 1.212
+      },
+      "note": "Partial calibration only: n, ed0, ec0, ei0 fixed to the existing literature transfer set; their source information is additional prior knowledge, not data learned by this pilot.",
+      "bounds_status": "exploratory analyst choices within current implementation bounds; sensitivity not established",
+      "baseline_source": {
+        "url": "https://doi.org/10.1002/nag.70375",
+        "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians"
+      }
+    }
+  ],
+  "evaluation_protocol": {
+    "kind": "acquisition_order_drained",
+    "maximum_increment": 0.0002,
+    "refinement_maximum_increments": [
+      0.0001,
+      5e-05
+    ],
+    "initial_state_policy": "measured_file_void_ratio_and_effective_stress",
+    "metric": "absolute_axial_strain_travel_trapezoidal_endpoint_error",
+    "decision": "Development file-based initialization preserves measured records; original-table e0 sensitivity is reported separately. Source disagreement remains unresolved.",
+    "calibration_distinction": "Calibration remains a monotonic ramp with uniform-strain error resampling. All six evaluation tests use acquisition-order replay and the same travel-weighted metric; aggregate scores are not directly comparable with the earlier pressure pilot."
+  },
+  "calibration_design_contrast": {
+    "kind": "matched_test_count",
+    "reference_package": "pressure3",
+    "alternative_package": "density3",
+    "tests_per_package": 3,
+    "question": "For this declared prediction task, how does spending three calibration tests on pressure coverage compare with spending them on density coverage?",
+    "contrast_direction": "alternative minus reference; negative error change favors density3",
+    "evaluation_groups": {
+      "loose_pressure_transfer": [
+        "KFS-TMD1",
+        "KFS-TMD5"
+      ],
+      "intermediate_density_pressure_transfer": [
+        "KFS-TMD7",
+        "KFS-TMD9"
+      ],
+      "higher_density_pressure_transfer": [
+        "KFS-TMD12",
+        "KFS-TMD14"
+      ]
+    },
+    "primary_stress_weight": 0.5,
+    "evaluation_stress_weight_sensitivity": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "exposure": "Design follows the inspected nested density pilot and the prior recorded follow-up proposal. Development only; not a blind or preregistered final comparison.",
+    "limits": [
+      "Equal test count does not equalize preparation effort, number of measurement samples or parameter information.",
+      "Pressure and density coverage are exchanged; results do not establish the universal value of diversity.",
+      "Evaluation-weight sensitivity holds fitted parameters fixed; it does not recalibrate under alternative objectives.",
+      "Density groups are not verified independent batches; no confidence intervals or independent-material claim.",
+      "Development jobs may run concurrently; elapsed times are diagnostic and are not controlled computational-cost comparisons."
+    ]
+  }
+}

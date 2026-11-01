@@ -1,0 +1,1 @@
+The current publication-lineage schema requires a DOI and journal version role. The ANSYS 2024R2 primary manual has no verified DOI; it is retained in the source receipt, model and dossier links, rather than inventing a DOI or changing the shared schema. No journal-lineage record is claimed.

@@ -1,0 +1,523 @@
+﻿2026-11-01T19:51:36.4092171Z Current runner version: '2.338.2'
+2026-11-01T19:51:36.4118568Z ##[group]Runner Image Provisioner
+2026-11-01T19:51:36.4119655Z Hosted Compute Agent
+2026-11-01T19:51:36.4120330Z Version: 20261021.618
+2026-11-01T19:51:36.4121059Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-01T19:51:36.4121832Z Build Date: 2026-10-21T00:45:21Z
+2026-11-01T19:51:36.4122540Z Worker ID: {4ab28f5e-a183-454f-ae14-fae31360635f}
+2026-11-01T19:51:36.4123355Z Region: westus
+2026-11-01T19:51:36.4123968Z Cloud: Azure
+2026-11-01T19:51:36.4124960Z ##[endgroup]
+2026-11-01T19:51:36.4126510Z ##[group]Operating System
+2026-11-01T19:51:36.4127214Z Ubuntu
+2026-11-01T19:51:36.4128314Z 24.04.5
+2026-11-01T19:51:36.4128928Z LTS
+2026-11-01T19:51:36.4129518Z ##[endgroup]
+2026-11-01T19:51:36.4130125Z ##[group]Runner Image
+2026-11-01T19:51:36.4130764Z Image: ubuntu-24.04
+2026-11-01T19:51:36.4131493Z Version: 20261025.353.1
+2026-11-01T19:51:36.4132916Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-01T19:51:36.4134638Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-11-01T19:51:36.4135655Z ##[endgroup]
+2026-11-01T19:51:36.4136878Z ##[group]GITHUB_TOKEN Permissions
+2026-11-01T19:51:36.4139173Z Contents: read
+2026-11-01T19:51:36.4139933Z Metadata: read
+2026-11-01T19:51:36.4140526Z ##[endgroup]
+2026-11-01T19:51:36.4142820Z Secret source: Actions
+2026-11-01T19:51:36.4143887Z Cache mode: write
+2026-11-01T19:51:36.4144600Z Prepare workflow directory
+2026-11-01T19:51:36.4560903Z Prepare all required actions
+2026-11-01T19:51:36.4611196Z Getting action download info
+2026-11-01T19:51:36.8378333Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-11-01T19:51:36.9397339Z Download action repository 'actions/setup-python@v6' (SHA:ece7cb06caefa5fff74198d8649806c4678c61a1)
+2026-11-01T19:51:37.0154388Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-11-01T19:51:37.0997269Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-01T19:51:37.3149334Z Complete job name: controlled-path
+2026-11-01T19:51:37.4024660Z ##[group]Run actions/checkout@v5
+2026-11-01T19:51:37.4025802Z with:
+2026-11-01T19:51:37.4026308Z   repository: benjym/constitutive-atlas
+2026-11-01T19:51:37.4031000Z   token: ***
+2026-11-01T19:51:37.4031487Z   ssh-strict: true
+2026-11-01T19:51:37.4031953Z   ssh-user: git
+2026-11-01T19:51:37.4032422Z   persist-credentials: true
+2026-11-01T19:51:37.4032930Z   clean: true
+2026-11-01T19:51:37.4033414Z   sparse-checkout-cone-mode: true
+2026-11-01T19:51:37.4033963Z   fetch-depth: 1
+2026-11-01T19:51:37.4034415Z   fetch-tags: false
+2026-11-01T19:51:37.4034882Z   show-progress: true
+2026-11-01T19:51:37.4035354Z   lfs: false
+2026-11-01T19:51:37.4035792Z   submodules: false
+2026-11-01T19:51:37.4036276Z   set-safe-directory: true
+2026-11-01T19:51:37.4036820Z   allow-unsafe-pr-checkout: false
+2026-11-01T19:51:37.4038085Z env:
+2026-11-01T19:51:37.4038603Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:51:37.4039156Z ##[endgroup]
+2026-11-01T19:51:37.7206666Z Syncing repository: benjym/constitutive-atlas
+2026-11-01T19:51:37.7209215Z ##[group]Getting Git version info
+2026-11-01T19:51:37.7210146Z Working directory is '/home/runner/work/constitutive-atlas/constitutive-atlas'
+2026-11-01T19:51:37.7211367Z [command]/usr/bin/git version
+2026-11-01T19:51:37.7336002Z git version 2.56.0
+2026-11-01T19:51:37.7359586Z ##[endgroup]
+2026-11-01T19:51:37.7375164Z Temporarily overriding HOME='/home/runner/work/_temp/bb983ca3-a7cd-495f-831a-d2a5102238c4' before making global git config changes
+2026-11-01T19:51:37.7377406Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T19:51:37.7381214Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:51:37.7439345Z Deleting the contents of '/home/runner/work/constitutive-atlas/constitutive-atlas'
+2026-11-01T19:51:37.7443435Z ##[group]Initializing the repository
+2026-11-01T19:51:37.7448349Z [command]/usr/bin/git init /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:51:37.7574510Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-01T19:51:37.7576117Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-01T19:51:37.7577861Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-01T19:51:37.7579043Z hint: call:
+2026-11-01T19:51:37.7579647Z hint:
+2026-11-01T19:51:37.7580415Z hint: 	git config --global init.defaultBranch <name>
+2026-11-01T19:51:37.7581348Z hint:
+2026-11-01T19:51:37.7582219Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-01T19:51:37.7583638Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-01T19:51:37.7584764Z hint:
+2026-11-01T19:51:37.7585392Z hint: 	git branch -m <name>
+2026-11-01T19:51:37.7586394Z hint:
+2026-11-01T19:51:37.7588180Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-01T19:51:37.7591294Z Initialized empty Git repository in /home/runner/work/constitutive-atlas/constitutive-atlas/.git/
+2026-11-01T19:51:37.7602089Z [command]/usr/bin/git remote add origin https://github.com/benjym/constitutive-atlas
+2026-11-01T19:51:37.7654158Z ##[endgroup]
+2026-11-01T19:51:37.7658535Z ##[group]Disabling automatic garbage collection
+2026-11-01T19:51:37.7659477Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-01T19:51:37.7691979Z ##[endgroup]
+2026-11-01T19:51:37.7692877Z ##[group]Setting up auth
+2026-11-01T19:51:37.7698867Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T19:51:37.7735063Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T19:51:37.8144514Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T19:51:37.8178842Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T19:51:37.8411176Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T19:51:37.8445876Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T19:51:37.8685734Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-01T19:51:37.8726047Z ##[endgroup]
+2026-11-01T19:51:37.8727081Z ##[group]Fetching the repository
+2026-11-01T19:51:37.8739277Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +0b1b15ac5f4c8038bce3b26a098d31116c28b537:refs/remotes/origin/main
+2026-11-01T19:51:50.4078438Z From https://github.com/benjym/constitutive-atlas
+2026-11-01T19:51:50.4080744Z  * [new ref]           0b1b15ac5f4c8038bce3b26a098d31116c28b537 -> origin/main
+2026-11-01T19:51:50.4084422Z ##[endgroup]
+2026-11-01T19:51:50.4085678Z ##[group]Determining the checkout info
+2026-11-01T19:51:50.4087007Z ##[endgroup]
+2026-11-01T19:51:50.4090777Z [command]/usr/bin/git sparse-checkout disable
+2026-11-01T19:51:50.4145870Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-01T19:51:50.4178176Z ##[group]Checking out the ref
+2026-11-01T19:51:50.4181456Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-01T19:51:51.4675504Z Updating files:  25% (7213/27828)
+2026-11-01T19:51:51.5182457Z Updating files:  26% (7236/27828)
+2026-11-01T19:51:51.5716673Z Updating files:  27% (7514/27828)
+2026-11-01T19:51:51.6209779Z Updating files:  28% (7792/27828)
+2026-11-01T19:51:51.6737413Z Updating files:  29% (8071/27828)
+2026-11-01T19:51:51.7401210Z Updating files:  30% (8349/27828)
+2026-11-01T19:51:51.8531124Z Updating files:  31% (8627/27828)
+2026-11-01T19:51:51.9463452Z Updating files:  32% (8905/27828)
+2026-11-01T19:51:51.9672262Z Updating files:  33% (9184/27828)
+2026-11-01T19:51:52.0006621Z Updating files:  34% (9462/27828)
+2026-11-01T19:51:52.0329998Z Updating files:  35% (9740/27828)
+2026-11-01T19:51:52.3164873Z Updating files:  36% (10019/27828)
+2026-11-01T19:51:52.4567815Z Updating files:  37% (10297/27828)
+2026-11-01T19:51:52.4606268Z Updating files:  38% (10575/27828)
+2026-11-01T19:51:52.6145044Z Updating files:  38% (10637/27828)
+2026-11-01T19:51:52.8322421Z Updating files:  39% (10853/27828)
+2026-11-01T19:51:52.9723608Z Updating files:  40% (11132/27828)
+2026-11-01T19:51:53.0960670Z Updating files:  41% (11410/27828)
+2026-11-01T19:51:53.2187039Z Updating files:  42% (11688/27828)
+2026-11-01T19:51:53.2438465Z Updating files:  43% (11967/27828)
+2026-11-01T19:51:53.2674805Z Updating files:  44% (12245/27828)
+2026-11-01T19:51:53.3202508Z Updating files:  45% (12523/27828)
+2026-11-01T19:51:53.3869919Z Updating files:  46% (12801/27828)
+2026-11-01T19:51:53.4626337Z Updating files:  47% (13080/27828)
+2026-11-01T19:51:53.4703041Z Updating files:  47% (13297/27828)
+2026-11-01T19:51:53.5202641Z Updating files:  48% (13358/27828)
+2026-11-01T19:51:53.5991516Z Updating files:  49% (13636/27828)
+2026-11-01T19:51:53.6550690Z Updating files:  50% (13914/27828)
+2026-11-01T19:51:53.6989335Z Updating files:  51% (14193/27828)
+2026-11-01T19:51:53.7350691Z Updating files:  52% (14471/27828)
+2026-11-01T19:51:53.7660546Z Updating files:  53% (14749/27828)
+2026-11-01T19:51:53.8003358Z Updating files:  54% (15028/27828)
+2026-11-01T19:51:53.8433852Z Updating files:  55% (15306/27828)
+2026-11-01T19:51:53.9002103Z Updating files:  56% (15584/27828)
+2026-11-01T19:51:53.9872312Z Updating files:  57% (15862/27828)
+2026-11-01T19:51:54.0085249Z Updating files:  58% (16141/27828)
+2026-11-01T19:51:54.0945764Z Updating files:  59% (16419/27828)
+2026-11-01T19:51:54.1274772Z Updating files:  60% (16697/27828)
+2026-11-01T19:51:54.1472740Z Updating files:  61% (16976/27828)
+2026-11-01T19:51:54.1655313Z Updating files:  62% (17254/27828)
+2026-11-01T19:51:54.1816346Z Updating files:  63% (17532/27828)
+2026-11-01T19:51:54.2665916Z Updating files:  64% (17810/27828)
+2026-11-01T19:51:54.3019569Z Updating files:  65% (18089/27828)
+2026-11-01T19:51:54.3625725Z Updating files:  66% (18367/27828)
+2026-11-01T19:51:54.4174943Z Updating files:  67% (18645/27828)
+2026-11-01T19:51:54.4546838Z Updating files:  68% (18924/27828)
+2026-11-01T19:51:54.4751861Z Updating files:  69% (19202/27828)
+2026-11-01T19:51:54.5535684Z Updating files:  69% (19234/27828)
+2026-11-01T19:51:54.5878920Z Updating files:  70% (19480/27828)
+2026-11-01T19:51:54.6108969Z Updating files:  71% (19758/27828)
+2026-11-01T19:51:54.6198243Z Updating files:  72% (20037/27828)
+2026-11-01T19:51:54.6411972Z Updating files:  73% (20315/27828)
+2026-11-01T19:51:54.6646190Z Updating files:  74% (20593/27828)
+2026-11-01T19:51:54.6895519Z Updating files:  75% (20871/27828)
+2026-11-01T19:51:54.7392304Z Updating files:  76% (21150/27828)
+2026-11-01T19:51:55.0594114Z Updating files:  77% (21428/27828)
+2026-11-01T19:51:55.3626875Z Updating files:  78% (21706/27828)
+2026-11-01T19:51:55.4656505Z Updating files:  79% (21985/27828)
+2026-11-01T19:51:55.4702378Z Updating files:  79% (22195/27828)
+2026-11-01T19:51:55.6540858Z Updating files:  80% (22263/27828)
+2026-11-01T19:51:55.6795465Z Updating files:  81% (22541/27828)
+2026-11-01T19:51:55.7853698Z Updating files:  82% (22819/27828)
+2026-11-01T19:51:55.8584079Z Updating files:  83% (23098/27828)
+2026-11-01T19:51:55.8891514Z Updating files:  84% (23376/27828)
+2026-11-01T19:51:55.9213740Z Updating files:  85% (23654/27828)
+2026-11-01T19:51:55.9611528Z Updating files:  86% (23933/27828)
+2026-11-01T19:51:56.0175771Z Updating files:  87% (24211/27828)
+2026-11-01T19:51:56.0722867Z Updating files:  88% (24489/27828)
+2026-11-01T19:51:56.0896050Z Updating files:  89% (24767/27828)
+2026-11-01T19:51:56.1672677Z Updating files:  90% (25046/27828)
+2026-11-01T19:51:56.1831082Z Updating files:  91% (25324/27828)
+2026-11-01T19:51:56.2183970Z Updating files:  92% (25602/27828)
+2026-11-01T19:51:56.3191577Z Updating files:  93% (25881/27828)
+2026-11-01T19:51:56.3481143Z Updating files:  94% (26159/27828)
+2026-11-01T19:51:56.3778698Z Updating files:  95% (26437/27828)
+2026-11-01T19:51:56.4099561Z Updating files:  96% (26715/27828)
+2026-11-01T19:51:56.4292575Z Updating files:  97% (26994/27828)
+2026-11-01T19:51:56.4443679Z Updating files:  98% (27272/27828)
+2026-11-01T19:51:56.4605302Z Updating files:  99% (27550/27828)
+2026-11-01T19:51:56.4618456Z Updating files:  99% (27807/27828)
+2026-11-01T19:51:56.4619073Z Updating files: 100% (27828/27828)
+2026-11-01T19:51:56.4619489Z Updating files: 100% (27828/27828), done.
+2026-11-01T19:51:56.5673678Z Switched to a new branch 'main'
+2026-11-01T19:51:56.5690813Z branch 'main' set up to track 'origin/main'.
+2026-11-01T19:51:56.5838329Z ##[endgroup]
+2026-11-01T19:51:56.5892429Z [command]/usr/bin/git log -1 --format=%H
+2026-11-01T19:51:56.5918223Z 0b1b15ac5f4c8038bce3b26a098d31116c28b537
+2026-11-01T19:51:56.6209111Z ##[group]Run actions/setup-python@v6
+2026-11-01T19:51:56.6209416Z with:
+2026-11-01T19:51:56.6209623Z   python-version: 3.12
+2026-11-01T19:51:56.6209855Z   check-latest: false
+2026-11-01T19:51:56.6212522Z   token: ***
+2026-11-01T19:51:56.6212743Z   update-environment: true
+2026-11-01T19:51:56.6212995Z   allow-prereleases: false
+2026-11-01T19:51:56.6213228Z   freethreaded: false
+2026-11-01T19:51:56.6213441Z env:
+2026-11-01T19:51:56.6213639Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:51:56.6213881Z ##[endgroup]
+2026-11-01T19:51:56.7558488Z ##[group]Installed versions
+2026-11-01T19:51:56.7661137Z Successfully set up CPython (3.12.15)
+2026-11-01T19:51:56.7662255Z ##[endgroup]
+2026-11-01T19:51:56.7818839Z ##[group]Run actions/setup-node@v6
+2026-11-01T19:51:56.7819134Z with:
+2026-11-01T19:51:56.7819340Z   node-version-file: .nvmrc
+2026-11-01T19:51:56.7819597Z   check-latest: false
+2026-11-01T19:51:56.7822263Z   token: ***
+2026-11-01T19:51:56.7822477Z   package-manager-cache: true
+2026-11-01T19:51:56.7822717Z env:
+2026-11-01T19:51:56.7822912Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:51:56.7823217Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:51:56.7823662Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:51:56.7824096Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:51:56.7824473Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:51:56.7824855Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:51:56.7825234Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:51:56.7825557Z ##[endgroup]
+2026-11-01T19:51:56.9202986Z Resolved .nvmrc as 24
+2026-11-01T19:51:56.9273128Z Found in cache @ /opt/hostedtoolcache/node/24.22.1/x64
+2026-11-01T19:51:56.9276371Z ##[group]Environment details
+2026-11-01T19:51:57.3955269Z node: v24.22.1
+2026-11-01T19:51:57.3955660Z npm: 11.19.1
+2026-11-01T19:51:57.3955934Z yarn: 1.22.22
+2026-11-01T19:51:57.3957293Z ##[endgroup]
+2026-11-01T19:51:57.4095581Z ##[group]Run python -B -m unittest tests.test_controlled_path tests.test_formulation tests.test_state_contract -q
+2026-11-01T19:51:57.4096443Z [36;1mpython -B -m unittest tests.test_controlled_path tests.test_formulation tests.test_state_contract -q[0m
+2026-11-01T19:51:57.4134112Z shell: /usr/bin/bash -e {0}
+2026-11-01T19:51:57.4134379Z env:
+2026-11-01T19:51:57.4134595Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:51:57.4134918Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:51:57.4135374Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:51:57.4135803Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:51:57.4136183Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:51:57.4136580Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:51:57.4137182Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:51:57.4137506Z ##[endgroup]
+2026-11-01T19:52:20.0747474Z ----------------------------------------------------------------------
+2026-11-01T19:52:20.0749109Z Ran 25 tests in 22.439s
+2026-11-01T19:52:20.0751462Z 
+2026-11-01T19:52:20.0751787Z OK (skipped=3)
+2026-11-01T19:52:20.0891082Z ##[group]Run path_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"
+2026-11-01T19:52:20.0892760Z [36;1mpath_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"[0m
+2026-11-01T19:52:20.0893994Z [36;1mcmake -S cmake/controlled-path -B build-path-native -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"[0m
+2026-11-01T19:52:20.0894747Z [36;1mcmake --build build-path-native --target atlas_path_capability --parallel 1[0m
+2026-11-01T19:52:20.0895203Z [36;1mmkdir -p path-results[0m
+2026-11-01T19:52:20.0896132Z [36;1mpython -B docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py build-path-native/libatlas_path_capability.so docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json[0m
+2026-11-01T19:52:20.0897800Z [36;1mpython -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json[0m
+2026-11-01T19:52:20.0921794Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-01T19:52:20.0922135Z env:
+2026-11-01T19:52:20.0922345Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:52:20.0922674Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:20.0923114Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:52:20.0923538Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:20.0923929Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:20.0924315Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:20.0924701Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:52:20.0925028Z ##[endgroup]
+2026-11-01T19:52:21.0129897Z -- The C compiler identification is GNU 13.3.0
+2026-11-01T19:52:21.2063819Z -- The CXX compiler identification is GNU 13.3.0
+2026-11-01T19:52:21.3131385Z -- Detecting C compiler ABI info
+2026-11-01T19:52:21.5185847Z -- Detecting C compiler ABI info - done
+2026-11-01T19:52:21.5363404Z -- Check for working C compiler: /usr/bin/cc - skipped
+2026-11-01T19:52:21.5424913Z -- Detecting C compile features
+2026-11-01T19:52:21.5433196Z -- Detecting C compile features - done
+2026-11-01T19:52:21.5707838Z -- Detecting CXX compiler ABI info
+2026-11-01T19:52:21.6623948Z -- Detecting CXX compiler ABI info - done
+2026-11-01T19:52:21.6805173Z -- Check for working CXX compiler: /usr/bin/c++ - skipped
+2026-11-01T19:52:21.6809538Z -- Detecting CXX compile features
+2026-11-01T19:52:21.6817103Z -- Detecting CXX compile features - done
+2026-11-01T19:52:21.8684659Z -- Found Python3: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12 (found version "3.12.15") found components: Interpreter
+2026-11-01T19:52:21.8696126Z -- Configuring done (1.3s)
+2026-11-01T19:52:21.8820323Z -- Generating done (0.0s)
+2026-11-01T19:52:21.8824337Z -- Build files have been written to: /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native
+2026-11-01T19:52:21.9162013Z [  6%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow.c.o
+2026-11-01T19:52:21.9907090Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow_data.c.o
+2026-11-01T19:52:22.0114092Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/exp_data.c.o
+2026-11-01T19:52:22.0316760Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_xflow.c.o
+2026-11-01T19:52:22.0567200Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_uflow.c.o
+2026-11-01T19:52:22.0811126Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_oflow.c.o
+2026-11-01T19:52:22.1053760Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_invalid.c.o
+2026-11-01T19:52:22.1294021Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/sin.c.o
+2026-11-01T19:52:22.1559970Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__sin.c.o
+2026-11-01T19:52:22.1817335Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__cos.c.o
+2026-11-01T19:52:22.2069608Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-01T19:52:22.2387369Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-01T19:52:22.2746331Z [ 81%] Linking C static library libatlas_scalar_functions.a
+2026-11-01T19:52:23.0356563Z [ 81%] Built target atlas_scalar_functions
+2026-11-01T19:52:23.0398023Z [ 87%] Generating generated/path_api.cpp, generated/path_models.hpp, generated/path_catalogue.json
+2026-11-01T19:52:23.1458187Z [ 93%] Building CXX object CMakeFiles/atlas_path_capability.dir/generated/path_api.cpp.o
+2026-11-01T19:52:23.6143459Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_api.cpp:2:
+2026-11-01T19:52:23.6148527Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_models.hpp: In function ‘bool atlas::path_generated::evaluate(int, const std::vector<double>&, const std::vector<double>&, const std::vector<double>&, std::vector<double>&, std::vector<double>&, std::vector<double>&, bool)’:
+2026-11-01T19:52:23.6152524Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_models.hpp:24:9: warning: unused variable ‘path_coordinate’ [-Wunused-variable]
+2026-11-01T19:52:23.6154203Z    24 | const T path_coordinate=inputs[0];
+2026-11-01T19:52:23.6154805Z       |         ^~~~~~~~~~~~~~~
+2026-11-01T19:52:23.6157840Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_models.hpp:94:9: warning: unused variable ‘path_coordinate’ [-Wunused-variable]
+2026-11-01T19:52:23.6159442Z    94 | const T path_coordinate=inputs[0];
+2026-11-01T19:52:23.6160054Z       |         ^~~~~~~~~~~~~~~
+2026-11-01T19:52:23.6161935Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_models.hpp:95:9: warning: unused variable ‘u’ [-Wunused-variable]
+2026-11-01T19:52:23.6163493Z    95 | const T u=inputs[1];
+2026-11-01T19:52:23.6163958Z       |         ^
+2026-11-01T19:52:23.6165729Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_models.hpp:96:9: warning: unused variable ‘du’ [-Wunused-variable]
+2026-11-01T19:52:23.6167094Z    96 | const T du=inputs[2];
+2026-11-01T19:52:23.6167835Z       |         ^~
+2026-11-01T19:52:23.6169737Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_models.hpp:97:9: warning: unused variable ‘unused’ [-Wunused-variable]
+2026-11-01T19:52:23.6171638Z    97 | const T unused=inputs[3];
+2026-11-01T19:52:23.6172146Z       |         ^~~~~~
+2026-11-01T19:52:23.6174374Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_models.hpp:119:9: warning: unused variable ‘path_coordinate’ [-Wunused-variable]
+2026-11-01T19:52:23.6175857Z   119 | const T path_coordinate=inputs[0];
+2026-11-01T19:52:23.6177031Z       |         ^~~~~~~~~~~~~~~
+2026-11-01T19:52:23.6179119Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_models.hpp:122:9: warning: unused variable ‘unused’ [-Wunused-variable]
+2026-11-01T19:52:23.6180482Z   122 | const T unused=inputs[3];
+2026-11-01T19:52:23.6180935Z       |         ^~~~~~
+2026-11-01T19:52:23.6186654Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-native/generated/path_models.hpp:7:222: warning: unused parameter ‘initial’ [-Wunused-parameter]
+2026-11-01T19:52:23.6190461Z     7 | inline bool evaluate(int model,const std::vector<double>& z,const std::vector<double>& params,const std::vector<double>& inputs,std::vector<double>& rates,std::vector<double>& observables,std::vector<double>& scales,bool initial=false) { using T=double; bool atlas_eval_ok=true; const auto I=identity<T>(); std::vector<double> rr,oo,ss; switch(model) {
+2026-11-01T19:52:23.6193385Z       |                                                                                                                                                                                                                         ~~~~~^~~~~~~~~~~~~
+2026-11-01T19:52:24.2321238Z [100%] Linking CXX shared library libatlas_path_capability.so
+2026-11-01T19:52:24.2982046Z [100%] Built target atlas_path_capability
+2026-11-01T19:52:28.1720099Z {
+2026-11-01T19:52:28.1720443Z   "result": "PASS",
+2026-11-01T19:52:28.1720764Z   "reports": [
+2026-11-01T19:52:28.1721046Z     {
+2026-11-01T19:52:28.1721398Z       "file": "path-results/native.json",
+2026-11-01T19:52:28.1721807Z       "count": 58,
+2026-11-01T19:52:28.1722181Z       "max_error": 3.274515703033387e-08
+2026-11-01T19:52:28.1722549Z     }
+2026-11-01T19:52:28.1722796Z   ]
+2026-11-01T19:52:28.1723038Z }
+2026-11-01T19:52:28.1796489Z ##[group]Run git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+2026-11-01T19:52:28.1797219Z [36;1mgit clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"[0m
+2026-11-01T19:52:28.1798061Z [36;1m"$RUNNER_TEMP/emsdk/emsdk" install 6.0.8[0m
+2026-11-01T19:52:28.1798407Z [36;1m"$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8[0m
+2026-11-01T19:52:28.1819308Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-01T19:52:28.1819656Z env:
+2026-11-01T19:52:28.1819870Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:52:28.1820184Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:28.1820625Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:52:28.1821051Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:28.1821443Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:28.1821895Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:28.1822299Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:52:28.1822630Z ##[endgroup]
+2026-11-01T19:52:28.1880580Z Cloning into '/home/runner/work/_temp/emsdk'...
+2026-11-01T19:52:30.1529470Z Resolving SDK version '6.0.8' to 'sdk-releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'
+2026-11-01T19:52:30.1530566Z Installing SDK 'sdk-releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'..
+2026-11-01T19:52:30.1531282Z Installing tool 'node-24.19.0-64bit'..
+2026-11-01T19:52:30.1534557Z Downloading: /home/runner/work/_temp/emsdk/downloads/node-v24.19.0-linux-x64.tar.xz from https://storage.googleapis.com/webassembly/emscripten-releases-builds/deps/node-v24.19.0-linux-x64.tar.xz, 31633904 Bytes
+2026-11-01T19:52:30.3800826Z  [----------------------------------------------------------------------------]
+2026-11-01T19:52:32.7102982Z Unpacking '/home/runner/work/_temp/emsdk/downloads/node-v24.19.0-linux-x64.tar.xz' to '/home/runner/work/_temp/emsdk/node/24.19.0_64bit'
+2026-11-01T19:52:32.7104711Z Done installing tool 'node-24.19.0-64bit'.
+2026-11-01T19:52:32.7105451Z Installing tool 'releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'..
+2026-11-01T19:52:32.7108126Z Downloading: /home/runner/work/_temp/emsdk/downloads/9d70dbe8860ccdd3595f6e6065d94bfb543ae955-wasm-binaries.tar.xz from https://storage.googleapis.com/webassembly/emscripten-releases-builds/linux/9d70dbe8860ccdd3595f6e6065d94bfb543ae955/wasm-binaries.tar.xz, 301662308 Bytes
+2026-11-01T19:52:34.3792259Z  [----------------------------------------------------------------------------]
+2026-11-01T19:52:54.6058904Z Unpacking '/home/runner/work/_temp/emsdk/downloads/9d70dbe8860ccdd3595f6e6065d94bfb543ae955-wasm-binaries.tar.xz' to '/home/runner/work/_temp/emsdk/upstream'
+2026-11-01T19:52:54.6061465Z Done installing tool 'releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'.
+2026-11-01T19:52:54.6062607Z Done installing SDK 'sdk-releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'.
+2026-11-01T19:52:54.7502907Z Resolving SDK version '6.0.8' to 'sdk-releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'
+2026-11-01T19:52:54.7503855Z Setting the following tools as active:
+2026-11-01T19:52:54.7504321Z    node-24.19.0-64bit
+2026-11-01T19:52:54.7504873Z    releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit
+2026-11-01T19:52:54.7505301Z 
+2026-11-01T19:52:54.7505443Z Next steps:
+2026-11-01T19:52:54.7505982Z - To conveniently access emsdk tools from the command line,
+2026-11-01T19:52:54.7506689Z   consider adding the following directories to your PATH:
+2026-11-01T19:52:54.7507277Z     /home/runner/work/_temp/emsdk
+2026-11-01T19:52:54.7508184Z     /home/runner/work/_temp/emsdk/upstream/emscripten
+2026-11-01T19:52:54.7508852Z - This can be done for the current shell by running:
+2026-11-01T19:52:54.7509477Z     source "/home/runner/work/_temp/emsdk/emsdk_env.sh"
+2026-11-01T19:52:54.7510223Z - Configure emsdk in your shell startup scripts by running:
+2026-11-01T19:52:54.7511358Z     echo 'source "/home/runner/work/_temp/emsdk/emsdk_env.sh"' >> $HOME/.bash_profile
+2026-11-01T19:52:54.7663360Z ##[group]Run source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+2026-11-01T19:52:54.7663836Z [36;1msource "$RUNNER_TEMP/emsdk/emsdk_env.sh"[0m
+2026-11-01T19:52:54.7664886Z [36;1mpath_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"[0m
+2026-11-01T19:52:54.7666281Z [36;1memcmake cmake -S cmake/controlled-path -B build-path-wasm -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"[0m
+2026-11-01T19:52:54.7667045Z [36;1mcmake --build build-path-wasm --target atlas_path_capability --parallel 1[0m
+2026-11-01T19:52:54.7668510Z [36;1mnode docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs build-path-wasm/atlas_path_capability.mjs build-path-wasm/atlas_path_capability.wasm docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/wasm.json[0m
+2026-11-01T19:52:54.7670114Z [36;1mpython -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json path-results/wasm.json[0m
+2026-11-01T19:52:54.7691972Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-01T19:52:54.7692312Z env:
+2026-11-01T19:52:54.7692520Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:52:54.7692846Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:54.7693292Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:52:54.7693719Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:54.7694100Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:54.7694492Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:52:54.7695135Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:52:54.7695457Z ##[endgroup]
+2026-11-01T19:52:54.9060350Z Setting up EMSDK environment (suppress these messages with EMSDK_QUIET=1)
+2026-11-01T19:52:54.9061886Z Adding directories to PATH:
+2026-11-01T19:52:54.9062990Z PATH += /home/runner/work/_temp/emsdk
+2026-11-01T19:52:54.9064485Z PATH += /home/runner/work/_temp/emsdk/upstream/emscripten
+2026-11-01T19:52:54.9065456Z 
+2026-11-01T19:52:54.9065918Z Setting environment variables:
+2026-11-01T19:52:54.9073271Z PATH = /home/runner/work/_temp/emsdk:/home/runner/work/_temp/emsdk/upstream/emscripten:/opt/hostedtoolcache/node/24.22.1/x64/bin:/opt/hostedtoolcache/Python/3.12.15/x64/bin:/opt/hostedtoolcache/Python/3.12.15/x64:/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+2026-11-01T19:52:54.9077350Z EMSDK = /home/runner/work/_temp/emsdk
+2026-11-01T19:52:54.9078398Z EMSDK_NODE = /home/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node
+2026-11-01T19:52:55.0074363Z emcmake: cmake -S cmake/controlled-path -B build-path-wasm -DCMAKE_BUILD_TYPE=Debug '-DATLAS_PATH_MODELS=/home/runner/work/constitutive-atlas/constitutive-atlas/models/research/norsand/norsand-jefferies-1993-active-axial.json;/home/runner/work/constitutive-atlas/constitutive-atlas/tests/fixtures/controlled-path/synthetic-curved.json;/home/runner/work/constitutive-atlas/constitutive-atlas/tests/fixtures/controlled-path/synthetic-model.json' -DCMAKE_TOOLCHAIN_FILE=/home/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/home/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:52:55.6475404Z -- Found Python3: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12 (found version "3.12.15") found components: Interpreter
+2026-11-01T19:52:55.6486768Z -- Configuring done (0.6s)
+2026-11-01T19:52:55.6547696Z -- Generating done (0.0s)
+2026-11-01T19:52:55.6552423Z -- Build files have been written to: /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm
+2026-11-01T19:52:55.6812336Z [  6%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow.c.o
+2026-11-01T19:52:55.8032327Z shared:INFO: (Emscripten: Running sanity checks)
+2026-11-01T19:52:55.8646558Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow_data.c.o
+2026-11-01T19:52:55.9833033Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/exp_data.c.o
+2026-11-01T19:52:56.1015193Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_xflow.c.o
+2026-11-01T19:52:56.2204370Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_uflow.c.o
+2026-11-01T19:52:56.3397283Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_oflow.c.o
+2026-11-01T19:52:56.4590951Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_invalid.c.o
+2026-11-01T19:52:56.5787420Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/sin.c.o
+2026-11-01T19:52:56.7033342Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__sin.c.o
+2026-11-01T19:52:56.8253552Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__cos.c.o
+2026-11-01T19:52:56.9475643Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-01T19:52:57.0737320Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-01T19:52:57.2001347Z [ 81%] Linking C static library libatlas_scalar_functions.a
+2026-11-01T19:52:57.3187242Z [ 81%] Built target atlas_scalar_functions
+2026-11-01T19:52:57.3224939Z [ 87%] Generating generated/path_api.cpp, generated/path_models.hpp, generated/path_catalogue.json
+2026-11-01T19:52:57.4290643Z [ 93%] Building CXX object CMakeFiles/atlas_path_capability.dir/generated/path_api.cpp.o
+2026-11-01T19:52:58.4543192Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm/generated/path_api.cpp:2:
+2026-11-01T19:52:58.4545660Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm/generated/path_models.hpp:24:9: warning: unused variable 'path_coordinate' [-Wunused-variable]
+2026-11-01T19:52:58.4547235Z    24 | const T path_coordinate=inputs[0];
+2026-11-01T19:52:58.4548072Z       |         ^~~~~~~~~~~~~~~
+2026-11-01T19:52:58.4568921Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm/generated/path_models.hpp:94:9: warning: unused variable 'path_coordinate' [-Wunused-variable]
+2026-11-01T19:52:58.4570415Z    94 | const T path_coordinate=inputs[0];
+2026-11-01T19:52:58.4571011Z       |         ^~~~~~~~~~~~~~~
+2026-11-01T19:52:58.4572542Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm/generated/path_models.hpp:95:9: warning: unused variable 'u' [-Wunused-variable]
+2026-11-01T19:52:58.4573829Z    95 | const T u=inputs[1];
+2026-11-01T19:52:58.4574413Z       |         ^
+2026-11-01T19:52:58.4575914Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm/generated/path_models.hpp:96:9: warning: unused variable 'du' [-Wunused-variable]
+2026-11-01T19:52:58.4577239Z    96 | const T du=inputs[2];
+2026-11-01T19:52:58.4579166Z       |         ^~
+2026-11-01T19:52:58.4581155Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm/generated/path_models.hpp:97:9: warning: unused variable 'unused' [-Wunused-variable]
+2026-11-01T19:52:58.4582939Z    97 | const T unused=inputs[3];
+2026-11-01T19:52:58.4583603Z       |         ^~~~~~
+2026-11-01T19:52:58.4600596Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm/generated/path_models.hpp:119:9: warning: unused variable 'path_coordinate' [-Wunused-variable]
+2026-11-01T19:52:58.4602092Z   119 | const T path_coordinate=inputs[0];
+2026-11-01T19:52:58.4602692Z       |         ^~~~~~~~~~~~~~~
+2026-11-01T19:52:58.4604271Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm/generated/path_models.hpp:122:9: warning: unused variable 'unused' [-Wunused-variable]
+2026-11-01T19:52:58.4605651Z   122 | const T unused=inputs[3];
+2026-11-01T19:52:58.4606140Z       |         ^~~~~~
+2026-11-01T19:52:58.4607884Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-path-wasm/generated/path_models.hpp:7:222: warning: unused parameter 'initial' [-Wunused-parameter]
+2026-11-01T19:52:58.4611485Z     7 | inline bool evaluate(int model,const std::vector<double>& z,const std::vector<double>& params,const std::vector<double>& inputs,std::vector<double>& rates,std::vector<double>& observables,std::vector<double>& scales,bool initial=false) { using T=double; bool atlas_eval_ok=true; const auto I=identity<T>(); std::vector<double> rr,oo,ss; switch(model) {
+2026-11-01T19:52:58.4614515Z       |                                                                                                                                                                                                                              ^
+2026-11-01T19:52:58.8551538Z 8 warnings generated.
+2026-11-01T19:52:58.8657357Z [100%] Linking CXX executable atlas_path_capability.mjs
+2026-11-01T19:52:59.6159208Z [100%] Built target atlas_path_capability
+2026-11-01T19:53:18.3313267Z {
+2026-11-01T19:53:18.3313771Z   "result": "PASS",
+2026-11-01T19:53:18.3314176Z   "reports": [
+2026-11-01T19:53:18.3314524Z     {
+2026-11-01T19:53:18.3314970Z       "file": "path-results/native.json",
+2026-11-01T19:53:18.3315507Z       "count": 58,
+2026-11-01T19:53:18.3315954Z       "max_error": 3.274515703033387e-08
+2026-11-01T19:53:18.3316425Z     },
+2026-11-01T19:53:18.3316742Z     {
+2026-11-01T19:53:18.3317147Z       "file": "path-results/wasm.json",
+2026-11-01T19:53:18.3317869Z       "count": 58,
+2026-11-01T19:53:18.3318309Z       "max_error": 3.274515703033387e-08
+2026-11-01T19:53:18.3318758Z     }
+2026-11-01T19:53:18.3319060Z   ]
+2026-11-01T19:53:18.3319377Z }
+2026-11-01T19:53:18.3426105Z ##[group]Run actions/upload-artifact@v4
+2026-11-01T19:53:18.3426434Z with:
+2026-11-01T19:53:18.3426680Z   name: controlled-path-qualification
+2026-11-01T19:53:18.3428135Z   path: path-results/
+build-path-native/generated/
+build-path-wasm/generated/
+build-path-native/CMakeCache.txt
+build-path-wasm/CMakeCache.txt
+build-path-native/libatlas_path_capability.so
+build-path-wasm/atlas_path_capability.mjs
+build-path-wasm/atlas_path_capability.wasm
+
+2026-11-01T19:53:18.3429260Z   if-no-files-found: warn
+2026-11-01T19:53:18.3429494Z   compression-level: 6
+2026-11-01T19:53:18.3429708Z   overwrite: false
+2026-11-01T19:53:18.3429919Z   include-hidden-files: false
+2026-11-01T19:53:18.3430146Z env:
+2026-11-01T19:53:18.3430338Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:53:18.3430641Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:53:18.3431064Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:53:18.3431518Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:53:18.3431911Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:53:18.3432312Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:53:18.3432696Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:53:18.3433019Z ##[endgroup]
+2026-11-01T19:53:18.5230455Z (node:2753) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T19:53:18.5232256Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T19:53:18.5333901Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-11-01T19:53:18.5337895Z The least common ancestor is /home/runner/work/constitutive-atlas/constitutive-atlas. This will be the root directory of the artifact
+2026-11-01T19:53:18.5338976Z With the provided path, there will be 13 files uploaded
+2026-11-01T19:53:18.5341508Z Artifact name is valid!
+2026-11-01T19:53:18.5342724Z Root directory input is valid!
+2026-11-01T19:53:18.9137145Z Beginning upload of artifact content to blob storage
+2026-11-01T19:53:19.0273023Z (node:2753) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T19:53:19.6063475Z Uploaded bytes 650858
+2026-11-01T19:53:19.6790241Z Finished uploading artifact content to blob storage!
+2026-11-01T19:53:19.6792182Z SHA256 digest of uploaded artifact zip is 35886dde8ae457001dd94558c9993a2678cf0046499be4c9bd51fe26ec17a548
+2026-11-01T19:53:19.6793577Z Finalizing artifact upload
+2026-11-01T19:53:20.1821846Z Artifact controlled-path-qualification.zip successfully finalized. Artifact ID 13098023067
+2026-11-01T19:53:20.1823795Z Artifact controlled-path-qualification has been successfully uploaded! Final size is 650858 bytes. Artifact ID is 13098023067
+2026-11-01T19:53:20.1830805Z Artifact download URL: https://github.com/benjym/constitutive-atlas/actions/runs/41340720867/artifacts/13098023067
+2026-11-01T19:53:20.2031712Z Post job cleanup.
+2026-11-01T19:53:20.3427984Z Post job cleanup.
+2026-11-01T19:53:20.4984692Z Post job cleanup.
+2026-11-01T19:53:20.5917691Z [command]/usr/bin/git version
+2026-11-01T19:53:20.5957937Z git version 2.56.0
+2026-11-01T19:53:20.5996977Z Temporarily overriding HOME='/home/runner/work/_temp/9c1e39a9-2ab3-4b7c-9297-f171e0fb4986' before making global git config changes
+2026-11-01T19:53:20.6000240Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T19:53:20.6002569Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:53:20.6042004Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T19:53:20.6081591Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T19:53:20.6403622Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T19:53:20.6435487Z http.https://github.com/.extraheader
+2026-11-01T19:53:20.6448060Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-01T19:53:20.6484920Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T19:53:20.6806903Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T19:53:20.6844097Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T19:53:20.7303477Z Cleaning up orphan processes
+2026-11-01T19:53:20.7759043Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

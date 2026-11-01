@@ -34,6 +34,7 @@ The coordinator is an agent integration role. The delivery lead may fill it for 
 - [ ] Retain readable originals durably in ignored private storage where permitted. Document source/code/data rights; link rather than publish copyrighted originals. Do not execute supplied author binaries or vendor code.
 - [ ] Reconcile multiple versions and implementation differences. List missing sources, ambiguous branches and proposed interpretations explicitly; resolve in-scope gaps before claiming source completeness.
 - [ ] Complete the source packet, prior-work links and an equation-to-source inventory. Distinguish source-complete from executable, approved and deployed.
+- [ ] Draft the [public model profile](PUBLIC_MODEL_PROFILES.md) from the inspected source: readable overview, characteristic behaviours, material parameters, starting state, meaningful limits and references. Keep a specialist draft in its owned packet until coordinator integration.
 
 **Exit:** every required equation and convention has readable source support or an explicit unresolved blocker.
 
@@ -110,18 +111,20 @@ python3 -B -m atlas.agent_review catalogue/agent-reviews/MODEL-agent-v1.json --a
 
 - [ ] Coordinator installs the exact qualified model bytes and reviewed approval entry, dossier, examples and relevant evidence. Use `models/` only for profiles supported by the normal public engine; otherwise implement/qualify the required generic engine and browser routing. A separate research executable is not public atlas delivery.
 - [ ] Update the discovery/catalogue entry and lineage/source links, approval registry, evidence/publication mappings and protocol/example registries as required by their actual consumers. Do not manufacture a legacy human-review acceptance to make an exporter happy.
+- [ ] Integrate the public profile in `web/model-profile-data.mjs` under the exact catalogue ID. Explain the implemented variant and a supported example, link related family/variant entries, and retain local content provenance. Run `node tools/check_model_profiles.mjs`; missing public content blocks website delivery.
 - [ ] Preserve approval/evidence hashes. If integration changes model metadata, IDs, equations, numerical settings or dependencies covered by the review, rebind the review and rerun affected gates before using the old approval claim.
 - [ ] Regenerate the full public catalogue and verify engine metadata equals the definitions packaged with it. Ensure all prior models remain present and retain their qualified behavior.
 - [ ] Extend complete-coverage/default/profile policies deliberately for the new model and freeze expected outcomes before observing the new release gate. Keep prior policy/evidence identities and declared failures; do not skip the new model to obtain a green package.
 - [ ] Update current status/roadmap counts and model summaries from actual records. Count full formulations and restricted variants accurately. Export the database when part of the release; verify the exact model/source/approval identity survives export.
 
-**Exit:** the ordinary atlas generation path includes the model and its actual approval/evidence. No private adapter or hand-edited generated catalogue is required.
+**Exit:** the ordinary atlas generation path includes the model, its public profile and its actual approval/evidence. No private adapter or hand-edited generated catalogue is required.
 
 ## E7 — Make the packaged website work
 
 - [ ] Use fresh matching Wasm/generated metadata and the standard web builder. Packaging must reject stale model/engine combinations. Include only permitted public assets; keep private sources and unapproved original measurement arrays out.
 - [ ] Ensure the model is selectable and reachable by its shareable URL; source/DOI links, equations, assumptions, author/variant attribution, initialization, parameter units and limitations are visible.
-- [ ] Display the accepted agent review and exact approved scope accurately. If the current exporter/UI only understands older review records, add and qualify generic support for agent-review/approval data; a registry entry alone does not make the website show it.
+- [ ] Keep the public profile prominent and the accepted agent review, exact approved scope and retained checks accessible inside closed technical details. If the current exporter/UI only understands older review records, add and qualify generic support for agent-review/approval data; a registry entry alone does not make the website expose it accurately.
+- [ ] In the actual packaged browser, inspect the catalogue summary, full public profile and laboratory/profile links. Confirm readable parameter meanings and units, correct initial-state guidance, a supported example and related-model links; check long names/tables on a narrow screen. Do not lead with agent/curation notes or imply that a literature-only entry is runnable.
 - [ ] Provide the actual controls required by this model. Physical-time laws need honest time/rate/hold controls and labels; unsupported controls must be unavailable with a useful explanation. A static catalogue card or timed CLI alone is not the requested interactive delivery.
 - [ ] In an actual browser, run the public default/named preset; inspect meaningful plots, units, all required state and absence of worker/console/network failures. Exercise parameter/initial-state changes, supported protocols, reset and latest-request behavior.
 - [ ] Test export/import/replay and invalid input followed by recovery through the real exposed interface. Record fetched engine/catalogue identities so a stale browser cache cannot supply the evidence.
@@ -138,7 +141,7 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory .local/delivery-site
 
 Use the current workflow's other parity/profile/browser commands for the actual package. `test_web_package.mjs` is the strict all-default gate; any known unsupported defaults must stay visible, with separately identified supported-input qualification rather than an unexplained waiver. A Python HTTP server is a preview, not proof of deployment.
 
-**Exit:** the exact packaged public application demonstrates the approved model interactively, with accurate source/review/applicability disclosures and passing interface checks.
+**Exit:** the exact packaged public application explains the model through its public profile and demonstrates it interactively, with accurate source/review/applicability disclosures and passing interface checks.
 
 ## E8 — Publish and verify the live website
 
@@ -147,10 +150,11 @@ Use the current workflow's other parity/profile/browser commands for the actual 
 - [ ] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
 - [ ] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
 - [ ] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
+- [ ] Verify the live public-profile data/rendering assets match the tested upload and the model's catalogue profile, related links and laboratory link display the intended explanation.
 - [ ] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
 - [ ] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
 
-**Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its sources/approval/evidence; the packaged and live website can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.
+**Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its public profile and sources/approval/evidence; the packaged and live website explain the model and can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.
 
 ## Handoff and resumption
 

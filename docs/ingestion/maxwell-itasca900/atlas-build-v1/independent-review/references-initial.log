@@ -1,0 +1,23 @@
+.E
+======================================================================
+ERROR: test_model_identity_and_references (__main__.MaxwellReferences.test_model_identity_and_references)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-maxwell-current-v1/source/tests/test_maxwell.py", line 157, in test_model_identity_and_references
+    self.assertEqual(m,load(ROOT/'docs/ingestion/maxwell-itasca900/candidate-v03.json'))
+                       ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-maxwell-current-v1/source/atlas/model.py", line 30, in load
+    model = json.loads(Path(path).read_text(), object_pairs_hook=reject_duplicate_keys,
+                       ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/atlas-maxwell-current-v1/source/docs/ingestion/maxwell-itasca900/candidate-v03.json'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.003s
+
+FAILED (errors=1)

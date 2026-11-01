@@ -1,0 +1,29 @@
+async page=>{
+ const assert=(v,m)=>{if(!v)throw Error(m);};
+ await page.setViewportSize({width:1440,height:1000});
+ await page.goto('http://127.0.0.1:19485/?backgrounds=v1#home');
+ await page.waitForSelector('#home:not([hidden])');
+ await page.evaluate(()=>document.fonts.ready);
+ const assets=await page.evaluate(async()=>{
+  const selectors=['.home-cover-image','.home-tile-laboratory','.home-tile-catalogue','.home-tile-methods'];
+  return Promise.all(selectors.map(async selector=>{
+   const element=document.querySelector(selector);
+   const url=element.tagName==='IMG'?element.src:getComputedStyle(element,'::before').backgroundImage.slice(5,-2);
+   const img=new Image();img.src=url;await img.decode();
+   return {selector,url,width:img.naturalWidth,height:img.naturalHeight};
+  }));
+ });
+ assert(new Set(assets.map(a=>a.url)).size===4,'Cover and three panels use distinct assets');
+ assert(assets.every(a=>a.width===1536&&a.height===1024),'All new backgrounds decode at expected resolution');
+ assert(await page.locator('.home-destinations').evaluate(e=>getComputedStyle(e).display)==='grid','Desktop grid');
+ await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+ await page.screenshot({path:'output/playwright/home-backgrounds-v1-desktop.png',fullPage:true});
+ await page.locator('.home-tile-catalogue').click();
+ await page.waitForSelector('#catalogue:not([hidden])');
+ await page.locator('.brand').click();
+ await page.setViewportSize({width:390,height:844});
+ await page.waitForFunction(()=>document.documentElement.scrollWidth===390);
+ await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+ await page.screenshot({path:'output/playwright/home-backgrounds-v1-mobile.png',fullPage:true});
+ return {status:'passed',assets,checks:['Four distinct decoded image assets','Desktop grid and390px layout','Panel/brand navigation']};
+}

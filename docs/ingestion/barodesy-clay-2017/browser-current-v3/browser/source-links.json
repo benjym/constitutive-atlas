@@ -1,0 +1,58 @@
+{
+  "links": [
+    {
+      "text": "Primary body equations and declared source differences · Medicus/Fellin2017 pp366–367Eqs1–10,Table1; p368Table2; p369Sec4.3; p374Eq32/footnote13; p375App3Eq41distinct6p; publisherPDFSHA256bd049a3fd874c9e4945e1c77f5af5b84ac14c26a08cee1b953428b4312e6af15 ↗",
+      "url": "https://doi.org/10.1007/s11440-016-0458-4"
+    },
+    {
+      "text": "Atlas numerical implementation and limitations · Original immutable research variant and separate rate/derivative/finite-path studies; historical evidence is not the current preview hash. ↗",
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/barodesy2017-research-rates.md"
+    },
+    {
+      "text": "Bounded independent finite-path comparisons · Off-NCL compression, reversal/reloading and rotated nonproportional tensor paths; no experimental validation. ↗",
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/barodesy2017-wider-integration-results.md"
+    },
+    {
+      "text": "Model definition (JSON) ↗",
+      "url": "http://127.0.0.1:18787/constitutive-atlas/models/barodesy-clay-2017.json"
+    },
+    {
+      "text": "Test controls ↓",
+      "url": "http://127.0.0.1:18787/constitutive-atlas/index.html#controls"
+    },
+    {
+      "text": "Response plots ↓",
+      "url": "http://127.0.0.1:18787/constitutive-atlas/index.html#response"
+    },
+    {
+      "text": "Compare measurements ↓",
+      "url": "http://127.0.0.1:18787/constitutive-atlas/index.html#measurements"
+    },
+    {
+      "text": "Equations & sources ↓",
+      "url": "http://127.0.0.1:18787/constitutive-atlas/index.html#equations"
+    },
+    {
+      "text": "Primary body equations and declared source differences · Medicus/Fellin2017 pp366–367Eqs1–10,Table1; p368Table2; p369Sec4.3; p374Eq32/footnote13; p375App3Eq41distinct6p; publisherPDFSHA256bd049a3fd874c9e4945e1c77f5af5b84ac14c26a08cee1b953428b4312e6af15 ↗",
+      "url": "https://doi.org/10.1007/s11440-016-0458-4"
+    },
+    {
+      "text": "Atlas numerical implementation and limitations · Original immutable research variant and separate rate/derivative/finite-path studies; historical evidence is not the current preview hash. ↗",
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/barodesy2017-research-rates.md"
+    },
+    {
+      "text": "Bounded independent finite-path comparisons · Off-NCL compression, reversal/reloading and rotated nonproportional tensor paths; no experimental validation. ↗",
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/barodesy2017-wider-integration-results.md"
+    }
+  ],
+  "local": [
+    {
+      "text": "Model definition (JSON) ↗",
+      "url": "http://127.0.0.1:18787/constitutive-atlas/models/barodesy-clay-2017.json",
+      "status": 200,
+      "size": 8661,
+      "sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477"
+    }
+  ],
+  "sourceText": "\n            Equations & source provenance\n            Recorded description. Review status in this text reflects when it was written; see the accepted review for its current scope. Draft laboratory preview of Medicus–Fellin2017 body Eqs1–10 at zero spin. Seven physical states; compression-positive effective Cauchy stress and void ratio. Selects body2p critical density, not Appendix6p; no claim of author-code equivalence or resolved printed spin expression. Conservative positive-definite stress interior and bounded matrix exponential; exact zero/hydrostatic continuations are project numerical choices. Default Table2 soil parameters and stress/e are examples, not a matched experimental preparation. No experimental validation, independent scientific admission, finite rotation or validated zero/near-hydrostatic update tangent. Use explicit state; source and retained research evidence are linked.Equation form: strain_path_rate. State equations are residuals for implicit models, or increments per unit path fraction for strain-path rate models.sphi = sin(phi_c)c2 = -(3*sqrt(2)+3)/2c1 = (1-sphi)/(2*c2**2*sphi)c5 = (1+sphi)/(1-sphi)t = c5*lambda_starc3 = (-sqrt(3)/lambda_star+sqrt(3)/kappa_star)/(2**t+(1/500)**t-2)c6 = 1/(2*(-sqrt(3)/(c3*kappa_star)+2**t-1))p = trace(sigma)/3critical_plus_one = exp(N)*(2*p/sigma_star)**(-lambda_star)density = (1+e)/critical_plus_onerate_norm = norm(de)lxx = sym(1,0,0,0,0,0)lyy = sym(0,1,0,0,0,0)lzz = sym(0,0,1,0,0,0)lxy = sym(0,0,0,1,0,0)lyz = sym(0,0,0,0,1,0)lxz = sym(0,0,0,0,0,1)loading_abs_sum = abs(dot(de,lxx))+abs(dot(de,lyy))+abs(dot(de,lzz))+abs(dot(de,lxy))+abs(dot(de,lyz))+abs(dot(de,lxz))hydro_measure = abs(dot(de,lxx)-dot(de,lyy))+abs(dot(de,lyy)-dot(de,lzz))+abs(dot(de,lzz)-dot(de,lxx))+abs(dot(de,lxy))+abs(dot(de,lyz))+abs(dot(de,lxz))U = select(rate_norm > 0, de/rate_norm, 0*I)delta = select(rate_norm > 0, select(hydro_measure > 0, -trace(U), select(trace(de) > 0,-sqrt(3),sqrt(3))),0)q = select(hydro_measure > 0,norm(dev(U)),0)m = select(q > 0,-sqrt(1.5)*delta/q,0)x = select(q > 0,c1*(m-c2)**2,1)logK = select(q > 0,select(x > 1,-log1p(1/x),log(x)-log1p(x)),0)a = select(q > 0,logK/(sqrt(1.5)*q),0)dir_B = select(q > 0,expm(-a*U),I)dir_P = dir_B/norm(dir_B)Lambda = -(lambda_star-kappa_star)*delta/(2*sqrt(3))+(lambda_star+kappa_star)/2beta = -1/(c3*Lambda)+(2**t-1)/sqrt(3)f = c6*beta*delta-1/2g = (1-c6)*beta*delta+density**c5-1/2stress_norm = norm(sigma)stress_unit = select(stress_norm > 0*sigma_star,sigma/stress_norm,0*I)stress_xx = dot(stress_unit,lxx)stress_yy = dot(stress_unit,lyy)stress_zz = dot(stress_unit,lzz)stress_xy = dot(stress_unit,lxy)stress_yz = dot(stress_unit,lyz)stress_xz = dot(stress_unit,lxz)minor_two = stress_xx*stress_yy-stress_xy**2/2stress_det = stress_xx*stress_yy*stress_zz-(stress_xx*stress_yz**2+stress_yy*stress_xz**2+stress_zz*stress_xy**2)/2+stress_xy*stress_yz*stress_xz/sqrt(2)sigma : select(rate_norm > 0,c3*rate_norm*(f*norm(sigma)*dir_P+g*sigma),0*sigma)e : -(1+e)*trace(de)Declared domainlambda_star > kappa_starc1 > 0p > 0*sigma_stare >= 0critical_plus_one > 0density > 0Lambda > 0x > 0abs(a) <= 64select(loading_abs_sum > 0,rate_norm > 0,rate_norm >= 0)select(hydro_measure > 0,q > 0,q >= 0)stress_norm > 0*sigma_starstress_xx > 0stress_yy > 0stress_zz > 0minor_two > 1.4210854715202004e-14stress_det > 1.4210854715202004e-14Primary body equations and declared source differences · Medicus/Fellin2017 pp366–367Eqs1–10,Table1; p368Table2; p369Sec4.3; p374Eq32/footnote13; p375App3Eq41distinct6p; publisherPDFSHA256bd049a3fd874c9e4945e1c77f5af5b84ac14c26a08cee1b953428b4312e6af15 ↗Atlas numerical implementation and limitations · Original immutable research variant and separate rate/derivative/finite-path studies; historical evidence is not the current preview hash. ↗Bounded independent finite-path comparisons · Off-NCL compression, reversal/reloading and rotated nonproportional tensor paths; no experimental validation. ↗\n          "
+}

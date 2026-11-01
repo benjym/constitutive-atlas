@@ -1,0 +1,7 @@
+# Kelvin numerical accuracy revision v3
+
+This separate study tightens solver controls after retained genuine v2 accuracy failures. It keeps all43case identities, every independent analytical reference and physical input, C ABI/model identity, failure/recovery case, and every acceptance bound. Source comparison permits exactly three solver-control replacements; case comparison constructs the exact allowed control changes and then requires complete case equality. The copied assessor is unchanged. See PLAN.md, comparison.json and budget-basis.json.
+
+Fine/direct/public rtol3e-11, atol3e-14 and budget1000000; coarse diagnostic rtol1e-5, atol1e-8. Intentional budget2 failures retain2. The public3e-8strain/1Pa gates and diagnostic3e-6strain gate remain unchanged. Larger step allowance is explicit before v3 results and does not guarantee success. Parent freezes Release build flags/source closure separately and performs all compiled calls. This worker prepares and checks source/cases only.
+
+Run `python3 -B docs/ingestion/kelvin-voigt-comsol63/execution-v3/check_preparation.py` for the saved input identity check. Parent execution commands are in PLAN.md. Preparation uses prepare_accuracy.py, not the retained historical study.py prepare entry point. New native/Wasm collectors run all43cases; no old numerical trajectory is reused for this new-control study. Old raw failures remain in execution-v1/v2.

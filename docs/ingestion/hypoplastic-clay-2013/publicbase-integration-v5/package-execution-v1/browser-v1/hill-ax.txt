@@ -1,0 +1,233 @@
+Browser tab: 24, Title: "Constitutive Atlas · Model testing", URL: "http://127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/#laboratory?model=hill-abaqus2025-perfect-be".
+0 AXWebArea Constitutive Atlas · Model testing, URL: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/#laboratory?model=hill-abaqus2025-perfect-be
+	1 container
+		2 link Description: Constitutive Atlas home, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/#laboratory
+		3 container Main navigation
+			4 link Description: ◫ Model testing, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/#laboratory
+			5 link Description: ≋ Ensemble explorer, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/#ensemble
+			6 link Description: ⌕ Model catalogue 45, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/#catalogue
+			7 link Description: ≋ Methods & evidence, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/#methods
+		8 container
+			9 text By
+			10 link Description: Benjy Marks, Value: github.com/benjym
+			11 link Description: François Guillard, Value: github.com/Franzzzzzzzz
+	12 container laboratory
+		13 heading Explore material behaviour., Value: 1
+			14 text Explore material behaviour.
+		16 container
+			17 text CONSTITUTIVE MODEL
+			50 text Approved bounded scope
+			19 text Select a model
+			20 pop up button (collapsed, settable) Select a model, Value: Hill · all-six strain increments, ID: model, Secondary Actions: Expand
+				21 menu
+					22 Barodesy clay 2017 — body law, zero spin (draft)
+					23 Barodesy sand (2015) — fixed-frame draft
+					24 Drucker–Prager, nonassociated perfect plasticity
+					25 Duncan–Chang (1970), constant ν, endpoint-average
+					26 Mašín clay hypoplasticity (2005) — zero-spin draft
+					27 Clay hypoplasticity 2013 — Appendix law, zero spin (draft)
+					28 Sand hypoplasticity + intergranular strain (1997)
+					29 Sand hypoplasticity — von Wolffersdorff (1996)
+					30 Linear isotropic elasticity
+					31 Modified Cam Clay
+					32 Mohr–Coulomb — nonassociated perfect plasticity H=0 (draft)
+					33 Original Cam Clay — invariant log-recovery endpoint
+					34 HP extracted ASBS + GIS2024 — v0.3 zero-spin research draft
+					35 Associated Tresca perfect plasticity — BK2022v1, project BE (draft)
+					36 (selected) Hill · all-six strain increments
+					37 Burgers · physical-time creep / relaxation
+					38 Standard Linear Solid · physical-time relaxation / creep
+					39 Orthotropic elasticity · nine constants
+					40 NorSand 1993 · drained active axial law
+					41 Maxwell · physical-time relaxation / creep
+					42 Lade–Duncan 1975 · cohesionless soil
+					43 J2 · all-six strain increments
+			51 text Hill anisotropic associative perfect plasticity with isotropic elasticity. All-six strain increments; fixed aligned material axes, dry total stress, no physical clock.
+			45 button (collapsed) Sources & model definition, Secondary Actions: Expand
+				46 text Sources & model definition
+			52 text Anisotropic Plasticity
+			48 text 3D · small strain
+			49 button View equations ↗, ID: equations-button
+		53 container Description: Hill strain-increment laboratory, ID: hill-material-laboratory
+			54 container
+				55 text Scope of evidence.  Dry total Cauchy stress, infinitesimal strain, fixed aligned material axes and zero spin. The named preset uses independently checked material-point parameters. Custom parameters, starting histories and loading paths are exploratory. Each row defines one backward-Euler map; adding rows can change a nonproportional response. No physical clock, stress control, pore pressure or finite-rotation transport. No experimental calibration or validation.
+			56 container controls
+				57 heading All six strain increments, Value: 2
+					58 text All six strain increments
+				59 text Mandel order: xx, yy, zz, √2xy, √2yz, √2xz. Compression positive; SI units. Each run starts from the complete initial state below.
+				60 text Reference scale p_ref (Pa)
+				61 stepper (settable, integer) Reference scale p_ref (Pa), Value: 100000, ID: p_ref
+				62 text Bulk modulus K (Pa)
+				63 stepper (settable, integer) Bulk modulus K (Pa), Value: 20000000, ID: K
+				64 text Shear modulus Gmod (Pa)
+				65 stepper (settable, integer) Shear modulus Gmod (Pa), Value: 12000000, ID: Gmod
+				66 text Yield scale σy (Pa)
+				67 stepper (settable, integer) Yield scale σy (Pa), Value: 60000, ID: sigma_y
+				68 text Hill coefficient F (dimensionless)
+				69 stepper (settable, float) Hill coefficient F (dimensionless), Value: 0.699999988079071, Details: 0.7, ID: F
+				70 text Hill coefficient G (dimensionless)
+				71 stepper (settable, float) Hill coefficient G (dimensionless), Value: 0.5, ID: Gh
+				72 text Hill coefficient H (dimensionless)
+				73 stepper (settable, float) Hill coefficient H (dimensionless), Value: 0.30000001192092896, Details: 0.3, ID: Hh
+				74 text Hill coefficient L (dimensionless)
+				75 stepper (settable, float) Hill coefficient L (dimensionless), Value: 1.2000000476837158, Details: 1.2, ID: L
+				76 text Hill coefficient M (dimensionless)
+				77 stepper (settable, float) Hill coefficient M (dimensionless), Value: 1.7000000476837158, Details: 1.7, ID: M
+				78 text Hill coefficient N (dimensionless)
+				79 stepper (settable, integer) Hill coefficient N (dimensionless), Value: 2, ID: N
+				80 text p_ref scales numerical residuals; it is not a material modulus. Machine parameter bounds do not establish physical calibration or numerical qualification across that range.
+				81 text Explicit initial full state · seven numbers
+				82 text entry area (settable) Explicit initial full state · seven numbers, Value: 0,0,0,0,0,0,0, ID: initial
+				83 text σxx, σyy, σzz, √2σxy, √2σyz, √2σxz (Pa), γ. Initial stress must lie inside or on the Hill yield surface. γ is temporary and must start at zero; it resets at each solve.
+				84 text Strain increment path · six numbers per row
+				85 text entry area (settable) Strain increment path · six numbers per row, ID: increments, Value: 0.003,-0.0015,-0.0015,0,0,0
+-0.003,0.0015,0.0015,0,0,0
+0,0,0,0,0,0
+				86 text 1–200 rows. The preset loads, reverses, then holds. All six components are prescribed; a zero row is a strain hold without elapsed time. Rows commit sequentially. A failed row preserves the accepted prefix.
+				87 button (collapsed) Frozen numerical settings, Secondary Actions: Expand
+					88 text Frozen numerical settings
+				89 button Run increment path, ID: run
+				90 button Reset named preset, ID: resetPreset
+				91 button Export request & result, ID: download
+				92 text Import exported JSON & replay
+				93 button Import exported JSON & replay, ID: import
+				94 text Completed 3 increment rows.
+			95 container Simulation results
+				96 text Committed increment rows
+				97 text 3 / 3
+				98 text Final σxx · total stress
+				99 text -27.052 kPa
+				100 text Last temporary increment γ
+				101 text 0.0000
+				102 text Plot component · Mandel
+				103 pop up button (collapsed, settable) Plot component · Mandel, Value: xx, ID: component, Secondary Actions: Expand
+					104 menu
+						105 (selected) xx
+						106 yy
+						107 zz
+						108 √2xy
+						109 √2yz
+						110 √2xz
+				111 heading Total Cauchy stress, Value: 2
+					112 text Total Cauchy stress
+				113 text Compression positive (kPa) Committed row →
+				114 container Description: Selected total stress against committed row, ID: stressChart
+				115 heading Cumulative applied strain, Value: 2
+					116 text Cumulative applied strain
+				117 text Increment sum (%) Committed row →
+				118 container Description: Selected cumulative strain increment against row, ID: strainChart
+				119 text All rows committed. Every plotted point is one complete backward-Euler update.
+				120 text Cumulative strain is the sum applied from the supplied starting state. It does not reconstruct that state's total or plastic strain. Experimental overlays unavailable: no compatible calibration or source experiment is supplied. Curves are model responses.
+				121 container stateDetails
+					122 button (expanded) Complete state at every accepted row, Secondary Actions: Collapse
+						123 text Complete state at every accepted row
+					124 text All seven state entries are shown and exported. Stress is Pa; γ is dimensionless. γ records only the latest solve and is not accumulated history.
+					146 table stateTable
+						147 row
+							148 cell
+								149 text row
+							150 cell
+								151 text σxx
+							152 cell
+								153 text σyy
+							154 cell
+								155 text σzz
+							156 cell
+								157 text √2σxy
+							158 cell
+								159 text √2σyz
+							160 cell
+								161 text √2σxz
+							162 cell
+								163 text γ
+						164 row
+							165 cell
+								166 text 0
+							167 cell
+								168 text 0
+							169 cell
+								170 text 0
+							171 cell
+								172 text 0
+							173 cell
+								174 text 0
+							175 cell
+								176 text 0
+							177 cell
+								178 text 0
+							179 cell
+								180 text 0
+						181 row
+							182 cell
+								183 text 1
+							184 cell
+								185 text 44948.401
+							186 cell
+								187 text -24257.532
+							188 cell
+								189 text -20690.87
+							190 cell
+								191 text 0
+							192 cell
+								193 text 0
+							194 cell
+								195 text 0
+							196 cell
+								197 text 0.0012621727
+						198 row
+							199 cell
+								200 text 2
+							201 cell
+								202 text -27051.599
+							203 cell
+								204 text 11742.468
+							205 cell
+								206 text 15309.13
+							207 cell
+								208 text 0
+							209 cell
+								210 text 0
+							211 cell
+								212 text 0
+							213 cell
+								214 text 0
+						215 row
+							216 cell
+								217 text 3
+							218 cell
+								219 text -27051.599
+							220 cell
+								221 text 11742.468
+							222 cell
+								223 text 15309.13
+							224 cell
+								225 text 0
+							226 cell
+								227 text 0
+							228 cell
+								229 text 0
+							230 cell
+								231 text 0
+				125 button (collapsed) Exact model, engine and approval identities, Secondary Actions: Expand
+					126 text Exact model, engine and approval identities
+			127 button (collapsed) Hill equations, source conventions and integration, Secondary Actions: Expand
+				128 text Hill equations, source conventions and integration
+			129 container
+				130 text Source: 
+				131 link Description: Abaqus2025 Hill anisotropic yield and associated flow, Value: docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-anisoyield.htm
+				132 text  · 
+				133 link Description: Classical metal plasticity, Value: docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-metalplastic.htm
+				134 text  · 
+				135 link Description: Linear elasticity, Value: docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-linearelastic.htm
+				136 text . Fixed-axis, dry total stress, isotropic elasticity and perfect plasticity specialization. 
+				137 link Description: Independent law review & delivery limitations, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/material-point-hill/review.html
+				138 text  · 
+				139 link Description: Approval record, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/material-point-hill/approval.json
+				140 text  · 
+				141 link Description: Review checklist, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/material-point-hill/review.json
+				142 text  · 
+				143 link Description: Exact approved model, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/material-point-hill/hill-abaqus2025-perfect-be.json
+				144 text  · 
+				145 link Description: Atlas catalogue, Value: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/#catalogue
+
+The focused UI element is 0 AXWebArea Constitutive Atlas · Model testing, URL: 127.0.0.1:54303/clay2013-publicbase-v5-25929ecb8ace1e03/#laboratory?model=hill-abaqus2025-perfect-be

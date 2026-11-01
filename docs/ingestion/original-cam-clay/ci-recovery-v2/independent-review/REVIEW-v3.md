@@ -1,0 +1,13 @@
+# CI strict-signature amendment v3
+
+Decision: strict-signature amendment accepted; CI-STRICT-1 resolved for this exact retained v3 gate/observation. Full portable result pending. This is generic CI-fixture review, not scientific/model approval. Zero reviewer compiled calls.
+
+Personally read checker-before, new checker, prospective plan, new two unit tests and saved four-process result. Current checker retains exact historical GIS first-failure string if OCC is absent. For current OCC it requires thirteen definitions, exact637ba7OCC definition and anchored knot1/trials1/axial1e-4/lateral0/singular mixed-control branch. Main checks every policy model hash against actual source before observation and unchanged strict numerical/unknown-profile stdout/stderr/returncode. It does not accept arbitrary failure. Definition count+OCC hash is not a standalone cryptographic hash of all thirteen definitions; exact surrounding policy/source bindings are part of this frozen gate context.
+
+Independent Decimal60 calculation from source normal-compression packing and BEvolume yields residual0.00086977407608178869495496002140069862671692453541021619659 versus observed0.00086977407608239442, well within the unchanged2e-10budget. This correctly identifies the zero-lateral-strain corner, without importing generated constitutive expressions as oracle. Positive v4 recorded test separately asserts exact original state/strain rollback and GIS default rollback. Saved strict-native-contracts-v3 passes all4processes. Reviewer ran only pure Python unit tests:2tests pass, including altered work, branch, lateral increment, residual and model hash rejection; no native call.
+
+Historical old checker, failed strict attempt and initial review remain immutable. Strict catalogue first-failure ordering changed upon adding OCC; distinct current-context allocation is appropriate rather than rewriting historical GIS expectation. Combined v4 positive native receipts already pass both suites; no tolerances or portable skip policy changed.
+
+Attribution correction: tests/test_web_recorded.py power-creep expectation change belongs to concurrent package registration work, not this CI author. The before snapshot captured the older expectation; reviewed final source/plan must preserve the actual frozen capture identity. No app changes by this CI owner are implied.
+
+Full portable fresh-solver run/source-drift monitor remains pending. No clean full CI, remote workflow, current-app or release result asserted. Exact checker, plan, unit tests, strict outcomes and policy/model identities are pinned in manifest-v3.json.

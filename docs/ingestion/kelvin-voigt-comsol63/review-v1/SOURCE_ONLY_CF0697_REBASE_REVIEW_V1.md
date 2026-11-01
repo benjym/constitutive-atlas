@@ -1,0 +1,13 @@
+# Independent final source-only CI-repair rebase review
+
+Decision: accept the bounded test/receipt-only rebase through remote e9bed516, including cf0697f09c3737f6e8d28ba9815984d79944e7d8. Existing exact V7 production-package and browser-v5 local acceptance remains applicable. E8 remains pending.
+
+Read actual remote J2 fixture with `git show origin/main:tests/test_j2_main_routing.mjs` and compared against isolated source. Exactly two additions remain: Kelvin setup import presence and exact controller membership/hook assertion. The stronger remote fixture retains the real modelProfile import, actual extracted refreshPublicModelSummary and DOM remove support; the inert summary stub is gone. No remote assertions were removed. Independently running the actual isolated source test passes (`cf0697-j2-routing-tests.log`), without compiled/browser/network calls.
+
+Independently recomputing all twenty-four V7 source pins finds exactly one changed test file: tests/test_j2_main_routing.mjs, from e7785a916a7e80a8ab99ae7170dd86b8e6301207561eef2c4fe6b7ebe724766e to 72f696e9106ac1ea1c3cf616a3114b4e67d1ab3eee834ca0536799284cca9875. All 1,050 frozen production-package assets still match their original browser-v5 prospective hashes. No model, engine, controls, scientific approval, public profile or packaged app asset changes result from this rebase.
+
+V17 preservation independently verifies all four recorded file hashes, both original V6/V7 freeze document hashes and both historical checked_receipt bindings to the exact prior test snapshot. The old prospective freezes remain immutable, with their test pins resolving through the canonical archive. Independently fetched both cf0697 remote archive maps: every remote document/hash pair and entry remains in the isolated supersets; no Kelvin-specific preserved binding is discarded.
+
+Also inspected the concurrent cf0697-to-e9bed516 delta: only the agent-review archive map, canonical historical AGENTS snapshot and CI-repair README change. Independently verified e9bed516's fourteen document pins/eleven map entries are a subset of the isolated map, the exact AGENTS snapshot hash is af554aa5c12e4f3706efdf20399a283e7a09bda8be748b1f394b4d0c78c3709e, and isolated CI-repair README equals remote bytes. This retains the already preserved VW96 historical policy guard without changing current admission policy or production assets.
+
+No further physical/compiled/package/browser rerun is required for this exact test/map/document delta. This is a source-only review, not a remote CI or deployment pass. The coordinator may proceed with the scoped commit and must still establish terminal current-revision CI, tested upload, Pages/live asset and actual live model/profile checks under the seven pending E8 actions.

@@ -31,6 +31,10 @@ List parameters, states, tensor/sign conventions, inputs, domains, initializatio
 
 Law type; time or strain-path variable; rate/history inputs; zero-load/hold behavior; trial/commit/rollback; old/new ordering and events; tangent/solver needs; unsupported cases. Use “unspecified in inspected source” where appropriate.
 
+## Public profile draft
+
+Follow [the public-profile contract](../PUBLIC_MODEL_PROFILES.md). Write a reader-facing title/summary, explanation of characteristic behaviours, material-parameter meanings/units, starting-state guidance, meaningful scope/limits and readable references. Include local source locators and a proposed supported experiment when justified. For a source-only assignment, keep the draft here or in a packet-local file and hand it to the coordinator for `web/model-profile-data.mjs`; do not edit shared web files. Literature-only entries get a bounded conceptual explanation without invented controls, defaults or equations. Keep curation status and check receipts out of the public prose.
+
 ## Independent checks
 
 Derivation or reference provenance, exact commands, results and limitations. Record failures. Do not claim compiled checks that were not run.

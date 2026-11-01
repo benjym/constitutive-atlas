@@ -1,0 +1,113 @@
+{
+  "passed": true,
+  "candidate_base": "6fed3e1e368337f02bbc67c2eef263d03b7c8c4a",
+  "review_validation": {
+    "command_pattern": "python3 -B -m atlas.agent_review catalogue/agent-reviews/<name> --for-approval",
+    "records": {
+      "catalogue/agent-reviews/hypoplastic-clay-2013-agent-v1.json": "exit0 accepted",
+      "catalogue/agent-reviews/igs97-agent-v1.json": "exit0 accepted",
+      "catalogue/agent-reviews/vw96-agent-v1.json": "exit0 accepted"
+    }
+  },
+  "database_export": {
+    "command": "python3 -B -c from atlas.research import export_database; export_database(output)",
+    "path": "/private/tmp/atlas-clay2013-release-v2.sqlite",
+    "sha256": "96b7b23cb39394bad4510dffdf2db6aae9a3bc839f7b613955b671b39f928e40",
+    "tables": {
+      "agent_reviews": {
+        "rows": 16,
+        "matches_qualified_package": true
+      },
+      "model_approvals": {
+        "rows": 20,
+        "matches_qualified_package": true
+      },
+      "models": {
+        "rows": 44,
+        "matches_qualified_package": true
+      },
+      "publication_models": {
+        "rows": 18,
+        "matches_qualified_package": true
+      },
+      "publication_relations": {
+        "rows": 8,
+        "matches_qualified_package": true
+      },
+      "publication_screening": {
+        "rows": 37,
+        "matches_qualified_package": true
+      },
+      "publications": {
+        "rows": 60,
+        "matches_qualified_package": true
+      },
+      "screening_evidence": {
+        "rows": 53,
+        "matches_qualified_package": true
+      },
+      "sources": {
+        "rows": 186,
+        "matches_qualified_package": true
+      }
+    },
+    "comparison": "Every row of all9normal public tables equals the sealed qualified clay2013 package, not just counts."
+  },
+  "source_candidate": {
+    "exact_whitelist": 28,
+    "tracked_changed": [
+      "catalogue/approved-models.json"
+    ],
+    "new_paths": [
+      "catalogue/agent-reviews/hypoplastic-clay-2013-agent-v1.json",
+      "catalogue/agent-reviews/igs97-agent-v1.json",
+      "catalogue/agent-reviews/vw96-agent-v1.json",
+      "docs/ingestion/hypoplastic-clay-2013/approval-v1/INPUT_FREEZE.json",
+      "docs/ingestion/hypoplastic-clay-2013/approval-v1/README.md",
+      "docs/ingestion/hypoplastic-clay-2013/approval-v1/independent-review/findings.md",
+      "docs/ingestion/hypoplastic-clay-2013/approval-v1/independent-review/replay-inputs.json",
+      "docs/ingestion/hypoplastic-clay-2013/approval-v1/independent-review/replay-results.json",
+      "docs/ingestion/hypoplastic-clay-2013/approval-v1/independent-review/replay.py",
+      "docs/ingestion/hypoplastic-clay-2013/approval-v1/private-retention.json",
+      "docs/reviews/igs97-agent-v1/algebra-checks.json",
+      "docs/reviews/igs97-agent-v1/backend-assessment.json",
+      "docs/reviews/igs97-agent-v1/check_saved.py",
+      "docs/reviews/igs97-agent-v1/checks.json",
+      "docs/reviews/igs97-agent-v1/checks.stderr.txt",
+      "docs/reviews/igs97-agent-v1/context-snapshots.json",
+      "docs/reviews/igs97-agent-v1/contract-checks.json",
+      "docs/reviews/igs97-agent-v1/inputs.json",
+      "docs/reviews/igs97-agent-v1/report.md",
+      "docs/reviews/igs97-agent-v1/source-reading.json",
+      "docs/reviews/vw96-agent-v1/README.md",
+      "docs/reviews/vw96-agent-v1/check_saved.py",
+      "docs/reviews/vw96-agent-v1/checks.json",
+      "docs/reviews/vw96-agent-v1/initial-check_saved.py",
+      "docs/reviews/vw96-agent-v1/initial-verifier-failure.json",
+      "docs/reviews/vw96-agent-v1/inputs.json",
+      "docs/reviews/vw96-agent-v1/source-reading.json"
+    ],
+    "index_empty": true,
+    "matching_tested_relative_inputs": 8303,
+    "preserved_release_repair_differences": [
+      ".github/workflows/verify.yml",
+      "tools/build_ci_targets.py",
+      "catalogue/investigations/tresca-mixed-catalogue-v1/source-archive-map.json"
+    ],
+    "missing_historical_packet_only_inputs": [
+      "docs/admission/clay2013-agent-v1/POST_INSTALL_CHECKS.json",
+      "docs/reviews/common-scalar-functions-v1/independent-review/final-actual-root-bindings-v1.json",
+      "catalogue/source-snapshots/39ab123fb57d8233f60fd174649ce1e921b4b51c9343a7341503582603ac9932/catalogue/approved-models.json",
+      "catalogue/source-snapshots/b94567eb211d478ae48b381cd4c3d46efd92b4c5c8cf86bce8ce2592e5a19b44/docs/ingestion/lade-duncan-1975/atlas-integration-v1/actual-package-v1/source-archive-map.json",
+      "catalogue/source-snapshots/d8be7ef02ad441c8aefd61995dcbca044cd9d0ee3a817338f27f1ce099d4a8d8/catalogue/approved-models.json",
+      "docs/ingestion/hypoplastic-clay-2013/current-delivery-v1/PLAN.json",
+      "docs/ingestion/hypoplastic-clay-2013/current-delivery-v1/run_command.py",
+      "docs/ingestion/hypoplastic-clay-2013/current-delivery-v1/REUSE_CHECKS.json"
+    ],
+    "compiled_model_schema_web_inputs_unchanged": true
+  },
+  "release_ready": false,
+  "remaining": "Independent source/integration review, pending Duncan base reconciliation, scoped reviewed release commit and authorized CI/deploy/live gates",
+  "new_material_execution": false,
+  "remote_action": false
+}

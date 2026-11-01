@@ -27,6 +27,9 @@ from tools.ingest_hurley import read_hurley
 from tools.ingest_castlegate import read_castlegate
 from tools.ingest_leap import read_leap
 from tools.ingest_torsion import read_torsion
+from tools.ingest_reviewed_xls import read_reviewed_xls
+from tools.ingest_staged_tsv import read_staged_tsv
+from tools.ingest_chang_mat import read_chang_mat
 from tools.source_downloads import zip_member
 
 
@@ -231,12 +234,26 @@ def main():
             records.extend(read_hurley(source, args.raw_dir))
         elif source.get('reader') == 'worksheet-tables':
             records.extend(read_tables(source, args.raw_dir))
+        elif source.get('reader') == 'chang-mcos':
+            records.extend(read_chang_mat(source, args.raw_dir))
+        elif source.get('reader') == 'staged-tsv':
+            records.extend(read_staged_tsv(source, args.raw_dir))
+        elif source.get('reader') == 'reviewed-xls':
+            records.extend(read_reviewed_xls(source, args.raw_dir))
         else:
             raise ValueError('Source needs a reviewed reader: ' + source['id'])
     dest = ROOT / 'data/curated'
     dest.mkdir(parents=True, exist_ok=True)
+    # load_curated has already verified retained assets. A source-only rebuild
+    # need not recompress or rewrite unrelated measurement histories.
+    retained = ({entry['id']: entry for entry in
+                 json.loads((dest / 'index.json').read_text())['records']}
+                if args.source else {})
     entries = []
     for record in sorted(records, key=lambda r: r['id']):
+        if args.source and record['provenance']['source_id'] not in selected:
+            entries.append(retained[record['id']])
+            continue
         content = gzip.compress(json_bytes(record), mtime=0)
         # gzip's OS byte varies across Python/zlib versions; it has no data
         # meaning. Fix it to "unknown" for portable deterministic packaging.

@@ -1,0 +1,110 @@
+{
+  "paper_record_version": 1,
+  "status": "development_information_audit_not_final_equal_information_protocol",
+  "config_sha256": {
+    "pilot.json": "3ddda5b741509e1eb598ec2453e162379351db7cc6257592cfc7a48e75d2cde6",
+    "pilot_density.json": "18241f5261f44da2f0454b6eb8db12af9930ffc6a0f2bb0037a863baec920a95",
+    "pilot_matched.json": "07f6630923393931705fec787ee2af320024573e9d130bbaced79de804f6cc8c"
+  },
+  "review": {
+    "annotator": "Codex assisted source review",
+    "date": "2026-10-30",
+    "independent_reviewer": null
+  },
+  "models": [
+    {
+      "model_id": "linear-elastic",
+      "fixed": {
+        "p_ref": {
+          "value": 100000,
+          "role": "numerical_reference_scale",
+          "source": "study configurations; not an extra experimental measurement"
+        }
+      },
+      "fitted": [
+        "E",
+        "nu"
+      ],
+      "initial_information": [
+        "file effective stress",
+        "file void ratio for bookkeeping"
+      ]
+    },
+    {
+      "model_id": "drucker-prager",
+      "fixed": {
+        "p_ref": {
+          "value": 100000,
+          "role": "numerical_reference_scale",
+          "source": "study configurations"
+        },
+        "c": {
+          "value": 0,
+          "role": "analyst_material_specialization",
+          "source": "declared cohesionless task restriction; not estimated from pilot curves"
+        }
+      },
+      "fitted": [
+        "E",
+        "nu",
+        "M",
+        "Md"
+      ],
+      "initial_information": [
+        "file effective stress inside yield domain",
+        "file void ratio for bookkeeping",
+        "transient multiplier reset"
+      ]
+    },
+    {
+      "model_id": "hypoplastic-sand-vw96",
+      "fixed": {
+        "p_ref": {
+          "value": 100000,
+          "role": "numerical_reference_scale",
+          "source": "study configurations"
+        },
+        "n": {
+          "value": 0.27,
+          "role": "external_material_information",
+          "source_id": "wichtmann2019",
+          "locator": "Section 2; Table 1: oedometric calibration"
+        },
+        "ed0": {
+          "value": 0.677,
+          "role": "external_material_information",
+          "source_id": "wichtmann2019",
+          "locator": "Section 2; Table 1: minimum-density index test"
+        },
+        "ec0": {
+          "value": 1.054,
+          "role": "external_material_information",
+          "source_id": "wichtmann2019",
+          "locator": "Section 2; Table 1: maximum-void-ratio index test"
+        },
+        "ei0": {
+          "value": 1.212,
+          "role": "external_material_relation",
+          "source_id": "wichtmann2019",
+          "locator": "Section 2; Table 1: rounded 1.15 times maximum void ratio"
+        }
+      },
+      "fitted": [
+        "phi",
+        "hs",
+        "alpha",
+        "beta"
+      ],
+      "initial_information": [
+        "file effective stress",
+        "file void ratio within limiting-density domain"
+      ],
+      "source_qualification": "Existing configuration cites the later transfer set. Equality with the 2019 backbone entries documents earlier information provenance; it does not establish identical IGS or backbone predictions."
+    }
+  ],
+  "shared_choices": [
+    "Exploratory fitted-parameter bounds and transforms are analyst information; they are not learned from the nominal calibration package.",
+    "Initial-state source choice remains unresolved; file values and table-value sensitivity are declared separately.",
+    "All compared packages contain development tests; no equal-information ranking is established."
+  ]
+}

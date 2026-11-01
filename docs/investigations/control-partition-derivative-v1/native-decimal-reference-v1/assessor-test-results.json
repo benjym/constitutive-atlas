@@ -1,0 +1,337 @@
+{
+  "passed": true,
+  "cases": 51,
+  "records": [
+    {
+      "label": "direct positive",
+      "expected_pass": true,
+      "observed_pass": true,
+      "error": []
+    },
+    {
+      "label": "actual CTest merged-output positive",
+      "expected_pass": true,
+      "observed_pass": true,
+      "error": []
+    },
+    {
+      "label": "wrong identity",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "export identity"
+    },
+    {
+      "label": "wrong selector",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "export identity"
+    },
+    {
+      "label": "wrong status",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "export identity"
+    },
+    {
+      "label": "wrong models",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "model count"
+    },
+    {
+      "label": "wrong binding evaluator_sha256",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "wrong binding policy_sha256",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "wrong binding base_source_freeze_sha256",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "wrong binding model_sha256",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "wrong binding request_sha256",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "wrong binding reference_sha256",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "wrong binding build_binding_sha256",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "missing endpoint",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "endpoint coverage"
+    },
+    {
+      "label": "extra endpoint",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "endpoint coverage"
+    },
+    {
+      "label": "duplicate endpoint",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "wrong bits",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "binary64 metadata bits"
+    },
+    {
+      "label": "truthy domain",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "false branch",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "metadata literal"
+    },
+    {
+      "label": "AD short row",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "AD14x14 shape"
+    },
+    {
+      "label": "AD wrong derivative",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": [
+        {
+          "gate": "AD/FD",
+          "column": 0,
+          "level": 0,
+          "row": 0,
+          "fd": "164010.239382055461823775583025509608865359520997886207818616468280681720581839236694575658334671150294194274044500698014",
+          "ad": "0",
+          "error": "164010.239382055461823775583025509608865359520997886207818616468280681720581839236694575658334671150294194274044500698014",
+          "budget": "4.92030718146166385471326749076528826596078562993658623455849404842045161745517710083726975004013450882582822133502094042",
+          "passed": false
+        },
+        {
+          "gate": "AD/FD",
+          "column": 0,
+          "level": 1,
+          "row": 0,
+          "fd": "164010.239380710448003504250966206218898348138298075197938296601679427774874960516738370046365643536623418420752819852110",
+          "ad": "0",
+          "error": "164010.239380710448003504250966206218898348138298075197938296601679427774874960516738370046365643536623418420752819852110",
+          "budget": "4.92030718142131344010512752898618656695044414894225593814889805038283324624881550215110139096930609870255262258459556330",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "label": "AD nan",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "finite hex string required"
+    },
+    {
+      "label": "missing rank13",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "exact object keys required {'rank13': True, 'rotation': True, 'other_models': True}"
+    },
+    {
+      "label": "extra envelope key",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "exact object keys required ['identity', 'selector', 'status', 'models', 'bindings', 'base', 'endpoints', 'ad_hex', 'cpp_checks']"
+    },
+    {
+      "label": "malformed wire b'not json'",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "label": "malformed wire b'\\xff'",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "'utf-8' codec can't decode byte 0xff in position 0: invalid start byte"
+    },
+    {
+      "label": "malformed wire b'{\"a\":1,\"a\":2}'",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "duplicate key a"
+    },
+    {
+      "label": "malformed wire b'{}\\n{}'",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "Extra data: line 2 column 1 (char 3)"
+    },
+    {
+      "label": "malformed wire b'{\"a\":NaN}'",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "nonfinite JSON"
+    },
+    {
+      "label": "malformed wire b'{\"a\":1e999}'",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "nonfinite JSON number"
+    },
+    {
+      "label": "nonzero exit",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "native returncode"
+    },
+    {
+      "label": "boolean exit",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "native returncode"
+    },
+    {
+      "label": "wrong argv",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "native argv"
+    },
+    {
+      "label": "wrong cwd",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "native cwd"
+    },
+    {
+      "label": "wrong selector",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "selectors"
+    },
+    {
+      "label": "optimizer",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "selectors"
+    },
+    {
+      "label": "rawhash drift",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "raw file hash"
+    },
+    {
+      "label": "extra process key",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "exact object keys required ['identity', 'purpose', 'argv', 'cwd', 'returncode', 'stdout', 'stderr', 'selectors', 'executable_sha256']"
+    },
+    {
+      "label": "stderr log",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "direct stderr must be empty"
+    },
+    {
+      "label": "wrong external build pin",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "independently pinned expected build-binding hash"
+    },
+    {
+      "label": "CTest parent nonzero",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "CTest parent returncode"
+    },
+    {
+      "label": "CTest wrong child",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "child identity"
+    },
+    {
+      "label": "CTest wrong directory",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "child cwd"
+    },
+    {
+      "label": "CTest missing success",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "child identity"
+    },
+    {
+      "label": "CTest invented stderr",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "exact object keys required ['identity', 'purpose', 'child_name', 'child_command', 'child_directory', 'child_status', 'last_test_log', 'combined_output', 'parent', 'selectors', 'executable_sha256']"
+    },
+    {
+      "label": "CTest forged command",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "anchored unique actual LastTest command/directory"
+    },
+    {
+      "label": "CTest forged directory",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "anchored unique actual LastTest command/directory"
+    },
+    {
+      "label": "CTest forged duplicate-header",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "anchored unique actual LastTest command/directory"
+    },
+    {
+      "label": "CTest forged duplicate-test",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "unique numerical LastTest section"
+    },
+    {
+      "label": "CTest forged status",
+      "expected_pass": false,
+      "observed_pass": false,
+      "error": "actual child success marker"
+    },
+    {
+      "label": "final stable direct positive",
+      "expected_pass": true,
+      "observed_pass": true,
+      "error": []
+    }
+  ],
+  "synthetic_only": true,
+  "compiled_calls": 0
+}

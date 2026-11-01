@@ -1,0 +1,58 @@
+{
+  "paper_record_version": 1,
+  "id": "geomechanics-formulation-survey-development-v1",
+  "status": "development_search_protocol_not_completed_systematic_survey",
+  "cutoff": "2026-10-30",
+  "scope": "Continuum constitutive formulations for soils, granular media, intact/jointed rock and interfaces, including damage, creep, unsaturated/coupled and nonlocal theories. Survey scope is broader than the executable benchmark.",
+  "units": {
+    "discovery_occurrence": "One returned record from one request or source location; repeats are retained.",
+    "publication": "A bibliographic work, deduplicated separately from constitutive identities.",
+    "formulation": "A source-specific set of governing assumptions, equations and state evolution; count only after exact variant and lineage review.",
+    "implementation": "A numerical realization of a formulation; discretization changes do not automatically add formulations.",
+    "parameter_set": "A material calibration or initialization set; does not add a formulation."
+  },
+  "bibliographic_pilot": {
+    "provider": "Crossref REST API",
+    "endpoint": "https://api.crossref.org/works",
+    "parameters": {"rows": 25, "cursor": "*", "sort": "score", "order": "desc", "filter": "until-pub-date:2026-10-30"},
+    "coverage": "One page per theme is a bounded search-method pilot, not exhaustive retrieval. Do not report API total-results as screened records or model counts. Full search depth and supplementary routes remain to be completed before survey claims.",
+    "queries": [
+      {"id": "soil", "theme": "soil plasticity and critical state", "query": "soil constitutive hypoplasticity critical state model"},
+      {"id": "bounding", "theme": "bounding and multisurface plasticity", "query": "sand soil bounding surface multisurface plasticity constitutive"},
+      {"id": "hypoplastic", "theme": "hypoplasticity and barodesy", "query": "hypoplasticity barodesy constitutive soil sand clay"},
+      {"id": "rock", "theme": "rock plasticity and damage", "query": "rock constitutive damage plasticity geomechanics model"},
+      {"id": "creep", "theme": "creep and rate dependence", "query": "soil rock constitutive creep viscoplasticity rate dependent"},
+      {"id": "coupled", "theme": "unsaturated and coupled media", "query": "unsaturated soil constitutive thermomechanical hydro mechanical model"},
+      {"id": "interface", "theme": "interfaces and joints", "query": "soil rock joint interface constitutive model shear"},
+      {"id": "nonlocal", "theme": "nonlocal theories", "query": "soil rock nonlocal gradient constitutive plasticity damage"}
+    ]
+  },
+  "supplementary_routes": [
+    "Source-pinned atlas candidates, including unresolved family/version records; do not count all candidates as formulations.",
+    "Foundational books and reviews, author publication lists, and material-model directories/registries; preserve route and access date.",
+    "Backward citation tracing from exact formulation sources and forward citation tracing for corrections and extensions; log each source and stopping rule."
+  ],
+  "screening": {
+    "title_abstract_decisions": ["retrieve_full_text", "exclude_outside_geomaterial_scope", "background_or_infrastructure", "unresolved"],
+    "full_text_decisions": ["include_exact_formulation", "exclude_outside_scope", "criterion_without_complete_constitutive_law", "background_or_reproduction_only", "unresolved_variant", "unavailable_source"],
+    "requirements": [
+      "Record publication identifier, stage, decision, reason, exact evidence locator, access level, reviewer identity/date, unresolved questions and proposed formulation IDs where justified.",
+      "Do not exclude a formulation from the survey merely because the current engine cannot express it, its code is unavailable, its calibration is expensive, or it falls outside the sand benchmark.",
+      "A complete law needs its relevant stress/kinematic relation and state/history evolution or explicit absence of history; a standalone failure criterion is a separate criterion record.",
+      "Reviews, applications, parameter recalibrations, numerical algorithms and errata remain linked evidence; they are not automatically new formulations.",
+      "An inaccessible or ambiguous source remains unresolved, not evidence of absent mechanisms. Abstract-only review cannot establish an exact full equation set.",
+      "Assisted screening remains labelled as such. Independent equation review and benchmark admission are separate gates, never inferred from discovery or passing software checks."
+    ],
+    "required_record_fields": ["publication_id", "stage", "decision", "reason", "evidence_locator", "access_level", "reviewer", "review_date", "independent_review_status", "formulation_ids", "unresolved"]
+  },
+  "deduplication": {
+    "doi": "Normalize resolver prefixes, URL escaping when supplied as a resolver URL, case and whitespace; preserve DOI suffix punctuation. Retain all source occurrences and flag conflicting metadata.",
+    "no_doi": "Exact normalized title, full supplied author sequence and bibliographic year yield a possible-duplicate group only. Incomplete metadata stays occurrence-specific. Do not silently merge preprints, translations, corrections or near titles.",
+    "formulations": "Review governing equations, assumptions, persistent states, documented corrections and lineage separately; never equate publication count with formulation count."
+  },
+  "known_limits": [
+    "English-language queries and Crossref indexing create coverage bias; language and access gaps must be reported.",
+    "The old two Crossref cursor batches in catalogue/discovery contain predominantly biomedical titles despite geomechanics query labels. Preserve them as search-quality evidence; do not treat their labels or raw counts as useful field coverage.",
+    "No survey population frequencies, completeness claim, independently reviewed screening count or 50-formulation coverage follows from this development protocol."
+  ]
+}

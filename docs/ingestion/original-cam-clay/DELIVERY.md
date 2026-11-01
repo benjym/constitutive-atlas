@@ -9,6 +9,8 @@
 - Owned closeout paths: `e1-e2-closeout-v1/`, coordinator ledger/own board entries. Existing control-selection/execution-v1/v2 files stay under their recorded owners; no duplicated build or candidate edit. Separate closeout reviewer owns `e1-e2-closeout-v1/independent-review/`.
 - Implementation/review identities: current root closeout; prior `/root/occ_selection_review` design/transcription reviews; new `/root/occ_e1_e2_closeout_review` source/contract closeout audit. These are distinct actual runs, not E5 approval.
 - Build owner: existing NUM-occ-log-recovery-v2 coordinator; native then Wasm, isolated serial explicit targets `--parallel 1` under its existing handoff.
+- Remote authorization: user explicitly instructed main push, CI and public GitHub Pages deployment; authorized actions completed for515b39c9.
+
 - Remote authorization: absent for OCC in this session; no push/deploy/remote CI by this closeout.
 
 - [X] **E0 — Claim/scope:** single umbrella, exact declared continuation, owners/paths and ordinary atlas/browser destination recorded.
@@ -19,6 +21,36 @@
 - [X] **E5 — Agent approval:** all nine items accepted by actual separate reviewer for exact637ba7.. candidate; [record](../../../catalogue/agent-reviews/original-cam-clay-sw-electronic-log-recovery-agent-v1.json) validates for approval and registry entry is installed. See [review](control-selection-v1/independent-review/e5-v1/REPORT.md). No experimental-validation claim.
 - [X] **E6 — Atlas:** exact model/dossier/E5 registry and SQLite identities installed. Common13 generated artifacts exactly match qualified engine; numerical covariance-v3 and distinct recorded-restart-v4 (83cases/2472checks) pass. Original OCC/GIS strict failures and rollback remain asserted. Current13 negative contract independently accepted; catalogue/example/applicability/export integration and archived receipt checks pass.
 - [X] **E7 — Packaged website:** isolated simplified-site standard package838files matches release source and qualified Wasm; supported-input contract passes12ordinary successes plus retained GIS default failure and1named success. Actual IAB fiveOCCmonotonic protocols, approved deep link, parameters/initial state, reset/latest request, real export replay, invalid recovery and overlay toggle pass. Portable1413tests pass63skips;31exact archival tests pass separately. [Final evidence](finish-checklist-v1/release-host-fixes-v1/), [independent integration review](finish-checklist-v1/independent-release-review/REPORT.md).
+- [X] **E8 — Live delivery:** main515b39c98176af5578bb29ee29d9e1a9e0ed834f; all5 [CI jobs](https://github.com/benjym/constitutive-atlas/actions/runs/41325213918) pass; Pages deployment7475897975 succeeds. Exact uploaded archive digest verified,27public assets match, actual live100-increment run/export passes1616numeric comparisons with zero difference. [Closure](live-delivery-v1/released-v1/closure.json).
+
+## Current handoff
+
+E0–E8 complete for the exact reviewed scope. The coordinating owner pushed commit `515b39c98176af5578bb29ee29d9e1a9e0ed834f` nonforce to main from `/private/tmp/atlas-occ-main-integration-v1`, preserving concurrent model integrations. No required delivery work remains.
+
+Live model: [Original Cam Clay in the atlas](https://benjym.github.io/constitutive-atlas/#catalogue/original-cam-clay-sw-electronic-log-recovery-v1). [Exact CI](https://github.com/benjym/constitutive-atlas/actions/runs/41325213918), [deployment receipt](live-delivery-v1/released-v1/deployment.json), [full closure audit](live-delivery-v1/released-v1/closure.json), [actual browser observation](live-delivery-v1/released-v1/browser-live.yml), [live export](live-delivery-v1/released-v1/browser-export.json), [screenshot](live-delivery-v1/released-v1/live-response.jpg).
+
+The actual CI upload has888files. Local preview had889; the Pages upload excludes `.nojekyll`. Platform-generated database and separate timed-engine differences are recorded in [package comparison](live-delivery-v1/released-v1/package-comparison.json). All27critical public assets equal the exact CI upload, including common engine, catalogue, model/schema, current review, approval and database. Raw ZIP/tar stay in ignored private storage, bound by GitHub artifact13091242971 and SHA25641972d44672b02e06dfa4a4d24111dc4945024a68e06897cc923a8be3da77992.
+
+Actual live default response completes100increments; all7physical state values,6strain components and available stress channels match the frozen packaged reference in1616comparisons, with101exact controls and zero numeric error. Reset and invalid-state recovery pass; stress-control cycles remain disabled. Console warnings/errors are empty. Browser download returned unusually slowly; retained export and final status were checked after completion.
+
+Limits remain unchanged: selected electronic-source fidelity; disclosed invariant/corner-power continuation and project finite selection; unsupported cyclic-stress unload; tiny-positive-pressure conditioning; minimum-subnormal CSV rejection; fixed-frame/zero-spin only; no calibration or experimental-validity claim. Prior failed studies and authorization rejections remain historical evidence, preserved without gate changes.
+
+## Evidence and review identities
+
+- E1/E2 [source/contract closure](e1-e2-closeout-v1/README.md) and [independent audit](e1-e2-closeout-v1/independent-review/README.md).
+- Exact definition SHA256637ba72335c3464fec427c773d214d21d06e9e26bc737d15307aae2f67111b34; accepted [nine-item E5 review](control-selection-v1/independent-review/e5-v1/REPORT.md), actual separate reviewer `/root/occ_selection_review`.
+- [Native/Wasm execution](execution-v2/README.md), [current-main package/browser receipts](live-delivery-v1/), [independent renewed integration review](live-delivery-v1/independent-review/renewed-v1/REPORT.md).
+- Prospective live checker v2 accepted by separate `/root/occ_e1_e2_closeout_review`: [report](live-delivery-v1/released-v1/independent-review/REVIEW-v2.md). Prior v1 findings and exact inputs retained. Actual [saved-proof E8 review](live-delivery-v1/released-v1/independent-review/REVIEW-live-v1.md) accepted with no blockers.
+- [Exact pre-final ledger](live-delivery-v1/released-v1/DELIVERY-before-final-closeout.md) retains earlier handoffs, deployment authorization blocks and all historical evidence-index links. Earlier release branch CI41295905872 passed but is not substituted for this main revision.
+
+## Reproduction
+
+`python3 -B docs/ingestion/original-cam-clay/live-delivery-v1/released-v1/verify.py` verifies saved CI/deployment/upload/public/browser evidence without executing compiled artifacts. It requires the ignored retained ZIP/tar at the receipt paths and exact Git release object. Live network observations and actual browser interaction are separately retained, not rerun by the offline checker.
+
+## Completion statement
+
+The complete named formulation is source-mapped, declarative and numerically qualified for its stated scope, independently agent-approved, integrated into the general atlas, browser-qualified and publicly delivered with all required CI and deployment gates passing for515b39c9. Experimental validation remains unclaimed.
+
 - [-] **E8 — Live delivery:** user explicitly authorized push, CI, current-main integration, deployment and live verification. Exact reviewed branch82a5961d is pushed; current-main integration, required green CI and exact project-path live run remain working. [Current plan/evidence](live-delivery-v1/PLAN.md).
 
 ## Current handoff

@@ -8,7 +8,7 @@ This is the operating checklist for a **full model-delivery assignment**. The le
 
 Website delivery means adding the model to the **general atlas catalogue and main laboratory**. Integrate any required physical-time or other supported interface into that laboratory. A standalone model page is not required and does not satisfy atlas integration or browser delivery; do not create one to complete this checklist. Live verification uses the model’s route within the general atlas.
 
-Read [AGENTS.md](../AGENTS.md), the [live board](../IMPLEMENTATION_PLAN.md), [roadmap](../ROADMAP.md), [formulation contract](FORMULATION_CONTRACT.md) and [agent review policy](AGENT_REVIEW_POLICY.md). Use [the delivery ledger template](ingestion/DELIVERY_TEMPLATE.md) at `docs/ingestion/<model-id>/DELIVERY.md`; keep the scientific source packet in `README.md` using [its template](ingestion/TEMPLATE.md). Reuse existing work instead of starting another numerical or source-audit campaign without a demonstrated gap.
+Read [AGENTS.md](../../../AGENTS.md), the [live board](../../../IMPLEMENTATION_PLAN.md), [roadmap](../../../ROADMAP.md), [formulation contract](../../FORMULATION_CONTRACT.md) and [agent review policy](../../AGENT_REVIEW_POLICY.md). Use [the delivery ledger template](../DELIVERY_TEMPLATE.md) at `docs/ingestion/<model-id>/DELIVERY.md`; keep the scientific source packet in `README.md` using [its template](../TEMPLATE.md). Reuse existing work instead of starting another numerical or source-audit campaign without a demonstrated gap.
 
 ## Ownership, tracking and stopping rules
 
@@ -110,7 +110,7 @@ These are the ordinary strain-path target examples, not a claim that every timed
 **Verified evidence:** scientific-review-v1/report.md, independent Decimal checks and manifest.json; catalogue/agent-reviews/orthotropic-ogs-agent-v1.json accepted all9items; docs/admission/orthotropic-ogs-approved-v1/approval.json exact frozen definition.
 
 - [X] Hand the exact candidate, readable source receipts, dossier, prospective gates and complete saved results to a separate agent run. Record actual implementation/reviewer run IDs and independence basis. Do not ask the implementation agent to certify its own transcription.
-- [X] The reviewer checks all nine items in [checklist v1](AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](AGENT_REVIEW_TEMPLATE.json).
+- [X] The reviewer checks all nine items in [checklist v1](../../AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](../../AGENT_REVIEW_TEMPLATE.json).
 - [X] Resolve blocking findings; rerun only affected qualification and regression checks when justified. Obtain a new or updated reviewer decision bound to the final model bytes and artifacts. Preserve superseded failures and decisions.
 - [X] Store the accepted record under `catalogue/agent-reviews/`, validate it and generate the approval entry. Coordinator integration requires no human scientific sign-off or further user approval.
 - [X] Confirm approval refers to the exact intended formulation and supported interfaces/parameter/protocol scope. Keep experimental validation separately assessed; no experimental match is required merely to illustrate an otherwise verified law.
@@ -162,13 +162,15 @@ Use the current workflow's other parity/profile/browser commands for the actual 
 
 ## E8 — Publish and verify the live website
 
-- [ ] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
-- [ ] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
-- [ ] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
-- [ ] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
-- [ ] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
-- [ ] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
-- [ ] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
+**Verified evidence:** release-v1/ci-run.json, ci-jobs.json, ci-run-attempt2.json, ci-jobs-attempt2.json, deploy-only-attempt2.log, upload.json and live-byte-attempt3/live-assets.json; live-v1/assessment.json and manifest.json; integration-review-v3/final/. Exact qualified application 462a450c, run 41341461226, same tested Pages artifact13098336823.
+
+- [X] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
+- [X] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
+- [X] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
+- [X] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
+- [X] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
+- [X] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
+- [X] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
 
 **Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its sources/approval/evidence; the packaged and live website can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.
 

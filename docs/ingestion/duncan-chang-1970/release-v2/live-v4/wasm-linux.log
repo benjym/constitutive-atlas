@@ -1,0 +1,1460 @@
+﻿2026-11-01T19:14:33.2160888Z Current runner version: '2.338.2'
+2026-11-01T19:14:33.2183430Z ##[group]Runner Image Provisioner
+2026-11-01T19:14:33.2184168Z Hosted Compute Agent
+2026-11-01T19:14:33.2184697Z Version: 20261021.618
+2026-11-01T19:14:33.2185334Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-01T19:14:33.2185937Z Build Date: 2026-10-21T00:45:21Z
+2026-11-01T19:14:33.2186530Z Worker ID: {96cc95ed-84e9-496c-a4f2-eec490406a32}
+2026-11-01T19:14:33.2187136Z Region: westus3
+2026-11-01T19:14:33.2187842Z Cloud: Azure
+2026-11-01T19:14:33.2188704Z ##[endgroup]
+2026-11-01T19:14:33.2190104Z ##[group]Operating System
+2026-11-01T19:14:33.2190628Z Ubuntu
+2026-11-01T19:14:33.2191153Z 24.04.5
+2026-11-01T19:14:33.2191638Z LTS
+2026-11-01T19:14:33.2192156Z ##[endgroup]
+2026-11-01T19:14:33.2192634Z ##[group]Runner Image
+2026-11-01T19:14:33.2193133Z Image: ubuntu-24.04
+2026-11-01T19:14:33.2193675Z Version: 20261025.353.1
+2026-11-01T19:14:33.2194798Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-01T19:14:33.2196107Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-11-01T19:14:33.2196883Z ##[endgroup]
+2026-11-01T19:14:33.2198185Z ##[group]GITHUB_TOKEN Permissions
+2026-11-01T19:14:33.2199992Z Contents: read
+2026-11-01T19:14:33.2200779Z Metadata: read
+2026-11-01T19:14:33.2201400Z ##[endgroup]
+2026-11-01T19:14:33.2203738Z Secret source: Actions
+2026-11-01T19:14:33.2204892Z Cache mode: write
+2026-11-01T19:14:33.2205771Z Prepare workflow directory
+2026-11-01T19:14:33.2552783Z Prepare all required actions
+2026-11-01T19:14:33.2592336Z Getting action download info
+2026-11-01T19:14:33.5481466Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-11-01T19:14:33.6390745Z Download action repository 'actions/setup-python@v6' (SHA:ece7cb06caefa5fff74198d8649806c4678c61a1)
+2026-11-01T19:14:33.7728616Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-11-01T19:14:33.9250323Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-01T19:14:34.1425735Z Complete job name: wasm-linux
+2026-11-01T19:14:34.2081764Z ##[group]Run actions/checkout@v5
+2026-11-01T19:14:34.2082439Z with:
+2026-11-01T19:14:34.2082812Z   repository: benjym/constitutive-atlas
+2026-11-01T19:14:34.2086103Z   token: ***
+2026-11-01T19:14:34.2086457Z   ssh-strict: true
+2026-11-01T19:14:34.2086815Z   ssh-user: git
+2026-11-01T19:14:34.2087177Z   persist-credentials: true
+2026-11-01T19:14:34.2087711Z   clean: true
+2026-11-01T19:14:34.2088084Z   sparse-checkout-cone-mode: true
+2026-11-01T19:14:34.2088503Z   fetch-depth: 1
+2026-11-01T19:14:34.2088852Z   fetch-tags: false
+2026-11-01T19:14:34.2089211Z   show-progress: true
+2026-11-01T19:14:34.2089573Z   lfs: false
+2026-11-01T19:14:34.2089910Z   submodules: false
+2026-11-01T19:14:34.2090283Z   set-safe-directory: true
+2026-11-01T19:14:34.2090691Z   allow-unsafe-pr-checkout: false
+2026-11-01T19:14:34.2091328Z env:
+2026-11-01T19:14:34.2091677Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:14:34.2092076Z ##[endgroup]
+2026-11-01T19:14:34.4096439Z Syncing repository: benjym/constitutive-atlas
+2026-11-01T19:14:34.4098812Z ##[group]Getting Git version info
+2026-11-01T19:14:34.4099841Z Working directory is '/home/runner/work/constitutive-atlas/constitutive-atlas'
+2026-11-01T19:14:34.4101205Z [command]/usr/bin/git version
+2026-11-01T19:14:34.4151388Z git version 2.56.0
+2026-11-01T19:14:34.4166120Z ##[endgroup]
+2026-11-01T19:14:34.4177856Z Temporarily overriding HOME='/home/runner/work/_temp/d0a8309e-418c-45f8-b70c-ce2071da238c' before making global git config changes
+2026-11-01T19:14:34.4179625Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T19:14:34.4182033Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:14:34.4220332Z Deleting the contents of '/home/runner/work/constitutive-atlas/constitutive-atlas'
+2026-11-01T19:14:34.4222916Z ##[group]Initializing the repository
+2026-11-01T19:14:34.4225988Z [command]/usr/bin/git init /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:14:34.4295180Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-01T19:14:34.4296318Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-01T19:14:34.4297207Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-01T19:14:34.4298268Z hint: call:
+2026-11-01T19:14:34.4298763Z hint:
+2026-11-01T19:14:34.4299229Z hint: 	git config --global init.defaultBranch <name>
+2026-11-01T19:14:34.4299774Z hint:
+2026-11-01T19:14:34.4300237Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-01T19:14:34.4301128Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-01T19:14:34.4301705Z hint:
+2026-11-01T19:14:34.4302041Z hint: 	git branch -m <name>
+2026-11-01T19:14:34.4302593Z hint:
+2026-11-01T19:14:34.4303094Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-01T19:14:34.4305651Z Initialized empty Git repository in /home/runner/work/constitutive-atlas/constitutive-atlas/.git/
+2026-11-01T19:14:34.4313982Z [command]/usr/bin/git remote add origin https://github.com/benjym/constitutive-atlas
+2026-11-01T19:14:34.4350788Z ##[endgroup]
+2026-11-01T19:14:34.4351431Z ##[group]Disabling automatic garbage collection
+2026-11-01T19:14:34.4354116Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-01T19:14:34.4380817Z ##[endgroup]
+2026-11-01T19:14:34.4381407Z ##[group]Setting up auth
+2026-11-01T19:14:34.4385568Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T19:14:34.4413036Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T19:14:34.4698913Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T19:14:34.4726001Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T19:14:34.4916186Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T19:14:34.4943104Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T19:14:34.5133470Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-01T19:14:34.5171095Z ##[endgroup]
+2026-11-01T19:14:34.5172069Z ##[group]Fetching the repository
+2026-11-01T19:14:34.5190197Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +0b1b15ac5f4c8038bce3b26a098d31116c28b537:refs/remotes/origin/main
+2026-11-01T19:14:45.1105668Z From https://github.com/benjym/constitutive-atlas
+2026-11-01T19:14:45.1107602Z  * [new ref]           0b1b15ac5f4c8038bce3b26a098d31116c28b537 -> origin/main
+2026-11-01T19:14:45.1111348Z ##[endgroup]
+2026-11-01T19:14:45.1112891Z ##[group]Determining the checkout info
+2026-11-01T19:14:45.1114467Z ##[endgroup]
+2026-11-01T19:14:45.1117097Z [command]/usr/bin/git sparse-checkout disable
+2026-11-01T19:14:45.1161008Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-01T19:14:45.1186672Z ##[group]Checking out the ref
+2026-11-01T19:14:45.1190258Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-01T19:14:46.1839539Z Updating files:  28% (7861/27828)
+2026-11-01T19:14:46.2256922Z Updating files:  29% (8071/27828)
+2026-11-01T19:14:46.2801564Z Updating files:  30% (8349/27828)
+2026-11-01T19:14:46.3751232Z Updating files:  31% (8627/27828)
+2026-11-01T19:14:46.4530972Z Updating files:  32% (8905/27828)
+2026-11-01T19:14:46.4685939Z Updating files:  33% (9184/27828)
+2026-11-01T19:14:46.4953177Z Updating files:  34% (9462/27828)
+2026-11-01T19:14:46.5218810Z Updating files:  35% (9740/27828)
+2026-11-01T19:14:46.7638246Z Updating files:  36% (10019/27828)
+2026-11-01T19:14:46.8829764Z Updating files:  37% (10297/27828)
+2026-11-01T19:14:47.0050161Z Updating files:  38% (10575/27828)
+2026-11-01T19:14:47.1728506Z Updating files:  39% (10853/27828)
+2026-11-01T19:14:47.2024362Z Updating files:  39% (10969/27828)
+2026-11-01T19:14:47.3135444Z Updating files:  40% (11132/27828)
+2026-11-01T19:14:47.4204929Z Updating files:  41% (11410/27828)
+2026-11-01T19:14:47.6342352Z Updating files:  42% (11688/27828)
+2026-11-01T19:14:47.6611961Z Updating files:  43% (11967/27828)
+2026-11-01T19:14:47.6734491Z Updating files:  44% (12245/27828)
+2026-11-01T19:14:47.7141041Z Updating files:  45% (12523/27828)
+2026-11-01T19:14:47.7708978Z Updating files:  46% (12801/27828)
+2026-11-01T19:14:47.8434314Z Updating files:  47% (13080/27828)
+2026-11-01T19:14:47.8838272Z Updating files:  48% (13358/27828)
+2026-11-01T19:14:47.9528530Z Updating files:  49% (13636/27828)
+2026-11-01T19:14:48.0009285Z Updating files:  50% (13914/27828)
+2026-11-01T19:14:48.0323660Z Updating files:  51% (14193/27828)
+2026-11-01T19:14:48.0635979Z Updating files:  52% (14471/27828)
+2026-11-01T19:14:48.0852319Z Updating files:  53% (14749/27828)
+2026-11-01T19:14:48.1136148Z Updating files:  54% (15028/27828)
+2026-11-01T19:14:48.1493530Z Updating files:  55% (15306/27828)
+2026-11-01T19:14:48.1563607Z Updating files:  56% (15584/27828)
+2026-11-01T19:14:48.1968396Z Updating files:  56% (15620/27828)
+2026-11-01T19:14:48.8039992Z Updating files:  57% (15862/27828)
+2026-11-01T19:14:48.8212306Z Updating files:  58% (16141/27828)
+2026-11-01T19:14:48.8898547Z Updating files:  59% (16419/27828)
+2026-11-01T19:14:48.9099869Z Updating files:  60% (16697/27828)
+2026-11-01T19:14:48.9201340Z Updating files:  61% (16976/27828)
+2026-11-01T19:14:48.9320119Z Updating files:  62% (17254/27828)
+2026-11-01T19:14:48.9442689Z Updating files:  63% (17532/27828)
+2026-11-01T19:14:49.0190242Z Updating files:  64% (17810/27828)
+2026-11-01T19:14:49.0488267Z Updating files:  65% (18089/27828)
+2026-11-01T19:14:49.0985625Z Updating files:  66% (18367/27828)
+2026-11-01T19:14:49.1453057Z Updating files:  67% (18645/27828)
+2026-11-01T19:14:49.1539739Z Updating files:  68% (18924/27828)
+2026-11-01T19:14:49.1726685Z Updating files:  68% (19095/27828)
+2026-11-01T19:14:49.2587911Z Updating files:  69% (19202/27828)
+2026-11-01T19:14:49.2865702Z Updating files:  70% (19480/27828)
+2026-11-01T19:14:49.3051766Z Updating files:  71% (19758/27828)
+2026-11-01T19:14:49.3118543Z Updating files:  72% (20037/27828)
+2026-11-01T19:14:49.3269971Z Updating files:  73% (20315/27828)
+2026-11-01T19:14:49.3460209Z Updating files:  74% (20593/27828)
+2026-11-01T19:14:49.3663173Z Updating files:  75% (20871/27828)
+2026-11-01T19:14:49.4091613Z Updating files:  76% (21150/27828)
+2026-11-01T19:14:49.7071438Z Updating files:  77% (21428/27828)
+2026-11-01T19:14:49.9663693Z Updating files:  78% (21706/27828)
+2026-11-01T19:14:50.0599011Z Updating files:  79% (21985/27828)
+2026-11-01T19:14:50.1710066Z Updating files:  80% (22263/27828)
+2026-11-01T19:14:50.1979963Z Updating files:  80% (22329/27828)
+2026-11-01T19:14:50.2195400Z Updating files:  81% (22541/27828)
+2026-11-01T19:14:50.2959065Z Updating files:  82% (22819/27828)
+2026-11-01T19:14:50.3355463Z Updating files:  83% (23098/27828)
+2026-11-01T19:14:50.3601782Z Updating files:  84% (23376/27828)
+2026-11-01T19:14:50.3857013Z Updating files:  85% (23654/27828)
+2026-11-01T19:14:50.4172476Z Updating files:  86% (23933/27828)
+2026-11-01T19:14:50.4637882Z Updating files:  87% (24211/27828)
+2026-11-01T19:14:50.5093042Z Updating files:  88% (24489/27828)
+2026-11-01T19:14:50.5227884Z Updating files:  89% (24767/27828)
+2026-11-01T19:14:50.5777512Z Updating files:  90% (25046/27828)
+2026-11-01T19:14:50.5911118Z Updating files:  91% (25324/27828)
+2026-11-01T19:14:50.7442084Z Updating files:  92% (25602/27828)
+2026-11-01T19:14:50.8236191Z Updating files:  93% (25881/27828)
+2026-11-01T19:14:50.8463942Z Updating files:  94% (26159/27828)
+2026-11-01T19:14:50.8683667Z Updating files:  95% (26437/27828)
+2026-11-01T19:14:50.8947595Z Updating files:  96% (26715/27828)
+2026-11-01T19:14:50.9110808Z Updating files:  97% (26994/27828)
+2026-11-01T19:14:50.9259622Z Updating files:  98% (27272/27828)
+2026-11-01T19:14:50.9396749Z Updating files:  99% (27550/27828)
+2026-11-01T19:14:50.9397288Z Updating files: 100% (27828/27828)
+2026-11-01T19:14:50.9398032Z Updating files: 100% (27828/27828), done.
+2026-11-01T19:14:51.1246747Z Switched to a new branch 'main'
+2026-11-01T19:14:51.1248219Z branch 'main' set up to track 'origin/main'.
+2026-11-01T19:14:51.1380436Z ##[endgroup]
+2026-11-01T19:14:51.1416360Z [command]/usr/bin/git log -1 --format=%H
+2026-11-01T19:14:51.1439033Z 0b1b15ac5f4c8038bce3b26a098d31116c28b537
+2026-11-01T19:14:51.2210777Z ##[group]Run actions/setup-python@v6
+2026-11-01T19:14:51.2211015Z with:
+2026-11-01T19:14:51.2211206Z   python-version: 3.12
+2026-11-01T19:14:51.2211397Z   check-latest: false
+2026-11-01T19:14:51.2213449Z   token: ***
+2026-11-01T19:14:51.2213637Z   update-environment: true
+2026-11-01T19:14:51.2213839Z   allow-prereleases: false
+2026-11-01T19:14:51.2214034Z   freethreaded: false
+2026-11-01T19:14:51.2214205Z env:
+2026-11-01T19:14:51.2214372Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:14:51.2214567Z ##[endgroup]
+2026-11-01T19:14:51.3458235Z ##[group]Installed versions
+2026-11-01T19:14:51.3544130Z Successfully set up CPython (3.12.15)
+2026-11-01T19:14:51.3544725Z ##[endgroup]
+2026-11-01T19:14:51.4154556Z ##[group]Run actions/setup-node@v6
+2026-11-01T19:14:51.4154782Z with:
+2026-11-01T19:14:51.4154957Z   node-version-file: .nvmrc
+2026-11-01T19:14:51.4155153Z   check-latest: false
+2026-11-01T19:14:51.4157192Z   token: ***
+2026-11-01T19:14:51.4157592Z   package-manager-cache: true
+2026-11-01T19:14:51.4157795Z env:
+2026-11-01T19:14:51.4157961Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:14:51.4158229Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:14:51.4158597Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:14:51.4158936Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:14:51.4159254Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:14:51.4159548Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:14:51.4159840Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:14:51.4160093Z ##[endgroup]
+2026-11-01T19:14:51.5486084Z Resolved .nvmrc as 24
+2026-11-01T19:14:51.5634306Z Found in cache @ /opt/hostedtoolcache/node/24.22.1/x64
+2026-11-01T19:14:51.5635001Z ##[group]Environment details
+2026-11-01T19:14:51.9259283Z node: v24.22.1
+2026-11-01T19:14:51.9259589Z npm: 11.19.1
+2026-11-01T19:14:51.9259829Z yarn: 1.22.22
+2026-11-01T19:14:51.9260947Z ##[endgroup]
+2026-11-01T19:14:51.9589347Z ##[group]Run git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+2026-11-01T19:14:51.9589944Z [36;1mgit clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"[0m
+2026-11-01T19:14:51.9590342Z [36;1m"$RUNNER_TEMP/emsdk/emsdk" install 6.0.8[0m
+2026-11-01T19:14:51.9590624Z [36;1m"$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8[0m
+2026-11-01T19:14:51.9618425Z shell: /usr/bin/bash -e {0}
+2026-11-01T19:14:51.9618635Z env:
+2026-11-01T19:14:51.9618814Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:14:51.9619090Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:14:51.9619440Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:14:51.9619780Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:14:51.9620080Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:14:51.9620373Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:14:51.9620709Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:14:51.9621146Z ##[endgroup]
+2026-11-01T19:14:51.9728964Z Cloning into '/home/runner/work/_temp/emsdk'...
+2026-11-01T19:14:53.1636079Z Resolving SDK version '6.0.8' to 'sdk-releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'
+2026-11-01T19:14:53.1637052Z Installing SDK 'sdk-releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'..
+2026-11-01T19:14:53.1637816Z Installing tool 'node-24.19.0-64bit'..
+2026-11-01T19:14:53.1639059Z Downloading: /home/runner/work/_temp/emsdk/downloads/node-v24.19.0-linux-x64.tar.xz from https://storage.googleapis.com/webassembly/emscripten-releases-builds/deps/node-v24.19.0-linux-x64.tar.xz, 31633904 Bytes
+2026-11-01T19:14:53.2437608Z  [----------------------------------------------------------------------------]
+2026-11-01T19:14:55.1042012Z Unpacking '/home/runner/work/_temp/emsdk/downloads/node-v24.19.0-linux-x64.tar.xz' to '/home/runner/work/_temp/emsdk/node/24.19.0_64bit'
+2026-11-01T19:14:55.1042815Z Done installing tool 'node-24.19.0-64bit'.
+2026-11-01T19:14:55.1043401Z Installing tool 'releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'..
+2026-11-01T19:14:55.1045111Z Downloading: /home/runner/work/_temp/emsdk/downloads/9d70dbe8860ccdd3595f6e6065d94bfb543ae955-wasm-binaries.tar.xz from https://storage.googleapis.com/webassembly/emscripten-releases-builds/linux/9d70dbe8860ccdd3595f6e6065d94bfb543ae955/wasm-binaries.tar.xz, 301662308 Bytes
+2026-11-01T19:14:56.5752631Z  [----------------------------------------------------------------------------]
+2026-11-01T19:15:12.2841581Z Unpacking '/home/runner/work/_temp/emsdk/downloads/9d70dbe8860ccdd3595f6e6065d94bfb543ae955-wasm-binaries.tar.xz' to '/home/runner/work/_temp/emsdk/upstream'
+2026-11-01T19:15:12.2842814Z Done installing tool 'releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'.
+2026-11-01T19:15:12.2843504Z Done installing SDK 'sdk-releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'.
+2026-11-01T19:15:12.4000025Z Resolving SDK version '6.0.8' to 'sdk-releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit'
+2026-11-01T19:15:12.4000535Z Setting the following tools as active:
+2026-11-01T19:15:12.4000776Z    node-24.19.0-64bit
+2026-11-01T19:15:12.4001050Z    releases-9d70dbe8860ccdd3595f6e6065d94bfb543ae955-64bit
+2026-11-01T19:15:12.4001260Z 
+2026-11-01T19:15:12.4001341Z Next steps:
+2026-11-01T19:15:12.4001612Z - To conveniently access emsdk tools from the command line,
+2026-11-01T19:15:12.4001991Z   consider adding the following directories to your PATH:
+2026-11-01T19:15:12.4002281Z     /home/runner/work/_temp/emsdk
+2026-11-01T19:15:12.4002564Z     /home/runner/work/_temp/emsdk/upstream/emscripten
+2026-11-01T19:15:12.4002967Z - This can be done for the current shell by running:
+2026-11-01T19:15:12.4003278Z     source "/home/runner/work/_temp/emsdk/emsdk_env.sh"
+2026-11-01T19:15:12.4003620Z - Configure emsdk in your shell startup scripts by running:
+2026-11-01T19:15:12.4004307Z     echo 'source "/home/runner/work/_temp/emsdk/emsdk_env.sh"' >> $HOME/.bash_profile
+2026-11-01T19:15:12.4140743Z ##[group]Run source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+2026-11-01T19:15:12.4141240Z [36;1msource "$RUNNER_TEMP/emsdk/emsdk_env.sh"[0m
+2026-11-01T19:15:12.4141613Z [36;1mcmake -S . -B build -DCMAKE_BUILD_TYPE=Release[0m
+2026-11-01T19:15:12.4141937Z [36;1mcmake --build build --target atlas_solver --parallel 1[0m
+2026-11-01T19:15:12.4142292Z [36;1memcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release[0m
+2026-11-01T19:15:12.4142688Z [36;1mcmake --build build-wasm --target atlas_solver --parallel 1[0m
+2026-11-01T19:15:12.4143098Z [36;1mcmake --build build-wasm --target atlas_power_creep_solver --parallel 1[0m
+2026-11-01T19:15:12.4143515Z [36;1mcmake --build build-wasm --target atlas_scalar_probe --parallel 1[0m
+2026-11-01T19:15:12.4144026Z [36;1mnode tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"[0m
+2026-11-01T19:15:12.4144909Z [36;1mpython -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"[0m
+2026-11-01T19:15:12.4145901Z [36;1mnode tools/test_experiments.mjs[0m
+2026-11-01T19:15:12.4146296Z [36;1mnode tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json[0m
+2026-11-01T19:15:12.4146891Z [36;1mnode tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver[0m
+2026-11-01T19:15:12.4147285Z [36;1mnode tools/test_loading.mjs[0m
+2026-11-01T19:15:12.4148076Z [36;1mnode tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json[0m
+2026-11-01T19:15:12.4148828Z [36;1mnode tools/test_scoped_parity.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/scoped-parity.json" catalogue/laboratory-profile-policy.json[0m
+2026-11-01T19:15:12.4149416Z [36;1mnode tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver[0m
+2026-11-01T19:15:12.4149817Z [36;1mpython tools/fetch_data.py --approved-only[0m
+2026-11-01T19:15:12.4150172Z [36;1memcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug[0m
+2026-11-01T19:15:12.4150583Z [36;1mcmake --build build-sls-wasm --target atlas_sls_solver --parallel 1[0m
+2026-11-01T19:15:12.4150967Z [36;1memcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release[0m
+2026-11-01T19:15:12.4151345Z [36;1mcmake --build build-j2-wasm --target atlas_j2_solver --parallel 1[0m
+2026-11-01T19:15:12.4151712Z [36;1mcmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release[0m
+2026-11-01T19:15:12.4152095Z [36;1mcmake --build build-burgers --target atlas_burgers_solver --parallel 1[0m
+2026-11-01T19:15:12.4152571Z [36;1mpython tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"[0m
+2026-11-01T19:15:12.4153068Z [36;1memcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release[0m
+2026-11-01T19:15:12.4153490Z [36;1mcmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1[0m
+2026-11-01T19:15:12.4153997Z [36;1mpython tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm[0m
+2026-11-01T19:15:12.4154460Z [36;1mpython -B -m unittest tests.test_provision_maxwell_assets[0m
+2026-11-01T19:15:12.4154770Z [36;1mpython -B tools/provision_maxwell_assets.py[0m
+2026-11-01T19:15:12.4155209Z [36;1mpython -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py[0m
+2026-11-01T19:15:12.4155656Z [36;1mpython -B tools/provision_implicit_path_assets.py[0m
+2026-11-01T19:15:12.4156023Z [36;1mpython -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"[0m
+2026-11-01T19:15:12.4156491Z [36;1memcmake cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release[0m
+2026-11-01T19:15:12.4156970Z [36;1mcmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1[0m
+2026-11-01T19:15:12.4157966Z [36;1mnode tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"[0m
+2026-11-01T19:15:12.4159063Z [36;1mpython -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'[0m
+2026-11-01T19:15:12.4160110Z [36;1mpython tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand[0m
+2026-11-01T19:15:12.4160621Z [36;1mnode --test tests/test_ensemble.mjs[0m
+2026-11-01T19:15:12.4160896Z [36;1mpython -B -m unittest tests.test_ensemble_package[0m
+2026-11-01T19:15:12.4161447Z [36;1mnode tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"[0m
+2026-11-01T19:15:12.4162274Z [36;1mnode tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json[0m
+2026-11-01T19:15:12.4163005Z [36;1mnode tools/test_experiments.mjs --built-assets web/dist/experiments[0m
+2026-11-01T19:15:12.4163583Z [36;1mnode --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs[0m
+2026-11-01T19:15:12.4164258Z [36;1mnode tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"[0m
+2026-11-01T19:15:12.4184829Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-01T19:15:12.4185110Z env:
+2026-11-01T19:15:12.4185295Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:15:12.4185556Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:15:12.4185898Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:15:12.4186241Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:15:12.4186539Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:15:12.4186864Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:15:12.4187205Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:15:12.4187720Z ##[endgroup]
+2026-11-01T19:15:12.5260822Z Setting up EMSDK environment (suppress these messages with EMSDK_QUIET=1)
+2026-11-01T19:15:12.5261438Z Adding directories to PATH:
+2026-11-01T19:15:12.5279692Z PATH += /home/runner/work/_temp/emsdk
+2026-11-01T19:15:12.5280270Z PATH += /home/runner/work/_temp/emsdk/upstream/emscripten
+2026-11-01T19:15:12.5280546Z 
+2026-11-01T19:15:12.5280737Z Setting environment variables:
+2026-11-01T19:15:12.5282561Z PATH = /home/runner/work/_temp/emsdk:/home/runner/work/_temp/emsdk/upstream/emscripten:/opt/hostedtoolcache/node/24.22.1/x64/bin:/opt/hostedtoolcache/Python/3.12.15/x64/bin:/opt/hostedtoolcache/Python/3.12.15/x64:/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+2026-11-01T19:15:12.5283857Z EMSDK = /home/runner/work/_temp/emsdk
+2026-11-01T19:15:12.5284229Z EMSDK_NODE = /home/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node
+2026-11-01T19:15:12.6558802Z -- The C compiler identification is GNU 13.3.0
+2026-11-01T19:15:12.7656721Z -- The CXX compiler identification is GNU 13.3.0
+2026-11-01T19:15:12.7785733Z -- Detecting C compiler ABI info
+2026-11-01T19:15:12.8496690Z -- Detecting C compiler ABI info - done
+2026-11-01T19:15:12.8632162Z -- Check for working C compiler: /usr/bin/cc - skipped
+2026-11-01T19:15:12.8636762Z -- Detecting C compile features
+2026-11-01T19:15:12.8642340Z -- Detecting C compile features - done
+2026-11-01T19:15:12.8749402Z -- Detecting CXX compiler ABI info
+2026-11-01T19:15:12.9324523Z -- Detecting CXX compiler ABI info - done
+2026-11-01T19:15:12.9460657Z -- Check for working CXX compiler: /usr/bin/c++ - skipped
+2026-11-01T19:15:12.9463545Z -- Detecting CXX compile features
+2026-11-01T19:15:12.9468970Z -- Detecting CXX compile features - done
+2026-11-01T19:15:13.0700945Z -- Found Python3: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12 (found version "3.12.15") found components: Interpreter
+2026-11-01T19:15:13.0732976Z -- Configuring done (0.5s)
+2026-11-01T19:15:13.1140786Z -- Generating done (0.0s)
+2026-11-01T19:15:13.1143324Z -- Build files have been written to: /home/runner/work/constitutive-atlas/constitutive-atlas/build
+2026-11-01T19:15:13.1433683Z [  6%] Generating generated/models.hpp, generated/models.json
+2026-11-01T19:15:13.3151174Z [  6%] Built target atlas_models
+2026-11-01T19:15:13.3219402Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow.c.o
+2026-11-01T19:15:13.4106783Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow_data.c.o
+2026-11-01T19:15:13.4290237Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/exp_data.c.o
+2026-11-01T19:15:13.4463936Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_xflow.c.o
+2026-11-01T19:15:13.4679039Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_uflow.c.o
+2026-11-01T19:15:13.4881032Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_oflow.c.o
+2026-11-01T19:15:13.5079722Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_invalid.c.o
+2026-11-01T19:15:13.5277061Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/sin.c.o
+2026-11-01T19:15:13.5551062Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__sin.c.o
+2026-11-01T19:15:13.5792417Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__cos.c.o
+2026-11-01T19:15:13.6023558Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-01T19:15:13.6522956Z [ 81%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-01T19:15:13.7988627Z [ 87%] Linking C static library libatlas_scalar_functions.a
+2026-11-01T19:15:14.7422165Z [ 87%] Built target atlas_scalar_functions
+2026-11-01T19:15:14.7484302Z [ 93%] Building CXX object CMakeFiles/atlas_solver.dir/cpp/main.cpp.o
+2026-11-01T19:15:15.4668124Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/normalized_determinant.hpp:4,
+2026-11-01T19:15:15.4669535Z                  from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/checked_normalized_determinant.hpp:3,
+2026-11-01T19:15:15.4670598Z                  from /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:4,
+2026-11-01T19:15:15.4671567Z                  from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2,
+2026-11-01T19:15:15.4672548Z                  from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/time.hpp:2,
+2026-11-01T19:15:15.4673499Z                  from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:2,
+2026-11-01T19:15:15.4674393Z                  from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:1:
+2026-11-01T19:15:15.4676999Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp: In member function ‘double atlas::determinant_accuracy::Dyadic::guide(int) const’:
+2026-11-01T19:15:15.4679375Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp:68:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:15.4680770Z    68 |   if(!sign)return 0.;const int length=bit_length(magnitude),keep=std::min(53,length);std::uint64_t high=0;
+2026-11-01T19:15:15.4681878Z       |   ^~
+2026-11-01T19:15:15.4683436Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp:68:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:15.4684911Z    68 |   if(!sign)return 0.;const int length=bit_length(magnitude),keep=std::min(53,length);std::uint64_t high=0;
+2026-11-01T19:15:15.4685580Z       |                      ^~~~~
+2026-11-01T19:15:15.4687589Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp: In function ‘atlas::determinant_accuracy::Dyadic atlas::determinant_accuracy::operator+(const Dyadic&, const Dyadic&)’:
+2026-11-01T19:15:15.4689860Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp:75:2: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:15.4690944Z    75 |  if(!a.sign)return b;if(!b.sign)return a;
+2026-11-01T19:15:15.4691331Z       |  ^~
+2026-11-01T19:15:15.4693113Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp:75:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:15.4694269Z    75 |  if(!a.sign)return b;if(!b.sign)return a;
+2026-11-01T19:15:15.4694683Z       |                      ^~
+2026-11-01T19:15:15.4696125Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp: In function ‘int atlas::determinant_accuracy::radical_sign(const Radical&)’:
+2026-11-01T19:15:15.4698349Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp:94:2: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:15.4699090Z    94 |  if(!x.a.sign)return x.b.sign;if(!x.b.sign)return x.a.sign;
+2026-11-01T19:15:15.4699374Z       |  ^~
+2026-11-01T19:15:15.4700300Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp:94:31: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:15.4701490Z    94 |  if(!x.a.sign)return x.b.sign;if(!x.b.sign)return x.a.sign;
+2026-11-01T19:15:15.4701962Z       |                               ^~
+2026-11-01T19:15:15.4727589Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp: In function ‘bool atlas::determinant_accuracy::checked(const Tensor&, Result&)’:
+2026-11-01T19:15:15.4729163Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp:152:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:15.4730415Z   152 |   if(!rounded(polynomial(x),candidate.v))return false;const auto cof=gradient(x);
+2026-11-01T19:15:15.4730963Z       |   ^~
+2026-11-01T19:15:15.4732510Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/numerics/determinant.hpp:152:55: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:15.4733841Z   152 |   if(!rounded(polynomial(x),candidate.v))return false;const auto cof=gradient(x);
+2026-11-01T19:15:15.4734457Z       |                                                       ^~~~~
+2026-11-01T19:15:15.4828575Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_0(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4829808Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:24:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4830489Z    24 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4830904Z       |                                                     ^
+2026-11-01T19:15:15.4832513Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:35:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4833530Z    35 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4833903Z       |            ^~~~~
+2026-11-01T19:15:15.4838507Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_1(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4840487Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:43:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4841591Z    43 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4842155Z       |                                                     ^
+2026-11-01T19:15:15.4843512Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:58:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4844493Z    58 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4845111Z       |            ^~~~~
+2026-11-01T19:15:15.4846646Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_2(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4848796Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:66:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4849863Z    66 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4850421Z       |                                                     ^
+2026-11-01T19:15:15.4851748Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:79:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4852708Z    79 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4853093Z       |            ^~~~~
+2026-11-01T19:15:15.4855191Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_3(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4857126Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:87:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4858400Z    87 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4858977Z       |                                                     ^
+2026-11-01T19:15:15.4863156Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_4(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4865195Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:116:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4866328Z   116 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4866938Z       |                                                     ^
+2026-11-01T19:15:15.4868475Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:135:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4869467Z   135 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4869841Z       |            ^~~~~
+2026-11-01T19:15:15.4871351Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_5(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4873310Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:143:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4874386Z   143 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4875175Z       |                                                     ^
+2026-11-01T19:15:15.4876540Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:158:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4877698Z   158 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4878067Z       |            ^~~~~
+2026-11-01T19:15:15.4879605Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_6(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4881504Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:166:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4882596Z   166 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4883153Z       |                                                     ^
+2026-11-01T19:15:15.4884494Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:195:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4885700Z   195 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4886067Z       |            ^~~~~
+2026-11-01T19:15:15.4887457Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:197:12: warning: variable ‘h’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4888383Z   197 | const auto h=tensor_from(z,7);
+2026-11-01T19:15:15.4888731Z       |            ^
+2026-11-01T19:15:15.4890222Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_7(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4892208Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:204:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4893322Z   204 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4893905Z       |                                                     ^
+2026-11-01T19:15:15.4895238Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:223:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4896216Z   223 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4896574Z       |            ^~~~~
+2026-11-01T19:15:15.4898280Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_8(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4900231Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:231:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4901319Z   231 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4901894Z       |                                                     ^
+2026-11-01T19:15:15.4903240Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:238:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4904204Z   238 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4904563Z       |            ^~~~~
+2026-11-01T19:15:15.4906069Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_9(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4908191Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:246:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4909279Z   246 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4909838Z       |                                                     ^
+2026-11-01T19:15:15.4911393Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:257:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4912392Z   257 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4912754Z       |            ^~~~~
+2026-11-01T19:15:15.4914283Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_10(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4916199Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:266:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4917259Z   266 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4917994Z       |                                                     ^
+2026-11-01T19:15:15.4919343Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:279:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4920565Z   279 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4920943Z       |            ^~~~~
+2026-11-01T19:15:15.4922496Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_11(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4924398Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:286:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4925486Z   286 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4926066Z       |                                                     ^
+2026-11-01T19:15:15.4927546Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:297:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4928533Z   297 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4928897Z       |            ^~~~~
+2026-11-01T19:15:15.4930415Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_12(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4932326Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:305:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4933382Z   305 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4933918Z       |                                                     ^
+2026-11-01T19:15:15.4935220Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:344:12: warning: variable ‘sigma’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4936172Z   344 | const auto sigma=tensor_from(z,0);
+2026-11-01T19:15:15.4936513Z       |            ^~~~~
+2026-11-01T19:15:15.4937899Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:346:12: warning: variable ‘h’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4948037Z   346 | const auto h=tensor_from(z,7);
+2026-11-01T19:15:15.4948411Z       |            ^
+2026-11-01T19:15:15.4949976Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::solution_constraints_13(const std::vector<double>&, const std::vector<double>&)’:
+2026-11-01T19:15:15.4951481Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:354:53: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4952154Z   354 | using T=double; bool atlas_eval_ok=true; const auto I=identity<T>();
+2026-11-01T19:15:15.4952500Z       |                                                     ^
+2026-11-01T19:15:15.4953573Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:364:12: warning: variable ‘ep’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:15.4954168Z   364 | const auto ep=tensor_from(z,6);
+2026-11-01T19:15:15.4954406Z       |            ^~
+2026-11-01T19:15:15.6051204Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In function ‘bool atlas::evaluate_model(int, const std::vector<T>&, const std::vector<T>&, const Sym<T>&, const std::vector<double>&, std::vector<T>&, bool, double, bool, bool)’:
+2026-11-01T19:15:15.6053345Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:769:1: note: ‘-Wmisleading-indentation’ is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
+2026-11-01T19:15:15.6081548Z   769 | if (!(atlas::expression_or_mark((atlas::expression_or_mark(support_norm, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(support_xx, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(support_yy, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(support_zz, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(support_minor2, atlas_eval_ok) > atlas::expression_or_mark(T(1.4210854715202004e-14), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(support_det, atlas_eval_ok) > atlas::expression_or_mark(T(1.4210854715202004e-14), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(e, atlas_eval_ok) >= atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(lambda_star, atlas_eval_ok) > atlas::expression_or_mark(kappa_star, atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(alpha, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(p, atlas_eval_ok) > atlas::expression_or_mark((atlas::expression_or_mark(T(0.0), atlas_eval_ok) * atlas::expression_or_mark(p_ref, atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(pairH, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(detH, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(c1, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark((atlas::expression_or_mark(c1, atlas_eval_ok) + atlas::expression_or_mark((atlas::expression_or_mark((atlas::expression_or_mark((atlas::expression_or_mark(c2, atlas_eval_ok) * atlas::expression_or_mark(a, atlas_eval_ok)), atlas_eval_ok) * atlas::expression_or_mark(a, atlas_eval_ok)), atlas_eval_ok) * atlas::expression_or_mark(dot(atlas::expression_or_mark(H, atlas_eval_ok), atlas::expression_or_mark(H, atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark((atlas::expression_or_mark((atlas::expression_or_mark(j2, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) ? atlas::expression_or_mark((atlas::expression_or_mark(j2, atlas_eval_ok) / atlas::expression_or_mark(j2_floor, atlas_eval_ok)), atlas_eval_ok) : atlas::expression_or_mark(T(1.0), atlas_eval_ok)), atlas_eval_ok) >= atlas::expression_or_mark(T(1.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark((atlas::expression_or_mark((atlas::expression_or_mark(j2, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) ? atlas::expression_or_mark((atlas::expression_or_mark(T(0.0), atlas_eval_ok) * atlas::expression_or_mark(p_ref, atlas_eval_ok)), atlas_eval_ok) : atlas::expression_or_mark(sphere_residual, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark((atlas::expression_or_mark(T(0.0), atlas_eval_ok) * atlas::expression_or_mark(p_ref, atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(raw_lode, atlas_eval_ok) >= atlas::expression_or_mark((atlas::expression_or_mark((-atlas::expression_or_mark(T(1.0), atlas_eval_ok)), atlas_eval_ok) - atlas::expression_or_mark(lode_allowance, atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(raw_lode, atlas_eval_ok) <= atlas::expression_or_mark((atlas::expression_or_mark(T(1.0), atlas_eval_ok) + atlas::expression_or_mark(lode_allowance, atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(F, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(Y, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(norm(atlas::expression_or_mark(m, atlas_eval_ok)), atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(pe, atlas_eval_ok) > atlas::expression_or_mark((atlas::expression_or_mark(T(0.0), atlas_eval_ok) * atlas::expression_or_mark(p_ref, atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(fd, atlas_eval_ok) > atlas::expression_or_mark(T(0.0), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(fs, atlas_eval_ok) > atlas::expression_or_mark((atlas::expression_or_mark(T(0.0), atlas_eval_ok) * atlas::expression_or_mark(p_ref, atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(j2, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(j3, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(detH, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(pairH, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(a, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(Q, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(alpha, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(Delta, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(c1, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(c2, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(Yi, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(Y, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(raw_lode, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(tanpsi, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(F, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(fd, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(e_rate, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(norm(atlas::expression_or_mark(m, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(norm(atlas::expression_or_mark(m_unit, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(norm(atlas::expression_or_mark(LE, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(norm(atlas::expression_or_mark(Lm, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(p, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark((atlas::expression_or_mark(p_ref, atlas_eval_ok) * atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(pe, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark((atlas::expression_or_mark(p_ref, atlas_eval_ok) * atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(aabs(atlas::expression_or_mark(fs, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark((atlas::expression_or_mark(p_ref, atlas_eval_ok) * atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok) && atlas::expression_or_mark((atlas::expression_or_mark(norm(atlas::expression_or_mark(stress_rate, atlas_eval_ok)), atlas_eval_ok) <= atlas::expression_or_mark((atlas::expression_or_mark(p_ref, atlas_eval_ok) * atlas::expression_or_mark(T(1e+250), atlas_eval_ok)), atlas_eval_ok)), atlas_eval_ok))) return false;
+2026-11-01T19:15:15.6104716Z       | ^~
+2026-11-01T19:15:15.6105697Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:769:1: note: adding ‘-flarge-source-files’ will allow for more column-tracking support, at the expense of compilation time and memory
+2026-11-01T19:15:15.7131308Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp: In function ‘bool atlas::controlled_step(int, const State&, const State&, int, double, double, double, Sym<double>&, Advance&, const IntegrationSettings&)’:
+2026-11-01T19:15:15.7132767Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:211:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:15.7134022Z   211 |             if(!pert.ok)return false;double derivative=(.5*(pert.state[1]+pert.state[2])-.5*(trial.state[1]+trial.state[2]))/h;
+2026-11-01T19:15:15.7134469Z       |             ^~
+2026-11-01T19:15:15.7135305Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:211:38: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:15.7136150Z   211 |             if(!pert.ok)return false;double derivative=(.5*(pert.state[1]+pert.state[2])-.5*(trial.state[1]+trial.state[2]))/h;
+2026-11-01T19:15:15.7136592Z       |                                      ^~~~~~
+2026-11-01T19:15:15.7438656Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp: In function ‘bool atlas::transition_controls(int, const State&, const State&, double, const ControlPath&, Sym<double>&, State&, double&, const ScheduleSettings&)’:
+2026-11-01T19:15:15.7440105Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:141:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:15.7441098Z   141 |         if(models()[model].axisymmetric)d.v[2]=d.v[1];std::vector<Jet> obs;
+2026-11-01T19:15:15.7441404Z       |         ^~
+2026-11-01T19:15:15.7442244Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:141:55: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:15.7443378Z   141 |         if(models()[model].axisymmetric)d.v[2]=d.v[1];std::vector<Jet> obs;
+2026-11-01T19:15:15.7443745Z       |                                                       ^~~
+2026-11-01T19:15:15.7444575Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:148:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:15.7445241Z   148 |             if(models()[model].axisymmetric)trial.v[2]=trial.v[1];State values;
+2026-11-01T19:15:15.7445541Z       |             ^~
+2026-11-01T19:15:15.7446351Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:148:67: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:15.7447044Z   148 |             if(models()[model].axisymmetric)trial.v[2]=trial.v[1];State values;
+2026-11-01T19:15:15.7447544Z       |                                                                   ^~~~~
+2026-11-01T19:15:15.7764964Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:2:
+2026-11-01T19:15:15.7766908Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp: In function ‘atlas::RecordedResult atlas::replay_recorded(int, const State&, const State&, const RecordedPath&, const RecordedSettings&)’:
+2026-11-01T19:15:15.7768487Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp:136:17: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:15.7769211Z   136 |                 for(double& x:constraints[rank])x/=diagonal;rhs[rank]/=diagonal;
+2026-11-01T19:15:15.7769539Z       |                 ^~~
+2026-11-01T19:15:15.7770389Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp:136:61: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+2026-11-01T19:15:15.7771129Z   136 |                 for(double& x:constraints[rank])x/=diagonal;rhs[rank]/=diagonal;
+2026-11-01T19:15:15.7771501Z       |                                                             ^~~
+2026-11-01T19:15:15.7772309Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp:139:21: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:15.7773066Z   139 |                     for(int j=0;j<6;++j)constraints[i][j]-=factor*constraints[rank][j];rhs[i]-=factor*rhs[rank];
+2026-11-01T19:15:15.7773458Z       |                     ^~~
+2026-11-01T19:15:15.7774704Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp:139:88: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+2026-11-01T19:15:15.7775501Z   139 |                     for(int j=0;j<6;++j)constraints[i][j]-=factor*constraints[rank][j];rhs[i]-=factor*rhs[rank];
+2026-11-01T19:15:15.7775936Z       |                                                                                        ^~~
+2026-11-01T19:15:16.0523987Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp: In function ‘atlas::IntegrationSettings {anonymous}::settings_for(const char*)’:
+2026-11-01T19:15:16.0525505Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:65:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:16.0526563Z    65 |     if(!atlas::valid_settings(s))throw std::runtime_error("invalid integration settings");return s;
+2026-11-01T19:15:16.0527106Z       |     ^~
+2026-11-01T19:15:16.0528473Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:65:91: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:16.0530051Z    65 |     if(!atlas::valid_settings(s))throw std::runtime_error("invalid integration settings");return s;
+2026-11-01T19:15:16.0530739Z       |                                                                                           ^~~~~~
+2026-11-01T19:15:16.0740447Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp: In function ‘const char* recorded_response(const char*, const char*, const char*, const char*, const char*, const char*, const char*, const char*, const char*, const char*)’:
+2026-11-01T19:15:16.0742207Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:203:13: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:16.0743180Z   203 |             for(int j=0;j<6;++j)knot.targets[j]=k[i+1+j];path.knots.push_back(knot);}
+2026-11-01T19:15:16.0743702Z       |             ^~~
+2026-11-01T19:15:16.0745027Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:203:58: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+2026-11-01T19:15:16.0745862Z   203 |             for(int j=0;j<6;++j)knot.targets[j]=k[i+1+j];path.knots.push_back(knot);}
+2026-11-01T19:15:16.0746243Z       |                                                          ^~~~
+2026-11-01T19:15:16.0846909Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp: In function ‘const char* atlas_run_schedule(const char*, const char*, const char*, const char*, const char*, const char*, const char*, double, double, double, double, double, int, double, int)’:
+2026-11-01T19:15:16.0848420Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:311:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:16.0849070Z   311 |         if(e.empty())e.assign(6,0);if(d.empty())d.assign(6,0);
+2026-11-01T19:15:16.0849427Z       |         ^~
+2026-11-01T19:15:16.0850187Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:311:36: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:16.0850808Z   311 |         if(e.empty())e.assign(6,0);if(d.empty())d.assign(6,0);
+2026-11-01T19:15:16.0851098Z       |                                    ^~
+2026-11-01T19:15:16.1116794Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp: In lambda function:
+2026-11-01T19:15:16.1118374Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:386:21: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:16.1119578Z   386 |                     if(data.size()>=2000000)throw std::runtime_error("recorded wire file exceeds 2 MB");data+=ch;
+2026-11-01T19:15:16.1120186Z       |                     ^~
+2026-11-01T19:15:16.1121862Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:386:105: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:16.1123164Z   386 |                     if(data.size()>=2000000)throw std::runtime_error("recorded wire file exceeds 2 MB");data+=ch;
+2026-11-01T19:15:16.1123915Z       |                                                                                                         ^~~~
+2026-11-01T19:15:16.1125190Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:388:17: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:15:16.1126206Z   388 |                 if(!in.eof())throw std::runtime_error("recorded wire read failed");return data;
+2026-11-01T19:15:16.1126740Z       |                 ^~
+2026-11-01T19:15:16.1127979Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:388:84: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:15:16.1128725Z   388 |                 if(!in.eof())throw std::runtime_error("recorded wire read failed");return data;
+2026-11-01T19:15:16.1129328Z       |                                                                                    ^~~~~~
+2026-11-01T19:15:16.1520343Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In instantiation of ‘bool atlas::evaluate_model(int, const std::vector<T>&, const std::vector<T>&, const Sym<T>&, const std::vector<double>&, std::vector<T>&, bool, double, bool, bool) [with T = double]’:
+2026-11-01T19:15:16.1521504Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:25:169:   required from here
+2026-11-01T19:15:16.1522490Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:404:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.1523099Z   404 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.1523369Z       |            ^~~~~~~
+2026-11-01T19:15:16.1552525Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:514:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.1553190Z   514 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.1553444Z       |            ^~~~~~~
+2026-11-01T19:15:16.1661963Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:688:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.1662610Z   688 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.1662885Z       |            ^~~~~~~
+2026-11-01T19:15:16.1705355Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:792:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.1705993Z   792 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.1706237Z       |            ^~~~~~~
+2026-11-01T19:15:16.1738278Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:868:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.1738938Z   868 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.1739183Z       |            ^~~~~~~
+2026-11-01T19:15:16.1739927Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:872:12: warning: variable ‘h_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.1740491Z   872 | const auto h_n = tensor_from(zn,7);
+2026-11-01T19:15:16.1740724Z       |            ^~~
+2026-11-01T19:15:16.1761351Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:946:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.1761989Z   946 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.1762228Z       |            ^~~~~~~
+2026-11-01T19:15:16.1992792Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:1345:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.1993468Z  1345 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.1993720Z       |            ^~~~~~~
+2026-11-01T19:15:16.1994461Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:1349:12: warning: variable ‘h_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.1995022Z  1349 | const auto h_n = tensor_from(zn,7);
+2026-11-01T19:15:16.1995249Z       |            ^~~
+2026-11-01T19:15:16.2237752Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In instantiation of ‘bool atlas::evaluate_model(int, const std::vector<T>&, const std::vector<T>&, const Sym<T>&, const std::vector<double>&, std::vector<T>&, bool, double, bool, bool) [with T = Jet]’:
+2026-11-01T19:15:16.2238925Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:58:27:   required from here
+2026-11-01T19:15:16.2239931Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:404:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2240813Z   404 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.2241059Z       |            ^~~~~~~
+2026-11-01T19:15:16.2241795Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:406:9: warning: variable ‘e_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2242321Z   406 | const T e_n=zn.at(6);
+2026-11-01T19:15:16.2242513Z       |         ^~~
+2026-11-01T19:15:16.2282902Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:514:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2283538Z   514 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.2283787Z       |            ^~~~~~~
+2026-11-01T19:15:16.2284535Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:516:9: warning: variable ‘e_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2285082Z   516 | const T e_n=zn.at(6);
+2026-11-01T19:15:16.2285287Z       |         ^~~
+2026-11-01T19:15:16.2305149Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:588:9: warning: variable ‘gamma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2305758Z   588 | const T gamma_n=zn.at(7);
+2026-11-01T19:15:16.2305974Z       |         ^~~~~~~
+2026-11-01T19:15:16.2439146Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:679:9: warning: variable ‘p_scale’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2439787Z   679 | const T p_scale = T(params.at(1));
+2026-11-01T19:15:16.2440034Z       |         ^~~~~~~
+2026-11-01T19:15:16.2440785Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:688:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2441382Z   688 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.2441634Z       |            ^~~~~~~
+2026-11-01T19:15:16.2442336Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:690:9: warning: variable ‘e_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2442856Z   690 | const T e_n=zn.at(6);
+2026-11-01T19:15:16.2443054Z       |         ^~~
+2026-11-01T19:15:16.2502186Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:785:9: warning: variable ‘p_scale’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2502821Z   785 | const T p_scale = T(params.at(1));
+2026-11-01T19:15:16.2503067Z       |         ^~~~~~~
+2026-11-01T19:15:16.2503820Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:792:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2504401Z   792 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.2504901Z       |            ^~~~~~~
+2026-11-01T19:15:16.2505615Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:794:9: warning: variable ‘e_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2506130Z   794 | const T e_n=zn.at(6);
+2026-11-01T19:15:16.2506326Z       |         ^~~
+2026-11-01T19:15:16.2560845Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:868:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2561489Z   868 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.2561746Z       |            ^~~~~~~
+2026-11-01T19:15:16.2562485Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:870:9: warning: variable ‘e_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2563019Z   870 | const T e_n=zn.at(6);
+2026-11-01T19:15:16.2563218Z       |         ^~~
+2026-11-01T19:15:16.2563916Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:872:12: warning: variable ‘h_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2564681Z   872 | const auto h_n = tensor_from(zn,7);
+2026-11-01T19:15:16.2564904Z       |            ^~~
+2026-11-01T19:15:16.2602958Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:946:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2603595Z   946 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.2603849Z       |            ^~~~~~~
+2026-11-01T19:15:16.2604592Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:948:9: warning: variable ‘e_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2605145Z   948 | const T e_n=zn.at(6);
+2026-11-01T19:15:16.2605352Z       |         ^~~
+2026-11-01T19:15:16.2612312Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:999:9: warning: variable ‘p_ref’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2612925Z   999 | const T p_ref = T(params.at(0));
+2026-11-01T19:15:16.2613154Z       |         ^~~~~
+2026-11-01T19:15:16.2638853Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:1036:9: warning: variable ‘gamma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2639437Z  1036 | const T gamma_n=zn.at(8);
+2026-11-01T19:15:16.2639640Z       |         ^~~~~~~
+2026-11-01T19:15:16.2966728Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:1345:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2967558Z  1345 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:15:16.2967811Z       |            ^~~~~~~
+2026-11-01T19:15:16.2968577Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:1347:9: warning: variable ‘e_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2969156Z  1347 | const T e_n=zn.at(6);
+2026-11-01T19:15:16.2969367Z       |         ^~~
+2026-11-01T19:15:16.2970096Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:1349:12: warning: variable ‘h_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2970662Z  1349 | const auto h_n = tensor_from(zn,7);
+2026-11-01T19:15:16.2970897Z       |            ^~~
+2026-11-01T19:15:16.2971608Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:1351:9: warning: variable ‘Omega_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.2972154Z  1351 | const T Omega_n=zn.at(13);
+2026-11-01T19:15:16.2972376Z       |         ^~~~~~~
+2026-11-01T19:15:16.3168049Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In instantiation of ‘bool atlas::prepare_model_increment(int, const std::vector<T>&, const Sym<T>&, const std::vector<double>&, std::vector<T>&, bool*) [with T = double]’:
+2026-11-01T19:15:16.3169477Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:153:32:   required from here
+2026-11-01T19:15:16.3170452Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:1521:51: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:16.3171245Z  1521 | bool atlas_eval_ok=true; (void)params; const auto I=identity<T>(); const auto& de=loading; out=zn; switch(model) {
+2026-11-01T19:15:16.3171692Z       |                                                   ^
+2026-11-01T19:15:16.3310678Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp: In instantiation of ‘bool atlas::prepare_model_increment(int, const std::vector<T>&, const Sym<T>&, const std::vector<double>&, std::vector<T>&, bool*) [with T = Jet]’:
+2026-11-01T19:15:16.3311771Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/linearize.hpp:26:32:   required from here
+2026-11-01T19:15:16.3312756Z /home/runner/work/constitutive-atlas/constitutive-atlas/build/generated/models.hpp:1521:51: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:15:52.8102561Z [100%] Linking CXX executable atlas_solver
+2026-11-01T19:15:52.8703808Z [100%] Built target atlas_solver
+2026-11-01T19:15:52.9526862Z emcmake: cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/home/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/home/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:15:53.4859204Z -- Found Python3: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12 (found version "3.12.15") found components: Interpreter
+2026-11-01T19:15:53.4885737Z -- Configuring done (0.5s)
+2026-11-01T19:15:53.5130479Z -- Generating done (0.0s)
+2026-11-01T19:15:53.5133210Z -- Build files have been written to: /home/runner/work/constitutive-atlas/constitutive-atlas/build-wasm
+2026-11-01T19:15:53.5374321Z [  6%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow.c.o
+2026-11-01T19:15:53.6439417Z shared:INFO: (Emscripten: Running sanity checks)
+2026-11-01T19:15:53.7043873Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow_data.c.o
+2026-11-01T19:15:53.8059009Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/exp_data.c.o
+2026-11-01T19:15:53.9080156Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_xflow.c.o
+2026-11-01T19:15:54.0086110Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_uflow.c.o
+2026-11-01T19:15:54.1098444Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_oflow.c.o
+2026-11-01T19:15:54.2126954Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_invalid.c.o
+2026-11-01T19:15:54.3145540Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/sin.c.o
+2026-11-01T19:15:54.4204684Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__sin.c.o
+2026-11-01T19:15:54.5234981Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__cos.c.o
+2026-11-01T19:15:54.6260230Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-01T19:15:54.7371288Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-01T19:15:54.8681288Z [ 81%] Linking C static library libatlas_scalar_functions.a
+2026-11-01T19:15:55.0226571Z [ 81%] Built target atlas_scalar_functions
+2026-11-01T19:15:55.0305424Z [ 87%] Generating generated/models.hpp, generated/models.json
+2026-11-01T19:15:55.2010828Z [ 87%] Built target atlas_models
+2026-11-01T19:15:55.2075886Z [ 93%] Building CXX object CMakeFiles/atlas_solver.dir/cpp/main.cpp.o
+2026-11-01T19:16:09.9418288Z [100%] Linking CXX executable atlas.js
+2026-11-01T19:16:19.2106351Z [100%] Built target atlas_solver
+2026-11-01T19:16:19.2476484Z [  6%] Generating power-creep-generated/models.hpp, power-creep-generated/models.json
+2026-11-01T19:16:19.3114897Z [  6%] Built target atlas_power_creep_models
+2026-11-01T19:16:19.3202785Z [ 87%] Built target atlas_scalar_functions
+2026-11-01T19:16:19.3263989Z [ 93%] Building CXX object CMakeFiles/atlas_power_creep_solver.dir/cpp/main.cpp.o
+2026-11-01T19:16:23.1180325Z [100%] Linking CXX executable power-creep.js
+2026-11-01T19:16:25.2743135Z [100%] Built target atlas_power_creep_solver
+2026-11-01T19:16:25.3012112Z [ 86%] Built target atlas_scalar_functions
+2026-11-01T19:16:25.3074630Z [ 93%] Building CXX object CMakeFiles/atlas_scalar_probe.dir/tests/scalar_functions_probe.cpp.o
+2026-11-01T19:16:26.2949745Z [100%] Linking CXX executable scalar-functions.js
+2026-11-01T19:16:27.8014667Z [100%] Built target atlas_scalar_probe
+2026-11-01T19:16:28.7248595Z 391Wasm scalar observations retained
+2026-11-01T19:16:28.7690844Z passed 391 8106 0
+2026-11-01T19:16:28.8006869Z Browser experiment import, units, missing channels, ordering and visibility checks passed.
+2026-11-01T19:16:28.8292709Z Hosted experiment decoding, integrity, channel semantics and request validation passed.
+2026-11-01T19:16:28.8296508Z Comparison axes, display-unit conversions, drainage/loading filters and missing pairs passed.
+2026-11-01T19:16:32.2728724Z Native/WebAssembly parity passed for 64 positive model/protocol combinations and 5 explicit legacy-contract rejections and 1 retained unsupported control failures.
+2026-11-01T19:16:32.3259873Z Native/WebAssembly increment diagnostics and rollback parity passed for 4 cases.
+2026-11-01T19:16:32.3517111Z Native/WebAssembly Cartesian-rate parity passed for 2 hypoplastic states.
+2026-11-01T19:16:32.4365249Z Native/WebAssembly IGS analytical crossing and cyclic history passed for 6 increments.
+2026-11-01T19:16:32.4906422Z Browser settings validation, default migration, wire mapping and stale-engine checks passed.
+2026-11-01T19:16:33.3290640Z Native/Wasm numerical settings and full-update tangent parity passed for 17 cases.
+2026-11-01T19:16:34.1920721Z {"passed":true,"phase_cases":1080,"exact_cyclic_controls":9720,"exact_ramp_samples":250,"negative_checks":60,"contract_cases":11,"material_calls":0}
+2026-11-01T19:17:37.2673946Z 156 native/Wasm pairs, 130 same-instance import/export replays and failed-prefix recovery passed.
+2026-11-01T19:17:51.0382081Z Scoped parity passed: 36 cases across 14 models, 43201 physical scalars; exact identity, controls and diagnostics.
+2026-11-01T19:17:52.9521485Z Recorded-run contract checks passed; 46 native/Wasm replay pairs passed.
+2026-11-01T19:17:53.4448137Z emcmake: cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=/home/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/home/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:17:53.9282351Z -- Found Python3: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12 (found version "3.12.15") found components: Interpreter
+2026-11-01T19:17:53.9293117Z -- Configuring done (0.5s)
+2026-11-01T19:17:53.9345699Z -- Generating done (0.0s)
+2026-11-01T19:17:53.9348618Z -- Build files have been written to: /home/runner/work/constitutive-atlas/constitutive-atlas/build-sls-wasm
+2026-11-01T19:17:53.9579012Z [  6%] Generating generated/models.hpp, generated/models.json
+2026-11-01T19:17:54.0253119Z [  6%] Built target atlas_sls_models
+2026-11-01T19:17:54.0326688Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow.c.o
+2026-11-01T19:17:54.1472707Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow_data.c.o
+2026-11-01T19:17:54.2542252Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/exp_data.c.o
+2026-11-01T19:17:54.3715049Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_xflow.c.o
+2026-11-01T19:17:54.4935333Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_uflow.c.o
+2026-11-01T19:17:54.5993828Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_oflow.c.o
+2026-11-01T19:17:54.7032373Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_invalid.c.o
+2026-11-01T19:17:54.8046937Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/sin.c.o
+2026-11-01T19:17:54.9107907Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__sin.c.o
+2026-11-01T19:17:55.0177211Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__cos.c.o
+2026-11-01T19:17:55.1256163Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-01T19:17:55.2369332Z [ 81%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-01T19:17:55.3462593Z [ 87%] Linking C static library libatlas_scalar_functions.a
+2026-11-01T19:17:55.4474325Z [ 87%] Built target atlas_scalar_functions
+2026-11-01T19:17:55.4541986Z [ 93%] Building CXX object CMakeFiles/atlas_sls_solver.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp.o
+2026-11-01T19:17:57.8083980Z [100%] Linking CXX executable sls.js
+2026-11-01T19:17:58.3314412Z [100%] Built target atlas_sls_solver
+2026-11-01T19:17:58.3796234Z emcmake: cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/home/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/home/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:17:58.8604316Z -- Found Python3: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12 (found version "3.12.15") found components: Interpreter
+2026-11-01T19:17:58.8614765Z -- Configuring done (0.5s)
+2026-11-01T19:17:58.8666203Z -- Generating done (0.0s)
+2026-11-01T19:17:58.8668998Z -- Build files have been written to: /home/runner/work/constitutive-atlas/constitutive-atlas/build-j2-wasm
+2026-11-01T19:17:58.8893088Z [  6%] Generating generated/models.hpp, generated/models.json
+2026-11-01T19:17:58.9551876Z [  6%] Built target atlas_j2_models
+2026-11-01T19:17:58.9625913Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow.c.o
+2026-11-01T19:17:59.0837042Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow_data.c.o
+2026-11-01T19:17:59.1886566Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/exp_data.c.o
+2026-11-01T19:17:59.2913522Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_xflow.c.o
+2026-11-01T19:17:59.3985441Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_uflow.c.o
+2026-11-01T19:17:59.5061495Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_oflow.c.o
+2026-11-01T19:17:59.6143310Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_invalid.c.o
+2026-11-01T19:17:59.7226416Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/sin.c.o
+2026-11-01T19:17:59.8287894Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__sin.c.o
+2026-11-01T19:17:59.9269344Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__cos.c.o
+2026-11-01T19:18:00.0266458Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-01T19:18:00.1312600Z [ 81%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-01T19:18:00.2580298Z [ 87%] Linking C static library libatlas_scalar_functions.a
+2026-11-01T19:18:00.3556971Z [ 87%] Built target atlas_scalar_functions
+2026-11-01T19:18:00.3618563Z [ 93%] Building CXX object CMakeFiles/atlas_j2_solver.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp.o
+2026-11-01T19:18:04.2147554Z [100%] Linking CXX executable j2.js
+2026-11-01T19:18:06.2950238Z [100%] Built target atlas_j2_solver
+2026-11-01T19:18:06.3402649Z -- The C compiler identification is GNU 13.3.0
+2026-11-01T19:18:06.3877090Z -- The CXX compiler identification is GNU 13.3.0
+2026-11-01T19:18:06.3944888Z -- Detecting C compiler ABI info
+2026-11-01T19:18:06.4415489Z -- Detecting C compiler ABI info - done
+2026-11-01T19:18:06.4551304Z -- Check for working C compiler: /usr/bin/cc - skipped
+2026-11-01T19:18:06.4553854Z -- Detecting C compile features
+2026-11-01T19:18:06.4557713Z -- Detecting C compile features - done
+2026-11-01T19:18:06.4651930Z -- Detecting CXX compiler ABI info
+2026-11-01T19:18:06.5211712Z -- Detecting CXX compiler ABI info - done
+2026-11-01T19:18:06.5350572Z -- Check for working CXX compiler: /usr/bin/c++ - skipped
+2026-11-01T19:18:06.5353164Z -- Detecting CXX compile features
+2026-11-01T19:18:06.5358575Z -- Detecting CXX compile features - done
+2026-11-01T19:18:06.6529322Z -- Found Python3: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12 (found version "3.12.15") found components: Interpreter
+2026-11-01T19:18:06.6539624Z -- Configuring done (0.4s)
+2026-11-01T19:18:06.6596758Z -- Generating done (0.0s)
+2026-11-01T19:18:06.6599667Z -- Build files have been written to: /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers
+2026-11-01T19:18:06.6850939Z [  6%] Generating generated/models.hpp, generated/models.json
+2026-11-01T19:18:06.7469699Z [  6%] Built target atlas_burgers_models
+2026-11-01T19:18:06.7538704Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow.c.o
+2026-11-01T19:18:06.8086122Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow_data.c.o
+2026-11-01T19:18:06.8263584Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/exp_data.c.o
+2026-11-01T19:18:06.8434520Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_xflow.c.o
+2026-11-01T19:18:06.8654243Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_uflow.c.o
+2026-11-01T19:18:06.8865344Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_oflow.c.o
+2026-11-01T19:18:06.9189491Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_invalid.c.o
+2026-11-01T19:18:06.9405768Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/sin.c.o
+2026-11-01T19:18:06.9678630Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__sin.c.o
+2026-11-01T19:18:06.9914502Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__cos.c.o
+2026-11-01T19:18:07.0152222Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-01T19:18:07.0543932Z [ 81%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-01T19:18:07.1822250Z [ 87%] Linking C static library libatlas_scalar_functions.a
+2026-11-01T19:18:07.2704892Z [ 87%] Built target atlas_scalar_functions
+2026-11-01T19:18:07.2770392Z [ 93%] Building CXX object CMakeFiles/atlas_burgers_solver.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp.o
+2026-11-01T19:18:07.7174213Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/time.hpp:2,
+2026-11-01T19:18:07.7176937Z                  from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:2,
+2026-11-01T19:18:07.7177944Z                  from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:1:
+2026-11-01T19:18:07.7180281Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp: In function ‘bool atlas::controlled_step(int, const State&, const State&, int, double, double, double, Sym<double>&, Advance&, const IntegrationSettings&)’:
+2026-11-01T19:18:07.7182290Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:211:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:07.7183469Z   211 |             if(!pert.ok)return false;double derivative=(.5*(pert.state[1]+pert.state[2])-.5*(trial.state[1]+trial.state[2]))/h;
+2026-11-01T19:18:07.7184083Z       |             ^~
+2026-11-01T19:18:07.7185374Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:211:38: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:18:07.7186929Z   211 |             if(!pert.ok)return false;double derivative=(.5*(pert.state[1]+pert.state[2])-.5*(trial.state[1]+trial.state[2]))/h;
+2026-11-01T19:18:07.7187982Z       |                                      ^~~~~~
+2026-11-01T19:18:07.7495527Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp: In function ‘bool atlas::transition_controls(int, const State&, const State&, double, const ControlPath&, Sym<double>&, State&, double&, const ScheduleSettings&)’:
+2026-11-01T19:18:07.7498337Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:141:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:07.7499637Z   141 |         if(models()[model].axisymmetric)d.v[2]=d.v[1];std::vector<Jet> obs;
+2026-11-01T19:18:07.7500450Z       |         ^~
+2026-11-01T19:18:07.7502094Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:141:55: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:18:07.7503524Z   141 |         if(models()[model].axisymmetric)d.v[2]=d.v[1];std::vector<Jet> obs;
+2026-11-01T19:18:07.7504647Z       |                                                       ^~~
+2026-11-01T19:18:07.7506303Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:148:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:07.7507811Z   148 |             if(models()[model].axisymmetric)trial.v[2]=trial.v[1];State values;
+2026-11-01T19:18:07.7508460Z       |             ^~
+2026-11-01T19:18:07.7522220Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:148:67: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:18:07.7523536Z   148 |             if(models()[model].axisymmetric)trial.v[2]=trial.v[1];State values;
+2026-11-01T19:18:07.7524127Z       |                                                                   ^~~~~
+2026-11-01T19:18:07.7808096Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:2:
+2026-11-01T19:18:07.7810480Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp: In function ‘atlas::RecordedResult atlas::replay_recorded(int, const State&, const State&, const RecordedPath&, const RecordedSettings&)’:
+2026-11-01T19:18:07.7813137Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp:136:17: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:07.7814274Z   136 |                 for(double& x:constraints[rank])x/=diagonal;rhs[rank]/=diagonal;
+2026-11-01T19:18:07.7814778Z       |                 ^~~
+2026-11-01T19:18:07.7816184Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp:136:61: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+2026-11-01T19:18:07.7817547Z   136 |                 for(double& x:constraints[rank])x/=diagonal;rhs[rank]/=diagonal;
+2026-11-01T19:18:07.7818151Z       |                                                             ^~~
+2026-11-01T19:18:07.7819519Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp:139:21: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:07.7820723Z   139 |                     for(int j=0;j<6;++j)constraints[i][j]-=factor*constraints[rank][j];rhs[i]-=factor*rhs[rank];
+2026-11-01T19:18:07.7821315Z       |                     ^~~
+2026-11-01T19:18:07.7822708Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/recorded.hpp:139:88: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+2026-11-01T19:18:07.7824019Z   139 |                     for(int j=0;j<6;++j)constraints[i][j]-=factor*constraints[rank][j];rhs[i]-=factor*rhs[rank];
+2026-11-01T19:18:07.7824721Z       |                                                                                        ^~~
+2026-11-01T19:18:08.0574921Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp: In function ‘atlas::IntegrationSettings {anonymous}::settings_for(const char*)’:
+2026-11-01T19:18:08.0576737Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:65:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:08.0578098Z    65 |     if(!atlas::valid_settings(s))throw std::runtime_error("invalid integration settings");return s;
+2026-11-01T19:18:08.0578684Z       |     ^~
+2026-11-01T19:18:08.0579965Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:65:91: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:18:08.0581224Z    65 |     if(!atlas::valid_settings(s))throw std::runtime_error("invalid integration settings");return s;
+2026-11-01T19:18:08.0581971Z       |                                                                                           ^~~~~~
+2026-11-01T19:18:08.0744758Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp: In function ‘const char* recorded_response(const char*, const char*, const char*, const char*, const char*, const char*, const char*, const char*, const char*, const char*)’:
+2026-11-01T19:18:08.0747007Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:203:13: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:08.0748327Z   203 |             for(int j=0;j<6;++j)knot.targets[j]=k[i+1+j];path.knots.push_back(knot);}
+2026-11-01T19:18:08.0748831Z       |             ^~~
+2026-11-01T19:18:08.0750151Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:203:58: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+2026-11-01T19:18:08.0751304Z   203 |             for(int j=0;j<6;++j)knot.targets[j]=k[i+1+j];path.knots.push_back(knot);}
+2026-11-01T19:18:08.0751907Z       |                                                          ^~~~
+2026-11-01T19:18:08.0856598Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp: In function ‘const char* atlas_run_schedule(const char*, const char*, const char*, const char*, const char*, const char*, const char*, double, double, double, double, double, int, double, int)’:
+2026-11-01T19:18:08.0859435Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:311:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:08.0860380Z   311 |         if(e.empty())e.assign(6,0);if(d.empty())d.assign(6,0);
+2026-11-01T19:18:08.0860780Z       |         ^~
+2026-11-01T19:18:08.0861973Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:311:36: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:18:08.0862949Z   311 |         if(e.empty())e.assign(6,0);if(d.empty())d.assign(6,0);
+2026-11-01T19:18:08.0863401Z       |                                    ^~
+2026-11-01T19:18:08.1138648Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp: In lambda function:
+2026-11-01T19:18:08.1140423Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:386:21: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:08.1141676Z   386 |                     if(data.size()>=2000000)throw std::runtime_error("recorded wire file exceeds 2 MB");data+=ch;
+2026-11-01T19:18:08.1142314Z       |                     ^~
+2026-11-01T19:18:08.1143684Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:386:105: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:18:08.1144953Z   386 |                     if(data.size()>=2000000)throw std::runtime_error("recorded wire file exceeds 2 MB");data+=ch;
+2026-11-01T19:18:08.1145733Z       |                                                                                                         ^~~~
+2026-11-01T19:18:08.1147045Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:388:17: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+2026-11-01T19:18:08.1148406Z   388 |                 if(!in.eof())throw std::runtime_error("recorded wire read failed");return data;
+2026-11-01T19:18:08.1148954Z       |                 ^~
+2026-11-01T19:18:08.1150284Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:388:84: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+2026-11-01T19:18:08.1151449Z   388 |                 if(!in.eof())throw std::runtime_error("recorded wire read failed");return data;
+2026-11-01T19:18:08.1152136Z       |                                                                                    ^~~~~~
+2026-11-01T19:18:08.1471479Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-01T19:18:08.1474633Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp: In instantiation of ‘bool atlas::evaluate_model(int, const std::vector<T>&, const std::vector<T>&, const Sym<T>&, const std::vector<double>&, std::vector<T>&, bool, double, bool, bool) [with T = double]’:
+2026-11-01T19:18:08.1476594Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:25:169:   required from here
+2026-11-01T19:18:08.1478631Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp:35:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:18:08.1479640Z    35 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:18:08.1480028Z       |            ^~~~~~~
+2026-11-01T19:18:08.1481326Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp:37:12: warning: variable ‘ek_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:18:08.1482341Z    37 | const auto ek_n = tensor_from(zn,6);
+2026-11-01T19:18:08.1482703Z       |            ^~~~
+2026-11-01T19:18:08.1496867Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp: In instantiation of ‘bool atlas::evaluate_model(int, const std::vector<T>&, const std::vector<T>&, const Sym<T>&, const std::vector<double>&, std::vector<T>&, bool, double, bool, bool) [with T = Jet]’:
+2026-11-01T19:18:08.1499275Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:58:27:   required from here
+2026-11-01T19:18:08.1500966Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp:27:9: warning: variable ‘time’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:18:08.1501927Z    27 | const T time=T(evaluation_time);
+2026-11-01T19:18:08.1502259Z       |         ^~~~
+2026-11-01T19:18:08.1503530Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp:35:12: warning: variable ‘sigma_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:18:08.1504537Z    35 | const auto sigma_n = tensor_from(zn,0);
+2026-11-01T19:18:08.1504911Z       |            ^~~~~~~
+2026-11-01T19:18:08.1506161Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp:37:12: warning: variable ‘ek_n’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:18:08.1507105Z    37 | const auto ek_n = tensor_from(zn,6);
+2026-11-01T19:18:08.1507625Z       |            ^~~~
+2026-11-01T19:18:08.1521712Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp: In instantiation of ‘bool atlas::prepare_model_increment(int, const std::vector<T>&, const Sym<T>&, const std::vector<double>&, std::vector<T>&, bool*) [with T = double]’:
+2026-11-01T19:18:08.1523478Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:153:32:   required from here
+2026-11-01T19:18:08.1525135Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp:59:51: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:18:08.1526458Z    59 | bool atlas_eval_ok=true; (void)params; const auto I=identity<T>(); const auto& de=loading; out=zn; switch(model) {
+2026-11-01T19:18:08.1527185Z       |                                                   ^
+2026-11-01T19:18:08.1667647Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp: In instantiation of ‘bool atlas::prepare_model_increment(int, const std::vector<T>&, const Sym<T>&, const std::vector<double>&, std::vector<T>&, bool*) [with T = Jet]’:
+2026-11-01T19:18:08.1669503Z /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/linearize.hpp:26:32:   required from here
+2026-11-01T19:18:08.1671227Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers/generated/models.hpp:59:51: warning: variable ‘I’ set but not used [-Wunused-but-set-variable]
+2026-11-01T19:18:13.5758515Z [100%] Linking CXX executable atlas_burgers_solver
+2026-11-01T19:18:13.6303075Z [100%] Built target atlas_burgers_solver
+2026-11-01T19:18:21.2445941Z {
+2026-11-01T19:18:21.2446183Z   "ok": true,
+2026-11-01T19:18:21.2446660Z   "calls": 44,
+2026-11-01T19:18:21.2446915Z   "analytical_schedule_points": 88,
+2026-11-01T19:18:21.2447225Z   "maximum_state_budget_fraction": 0.2702700808336969,
+2026-11-01T19:18:21.2447884Z   "catalogue_hash": "43b5e940e56860d9cd3875c165374fe239b29578caff36f9e98d7ce29abeb841",
+2026-11-01T19:18:21.2448247Z   "refinement": "pass",
+2026-11-01T19:18:21.2448440Z   "restart": "pass",
+2026-11-01T19:18:21.2448644Z   "rollback_recovery": "pass",
+2026-11-01T19:18:21.2448858Z   "separate_refinement": {
+2026-11-01T19:18:21.2449051Z     "stress": {
+2026-11-01T19:18:21.2449243Z       "fine": 0.4524055079527898,
+2026-11-01T19:18:21.2449466Z       "coarse": 4.236536867159884
+2026-11-01T19:18:21.2449657Z     },
+2026-11-01T19:18:21.2449811Z     "Kelvin": {
+2026-11-01T19:18:21.2450006Z       "fine": 1.0990417878662014e-07,
+2026-11-01T19:18:21.2450238Z       "coarse": 1.0146007761255987e-06
+2026-11-01T19:18:21.2450444Z     }
+2026-11-01T19:18:21.2450601Z   },
+2026-11-01T19:18:21.2450788Z   "Kelvin_corruption_rejected": true
+2026-11-01T19:18:21.2451149Z }
+2026-11-01T19:18:21.2991122Z emcmake: cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/home/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/home/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:18:21.7841204Z -- Found Python3: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12 (found version "3.12.15") found components: Interpreter
+2026-11-01T19:18:21.7851420Z -- Configuring done (0.5s)
+2026-11-01T19:18:21.7903286Z -- Generating done (0.0s)
+2026-11-01T19:18:21.7905820Z -- Build files have been written to: /home/runner/work/constitutive-atlas/constitutive-atlas/build-burgers-wasm
+2026-11-01T19:18:21.8125865Z [  6%] Generating generated/models.hpp, generated/models.json
+2026-11-01T19:18:21.8773187Z [  6%] Built target atlas_burgers_models
+2026-11-01T19:18:21.8842573Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow.c.o
+2026-11-01T19:18:22.0022299Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow_data.c.o
+2026-11-01T19:18:22.1027172Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/exp_data.c.o
+2026-11-01T19:18:22.2081421Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_xflow.c.o
+2026-11-01T19:18:22.3120903Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_uflow.c.o
+2026-11-01T19:18:22.4175949Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_oflow.c.o
+2026-11-01T19:18:22.5228232Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_invalid.c.o
+2026-11-01T19:18:22.6216078Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/sin.c.o
+2026-11-01T19:18:22.7271577Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__sin.c.o
+2026-11-01T19:18:22.8274544Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__cos.c.o
+2026-11-01T19:18:22.9307613Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-01T19:18:23.0364915Z [ 81%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-01T19:18:23.1664103Z [ 87%] Linking C static library libatlas_scalar_functions.a
+2026-11-01T19:18:23.2629511Z [ 87%] Built target atlas_scalar_functions
+2026-11-01T19:18:23.2694082Z [ 93%] Building CXX object CMakeFiles/atlas_burgers_solver.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp.o
+2026-11-01T19:18:27.1389515Z [100%] Linking CXX executable burgers.mjs
+2026-11-01T19:18:29.1517190Z [100%] Built target atlas_burgers_solver
+2026-11-01T19:18:37.5599587Z {
+2026-11-01T19:18:37.5599890Z   "ok": true,
+2026-11-01T19:18:37.5600146Z   "calls": 44,
+2026-11-01T19:18:37.5600385Z   "analytical_schedule_points": 88,
+2026-11-01T19:18:37.5600699Z   "maximum_state_budget_fraction": 0.2702700808336969,
+2026-11-01T19:18:37.5601108Z   "catalogue_hash": "43b5e940e56860d9cd3875c165374fe239b29578caff36f9e98d7ce29abeb841",
+2026-11-01T19:18:37.5601465Z   "refinement": "pass",
+2026-11-01T19:18:37.5601688Z   "restart": "pass",
+2026-11-01T19:18:37.5602161Z   "rollback_recovery": "pass",
+2026-11-01T19:18:37.5602380Z   "separate_refinement": {
+2026-11-01T19:18:37.5602572Z     "stress": {
+2026-11-01T19:18:37.5602767Z       "fine": 0.4524055079527898,
+2026-11-01T19:18:37.5602987Z       "coarse": 4.236536867159884
+2026-11-01T19:18:37.5603180Z     },
+2026-11-01T19:18:37.5603331Z     "Kelvin": {
+2026-11-01T19:18:37.5603524Z       "fine": 1.0990417878662014e-07,
+2026-11-01T19:18:37.5603765Z       "coarse": 1.0146007761255987e-06
+2026-11-01T19:18:37.5603965Z     }
+2026-11-01T19:18:37.5604112Z   },
+2026-11-01T19:18:37.5604301Z   "Kelvin_corruption_rejected": true
+2026-11-01T19:18:37.5604504Z }
+2026-11-01T19:18:37.8607243Z .....
+2026-11-01T19:18:37.8607893Z ----------------------------------------------------------------------
+2026-11-01T19:18:37.8608354Z Ran 5 tests in 0.009s
+2026-11-01T19:18:37.8608531Z 
+2026-11-01T19:18:37.8608636Z OK
+2026-11-01T19:18:38.0143954Z {
+2026-11-01T19:18:38.0144325Z   "status": "passed",
+2026-11-01T19:18:38.0144667Z   "files": {
+2026-11-01T19:18:38.0145025Z     "maxwell.js": "b7c4eb34acd014c9b0df775483ec8a5d49f65c2044d329c8afca74b07daee99c",
+2026-11-01T19:18:38.0145518Z     "maxwell.wasm": "fb415e8e539ebe6a344bbc84afa0767a0192489d7c75a578e0069ea794d271e5",
+2026-11-01T19:18:38.0146029Z     "generated/models.json": "f6df0b221124e371b7f32a61bdffe5616a9256e8d940e3f816cc300e4b1bfa8d",
+2026-11-01T19:18:38.0146579Z     "maxwell-qualification.json": "6c4de6ef03b2f993b24ba153db9b5702334ae9e92df578418f3bfafe67695f26",
+2026-11-01T19:18:38.0147123Z     "build-review.json": "3f509c9e7d6cfa027a6ff25570c7af278433ca42eb5f38ba1a51bf19bca8adf8"
+2026-11-01T19:18:38.0147635Z   },
+2026-11-01T19:18:38.0147937Z   "scope": "Exact retained reviewed engine; no new compilation or qualification"
+2026-11-01T19:18:38.0148245Z }
+2026-11-01T19:18:38.0429179Z Restored exact frozen interface JSON witness
+2026-11-01T19:18:38.4453842Z {
+2026-11-01T19:18:38.4454158Z   "status": "passed",
+2026-11-01T19:18:38.4454610Z   "model": "lade-duncan-1975-midpoint-elastic-eq19-gap-v4",
+2026-11-01T19:18:38.4455288Z   "index_sha256": "9d7c81df2989072ab83e6b4a7616a35da7a08545892a95101124e58b9eb98771",
+2026-11-01T19:18:38.4456016Z   "archive_sha256": "e527459cf66fe4703c66f4e9573bf614b3b2f50323a7cf7454aa0e6cf22b5880",
+2026-11-01T19:18:38.4456522Z   "files": {
+2026-11-01T19:18:38.4457014Z     "build-review.json": "e47890b8aba6d4f074f45635315acdcc569bc48a6acf5a47bc96798d4ab50e4a",
+2026-11-01T19:18:38.4457953Z     "generated/models.json": "2919cc4d5699cad7d4e0d8f8c30a7479333a4dfc3b7b185b685c96e64d68b591",
+2026-11-01T19:18:38.4458815Z     "implicit-path-qualification.json": "61c68aed8407502c80e236a6fa4151098c06aa5515859b8b94e60089d4980a2a",
+2026-11-01T19:18:38.4459629Z     "lade-domain.mjs": "ae5630f8f2277569e804d59125aa732dbd343557a24fa4acdfb7ccc642be0b23",
+2026-11-01T19:18:38.4460340Z     "lade-domain.wasm": "ae1b18c559111537b08de8b695ee38374385c3b89b60c02ddef84277a6af2469"
+2026-11-01T19:18:38.4460801Z   },
+2026-11-01T19:18:38.4461287Z   "package_identity": {
+2026-11-01T19:18:38.4461607Z     "profile": "implicit-path-v1",
+2026-11-01T19:18:38.4462028Z     "model": "lade-duncan-1975-midpoint-elastic-eq19-gap-v4",
+2026-11-01T19:18:38.4462610Z     "model_sha256": "120b93f319543518b2b87221ab7457afaca2a1fb5de78af901276e8e89a22e63",
+2026-11-01T19:18:38.4463073Z     "public_models": [
+2026-11-01T19:18:38.4463433Z       "lade-duncan-1975-midpoint-elastic-eq19-gap-v4"
+2026-11-01T19:18:38.4463790Z     ],
+2026-11-01T19:18:38.4464248Z     "catalogue_hash": "d7bc6b1e91bece364a94da5398ac41bb318127f1c0132c1702539392ff2566aa",
+2026-11-01T19:18:38.4464980Z     "catalogue_file_sha256": "2919cc4d5699cad7d4e0d8f8c30a7479333a4dfc3b7b185b685c96e64d68b591",
+2026-11-01T19:18:38.4465714Z     "module_sha256": "ae5630f8f2277569e804d59125aa732dbd343557a24fa4acdfb7ccc642be0b23",
+2026-11-01T19:18:38.4466381Z     "wasm_sha256": "ae1b18c559111537b08de8b695ee38374385c3b89b60c02ddef84277a6af2469",
+2026-11-01T19:18:38.4467136Z     "approval_sha256": "d83a1cf670b0e2adf71c22622d9f0a7df435d33a89d6bfb0d8544a017657808d",
+2026-11-01T19:18:38.4468127Z     "review_sha256": "0912247e7749c21fd9063ef865ea7febc2cbb23f550992b1ddf6c6352faa7de4",
+2026-11-01T19:18:38.4468857Z     "review_html_sha256": "493c6a4c8d2b66f6f6b64ccad854d16c982a3bf5cc09171868f157534804acda",
+2026-11-01T19:18:38.4469652Z     "qualification_sha256": "61c68aed8407502c80e236a6fa4151098c06aa5515859b8b94e60089d4980a2a",
+2026-11-01T19:18:38.4470443Z     "build_review_sha256": "e47890b8aba6d4f074f45635315acdcc569bc48a6acf5a47bc96798d4ab50e4a",
+2026-11-01T19:18:38.4471190Z     "runtime_sha256": "acb8756e5d80b3a9f967a5e3985a2e4b3c5d0f0ca1011172732155c3d9c25928",
+2026-11-01T19:18:38.4471958Z     "interface_review_sha256": "8132b172b84a192138c0879510f8774dee6f0d82cec4eade9e729b030dca7836",
+2026-11-01T19:18:38.4472493Z     "component_sha256": {
+2026-11-01T19:18:38.4473080Z       "implicit-path-contract.mjs": "b40ce1a6a2b040e2e7b744e9895f0262c43eeead0b3fc1b646de29d68d25f355",
+2026-11-01T19:18:38.4473949Z       "implicit-path-engine.mjs": "b87dabc6893d7fc315a131cadd97049503f28b562665d2b16747813bdb8d44bd",
+2026-11-01T19:18:38.4474797Z       "implicit-path-runner.mjs": "580f6d233d04b4edab3a86af5057e1c6cb5dcf649cf2c963306cb437a6ef94ee",
+2026-11-01T19:18:38.4475629Z       "implicit-path-worker.mjs": "7fb970029e5877bf7e402d4d75acfdad419379088b0f94f4feae9bfddaad97aa",
+2026-11-01T19:18:38.4476544Z       "implicit-path-laboratory.mjs": "1fc23cd4b8616ea338af48878f9b57f089210e971d634268e04cdd9bd69bb734"
+2026-11-01T19:18:38.4477100Z     },
+2026-11-01T19:18:38.4477639Z     "release_revision": "0b1b15ac5f4c8038bce3b26a098d31116c28b537"
+2026-11-01T19:18:38.4478033Z   },
+2026-11-01T19:18:38.4478568Z   "scope": "Exact independently approved retained assets; no build, material call or new qualification"
+2026-11-01T19:18:38.4479117Z }
+2026-11-01T19:18:52.0642752Z {
+2026-11-01T19:18:52.0643078Z   "status": "passed",
+2026-11-01T19:18:52.0643398Z   "frozen_cases": 24,
+2026-11-01T19:18:52.0643634Z   "frozen_calls": 48,
+2026-11-01T19:18:52.0643865Z   "public_presets": 4,
+2026-11-01T19:18:52.0644061Z   "public_calls": 8,
+2026-11-01T19:18:52.0644274Z   "reference_errors_Pa": {
+2026-11-01T19:18:52.0644565Z     "tensor-tau0.2-duration0.01": 9.538175072520971e-05,
+2026-11-01T19:18:52.0644896Z     "tensor-tau0.2-duration0.5": 0.007136739222914912,
+2026-11-01T19:18:52.0645183Z     "tensor-tau0.2-duration4": 0.0061115736461943015,
+2026-11-01T19:18:52.0645469Z     "tensor-tau2-duration0.01": 7.89685968811682e-05,
+2026-11-01T19:18:52.0645749Z     "tensor-tau2-duration0.5": 0.001476084224123042,
+2026-11-01T19:18:52.0646029Z     "tensor-tau2-duration4": 0.00287748465052573,
+2026-11-01T19:18:52.0646323Z     "tensor-tau20-duration0.01": 5.367250196286477e-05,
+2026-11-01T19:18:52.0646609Z     "tensor-tau20-duration0.5": 0.011168394528795034,
+2026-11-01T19:18:52.0646889Z     "tensor-tau20-duration4": 0.023884233203716576,
+2026-11-01T19:18:52.0647127Z     "hydrostatic": 0.0,
+2026-11-01T19:18:52.0647553Z     "relaxation": 0.005065181743702851,
+2026-11-01T19:18:52.0648079Z     "relaxation-schedule": 1.3607189672329696,
+2026-11-01T19:18:52.0648327Z     "creep-schedule": 0,
+2026-11-01T19:18:52.0648530Z     "creep-one-sample": 0,
+2026-11-01T19:18:52.0648745Z     "oedometer": 1.375202386683668,
+2026-11-01T19:18:52.0648985Z     "load-hold-reverse": 1.1758537460846128,
+2026-11-01T19:18:52.0649235Z     "refine-coarse": 138.3807692486298,
+2026-11-01T19:18:52.0649469Z     "refine-fine": 1.3607189672329696,
+2026-11-01T19:18:52.0649704Z     "late-budget-rollback": 0,
+2026-11-01T19:18:52.0649919Z     "zero-duration": 0,
+2026-11-01T19:18:52.0650113Z     "negative-viscosity": 0,
+2026-11-01T19:18:52.0650312Z     "missing-state": 0,
+2026-11-01T19:18:52.0650495Z     "short-state": 0,
+2026-11-01T19:18:52.0650703Z     "schedule-budget-rollback": 0
+2026-11-01T19:18:52.0650904Z   },
+2026-11-01T19:18:52.0651072Z   "preset_errors_Pa": {
+2026-11-01T19:18:52.0651275Z     "relaxation": 1.3607189672329696,
+2026-11-01T19:18:52.0651480Z     "creep": 0,
+2026-11-01T19:18:52.0651677Z     "oedometer": 1.375202386683668,
+2026-11-01T19:18:52.0651919Z     "load-hold-reverse": 1.1758537460846128
+2026-11-01T19:18:52.0652270Z   },
+2026-11-01T19:18:52.0652683Z   "scope": "Exact retained reviewed Maxwell Wasm; no native rebuild, new approval, global regression or live qualification"
+2026-11-01T19:18:52.0653087Z }
+2026-11-01T19:18:52.1200261Z emcmake: cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/home/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/home/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:18:52.5895431Z -- Found Python3: /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3.12 (found version "3.12.15") found components: Interpreter
+2026-11-01T19:18:52.5906941Z -- Configuring done (0.5s)
+2026-11-01T19:18:52.5960016Z -- Generating done (0.0s)
+2026-11-01T19:18:52.5962775Z -- Build files have been written to: /home/runner/work/constitutive-atlas/constitutive-atlas/build-orthotropic-wasm
+2026-11-01T19:18:52.6204709Z [  6%] Generating generated/models.hpp, generated/models.json
+2026-11-01T19:18:52.6890605Z [  6%] Built target atlas_orthotropic_models
+2026-11-01T19:18:52.6962894Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow.c.o
+2026-11-01T19:18:52.8168011Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/pow_data.c.o
+2026-11-01T19:18:52.9188508Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/exp_data.c.o
+2026-11-01T19:18:53.0203995Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_xflow.c.o
+2026-11-01T19:18:53.1251714Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_uflow.c.o
+2026-11-01T19:18:53.2244003Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_oflow.c.o
+2026-11-01T19:18:53.3259929Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__math_invalid.c.o
+2026-11-01T19:18:53.4270580Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/sin.c.o
+2026-11-01T19:18:53.5330095Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__sin.c.o
+2026-11-01T19:18:53.6341476Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__cos.c.o
+2026-11-01T19:18:53.7341160Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-01T19:18:53.8432297Z [ 81%] Building C object CMakeFiles/atlas_scalar_functions.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-01T19:18:53.9750273Z [ 87%] Linking C static library libatlas_scalar_functions.a
+2026-11-01T19:18:54.0749293Z [ 87%] Built target atlas_scalar_functions
+2026-11-01T19:18:54.0814966Z [ 93%] Building CXX object CMakeFiles/atlas_orthotropic_solver.dir/home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp.o
+2026-11-01T19:18:54.8458524Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp:1:
+2026-11-01T19:18:54.8459683Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/schedule.hpp:2:
+2026-11-01T19:18:54.8460792Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/time.hpp:2:
+2026-11-01T19:18:54.8462396Z In file included from /home/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-01T19:18:54.8463870Z /home/runner/work/constitutive-atlas/constitutive-atlas/build-orthotropic-wasm/generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-01T19:18:54.8466191Z    19 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+2026-11-01T19:18:54.8468258Z       |                                                                                                                                                                                         ^
+2026-11-01T19:18:58.1442802Z 1 warning generated.
+2026-11-01T19:18:58.1595751Z [100%] Linking CXX executable orthotropic.js
+2026-11-01T19:19:00.2579507Z [100%] Built target atlas_orthotropic_solver
+2026-11-01T19:19:00.4445678Z {"cases":121,"output":"/home/runner/work/_temp/orthotropic-wasm-raw.json"}
+2026-11-01T19:19:00.4844465Z {'ok': True, 'cases': 121, 'reference_scalars': 648, 'tangent_scalars': 144, 'rejections': 13, 'partition_counts': [1, 2, 4]}
+2026-11-01T19:20:18.5180312Z {
+2026-11-01T19:20:18.5180641Z   "ok": true,
+2026-11-01T19:20:18.5180994Z   "finitePhysicalScalarComparisons": 594,
+2026-11-01T19:20:18.5181441Z   "nullRateMaskComparisons": 6,
+2026-11-01T19:20:18.5181770Z   "exactReplay": true,
+2026-11-01T19:20:18.5182120Z   "model": "burgers-itasca900-dry-zero-spin-ode"
+2026-11-01T19:20:18.5182453Z }
+2026-11-01T19:20:21.0266189Z Power-creep package: identity, Pages-relative paths, analytical creep and relaxation passed
+2026-11-01T19:22:23.8447051Z {
+2026-11-01T19:22:23.8447284Z   "ok": true,
+2026-11-01T19:22:23.8447980Z   "model": "sls-comsol63-deviatoric-zero-spin-ode",
+2026-11-01T19:22:23.8450418Z   "fullStateStressComparisons": 324,
+2026-11-01T19:22:23.8451120Z   "nullRateMaskEntries": 6,
+2026-11-01T19:22:23.8451458Z   "exactReplay": true,
+2026-11-01T19:22:23.8451776Z   "failedRequestRecovery": true,
+2026-11-01T19:22:23.8452159Z   "allPackageAssetsGuarded": 12,
+2026-11-01T19:22:23.8452491Z   "standalonePageAbsent": true
+2026-11-01T19:22:23.8452761Z }
+2026-11-01T19:22:24.0280887Z {
+2026-11-01T19:22:24.0281193Z   "passed": true,
+2026-11-01T19:22:24.0281410Z   "calls": 327,
+2026-11-01T19:22:24.0281618Z   "stateComparisons": 1264,
+2026-11-01T19:22:24.0281848Z   "tangentComparisons": 192,
+2026-11-01T19:22:24.0282118Z   "maxStressError": 0.0000014007091522216797,
+2026-11-01T19:22:24.0282407Z   "maxHistoryError": 6.071532165918825e-17,
+2026-11-01T19:22:24.0282656Z   "immutableIdentity": true,
+2026-11-01T19:22:24.0282864Z   "exactReplay": true,
+2026-11-01T19:22:24.0283055Z   "preset": true,
+2026-11-01T19:22:24.0283575Z   "actualHistory": true,
+2026-11-01T19:22:24.0283786Z   "failedPrefix": true,
+2026-11-01T19:22:24.0283968Z   "recovery": true,
+2026-11-01T19:22:24.0284172Z   "corruptImportRejected": true,
+2026-11-01T19:22:24.0284377Z   "identity": {
+2026-11-01T19:22:24.0284601Z     "model": "j2-linear-isotropic-hardening-be",
+2026-11-01T19:22:24.0285006Z     "model_sha256": "a28068cbb8cfc660e49eb648d6ce7fcbf993ea50b45e8eb0d325c6b75f4ffc3b",
+2026-11-01T19:22:24.0285502Z     "catalogue_hash": "2ce7ce9c486598a15c04c65600478bfb1fba227d442538d4aa3fc99076d15084",
+2026-11-01T19:22:24.0286067Z     "catalogue_sha256": "cc7b89de1f9966ef58260c545c36b2681cf3ebbe8c288341201edbecad8b45ba",
+2026-11-01T19:22:24.0286556Z     "module_sha256": "dea12fad99ec6702bdde08582781decbba5cd57daeaa1a11ebae0a41cc9095e2",
+2026-11-01T19:22:24.0287051Z     "wasm_sha256": "edc6ea5d445418a588240df445d36b2c1fb6d8a1ba2825c9aa29d9736f39f1a8",
+2026-11-01T19:22:24.0287834Z     "approval_sha256": "7e2838bf5a9ca4f14a47836d0502227417d09454b714dce8ae26f5148416b43d",
+2026-11-01T19:22:24.0288346Z     "review_sha256": "949eefe828ae1e8a6b6830517a8f97087af60134d6402a2de313464f80256d33"
+2026-11-01T19:22:24.0288867Z   }
+2026-11-01T19:22:24.0289021Z }
+2026-11-01T19:22:24.4552355Z PASS: 106 implicit-path package checks
+2026-11-01T19:22:24.6330551Z {
+2026-11-01T19:22:24.6330881Z   "passed": true,
+2026-11-01T19:22:24.6331171Z   "calls": 267,
+2026-11-01T19:22:24.6331450Z   "referenceCases": 128,
+2026-11-01T19:22:24.6331765Z   "stateComparisons": 786,
+2026-11-01T19:22:24.6332146Z   "maxAbsoluteErrorPa": 5.820766091346741e-11,
+2026-11-01T19:22:24.6332530Z   "tolerancePa": 0.000001,
+2026-11-01T19:22:24.6332841Z   "exactVerifiedWasm": true,
+2026-11-01T19:22:24.6333163Z   "immutableIdentity": true,
+2026-11-01T19:22:24.6333382Z   "fullDocumentReplay": true,
+2026-11-01T19:22:24.6333625Z   "finiteTamperRejected": true,
+2026-11-01T19:22:24.6333853Z   "failedPrefix": true,
+2026-11-01T19:22:24.6334075Z   "recovery": true,
+2026-11-01T19:22:24.6334253Z   "preset": true,
+2026-11-01T19:22:24.6334450Z   "identity": {
+2026-11-01T19:22:24.6334681Z     "model": "orthotropic-linear-elastic-ogs",
+2026-11-01T19:22:24.6335108Z     "model_sha256": "60a734a0c40fb0f03642752d22c046d4a05ea66bbf53a3c8e7be06fe71287c14",
+2026-11-01T19:22:24.6335673Z     "catalogue_hash": "5f394a724f409f9e1cbdea9f7ff536bd1566550eb7071c39987c1cb03f528abc",
+2026-11-01T19:22:24.6336194Z     "catalogue_sha256": "b2f20aa0a81782b58476456ec7acb538c16303b51bdd246bdb85fe046674dc7d",
+2026-11-01T19:22:24.6336726Z     "module_sha256": "903d92b254386c69bcf5d5b064ee8e04dbd8c4e333dbe312e560d2f3173fd08a",
+2026-11-01T19:22:24.6337200Z     "wasm_sha256": "206d966d08145b399a779f68b3400463dfc69a9ffd81ef94abb09e7e48a2066a",
+2026-11-01T19:22:24.6337902Z     "approval_sha256": "3cb73256ceea7dcdb592275a40cd0685cd2dc6f0c8fc49eb2288f92348d89b79",
+2026-11-01T19:22:24.6338405Z     "review_sha256": "a2862129dd393f2c73923b06706e12b75767f8b360b57bd1cfbb67c6069ef50f",
+2026-11-01T19:22:24.6338941Z     "review_html_sha256": "bb23772ccc004e3b6ce8990dfa6fd284c080681191553971faf1e4881c64197c"
+2026-11-01T19:22:24.6339282Z   }
+2026-11-01T19:22:24.6339458Z }
+2026-11-01T19:22:24.6705993Z Prepared 628 built-in experiments (public)
+2026-11-01T19:22:24.6706672Z Packaged /home/runner/work/constitutive-atlas/constitutive-atlas/web/dist
+2026-11-01T19:22:25.1466479Z ✔ 15 independent deterministic requests preserve direct radial source order and fixed preparation (100.532124ms)
+2026-11-01T19:22:25.1467980Z ✔ variations are OAT, deduplicated, explicit and never mutate baseline (8.20101ms)
+2026-11-01T19:22:25.1469145Z ✔ invalid inputs retain per-run rejections rather than silently replacing state (10.827317ms)
+2026-11-01T19:22:25.1471706Z ✔ nonfinite baseline/history fail before snapshots can silently serialize null (5.474143ms)
+2026-11-01T19:22:25.1472789Z ✔ source conventions, window, ordering and model scope fail closed (10.772686ms)
+2026-11-01T19:22:25.1473778Z ✔ queued export roundtrip validates catalogue, source, definitions and exact requests (190.151365ms)
+2026-11-01T19:22:25.1475197Z ✔ missing model is visibly excluded and cannot be silently substituted (8.521715ms)
+2026-11-01T19:22:25.1516603Z ✔ queue is serial, keeps stopped prefixes, skips rejected jobs and continues after errors (7.471429ms)
+2026-11-01T19:22:25.1518149Z ✔ cancel aborts active work, cancels pending and suppresses late responses (0.629252ms)
+2026-11-01T19:22:25.1581671Z ✔ timeout aborts executor and proceeds to next request (6.297312ms)
+2026-11-01T19:22:25.1717649Z ℹ tests 10
+2026-11-01T19:22:25.1718221Z ℹ suites 0
+2026-11-01T19:22:25.1718526Z ℹ pass 10
+2026-11-01T19:22:25.1718793Z ℹ fail 0
+2026-11-01T19:22:25.1719080Z ℹ cancelled 0
+2026-11-01T19:22:25.1719377Z ℹ skipped 0
+2026-11-01T19:22:25.1719644Z ℹ todo 0
+2026-11-01T19:22:25.1719963Z ℹ duration_ms 419.245965
+2026-11-01T19:22:25.2790298Z ..
+2026-11-01T19:22:25.2790815Z ----------------------------------------------------------------------
+2026-11-01T19:22:25.2791267Z Ran 2 tests in 0.036s
+2026-11-01T19:22:25.2791453Z 
+2026-11-01T19:22:25.2791544Z OK
+2026-11-01T19:22:26.2826930Z {
+2026-11-01T19:22:26.2827275Z   "status": "passed",
+2026-11-01T19:22:26.2828098Z   "checks": [
+2026-11-01T19:22:26.2828336Z     {
+2026-11-01T19:22:26.2828628Z       "id": "linear-elastic:baseline",
+2026-11-01T19:22:26.2828978Z       "status": "passed",
+2026-11-01T19:22:26.2829349Z       "max_stress_error_Pa": 1.1641532182693481e-10,
+2026-11-01T19:22:26.2829763Z       "max_volume_strain_error": 2.6020852139652106e-18
+2026-11-01T19:22:26.2830078Z     },
+2026-11-01T19:22:26.2830286Z     {
+2026-11-01T19:22:26.2830595Z       "id": "linear-elastic:E:4176e36000000000",
+2026-11-01T19:22:26.2830964Z       "status": "passed",
+2026-11-01T19:22:26.2831376Z       "max_stress_error_Pa": 2.9103830456733704e-11,
+2026-11-01T19:22:26.2831829Z       "max_volume_strain_error": 2.6020852139652106e-18
+2026-11-01T19:22:26.2832164Z     },
+2026-11-01T19:22:26.2832424Z     {
+2026-11-01T19:22:26.2832717Z       "id": "linear-elastic:E:41812a8800000000",
+2026-11-01T19:22:26.2833065Z       "status": "passed",
+2026-11-01T19:22:26.2833416Z       "max_stress_error_Pa": 1.1641532182693481e-10,
+2026-11-01T19:22:26.2833862Z       "max_volume_strain_error": 2.168404344971009e-18
+2026-11-01T19:22:26.2834202Z     },
+2026-11-01T19:22:26.2834417Z     {
+2026-11-01T19:22:26.2834755Z       "id": "linear-elastic:nu:3fc999999999999a",
+2026-11-01T19:22:26.2835140Z       "status": "passed",
+2026-11-01T19:22:26.2835507Z       "max_stress_error_Pa": 1.7462298274040222e-10,
+2026-11-01T19:22:26.2835954Z       "max_volume_strain_error": 3.469446951953614e-18
+2026-11-01T19:22:26.2836308Z     },
+2026-11-01T19:22:26.2836542Z     {
+2026-11-01T19:22:26.2836843Z       "id": "linear-elastic:nu:3fd3333333333333",
+2026-11-01T19:22:26.2837197Z       "status": "passed",
+2026-11-01T19:22:26.2837713Z       "max_stress_error_Pa": 1.1641532182693481e-10,
+2026-11-01T19:22:26.2838148Z       "max_volume_strain_error": 3.0357660829594124e-18
+2026-11-01T19:22:26.2838491Z     }
+2026-11-01T19:22:26.2838705Z   ],
+2026-11-01T19:22:26.2839130Z   "outcomes": [
+2026-11-01T19:22:26.2839423Z     {
+2026-11-01T19:22:26.2839747Z       "id": "linear-elastic:baseline",
+2026-11-01T19:22:26.2840150Z       "status": "completed",
+2026-11-01T19:22:26.2840525Z       "message": ""
+2026-11-01T19:22:26.2840827Z     },
+2026-11-01T19:22:26.2841099Z     {
+2026-11-01T19:22:26.2841453Z       "id": "linear-elastic:E:4176e36000000000",
+2026-11-01T19:22:26.2841877Z       "status": "completed",
+2026-11-01T19:22:26.2842219Z       "message": ""
+2026-11-01T19:22:26.2842503Z     },
+2026-11-01T19:22:26.2842711Z     {
+2026-11-01T19:22:26.2842978Z       "id": "linear-elastic:E:41812a8800000000",
+2026-11-01T19:22:26.2843370Z       "status": "completed",
+2026-11-01T19:22:26.2843700Z       "message": ""
+2026-11-01T19:22:26.2843974Z     },
+2026-11-01T19:22:26.2844217Z     {
+2026-11-01T19:22:26.2844562Z       "id": "linear-elastic:nu:3fc999999999999a",
+2026-11-01T19:22:26.2844985Z       "status": "completed",
+2026-11-01T19:22:26.2845357Z       "message": ""
+2026-11-01T19:22:26.2846139Z     },
+2026-11-01T19:22:26.2846925Z     {
+2026-11-01T19:22:26.2847514Z       "id": "linear-elastic:nu:3fd3333333333333",
+2026-11-01T19:22:26.2848004Z       "status": "completed",
+2026-11-01T19:22:26.2848408Z       "message": ""
+2026-11-01T19:22:26.2848774Z     },
+2026-11-01T19:22:26.2849115Z     {
+2026-11-01T19:22:26.2849515Z       "id": "drucker-prager:baseline",
+2026-11-01T19:22:26.2849958Z       "status": "completed",
+2026-11-01T19:22:26.2850351Z       "message": ""
+2026-11-01T19:22:26.2850693Z     },
+2026-11-01T19:22:26.2851027Z     {
+2026-11-01T19:22:26.2851436Z       "id": "drucker-prager:M:3feeb851eb851eb8",
+2026-11-01T19:22:26.2851914Z       "status": "completed",
+2026-11-01T19:22:26.2852318Z       "message": ""
+2026-11-01T19:22:26.2852678Z     },
+2026-11-01T19:22:26.2853018Z     {
+2026-11-01T19:22:26.2853435Z       "id": "drucker-prager:M:3ff70a3d70a3d70a",
+2026-11-01T19:22:26.2853911Z       "status": "completed",
+2026-11-01T19:22:26.2854320Z       "message": ""
+2026-11-01T19:22:26.2854695Z     },
+2026-11-01T19:22:26.2855031Z     {
+2026-11-01T19:22:26.2855449Z       "id": "drucker-prager:Md:3fc47ae147ae147b",
+2026-11-01T19:22:26.2856106Z       "status": "completed",
+2026-11-01T19:22:26.2856508Z       "message": ""
+2026-11-01T19:22:26.2856876Z     },
+2026-11-01T19:22:26.2857217Z     {
+2026-11-01T19:22:26.2857852Z       "id": "drucker-prager:Md:3fceb851eb851eb8",
+2026-11-01T19:22:26.2858319Z       "status": "completed",
+2026-11-01T19:22:26.2858728Z       "message": ""
+2026-11-01T19:22:26.2859124Z     },
+2026-11-01T19:22:26.2859468Z     {
+2026-11-01T19:22:26.2859870Z       "id": "modified-cam-clay:baseline",
+2026-11-01T19:22:26.2860357Z       "status": "completed",
+2026-11-01T19:22:26.2860762Z       "message": ""
+2026-11-01T19:22:26.2861127Z     },
+2026-11-01T19:22:26.2861468Z     {
+2026-11-01T19:22:26.2861896Z       "id": "modified-cam-clay:M:3feeb851eb851eb8",
+2026-11-01T19:22:26.2862397Z       "status": "completed",
+2026-11-01T19:22:26.2862811Z       "message": ""
+2026-11-01T19:22:26.2863178Z     },
+2026-11-01T19:22:26.2863515Z     {
+2026-11-01T19:22:26.2863948Z       "id": "modified-cam-clay:M:3ff70a3d70a3d70a",
+2026-11-01T19:22:26.2864459Z       "status": "completed",
+2026-11-01T19:22:26.2864872Z       "message": ""
+2026-11-01T19:22:26.2865241Z     },
+2026-11-01T19:22:26.2865590Z     {
+2026-11-01T19:22:26.2866036Z       "id": "modified-cam-clay:kappa:3fa0624dd2f1a9fc",
+2026-11-01T19:22:26.2866533Z       "status": "completed",
+2026-11-01T19:22:26.2866938Z       "message": ""
+2026-11-01T19:22:26.2867426Z     },
+2026-11-01T19:22:26.2867777Z     {
+2026-11-01T19:22:26.2868206Z       "id": "modified-cam-clay:kappa:3fa89374bc6a7efa",
+2026-11-01T19:22:26.2868717Z       "status": "completed",
+2026-11-01T19:22:26.2869136Z       "message": ""
+2026-11-01T19:22:26.2869510Z     }
+2026-11-01T19:22:26.2869861Z   ]
+2026-11-01T19:22:26.2870210Z }
+2026-11-01T19:22:54.5486228Z PASS: Dense/Loose400 public presets, original source bounds and complete recomputed replay.
+2026-11-01T19:22:54.5890647Z Browser experiment import, units, missing channels, ordering and visibility checks passed.
+2026-11-01T19:22:54.6152020Z Hosted experiment decoding, integrity, channel semantics and request validation passed.
+2026-11-01T19:23:02.8279588Z All 628 built experiments passed browser decoding and checksum checks.
+2026-11-01T19:23:02.8285832Z Comparison axes, display-unit conversions, drainage/loading filters and missing pairs passed.
+2026-11-01T19:23:03.0004791Z ✔ download identities match the packaged model and discovery bytes (6.00394ms)
+2026-11-01T19:23:03.0009541Z ✔ missing atlas.sqlite blocks package (1.123093ms)
+2026-11-01T19:23:03.0010446Z ✔ missing atlas-database.json blocks package (0.623694ms)
+2026-11-01T19:23:03.0011232Z ✔ missing models.json blocks package (1.083375ms)
+2026-11-01T19:23:03.0011964Z ✔ missing catalogue.json blocks package (0.921214ms)
+2026-11-01T19:23:03.0012652Z ✔ wrong kind blocks package (1.866995ms)
+2026-11-01T19:23:03.0013308Z ✔ wrong version blocks package (1.110785ms)
+2026-11-01T19:23:03.0013988Z ✔ unsafe filename blocks package (1.801578ms)
+2026-11-01T19:23:03.0034941Z ✔ wrong MIME blocks package (1.317121ms)
+2026-11-01T19:23:03.0035825Z ✔ wrong database hash blocks package (1.948836ms)
+2026-11-01T19:23:03.0036599Z ✔ wrong size blocks package (1.345562ms)
+2026-11-01T19:23:03.0045522Z ✔ wrong model hash blocks package (1.216051ms)
+2026-11-01T19:23:03.0060153Z ✔ wrong catalogue hash blocks package (1.133559ms)
+2026-11-01T19:23:03.0061071Z ✔ missing membership blocks package (1.118196ms)
+2026-11-01T19:23:03.0061846Z ✔ different membership blocks package (1.394805ms)
+2026-11-01T19:23:03.0062558Z ✔ duplicate membership blocks package (1.369308ms)
+2026-11-01T19:23:03.0088150Z ✔ measurement declaration blocks package (0.912381ms)
+2026-11-01T19:23:03.0088930Z ✔ source document declaration blocks package (1.168069ms)
+2026-11-01T19:23:03.0089523Z ✔ engine declaration blocks package (1.029615ms)
+2026-11-01T19:23:03.0093546Z ✔ missing declaration blocks package (1.001342ms)
+2026-11-01T19:23:03.0101009Z ✔ corrupted database bytes block package (1.26952ms)
+2026-11-01T19:23:03.0103579Z ✔ non-SQLite bytes reject even with matching checksum (1.306144ms)
+2026-11-01T19:23:03.0115372Z ✔ changed packaged models.json blocks stale database (1.113589ms)
+2026-11-01T19:23:03.0122868Z ✔ changed packaged catalogue.json blocks stale database (0.895216ms)
+2026-11-01T19:23:03.0718226Z ✔ complete fourteen model allocation validates with every successful scope (29.362173ms)
+2026-11-01T19:23:03.0750470Z ✔ missing total rejection (6.840796ms)
+2026-11-01T19:23:03.0754758Z ✔ effective model rejection (6.888831ms)
+2026-11-01T19:23:03.0755421Z ✔ relaxed tolerance (0.29717ms)
+2026-11-01T19:23:03.0755907Z ✔ unsafe path (5.282211ms)
+2026-11-01T19:23:03.0756526Z ✔ unknown field (0.531617ms)
+2026-11-01T19:23:03.0757118Z ✔ wrong count (4.825776ms)
+2026-11-01T19:23:03.0768975Z ✔ duplicate case (7.206201ms)
+2026-11-01T19:23:03.0778233Z ✔ missing model (12.535011ms)
+2026-11-01T19:23:03.0781454Z ✔ wrong scope (5.338876ms)
+2026-11-01T19:23:03.0782084Z ✔ unreviewed negative (6.439946ms)
+2026-11-01T19:23:03.0782580Z ✔ wrong success length (3.623495ms)
+2026-11-01T19:23:03.0783046Z ✔ no successful GIS (8.120244ms)
+2026-11-01T19:23:03.0783486Z ✔ stale definition rejected (0.311441ms)
+2026-11-01T19:23:03.0783938Z ✔ stale evidence rejected (0.642902ms)
+2026-11-01T19:23:03.0784600Z ✔ ordinary failure requires exact request and preserved initial (8.993037ms)
+2026-11-01T19:23:03.0877775Z ✔ all ordinary successes need no declarations (3.366244ms)
+2026-11-01T19:23:03.0878848Z ✔ declared failure and registered named success remain separate results (1.192455ms)
+2026-11-01T19:23:03.0879650Z ✔ unexpected ordinary failure rejects release (1.403137ms)
+2026-11-01T19:23:03.0880371Z ✔ changed ordinary request rejects release (1.406754ms)
+2026-11-01T19:23:03.0883617Z ✔ stale definition rejects release (0.525198ms)
+2026-11-01T19:23:03.0884215Z ✔ missing policy model rejects release (1.2694ms)
+2026-11-01T19:23:03.0884647Z ✔ extra policy model rejects release (0.455855ms)
+2026-11-01T19:23:03.0885086Z ✔ duplicate runtime model rejects release (0.380854ms)
+2026-11-01T19:23:03.0885485Z ✔ duplicate declaration rejects release (0.785954ms)
+2026-11-01T19:23:03.0885837Z ✔ unknown policy field rejects release (0.960913ms)
+2026-11-01T19:23:03.0886235Z ✔ unknown declaration field rejects release (0.856218ms)
+2026-11-01T19:23:03.0886601Z ✔ missing evidence rejects release (0.308396ms)
+2026-11-01T19:23:03.0886950Z ✔ corrupt evidence rejects release (0.501873ms)
+2026-11-01T19:23:03.0887280Z ✔ unsafe evidence path rejects release (6.802543ms)
+2026-11-01T19:23:03.0887967Z ✔ unregistered named example rejects release (0.53327ms)
+2026-11-01T19:23:03.0888540Z ✔ duplicate named example rejects release (0.600159ms)
+2026-11-01T19:23:03.0889085Z ✔ stale named definition rejects release (0.445109ms)
+2026-11-01T19:23:03.0889606Z ✔ invalid named document rejects release (0.360354ms)
+2026-11-01T19:23:03.0890158Z ✔ changed failure signature rejects release (0.399992ms)
+2026-11-01T19:23:03.0890750Z ✔ unexpected committed progress rejects release (0.471959ms)
+2026-11-01T19:23:03.0891676Z ✔ initial state altered rejects release (1.935176ms)
+2026-11-01T19:23:03.0892221Z ✔ named failure rejects release (0.444007ms)
+2026-11-01T19:23:03.0892761Z ✔ unexpected default success rejects release (0.389377ms)
+2026-11-01T19:23:03.0893320Z ✔ nonfinite history rejects release (1.157073ms)
+2026-11-01T19:23:03.0893848Z ✔ wrong response catalogue rejects release (0.329768ms)
+2026-11-01T19:23:03.0894417Z ✔ wrong response parameters rejects release (0.365851ms)
+2026-11-01T19:23:03.0894986Z ✔ wrong named model rejects release (0.798072ms)
+2026-11-01T19:23:03.0895561Z ✔ unknown committed-point policy rejects release (0.463967ms)
+2026-11-01T19:23:03.0896239Z ✔ failed execution retains partial ordinary observation (1.505058ms)
+2026-11-01T19:23:03.0897015Z ✔ all prospective identity checks precede material execution (0.309819ms)
+2026-11-01T19:23:03.1070408Z ✔ complete local package resolves beneath project prefix (6.595296ms)
+2026-11-01T19:23:03.1071731Z ✔ stale downloaded model definition is rejected (3.108413ms)
+2026-11-01T19:23:03.1074763Z ✔ executable and runtime lists must agree (1.615352ms)
+2026-11-01T19:23:03.1078164Z ✔ duplicate model IDs are rejected (1.720578ms)
+2026-11-01T19:23:03.1083772Z ✔ unsafe source schemes cannot appear in release definitions (1.992285ms)
+2026-11-01T19:23:03.1084770Z ✔ missing local asset is rejected (1.325873ms)
+2026-11-01T19:23:03.1087810Z ✔ root-relative link breaks Pages project prefix and is rejected (1.196041ms)
+2026-11-01T19:23:03.1095447Z ✔ legacy v0.1 model resolves its original schema filename (1.89719ms)
+2026-11-01T19:23:03.1096326Z ✔ declared public timed page and route module are required (2.251033ms)
+2026-11-01T19:23:03.1097659Z ✔ unsafe public timed routes fail closed (4.076126ms)
+2026-11-01T19:23:03.1100078Z ✔ standard package gate requires the database artifacts before engine execution (1.534993ms)
+2026-11-01T19:23:03.1185538Z ℹ tests 81
+2026-11-01T19:23:03.1185811Z ℹ suites 0
+2026-11-01T19:23:03.1185999Z ℹ pass 81
+2026-11-01T19:23:03.1186263Z ℹ fail 0
+2026-11-01T19:23:03.1186537Z ℹ cancelled 0
+2026-11-01T19:23:03.1186855Z ℹ skipped 0
+2026-11-01T19:23:03.1187135Z ℹ todo 0
+2026-11-01T19:23:03.1187745Z ℹ duration_ms 224.130376
+2026-11-01T19:23:04.4636248Z Supported-input package passed: 14 ordinary requests, 1 named examples; strict-default result unchanged.
+2026-11-01T19:23:04.7705527Z ##[group]Run actions/upload-artifact@v4
+2026-11-01T19:23:04.7705795Z with:
+2026-11-01T19:23:04.7705984Z   name: orthotropic-wasm-linux
+2026-11-01T19:23:04.7706260Z   path: /home/runner/work/_temp/orthotropic-wasm-raw.json
+2026-11-01T19:23:04.7706535Z   if-no-files-found: warn
+2026-11-01T19:23:04.7706728Z   compression-level: 6
+2026-11-01T19:23:04.7706922Z   overwrite: false
+2026-11-01T19:23:04.7707104Z   include-hidden-files: false
+2026-11-01T19:23:04.7707299Z env:
+2026-11-01T19:23:04.7707728Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-01T19:23:04.7707984Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:23:04.7708321Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+2026-11-01T19:23:04.7708670Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:23:04.7708971Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:23:04.7709273Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+2026-11-01T19:23:04.7709632Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+2026-11-01T19:23:04.7709889Z ##[endgroup]
+2026-11-01T19:23:04.9154587Z (node:4635) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-01T19:23:04.9155644Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-01T19:23:04.9193529Z With the provided path, there will be 1 file uploaded
+2026-11-01T19:23:04.9197157Z Artifact name is valid!
+2026-11-01T19:23:04.9197927Z Root directory input is valid!
+2026-11-01T19:23:05.2593279Z Beginning upload of artifact content to blob storage
+2026-11-01T19:23:05.2840697Z (node:4635) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-01T19:23:05.5347530Z Uploaded bytes 25927
+2026-11-01T19:23:05.5904892Z Finished uploading artifact content to blob storage!
+2026-11-01T19:23:05.5905982Z SHA256 digest of uploaded artifact zip is a7b4399b6a724c8080fa64063f265e1f5dd9cd51758cc9f943f29ada5a30eb4b
+2026-11-01T19:23:05.5906819Z Finalizing artifact upload
+2026-11-01T19:23:06.0436924Z Artifact orthotropic-wasm-linux.zip successfully finalized. Artifact ID 13097890290
+2026-11-01T19:23:06.0438186Z Artifact orthotropic-wasm-linux has been successfully uploaded! Final size is 25927 bytes. Artifact ID is 13097890290
+2026-11-01T19:23:06.0443641Z Artifact download URL: https://github.com/benjym/constitutive-atlas/actions/runs/41340720867/artifacts/13097890290
+2026-11-01T19:23:06.0638339Z Post job cleanup.
+2026-11-01T19:23:06.1848099Z Post job cleanup.
+2026-11-01T19:23:06.3154825Z Post job cleanup.
+2026-11-01T19:23:06.3947895Z [command]/usr/bin/git version
+2026-11-01T19:23:06.3988511Z git version 2.56.0
+2026-11-01T19:23:06.4021033Z Temporarily overriding HOME='/home/runner/work/_temp/8916a190-eafa-4d0b-876b-6b71777bdd2b' before making global git config changes
+2026-11-01T19:23:06.4022390Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-01T19:23:06.4025850Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T19:23:06.4073104Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-01T19:23:06.4117142Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-01T19:23:06.4428914Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-01T19:23:06.4459557Z http.https://github.com/.extraheader
+2026-11-01T19:23:06.4472550Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-01T19:23:06.4516242Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-01T19:23:06.4825443Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-01T19:23:06.4860918Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-01T19:23:06.5319442Z Cleaning up orphan processes
+2026-11-01T19:23:06.5637820Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

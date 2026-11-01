@@ -1,0 +1,23 @@
+# Independent prospective review: changes required
+
+Task REVIEW-md1997-control-rebind-v5. This review covers exact runtime-rebind-v5 manifest `e1123475…`, ordinary-regression-v7 manifest `c24a48d4…`, full77-input freeze `b03d818d…`, and582-file source receipt `4bdaf4c5…`. No artifact was executed or built. This is prospective execution-readiness review, not E5 or scientific admission.
+
+The identity-only rebind is sound within its stated numerical scope. Independent reads and hash checks verified all582 source files, all77 frozen inputs and historical manifests. The only changed existing runtime file relative to the prior578 receipt is solver.hpp; four generic capability fixture/build files were added. The35 v4 requests, 14 paths, coarse/fine accuracy, refinement, AD/FD, branch/partition, replay, covariance, rollback/recovery and special checks retain their original identities. All16 ordinary cases, expected decisions, exact GIS failure and other original policy fields match original ordinary-regression-policy-v2, except identity/source receipt. The v7 runner is exactly the v6 runner with its two identity/path substitutions.
+
+External build receipt validation binds declared582-source identity/directory, backend, absolute artifact bytes, exact normal16 catalogue bytes, retained build-log bytes and sibling Wasm payload bytes. Three supplied negative receipt fixtures are rejected. Actual build/source correspondence remains coordinator provenance that must be independently reviewed against retained logs; this review does not authenticate a future build receipt.
+
+**Blocking finding B1: saved MD and ordinary evidence lacks raw transport closure.** `check_binding.verify` verifies report hash, source/artifact/delegate identities and case coverage, but never opens a raw gzipJSONL file. The unchanged v4 numerical/source and parity checkers also consume reports only. Source-only synthetic fixtures show both studies' saved-binding verification accepting (a) no raw logs at all and (b) a contradictory raw log containing a wrong request, returncode99, invalid stdout and failed parsed response. The ordinary fixture also demonstrates that saved-binding verification trusts the report's passed flags rather than recomputing its checks from retained responses. Numerical checkers remain required, but cannot establish raw request/transport/report correspondence themselves.
+
+The synthetic tests isolate this specific layer by replacing only `check` and `build_binding` with deterministic stand-ins after the real582-source preflight and comparison pass. No synthetic receipt is asserted to be an actual build receipt. Synthetic success means the checker accepts a deliberately incomplete evidence bundle, not that a model or qualification passed. Report-byte drift, artifact mismatch and missing case order are correctly rejected for each study.
+
+The separate133-point coarse operational diagnostic matches the original execution-v3 case, settings, controls and control-bit wire exactly. Its checker correctly rejects wrong raw requests and stdout/parsed-response disagreement and checks raw/report point linkage, finite14-state/6-strain vectors, coordinates, initial state and zero strain. A constant-state synthetic response passes its shape-only checks as expected: this diagnostic makes no source-accuracy claim. It preserves the old failed source gates.
+
+Required next action: add a separately frozen read-only evidence checker, without changing any requests/gates or historical files, that requires the complete expected raw files/call order and reconstructs exact requests, validates backend transport outcomes and stdout/parsed-response agreement, links report values/metadata to those responses, and recomputes ordinary outcomes from the same original acceptance logic. Cover MD special-suite calls as well as the35 cases. Add adversarial missing/extra/wrong-request/raw-response/report and transport-error tests. Bind that checker prospectively before actual execution and retain separate numerical source/parity checks. Re-review the additive checker and its exact hash; no numerical gate waiver is requested.
+
+`review.py` reproduces17 source-only adversarial checks. Initial fixtures/results are preserved; the replay additionally checks original v2 ordinary policy equality. Reproduce into new owned names, for example:
+
+```
+python3 -B docs/ingestion/manzari-dafalias-1997/delivery-v1/runtime-rebind-v5-review/review.py --fixture-name replay-2 --report-name replay-2-results.json
+```
+
+All17 test expectations were met on both recorded runs. Prospective readiness remains **changes required**, with one blocker and no actual model-execution approval.

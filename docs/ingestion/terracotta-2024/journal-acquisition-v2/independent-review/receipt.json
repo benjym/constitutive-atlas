@@ -1,0 +1,55 @@
+{
+  "task": "REVIEW-terracotta-acquisition-v2",
+  "reviewer_run": "/root/maxwell_checklist_review",
+  "decision": "accepted bounded journal rights-metadata and access inference",
+  "independence": "Separate reviewer did not perform the acquisition or author the original packet; reviewed saved raw response bytes only, plus independent immediate Downloads filename count.",
+  "inputs": {
+    "path": "docs/ingestion/terracotta-2024/journal-acquisition-v2/independent-review/inputs.json",
+    "sha256": "7b27a604cf582b85ab8673f761ea095431b17581fa887ee261e4621ce7874c78"
+  },
+  "checker": {
+    "path": "docs/ingestion/terracotta-2024/journal-acquisition-v2/independent-review/check_saved.py",
+    "sha256": "48cc1ed73b330fe6f8b91f0e1ed6a1021fee108eb55a692564abd7385384ab99"
+  },
+  "checks": {
+    "path": "docs/ingestion/terracotta-2024/journal-acquisition-v2/independent-review/checks.log",
+    "sha256": "210ee9c7501d3b2bbea12098e7cc80f7675dc9700fedea1c6b5f70e45834f6f8",
+    "exit": 0
+  },
+  "supported": [
+    {
+      "claim": "Exact journal identity and primary publisher open-access/CC BY4 metadata",
+      "evidence": "publisher-api.xml: only coredata child under misleading full-text-retrieval-response root;2001bytes. DOI10.1016/j.jmps.2024.105789/title A simple hydrodynamic model for clay/openaccess1/openaccessArticle true/openaccessType Full/openaccessUserLicense http://creativecommons.org/licenses/by/4.0/. Publisher access record200 text/xml."
+    },
+    {
+      "claim": "Journal version-of-record licence metadata corroborated, not confused with TDM terms",
+      "evidence": "crossref.json message.license has exactly one content-version vor CC BY4 entry starting2024-07-18 and two content-version tdm Elsevier entries starting2024-11-01. Text-mining XML/plain links identify vor but establish no body retrieval. Authors Max Wiebicke/Itai Einav,volume192/article105789 exact."
+    },
+    {
+      "claim": "Saved discovery sources give no direct journal PDF",
+      "evidence": "openalex.json locations exactly journal publishedVersion cc-by and SSRN acceptedVersion license null; both pdf_url null. any_repository_has_fulltext true is an aggregator assertion, not received full text. Nontruncated pinned GitHub tree a4039d0124d8ff61e766f5201f44ddc163c4cff5 has9entries and no .pdf/.tex filenames."
+    },
+    {
+      "claim": "No readable article/source pages acquired by this packet",
+      "evidence": "FULL view401, pdfft403, API PDF406 recorded; default200 XML contains only metadata. Initial three DNS failures retained separately from successful later metadata retrieval. Status/error observations apply to saved attempts, not universal future availability."
+    },
+    {
+      "claim": "Downloads current count is20 at filename level",
+      "evidence": "Independent immediate directory-entry count confirms20 PDF filenames. No fresh full text, PDF first-page, archive or recursive search performed."
+    }
+  ],
+  "uncertain_or_not_established": [
+    "No complete readable journal PDF, body, equations, Figure1, Eq54, Table1 or AppendixB received/rendered in this acquisition. Their fidelity, parameter/domain/initialization and model version reconciliation remain open.",
+    "Metadata-level journal CC BY4 statement is supported; no broader legal interpretation, licence compliance assessment, third-party measurement/data/code rights or SSRN licence grant inferred.",
+    "Null PDF URLs and a nontruncated named repository tree do not prove absence from other repositories, refs, linked assets, archives or private folders.",
+    "Saved response integrity is hash-bound; this review did not reauthenticate remote services or independently repeat network retrieval.",
+    "No E1 closure, model definition change, scientific approval, numerical validation, build, compiled execution, author code import, remote CI or external messaging."
+  ],
+  "unresolved_in_scope_blockers": [],
+  "retained_failures": [
+    "metadata-access.json initial DNS failures",
+    "full-access.json401/403",
+    "pdf-access.json406"
+  ],
+  "next_action": "Obtain readable exact journal copy or minimum source-page set through an authorized route, retain/hash original privately and independently inspect page images before source-to-schema or scientific approval. No unchanged denied-route campaign is needed for this bounded metadata task."
+}

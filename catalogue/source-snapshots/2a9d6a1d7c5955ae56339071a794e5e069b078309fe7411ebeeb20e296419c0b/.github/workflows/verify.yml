@@ -1,0 +1,330 @@
+name: Verify and publish Constitutive Atlas
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: '3.12'
+          - os: macos-26
+            python: '3.14'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m atlas.cli validate
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - run: python tools/build_ci_targets.py build
+      - name: Qualify common scalar functions against independent references
+        shell: bash
+        run: |
+          cmake --build build --target atlas_scalar_probe --parallel 1
+          case "$RUNNER_OS" in
+            Linux) scalar_extension=so ;;
+            macOS) scalar_extension=dylib ;;
+          esac
+          python -B tools/test_scalar_functions.py "build/libatlas_scalar_probe.$scalar_extension" --output-dir "$RUNNER_TEMP/scalar-native"
+      - name: Build and qualify the approved SLS physical-time model
+        run: |
+          cmake -S cmake/sls -B build-sls -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-sls --target atlas_sls_solver --parallel 1
+          python tools/test_sls_native.py --solver build-sls/atlas_sls_solver --output "$RUNNER_TEMP/sls-native.json"
+          node --test tests/test_sls_laboratory_contract.mjs tests/test_laboratory_controller_router.mjs
+      - name: Build and qualify the approved J2 strain-increment model
+        run: |
+          cmake -S cmake/j2 -B build-j2 -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2 --target atlas_j2_solver --parallel 1
+          python tools/test_j2_native.py --solver build-j2/atlas_j2_solver --output "$RUNNER_TEMP/j2-native"
+          node --test tests/test_j2_contract.mjs tests/test_j2_main_routing.mjs
+      - name: Build and qualify Burgers physical-time schedules
+        run: |
+          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+          node --test tests/test_burgers_web_contract.mjs
+      - name: Qualify Ramberg–Osgood against independent scalar references
+        run: |
+          cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+          cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+          python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+      - name: Native checks and full exact archival replay
+        if: runner.os == 'macOS'
+        run: |
+          ctest --test-dir build --output-on-failure -E "^atlas_recorded$"
+          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+        env:
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5
+      - name: Linux native checks
+        if: runner.os == 'Linux'
+        run: |
+          ctest --test-dir build --output-on-failure -E "^(atlas_python|atlas_recorded)$"
+          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+        env:
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5
+      - name: Retain strict original native failures and reject unknown fixtures
+        run: python tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
+      - name: Linux portable Python suite
+        if: runner.os == 'Linux'
+        env:
+          ATLAS_SOLVER: ${{ github.workspace }}/build/atlas_solver
+          ATLAS_TIME_SOLVER: ${{ github.workspace }}/build/atlas_time_solver
+          ATLAS_RESEARCH_SOLVER: ${{ github.workspace }}/build/atlas_research_solver
+          ATLAS_HISTORY_SOLVER: ${{ github.workspace }}/build/atlas_history_solver
+          ATLAS_CLAY2013_SOLVER: ${{ github.workspace }}/build/atlas_clay2013_solver
+          ATLAS_GIS2024_SOLVER: ${{ github.workspace }}/build/atlas_gis2024_solver
+        run: python -B tools/run_ci_tests.py --portable
+      - name: Verify recorded-path JSON replay
+        env:
+          ATLAS_RECORDED_SOLVER: ${{ github.workspace }}/build/atlas_solver
+        run: python -m unittest tests.test_experiment_replay tests.test_recorded_api tests.test_recorded_path tests.test_web_recorded tests.test_refinement tests.test_isotropic_reference tests.test_resolution_diagnosis tests.test_recorded_restarts -v
+  wasm:
+    # Full retained-reference assessments use their original macOS arithmetic.
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+      - name: Install the official pinned Emscripten SDK
+        run: |
+          git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+          "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+      - name: Build and compare native and Wasm
+        shell: bash
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          python tools/build_ci_targets.py build
+          emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+          python tools/build_ci_targets.py build-wasm --wasm
+          cmake --build build-wasm --target atlas_scalar_probe --parallel 1
+          node tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"
+          python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
+          node tools/test_experiments.mjs
+          node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
+          cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+          cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+          python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+          node tools/check_ramberg_osgood_wasm.mjs build-wasm "$RUNNER_TEMP/ramberg-wasm.json" "$RUNNER_TEMP/ramberg-native.json"
+          python -B tools/check_ramberg_osgood.py --responses "$RUNNER_TEMP/ramberg-wasm.json" --output "$RUNNER_TEMP/ramberg-wasm-checks.json"
+          node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+          node tools/test_loading.mjs
+          node tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json
+          node tools/test_scoped_parity.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/scoped-parity.json" catalogue/laboratory-profile-policy.json
+          node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+          python -m tools.history_cases --output "$RUNNER_TEMP/history-cases.json"
+          node tools/test_history_wasm.mjs --cases "$RUNNER_TEMP/history-cases.json"
+          node tools/test_time_wasm.mjs
+          node tools/test_schedule_wasm.mjs
+          node tools/test_terracotta_wasm.mjs
+          node tools/test_terracotta_creep_wasm.mjs --output "$RUNNER_TEMP/terracotta-creep-parity.json"
+          python -m tools.verify_terracotta_creep_wasm "$RUNNER_TEMP/terracotta-creep-parity.json"
+          python -m tools.clay2013_integration_study --output "$RUNNER_TEMP/clay2013-native.json"
+          node tools/test_clay2013_wasm.mjs --native-report "$RUNNER_TEMP/clay2013-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/clay2013-wasm.json"
+          python -m tools.verify_clay2013_wasm "$RUNNER_TEMP/clay2013-wasm.json"
+          python -m tools.clay2013_nonisotropic_study --output "$RUNNER_TEMP/clay2013-path-native.json"
+          node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/clay2013-path-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/clay2013-path-wasm.json"
+          python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/clay2013-path-wasm.json"
+          python -m tools.gis2024_rate_study --output "$RUNNER_TEMP/gis2024-native.json"
+          node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/gis2024-native.json" --wasm build-wasm/gis2024.js --output "$RUNNER_TEMP/gis2024-wasm.json"
+          python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/gis2024-wasm.json"
+          python -m tools.gis2024_integration_study --output "$RUNNER_TEMP/gis2024-path-native.json"
+          node tools/test_gis2024_paths_wasm.mjs --native-report "$RUNNER_TEMP/gis2024-path-native.json" --wasm build-wasm/gis2024.js --output "$RUNNER_TEMP/gis2024-path-wasm.json"
+          python -m tools.verify_gis2024_paths "$RUNNER_TEMP/gis2024-path-wasm.json"
+          python tools/expm_study.py --binary build/atlas_expm_probe --output "$RUNNER_TEMP/expm-native.json"
+          node tools/test_expm_wasm.mjs --native-report "$RUNNER_TEMP/expm-native.json" --wasm build-wasm/expm-fixtures.js --output "$RUNNER_TEMP/expm-wasm.json"
+          python tools/expm_study.py --verify "$RUNNER_TEMP/expm-wasm.json" --native-report "$RUNNER_TEMP/expm-native.json"
+          python -m tools.log1p_study --binary build/atlas_log1p_probe --output "$RUNNER_TEMP/log1p-native.json"
+          node tools/test_log1p_wasm.mjs --native-report "$RUNNER_TEMP/log1p-native.json" --wasm build-wasm/log1p-fixtures.js --output "$RUNNER_TEMP/log1p-wasm.json"
+          python -m tools.log1p_study --report "$RUNNER_TEMP/log1p-wasm.json" --native-report "$RUNNER_TEMP/log1p-native.json" --output "$RUNNER_TEMP/log1p-assessed.json"
+          python -m tools.barodesy2017_rate_study --native build/atlas_barodesy_rate_probe --output "$RUNNER_TEMP/barodesy-native.json"
+          node tools/test_barodesy2017_rates_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-native.json" --wasm build-wasm/barodesy-rates.js --output "$RUNNER_TEMP/barodesy-wasm.json"
+          python -m tools.barodesy2017_rate_study --verify "$RUNNER_TEMP/barodesy-wasm.json" --native-report "$RUNNER_TEMP/barodesy-native.json"
+          python -m tools.barodesy2017_material_ad --native build/atlas_barodesy_material_ad_probe --output "$RUNNER_TEMP/barodesy-ad-native.json"
+          node tools/test_barodesy2017_material_ad_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-ad-native.json" --wasm build-wasm/barodesy-material-ad.js --output "$RUNNER_TEMP/barodesy-ad-wasm.json"
+          python -m tools.barodesy2017_material_ad --verify "$RUNNER_TEMP/barodesy-ad-wasm.json" --native-report-path "$RUNNER_TEMP/barodesy-ad-native.json"
+          python tools/run_historical_barodesy.py --directory "$RUNNER_TEMP/historical-barodesy"
+          python -m tools.barodesy2017_hydro_ad --native build/atlas_barodesy_hydro_ad_probe --output "$RUNNER_TEMP/barodesy-hydro-native.json"
+          node tools/test_barodesy2017_hydro_ad_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-hydro-native.json" --wasm build-wasm/barodesy-hydro-ad.js --output "$RUNNER_TEMP/barodesy-hydro-wasm.json"
+          python -m tools.barodesy2017_hydro_ad --verify "$RUNNER_TEMP/barodesy-hydro-wasm.json" --native-report-path "$RUNNER_TEMP/barodesy-hydro-native.json"
+          python -m tools.clay2014_rate_study --native build/atlas_clay2014_rate_probe --output "$RUNNER_TEMP/clay2014-native.json"
+          node tools/test_clay2014_rates_wasm.mjs --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-wasm.json"
+          python -m tools.clay2014_rate_assessment --wasm-report "$RUNNER_TEMP/clay2014-wasm.json" --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm-transport "$RUNNER_TEMP/clay2014-wasm.transport.json" --native-transport "$RUNNER_TEMP/clay2014-native.transport.json" --artifact build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-assessment.json"
+          python tools/fetch_data.py --approved-only
+          emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
+          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+          emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+          python -B -m unittest tests.test_provision_maxwell_assets
+          python -B tools/provision_maxwell_assets.py
+          python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+          python -B tools/provision_implicit_path_assets.py
+          python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
+          node --test tests/test_ensemble.mjs
+          python -B -m unittest tests.test_ensemble_package
+          node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
+          node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
+          node tools/test_experiments.mjs --built-assets web/dist/experiments
+          node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+          node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+      - name: Configure GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@v6
+      - name: Upload tested website
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: web/dist
+  wasm-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+      - name: Install the official pinned Emscripten SDK
+        run: |
+          git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+          "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+      - name: Verify Linux browser engine and packaged website
+        shell: bash
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --target atlas_solver --parallel 1
+          emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-wasm --target atlas_solver --parallel 1
+          cmake --build build-wasm --target atlas_power_creep_solver --parallel 1
+          cmake --build build-wasm --target atlas_scalar_probe --parallel 1
+          node tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"
+          python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
+          node tools/test_experiments.mjs
+          node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
+          cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+          cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+          python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+          node tools/check_ramberg_osgood_wasm.mjs build-wasm "$RUNNER_TEMP/ramberg-wasm.json" "$RUNNER_TEMP/ramberg-native.json"
+          python -B tools/check_ramberg_osgood.py --responses "$RUNNER_TEMP/ramberg-wasm.json" --output "$RUNNER_TEMP/ramberg-wasm-checks.json"
+          node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+          node tools/test_loading.mjs
+          node tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json
+          node tools/test_scoped_parity.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/scoped-parity.json" catalogue/laboratory-profile-policy.json
+          node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+          python tools/fetch_data.py --approved-only
+          emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
+          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+          emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+          python -B -m unittest tests.test_provision_maxwell_assets
+          python -B tools/provision_maxwell_assets.py
+          python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+          python -B tools/provision_implicit_path_assets.py
+          python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
+          node --test tests/test_ensemble.mjs
+          python -B -m unittest tests.test_ensemble_package
+          node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
+          node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
+          node tools/test_experiments.mjs --built-assets web/dist/experiments
+          node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+          node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+  controlled-path:
+    needs: [native, wasm, wasm-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+      - name: Check controlled-path contracts and existing formulation semantics
+        run: python -B -m unittest tests.test_controlled_path tests.test_formulation tests.test_state_contract -q
+      - name: Build and qualify native controlled paths
+        shell: bash
+        run: |
+          path_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"
+          cmake -S cmake/controlled-path -B build-path-native -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"
+          cmake --build build-path-native --target atlas_path_capability --parallel 1
+          mkdir -p path-results
+          python -B docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py build-path-native/libatlas_path_capability.so docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json
+          python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json
+      - name: Install the pinned Emscripten SDK
+        shell: bash
+        run: |
+          git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+          "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+      - name: Build Wasm and require both backends to pass the same frozen gates
+        shell: bash
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          path_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"
+          emcmake cmake -S cmake/controlled-path -B build-path-wasm -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"
+          cmake --build build-path-wasm --target atlas_path_capability --parallel 1
+          node docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs build-path-wasm/atlas_path_capability.mjs build-path-wasm/atlas_path_capability.wasm docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/wasm.json
+          python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json path-results/wasm.json
+      - name: Retain numerical outputs and generated model metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: controlled-path-qualification
+          path: |
+            path-results/
+            build-path-native/generated/
+            build-path-wasm/generated/
+            build-path-native/CMakeCache.txt
+            build-path-wasm/CMakeCache.txt
+            build-path-native/libatlas_path_capability.so
+            build-path-wasm/atlas_path_capability.mjs
+            build-path-wasm/atlas_path_capability.wasm
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: [native, wasm, wasm-linux, controlled-path]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

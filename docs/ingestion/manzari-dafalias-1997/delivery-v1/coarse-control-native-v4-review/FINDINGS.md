@@ -1,0 +1,11 @@
+# Original coarse control actual review
+
+Decision: **ACCEPTED for operational completion of the exact original 133-point drained-dense-compression-128 request on the corrected native runtime.** No blocking finding within this bounded scope. Reviewer builds and compiled calls: zero.
+
+The complete original case, model identity, parameters, initial state, protocol, settings, 133 controls and every binary64 control bit match the frozen execution-v3 plan. The actual request also exactly equals the durable raw request from the earlier corrected-runtime-v3 failure: that response stopped at 19 points with ok=false. The new response completes all 133 points with ok=true. Every point retains a finite full 14-state vector and six-strain vector, with exact planned coordinates. Raw stdout parses exactly to the recorded full response; every saved report point matches its raw counterpart.
+
+All 582 source hashes, unchanged candidate, coordinator build identity, actual native artifact, generated catalogue/header, actual saved embedded description (16 models), serial Release atlas_solver build, pre-observation inputs and retained manifests check exactly. Artifact SHA-256: `44dc08a17d18d0a06a37eb0fbd3f57ff4b363feff8af91fe23fdaeedcb4af148`; report: `be2fd6ad1c4a8c2628d48ac9577e7afea9754ce59d28e9362563ca076f915fd9`; source freeze: `4bdaf4c5ac59324a644d533e2699d32b2272036803e9927968552e86ebb5dea8`.
+
+Independent saved-evidence checks pass 19 groups. Replaying the frozen v5 coarse checker passes and exactly reproduces all 409 checks, including strict source/build/artifact binding and complete raw-request/response/report linkage. This checker is an operational diagnostic, not a source-checkpoint accuracy gate. It does not turn the original 128/512 qualification failures into passes, and it does not qualify the full 35-case study, ordinary suite, Wasm production runtime, profiles or E5.
+
+Reproduction: run `python3 check_saved.py` with a fresh rechecked output filename because the author checker intentionally refuses overwrite. The script reads saved evidence and source only; it never executes the artifact. Exact inputs and review outputs are pinned in manifest.json. Next action is the separately frozen complete raw-linked production regression work; full model acceptance remains pending.

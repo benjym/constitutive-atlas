@@ -1,0 +1,45 @@
+# Maxwell CI regressions — prospective v1
+
+Claim CI-maxwell-interface-regressions-v1. New source whitelist:
+tools/check_maxwell_ci.py, tools/test_maxwell_public_presets.mjs and this packet.
+Workflow hook follows separate exact-byte archival. No runtime/model/schema changes,
+new builds, new approval record or remote CI invocation.
+
+Before compiled execution obtain separate prospective source/plan review.
+Then coordinator serially executes only the exact retained independently reviewed
+Maxwell Wasm, already restored at /private/tmp/atlas-maxwell-ci-assets-review-v1.
+No new executable or native material call is planned.
+
+Command:
+```sh
+python3 -B tools/check_maxwell_ci.py --build /private/tmp/atlas-maxwell-ci-assets-review-v1 --output /private/tmp/atlas-maxwell-ci-regression-v1
+```
+
+The existing guarded bundle must accept exact model, source, generated metadata,
+independent build review, interface and approval before any compiled execution.
+Afterward repeat that guard and compare source/reference identities.
+
+Required gates:
+1. Existing Node contract/runtime tests (21 tests) all pass.
+2. Exact 24 frozen cases run twice (48 calls) through existing raw collector;
+   unchanged Python source assessor and exact per-case replay pass.
+3. Four existing public presets run through actual strict contract request/result/
+   export/import/replay functions, each twice (8 calls). Actual embedded catalogue
+   equals qualified generated catalogue. Preset/source mapping remains exact after
+   explicitly qualified fixed solver defaults are filled in.
+4. Apply unchanged corresponding frozen analytical schedule cases to all four
+   public results; full recomputed results exactly equal their saved replay.
+5. Preserve raw/partial outputs and process logs. Refuse existing output directories.
+   Source or asset drift, command failure or timeout fails; no passing report written.
+   Timeout is 120 seconds per command, not a new material integration budget.
+6. Subsequent CI hook is required in both standard packaging jobs after exact asset
+   provisioning and before the builder, retaining every existing global gate.
+
+No new scientific/parameter/native parity qualification is inferred. This check
+regresses a retained reviewed engine against its existing claims. Original errors,
+coarse refinement tolerance, initial-entry scheduled failure limitation, loose-
+tolerance energy witness and global ordinary failures remain unchanged.
+
+## Pre-execution review corrections
+
+The exact existing Node command has21tests, not27; only the documented two Maxwell test files were intended. All24numericalcases and four presets/gates remain unchanged. Harness now binds both testfiles, four examples and bundlehelper; captures every returned raw metadata/material response before parsing or validation; imports full actual guarded package identity for export/replay. Earlier prospective source bindings and plan bytes remain retained.

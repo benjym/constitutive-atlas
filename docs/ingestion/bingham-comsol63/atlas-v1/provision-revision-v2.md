@@ -1,0 +1,3 @@
+# Pre-execution artifact restoration destination guard
+
+The initial provisioner was prospectively reviewed in REPORT-v5. Parent subsequently added refusal to replace any existing output directory/symlink, complete staging and a second destination check before installation, matching the established Maxwell provisioning pattern. This preserves unrelated/local prior work and avoids partial publication on write failure. Exact previous helper bytes remain in provision-before-v2.py. No archive has been created, no engine provision/execution has run, and no source/numerical input or gate changed. Final independent review must inspect the current helper.

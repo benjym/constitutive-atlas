@@ -1,0 +1,1 @@
+Prospective independent review requested stronger ZIP/API digest transport binding, selected deployment/status/job URL binding, exact job count, archived review-definition/schema identity and result contract field checks. Original checker retained in superseded-checker-v1; revised guards add checks without changing scientific budgets or observing live results.

@@ -1,0 +1,33 @@
+--- docs/ingestion/maxwell-itasca900/integration-v1/check_transactions.py
++++ adapters/check_maxwell_transactions.py
+@@ -3,13 +3,18 @@
+ """
+ import argparse,copy,importlib.util,json,subprocess,sys
+ from pathlib import Path
+-ROOT=Path(__file__).resolve().parents[4]
++import os
++ROOT=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()
++BASE=Path(os.environ['ATLAS_QUALIFICATION_OUTPUT']).resolve()
++assert BASE != ROOT and not BASE.is_relative_to(ROOT), 'Fresh output must be outside support source'
++assert BASE.is_dir(), 'Create fresh output directory explicitly'
++INPUT_BASE=ROOT/'docs/ingestion/maxwell-itasca900/integration-v1'
+ sys.path.insert(0,str(ROOT))
+ spec=importlib.util.spec_from_file_location('maxwell_checks',ROOT/'tests/test_maxwell.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+-BASE=Path(__file__).resolve().parent
++
+ 
+ def cases_for(raw):
+-    cases=json.loads((BASE/'reference-cases.json').read_text())['cases'];rows=json.loads(raw.read_text());out=[]
++    cases=json.loads((INPUT_BASE/'reference-cases.json').read_text())['cases'];rows=json.loads(raw.read_text());out=[]
+     good=next(c for c in cases if c['id']=='tensor-tau2-duration0.5')
+     for bad in [c for c in cases if not c['ok']]:
+         out.append(copy.deepcopy(bad));recovery=copy.deepcopy(good);recovery['id']='recovery-after-'+bad['id'];out.append(recovery)
+@@ -43,7 +48,7 @@
+         subprocess.run(['node',str(ROOT/'tools/test_maxwell_wasm.mjs'),str(a.module),str(casepath),str(out)],check=True);rows=json.loads(out.read_text())
+     report={'passed':True,'errors_Pa':assess(cases,rows),'recovery_pairs':6,'actual_endpoint_restarts':2}
+     if a.backend=='native':
+-        replaydir=Path('/private/tmp/atlas-maxwell-execution-v1/cli');replaydir.mkdir(exist_ok=True)
++        replaydir=BASE/'cli';replaydir.mkdir(exist_ok=True)
+         paths=[ROOT/'examples/maxwell/creep.json',replaydir/'first.json',replaydir/'replay.json']
+         for source,target in zip(paths,paths[1:]):
+             r=subprocess.run([sys.executable,'-m','atlas.cli','run',str(source),'--solver',str(a.solver),'--output',str(target)],cwd=ROOT,capture_output=True,text=True,timeout=60);assert r.returncode==0,(r.stdout,r.stderr)

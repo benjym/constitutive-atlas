@@ -1,0 +1,7 @@
+# V5 presentation reconciliation — E7 closed
+
+Reviewer `/root/hill_scientific_review`, 2 November 2026. The condition in REPORT.md is satisfied: I independently compared all 76 JavaScript/module/Wasm assets between tested v4 and the standard-builder v5 package; every byte is identical. All 15 strict Hill package-manifest entries validate, and Hill identity metadata is unchanged. Current dossier/review-page changes match the previously inspected link/status corrections. The varying temporary implicit-path check-report directory is evidence-output naming, not changed executable behavior. The full v5 builder passes, including all existing peer and Hill package gates.
+
+I also independently verified git0b1b15ac→462a450c contains only the three stated orthotropic dossier correction files and that the current isolated release preserves their exact new bytes. No executable or integration change is introduced by this remote advance. Their source author/scientific scope remains separate from this Hill review.
+
+**E7 accepted and closed for the bounded local v5 delivery.** Source/mathematical, backend, actual browser, visual, coexistence, replay/recovery and exact presentation reconciliation evidence remain separately bound. No scientific record or frozen acceptance input was rewritten. E8 remains open and still requires scoped commit, all exact remote gates, actual upload and live byte/browser verification. No further human scientific approval is required.

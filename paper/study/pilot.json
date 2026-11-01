@@ -1,0 +1,200 @@
+{
+  "paper_record_version": 1,
+  "id": "kfs-drained-development-v1",
+  "phase": "development_only",
+  "claim": "Protocol development on previously inspected tests; no blind validation, ranking, full calibration, or experimental validity claim.",
+  "experiment_paths": {
+    "KFS-TMD1": "data/normalized/KFS-TMD1.json",
+    "KFS-TMD2": "data/normalized/KFS-TMD2.json",
+    "KFS-TMD3": "data/normalized/KFS-TMD3.json",
+    "KFS-TMD4": "data/normalized/KFS-TMD4.json",
+    "KFS-TMD5": "data/normalized/KFS-TMD5.json"
+  },
+  "packages": {
+    "C1": [
+      "KFS-TMD3"
+    ],
+    "C2": [
+      "KFS-TMD2",
+      "KFS-TMD3",
+      "KFS-TMD4"
+    ]
+  },
+  "evaluation_ids": [
+    "KFS-TMD1",
+    "KFS-TMD5"
+  ],
+  "maximum_axial_strain": 0.02,
+  "steps": 100,
+  "refinement_steps": [
+    200,
+    400
+  ],
+  "samples": 101,
+  "objective": {
+    "channels": [
+      "q",
+      "volumetric_strain"
+    ],
+    "q_scale": "initial_mean_effective_stress",
+    "volumetric_strain_scale": 0.01,
+    "aggregation": "equal channel MSE within test, equal tests"
+  },
+  "optimizer": {
+    "method": "bounded_coordinate_pattern_search",
+    "seeds": [
+      0,
+      17,
+      41
+    ],
+    "max_evaluations": 96,
+    "initial_step": 0.25,
+    "minimum_step": 0.001,
+    "failure_objective": 1e+30,
+    "selection": "lowest calibration objective across all seeds; no evaluation access"
+  },
+  "timeout_seconds": 30,
+  "models": [
+    {
+      "id": "linear-elastic",
+      "baseline_parameters": {
+        "p_ref": 100000,
+        "E": 30000000.0,
+        "nu": 0.25
+      },
+      "fit": {
+        "E": {
+          "bounds": [
+            100000.0,
+            200000000.0
+          ],
+          "transform": "log"
+        },
+        "nu": {
+          "bounds": [
+            0.05,
+            0.45
+          ],
+          "transform": "linear"
+        }
+      },
+      "fixed_parameters": {
+        "p_ref": 100000
+      },
+      "note": "Hooke-law diagnostic baseline; cannot represent irreversible sand behaviour.",
+      "bounds_status": "exploratory analyst choices within current implementation bounds; sensitivity not established",
+      "baseline_source": {
+        "path": "models/linear-elastic.json",
+        "locator": "default parameters with stated c=0 specialization for Drucker-Prager"
+      }
+    },
+    {
+      "id": "drucker-prager",
+      "baseline_parameters": {
+        "p_ref": 100000,
+        "E": 30000000.0,
+        "nu": 0.25,
+        "M": 1.2,
+        "Md": 0.2,
+        "c": 0
+      },
+      "fit": {
+        "E": {
+          "bounds": [
+            100000.0,
+            200000000.0
+          ],
+          "transform": "log"
+        },
+        "nu": {
+          "bounds": [
+            0.05,
+            0.45
+          ],
+          "transform": "linear"
+        },
+        "M": {
+          "bounds": [
+            0.6,
+            1.8
+          ],
+          "transform": "linear"
+        },
+        "Md": {
+          "bounds": [
+            0,
+            0.6
+          ],
+          "transform": "linear"
+        }
+      },
+      "fixed_parameters": {
+        "p_ref": 100000,
+        "c": 0
+      },
+      "note": "c=0 cohesionless specialization; Md>=0 forbids plastic contraction under compression-positive convention. This is an intentionally limited baseline.",
+      "bounds_status": "exploratory analyst choices within current implementation bounds; sensitivity not established",
+      "baseline_source": {
+        "path": "models/drucker-prager.json",
+        "locator": "default parameters with stated c=0 specialization for Drucker-Prager"
+      }
+    },
+    {
+      "id": "hypoplastic-sand-vw96",
+      "baseline_parameters": {
+        "p_ref": 100000.0,
+        "phi": 0.5777039824101231,
+        "hs": 4000000000.0,
+        "n": 0.27,
+        "ed0": 0.677,
+        "ec0": 1.054,
+        "ei0": 1.212,
+        "alpha": 0.14,
+        "beta": 2.5
+      },
+      "fit": {
+        "phi": {
+          "bounds": [
+            0.45,
+            0.7
+          ],
+          "transform": "linear"
+        },
+        "hs": {
+          "bounds": [
+            500000000.0,
+            20000000000.0
+          ],
+          "transform": "log"
+        },
+        "alpha": {
+          "bounds": [
+            0.05,
+            0.4
+          ],
+          "transform": "linear"
+        },
+        "beta": {
+          "bounds": [
+            0.5,
+            4
+          ],
+          "transform": "linear"
+        }
+      },
+      "fixed_parameters": {
+        "p_ref": 100000.0,
+        "n": 0.27,
+        "ed0": 0.677,
+        "ec0": 1.054,
+        "ei0": 1.212
+      },
+      "note": "Partial calibration only: n, ed0, ec0, ei0 fixed to the existing literature transfer set; their source information is additional prior knowledge, not data learned by this pilot.",
+      "bounds_status": "exploratory analyst choices within current implementation bounds; sensitivity not established",
+      "baseline_source": {
+        "url": "https://doi.org/10.1002/nag.70375",
+        "locator": "Table 3, Hypoplasticity row; hs reported in kPa converted to Pa, phi in degrees converted to radians"
+      }
+    }
+  ]
+}

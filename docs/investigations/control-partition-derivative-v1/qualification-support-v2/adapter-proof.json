@@ -1,0 +1,29 @@
+{
+  "j2": {
+    "source": "docs/ingestion/j2-linear-hardening/execution-v2/check_paths.py",
+    "source_sha256": "1cbf99556082887eaa34886c5bc15bf96ec2605a57b5c1960ccafb275f97874b",
+    "adapter": "adapters/check_j2_paths.py",
+    "adapter_sha256": "d631a6991e9e60f076c36e277078a63042f277fbbd8378a1a016da757b3bf748",
+    "exact_reverse_substitution": true,
+    "replacements": [
+      {
+        "original": "ROOT=Path(__file__).resolve().parents[4];sys.path.insert(0,str(ROOT))",
+        "replacement": "import os\nROOT=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve();sys.path.insert(0,str(ROOT))\nOUTPUT=Path(os.environ['ATLAS_QUALIFICATION_OUTPUT']).resolve()\nassert OUTPUT.is_dir() and not OUTPUT.is_relative_to(ROOT), 'Fresh external output directory required'"
+      },
+      {
+        "original": "BASE=Path(__file__).resolve().parent",
+        "replacement": "BASE=ROOT/'docs/ingestion/j2-linear-hardening/execution-v2'"
+      },
+      {
+        "original": "BASE/'native-paths-raw.json'",
+        "replacement": "OUTPUT/'native-paths-raw.json'"
+      }
+    ]
+  },
+  "v1_exact_reuse": {
+    "docs/investigations/control-partition-derivative-v1/qualification-support-v1/adapters/check_maxwell_transactions.py": "8ea5d5d97f346a913a7c67159ee3bb5ce81f947adb96146a4991b5c2e21fc22a",
+    "docs/investigations/control-partition-derivative-v1/qualification-support-v1/adapters/check_sls_saved.py": "8add9b7a775a9dc7f4bef6a4d0a7b2196a4f9c621f9bda9d7c690a8b94aeb35a",
+    "docs/investigations/control-partition-derivative-v1/qualification-support-v1/adapters/prepare_sls_reports.py": "021de97b608d0c47d09eeb2b67b5cd19ebe33326051ee5c04b63977fe208698d"
+  },
+  "wrapper_policy": "Additional assess_fresh wrappers call unchanged source assessment functions; no reference generation, numerical expressions or tolerances"
+}

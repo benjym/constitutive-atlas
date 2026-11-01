@@ -1,0 +1,147 @@
+{
+  "identity": "md1997-decimal-reference-transport-contract-v1",
+  "invocation": [
+    "python3",
+    "-B",
+    "assess_saved.py",
+    "--requests",
+    "requests.json",
+    "--reference",
+    "reference.json",
+    "--process",
+    "PROCESS.json",
+    "--build-binding",
+    "BINDING.json",
+    "--build-binding-sha256",
+    "INDEPENDENTLY_PINNED_ACTUAL_BINDING_SHA256",
+    "--output",
+    "FRESH_REPORT.json"
+  ],
+  "export": {
+    "identity": "md1997-decimal-ad-export-v1",
+    "selector": "md1997-decimal-fd-reference-v1",
+    "status": "exported-unassessed",
+    "models": 16,
+    "exact_keys": [
+      "identity",
+      "selector",
+      "status",
+      "models",
+      "bindings",
+      "base",
+      "endpoints",
+      "ad_hex",
+      "cpp_checks"
+    ],
+    "bindings_keys": [
+      "evaluator_sha256",
+      "policy_sha256",
+      "base_source_freeze_sha256",
+      "model_sha256",
+      "request_sha256",
+      "reference_sha256",
+      "build_binding_sha256"
+    ],
+    "base_keys": [
+      "layout",
+      "state_hex",
+      "previous_hex",
+      "loading_hex",
+      "parameters_hex",
+      "scales_hex"
+    ],
+    "endpoints": "Exactly requests.endpoints in order, plus domain:true/branch:true per record. Hex representations may differ only when decoding gives identical binary64 bits, including signed zero.",
+    "ad_hex": "14 rows \u00d714 columns, finite hexadecimal binary64 strings; columns carry frozen scaled AD seeds.",
+    "cpp_checks": {
+      "rank13": true,
+      "rotation": true,
+      "other_models": true
+    }
+  },
+  "process_direct": {
+    "identity": "md1997-decimal-direct-process-v1",
+    "exact_keys": [
+      "identity",
+      "purpose",
+      "argv",
+      "cwd",
+      "returncode",
+      "stdout",
+      "stderr",
+      "selectors",
+      "executable_sha256"
+    ],
+    "returncode": "integer0; bool rejected",
+    "stderr": "Separate observed stderr, must be empty"
+  },
+  "process_ctest": {
+    "identity": "md1997-decimal-ctest-child-v1",
+    "exact_keys": [
+      "identity",
+      "purpose",
+      "child_name",
+      "child_command",
+      "child_directory",
+      "child_status",
+      "last_test_log",
+      "combined_output",
+      "parent",
+      "selectors",
+      "executable_sha256"
+    ],
+    "child_name": "atlas_numerical",
+    "child_status": "Test Passed.",
+    "parent_exact_keys": [
+      "argv",
+      "cwd",
+      "returncode",
+      "stdout",
+      "stderr"
+    ],
+    "channel_scope": "Combined child stdout/stderr from exact unique LastTest.log section. No separate child stderr or numeric child exit inferred.",
+    "framing": "UTF-8 LF LastTest.log; unique Testing header; anchored singleton Command/Directory before Output; Test header index matches; exact Output separator through <end of output> bytes equals combined_output; Test Passed after output; parent CTest0. Collector additionally proves exact full selected registry/order/freshness/tool/source bindings."
+  },
+  "build_binding": {
+    "identity": "md1997-decimal-native-build-binding-v1",
+    "exact_keys": [
+      "identity",
+      "purpose",
+      "source_freeze_sha256",
+      "fixture_sha256",
+      "generated_catalogue_sha256",
+      "executable_sha256",
+      "executable_path",
+      "working_directory",
+      "model_sha256"
+    ],
+    "purpose": [
+      "actual",
+      "synthetic-test-only"
+    ],
+    "trust_boundary": "Caller supplies separately reviewed/pinned expected build-binding hash. Assessor verifies model/artifact hash and metadata equality; cannot derive compiler/source/generated correspondence or approval from hash-shaped fields. No actual receipt created in Phase1."
+  },
+  "raw_file_binding_exact_keys": [
+    "path",
+    "sha256"
+  ],
+  "selectors": {
+    "ATLAS_NATIVE_FIXTURES": "explicit-gis20-occ-restart-duncan-v5",
+    "ATLAS_NUMERICAL_FIXTURES": "md1997-decimal-fd-reference-v1",
+    "PYTHONOPTIMIZE": "0"
+  },
+  "cpp_build_binding_env": "ATLAS_MD1997_DECIMAL_BUILD_BINDING_SHA256; single separately frozen actualbinding hash, no reference/request injection env",
+  "assessment": {
+    "identity": "md1997-decimal-saved-assessment-v1",
+    "required_positive": "passed literaltrue, purpose actual,588complete results,0failures,exact allbound identities; synthetic-test-only results never qualify execution",
+    "comparisons": {
+      "AD/FD": 392,
+      "h/h2": 196
+    },
+    "thresholds": {
+      "AD/FD": "Decimal exact nominal3e-5 * max1",
+      "h/h2": "Decimal exact nominal1.5e-5 * max1"
+    },
+    "report": "Each comparison records gate,row,column,level when applicable,FD/AD or bothFDlevels,error,budget,passed; all retained."
+  },
+  "independent_review_before_new_native_AD": true
+}

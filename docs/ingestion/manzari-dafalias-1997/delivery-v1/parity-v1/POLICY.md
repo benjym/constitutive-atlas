@@ -1,0 +1,7 @@
+# Prospective native/Wasm parity v1
+
+Frozen before any MD1997 compiled observation. This supplements execution-v1's independent source gates; parity cannot replace either backend's source qualification. Input request plan must match execution-v1/requests.json SHA2562365a2d8e175a88273747da6fd7c56afa0fe9f67ffb71aa1ea13c5efbf6ac0f5. Both reports must identify their distinct intended backends and same exact model/request/policy/harness identities.
+
+Require all35planned cases, success, exact point counts and coordinates. Compare every returned point's full14state and6strain. Stress tolerance1e-6Pa+1e-8max(1,abs(native),abs(Wasm)); e tolerance1e-10; alpha tolerance1e-9; transient plastic multiplier tolerance1e-10; strain tolerance1e-12. Require finite complete vectors. Any missing/nonfinite report/state or mismatch fails.
+
+Special operations must have identical success/rejection decisions and no harness errors. Compare full states when present, including returned rollback parent and all finite-difference states, with the same tolerances. Compare actual14x6AD tangent with1e-6+1e-7max(1,abs(native),abs(Wasm)); source AD/FD gates remain separately required. Require matching accepted partition fractions for special operations whenever either backend exposes them. No numerical observations authorize editing these tolerances; failures need retained evidence and an independently reviewed new study.

@@ -1,0 +1,98 @@
+{
+  "summary": "A sand model in which pressure, density and deformation direction shape the evolving effective stress.",
+  "introduction": "Barodesy for sand describes stress and void-ratio evolution during deformation. It represents contraction or dilation and the approach toward critical states through a direct stress-rate law, without a yield surface.",
+  "behaviours": [
+    [
+      "Density-dependent contraction and dilation",
+      "The current void ratio relative to the pressure-dependent critical void ratio affects the volume response and stress evolution."
+    ],
+    [
+      "Pressure-dependent stiffness",
+      "The stress-rate scale increases with stress magnitude; equal strain increments can produce different stress changes at different confining pressures."
+    ],
+    [
+      "Direction-sensitive response",
+      "Changing the deformation direction changes the direction toward which the stress evolves."
+    ]
+  ],
+  "scope": "The Atlas implementation uses three-dimensional small strain, fixed spatial axes and compression-positive effective stress and strain. It advances along a prescribed strain history; changing elapsed time alone does not produce creep or relaxation. The sand law does not supply a pore-pressure evolution law.",
+  "limits": "Atlas implements the 2015 sand law with a separately attributed 2019 illustrative parameter set. It requires nonzero positive-definite effective stress and an admissible void ratio above the minimum. The laboratory applies mixed stress constraints at increment endpoints; these are not continuously imposed constraints within each increment. Finite rotations, a finite-element tangent and experimental validation are outside this delivery.",
+  "preparation": "Use Load model example to supply equal compressive normal effective stresses, zero shear stress and an explicit starting void ratio. For another specimen, supply its initial effective stress and void ratio. Merely changing void ratio does not reproduce its preparation history.",
+  "parameters": [
+    {
+      "name": "c1",
+      "symbol": "c1",
+      "meaning": "Critical-friction direction coefficient",
+      "help": "Relates the deformation-direction mapping to the critical friction angle.",
+      "unit": "1"
+    },
+    {
+      "name": "c2",
+      "symbol": "c2",
+      "meaning": "Dilatancy direction coefficient",
+      "help": "Adjusts the dilatancy-dependent direction mapping and its curvature.",
+      "unit": "1"
+    },
+    {
+      "name": "c3",
+      "symbol": "c3",
+      "meaning": "Density-departure coefficient",
+      "help": "Weights the difference between critical and current void ratio in the stress-rate law.",
+      "unit": "1"
+    },
+    {
+      "name": "c4",
+      "symbol": "c4",
+      "meaning": "Stress-rate scale",
+      "help": "Sets the stress-valued offset in the stiffness scale c4 + c5 times stress magnitude. It does not authorize zero-stress initialization.",
+      "unit": "Pa"
+    },
+    {
+      "name": "c5",
+      "symbol": "c5",
+      "meaning": "Pressure-stiffening slope",
+      "help": "Sets the dimensionless slope of the stress-dependent stiffness scale and also enters the pressure dependence of critical void ratio.",
+      "unit": "1"
+    },
+    {
+      "name": "ec0",
+      "symbol": "e_c0",
+      "meaning": "Zero-pressure critical void ratio",
+      "help": "Sets the critical void-ratio reference at zero pressure; admissible runs still require nonzero effective stress.",
+      "unit": "1"
+    },
+    {
+      "name": "emin",
+      "symbol": "e_min",
+      "meaning": "Minimum void ratio",
+      "help": "Sets the lower void-ratio reference and the admissible density boundary.",
+      "unit": "1"
+    }
+  ],
+  "stateLabels": {
+    "e": "Void ratio e"
+  },
+  "references": [
+    {
+      "label": "Kolymbas (2015) — barodesy for sand",
+      "url": "https://doi.org/10.1680/geot.14.P.151"
+    },
+    {
+      "label": "Kolymbas and Bathaeian (2019) — parameter example",
+      "url": "https://doi.org/10.1002/nag.2984"
+    }
+  ],
+  "related": [
+    "barodesy-clay-2017",
+    "hypoplastic-sand-vw96"
+  ],
+  "contentSources": [
+    "models/barodesy-sand.json",
+    "docs/ingestion/barodesy-sand/README.md",
+    "docs/models/barodesy-sand-qualified-v1.md"
+  ],
+  "explorationTitle": "Explore the response",
+  "exploration": "Choose Drained triaxial and Load model example, then run the monotonic example. Compare its stress–strain and volume response with a second admissible starting void ratio at the same initial stress and material parameters. Keep the strain target small and check the run status before interpreting the comparison.",
+  "parameterNote": "The displayed defaults come from the model definition and illustrate the response; they are not a calibration for an arbitrary sand. Keep stress quantities in consistent units and use a material-specific parameter set.",
+  "title": "Barodesy sand (2015)"
+}

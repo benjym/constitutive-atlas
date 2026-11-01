@@ -1,0 +1,7 @@
+# Mohr–Coulomb independent approval handoff — 2 November 2026
+
+The actual separate `/root/mc_scientific_review` accepted all nine policy items for the exact existing full H=0 three-dimensional formulation. The canonical record is byte-identical to its actual decision, SHA-2565190673eb3991450b598f1d0bb0943e6995f605be8890f69d0dc536d9014d9ce. The official validator accepts both paths. The coordinator replayed the independent source/binding/243-case rational algebra checker; `CHECKS.json` and `coordinator-source-replay.json` retain those results.
+
+`approval-entry.json` is generated through the ordinary approval-entry function against the canonical record; it is not installed in the shared registry. Existing registry and source-archive map bytes remain unchanged. The known unrelated VW96 policy binding still prevents unqualified whole-atlas export. Its exact recovered policy/proposal is in `docs/reviews/vw96-policy-binding-v1/`; coordinate existing consumers' source preservation before changing the map or registry.
+
+Next: integrate this exact generated entry additively on the coordinated current baseline; preserve every prior approval/review, qualify normal database/evidence projections and affected package/profile/browser scope. Do not manufacture another scientific signature or repeat the completed scientific review. Full E5 installation, E6–E8 and the model umbrella remain open. Current runtime, experimental validity and live-release qualification are not supplied by this handoff. No compiled calls, builds, push or deployment occurred.

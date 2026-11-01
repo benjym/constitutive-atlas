@@ -1,0 +1,2258 @@
+From 000ab5e79619038e0b56483e0146cf2e9ce4bd18 Mon Sep 17 00:00:00 2001
+From: Benjy Marks <benjy.marks@sydney.edu.au>
+Date: Mon, 2 Nov 2026 09:10:17 +1100
+Subject: [PATCH] Approve Mohr-Coulomb H=0 through independent agent review
+
+---
+ .../agent-reviews/mohr-coulomb-agent-v1.json  |  373 ++++++
+ catalogue/approved-models.json                |  291 ++++-
+ .../retention-v1/private-retention.json       |   19 +
+ .../certificates-replay.json                  | 1041 +++++++++++++++++
+ .../independent-review/check-results.json     |   52 +
+ .../independent-review/check_review.py        |   51 +
+ .../independent-review/execution-receipt.json |   38 +
+ .../independent-review/report.md              |   81 ++
+ .../stored-backend-preflight.py.stderr        |    0
+ .../stored-backend-preflight.py.stdout        |    1 +
+ .../stored-backend-static_checks.py.stderr    |    0
+ .../stored-backend-static_checks.py.stdout    |   19 +
+ .../stored-backend-verify_source.py.stderr    |    0
+ .../stored-backend-verify_source.py.stdout    |   10 +
+ .../stored-reference-check.json               |   23 +
+ .../independent-review/tooling-note.txt       |    1 +
+ .../reviews/mohr-coulomb-agent-v1/inputs.json |   18 +
+ 17 files changed, 2004 insertions(+), 14 deletions(-)
+ create mode 100644 catalogue/agent-reviews/mohr-coulomb-agent-v1.json
+ create mode 100644 docs/ingestion/mohr-coulomb/retention-v1/private-retention.json
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/certificates-replay.json
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/check-results.json
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/check_review.py
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/execution-receipt.json
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stderr
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stdout
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stderr
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stdout
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stderr
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stdout
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-reference-check.json
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/independent-review/tooling-note.txt
+ create mode 100644 docs/reviews/mohr-coulomb-agent-v1/inputs.json
+
+diff --git a/catalogue/agent-reviews/mohr-coulomb-agent-v1.json b/catalogue/agent-reviews/mohr-coulomb-agent-v1.json
+new file mode 100644
+index 00000000..5b38de77
+--- /dev/null
++++ b/catalogue/agent-reviews/mohr-coulomb-agent-v1.json
+@@ -0,0 +1,373 @@
++{
++  "schema_version": "0.1",
++  "kind": "agent-model-review",
++  "id": "mohr-coulomb-independent-agent-review-v1",
++  "created_at": "2026-11-02",
++  "source_commit": "c216f7d1adfe0a8e8c4f4f14dc0ed273ca77aad2",
++  "model": {
++    "id": "mohr-coulomb",
++    "path": "models/mohr-coulomb.json",
++    "sha256": "6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5"
++  },
++  "status": "accepted",
++  "reviewer": {
++    "kind": "agent",
++    "name": "/root/mc_scientific_review",
++    "run_id": "/root/mc_scientific_review",
++    "independence_basis": "Actual separate coordinator-dispatched scientific reviewer run; did not author model transcription. Read exact original governing pages, independently checked full model/source algebra and inspected independent source references and retained saved numerical evidence. No compiled calls/builds/new trajectories/browser execution."
++  },
++  "author_run_ids": [
++    "unknown: historical model-transcription run identities were not recorded; no invented identity asserted"
++  ],
++  "scope": "Complete constant-cohesion three-dimensional nonassociated H=0 Sysala-Cermak arXiv1508.07435v3 law with explicit Atlas backward-Euler compression-positive effective-Cauchy/Mandel small-strain fixed-frame zero-spin choices for exact model bytes. Strict source domain retained in full. Bounded inspected historical native/Wasm residual/38-column-current-parent-loading, six-stress transactions, five-protocol finite laboratory paths and corrected private-package browser qualification support software use only within documented numerical representability; no universal path/parameter/tangent or current live-release claim.",
++  "limitations": [
++    "All strict source parameters remain c>0,E>0,-1<nu<1/2,0<phi,psi<pi/2; no c=0,phi=0,psi=0,negative-dilation extension or added psi<=phi constraint.",
++    "Finite valid near-apex inputs and rounded right-to-apex holds can reject at selected unresolved spectral gaps; 27conditional source inputs and ten rejected unresolved-gap requests remain disclosed numerical coverage limits, not source-domain exclusions or passes.",
++    "Initial/postreturn admissibility allowance is256eps stress-scaled; raw Ftrial<=0 remains strict. No universal floating-point error or representability theorem, physical pressure cutoff or elastic tolerance zone is inferred.",
++    "Selected-branch derivatives at equalities are not unique classical tangents. General boundary semismooth proof, complete general tangent/FE capability and universal parameter/path coverage are not established.",
++    "38compiled columns are current/parent/loading; five independent parameter sensitivities are source references, not production parameter-Jet support.",
++    "Only six persistent stresses are modeled. Constant elasticity/cohesion; no density, fabric, cap, cutoff, softening/hardening, viscosity or physical-time evolution. Default100kPa sphere is illustrative with no specimen preparation/calibration.",
++    "Effective pore-pressure reconstruction is only for declared undrained protocols and host assumptions; no density/void-ratio matching or experimental validation assessed.",
++    "Backend/browser observations are inspected historical exact-artifact evidence. Native finite-path recovery was fresh-process, Wasm same-module. This review made no compiled/build/browser calls and does not attest current live-release bytes or authorize deployment.",
++    "Historical author run IDs unknown explicitly. Source PDF is private and ignored; redistribution permission not asserted. Original failed identities remain unchanged."
++  ],
++  "blocking_findings": [],
++  "checklist": [
++    {
++      "id": "source_provenance",
++      "outcome": "pass",
++      "reason": "Original exact private PDF title and complete governing pp1,7-16 visually inspected; exact two-author preprint identity, source receipt and private retention verified.",
++      "evidence": [
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md#source_provenance",
++        "docs/ingestion/mohr-coulomb/sources.json",
++        "docs/ingestion/mohr-coulomb/retention-v1/private-retention.json"
++      ]
++    },
++    {
++      "id": "equation_fidelity",
++      "outcome": "pass",
++      "reason": "Every model parameter, branch expression, residual and predicate checked against source H=0; independent exact arithmetic confirms coefficients and gap identities; equality ownership remains source-derived.",
++      "evidence": [
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md#equation_fidelity",
++        "models/mohr-coulomb.json",
++        "docs/ingestion/mohr-coulomb/FORMULAS.md",
++        "docs/reviews/mc-branch-policy-audit-v1/PROOF.md",
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/check-results.json"
++      ]
++    },
++    {
++      "id": "conventions_dimensions",
++      "outcome": "pass",
++      "reason": "Pa/dimensionless/radian/Mandel conventions and compression sign/order reversal verified; effective stress is an explicit host specialization.",
++      "evidence": [
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md#conventions_dimensions",
++        "docs/FORMULATION_CONTRACT.md",
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/certificates-replay.json"
++      ]
++    },
++    {
++      "id": "initialization_domain",
++      "outcome": "pass",
++      "reason": "Complete minimal stress-only state, explicit admissible initial stress, strict physical domains and numerical rejection limits assessed without removing valid source states.",
++      "evidence": [
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md#initialization_domain",
++        "models/mohr-coulomb.json",
++        "docs/ingestion/mohr-coulomb/README.md",
++        "catalogue/investigations/mc-stored-backends-v1/policy-audit/README.md"
++      ]
++    },
++    {
++      "id": "integration_transactions",
++      "outcome": "pass",
++      "reason": "Backward-Euler incremental history, no physical-time creep/reset, selected tangent distinctions and actual saved six-stress tentative-update failure/rollback/recovery evidence assessed.",
++      "evidence": [
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md#integration_transactions",
++        "catalogue/investigations/mc-stored-backends-v1/RESULTS.md",
++        "catalogue/investigations/mc-stored-backends-v1/policy.json",
++        "catalogue/investigations/mc-stored-backends-v1/native/assessment.json",
++        "catalogue/investigations/mc-stored-backends-v1/wasm/assessment.json"
++      ]
++    },
++    {
++      "id": "independent_numerical_evidence",
++      "outcome": "pass",
++      "reason": "Independent manufactured KKT certificates and exact stored-coordinate/axisymmetric references inspected; source/saved checks pass; branch eligibility, conditioned budgets, mixed-scale gates and original failures retained.",
++      "evidence": [
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md#independent_numerical_evidence",
++        "docs/ingestion/mohr-coulomb/check_certificates.py",
++        "docs/reviews/mc-stored-reference-v1/generate.py",
++        "docs/reviews/mc-stored-reference-v1/spectral_source.py",
++        "docs/reviews/mc-stored-reference-v1/summary.json",
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-reference-check.json",
++        "catalogue/investigations/mc-stored-backends-v1/prospective-freeze.json",
++        "catalogue/investigations/mc-stored-backends-v1/assess.py",
++        "catalogue/investigations/mc-stored-backends-v1/policy-audit/policy-table.json",
++        "docs/reviews/mc-browser-loading-paths-v1/axisymmetric.py",
++        "docs/reviews/mc-browser-loading-paths-v1/README.md"
++      ]
++    },
++    {
++      "id": "backend_delivery",
++      "outcome": "pass",
++      "reason": "Actual archived raw descriptors embed exact current model; historical native/Wasm finite paths and corrected private browser candidate saved replays pass; no fresh execution/current live-release claim.",
++      "evidence": [
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md#backend_delivery",
++        "docs/reviews/mc-current-collector-freeze-v3/models/mohr-coulomb.json",
++        "docs/reviews/mc-current-collector-freeze-v3/catalogue.json",
++        "docs/reviews/mc-native-qualification-v3/observations.tar.gz",
++        "docs/reviews/mc-native-qualification-v3/receipt.json",
++        "docs/reviews/mc-wasm-qualification-v3/observations.tar.gz",
++        "docs/reviews/mc-wasm-qualification-v3/receipt.json",
++        "docs/reviews/mc-browser-closure-v3/observations.tar.gz",
++        "docs/reviews/mc-browser-closure-v3/package-receipt.json",
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/execution-receipt.json"
++      ]
++    },
++    {
++      "id": "applicability_claims",
++      "outcome": "pass",
++      "reason": "Complete strict-domain H=0 law accepted with explicit numerical coverage, selected/general tangent, preparation, density, finite rotation/FE and experimental limits; no unsupported broader claim.",
++      "evidence": [
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md#applicability_claims",
++        "docs/models/mohr-coulomb.md",
++        "catalogue/investigations/mc-stored-backends-v1/RESULTS.md",
++        "docs/reviews/mc-browser-closure-v3/README.md"
++      ]
++    },
++    {
++      "id": "reproducibility_rights",
++      "outcome": "pass",
++      "reason": "Exact model/source/check/evidence hashes and actual separate reviewer identity bound; author identities unknown explicitly; source retained privately without article redistribution.",
++      "evidence": [
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md#reproducibility_rights",
++        "docs/reviews/mohr-coulomb-agent-v1/inputs.json",
++        "docs/ingestion/mohr-coulomb/retention-v1/private-retention.json",
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/check_review.py",
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/execution-receipt.json",
++        "docs/reviews/mohr-coulomb-agent-v1/independent-review/tooling-note.txt"
++      ]
++    }
++  ],
++  "artifacts": [
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/RESULTS.md",
++      "sha256": "769f760d81c471b1fe550e300e6a608cc60ff4598cbfc176480c115897c15bcd"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/assess.py",
++      "sha256": "2535dd523fe4a2f6d879a4ee78100ec76240a52c8a7debafd6b52b5b428a1646"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/assessor-audit/extra-probe-results-latest.json",
++      "sha256": "bbf0803e573966a030968ca8d917cf92407bf667f2e709886ac016ebc618f72d"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/assessor-audit/extra-probe-results.json",
++      "sha256": "8c6a282191f6caa20a19a53b82b1aa6a3d6b806f9205b0bea8527ed95ac28518"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/frozen/models/research/mohr-coulomb-sysala-cermak-h0-gap-classifier-v2.json",
++      "sha256": "43c16277460be77458e321316b9df13dd13fd6c4ab892a628c3c691e0fc24d5f"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/native/assessment.json",
++      "sha256": "7069527e231e5ac0fe10ef00562d3eb3cfa8bc345aa46b19e974476a03812e9f"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/policy-audit/README.md",
++      "sha256": "3d67100341398ca25b4fe01a9f0450570008b0a3744885abc9df1abcfd7c806c"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/policy-audit/policy-table.json",
++      "sha256": "0af0da7a4f1c184358bb9eb1e62eab4a69d2290f4c12aff8855ab66599439c51"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/policy.json",
++      "sha256": "c7f9823dad2da709493c7cb2b761eb1ef3face0604c243e8829520daecaa2067"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/prospective-freeze.json",
++      "sha256": "3a38e4acb90d1f419a84ae5e6d6ff98527b1af5ad6e52d78639bb8b2e3b25c0c"
++    },
++    {
++      "path": "catalogue/investigations/mc-stored-backends-v1/wasm/assessment.json",
++      "sha256": "7069527e231e5ac0fe10ef00562d3eb3cfa8bc345aa46b19e974476a03812e9f"
++    },
++    {
++      "path": "docs/AGENT_REVIEW_POLICY.md",
++      "sha256": "8d35ca57150889ff1630626e6f677e7f4124997a58e26f9ef8555f9ba7dd6798"
++    },
++    {
++      "path": "docs/FORMULATION_CONTRACT.md",
++      "sha256": "5f3ee154c00ed61c9faf5f9d9cfd3ab52c4c9c206add88150316e579c3f24eab"
++    },
++    {
++      "path": "docs/ingestion/mohr-coulomb/FORMULAS.md",
++      "sha256": "f805747b8d1978c8c1223ef86fcdba9f027e3d9935b31cc1289db7c32274aa85"
++    },
++    {
++      "path": "docs/ingestion/mohr-coulomb/README.md",
++      "sha256": "46f2da87439aa3ef84cfb3ff853adfdeb81dd95027aa9aaba76f2fec4f9a4154"
++    },
++    {
++      "path": "docs/ingestion/mohr-coulomb/check_certificates.py",
++      "sha256": "bd59247c22c8eee7802b25c8015810dbc2c8c0b4b5c472def61dd770dc291df9"
++    },
++    {
++      "path": "docs/ingestion/mohr-coulomb/initial-failure.log",
++      "sha256": "84d8ec52ce6cf7f42647a076673e2a10c1c72c226578cc14d5dc9a0de2a104f1"
++    },
++    {
++      "path": "docs/ingestion/mohr-coulomb/retention-v1/private-retention.json",
++      "sha256": "4b3e7f011e11320424c9517f9eeb6bc9d10ae748b37038ae5770d6fe4073ebf1"
++    },
++    {
++      "path": "docs/ingestion/mohr-coulomb/sources.json",
++      "sha256": "47c8d05834c5ff67780818ff30a67375a9d1242021cc6dc9674cb60d405b3bb6"
++    },
++    {
++      "path": "docs/models/mohr-coulomb.md",
++      "sha256": "190f1127143b9a9cbeba54483fc7d5cbe09fbed30b2f076157c60359e0037ce9"
++    },
++    {
++      "path": "docs/reviews/mc-branch-policy-audit-v1/PROOF.md",
++      "sha256": "b8643c37890d48a1f1e38edc173a3645d4c13cf2a8c72c38459fcf3f7bf30d59"
++    },
++    {
++      "path": "docs/reviews/mc-browser-closure-v3/README.md",
++      "sha256": "d2d9558f3a66f2d3ec634a5692e99ed1b2cc7fa67be96c3d1323ff85281c220c"
++    },
++    {
++      "path": "docs/reviews/mc-browser-closure-v3/observations.tar.gz",
++      "sha256": "1a26b80f178ed29d8408a325c26c558c958d337e8029b949ca696b9647a9e4b2"
++    },
++    {
++      "path": "docs/reviews/mc-browser-closure-v3/package-receipt.json",
++      "sha256": "c77af378833d5467f29390139ab59164282fb17bf89d78b8240cf7a164052151"
++    },
++    {
++      "path": "docs/reviews/mc-browser-loading-paths-v1/README.md",
++      "sha256": "38d279942d2f26280ed04a1a7af990d3c91da437aea0ecb04762cd7ade89586b"
++    },
++    {
++      "path": "docs/reviews/mc-browser-loading-paths-v1/axisymmetric.py",
++      "sha256": "ac1beff639a43d5bd6ef3a508ece065a687a75a4626d42367e728d7424194ebc"
++    },
++    {
++      "path": "docs/reviews/mc-current-collector-freeze-v3/catalogue.json",
++      "sha256": "a5aa4c75272655973526500eee137ff732934366b7b3fbb2c022f8a76a4c1cac"
++    },
++    {
++      "path": "docs/reviews/mc-current-collector-freeze-v3/models/mohr-coulomb.json",
++      "sha256": "6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5"
++    },
++    {
++      "path": "docs/reviews/mc-cyclic-control-diagnostic-v1/README.md",
++      "sha256": "3ebdc6ee78136584ed3135993a2f10aacdeb730888afe0eeb377801cbbd3f5d5"
++    },
++    {
++      "path": "docs/reviews/mc-declarative-design-v1/check.stderr",
++      "sha256": "9865ce7a801f801e8ed9ea42a24fec5c64d63adb37be2cb14baf84aa43017a5e"
++    },
++    {
++      "path": "docs/reviews/mc-native-qualification-v3/observations.tar.gz",
++      "sha256": "a0952aca3ddb877809f0fa0da25817da5f9f5c83674d6d8874b8bca4a87e303f"
++    },
++    {
++      "path": "docs/reviews/mc-native-qualification-v3/receipt.json",
++      "sha256": "852c81e45fc17165598505c2aa9198a455ee297f37d04d491f666665d2d1fab9"
++    },
++    {
++      "path": "docs/reviews/mc-private-package-v3-attempt3/README.md",
++      "sha256": "1914d1b19bd6c56abbf36b4cc7400f42d22279e402abc1ff8eeb91e5e94b9170"
++    },
++    {
++      "path": "docs/reviews/mc-private-package-v3/README.md",
++      "sha256": "93a33097b017131e1641e557c0372c2b3cefcb83d01b3adce108847cdc3b7f0d"
++    },
++    {
++      "path": "docs/reviews/mc-stored-reference-v1/generate.py",
++      "sha256": "9832f8e0c3c6e489b8dab49fc1a29fbd7baabcb495e74c83e3d8bec028b99d54"
++    },
++    {
++      "path": "docs/reviews/mc-stored-reference-v1/spectral_source.py",
++      "sha256": "c8674f295f3fa66ad908d3d6f135b79d4ac4e0d89b2664d3150f24c98718a3ee"
++    },
++    {
++      "path": "docs/reviews/mc-stored-reference-v1/summary.json",
++      "sha256": "dce647aa19fb26425693c3ff938ba9bdc48df6c99b12fcd45a4b619e267cfe9e"
++    },
++    {
++      "path": "docs/reviews/mc-wasm-qualification-v3/observations.tar.gz",
++      "sha256": "55ec50777391a9f5e25d2ee72a976c1306e9fca8120823ae0f903e35089e67ee"
++    },
++    {
++      "path": "docs/reviews/mc-wasm-qualification-v3/receipt.json",
++      "sha256": "81af75ec67e499ecc536a9e1073781d779c2b84ff35fb875ad0631931277e11b"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/certificates-replay.json",
++      "sha256": "f51dfe97f0c2b640b631341fd06c20897a12a128d9e8422bb9a9b750065dc6b6"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/check-results.json",
++      "sha256": "71b95dee4aa5c46126df73df6c44cf7b8d2982f8e0e49253247c47e87181d53e"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/check_review.py",
++      "sha256": "75ec296ddf0a5b9eb9778ef82d208433856cf97100cd28c94aad097c4863be67"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/execution-receipt.json",
++      "sha256": "e041099e67adf8ca1bde998d6e0d8d882a1310e0acea4594f512e72899e05c4a"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md",
++      "sha256": "610082f25ce32b687606a3d9ead5d8a204ad63b5acc60f291f8d70f519714ad6"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stderr",
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stdout",
++      "sha256": "1a0187368bd75af9bfd6ffca4012a471a6b08920aaf4c98fa1f13da3c59c51e9"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stderr",
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stdout",
++      "sha256": "951e915ecdd7c530249491e2b44c2b4a94079f80ada1c9fe43070718ed696c4f"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stderr",
++      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stdout",
++      "sha256": "189aa6bd0197112b4f770b3729cb2cbc0b822e976447fba856a839b3c0b0045c"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-reference-check.json",
++      "sha256": "cf7d4e603a0295d3473d8d02bac33190222b35cd15b0ca1a26bb1602a8cf0813"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/tooling-note.txt",
++      "sha256": "6122fcc8cd7f5e2d0d9dfd77081fc156ee186fae65412e8f580dc253541379ca"
++    },
++    {
++      "path": "docs/reviews/mohr-coulomb-agent-v1/inputs.json",
++      "sha256": "26cfa391140c2976b37e315bb276031bcedc3e9ec0ca4692a04c6636e20ecbfb"
++    },
++    {
++      "path": "models/mohr-coulomb.json",
++      "sha256": "6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5"
++    },
++    {
++      "path": "schemas/agent-review.schema.json",
++      "sha256": "ff1e3a55ab38036b08efba5c41b50b241158f4c01928c37272fca015f69a4884"
++    }
++  ]
++}
+diff --git a/catalogue/approved-models.json b/catalogue/approved-models.json
+index 70fb30c2..192ac527 100644
+--- a/catalogue/approved-models.json
++++ b/catalogue/approved-models.json
+@@ -234,7 +234,7 @@
+         "immutable_identity_policy": "Exact qualified bytes preserved. This registry supplies current bounded user approval; historical draft metadata and reports remain unchanged."
+       },
+       "scope": {
+-        "law": "Nakai–Hinokio2004 full one-a clay with Appendix V, project endpoint backward Euler",
++        "law": "Nakai\u2013Hinokio2004 full one-a clay with Appendix V, project endpoint backward Euler",
+         "kinematics": "small_strain_3d",
+         "frame": "fixed_spatial",
+         "objective_rate": "none",
+@@ -636,7 +636,7 @@
+         "Original native22/27 accuracy failures retained; refined27/27 native/Wasm passes do not imply unconditional discrete dissipation.",
+         "Restart uses the same partition; clock-shift study checks stress response, with endpoint times separately checked in execution-v1. No arbitrary adaptive checkpoint or persistent native-process recovery claim.",
+         "Von-Mises norm gradient is undefined at zero; no physical norm-gradient, general FE tangent, FE/MPM, finite spin or coupled-pore-pressure qualification.",
+-        "Browser import/reset/invalid recovery/latest-request/full changed-parameter lifecycle, ordinary public selector integration and live deployment are not approved by this record; E6–E8 remain separate delivery gates.",
++        "Browser import/reset/invalid recovery/latest-request/full changed-parameter lifecycle, ordinary public selector integration and live deployment are not approved by this record; E6\u2013E8 remain separate delivery gates.",
+         "Original source HTML unavailable; readable extracted vendor text is durably private and hash bound, not redistributable source bytes.",
+         "Two review-v1 low findings retained and bounded by additive reproduction/clock clarification."
+       ],
+@@ -905,7 +905,7 @@
+         "policy": "agent-checklist-v1",
+         "identity": {
+           "kind": "agent",
+-          "name": "Drucker–Prager independent reviewing agent",
++          "name": "Drucker\u2013Prager independent reviewing agent",
+           "run_id": "/root/drucker_prager_agent_review",
+           "independence_basis": "Separate delegated reviewing run from /root; read original sources, wrote independent scalar oracle and assessed saved raw evidence. Did not author model/transcription or run compiled backends."
+         }
+@@ -1233,7 +1233,7 @@
+         "sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14"
+       },
+       "scope": {
+-        "use": "Exact legacy schema0.1 complete associated MCC Atlas discrete formulation: current endpoint pressure/volume elasticity, M² yield/associated flow, normalized temporary gamma, exponential total-volume/log-pc updates; compression-positive Mandel effective stress, infinitesimal3D fixed-frame zero-spin, explicit caller sigma/e/pc. Default vector and named57 saved native cases plus eleven frozen historical native/Wasm protocol0-4/default pairs only. No migration, current build/release/browser, Wasm failure-recovery, serialization restart, FE, finite-rotation, physical-time, experimental or general parameter/uniqueness claim."
++        "use": "Exact legacy schema0.1 complete associated MCC Atlas discrete formulation: current endpoint pressure/volume elasticity, M\u00b2 yield/associated flow, normalized temporary gamma, exponential total-volume/log-pc updates; compression-positive Mandel effective stress, infinitesimal3D fixed-frame zero-spin, explicit caller sigma/e/pc. Default vector and named57 saved native cases plus eleven frozen historical native/Wasm protocol0-4/default pairs only. No migration, current build/release/browser, Wasm failure-recovery, serialization restart, FE, finite-rotation, physical-time, experimental or general parameter/uniqueness claim."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -1717,7 +1717,7 @@
+         "sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477"
+       },
+       "scope": {
+-        "use": "Exact v0.3 complete Medicus-Fellin2017 body Eqs1–10 body 2p/incompressible-grain, fixed-spatial zero-spin infinitesimal Mandel compression-positive effective Cauchy stress/e material-point law. Explicit seven-state initialization, declared zero/hydro continuations and conservative interior/exponential support. Named complete Table 2 calibrations/frozen rate/path/preview matrices and separately pinned analytical London NCL 100 kPa assignment only. Direct exact-candidate evidence: historical13 requests/330 caller points per backend previewv1/v2 plus101 point default; historical research rate/AD/finite-path support connected by exact mathematical/state-layout equality. No current engine/package/browser/live-release, author UMAT/Appendix 6p, finite-rotation, integrated FE tangent, zero/near-hydro AD, restart, arbitraryparameter/domain or experimental claim."
++        "use": "Exact v0.3 complete Medicus-Fellin2017 body Eqs1\u201310 body 2p/incompressible-grain, fixed-spatial zero-spin infinitesimal Mandel compression-positive effective Cauchy stress/e material-point law. Explicit seven-state initialization, declared zero/hydro continuations and conservative interior/exponential support. Named complete Table 2 calibrations/frozen rate/path/preview matrices and separately pinned analytical London NCL 100 kPa assignment only. Direct exact-candidate evidence: historical13 requests/330 caller points per backend previewv1/v2 plus101 point default; historical research rate/AD/finite-path support connected by exact mathematical/state-layout equality. No current engine/package/browser/live-release, author UMAT/Appendix 6p, finite-rotation, integrated FE tangent, zero/near-hydro AD, restart, arbitraryparameter/domain or experimental claim."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -1928,7 +1928,7 @@
+         "Two low prior findings remain: original assessor mixes stress/history in refinement gate although both actual channels improve, and preserved model metadata describes the pre-integration checkpoint.",
+         "Current original source/prior-review verifier calls fail on historical atlas/dsl.py hash drift; successful released-context replays and unchanged model/source evidence are retained. No historical files repinned.",
+         "Native recovery uses separate processes; Wasm same-instance recovery is bounded to saved requests. No unconditional discrete dissipation or arbitrary failure-point proof.",
+-        "E6–E8 public main-laboratory/package/lifecycle/live delivery and dedicated current CI qualification require separate evidence; static live model availability and prior site deployment do not establish them."
++        "E6\u2013E8 public main-laboratory/package/lifecycle/live delivery and dedicated current CI qualification require separate evidence; static live model availability and prior site deployment do not establish them."
+       ],
+       "supporting_files": [
+         {
+@@ -2115,7 +2115,7 @@
+         "sha256": "452b49ef48668c0c5d8aba20dfca398235fa45431e853ee923be05a17c7c88a0"
+       },
+       "scope": {
+-        "use": "Exact Duncan–Chang1970 constant-nu effective-stress isotropic endpoint-principal-average incremental residual, compression-positive Mandel small-strain fixed-spatial zero-spin. Only frozen native/Wasm describe/evaluate/integrate_with_settings and the two source-coefficient drained run_with_settings presets, the exact execution-v2 requests and settings(2e-10,1e-6,45,14,20000,11), with explicitly diagnostic-only modified budgets. Qualified20column residualAD, not a Duncan discrete-update tangent. Exact-copy installation at the stated models path; no scientific metadata change authorized."
++        "use": "Exact Duncan\u2013Chang1970 constant-nu effective-stress isotropic endpoint-principal-average incremental residual, compression-positive Mandel small-strain fixed-spatial zero-spin. Only frozen native/Wasm describe/evaluate/integrate_with_settings and the two source-coefficient drained run_with_settings presets, the exact execution-v2 requests and settings(2e-10,1e-6,45,14,20000,11), with explicitly diagnostic-only modified budgets. Qualified20column residualAD, not a Duncan discrete-update tangent. Exact-copy installation at the stated models path; no scientific metadata change authorized."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -2128,7 +2128,7 @@
+         "Selected scalar exact-tie rows are not unique classical or proved whole-residual Clarke derivatives; numerically unresolved distinct spectra may reject.",
+         "Parity worst3.950669546611607e-8 is close to the frozen4e-8 bound; no bitwise backend equality claim. Non-dyadic loading split has a bounded disclosed exact-real roundoff defect.",
+         "No model-specific constitutive-update tangent, FE host, finite-rotation transport, pore-fluid coupling, dilatancy, physical clock, calibration or experimental validation is approved.",
+-        "Atlas packaging, actual browser qualification and live delivery remain separate E6–E8 gates; no push/deployment authorization is conveyed.",
++        "Atlas packaging, actual browser qualification and live delivery remain separate E6\u2013E8 gates; no push/deployment authorization is conveyed.",
+         "Source commit identifies the repository base; dirty qualified dependencies are separately frozen. Coordinator must install exact candidate bytes and validate final record/model paths before registry integration."
+       ],
+       "supporting_files": [
+@@ -2292,7 +2292,7 @@
+         "sha256": "67ff78f8cd56fd8812ba42f4456105b6e7ae217090dbcf40d8f8d5f839995d2c"
+       },
+       "scope": {
+-        "use": "Original Jefferies1993 active monotonic drained rigid-plastic axial formulation, current-volume incompressible-grain kinematics and adaptive midpoint policy; generic Python controlled-path API, flat native C ABI and Node-hosted Wasm harness only. Numerical qualification limited to nine frozen Latin-square cases and associated58-request/backend corpus: M1.2,h280,lambda.0135,Gamma.82,pref1000Pa,N0/.2/.39,psi0−.16/0/+.075,progress.16 and specified constant-cell/constant-mean/linear-changing controls under frozen settings. Exact model hash and target artifacts as bound."
++        "use": "Original Jefferies1993 active monotonic drained rigid-plastic axial formulation, current-volume incompressible-grain kinematics and adaptive midpoint policy; generic Python controlled-path API, flat native C ABI and Node-hosted Wasm harness only. Numerical qualification limited to nine frozen Latin-square cases and associated58-request/backend corpus: M1.2,h280,lambda.0135,Gamma.82,pref1000Pa,N0/.2/.39,psi0\u2212.16/0/+.075,progress.16 and specified constant-cell/constant-mean/linear-changing controls under frozen settings. Exact model hash and target artifacts as bound."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -2302,7 +2302,7 @@
+       "limitations": [
+         "Declared parameter bounds do not establish accuracy over the full box or arbitrary controls; nine sampled endpoint cases and qualified transactions only.",
+         "No experimental validation, figure digitization, nominal post-peak specimen response, inactive/interior unloading, elasticity, cyclic/fabric law, general3D/Lode/finite rotation/FE/MPM support or analytic tangent claim.",
+-        "No separately exposed user-facing CLI, main-atlas/package/actualbrowser/live delivery qualification; E6–E8 remain separate.",
++        "No separately exposed user-facing CLI, main-atlas/package/actualbrowser/live delivery qualification; E6\u2013E8 remain separate.",
+         "Current-volume void-ratio reconstruction and adaptive midpoint integration are explicit Atlas choices; accumulated strain increments are not exact finite principal stretches.",
+         "Candidate metadata retains its exact historical draft/staged wording; separate registry approval carries this bounded decision. Metadata edits require new hash binding."
+       ],
+@@ -2665,7 +2665,7 @@
+         "sha256": "120b93f319543518b2b87221ab7457afaca2a1fb5de78af901276e8e89a22e63"
+       },
+       "scope": {
+-        "use": "Exact complete Lade–Duncan 1975 law in canonical v0.3 model120b93f3, with disclosed midpoint elasticity, endpoint local Eq19 plastic work, signed history carrier and generalized repeated-minimum choices. Fixed-frame small-strain compression-positive Mandel, zero-pore-pressure mechanical Cauchy stress; named Table1 preparations and frozen F parameter/protocol/native/Wasm API case matrices only. Exact installed generic F runtime acb8756e and accepted model/generated/artifact binding. Compiled-scope E5 approval; actual public packaging/preset/browser/live acceptance excluded."
++        "use": "Exact complete Lade\u2013Duncan 1975 law in canonical v0.3 model120b93f3, with disclosed midpoint elasticity, endpoint local Eq19 plastic work, signed history carrier and generalized repeated-minimum choices. Fixed-frame small-strain compression-positive Mandel, zero-pore-pressure mechanical Cauchy stress; named Table1 preparations and frozen F parameter/protocol/native/Wasm API case matrices only. Exact installed generic F runtime acb8756e and accepted model/generated/artifact binding. Compiled-scope E5 approval; actual public packaging/preset/browser/live acceptance excluded."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -3636,7 +3636,7 @@
+         "sha256": "6811580cf9c0678605b9bb7d93a524743bbe5b5cb1f547bd232d090aeda950e4"
+       },
+       "scope": {
+-        "use": "Complete Mašin2013 pinned author-manuscript Appendix43-58 stress law plus p3Eq7 density evolution, exact model6811580cf9c0678605b9bb7d93a524743bbe5b5cb1f547bd232d090aeda950e4, all seven persistent stress/e components under explicit v0.3 zero-spin fixed-spatial infinitesimal3D compression-positive effective Cauchy/Mandel strain-path-rate contract, regular compressive interior and declared continuation/rejection policies. Numerical qualification is bounded by retained source/rate/isotropic/nonisotropic cases and exact historical clay2013-preview-v2 atlas_integrate_with_settings/atlas_run_with_settings native/Wasm artifacts and saved local browser export. No certification of current entire runtime/package/browser or deployment."
++        "use": "Complete Ma\u0161in2013 pinned author-manuscript Appendix43-58 stress law plus p3Eq7 density evolution, exact model6811580cf9c0678605b9bb7d93a524743bbe5b5cb1f547bd232d090aeda950e4, all seven persistent stress/e components under explicit v0.3 zero-spin fixed-spatial infinitesimal3D compression-positive effective Cauchy/Mandel strain-path-rate contract, regular compressive interior and declared continuation/rejection policies. Numerical qualification is bounded by retained source/rate/isotropic/nonisotropic cases and exact historical clay2013-preview-v2 atlas_integrate_with_settings/atlas_run_with_settings native/Wasm artifacts and saved local browser export. No certification of current entire runtime/package/browser or deployment."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -4281,7 +4281,7 @@
+         "sha256": "080fa946ea5d7743b133b62bbd39098b6b50ecf09d835f1a9966fa9283b6f8da"
+       },
+       "scope": {
+-        "use": "COMSOL6.3 ordinary isotropic Kelvin–Voigt, deviatoric viscosity and elastic bulk, dry total Cauchy stress; physical-time small-strain3D fixed-spatial zero-spin compression-positive Mandel eps6 ODE/instantaneous observable. Exact model080fa946…3b6f8da and execution-v3 synthetic43cases: K20MPa,G12MPa,tau0.2/2/20s; declared finite vectors/histories and fine solver rtol3e-11,atol3e-14,budget1e6 (intentional failure budget2), coarse diagnostic1e-5/1e-8. Common native/Wasm integrate-time/observe-time/schedule APIs with direct endpoint restart, full schedule replay and bounded failure lifecycle; historical interface-v3 source/pure transport tests only. Actual packaged browser/live delivery and subsequent interface-v4 changes are not approved or claimed by this record."
++        "use": "COMSOL6.3 ordinary isotropic Kelvin\u2013Voigt, deviatoric viscosity and elastic bulk, dry total Cauchy stress; physical-time small-strain3D fixed-spatial zero-spin compression-positive Mandel eps6 ODE/instantaneous observable. Exact model080fa946\u20263b6f8da and execution-v3 synthetic43cases: K20MPa,G12MPa,tau0.2/2/20s; declared finite vectors/histories and fine solver rtol3e-11,atol3e-14,budget1e6 (intentional failure budget2), coarse diagnostic1e-5/1e-8. Common native/Wasm integrate-time/observe-time/schedule APIs with direct endpoint restart, full schedule replay and bounded failure lifecycle; historical interface-v3 source/pure transport tests only. Actual packaged browser/live delivery and subsequent interface-v4 changes are not approved or claimed by this record."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -4290,7 +4290,7 @@
+       },
+       "limitations": [
+         "No experimental data match, material calibration, specimen preparation or predictive material validity is established.",
+-        "Machine parameter bounds1e-12–1e30 and arbitrary custom controls/continuous parameter hull are unqualified; only exact named synthetic cases/settings pass.",
++        "Machine parameter bounds1e-12\u20131e30 and arbitrary custom controls/continuous parameter hull are unqualified; only exact named synthetic cases/settings pass.",
+         "No finite-strain/finite-rotation objectivity, FE-host adapter/consistent tangent, volumetric viscosity, anisotropy, thermal/fractional/pore/coupled behavior or ideal strain impulse is approved.",
+         "Passive orthonormal basis covariance is not finite-rotation evolution; some synthetic strains are appreciable and do not establish physical small-strain applicability at those amplitudes.",
+         "Native requests are isolated processes; persistent-instance failure/recovery is evidenced by a single Wasm module. Direct actual-endpoint restart/full schedule replay do not establish arbitrary schedule-checkpoint restart.",
+@@ -4485,6 +4485,269 @@
+       ],
+       "experimental_validation": "not_assessed",
+       "deployment_authorized": false
++    },
++    {
++      "id": "mohr-coulomb-independent-agent-review-v1-approval",
++      "model_id": "mohr-coulomb",
++      "status": "approved",
++      "approved_on": "2026-11-02",
++      "approval_authority": {
++        "kind": "independent-agent-review",
++        "policy": "agent-checklist-v1",
++        "identity": {
++          "kind": "agent",
++          "name": "/root/mc_scientific_review",
++          "run_id": "/root/mc_scientific_review",
++          "independence_basis": "Actual separate coordinator-dispatched scientific reviewer run; did not author model transcription. Read exact original governing pages, independently checked full model/source algebra and inspected independent source references and retained saved numerical evidence. No compiled calls/builds/new trajectories/browser execution."
++        }
++      },
++      "definition": {
++        "path": "models/mohr-coulomb.json",
++        "sha256": "6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5"
++      },
++      "scope": {
++        "use": "Complete constant-cohesion three-dimensional nonassociated H=0 Sysala-Cermak arXiv1508.07435v3 law with explicit Atlas backward-Euler compression-positive effective-Cauchy/Mandel small-strain fixed-frame zero-spin choices for exact model bytes. Strict source domain retained in full. Bounded inspected historical native/Wasm residual/38-column-current-parent-loading, six-stress transactions, five-protocol finite laboratory paths and corrected private-package browser qualification support software use only within documented numerical representability; no universal path/parameter/tangent or current live-release claim."
++      },
++      "review": {
++        "kind": "agent-model-review",
++        "path": "catalogue/agent-reviews/mohr-coulomb-agent-v1.json",
++        "sha256": "5190673eb3991450b598f1d0bb0943e6995f605be8890f69d0dc536d9014d9ce"
++      },
++      "limitations": [
++        "All strict source parameters remain c>0,E>0,-1<nu<1/2,0<phi,psi<pi/2; no c=0,phi=0,psi=0,negative-dilation extension or added psi<=phi constraint.",
++        "Finite valid near-apex inputs and rounded right-to-apex holds can reject at selected unresolved spectral gaps; 27conditional source inputs and ten rejected unresolved-gap requests remain disclosed numerical coverage limits, not source-domain exclusions or passes.",
++        "Initial/postreturn admissibility allowance is256eps stress-scaled; raw Ftrial<=0 remains strict. No universal floating-point error or representability theorem, physical pressure cutoff or elastic tolerance zone is inferred.",
++        "Selected-branch derivatives at equalities are not unique classical tangents. General boundary semismooth proof, complete general tangent/FE capability and universal parameter/path coverage are not established.",
++        "38compiled columns are current/parent/loading; five independent parameter sensitivities are source references, not production parameter-Jet support.",
++        "Only six persistent stresses are modeled. Constant elasticity/cohesion; no density, fabric, cap, cutoff, softening/hardening, viscosity or physical-time evolution. Default100kPa sphere is illustrative with no specimen preparation/calibration.",
++        "Effective pore-pressure reconstruction is only for declared undrained protocols and host assumptions; no density/void-ratio matching or experimental validation assessed.",
++        "Backend/browser observations are inspected historical exact-artifact evidence. Native finite-path recovery was fresh-process, Wasm same-module. This review made no compiled/build/browser calls and does not attest current live-release bytes or authorize deployment.",
++        "Historical author run IDs unknown explicitly. Source PDF is private and ignored; redistribution permission not asserted. Original failed identities remain unchanged."
++      ],
++      "supporting_files": [
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/RESULTS.md",
++          "sha256": "769f760d81c471b1fe550e300e6a608cc60ff4598cbfc176480c115897c15bcd"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/assess.py",
++          "sha256": "2535dd523fe4a2f6d879a4ee78100ec76240a52c8a7debafd6b52b5b428a1646"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/assessor-audit/extra-probe-results-latest.json",
++          "sha256": "bbf0803e573966a030968ca8d917cf92407bf667f2e709886ac016ebc618f72d"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/assessor-audit/extra-probe-results.json",
++          "sha256": "8c6a282191f6caa20a19a53b82b1aa6a3d6b806f9205b0bea8527ed95ac28518"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/frozen/models/research/mohr-coulomb-sysala-cermak-h0-gap-classifier-v2.json",
++          "sha256": "43c16277460be77458e321316b9df13dd13fd6c4ab892a628c3c691e0fc24d5f"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/native/assessment.json",
++          "sha256": "7069527e231e5ac0fe10ef00562d3eb3cfa8bc345aa46b19e974476a03812e9f"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/policy-audit/README.md",
++          "sha256": "3d67100341398ca25b4fe01a9f0450570008b0a3744885abc9df1abcfd7c806c"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/policy-audit/policy-table.json",
++          "sha256": "0af0da7a4f1c184358bb9eb1e62eab4a69d2290f4c12aff8855ab66599439c51"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/policy.json",
++          "sha256": "c7f9823dad2da709493c7cb2b761eb1ef3face0604c243e8829520daecaa2067"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/prospective-freeze.json",
++          "sha256": "3a38e4acb90d1f419a84ae5e6d6ff98527b1af5ad6e52d78639bb8b2e3b25c0c"
++        },
++        {
++          "path": "catalogue/investigations/mc-stored-backends-v1/wasm/assessment.json",
++          "sha256": "7069527e231e5ac0fe10ef00562d3eb3cfa8bc345aa46b19e974476a03812e9f"
++        },
++        {
++          "path": "docs/AGENT_REVIEW_POLICY.md",
++          "sha256": "8d35ca57150889ff1630626e6f677e7f4124997a58e26f9ef8555f9ba7dd6798"
++        },
++        {
++          "path": "docs/FORMULATION_CONTRACT.md",
++          "sha256": "5f3ee154c00ed61c9faf5f9d9cfd3ab52c4c9c206add88150316e579c3f24eab"
++        },
++        {
++          "path": "docs/ingestion/mohr-coulomb/FORMULAS.md",
++          "sha256": "f805747b8d1978c8c1223ef86fcdba9f027e3d9935b31cc1289db7c32274aa85"
++        },
++        {
++          "path": "docs/ingestion/mohr-coulomb/README.md",
++          "sha256": "46f2da87439aa3ef84cfb3ff853adfdeb81dd95027aa9aaba76f2fec4f9a4154"
++        },
++        {
++          "path": "docs/ingestion/mohr-coulomb/check_certificates.py",
++          "sha256": "bd59247c22c8eee7802b25c8015810dbc2c8c0b4b5c472def61dd770dc291df9"
++        },
++        {
++          "path": "docs/ingestion/mohr-coulomb/initial-failure.log",
++          "sha256": "84d8ec52ce6cf7f42647a076673e2a10c1c72c226578cc14d5dc9a0de2a104f1"
++        },
++        {
++          "path": "docs/ingestion/mohr-coulomb/retention-v1/private-retention.json",
++          "sha256": "4b3e7f011e11320424c9517f9eeb6bc9d10ae748b37038ae5770d6fe4073ebf1"
++        },
++        {
++          "path": "docs/ingestion/mohr-coulomb/sources.json",
++          "sha256": "47c8d05834c5ff67780818ff30a67375a9d1242021cc6dc9674cb60d405b3bb6"
++        },
++        {
++          "path": "docs/models/mohr-coulomb.md",
++          "sha256": "190f1127143b9a9cbeba54483fc7d5cbe09fbed30b2f076157c60359e0037ce9"
++        },
++        {
++          "path": "docs/reviews/mc-branch-policy-audit-v1/PROOF.md",
++          "sha256": "b8643c37890d48a1f1e38edc173a3645d4c13cf2a8c72c38459fcf3f7bf30d59"
++        },
++        {
++          "path": "docs/reviews/mc-browser-closure-v3/README.md",
++          "sha256": "d2d9558f3a66f2d3ec634a5692e99ed1b2cc7fa67be96c3d1323ff85281c220c"
++        },
++        {
++          "path": "docs/reviews/mc-browser-closure-v3/observations.tar.gz",
++          "sha256": "1a26b80f178ed29d8408a325c26c558c958d337e8029b949ca696b9647a9e4b2"
++        },
++        {
++          "path": "docs/reviews/mc-browser-closure-v3/package-receipt.json",
++          "sha256": "c77af378833d5467f29390139ab59164282fb17bf89d78b8240cf7a164052151"
++        },
++        {
++          "path": "docs/reviews/mc-browser-loading-paths-v1/README.md",
++          "sha256": "38d279942d2f26280ed04a1a7af990d3c91da437aea0ecb04762cd7ade89586b"
++        },
++        {
++          "path": "docs/reviews/mc-browser-loading-paths-v1/axisymmetric.py",
++          "sha256": "ac1beff639a43d5bd6ef3a508ece065a687a75a4626d42367e728d7424194ebc"
++        },
++        {
++          "path": "docs/reviews/mc-current-collector-freeze-v3/catalogue.json",
++          "sha256": "a5aa4c75272655973526500eee137ff732934366b7b3fbb2c022f8a76a4c1cac"
++        },
++        {
++          "path": "docs/reviews/mc-current-collector-freeze-v3/models/mohr-coulomb.json",
++          "sha256": "6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5"
++        },
++        {
++          "path": "docs/reviews/mc-cyclic-control-diagnostic-v1/README.md",
++          "sha256": "3ebdc6ee78136584ed3135993a2f10aacdeb730888afe0eeb377801cbbd3f5d5"
++        },
++        {
++          "path": "docs/reviews/mc-declarative-design-v1/check.stderr",
++          "sha256": "9865ce7a801f801e8ed9ea42a24fec5c64d63adb37be2cb14baf84aa43017a5e"
++        },
++        {
++          "path": "docs/reviews/mc-native-qualification-v3/observations.tar.gz",
++          "sha256": "a0952aca3ddb877809f0fa0da25817da5f9f5c83674d6d8874b8bca4a87e303f"
++        },
++        {
++          "path": "docs/reviews/mc-native-qualification-v3/receipt.json",
++          "sha256": "852c81e45fc17165598505c2aa9198a455ee297f37d04d491f666665d2d1fab9"
++        },
++        {
++          "path": "docs/reviews/mc-private-package-v3-attempt3/README.md",
++          "sha256": "1914d1b19bd6c56abbf36b4cc7400f42d22279e402abc1ff8eeb91e5e94b9170"
++        },
++        {
++          "path": "docs/reviews/mc-private-package-v3/README.md",
++          "sha256": "93a33097b017131e1641e557c0372c2b3cefcb83d01b3adce108847cdc3b7f0d"
++        },
++        {
++          "path": "docs/reviews/mc-stored-reference-v1/generate.py",
++          "sha256": "9832f8e0c3c6e489b8dab49fc1a29fbd7baabcb495e74c83e3d8bec028b99d54"
++        },
++        {
++          "path": "docs/reviews/mc-stored-reference-v1/spectral_source.py",
++          "sha256": "c8674f295f3fa66ad908d3d6f135b79d4ac4e0d89b2664d3150f24c98718a3ee"
++        },
++        {
++          "path": "docs/reviews/mc-stored-reference-v1/summary.json",
++          "sha256": "dce647aa19fb26425693c3ff938ba9bdc48df6c99b12fcd45a4b619e267cfe9e"
++        },
++        {
++          "path": "docs/reviews/mc-wasm-qualification-v3/observations.tar.gz",
++          "sha256": "55ec50777391a9f5e25d2ee72a976c1306e9fca8120823ae0f903e35089e67ee"
++        },
++        {
++          "path": "docs/reviews/mc-wasm-qualification-v3/receipt.json",
++          "sha256": "81af75ec67e499ecc536a9e1073781d779c2b84ff35fb875ad0631931277e11b"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/certificates-replay.json",
++          "sha256": "f51dfe97f0c2b640b631341fd06c20897a12a128d9e8422bb9a9b750065dc6b6"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/check-results.json",
++          "sha256": "71b95dee4aa5c46126df73df6c44cf7b8d2982f8e0e49253247c47e87181d53e"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/check_review.py",
++          "sha256": "75ec296ddf0a5b9eb9778ef82d208433856cf97100cd28c94aad097c4863be67"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/execution-receipt.json",
++          "sha256": "e041099e67adf8ca1bde998d6e0d8d882a1310e0acea4594f512e72899e05c4a"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md",
++          "sha256": "610082f25ce32b687606a3d9ead5d8a204ad63b5acc60f291f8d70f519714ad6"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stderr",
++          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stdout",
++          "sha256": "1a0187368bd75af9bfd6ffca4012a471a6b08920aaf4c98fa1f13da3c59c51e9"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stderr",
++          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stdout",
++          "sha256": "951e915ecdd7c530249491e2b44c2b4a94079f80ada1c9fe43070718ed696c4f"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stderr",
++          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stdout",
++          "sha256": "189aa6bd0197112b4f770b3729cb2cbc0b822e976447fba856a839b3c0b0045c"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-reference-check.json",
++          "sha256": "cf7d4e603a0295d3473d8d02bac33190222b35cd15b0ca1a26bb1602a8cf0813"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/independent-review/tooling-note.txt",
++          "sha256": "6122fcc8cd7f5e2d0d9dfd77081fc156ee186fae65412e8f580dc253541379ca"
++        },
++        {
++          "path": "docs/reviews/mohr-coulomb-agent-v1/inputs.json",
++          "sha256": "26cfa391140c2976b37e315bb276031bcedc3e9ec0ca4692a04c6636e20ecbfb"
++        },
++        {
++          "path": "models/mohr-coulomb.json",
++          "sha256": "6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5"
++        },
++        {
++          "path": "schemas/agent-review.schema.json",
++          "sha256": "ff1e3a55ab38036b08efba5c41b50b241158f4c01928c37272fca015f69a4884"
++        }
++      ],
++      "experimental_validation": "not_assessed",
++      "deployment_authorized": false
+     }
+   ]
+ }
+diff --git a/docs/ingestion/mohr-coulomb/retention-v1/private-retention.json b/docs/ingestion/mohr-coulomb/retention-v1/private-retention.json
+new file mode 100644
+index 00000000..090467f8
+--- /dev/null
++++ b/docs/ingestion/mohr-coulomb/retention-v1/private-retention.json
+@@ -0,0 +1,19 @@
++{
++  "date": "2026-11-02",
++  "source_receipt": "docs/ingestion/mohr-coulomb/sources.json",
++  "title": "Subdifferential-based implicit return-mapping operators in Mohr-Coulomb plasticity",
++  "authors": [
++    "Stanislav Sysala",
++    "Martin Cermak"
++  ],
++  "version": "arXiv1508.07435v3",
++  "source_url": "https://arxiv.org/abs/1508.07435v3",
++  "pdf_url": "https://arxiv.org/pdf/1508.07435v3",
++  "original_private_path": "/private/tmp/atlas-mohr-coulomb-ingestion-v1/private/arxiv-1508.07435v3.pdf",
++  "durable_private_path": "/Users/bmar5496/code/constitutive-atlas/.local/private-sources/mohr-coulomb/arxiv-1508.07435v3.pdf",
++  "sha256": "bf35ee09d500b8e21aabdddbdfac363c5f68368f150890c60343bc62447c83ca",
++  "bytes": 2590234,
++  "git_ignored": true,
++  "source_equations_read_by": "Separate mc_scientific_review run; actual review pending",
++  "rights": "No redistribution permission asserted. Original remains private/ignored; public metadata and links only. No author code executed."
++}
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/certificates-replay.json b/docs/reviews/mohr-coulomb-agent-v1/independent-review/certificates-replay.json
+new file mode 100644
+index 00000000..b92ab970
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/certificates-replay.json
+@@ -0,0 +1,1041 @@
++{
++  "additional_checks": [
++    "exact rotated Cartesian constitutive residuals for11 plastic cases",
++    "smooth face principal tangent exact centered difference",
++    "interior perfect-plastic apex zero tangent"
++  ],
++  "certificate_count": 14,
++  "certificates": [
++    {
++      "branch": "face",
++      "case": "face",
++      "compression_cartesian_increment": [
++        [
++          "-151/150",
++          "-28/25",
++          "0"
++        ],
++        [
++          "-28/25",
++          "-83/50",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/2"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-3/25",
++          "-4/25",
++          "0"
++        ],
++        [
++          "-4/25",
++          "-16/75",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/6"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-61/25",
++          "-48/25",
++          "0"
++        ],
++        [
++          "-48/25",
++          "-89/25",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "0"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-1231/450",
++          "-56/25",
++          "0"
++        ],
++        [
++          "-56/25",
++          "-1819/450",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "5/18"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "4/3",
++        "0",
++        "-2/3"
++      ],
++      "source_tension_principal_trial": [
++        "103/18",
++        "19/18",
++        "-5/18"
++      ],
++      "source_tension_return": [
++        "5",
++        "1",
++        "0"
++      ]
++    },
++    {
++      "branch": "left",
++      "case": "left",
++      "compression_cartesian_increment": [
++        [
++          "-3779/1800",
++          "-1/25",
++          "0"
++        ],
++        [
++          "-1/25",
++          "-3821/1800",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "13/18"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-31/200",
++          "-1/25",
++          "0"
++        ],
++        [
++          "-1/25",
++          "-107/600",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/6"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-5",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-5",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "0"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-4829/900",
++          "-2/25",
++          "0"
++        ],
++        [
++          "-2/25",
++          "-4871/900",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "5/18"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "5/6",
++        "1/2",
++        "-2/3"
++      ],
++      "source_tension_principal_trial": [
++        "197/36",
++        "191/36",
++        "-5/18"
++      ],
++      "source_tension_return": [
++        "5",
++        "5",
++        "0"
++      ]
++    },
++    {
++      "branch": "right",
++      "case": "right",
++      "compression_cartesian_increment": [
++        [
++          "-161/225",
++          "-69/50",
++          "0"
++        ],
++        [
++          "-69/50",
++          "-2737/1800",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "29/72"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-7/75",
++          "-9/50",
++          "0"
++        ],
++        [
++          "-9/50",
++          "-119/600",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/8"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-9/5",
++          "-12/5",
++          "0"
++        ],
++        [
++          "-12/5",
++          "-16/5",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "0"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-919/450",
++          "-69/25",
++          "0"
++        ],
++        [
++          "-69/25",
++          "-3287/900",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "7/36"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "4/3",
++        "-1/6",
++        "-1/2"
++      ],
++      "source_tension_principal_trial": [
++        "103/18",
++        "-1/36",
++        "-7/36"
++      ],
++      "source_tension_return": [
++        "5",
++        "0",
++        "0"
++      ]
++    },
++    {
++      "branch": "apex",
++      "case": "apex_interior",
++      "compression_cartesian_increment": [
++        [
++          "-2081/900",
++          "-3/25",
++          "0"
++        ],
++        [
++          "-3/25",
++          "-536/225",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-77/36"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-9/100",
++          "-3/25",
++          "0"
++        ],
++        [
++          "-3/25",
++          "-4/25",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/12"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-20/3",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-20/3",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-20/3"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-1553/225",
++          "-6/25",
++          "0"
++        ],
++        [
++          "-6/25",
++          "-3169/450",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-59/9"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "1",
++        "0",
++        "-1/3"
++      ],
++      "source_tension_principal_trial": [
++        "65/9",
++        "121/18",
++        "59/9"
++      ],
++      "source_tension_return": [
++        "20/3",
++        "20/3",
++        "20/3"
++      ]
++    },
++    {
++      "branch": "left",
++      "case": "left_repeated_trial",
++      "compression_cartesian_increment": [
++        [
++          "-19/9",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-19/9",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "13/18"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-1/6",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-1/6",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/6"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-5",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-5",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "0"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-97/18",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-97/18",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "5/18"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "2/3",
++        "2/3",
++        "-2/3"
++      ],
++      "source_tension_principal_trial": [
++        "97/18",
++        "97/18",
++        "-5/18"
++      ],
++      "source_tension_return": [
++        "5",
++        "5",
++        "0"
++      ]
++    },
++    {
++      "branch": "right",
++      "case": "right_repeated_trial",
++      "compression_cartesian_increment": [
++        [
++          "-31/45",
++          "-7/5",
++          "0"
++        ],
++        [
++          "-7/5",
++          "-271/180",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "13/36"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-1/15",
++          "-1/5",
++          "0"
++        ],
++        [
++          "-1/5",
++          "-11/60",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/12"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-9/5",
++          "-12/5",
++          "0"
++        ],
++        [
++          "-12/5",
++          "-16/5",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "0"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-179/90",
++          "-14/5",
++          "0"
++        ],
++        [
++          "-14/5",
++          "-163/45",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/9"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "4/3",
++        "-1/3",
++        "-1/3"
++      ],
++      "source_tension_principal_trial": [
++        "103/18",
++        "-1/9",
++        "-1/9"
++      ],
++      "source_tension_return": [
++        "5",
++        "0",
++        "0"
++      ]
++    },
++    {
++      "branch": "apex",
++      "case": "hydrostatic_apex",
++      "compression_cartesian_increment": [
++        [
++          "-26/9",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-26/9",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-26/9"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-2/3",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-2/3",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-2/3"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-20/3",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-20/3",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-20/3"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-26/3",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-26/3",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-26/3"
++        ]
++      ],
++      "gamma": "3",
++      "source_subgradient": [
++        "2/9",
++        "2/9",
++        "2/9"
++      ],
++      "source_tension_principal_trial": [
++        "26/3",
++        "26/3",
++        "26/3"
++      ],
++      "source_tension_return": [
++        "20/3",
++        "20/3",
++        "20/3"
++      ]
++    },
++    {
++      "branch": "left",
++      "case": "face_to_left_boundary",
++      "compression_cartesian_increment": [
++        [
++          "-929/450",
++          "-4/25",
++          "0"
++        ],
++        [
++          "-4/25",
++          "-971/450",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "13/18"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-3/25",
++          "-4/25",
++          "0"
++        ],
++        [
++          "-4/25",
++          "-16/75",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/6"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-5",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-5",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "0"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-2383/450",
++          "-8/25",
++          "0"
++        ],
++        [
++          "-8/25",
++          "-2467/450",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "5/18"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "4/3",
++        "0",
++        "-2/3"
++      ],
++      "source_tension_principal_trial": [
++        "103/18",
++        "91/18",
++        "-5/18"
++      ],
++      "source_tension_return": [
++        "5",
++        "5",
++        "0"
++      ]
++    },
++    {
++      "branch": "right",
++      "case": "face_to_right_boundary",
++      "compression_cartesian_increment": [
++        [
++          "-167/225",
++          "-34/25",
++          "0"
++        ],
++        [
++          "-34/25",
++          "-691/450",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "4/9"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-3/25",
++          "-4/25",
++          "0"
++        ],
++        [
++          "-4/25",
++          "-16/75",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/6"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-9/5",
++          "-12/5",
++          "0"
++        ],
++        [
++          "-12/5",
++          "-16/5",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "0"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-943/450",
++          "-68/25",
++          "0"
++        ],
++        [
++          "-68/25",
++          "-1657/450",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "5/18"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "4/3",
++        "0",
++        "-2/3"
++      ],
++      "source_tension_principal_trial": [
++        "103/18",
++        "1/18",
++        "-5/18"
++      ],
++      "source_tension_return": [
++        "5",
++        "0",
++        "0"
++      ]
++    },
++    {
++      "branch": "apex",
++      "case": "left_to_apex_boundary",
++      "compression_cartesian_increment": [
++        [
++          "-43/18",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-43/18",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-37/18"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-1/6",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-1/6",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/6"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-20/3",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-20/3",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-20/3"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-127/18",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-127/18",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-115/18"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "2/3",
++        "2/3",
++        "-2/3"
++      ],
++      "source_tension_principal_trial": [
++        "127/18",
++        "127/18",
++        "115/18"
++      ],
++      "source_tension_return": [
++        "20/3",
++        "20/3",
++        "20/3"
++      ]
++    },
++    {
++      "branch": "apex",
++      "case": "right_to_apex_boundary",
++      "compression_cartesian_increment": [
++        [
++          "-103/45",
++          "-1/5",
++          "0"
++        ],
++        [
++          "-1/5",
++          "-433/180",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-77/36"
++        ]
++      ],
++      "compression_cartesian_plastic_increment": [
++        [
++          "-1/15",
++          "-1/5",
++          "0"
++        ],
++        [
++          "-1/5",
++          "-11/60",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "1/12"
++        ]
++      ],
++      "compression_cartesian_return": [
++        [
++          "-20/3",
++          "0",
++          "0"
++        ],
++        [
++          "0",
++          "-20/3",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-20/3"
++        ]
++      ],
++      "compression_cartesian_trial": [
++        [
++          "-617/90",
++          "-2/5",
++          "0"
++        ],
++        [
++          "-2/5",
++          "-319/45",
++          "0"
++        ],
++        [
++          "0",
++          "0",
++          "-59/9"
++        ]
++      ],
++      "gamma": "1/4",
++      "source_subgradient": [
++        "4/3",
++        "-1/3",
++        "-1/3"
++      ],
++      "source_tension_principal_trial": [
++        "133/18",
++        "59/9",
++        "59/9"
++      ],
++      "source_tension_return": [
++        "20/3",
++        "20/3",
++        "20/3"
++      ]
++    },
++    {
++      "branch": "elastic",
++      "case": "elastic_zero",
++      "gamma": "0",
++      "return": [
++        "0",
++        "0",
++        "0"
++      ],
++      "trial": [
++        "0",
++        "0",
++        "0"
++      ]
++    },
++    {
++      "branch": "elastic",
++      "case": "elastic_compression",
++      "gamma": "0",
++      "return": [
++        "-10",
++        "-10",
++        "-10"
++      ],
++      "trial": [
++        "-10",
++        "-10",
++        "-10"
++      ]
++    },
++    {
++      "branch": "elastic",
++      "case": "elastic_yield_hold",
++      "gamma": "0",
++      "return": [
++        "5",
++        "1",
++        "0"
++      ],
++      "trial": [
++        "5",
++        "1",
++        "0"
++      ]
++    }
++  ],
++  "failed": 0,
++  "identity": "MC nonassociated H=0 exact rational constitutive certificates v1",
++  "limits": [
++    "No Atlas imports or author code",
++    "No floating spectral decomposition tested",
++    "No complete tensor tangent or AD38-column verification",
++    "Constructed analytical certificates, not experimental validation or compiled output"
++  ],
++  "parameters": {
++    "E": "9/4",
++    "G": "1",
++    "K": "1",
++    "c": "5",
++    "cos_phi": "4/5",
++    "nu": "1/8",
++    "sin_phi": "3/5",
++    "sin_psi": "1/3"
++  }
++}
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/check-results.json b/docs/reviews/mohr-coulomb-agent-v1/independent-review/check-results.json
+new file mode 100644
+index 00000000..c2b9dd4a
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/check-results.json
+@@ -0,0 +1,52 @@
++{
++  "candidate_calls": 0,
++  "compiled_calls": 0,
++  "durable_private_pdf_hash": "bf35ee09d500b8e21aabdddbdfac363c5f68368f150890c60343bc62447c83ca",
++  "exact_model_sha256": "6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5",
++  "historical_initial_examples": [
++    [
++      0.0,
++      0.0,
++      0.0,
++      0.0,
++      0.0,
++      0.0
++    ],
++    [
++      100000.0,
++      100000.0,
++      100000.0,
++      0.0,
++      0.0,
++      0.0
++    ]
++  ],
++  "historical_research_differences": [
++    "description",
++    "id",
++    "name",
++    "state",
++    "status"
++  ],
++  "independent_fraction_coefficient_gap_cases": 243,
++  "input_freeze": {
++    "AGENTS.md": true,
++    "docs/AGENT_REVIEW_POLICY.md": true,
++    "docs/MODEL_DELIVERY_CHECKLIST.md": true,
++    "docs/ingestion/mohr-coulomb/FORMULAS.md": true,
++    "docs/ingestion/mohr-coulomb/README.md": true,
++    "docs/ingestion/mohr-coulomb/sources.json": true,
++    "docs/models/mohr-coulomb.md": true,
++    "docs/reviews/mc-browser-closure-v3/README.md": true,
++    "docs/reviews/mc-native-qualification-v3/README.md": true,
++    "docs/reviews/mc-wasm-qualification-v3/README.md": true,
++    "models/mohr-coulomb.json": true,
++    "schemas/agent-review.schema.json": true
++  },
++  "passed": true,
++  "private_pdf_bytes": 2590234,
++  "raw_backend_descriptor_equal_current": {
++    "native": true,
++    "wasm": true
++  }
++}
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/check_review.py b/docs/reviews/mohr-coulomb-agent-v1/independent-review/check_review.py
+new file mode 100644
+index 00000000..636a6d88
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/check_review.py
+@@ -0,0 +1,51 @@
++"""Read-only/source-only independent scientific-review integrity and algebra checks."""
++from pathlib import Path
++from fractions import Fraction as F
++import hashlib,json,tarfile,subprocess,sys
++ROOT=Path(sys.argv[1]).resolve()
++sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
++load=lambda p:json.loads(p.read_text())
++checks={}
++freeze=load(ROOT/'docs/reviews/mohr-coulomb-agent-v1/inputs.json')
++checks['input_freeze']={p:sha(ROOT/p)==v for p,v in freeze['files'].items()}
++assert all(checks['input_freeze'].values())
++m=load(ROOT/'models/mohr-coulomb.json');c=load(ROOT/'docs/reviews/mc-current-collector-freeze-v3/catalogue.json')
++checks['exact_model_sha256']=sha(ROOT/'models/mohr-coulomb.json')
++assert sha(ROOT/'docs/reviews/mc-current-collector-freeze-v3/models/mohr-coulomb.json')==checks['exact_model_sha256']
++assert next(x for x in c['models']if x['id']=='mohr-coulomb')==m
++checks['raw_backend_descriptor_equal_current']={}
++for role in ('native','wasm'):
++ with tarfile.open(ROOT/f'docs/reviews/mc-{role}-qualification-v3/observations.tar.gz')as t:
++  rows=json.load(t.extractfile('observations/journal.json'))
++  d=json.loads(next(x for x in rows if x['id']=='describe')['raw'])
++  assert d==c;checks['raw_backend_descriptor_equal_current'][role]=True
++old=load(ROOT/'catalogue/investigations/mc-stored-backends-v1/frozen/models/research/mohr-coulomb-sysala-cermak-h0-gap-classifier-v2.json')
++checks['historical_research_differences'] = sorted(k for k in old.keys()|m.keys()if old.get(k)!=m.get(k))
++assert set(checks['historical_research_differences'])=={'id','name','status','description','state'}
++a,b=old['state'][0].copy(),m['state'][0].copy();checks['historical_initial_examples']=[a.pop('initial'),b.pop('initial')];assert a==b
++# Independently expand source denominators and verify the gap apex identity,
++# without importing the model DSL, candidate or existing return/reference programs.
++n=0
++for K in (F(1,10),F(1),F(13)):
++ for G in (F(1,3),F(2),F(20)):
++  for s in (F(1,100),F(3,5),F(99,100)):
++   for d in (F(1,100),F(1,3),F(99,100)):
++    A=2*(K-2*G/3)*d
++    ds=2*A*s+4*G*(1+d*s);dl=2*A*s+G*(1+d)*(1+s)+2*G*(1-d)*(1-s);dr=2*A*s+2*G*(1+d)*(1+s)+G*(1-d)*(1-s)
++    assert ds==4*K*d*s+4*G*(1+d*s/3)>0
++    assert dl==4*K*d*s+G*(3-s-d+d*s/3)>0
++    assert dr==4*K*d*s+G*(3+s+d+d*s/3)>0
++    for t in ((F(10),F(3),F(-4)),(F(5),)*3,(F(10**20+2),F(10**20+1),F(10**20))):
++     x,y=t[0]-t[1],t[1]-t[2];h=F(7);ft=(1+s)*t[0]-(1-s)*t[2]-h
++     assert ft-(1+s/3)*x-(1-s/3)*y==F(2,3)*s*sum(t)-h
++     a=x/(2*G*(1+d));b=y/(2*G*(1-d));L=(x+2*y)/(2*G*(3-d));R=(2*x+y)/(2*G*(3+d))
++     assert L-R==3*(1-d*d)*(b-a)/(9-d*d)
++     n+=1
++checks['independent_fraction_coefficient_gap_cases']=n
++receipt=load(ROOT/'docs/ingestion/mohr-coulomb/retention-v1/private-retention.json')
++checks['durable_private_pdf_hash']=sha(Path(receipt['durable_private_path']))
++assert checks['durable_private_pdf_hash']==receipt['sha256']=='bf35ee09d500b8e21aabdddbdfac363c5f68368f150890c60343bc62447c83ca'
++checks['private_pdf_bytes']=Path(receipt['durable_private_path']).stat().st_size
++checks['candidate_calls']=checks['compiled_calls']=0
++checks['passed']=True
++print(json.dumps(checks,indent=2,sort_keys=True))
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/execution-receipt.json b/docs/reviews/mohr-coulomb-agent-v1/independent-review/execution-receipt.json
+new file mode 100644
+index 00000000..72c39ad8
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/execution-receipt.json
+@@ -0,0 +1,38 @@
++{
++  "reviewer_run": "/root/mc_scientific_review",
++  "date": "2026-11-02",
++  "candidate_calls": 0,
++  "compiled_calls": 0,
++  "browser_calls": 0,
++  "pdf_skill_read": true,
++  "pdf_pages_visually_inspected": [
++    1,
++    7,
++    8,
++    9,
++    10,
++    11,
++    12,
++    13,
++    14,
++    15,
++    16
++  ],
++  "render_command": "pdftoppm -f 7 -l 16 -scale-to 1500 -png ORIGINAL PRIVATE_PREFIX; separately page1",
++  "source_only_checks": {
++    "input_binding_and_fraction_cases": "check-results.json",
++    "certificates": "certificates-replay.json",
++    "stored_reference_saved_precision_check": "stored-reference-check.json",
++    "stored_backend_verify": {
++      "passed": true,
++      "frozen_files": 195,
++      "both_recorded_assessments_exact": true,
++      "available_local_artifact_hashes_checked": 3,
++      "logs_original_private": "/private/tmp/mc-complete-source-replay-fpbekxt4"
++    },
++    "saved_native_verify": "passed:14paths/834points,93raw bindings,12recovery pairs,12compatibility requests",
++    "saved_wasm_verify": "passed:14paths/834points each,14replays/12recoveries each,13540parity scalars,12compatibility requests",
++    "saved_browser_verify": "passed:P01-B06,26worker requests,14UIimports/834points"
++  },
++  "historical_author_run_identity": "unknown; not fabricated"
++}
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md b/docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md
+new file mode 100644
+index 00000000..9e622857
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/report.md
+@@ -0,0 +1,81 @@
++# Independent scientific review: Mohr-Coulomb H=0
++
++Decision: **accepted**, 2026-11-02, by actual separate reviewer run `/root/mc_scientific_review`. All nine checklist items pass for the complete selected formulation and the explicitly bounded numerical/interface evidence below. No unresolved scientific transcription blocker was found. This is not a claim that every mathematically admissible input is numerically executable.
++
++Exact definition: `models/mohr-coulomb.json`, SHA-256 `6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5`. Selected source is the two-author Sysala-Cermak arXiv1508.07435v3, constant cohesion, nonassociated three-dimensional perfect plasticity H=0, with Atlas backward Euler, compression-positive effective Cauchy stress and strain, Mandel representation, infinitesimal kinematics and fixed spatial frame/zero spin. The associated subcase psi=phi is included by these equations. No equivalence to the later journal identity is asserted. This review assessed the full model; no source-domain restriction or branch was removed to obtain acceptance.
++
++Independence: this separate dispatched run did not author the existing transcription or its numerical packets. I read the original source, each model expression, source crosswalk, exact-arithmetic branch proof, independent oracle implementation and saved assessments. Historical model-author agent/run IDs are not known; packet task labels are not invented as authenticated run IDs. The schema's nonempty author_run_ids field therefore explicitly records that historical identity is unknown. Prior technical audits are evidence, not substituted scientific reviewers.
++
++## source_provenance
++
++Pass. The actual private PDF exists, has 2,590,234 bytes and SHA-256 `bf35ee09d500b8e21aabdddbdfac363c5f68368f150890c60343bc62447c83ca`. I rendered and visually read complete pages 1 and 7-16, with extracted text for navigation. Page 1 has S. Sysala and M. Cermak, internal date October 15, 2018 and arXiv v3 margin stamp September 27, 2016. Page 7 supplies Eqs3.1-3.6, strict parameter assumptions and admissible H; pp8-13 derive all returns and solvability; pp14-16 supply grouped tensor/tangent expressions and their limitations. Exact original bytes, rather than publication-year inference, govern this review. Original and durable private paths are in the public retention receipt. No web search snippet, abstract or vendor composite law was used in place of governing equations.
++
++## equation_fidelity
++
++Pass. I checked all six parameters (p_ref numerical only), the six-component stress state, every derived alias, residual, domain predicate and initial check. E and nu give positive isotropic K and G; sf/sd/cf, h=2c cos(phi), aa=2(K-2G/3)sin(psi) follow Eqs3.2-3.5 and4.6. Expanding source q slopes gives exactly ds=4Kdsf+4G(1+dsf/3), dl=4Kdsf+G(3-sf-sd+dsf/3), dr=4Kdsf+G(3+sf+sd+dsf/3) and da=4Kdsf, where dsf denotes sd*sf in this sentence. No hardening term survives H=0; its auxiliary accumulated scalar has no stress feedback and may be omitted from this recurrence with constant elasticity.
++
++The negated elastic trial, descending principal v1/v2/v3, gaps, Ftrial, gsl/gsr/gla/gra and face/left/right multipliers match Eqs4.8-4.27. The gap-based class_ga is the source apex root rewritten using Ftrial and nonnegative gaps; it is not an elastic tolerance zone. class_gs=Ftrial/ds. The apex-first classifier is exhaustive because L and R are convex combinations of gsl/gsr, the source affine q branches meet continuously and decrease strictly. Apex root>=max(L,R) owns apex equality; otherwise face root<min(gsl,gsr) owns the open face; otherwise gsl<gsr selects left and the remaining reachable case right. If gsl=gsr both edge intervals are empty. Ftrial<=0 owns elastic equality, including zero-multiplier repeated/hydrostatic states. Source Theorem4.2's strict interior presentation does not erase the explicitly closed lower apex interval on p11.
++
++The face reconstruction r2 I+(r1-r2)Pmax+(r3-r2)Pmin, left rl I+(r3-rl)Pmin, right rr I+(r1-rr)Pmax and constant apex c cot(phi) I match the source. Group sums avoid arbitrary projectors inside repeated pairs. The face uses direct principal_mid, preserving the meaningful mixed-scale middle component. Ordinary spectral operations are lazy inside selected gamma/tensor branches; value-only eigenvalues drive classification. The residual sigma+returned_source=0 returns the negated source stress. Source numerators and ordinary return expressions were not replaced by a post-observation fitting reference.
++
++Initialization and postreturn yield predicates use 256eps times a stress scale (5.684341886080802e-14), an explicit numerical admissibility allowance. The actual branch test retains raw Ftrial<=0. This allowance is not exact source admissibility, an error theorem or a new physical cutoff. Selected multiplier nonnegativity and positive finite denominators remain necessary numerical gates. The full source subgradient/order/KKT evidence, rather than yield residual alone, supports the transcription.
++
++Independent reviewer algebra in check_review.py checks source denominator expansions, positivity including negative Lame modulus, the gap apex identity and the transition relation L-R on 243 exact Fraction cases. This supplements the inspected exhaustive proof and its prior 19,694 cases/1,440 gap-identity cases; it does not claim a floating-point-domain proof.
++
++## conventions_dimensions
++
++Pass. Atlas S=-sigma_source and Eps=-eps_source imply tau1=-Smin, tau3=-Smax. Consequently F_Atlas=(1-sf)Smax-(1+sf)Smin-h, exactly the initialization check. Source tensile apex becomes Atlas -c cot(phi) I. Left/right source edge names correspond respectively to the repeated lower/upper compression pairs. The plastic compression strain trace is -2 sin(psi) gamma, giving dilation with the correct sign.
++
++All stresses/moduli/cohesion use Pa; increments and gamma are dimensionless; angles are radians; nu and p_ref scaling carry no physical evolution. Mandel shear is sqrt(2) times Cartesian tensor shear, with corresponding strain encoding and Frobenius inner product. The exact rotated certificates and stored-coordinate oracle check this conversion. The effective-stress binding is an Atlas host specialization; no pore-pressure law was inferred from the source. No finite-rotation/objective update is supplied.
++
++## initialization_domain
++
++Pass. Complete stress history for H=0 is sigma_n (six persistent components); no omitted density, hardening, fabric or plastic-strain memory affects stress. Explicit initial sigma and all resolved parameters are required by the interface contract. The 100kPa sphere and defaults are illustrative and lack specimen preparation/calibration. A prior physical plastic strain history cannot be uniquely recovered from stress alone, which does not invalidate the minimal recurrence.
++
++Physical domain remains c>0, E>0, -1<nu<1/2 and 0<phi,psi<pi/2, equivalent to source positive K,G and strict angular assumptions. There is no added psi<=phi restriction. Zero cohesion/friction/dilation, negative dilation and endpoint nu are unreviewed extensions. Broad parameter metadata endpoints do not override strict domain predicates. Initial stress must satisfy the stated scaled check and finite/domain validation; no silent projection occurs. The uncut tensile apex is retained, with no positive-pressure, cap or tensile-cutoff restriction.
++
++A generic selected-gap threshold, under/overflow or nonfinite intermediate can reject an otherwise source-admissible input. These are numerical coverage limits, not new physical domain boundaries. In particular the retained right-to-apex hold failures remain valid physical states. No general source-domain representability claim passes this review.
++
++## integration_transactions
++
++Pass. Eqs3.6/4.1-4.3 are the selected backward-Euler incremental relation, not a physical-time ODE or exact finite curved-path flow. Constant elasticity permits sigma_trial=sigma_n+C:de. Each trial uses immutable committed sigma_n; current sigma is a Newton unknown with identity residual derivative. Step subdivision/caller waveform determines discrete path semantics; general partition invariance is not asserted.
++
++Zero increment returns unchanged admissible source state mathematically and there is no time hold creep, reset or reversal memory. Numerically, rounded boundary holds can hit the documented spectral rejection. Unloading/reversal uses the new trial and source branch policy. The saved generated study covers 39 unsplit source updates, explicit initial-check on/off cases, invalid parent rejection and three accepted-state transactions. The one-iteration transaction observes changed tentative Newton stress followed by failure, original returned/committed six stress bits and independently known recovery/fresh states. Early invalid/nonfinite tests are separate. No synthetic additional-history rollback is claimed. Finite-path export/import/replay evidence covers the declared interface; native path recovery was fresh-process, whereas Wasm recovery was in one module instance.
++
++## independent_numerical_evidence
++
++Pass with explicit finite coverage. The exact source certificates construct returned states and admissible flow subgradients first, then manufacture trial=return+gamma C:nu. I inspected the construction and reran it: 14 certificates pass, including all returns, repeated trial pairs, boundaries, rotations/sign conversion, elastic/hold and principal face/apex identities. The initial failed two-sided apex tangent test actually crossed a boundary; its script/log remain unchanged and do not support an interior tangent there.
++
++The independent stored-coordinate oracle imports no Atlas/candidate code. Its exact Fraction elastic trial, high-precision trig, characteristic-cubic bisection, polynomial/projector derivatives and grouped reconstructions were inspected. The 280/360-digit stored-reference saved check reran successfully: 140 canonical cases, 571 defined branch expressions, 21,698 directional vectors, 2,855 separate parameter vectors, 327,888 fields, worst normalized precision difference 3.84834e-172 and internal residual 1.05920e-186 against frozen 1e-60. Prior 400-digit two-step fixed-branch derivative checks cover 15,264 components, 260,376 linearity checks, 4,200 apex parameter identities and six mixed-scale checks. Those finite differences test the reference's differentiation consistency; the separate manufactured KKT certificates support source fidelity.
++
++The stored generated study's complete 195-file source freeze and saved native/Wasm assessments replayed successfully without binaries: 862 requests per backend, 113 original required-success inputs, 27 conditional original inputs, 652 successful calls and 210 expected rejections. Each actual selected branch must match emitted classifier values and prospectively eligible branches before the corresponding reference is compared. Choosing whichever branch fits best is forbidden. The conditioned engineering budgets are not universal error bounds; tight middle-component gates prevent large-stress norms hiding middle1 next to1e300. All38 incoming current/parent/loading columns are represented, with current-only identity exact. Five source parameter sensitivities do not establish a production parameter-Jet ABI.
++
++Ten finite unresolved-gap requests (six retained right-to-apex hold calls plus four supplemental requests) reject with matching selected-operation/site and threshold-compatible gap witnesses. A bool-only wrapper cannot uniquely prove internal cause. They remain numerical gaps. Failed original v1 holds, initial accepted arbitrary-negative-gamma corruption, its repaired rejection, original waveform15 parity failures and later source/input/parser/package failures retain separate identities. The revised producer/reference studies do not retroactively pass the old waveform identity. Backend agreement is corroboration; source-derived references carry accuracy evidence.
++
++I also inspected the independent reduced axisymmetric oracle: drained plateau/elastic-plastic strain decomposition, constrained-volume response and q-control inversion avoid the candidate spectral/Newton route. Explicit producer-controlled finite references cover14paths/834points across all five lab protocols, compression/extension, reversals and apex. These are finite default-parameter qualification, not every parameter/path or experimental calibration.
++
++## backend_delivery
++
++Pass for the inspected historical native/Wasm/laboratory/browser scope. The current collector's model bytes exactly equal the reviewed SHA. Both actual archived raw describe responses equal the complete12-model descriptor, whose embedded MC object equals the current definition. Thus evidence binding is stronger than a packet README or manifest without model identity.
++
++The stored research definition differs from the current file only in id/name/status/description and the illustrative initial stress (zero to100kPa); state semantics, physical domains, parameters, equations, branches, formulation and initialization policy are identical. Those initial examples are not silently substituted in the explicit-state stored corpus. Current finite-path qualification independently exercises the exact current definition/default.
++
++Read-only saved native, Wasm and browser verifiers pass:14paths/834points per backend,14 complete replays and12recovery pairs per backend,12compatibility requests,13,540 native/Wasm parity scalars,26packaged worker requests and14actual UI imports. Current packet evidence identifies qualified engine bytes and asset hashes. The browser evidence belongs to the corrected private candidate package, not a fresh browser session in this review. Earlier incomplete package/disclosure failures remain failures. No compiled call/build/new trajectory/browser run occurred here, and no claim of current live release or general FE/tangent qualification follows.
++
++## applicability_claims
++
++Pass. The complete law is constant-cohesion nonassociated perfect plasticity with constant elasticity under fixed-frame small strain. No hardening/softening, viscosity, cap/cutoff, density evolution, finite rotation, FE convergence, general semismooth tangent or experimental validation is inferred. Nonassociated tangents can be unsymmetric; apex interior stress tangent is zero, so stress-controlled outer problems may be singular. Source p16 explicitly leaves the boundary semismooth proof more involved and omitted; this review does not promote that discussion into a complete project proof. At equalities the selected-branch derivative is not a unique classical derivative. Repeated complementary eigenspaces can be valid grouped inputs, while selected insufficiently resolved gaps can reject numerically.
++
++Effective pore pressure is reconstructed only for declared undrained protocols under fixed radial total stress/incompressible phases. No void-ratio state or density/preparation match is available. The corrected browser disclosure is evidence of this limit, not calibration. Experimental qualification is not assessed. Older draft/pending statements remain historical immutable evidence; this new review supplies the scientific decision for these exact model bytes without rewriting them.
++
++## reproducibility_rights
++
++Pass. review.json hashes every checklist's report and its specific evidence. check_review.py and saved-check outputs allow source-only integrity/algebra replay. The private original is durably retained under ignored .local/private-sources/mohr-coulomb, verified against the public retention receipt; no PDF/text/rendered-page bytes enter this public packet. Rights to redistribute the full article were not established; only links, metadata and project-authored mathematical review are published. No author code was run.
++
++All incoming input-freeze hashes matched. The reviewer first attempted a nonexistent historical model.json path when inspecting binding; it stopped before any mutation and was corrected to the explicitly frozen research path. The retained tooling note records that failure. No source binding, old evidence, tolerance or policy was rewritten. source_commit identifies the checkout commit, while exact artifact hashes bind uncommitted/current bytes. This review is not an authorship authentication service and makes no unknown model-author run ID claim.
++
++## Reproduce and next action
++
++Run `python3 -B docs/reviews/mohr-coulomb-agent-v1/independent-review/check_review.py /absolute/repository/path`, the source certificate script, stored-reference check.py with the frozen inputs/two precision files/policy, and the saved-only native/Wasm/browser verify.py files. The stored-backend verify.py performs source-only generation in a fresh private temporary capsule and reassesses retained outputs; it never invokes a candidate binary. The script/result hashes are bound in review.json.
++
++Coordinator's smallest next action: validate this actual accepted record, preserve its exact bytes and integrate only the resulting hash-bound approval entry under policy. Scientific approval does not authorize deployment or close remaining delivery/experimental gates. Future changes to model bytes require a newly bound review. Any attempt to fix near-apex rejection, change branch/equality/tolerance policy, add parameter Jets or claim broader tangents requires a separately frozen study retaining the present failures.
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stderr b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stderr
+new file mode 100644
+index 00000000..e69de29b
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stdout b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stdout
+new file mode 100644
+index 00000000..055aa7d0
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-preflight.py.stdout
+@@ -0,0 +1 @@
++{"ideal_passed": true, "corruption_probes": 30, "candidate_calls": 0, "compiled_observations": 0}
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stderr b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stderr
+new file mode 100644
+index 00000000..e69de29b
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stdout b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stdout
+new file mode 100644
+index 00000000..620a1fad
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-static_checks.py.stdout
+@@ -0,0 +1,19 @@
++{
++  "passed": true,
++  "instrumentation_arithmetic_control_unchanged": true,
++  "literal_request_count": 862,
++  "wire_tokens_per_request": 714,
++  "exact_copied_source_generated_files": [
++    "generated-original/models.hpp",
++    "generated-original/models.json",
++    "generated/models.hpp",
++    "generated/instrumentation.patch",
++    "requests.json",
++    "requests.txt.gz",
++    "wire.json",
++    "trace-fields.json",
++    "generation-results.json"
++  ],
++  "candidate_calls": 0,
++  "compiled_observations": 0
++}
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stderr b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stderr
+new file mode 100644
+index 00000000..e69de29b
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stdout b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stdout
+new file mode 100644
+index 00000000..f5db81dd
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-backend-verify_source.py.stdout
+@@ -0,0 +1,10 @@
++{
++  "passed": true,
++  "policy_manifest_entries": 24,
++  "source_manufacture_exact": true,
++  "supplemental_both_gzip_byte_exact": true,
++  "classification_and8397selfchecks_exact": true,
++  "candidate_calls": 0,
++  "compiled_observations": 0,
++  "logs": "/private/tmp/mc-policy-source-replay-alnfhef6"
++}
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-reference-check.json b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-reference-check.json
+new file mode 100644
+index 00000000..d496ad53
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/stored-reference-check.json
+@@ -0,0 +1,23 @@
++{
++  "compiled_observations": 0,
++  "counts": {
++    "canonical_reference_cases": 140,
++    "defined_branch_expressions": 571,
++    "direction_vectors": 21698,
++    "numeric_fields": 327888,
++    "parameter_direction_vectors": 2855
++  },
++  "failures": [],
++  "identity": "mc-stored-reference-internal-check-v1",
++  "input_sha256": "c834a0800d60ac90d50b77da24308a2032343ba8e2b0620a3e3a4dc961ece28e",
++  "maximum_difference_path": "scale/right_repeated_trial/300/canonical/left/parameter/nu/residual/4",
++  "maximum_internal_normalized_residual": "1.059203221362041386721066279484809705399926005070509979064262775126562080E-186",
++  "maximum_normalized_precision_difference": "3.84834087066143144713420308603654189427887508757007661303741804088768271399999996952858126692215534607637299563215429233855922867797237929211194837554846E-172",
++  "passed": true,
++  "policy_sha256": "892d1c43d403039913a62d151bba0a98dab16d6189e36548fcf222423b8a2aeb",
++  "reference_output_sha256": {
++    "reference-p280.json.gz": "d89c0da276ae971da778076080471b668cd9c7908598d6fb49b7f1b3d0c53804",
++    "reference-p360.json.gz": "da7786c6be690e817ef32477b29d3a72c6a98967dcb6500865bcee113056d723"
++  },
++  "scientific_admission": false
++}
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/independent-review/tooling-note.txt b/docs/reviews/mohr-coulomb-agent-v1/independent-review/tooling-note.txt
+new file mode 100644
+index 00000000..ea28b34b
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/independent-review/tooling-note.txt
+@@ -0,0 +1 @@
++Actual review retained tooling finding: initial read-only binding inspection attempted catalogue/investigations/mc-stored-backends-v1/model.json and stopped with FileNotFoundError. The actual frozen model is frozen/models/research/mohr-coulomb-sysala-cermak-h0-gap-classifier-v2.json; corrected comparison passed and is reproduced by check_review.py. Initial exploratory reads also found no docs/reviews/mc-stored-backends-v1/README.md; actual study is under catalogue/investigations/. No mutation or repinning occurred.
+diff --git a/docs/reviews/mohr-coulomb-agent-v1/inputs.json b/docs/reviews/mohr-coulomb-agent-v1/inputs.json
+new file mode 100644
+index 00000000..0437a8e4
+--- /dev/null
++++ b/docs/reviews/mohr-coulomb-agent-v1/inputs.json
+@@ -0,0 +1,18 @@
++{
++  "task": "SCI-mohr-coulomb-agent-v1",
++  "scope": "Existing exact full model independent scientific review; no new runtime qualification or publication.",
++  "files": {
++    "AGENTS.md": "3df7913eba215b6e0ac509841b0a27fcb69671b3fb20e4e1ff13815e39c6642c",
++    "docs/AGENT_REVIEW_POLICY.md": "8d35ca57150889ff1630626e6f677e7f4124997a58e26f9ef8555f9ba7dd6798",
++    "docs/MODEL_DELIVERY_CHECKLIST.md": "7554a7e57272fab19dad65b686d18c0cd08b05de9a22859f27662d73e3451e69",
++    "schemas/agent-review.schema.json": "ff1e3a55ab38036b08efba5c41b50b241158f4c01928c37272fca015f69a4884",
++    "models/mohr-coulomb.json": "6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5",
++    "docs/models/mohr-coulomb.md": "190f1127143b9a9cbeba54483fc7d5cbe09fbed30b2f076157c60359e0037ce9",
++    "docs/ingestion/mohr-coulomb/README.md": "46f2da87439aa3ef84cfb3ff853adfdeb81dd95027aa9aaba76f2fec4f9a4154",
++    "docs/ingestion/mohr-coulomb/sources.json": "47c8d05834c5ff67780818ff30a67375a9d1242021cc6dc9674cb60d405b3bb6",
++    "docs/ingestion/mohr-coulomb/FORMULAS.md": "f805747b8d1978c8c1223ef86fcdba9f027e3d9935b31cc1289db7c32274aa85",
++    "docs/reviews/mc-native-qualification-v3/README.md": "b6bbcf1a05cdbf03a5d9b3881b5b9406da22fb9653042e75eee018075a2a3785",
++    "docs/reviews/mc-wasm-qualification-v3/README.md": "59708a667e184137665dae9a2830c333d6a634cbeb0400432b1a69cec93e64f0",
++    "docs/reviews/mc-browser-closure-v3/README.md": "d2d9558f3a66f2d3ec634a5692e99ed1b2cc7fa67be96c3d1323ff85281c220c"
++  }
++}
+-- 
+2.54.0 (Apple Git-157)
+

@@ -1,0 +1,9 @@
+# Source-complete Mohr–Coulomb checkpoint
+
+E1 is complete for the exact Sysala–Cermak arXiv1508.07435v3 H=0 formulation. The actual separate accepted [scientific review](../../../reviews/mohr-coulomb-agent-v1/independent-review/report.md) inspected the governing source and all model expressions, found no in-scope transcription blocker and retained the numerical and applicability limits. This checkpoint reconciles existing work; it adds no constitutive equations or numerical results.
+
+The [source packet](../README.md), [equation inventory](../FORMULAS.md), [descriptive crosswalk](../crosswalk.json), [receipt](../sources.json) and [private-retention receipt](../retention-v1/private-retention.json) remain unchanged. Their historical executable/admission statements describe their original creation stage; the new accepted review supplies the later scientific decision. No equivalence to the later journal version or redistribution right is inferred.
+
+`profile.json` is an exact data copy of the existing public-profile draft from isolated commit000ab5e7, with the full source-file hash and source-to-claim checks in `checks.json`. It explains confinement-dependent strength, independently controlled dilation, material parameter meanings/units, explicit stress initialization, constant stiffness/cohesion and missing hardening/cap/tensile-cutoff/time evolution. It links the exact source and related variants, and suggests the existing drained monotonic controls. It carries no approval badge or experimental claim. The current actual browser and exploration still require E7 qualification. The normal profile source checker passes all47catalogue entries.
+
+E2–E4 and E6–E8 remain open where current contract/backend/package/live identity has not yet been reconciled. Existing historical failures and all hash-pinned source/review records are preserved.

@@ -1,0 +1,152 @@
+Browser tab: 5, Title: "Constitutive Atlas · Model testing", URL: "http://127.0.0.1:8793/index.html#laboratory?model=ramberg-osgood-ansys242".
+1 AXWebArea Constitutive Atlas · Model testing, URL: 127.0.0.1:8793/index.html#laboratory?model=ramberg-osgood-ansys242
+	2 container
+		3 link Description: Constitutive Atlas home, Value: 127.0.0.1:8793/index.html#laboratory
+		4 container Main navigation
+			5 link Description: ◫ Model testing, Value: 127.0.0.1:8793/index.html#laboratory
+			6 link Description: ≋ Ensemble explorer, Value: 127.0.0.1:8793/index.html#ensemble
+			7 link Description: ⌕ Model catalogue 46, Value: 127.0.0.1:8793/index.html#catalogue
+			8 link Description: ≋ Methods & evidence, Value: 127.0.0.1:8793/index.html#methods
+		9 container
+			10 text By
+			11 link Description: Benjy Marks, Value: github.com/benjym
+			12 link Description: François Guillard, Value: github.com/Franzzzzzzzz
+	13 container laboratory
+		14 heading Explore material behaviour., Value: 1
+			15 text Explore material behaviour.
+		16 button ↑ Import run, ID: import-run
+		17 container
+			18 text CONSTITUTIVE MODEL
+			19 text Approved scope
+			20 text Select a model
+			21 pop up button (collapsed, settable) Select a model, Value: Ramberg–Osgood nonlinear elasticity — ANSYS2024R2, ID: model, Secondary Actions: Expand
+				22 menu
+					23 Barodesy clay 2017 — body law, zero spin (draft)
+					24 Barodesy sand (2015) — fixed-frame draft
+					25 Drucker–Prager, nonassociated perfect plasticity
+					26 Duncan–Chang (1970), constant ν, endpoint-average
+					27 Mašín clay hypoplasticity (2005) — zero-spin draft
+					28 Clay hypoplasticity 2013 — Appendix law, zero spin (draft)
+					29 Sand hypoplasticity + intergranular strain (1997)
+					30 Sand hypoplasticity — von Wolffersdorff (1996)
+					31 Linear isotropic elasticity
+					32 Modified Cam Clay
+					33 Mohr–Coulomb — nonassociated perfect plasticity H=0 (draft)
+					34 Original Cam Clay — invariant log-recovery endpoint
+					35 (selected) Ramberg–Osgood nonlinear elasticity — ANSYS2024R2
+					36 HP extracted ASBS + GIS2024 — v0.3 zero-spin research draft
+					37 Associated Tresca perfect plasticity — BK2022v1, project BE (draft)
+					38 Hill · all-six strain increments
+					39 Burgers · physical-time creep / relaxation
+					40 Standard Linear Solid · physical-time relaxation / creep
+					41 Orthotropic elasticity · nine constants
+					42 NorSand 1993 · drained active axial law
+					43 Maxwell · physical-time relaxation / creep
+					44 Lade–Duncan 1975 · cohesionless soil
+					45 J2 · all-six strain increments
+			46 text Recorded description. Review status in this text reflects when it was written; see the accepted review for its current scope. Full three-dimensional reversible isotropic small-strain Ramberg–Osgood deformation law, ANSYS2024R2 constant-parameter mechanical formulation. Unloading retraces loading; no yield surface, permanent plastic strain or hysteresis. Dry total Cauchy stress, compression-positive Mandel components, fixed spatial axes/zero spin. Project implicit endpoint compliance residual and explicit full stress/strain initialization. Illustrative parameters, no experimental or finite-deformation/host qualification. Source postprocessing energy inconsistency is excluded; no energy output claimed.
+			47 button (collapsed) Sources & model definition, Secondary Actions: Expand
+				48 text Sources & model definition
+			49 text Nonlinear Elasticity
+			50 text 3D · small strain
+			51 button View equations ↗, ID: equations-button
+		52 container Model testing sections
+			53 link Description: Test controls ↓, Value: 127.0.0.1:8793/index.html#controls
+			54 link Description: Response plots ↓, Value: 127.0.0.1:8793/index.html#response
+			55 link Description: Compare measurements ↓, Value: 127.0.0.1:8793/index.html#measurements
+			56 link Description: Equations & sources ↓, Value: 127.0.0.1:8793/index.html#equations
+		57 container controls
+			58 heading Test controls, Value: 2
+				59 text Test controls
+			60 button Reset, ID: reset
+			61 text  Live updates as you adjust
+			62 container
+				63 text Loading protocol
+				64 pop up button (collapsed, settable) Loading protocol, Value: Fixed radial total stress, ID: protocol, Secondary Actions: Expand
+					65 menu
+						66 (selected) Fixed radial total stress
+						67 Zero volumetric strain
+						68 One-dimensional strain
+						69 Isotropic strain
+						70 Signed q control · zero volumetric strain
+			71 container
+				72 text Axial strain (%)
+				73 stepper (settable, integer) Axial strain (%), Value: 1, ID: target
+			74 slider (settable, integer) Description: Axial strain (%) slider, Value: 550
+			75 container
+				76 text Loading history
+				77 pop up button (collapsed, settable) Loading history, Value: Monotonic ramp, ID: cycles, Secondary Actions: Expand
+					78 menu
+						79 (selected) Monotonic ramp
+						80 1 sinusoidal cycle
+						81 3 sinusoidal cycles
+						82 10 sinusoidal cycles
+			83 text INITIAL STATE
+			84 button Load model example, ID: load-model-example
+			85 text Selecting a model loads its example parameters and full initial state. These illustrative values do not establish specimen preparation or experimental calibration. Loading an example replaces parameter and state edits.
+			86 container
+				87 text Radial total stress (kPa)
+				88 stepper (settable, integer) Radial total stress (kPa), Value: 100, ID: confinement
+			89 slider (settable, integer) Description: Radial total stress (kPa) slider, Value: 500
+			90 button (collapsed) Initial state details, Secondary Actions: Expand
+				91 text Initial state details
+			92 button (collapsed) Material parameters Adjust model constants, Secondary Actions: Expand
+				93 AXListMarker ▸ 
+				94 text Material parameters
+				95 text Adjust model constants
+			96 button (collapsed) Solver settings, Secondary Actions: Expand
+				97 text Solver settings
+			98 text Live · changes update automatically.
+		99 container Compare with measurements, ID: measurements
+			100 text EXPERIMENTAL COMPARISON
+			101 heading Compare with measurements, Value: 2, ID: experiment-title
+				102 text Compare with measurements
+			103 text Tests are filtered by drainage protocol, loading path and verified plot axes. Assess model–material suitability, parameter calibration and specimen preparation separately. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.
+			104 text Normalized overlays require an effective-stress model. Browse source records to view measurements.
+			105 container
+				106 text Find measurements
+				107 search text field (settable) Find measurements, ID: experiment-search
+			108 container
+				109 text Experimental test
+				110 pop up button (collapsed, settable) Experimental test, Value: No measurements selected, ID: experiment-select, Secondary Actions: Expand
+					111 menu
+						112 (disabled) No measurements selected
+			113 switch (disabled, settable, boolean) Description: Show measurements, Value: 0, ID: show-experiment
+			114 button (disabled) Match available test inputs, ID: match-experiment
+			115 text Matching uses supplied stress and protocol, and void ratio only when this model provides that input. Other internal-state inputs keep their explicit values; specimen preparation remains unassessed.
+			116 text No measurement overlays match this protocol and loading path. You can browse source records or load your own measurements.
+			117 checkbox (settable, integer) Description: Browse all source records (includes tests without model overlays), Value: 0, ID: browse-source-records
+			118 button (collapsed) Compare your own measurements, Secondary Actions: Expand
+				119 text Compare your own measurements
+		120 container response
+			121 text ✓ Response up to date
+			122 text 100 increments · 54.0 ms · Fixed radial total stress · total stress
+		123 container Description: Simulation results, ID: response-charts
+			124 container
+				125 heading Stress–strain response, Value: 2
+					126 text Stress–strain response
+				127 container Description: Total deviator stress versus axial strain, Help: Total deviator stress q (kPa) versus Axial strain ε₁ (%), ID: stress-chart
+				128 text Model prediction
+			129 container
+				130 heading Total stress path, Value: 2, ID: path-title
+					131 text Total stress path
+				132 container Description: Deviator stress versus total mean stress, Help: Total deviator stress q (kPa) versus Mean total stress p (kPa), ID: path-chart
+				133 text Model prediction
+			134 container
+				135 heading Volumetric response, Value: 2
+					136 text Volumetric response
+				137 container Description: Volumetric versus axial strain, Help: Volumetric strain εᵥ (%) versus Axial strain ε₁ (%), ID: volume-chart
+				138 text Model prediction
+			139 container
+				140 heading Pore-pressure change, Value: 2
+					141 text Pore-pressure change
+				142 container Description: Pore-pressure change versus axial strain, Help: Pore-pressure change Δu (kPa) versus Axial strain ε₁ (%), ID: pore-chart
+				143 text Model prediction
+				144 text Unavailable: total stress has no pore-pressure law.
+		145 text Example parameters. No experimental calibration or predictive validity is implied.
+		146 button ↓ Results CSV, ID: export-csv
+		147 button ↓ Reproducible run, ID: export-run
+		148 button (collapsed) Equations & source provenance, Secondary Actions: Expand
+			149 text Equations & source provenance
+
+The focused UI element is 1 AXWebArea Constitutive Atlas · Model testing, URL: 127.0.0.1:8793/index.html#laboratory?model=ramberg-osgood-ansys242

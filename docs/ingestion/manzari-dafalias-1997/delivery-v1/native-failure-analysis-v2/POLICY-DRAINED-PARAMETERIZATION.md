@@ -1,0 +1,3 @@
+# Additive root parameterization correction
+
+The initial gamma-eliminated source diagnostic failed near peak at axial~.0104, with failures retained in drained-first-failure.json and drained-gamma-elimination-failure.json and original script preserved. Near beta=beta_b, division by h*(beta_b-beta) is ill-conditioned. A new script drained-v2.py solves gamma as a third independent unknown and retains the original uneliminated source kinematic equation. All source laws, grids and tolerances remain identical. This is a diagnostic coordinate correction, not a gate relaxation or a production change. Frozen before the revised diagnostic executes.

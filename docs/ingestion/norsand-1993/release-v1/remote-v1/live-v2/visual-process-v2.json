@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/Users/bmar5496/.npm/_npx/31e32ef8478fbf80/node_modules/.bin/playwright-cli",
+    "-s=norsand-live-v2",
+    "run-code",
+    "--filename",
+    "/private/tmp/atlas-norsand-release-v1/docs/ingestion/norsand-1993/release-v1/remote-v1/live-v2/browser-visual-v1.js"
+  ],
+  "exit_code": 0,
+  "stdout": "### Result\n{\"result\":\"PASS\",\"mobile_horizontal_overflow\":false,\"links\":[{\"text\":\"Jefferies1993 original source\",\"href\":\"https://doi.org/10.1680/geot.1993.43.1.91\"},{\"text\":\"Independent review\",\"href\":\"https://benjym.github.io/constitutive-atlas/engine-path/review.html\"},{\"text\":\"Exact checklist\",\"href\":\"https://benjym.github.io/constitutive-atlas/engine-path/review.json\"},{\"text\":\"Approval and scope\",\"href\":\"https://benjym.github.io/constitutive-atlas/engine-path/approval.json\"},{\"text\":\"Exact definition\",\"href\":\"https://benjym.github.io/constitutive-atlas/engine-path/model.json\"}]}\n### Ran Playwright code\n```js\nawait (async (page) => {\n await page.setViewportSize({width:1440,height:1000});await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:'output/playwright/norsand-live-v2/desktop-top.png'});\n const links=await page.locator('#path-source a').evaluateAll(nodes=>nodes.map(n=>({text:n.textContent,href:n.href})));\n await page.setViewportSize({width:390,height:844});await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:'output/playwright/norsand-live-v2/mobile-top.png'});const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth);if(overflow)throw Error('Mobile horizontal overflow');await page.setViewportSize({width:1440,height:1000});return {result:'PASS',mobile_horizontal_overflow:false,links};\n}\n)(page);\n```\n",
+  "stderr": ""
+}

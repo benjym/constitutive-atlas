@@ -1,0 +1,7 @@
+# Exact runtime source boundary for package v2
+
+The accepted frontend/package-v2 scope uses the existing qualified common engine built from `/private/tmp/atlas-occ-ci-recovery-v2/source`, as hash-bound by `../prospective-v1.json` and `../wasm-build-v1.json`. The matching native executable is `/private/tmp/atlas-occ-ci-recovery-v2/build/atlas_solver`; fresh common Wasm is `/private/tmp/atlas-occ-shared-app-v2/build-wasm`. Package v2 retains those exact common engine bytes.
+
+`../package-source-freeze-v2.json` captures broad inputs for the standard frontend packager. Its incidental current C++ hashes are **not** the production source provenance of that prebuilt engine. Three newer checkout runtime files belong to another owner's work in progress, outside this review and engine scope. `runtime-delta-v2.patch` preserves their exact textual difference from the actual frozen engine source; both sides' hashes are also bound in the current-package-v2 review.
+
+This review does not accept the newer runtime, authorize its execution or waive the broad exact-current production gate. The current-production delta is a release blocker until the coordinating owner explicitly segregates it from the exact tested release artifact or its owner separately qualifies and repackages it. This is consistent with bounded frontend/frozen-engine package acceptance, not a claim that all checkout production bytes were qualified. No old review, source receipt, failed gate or manifest was modified.

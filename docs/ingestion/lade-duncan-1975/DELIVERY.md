@@ -1,5 +1,7 @@
 # lade-duncan-1975 — end-to-end delivery ledger
 
+Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). MODEL-lade-duncan-1975 is complete through verified E8 live delivery for the exact bounded scope below.
+
 Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). MODEL-lade-duncan-1975 remains open until actual live delivery; local qualification and publication are separate.
 
 - Lead: coordinator `/root`, claimed 2026-11-01 after the user redirected this session from OCC. Current update 2026-11-02.
@@ -8,6 +10,8 @@ Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). MODEL-lade-duncan-1975 rema
 - Scope: original pre-failure cohesionless-soil equations, small strain, compression-positive Mandel, fixed spatial axes, total mechanical Cauchy stress and zero pore pressure. No physical clock, post-failure, finite-rotation, general Newton convergence or experimental-validation claim. Midpoint elastic/endpoint plastic integration and the bounded domain/controller policy are Atlas numerical choices; see [final scope](fused-linear-v1/FINAL_SCOPE.md).
 - Owners/whitelist: coordinator board child tasks authorize versioned runtime installation, exact old-byte/map preservation, model/catalogue/approval/wiring/provisioning/workflow, standard package and browser evidence. Other models, shared migrations and paper work remain outside this assignment. No shared checkout staging or commits.
 - Independent runs: `/root/lade_source_review` for source, exact numerical evidence and canonical nine-item approval; `/root/lade_interface_review` for separate interface/header/source checks. Actual independence basis is recorded in the accepted receipts. Neither approval nor Node transport fixtures imply browser qualification.
+- Remote authorization: explicit user “Publish please” (2026-11-02). Published revision `6fed3e1e368337f02bbc67c2eef263d03b7c8c4a`; all five CI/deployment jobs and actual live browser verification pass. Independent final acceptance `e9940d960a062c167f13648ab2686bc21562efbbff2413b5d4f378caf1bafaf2`. Shared checkout was not staged or committed.
+
 - Remote authorization: pending. No push, deployment or remote CI has been performed.
 
 - [X] **E0 — Claim/scope:** exact formulation, ownership and dependent board tasks recorded.
@@ -18,6 +22,30 @@ Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). MODEL-lade-duncan-1975 rema
 - [X] **E5 — Agent approval:** accepted canonical nine-item review `0912247e7749c21fd9063ef865ea7febc2cbb23f550992b1ddf6c6352faa7de4` validates for approval and exact registry entry is installed. [Canonical record](../../../catalogue/agent-reviews/lade-duncan-1975-midpoint-elastic-eq19-gap-v4-agent-v1.json). Bounded numerical scope, no inferred experimental validation.
 - [X] **E6 — Atlas:** exact model/review/registry/discovery/source/publication, normal generation, qualified asset restoration and required public preset/replay wiring installed. Standard complete sitev2, exact database/compiler coverage,106 dedicated checks, four public calls and supported ordinary policy pass. Independent package acceptance `0d161b68bd11f11333c2cacdb4682c8627d0c87a915a12a974c0ca8036055a97`.
 - [X] **E7 — Packaged website:** exact corrected v2 full site passes actual headed Chrome Dense/Loose400, direct/deep-link/header/source disclosure,19 fetched-body hashes, exact model download, mobile390px/all16 state columns, active-worker cancellation on edit/switch, latest request, ordinary success, invalid/reset and signed-zero export/import/replay. V1 unchanged-component evidence carries all five controls, edited parameters/state, hold/cycle, tamper rejection, finite-lifetime committed-prefix/no-export and Maxwell smoke. Independent E7 acceptance `131011379be4535adf5868c778978fe38bee032e63f82dd9d6d52e5668eaba99`. Rounded failed-prefix DOM is UI evidence; numerical rollback is independently qualified in E4. V1 header failure is retained.
+- [X] **E8 — Live delivery:** authorized isolated source published; exact [run41330422584](https://github.com/benjym/constitutive-atlas/actions/runs/41330422584) passes all five jobs. Pages7476620184 serves the same tested upload;30 live assets match, both actual Chrome400-increment runs match all401reference points and complete state,402DOMrows/four meaningful curves each,0console messages. [Independent final audit](atlas-integration-v1/live-release-v1/independent-review/live-e8-v1/final-audit/review-receipt.json).
+
+## Current handoff
+
+Overall state: **live; E0–E8 complete**. Coordinator `/root`, verified2026-11-02. No remaining in-scope delivery blocker or required next action. Earlier failed candidates, CI runs, trend diagnostics and historical archive gaps remain preserved and are not passing evidence.
+
+## Deployment receipt
+
+- Release revision: `6fed3e1e368337f02bbc67c2eef263d03b7c8c4a`; isolated reviewed commits, fast-forward push.
+- Actions: [41330422584 — success](https://github.com/benjym/constitutive-atlas/actions/runs/41330422584); both native/Python jobs, both Wasm/package jobs and deploy succeed. [Exact terminal receipt](atlas-integration-v1/live-release-v1/release-run.json).
+- Pages: deployment7476620184, deployjob124925970528, exact revision/main/github-pages/success. [Deployment receipt](atlas-integration-v1/live-release-v1/deployment.json).
+- Tested upload: artifact13093547139; ZIP SHA256 `d0eb3b9fd26132b627852ac2f511278c44a619e56dbf3ef025b5792b5d60b157`; tar `ddfe9b525b2fe9a4b2c9aed4440ade41f25b4f6ee2d66f34d0e47db5efb81f51`;979 actual files rehashed. Private raw archives remain under ignored private evidence. [Upload verification](atlas-integration-v1/live-release-v1/upload-verification.json), [independent upload review](atlas-integration-v1/live-release-v1/independent-review/live-e8-v1/upload-review-receipt.json).
+- Live page: [Lade–Duncan1975](https://benjym.github.io/constitutive-atlas/index.html#laboratory?model=lade-duncan-1975-midpoint-elastic-eq19-gap-v4). [Download exact model JSON](https://benjym.github.io/constitutive-atlas/engine-implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json).
+- Live identity/link check: all30required HTTP200 response-body hashes equal the actual upload, including model/source/review/approval/engine/browser/database assets. [Body-hash evidence](atlas-integration-v1/live-release-v1/live-assets.json).
+- Actual headed Chrome: Dense and Loose400 at0.005strain; each401points/402table rows/four meaningful curves. Every response field and state matches the qualified public reference except elapsed time; complete controls/provenance exact. No console errors/warnings/messages. [Dense export](atlas-integration-v1/live-release-v1/browser-dense-export.json), [Loose export](atlas-integration-v1/live-release-v1/browser-loose-export.json), [durable browser witnesses](atlas-integration-v1/live-release-v1/browser-witness-v1/MANIFEST.json).
+- Unchanged prospective checker: [policyv5](atlas-integration-v1/live-release-v1/LIVE_POLICY-v5.json), [checker](atlas-integration-v1/live-release-v1/check_live_v5.py), [final result](atlas-integration-v1/live-release-v1/FINAL_CHECK-v5.json); independently accepted final receipt `e9940d960a062c167f13648ab2686bc21562efbbff2413b5d4f378caf1bafaf2`.
+
+## Completion statement
+
+Source complete: original1975full law,1977 supporting context only. Executable: exact declarative midpoint-elastic/local-Eq19 gap realization on the versioned generic implicit-path engine. Independent numerical qualification, nine-item agent approval, atlas integration, packaged real-browser qualification and exact live delivery: complete for the disclosed bounded scope. Experimental validation: unassessed. Custom paths/preparations, postfailure, finite rotation and broader convergence/host claims remain outside approval. Original failures and preexisting historical archive gaps remain disclosed. Local ledger closeout does not alter or redeploy the verified application revision.
+
+## Historical local handoff before publication
+
+
 - [ ] **E8 — Live delivery:** scoped release preparation, authorized remote CI/deployment and exact live asset/run verification pending. Shared checkout contains substantial unrelated uncommitted work, so it must not be staged wholesale.
 
 ## Current handoff
@@ -27,6 +55,8 @@ The exact versioned29-file runtime is installed (`acb8756e5d80b3a9f967a5e3985a2e
 The reviewed107-operation shared installation preserves43791 bindings. A separate reviewed positive fixture count correction restores all81 package unit tests; no acceptance policy was changed. Actual standard sitev1,106 dedicated package checks, four public Dense/Loose/replay calls,25 qualified-bundle adversarial checks and supported ordinary package gate pass. V1 archive `720f700e4c708a9302861078ee8e6337524949e28d9124d4de495447cd4d4dd0` is retained with its browser header failure. Header fix is presentation only: current app `9612893e73052b905959d47affd535404f355986d27b2088c204857b53b55a4b`; separate installed audit `19286d0dd3ec48be7d3a38b620b668ab1af28aec8e13d92bc89d369800671ee7` confirms14 operations/19 preserved bindings. Compiled model/runtime/assets and five reviewed components are unchanged.
 
 Current local delivery is independently accepted through E7. Exact website archive SHA256 `ace661fddee71afcbe78f1649f66b98dd4c792d6a6835569637ac7b830ce161c`,980files/121467005bytes; [download tested website](atlas-integration-v1/actual-package-v2/website.tar.gz), [manifest](atlas-integration-v1/actual-package-v2/PACKAGE_MANIFEST.json), [browser evidence](atlas-integration-v1/actual-package-v2/BROWSER_RESULTS.json), [signed-zero supplement](atlas-integration-v1/actual-package-v2/SIGNED_ZERO_RESULTS.json), [independent package audit](fused-linear-v1/independent-review/actual-package-v2/REVIEW.md) and [independent browser audit](fused-linear-v1/independent-review/browser-v2/REVIEW.md). The full site build took155.006s; all8194 frozen source files remained unchanged through packaging. Current source and exact qualified components remain pinned; the accepted public numerical/physical scope is unchanged.
+
+Smallest next action is monitor [the exact current publication run](https://github.com/benjym/constitutive-atlas/actions/runs/41330422584) to terminal results and require every gate, then compare the actual tested upload with live assets and exercise both named public preparations in Chrome. [Release evidence](atlas-integration-v1/live-release-v1/CI_FOLLOWUP_RELEASE-v2.json) records the independently reviewed isolated source baseline, remote preservation and dependency repair. Original local-only website archives and private PDFs remain private. E8 and the umbrella remain open until actual live verification.
 
 Smallest next action is E8 shared-baseline coordination, followed by a scoped release commit and new remote authorization. [Release preparation](atlas-integration-v1/release-preparation-v1/README.md) contains the tested website, exact12-file reviewed source delta and isolated patch reconstruction. Its159 qualified-source differences from HEAD include concurrent compiler/schema/other-model work; the scoped delta is not self-contained on HEAD. AGENTS.md forbids staging/committing other agents' shared work. No shared staging/commit, push, remote CI or deployment occurred. E8 remains blocked on an integration-owner handoff for that baseline; this is not a scientific or local browser blocker. The full model umbrella remains open and no live-delivery claim is made.
 
@@ -177,3 +207,18 @@ Shared installation is deliberately stopped before any production writes: revisi
 ## Local delivery checkpoint — 2026-11-02
 
 E0–E7 are verified for exact model120b93f3 and packageace661fd. E8 remains open for shared-baseline/commit coordination and authorized publication. No remote action or live verification has occurred. Prior ledger bytes for this update: `fused-linear-v1/tracking-snapshots/c9c7a54b2b5ee3f0c65cffd49b80c3cbfcbb209f0024e77225daf0934cb653e4-DELIVERY.md`.
+
+
+## Authorized publication in progress — 2026-11-02
+
+Independent exact5909-source acceptancee8b238a1 and workflow646810d1 precede c6dfd937 publication. Initial run41326847301 is retained: Linux CTest failed because the existing accuracy probe library was omitted from the serial explicit-target build list. A separate clean-checkout test also exposed16 missing archived analytical fixtures. The unchanged three test modules pass12pure checks after restoring exact files, revieweddb0f2c40; the single existing probe target addition is reviewedb70a527f. Revision7c23ef80 includes only these reviewed dependency repairs and evidence; model/runtime/gates are unchanged. Current run41327724187 is required; no previous green run substitutes. Live acquisition/browser verification remains pending.
+
+Prior ledger archived as `fused-linear-v1/tracking-snapshots/1b670892678e67b1511bbcf04d39beebd496576d351aba11bf7c937376c0e802-DELIVERY.md`.
+
+## Final source context repair — 2026-11-02
+
+Reviewed provenance-only revision `9cefd1a654f6e0f587edd6aac2c3828bd29e9a16` is pushed, exact [CI41328999352](https://github.com/benjym/constitutive-atlas/actions/runs/41330422584) running. [Independent source-context review](atlas-integration-v1/live-release-v1/independent-review/ci-helper-archive-v1/review-receipt.json) accepts current E6 v2 canonical old-helper resolution and immutable consumer contexts;20,922 receipt predicates pass,35 prior diagnostics and superseded v1 helper-resolution failure remain disclosed. No model/runtime/asset criteria changed. [Prospective E8 v4 policy](atlas-integration-v1/live-release-v1/LIVE_POLICY-v4.json) and [independent acceptance](atlas-integration-v1/live-release-v1/independent-review/live-checker-v1/v4-audit/review-receipt.json) bind exact final revision/run before live observations. E8 pending.
+
+## Reviewed CI compatibility repair — 2026-11-02
+
+Exact revision `6fed3e1e368337f02bbc67c2eef263d03b7c8c4a`, [CI41330422584](https://github.com/benjym/constitutive-atlas/actions/runs/41330422584), follows retained5failures/3errors in bothpriornativePythonjobs. [Interface acceptance](atlas-integration-v1/live-release-v1/ci-compat-v3/interface-review/review-receipt.json) and [source-context acceptance](atlas-integration-v1/live-release-v1/independent-review/ci-compat-v3/final-audit/review-receipt.json) bind6testcompatibilityfixes, exact14-model fixture and canonicalhistorical-source redirects. All24focusedtests,140repair predicates,126previouslypositive predicates,7proposalinputs,36recursiveconsumer checks and13scientificapprovals pass. Original20unresolveddiagnostics/twoalready-missinghistoricalarchivesremain disclosed. No model/runtime/assets/numericalthreshold/workflow changes. Sharedcheckouttest/othermodelmapfiles were not overwritten; integrationcommit is isolated. E8 pending exactfinalCI/upload/live/browser checks under newprospectivev5policy.

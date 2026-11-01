@@ -1,0 +1,3 @@
+# Current-origin normal package v3
+
+Prospective exact ec47+Kelvin source integration, Hill retained, narrow catalogue definition correction. Full standard build_web entry point into fresh package-v4. Reuse exact qualified backend artifacts; no compiler/runtime/model change since approved Kelvin execution-v3. Every existing mandatory profile gate remains, plus360Kelvin independent state/stress comparisons, exact replay and tamper rejection. Ordinary14model supported-input gate unchanged. Prior failed packages/fixture repair retained. No new accuracy policy. Compiled calls await MDnative-v5 explicit release; no build under this plan.

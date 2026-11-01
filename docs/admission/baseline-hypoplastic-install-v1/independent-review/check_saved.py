@@ -1,0 +1,180 @@
+#!/usr/bin/env python3
+"""Saved-only prospective preservation/installer audit; never invokes apply or a model."""
+import argparse,ast,copy,hashlib,json,subprocess,sys,tempfile
+from pathlib import Path
+from types import SimpleNamespace
+HERE=Path(__file__).resolve().parent
+REL=Path('docs/admission/baseline-hypoplastic-install-v1')
+REG='catalogue/approved-models.json'
+LADE='docs/ingestion/lade-duncan-1975/atlas-integration-v1/'
+CHECKER='docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/actual-package-v2/check.py'
+DOC=LADE+'actual-package-v2/EXECUTION_SOURCE_FREEZE.json'
+def need(ok,msg):
+ if not ok:raise ValueError(msg)
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def load(p):return json.loads(p.read_text())
+def valid(x):return isinstance(x,str) and len(x)==64 and all(c in '0123456789abcdef' for c in x)
+def pairs(x):
+ out=set()
+ if isinstance(x,dict):
+  for k,v in x.items():
+   if valid(v):out.add((k,v))
+   out.update(pairs(v))
+  if isinstance(x.get('path'),str):
+   for k in ('sha256','hash'):
+    if valid(x.get(k)):out.add((x['path'],x[k]))
+ elif isinstance(x,list):
+  for v in x:out.update(pairs(v))
+ return out
+
+def run(root):
+ root=root.resolve();packet=root/REL;own=load(HERE/'manifest.json')
+ for group in ['inputs','outputs']:
+  for n,h in own[group].items():need(sha((root if group=='inputs' else HERE)/n)==h,'review binding drift: '+n)
+ freeze=load(packet/'INSTALL_SOURCE_FREEZE.json')
+ for n,h in freeze.items():need(sha(root/n)==h,'install freeze drift: '+n)
+ plan=load(packet/'PLAN.json');decision=load(HERE/'decision.json')
+ need(plan['passed'] and not plan['issues'] and not plan['failed'],'parent plan failure')
+ need(sha(packet/'install.py')==decision['installer_sha256'] and sha(packet/'INSTALL_SOURCE_FREEZE.json')==decision['source_freeze_sha256'],'decision source binding')
+ # Independently enumerate each exact ordered operation, not just scanner totals.
+ operations=[]
+ for r in plan['archives']:
+  need(sha(packet/r['snapshot'])==r['old_sha256'],'archive snapshot')
+  if not r['already_present']:operations.append(dict(path=r['canonical_archive'],before=None,after=r['old_sha256'],kind='snapshot'))
+ for r in plan['maps']:
+  need(sha(packet/r['candidate'])==r['new_sha256'],'candidate map')
+  operations.append(dict(path=r['original_path'],before=r['old_sha256'],after=r['new_sha256'],kind='map'))
+ proposal=root/'docs/admission/baseline-hypoplastic-canonical-v1';old=load(proposal/'registry-observed.json');new=load(proposal/'registry-proposed.json');add=load(proposal/'approval-entries.json')
+ need(new==dict(old,models=old['models']+add),'not exact additive registry')
+ for e in add:operations.append(dict(path=e['review']['path'],before=None,after=sha(proposal/'proposed'/e['review']['path']),kind='canonical-review'))
+ operations.append(dict(path=REG,before=sha(proposal/'registry-observed.json'),after=sha(proposal/'registry-proposed.json'),kind='registry'))
+ need(operations==load(packet/'PREFLIGHT.json')['operations']==decision['operations'],'ordered operations differ')
+ need([o['kind'] for o in operations]==['snapshot']*2+['map']*4+['canonical-review']*2+['registry'],'operation order')
+ for o in operations:need((sha(root/o['path']) if (root/o['path']).exists() else None)==o['before'],'pre-install old bytes: '+o['path'])
+ need(not (packet/'APPLY_JOURNAL.json').exists(),'installation already started')
+ # Independent source-pair scan; source snapshots and only this future packet excluded.
+ wanted={(r['original_path'],r['old_sha256']) for r in plan['archives']};found={p:set() for p in wanted};unreadable=[];scanned=0;skipped=0
+ for directory in ['docs','catalogue']:
+  for f in sorted((root/directory).rglob('*.json')):
+   n=f.relative_to(root).as_posix()
+   if n.startswith(REL.as_posix()+'/'):continue
+   if n.startswith('catalogue/source-snapshots/'):skipped+=1;continue
+   raw=f.read_bytes()
+   try:value=json.loads(raw)
+   except (ValueError,UnicodeDecodeError):
+    mentions=any(a.encode() in raw and h.encode() in raw for a,h in wanted)
+    need(not mentions,'unreadable affected document: '+n)
+    unreadable.append(dict(document=n,bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest(),mentions_affected_pair=False));continue
+   scanned+=1
+   for pair in pairs(value)&wanted:found[pair].add(n)
+ expected={(r['original_path'],r['old_sha256'],r['document']) for r in plan['baseline']}
+ actual={(a,h,n) for (a,h),docs in found.items() for n in docs}
+ need(actual==expected,'new/missed actual consumer; rerun preservation plan')
+ sys.path.insert(0,str(root));from atlas.evidence import checked_receipt
+ for r in plan['baseline']:need(sha(root/r['document'])==r['document_sha256'],'live immutable receipt changed')
+ for r in plan['maps']:
+  m=load(packet/r['candidate'])
+  for pin in r['document_pins']:need(sha(root/pin['original_document'])==pin['old_document_sha256'],'candidate document pin changed')
+  if r['old_sha256']:
+   before=load(root/r['original_path'])
+   need(all(m['documents'].get(k)==v for k,v in before['documents'].items()),'prior document pins lost')
+   need(all(e in m['entries'] for e in before['entries']),'prior map entries lost')
+ for r in plan['baseline']+plan['all_existing_candidate_map_bindings']:checked_receipt(root,r['document'],r['original_path'],r['old_sha256'])
+ with tempfile.TemporaryDirectory(prefix='atlas-preservation-probe-') as td:
+  overlay=Path(td).resolve()
+  def put(n,data):
+   q=overlay/n;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(data)
+  for r in plan['archives']:put(r['canonical_archive'],(packet/r['snapshot']).read_bytes())
+  for r in plan['maps']:
+   put(r['original_path'],(packet/r['candidate']).read_bytes());m=load(packet/r['candidate'])
+   for n,h in m['documents'].items():need(sha(root/n)==h,'map receipt bytes');put(n,(root/n).read_bytes())
+   for e in m['entries']:
+    if not (overlay/e['archived_path']).exists():put(e['archived_path'],(root/e['archived_path']).read_bytes())
+  put(REG,(proposal/'registry-proposed.json').read_bytes())
+  for r in plan['baseline']+plan['all_existing_candidate_map_bindings']:checked_receipt(overlay,r['document'],r['original_path'],r['old_sha256'])
+  selected=checked_receipt(overlay,DOC,REG,operations[-1]['before'])
+  need(sha(selected)==operations[-1]['before'],'old registry unavailable through resolver')
+  need(sha(overlay/REG)!=load(overlay/DOC)['files'][REG],'direct old freeze unexpectedly passes replacement')
+  historical=overlay/'historical-root';q=historical/REG;q.parent.mkdir(parents=True);q.write_bytes(selected.read_bytes())
+  need(sha(q)==load(overlay/DOC)['files'][REG],'historical materialization fails direct pin')
+  neg=[];raw=selected.read_bytes()
+  for label in ['corrupt-archive','missing-archive','mutated-document']:
+   if label=='corrupt-archive':selected.write_bytes(b'corrupt')
+   elif label=='missing-archive':selected.unlink()
+   else:put(DOC,(overlay/DOC).read_bytes()+b' ')
+   try:checked_receipt(overlay,DOC,REG,operations[-1]['before'])
+   except ValueError as e:neg.append(dict(probe=label,rejected=True,reason=str(e).replace(str(overlay),'OVERLAY')))
+   else:raise ValueError('historical resolver accepted '+label)
+   selected.parent.mkdir(parents=True,exist_ok=True);selected.write_bytes(raw)
+   put(DOC,(root/DOC).read_bytes())
+ # Execute only AST-extracted installer safe() and review gates in a fake root.
+ tree=ast.parse((packet/'install.py').read_text());safe_def=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='safe');main=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='main')
+ apply=next(n for n in main.body if isinstance(n,ast.If) and ast.unparse(n.test)=='args.apply')
+ gate=[]
+ for n in apply.body:
+  if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='journal' for t in n.targets):break
+  gate.append(n)
+ with tempfile.TemporaryDirectory(prefix='atlas-installer-gates-') as td:
+  fake=Path(td).resolve();here=fake/REL;here.mkdir(parents=True)
+  for n in ['install.py','INSTALL_SOURCE_FREEZE.json']:(here/n).write_bytes((packet/n).read_bytes())
+  env={'Path':Path,'ROOT':fake,'HERE':here,'sha':lambda b:hashlib.sha256(b).hexdigest(),'json':json,'out':{'operations':operations}}
+  exec(compile(ast.fix_missing_locations(ast.Module(body=[safe_def],type_ignores=[])),'safe-gate','exec'),env)
+  safe=env['safe'];need(safe('normal/file')==fake/'normal/file','safe relative rejected')
+  (fake/'link').symlink_to(here,target_is_directory=True)
+  path_rejects=[]
+  for n in ['/absolute','../escape','a//b','link/file']:
+   try:safe(n)
+   except AssertionError:path_rejects.append(n)
+   else:raise ValueError('unsafe installer path accepted '+n)
+  code=compile(ast.fix_missing_locations(ast.Module(body=gate,type_ignores=[])),'review-gate','exec')
+  def test_gate(d):
+   p=fake/'review.json';p.write_text(json.dumps(d));env['args']=SimpleNamespace(review='review.json',review_sha256=sha(p));exec(code,env)
+  test_gate(decision);review_rejects=[]
+  # Exercise the actual pre-write journal refusal without executing any write.
+  jidx=next(i for i,n in enumerate(apply.body) if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='journal' for t in n.targets))
+  journal_gate=compile(ast.fix_missing_locations(ast.Module(body=apply.body[jidx:jidx+2],type_ignores=[])),'journal-gate','exec')
+  exec(journal_gate,env);(here/'APPLY_JOURNAL.json').write_text('{}')
+  try:exec(journal_gate,env)
+  except AssertionError:pass
+  else:raise ValueError('existing journal accepted')
+  # Execute only receipt-hash loops before operations are built.
+  oidx=next(i for i,n in enumerate(main.body) if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='operations' for t in n.targets))
+  loops=[n for n in main.body[:oidx] if isinstance(n,ast.For) and ast.unparse(n.iter) in ("plan['baseline']","plan['maps']")]
+  need(len(loops)==2,'receipt prewrite gates missing');env['plan']=plan
+  for row in plan['maps']:
+   for pin in row['document_pins']:
+    dst=fake/pin['original_document'];dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes((root/pin['original_document']).read_bytes())
+  receipts=compile(ast.fix_missing_locations(ast.Module(body=loops,type_ignores=[])),'receipt-gate','exec');exec(receipts,env)
+  changed=fake/plan['baseline'][0]['document'];changed.write_bytes(b'changed receipt')
+  try:exec(receipts,env)
+  except AssertionError:pass
+  else:raise ValueError('changed immutable receipt accepted')
+  mutations={'generic-accepted':{'accepted':True},'wrong-task':dict(decision,task='other'),'root-reviewer':dict(decision,reviewer_run_id='/root'),'wrong-installer':dict(decision,installer_sha256='0'*64),'wrong-freeze':dict(decision,source_freeze_sha256='0'*64),'wrong-operations':dict(decision,operations=operations[:-1]),'reordered-operations':dict(decision,operations=list(reversed(operations)))}
+  for label,d in mutations.items():
+   try:test_gate(d)
+   except AssertionError:review_rejects.append(label)
+   else:raise ValueError('unbound review accepted '+label)
+ optimized=subprocess.run([sys.executable,'-O',str(packet/'install.py'),'--help'],capture_output=True,text=True)
+ need(optimized.returncode!=0 and 'Optimized Python disables required assertions' in optimized.stderr,'optimized installer not rejected')
+ # Full current root metadata export is a prerequisite, with no evaluators/builds.
+ import sqlite3
+ from atlas.research import export_database
+ before=load(HERE/'fullroot-before-results.json')
+ with tempfile.TemporaryDirectory(prefix='atlas-before-install-export-') as td:
+  db=Path(td)/'atlas.sqlite';export_database(db)
+  with sqlite3.connect(db) as c:
+   counts={k:c.execute('select count(*) from '+t).fetchone()[0] for k,t in [('models','models'),('approvals','model_approvals'),('agent_reviews','agent_reviews')]}
+   counts['ordinary']=c.execute('select count(*) from models where executable=1').fetchone()[0]
+   need(all(before[k]==v for k,v in counts.items()),'fullroot before-export counts changed')
+   need(c.execute('pragma integrity_check').fetchall()==[('ok',)] and c.execute('pragma foreign_key_check').fetchall()==[],'fullroot integrity/FK gate')
+ need(sha(root/'docs/MODEL_DELIVERY_CHECKLIST.md')==before['checklist_sha256'],'checklist prerequisite changed')
+ # This is a source-preservation/local replay claim, not an independent full-package rerun.
+ old_checker=(root/CHECKER).read_text();need("for name,h in freeze['files'].items():assert sha(R/name)==h,name" in old_checker and 'checked_receipt' not in old_checker,'old checker semantics changed')
+ need(CHECKER in freeze,'unchanged historical checker not frozen by installer')
+ historical=load(HERE/'baseline-historical/historical-package-result.json');stdout=load(HERE/'baseline-historical/historical-package.stdout')
+ need(historical['returncode']==0 and historical['source_files']==8194 and historical['absolute_frozen_prerequisites']==33 and historical['checker_sha256']==sha(root/CHECKER),'parent historical-context result')
+ need(historical['live_root_drift']==[] and historical['exact_archive_redirects']==[],'this is not pre-install baseline evidence')
+ need(stdout['source_files']==8194 and stdout['package_checks']==106 and stdout['archive_members']==980,'parent unchanged-checker stdout')
+ return dict(status='PASS',task='INSTALL-baseline-hypoplastic-v1-independent-review',install_freeze_bindings=len(freeze),operations=len(operations),operation_order=[o['kind'] for o in operations],independent_scan=dict(parsed_documents=scanned,canonical_snapshots_excluded=skipped,affected_consumers=sorted(n for _,_,n in actual),unreadable=unreadable,limitation='JSON path/hash patterns only; raw Python consumer inspected separately'),baseline_and_overlay_bindings=len(plan['baseline'])+len(plan['all_existing_candidate_map_bindings']),resolver_negative_probes=neg,direct_live_old_freeze='expected FAIL after registry replacement',single_path_historical_materialization='PASS',path_gate_rejections=path_rejects,exact_review_gate_rejections=review_rejects,optimized_installer_rejected=True,existing_journal_rejected=True,mutated_live_receipt_rejected_before_writes=True,parent_full_historical_context='PASS pre-install baseline only; source/results inspected, not rerun by this reviewer',post_install_full_historical_context_required=True,fullroot_before_export=counts,production_apply=False,compiled_calls=0,material_calls=0,builds=0)
+if __name__=='__main__':
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);a=p.parse_args();print(json.dumps(run(a.root),indent=2))

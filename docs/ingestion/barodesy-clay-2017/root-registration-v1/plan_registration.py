@@ -1,0 +1,47 @@
+from pathlib import Path
+import json,hashlib,copy
+R=Path('/Users/bmar5496/code/constitutive-atlas');P=Path(__file__).parent
+read=lambda p:json.loads(p.read_text())
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+scan=read(P.parent/'ncl-current-v2/registry-binding-scan-v2.json')
+registry='catalogue/laboratory-examples.json'
+assert sha(R/registry)=='5150df65d62f9c9168be418f4c680271e3592c1226f5a3d28be162f4b7fbb03c'
+maps={};before={};redirects=[];seen=set()
+def add(row):
+ doc=row['document'];target=row['original_path'];h=row['sha256']
+ assert sha(R/doc)==row['document_sha256'],doc
+ assert sha(R/target)==h,target
+ name=str(Path(doc).parent/'source-archive-map.json')
+ assert name!=doc,('self receipt',doc)
+ if name not in maps:
+  if (R/name).exists():
+   before[name]=sha(R/name);maps[name]=read(R/name)
+   assert maps[name]['version']=='immutable-source-archive-map-0.1'
+  else:before[name]=None;maps[name]={'version':'immutable-source-archive-map-0.1','documents':{},'entries':[]}
+ m=maps[name];assert m['documents'].get(doc,row['document_sha256'])==row['document_sha256']
+ m['documents'][doc]=row['document_sha256']
+ entry={'original_path':target,'sha256':h,'archived_path':str(Path('catalogue/source-snapshots')/h/target)}
+ old=[e for e in m['entries'] if e['original_path']==target and e['sha256']==h]
+ assert not old or old==[entry]
+ if not old:m['entries'].append(entry)
+ redirects.append(row)
+for row in scan['primary_references']:
+ if row['resolution']=='live':
+  add(row);seen.add((row['document'],row['original_path'],row['sha256']))
+while True:
+ fresh=[]
+ for row in scan['secondary_source_map_references']:
+  key=(row['document'],row['original_path'],row['sha256'])
+  if row['resolution']=='live' and row['original_path'] in maps and key not in seen:
+   fresh.append(row);seen.add(key)
+ if not fresh:break
+ for row in fresh:add(row)
+snapshots={registry:sha(R/registry)}
+snapshots.update({p:h for p,h in before.items() if h})
+for name,node in maps.items():
+ for e in node['entries']:
+  if e['original_path'] in snapshots:
+   assert e['sha256']!=snapshots[e['original_path']] or e['archived_path']==str(Path('catalogue/source-snapshots')/e['sha256']/e['original_path'])
+plan={'status':'prospective only; no shared mutation','source_scan_sha256':sha(P.parent/'ncl-current-v2/registry-binding-scan-v2.json'),'prior_paths':snapshots,'map_before':before,'maps':maps,'redirected_pairs':redirects,'unchanged_original_documents':{x['document']:x['document_sha256']for x in redirects},'new_protocol':'protocols/barodesy2017-london-ncl-isotropic-fourteen-v2.json','new_protocol_sha256':'2e07748fa53a2b02c9d7234d1db6d79cecebd0eb5247c1368d04be8f901b92ff','new_registry_sha256':'a458881cbefeaae5cb573c34098c75202e8ca3c688e55d1d740531f60d957fa3','limitations':'Only existing successfully resolved registry/map pairs are preserved; preexisting unresolved pairs not repaired. No original receipt bytes changed. No package/browser/live claim.'}
+(P/'installation-plan-v1.json').write_text(json.dumps(plan,indent=2)+'\n')
+print(json.dumps({'maps':len(maps),'prior_paths':len(snapshots),'redirected_pairs':len(redirects),'map_paths':list(maps)},indent=2))

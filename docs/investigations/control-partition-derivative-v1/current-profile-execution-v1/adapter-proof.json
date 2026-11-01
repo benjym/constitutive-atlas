@@ -1,0 +1,92 @@
+{
+  "assess_fresh.py": {
+    "exact_reuse": true,
+    "source": "/Users/bmar5496/code/constitutive-atlas/docs/investigations/control-partition-derivative-v1/qualification-support-v2/adapters/assess_fresh.py",
+    "sha256": "424657e627cd206d68667ed894dabd6fc034e46e785f38e4e8e65a79fd3c7a7c"
+  },
+  "check_j2_paths.py": {
+    "exact_reuse": true,
+    "source": "/Users/bmar5496/code/constitutive-atlas/docs/investigations/control-partition-derivative-v1/qualification-support-v2/adapters/check_j2_paths.py",
+    "sha256": "d631a6991e9e60f076c36e277078a63042f277fbbd8378a1a016da757b3bf748"
+  },
+  "prepare_sls_reports.py": {
+    "exact_reuse": true,
+    "source": "/Users/bmar5496/code/constitutive-atlas/docs/investigations/control-partition-derivative-v1/qualification-support-v2/adapters/prepare_sls_reports.py",
+    "sha256": "021de97b608d0c47d09eeb2b67b5cd19ebe33326051ee5c04b63977fe208698d"
+  },
+  "check_sls_saved.py": {
+    "exact_reuse": true,
+    "source": "/Users/bmar5496/code/constitutive-atlas/docs/investigations/control-partition-derivative-v1/qualification-support-v2/adapters/check_sls_saved.py",
+    "sha256": "8add9b7a775a9dc7f4bef6a4d0a7b2196a4f9c621f9bda9d7c690a8b94aeb35a"
+  },
+  "check_maxwell_transactions.py": {
+    "exact_reuse": true,
+    "source": "/Users/bmar5496/code/constitutive-atlas/docs/investigations/control-partition-derivative-v1/qualification-support-v2/adapters/check_maxwell_transactions.py",
+    "sha256": "8ea5d5d97f346a913a7c67159ee3bb5ce81f947adb96146a4991b5c2e21fc22a"
+  },
+  "compare_maxwell.py": {
+    "source": "/private/tmp/atlas-control-partition-support-v3/source/docs/ingestion/maxwell-itasca900/integration-v1/compare_backends_v2.py",
+    "source_sha256": "d44d40518f49f077f8b88fe8e33b6ae7997ec8a7282155c1036f59a9e34ac991",
+    "adapter_sha256": "d04cbde2cf2ddb9803701dd1c74df205fe7979c2d8b0569aabbab7cc8dda92cb",
+    "replacements": [
+      {
+        "original": "BASE=Path(__file__).resolve().parent",
+        "replacement": "import os\nBASE=Path(os.environ['ATLAS_QUALIFICATION_OUTPUT']).resolve()\nassert BASE.is_dir() and not BASE.is_relative_to(Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve())"
+      }
+    ],
+    "exact_reverse": true
+  },
+  "study.py": {
+    "source": "/private/tmp/atlas-control-partition-support-v3/source/docs/ingestion/burgers-itasca900/integration-v1/study.py",
+    "source_sha256": "d6b540f72f276b47092377a092d8ca6c2d05e6e4b755e2e8931bc41b66a94102",
+    "adapter_sha256": "4f7fcf65d40b86f1abeda3ebf29d9e9cf7250125222502c3d86826e572cd9746",
+    "replacements": [
+      {
+        "original": "R=Path(__file__).resolve().parent",
+        "replacement": "import os\nR=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()/'docs/ingestion/burgers-itasca900/integration-v1'"
+      },
+      {
+        "original": "R/'model.json'",
+        "replacement": "R.parents[3]/'models/research/burgers/burgers-itasca900-dry-zero-spin-ode.json'"
+      }
+    ],
+    "exact_reverse": true
+  },
+  "test_burgers_native.py": {
+    "source": "/private/tmp/atlas-control-partition-support-v3/source/tools/test_burgers_native.py",
+    "source_sha256": "b52f0106aa3b0c1fa24e74973015d1946b244e3721fbedbd832674a196f4afb8",
+    "adapter_sha256": "911668e2f8ac09f9a6cef10ab87796640cd31748c9f751b2ecbf4bb0d28cf79f",
+    "replacements": [
+      {
+        "original": "ROOT=Path(__file__).resolve().parents[1]",
+        "replacement": "import os\nROOT=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()"
+      },
+      {
+        "original": "from study import Backend,execute,assess",
+        "replacement": "sys.path.insert(0,str(Path(__file__).resolve().parent))\nfrom study import Backend,execute,assess"
+      }
+    ],
+    "exact_reverse": true
+  },
+  "burgers_model_path": {
+    "original_sha256": "1452a27d5d3b50989ca66df5beb7f08e22434596800133983339466d3571933c",
+    "canonical_sha256": "1452a27d5d3b50989ca66df5beb7f08e22434596800133983339466d3571933c",
+    "exact_byte_equal": true
+  },
+  "study_j2.py": {
+    "source": "/private/tmp/atlas-control-partition-support-v3/source/tools/study_j2.py",
+    "source_sha256": "9e21f1e918c0344986b78753d62952c699833d370082d1425e2caf67dd9ea839",
+    "adapter_sha256": "638feb291cb2b568c0bc4a8b516d56861a929087fcc07b2ad80c0caf40e6bb1b",
+    "replacements": [
+      {
+        "original": "ROOT = Path(__file__).resolve().parents[1]",
+        "replacement": "import os\nROOT = Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()"
+      },
+      {
+        "original": "BASE/'references.json'",
+        "replacement": "Path(os.environ['ATLAS_J2_REFERENCE'])"
+      }
+    ],
+    "exact_reverse": true
+  }
+}

@@ -1,0 +1,15 @@
+# Hill catalogue route correction review
+
+Reviewer: `/root/hill_scientific_review`, separate from the implementation/coordinator run. Scope: metadata correction against committed `f8416d7732100b7502d2b4e6212c82420603bfcd`, not a new scientific approval or live delivery claim.
+
+**Accept the exact one-key correction.** The unchanged Linux catalogue test exposed a real error: `timed_laboratory` classified the approved strain-path Hill formulation as physical time. The retained run reports 1 failure among 1487 tests (50 skipped). Earlier interface review did not catch this metadata mismatch. Keep that failure and the unchanged gate.
+
+The independently checked candidate replaces only Hill’s `timed_laboratory: "index.html"` with `material_laboratory: "index.html"`; all other manifest data are identical. Old manifest SHA-256 is `a565fa21aaa63d895977b28d37817eeac418fb718b002fd5080542d952a21c47`; candidate is `e1f1213648e037cc2fced0432df6c1b2d0cfba1e11052a2d1cf6e2e6b81c0ff8`. Definition, approval, registry, app and test bytes are unchanged.
+
+The definition explicitly declares `strain_path`. The existing material route requires `index.html`, exact bound approval equality and receipt-resolved evidence. The app already includes this route in catalogue availability and Explore actions, labels it a strain-increment laboratory and routes the Hill model ID to its controller. Expected URL: `index.html#laboratory?model=hill-abaqus2025-perfect-be`. This correction does not create a public physical-time laboratory route: Hill has no `public_timed_laboratory` claim. No constitutive equation, numerical policy, runtime or approval change is justified or made.
+
+Preservation is sufficient for this narrow edit. The old manifest is byte-identical at its canonical source snapshot. The manifest-only helper differs from the previously reviewed helper only in the `SHARED` whitelist. Independently rerunning its dry plan scanned 5500 tracked receipt documents and found no matching pins or required map changes; after the coordinator’s archival, zero additional snapshots are needed. The retained application result records the single old-manifest snapshot. A zero-pair closure is appropriate here; no receipt is silently redirected or rewritten.
+
+`check_source.py` independently verifies the exact semantic diff, unchanged test/app/model/approval/registry, material-route source hooks and original snapshot. `check-results.json` binds the evidence, including the original Linux failure and the coordinator’s 16 passing focused catalogue/database/CI-profile tests. Reproduce with `python3 -B docs/ingestion/hill-abaqus2025/review-v1/catalogue-route-fix-v1/check_source.py /private/tmp/atlas-hill-release-v3`.
+
+The source correction and preservation have no remaining review blocker. E6/E7 close only after the coordinator’s corrected full package and actual browser qualification. E8 remains contingent on required remote checks and verified live delivery. This report leaves every prior scientific/interface review intact.

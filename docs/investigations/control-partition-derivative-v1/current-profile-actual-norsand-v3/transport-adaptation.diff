@@ -1,0 +1,34 @@
+--- completed-Burgers
++++ norsand-freshstart
+@@ -1,4 +1,4 @@
+-"""Transport-only exact reviewed Burgers profile execution; stops on any failure."""
++"""Transport-only exact reviewed norsand profile execution; stops on any failure."""
+ import datetime,hashlib,json,os,pathlib,subprocess,re
+ if not __debug__:raise RuntimeError('Unoptimized execution required')
+ D=pathlib.Path(__file__).resolve().parent
+@@ -6,7 +6,7 @@
+ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+ read=lambda p:json.loads(p.read_text())
+ f=read(D/'freeze.json');plan=read(P/'plan.json');tool=read(P/'toolchain.json')
+-profile=next(x for x in plan['profiles']if x['profile']=='burgers')
++profile=next(x for x in plan['profiles']if x['profile']=='norsand')
+ evidence=pathlib.Path(profile['output'])
+ actual_binding_hashes={}
+ def verify():
+@@ -68,14 +68,14 @@
+  for n in sdk:
+   if sha(pathlib.Path(n))!=tool['files'][n]['sha256']:raise RuntimeError('SDK settings changed')
+  metadata={str(p.relative_to(build)):sha(p)for p in (build/'CMakeFiles').rglob('*')if p.is_file()and p.suffix in ['.cmake','.yaml']}
+- receipt=dict(identity='current-power-actual-configure-v5',build=str(build),compiler_binding_files=compiler_binding_files,cache_sha256=sha(cache),values=values,actual_tool_pins=pins,sdk_settings={n:tool['files'][n]for n in sdk},compiler_metadata=metadata,passed=True)
++ receipt=dict(identity='current-profile-actual-configure-v3',profile=profile['profile'],build=str(build),compiler_binding_files=compiler_binding_files,cache_sha256=sha(cache),values=values,actual_tool_pins=pins,sdk_settings={n:tool['files'][n]for n in sdk},compiler_metadata=metadata,passed=True)
+  path=evidence/(stage+'.inputs.json')
+  with path.open('x')as stream:stream.write(json.dumps(receipt,indent=2)+'\n')
+  actual_binding_hashes[str(path)]=sha(path)
+  verify()
+ for st in profile['steps']:
+  verify();env={**os.environ,**st['env']};name=st['stage'];folder=evidence/'processes'/name
+- base=['python3','-B',str(P/'stage_receipt.py'),'--profile','burgers','--stage',name]
++ base=['python3','-B',str(P/'stage_receipt.py'),'--profile','norsand','--stage',name]
+  pre=base+['--phase','pre','--output',str(evidence/'stage-receipts'/(name+'.pre.json'))]
+  if capture(pre,st['cwd'],env,evidence/'processes'/(name+'.pre')):raise RuntimeError('Precondition failed '+name)
+  status=capture(st['argv'],st['cwd'],env,folder)

@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chart readability qualification</title><link id="sheet" rel="stylesheet"><style>.fixture{max-width:1000px;margin:auto;padding:16px}.fixture-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.fixture svg{display:block;width:100%;height:auto}@media(max-width:760px){.fixture-grid{grid-template-columns:1fr}}</style><body><div class="fixture"><h1>Saved chart rendering</h1><p>Presentation fixture only. Saved qualified Maxwell outputs; no solver calls.</p><div id="plots" class="fixture-grid"></div></div><script>
+const mode=new URLSearchParams(location.search).get('mode')==='prior'?'prior':'candidate';document.querySelector('#sheet').href=mode+'-style.css';
+const $=id=>document.getElementById(id);
+(async()=>{
+ const script=document.createElement('script');script.src=mode+'-chart.js';document.body.append(script);await new Promise((resolve,reject)=>{script.onload=resolve;script.onerror=reject;});
+ const samples=await(await fetch('saved-points.json')).json();window.fixtureInputs=[];
+ const add=(id,title,xlabel,ylabel,points)=>{const panel=document.createElement('section');panel.className='experiment-card';panel.innerHTML='<h2>'+title+'</h2><svg id="'+id+'" viewBox="0 0 480 290" role="img"></svg>';document.querySelector('#plots').append(panel);chart(id,xlabel,ylabel,points);window.fixtureInputs.push({id,points});};
+ for(const[name,points]of Object.entries(samples)){
+  for(const[channel,ylabel,value]of [['stress','Axial total stress (kPa)',p=>p.state[0]/1000],['strain','Accumulated axial strain (%)',p=>p.strain[0]*100],['rate','Axial strain rate (1/s)',p=>p.strain_rate[0]]]){
+   add(name+'-'+channel,name+' · '+channel,'Physical time (s)',ylabel,points.filter(p=>value(p)!==null).map(p=>[p.time,value(p)]));
+  }
+ }
+ add('tiny','Small nonzero values','Physical time (s)','Strain rate (1/s)',[[0,-1e-12],[1,1e-12]]);
+ add('wide','Signed scientific ticks','Physical time (s)','Rate (1/s)',[[0,-1.234e-290],[1,1.234e-290]]);
+ add('ordinary','Ordinary stress path','Mean effective stress (kPa)','Signed deviatoric stress (kPa)',[[0,0],[100,-300],[200,400]]);
+ add('empty','Empty plot','Time (s)','Strain (%)',[]);
+ window.fixtureReady=true;
+})().catch(e=>{window.fixtureError=String(e);throw e;});
+</script></body></html>

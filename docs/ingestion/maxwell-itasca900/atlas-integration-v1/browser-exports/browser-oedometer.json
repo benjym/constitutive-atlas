@@ -1,0 +1,629 @@
+{
+  "kind": "atlas-maxwell-laboratory-v1",
+  "provenance": {
+    "model": "maxwell-itasca900-zero-spin-ode",
+    "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+    "catalogue_hash": "370d167c30c34cf5525d799e31f5d4b4d069e91ac5232c6425a0ebe9e348c8a7",
+    "catalogue_file_sha256": "f6df0b221124e371b7f32a61bdffe5616a9256e8d940e3f816cc300e4b1bfa8d",
+    "module_sha256": "b7c4eb34acd014c9b0df775483ec8a5d49f65c2044d329c8afca74b07daee99c",
+    "wasm_sha256": "7cfd285b264be5a8f873b7bd38e1bf9e282fdbda30e343608242a30aef14408c",
+    "approval_sha256": "6a0acffdf6e84b006a6a374da230e2b2d9d479548b712f260df73882d335ac2c",
+    "review_sha256": "00014d70f022999f8a5d30ad4747c1513628e313b85caeab7d9a65a5d849059d",
+    "review_html_sha256": "1386c5cb43ae48d7ffb850367373e1e16a988c04167ea5a3993c44086a48042b",
+    "qualification_sha256": "d989230df995a154ec721769bef3afd5d5347bc40d652af95229cdb5dab9433c",
+    "build_review_sha256": "0fb88a7954f1f87682b8ee64b6e8538710c3b36ad359708431023aa550097914",
+    "interface_review_sha256": "c6d480f8921677079381f80d228272ab7b95207fa0d63d225c3abc0fd71f1584",
+    "component_sha256": {
+      "maxwell-atlas-contract.mjs": "8032aa63c3d9bf880f993ac2bf06e13878014085049d28596b23f7cb1bccb3c2",
+      "maxwell-atlas-engine.mjs": "f77627baa6e631f7e5ea12ac088f5f5321984b63a1b4b954427d0145c29b18fa",
+      "maxwell-atlas-runner.mjs": "3b2c0aec2620745313581e5ca8e096d0b2019591ce02531f24ac78972e10eed2",
+      "maxwell-atlas-worker.mjs": "c6431384e8c102feadf527d89010a7c926cba39c48fe0ee0127c65e32c691763",
+      "maxwell-laboratory.mjs": "b4b548c01c7285aa31e4f5326f4b150d55dbe985fa2438e9eddd2ffd543bc9a4",
+      "laboratory-controller-router.mjs": "e6f5f85ba95b909608015e974cbb0c919e97b9fd68d5d9d6202482e4a46eb934"
+    },
+    "release_revision": "f4fce681aeec90c963ce69152b5e59b6094f8cc0"
+  },
+  "controls": {
+    "schema_version": "0.2",
+    "units": "SI",
+    "model": "maxwell-itasca900-zero-spin-ode",
+    "parameters": [
+      20000000,
+      12000000,
+      24000000
+    ],
+    "initial": [
+      33333.333333333336,
+      33333.333333333336,
+      100000,
+      0,
+      0,
+      0
+    ],
+    "initial_strain": [
+      0,
+      0,
+      0.002777777777777778,
+      0,
+      0,
+      0
+    ],
+    "initial_strain_rate": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "segments": [
+      {
+        "id": "creep",
+        "duration": 8,
+        "samples": 8,
+        "controls": [
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          },
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          },
+          {
+            "quantity": "stress",
+            "kind": "hold"
+          },
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          },
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          },
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          }
+        ]
+      }
+    ],
+    "start_time": 0,
+    "solver": {
+      "method": "backward-euler-step-doubling",
+      "relative_tolerance": 1e-8,
+      "absolute_scale_fraction": 1e-11,
+      "minimum_step": 1e-12,
+      "maximum_step": 1000000,
+      "maximum_substeps": 100000,
+      "nonlinear_tolerance": 1e-10,
+      "maximum_iterations": 40,
+      "maximum_depth": 40
+    }
+  },
+  "request": {
+    "function": "atlas_run_schedule",
+    "args": [
+      "maxwell-itasca900-zero-spin-ode",
+      "20000000,12000000,24000000",
+      "33333.333333333336,33333.333333333336,100000,0,0,0",
+      "0,0,0.002777777777777778,0,0,0",
+      "0,0,0,0,0,0",
+      "8,8,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0",
+      "creep",
+      0,
+      1e-8,
+      1e-11,
+      1e-12,
+      1000000,
+      100000,
+      1e-10,
+      40
+    ]
+  },
+  "result": {
+    "ok": true,
+    "schema_version": "0.2",
+    "units": "SI",
+    "model": "maxwell-itasca900-zero-spin-ode",
+    "catalogue_hash": "370d167c30c34cf5525d799e31f5d4b4d069e91ac5232c6425a0ebe9e348c8a7",
+    "message": "",
+    "start_time": 0,
+    "parameters": [
+      20000000,
+      12000000,
+      24000000
+    ],
+    "initial": [
+      33333.333333333336,
+      33333.333333333336,
+      100000,
+      0,
+      0,
+      0
+    ],
+    "initial_strain": [
+      0,
+      0,
+      0.002777777777777778,
+      0,
+      0,
+      0
+    ],
+    "initial_strain_rate": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "solver": {
+      "method": "backward-euler-step-doubling",
+      "relative_tolerance": 1e-8,
+      "absolute_scale_fraction": 1e-11,
+      "minimum_step": 1e-12,
+      "maximum_step": 1000000,
+      "maximum_substeps": 100000,
+      "nonlinear_tolerance": 1e-10,
+      "maximum_iterations": 40,
+      "maximum_depth": 40
+    },
+    "segments": [
+      {
+        "id": "creep",
+        "duration": 8,
+        "samples": 8,
+        "controls": [
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          },
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          },
+          {
+            "quantity": "stress",
+            "kind": "hold"
+          },
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          },
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          },
+          {
+            "quantity": "strain",
+            "kind": "hold"
+          }
+        ]
+      }
+    ],
+    "points": [
+      {
+        "time": 0,
+        "segment": -1,
+        "side": "left",
+        "state": [
+          33333.333333333336,
+          33333.333333333336,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.002777777777777778,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          33333.333333333336,
+          33333.333333333336,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 0,
+        "substeps": 0,
+        "rejected": 0,
+        "temporal_error_norm": 0,
+        "nonlinear_residual_norm": 0
+      },
+      {
+        "time": 0,
+        "segment": 0,
+        "side": "right",
+        "state": [
+          33333.333333333336,
+          33333.333333333336,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.002777777777777778,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          null,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          33333.333333333336,
+          33333.333333333336,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 0,
+        "substeps": 0,
+        "rejected": 0,
+        "temporal_error_norm": 0,
+        "nonlinear_residual_norm": 0
+      },
+      {
+        "time": 1,
+        "segment": 0,
+        "side": "left",
+        "state": [
+          49501.849154913376,
+          49501.849154913376,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.003316728305163768,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          0.000467575470787839,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          49501.849154913376,
+          49501.849154913376,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 24570,
+        "substeps": 4096,
+        "rejected": 2047,
+        "temporal_error_norm": 0.334114495224878,
+        "nonlinear_residual_norm": 6.61566446069628e-16
+      },
+      {
+        "time": 2,
+        "segment": 0,
+        "side": "left",
+        "state": [
+          61748.921957998755,
+          61748.921957998755,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.0037249640652666227,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          0.0003541766485370484,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          61748.921957998755,
+          61748.921957998755,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 20154,
+        "substeps": 3360,
+        "rejected": 1679,
+        "temporal_error_norm": 0.8605556144045867,
+        "nonlinear_residual_norm": 3.410605131648481e-16
+      },
+      {
+        "time": 3,
+        "segment": 0,
+        "side": "left",
+        "state": [
+          71025.59649394572,
+          71025.59649394572,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.004034186549798173,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          0.000268281513944947,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          71025.59649394572,
+          71025.59649394572,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 12282,
+        "substeps": 2048,
+        "rejected": 1023,
+        "temporal_error_norm": 0.5854209682856056,
+        "nonlinear_residual_norm": 4.720277502201498e-16
+      },
+      {
+        "time": 4,
+        "segment": 0,
+        "side": "left",
+        "state": [
+          78052.48632182721,
+          78052.48632182721,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.004268416210727589,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          0.0002032177192423407,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          78052.48632182721,
+          78052.48632182721,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 12282,
+        "substeps": 2048,
+        "rejected": 1023,
+        "temporal_error_norm": 0.41166506841643613,
+        "nonlinear_residual_norm": 5.457877705339342e-16
+      },
+      {
+        "time": 5,
+        "segment": 0,
+        "side": "left",
+        "state": [
+          83375.21058706431,
+          83375.21058706431,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.004445840352902153,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          0.00015393323530495993,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          83375.21058706431,
+          83375.21058706431,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 12282,
+        "substeps": 2048,
+        "rejected": 1023,
+        "temporal_error_norm": 0.29577197674758926,
+        "nonlinear_residual_norm": 6.089067028369754e-16
+      },
+      {
+        "time": 6,
+        "segment": 0,
+        "side": "left",
+        "state": [
+          87406.95199099682,
+          87406.95199099682,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.004580231733033235,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          0.00011660229637965905,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          87406.95199099682,
+          87406.95199099682,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 9366,
+        "substeps": 1562,
+        "rejected": 780,
+        "temporal_error_norm": 0.8622992294811666,
+        "nonlinear_residual_norm": 6.921254680491984e-17
+      },
+      {
+        "time": 7,
+        "segment": 0,
+        "side": "left",
+        "state": [
+          90460.84594731944,
+          90460.84594731944,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.00468202819824399,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          0.00008832550048778277,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          90460.84594731944,
+          90460.84594731944,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 6138,
+        "substeps": 1024,
+        "rejected": 511,
+        "temporal_error_norm": 0.6351276643927041,
+        "nonlinear_residual_norm": 2.5920599000528453e-18
+      },
+      {
+        "time": 8,
+        "segment": 0,
+        "side": "left",
+        "state": [
+          92774.15126379917,
+          92774.15126379917,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "strain": [
+          0,
+          0,
+          0.004759138375459977,
+          0,
+          0,
+          0
+        ],
+        "strain_rate": [
+          0,
+          0,
+          0.00006690600681667438,
+          0,
+          0,
+          0
+        ],
+        "observables": [
+          92774.15126379917,
+          92774.15126379917,
+          100000,
+          0,
+          0,
+          0
+        ],
+        "iterations": 6138,
+        "substeps": 1024,
+        "rejected": 511,
+        "temporal_error_norm": 0.4712363947114938,
+        "nonlinear_residual_norm": 2.2216681827558206e-16
+      }
+    ]
+  }
+}

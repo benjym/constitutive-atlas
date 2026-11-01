@@ -1,0 +1,42 @@
+{
+  "paper_record_version": 1,
+  "id": "kfs-first-loading-approved-core-sensitivity-v1",
+  "phase": "development_only_not_calibration_admission",
+  "protocol": "paper/study/compression_protocol.json",
+  "baseline_report": "paper/results/pilot-matched96/report.json",
+  "model_ids": [
+    "linear-elastic",
+    "hypoplastic-sand-vw96"
+  ],
+  "parameter_selection": "baseline_parameters_in_frozen_report_config_not_selected_fits",
+  "parameter_qualification": "Elastic constants are diagnostic choices. Hypoplastic constants are the inherited source baseline from the earlier development config, including information from compression. This is neither independent prediction nor an equal-information model ranking.",
+  "initial_radial_to_axial_stress_ratios": [
+    0.5,
+    0.35,
+    0.65,
+    1.0
+  ],
+  "initial_stress_qualification": "User-approved primaryK0=.50; sensitivities.35/.65 plus isotropic diagnostic1.0. Analyst-selected initialization ratios, not measurements or confidence bounds. Same scenarios and fixed parameters across models; radial stress evolves under zero lateral strain after initialization.",
+  "coordinates": [
+    "engineering_increment",
+    "log_height_increment"
+  ],
+  "coordinate_qualification": "Compare fixed-parameter predictions at identical measured observation rows. Log height is a qualified geometric mapping; it does not establish finite-strain validity of the native stress law.",
+  "maximum_increments": [
+    0.0005,
+    0.00025
+  ],
+  "timeout_seconds_per_replay": 120,
+  "summary": "Report initial-stress and coordinate differences at fixed start, and paired step-refinement differences. Do not optimize or choose a scenario using measured stress error. Different start thresholds have different initialization points and intervals; their endpoint spread is a separate diagnostic, not a paired common-interval error.",
+  "primary_initial_stress_ratio": 0.5,
+  "assumption_approval": {
+    "path": "paper/study/assumption_proposal.json",
+    "sha256": "49de78fa739bd935ea71210b1f60fec05ef81ec5bc170084d0e995c7dbbe039f",
+    "ids": [
+      "A01",
+      "A03"
+    ]
+  },
+  "prior_config": "paper/study/compression_sensitivity.json",
+  "prior_run_policy": "Preserve previous config, reports and fitted constants; write the new run to a distinct directory."
+}

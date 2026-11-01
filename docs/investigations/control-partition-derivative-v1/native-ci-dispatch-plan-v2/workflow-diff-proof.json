@@ -1,0 +1,17 @@
+{
+  "identity": "published37d-native-dispatch-workflow-proposal-v2",
+  "published_sha256": "8a2293ee849835c1f2bf08ec3ae09c0fced753d05148d7d2b82cf5b9bef81c9d",
+  "proposed_sha256": "d1740a148be0c5f890c99d1a65b7b00935bf31af1aeb7aefcd0e1f8c936d951a",
+  "replaced_original_block": "      - name: Native checks and full exact archival replay\n        if: runner.os == 'macOS'\n        run: |\n          ctest --test-dir build --output-on-failure -E \"^atlas_recorded$\"\n          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R \"^atlas_recorded$\"\n        env:\n          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5\n      - name: Linux native checks\n        if: runner.os == 'Linux'\n        run: |\n          ctest --test-dir build --output-on-failure -E \"^(atlas_python|atlas_recorded)$\"\n          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R \"^atlas_recorded$\"\n        env:\n          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5\n      - name: Retain strict original native failures and reject unknown fixtures\n        run: python tools/check_native_fixture_contracts.py --build build --output \"$RUNNER_TEMP/native-fixture-contracts.json\"\n",
+  "proposed_block": "      - name: Retain strict original and MD legacy failures and reject unknown fixtures\n        run: python -B tools/check_native_fixture_dispatch.py check --catalogue build/generated/models.json --source-root . --build build --output \"$RUNNER_TEMP/native-ci-dispatch/contracts.json\"\n      - name: Native checks and full exact archival replay\n        if: runner.os == 'macOS'\n        run: |\n          python -B tools/check_native_fixture_dispatch.py ctest --catalogue build/generated/models.json --source-root . --build build --suite macos-main --output \"$RUNNER_TEMP/native-ci-dispatch/macos-main.json\"\n          python -B tools/check_native_fixture_dispatch.py ctest --catalogue build/generated/models.json --source-root . --build build --suite recorded --output \"$RUNNER_TEMP/native-ci-dispatch/macos-recorded.json\"\n      - name: Linux native checks\n        if: runner.os == 'Linux'\n        run: |\n          python -B tools/check_native_fixture_dispatch.py ctest --catalogue build/generated/models.json --source-root . --build build --suite linux-main --output \"$RUNNER_TEMP/native-ci-dispatch/linux-main.json\"\n          python -B tools/check_native_fixture_dispatch.py ctest --catalogue build/generated/models.json --source-root . --build build --suite recorded --output \"$RUNNER_TEMP/native-ci-dispatch/linux-recorded.json\"\n      - name: Retain native dispatch process evidence\n        if: always()\n        uses: actions/upload-artifact@v4\n        with:\n          name: native-ci-dispatch-${{ matrix.os }}\n          path: ${{ runner.temp }}/native-ci-dispatch/\n",
+  "prefix_sha256": "49250a1e8682d43fa5ed784bd4be4a86a1cc6a1b3196dad1acc055c6326e27ae",
+  "suffix_sha256": "2afdc15f2bfd3cfc9239fd963f377483583ced166b27a20e413bcc987d2b1522",
+  "outside_block_unchanged": true,
+  "roundtrip_replace_recovers_original": true,
+  "main_filters": {
+    "macos-main": "^atlas_recorded$",
+    "linux-main": "^(atlas_python|atlas_recorded)$"
+  },
+  "recorded_filter": "^atlas_recorded$",
+  "all_non_native_workflow_gates_unchanged": true
+}

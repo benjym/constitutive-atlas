@@ -1,0 +1,63 @@
+// Test-only transport. It exports actual generated Jet derivatives and actual
+// endpoint probes; the independent frozen Decimal assessor decides accuracy.
+void md_decimal_json_string(std::ostream&out,const std::string&value){
+    const char*hex="0123456789abcdef";out<<'"';
+    for(unsigned char c:value){
+        if(c=='"'||c=='\\')out<<'\\'<<char(c);
+        else if(c<32)out<<"\\u00"<<hex[c>>4]<<hex[c&15];
+        else out<<char(c);
+    }
+    out<<'"';
+}
+void md_decimal_hex(std::ostream&out,double value){
+    require(std::isfinite(value),"MD Decimal export nonfinite number");
+    out<<'"'<<std::nouppercase<<std::hexfloat<<value<<std::defaultfloat<<'"';
+}
+void md_decimal_vector(std::ostream&out,const atlas::State&values){
+    out<<'[';for(size_t i=0;i<values.size();++i){if(i)out<<',';md_decimal_hex(out,values[i]);}out<<']';
+}
+bool md_decimal_binding_valid(const char*value){
+    if(!value||std::string(value).size()!=64)return false;
+    for(const char*c=value;*c;++c)if(!((*c>='0'&&*c<='9')||(*c>='a'&&*c<='f')))return false;
+    return true;
+}
+std::string md_decimal_export(int model,const atlas::State&z,const atlas::State&zn,const atlas::State&p,const atlas::State&scales,const atlas::Sym<double>&de,const std::vector<atlas::Jet>&r,const std::string&binding){
+    require(z.size()==14&&zn.size()==14&&p.size()==17&&scales.size()==14&&r.size()==14,"MD Decimal export layout");
+    const auto branch=md_fixture_branch(z,p);const auto&metadata=atlas::models()[model];
+    std::ostringstream out;out.imbue(std::locale::classic());
+    out<<"{\"identity\":\"md1997-decimal-ad-export-v1\",\"selector\":\"md1997-decimal-fd-reference-v1\",\"status\":\"exported-unassessed\",\"models\":"<<atlas::models().size()<<",\"bindings\":{";
+    // Frozen oracle/source identities, not runtime-injectable requests.
+    /* FROZEN_BINDINGS */
+    out<<",\"build_binding_sha256\":";md_decimal_json_string(out,binding);out<<"},\"base\":{\"layout\":[";
+    for(size_t i=0;i<metadata.fields.size();++i){
+        const auto&field=metadata.fields[i];if(i)out<<',';out<<"{\"name\":";md_decimal_json_string(out,field.name);out<<",\"shape\":";md_decimal_json_string(out,field.size==6?"sym":"scalar");out<<",\"offset\":"<<field.offset<<",\"size\":"<<field.size<<'}';
+    }
+    out<<"],\"state_hex\":";md_decimal_vector(out,z);out<<",\"previous_hex\":";md_decimal_vector(out,zn);
+    atlas::State loading(6);for(int i=0;i<6;++i)loading[i]=de.v[i];out<<",\"loading_hex\":";md_decimal_vector(out,loading);out<<",\"parameters_hex\":{";
+    require(metadata.parameters.size()==p.size(),"MD Decimal parameter layout");
+    for(size_t i=0;i<p.size();++i){if(i)out<<',';md_decimal_json_string(out,metadata.parameters[i].name);out<<':';md_decimal_hex(out,p[i]);}
+    out<<"},\"scales_hex\":";md_decimal_vector(out,scales);out<<"},\"endpoints\":[";
+    bool first=true;
+    for(int column=0;column<14;++column){
+        atlas::State direction(14,0.);direction[column]=1.;const double h=column>=7&&column<=9?5e-11:1e-6;
+        for(int level=0;level<2;++level){
+            const double step=level?h/2:h;auto plus=z,minus=z;
+            for(int j=0;j<14;++j){plus[j]+=step*scales[j]*direction[j];minus[j]-=step*scales[j]*direction[j];}
+            require(md_fixture_branch(plus,p)==branch&&md_fixture_branch(minus,p)==branch,"MD FD branch changed");
+            atlas::State rp,rm;require(atlas::evaluate_model(model,plus,zn,de,p,rp)&&atlas::evaluate_model(model,minus,zn,de,p,rm),"MD FD outside domain");
+            require(rp.size()==14&&rm.size()==14&&atlas::finite(rp)&&atlas::finite(rm),"MD FD residual finite layout");
+            for(int sign:{1,-1}){
+                if(!first)out<<',';first=false;out<<"{\"column\":"<<column<<",\"level\":"<<level<<",\"sign\":"<<sign<<",\"step_hex\":";md_decimal_hex(out,step);
+                out<<",\"direction_hex\":";md_decimal_vector(out,direction);out<<",\"state_hex\":";md_decimal_vector(out,sign==1?plus:minus);
+                out<<",\"domain\":true,\"branch\":true}";
+            }
+        }
+    }
+    out<<"],\"ad_hex\":[";
+    for(int row=0;row<14;++row){
+        require(atlas::finite_value(r[row]),"MD Decimal export nonfinite Jet");if(row)out<<',';out<<'[';
+        for(int column=0;column<14;++column){if(column)out<<',';md_decimal_hex(out,r[row].d[column]);}out<<']';
+    }
+    out<<']';return out.str(); // caller appends C++ check flags only after ALL checks
+}
+

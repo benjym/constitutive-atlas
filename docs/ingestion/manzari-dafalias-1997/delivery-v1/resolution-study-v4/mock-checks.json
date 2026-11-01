@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "scope": "both unchanged gate families reject empty mock reports",
+  "compiled_calls": 0,
+  "records": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "docs/ingestion/manzari-dafalias-1997/delivery-v1/resolution-study-v4/check_reports.py",
+        "docs/ingestion/manzari-dafalias-1997/delivery-v1/resolution-study-v4/mock-empty-report.json",
+        "--output",
+        "docs/ingestion/manzari-dafalias-1997/delivery-v1/resolution-study-v4/mock-empty-source-checks.json"
+      ],
+      "returncode": 1,
+      "stdout": "{\"passed\": false, \"checks\": 442, \"failures\": 434}\n",
+      "stderr": "",
+      "expected": "reject incomplete mock; never a compiled report"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "docs/ingestion/manzari-dafalias-1997/delivery-v1/resolution-study-v4/check_parity.py",
+        "docs/ingestion/manzari-dafalias-1997/delivery-v1/resolution-study-v4/mock-empty-report.json",
+        "docs/ingestion/manzari-dafalias-1997/delivery-v1/resolution-study-v4/mock-empty-report.json",
+        "--output",
+        "docs/ingestion/manzari-dafalias-1997/delivery-v1/resolution-study-v4/mock-empty-parity-checks.json"
+      ],
+      "returncode": 1,
+      "stdout": "{\"passed\": false, \"failures\": 158}\n",
+      "stderr": "",
+      "expected": "reject incomplete mock; never a compiled report"
+    }
+  ]
+}

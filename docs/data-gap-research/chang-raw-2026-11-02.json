@@ -1,0 +1,111 @@
+{
+  "format": "atlas-chang-raw-ingestion-audit-v1",
+  "review_date": "2026-11-02",
+  "scope": "Completion of the raw-data portion of the existing Chang accelerating-creep candidate; no new candidate is counted.",
+  "prior_pass": "docs/data-gap-research/2026-11-02-ingestion.json",
+  "source_url": "https://doi.org/10.5281/zenodo.11513623",
+  "associated_publication": "https://doi.org/10.1029/2024GL111839",
+  "license_evidence": "docs/data-license-evidence/chang-raw-2026-11-02.json",
+  "counts": {
+    "raw_files": 40,
+    "added_records": 41,
+    "added_observations": 2371673,
+    "numeric_cells_independently_compared": 58773461,
+    "time_slip_boundary_checks": 80,
+    "total_public_records": 994,
+    "total_public_observations": 9351462,
+    "total_registered_sources": 23,
+    "public_kinds": {
+      "measurement-series": 848,
+      "test-summary": 97,
+      "experiment": 49
+    },
+    "candidates_with_public_ingestion": 31,
+    "candidates_screened": 40,
+    "prior_953_assets_unchanged": true
+  },
+  "snapshot": {
+    "public_index_sha256": "14a2624d0c999d2d1b0b1cbbe54afc8dcab232c7fbd08bd2e8b77660f2833380",
+    "public_registry_sha256": "bade746cfb388fd93cbda6cb53177156ee1572a60a4d5734a4d97830949fbcea",
+    "prior_953_index_sha256": "f33b69dbd64deaa745d56e4038fc1f34b7d5f1223bcb57314897f44110c3da94"
+  },
+  "verification": {
+    "independent_source_and_curated_cells": "pass",
+    "source_verification_report": "docs/data-gap-research/chang-raw-verification-2026-11-02.json",
+    "verification_command": "python tools/verify_chang_data.py --raw-dir <download-directory> --curated",
+    "ingestion_command": "python tools/ingest_public_data.py --raw-dir <download-directory> --source chang-creep-raw",
+    "unit_and_existing_reader_tests": {
+      "result": "pass",
+      "tests": 11,
+      "command": "python3 -m unittest tests.test_staged_tsv tests.test_gap_datasets tests.test_measurement_units -v"
+    },
+    "new_source_browser_bundle": {
+      "result": "pass",
+      "scope": "All 41 new records, every row/channel, explicit SI conversions and unresolved units; existing 953 assets were separately verified and are byte-identical.",
+      "report": "docs/data-gap-research/chang-browser-projection-2026-11-02.json",
+      "records": 41,
+      "observations": 2371673
+    },
+    "source_verifier_sha256": "39ce64284844bc82d113b871bd15e025b4cd59129211332b51ef1a1837fee3dd",
+    "reader_sha256": "74f1295d1df37dca9a36005dd73d616d537a57439a8bb79254226fc387d53c70"
+  },
+  "interpretation": [
+    "All forty exported experiments retained; 39 have 25 channels and experiment 5 has 8 generic channels.",
+    "One 250178-row history is partitioned into two storage chunks without resetting time or displacement. Record counts are not independent-specimen counts.",
+    "The optional mat-io 1.0.2 decoder reads table properties as data; no supplied MATLAB code, author binaries or native/Wasm build was executed.",
+    "Every numeric cell was compared exactly with the original MAT subsystem blocks through an independent SciPy reader, including source row order.",
+    "Time in seconds and slip in millimetres are bound through author metadata and summary workbook units, with all 80 boundary anchors matching exactly.",
+    "MAT VariableUnits is empty. All other exported channel units remain unresolved, including apparatus signals and author-processed views.",
+    "Scalar loading-rate metadata may differ from the workbook; source values remain preserved and are not automatically applied.",
+    "The prior 40-test summary is retained as a derived view of the same tests, not an additional forty experiments.",
+    "These are ring-shear source series, not homogeneous bulk-strain overlays; qualified model overlays remain 49."
+  ],
+  "retained_failure": {
+    "description": "The first sequential download stopped on a response-length mismatch before accepting the next MAT file. No invalid file entered the source registry. Missing files were subsequently downloaded and verified against the published MD5 and size.",
+    "initial_command": "python tmp/experimental-gap-screen-2026-11-02/download_chang_raw.py",
+    "initial_exit_code": 1
+  },
+  "remaining": [
+    {
+      "scope": "Six SoilModels candidates",
+      "state": "Processed privately; public hosting permission absent."
+    },
+    {
+      "scope": "Wang sand / 4TU",
+      "state": "Retrieval remains paused at user instruction; no request made."
+    },
+    {
+      "scope": "Organic clay compression/extension",
+      "state": "Publisher Data Availability Statement remains author-upon-request; no public numeric archive established.",
+      "evidence": "https://onlinelibrary.wiley.com/doi/full/10.1002/nag.70019"
+    },
+    {
+      "scope": "London Clay thermal creep/relaxation",
+      "state": "No separate public numeric archive established; author contact/data request remains a lead.",
+      "evidence": "https://doi.org/10.1061/IJGNAI.GMENG-9074"
+    }
+  ],
+  "local_source_search": {
+    "directory": "/Users/bmar5496/Downloads",
+    "filename_terms": [
+      "Chao",
+      "Muraro",
+      "Jommi",
+      "organic",
+      "thermal clay",
+      "Sheridan",
+      "9074",
+      "70019",
+      "111839"
+    ],
+    "matching_files": 0,
+    "scope": "Filename search only; no claim about unnamed archive contents."
+  },
+  "delivery": {
+    "native_or_wasm_build": false,
+    "commit_created": false,
+    "push": false,
+    "deployment": false
+  },
+  "completion_proven": false
+}

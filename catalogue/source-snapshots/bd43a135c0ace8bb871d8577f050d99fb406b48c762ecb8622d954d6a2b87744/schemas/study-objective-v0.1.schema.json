@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://benjym.github.io/constitutive-atlas/schemas/study-objective-v0.1.schema.json",
+  "title": "Complete whole-test calibration objective",
+  "description": "Structural contract; atlas.study_objective additionally validates allocation/reservation identity, fixed SI channel units, finite arithmetic and complete candidate coverage. Not a scientific study freeze.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "id",
+    "allocation_sha256",
+    "package",
+    "method",
+    "test_aggregation",
+    "failure_policy",
+    "channels"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "kind": {
+      "const": "study-objective"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "allocation_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "package": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*$"
+    },
+    "method": {
+      "const": "piecewise-linear-residual-axial-travel-v1"
+    },
+    "test_aggregation": {
+      "const": "equal_whole_test"
+    },
+    "failure_policy": {
+      "const": "reject_entire_candidate"
+    },
+    "channels": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "q": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "scale",
+            "weight"
+          ],
+          "properties": {
+            "unit": {
+              "const": "Pa"
+            },
+            "scale": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "weight": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        },
+        "p": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "scale",
+            "weight"
+          ],
+          "properties": {
+            "unit": {
+              "const": "Pa"
+            },
+            "scale": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "weight": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        },
+        "volumetric_strain": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "scale",
+            "weight"
+          ],
+          "properties": {
+            "unit": {
+              "const": "1"
+            },
+            "scale": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "weight": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

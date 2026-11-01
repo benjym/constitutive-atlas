@@ -1,0 +1,21 @@
+# Independent prospective followup — accepted
+
+Reviewer: separate agent `/root/bingham_review`, 2 November2026. Task `REVIEW-bingham-prospective-v1` followup. **Prospective decision: accepted for execution against freeze-v3. R1–R3 are resolved. This is not E5 approval and does not accept backend delivery before actual evidence exists.** Source/transcription acceptance and bounded scope remain those in REPORT-v1. Candidate SHA-256 remains `6c5ee29c5c8cfbe18eaac09808a86ed7b656c8716511409bb23ecd0d3ad89850`.
+
+Read corrected study.py, parity.py, revision-v2/v3 disclosures and retained prior assessors; checked the current API serialization in cpp/main.cpp and lifecycle/control implementation in cpp/include/atlas/time.hpp and schedule.hpp. `input-binding-v2.json` binds all113 freeze-v3 inputs and the freeze manifest itself; all match. Prior review/report/bindings/results remain unchanged. No compiled code, build, vendor program or network acquisition was executed.
+
+R1: successful direct and scheduled results now enforce full13component finite state, alpha>=0 and plastic trace tolerance, plus nondecreasing alpha. Direct results bind exact model/catalogue, incoming state, parameters, loading, clock and solver settings separately from physical error allowances. Negative alpha can no longer hide inside a reference tolerance.
+
+R2: the schedule assessor now requires exact serialized segments/controls, initial loading context and solver metadata, exact point count and chronological tuple(time,segment,side), segment-entry state continuity, prescribed strain rates and expected stress-control transition nulls. These expectations agree with the current API: an initial left point with segment=-1, one right transition per segment, then the requested left samples. All successful physical states/stresses remain checked against independent references. Stress-controlled post-transition strain rates are required finite rather than prescribed: that agrees with their role as solved host outputs; the independent creep state/stress history checks their integrated effect.
+
+R3: expected parse-level errors require their exact minimal error envelopes; integration-level rejections require full original state/time and exact failure message, with no accepted substeps on early validation failure and positive substeps on deliberate late-budget rejection. Both repeated process/ABI calls must report the expected return status. This matches params_for/state_for, atlas_integrate_time serialization and integrate_time_history. Native collection retains stderr. All136requests and their recovery sequence remain unchanged.
+
+The parity v3 exclusions add temporal_error_norm and nonlinear_residual_norm, which cpp/main.cpp actually serializes from temporal and nonlinear diagnostic residuals. They are internal error estimates, not state, observable stress, control, clock or success status. Excluding them implements the existing pre-observation diagnostic policy; it does not loosen physical accuracy or physical parity. The previous parity file and freeze-v2 remain retained.
+
+Reviewer-only `check_review_v2.py` builds a synthetic complete136case output fixture satisfying the actual API structure and exact-reference physical values, then calls the corrected Python assessor. The baseline passes. Seven corruptions are all rejected: negative direct alpha, duplicate sample, reversed chronology, arbitrary parent on rejection, wrong prescribed control rate, incorrect segment index and wrong failure message. `check-results-v2.json` records this result and113matching bindings. The script never invokes collection or a backend.
+
+Reproduce from the isolated checkout:
+
+`python3 -B docs/ingestion/bingham-comsol63/independent-review-v1/check_review_v2.py`
+
+New exact files: REPORT-v2.md, check_review_v2.py, check-results-v2.json, input-binding-v2.json. Existing v1 files are preserved. No remaining prospective blocker found. Parent may now perform the coordinator-owned serial native/Wasm study under freeze-v3. Later all-nine E5 review must assess actual raw outputs, retained failures, accuracy/refinement/parity, transactions and exact exposed interface scope. Numerical qualification remains distinct from experimental validation and E6–E8 integration/browser/live delivery.

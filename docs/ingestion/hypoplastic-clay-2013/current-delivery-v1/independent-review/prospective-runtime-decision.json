@@ -1,0 +1,40 @@
+{
+  "task": "REVIEW-clay2013-current-delivery-v1",
+  "reviewer_run_id": "/root/contour_lifecycle_review",
+  "phase": "prospective-runtime-plan",
+  "accepted": true,
+  "scope": "Coordinator native20literal requests then native-only gate then Wasm20literal requests; no additional scientific/parameter/boundary claim",
+  "inputs": {
+    "PLAN.json": "2607f96b42d0e10642e130cc7785e64925884c19e73dbc7939136bdf9b77e507",
+    "INPUT_FREEZE.json": "51182e3d28635fd1bbd92c9155cd10684b01f1da91126002295e725bf8c4fd0e",
+    "ADAPTATION.json": "64a5afbeb9751555379973aee44aac9df8165665446a30902a9b02e2313e89a4",
+    "identity.py": "4f0be6bc143f981ab31b75c4bf51d1dd630ee45f185e9f118c424b68730383ef",
+    "collect.py": "5f718c5d2a5fd63eb9d056fe15999dd787341664069dc35fd27dcc7071d3587a",
+    "assess.py": "b7102ccb0d2ebddea0df6afaacae4aee58bdc8ae8e5f7d6d2fcae4b7cfb57e43",
+    "assess_native.py": "7dd52027cc83ecd3d64fd76a84c0a2a4935ed984d5fbdc3313158401d57a7e7a",
+    "observe.mjs": "0c88f542059f3e95acc8c2717645a2086039b9ebd33c3ecd8ebd0ff64ab30d06",
+    "requests.json": "74e565c2b0a1be09137170a05bb328242c9e7ca228763dd6d6b9818cb1398065",
+    "acceptance.json": "7bf3ab0f00040a3f37d5a78319c974670093dc7339ddaa56996429f4de909aec",
+    "generated-models.json": "77e85070a62ada86d47af3890817f57d6ce0194e646a396dbf7ff75c75f9834a",
+    "historical-assess.py": "fd51bdac9d4df927c9600b46e07cf2f4c30410e3b13535452a9be224eb49acb8"
+  },
+  "checks": {
+    "frozen_inputs_match": 8364,
+    "historical_requests_and_policy_byteexact": true,
+    "historical_physical_gate_body_byteexact": true,
+    "native_assessor_only_backend_tuple_difference": true,
+    "current_native_js_wasm_artifacts_match": true,
+    "compiled_or_material_execution_by_reviewer": false
+  },
+  "required_sequence": [
+    "collect.py native",
+    "assess_native.py -> NATIVE_PRECHECK.json, require pass",
+    "collect.py wasm",
+    "assess.py -> ASSESSMENT.json"
+  ],
+  "limitations": [
+    "Acceptance of prospective wrappers is not successful current execution or scientific review",
+    "Preserve stop-on-native-failure rule and all failures",
+    "Browser resource URL inventory and own-server HTTP hashes do not establish directly captured browser response bytes"
+  ]
+}

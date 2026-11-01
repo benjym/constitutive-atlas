@@ -1,5 +1,7 @@
 # NorSand1993 — complete per-item delivery checklist
 
+Canonical source: docs/MODEL_DELIVERY_CHECKLIST.md, SHA256b370c525b8650492c8b0fb49e1107a765009b5be8f16818675196541eb128289, captured2026-11-02. Exact original active drained axial formulation; historical evidence remains immutable. This file carries every canonical check and exit condition; E8 observations are complete for the exact published application3873a48b, run41343952906; final actual-publication acceptance is recorded below.
+
 Canonical source: docs/MODEL_DELIVERY_CHECKLIST.md, SHA256b370c525b8650492c8b0fb49e1107a765009b5be8f16818675196541eb128289, captured2026-11-02. Exact original active drained axial formulation; historical evidence remains immutable. This file carries every canonical check and exit condition; E8 remains pending until actual observations.
 
 # Deliver a constitutive model from source to the live atlas
@@ -192,21 +194,21 @@ Use the current workflow's other parity/profile/browser commands for the actual 
 
 ## E8 — Publish and verify the live website
 
-- [ ] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
-  - Evidence/status: Release-v1 prospective source/gates, remote CI/upload/deployment/live browser receipts; pending actions remain unchecked.
+- [X] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
+  - Evidence/status: release-v1/remote-v1/live-v1/: exactdd7de01f run41340048752 all6jobsPASS; actual979fileupload/23liveasset hashes; actual41point/3plot lifecycle, replay/tamper/recovery/catalogue/mobile checks. Separate live review and final merged-publication requalification preserve concurrent462a450c and the retained historical alias correction.
 - [X] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
   Evidence: user instruction on 2026-11-02: “Ok finish the implementation and publish”.
-  - Evidence/status: Release-v1 prospective source/gates, remote CI/upload/deployment/live browser receipts; pending actions remain unchecked.
-- [ ] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
-  - Evidence/status: Release-v1 prospective source/gates, remote CI/upload/deployment/live browser receipts; pending actions remain unchecked.
-- [ ] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
-  - Evidence/status: Release-v1 prospective source/gates, remote CI/upload/deployment/live browser receipts; pending actions remain unchecked.
-- [ ] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
-  - Evidence/status: Release-v1 prospective source/gates, remote CI/upload/deployment/live browser receipts; pending actions remain unchecked.
-- [ ] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
-  - Evidence/status: Release-v1 prospective source/gates, remote CI/upload/deployment/live browser receipts; pending actions remain unchecked.
-- [ ] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
-  - Evidence/status: Release-v1 prospective source/gates, remote CI/upload/deployment/live browser receipts; pending actions remain unchecked.
+  - Evidence/status: release-v1/remote-v1/live-v1/: exactdd7de01f run41340048752 all6jobsPASS; actual979fileupload/23liveasset hashes; actual41point/3plot lifecycle, replay/tamper/recovery/catalogue/mobile checks. Separate live review and final merged-publication requalification preserve concurrent462a450c and the retained historical alias correction.
+- [X] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
+  - Evidence/status: release-v1/remote-v1/live-v1/: exactdd7de01f run41340048752 all6jobsPASS; actual979fileupload/23liveasset hashes; actual41point/3plot lifecycle, replay/tamper/recovery/catalogue/mobile checks. Separate live review and final merged-publication requalification preserve concurrent462a450c and the retained historical alias correction.
+- [X] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
+  - Evidence/status: release-v1/remote-v1/live-v1/: exactdd7de01f run41340048752 all6jobsPASS; actual979fileupload/23liveasset hashes; actual41point/3plot lifecycle, replay/tamper/recovery/catalogue/mobile checks. Separate live review and final merged-publication requalification preserve concurrent462a450c and the retained historical alias correction.
+- [X] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
+  - Evidence/status: release-v1/remote-v1/live-v1/: exactdd7de01f run41340048752 all6jobsPASS; actual979fileupload/23liveasset hashes; actual41point/3plot lifecycle, replay/tamper/recovery/catalogue/mobile checks. Separate live review and final merged-publication requalification preserve concurrent462a450c and the retained historical alias correction.
+- [X] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
+  - Evidence/status: release-v1/remote-v1/live-v1/: exactdd7de01f run41340048752 all6jobsPASS; actual979fileupload/23liveasset hashes; actual41point/3plot lifecycle, replay/tamper/recovery/catalogue/mobile checks. Separate live review and final merged-publication requalification preserve concurrent462a450c and the retained historical alias correction.
+- [X] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
+  - Evidence/status: release-v1/remote-v1/live-v1/: exactdd7de01f run41340048752 all6jobsPASS; actual979fileupload/23liveasset hashes; actual41point/3plot lifecycle, replay/tamper/recovery/catalogue/mobile checks. Separate live review and final merged-publication requalification preserve concurrent462a450c and the retained historical alias correction.
 
 **Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its sources/approval/evidence; the packaged and live website can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.
 
@@ -217,3 +219,5 @@ Every handoff names the umbrella task and phase, exact files/hashes, passed/fail
 Full-delivery dispatch prompt:
 
 > Read AGENTS.md and docs/MODEL_DELIVERY_CHECKLIST.md. Lead MODEL-<id> from existing source work through E0–E8 for the exact assigned variant and website scope. Maintain docs/ingestion/<id>/DELIVERY.md and the coordinator-owned board. Use the assigned worktree/whitelist; arrange specialist capability and separate-agent review handoffs, serial native/Wasm qualification and actual browser checks. Continue after packet handoff to atlas integration and verified live delivery when remote authorization exists. Preserve failures, sources and other workers' files. Report exact evidence and honest blocked/ready/live state; do not equate a packet or approval with delivery.
+
+Final merged E8 receipt: application3873a48b/run41343952906; all6required jobs,1016uploadfiles/23exactliveassets, actual database integrity/identity,58+58requests,41point/3plot actual browser/export/replay/tamper/recovery/desktop/mobile pass; independent live-v2 acceptance59583bba. See DELIVERY.md and release-v1/remote-v1/live-v2/. All53canonical items remain satisfied for the bounded active axial scope.

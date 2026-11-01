@@ -2,6 +2,15 @@
 
 [Live assignments](../../IMPLEMENTATION_PLAN.md) · [Agent instructions](../../AGENTS.md) · [Packet template](TEMPLATE.md)
 
+## Start a full model-delivery assignment
+
+Use [the agent assignment brief](AGENT_ASSIGNMENT_TEMPLATE.md) to dispatch a lead, then follow [the complete E0–E8 checklist](../MODEL_DELIVERY_CHECKLIST.md). Copy [the delivery ledger](DELIVERY_TEMPLATE.md) to `docs/ingestion/<model-id>/DELIVERY.md` and maintain detailed model-local checkboxes with evidence. The lead continues through source acquisition, schema/temporal integration, implementation, numerical qualification, separate-agent approval, atlas integration, browser testing and live release when authorized.
+
+Use `[ ]` unstarted, `[-]` working or blocked, and `[X]` verified complete. Keep a next owner/action and resumption condition for blockers. Source packets below are bounded specialist deliverables; their completion does not close a full delivery assignment.
+
+Every entry also needs a [public model profile](../PUBLIC_MODEL_PROFILES.md). Draft the explanation from sources, have the coordinator integrate it at E6, and inspect the packaged/live profile and its laboratory links at E7–E8. Keep behaviour, parameters and starting-state guidance prominent; retain curation/check details in the technical disclosure.
+
+
 **Current corrections:** the [clay2005 audit](hypoplastic-clay-2005/rate-review-v1/README.md) corrects our false Eq38 minus-sign claim and reproduces an unsafe draft SPD guard. The [sand2015 audit](barodesy-sand/rate-review-v1/README.md) records two wider-envelope oracle/support issues. Frozen historical packet checks preserve their original assertions; passing them is not confirmation of those superseded assertions. Distinct [clay v2](hypoplastic-clay-2005/rate-study-v2/README.md) and [sand v2](barodesy-sand/rate-study-v2/README.md) packets preserve those records and provide corrected source/support contracts. Compiled and scientific gates remain open.
 
 These authored packets extract available source equations, schema requirements, temporal/transaction semantics and explicit gaps. Completion means the named bounded ingestion task was reviewed and integrated. It does not confer complete-model, executable, numerical-trajectory or scientific admission.

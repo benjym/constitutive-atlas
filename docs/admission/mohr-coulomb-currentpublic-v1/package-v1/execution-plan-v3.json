@@ -1,0 +1,76 @@
+{
+  "status": "serial-slot-held-retry-prepared",
+  "freeze": "freeze-v3.json",
+  "freeze_sha256": "d32747fdf06b16394856e8b817a5995b7a4ba969a07679ce3a9fea438abf4f63",
+  "prerequisites": [
+    "Fresh board check and explicit release from current serial owner",
+    "No live local compiled/build process",
+    "Exclusive new coordinator serial claim",
+    "preflight.py passes immediately before execution"
+  ],
+  "commands": {
+    "preflight": [
+      "python3",
+      "-B",
+      "/Users/bmar5496/code/constitutive-atlas/docs/admission/mohr-coulomb-currentpublic-v1/package-v1/preflight.py",
+      "/Users/bmar5496/code/constitutive-atlas/docs/admission/mohr-coulomb-currentpublic-v1/package-v1/freeze-v3.json",
+      "--report",
+      "/Users/bmar5496/code/constitutive-atlas/docs/admission/mohr-coulomb-currentpublic-v1/package-v1/retry-preflight.json"
+    ],
+    "standard_package": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/private/tmp/atlas-mc-admission-public-v1/tools/build_web.py",
+      "--wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/wasm-dir",
+      "--power-creep-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/power-creep-wasm-dir",
+      "--sls-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/sls-wasm-dir",
+      "--burgers-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/burgers-wasm-dir",
+      "--j2-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/j2-wasm-dir",
+      "--controlled-path-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v3/controlled-path-wasm-dir",
+      "--maxwell-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/maxwell-wasm-dir",
+      "--implicit-path-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/implicit-path-wasm-dir",
+      "--orthotropic-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/orthotropic-wasm-dir",
+      "--hill-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/hill-wasm-dir",
+      "--kelvin-voigt-wasm-dir",
+      "/private/tmp/atlas-mc-package-v1/engines-v2/kelvin-voigt-wasm-dir",
+      "--output",
+      "/private/tmp/atlas-mc-package-v1/site-v2"
+    ],
+    "supported_package": [
+      "node",
+      "/private/tmp/atlas-mc-admission-public-v1/tools/test_supported_package.mjs",
+      "--directory",
+      "/private/tmp/atlas-mc-package-v1/site-v2",
+      "--policy",
+      "/private/tmp/atlas-mc-admission-public-v1/catalogue/laboratory-package-policy.json",
+      "--output",
+      "/Users/bmar5496/code/constitutive-atlas/docs/admission/mohr-coulomb-currentpublic-v1/package-v1/supported-package.json"
+    ]
+  },
+  "browser_after_success": [
+    "Open actual produced site in browser",
+    "Find Mohr\u2013Coulomb profile and accepted review entry",
+    "Verify original paper and local accepted review/definition hyperlinks",
+    "Run supported MC example and check result/plot",
+    "Export laboratory state, import it and verify replay",
+    "Exercise failed import or invalid request then recover with valid MC run",
+    "Change model route and return without stale results"
+  ],
+  "execution_slot_attempt": {
+    "claimed": false,
+    "reason": "Fresh guard found newer REGRESS-current-norsand-profile-v3 ACTIVE claim before mutation; no process check or compiled execution followed"
+  },
+  "compiled_calls": 0,
+  "builds": 0,
+  "remote_actions": 0
+}

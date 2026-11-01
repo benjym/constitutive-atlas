@@ -1,0 +1,67 @@
+# Mašín2013 hypoplastic clay — full delivery ledger
+
+Umbrella MODEL-hypoplastic-clay-2013; lead coordinating parent /root; claimed2November2026. Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md) and [model-local detailed checks](CHECKLIST.md). This assignment continues the existing complete author-manuscript Appendix43–58/densityEq7 law; it is not a new discovery entry or a partial failure-criterion implementation.
+
+- Exact definition: models/hypoplastic-clay-2013.json, SHA2566811580cf9c0678605b9bb7d93a524743bbe5b5cb1f547bd232d090aeda950e4; schema0.3.
+- Scope: fixed-spatial infinitesimal3D, zero spin, effective compression-positive Mandel Cauchy stress and persistent void ratio; regular compressive interior. All governing source terms retained. Full final-publisher body equivalence, general near-boundary accuracy and experiments are not claimed.
+- Sources: [DOI](https://doi.org/10.1007/s11440-012-0199-y), [pinned author manuscript](https://web.natur.cuni.cz/uhigug/masin/download/Masin_AG12-pp.pdf), [source packet](README.md), [private durable retention](approval-v1/private-retention.json).
+- Source SHA25621834ab9da81ec2cdebdf3a3d7f97b691d47bf481a24432bc0562aca9f503281. No copyrighted originals are public assets.
+- Current ownership: lead only NEW DELIVERY.md/CHECKLIST.md and approval-v1/ coordinator files plus owned board rows. Separate reviewer only approval-v1/independent-review/. Shared model/compiler/runtime/web/registry/build/release handoffs are not inherited.
+- Independent scientific reviewer: separate actual /root/clay2013_checklist_review, SCI-clay2013-agent-v1; accepted all nine checklist items with no in-scope blockers; canonical record catalogue/agent-reviews/hypoplastic-clay-2013-agent-v1.json is installed.
+- Implementation identities: historical frozen source/build receipts in preview-v1/v2 and earlier studies. Current coordinator did not author the original transcription; review must not infer original run IDs beyond retained records.
+- Canonical checklist at assignment SHA256 b370c525b8650492c8b0fb49e1107a765009b5be8f16818675196541eb128289 (2November2026).
+- Native/Wasm execution owner: coordinator only, serial one-target --parallel1 when a separately frozen execution is needed. No new build/material execution assigned here.
+- Remote authorization: no new push/deploy authorization for this delivery assignment; complete local handoffs first.
+
+## Stage status
+
+- [X] **E0 — Scope/ownership:** exact complete manuscript law, general-atlas destination, source/evidence inventory and lead/reviewer/phase-specific whitelists recorded; later handoffs remain separately scoped.
+- [X] **E1 — Sources:** separate reviewer inspected original governing equation/table pages and accepted exact source, fidelity, version and rights scope. Same primary bytes retained durably; full final-publication body equivalence remains outside this named manuscript identity.
+- [X] **E2 — Contract:** complete explicit v0.3 stress/e/path/initialization/domain and transaction contract accepted. Prospectively frozen historical references/gates remain exact; no generic profile gap for this law. Qualification of current runtime/package changes is E4/E6/E7 work, not implied by this contract acceptance.
+- [X] **E3 — Transcription:** current definition exactly matches compiled preview-v2; current semantic validation and isolated official generation pass. Separate reviewer accepted source/Cartesian/algebra/isotropic/nonisotropic checks and replayed retained results without a new campaign.
+- [X] **E4 — Native/Wasm:** separate delivery reviewer accepted exact retained qualified artifact reuse plus current20literal requests/598successfulpoints per backend, unchanged gates, zero scaled difference and inherited accepted source/refinement evidence. No fresh build or entire-current-runtime/boundary certification. Native disk-full metadata recovery is explicit; original collector exit unknown. Original failed100kPa and successful10kPa example remain distinct.
+- [X] **E5 — Agent approval:** actual separate nine-item review accepted, exact canonical record installed and generated approval registered. All scope/limitations retained. Metadata installer independently reviewed; ordinary database/evidence projections verified.
+- [X] **E6 — Atlas:** ordinary full generation/export includes exact model, canonical review/approval and source/evidence metadata; all prior models remain present. Accepted technical evidence is supplemented by the dated current STATUS checkpoint and detailed checklist reconciliation. Exact prior tracking bytes are preserved; scientific records and package unchanged.
+- [X] **E7 — Packaged website:** separate reviewer accepted all8detailed items in the exact986-file local package: real main-atlas controls/plots/sources/approval display, edits/reset/latest request, invalid-state recovery, exact101point full-state public export/import replay and fresh-origin delivered asset identity. OPARA toggle is plumbing only with mismatch warnings. No live claim.
+- [ ] **E8 — Live delivery:** scoped release/CI/deployment/upload-live asset checks and actual live model run remain unverified for this delivery.
+
+## Current handoff
+
+Current phase: E0–E7 complete for the exact declared formulation and bounded interfaces. The [actual separate current delivery decision](current-delivery-v1/independent-review/decision.json), SHA25656c986b0693c0c813ae02ed37973f8a0c9eae1caf0544c714b6d9db79d0868fb, accepts E4, technical E6 and all8E7items. Its requested tracking reconciliation is recorded in [the preserved-before/change receipt](tracking-current-delivery-v1/RESULT.json) and the dated current docs/STATUS.md checkpoint. Scientific approval is separately bound to the unchanged canonical record.
+
+Next: prepare and inspect a scoped release baseline without staging unrelated/private work; then perform authorized E8 CI/deployment/upload/live checks. E8 and the full-delivery umbrella remain open. This ledger is locally qualified and awaiting release preparation, not yet a prepared release commit or live deployment. No additional scientific campaign or new material execution is needed to reconcile these tracking items.
+
+## Evidence index
+
+| Claim | Evidence | Current conclusion |
+| --- | --- | --- |
+| Exact current definition/source/private identity | approval-v1/INPUT_FREEZE.json; approval-v1/private-retention.json |23 existing inputs pinned; primary source copied to private durable storage, same bytes |
+| Current structural/semantic validation | python3 -B -c "from atlas.model import load; load('models/hypoplastic-clay-2013.json')" |PASS2November2026; no material call |
+| Exact historical candidate identity | catalogue/investigations/clay2013-preview-v2/models/hypoplastic-clay-2013.json |Parent exact byte equality with current root verified |
+| Independent source/rate/preparation references | docs/models/clay2013-source-rate.md; docs/reviews/clay2013-{algebra-review,initialization-policy,isotropic-trajectory,nonisotropic-review}.md |Existing results reused, no rerun or broader claim |
+| Historical actual-consumer/interface qualification | catalogue/investigations/clay2013-preview-v2/; docs/reviews/eight-model-lab-integration/ |Historical exact model/interfaces; current entire package not certified here |
+
+## Limitations and retained failures
+
+Illustrative software parameters are distinct from the source's fictitious eval. and calibrated material sets. Supplied stress/e does not establish specimen preparation or physical OCR. ASBS is diagnostic, not a continuous yield constraint. Stable invariant/exact-isotropy numerical choices and conservative arithmetic rejection do not certify arbitrary-SPD eigenvalue signs, near-isotropic tangents or singular-stress accuracy. Preserve the failed100kPa default and separate passing10kPa example; neither may be relabelled as experimental validation. Finite rotation/spin,2014 anisotropy, IGS/GIS and FE tangent are excluded. Full scientific approval, actual current software delivery and experimental validation remain separately evidenced.
+
+Accepted canonical review SHA256b5197209c2e3f95ae6a301c9a263c1925fb97c24c23413a3f55ccc7efc0102a6. Approval registry now contains20entries, which is not a claim of20complete public deliveries or20validated experiments. Complete9-table export preserves all186source rows and all prior data; only one approval and one agent-review row are added.
+
+## Current package and browser qualification — 2 November 2026
+
+The immutable [current package packet](current-delivery-v1/README.md) is supplemented by the final [independent handoff review](current-delivery-v1/independent-review/README.md). Its earlier open-item prose is a preserved intermediate observation, superseded by the final decision and this tracking reconciliation.
+
+- [Current runtime assessment](current-delivery-v1/runtime-v1/ASSESSMENT.json):20requests and598successfulpoints/backend; maximum void error4.1637138181727096e-10; zero scaled backend difference. Exact retained compiled inputs/artifacts verified; no fresh build. Filesystem interruption and metadata-only recovery preserved without repeating material calls.
+- [Actual browser replay](current-delivery-v1/browser-v2/REPLAY_CHECK.json):101points/all7persistent components exact,2519binary64/4528scalar comparisons; only elapsed time ignored. Edited nu=.21/e=.81/undrained target=.002, latest-request behavior, reset and invalid-input recovery observed through public controls.
+- [Actual fetched identity](current-delivery-v1/browser-identity-v1/CHECK.json):all986package hashes preserved; fresh nonce/no-store full200delivery of app.js,models.json,atlas.js,laboratory-worker.mjs,atlas.wasm; actual same-run export exactly matches the package gate. Method is server-observed delivered bytes, not direct cache-body/CPU attestation.
+- CC-BY4.0 OPARA overlay/toggle and explicit stress/e mismatch warnings verified as interface plumbing. No preparation, clay calibration, Wichtmann rights or experimental validation inferred.
+- No remote CI, staging, commit, push, deployment or live-asset check performed in this reconciliation.
+
+
+## Authorized live release in progress — 2 November 2026
+
+The current user explicitly authorized push and monitoring. Commit `95210701c73718500ca41d0eb70a8281c585b1a3` was pushed to main, preserving newer public Ramberg delivery and all20 existing approvals, then adding three reviewed hypoplastic approvals. All34 bounded approval/database tests passed. [Exact release and Actions evidence](live-release-v1/release.json) supersedes earlier authorization-only stops; [workflow](https://github.com/benjym/constitutive-atlas/actions/runs/41349367668) is being monitored. E8 remains open pending all required jobs, deployment, exact upload/live comparisons and actual live model run. No older green run/package substitutes for this revision.
+
+## Terminal release result — 2 November 2026
+
+[Run41349367668](https://github.com/benjym/constitutive-atlas/actions/runs/41349367668) completed with failure for exact pushed95210701. Both Wasm/package jobs passed; Linux native failed two Python tests and macOS native failed one. The same failures occur on prior public37d70660: the current-generation guard still expects fourteen definitions and omits Ramberg; Linux also fails exact regenerated/frozen Ramberg oracle float equality. Original logs, hashes and comparison are retained in [live-release-v1](live-release-v1/release.json). Controlled-path and deployment were skipped. E8/full MODEL remain open; no new live release is claimed. The authorized push and monitoring are complete. Next correction must preserve frozen scientific evidence, restore current-generation coverage and resolve platform reproducibility before new CI/live verification.

@@ -1,0 +1,7 @@
+### Result
+{"passed":true,"catalogue_status":"Approved bounded scope · strain-increment laboratory","main_laboratory_url":"http://127.0.0.1:8984/index.html#laboratory?model=hill-abaqus2025-perfect-be"}
+### Ran Playwright code
+```js
+await (async(page)=>{await page.goto('http://127.0.0.1:8984/index.html#catalogue/hill-abaqus2025-perfect-be');await page.locator('#catalogue-dialog').waitFor({state:'visible'});const status=await page.locator('#catalogue-detail-status').textContent();if(!status.includes('strain-increment laboratory'))throw Error(status);await page.locator('#catalogue-explore').click();await page.locator('#hill-material-laboratory').locator('#status').filter({hasText:'Completed 3 increment rows.'}).waitFor();return {passed:true,catalogue_status:status,main_laboratory_url:page.url()};})(page);
+```
+

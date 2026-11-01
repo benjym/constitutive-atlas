@@ -1,0 +1,14 @@
+# Independent newer-base clay2013 metadata integration review
+
+Actual reviewer /root/contour_lifecycle_review. Task REVIEW-clay2013-integration-v3.
+**Accepted only for the exact bounded metadata integration; not release-ready or E8 completion.**
+
+I independently verified isolated commit e80e5311f2c97944876eada2dd5575739f9da391 has direct parent dd7de01fa1695e1858de03a26aea1acabb5fa98e, a clean tree and precisely28committed changed paths. All28before hashes/absences and after hashes/sizes match PLAN, and actual blobs match accepted metadata147617cd50ac7f70d5deb2fac7538e0f16e81155. The prior actual separate review4483d9ab... remains exact. The four newer-base workflow/build-helper/catalogue-family/Tresca-archive repairs match both base and integrated bytes. There are no other source writes.
+
+All9before/after SQLite tables were independently checked for integrity, foreign keys and every row as a Counter. Every prior row remains, including duplicate sources; only3approval and3agent-review rows are added (17→20 and13→16). The seven other tables are unchanged, including186source rows. Normal database packaging validates exact definitions/approvals/reviews, not numerical readiness.
+
+I independently ran the normal tools/build_database.py and tools/build_evidence.py into a disposable directory seeded with the exact current descriptor/catalogue. Every resulting filename and SHA256 equals the supplied after tree. The official downloadable-database validator passes22definitions. The14ordinary engine descriptor is byte-identical before/after. Existing22numerical/21source/13agent-review projection rows remain identical. Exactly6new public review/definition envelopes and4changed metadata files occur, with no removals. The34existing focused metadata tests were run by the coordinator with exit0; I inspected/pinned their actual argv/stdout/stderr without rerunning them.
+
+This carries forward the three exact accepted scientific reviews and their exclusions. It is not another source-law review, broader model admission or experimental validation. Only review/provenance metadata and registry contents changed; no source PDF, measurement archive or author binary was added. Ordinary metadata builders ran, but no compiled builds, material calls, browser actions or remote actions were performed by this reviewer.
+
+The candidate is not certified as latest remote or as a complete tested release. Full standard packaging/current browser qualification remain explicitly deferred while other owners hold the shared execution slot. Preserve this exact candidate and review; obtain the coordinator slot, recheck any final-base advance and qualify the actual integrated package before separately authorized E8 CI/deployment/live verification. Do not repeat scientific or numerical campaigns without a changed relevant input.

@@ -1,0 +1,64 @@
+{
+  "paper_record_version": 1,
+  "date": "2026-10-31",
+  "status": "approved_core_activated_initial_diagnostics_completed",
+  "approved_ids": [
+    "A01",
+    "A02",
+    "A03",
+    "A04",
+    "A05",
+    "A06",
+    "A07"
+  ],
+  "optional_ids_pending": [
+    "B01",
+    "B02"
+  ],
+  "inputs_sha256": {
+    "paper/study/assumption_proposal.json": "49de78fa739bd935ea71210b1f60fec05ef81ec5bc170084d0e995c7dbbe039f",
+    "paper/study/leap2022_core_development.json": "5ee852c04d86e11837bb1d846edd145f2ffe036cbf55d853d2eb99a3e70a3ae3",
+    "paper/study/compression_sensitivity_approved_core.json": "5cf346ed4c94981ca0bf3dd0338776e0eab34fc3787330f01211dafbd5d252c0",
+    "paper/results/compression-sensitivity-approved-core-v1/report.json": "26b67e2ca73e7b3729d80b1cb374444e1809711e1d08b41039fcf9454df22837",
+    "paper/results/compression-sensitivity-approved-core-v1/report.md": "b8ba39cb36b914153c759d21bc6b797d72efec87f0ebccd6ad050bce04a089c4",
+    "paper/analysis/atlas_adapter.py": "df27cefe970d06bb4610dae02e9008018dbb9ea546ae5a70f2b49ad735cb916d"
+  },
+  "DSS_header_audit": {
+    "candidate_records": 32,
+    "raw_response_rows_read": 0,
+    "headers_read": 32,
+    "column6_families": {
+      "Pressure Ratio": 24,
+      "Excess Pressure": 8
+    },
+    "physical_header_line_counts": {
+      "7": 26,
+      "6": 6
+    },
+    "empty_trailing_header_columns_records": [
+      "LEAP2022-report-table4-test2"
+    ],
+    "limits": "Byte identity and header contract verified, not raw specimen identity or pressure-reference convention. Registry/report unit mappings are adopted; no new sensor calibration."
+  },
+  "compression_run": {
+    "attempted_replays": 192,
+    "successful_replays": 192,
+    "fitting": false,
+    "reserved_tests_accessed": false,
+    "origin_drift": {
+      "models": {
+        "linear-elastic": false,
+        "hypoplastic-sand-vw96": false
+      },
+      "solver": false
+    },
+    "max_hypoplastic_initial_stress_scenario_difference_Pa": 22199.876610479085,
+    "max_hypoplastic_refinement_difference_Pa": 6.185331046523061,
+    "qualification": "Fixed inherited baseline parameters, first-loading OE1/OE12 development records only. Scenarios are not uncertainty intervals, source-state validation or equal-information model-performance claims."
+  },
+  "remaining_DSS_execution_gate": {
+    "evidence": "NativeAdapter.initialize currently requires protocol drained-triaxial and supports only sigma/e/transient gamma initialization. Simple-shear controls, tensor/spin conversion and model-specific histories have not been admitted by this paper adapter.",
+    "next_work": "Implement and synthetically validate a separate scoped simple-shear adapter before experimental replay; validate complete numeric rows without script truncation, then use an explicitly documented Ottawa calibration/diagnostic parameter track."
+  },
+  "contact_status": "No contacts or copy requests; outreach remains on hold."
+}

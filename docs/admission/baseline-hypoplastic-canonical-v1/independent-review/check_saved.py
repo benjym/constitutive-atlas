@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Bounded canonical integration replay. No evaluators, material calls or compiled builds."""
+import argparse
+import copy
+import hashlib
+import json
+from pathlib import Path
+import sqlite3
+import subprocess
+import sys
+import tempfile
+from unittest.mock import patch
+
+HERE=Path(__file__).resolve().parent
+REL=Path('docs/admission/baseline-hypoplastic-canonical-v1')
+IDS={'hypoplastic-sand-vw96','hypoplastic-sand-igs97'}
+
+def need(ok,message):
+    if not ok: raise ValueError(message)
+
+def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def read(p):return json.loads(p.read_text())
+def db_rows(path):
+    with sqlite3.connect(f'file:{path}?mode=ro',uri=True) as c:
+        need(c.execute('PRAGMA integrity_check').fetchall()==[('ok',)],'SQLite integrity')
+        need(c.execute('PRAGMA foreign_key_check').fetchall()==[],'SQLite FKs')
+        tables={x[0] for x in c.execute("select name from sqlite_master where type='table'")}
+        need(tables=={'models','sources','publications','publication_relations','publication_models','publication_screening','screening_evidence','model_approvals','agent_reviews'},'public table allowlist')
+        return {t:sorted(c.execute('select * from '+t).fetchall(),key=repr) for t in tables}
+
+def run(root):
+    root=root.resolve();packet=root/REL
+    own=read(HERE/'manifest.json')
+    for group in ['inputs','outputs']:
+        for name,h in own[group].items():
+            need(digest((root if group=='inputs' else HERE)/name)==h,'review binding drift: '+name)
+    for name,h in read(packet/'manifest.json').items():need(digest(packet/name)==h,'packet drift: '+name)
+    pinned=read(packet/'inputs.json')
+    for name,h in pinned.items():need(digest(root/name)==h,'original input drift: '+name)
+    observed=read(packet/'registry-observed.json');proposed=read(packet/'registry-proposed.json');entries=read(packet/'approval-entries.json')
+    need(len(entries)==2 and {x['model_id'] for x in entries}==IDS,'two approval identities')
+    expected=copy.deepcopy(observed);expected['models']+=entries
+    need(proposed==expected,'registry is not exactly additive')
+    need((root/'catalogue/approved-models.json').read_bytes()==(packet/'registry-observed.json').read_bytes(),'production registry evolved; regenerate proposal')
+    need(read(packet/'initial-attempt.json')['passed'] is False,'original setup failure lost')
+    sys.path.insert(0,str(root))
+    from atlas.agent_review import approval_entry
+    from atlas.review_export import collect
+    import atlas.research as research
+    from atlas.model import ValidationError
+    models={}
+    with tempfile.TemporaryDirectory(prefix='atlas-independent-canonical-') as temp:
+        context=Path(temp)
+        def put(name,data):
+            dest=context/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
+        for entry in entries:
+            canonical=entry['review']['path'];short=Path(canonical).stem
+            source=root/'docs/reviews'/short/'review.json'
+            raw=(packet/'proposed'/canonical).read_bytes()
+            need(raw==source.read_bytes(),'canonical copy is not byte-exact actual review')
+            need(digest(source)==entry['review']['sha256'],'actual review digest')
+            need(not (root/canonical).exists(),'canonical production review already installed; installation boundary changed')
+            record=json.loads(raw)
+            need(record['scope']==entry['scope']['use'] and record['limitations']==entry['limitations'],'scope or limits widened')
+            for artifact in record['artifacts']:
+                p=root/artifact['path'];need(digest(p)==artifact['sha256'],'artifact changed: '+artifact['path']);put(artifact['path'],p.read_bytes())
+            model_path=record['model']['path'];put(model_path,(root/model_path).read_bytes());put(canonical,raw)
+            models[record['model']['id']]=read(root/model_path)
+            need(approval_entry(context/canonical,root=context)==entry,'actual-path generated approval differs')
+        registry={'models':entries}
+        registry_raw=(packet/'evidence-export/catalogue/approved-models.json').read_bytes()
+        need(json.loads(registry_raw)==registry,'isolated registry differs from exact two generated approvals')
+        put('catalogue/approved-models.json',registry_raw)
+        projection,originals,omitted=collect(context,IDS)
+        need(omitted==[],'unexpected review omission')
+        need(projection==read(packet/'evidence-export/agent-review-projection.json'),'ordinary review projection differs')
+        allowed={'catalogue/approved-models.json'}
+        for e in entries:
+            allowed.add(e['review']['path']);allowed.add('catalogue/agent-reviews/definitions/'+Path(e['review']['path']).name)
+        need(set(originals)==allowed,'public original allowlist widened')
+        for name,data in originals.items():
+            # JSON formatting of the isolated registry is not an authority claim.
+            saved=(packet/'evidence-export'/name).read_bytes()
+            need(data==saved,'public original differs: '+name)
+            need(b'/Users/' not in data and b'/private/' not in data and b'file://' not in data,'private filesystem path in public export')
+        actual_files={p.relative_to(packet/'evidence-export').as_posix() for p in (packet/'evidence-export').rglob('*') if p.is_file()}
+        need(actual_files==allowed|{'agent-review-projection.json'},'extra public raw artifact')
+        negatives=[]
+        for label in ['broadened-scope','missing-limits','duplicate-entry']:
+            modified=copy.deepcopy(registry)
+            if label=='broadened-scope':modified['models'][0]['scope']['use']='All parameter ranges and experiments approved'
+            elif label=='missing-limits':modified['models'][0]['limitations']=[]
+            else:modified['models'].append(copy.deepcopy(modified['models'][0]))
+            put('catalogue/approved-models.json',json.dumps(modified).encode())
+            try:collect(context,IDS)
+            except (ValueError,ValidationError) as exc:negatives.append({'probe':label,'rejected':True,'reason':str(exc)})
+            else:raise ValueError('forged projection accepted: '+label)
+        put('catalogue/approved-models.json',json.dumps(registry).encode())
+        manifest={'models':[{'id':mid,'name':m['name'],'family':m['family']} for mid,m in models.items()]}
+        put('catalogue/manifest.json',json.dumps(manifest).encode())
+        db=context/'independent.sqlite'
+        with patch.object(research,'ROOT',context),patch.object(research,'all_models',return_value=list(models.values())),patch.object(research,'load_publications',return_value={'publications':[],'relations':[]}),patch.object(research,'load_screening',return_value=[]):
+            research.export_database(db)
+        rows=db_rows(db);saved_rows=db_rows(packet/'two-model.sqlite')
+        need(rows==saved_rows,'independent isolated database differs semantically')
+        need(len(rows['models'])==len(rows['model_approvals'])==len(rows['agent_reviews'])==2,'SQLite cardinality')
+        for row in rows['models']:need(json.loads(row[5])==models[row[0]],'definition JSON changed')
+        expected_sources=sorted([(mid,s['url'],s['locator'],s['role']) for mid,m in models.items() for s in m['sources']],key=repr)
+        need(rows['sources']==expected_sources,'source URLs, locators or roles changed')
+        for row in rows['model_approvals']:need(json.loads(row[4]) in entries,'approval JSON changed')
+        for row in rows['agent_reviews']:need(json.loads(row[4])==read(context/row[2]),'review JSON changed')
+        cardinality={k:len(v) for k,v in sorted(rows.items())}
+    rendered=subprocess.run(['node',str(HERE/'check_renderer.mjs'),str(root)],check=True,capture_output=True,text=True)
+    need((root/'catalogue/approved-models.json').read_bytes()==(packet/'registry-observed.json').read_bytes(),'production registry changed during replay')
+    return {'status':'PASS','task':'INT-baseline-hypoplastic-canonical-v1-independent-review','parent_payload_bindings':len(read(packet/'manifest.json')),'parent_input_bindings':len(pinned),'own_input_bindings':len(own['inputs']),'own_output_bindings':len(own['outputs']),'canonical_records':2,'actual_path_generated_approvals':2,'additive_registry_counts':[len(observed['models']),len(proposed['models'])],'ordinary_agent_review_projection':'exact','public_original_allowlist':sorted(allowed),'negative_probes':negatives,'isolated_sqlite_cardinality':cardinality,'definitions_approvals_reviews_sources':'exact semantic match','renderer':json.loads(rendered.stdout),'production_installation':False,'production_registry_sha256':digest(root/'catalogue/approved-models.json'),'science_re_review':False,'material_calls':0,'compiled_calls':0,'builds':0,'qualification':'isolated integration and source renderer only; not complete catalogue/database/site/browser/release/live'}
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);a=p.parse_args()
+    print(json.dumps(run(a.root),indent=2,ensure_ascii=False))

@@ -1,0 +1,18 @@
+--- .github/workflows/verify.yml
++++ .github/workflows/verify.yml
+@@ -152,6 +152,7 @@
+           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+           python -B -m unittest tests.test_provision_maxwell_assets
+           python -B tools/provision_maxwell_assets.py
++          python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+           python tools/build_web.py
+           node tools/test_experiments.mjs --built-assets web/dist/experiments
+           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+@@ -208,6 +209,7 @@
+           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+           python -B -m unittest tests.test_provision_maxwell_assets
+           python -B tools/provision_maxwell_assets.py
++          python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+           python tools/build_web.py
+           node tools/test_experiments.mjs --built-assets web/dist/experiments
+           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs

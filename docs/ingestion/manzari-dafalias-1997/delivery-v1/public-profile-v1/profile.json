@@ -1,0 +1,47 @@
+{
+  "title": "Manzari–Dafalias sand (1997, constant yield width)",
+  "summary": "A sand plasticity model in which density relative to critical state controls strength and volume change during shearing.",
+  "introduction": "The model compares the current void ratio with the critical void ratio at the same mean effective stress. This difference, called the state parameter, connects loose and dense sand responses within one formulation. A translating yield cone records directional plastic loading, while bounding and dilatancy surfaces control hardening and volume change.",
+  "behaviours": [
+    ["Density and volume change", "The state parameter influences whether plastic shearing contracts or dilates the material. Changes in pressure also move the critical void ratio, so density alone does not determine the response."],
+    ["Pressure-dependent stiffness", "The elastic shear and bulk moduli increase with mean effective stress through a pressure power law."],
+    ["Evolving directional strength", "A deviatoric back-stress-ratio tensor translates the yield cone during plastic loading. The distance to the bounding surface controls its evolution and can permit softening."]
+  ],
+  "explorationTitle": "Explore drainage during axial compression",
+  "exploration": "Choose Drained triaxial and Monotonic ramp. Use radial effective stress 160 kPa, axial / radial stress ratio 1, initial void ratio e = 0.65, reference void ratio e0 = 0.65 and six zero alpha components. Keep the other material parameters at their defaults. Apply 1% axial strain in 100 steps and inspect the deviator stress and volume response.",
+  "comparison": "Reset to the same initial state and choose Undrained triaxial with the same strain target and step count. Compare the effective-stress path with the drained result. The undrained laboratory enforces zero volume change and reconstructs pore-pressure change; the material law itself supplies no fluid-flow equation.",
+  "parameters": [
+    {"name":"p_at","symbol":"p_at","meaning":"Elastic reference pressure","help":"Normalizes mean effective stress in the elastic pressure power law.","unit":"Pa"},
+    {"name":"p_ref","symbol":"p_ref","meaning":"Critical-state reference pressure","help":"The pressure at which the critical void ratio equals ec_ref; it is distinct from the elastic reference pressure.","unit":"Pa"},
+    {"name":"G0","symbol":"G₀","meaning":"Reference shear modulus","help":"Sets elastic shear stiffness at p_at.","unit":"Pa"},
+    {"name":"K0","symbol":"K₀","meaning":"Reference bulk modulus","help":"Sets elastic volume stiffness at p_at.","unit":"Pa"},
+    {"name":"a","symbol":"a","meaning":"Elastic pressure exponent","help":"Controls how rapidly both elastic moduli increase with pressure.","unit":"1"},
+    {"name":"Mc","symbol":"M_c","meaning":"Compression critical stress ratio","help":"Sets the critical stress ratio in triaxial compression.","unit":"1"},
+    {"name":"Me","symbol":"M_e","meaning":"Extension critical stress ratio","help":"Sets the critical stress ratio in triaxial extension and contributes to interpolation between loading directions.","unit":"1"},
+    {"name":"lambda_c","symbol":"λ","meaning":"Critical-state line slope","help":"Controls the decrease in critical void ratio with the natural logarithm of mean effective stress.","unit":"1"},
+    {"name":"ec_ref","symbol":"e_c,ref","meaning":"Reference critical void ratio","help":"Locates the critical-state line at p_ref.","unit":"1"},
+    {"name":"kbc","symbol":"k_b,c","meaning":"Compression bounding slope","help":"Controls the state-parameter dependence of the bounding surface in compression.","unit":"1"},
+    {"name":"kbe","symbol":"k_b,e","meaning":"Extension bounding slope","help":"Controls the state-parameter dependence of the bounding surface in extension.","unit":"1"},
+    {"name":"kdc","symbol":"k_d,c","meaning":"Compression dilatancy slope","help":"Controls the state-parameter dependence of the dilatancy surface in compression.","unit":"1"},
+    {"name":"kde","symbol":"k_d,e","meaning":"Extension dilatancy slope","help":"Controls the state-parameter dependence of the dilatancy surface in extension.","unit":"1"},
+    {"name":"h0","symbol":"h₀","meaning":"Kinematic hardening coefficient","help":"Scales the evolution of the back-stress-ratio tensor through the source distance-dependent hardening law.","unit":"1"},
+    {"name":"m","symbol":"m","meaning":"Constant yield width","help":"Sets the radius of the elastic cone in stress-ratio space. It remains constant in this variant.","unit":"1"},
+    {"name":"A","symbol":"A","meaning":"Dilatancy coefficient","help":"Scales plastic volume change through the distance to the dilatancy surface.","unit":"1"},
+    {"name":"e0","symbol":"e₀","meaning":"Reference initial void ratio","help":"The fixed preparation value in Atlas's infinitesimal volume balance. Set it consistently with initial e and retain it during restarts.","unit":"1"}
+  ],
+  "parameterNote": "The defaults illustrate the original paper's constant-width calibration and Atlas's stated elastic reference choices. They are not a calibration for an arbitrary sand. Pressure and modulus parameters use Pa in the definition; the laboratory displays stress inputs in kPa. The critical-state line uses natural logarithms.",
+  "stateLabels": {"e":"Void ratio e","alpha":"Back-stress-ratio tensor α"},
+  "preparation": "Supply the effective stress, void ratio e and all six components of the symmetric deviatoric tensor alpha. Its trace must be zero. The illustrative isotropic state uses alpha = 0; this is not a reconstruction of specimen preparation. Initial stress must lie inside or on the yield cone, pressure and void ratio must be positive, and the hardening-distance domain must hold. The parameter e0 stores the initial reference void ratio and remains fixed as current e evolves. Tensor entries use Mandel order xx, yy, zz, √2xy, √2yz, √2xz.",
+  "scope": "This is the original 1997 constant-m formulation using the first published reference-distance option. Atlas integrates it with backward Euler at small strain in a fixed frame, using compression-positive effective stress. It is rate independent: elapsed time alone does not cause creep or relaxation. The exposed examples use drained or undrained axial strain control.",
+  "limits": "This variant excludes the optional evolving yield-width law and the later 2004 fabric formulation. It requires positive mean effective stress and supplies no tension extension, finite-rotation law or fluid transport. Axial stress control and full plastic cycles are outside the exposed qualification scope. A successful example does not establish accuracy for every parameter or loading path; finite-step error needs resolution checks.",
+  "equationIntro": "p is mean effective stress, s its deviator, e the current void ratio, alpha the back-stress-ratio tensor and ψ the state parameter.",
+  "equations": [
+    ["State parameter", "ψ = e − e_c;  e_c = e_c,ref − λ ln(p / p_ref)"],
+    ["Yield cone", "f = ‖s − p α‖ − √(2/3) m p ≤ 0"],
+    ["Elastic moduli", "G = G₀ (p / p_at)^a;  K = K₀ (p / p_at)^a"]
+  ],
+  "equationNote": "The technical dossier gives the complete bounding-surface, dilatancy and hardening equations and identifies Atlas's discrete integration and infinitesimal volume-balance choices.",
+  "references": [{"label":"Manzari and Dafalias (1997), A critical state two-surface plasticity model for sands, Géotechnique 47(2), 255–272","url":"https://doi.org/10.1680/geot.1997.47.2.255"}],
+  "related": ["manzari-dafalias-1997"],
+  "contentSources": ["docs/ingestion/manzari-dafalias-1997/source-v1/visual-verification.md","docs/ingestion/manzari-dafalias-1997/delivery-v1/MODEL.md","docs/ingestion/manzari-dafalias-1997/delivery-v1/public-control-scope-v2.md"]
+}

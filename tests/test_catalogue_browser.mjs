@@ -17,9 +17,10 @@ test('deep links round-trip identifiers and retain project-relative hash routes'
   assert.equal(catalogueRoute('#catalogue/').invalid,true);
 });
 test('existing navigation and laboratory anchors retain their page',()=>{
+  for(const hash of ['','#','#home'])assert.equal(catalogueRoute(hash).page,'home');
   assert.equal(catalogueRoute('#recorded').page,'laboratory');
   for(const page of ['catalogue','methods'])assert.equal(catalogueRoute('#'+page).page,page);
-  for(const hash of ['','#laboratory','#equations','#unknown'])assert.equal(catalogueRoute(hash).page,'laboratory');
+  for(const hash of ['#laboratory','#equations','#unknown'])assert.equal(catalogueRoute(hash).page,'laboratory');
 });
 test('index validation rejects unsafe links, missing identity and ambiguous duplicate records',()=>{
   assert.equal(validateEvidenceIndex(index()).records.length,1);

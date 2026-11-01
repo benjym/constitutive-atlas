@@ -1,0 +1,7 @@
+# Independent current-runtime Maxwell browser delta
+
+Accepted the bounded local browser evidence in [receipt.json](receipt.json), with the rate-axis clipping limitation in [findings.json](findings.json). The frozen953file site,58direct browser byte captures and all six initial exports match their exact qualified inputs. Supplemental actual import/error/reset interaction source/results and two complete downloaded outputs are retained and checked here. Both desktop and390px screenshots were independently viewed.
+
+Reproduce from repository root: `python3 -B docs/ingestion/maxwell-itasca900/atlas-browser-v2/independent-review/check_saved.py`. [checks.log](checks.log) records PASS. This checker is an independently inspected derivative of the coordinator saved checker with report writing removed and added exact qualification/identity/component/link/action checks. It invokes only the original Python analytical assessor and pure Node public contract; no generated JavaScript/Wasm, browser, build or remote action occurs.
+
+The original159response capture, three external fonts and Unicode notice mismatch remain visible. The exact17801byte notice is established by the separate ArrayBuffer capture, not by the mismatching decoded body. Whole-package/current-tree approval, remote CI, live delivery and broader scientific scope remain excluded. The generic rate-axis decimal/sign clipping should be fixed by its presentation owner before claiming fully readable chart typography.

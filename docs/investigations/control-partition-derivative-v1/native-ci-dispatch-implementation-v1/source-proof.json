@@ -1,0 +1,45 @@
+{
+  "identity": "native-ci-dispatch-implementation-source-proof-v1",
+  "original582_source_unchanged": true,
+  "isolated_source_count": 591,
+  "changed_from582": [
+    "tests/test_ci_profiles.py"
+  ],
+  "added_from582": [
+    ".github/workflows/verify.yml",
+    "catalogue/laboratory-package-policy.json",
+    "tests/test_native_fixture_dispatch.py",
+    "tools/build_ci_targets.py",
+    "tools/check_md1997_native_fixture_contract.py",
+    "tools/check_native_fixture_contracts.py",
+    "tools/check_native_fixture_dispatch.py",
+    "tools/ci_exact_replays.json",
+    "tools/run_ci_tests.py"
+  ],
+  "unrelated_original582_files_preserved": true,
+  "original582_test_solver_untouched": true,
+  "published_helper_policy_exact": true,
+  "workflow_exact_accepted_proposal": true,
+  "preserved_profile_assertions": [
+    "            self.assertEqual(command[-2:],['--parallel','1'])",
+    "            self.assertEqual(command.count('--target'),1)",
+    "        self.assertEqual(len(native_targets),len(native))",
+    "        self.assertEqual(len(wasm_targets),len(wasm))",
+    "        self.assertTrue(wasm_targets < native_targets)",
+    "        self.assertIn('atlas_recorded_tests',native_targets)",
+    "        self.assertIn('atlas_clay2014_rate_probe',wasm_targets)",
+    "        self.assertEqual(result.testsRun,2);self.assertEqual(len(result.skipped),1)",
+    "        self.assertEqual(calls,['current'])",
+    "            with self.assertRaises(ValueError):portable_suite(make(),policy|{'exact_test_ids':names})",
+    "        calls.clear();make().run(unittest.TestResult());self.assertCountEqual(calls,['current','exact'])",
+    "        self.assertIn('os: ubuntu-latest',workflow)",
+    "        self.assertIn('os: macos-26',workflow)",
+    "        self.assertIn(\"python: '3.14'\",workflow)",
+    "        self.assertIn('needs: [native, wasm, wasm-linux]',workflow)",
+    "        self.assertIn('PYTHONDONTWRITEBYTECODE: \"1\"',workflow)",
+    "        self.assertEqual(len(policy['exact_test_ids']),len(set(policy['exact_test_ids'])))"
+  ],
+  "forbidden_bytecode_count": 0,
+  "builds": 0,
+  "compiled_calls": 0
+}

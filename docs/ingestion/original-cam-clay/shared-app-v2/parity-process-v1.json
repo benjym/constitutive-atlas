@@ -1,0 +1,71 @@
+[
+  {
+    "command": [
+      "node",
+      "tools/test_wasm.mjs",
+      "--wasm-dir",
+      "/private/tmp/atlas-occ-shared-app-v2/build-wasm",
+      "--native",
+      "/private/tmp/atlas-occ-ci-recovery-v2/build/atlas_solver",
+      "--profile-policy",
+      "catalogue/laboratory-profile-policy.json"
+    ],
+    "returncode": 0,
+    "stdout": "Native/WebAssembly parity passed for 59 positive model/protocol combinations and 5 explicit legacy-contract rejections and 1 retained unsupported control failures.\nNative/WebAssembly increment diagnostics and rollback parity passed for 4 cases.\nNative/WebAssembly Cartesian-rate parity passed for 2 hypoplastic states.\nNative/WebAssembly IGS analytical crossing and cyclic history passed for 6 increments.\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "tools/test_numerics.mjs",
+      "--wasm",
+      "/private/tmp/atlas-occ-shared-app-v2/build-wasm/atlas.js",
+      "--native",
+      "/private/tmp/atlas-occ-ci-recovery-v2/build/atlas_solver"
+    ],
+    "returncode": 0,
+    "stdout": "Browser settings validation, default migration, wire mapping and stale-engine checks passed.\nNative/Wasm numerical settings and full-update tangent parity passed for 17 cases.\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "tools/test_browser_loading.mjs",
+      "/private/tmp/atlas-occ-ci-recovery-v2/build/atlas_solver",
+      "/private/tmp/atlas-occ-shared-app-v2/build-wasm",
+      "docs/ingestion/original-cam-clay/shared-app-v2/browser-loading-v1.json",
+      "catalogue/laboratory-profile-policy.json"
+    ],
+    "returncode": 0,
+    "stdout": "145 native/Wasm pairs, 120 same-instance import/export replays and failed-prefix recovery passed.\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "tools/test_scoped_parity.mjs",
+      "/private/tmp/atlas-occ-ci-recovery-v2/build/atlas_solver",
+      "/private/tmp/atlas-occ-shared-app-v2/build-wasm",
+      "docs/ingestion/original-cam-clay/shared-app-v2/scoped-parity-v1.json",
+      "catalogue/laboratory-profile-policy.json"
+    ],
+    "returncode": 0,
+    "stdout": "Scoped parity passed: 35 cases across 13 models, 43116 physical scalars; exact identity, controls and diagnostics.\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "node",
+      "tools/test_recorded.mjs",
+      "--wasm",
+      "/private/tmp/atlas-occ-shared-app-v2/build-wasm/atlas.js",
+      "--native",
+      "/private/tmp/atlas-occ-ci-recovery-v2/build/atlas_solver",
+      "--output",
+      "docs/ingestion/original-cam-clay/shared-app-v2/recorded-parity-v1.json"
+    ],
+    "returncode": 0,
+    "stdout": "Recorded-run contract checks passed; 46 native/Wasm replay pairs passed.\n",
+    "stderr": ""
+  }
+]

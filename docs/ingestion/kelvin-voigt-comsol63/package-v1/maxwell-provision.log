@@ -1,0 +1,20 @@
+fatal: not a git repository (or any of the parent directories): .git
+Traceback (most recent call last):
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/provision_maxwell_assets.py", line 83, in <module>
+    print(json.dumps(provision(args.output), indent=2))
+                     ~~~~~~~~~^^^^^^^^^^^^^
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/provision_maxwell_assets.py", line 71, in provision
+    bundle(Path(temporary)/'verification-package', staging)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/build_maxwell_laboratory.py", line 115, in bundle
+    release_revision=os.environ.get('GITHUB_SHA') or subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip())
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 473, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['git', 'rev-parse', 'HEAD']' returned non-zero exit status 128.

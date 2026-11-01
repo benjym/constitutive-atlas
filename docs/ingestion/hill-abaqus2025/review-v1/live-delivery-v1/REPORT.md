@@ -1,0 +1,15 @@
+# Hill live delivery acceptance
+
+Reviewer: `/root/hill_scientific_review`. Accept E8 closure for the observed live release `3873a48b256ed37cbc78378ee6b41d73139676f8`, within the exact scientific approval and qualified interface scope.
+
+Independent saved-evidence checks confirm all six jobs of workflow run `41343952906` succeeded, including Linux/macOS native checks, Linux/macOS Wasm qualification, controlled-path qualification and deploy. The original failed catalogue run remains preserved; its correction passed the unchanged gates.
+
+The actual Pages upload tar matches its retained SHA-256. All 26 reported live asset hashes independently match bytes in that extracted upload, with HTTP 200 responses. The uploaded app and Hill interface sources equal the named commit, and its catalogue equals that commit’s corrected catalogue. All 15 strict Hill package bindings match the previously reviewed package. The live browser identity is exactly the approved model/module/Wasm/review/approval identity. The direct GitHub run-identity receipt additionally binds completed successful run `41343952906` to head SHA `3873a48b256ed37cbc78378ee6b41d73139676f8`; the upload receipt and exact-source comparisons agree.
+
+The actual live Chrome report and its raw output agree: all 28 checks pass, with zero page, console or request errors. This includes catalogue Explore and the strain-increment label, ordinary/J2/orthotropic coexistence, parameter and initial-state changes, invalid-input export blocking, reset, exact replay, shear loading, mobile containment and accessible evidence links. Error listeners precede live navigation in the retained script. The reviewer also inspected the settled mobile viewport: its header, Hill selector and scope text are clear and contained. The immediate-resize capture artifact and DOM diagnosis remain retained separately.
+
+A separate reviewer execution of the saved-export Decimal analysis verifies 119 state components against the original source-derived 100-digit oracle, using frozen bounds. Maximum stress error is `1.7988350009545684e-7 Pa`; multiplier error is `9.740905998478766e-15`. Reset and imported replay are exact. No compiled model was executed by this reviewer.
+
+`check_delivery.py`, `check-results.json` and `independent-export-results.json` retain reproducible assertions and hash bindings for the saved evidence. The concurrent `ec47f3e47b41d01a51c0cd1ef0bfecb344def694` closeout has no changes in production web/tools/workflow/model/catalogue routes or approval registry; it does not replace the qualified deployed identity.
+
+No remaining delivery blocker is identified. Acceptance is for fixed aligned material axes, small-strain Hill associative perfect plasticity with isotropic elasticity, prescribed all-six strain increments and the exact approved engine. It establishes numerical qualification and observed live delivery, without extending the law to hardening, viscosity, finite rotations, arbitrary solvers or experimental validation. All earlier scientific records and retained failures remain unchanged.

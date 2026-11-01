@@ -1,0 +1,376 @@
+{
+  "schema_version": "0.3",
+  "id": "manzari-dafalias-1997-constant-m-be-v1",
+  "name": "Manzari–Dafalias1997, original constant-m sand law / Atlas backward Euler",
+  "family": "critical-state two-surface sand plasticity",
+  "description": "PROVISIONAL UNAPPROVED source-linked full3D constant-m formulation used by original1997 numerical examples. Literal Eq26 with first source b_ref choice; zero-spin fixed frame; project backward-Euler/off-surface unit-normal extension. Original optional evolving-m Appendix, optional low-pressure bulk floor, finite rotation and experimental validation excluded. Source visual reconciliation and qualification pending.",
+  "status": "draft",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1680/geot.1997.47.2.255",
+      "locator": "Manzari/Dafalias1997 pp257–264 Eqs1–29, constant-m examples; p266 extension constants. Source visual verification pending except Eq26.",
+      "role": "original continuous law; numerical realization separately disclosed"
+    }
+  ],
+  "parameters": {
+    "p_at": {
+      "default": 100000.0,
+      "min": 1.0,
+      "max": 1000000000.0,
+      "unit": "Pa",
+      "label": "Atmospheric reference pressure, illustrative100kPa"
+    },
+    "p_ref": {
+      "default": 160000.0,
+      "min": 1.0,
+      "max": 1000000000.0,
+      "unit": "Pa",
+      "label": "CSL reference pressure"
+    },
+    "G0": {
+      "default": 31400000.0,
+      "min": 1.0,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "Shear modulus at atmospheric pressure"
+    },
+    "K0": {
+      "default": 31400000.0,
+      "min": 1.0,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "Bulk modulus at atmospheric pressure"
+    },
+    "a": {
+      "default": 0.6,
+      "min": 0.0,
+      "max": 1.0,
+      "unit": "1",
+      "label": "Elastic pressure exponent"
+    },
+    "Mc": {
+      "default": 1.14,
+      "min": 0.1,
+      "max": 3.0,
+      "unit": "1",
+      "label": "Compression critical stress ratio"
+    },
+    "Me": {
+      "default": 1.14,
+      "min": 0.1,
+      "max": 3.0,
+      "unit": "1",
+      "label": "Extension critical stress ratio"
+    },
+    "lambda_c": {
+      "default": 0.025,
+      "min": 0.001,
+      "max": 0.5,
+      "unit": "1",
+      "label": "CSL slope in e versus ln pressure"
+    },
+    "ec_ref": {
+      "default": 0.8,
+      "min": 0.1,
+      "max": 2.0,
+      "unit": "1",
+      "label": "Critical void ratio at p_ref"
+    },
+    "kbc": {
+      "default": 3.975,
+      "min": 0.001,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Compression bounding slope"
+    },
+    "kbe": {
+      "default": 2.0,
+      "min": 0.001,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Extension bounding slope"
+    },
+    "kdc": {
+      "default": 4.2,
+      "min": 0.001,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Compression dilatancy slope"
+    },
+    "kde": {
+      "default": 0.07,
+      "min": 0.001,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Extension dilatancy slope"
+    },
+    "h0": {
+      "default": 1200.0,
+      "min": 1.0,
+      "max": 100000.0,
+      "unit": "1",
+      "label": "Kinematic hardening coefficient"
+    },
+    "m": {
+      "default": 0.05,
+      "min": 0.001,
+      "max": 0.2,
+      "unit": "1",
+      "label": "Constant yield wedge half-width"
+    },
+    "A": {
+      "default": 2.64,
+      "min": 0.01,
+      "max": 20.0,
+      "unit": "1",
+      "label": "Dilatancy coefficient"
+    },
+    "e0": {
+      "default": 0.65,
+      "min": 0.1,
+      "max": 2.0,
+      "unit": "1",
+      "label": "Fixed initial reference void ratio for infinitesimal volume law"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        160000.0,
+        160000.0,
+        160000.0,
+        0,
+        0,
+        0
+      ],
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.65,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "alpha",
+      "shape": "sym",
+      "unit": "1",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "deviatoric_back_stress_ratio",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "gamma",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.0,
+      "scale": "1",
+      "semantics": {
+        "role": "plastic_multiplier",
+        "quantity": "integrated_plastic_loading_multiplier",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "p",
+      "expr": "trace(sigma)/3"
+    },
+    {
+      "name": "r",
+      "expr": "dev(sigma)/p"
+    },
+    {
+      "name": "relative",
+      "expr": "r-alpha"
+    },
+    {
+      "name": "relative_norm",
+      "expr": "norm(relative)"
+    },
+    {
+      "name": "n",
+      "expr": "select(relative_norm > 0, relative/relative_norm, 0*I)"
+    },
+    {
+      "name": "cos3theta",
+      "expr": "sqrt(6)*cube_trace(n)"
+    },
+    {
+      "name": "Gc",
+      "expr": "G0*(p/p_at)**a"
+    },
+    {
+      "name": "Kc",
+      "expr": "K0*(p/p_at)**a"
+    },
+    {
+      "name": "ec",
+      "expr": "ec_ref-lambda_c*log(p/p_ref)"
+    },
+    {
+      "name": "psi",
+      "expr": "e-ec"
+    },
+    {
+      "name": "c",
+      "expr": "Me/Mc"
+    },
+    {
+      "name": "cb",
+      "expr": "kbe/kbc"
+    },
+    {
+      "name": "cd",
+      "expr": "kde/kdc"
+    },
+    {
+      "name": "g",
+      "expr": "2*c/((1+c)-(1-c)*cos3theta)"
+    },
+    {
+      "name": "gb",
+      "expr": "2*cb/((1+cb)-(1-cb)*cos3theta)"
+    },
+    {
+      "name": "gd",
+      "expr": "2*cd/((1+cd)-(1-cd)*cos3theta)"
+    },
+    {
+      "name": "alpha_bc",
+      "expr": "Mc+kbc*max(-psi,0)-m"
+    },
+    {
+      "name": "alpha_b_scalar",
+      "expr": "g*Mc+gb*kbc*max(-psi,0)-m"
+    },
+    {
+      "name": "alpha_d_scalar",
+      "expr": "g*Mc+gd*kdc*psi-m"
+    },
+    {
+      "name": "alpha_b",
+      "expr": "sqrt(2/3)*alpha_b_scalar*n"
+    },
+    {
+      "name": "alpha_d",
+      "expr": "sqrt(2/3)*alpha_d_scalar*n"
+    },
+    {
+      "name": "b",
+      "expr": "alpha_b-alpha"
+    },
+    {
+      "name": "bn",
+      "expr": "dot(b,n)"
+    },
+    {
+      "name": "b_ref",
+      "expr": "2*sqrt(2/3)*alpha_bc"
+    },
+    {
+      "name": "h",
+      "expr": "h0*abs(bn)/(b_ref-abs(bn))"
+    },
+    {
+      "name": "D_raw",
+      "expr": "A*dot(alpha_d-alpha,n)"
+    },
+    {
+      "name": "D",
+      "expr": "select(psi > 0, max(D_raw,0), D_raw)"
+    },
+    {
+      "name": "yield_scaled",
+      "expr": "(norm(dev(sigma)-p*alpha)-sqrt(2/3)*m*p)/p_ref"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma-sigma_n-2*Gc*dev(de)-Kc*trace(de)*I+gamma*(2*Gc*n+Kc*D*I)",
+    "e": "e-e_n+(1+e0)*trace(de)",
+    "alpha": "alpha-alpha_n-gamma*h*b",
+    "gamma": "sqrt(gamma**2+yield_scaled**2)-gamma+yield_scaled"
+  },
+  "domain": [
+    "p > 0*p_ref",
+    "e > 0",
+    "b_ref > abs(bn)",
+    "alpha_bc > 0",
+    "gamma >= -1e-10",
+    "abs(trace(alpha)) <= 1e-10",
+    "Mc > m",
+    "Me > m"
+  ],
+  "initial_checks": [
+    "yield_scaled <= 1e-8"
+  ],
+  "solution_constraints": [
+    "yield_scaled <= 1e-8"
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e",
+      "alpha"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
+}

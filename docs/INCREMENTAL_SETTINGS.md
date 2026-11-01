@@ -19,8 +19,8 @@ The optional final argument also applies to `controlled_step` and `run_protocol`
 | `residual_tolerance` | `2e-10` | Finite positive scaled Newton residual threshold; strict `<` comparison |
 | `rate_tolerance` | `1e-6` | Finite positive maximum scaled step-doubling/endpoint-defect threshold; strict `<` comparison |
 | `max_iterations` | `45` | Integer 1–1000, per implicit candidate step, including elastic-predictor iterations |
-| `max_depth` | `14` | Integer 0–20, binary subdivision depth of a candidate; root depth is zero |
-| `max_substeps` | `20000` | Integer 1–1000000, accepted steps per material update, shared across recursive branches |
+| `max_depth` | `14` | Integer 0–20, subdivision depth of a candidate; root depth is zero, including the alternate root split |
+| `max_substeps` | `20000` | Integer 1–1000000, accepted internal work per material update, shared across branches and the bounded alternate-partition attempt |
 | `max_backtracks` | `11` | Integer 0–30; try Newton line-search factors `2^-k` for `k=0..max_backtracks` |
 
 Both tolerances are dimensionless in the existing model state scales. The norm remains the maximum absolute scaled component, including the rate controller's defect tests. These settings do not establish relative stress accuracy or a global integration error bound. Componentwise adaptation need not select the same partition under general tensor rotations; see [the geometry investigation](TANGENT_GEOMETRY.md).
@@ -77,3 +77,11 @@ python3 -m unittest tests.test_integration_settings tests.test_tangent_geometry 
 Preparation and offline verification do not run native code; captures execute serial native requests with 45-second individual bounds. Outer mixed-control stopping rules, linear pivot cutoffs, tangent replay tolerances, global resource budgets, website/export settings controls and native/Wasm parity remain open. NUM-03 is not complete; no solver default tolerance is changed by these refinement results.
 
 The subsequent [public browser integration](BROWSER_NUMERICS.md) adds settings controls, import/export replay and 17 native/Wasm comparisons. Research-model Wasm evidence, outer-control settings and global budgets remain open; this does not complete NUM-03.
+
+## Bounded alternate partition for residual laws
+
+After an entire ordinary dyadic residual update fails, the solver may try one root split `left=de/3`, `right=de-left`, with ordinary dyadic descendants. Both children start at depth1; no nested alternate retry occurs. Successful original trajectories and rate-law algorithms remain unchanged. Retry uses the original prepared parent (preparation once), and all prior tentative accepted work consumes the same original max_substeps budget. Domain, finite arithmetic, Newton tolerance, maximum depth/iterations/backtracks and exact endpoint constraints remain unchanged. No retry follows invalid input or preparation rejection. This is a search heuristic, not an exact event locator or convergence guarantee.
+
+On success, substeps and increment_fractions describe the committed path. On failure they retain the legacy tentative-work meaning and partition_committed is false. attempted_substeps counts all accepted internal work; discarded_substeps counts the work discarded by failed attempts; first_attempt_substeps identifies the first-attempt prefix on total failure. iterations and rejected include every attempt. Failed parent state is always restored. Actual alternate-path component tensors and discarded first-attempt tensors/fractions are retained in integrate/linearize API diagnostics. This avoids replaying discarded state or treating failed fractions as committed coverage.
+
+The root split rejects nonfinite arithmetic, lost nonzero components and differing rounded recomposition. An error-free TwoSum records the exact real left+right−incoming defect; its magnitude must be no more than2machineeps times the incoming component. Thus nominal fractions cover the path while the small binary loading defect is explicit. A fallback tangent replays actual component tensors, seeding nominal fractions for a fixed affine extension of each actual wire increment. It does not differentiate rounding or adaptive partition selection; the existing successful dyadic tangent route is unchanged. See the separately frozen [generic policy and review](reviews/bounded-partition-retry-v1/CONTRACT.md).

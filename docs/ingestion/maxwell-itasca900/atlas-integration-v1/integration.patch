@@ -1,0 +1,72 @@
+--- prior/web/app.js
++++ current/web/app.js
+@@ -2,6 +2,7 @@
+ import {setupTimedLaboratory} from './timed-laboratory.mjs';
+ import {setupSlsLaboratory} from './sls-laboratory.mjs';
+ import {setupPathLaboratory} from './path-laboratory.mjs';
++import {setupMaxwellLaboratory} from './maxwell-laboratory.mjs';
+ import {createLaboratoryControllerRouter} from './laboratory-controller-router.mjs';
+ import {validateSupport,unsupportedReason,requireSupportedControl} from './laboratory-support.mjs';
+ import {timedLaboratoryRoute} from './timed-route.mjs';
+@@ -585,5 +586,5 @@
+   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
+   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
+   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
+-  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
++  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+ }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}
+--- prior/tools/build_web.py
++++ current/tools/build_web.py
+@@ -25,6 +25,7 @@
+     parser.add_argument('--burgers-wasm-dir',type=Path,default=ROOT/'build-burgers-wasm',help='Dedicated common physical-time Burgers engine')
+     parser.add_argument('--j2-wasm-dir',type=Path,default=ROOT/'build-j2-wasm',help='Qualified J2 material-point engine for the main laboratory')
+     parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'docs/ingestion/norsand-1993/shared-integration-v1/wasm-v2',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
++    parser.add_argument('--maxwell-wasm-dir',type=Path,default=ROOT/'build-maxwell-wasm',help='Dedicated Maxwell engine with exact accepted current-build qualification receipt')
+     parser.add_argument('--output',type=Path,help='Explicit local output directory')
+     args=parser.parse_args()
+     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
+@@ -92,6 +93,8 @@
+     subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)
+     from build_controlled_path_web import bundle as bundle_controlled_path
+     bundle_controlled_path(dest,args.controlled_path_wasm_dir)
++    from build_maxwell_laboratory import bundle as bundle_maxwell
++    bundle_maxwell(dest,args.maxwell_wasm_dir)
+     (dest/'.nojekyll').touch()
+     print(f'Packaged {dest}')
+ 
+--- prior/catalogue/manifest.json
++++ current/catalogue/manifest.json
+@@ -899,6 +899,33 @@
+       ]
+     },
+     {
++      "id": "maxwell-itasca900-zero-spin-ode",
++      "name": "Maxwell continuum · continuous dry zero-spin",
++      "family": "Viscoelasticity",
++      "status": "reviewed",
++      "executable": false,
++      "timed_laboratory": "index.html",
++      "dossier": "docs/models/maxwell-itasca900-zero-spin-ode.md",
++      "note": "Independently agent-reviewed continuous Maxwell deviatoric viscosity with elastic volume response. Main-laboratory physical-time relaxation, creep, oedometer and load–hold–reverse controls. Dry total Cauchy stress, infinitesimal strain, fixed spatial axes/zero spin; illustrative uncalibrated parameters. Vendor discrete updates, finite rotations, broad parameter envelope and experimental validation excluded.",
++      "catalogue_sources": [
++        {
++          "url": "https://docs.itascacg.com/itasca900/common/models/viscous/doc/modelviscous.html",
++          "role": "vendor mathematical formulation",
++          "locator": "Eqs1–6, especially Eq4 coefficients G/eta; trace interpretation of malformed adjacent index expressions"
++        },
++        {
++          "url": "https://docs.itascacg.com/itasca900/common/docproject/source/manual/program_guide/modelformulation/signconventions.html",
++          "role": "tensor sign convention",
++          "locator": "direct stress, direct strain, strain rate"
++        },
++        {
++          "url": "https://docs.itascacg.com/itasca900/flac3d/zone/test3d/Creep/OedometerMaxwell/oedometermaxwell.html",
++          "role": "small-strain dry example and preparation",
++          "locator": "Eqs1–6, elastic-equilibrium paragraph, model large-strain off; no vendor code executed"
++        }
++      ]
++    },
++    {
+       "id": "sls-comsol63-deviatoric-zero-spin-ode",
+       "name": "Standard Linear Solid / Zener — COMSOL6.3 deviatoric",
+       "family": "linear viscoelasticity",

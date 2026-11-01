@@ -1,0 +1,13 @@
+--- accepted/test_solver.cpp
++++ diagnostic/test_solver.cpp
+@@ -43,6 +43,10 @@
+             fd[level].resize(14);
+             for(int i=0;i<14;++i){double ad=0;for(int j=0;j<14;++j)ad+=r[i].d[j]*v[j];
+                 fd[level][i]=(rp[i]-rm[i])/(2*step);
++                if(!(std::isfinite(ad)&&std::isfinite(fd[level][i])&&std::abs(fd[level][i]-ad)<3e-5*std::max({1.,std::abs(fd[level][i]),std::abs(ad)}))){
++                    std::cerr.precision(17);std::cerr<<"MD_FD_DIAGNOSTIC row="<<i<<" level="<<level<<" h="<<step<<" ad="<<ad<<" fd="<<fd[level][i]<<" rp="<<rp[i]<<" rm="<<rm[i]<<" direction=";
++                    for(int j=0;j<14;++j)std::cerr<<v[j]<<",";std::cerr<<" state=";for(double value:z)std::cerr<<value<<",";std::cerr<<" scales=";for(double value:scales)std::cerr<<value<<",";std::cerr<<"\n";
++                }
+                 require(std::isfinite(ad)&&std::isfinite(fd[level][i])&&std::abs(fd[level][i]-ad)<3e-5*std::max({1.,std::abs(fd[level][i]),std::abs(ad)}),"MD AD/FD residual Jacobian mismatch");}
+         }
+         for(int i=0;i<14;++i)require(std::abs(fd[0][i]-fd[1][i])<1.5e-5*std::max({1.,std::abs(fd[0][i]),std::abs(fd[1][i])}),"MD FD h/h2 mismatch");

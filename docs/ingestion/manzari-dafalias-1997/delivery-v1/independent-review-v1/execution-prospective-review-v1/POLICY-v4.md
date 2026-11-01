@@ -1,0 +1,3 @@
+# Prospective final parity-v4 checker review
+
+Before execution: verify manifest e50ca8293a0fa3247fa259d301fb1e6f12d2b1216e4abcf3f043b7f5f20b746c and all bound files; inspect delta from v3. Repeat positive synthetic reachability and v3 source diagnostic checks. Require rejection of identical wrong coordinates, corrupt receipt, empty partition, equal two-substep partitions and source branch changes in FD endpoints. Require all36 source checkpoint signatures and the preserved Mandel sign witness to match independent Cartesian source calculations. These synthetic tests exercise gates only; no constitutive/backend results or approval are implied. Prior reports/policies retain their identities.

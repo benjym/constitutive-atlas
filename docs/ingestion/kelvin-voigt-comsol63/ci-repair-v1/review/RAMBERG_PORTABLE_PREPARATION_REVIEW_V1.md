@@ -1,0 +1,11 @@
+# Independent upstream Ramberg regeneration repair review
+
+Decision: accept exact adopted tests/test_ramberg_osgood.py from upstream339e6dc6/4ae43cee as a source-only portability correction. Full subsequent CI must establish final success; the failed application run remains failed and preserved. Reviewer `/root/kelvin_scientific_review` performed no network/build/compiled/browser call.
+
+Read original Linux failure, upstream eighteen-field diagnostic, actual Linux/macOS pow outputs, explicit preparation source and independent Ramberg review. Same q and z in the n2.5 uniaxial input preparation reach different libm z**1.5 last bits. Algebraic z*sqrt(z) gives the original frozen-host result on both. This is a declared elementary operation order on nonnegative source-domain z, without a platform condition, expected-value lookup, tolerance or skip.
+
+The helper computes source compliance solely to prepare inputs during whole-object make_requests regeneration. It uses explicit fsum and replaces only exponent1.5 power evaluation with the product; all other exponents and the independent stress oracle remain unchanged. Exact full-object equality against all eighty-three original requests remains mandatory. This preserves exact qualified-host regeneration rather than weakening its comparison. Production initialization tests still exercise the original compliance/oracle routines separately.
+
+Independently verified adopted test bytes equal upstream and that model c949cb14269846ec46a7e8f25718e17e8c8eab394b6ee09204f029e1ca15a3e2, original requests859518b4f1896f2c431992a8cbd98b5f79d1ff9ca7de1f7971b9858960d61aa3 and tool f4257c0231b7188a4cd3b37aa7a552a2c3f54b46c70cc63f45b5fc9611abf5b2 are unchanged from applicatione32f8a86. Independently ran all nine historical-generation/Ramberg focused Python tests: pass, retained ramberg-upstream-focused.log. Read retained actual Linuxamd64Python3.12 and macOS3.12/3.14 focused-pass evidence. This supports the bounded corpus/platform correction, not arbitrary transcendental reproducibility.
+
+The independent qualifier's alternative AST investigation remains separate diagnostic work and is not adopted into production or tests. Static browser DOM fixture correction still requires its own exact source review; this decision alone does not accept the complete CI repair, final workflow or E8.

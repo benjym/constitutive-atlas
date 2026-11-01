@@ -1,0 +1,41 @@
+# Independent prospective review — Bingham COMSOL 6.3 v1
+
+Reviewer: separate agent `/root/bingham_review`, 2 November 2026. Task `REVIEW-bingham-prospective-v1`. The reviewer authored neither candidate, source packet, production implementation nor numerical study. Owned output is only `independent-review-v1/`; no build, compiled execution, vendor program, network acquisition, shared edit, staging or commit was performed.
+
+**Decision: changes requested for prospective execution assessment. Source/transcription accepted for the exact bounded candidate. This is not E5 approval or backend-delivery acceptance.** The parent must preserve execution-v1/freeze-v1 and identify corrected assessment prospectively before observing compiled output.
+
+Candidate `bingham-comsol63-mises-perfect-zero-spin-ode`, SHA-256 `6c5ee29c5c8cfbe18eaac09808a86ed7b656c8716511409bb23ecd0d3ad89850`. `input-binding.json` binds all109 frozen inputs and all52 private source originals/derived assets; every hash matched at review. It includes the freeze manifest hash. Source receipts remain private-location references; this review redistributes no vendor images or source text.
+
+## Source and equation assessment
+
+Read AGENTS, board claim, agent review policy, formulation contract, research charter, candidate, source packet/crosswalk, source receipt inventory, source generator and analytical cases, execution PLAN/study/oracle/cases/parity/collector/freeze. The private saved HTML identifies COMSOL6.3 Creep and Viscoplasticity, Bingham, interface model/hardening/thermal selections and elasticity subtraction. Visually inspected the private equation contact sheet (including original-image locators016,022,057,059,060,070,076–078,087–088), elasticity contact sheet (002–004,008–010), and opened originals057/076. The originals have transparency against a black display; the hash-bound white contact sheet supplies readable equation inspection. This is actual saved-source reading, not snippet inference.
+
+The source equations give q=sqrt(3s:s/2), N=3s/(2q), lambda=positive_part(q-Y)/eta, vp'=lambda N, alpha'=abs(lambda)=lambda. The candidate's max(q,Y) denominator equals q on the active branch and provides exact zero continuation on the inactive branch, with Y>0. It changes no active flow or threshold. Elastic stress is K trace(eps-vp) I+2G dev(eps-vp). Simultaneously negating source stress, strain and vp strain preserves this law and power under the declared compression-positive convention. Mandel ordering and sqrt(2) shear preserve contraction; alpha is invariant. Dry total stress is a defensible explicitly bounded specialization, with no pore/thermal/initial-offset mechanism inferred.
+
+All13 persistent state components and physical-time inputs are explicit. K,G,Y>0 have Pa units; eta>0 has Pa s; flow and alpha rates are 1/s. The alpha nonnegativity and vp trace tolerance are explicit project checks. Unstated preparation/realizability is disclosed; example state and parameter values are not calibration. Initial overstress correctly remains admissible. No hardening, finite-rotation transport, vendor FE algorithm, tangent, experimental or general-parameter qualification is asserted.
+
+The independent scalar reduction is correct: for s=zN with N:N=2/3, z'=2Gd-(3G/eta)sign(z)positive_part(abs(z)-Y). The active equilibrium, decay factor, elastic crossings, alpha increment and compliance reconstruction in the source generator follow directly. Stress-space RK4 uses sigma'=C:D-(3G/eta)positive_part(q-Y)s/q and alpha'=positive_part(q-Y)/eta. Its elastic normal mean strain trace(sigma)/(9K) is correct. It is distinct from production strain-space integration. The fixed4096/8192 convergence gate is strict relative to the final3Pa/3e-7 accuracy allowance; the saved convergence values meet it. Pointwise reviewer arithmetic over100 deterministic all-component states verified deviatoric flow, equivalent vp rate and dissipation, maximum absolute combined identity residual4.37e-11 (stress-power roundoff dominates). This does not establish integration accuracy.
+
+## Blocking prospective findings
+
+1. **R1 — declared-domain checks missing on successful direct results.** `study.assess` compares direct state to references with a3e-7 absolute allowance, then checks only time and observed stress. It does not enforce alpha>=0 or abs(trace(vp))<=1e-10. Synthetic zero-hold alpha=-1e-8 passes despite violating the candidate domain. Add exact declared-domain checks to every successful direct/schedule result, finiteness/complete layout and appropriate alpha monotonicity checks. These are independent checks beyond reference-error allowances.
+2. **R2 — scheduled output topology/controls are insufficiently assessed.** A set of matched times permits duplicated or reverse-ordered points. Synthetic public-creep duplicated point and reverse chronology both pass. Expected segment IDs/indices, sample counts/order, boundary duplication policy, control/stress/strain/rate bindings and final physical clock should be explicitly checked against the actual API contract. The references remain useful physical accuracy checks, but they cannot establish the PLAN's topology/control claim alone.
+3. **R3 — rejection preservation/status evidence is incomplete.** Every invalid request except deliberate late-budget rollback checks only ok=false. A negative-alpha failure returning arbitrary13component state and time=-999 passes. Assert rejection return/status/message contract and unchanged incoming state/time whenever the API returns them; distinguish early parsing errors whose schema legitimately omits outputs. Assert process/ABI status consistency and retain stderr. Recovery is present in one persistent Wasm instance, but does not prove that rejection preserved the returned parent.
+
+`check_review.py` constructs a complete synthetic baseline from the frozen references and demonstrates these assessor holes without calling any constitutive backend. `check-results.json` records all four accepted mutations. These are evidence-assessor failures, not observations of incorrect production output. Correcting them prospectively is not relaxation of a failed numerical gate.
+
+## Other observations and limits
+
+The complete108 radial cases cover signed flow, threshold/zero norm, holds, reversals and normal/shear directions. Volumetric, rotations, public presets, noncoaxial history, restart, refinement and deliberate late-budget rollback complement that evidence. The native/Wasm parity policy explicitly excludes only internal diagnostics and cannot substitute for independent accuracy. No prospective tolerance appears scientifically unreasonable for the illustrative bounded parameter set. The parameter declaration's enormous finite range is not numerically qualified: final approval must bind the actual tested parameters, protocols, settings and interface scope. Basis covariance does not support finite rotations. The mixed stress/strain host must pass actual results; selecting the continuous source law does not qualify that interface by itself.
+
+All-nine E5 status at this phase: source_provenance/equation_fidelity/conventions_dimensions/initialization_domain/applicability_claims/reproducibility_rights are prospectively satisfactory for the declared scope; integration_transactions and independent_numerical_evidence await corrected assessment plus actual evidence; backend_delivery is pending, not not-applicable. No E5 checklist or approval-registry decision is issued here.
+
+## Reproduction and handoff
+
+Run from the isolated checkout:
+
+`python3 -B docs/ingestion/bingham-comsol63/independent-review-v1/check_review.py`
+
+It reads existing inputs, verifies109freeze bindings and52source receipts, runs100 pointwise identity checks and synthetic assessor mutations, and writes only the review directory. No compiled artifacts execute. Exact output files: `REPORT-v1.md`, `input-binding.json`, `check_review.py`, `check-results.json`.
+
+Smallest next action: parent corrects R1–R3 under a distinct pre-observation assessment/freeze identity, requests reviewer confirmation, then conducts coordinator-owned serial native/Wasm qualification. Later reviewer followup must inspect raw results, all-nine exact hash-bound E5 evidence and exposed interface scope. Neither this review nor packet completeness finishes E0–E8 delivery.
