@@ -1,0 +1,5 @@
+# Wasm prospective handoff for outer-predictor-v1
+
+Inherits exact accepted worker/transport/runner/CMake and material120000ms includinginit/SIGKILL/64MiB/immediateprecallmanifest/rawoutcome policy from outer-reuse-v1. Synthetic19tests only before approval. Exact new proposed-native-source C++/generatedmirror; replace only isolated CMakeLists with this directory approvedhistorical CMake. Serial Release atlas_lade_domain_wasm --parallel1 using isolatedwritablecopiedcache.
+
+New study executionorder (prospective, no observations): after nativefixtures/strictsame-predictorcachefidelity/native120secondperformancepass, buildmatchingWasm; perform ONE identical dense.005/N1600 request via bounded worker before allremainingcampaigns. Failures stopperformancequalification andpreserve evidence. This earlyWasmprerequisite avoids spending fullcampaignresources on an already-too-slowruntime; all unchanged native/fullWasm parity/independentchains/source gates stillrequired beforequalification/E5. No timeout or accuracy relaxation. Fullcheckers onlymoduleinitializationchangedfrom originals; sourceauditPythonunchanged.

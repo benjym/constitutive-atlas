@@ -1,0 +1,9 @@
+async(page)=>{
+ const host=page.locator('#orthotropic-material-laboratory'),q=id=>host.locator('#'+id),base='/Users/bmar5496/code/constitutive-atlas/docs/ingestion/orthotropic-ogs/browser-v1/';
+ await page.waitForFunction(()=>document.getElementById('orthotropic-material-laboratory')?.shadowRoot.querySelector('#status').textContent.startsWith('Completed'),null,{timeout:180000});
+ if(!await host.isVisible()||await page.locator('#laboratory > .lab-layout').isVisible()||await page.locator('iframe').count())throw Error('Not embedded orthotropic main laboratory');
+ const table=await q('stateTable').evaluate(el=>({rows:el.rows.length,columns:el.rows[0].cells.length})),plots=await host.locator('svg polyline').count();if(table.rows!==5||table.columns!==7||plots!==2)throw Error('Incomplete state table/plots');
+ for(let i=0;i<6;i++){await q('component').selectOption({index:i});if(await host.locator('svg polyline').count()!==2)throw Error('Component plot absent');}await q('component').selectOption({index:0});
+ let d=page.waitForEvent('download');await q('download').click();await(await d).saveAs(base+'default.json');
+ return {observed:new Date().toISOString(),url:page.url(),browser:page.context().browser().version(),status:await q('status').textContent(),table,plots,allSixPlotChannels:true};
+}

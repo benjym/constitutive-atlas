@@ -1,0 +1,50 @@
+--- docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/candidate-v2/build-source-snapshot/include/atlas/solver.hpp	2026-11-01 20:22:55
++++ .local/lade-domain-control-v1/native-source/include/atlas/solver.hpp	2026-11-01 20:34:59
+@@ -8,7 +8,7 @@
+ 
+ namespace atlas {
+ using State=std::vector<double>;
+-struct Diagnostics { int iterations=0, substeps=0, rejected=0; double error=0; std::vector<double> increment_fractions; };
++struct Diagnostics { int reserved_path_trials=0; int iterations=0, substeps=0, rejected=0; double error=0; std::vector<double> increment_fractions; };
+ struct Advance { bool ok=false; State state; Diagnostics diagnostics; std::string message; IntegrationSettings settings; };
+ inline State default_parameters(int model) { State p;for(const auto&v:models().at(model).parameters)p.push_back(v.value);return p; }
+ inline State initial_state(int model){State z;for(const auto&f:models().at(model).fields)for(int i=0;i<f.size;++i)z.push_back(f.initial[i]);return z;}
+@@ -70,10 +70,29 @@
+     }
+     return true;
+ }
++} // namespace atlas
++#include "atlas/path_error_control.hpp"
++namespace atlas {
+ inline bool advance_recursive(int model,const State&zn,const Sym<double>&de,const State&p,State&z,Diagnostics&diag,int depth,const IntegrationSettings&settings={}){
+     if(depth>settings.max_depth||diag.substeps>=settings.max_substeps)return false;
+     const bool rate=models().at(model).rate;
+-    if(!rate){if(implicit_step(model,zn,de,p,z,diag,settings)){++diag.substeps;diag.increment_fractions.push_back(std::ldexp(1.,-depth));return true;}}
++    if(!rate){
++        if(settings.increment_tolerance==0.){if(implicit_step(model,zn,de,p,z,diag,settings)){++diag.substeps;diag.increment_fractions.push_back(std::ldexp(1.,-depth));return true;}}
++        else {
++            // Reserve three solves even if short-circuiting executes fewer.
++            if(diag.reserved_path_trials>3*settings.max_substeps-3)return false;
++            diag.reserved_path_trials+=3;
++            State full,half,two;double error=0.;
++            if(implicit_step(model,zn,de,p,full,diag,settings)&&implicit_step(model,zn,.5*de,p,half,diag,settings)&&implicit_step(model,half,.5*de,p,two,diag,settings)
++                &&implicit_path_error(model,zn,full,half,two,p,settings,error)){
++                diag.error=error;
++                if(error<settings.increment_tolerance){
++                    if(diag.substeps>settings.max_substeps-2)return false;
++                    z=two;diag.substeps+=2;diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));return true;
++                }
++            }
++        }
++    }
+     else {
+         State full,half,two,half_defect,two_defect;const auto halfde=.5*de;
+         if(midpoint(model,zn,de,p,full)&&midpoint(model,zn,halfde,p,half,&half_defect)&&midpoint(model,half,halfde,p,two,&two_defect)){
+@@ -96,6 +115,7 @@
+     if(!valid_settings(settings)){result.message="invalid integration settings";return result;}
+     if(model<0||model>=int(models().size())){result.message="unknown model";return result;}
+     if(models()[model].physical_time){result.message="physical-time model requires the timed update API";return result;}
++    if(settings.increment_tolerance>0. && (models()[model].rate||!path_metric_layout(model,settings))){result.message="path error control requires an incremental residual and its declared stress layout";return result;}
+     if(zn.size()!=initial_state(model).size()||!valid_parameters(model,p)||!domain(model,zn,p,true)||!std::isfinite(norm(de))){result.message="invalid parameters, inadmissible initial state or strain increment";return result;}
+     for(double s:model_scales(model,p))if(!std::isfinite(s)||s<=0){result.message="invalid state scales";return result;}
+     State prepared;

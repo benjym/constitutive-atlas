@@ -1,0 +1,124 @@
+{
+  "id": "REVIEW-lade-duncan-lifecycle-v2-python-diagnostic",
+  "model_sha256": "e1a21278ac9ce65debd5bf81b181462509e57d7928cc8b8366c75cd6110c4e63",
+  "original_lifecycle": {
+    "checks": 32,
+    "failures": 4,
+    "passed": false,
+    "failed_names": [
+      "dense_covariance",
+      "loose_rollback",
+      "loose_recovery",
+      "loose_covariance"
+    ]
+  },
+  "native_snapshot_hashes": "all 27 match",
+  "native_triaxial": "24/24 successful; retained frozen study passes",
+  "independent_reference": "8/8 retained convergence checks pass",
+  "corrected_covariance_diagnostics": [
+    {
+      "set": "dense",
+      "correct_matrix_H_direct": 40.000000000010225,
+      "correct_matrix_H_rotated": 40.00000000001023,
+      "correct_H_error": 7.105427357601002e-15,
+      "model_H_error": 0.0,
+      "matrix_vs_model_H_direct_difference": 7.105427357601002e-15,
+      "correct_matrix_stress_covariance_error": 1.5158245029548803e-16,
+      "work_error": 0.0,
+      "original_check": {
+        "name": "dense_covariance",
+        "passed": false,
+        "detail": {
+          "stress_error": 1.2126596023639044e-16,
+          "H_error": 0.47876129180134797,
+          "wp_error": 0.0
+        }
+      },
+      "disposition": "Original checker used raw Mandel shears as Cartesian shears; corrected retained-response diagnostic satisfies original numerical covariance bounds. Original study remains failed."
+    },
+    {
+      "set": "loose",
+      "correct_matrix_H_direct": 33.00000000000016,
+      "correct_matrix_H_rotated": 33.000000000000156,
+      "correct_H_error": 7.105427357601002e-15,
+      "model_H_error": 7.105427357601002e-15,
+      "matrix_vs_model_H_direct_difference": 0.0,
+      "correct_matrix_stress_covariance_error": 1.2126596023639044e-16,
+      "work_error": 0.0,
+      "original_check": {
+        "name": "loose_covariance",
+        "passed": false,
+        "detail": {
+          "stress_error": 1.2126596023639044e-16,
+          "H_error": 0.22928905659259868,
+          "wp_error": 0.0
+        }
+      },
+      "disposition": "Original checker used raw Mandel shears as Cartesian shears; corrected retained-response diagnostic satisfies original numerical covariance bounds. Original study remains failed."
+    }
+  ],
+  "hydrostatic_unloading_diagnostics": [
+    {
+      "set": "dense",
+      "native_ok": false,
+      "continuous_zero_pressure_strain_per_axis": -0.001957623166951442,
+      "requested_per_axis_strain": -2.0,
+      "request_beyond_positive_continuous_path": true,
+      "input_is_finite": true,
+      "native_state": [
+        60000,
+        60000,
+        60000,
+        0,
+        0,
+        0,
+        13,
+        0
+      ],
+      "accepted_substeps": 2,
+      "accepted_fraction_sum_exact": "3/512",
+      "small_strain_amplitude_qualification": "200percent extension is outside the demonstrated infinitesimal test regime; finite descriptor alone supplies no amplitude bound.",
+      "rollback_exact": true
+    },
+    {
+      "set": "loose",
+      "native_ok": true,
+      "continuous_zero_pressure_strain_per_axis": -0.0041485165880758195,
+      "requested_per_axis_strain": -2.0,
+      "request_beyond_positive_continuous_path": true,
+      "input_is_finite": true,
+      "native_state": [
+        5.7145063583093926e-11,
+        5.714506358470115e-11,
+        5.714506357740566e-11,
+        0,
+        0,
+        0,
+        6.000000000000036,
+        0
+      ],
+      "accepted_substeps": 64,
+      "accepted_fraction_sum_exact": "1",
+      "small_strain_amplitude_qualification": "200percent extension is outside the demonstrated infinitesimal test regime; finite descriptor alone supplies no amplitude bound.",
+      "final_model_min_pressure_Pa": 5.714506357740566e-11,
+      "final_model_f": 27.000000000000007,
+      "final_decoded_H": 33.00000000000004,
+      "final_E_Pa": 1.2471595246164135e-05,
+      "zero_reentry_preparation": "accepted unchanged",
+      "zero_hold_residual_scaled_norm": 0.0,
+      "first_accepted_subincrement_per_axis": -0.015625,
+      "first_BE_pressure_Pa": 1272.8173426816209,
+      "scalar_exact_BE_partition_final_log10_pressure_Pa": -90685.04632417382,
+      "native_final_log10_pressure_Pa": -10.2430212797257,
+      "residual_stress_absolute_scale_Pa": 2.0265e-05,
+      "partition_replay_limit": "Scalar log-domain endpoint-root diagnostic; not compiled replay, and not an oracle for individual native residual termination states."
+    }
+  ],
+  "disposition": "Two covariance oracle defects; finite minus2 increment has no declared schema-invalid amplitude premise, making rollback/retry expectations unsupported. Large-unloading response nonetheless does not establish positive-domain differential source fidelity; source-derived zero-pressure event and residual-scale/partition behavior need separately frozen qualification. Original lifecycle remains failed.",
+  "limits": [
+    "No native/compiled execution",
+    "No root files rewritten",
+    "No revised acceptance result",
+    "No E5/model approval"
+  ]
+}

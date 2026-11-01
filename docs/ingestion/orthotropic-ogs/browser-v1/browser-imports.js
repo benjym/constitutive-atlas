@@ -1,0 +1,8 @@
+async(page)=>{
+ const h=page.locator('#orthotropic-material-laboratory'),q=id=>h.locator('#'+id),base='/Users/bmar5496/code/constitutive-atlas/docs/ingestion/orthotropic-ogs/browser-v1/',checks=[];
+ const complete=()=>page.waitForFunction(()=>{const r=document.getElementById('orthotropic-material-laboratory').shadowRoot;return r.querySelector('#status').textContent.startsWith('Completed')&&!r.querySelector('#download').disabled&&r.querySelector('#import').value==='';},null,{timeout:180000});
+ for(let i=0;i<2;i++){await q('import').setInputFiles(base+'default.json');await complete();if(await q('import').inputValue()!=='')throw Error('Consumed file retained');checks.push({sameFile:i+1,status:await q('status').textContent()});}
+ let d=page.waitForEvent('download');await q('download').click();await(await d).saveAs(base+'replayed.json');
+ for(const [file,message]of [['finite-tamper.json','differs from saved output'],['duplicate.json','Duplicate JSON key']]){await q('import').setInputFiles(base+file);await page.waitForFunction(m=>document.getElementById('orthotropic-material-laboratory').shadowRoot.querySelector('#status').textContent.includes(m),message,{timeout:180000});if(!await q('download').isDisabled())throw Error('Rejected replay retained stale export');checks.push({file,rejection:await q('status').textContent()});await q('import').setInputFiles(base+'default.json');await complete();}
+ await q('resetPreset').click();await complete();d=page.waitForEvent('download');await q('download').click();await(await d).saveAs(base+'reset.json');return {checks,recovery:await q('status').textContent()};
+}

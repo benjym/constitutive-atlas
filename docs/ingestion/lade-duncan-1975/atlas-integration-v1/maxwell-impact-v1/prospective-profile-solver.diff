@@ -1,0 +1,15 @@
+--- cpp/profiles/implicit-path-v1/include/atlas/solver.hpp
++++ docs/ingestion/lade-duncan-1975/fused-linear-v1/proposed-native-source/include/atlas/solver.hpp
+@@ -27,9 +27,9 @@
+     for(int k=0;k<n;++k){int pivot=k;for(int i=k+1;i<n;++i)if(std::abs(a[i][k])>std::abs(a[pivot][k]))pivot=i;
+         if(!std::isfinite(a[pivot][k])||std::abs(a[pivot][k])<1e-14)return false;
+         std::swap(a[k],a[pivot]);std::swap(b[k],b[pivot]);
+-        for(int i=k+1;i<n;++i){double f=a[i][k]/a[k][k];for(int j=k+1;j<n;++j)a[i][j]-=f*a[k][j];b[i]-=f*b[k];}
+-    }
+-    x.assign(n,0);for(int i=n-1;i>=0;--i){double s=b[i];for(int j=i+1;j<n;++j)s-=a[i][j]*x[j];x[i]=s/a[i][i];}return finite(x);
++        for(int i=k+1;i<n;++i){double f=a[i][k]/a[k][k];for(int j=k+1;j<n;++j)a[i][j]=std::fma(-f,a[k][j],a[i][j]);b[i]=std::fma(-f,b[k],b[i]);}
++    }
++    x.assign(n,0);for(int i=n-1;i>=0;--i){double s=b[i];for(int j=i+1;j<n;++j)s=std::fma(-a[i][j],x[j],s);x[i]=s/a[i][i];}return finite(x);
+ }
+ } // namespace atlas
+ #include "atlas/implicit_seed.hpp"

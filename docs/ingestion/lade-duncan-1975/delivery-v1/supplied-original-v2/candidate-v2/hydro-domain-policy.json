@@ -1,0 +1,15 @@
+{
+  "id": "lade1975-hydro-pressure-zero-diagnostic-v1",
+  "frozen_before_these_requests": true,
+  "reason": "Original lifecycle large-unloading failure and native/Wasm mismatch warrant a source-derived domain-event diagnostic. Original studies remain FAIL.",
+  "source": "Eq2, Table1 nu=0, E=Kur*pa*(p/pa)^n; isotropic unloading remains f=27 and elastic",
+  "reference": "epsilon_crit=-(p0/pa)^(1-n)/((1-n)*Kur); p(epsilon)=pa*((p0/pa)^(1-n)+(1-n)*Kur*epsilon)^(1/(1-n)) before zero",
+  "p0_Pa": 60000,
+  "sets": ["dense", "loose"],
+  "total_strain_as_fraction_of_negative_critical_strain": [0.5, 1.25],
+  "uniform_external_steps": [1, 4, 16, 64],
+  "before_event_requirement": "All external steps succeed; report source pressure error and refinement without retroactively declaring a tolerance pass",
+  "cross_event_requirement": "A wholly successful path past finite pressure-zero event is a domain-fidelity failure; report first failed step and exact failed-parent rollback if failure occurs",
+  "metrics": "All accepted state, pressure, plastic work, physical history; no pressure floor, tolerance weakening or automatic exemption",
+  "scope": "Diagnostic only; no E4/E5 acceptance, no arbitrary new model restrictions or runtime modifications"
+}

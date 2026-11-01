@@ -1,0 +1,571 @@
+{
+  "scope": "Synthetic engine reset verification only; expected values derived in docs/PARENT_INCREMENT_RESETS.md. Not SANISAND equations.",
+  "cases": [
+    {
+      "name": "negative guard",
+      "model": "test-parent-reset",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        -400.0,
+        100,
+        100,
+        0,
+        0,
+        0,
+        0.5,
+        1
+      ],
+      "parameters": null
+    },
+    {
+      "name": "positive guard",
+      "model": "test-parent-reset",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        600.0,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1.5,
+        0
+      ],
+      "parameters": null
+    },
+    {
+      "name": "zero guard",
+      "model": "test-parent-reset",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "parameters": null
+    },
+    {
+      "name": "implicit reset",
+      "model": "test-parent-residual",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        -400.0,
+        100,
+        100,
+        0,
+        0,
+        0,
+        0.5,
+        1
+      ],
+      "parameters": null
+    },
+    {
+      "name": "simultaneous parent snapshot",
+      "model": "test-parent-simultaneous",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "parameters": null
+    },
+    {
+      "name": "Mandel tensor reset",
+      "model": "test-parent-tensor",
+      "initial": [
+        100,
+        200,
+        300,
+        4,
+        5,
+        6,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "increment": [
+        -0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        -400,
+        200,
+        300,
+        4,
+        5,
+        6,
+        0.5,
+        0,
+        -0.1,
+        0,
+        0.1,
+        0.004,
+        0.005,
+        0.006
+      ],
+      "parameters": null
+    },
+    {
+      "name": "nonfinite guard rolls back",
+      "model": "test-parent-nonfinite-guard",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": false,
+      "expected": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "parameters": null
+    },
+    {
+      "name": "triggered nonfinite value rolls back",
+      "model": "test-parent-nonfinite-value",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": false,
+      "expected": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "parameters": null
+    },
+    {
+      "name": "inactive nonfinite value is lazy",
+      "model": "test-parent-nonfinite-value",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        600.0,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1.5,
+        0
+      ],
+      "parameters": null
+    },
+    {
+      "name": "reset domain rolls back",
+      "model": "test-parent-reset-domain",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": false,
+      "expected": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "parameters": null
+    },
+    {
+      "name": "late failure rolls back reset",
+      "model": "test-parent-reset",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": false,
+      "expected": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "parameters": [
+        1000,
+        1.1
+      ],
+      "minimum_substeps": 1
+    },
+    {
+      "name": "nonlinear rejected trials preserve reset",
+      "model": "test-parent-reset-cutback",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        -900,
+        100,
+        100,
+        0,
+        0,
+        0,
+        0.36787944117144233,
+        1
+      ],
+      "parameters": null,
+      "tolerance": 2e-05,
+      "minimum_rejected": 1,
+      "minimum_substeps": 3
+    },
+    {
+      "name": "internal threshold does not retrigger",
+      "model": "test-parent-boundary-cutback",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        -900,
+        100,
+        100,
+        0,
+        0,
+        0,
+        0.36787944117144233,
+        0
+      ],
+      "parameters": null,
+      "tolerance": 2e-05,
+      "minimum_rejected": 1,
+      "minimum_substeps": 3
+    },
+    {
+      "name": "dimensional guard and committed aliases",
+      "model": "test-parent-derived",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": true,
+      "expected": [
+        -400.0,
+        100,
+        100,
+        0,
+        0,
+        0,
+        0.5,
+        1
+      ],
+      "parameters": null
+    },
+    {
+      "name": "nonfinite-derived rejects transaction",
+      "model": "test-parent-nonfinite-derived",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": false,
+      "expected": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "parameters": null
+    },
+    {
+      "name": "prepared-derived rejects transaction",
+      "model": "test-parent-prepared-derived",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "increment": [
+        -0.5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "ok": false,
+      "expected": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "parameters": null
+    }
+  ]
+}

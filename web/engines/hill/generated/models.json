@@ -1,0 +1,230 @@
+{
+  "schema_version": "0.1",
+  "sha256": "73c42c203929e5fcea6fd229367d78ae827b4520093756807fb45b5ac106ad96",
+  "models": [
+    {
+      "schema_version": "0.3",
+      "id": "hill-abaqus2025-perfect-be",
+      "name": "Hill anisotropic associative perfect plasticity, backward Euler",
+      "family": "elastoplasticity",
+      "description": "Abaqus2025 documented Hill quadratic perfect-plastic law plus isotropic elasticity; Atlas mathematical backward Euler, fixed material axes aligned to Cartesian frame. Small strain dry total stress. No hardening, viscosity, finite rotations, damage or experimental validation.",
+      "status": "draft",
+      "sources": [
+        {
+          "url": "https://docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-anisoyield.htm",
+          "locator": "Anisotropic Yield: Hill potential, coefficients and associated flow; Atlas Mandel conversion and equivalent squared-potential residual documented in source packet.",
+          "role": "primary formulation"
+        },
+        {
+          "url": "https://docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-metalplastic.htm",
+          "locator": "Perfect Plasticity; Flow Rule; required linear elastic closure. No rate-dependent options selected.",
+          "role": "complete plastic closure"
+        },
+        {
+          "url": "https://docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-linearelastic.htm",
+          "locator": "Isotropic linear elastic behavior; three-dimensional elasticity, isotropic compliance and material stability.",
+          "role": "elastic closure"
+        }
+      ],
+      "parameters": {
+        "p_ref": {
+          "default": 100000.0,
+          "min": 1,
+          "max": 1000000000000000.0,
+          "unit": "Pa",
+          "label": "Numerical reference stress, not constitutive"
+        },
+        "K": {
+          "default": 20000000.0,
+          "min": 1,
+          "max": 1000000000000000.0,
+          "unit": "Pa",
+          "label": "Bulk modulus"
+        },
+        "Gmod": {
+          "default": 12000000.0,
+          "min": 1,
+          "max": 1000000000000000.0,
+          "unit": "Pa",
+          "label": "Shear modulus"
+        },
+        "sigma_y": {
+          "default": 60000,
+          "min": 1,
+          "max": 10000000000000.0,
+          "unit": "Pa",
+          "label": "Reference Hill yield stress"
+        },
+        "F": {
+          "default": 0.7,
+          "min": 1e-06,
+          "max": 100,
+          "unit": "1",
+          "label": "Hill coefficient F"
+        },
+        "Gh": {
+          "default": 0.5,
+          "min": 1e-06,
+          "max": 100,
+          "unit": "1",
+          "label": "Hill coefficient Gh"
+        },
+        "Hh": {
+          "default": 0.3,
+          "min": 1e-06,
+          "max": 100,
+          "unit": "1",
+          "label": "Hill coefficient Hh"
+        },
+        "L": {
+          "default": 1.2,
+          "min": 1e-06,
+          "max": 100,
+          "unit": "1",
+          "label": "Hill coefficient L"
+        },
+        "M": {
+          "default": 1.7,
+          "min": 1e-06,
+          "max": 100,
+          "unit": "1",
+          "label": "Hill coefficient M"
+        },
+        "N": {
+          "default": 2,
+          "min": 1e-06,
+          "max": 100,
+          "unit": "1",
+          "label": "Hill coefficient N"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "initial": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "gamma",
+          "shape": "scalar",
+          "unit": "1",
+          "initial": 0,
+          "scale": "1",
+          "semantics": {
+            "role": "plastic_multiplier",
+            "quantity": "Hill_plastic_multiplier_increment",
+            "transformation": "scalar_invariant"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "sx",
+          "expr": "dot(sigma, sym(1, 0, 0, 0, 0, 0))"
+        },
+        {
+          "name": "sy",
+          "expr": "dot(sigma, sym(0, 1, 0, 0, 0, 0))"
+        },
+        {
+          "name": "sz",
+          "expr": "dot(sigma, sym(0, 0, 1, 0, 0, 0))"
+        },
+        {
+          "name": "sxy",
+          "expr": "dot(sigma, sym(0, 0, 0, 1, 0, 0))"
+        },
+        {
+          "name": "syz",
+          "expr": "dot(sigma, sym(0, 0, 0, 0, 1, 0))"
+        },
+        {
+          "name": "sxz",
+          "expr": "dot(sigma, sym(0, 0, 0, 0, 0, 1))"
+        },
+        {
+          "name": "As",
+          "expr": "sym(Gh*(sx-sz)+Hh*(sx-sy), F*(sy-sz)+Hh*(sy-sx), F*(sz-sy)+Gh*(sz-sx), N*sxy, L*syz, M*sxz)"
+        },
+        {
+          "name": "q_squared",
+          "expr": "dot(sigma, As)"
+        },
+        {
+          "name": "yield_scaled",
+          "expr": "(q_squared - sigma_y**2) / (2 * sigma_y * p_ref)"
+        }
+      ],
+      "equations": {
+        "sigma": "sigma - sigma_n - K * trace(de) * I - 2 * Gmod * dev(de) + (2 * Gmod * gamma / sigma_y) * As",
+        "gamma": "sqrt(gamma**2 + yield_scaled**2) - gamma + yield_scaled"
+      },
+      "domain": [
+        "K > 0 * p_ref",
+        "Gmod > 0 * p_ref",
+        "sigma_y > 0 * p_ref",
+        "F > 0",
+        "Gh > 0",
+        "Hh > 0",
+        "L > 0",
+        "M > 0",
+        "N > 0"
+      ],
+      "initial_checks": [
+        "yield_scaled <= 1e-10"
+      ],
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "total"
+        },
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    }
+  ]
+}

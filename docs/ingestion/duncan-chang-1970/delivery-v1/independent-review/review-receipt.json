@@ -1,0 +1,106 @@
+{
+  "version": "duncan-chang-independent-source-gate-v1",
+  "date": "2026-11-01",
+  "reviewer_run": "/root/duncan_source_gate_review",
+  "implementation_acquisition_run": "/root",
+  "independence": "Separate agent run; did not author historical or coordinator source packet; output restricted to independent-review directory.",
+  "task": "REVIEW-duncan-chang-source-gate-v1",
+  "review_scope": "E1 source gate only; not E5 approval",
+  "disposition": "source_gate_blocked",
+  "blocking_findings": [
+    "Readable original1970 article missing",
+    "Erratum1971 contents missing"
+  ],
+  "source_complete": false,
+  "model_approval": false,
+  "reviewed_files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "af554aa5c12e4f3706efdf20399a283e7a09bda8be748b1f394b4d0c78c3709e"
+    },
+    {
+      "path": "docs/MODEL_DELIVERY_CHECKLIST.md",
+      "sha256": "3436962d01128c5edad02ecb2d3334483370ec6bce8d3f1eae54beb92125af77"
+    },
+    {
+      "path": "docs/AGENT_REVIEW_POLICY.md",
+      "sha256": "8d35ca57150889ff1630626e6f677e7f4124997a58e26f9ef8555f9ba7dd6798"
+    },
+    {
+      "path": "docs/ingestion/duncan-chang-1970/README.md",
+      "sha256": "6a391aee869abb868c6e436440fa44bc925b99a3142e2d03c460a6f60a80d65a"
+    },
+    {
+      "path": "docs/ingestion/duncan-chang-1970/source-audit.json",
+      "sha256": "8b71d15f47d9fb00835c9e31d36372c2f3668a98d1e6b74d86ecd48c505afb68"
+    },
+    {
+      "path": "docs/ingestion/duncan-chang-1970/schema-integration-ledger.json",
+      "sha256": "bebc949570d269a2bb53da77cf89cc7df25f6a0c99dfb79981467147b7e6e7a7"
+    },
+    {
+      "path": "docs/ingestion/duncan-chang-1970/delivery-v1/README.md",
+      "sha256": "b2f635def5da563e470ea8c88d31b6d41a50ce540db2d27143ce61e815950fde"
+    },
+    {
+      "path": "docs/ingestion/duncan-chang-1970/delivery-v1/source-receipts.json",
+      "sha256": "9fdc3994c3b203646f33b405557c386d47d7b23515b706d3396080bff36d22f6"
+    },
+    {
+      "path": "docs/ingestion/duncan-chang-1970/delivery-v1/input-pins.json",
+      "sha256": "3a28c952d204e2339e743810f0f83aa4f06e806449f34ca4cf575c2e8f4e13f5"
+    },
+    {
+      "path": "docs/ingestion/duncan-chang-1970/delivery-v1/downloads-screen.json",
+      "sha256": "e346376a40768514816fcf168e184c193f341eda7ce083ef72fa46f17a0252b5"
+    },
+    {
+      "path": "docs/ingestion/duncan-chang-1970/delivery-v1/check_receipts.py",
+      "sha256": "a4f7d5e1b81de4d67bb10e54ead67757acd2bb29a05d258514ba609bc2f984fa"
+    }
+  ],
+  "private_pdf_identity_checks": [
+    {
+      "path": ".local/private-sources/duncan-chang-1970/archive-37.pdf",
+      "sha256": "9848f5a8e2dce5646cef6fac123742676c1b7c9862a2493af9aa7ee8d43d9022",
+      "pages": 5,
+      "visual_locator": "PDF page4 / printed iv",
+      "result": "Discussion starts p702; contents only; no governing text",
+      "method": "pdfinfo, full pdftotext, pdftoppm page4, image inspection"
+    },
+    {
+      "path": ".local/private-sources/duncan-chang-1970/archive-39.pdf",
+      "sha256": "68805c12c25fd832f8b7c85e9b873c38355f39a2ed5567125663151b71e77289",
+      "pages": 5,
+      "visual_locator": "PDF page4 / printed iv",
+      "result": "Closure starts p495; contents only; no governing text",
+      "method": "pdfinfo, full pdftotext, pdftoppm page4, image inspection"
+    }
+  ],
+  "checks": [
+    {
+      "command": "python3 -B docs/ingestion/duncan-chang-1970/delivery-v1/check_receipts.py",
+      "result": "pass",
+      "checks": 11,
+      "missing_private": []
+    },
+    {
+      "command": "python3 -B -m unittest tests.test_ingestion_packets.IngestionPackets.test_duncan_chang_original_and_correction_remain_unverified -v",
+      "result": "pass",
+      "tests": 1
+    }
+  ],
+  "limitations": [
+    "No original equations visually inspected; no source equations inferred",
+    "No model/numerical/backend/browser evidence reviewed",
+    "Search bounded, not exhaustive"
+  ],
+  "new_lead": {
+    "url": "https://search.worldcat.org/title/nonlinear-analysis-of-stress-and-strain-in-soils/oclc/1157071665",
+    "status": "Bibliographic departmental eBook lead; readable bytes and journal equivalence unverified"
+  },
+  "report": {
+    "path": "docs/ingestion/duncan-chang-1970/delivery-v1/independent-review/README.md",
+    "sha256": "b7542acbaaf07c0d82f4e2f2ab5048297629c1bf9b885db0d14eb49fafdc25e0"
+  }
+}

@@ -1,0 +1,11 @@
+import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import {fileURLToPath} from 'node:url';
+import {createBoundedModule} from './wasm-bounded-v1/runner.mjs';
+const here=path.dirname(fileURLToPath(import.meta.url)),root=path.resolve(here,'../../../..'),hash=x=>crypto.createHash('sha256').update(x).digest('hex'),read=n=>JSON.parse(fs.readFileSync(path.join(here,n),'utf8'));
+const rawdir=path.join(root,'.local/lade-fused-linear-v1/wasm-performance'),module=createBoundedModule(path.join(root,'.local/lade-fused-linear-v1/wasm-build'),rawdir);
+const report={id:'lade-outer-predictor-wasm-fixed-performance-v1',timeout_seconds:120,passed:false,model_sha256:hash(fs.readFileSync(path.join(here,'model.json'))),reference_sha256:hash(fs.readFileSync(path.join(here,'triaxial-reference-results.json'))),policy_sha256:hash(fs.readFileSync(path.join(here,'triaxial-policy.json')))};
+try{
+ const output=module.ccall('atlas_run_scope_with_settings','string',['string','string','string','number','number','number','number','string'],[read('model.json').id,'101325,103,40,0.44,0.957,0.000255,1.32,2300,0.8,0','60000,60000,60000,0,0,0,13,0',1,.005,1600,0,'7.8125e-13,1e-06,45,20,200000,11,3.90625e-10,1']);
+ const result=JSON.parse(output),ref=read('triaxial-reference-results.json').cases.find(x=>x.set==='dense'&&x.reference.axial_strain===.005).reference,bounds=read('triaxial-policy.json').native_final_reference_bounds;
+ report.ok=result.ok;report.point_count=result.points?.length;if(result.ok&&result.points?.length===1601){const point=result.points.at(-1);report.errors={relative_axial_stress:Math.abs(point.state[0]-ref.axial_stress)/ref.axial_stress,absolute_radial_strain:Math.abs(point.strain[1]-ref.radial_strain),relative_work_using_1Pa_floor:Math.abs(point.state[7]-ref.wp)/Math.max(1,Math.abs(ref.wp))};report.passed=Object.entries(bounds).every(([k,v])=>Number.isFinite(report.errors[k])&&report.errors[k]<=v);}
+}catch(error){report.error=String(error);}
+const manifest=path.join(rawdir,'manifest.json');report.manifest={path:path.relative(root,manifest),sha256:hash(fs.readFileSync(manifest))};fs.writeFileSync(path.join(here,'wasm-performance-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));process.exitCode=report.passed?0:1;

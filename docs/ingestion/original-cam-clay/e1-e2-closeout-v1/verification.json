@@ -1,0 +1,130 @@
+{
+  "bindings": {
+    "docs/ingestion/original-cam-clay/control-selection-v1/CONTRACT.md": "d9bbb5f0b8c142e13687a3dbccf5e8576f825c2c96fb62a7f8479e58e177c38b",
+    "docs/ingestion/original-cam-clay/control-selection-v1/prospective.json": "45096773f26cda5fa2f0bb06b2b074faac235e4dc66d40c38dc35ae16af00d96",
+    "docs/ingestion/original-cam-clay/control-selection-v1/candidate-v03-v2.json": "36012205c441860b28c722d3177330f37d102a2028d5c3b3afce7786fd36b13a",
+    "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/README.md": "af8d7aa37e305666f3065ce1b2cf792b80f7d80807834b89078e82ac74a6c71a",
+    "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/check_constraints.py": "9f1f1e560f4e8ca3efde5b7c888915e3b503caec5e56bd91497df221b75f33d8",
+    "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/candidate-review-v2.md": "8d5ebdb98ef407b62185194563fe9291cc35ee8f43367fd2dfa9f58e196cc83b",
+    "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/execution-plan-v1/update-v2.md": "7a49c9b821e683c59d07300d2cb251afabc99393f4a8e0b921a0f9b88a13fe2a",
+    "docs/ingestion/original-cam-clay/execution-v1/freeze-manifest-v2.json": "8daee49320590c36b89b75be6a60e908c01a9e7ccf1a86aa5983e51d5f6f2360",
+    ".local/private-sources/original-cam-clay/schofield-wroth-electronic-transcription.pdf": "638e0ee7dc238ae8922b79983433be7d12ad30450098efe395968f7eeed13cb2",
+    "docs/ingestion/original-cam-clay/delivery-v1/independent-review/README.md": "c72108af04c219c90ad33f7220c28c2a151ece1f26546a1f6f61b065286b908d",
+    "docs/ingestion/original-cam-clay/delivery-review-v1/contract-review-report.md": "8b7c4d7a3ec61a6f3eee30333b3d6ba5b15cfbfc501075339454662b69206f2b"
+  },
+  "source_receipt_and_review_bindings": "pass",
+  "independent_decimal_cases": 400,
+  "candidate_load": "pass",
+  "candidate_generate": "pass",
+  "compiled_calls": 0,
+  "candidate_hash": "36012205c441860b28c722d3177330f37d102a2028d5c3b3afce7786fd36b13a",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "v"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "pref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "v",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 1.7389659628023817,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "specific_volume",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "parameters": {
+    "pref": {
+      "default": 1000.0,
+      "min": 1.0,
+      "max": 10000000000.0,
+      "unit": "Pa",
+      "label": "Pressure reference for Gamma; convert together"
+    },
+    "M": {
+      "default": 1.2,
+      "min": 0.001,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Critical-state stress ratio"
+    },
+    "lambda_c": {
+      "default": 0.2,
+      "min": 0.0001,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Specific-volume natural-log compression slope"
+    },
+    "kappa": {
+      "default": 0.04,
+      "min": 1e-05,
+      "max": 5.0,
+      "unit": "1",
+      "label": "Specific-volume natural-log recovery slope"
+    },
+    "Gamma": {
+      "default": 2.5,
+      "min": -100.0,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Critical specific volume intercept at pref"
+    }
+  }
+}

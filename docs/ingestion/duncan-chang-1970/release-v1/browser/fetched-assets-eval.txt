@@ -1,0 +1,46 @@
+### Result
+{
+  "url": "http://127.0.0.1:18767/#laboratory",
+  "assets": [
+    {
+      "path": "catalogue.json",
+      "status": 200,
+      "bytes": 62192,
+      "sha256": "ec1c82581ad3a7b0cc293a978cb4947ef50c8605936df259112cf9001348c6c5"
+    },
+    {
+      "path": "atlas-database.json",
+      "status": 200,
+      "bytes": 6326,
+      "sha256": "33cea74563fdcfe17f88e2c86d243f529c2b1e91243cf98bcef0fcc5a02214a7"
+    },
+    {
+      "path": "atlas.js",
+      "status": 200,
+      "bytes": 27569,
+      "sha256": "dc27946695d74a29ed8167dd55a9363945bf9af7b30f146dbd33f1805431c973"
+    },
+    {
+      "path": "atlas.wasm",
+      "status": 200,
+      "bytes": 1367538,
+      "sha256": "fd18646eca26a3034b531f244fe1f0d9c02eda736dd9ba620dc620784fff7cf0"
+    },
+    {
+      "path": "models.json",
+      "status": 200,
+      "bytes": 119161,
+      "sha256": "77e85070a62ada86d47af3890817f57d6ce0194e646a396dbf7ff75c75f9834a"
+    },
+    {
+      "path": "models/duncan-chang-1970-endpoint-average.json",
+      "status": 200,
+      "bytes": 6966,
+      "sha256": "452b49ef48668c0c5d8aba20dfca398235fa45431e853ee923be05a17c7c88a0"
+    }
+  ]
+}
+### Ran Playwright code
+```js
+await page.evaluate('async () => {const paths=["catalogue.json","atlas-database.json","atlas.js","atlas.wasm","models.json","models/duncan-chang-1970-endpoint-average.json"];const assets=[];for(const path of paths){const r=await fetch(path,{cache:"no-store"});const b=await r.arrayBuffer();assets.push({path,status:r.status,bytes:b.byteLength,sha256:Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",b)),v=>v.toString(16).padStart(2,"0")).join("")});}return {url:location.href,assets};}');
+```

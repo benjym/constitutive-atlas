@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-ramberg-osgood-delivery-v1/tools/build_web.py", line 108, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/atlas-ramberg-osgood-delivery-v1/tools/build_web.py", line 65, in main
+    bundle_database(dest)
+    ~~~~~~~~~~~~~~~^^^^^^
+  File "/private/tmp/atlas-ramberg-osgood-delivery-v1/tools/build_database.py", line 89, in bundle
+    export_database(database)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/private/tmp/atlas-ramberg-osgood-delivery-v1/atlas/research.py", line 173, in export_database
+    publications = load_publications()
+  File "/private/tmp/atlas-ramberg-osgood-delivery-v1/atlas/research.py", line 51, in load_publications
+    return validate_publications(json.loads((ROOT / 'catalogue/publications.json').read_text()))
+  File "/private/tmp/atlas-ramberg-osgood-delivery-v1/atlas/research.py", line 17, in validate_publications
+    check(graph, schema)
+    ~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-ramberg-osgood-delivery-v1/atlas/structure.py", line 32, in check
+    if key in properties:check(item,properties[key],path+'.'+key)
+                         ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-ramberg-osgood-delivery-v1/atlas/structure.py", line 37, in check
+    for i,item in enumerate(value):check(item,schema.get('items',{}),f'{path}[{i}]')
+                                   ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-ramberg-osgood-delivery-v1/atlas/structure.py", line 27, in check
+    if not set(schema.get('required',[]))<=value.keys():raise ValidationError(f'{path}: required fields missing')
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+atlas.dsl.ValidationError: $.publications[26]: required fields missing

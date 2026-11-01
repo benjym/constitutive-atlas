@@ -1,0 +1,9 @@
+# Preserved release assembly findings
+
+The initial isolated overlay omitted the Maxwell installer test, three registered protocol files, and direct Original Cam Clay review artifacts. The first artifact-copy attempt encountered a missing historical checklist donor and incorrectly placed older schema/power-creep artifacts at their live source paths. The frozen primary schema and both power-creep sources were restored exactly; later artifact copying uses accepted approval contexts and archives. These are assembly defects, not revised numerical references. The first completed953file reproduction retained two old power-creep metadata/UI mismatches; its FAIL report remains package-reproduction-v1.json.
+
+The initial34test projection exposed two existing NorSand profile assumptions and one missing Duncan family disclosure. The profile fixtures now use their existing path-header/strict approval checks, preserving additional negative cases; the existing catalogue gap gate remains unchanged. The scoped family metadata correction was independently reviewed and old bytes plus5receipt bindings/4maps preserved. Unit logs v1–v4 remain retained; v4 passes34tests.
+
+The first preservation apply preflight stopped on a planned new sidecar treated as an existing file, before any writes. The corrected preflight distinguishes absent originals;5checked_receipt postchecks pass. Initial localhost binding was denied by sandbox; explicitly escalated localhost preview succeeded. The draft public allowlist omitted required NorSand Wasm; corrected inventory explicitly includes its qualified hash and keeps historical compiled sandboxes/native binaries private.
+
+Final package v6 completed normally with all frozen source postchecks intact;951files match original953package and only catalogue.json/database-download metadata differ. No numerical tolerance, source equation, scientific approval or failure policy changed.

@@ -26,34 +26,76 @@ jobs:
       - run: python -m atlas.cli validate
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       - run: python tools/build_ci_targets.py build
+      - name: Qualify common scalar functions against independent references
+        shell: bash
+        run: |
+          cmake --build build --target atlas_scalar_probe --parallel 1
+          case "$RUNNER_OS" in
+            Linux) scalar_extension=so ;;
+            macOS) scalar_extension=dylib ;;
+          esac
+          python -B tools/test_scalar_functions.py "build/libatlas_scalar_probe.$scalar_extension" --output-dir "$RUNNER_TEMP/scalar-native"
       - name: Build and qualify the approved SLS physical-time model
         run: |
           cmake -S cmake/sls -B build-sls -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls --target atlas_sls_solver --parallel 1
           python tools/test_sls_native.py --solver build-sls/atlas_sls_solver --output "$RUNNER_TEMP/sls-native.json"
           node --test tests/test_sls_laboratory_contract.mjs tests/test_laboratory_controller_router.mjs
-      - name: Build and qualify Burgers physical-time schedules
+      - name: Build and qualify the approved orthotropic strain-increment model
         run: |
-          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
-          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
-          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
-          node --test tests/test_burgers_web_contract.mjs
+          cmake -S cmake/orthotropic -B build-orthotropic -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-orthotropic --target atlas_orthotropic_solver --parallel 1
+          python tools/test_orthotropic_native.py --solver build-orthotropic/atlas_orthotropic_solver --output "$RUNNER_TEMP/orthotropic-native"
+          node --test tests/test_orthotropic_contract.mjs
+      - name: Retain orthotropic native qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orthotropic-native-${{ matrix.os }}
+          path: ${{ runner.temp }}/orthotropic-native/
       - name: Build and qualify the approved J2 strain-increment model
         run: |
           cmake -S cmake/j2 -B build-j2 -DCMAKE_BUILD_TYPE=Release
           cmake --build build-j2 --target atlas_j2_solver --parallel 1
           python tools/test_j2_native.py --solver build-j2/atlas_j2_solver --output "$RUNNER_TEMP/j2-native"
           node --test tests/test_j2_contract.mjs tests/test_j2_main_routing.mjs
+      - name: Build and qualify Burgers physical-time schedules
+        run: |
+          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+          node --test tests/test_burgers_web_contract.mjs
+      - name: Qualify Ramberg–Osgood against independent scalar references
+        run: |
+          cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+          cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+          python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+      - name: Build and qualify Hill anisotropic plasticity
+        run: |
+          cmake -S cmake/hill -B build-hill -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-hill --target atlas_hill_solver --parallel 1
+          python tools/test_hill_native.py --solver build-hill/atlas_hill_solver --output "$RUNNER_TEMP/hill-native"
+          node --test tests/test_hill_contract.mjs
+      - name: Retain Hill native qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hill-native-${{ matrix.os }}
+          path: ${{ runner.temp }}/hill-native/
       - name: Native checks and full exact archival replay
         if: runner.os == 'macOS'
-        run: ctest --test-dir build --output-on-failure
+        run: |
+          ctest --test-dir build --output-on-failure -E "^atlas_recorded$"
+          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
         env:
-          ATLAS_NATIVE_FIXTURES: explicit-gis20-v2
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5
       - name: Linux native checks
         if: runner.os == 'Linux'
-        run: ctest --test-dir build --output-on-failure -E atlas_python
+        run: |
+          ctest --test-dir build --output-on-failure -E "^(atlas_python|atlas_recorded)$"
+          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
         env:
-          ATLAS_NATIVE_FIXTURES: explicit-gis20-v2
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5
       - name: Retain strict original native failures and reject unknown fixtures
         run: python tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
       - name: Linux portable Python suite
@@ -94,8 +136,16 @@ jobs:
           python tools/build_ci_targets.py build
           emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
           python tools/build_ci_targets.py build-wasm --wasm
+          cmake --build build-wasm --target atlas_scalar_probe --parallel 1
+          node tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"
+          python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
           node tools/test_experiments.mjs
           node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
+          cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+          cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+          python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+          node tools/check_ramberg_osgood_wasm.mjs build-wasm "$RUNNER_TEMP/ramberg-wasm.json" "$RUNNER_TEMP/ramberg-native.json"
+          python -B tools/check_ramberg_osgood.py --responses "$RUNNER_TEMP/ramberg-wasm.json" --output "$RUNNER_TEMP/ramberg-wasm-checks.json"
           node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
           node tools/test_loading.mjs
           node tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json
@@ -142,21 +192,46 @@ jobs:
           python tools/fetch_data.py --approved-only
           emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
           cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
           emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
-          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
-          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
-          python tools/build_web.py
+          python -B -m unittest tests.test_provision_maxwell_assets
+          python -B tools/provision_maxwell_assets.py
+          python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+          python -B tools/provision_implicit_path_assets.py
+          python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+          emcmake cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
+          node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
+          python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
+          emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
+          node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
+          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package
           node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
+          node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+      - name: Retain orthotropic Wasm qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orthotropic-wasm-macos
+          path: ${{ runner.temp }}/orthotropic-wasm-raw.json
+      - name: Retain Hill macos Wasm qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hill-wasm-macos
+          path: ${{ runner.temp }}/hill-wasm/
       - name: Configure GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/configure-pages@v6
@@ -189,8 +264,16 @@ jobs:
           emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-wasm --target atlas_solver --parallel 1
           cmake --build build-wasm --target atlas_power_creep_solver --parallel 1
+          cmake --build build-wasm --target atlas_scalar_probe --parallel 1
+          node tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"
+          python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
           node tools/test_experiments.mjs
           node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
+          cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+          cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+          python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+          node tools/check_ramberg_osgood_wasm.mjs build-wasm "$RUNNER_TEMP/ramberg-wasm.json" "$RUNNER_TEMP/ramberg-native.json"
+          python -B tools/check_ramberg_osgood.py --responses "$RUNNER_TEMP/ramberg-wasm.json" --output "$RUNNER_TEMP/ramberg-wasm-checks.json"
           node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
           node tools/test_loading.mjs
           node tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json
@@ -199,24 +282,102 @@ jobs:
           python tools/fetch_data.py --approved-only
           emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
           cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
           emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
-          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
-          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
-          python tools/build_web.py
+          python -B -m unittest tests.test_provision_maxwell_assets
+          python -B tools/provision_maxwell_assets.py
+          python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+          python -B tools/provision_implicit_path_assets.py
+          python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+          emcmake cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
+          node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
+          python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
+          emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
+          node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
+          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package
           node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
+          node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+      - name: Retain orthotropic Linux Wasm qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orthotropic-wasm-linux
+          path: ${{ runner.temp }}/orthotropic-wasm-raw.json
+      - name: Retain Hill linux Wasm qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hill-wasm-linux
+          path: ${{ runner.temp }}/hill-wasm/
+
+  controlled-path:
+    needs: [native, wasm, wasm-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+      - name: Check controlled-path contracts and existing formulation semantics
+        run: python -B -m unittest tests.test_controlled_path tests.test_formulation tests.test_state_contract -q
+      - name: Build and qualify native controlled paths
+        shell: bash
+        run: |
+          path_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"
+          cmake -S cmake/controlled-path -B build-path-native -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"
+          cmake --build build-path-native --target atlas_path_capability --parallel 1
+          mkdir -p path-results
+          python -B docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py build-path-native/libatlas_path_capability.so docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json
+          python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json
+      - name: Install the pinned Emscripten SDK
+        shell: bash
+        run: |
+          git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+          "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+      - name: Build Wasm and require both backends to pass the same frozen gates
+        shell: bash
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          path_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"
+          emcmake cmake -S cmake/controlled-path -B build-path-wasm -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"
+          cmake --build build-path-wasm --target atlas_path_capability --parallel 1
+          node docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs build-path-wasm/atlas_path_capability.mjs build-path-wasm/atlas_path_capability.wasm docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/wasm.json
+          python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json path-results/wasm.json
+      - name: Retain numerical outputs and generated model metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: controlled-path-qualification
+          path: |
+            path-results/
+            build-path-native/generated/
+            build-path-wasm/generated/
+            build-path-native/CMakeCache.txt
+            build-path-wasm/CMakeCache.txt
+            build-path-native/libatlas_path_capability.so
+            build-path-wasm/atlas_path_capability.mjs
+            build-path-wasm/atlas_path_capability.wasm
+
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: [native, wasm, wasm-linux]
+    needs: [native, wasm, wasm-linux, controlled-path]
     runs-on: ubuntu-latest
     permissions:
       pages: write

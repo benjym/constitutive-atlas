@@ -1,0 +1,11 @@
+import {readFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import createModule from './engine-path/engine.mjs';
+import {createPathEngine} from './path-engine.mjs';
+const read=async p=>readFile(new URL(p,import.meta.url)),json=async p=>JSON.parse(await read(p));
+const manifest=await json('./SHA256.json');
+for(const [name,hash]of Object.entries(manifest))assert.equal(createHash('sha256').update(await read('./'+name)).digest('hex'),hash,name);
+const saved=await json('./default-run.json'),module=await createModule({wasmBinary:await read('./engine-path/engine.wasm')}),engine=createPathEngine(module,await json('./engine-path/catalogue.json'));
+const result=engine.run(saved.model,saved.request);assert.deepEqual(result,saved.result);
+console.log(JSON.stringify({result:'PASS',model:saved.model,exact_browser_replay:true,points:result.points.length,endpoint:result.points.at(-1)},null,2));

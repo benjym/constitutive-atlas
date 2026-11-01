@@ -1,0 +1,91 @@
+{
+  "id": "lade1975-derivative-tail-runtime-policy-v1",
+  "model_sha256": "120b93f319543518b2b87221ab7457afaca2a1fb5de78af901276e8e89a22e63",
+  "numerics": {
+    "elasticity": "E at arithmetic mean of committed parent and endpoint stress; second-order elastic midpoint/first-order endpoint plastic split, source-consistent numerical choice, not source-prescribed algorithm",
+    "plasticity": "endpoint flow and local Eq19 unchanged",
+    "residual": "stress residual divided by dimensionless previous least pressure; same zero set; relative Newton control",
+    "path_control": "generic opt-in full vs two-half implicit solves; accept two halves; Mandel Frobenius stress defect divided by minimum positive least pressure over parent/full/half/two; other state errors use original static scales; no extrapolation/floor",
+    "legacy": "path tolerance zero preserves existing six-setting behavior",
+    "settings_layout": [
+      "residual_tolerance",
+      "rate_tolerance",
+      "max_iterations",
+      "max_depth",
+      "max_substeps",
+      "max_backtracks",
+      "increment_tolerance",
+      "positive_stress_metric"
+    ],
+    "default_study_settings": [
+      2e-10,
+      1e-06,
+      45,
+      20,
+      200000,
+      11,
+      1e-07,
+      1
+    ],
+    "preflight": "Opt-in requires incremental_residual; positive metric additionally requires first persistent6component sigma field with declared stress scope; rate route rejects",
+    "work_budget": "max_substeps counts accepted halves; before each attempted macrostep reserve3implicit solves, bounded by3*max_substeps. 120second per subprocess timeout is a hard study failure, not success/exemption."
+  },
+  "gates": {
+    "unchanged_triaxial": "Same24external cases and independent references/bounds/decreasing-plastic-stress criterion, with joint refinement of external steps and both inner numerical tolerances: residual=2e-10*(100/N)^2 and path=1e-7*(100/N)^2; same depth/work/iteration budgets. This is a stricter separately identified study, not a pass for failedv3fixed-tolerance refinement.",
+    "hydro_interior_fractions": [
+      0.5,
+      0.9,
+      0.99
+    ],
+    "interior_refinement_tolerances": [
+      1e-05,
+      1e-06,
+      1e-07
+    ],
+    "hydro_finest_pressure_relative_bounds": {
+      "0.5": 0.005,
+      "0.9": 0.05
+    },
+    "hydro_refinement": "all interior successes, decreasing pressure errors; report .99 error without retroactive acceptance tolerance",
+    "hydro_cross_fractions": [
+      1.0001,
+      1.001,
+      1.01,
+      1.25
+    ],
+    "cross_external_partitions": [
+      1,
+      4,
+      16,
+      64
+    ],
+    "cross_requirement": "both parameter sets; every path must reject before consuming full prescribed crossing strain; each failed call returns exact parent; ordinary valid recovery equals direct request",
+    "large_unload": "literal v2 [-2,-2,-2,0,0,0] must reject both sets and native/Wasm statuses/fullstates agree",
+    "tiny_pressure_Pa": [
+      1e-06,
+      1e-12,
+      1e-24
+    ],
+    "tiny_case": "hydro source-relative fractions .5 successful and1.25 reject; fullstate recovery/zero holds; finite/domain failures may not be reclassified as successful stagnation",
+    "proportional_3d": "anisotropic positive tensor with principal ratios[1.1,1,.9], rotated by nontrivial3D orthogonal Q; de proportional to tensor, constant f<bothft; analytic scalar source-pressure path and extinction; fractions .5(success with same .005 fine bound),1.001/1.25(reject), both parameter sets",
+    "lifecycle": "literal corrected38v2cases, same original covariance/history/hold/replay bounds; forcedfailure settings preserved with controller disabled as original sixsetting budget",
+    "parity": "all relevant native requests through same eight-setting Wasm API, statuses exact and fullstate scaled error<=1e-8",
+    "regression": "disabled controller must reproduce previous exact common-engine outputs for representative old model/cases; synthetic strict-positive-stress metric tests must reject nonpositive tensors and remain rotationally invariant",
+    "fixed_tolerance_triaxial_diagnostic": "Separately replay all24v4cases at fixed1e-7 path tolerance/2e-10residual. Require allsuccessful and allreferencebounds. Preserve/report fixed-tolerance trend including nonmonotonicity; it is not claimed as joint numerical refinement. Originalv3requiredtrend failure remains retained and is not rewritten.",
+    "performance": "Exact previously timed-out dense.005/N1600/joint-tolerance request must finish within unchanged120second subprocess limit before full study; full original24joint requests also required, including repeated hardcase. Preserve all timeouts.",
+    "derivative_tail": "Fullwidth/scoped exact primal/derivative checks, finite/rejection parity including inactive 0*infinity, model Jacobian/failed branch corpus and nested/exception/early-return scope restoration before material performance probe."
+  },
+  "limits": [
+    "hydro/proportional exact arithmetic one-sided lifetime proof does not establish all3D event guarantee",
+    "finite precision bounded by explicit residual qualification; source-boundary uncertainty/limits must reject and roll back",
+    "no new public approval, source/parameter claims, pressure floor, hydro-specific branch, shared runtime/schema/compiler mutation or remote action"
+  ],
+  "early_gates": {
+    "validation_generation": "must validate exact candidate and generate standalone normal engine",
+    "hydrostatic_endpoint_stress_relative_tolerance": 1e-08,
+    "algebraic_endpoint_state_scaled_residual_tolerance": 1e-09,
+    "zero_increment_state_max_scaled_absolute_error": 1e-12
+  },
+  "frozen_before_compiled_v4_observation": true,
+  "runtime_variant": "Warmstart plus generic opt-in repeated derivative tail: n state columns plus one identical inactive representative, splat remaining fixed38storage including nonfinite/signedzero. Fullfinite checks, actual source, history, resources, settings unchanged; default fullwidth elsewhere."
+}

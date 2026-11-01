@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-01",
+  "checks": [
+    {
+      "command": "python3 -B docs/ingestion/duncan-chang-1970/delivery-v1/check_receipts.py",
+      "result": "pass",
+      "verified_files": 11,
+      "missing_private": []
+    },
+    {
+      "command": "python3 -B -m unittest tests.test_ingestion_packets.IngestionPackets.test_duncan_chang_original_and_correction_remain_unverified -v",
+      "result": "pass",
+      "tests": 1
+    },
+    {
+      "command": "git diff --check -- IMPLEMENTATION_PLAN.md docs/ingestion/duncan-chang-1970",
+      "result": "pass"
+    },
+    {
+      "command": "git check-ignore .local/private-sources/duncan-chang-1970/archive-{37,39}.pdf",
+      "result": "both ignored"
+    },
+    {
+      "command": "Local Markdown links from ledger and source-gate README",
+      "result": "pass"
+    }
+  ],
+  "constitutive_checks": 0,
+  "builds": 0,
+  "compiled_calls": 0,
+  "source_complete": false
+}

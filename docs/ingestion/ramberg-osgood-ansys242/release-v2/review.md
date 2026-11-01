@@ -1,0 +1,13 @@
+# Independent review of Linux Python CI corrections
+
+Separate reviewer `/root/ramberg_review`,2026-11-02. Read retained failing Linux log, original tests, proposed test changes and new fifteen-model fixture. No network, native/Wasm build or compiled execution. No canonical approval record changed.
+
+**Accepted as strict-gate-preserving integration/test portability corrections.** Independently ran all nine tests in `tests.test_historical_generation` and `tests.test_ramberg_osgood`: PASS. Independently verified every new model/catalogue hash, all fourteen prior fixture entries preserved exactly, and all50 canonical scientific review artifacts unchanged.
+
+The historical-generation failure is a stale live-model coverage fixture: Ramberg is the fifteenth ordinary definition and second total-stress model. The replacement current-fifteen fixture pins all15 exact definitions and exact generated catalogue. Assertions still require equality with every live root JSON, exact model bytes, exact emitted catalogue objects and exact stress-scope membership/counts (2total/13effective). Original historical gates and fourteen-model fixture remain intact. This strengthens current coverage rather than excluding the new model or dropping equality assertions.
+
+The frozen-request failure is last-bit arithmetic drift in regenerating independent expected values between Python builtin summation versions. The test explicitly scopes `math.fsum` to the request module during regeneration and still compares the entire regenerated object for exact equality with the unchanged freeze. No tolerance is introduced, no data is loaded from the expected object into the generator, and model/oracle/production/frozen requests/numerical thresholds remain untouched. The patch exits its context normally and does not change other tests or actual compiled reference checking. This is an explicit arithmetic choice for reproducibility of the test generator, not a requalification of different reference values.
+
+Portability is to be confirmed by the next actual Linux CI run; local nine-test success alone does not establish that remote outcome. The command-line `--prepare` generator still uses its host builtin sum outside this scoped test, so a future freeze generation on another Python version should explicitly document summation/runtime or use the frozen corpus; this does not affect current CI which consumes the retained exact corpus. Original failing tests/logs are retained and must not be represented as an earlier pass.
+
+No weakening of scientific bounds or unresolved blocker in these proposed corrections. New CI/artifact/live qualification is still required for the new release commit.

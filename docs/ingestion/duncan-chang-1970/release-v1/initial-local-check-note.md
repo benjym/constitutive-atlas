@@ -1,0 +1,1 @@
+Initial isolated validation passed14models. The first unittest invocation failed with ModuleNotFoundError because the prospective overlay omitted the independently reviewed Maxwell installer test file. The subsequent guarded Maxwell restore passed. The missing test is added explicitly before rerunning; no test gate change.

@@ -1,0 +1,5 @@
+# Distinct current13 negative-fixture contract
+
+Freeze before checker edit. catalogue/native-fixture-contracts-thirteen-occ-v1.json binds exact13 model hashes and all four executable/profile cases. Exact exit/stdout/stderr for numerical and both unknown profiles; full-match recorded stderr requires knot1, trials1, axial0.0001, lateral0 and singular OCC last-committed message. Its reported residual must be finite and above1e-10, preserving failure rather than accepting convergence. Companion explicit recorded-v4 requires the existing exact all-state/strain rollback/point-count assertions for OCC and GIS, then all83cases/2472checks.
+
+Implement optional --fixture-contract only; default old checker preserved, closed four-case validation and exact model-set equality. CI explicitly selects new identity. Original failed output, old checker, old gates retained. This changes host expected first-failure identity caused by model ordering, not law, solver, tolerance, rollback or positive acceptance.

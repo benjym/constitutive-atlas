@@ -1,0 +1,19 @@
+# Physical solution constraints
+
+A v0.3 incremental residual model may declare `solution_constraints`, a nonempty array of Boolean DSL expressions. These describe admissible physical states separately from the mathematical domain in which residuals can be evaluated.
+
+```json
+"solution_constraints": ["principal_range_le(sigma,2*k)"]
+```
+
+Expressions may use material parameters, current persistent state fields and the identity tensor `I`. They must type-check as dimensionally consistent Booleans. Previous state, loading, increment, time, temporary solve unknowns and derived aliases are unavailable. Write the expression directly in terms of persistent fields and parameters. Rate laws and physical-time profiles currently reject this feature.
+
+`domain` continues to define residual evaluation, including raw double and automatic differentiation calls. `initial_checks` continues to describe declared preparation checks. Neither implicitly becomes a solution constraint. Model authors must identify each contract from the source and declare it explicitly.
+
+Python initialization and increment preparation reject inadmissible physical states. Generated C++ bindings validate state and parameter layouts, finiteness and parameter bounds before evaluating constraints. The solver checks its initial/reset state, converged state and final commit. Backtracking first prefers solution-admissible strict descent candidates, preserving successful feasible trajectories. If none exists, provisional candidates may leave the physical solution set while retaining domain, finiteness and strict descent checks. One domain-valid full Newton restart per solve permits departure from discontinuous branch boundaries when both descent scans stall; ordinary iteration limits still apply. Solution constraints and the unchanged residual tolerance both bind convergence. Failed integration preserves the incoming full state. Observation and generated initialization calls also enforce the constraint. Raw residual and Jacobian calls remain available wherever the residual domain permits them, even outside the physical solution set.
+
+This is an endpoint-constrained Newton policy. Iteration may pass outside the physical solution set wherever the residual domain permits; a converged root outside that set is rejected. The prior feasible-iterate policy prevented hydrostatic departure in stress/history laws; its exact bytes and evidence are retained in the [generic repair policy](reviews/newton-endpoint-constraints-v1/CONTRACT_V2.md). This change does not guarantee convergence or uniqueness. It does not project or repair states, relax constraints with a tolerance, change the integration budget, or supply an independent equation verification.
+
+Models without the feature retain their numerical route because their solution predicate is always true. For the existing nine-model catalogue, generated header and catalogue bytes are unchanged. A dependent callback adapter supports older generated model structs without a constraint member.
+
+The first compiled qualification is the private [Tresca v4 study](../catalogue/investigations/tresca-solution-constraints-v4/README.md). Passing its fixed numerical gates does not establish experimental validity or scientific admission. Laboratory controls and public activation require their own qualification.

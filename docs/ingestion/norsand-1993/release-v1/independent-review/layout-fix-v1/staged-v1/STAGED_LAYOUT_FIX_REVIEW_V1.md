@@ -1,0 +1,11 @@
+# Exact staged layout correction review V1
+
+Reviewer `/root/norsand_path_review`; task `FIX-norsand-e8-source-packet-layout-v1` independent review.
+
+Accept the exact staged 54-path correction against parent 0cd28fc2a18dea9a496795ad149a58afed809930 for the authorized publication attempt. The manifest binds 51 current index files and three removed original PNG paths. Every staged nondeleted blob and matching worktree file independently hashes correctly; the deleted paths are absent from both index and worktree. HEAD equals the stated base. Git detects three exact PNG renames, so the full added/deleted path set is reproduced with --no-renames. The normal `git diff --cached --raw -z` digest equals ec86f3805173779e75f849309ca1c8ca87fd7caa00d59f420185340e54f38e22.
+
+Scope is only the three screenshot removals with identical archival retention and relative aliases, required map/source pin closure, the already-qualified exact ZIP, pending-release ledger and board, and retained review/log/failure/test evidence. There are no workflow, compiler, runtime, model, schema, application, test, reference or numerical tolerance changes. The installed layout review already independently resolved ordinary, relative and custom locators, raw/clean log identities and the unchanged originally failing layout test. The stage preserves those accepted bytes.
+
+The complete whitespace check reports sixteen trailing-whitespace findings: eight in the retained immutable raw CI log and eight in its exact ANSI-stripped readable log. This limited finding is retained rather than reporting a clean diff check or trimming provenance. It does not alter executable source or acceptance policy. No other path has a whitespace finding. An initial truncated-output inspection understated the count; the complete check corrected it before this report was submitted or staged.
+
+The coordinator may add only this report, its binding and exact manifest copy as review evidence before committing the reviewed 54 paths. Any further delta requires comparison. No staging, commit, push, builds, compiled material calls, browser actions or remote polling were performed by this reviewer. Fresh terminal required CI, deployment, tested upload and actual live model qualification remain mandatory; the inherited baseline failure is not erased by this stage acceptance.

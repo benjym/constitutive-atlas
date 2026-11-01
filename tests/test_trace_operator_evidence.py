@@ -4,6 +4,9 @@ import importlib.util
 import json
 from pathlib import Path
 import unittest
+import tempfile
+import shutil
+from atlas.evidence import checked_receipt
 
 ROOT = Path(__file__).resolve().parents[1]
 STUDY = ROOT / "catalogue/investigations/tensor-trace-operator-v1"
@@ -14,7 +17,21 @@ spec.loader.exec_module(assessor)
 
 class TraceOperatorEvidence(unittest.TestCase):
     def test_complete_retained_evidence(self):
-        actual = assessor.assess()
+        # Reproduce the immutable study against its exact source context.
+        protocol = json.loads((STUDY / 'protocol.json').read_text())
+        with tempfile.TemporaryDirectory() as directory:
+            context = Path(directory)
+            for path, expected in protocol['inputs'].items():
+                source = checked_receipt(ROOT, (STUDY / 'protocol.json').relative_to(ROOT), path, expected)
+                target = context / path
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
+            prior_root = assessor.ROOT
+            try:
+                assessor.ROOT = context
+                actual = assessor.assess()
+            finally:
+                assessor.ROOT = prior_root
         self.assertTrue(actual["pass"], actual)
         self.assertEqual(actual, json.loads((STUDY / "assessment.json").read_text()))
 

@@ -1,0 +1,65 @@
+{
+  "identity": "occ-partial-rollback-v1",
+  "cases": [
+    {
+      "name": "accepted-prefix-then-fail",
+      "initial": [
+        99551.6445155611,
+        86245.94718171557,
+        86245.94718171557,
+        0.0,
+        0.0,
+        0.0,
+        1.7389659628023817
+      ],
+      "de": [
+        -0.999,
+        -0.999,
+        -0.999,
+        0,
+        0,
+        0
+      ],
+      "settings": "1e-11,1e-6,60,2,4,20",
+      "expected_ok": false,
+      "require_accepted_prefix": true
+    },
+    {
+      "name": "subsequent-recovery",
+      "initial": [
+        138.5833300342914,
+        133.71125983777335,
+        133.71125983777335,
+        0.0,
+        0.0,
+        0.0,
+        3.052
+      ],
+      "de": [
+        0.49966666666666665,
+        -0.25033333333333335,
+        -0.25033333333333335,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "expected": [
+        112.79522274557057,
+        38.22880977612352,
+        38.22880977612352,
+        0.0,
+        0.0,
+        0.0,
+        3.0550550550550555
+      ],
+      "settings": "1e-11,1e-6,60,0,1,20",
+      "expected_ok": true,
+      "require_accepted_prefix": false
+    }
+  ],
+  "policy": {
+    "exact_rollback": true,
+    "minimum_accepted_prefix_substeps": 1,
+    "recovery_relative_budget": 2e-10
+  }
+}

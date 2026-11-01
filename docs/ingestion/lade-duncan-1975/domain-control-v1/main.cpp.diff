@@ -1,0 +1,38 @@
+--- docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/candidate-v2/build-source-snapshot/main.cpp	2026-11-01 20:22:55
++++ .local/lade-domain-control-v1/native-source/main.cpp	2026-11-01 20:36:15
+@@ -58,10 +58,14 @@
+ atlas::State state_for(int m,const char*s){auto z=parse_csv(s);if(z.empty()){if(atlas::explicit_initialization_required(m))throw std::runtime_error("v0.3 requires explicit state; initial literals are examples only");z=atlas::initial_state(m);}if(z.size()!=atlas::initial_state(m).size())throw std::runtime_error("state length invalid");return z;}
+ atlas::IntegrationSettings settings_for(const char* csv){
+     atlas::IntegrationSettings s;auto v=parse_csv(csv);if(v.empty())return s;
+-    if(v.size()!=6)throw std::runtime_error("six integration settings required");
++    if(v.size()!=6&&v.size()!=8)throw std::runtime_error("six legacy or eight path-control integration settings required");
+     for(int i=2;i<6;++i)if(v[i]!=std::floor(v[i])||v[i]<0||v[i]>1000000)throw std::runtime_error("invalid integer integration setting");
+     s.residual_tolerance=v[0];s.rate_tolerance=v[1];s.max_iterations=int(v[2]);
+     s.max_depth=int(v[3]);s.max_substeps=int(v[4]);s.max_backtracks=int(v[5]);
++    if(v.size()==8){
++        if(v[7]!=0.&&v[7]!=1.)throw std::runtime_error("positive stress metric must be zero or one");
++        s.increment_tolerance=v[6];s.positive_stress_metric=v[7]==1.;
++    }
+     if(!atlas::valid_settings(s))throw std::runtime_error("invalid integration settings");return s;
+ }
+ void require_incremental_stress_contract(int model,bool scope_aware,const std::string& kind="laboratory"){
+@@ -84,7 +88,9 @@
+ void write_settings(std::ostream& o,const atlas::IntegrationSettings& s){
+     o<<"{\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":"<<s.residual_tolerance
+       <<",\"rate_tolerance\":"<<s.rate_tolerance<<",\"max_iterations\":"<<s.max_iterations<<",\"max_depth\":"<<s.max_depth
+-      <<",\"max_substeps\":"<<s.max_substeps<<",\"max_backtracks\":"<<s.max_backtracks<<'}';
++      <<",\"max_substeps\":"<<s.max_substeps<<",\"max_backtracks\":"<<s.max_backtracks;
++    if(s.increment_tolerance>0.)o<<",\"path_control_version\":\"implicit-step-doubling-0.1\",\"increment_tolerance\":"<<s.increment_tolerance<<",\"positive_stress_metric\":"<<(s.positive_stress_metric?"true":"false")<<",\"max_reserved_path_trials\":"<<3*s.max_substeps;
++    o<<'}';
+ }
+ }
+ 
+@@ -131,7 +137,7 @@
+ }
+ static const char* integrate_response(const char*id,const char*parameters,const char*initial,const char*strain,const char*settings_csv){
+     try{int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial),d=parse_csv(strain);if(d.size()!=6)throw std::runtime_error("six Mandel strain components required");auto settings=settings_for(settings_csv);auto result=atlas::integrate(m,z,atlas::tensor_from(d,0),p,settings);
+-        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"message\":"<<quote(result.message)<<",\"state\":";array(o,result.state);o<<",\"diagnostics\":{\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"rejected\":"<<result.diagnostics.rejected<<",\"increment_fractions\":";array(o,result.diagnostics.increment_fractions);o<<'}';
++        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"message\":"<<quote(result.message)<<",\"state\":";array(o,result.state);o<<",\"diagnostics\":{\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"rejected\":"<<result.diagnostics.rejected<<",\"increment_fractions\":";array(o,result.diagnostics.increment_fractions);if(settings.increment_tolerance>0.)o<<",\"reserved_path_trials\":"<<result.diagnostics.reserved_path_trials;o<<'}';
+         if(settings_csv){o<<",\"integration_settings\":";write_settings(o,result.settings);
+             o<<",\"catalogue_hash\":"<<quote(atlas::catalogue_hash())<<",\"model\":"<<quote(id)<<",\"parameters\":";array(o,p);
+             o<<",\"initial\":";array(o,z);o<<",\"strain\":";array(o,d);}

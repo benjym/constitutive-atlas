@@ -1,0 +1,22 @@
+{
+  "base_revision": "8718467f915c5f7c2aa87a7cef0903f493fde2d5",
+  "source_freeze": "source-freeze-v2.json",
+  "artifacts": {
+    "/private/tmp/atlas-hill-native-v2/atlas_hill_solver": "5f27fd6457f6b479819b54836a3ad46bcbfa90b87e51d5db51e696b258b5f90e",
+    "/private/tmp/atlas-hill-wasm-v1/hill.js": "3a81d8b043389fff74e0d111260d5d4cbff4263b12e02f82d2254e2507187ece",
+    "/private/tmp/atlas-hill-wasm-v1/hill.wasm": "21c04806ed9eae2b196c37fdfea4ef1d55d778ec717d960027340271ad592046",
+    "/private/tmp/atlas-hill-wasm-v1/generated/models.json": "d3f34a82f3735678adc2d082782d50a0571a919864ce71beedcb16f09c7b4186"
+  },
+  "commands": [
+    "cmake -S /private/tmp/atlas-hill-delivery-v1/cmake/hill -B /private/tmp/atlas-hill-native-v2 -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build /private/tmp/atlas-hill-native-v2 --target atlas_hill_solver --parallel 1",
+    "emcmake cmake -S /private/tmp/atlas-hill-delivery-v1/cmake/hill -B /private/tmp/atlas-hill-wasm-v1 -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build /private/tmp/atlas-hill-wasm-v1 --target atlas_hill_solver --parallel 1"
+  ],
+  "toolchain": {
+    "cmake": "cmake version 4.4.3",
+    "clang": "Apple clang version 21.0.0 (clang-2100.4.1.1)",
+    "emscripten": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.8-git"
+  },
+  "retained_failure": "First Wasm link sandbox cache-lock denied; identical serial target completed with approved cache access."
+}

@@ -93,7 +93,7 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
         return invalid("first recorded targets do not match supplied initial state and strain; preparation is explicit");
     RecordedPoint origin;origin.coordinate=path.knots[0].coordinate;origin.state=initial;origin.strain=path.initial_strain;
     origin.control_error=error(first);result.points.push_back(origin);
-    auto account=[&](const Advance& a){result.attempted_substeps+=a.diagnostics.substeps;};
+    auto account=[&](const Advance& a){result.attempted_substeps+=a.diagnostics.attempted_substeps;};
     auto material=[&](const State& parent,const Sym<double>& increment,Advance& trial){
         if(result.material_trials>=settings.max_material_trials)return false;
         ++result.material_trials;trial=integrate(model,parent,increment,parameters,settings.material);account(trial);return trial.ok;

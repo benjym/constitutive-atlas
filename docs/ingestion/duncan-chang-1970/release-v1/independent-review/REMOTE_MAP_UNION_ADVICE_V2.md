@@ -1,0 +1,9 @@
+# Remote 9cefd1a6 map-union advice
+
+Prospectively compatible, pending exact union/preservation-plan review. Independently inspected the 13-file delta from 7c23ef80 to 9cefd1a654f6e0f587edd6aac2c3828bd29e9a16: only provenance maps, archives and CI-helper repair evidence. No workflow, catalogue, test, runtime or numerical gate changes. All common document pins and common path/hash entries of the three overlapping maps agree.
+
+The union must retain both the remote CI-helper archive mappings and local original-manifest/workflow/test/map archives. Preserve exact local and remote versions of each changed map canonically before writing a union. Preserve reverse references to each version, including the remote FINAL_REPAIR and independent review receipt, without recomputing their expected source hashes or changing original document bytes. Map union alone would change those exact review-bound source identities. The source freeze remains bound to its original map bytes; a distinct additive receipt describes union installation.
+
+The actual-package-v2 union has three entries: existing Tresca, remote old CI helper, and local old manifest. The release-parent map must retain the remote two initial-map archive entries, all local archive mappings and all 25 remote document pins. No shared pin or entry conflict was found. Any unexpected conflict must block application rather than be resolved by replacement.
+
+Fast-forwarding to the remote base before reapplying only the reviewed additive delta preserves concurrent work. Retain prior browser/package observations as fixed artifacts; source-only map changes require an explicit provenance addendum, not a new numerical qualification. No final staging/CI/Pages/live E8 acceptance is made here. No builds, compiled calls or browser control were performed.

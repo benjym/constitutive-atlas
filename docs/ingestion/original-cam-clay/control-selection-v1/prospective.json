@@ -1,0 +1,14 @@
+{
+  "identity": "occ-control-selection-v1-python-policy",
+  "date": "2026-11-01",
+  "scope": "source/finite-equation design checks before production candidate or compiled observations",
+  "source_hash": "638e0ee7dc238ae8922b79983433be7d12ad30450098efe395968f7eeed13cb2",
+  "physical_residual_relative_budget": 2e-10,
+  "rotation_relative_budget": 2e-10,
+  "reference_pressure_relative_budget": 2e-10,
+  "zero_hold": "exact full incoming state",
+  "tiny_strain_witness": {"strict_interior_pc_over_p": 2, "mandel_xy": 1e-200, "expected": "nonzero finite yield-level shear; never silent hold"},
+  "undrained_reference": {"start_distortion": 0.002, "end_distortion": 0.03, "steps": [32, 64, 128, 256], "minimum_adjacent_error_improvement": 1.8, "finest_scaled_error_budget": 0.003},
+  "required_branches": ["interior hold", "elastic bulk recovery", "zero-distortion deviator projection", "positive and negative smooth", "isotropic corner", "mixed-strain corner", "critical undrained", "dry-side dilation/softening", "reversal", "tiny shear jump", "rotation", "reference-pressure conversion", "invalid volume rejection"],
+  "not_claimed": ["native/Wasm qualification", "all-binary64 accuracy", "stress-controller success", "agent model approval", "experimental validation"]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "lade1975-algebra-policy-v2",
+  "frozen_before_results": true,
+  "scope": "Source algebra only; not candidate/backend qualification",
+  "cases": [
+    "positive diagonal triaxial stress (6,2,2)",
+    "full symmetric positive-confined stress (10,7,5,xy1,yz1/2,zx-1/4)",
+    "isotropic (3,3,3)",
+    "both Table1 parameter sets"
+  ],
+  "g_derivative": "exact rational cubic central interpolation Richardson cancellation; fixed kappa2",
+  "exact_checks": [
+    "all6 engineering gradient components",
+    "Euler stress dot gradient =3g",
+    "Eq11 inversion",
+    "fixed-a Eq16 derivative matches Eq19",
+    "hydrostatic f27 and zero potential gradient at kappa2=27",
+    "Table1 pre-failure denominator positive"
+  ],
+  "float_checks": {
+    "Mandel_vs_engineering_work_relative_tolerance": 1e-14
+  },
+  "failure_policy": "retain failing report; revise checker/study with new identity if defective; never relax gates after failure"
+}

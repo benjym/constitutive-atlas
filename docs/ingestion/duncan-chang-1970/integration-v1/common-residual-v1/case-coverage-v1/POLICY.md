@@ -1,0 +1,3 @@
+# Complete request coverage diagnostic
+
+Execute every unchanged original browser-wire request with unchanged original recursive comparison predicates/tolerances and same native/Wasm standard artifacts. Catch comparison assertion only to retain per-case failure and continue later requests. Keep all other schema, success, replay, direct same-backend and recovery assertions unchanged. Final status and process exit fail if any comparison failed. This is an additive coverage diagnostic, not replacement or waiver of the original aborting gate, and cannot establish E6/E7 acceptance. No build/shared source/gate changes.
