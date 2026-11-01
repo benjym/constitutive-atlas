@@ -25,3 +25,13 @@ test('missing local asset is rejected',()=>fixture(({dir,put})=>{put('index.html
 test('root-relative link breaks Pages project prefix and is rejected',()=>fixture(({dir,put})=>{put('index.html','<script src="/atlas.js"></script>');assert.throws(()=>validatePackage(dir),/escapes project prefix/);}));
 
 test('legacy v0.1 model resolves its original schema filename',()=>fixture(({dir,put,meta,model})=>{model.schema_version='0.1';put('models.json',meta);put('models/example.json',model);put('schemas/model.schema.json','{}');assert.equal(validatePackage(dir).models.length,1);}));
+
+test('declared public timed page and route module are required',()=>fixture(({dir,put,catalogue})=>{
+ catalogue.models.push({id:'timed-example',executable:false,public_timed_laboratory:true,timed_laboratory:'timed-example.html'});put('catalogue.json',catalogue);
+ assert.throws(()=>validatePackage(dir),/Missing public timed laboratory/);put('timed-example.html','');
+ assert.throws(()=>validatePackage(dir),/Missing timed route module/);put('timed-route.mjs','');assert.equal(validatePackage(dir).models.length,1);
+}));
+test('unsafe public timed routes fail closed',()=>fixture(({dir,put,catalogue})=>{
+ const entry={id:'timed-example',executable:false,public_timed_laboratory:true};catalogue.models.push(entry);
+ for(const route of ['../escape.html','/escape.html','https://example.org/page.html','index.html?x=1','page.html#x','page%2ehtml','']){entry.timed_laboratory=route;put('catalogue.json',catalogue);assert.throws(()=>validatePackage(dir),/Unsafe public timed route/);}
+}));

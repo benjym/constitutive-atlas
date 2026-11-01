@@ -1,3 +1,4 @@
+import {timedLaboratoryRoute} from './timed-route.mjs';
 import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';
 import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
 import {formulationSection} from './formulation-view.mjs';
@@ -303,7 +304,7 @@ function renderCharts(){
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec;if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
+  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry);if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
     const heading=element('h2'),open=element('a',entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
@@ -315,13 +316,14 @@ function catalogueCards(){
   if(!count)grid.append(element('p','No matching models. Try another name or availability.','catalogue-empty'));
 }
 function showCatalogueModel(entry,spec){
+  const timedRoute=timedLaboratoryRoute(entry);
   const dialog=$('catalogue-dialog'),body=$('catalogue-detail-body');body.replaceChildren();
   $('catalogue-detail-title').textContent=entry.name;$('catalogue-detail-family').textContent=entry.family;
-  $('catalogue-detail-status').textContent=spec?'Available to test · '+spec.status:'Research candidate';
-  $('catalogue-detail-status').className='catalogue-availability'+(spec?' available':'');
+  $('catalogue-detail-status').textContent=spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
+  $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute?' available':'');
   body.append(element('p',entry.note||spec?.description||'Bibliographic and formulation review pending.','catalogue-detail-note'));
   body.append(formulationSection(document,spec));
-  if(!spec){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
+  if(!spec&&!timedRoute){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);
   if(sources.length){
@@ -337,7 +339,7 @@ function showCatalogueModel(entry,spec){
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
   $('catalogue-detail-id').textContent=entry.id;
   $('catalogue-permalink').href=catalogueModelHash(entry.id);
-  const explore=$('catalogue-explore');explore.hidden=!spec;explore.onclick=()=>{dialog.close();$('model').value=entry.id;populate();location.hash='laboratory';simulate();$('model').focus({preventScroll:true});};
+  const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();$('model').value=entry.id;populate();location.hash='laboratory';simulate();$('model').focus({preventScroll:true});};
   if(!dialog.open)dialog.showModal();body.scrollTop=0;
 }
 function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}

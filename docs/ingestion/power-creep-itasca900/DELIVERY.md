@@ -25,7 +25,7 @@ This ledger records current evidence without rewriting historical stage receipts
 
 ## Current handoff
 
-E0–E7 complete within exact both-active scope. Parent owns final scoped commit/push, terminal workflow and exact upload/live comparison. Independent delivery review accepted the final interface8d54d550; no constitutive changes. See [closure evidence](delivery-v2/README.md). E8 remains open until actual live success.
+E0–E7 complete within exact both-active scope. E7 was reopened and corrected in separately reviewed builder-route-v3: the actual uploaded 51a9ef72 package omitted power-creep after concurrent standard-builder retirement f51113bd; earlier working-copy builder checks do not establish committed integration. The isolated corrected standard build, mandatory package/analytical gates and actual catalogue-to-laboratory browser run now pass. See delivery-v2/builder-route-v3/README.md. Parent owns final scoped commit/push, terminal workflow and exact upload/live comparison. Independent delivery review accepted the final interface8d54d550; no constitutive changes. See [closure evidence](delivery-v2/README.md). E8 remains open until actual live success.
 
 ## Evidence index
 

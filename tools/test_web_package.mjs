@@ -24,6 +24,12 @@ export function validatePackage(directory){
    assert.ok(url.hostname,'Source URL has no host');
   }
  }
+ for(const entry of catalogue.models){
+  if(entry.public_timed_laboratory!==true)continue;
+  assert.match(entry.timed_laboratory||'',/^[a-z0-9][a-z0-9-]*\.html$/,'Unsafe public timed route');
+  assert.ok(existsSync(join(directory,entry.timed_laboratory)),'Missing public timed laboratory: '+entry.id);
+  assert.ok(existsSync(join(directory,'timed-route.mjs')),'Missing timed route module');
+ }
  const base=new URL('https://example.invalid/constitutive-atlas/');
  for(const file of ['index.html']){
   const html=readFileSync(join(directory,file),'utf8');
