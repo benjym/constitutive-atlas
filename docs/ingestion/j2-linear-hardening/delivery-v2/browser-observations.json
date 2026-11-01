@@ -1,0 +1,99 @@
+{
+  "observed_utc": "2026-11-01T09:33:12.656297+00:00",
+  "interface_freeze": "interface-freeze-r3.json",
+  "browser_freeze": "browser-execution-freeze.json",
+  "browser": "Actual ChatGPT IAB, project-prefix loopback HTTP server; mounted UI actions via CUA",
+  "site": "/private/tmp/atlas-j2-main-v2/site-r3",
+  "url": "http://127.0.0.1:54051/constitutive-atlas/index.html#laboratory?model=j2-linear-isotropic-hardening-be",
+  "identity": {
+    "model": "j2-linear-isotropic-hardening-be",
+    "model_sha256": "a28068cbb8cfc660e49eb648d6ce7fcbf993ea50b45e8eb0d325c6b75f4ffc3b",
+    "catalogue_hash": "2ce7ce9c486598a15c04c65600478bfb1fba227d442538d4aa3fc99076d15084",
+    "catalogue_sha256": "cc7b89de1f9966ef58260c545c36b2681cf3ebbe8c288341201edbecad8b45ba",
+    "module_sha256": "e0a74ad032d716cc747be51a544f82e085be12f3ad707b3e6de3924f3834c3c2",
+    "wasm_sha256": "a100f0b70a0eab42de8cbec0b94ac57a1615e2548c293b22070d585fc32791e9",
+    "approval_sha256": "7e2838bf5a9ca4f14a47836d0502227417d09454b714dce8ae26f5148416b43d",
+    "review_sha256": "949eefe828ae1e8a6b6830517a8f97087af60134d6402a2de313464f80256d33"
+  },
+  "checks": [
+    {
+      "id": "direct-route-preset",
+      "result": "PASS",
+      "observation": "Selected J2, Completed 3 increment rows; full 8-component history matches unchanged frozen preset. First alpha/gamma 1/775, reversal elastic and hold preserves alpha while gamma=0."
+    },
+    {
+      "id": "failed-prefix-reset",
+      "result": "PASS",
+      "observation": "Plastic row followed by 1e300 overflow fails row 2 and retains row 1 accepted state; reset recovers named preset."
+    },
+    {
+      "id": "custom-all-six",
+      "result": "PASS",
+      "reference": "custom-elastic-ui-reference.json",
+      "observation": "All six custom increment components, H=0 and initial alpha .002 give [3000,0,0,400,-200,600,.002,0] on loaded and hold rows. Selected sqrt(2)xz plot."
+    },
+    {
+      "id": "invalid-input",
+      "result": "PASS",
+      "observation": "Malformed six-component row clears summaries, plots/table and disables export; reset recovers."
+    },
+    {
+      "id": "ordinary-roundtrip",
+      "result": "PASS",
+      "observation": "Linear elasticity ordinary controls and 100-step run work; J2 selection restores scoped controls/results."
+    },
+    {
+      "id": "actual-identity-retry",
+      "result": "PASS",
+      "observation": "Server synthetic fixture changes only self-consistent models.json/identity catalogue SHA, actual atlas_describe detects mismatch. Error Loaded engine identity mismatch; export disabled. Restore real metadata and deselect/reselect in SAME page retries full engine initialization, completes 3 rows."
+    },
+    {
+      "id": "late-j2-initialization",
+      "result": "PASS",
+      "observation": "20-second identity.json delay; select ordinary before delayed J2 completes. After delayed fetch/compilation ordinary selected/header/result/export state unchanged and J2 hidden. Reselect J2 passes."
+    },
+    {
+      "id": "late-ordinary-worker",
+      "result": "PASS",
+      "observation": "20-second worker.js HTTP delay: reload ordinary then select J2 immediately. J2 completes 3 rows before worker fetch completion; remains selected, visible and Completed 3 after >20 sec. Server log retained."
+    },
+    {
+      "id": "rapid-run-selection",
+      "result": "bounded-observation",
+      "observation": "200-row zero J2 run followed by ordinary selection shows ordinary/J2 hidden. No instrumented proof run was still pending; reviewer deterministic deferred run witness separately covers late success/rejection."
+    },
+    {
+      "id": "catalogue",
+      "result": "PASS",
+      "observation": "Available-to-test card, accepted nine-decision law review exact hash and bounded approval visible; Test this model opens canonical main-laboratory J2 route, preset completes."
+    },
+    {
+      "id": "actual-import",
+      "result": "PASS",
+      "observation": "Actual mounted file chooser imports delivery-v1/browser-export-before-loader-fix.json and replays full 3-row preset. Wrong guessed Export JSON locator timed out before action; corrected actual Export request & result control produces new browser-export.json."
+    },
+    {
+      "id": "actual-export",
+      "result": "PASS",
+      "file": "browser-export.json",
+      "sha256": "496f9ed22928ee4b1004729bc5e5d9cd151cc1b53c1b57263702c59be9afe94c",
+      "observation": "Actual UI download. Exact identity matches all package fields, 3 wire calls, all 4 complete states. Independent closed-form preset alpha checked on saved JSON."
+    },
+    {
+      "id": "visual",
+      "result": "PASS",
+      "observation": "Screenshot inspected at normal 1280x720 viewport. Main nav and scoped controls/table/source links visible. Complete state table scrolls horizontally. No overlapping controls."
+    },
+    {
+      "id": "console",
+      "result": "PASS",
+      "observation": "Captured browser error/warning log empty after standard preset/catalogue/import flow; deliberate invalid-input/identity rejection reported in UI."
+    }
+  ],
+  "not_claimed": [
+    "No new scientific approval or experimental validation",
+    "No claim entire model parameter domain qualified",
+    "No browser timing claim from uninstrumented 200-row run",
+    "No live deployment claim yet"
+  ]
+}

@@ -1,0 +1,35 @@
+[ 33%] Generating generated/models.hpp, generated/models.json
+[ 33%] Built target atlas_j2_models
+[ 66%] Building CXX object CMakeFiles/atlas_j2_solver.dir/private/tmp/atlas-j2-delivery-v1/source/cpp/main.cpp.o
+[100%] Linking CXX executable j2.js
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/em++.py", line 13, in <module>
+    sys.exit(emcc.main(sys.argv))
+             ~~~~~~~~~^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/emcc.py", line 377, in main
+    return link.run(linker_args)
+           ~~~~~~~~^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/link.py", line 3171, in run
+    js_info = get_js_sym_info()
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/link.py", line 244, in get_js_sym_info
+    file_content = emscripten.get_cached_file('symbol_lists', f'{content_hash}.json', generate_json, cache_limit=500)
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/emscripten.py", line 317, in get_cached_file
+    with filelock.FileLock(cache_file + '.lock'):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/filelock.py", line 330, in __enter__
+    self.acquire()
+    ~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/filelock.py", line 278, in acquire
+    self._acquire()
+    ~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/filelock.py", line 391, in _acquire
+    fd = os.open(self._lock_file, open_mode)
+PermissionError: [Errno 1] Operation not permitted: '/opt/homebrew/Cellar/emscripten/6.0.8/libexec/cache/symbol_lists/b0847ac9c15fc1a11b3e8887078210bf4896533c.json.lock'
+make[3]: *** [j2.js] Error 1
+make[2]: *** [CMakeFiles/atlas_j2_solver.dir/all] Error 2
+make[1]: *** [CMakeFiles/atlas_j2_solver.dir/rule] Error 2
+make: *** [atlas_j2_solver] Error 2

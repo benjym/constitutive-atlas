@@ -720,3 +720,7 @@ The [DP packet](ingestion/drucker-prager/README.md) reconciles source parameter/
 ## DP dilatancy-domain correction — 2026-11-01
 
 The [native study](../catalogue/investigations/dp-dilatancy-domain-v1/README.md) adds only Md<=M, preserving valid equations/defaults and exact prior definition with27historical receipt bindings. All83prospectively frozen cases and two native regression groups pass. The initial incomplete-source configuration failure is retained; the completed source closure builds one serial target normally.9archive units pass; broader sibling-binding failures are19before/15after/0new. Native numerical evidence v3 and pending review v4 bind the new guard; old failed/passed reports remain historical. Wasm/browser packaging and scientific admission remain open; no deployment.
+
+### J2 main laboratory delivery — 2026-11-01
+
+The exact approved J2 linear isotropic hardening law now has a qualified main-laboratory interface: all six prescribed strain increments, full eight-component state, plots, export/import replay, failure-prefix recovery and exact engine/approval verification. The unchanged327-call package gate and actual mounted-browser checks pass; independent interface review and final integration addendum are accepted separately from unchanged scientific approval. Retired standalone J2 HTML is not restored. Release/CI/live E8 remains open in [the J2 delivery ledger](ingestion/j2-linear-hardening/DELIVERY.md).

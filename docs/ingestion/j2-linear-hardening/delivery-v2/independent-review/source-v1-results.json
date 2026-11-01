@@ -1,0 +1,72 @@
+{
+  "status": "changes requested before final qualification",
+  "frozen_source_files": 11,
+  "reused_engine_hashes": 6,
+  "reviewer_compiled_calls": 0,
+  "pure_proposal_assertions": 56,
+  "pure_contract_assertions": 51,
+  "findings": [
+    {
+      "id": "J2-MAIN-001",
+      "severity": "blocking fail-closed initialization lifecycle defect",
+      "detail": "Shared engine assigned before descriptor validation. Rejected engine survives initialization catch; ensureEngine subsequent call bypasses failed descriptor check.",
+      "fix": "Publish local candidate engine only after descriptor validation; test descriptor mismatch then retry."
+    },
+    {
+      "id": "J2-MAIN-002",
+      "severity": "required orchestration evidence pending",
+      "detail": "56 assertions do not exercise successful pending init, delayed path solve, stale root worker or actual main-root routing; retain prospective gates."
+    },
+    {
+      "id": "J2-MAIN-003",
+      "severity": "minor stale error notification",
+      "detail": "Ordinary importRun catch toasts read error even after request sequence changed or J2 activated; success continuation is guarded."
+    }
+  ],
+  "source_receipts": [
+    {
+      "path": "web/j2-laboratory.mjs",
+      "sha256": "0758876fd7648682943f6fac332cddafe0e0c3e2515c95019a0eef31d609dfce"
+    },
+    {
+      "path": "web/j2-contract.mjs",
+      "sha256": "7c9dbbad87008f571f7f73ae33fd5c7b5d37316cd8bc0986f26de94b23d2969f"
+    },
+    {
+      "path": "web/app.js",
+      "sha256": "7d25bdbfe099786b8c8a434c15d1fb2be0f2fd89407cdc5f35e305e3d5528cfa"
+    },
+    {
+      "path": "tools/build_j2_laboratory.py",
+      "sha256": "56acf518cf18a6153f769882abb24205447bfb6c809531d0e2ec76561590e380"
+    },
+    {
+      "path": "tools/build_j2_web.py",
+      "sha256": "ebf640bb785928d1d1e5b6bf05790b3e15b626374a26ecb99691200c145c4cb6"
+    },
+    {
+      "path": "tools/test_j2_laboratory_package.mjs",
+      "sha256": "237cf2f32df9fcd166c2f388d3e70e4d74475ef91ef52ac4e0af4ae8f9ca48d4"
+    },
+    {
+      "path": "tools/test_j2_package.mjs",
+      "sha256": "80ecfca6c162d092c5673a2d4b1a8a219cd819f021a0362f04195e11096fc630"
+    },
+    {
+      "path": "tools/test_j2_native.py",
+      "sha256": "fd84e353f3b06ce40e36ce1da70734a8ce30ea25d9fcc6d26635d022ba1ad7af"
+    },
+    {
+      "path": "tools/build_web.py",
+      "sha256": "851a7e483d4a9637b69666ccd678bc2f78f22a52186f91a928cf5b52ad6b4fad"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "e2f94564aaec7b46a38c7757842a8863db6674b3d29f19e8c0550faee53b20d1"
+    },
+    {
+      "path": "catalogue/manifest.json",
+      "sha256": "e05836832a13eacb11e4b0f8cf28a6a77d63da5c78329fd8ae2f365f0842db9e"
+    }
+  ]
+}

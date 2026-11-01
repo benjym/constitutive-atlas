@@ -1,0 +1,28 @@
+======================================================================
+FAIL: test_database_keeps_candidate_and_executable_sources (tests.test_catalogue.CatalogueTests.test_database_keeps_candidate_and_executable_sources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_catalogue.py", line 86, in test_database_keeps_candidate_and_executable_sources
+    self.assertEqual(db.execute('SELECT COUNT(*) FROM models').fetchone()[0], len(manifest['models']))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 40 != 37
+
+======================================================================
+FAIL: test_directory_coverage_has_resolvable_provenance (tests.test_catalogue.CatalogueTests.test_directory_coverage_has_resolvable_provenance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_catalogue.py", line 34, in test_directory_coverage_has_resolvable_provenance
+    self.assert_timed_provenance(entry)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_catalogue.py", line 61, in assert_timed_provenance
+    self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), evidence['sha256'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '769f96e8ef296c9fbcee78455be60e62d923f3b0e0820df62f6db2fa6b0dba06' != '2fca21267f0e38b66adee62313f317e2e45e92e9c20b0cd32ac74409514049de'
+- 769f96e8ef296c9fbcee78455be60e62d923f3b0e0820df62f6db2fa6b0dba06
++ 2fca21267f0e38b66adee62313f317e2e45e92e9c20b0cd32ac74409514049de
+
+
+----------------------------------------------------------------------
+Ran 36 tests in 1.265s
+
+FAILED (failures=2)

@@ -38,6 +38,12 @@ jobs:
           cmake --build build-burgers --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
           node --test tests/test_burgers_web_contract.mjs
+      - name: Build and qualify the approved J2 strain-increment model
+        run: |
+          cmake -S cmake/j2 -B build-j2 -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2 --target atlas_j2_solver --parallel 1
+          python tools/test_j2_native.py --solver build-j2/atlas_j2_solver --output "$RUNNER_TEMP/j2-native"
+          node --test tests/test_j2_contract.mjs tests/test_j2_main_routing.mjs
       - name: Native checks and full exact archival replay
         if: runner.os == 'macOS'
         run: ctest --test-dir build --output-on-failure
@@ -142,6 +148,8 @@ jobs:
           emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
@@ -194,6 +202,8 @@ jobs:
           emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs

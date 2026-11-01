@@ -1,0 +1,11 @@
+# J2 strain-increment laboratory — interface qualification v1
+
+This page accompanies the unchanged v2 scientific approval for exact model a28068cbb8cfc660e49eb648d6ce7fcbf993ea50b45e8eb0d325c6b75f4ffc3b. That historical law review excluded browser packaging. The present interface study separately qualifies a dedicated browser route using the same declarative model and common engine, without broadening the constitutive or experimental claim.
+
+The named preset uses p_ref=100000 Pa, K=20000000 Pa, G=12000000 Pa, sigma_y=60000 Pa, H=1200000 Pa and zero initial stress/history. It applies three complete six-component strain increments: loading, reversal and zero hold. Independent analytical reference: first alpha=1/775, retained on reversal/hold; temporary gamma resets to zero on those later rows. This is a synthetic example, not a calibrated material.
+
+Fresh serial native and Wasm builds pass the original 115 main cases, 16 selected default cases and 27 propagated history steps, plus the three public-preset rows; original physical, tangent and parity limits remain unchanged. The copied package study checks complete state, tangents, exact replay, failed-prefix retention, recovery and rejected identity corruption. Custom paths and machine parameter bounds remain exploratory. No stress-controlled laboratory, finite rotations, physical time, pore pressure or experimental overlay is qualified.
+
+All six prescribed infinitesimal-strain increments and eight state entries are visible/exported. Compression-positive Mandel components; dry total Cauchy stress. A failed row does not commit; earlier accepted rows remain visible. Imports bind exact model, engine and catalogue identity and reconstruct the full starting request. Reset restores the preset. Engine JS and Wasm bytes are hashed before the verified JS bytes are imported and the verified Wasm is instantiated through the Emscripten hook.
+
+The repository delivery-v1 packet records prospective freezes, raw observations, independent interface review, retained failures and actual browser checks. The separate agent reviews interface evidence; the original scientific review and approval remain unchanged. Package and live-delivery status is recorded in DELIVERY.md and the release receipt; local checks alone do not establish a successful live deployment. No experimental validation is claimed.

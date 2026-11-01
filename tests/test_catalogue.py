@@ -31,7 +31,7 @@ class CatalogueTests(unittest.TestCase):
         for entry in entries.values():
             self.assertEqual(entry['executable'], entry['id'] in definitions)
             if not entry['executable']:
-                if entry.get('timed_laboratory'):
+                if entry.get('timed_laboratory') or entry.get('material_laboratory'):
                     self.assert_timed_provenance(entry)
                 else:
                     self.assertEqual(entry['status'], 'candidate')
@@ -39,7 +39,7 @@ class CatalogueTests(unittest.TestCase):
 
     def assert_timed_provenance(self, entry, approvals=None):
         self.assertIn(entry['status'], ('numerically-tested', 'reviewed'))
-        page = Path(entry['timed_laboratory'])
+        page = Path(entry.get('material_laboratory') or entry['timed_laboratory'])
         self.assertFalse(page.is_absolute())
         self.assertNotIn('..', page.parts)
         self.assertTrue((ROOT / 'web' / page).is_file())
@@ -54,13 +54,16 @@ class CatalogueTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), definition['sha256'])
             model = json.loads(path.read_text())
             self.assertEqual(model['id'], entry['id'])
-            self.assertEqual(model['formulation']['time_dependence'], 'physical_time')
+            self.assertEqual(model['formulation']['time_dependence'], 'strain_path' if entry.get('material_laboratory') else 'physical_time')
+            if entry.get('material_laboratory'):
+                self.assertEqual(entry['material_laboratory'], 'index.html')
+                self.assertEqual(json.loads((ROOT / entry['approval_record']).read_text()), record)
             self.assertTrue(record['supporting_files'])
             for evidence in record['supporting_files']:
                 if (record.get('review', {}).get('kind') == 'agent-model-review' and
                         hashlib.sha256((ROOT / evidence['path']).read_bytes()).hexdigest() != evidence['sha256']):
                     try:
-                        path = checked_receipt(ROOT, record['review']['path'], evidence['path'], evidence['sha256'])
+                        path = checked_receipt(ROOT, entry.get('approval_record') or record['review']['path'], evidence['path'], evidence['sha256'])
                     except ValueError as exc:
                         self.fail(str(exc))
                 else:
@@ -81,6 +84,15 @@ class CatalogueTests(unittest.TestCase):
                 target = record[key] if key == 'definition' else record[key][0]
                 target['sha256'] = '0' * 64
             with self.subTest(key=key), self.assertRaises(AssertionError):
+                self.assert_timed_provenance(entry, corrupted)
+
+    def test_material_point_route_requires_exact_approval(self):
+        manifest = json.loads((ROOT / 'catalogue/manifest.json').read_text())
+        entry = next(e for e in manifest['models'] if e.get('material_laboratory'))
+        record = json.loads((ROOT / entry['approval_record']).read_text())
+        self.assert_timed_provenance(entry, [record])
+        for corrupted in ([], [{**record, 'status': 'candidate'}], [{**record, 'scope': 'forged broader scope'}]):
+            with self.assertRaises(AssertionError):
                 self.assert_timed_provenance(entry, corrupted)
 
     def test_database_keeps_candidate_and_executable_sources(self):

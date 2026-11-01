@@ -1,0 +1,168 @@
+--- base/web/app.js
++++ stage/web/app.js
+@@ -1,3 +1,4 @@
++import {setupJ2Laboratory} from './j2-laboratory.mjs';
+ import {timedLaboratoryRoute} from './timed-route.mjs';
+ import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';
+ import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
+@@ -11,6 +12,7 @@
+ import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
+ import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
+ const $ = id => document.getElementById(id);
++let j2View=null;
+ let compiledCatalogue=null, laboratoryExamples=null;
+ let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
+ let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
+@@ -54,8 +56,22 @@
+ function closeCatalogue(){if(catalogueRoute(location.hash).modelId||catalogueRoute(location.hash).invalid){history.replaceState(null,'','#catalogue');route();}else $('catalogue-dialog').close();restoreCatalogueFocus();}
+ const protocolNames=['Oedometer','Drained triaxial','Undrained triaxial','Undrained stress control','Isotropic compression'];
+ function toast(message){$('toast').textContent=message;$('toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').style.display='none',7000);}
++function selectJ2(id){
++  const active=j2View?.select(id)??false;
++  document.querySelector('#laboratory > .lab-layout').hidden=active;
++  document.querySelector('#laboratory > .workspace-links').hidden=active;
++  $('import-run').hidden=active;
++  if(active){
++    $('model-description').textContent='Associated J2 plasticity with linear isotropic hardening. All-six prescribed strain increments; full stress and hardening history.';
++    $('model-family').textContent='Small-strain plasticity';$('model-status').textContent='Approved bounded scope';
++    $('model-sources').replaceChildren();
++    for(const [text,path] of [['Independent scientific review and limitations','review.html#law-review'],['Exact approval','approval.json'],['Exact approved definition','j2-linear-isotropic-hardening-be.json']]){const a=element('a',text+' ↗');a.href='./material-point-j2/'+path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}
++  }
++  return active;
++}
+ function route(){
+   const anchor=location.hash.slice(1),selection=catalogueRoute(location.hash),page=selection.page;
++  if(page==='laboratory'&&anchor.startsWith('laboratory?')){const id=new URLSearchParams(anchor.split('?')[1]).get('model');if(id===j2View?.modelId)selectJ2(id);}
+   const entry=catalogue.find(x=>x.id===selection.modelId);
+   if(entry)showCatalogueModel(entry,models.find(x=>x.id===entry.id));
+   else{if($('catalogue-dialog').open)$('catalogue-dialog').close();if(selection.modelId||selection.invalid)toast('That model link is not in this catalogue.');}
+@@ -137,6 +153,7 @@
+   document.querySelector('[data-for="target"]')?.setAttribute('aria-label',$('target-label').textContent+' slider');
+ }
+ function populate({loadExample=true}={}){
++  if(j2View?.active)return;
+   laboratoryExamples?.refresh();
+   const m=model(),example=loadExample?laboratoryExample(m):null;updateScopeLabels();
+   if(example){$('confinement').value=example.confinement;$('stress-ratio').value=example.stressRatio;}
+@@ -251,6 +268,7 @@
+   worker.postMessage({id,kind:'laboratory',specification:s,catalogue:compiledCatalogue});
+ }
+ function simulate(s){
++  if(j2View?.active)return;
+   clearTimeout(updateTimer);updateTimer=null;
+   try{
+     if(!s){if(!$('controls').checkValidity()){scheduleUpdate();return;}s=specification();}
+@@ -284,6 +302,7 @@
+   }
+ }
+ function renderCharts(){
++  if(j2View?.active)return;
+   const visible=$('show-experiment').checked;
+   describeExperiment();
+   const native=experiment&&experiment.kind!=='experiment',view=$('source-record-view');view.hidden=!native;
+@@ -319,7 +338,7 @@
+ }
+ function catalogueCards(){
+   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
+-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry);if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
++  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId;if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
+     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
+     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
+     const heading=element('h2'),open=element('a',entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
+@@ -334,11 +353,11 @@
+   const timedRoute=timedLaboratoryRoute(entry);
+   const dialog=$('catalogue-dialog'),body=$('catalogue-detail-body');body.replaceChildren();
+   $('catalogue-detail-title').textContent=entry.name;$('catalogue-detail-family').textContent=entry.family;
+-  $('catalogue-detail-status').textContent=spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
+-  $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute?' available':'');
++  $('catalogue-detail-status').textContent=entry.id===j2View?.modelId?'Approved scope · independent agent review':spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
++  $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute||entry.id===j2View?.modelId?' available':'');
+   body.append(element('p',recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',entry.id,evidenceIndex),'catalogue-detail-note'));
+-  body.append(formulationSection(document,spec,{evidenceIndex}));
+-  if(!spec&&!timedRoute){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
++  if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else body.append(formulationSection(document,spec,{evidenceIndex}));
++  if(!spec&&!timedRoute&&entry.id!==j2View?.modelId){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
+   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
+   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);
+   if(sources.length){
+@@ -354,7 +373,7 @@
+   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
+   $('catalogue-detail-id').textContent=entry.id;
+   $('catalogue-permalink').href=catalogueModelHash(entry.id);
+-  const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();$('model').value=entry.id;populate();location.hash='laboratory';simulate();$('model').focus({preventScroll:true});};
++  const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute&&entry.id!==j2View?.modelId;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(selectJ2(entry.id)){location.hash='laboratory?model='+encodeURIComponent(entry.id);}else{$('model').value=entry.id;populate();location.hash='laboratory';simulate();}$('model').focus({preventScroll:true});};
+   if(!dialog.open)dialog.showModal();body.scrollTop=0;
+ }
+ function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+@@ -376,10 +395,12 @@
+     refreshExperimentFilter();location.hash='laboratory';simulate(s);
+ }
+ async function importRun(file){
+-  try{if(!file)return;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');applyRunSpecification(parseLaboratoryDocument(await file.text(),compiledCatalogue));}
+-  catch(e){toast(e.message);}
++  const requested=sequence;
++  try{if(!file)return;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');const text=await file.text();if(requested!==sequence||j2View?.active)return;applyRunSpecification(parseLaboratoryDocument(text,compiledCatalogue));}
++  catch(e){if(requested===sequence&&!j2View?.active)toast(e.message);}
+ }
+ function describeExperiment(){
++  if(j2View?.active)return;
+   $('match-experiment').disabled=!experiment||experiment.kind!=='experiment'||!supportsEffectiveExperiment(model());
+   const sourceNotes=Array.isArray(experiment?.warnings)?experiment.warnings:[];
+   $('experiment-details').hidden=!sourceNotes.length;$('experiment-warnings').textContent=sourceNotes.join(' ');
+@@ -401,6 +422,7 @@
+   $('experiment-status').textContent=label+'. '+notes.join(' ');
+ }
+ function experimentOptions(selected=''){
++  if(j2View?.active)return;
+   const options=[new Option('No measurements selected','')];
+   const groups=new Map();
+   const query=$('experiment-search').value.trim().toLowerCase();
+@@ -481,10 +503,10 @@
+   }catch(e){if(id===experimentLoadSequence)toast(e.message);}
+   finally{$('experiment-file').value='';}
+ }
+-window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{cancel('');populate();simulate();};$('protocol').onchange=()=>{setProtocol();refreshExperimentFilter();scheduleUpdate();};
++window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{cancel('');if(selectJ2($('model').value)){location.hash='laboratory?model='+encodeURIComponent($('model').value);return;}history.replaceState(null,'','#laboratory');populate();simulate();};$('protocol').onchange=()=>{setProtocol();refreshExperimentFilter();scheduleUpdate();};
+ $('cycles').onchange=()=>{refreshExperimentFilter();const minimum=16*Number($('cycles').value);if(Number($('steps').value)<minimum)$('steps').value=minimum;scheduleUpdate();};
+ $('load-model-example').onclick=()=>{try{cancel('');populate();simulate();}catch(e){toast(e.message);}};
+-$('reset').onclick=()=>{cancel('');HTMLFormElement.prototype.reset.call($('controls'));populate();setProtocol();refreshExperimentFilter();simulate();};$('equations-button').onclick=()=>{$('equations').open=true;$('equations').scrollIntoView({behavior:'smooth'});};
++$('reset').onclick=()=>{cancel('');HTMLFormElement.prototype.reset.call($('controls'));populate();setProtocol();refreshExperimentFilter();simulate();};$('equations-button').onclick=()=>{if(j2View?.showEquations())return;$('equations').open=true;$('equations').scrollIntoView({behavior:'smooth'});};
+ $('import-run').onclick=()=>$('run-file').click();$('run-file').onchange=e=>importRun(e.target.files[0]);$('experiment-file').onchange=e=>loadExperiments(e.target.files);
+ function refreshExperimentFilter(){experimentOptions($('experiment-select').value);renderCharts();}
+ $('browse-source-records').onchange=refreshExperimentFilter;
+@@ -509,6 +531,6 @@
+   const [response,manifest]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json')]);if(!response.ok||!manifest.ok)throw Error('Catalogue could not be loaded.');
+   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
+   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
+-  laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:applyRunSpecification,onError:toast});
+-  populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
++  laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!j2View?.active)applyRunSpecification(s);},onError:toast});
++  populate();j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+ }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}
+--- base/tools/build_web.py
++++ stage/tools/build_web.py
+@@ -14,6 +14,7 @@
+ from build_development import bundle as bundle_development
+ from build_applicability import bundle as bundle_applicability
+ from build_power_creep_web import bundle as bundle_power_creep
++from build_j2_laboratory import bundle as bundle_material_point
+ 
+ def main():
+     parser=argparse.ArgumentParser()
+@@ -21,6 +22,7 @@
+     parser.add_argument('--wasm-dir',type=Path,default=ROOT/'build-wasm',help='Verified engine directory containing atlas.js, atlas.wasm and generated/models.json')
+     parser.add_argument('--power-creep-wasm-dir',type=Path,help='Qualified dedicated physical-time power-creep engine; defaults to --wasm-dir')
+     parser.add_argument('--sls-wasm-dir',type=Path,default=ROOT/'build-sls-wasm',help=argparse.SUPPRESS)
++    parser.add_argument('--j2-wasm-dir',type=Path,default=ROOT/'build-j2-wasm',help='Qualified J2 material-point engine for the main laboratory')
+     parser.add_argument('--output',type=Path,help='Explicit local output directory')
+     args=parser.parse_args()
+     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
+@@ -60,6 +62,8 @@
+     print(f"Prepared {len(experiment_manifest['experiments'])} built-in experiments ({experiment_manifest['release']})")
+     bundle_power_creep(dest,args.power_creep_wasm_dir or args.wasm_dir)
+     subprocess.run(['node',str(ROOT/'tools/test_power_creep_package.mjs'),str(dest)],check=True)
++    bundle_material_point(dest,args.j2_wasm_dir)
++    subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)
+     (dest/'.nojekyll').touch()
+     print(f'Packaged {dest}')
+ 

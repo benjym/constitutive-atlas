@@ -1,0 +1,269 @@
+--- a/web/app.js
++++ b/web/app.js
+@@ -1,7 +1,8 @@
+-import {timedLaboratoryRoute} from './timed-route.mjs';
++import {setupJ2Laboratory} from './j2-laboratory.mjs';
+ import {setupTimedLaboratory} from './timed-laboratory.mjs';
+ import {setupSlsLaboratory} from './sls-laboratory.mjs';
+ import {createLaboratoryControllerRouter} from './laboratory-controller-router.mjs';
++import {timedLaboratoryRoute} from './timed-route.mjs';
+ import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';
+ import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
+ import {formulationSection,recordedDescription} from './formulation-view.mjs';
+@@ -14,7 +15,7 @@
+ import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
+ import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
+ const $ = id => document.getElementById(id);
+-let timedView=null;
++let j2View=null,timedView=null;
+ let compiledCatalogue=null, laboratoryExamples=null;
+ let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
+ let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
+@@ -58,9 +59,43 @@
+ function closeCatalogue(){if(catalogueRoute(location.hash).modelId||catalogueRoute(location.hash).invalid){history.replaceState(null,'','#catalogue');route();}else $('catalogue-dialog').close();restoreCatalogueFocus();}
+ const protocolNames=['Oedometer','Drained triaxial','Undrained triaxial','Undrained stress control','Isotropic compression'];
+ function toast(message){$('toast').textContent=message;$('toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').style.display='none',7000);}
++function specialLaboratoryActive(){return !!(j2View?.active||timedView?.active);}
++function selectJ2(id){
++  const active=j2View?.select(id)??false;
++  document.querySelector('#laboratory > .lab-layout').hidden=active;
++  document.querySelector('#laboratory > .workspace-links').hidden=active;
++  $('import-run').hidden=active;
++  if(active){
++    $('model-description').textContent='Associated J2 plasticity with linear isotropic hardening. All-six prescribed strain increments; full stress and hardening history.';
++    $('model-family').textContent='Small-strain plasticity';$('model-status').textContent='Approved bounded scope';
++    $('model-sources').replaceChildren();
++    for(const [text,path] of [['Independent scientific review and limitations','review.html#law-review'],['Exact approval','approval.json'],['Exact approved definition','j2-linear-isotropic-hardening-be.json']]){const a=element('a',text+' ↗');a.href='./material-point-j2/'+path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}
++  }
++  return active;
++}
++function selectLaboratory(id){
++  if(j2View&&id===j2View.modelId){
++    // The timed profile's deactivation restores ordinary visibility, so it must
++    // run before the J2 helper establishes the selected workspace.
++    if(timedView?.active)timedView.select(false);
++    if(!j2View.active)++experimentLoadSequence;
++    return selectJ2(id);
++  }
++  if(timedView?.supports(id)){
++    if(j2View?.active)j2View.select(false);
++    if(!timedView.active)++experimentLoadSequence;
++    return timedView.select(id);
++  }
++  if(j2View?.active)j2View.select(false);
++  if(timedView?.active)timedView.select(false);
++  document.querySelector('#laboratory > .lab-layout').hidden=false;
++  document.querySelector('#laboratory > .workspace-links').hidden=false;
++  $('import-run').hidden=false;
++  return false;
++}
+ function route(){
+   const anchor=location.hash.slice(1),selection=catalogueRoute(location.hash),page=selection.page;
+-  if(page==='laboratory'&&anchor.startsWith('laboratory?')){const id=new URLSearchParams(anchor.split('?')[1]).get('model');if(timedView?.supports(id))timedView.select(id);}
++  if(page==='laboratory'&&anchor.startsWith('laboratory?')){const id=new URLSearchParams(anchor.split('?')[1]).get('model');if(id===j2View?.modelId||timedView?.supports(id))selectLaboratory(id);}
+   const entry=catalogue.find(x=>x.id===selection.modelId);
+   if(entry)showCatalogueModel(entry,models.find(x=>x.id===entry.id));
+   else{if($('catalogue-dialog').open)$('catalogue-dialog').close();if(selection.modelId||selection.invalid)toast('That model link is not in this catalogue.');}
+@@ -73,7 +108,7 @@
+     requestAnimationFrame(()=>target.scrollIntoView({behavior:'smooth',block:'start'}));
+   }else window.scrollTo(0,0);
+ }
+-function model(){return models.find(x=>x.id===$('model').value)||models.find(x=>x.id==='hypoplastic-sand-vw96');}
++function model(){return models.find(x=>x.id===$('model').value);}
+ function element(tag,text,className){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(className)e.className=className;return e;}
+ function sourceLinks(container,sources){
+   for(const source of sources){
+@@ -119,6 +154,7 @@
+   $('response-charts').classList.add('updating');$('response-charts').setAttribute('aria-busy','true');
+ }
+ function scheduleUpdate(){
++  if(specialLaboratoryActive())return;
+   invalidate(false);syncSliders();
+   if(!$('controls').checkValidity()){
+     clearTimeout(updateTimer);updateTimer=null;
+@@ -142,6 +178,7 @@
+   document.querySelector('[data-for="target"]')?.setAttribute('aria-label',$('target-label').textContent+' slider');
+ }
+ function populate({loadExample=true}={}){
++  if(specialLaboratoryActive())return;
+   laboratoryExamples?.refresh();
+   const m=model(),example=loadExample?laboratoryExample(m):null;updateScopeLabels();
+   if(example){$('confinement').value=example.confinement;$('stress-ratio').value=example.stressRatio;}
+@@ -227,11 +264,11 @@
+   $('retry-button').hidden=false;$('response-charts').setAttribute('aria-busy','false');
+ }
+ function startRun(job){
+-  const {s,id}=job;activeId=id;busy(true);$('retry-button').hidden=true;
++  const {s,id}=job;if(specialLaboratoryActive()||id!==sequence)return;activeId=id;busy(true);$('retry-button').hidden=true;
+   $('run-state').textContent='Updating response…';
+   worker??=new Worker('./worker.js',{type:'module'});
+   worker.onmessage=({data})=>{
+-    if(data.id!==activeId)return;
++    if(data.id!==activeId||specialLaboratoryActive())return;
+     clearTimeout(timer);busy(false);activeId=null;
+     // A completed older calculation must never replace newer slider settings.
+     if(data.id===sequence){
+@@ -249,14 +286,14 @@
+         $('result-note').textContent=r.ok?'Example parameters. No experimental calibration or predictive validity is implied.':r.message;
+       }
+     }
+-    if(pendingRun){const next=pendingRun;pendingRun=null;startRun(next);}
++    if(pendingRun&&!specialLaboratoryActive()){const next=pendingRun;pendingRun=null;startRun(next);}
+   };
+-  worker.onerror=e=>{const next=pendingRun;const latest=id===sequence;clearTimeout(timer);worker?.terminate();worker=null;activeId=null;pendingRun=null;busy(false);if(latest)calculationError('Worker error: '+e.message);if(next)startRun(next);};
+-  timer=setTimeout(()=>{const next=pendingRun;const latest=id===sequence;worker?.terminate();worker=null;activeId=null;pendingRun=null;busy(false);if(latest)calculationError('Calculation exceeded 15 seconds. Reduce increments or check the model domain.');if(next)startRun(next);},15000);
++  worker.onerror=e=>{if(id!==activeId||specialLaboratoryActive())return;const next=pendingRun;const latest=id===sequence&&!specialLaboratoryActive();clearTimeout(timer);worker?.terminate();worker=null;activeId=null;pendingRun=null;busy(false);if(latest)calculationError('Worker error: '+e.message);if(next&&!specialLaboratoryActive())startRun(next);};
++  timer=setTimeout(()=>{if(id!==activeId||specialLaboratoryActive())return;const next=pendingRun;const latest=id===sequence&&!specialLaboratoryActive();worker?.terminate();worker=null;activeId=null;pendingRun=null;busy(false);if(latest)calculationError('Calculation exceeded 15 seconds. Reduce increments or check the model domain.');if(next&&!specialLaboratoryActive())startRun(next);},15000);
+   worker.postMessage({id,kind:'laboratory',specification:s,catalogue:compiledCatalogue});
+ }
+ function simulate(s){
+-  if(timedView?.active)return;
++  if(specialLaboratoryActive())return;
+   clearTimeout(updateTimer);updateTimer=null;
+   try{
+     if(!s){if(!$('controls').checkValidity()){scheduleUpdate();return;}s=specification();}
+@@ -290,6 +327,7 @@
+   }
+ }
+ function renderCharts(){
++  if(specialLaboratoryActive())return;
+   const visible=$('show-experiment').checked;
+   describeExperiment();
+   const native=experiment&&experiment.kind!=='experiment',view=$('source-record-view');view.hidden=!native;
+@@ -325,7 +363,7 @@
+ }
+ function catalogueCards(){
+   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
+-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||(timedView?.supports(entry.id)&&entry.timed_laboratory==='index.html');if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
++  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&entry.timed_laboratory==='index.html');if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
+     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
+     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
+     const heading=element('h2'),open=element('a',entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
+@@ -340,11 +378,11 @@
+   const timedRoute=timedLaboratoryRoute(entry);
+   const dialog=$('catalogue-dialog'),body=$('catalogue-detail-body');body.replaceChildren();
+   $('catalogue-detail-title').textContent=entry.name;$('catalogue-detail-family').textContent=entry.family;
+-  $('catalogue-detail-status').textContent=timedView?.supports(entry.id)?'Approved bounded scope · physical-time laboratory':spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
+-  $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute||timedView?.supports(entry.id)?' available':'');
++  $('catalogue-detail-status').textContent=entry.id===j2View?.modelId?'Approved scope · independent agent review':timedView?.supports(entry.id)?'Approved bounded scope · physical-time laboratory':spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
++  $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute||entry.id===j2View?.modelId||timedView?.supports(entry.id)?' available':'');
+   body.append(element('p',recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',entry.id,evidenceIndex),'catalogue-detail-note'));
+-  body.append(formulationSection(document,spec,{evidenceIndex}));
+-  if(!spec&&!timedRoute&&!timedView?.supports(entry.id)){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
++  if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else body.append(formulationSection(document,spec,{evidenceIndex}));
++  if(!spec&&!timedRoute&&entry.id!==j2View?.modelId&&!timedView?.supports(entry.id)){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
+   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
+   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);
+   if(sources.length){
+@@ -361,7 +399,7 @@
+   $('catalogue-detail-id').textContent=entry.id;
+   $('catalogue-permalink').href=catalogueModelHash(entry.id);
+   const timed=timedView?.supports(entry.id)&&entry.timed_laboratory==='index.html';
+-  const explore=$('catalogue-explore');explore.hidden=!spec&&!timed&&!timedRoute;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(timed){timedView.select(entry.id);location.hash='laboratory?model='+encodeURIComponent(entry.id);}else{timedView?.select(entry.id);$('model').value=entry.id;populate();location.hash='laboratory';simulate();}$('model').focus({preventScroll:true});};
++  const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute&&!timed&&entry.id!==j2View?.modelId;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(selectLaboratory(entry.id)){location.hash='laboratory?model='+encodeURIComponent(entry.id);}else{$('model').value=entry.id;populate();location.hash='laboratory';simulate();}$('model').focus({preventScroll:true});};
+   if(!dialog.open)dialog.showModal();body.scrollTop=0;
+ }
+ function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+@@ -375,6 +413,7 @@
+ }
+ async function readFile(file){if(!file)return null;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');return JSON.parse(await file.text());}
+ function applyRunSpecification(imported){
++  if(specialLaboratoryActive())return;
+     const s={...imported,integration_settings:normalizeSettings(imported.integration_settings)},m=validateSpec(s);cancel('');$('loading-version').value=s.loading?'exact':'legacy';setNumericalValues(s.integration_settings);$('model').value=m.id;populate({loadExample:false});Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
+     $('confinement').value=s.initial[1]/1000;$('stress-ratio').value=s.initial[0]/s.initial[1];let offset=6;
+     for(const f of m.state.slice(1)){const size=f.shape==='sym'?6:1;if(persistentState(f)){const input=$('state-'+f.name);input.value=size===6?s.initial.slice(offset,offset+6).join(','):s.initial[offset]/Number(input.dataset.factor);}offset+=size;}
+@@ -383,10 +422,12 @@
+     refreshExperimentFilter();location.hash='laboratory';simulate(s);
+ }
+ async function importRun(file){
+-  try{if(!file)return;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');applyRunSpecification(parseLaboratoryDocument(await file.text(),compiledCatalogue));}
+-  catch(e){toast(e.message);}
++  const requested=sequence;
++  try{if(!file)return;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');const text=await file.text();if(requested!==sequence||specialLaboratoryActive())return;applyRunSpecification(parseLaboratoryDocument(text,compiledCatalogue));}
++  catch(e){if(requested===sequence&&!specialLaboratoryActive())toast(e.message);}
+ }
+ function describeExperiment(){
++  if(specialLaboratoryActive())return;
+   $('match-experiment').disabled=!experiment||experiment.kind!=='experiment'||!supportsEffectiveExperiment(model());
+   const sourceNotes=Array.isArray(experiment?.warnings)?experiment.warnings:[];
+   $('experiment-details').hidden=!sourceNotes.length;$('experiment-warnings').textContent=sourceNotes.join(' ');
+@@ -408,6 +449,7 @@
+   $('experiment-status').textContent=label+'. '+notes.join(' ');
+ }
+ function experimentOptions(selected=''){
++  if(specialLaboratoryActive())return;
+   const options=[new Option('No measurements selected','')];
+   const groups=new Map();
+   const query=$('experiment-search').value.trim().toLowerCase();
+@@ -427,6 +469,7 @@
+   if(selected&&$('experiment-select').value!==selected){$('experiment-select').value='';++experimentLoadSequence;showExperiment(null);}
+ }
+ function showExperiment(data){
++  if(specialLaboratoryActive())return;
+   experiment=data;$('retry-experiment').hidden=true;
+   $('match-experiment').hidden=!!data&&data.kind!=='experiment';
+   $('show-experiment').disabled=!data;$('show-experiment').checked=!!data;$('match-experiment').disabled=!data||data.kind!=='experiment'||!supportsEffectiveExperiment(model());
+@@ -439,6 +482,7 @@
+   renderCharts();
+ }
+ async function selectExperiment(){
++  if(specialLaboratoryActive())return;
+   const revision=++experimentLoadSequence,choice=$('experiment-select').value;showExperiment(null);
+   if(!choice)return;
+   try{
+@@ -449,8 +493,8 @@
+       data=experimentCache.get(entry.id);
+       if(!data){data=await fetchExperiment(entry);experimentCache.set(entry.id,data);}
+     }
+-    if(revision===experimentLoadSequence&&choice===$('experiment-select').value)showExperiment(data);
+-  }catch(error){if(revision===experimentLoadSequence){$('experiment-status').textContent=error.message;$('retry-experiment').hidden=false;}}
++    if(revision===experimentLoadSequence&&!specialLaboratoryActive()&&choice===$('experiment-select').value)showExperiment(data);
++  }catch(error){if(revision===experimentLoadSequence&&!specialLaboratoryActive()){$('experiment-status').textContent=error.message;$('retry-experiment').hidden=false;}}
+ }
+ async function loadExperimentCatalogue(){
+   try{
+@@ -458,10 +502,11 @@
+     const manifest=await response.json();
+     if(manifest.schema_version!=='0.1'||!Array.isArray(manifest.experiments))throw Error('Unsupported experiment catalogue.');
+     builtinExperiments=manifest.experiments;
+-    experimentOptions($('experiment-select').value);describeExperiment();
+-  }catch(error){experimentOptions($('experiment-select').value);$('experiment-status').textContent=error.message;$('retry-experiment').hidden=false;}
++    if(!specialLaboratoryActive()){experimentOptions($('experiment-select').value);describeExperiment();}
++  }catch(error){if(!specialLaboratoryActive()){experimentOptions($('experiment-select').value);$('experiment-status').textContent=error.message;$('retry-experiment').hidden=false;}}
+ }
+ function matchExperiment(){
++  if(specialLaboratoryActive())return;
+   if(!experiment)return;
+   if(!supportsEffectiveExperiment(model())){toast('Initial-state matching requires an effective-stress model.');return;}
+   const stress=experiment.initial?.effective_stress,e=experiment.initial?.void_ratio;
+@@ -483,15 +528,15 @@
+       const text=await file.text(),data=/\.dat$/i.test(file.name)?normalizeWichtmann(text,file.name):validateExperiment(JSON.parse(text));
+       if(loaded.some(x=>x.id===data.id))throw Error('Duplicate experiment ID: '+data.id);loaded.push(data);
+     }
+-    if(id!==experimentLoadSequence)return;
++    if(id!==experimentLoadSequence||specialLaboratoryActive())return;
+     experiments=loaded;const first=loaded.findIndex(e=>compatibleExperiment(e,Number($('protocol').value),Number($('cycles').value),model()));experimentOptions(first<0?'':'local:'+first);$('clear-experiments').disabled=false;selectExperiment();
+-  }catch(e){if(id===experimentLoadSequence)toast(e.message);}
+-  finally{$('experiment-file').value='';}
+-}
+-window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{cancel('');if(timedView?.select($('model').value)){location.hash='laboratory?model='+encodeURIComponent($('model').value);return;}history.replaceState(null,'','#laboratory');populate();simulate();};$('protocol').onchange=()=>{setProtocol();refreshExperimentFilter();scheduleUpdate();};
++  }catch(e){if(id===experimentLoadSequence&&!specialLaboratoryActive())toast(e.message);}
++  finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}
++}
++window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{cancel('');if(selectLaboratory($('model').value)){location.hash='laboratory?model='+encodeURIComponent($('model').value);return;}history.replaceState(null,'','#laboratory');populate();simulate();};$('protocol').onchange=()=>{setProtocol();refreshExperimentFilter();scheduleUpdate();};
+ $('cycles').onchange=()=>{refreshExperimentFilter();const minimum=16*Number($('cycles').value);if(Number($('steps').value)<minimum)$('steps').value=minimum;scheduleUpdate();};
+ $('load-model-example').onclick=()=>{try{cancel('');populate();simulate();}catch(e){toast(e.message);}};
+-$('reset').onclick=()=>{cancel('');HTMLFormElement.prototype.reset.call($('controls'));populate();setProtocol();refreshExperimentFilter();simulate();};$('equations-button').onclick=()=>{if(timedView?.showEquations())return;$('equations').open=true;$('equations').scrollIntoView({behavior:'smooth'});};
++$('reset').onclick=()=>{cancel('');HTMLFormElement.prototype.reset.call($('controls'));populate();setProtocol();refreshExperimentFilter();simulate();};$('equations-button').onclick=()=>{if(j2View?.showEquations()||timedView?.showEquations())return;$('equations').open=true;$('equations').scrollIntoView({behavior:'smooth'});};
+ $('import-run').onclick=()=>$('run-file').click();$('run-file').onchange=e=>importRun(e.target.files[0]);$('experiment-file').onchange=e=>loadExperiments(e.target.files);
+ function refreshExperimentFilter(){experimentOptions($('experiment-select').value);renderCharts();}
+ $('browse-source-records').onchange=refreshExperimentFilter;
+@@ -516,6 +561,6 @@
+   const [response,manifest]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json')]);if(!response.ok||!manifest.ok)throw Error('Catalogue could not be loaded.');
+   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
+   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
+-  laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:applyRunSpecification,onError:toast});
+-  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')})]);catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
++  laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
++  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+ }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

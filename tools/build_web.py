@@ -13,6 +13,7 @@ from build_evidence import bundle as bundle_evidence
 from build_benchmark import bundle as bundle_benchmark
 from build_development import bundle as bundle_development
 from build_applicability import bundle as bundle_applicability
+from build_j2_laboratory import bundle as bundle_material_point
 from build_power_creep_web import bundle as bundle_power_creep
 
 def main():
@@ -22,6 +23,7 @@ def main():
     parser.add_argument('--power-creep-wasm-dir',type=Path,help='Qualified dedicated physical-time power-creep engine; defaults to --wasm-dir')
     parser.add_argument('--sls-wasm-dir',type=Path,default=ROOT/'build-sls-wasm',help=argparse.SUPPRESS)
     parser.add_argument('--burgers-wasm-dir',type=Path,default=ROOT/'build-burgers-wasm',help='Dedicated common physical-time Burgers engine')
+    parser.add_argument('--j2-wasm-dir',type=Path,default=ROOT/'build-j2-wasm',help='Qualified J2 material-point engine for the main laboratory')
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
     args=parser.parse_args()
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
@@ -67,6 +69,8 @@ def main():
     from build_sls_laboratory import bundle as bundle_sls_laboratory
     bundle_sls_laboratory(dest,args.sls_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_sls_laboratory_package.mjs'),str(dest)],check=True)
+    bundle_material_point(dest,args.j2_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)
     (dest/'.nojekyll').touch()
     print(f'Packaged {dest}')
 
