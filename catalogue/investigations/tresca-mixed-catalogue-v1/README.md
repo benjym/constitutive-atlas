@@ -1,0 +1,21 @@
+# Mixed ten-model compatibility qualification
+
+This completes the numerical compatibility subgate of IMPL-tresca-draft-integration-v1. Native and Wasm each pass the frozen 126-request regression for the existing nine models, the unchanged 29-request independent Tresca laboratory gate and a 12-step full-state API restart history assessed against the original independent projection. The public catalogue is still nine models: local draft installation and actual packaged-browser qualification remain open. No scientific review signature or deployment is supplied.
+
+## What was compared
+
+The default `build/` and `build-wasm/` were stale (eight/five models), so they were not used as current baselines. The retained [current-source build](../../../docs/benchmarks/current-source-build-v1/README.md) describes exactly the current nine model definitions. Its executable hash and 126 responses were recorded before candidate builds. This is a software regression reference, not independent constitutive truth. The request set covers all five laboratory protocols for every old model, residual/rate evaluation, signed shear reversal/history, malformed state/parameter rejection, forced failure/full rollback and recovery. Each backend checks 11,278 numeric fields, 27 expected failures and nine full-state rollback cases. Failed requests are expected results, not deleted cases.
+
+The normal compiler generates ten models, with Tresca at index 9. Adding the first solution-constraint model activates callbacks for every model. The [generated equivalence proof](generated-equivalence.json) and read-only verifier compare all Tresca numerical dispatch bodies and its physical callback with the qualified single-model implementation, adjusting only dispatch indices. Full original 38-column qualification remains in [v5](../tresca-certified-corners-v5/README.md); it was not rerun or replaced here.
+
+Each backend's unchanged Tresca laboratory gate checks 1,746 state/strain components, 97 exact admissible points and 29 recoveries. API history accepts all 12 steps with 288 independent value checks. This history explicitly transports complete state through JSON/CSV between calls; the earlier v5 in-process own-state history is distinct. Total-stress metadata and unavailable/null pore pressure remain intact; legacy effective-only calls reject.
+
+## Evidence and scope
+
+[Policy](policy.json), [prospective freeze](prospective-freeze.json), source receipts, generated catalogues, full responses, native/Wasm build/configure process receipts, artifact hashes and [assessment](assessment.json) are retained. Acceptance policies and reference inputs were frozen before building. The saved-output assessor was implemented after the native build was launched, before native responses were inspected; it implements the frozen policy without gate changes. [Provenance](provenance.json) states that timing explicitly.
+
+One explicit `atlas_solver` target was built with `--parallel 1` natively, then with Emscripten. Both used the same 428 tracked source/fixture files plus the exact public proposal. No shared runtime code was edited. The local artifacts remain at `/private/tmp/atlas-tresca-mixed-catalogue-v1/{native,wasm}`; hash-check them before reusing the qualified Wasm engine for browser packaging. Their continued existence is not required to replay the saved evidence.
+
+Read-only reproduction: `python3 -B catalogue/investigations/tresca-mixed-catalogue-v1/verify.py`. Regression command: `python3 -B -m unittest tests.test_tresca_mixed_catalogue tests.test_tresca_source_integration_review tests.test_tresca_certified_corners -q`. `prepare.py` and `study.py` retain original acquisition/build procedures; do not rerun them into this immutable packet or overwrite its results. New studies need new paths and prospective identities.
+
+Next: the existing [bounded integration checklist](../../../docs/reviews/tresca-v5-source-integration-v1/INTEGRATION_PLAN.md), starting at installation. Register the exact draft and pending review, preserve pinned manifest/status bytes before shared edits, then package and inspect source/review disclosure, full-state preparation/import/export and stress/overlay guards in the actual browser. Stop there; no new fit or numerical expansion is needed.
