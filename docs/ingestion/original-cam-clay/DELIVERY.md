@@ -65,3 +65,11 @@ Source, complete declared representation, exact transcription, bounded native/Wa
 ## Authorized live-delivery continuation
 
 User Yes authorizes the concrete release handoff: push, CI, integration, deployment and live verification. Prior absence-of-authorization statements above describe the earlier checkpoint; preserved exact ledger is [here](live-delivery-v1/DELIVERY-before-authorized-live.md). Main integration preserves newer SLS/Burgers/J2 interfaces; actual separate merge review accepted. E8 and umbrella remain open pending exact all-green deployed revision and live browser/asset evidence.
+
+## Current release checkpoint — supersedes earlier handoffs
+
+Local qualified current-main integration:46afadb723a2c8cf00fedee413b2718c944b1da9 on delivery/occ-main-integration-v1, worktree /private/tmp/atlas-occ-main-integration-v1; includes remote75d36e7a and exact reviewed OCC. Independent final merge accepted. Full portable1424tests/49skips passes;31canonicalexact replays pass separately; final27affectedtests pass. Final standardpackage889files/42websourceequalities, supported-input policy and actual IAB OCC100increment response pass. New ensemble, SQLite download, SLS/Burgers/J2 and completed delivery evidence preserved.
+
+Original unchanged OCC release82a5961d branch CI41295905872 completed success: both native and both Wasm jobs green; deployment skipped on nonmain branch. This does not qualify the later merged main revision remotely.
+
+Main push was rejected before execution by automatic approval review because it could not verify the prior Yes authorization context for public deployment. Explicit renewed approval requested; no workaround/push/deployment occurred. E8 remains open pending authorized nonforce main push, required exact all-green CI, Pages artifact/live asset comparison and actual live project-path run. See [block receipt](live-delivery-v1/approval-review-block-v1.json). No scientific gate or source claim changed.
