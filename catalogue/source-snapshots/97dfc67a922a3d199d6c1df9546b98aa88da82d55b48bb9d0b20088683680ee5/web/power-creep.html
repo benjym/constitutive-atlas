@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Power creep · Constitutive Atlas research</title>
+<style>
+  :root{font:16px/1.5 system-ui,sans-serif;color:#19312c;background:#f3f5f1}
+  *{box-sizing:border-box}body{margin:0}main{max-width:1200px;margin:42px auto;padding:0 24px}
+  header{display:flex;gap:24px;justify-content:space-between;align-items:start;margin-bottom:28px}
+  h1{font-size:34px;letter-spacing:-1px;margin:3px 0 8px}h2{font-size:16px;margin:0 0 14px}
+  p{margin:6px 0}a{color:#17644b}.eyebrow{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#547168}
+  .badge{display:inline-block;border:1px solid #d4c58b;color:#745c1c;background:#fff8df;padding:5px 12px;border-radius:20px;font-size:12px;white-space:nowrap}
+  .layout{display:grid;grid-template-columns:315px 1fr;gap:22px}.card{background:#fff;border:1px solid #dce4dd;border-radius:14px;padding:23px}
+  label{display:block;font-size:13px;color:#466057;margin:12px 0 5px}input,select,button{width:100%;font:inherit;padding:9px 10px;border:1px solid #c9d6cc;border-radius:6px;background:white;color:inherit}
+  input:focus,select:focus,button:focus{outline:3px solid #b4dcc9;outline-offset:1px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  button{background:#18563f;color:white;border:0;font-weight:600;cursor:pointer;margin-top:18px}button:disabled{opacity:.45;cursor:wait}
+  button.secondary{background:#eef4ef;color:#18563f;margin-top:10px}.subtle{color:#64766f;font-size:13px}.error{color:#943228}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}.stat{background:#edf4ef;border-radius:8px;padding:13px}.stat strong{font-size:23px;display:block;letter-spacing:-.5px}.stat span{font-size:12px;color:#557064}
+  svg{width:100%;height:auto;display:block}.chart{margin-top:14px}.chart+h2{margin-top:24px}.plot-note{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#63776e}
+  details{margin-top:16px;border-top:1px solid #e3e9e4;padding-top:14px}summary{font-size:13px;cursor:pointer}footer{margin:22px 0;font-size:12px;color:#67766e}
+  @media(max-width:800px){main{margin-top:24px}.layout{grid-template-columns:1fr}header{flex-direction:column;gap:8px}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}}
+</style>
+<main>
+  <header><div><div class="eyebrow">Constitutive Atlas / physical-time research</div><h1>Two-component power creep</h1><p class="subtle">Explore stress relaxation and creep with both mechanisms active.</p></div><span class="badge">Approved scope · illustrative parameters</span></header>
+  <div class="layout">
+    <form id="controls" class="card">
+      <h2>Loading &amp; material</h2>
+      <label for="mode">Experiment</label><select id="mode"><option value="relaxation">Relaxation · hold all strains</option><option value="creep">Creep · hold all stresses</option></select>
+      <div class="pair"><div><label for="duration">Duration (s)</label><input id="duration" type="number" value="10" min="0.001" max="10000" step="any" required></div><div><label for="samples">Output intervals</label><input id="samples" type="number" value="20" min="1" max="200" step="1" required></div></div>
+      <div class="pair"><div><label for="pressure">Initial mean stress (MPa)</label><input id="pressure" type="number" value="1" min="-1000" max="1000" step="any" required></div><div><label for="initialQ">Initial axial q (MPa)</label><input id="initialQ" type="number" value="0.3" min="-1000" max="1000" step="any" required></div></div>
+      <details><summary>Material coefficients &amp; units</summary>
+        <div class="pair"><div><label for="bulk">Bulk K (MPa)</label><input id="bulk" type="number" value="20" min="0.000001" max="100000000" step="any" required></div><div><label for="shear">Shear G (MPa)</label><input id="shear" type="number" value="12" min="0.000001" max="100000000" step="any" required></div></div>
+        <label for="pref">Reference stress (MPa)</label><input id="pref" type="number" value="1" min="0.000001" max="1000000" step="any" required>
+        <div class="pair"><div><label for="b1">b₁ (1/s)</label><input id="b1" type="number" value="0.002" min="0" max="1000" step="any" required></div><div><label for="n1">n₁</label><input id="n1" type="number" value="1" min="1" max="10" step="any" required></div></div>
+        <div class="pair"><div><label for="b2">b₂ (1/s)</label><input id="b2" type="number" value="0.001" min="0" max="1000" step="any" required></div><div><label for="n2">n₂</label><input id="n2" type="number" value="3" min="1" max="10" step="any" required></div></div>
+        <p class="subtle">Equivalent creep rate = b₁(q/pᵣₑ𝒻)ⁿ¹ + b₂(q/pᵣₑ𝒻)ⁿ². These values are an example, with no material calibration.</p>
+      </details>
+      <button id="run" disabled>Loading engine…</button><button id="download" type="button" class="secondary" disabled>Download full result</button>
+      <p id="status" role="status" class="subtle">Starting the WebAssembly solver.</p>
+    </form>
+    <section class="card" aria-label="Simulation results">
+      <div class="stats"><div class="stat"><span>Physical time</span><strong id="timeValue">—</strong></div><div class="stat"><span>Final von Mises stress</span><strong id="qValue">—</strong></div><div class="stat"><span>Final axial strain</span><strong id="strainValue">—</strong></div></div>
+      <h2>Deviatoric stress</h2><div class="plot-note"><span>Von Mises q (MPa)</span><span>Physical time (s) →</span></div><svg id="stressChart" viewBox="0 0 720 230" role="img" aria-label="Deviatoric stress against physical time"></svg>
+      <h2>Accumulated axial strain</h2><div class="plot-note"><span>Compression-positive strain (%)</span><span>Physical time (s) →</span></div><svg id="strainChart" viewBox="0 0 720 230" role="img" aria-label="Axial strain against physical time"></svg>
+      <p id="description" class="subtle">Run an experiment to inspect its response.</p>
+    </section>
+  </div>
+  <footer>Source: <a href="https://docs.itascacg.com/itasca900/common/models/power/doc/modelpower.html" target="_blank" rel="noreferrer">Itasca 9.0 Power Model</a>, both-components-active option. Continuous small-strain, zero-spin law; uncoupled zero pore pressure. Threshold switching is outside this formulation. Accepted after independent agent review; material validation remains open. <a href="power-creep-review.html">Review &amp; scope</a> · <a href="power-creep-approval.json">Approval record</a> · <a href="index.html#catalogue">Atlas catalogue</a></footer>
+</main>
+<script type="module">
+  const $=id=>document.getElementById(id), form=$('controls');
+  let engine,identity,lastResult;
+  function plot(id,points,value,color){
+    const svg=$(id),ns='http://www.w3.org/2000/svg',w=720,h=230,left=65,right=15,top=18,bottom=32;
+    svg.replaceChildren();
+    const xs=points.map(p=>p.time),ys=points.map(value);let lo=Math.min(...ys),hi=Math.max(...ys);
+    const pad=Math.max((hi-lo)*.12,Math.abs(hi)*.05,1e-7);lo-=pad;hi+=pad;
+    const x=t=>left+(t-xs[0])/(xs.at(-1)-xs[0])*(w-left-right),y=v=>h-bottom-(v-lo)/(hi-lo)*(h-top-bottom);
+    const add=(tag,attrs,text)=>{const el=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))el.setAttribute(k,v);if(text!==undefined)el.textContent=text;svg.append(el);};
+    for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4,yy=y(v);add('line',{x1:left,x2:w-right,y1:yy,y2:yy,stroke:'#e4eae5'});add('text',{x:left-8,y:yy+4,'text-anchor':'end','font-size':11,fill:'#6b7a71'},Number(v.toPrecision(3)).toString());const t=xs[0]+(xs.at(-1)-xs[0])*i/4;add('text',{x:x(t),y:h-10,'text-anchor':'middle','font-size':11,fill:'#6b7a71'},Number(t.toPrecision(3)).toString());}
+    add('polyline',{points:points.map((p,i)=>`${x(p.time)},${y(ys[i])}`).join(' '),fill:'none',stroke:color,'stroke-width':2.5,'stroke-linejoin':'round'});
+  }
+  function run(event){
+    event?.preventDefault();if(!form.reportValidity())return;
+    $('run').disabled=true;$('download').disabled=true;lastResult=null;
+    const n=id=>Number($(id).value),p=n('pressure')*1e6,q=n('initialQ')*1e6;
+    const parameters=[n('bulk')*1e6,n('shear')*1e6,n('pref')*1e6,n('b1'),n('n1'),n('b2'),n('n2'),1];
+    const initial=[p+2*q/3,p-q/3,p-q/3,0,0,0],duration=n('duration'),samples=n('samples');
+    const stressHold=$('mode').value==='creep', wire=[duration,samples,...Array.from({length:6},()=>[+stressHold,0,0]).flat()];
+    const args=[identity.model,parameters.join(','),initial.join(','),'0,0,0,0,0,0','0,0,0,0,0,0',wire.join(','),$('mode').value,0,1e-9,1e-12,1e-12,.1,200000,1e-10,40];
+    $('status').className='subtle';$('status').textContent='Running physical-time history…';
+    // Yield once so the running state is painted before the synchronous Wasm call.
+    setTimeout(()=>{
+      try{
+        const result=JSON.parse(engine.ccall('atlas_run_schedule','string',[...Array(7).fill('string'),...Array(8).fill('number')],args));
+        if(result.catalogue_hash!==identity.catalogue_hash)throw Error('Engine catalogue does not match the supplied model identity.');
+        if(!result.ok)throw Error(result.message);
+        const end=result.points.at(-1);
+        $('timeValue').textContent=`${end.time.toPrecision(4)} s`;$('qValue').textContent=`${(end.observables[7]/1e6).toPrecision(4)} MPa`;$('strainValue').textContent=`${(end.strain[0]*100).toPrecision(4)} %`;
+        plot('stressChart',result.points,p=>p.observables[7]/1e6,'#246647');plot('strainChart',result.points,p=>p.strain[0]*100,'#b07839');
+        $('description').textContent=stressHold?'All six stress components are held fixed. The solver finds the strain needed for ongoing creep.':'All six strain components are held fixed. Deviatoric stress relaxes while mean stress stays constant.';
+        lastResult={...result,provenance:identity,request:{function:'atlas_run_schedule',args}};
+        $('download').disabled=false;$('status').textContent=`Completed ${duration} physical seconds. ${samples} output intervals.`;
+      }catch(error){$('status').className='subtle error';$('status').textContent=`Run failed: ${error.message}`;}
+      finally{$('run').disabled=false;}
+    },20);
+  }
+  form.addEventListener('submit',run);
+  $('download').addEventListener('click',()=>{if(!lastResult)return;const url=URL.createObjectURL(new Blob([JSON.stringify(lastResult,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`power-creep-${$('mode').value}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+  try{
+    identity=await(await fetch('./engine/identity.json')).json();
+    const {default:create}=await import('./engine/power-creep.js');engine=await create();
+    $('run').disabled=false;$('run').textContent='Run experiment';run();
+  }catch(error){$('status').className='subtle error';$('status').textContent=`Engine unavailable: ${error.message}`;}
+</script>
+</html>

@@ -12,6 +12,8 @@ Operational new-model work follows [the full delivery checklist](docs/MODEL_DELI
 
 The user has replaced human scientific sign-off with [independent agent review against checklist v1](docs/AGENT_REVIEW_POLICY.md). A separate agent's accepted, exact-definition checklist is sufficient for model approval and the review requirements of every milestone below; no human signature or further user approval is required. Resolve in-scope blocking findings, retain limitations and independently check source/numerical claims. Historical review packets remain unchanged. Experimental validation and software delivery remain separate gates. Existing review tasks now target this agent pathway.
 
+Power-creep delivery now covers the independently approved Itasca9.0 both-active physical-time formulation through its dedicated common-engine laboratory and exact-definition database export. It remains one restricted timed formulation, separate from ordinary strain-path model counts. The [delivery ledger](docs/ingestion/power-creep-itasca900/DELIVERY.md) records final CI and live-site qualification; threshold switching, material calibration and experimental validation remain outside this approval.
+
 ## 1. Destination and immediate priority
 
 The project has three final products:

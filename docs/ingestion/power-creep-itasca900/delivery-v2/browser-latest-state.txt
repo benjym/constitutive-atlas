@@ -1,0 +1,57 @@
+- main:
+  - generic: Constitutive Atlas / physical-time research
+  - heading "Two-component power creep" [level=1]
+  - paragraph: Explore stress relaxation and creep with both mechanisms active.
+  - generic: Approved scope · illustrative parameters
+  - heading "Loading & material" [level=2]
+  - generic: Experiment
+  - combobox "Experiment":
+    - option "Relaxation · hold all strains" [selected]
+    - option "Creep · hold all stresses"
+  - generic: Duration (s)
+  - spinbutton "Duration (s)" [active]: "3"
+  - generic: Output intervals
+  - spinbutton "Output intervals": "20"
+  - generic: Initial mean stress (MPa)
+  - spinbutton "Initial mean stress (MPa)": "1"
+  - generic: Initial axial q (MPa)
+  - spinbutton "Initial axial q (MPa)": "0.3"
+  - generic "Material coefficients & units"
+  - button "Reset example"
+  - button "Import & replay JSON"
+  - button "Run experiment"
+  - button "Download full result" [disabled]
+  - status: Controls changed. Run the experiment to update the response.
+  - region "Simulation results":
+    - text: Physical time
+    - strong: —
+    - text: Final von Mises stress
+    - strong: —
+    - text: Final axial strain
+    - strong: —
+    - heading "Deviatoric stress" [level=2]
+    - generic: Von Mises q (MPa)
+    - generic: Physical time (s) →
+    - img "Deviatoric stress against physical time"
+    - heading "Accumulated axial strain" [level=2]
+    - generic: Compression-positive strain (%)
+    - generic: Physical time (s) →
+    - img "Axial strain against physical time"
+    - paragraph: No current result.
+    - generic "Complete final state & engine identity"
+    - paragraph: "Measurement comparison is unavailable: these illustrative coefficients have no matched calibrated material or approved compatible experiment. No experimental validation is implied."
+  - text: "Source:"
+  - link "Itasca 9.0 Power Model":
+    - /url: https://docs.itascacg.com/itasca900/common/models/power/doc/modelpower.html
+  - text: ", both-components-active option. Continuous small-strain, zero-spin law; uncoupled zero pore pressure. Threshold switching is outside this formulation. Accepted after independent agent review; material validation remains open."
+  - link "Review & scope":
+    - /url: power-creep-review.html
+  - text: ·
+  - link "Approval record":
+    - /url: power-creep-approval.json
+  - text: ·
+  - link "Nine-item agent review":
+    - /url: power-creep-agent-review.json
+  - text: ·
+  - link "Atlas catalogue":
+    - /url: index.html#catalogue

@@ -13,6 +13,9 @@ assert.equal(identity.model_sha256,approval.definition.sha256);
 assert.equal(hash('engine/'+identity.model+'.json'),identity.model_sha256);
 assert.equal(hash('engine/power-creep.js'),identity.module_sha256);assert.equal(hash('engine/power-creep.wasm'),identity.wasm_sha256);
 assert.equal(read('engine/models.json').sha256,identity.catalogue_hash);
+const manifest=read('power-creep-package.json');for(const [p,h] of Object.entries(manifest.files))assert.equal(hash(p),h,'Stale timed package asset: '+p);
+assert.equal(read('power-creep-agent-review.json').status,'accepted');
+const {defaults,request,importRun,verifyResult}=await import(pathToFileURL(join(dir,'power-creep-contract.mjs')));
 const page=readFileSync(join(dir,'power-creep.html'),'utf8');
 assert.ok(page.includes("'./engine/identity.json'")&&page.includes("'./engine/power-creep.js'"));
 assert.ok(!page.includes("'/engine/"),'Root-relative runtime URL breaks Pages prefix');
@@ -21,7 +24,12 @@ const engine=await(await import(pathToFileURL(join(dir,'engine/power-creep.js'))
 for(const creep of [false,true]){
  const wire=[10,20,...Array.from({length:6},()=>[+creep,0,0]).flat()].join(',');
  const args=[identity.model,'20000000,12000000,1000000,0.002,1,0.001,3,1','1200000,900000,900000,0,0,0','0,0,0,0,0,0','0,0,0,0,0,0',wire,creep?'creep':'relaxation',0,1e-9,1e-12,1e-12,.1,200000,1e-10,40];
+ assert.deepEqual(request({...defaults,mode:creep?'creep':'relaxation'},identity),args);
  const result=JSON.parse(engine.ccall('atlas_run_schedule','string',[...Array(7).fill('string'),...Array(8).fill('number')],args));
+ verifyResult(result,identity);
+ const replayArgs=request(importRun(JSON.stringify({...result,provenance:identity,request:{function:'atlas_run_schedule',args}}),identity),identity);
+ const replay=JSON.parse(engine.ccall('atlas_run_schedule','string',[...Array(7).fill('string'),...Array(8).fill('number')],replayArgs));
+ assert.deepEqual(replay.points,result.points,'Full-state exported replay mismatch');
  assert.equal(result.ok,true,result.message);assert.equal(result.catalogue_hash,identity.catalogue_hash);
  const end=result.points.at(-1);assert.equal(end.time,10);
  if(creep){assert.ok(Math.abs(end.state[0]-1200000)<15);const f=.002*.3+.001*.3**3;assert.ok(Math.abs(end.strain[0]-10*f)<1e-10);}

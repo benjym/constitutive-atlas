@@ -1,0 +1,93 @@
+- main:
+  - generic: Constitutive Atlas / physical-time research
+  - heading "Two-component power creep" [level=1]
+  - paragraph: Explore stress relaxation and creep with both mechanisms active.
+  - generic: Approved scope · illustrative parameters
+  - heading "Loading & material" [level=2]
+  - generic: Experiment
+  - combobox "Experiment":
+    - option "Relaxation · hold all strains"
+    - option "Creep · hold all stresses" [selected]
+  - generic: Duration (s)
+  - spinbutton "Duration (s)": "2"
+  - generic: Output intervals
+  - spinbutton "Output intervals": "20"
+  - generic: Initial mean stress (MPa)
+  - spinbutton "Initial mean stress (MPa)": "2"
+  - generic: Initial axial q (MPa)
+  - spinbutton "Initial axial q (MPa)": "0.20000000000000023"
+  - generic "Material coefficients & units"
+  - generic: Bulk K (MPa)
+  - spinbutton "Bulk K (MPa)": "20"
+  - generic: Shear G (MPa)
+  - spinbutton "Shear G (MPa)": "12"
+  - generic: Reference stress (MPa)
+  - spinbutton "Reference stress (MPa)": "1"
+  - generic: b₁ (1/s)
+  - spinbutton "b₁ (1/s)": "0.004"
+  - generic: n₁
+  - spinbutton "n₁": "1"
+  - generic: b₂ (1/s)
+  - spinbutton "b₂ (1/s)": "0.001"
+  - generic: n₂
+  - spinbutton "n₂": "3"
+  - paragraph: Equivalent creep rate = b₁(q/pᵣₑ𝒻)ⁿ¹ + b₂(q/pᵣₑ𝒻)ⁿ². These values are an example, with no material calibration.
+  - button "Reset example"
+  - button "Import & replay JSON" [active]
+  - button "Run experiment"
+  - button "Download full result"
+  - status: Completed 2 physical seconds. 20 output intervals.
+  - region "Simulation results":
+    - text: Physical time
+    - strong: 2.000 s
+    - text: Final von Mises stress
+    - strong: 0.2000 MPa
+    - text: Final axial strain
+    - strong: 0.1616 %
+    - heading "Deviatoric stress" [level=2]
+    - generic: Von Mises q (MPa)
+    - generic: Physical time (s) →
+    - img "Deviatoric stress against physical time":
+      - generic: "0.19"
+      - generic: "0"
+      - generic: "0.195"
+      - generic: "0.5"
+      - generic: "0.2"
+      - generic: "1"
+      - generic: "0.205"
+      - generic: "1.5"
+      - generic: "0.21"
+      - generic: "2"
+    - heading "Accumulated axial strain" [level=2]
+    - generic: Compression-positive strain (%)
+    - generic: Physical time (s) →
+    - img "Axial strain against physical time":
+      - generic: "-0.0194"
+      - generic: "0"
+      - generic: "0.0307"
+      - generic: "0.5"
+      - generic: "0.0808"
+      - generic: "1"
+      - generic: "0.131"
+      - generic: "1.5"
+      - generic: "0.181"
+      - generic: "2"
+    - paragraph: All six stress components are held fixed. The solver finds the strain needed for ongoing creep.
+    - generic "Complete final state & engine identity"
+    - generic: "{ \"basis\": \"Mandel: xx, yy, zz, sqrt(2)xy, sqrt(2)yz, sqrt(2)xz\", \"time_s\": 2, \"stress_Pa\": [ 2133333.3333333335, 1933333.3333333333, 1933333.3333333333, 0, 0, 0 ], \"strain\": [ 0.0016160000000000029, -0.0008080000000000014, -0.0008080000000000014, 0, 0, 0 ], \"engine\": { \"release_revision\": \"50ca4808f54dc97f4dc7355067bd03d3de79f054\", \"model\": \"power-creep-itasca900-both-active-ode\", \"catalogue_hash\": \"47aa5d0dfa850ca6934471569bd3b5e359eadabdb0972cb90291194d555ba801\", \"model_sha256\": \"67f3fabd6aecfda19b977bf3baeae2dce45f9081fa81a4436a750a41825a4bef\", \"module_sha256\": \"52cc919fdb061657468a60c493ed5e186b9a6fd17a280c2dca76a1932378e3a6\", \"wasm_sha256\": \"9c00d1c0f86475c14a85515ea4336dc10851f18e0971874488d3eeeec474ec0a\" } }"
+    - paragraph: "Measurement comparison is unavailable: these illustrative coefficients have no matched calibrated material or approved compatible experiment. No experimental validation is implied."
+  - text: "Source:"
+  - link "Itasca 9.0 Power Model":
+    - /url: https://docs.itascacg.com/itasca900/common/models/power/doc/modelpower.html
+  - text: ", both-components-active option. Continuous small-strain, zero-spin law; uncoupled zero pore pressure. Threshold switching is outside this formulation. Accepted after independent agent review; material validation remains open."
+  - link "Review & scope":
+    - /url: power-creep-review.html
+  - text: ·
+  - link "Approval record":
+    - /url: power-creep-approval.json
+  - text: ·
+  - link "Nine-item agent review":
+    - /url: power-creep-agent-review.json
+  - text: ·
+  - link "Atlas catalogue":
+    - /url: index.html#catalogue

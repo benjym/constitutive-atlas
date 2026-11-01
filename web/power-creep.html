@@ -35,6 +35,7 @@
         <div class="pair"><div><label for="b2">b₂ (1/s)</label><input id="b2" type="number" value="0.001" min="0" max="1000" step="any" required></div><div><label for="n2">n₂</label><input id="n2" type="number" value="3" min="1" max="10" step="any" required></div></div>
         <p class="subtle">Equivalent creep rate = b₁(q/pᵣₑ𝒻)ⁿ¹ + b₂(q/pᵣₑ𝒻)ⁿ². These values are an example, with no material calibration.</p>
       </details>
+      <button id="reset" type="button" class="secondary" disabled>Reset example</button><button id="import" type="button" class="secondary" disabled>Import &amp; replay JSON</button><input id="run-file" type="file" accept="application/json,.json" hidden>
       <button id="run" disabled>Loading engine…</button><button id="download" type="button" class="secondary" disabled>Download full result</button>
       <p id="status" role="status" class="subtle">Starting the WebAssembly solver.</p>
     </form>
@@ -43,11 +44,14 @@
       <h2>Deviatoric stress</h2><div class="plot-note"><span>Von Mises q (MPa)</span><span>Physical time (s) →</span></div><svg id="stressChart" viewBox="0 0 720 230" role="img" aria-label="Deviatoric stress against physical time"></svg>
       <h2>Accumulated axial strain</h2><div class="plot-note"><span>Compression-positive strain (%)</span><span>Physical time (s) →</span></div><svg id="strainChart" viewBox="0 0 720 230" role="img" aria-label="Axial strain against physical time"></svg>
       <p id="description" class="subtle">Run an experiment to inspect its response.</p>
+      <details><summary>Complete final state &amp; engine identity</summary><pre id="full-state" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details>
+      <p class="subtle">Measurement comparison is unavailable: these illustrative coefficients have no matched calibrated material or approved compatible experiment. No experimental validation is implied.</p>
     </section>
   </div>
-  <footer>Source: <a href="https://docs.itascacg.com/itasca900/common/models/power/doc/modelpower.html" target="_blank" rel="noreferrer">Itasca 9.0 Power Model</a>, both-components-active option. Continuous small-strain, zero-spin law; uncoupled zero pore pressure. Threshold switching is outside this formulation. Accepted after independent agent review; material validation remains open. <a href="power-creep-review.html">Review &amp; scope</a> · <a href="power-creep-approval.json">Approval record</a> · <a href="index.html#catalogue">Atlas catalogue</a></footer>
+  <footer>Source: <a href="https://docs.itascacg.com/itasca900/common/models/power/doc/modelpower.html" target="_blank" rel="noreferrer">Itasca 9.0 Power Model</a>, both-components-active option. Continuous small-strain, zero-spin law; uncoupled zero pore pressure. Threshold switching is outside this formulation. Accepted after independent agent review; material validation remains open. <a href="power-creep-review.html">Review &amp; scope</a> · <a href="power-creep-approval.json">Approval record</a> · <a href="power-creep-agent-review.json">Nine-item agent review</a> · <a href="index.html#catalogue">Atlas catalogue</a></footer>
 </main>
 <script type="module">
+  import {defaults,validateControls,request,importRun,verifyResult} from './power-creep-contract.mjs';
   const $=id=>document.getElementById(id), form=$('controls');
   let engine,identity,lastResult;
   function plot(id,points,value,color){
@@ -60,37 +64,54 @@
     for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4,yy=y(v);add('line',{x1:left,x2:w-right,y1:yy,y2:yy,stroke:'#e4eae5'});add('text',{x:left-8,y:yy+4,'text-anchor':'end','font-size':11,fill:'#6b7a71'},Number(v.toPrecision(3)).toString());const t=xs[0]+(xs.at(-1)-xs[0])*i/4;add('text',{x:x(t),y:h-10,'text-anchor':'middle','font-size':11,fill:'#6b7a71'},Number(t.toPrecision(3)).toString());}
     add('polyline',{points:points.map((p,i)=>`${x(p.time)},${y(ys[i])}`).join(' '),fill:'none',stroke:color,'stroke-width':2.5,'stroke-linejoin':'round'});
   }
+  let generation=0;
+  const readControls=()=>Object.fromEntries(Object.entries(defaults).map(([key])=>[key,key==='mode'?$(key).value:Number($(key).value)]));
+  const setControls=c=>{for(const [key] of Object.entries(defaults))$(key).value=c[key];};
+  function invalidate(message='Controls changed. Run the experiment to update the response.'){
+    generation++;lastResult=null;$('download').disabled=true;
+    $('timeValue').textContent=$('qValue').textContent=$('strainValue').textContent='—';
+    $('stressChart').replaceChildren();$('strainChart').replaceChildren();$('full-state').textContent='';
+    $('status').textContent=message;$('description').textContent='No current result.';
+    if(engine)$('run').disabled=false;
+  }
   function run(event){
-    event?.preventDefault();if(!form.reportValidity())return;
-    $('run').disabled=true;$('download').disabled=true;lastResult=null;
-    const n=id=>Number($(id).value),p=n('pressure')*1e6,q=n('initialQ')*1e6;
-    const parameters=[n('bulk')*1e6,n('shear')*1e6,n('pref')*1e6,n('b1'),n('n1'),n('b2'),n('n2'),1];
-    const initial=[p+2*q/3,p-q/3,p-q/3,0,0,0],duration=n('duration'),samples=n('samples');
-    const stressHold=$('mode').value==='creep', wire=[duration,samples,...Array.from({length:6},()=>[+stressHold,0,0]).flat()];
-    const args=[identity.model,parameters.join(','),initial.join(','),'0,0,0,0,0,0','0,0,0,0,0,0',wire.join(','),$('mode').value,0,1e-9,1e-12,1e-12,.1,200000,1e-10,40];
-    $('status').className='subtle';$('status').textContent='Running physical-time history…';
-    // Yield once so the running state is painted before the synchronous Wasm call.
+    event?.preventDefault();invalidate();
+    const token=generation;let c,args;
+    try{c=validateControls(readControls());args=request(c,identity);}catch(error){$('status').textContent='Invalid input: '+error.message;return;}
+    $('run').disabled=true;$('status').className='subtle';$('status').textContent='Running physical-time history…';
     setTimeout(()=>{
+      if(token!==generation)return;
       try{
-        const result=JSON.parse(engine.ccall('atlas_run_schedule','string',[...Array(7).fill('string'),...Array(8).fill('number')],args));
-        if(result.catalogue_hash!==identity.catalogue_hash)throw Error('Engine catalogue does not match the supplied model identity.');
-        if(!result.ok)throw Error(result.message);
+        const result=verifyResult(JSON.parse(engine.ccall('atlas_run_schedule','string',[...Array(7).fill('string'),...Array(8).fill('number')],args)),identity);
+        if(token!==generation)return;
         const end=result.points.at(-1);
         $('timeValue').textContent=`${end.time.toPrecision(4)} s`;$('qValue').textContent=`${(end.observables[7]/1e6).toPrecision(4)} MPa`;$('strainValue').textContent=`${(end.strain[0]*100).toPrecision(4)} %`;
         plot('stressChart',result.points,p=>p.observables[7]/1e6,'#246647');plot('strainChart',result.points,p=>p.strain[0]*100,'#b07839');
-        $('description').textContent=stressHold?'All six stress components are held fixed. The solver finds the strain needed for ongoing creep.':'All six strain components are held fixed. Deviatoric stress relaxes while mean stress stays constant.';
+        $('description').textContent=c.mode==='creep'?'All six stress components are held fixed. The solver finds the strain needed for ongoing creep.':'All six strain components are held fixed. Deviatoric stress relaxes while mean stress stays constant.';
+        $('full-state').textContent=JSON.stringify({basis:'Mandel: xx, yy, zz, sqrt(2)xy, sqrt(2)yz, sqrt(2)xz',time_s:end.time,stress_Pa:end.state,strain:end.strain,engine:identity},null,2);
         lastResult={...result,provenance:identity,request:{function:'atlas_run_schedule',args}};
-        $('download').disabled=false;$('status').textContent=`Completed ${duration} physical seconds. ${samples} output intervals.`;
+        $('download').disabled=false;$('status').textContent=`Completed ${c.duration} physical seconds. ${c.samples} output intervals.`;
       }catch(error){$('status').className='subtle error';$('status').textContent=`Run failed: ${error.message}`;}
-      finally{$('run').disabled=false;}
+      finally{if(token===generation)$('run').disabled=false;}
     },20);
   }
   form.addEventListener('submit',run);
+  form.addEventListener('invalid',()=>invalidate('Invalid input. Correct the highlighted field, then run again.'),true);
+  form.addEventListener('input',event=>{if(event.target.id!=='run-file')invalidate();});
+  form.addEventListener('change',event=>{if(event.target.id==='mode')invalidate();});
+  $('reset').addEventListener('click',()=>{setControls(defaults);run();});
+  $('import').addEventListener('click',()=>$('run-file').click());
+  $('run-file').addEventListener('change',async()=>{
+    invalidate('Reading imported history…');const token=generation;
+    try{const file=$('run-file').files[0];if(!file)return;if(file.size>10*1024*1024)throw Error('Import exceeds 10 MB.');const text=await file.text();if(token!==generation)return;const c=importRun(text,identity);setControls(c);$('run-file').value='';run();}
+    catch(error){if(token!==generation)return;$('status').className='subtle error';$('status').textContent='Import rejected: '+error.message;}
+    finally{if(token===generation)$('run-file').value='';}
+  });
   $('download').addEventListener('click',()=>{if(!lastResult)return;const url=URL.createObjectURL(new Blob([JSON.stringify(lastResult,null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`power-creep-${$('mode').value}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
   try{
     identity=await(await fetch('./engine/identity.json')).json();
     const {default:create}=await import('./engine/power-creep.js');engine=await create();
-    $('run').disabled=false;$('run').textContent='Run experiment';run();
+    $('run').disabled=false;$('reset').disabled=false;$('import').disabled=false;$('run').textContent='Run experiment';run();
   }catch(error){$('status').className='subtle error';$('status').textContent=`Engine unavailable: ${error.message}`;}
 </script>
 </html>

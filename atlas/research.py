@@ -128,8 +128,48 @@ def discover(query,output,rows=50,cursor='*'):
     return record
 
 
+def approved_definitions():
+    """Resolve exact approved definitions without changing ordinary engine membership."""
+    from .model import load
+    registry = ROOT / 'catalogue/approved-models.json'
+    approvals = json.loads(registry.read_text())['models'] if registry.exists() else []
+    definitions = {}
+    seen = set()
+    for approval in approvals:
+        if approval['id'] in seen:
+            raise ValidationError('Duplicate approval identity')
+        seen.add(approval['id'])
+        if approval.get('status') != 'approved':
+            continue
+        pin = approval['definition']
+        relative = Path(pin['path'])
+        file = (ROOT / relative).resolve()
+        if relative.is_absolute() or '..' in relative.parts or not file.is_relative_to((ROOT / 'models').resolve()):
+            raise ValidationError('Approval definition escapes models directory')
+        if hashlib.sha256(file.read_bytes()).hexdigest() != pin['sha256']:
+            raise ValidationError('Approval definition hash mismatch: ' + pin['path'])
+        model = load(file)
+        if model['id'] != approval['model_id']:
+            raise ValidationError('Approval model ID mismatch')
+        if model['id'] in definitions and definitions[model['id']] != model:
+            raise ValidationError('Conflicting approved model definitions')
+        definitions[model['id']] = model
+    return definitions, [a for a in approvals if a.get('status') == 'approved']
+
+
 def export_database(path):
-    models={m['id']:m for m in all_models()};manifest=json.loads((ROOT/'catalogue/manifest.json').read_text())
+    ordinary={m['id']:m for m in all_models()};models=dict(ordinary)
+    approved, approvals = approved_definitions()
+    for identity, model in approved.items():
+        if identity in models and models[identity] != model:
+            raise ValidationError('Approval differs from ordinary model definition')
+        models[identity] = model
+    manifest=json.loads((ROOT/'catalogue/manifest.json').read_text())
+    entries = list(manifest['models'])
+    known = {entry['id'] for entry in entries}
+    for identity, model in approved.items():
+        if identity not in known:
+            entries.append(dict(id=identity, name=model['name'], family=model['family']))
     publications = load_publications()
     screening = load_screening()
     # Prefer richer lineage metadata when a DOI occurs in both canonical sources.
@@ -149,20 +189,44 @@ def export_database(path):
             CREATE TABLE IF NOT EXISTS publication_models(publication_id TEXT NOT NULL REFERENCES publications(id),model_id TEXT NOT NULL REFERENCES models(id),PRIMARY KEY(publication_id,model_id));
             CREATE TABLE IF NOT EXISTS publication_screening(publication_id TEXT PRIMARY KEY REFERENCES publications(id),decision TEXT NOT NULL,reason_code TEXT NOT NULL,screening_basis TEXT NOT NULL,full_text_reviewed INTEGER NOT NULL,reviewer TEXT NOT NULL,reviewed_at TEXT NOT NULL,independent_review TEXT NOT NULL,record_json TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS screening_evidence(publication_id TEXT NOT NULL REFERENCES publication_screening(publication_id),path TEXT NOT NULL,sha256 TEXT NOT NULL,locator TEXT NOT NULL,url TEXT NOT NULL,PRIMARY KEY(path,locator));''')
+            connection.executescript('''CREATE TABLE IF NOT EXISTS model_approvals(id TEXT PRIMARY KEY,model_id TEXT NOT NULL REFERENCES models(id),definition_path TEXT NOT NULL,definition_sha256 TEXT NOT NULL,record_json TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS agent_reviews(id TEXT PRIMARY KEY,model_id TEXT NOT NULL REFERENCES models(id),path TEXT NOT NULL,sha256 TEXT NOT NULL,record_json TEXT NOT NULL);''')
+            connection.execute('DELETE FROM agent_reviews')
+            connection.execute('DELETE FROM model_approvals')
             connection.execute('DELETE FROM screening_evidence')
             connection.execute('DELETE FROM publication_screening')
             connection.execute('DELETE FROM publication_models')
             connection.execute('DELETE FROM publication_relations')
             connection.execute('DELETE FROM publications')
             connection.execute('DELETE FROM sources');connection.execute('DELETE FROM models')
-            for entry in manifest['models']:
-                m=models.get(entry['id']);connection.execute('INSERT INTO models VALUES(?,?,?,?,?,?)',(entry['id'],entry['name'],entry['family'],m['status'] if m else 'candidate',int(bool(m)),json.dumps(m) if m else None))
+            for entry in entries:
+                m=models.get(entry['id']);connection.execute('INSERT INTO models VALUES(?,?,?,?,?,?)',(entry['id'],entry['name'],entry['family'],m['status'] if m else entry.get('status','candidate'),int(entry['id'] in ordinary),json.dumps(m) if m else None))
                 sources = list((m or {}).get('sources', []))
                 if entry.get('discovery_url'):
                     sources.append(dict(url=entry['discovery_url'], locator='Bibliographic review pending', role='Discovery reference'))
                 sources += entry.get('research_sources', []) + entry.get('catalogue_sources', [])
                 for s in sources:
                     connection.execute('INSERT INTO sources VALUES(?,?,?,?)', (entry['id'], s['url'], s['locator'], s['role']))
+            review_ids = set()
+            for approval in approvals:
+                pin = approval['definition']
+                connection.execute('INSERT INTO model_approvals VALUES(?,?,?,?,?)',
+                    (approval['id'], approval['model_id'], pin['path'], pin['sha256'], json.dumps(approval)))
+                review = approval.get('review', {})
+                if review.get('kind') == 'agent-model-review':
+                    relative = Path(review['path'])
+                    file = (ROOT / relative).resolve()
+                    if relative.is_absolute() or '..' in relative.parts or not file.is_relative_to((ROOT/'catalogue/agent-reviews').resolve()):
+                        raise ValidationError('Unsafe agent review path')
+                    if hashlib.sha256(file.read_bytes()).hexdigest() != review['sha256']:
+                        raise ValidationError('Agent review hash mismatch')
+                    record = json.loads(file.read_text())
+                    if record['model']['id'] != approval['model_id'] or record['model']['sha256'] != pin['sha256'] or record['status'] != 'accepted':
+                        raise ValidationError('Agent review does not bind accepted definition')
+                    if record['id'] not in review_ids:
+                        connection.execute('INSERT INTO agent_reviews VALUES(?,?,?,?,?)',
+                            (record['id'], approval['model_id'], review['path'], review['sha256'], json.dumps(record)))
+                        review_ids.add(record['id'])
             for node in nodes.values():
                 connection.execute('INSERT INTO publications VALUES(?,?,?,?,?)',
                     (node['id'], node['doi'], node['title'], node['url'], json.dumps(node['record'])))

@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const dir=process.argv[2]||'/private/tmp/atlas-power-creep-delivery-v2-full-site';
+const doc=JSON.parse(fs.readFileSync('docs/ingestion/power-creep-itasca900/delivery-v2/browser-export.json','utf8'));
+const identity=JSON.parse(fs.readFileSync(dir+'/engine/identity.json','utf8'));
+const {importRun,request,verifyResult}=await import(dir+'/power-creep-contract.mjs');
+const engine=await(await import(dir+'/engine/power-creep.js')).default();
+const args=request(importRun(JSON.stringify(doc),identity),identity);
+const replay=verifyResult(JSON.parse(engine.ccall('atlas_run_schedule','string',[...Array(7).fill('string'),...Array(8).fill('number')],args)),identity);
+assert.deepEqual(replay.points,doc.points);
+const end=replay.points.at(-1);assert.equal(end.time,2);assert.ok(Math.abs(end.strain[0]-.001616)<1e-10);
+console.log(JSON.stringify({ok:true,all_points_exact:true,points:replay.points.length,independent_constant_stress_creep_strain:.001616,actual_strain:end.strain[0]},null,2));

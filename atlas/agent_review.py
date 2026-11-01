@@ -9,6 +9,7 @@ import hashlib
 import json
 from pathlib import Path
 from .dsl import ValidationError
+from .evidence import checked_receipt
 from .model import ROOT
 from .structure import check
 
@@ -43,11 +44,32 @@ def validate_review(path, root=ROOT, for_approval=False):
     if {row['id'] for row in entries} != CHECKLIST or len({row['id'] for row in entries}) != len(entries):
         raise ValidationError('Every checklist item must appear exactly once')
     artifacts = {}
+    # A changing policy/dossier may have an explicitly archived original. Only
+    # a document pinned by that sidecar can use it; unrelated/new reviews still
+    # require their exact live artifacts. The model below always stays current.
+    document = Path(path).resolve()
+    archived_context = None
+    if document.is_relative_to(root):
+        sidecar = document.parent / 'source-archive-map.json'
+        if sidecar.exists():
+            try:
+                mapping = json.loads(sidecar.read_text())
+                relative = document.relative_to(root).as_posix()
+                if relative in mapping.get('documents', {}):
+                    archived_context = relative
+            except (OSError, ValueError, TypeError, AttributeError) as exc:
+                raise ValidationError('Invalid review artifact archive map') from exc
     for item in record['artifacts']:
         name = item['path']
         if name in artifacts:
             raise ValidationError('Duplicate review artifact: ' + name)
-        artifacts[name] = _file(root, name)
+        if archived_context is not None:
+            try:
+                artifacts[name] = checked_receipt(root, archived_context, name, item['sha256'])
+            except (OSError, ValueError, TypeError, KeyError) as exc:
+                raise ValidationError('Review artifact missing or changed: ' + name) from exc
+        else:
+            artifacts[name] = _file(root, name)
         if _hash(artifacts[name]) != item['sha256']:
             raise ValidationError('Review artifact missing or changed: ' + name)
     for row in entries:
