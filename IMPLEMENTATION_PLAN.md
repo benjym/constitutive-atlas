@@ -951,3 +951,5 @@ These are independent automated audits of the draft mappings and study machinery
 
 - [X] **CI-j2-browser-fixtures-v1** — Owner: coordinating parent; completed:2026-11-02. Completed independently reviewed actual-helper VM fixtures, preserved both failed native logs/original assertions/archive redirects; exact release 8e060a42 passes all required jobs. Production/numerical gates unchanged.
 - [X] **CI-j2-archive-redirects-v2** — Owner: coordinating parent; completed:2026-11-02. Completed eight independently reviewed redirects across six maps, canonical exact prior maps and complete 19-receipt inventory. All 28 affected saved checks and release 8e060a42 required jobs pass; original failed runs retained.
+
+- [-] FIX-norsand-e8-source-packet-layout-v1 — /root,2026-11-02; dependency RELEASE-norsand-e8-v1; isolate exact three generated Duncan PNGs into content-addressed archives outside historical source-only packet, preserve receipt bindings, unchanged CI exclusion gate; owned paths only listed in release-v1/remote-v1/baseline-layout-failure-v1.json plus required sidecars/snapshots.
