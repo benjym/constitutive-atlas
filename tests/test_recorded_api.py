@@ -16,6 +16,8 @@ import unittest
 from unittest.mock import patch
 from atlas.dsl import ValidationError
 from atlas.model import ROOT, all_models
+from atlas.stress import stress_scope
+from atlas.recorded_scope_execution import execute_scoped_recorded
 from atlas.recorded import (CONTROL_DEFAULTS, MATERIAL_DEFAULTS, execute_recorded,
                             recorded_wire, validate_recorded_run)
 
@@ -66,9 +68,18 @@ class RecordedNativeAPITests(unittest.TestCase):
         if target:Path(target).write_bytes(gzip.compress(json.dumps(cls.records,allow_nan=False).encode(),mtime=0))
 
     def run_spec(self,spec):
-        result=execute_recorded(spec,os.environ['ATLAS_RECORDED_SOLVER'])
+        solver=os.environ['ATLAS_RECORDED_SOLVER']
+        if spec['version']=='experimental-recorded-run-0.2':
+            catalogue=json.loads(subprocess.check_output([solver,'--describe'],text=True))
+            self.assertEqual(catalogue['models'],all_models())
+            result=execute_scoped_recorded(spec,catalogue,solver)
+        else:
+            result=execute_recorded(spec,solver)
         self.records.append(dict(request=copy.deepcopy(spec),response=copy.deepcopy(result)))
         json.dumps(result,allow_nan=False)
+        if spec['version']=='experimental-recorded-run-0.2':
+            self.assertEqual(result['stress']['scope'],spec['stress_scope'])
+            return result
         self.assertEqual(result['specification'],spec)
         self.assertEqual(len(result['request_sha256']),64)
         return result
@@ -115,11 +126,28 @@ class RecordedNativeAPITests(unittest.TestCase):
                               (field['initial'] if field.get('shape')=='sym' else [field['initial']])]
                 for i,c in enumerate(p['controls']):c['kind']='strain';c['coefficients']=[int(i==j) for j in range(6)]
                 p['knots']=[{'coordinate':k,'targets':[x,0,0,0,0,0]} for k,x in enumerate([0,.0001,-.0001,.0002])]
+                is_gis=model=='research-hp-extracted-asbs-gis-2024-v03'
+                if is_gis or stress_scope(definition)=='total':
+                    original=self.run_spec(copy.deepcopy(s))
+                    self.assertFalse(original['ok'])
+                    if is_gis:
+                        self.assertEqual(original['state'],s['initial'])
+                        self.assertEqual(original['failed_knot'],1)
+                        self.assertEqual(len(original['points']),1)
+                    else:
+                        self.assertIn('requires effective stress',original['message'])
+                        self.assertNotIn('state',original)
+                s['version']='experimental-recorded-run-0.2'
+                s['stress_scope']=stress_scope(definition)
+                if is_gis:s['integration_settings']={'max_depth':20}
                 r=self.run_spec(s);self.assertTrue(r['ok'],r['message'])
                 parent=r['initial']
                 for i,pt in enumerate(r['points'][1:],1):
                     de=[pt['strain'][j]-r['points'][i-1]['strain'][j] for j in range(6)]
                     command=[os.environ['ATLAS_RECORDED_SOLVER'],'--mode','integrate','--model',model,'--initial',','.join(map(str,parent)),'--strain',','.join(map(str,de))]
+                    if is_gis:
+                        settings=MATERIAL_DEFAULTS|s['integration_settings']
+                        command+=['--integration-settings',','.join(map(str,settings.values()))]
                     direct=json.loads(subprocess.check_output(command,text=True));self.assertTrue(direct['ok']);self.assertEqual(direct['state'],pt['state']);parent=pt['state']
                 restart=copy.deepcopy(s);restart['initial']=r['points'][2]['state'];restart['path']['initial_strain']=r['points'][2]['strain'];restart['path']['knots']=p['knots'][2:]
                 again=self.run_spec(restart);self.assertTrue(again['ok']);self.assertEqual(again['state'],r['state'])
