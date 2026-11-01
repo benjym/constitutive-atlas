@@ -33,3 +33,7 @@ The saved schedule failure exercises the initial left point/entry transition, no
 Separate nine-item review and exact canonical/registry integration are complete, preserving the existing explicit-user entry unchanged. Next claim a new bounded main-atlas interface/package task and prospective source/artifact/control gates. Reuse common physical-time ABI; no new constitutive kernel or broad sweep is justified. Fresh serial native-then-Wasm qualification follows an explicit coordinator slot handoff, then actual packaged browser and E8 authorization/verification.
 
 The original source-review statements about missing human signature remain historical. Current policy requires independent agent assessment, not human scientific approval. Numerical qualification, approval, website delivery and experimental validity remain separate.
+
+## Main-atlas transport checkpoint
+
+[WEB-maxwell-contract-v1](atlas-contract-v1/README.md) adds all four history presets and strict common-ABI/result/export/import/replay validation. Fourteen pure Node groups pass against retained responses; no current engine/browser claim. Explicit child whitelist: new web/maxwell-atlas-contract.mjs, tests/test_maxwell_atlas_contract.mjs and atlas-contract-v1/ only, plus own board/ledger. [Independent contract review](atlas-contract-v1/independent-review/README.md) accepted the corrected exact bytes after three findings were resolved; 32 saved responses include eight nonzero-time restarts. Next: worker/controller and shared packaging handoffs. E4/current E6–E8 remain open.
