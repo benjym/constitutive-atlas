@@ -1,0 +1,14 @@
+### Result
+{"worker_events":24,"download":"research-hp-extracted-asbs-gis-2024-v03-run.json"}
+### Ran Playwright code
+```js
+await (async (page) => {
+ const wire=await page.evaluate(()=>window.__wires.map(x=>({direction:x.direction,data:x.data})));
+ const pending=page.waitForEvent('download',{timeout:8000});await page.locator('#export-run').click();
+ const download=await pending;await download.saveAs('output/playwright/gis-installed/case-10.json');return {worker_events:wire.length,download:download.suggestedFilename()};
+}
+)(page);
+```
+### Events
+- Downloading file research-hp-extracted-asbs-gis-2024-v03-run.json ...
+- Downloaded file research-hp-extracted-asbs-gis-2024-v03-run.json to ".playwright-cli/research-hp-extracted-asbs-gis-2024-v03-run.json"

@@ -1,0 +1,18 @@
+async (page) => {
+ await page.reload();await page.waitForFunction(()=>window.__wires.some(x=>x.direction==='response')&&!document.querySelector('#export-run').disabled);
+ const file='/Users/bmar5496/code/constitutive-atlas/output/playwright/gis-installed/case-13.json',n=await page.evaluate(()=>window.__wires.length);
+ await page.locator('#run-file').setInputFiles(file);await page.waitForFunction(n=>window.__wires.slice(n).some(x=>x.direction==='response')&&!document.querySelector('#export-run').disabled,n);
+ const replay=await page.evaluate(n=>window.__wires.slice(n),n);if(!replay.find(x=>x.direction==='response')?.data.result?.ok)throw Error('Fresh reload replay failed');
+ for(const [id,name]of [['export-run','replay.json'],['export-csv','replay.csv']]){const pending=page.waitForEvent('download');await page.locator('#'+id).click();const d=await pending;await d.saveAs('output/playwright/gis-installed/'+name);}
+ const inputs=()=>page.locator('#controls').evaluate(el=>Object.fromEntries([...el.querySelectorAll('input[id],select[id]')].filter(x=>x.type!=='file').map(x=>[x.id,x.value])));
+ const before=await inputs(),records=[];
+ for(const id of ['wrong-catalogue','saved-initial-state','control-bits','saved-settings','unsupported-stress']){
+  const n=await page.evaluate(()=>{document.querySelector('#toast').textContent='';return window.__wires.length;});
+  await page.locator('#run-file').setInputFiles('/Users/bmar5496/code/constitutive-atlas/docs/reviews/gis2024-installed-browser-v1/inputs/invalid-'+id+'.json');
+  await page.waitForFunction(()=>document.querySelector('#toast').textContent.length>0);
+  const observation=await page.evaluate(n=>({message:document.querySelector('#toast').textContent,wire_count:window.__wires.length-n,export_disabled:document.querySelector('#export-run').disabled}),n);
+  if(observation.wire_count||JSON.stringify(await inputs())!==JSON.stringify(before)||observation.export_disabled)throw Error('Rejected import changed current run: '+id);
+  records.push({id,...observation});
+ }
+ const report={replay,corrupt_imports:records,inputs:before};const pending=page.waitForEvent('download');await page.evaluate(report=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));a.download='replay-audit.json';a.click();},report);const d=await pending;await d.saveAs('output/playwright/gis-installed/replay-audit.json');return {reload_replay:true,invalid_imports:records};
+}
