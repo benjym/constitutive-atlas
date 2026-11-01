@@ -46,7 +46,7 @@ test('actual browser match handler rejects total scope before any input mutation
   const fields=new Map();const field=id=>{if(!fields.has(id))fields.set(id,{value:'untouched'});return fields.get(id);};
   const messages=[];let refreshes=0,updates=0,protocols=0;
   vm.runInNewContext(handler+';matchExperiment();',{
-   experiment:structuredClone(record),model:()=>model,supportsEffectiveExperiment,toast:s=>messages.push(s),$:field,
+   specialLaboratoryActive:()=>false,experiment:structuredClone(record),model:()=>model,supportsEffectiveExperiment,toast:s=>messages.push(s),$:field,
    comparisonMetadata,setProtocol:()=>protocols++,refreshExperimentFilter:()=>refreshes++,scheduleUpdate:()=>updates++
   });
   if(model===total){assert.equal(fields.size,0);assert.equal(refreshes+updates+protocols,0);assert.match(messages[0],/effective-stress/);}

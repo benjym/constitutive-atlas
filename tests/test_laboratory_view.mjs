@@ -22,7 +22,7 @@ for(const row of rows){
  const ranges=new Map();const document={querySelector(key){if(!ranges.has(key))ranges.set(key,{setAttribute(k,v){this[k]=v;}});return ranges.get(key);}};
  vm.runInNewContext(labels+';updateScopeLabels();',{model:()=>m,laboratoryPresentation,$:get,document});
  assert.equal(get('confinement-label').textContent,p.radialLabel);assert.equal(get('path-title').textContent,p.pathTitle);assert.equal(get('path-chart').attributes['aria-label'],p.pathAria);assert.equal(ranges.get('[data-for="confinement"]')['aria-label'],p.radialLabel+' slider');
- vm.runInNewContext(render+';renderCharts();',{model:()=>m,laboratoryPresentation,laboratoryPoreView,$:get,lastSpec:s,currentResult:r,experiment:null,describeExperiment(){},comparisonSeries,chart(...args){charts.push(args);}});
+ vm.runInNewContext(render+';renderCharts();',{specialLaboratoryActive:()=>false,model:()=>m,laboratoryPresentation,laboratoryPoreView,$:get,lastSpec:s,currentResult:r,experiment:null,describeExperiment(){},comparisonSeries,chart(...args){charts.push(args);}});
  const poreChart=charts.find(c=>c[0]==='pore-chart');assert.deepEqual(poreChart[3],pore.points);assert.equal(get('pore-caption').textContent,pore.caption);
  assert.equal(charts.find(c=>c[0]==='path-chart')[1],p.axes.path.xLabel);
  const example=laboratoryExample(m);assert.deepEqual(example.initial,m.state.flatMap(f=>f.shape==='sym'?f.initial:[f.initial]));

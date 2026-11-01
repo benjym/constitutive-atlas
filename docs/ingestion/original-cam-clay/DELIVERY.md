@@ -19,7 +19,7 @@
 - [X] **E5 — Agent approval:** all nine items accepted by actual separate reviewer for exact637ba7.. candidate; [record](../../../catalogue/agent-reviews/original-cam-clay-sw-electronic-log-recovery-agent-v1.json) validates for approval and registry entry is installed. See [review](control-selection-v1/independent-review/e5-v1/REPORT.md). No experimental-validation claim.
 - [X] **E6 — Atlas:** exact model/dossier/E5 registry and SQLite identities installed. Common13 generated artifacts exactly match qualified engine; numerical covariance-v3 and distinct recorded-restart-v4 (83cases/2472checks) pass. Original OCC/GIS strict failures and rollback remain asserted. Current13 negative contract independently accepted; catalogue/example/applicability/export integration and archived receipt checks pass.
 - [X] **E7 — Packaged website:** isolated simplified-site standard package838files matches release source and qualified Wasm; supported-input contract passes12ordinary successes plus retained GIS default failure and1named success. Actual IAB fiveOCCmonotonic protocols, approved deep link, parameters/initial state, reset/latest request, real export replay, invalid recovery and overlay toggle pass. Portable1413tests pass63skips;31exact archival tests pass separately. [Final evidence](finish-checklist-v1/release-host-fixes-v1/), [independent integration review](finish-checklist-v1/independent-release-review/REPORT.md).
-- [ ] **E8 — Live delivery:** ready to publish from isolated delivery/occ-checklist-v1 after scoped local commit. Push/deploy/remote CI authorization absent; no Actions/Pages/live verification claimed. Remote gates and exact project-path live run remain required.
+- [-] **E8 — Live delivery:** user explicitly authorized push, CI, current-main integration, deployment and live verification. Exact reviewed branch82a5961d is pushed; current-main integration, required green CI and exact project-path live run remain working. [Current plan/evidence](live-delivery-v1/PLAN.md).
 
 ## Current handoff
 
@@ -61,3 +61,7 @@ Reproduce portable closure from repository root: `python3 -B docs/ingestion/orig
 ## Completion statement
 
 Source, complete declared representation, exact transcription, bounded native/Wasm numerical qualification, separate model approval, common atlas integration and actual packaged-browser qualification are complete. This delivery is ready to publish; E8/umbrella remain open until authorized deployment and live verification succeed.
+
+## Authorized live-delivery continuation
+
+User Yes authorizes the concrete release handoff: push, CI, integration, deployment and live verification. Prior absence-of-authorization statements above describe the earlier checkpoint; preserved exact ledger is [here](live-delivery-v1/DELIVERY-before-authorized-live.md). Main integration preserves newer SLS/Burgers/J2 interfaces; actual separate merge review accepted. E8 and umbrella remain open pending exact all-green deployed revision and live browser/asset evidence.
