@@ -762,7 +762,7 @@ The approved bounded J2 formulation is delivered in the main laboratory. Release
 
 ### Orthotropic OGS main-laboratory qualification — 2026-11-02
 
-The complete nine-constant fixed-aligned-axis OGS law is independently source/numerically approved and works in the general atlas laboratory. Exact-source compliance references, all-six state histories and tangents, native/Wasm parity, immutable approval, standard packaging and actual browser replay/recovery/layout are qualified. It is counted separately from the twelve ordinary definitions at this release baseline. [Delivery ledger](docs/ingestion/orthotropic-ogs/DELIVERY.md) tracks remaining E8 CI/Pages/live verification; no standalone page or experimental qualification is claimed.
+The complete nine-constant fixed-aligned-axis OGS orthotropic law is delivered in the general atlas laboratory. Qualified application 462a450c/run 41341461226 passes all six CI/Pages jobs, independently assessed native/Wasm checks on macOS/Linux, 155 exact published-upload asset comparisons and actual desktop/mobile browser numerical/replay/recovery checks. All 53 delivery criteria are complete. The qualified 995-file package preserves 14 ordinary definitions; orthotropic is a separate common-solver profile. [Delivery ledger](docs/ingestion/orthotropic-ogs/DELIVERY.md) retains exact source/approval/review identities, all failures and final independent acceptance. No finite rotation, broad conditioning envelope or experimental validation is claimed.
 
 
 ### Hill anisotropic perfect plasticity — 2026-11-02

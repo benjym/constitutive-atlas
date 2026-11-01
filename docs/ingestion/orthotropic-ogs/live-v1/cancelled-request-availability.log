@@ -1,0 +1,7 @@
+### Result
+{"purpose":"Availability only for five original network entries without terminal status after worker/model cancellation; not a claim those original requests completed","results":[{"path":"worker.js","url":"https://benjym.github.io/constitutive-atlas/worker.js","status":200},{"path":"sls-atlas-worker.mjs","url":"https://benjym.github.io/constitutive-atlas/sls-atlas-worker.mjs","status":200},{"path":"implicit-path-worker.mjs","url":"https://benjym.github.io/constitutive-atlas/implicit-path-worker.mjs","status":200},{"path":"material-point-orthotropic/identity.json","url":"https://benjym.github.io/constitutive-atlas/material-point-orthotropic/identity.json","status":200},{"path":"maxwell-atlas-worker.mjs","url":"https://benjym.github.io/constitutive-atlas/maxwell-atlas-worker.mjs","status":200}]}
+### Ran Playwright code
+```js
+await (async(page)=>{const paths=['worker.js','sls-atlas-worker.mjs','implicit-path-worker.mjs','material-point-orthotropic/identity.json','maxwell-atlas-worker.mjs'],results=[];for(const path of paths){const url=new URL('./'+path,page.url()).href,r=await page.request.get(url,{timeout:30000});results.push({path,url,status:r.status()});}if(results.some(x=>x.status!==200))throw Error(JSON.stringify(results));return {purpose:'Availability only for five original network entries without terminal status after worker/model cancellation; not a claim those original requests completed',results};}
+)(page);
+```

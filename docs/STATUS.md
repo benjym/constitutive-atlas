@@ -732,9 +732,9 @@ The exact approved J2 linear isotropic hardening law now has a qualified main-la
 The approved bounded J2 formulation is delivered in the main laboratory. Release 8e060a42 passes all required native/Wasm/package/Pages gates;20 assets match the tested upload and the actual live preset passes 32full-state checks. Independent review and all original failures are retained in [the delivery ledger](ingestion/j2-linear-hardening/DELIVERY.md). No broader or experimental validation is claimed.
 
 
-## Orthotropic OGS local delivery — 2 November 2026
+## Orthotropic OGS live delivery — 2 November 2026
 
-The full nine-constant fixed-axis small-strain orthotropic law has exact independent agent approval, 121 requests per native/Wasm backend, independent compliance/tangent checks, and a qualified main-atlas laboratory. The standard 895-file package preserves the twelve-model ordinary catalogue and its unchanged supported-input policy; the orthotropic engine is a separate dedicated common-solver profile, not a thirteenth ordinary definition. Actual desktop/mobile browser tests cover all material constants, six-component prestress/increments, replay, rejection/recovery and model switching. Three unique source identities survive SQLite export (six rows from the existing definition/catalogue union). See the [delivery ledger](ingestion/orthotropic-ogs/DELIVERY.md). E8 release/CI/live verification remains open. No experimental validation, finite rotation or broad parameter-conditioning claim is made.
+The complete nine-constant fixed-aligned-axis OGS orthotropic law is delivered in the general atlas laboratory. Qualified application 462a450c/run 41341461226 passes all six CI/Pages jobs, independently assessed native/Wasm checks on macOS/Linux, 155 exact published-upload asset comparisons and actual desktop/mobile browser numerical/replay/recovery checks. All 53 delivery criteria are complete. The qualified 995-file package preserves 14 ordinary definitions; orthotropic is a separate common-solver profile. [Delivery ledger](ingestion/orthotropic-ogs/DELIVERY.md) retains exact source/approval/review identities, all failures and final independent acceptance. No finite rotation, broad conditioning envelope or experimental validation is claimed.
 
 
 ### Hill anisotropic perfect plasticity — 2026-11-02
