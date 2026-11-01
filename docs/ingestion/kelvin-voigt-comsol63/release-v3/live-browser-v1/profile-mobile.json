@@ -1,0 +1,88 @@
+{
+  "body": "A spring and dashpot acting in parallel produce delayed shear creep, while volume changes remain elastic.\n\nThe spring resists strain and the dashpot resists its rate of change. Under a held shear stress, strain gradually approaches a finite value as the spring takes more of the load. This simple model helps distinguish delayed deformation from the continuing creep of a Maxwell material.\n\nWhat it describes\nDelayed creep\nA held deviatoric stress produces a gradual approach to a finite strain. Deviatoric means the part that changes shape rather than volume; the approach has time scale τ.\nRate-dependent stress\nAt the same strain, faster shape change requires a larger viscous stress. A sudden change between finite strain rates changes stress immediately while strain remains continuous.\nStrain hold and elastic volume\nStopping all strain rates immediately removes viscous stress. The remaining elastic stress stays constant during the hold. Volume change has no viscous contribution in this variant.\nCompare creep, loading and a strain hold\n\nUse Reset Kelvin–Voigt preset to load the complete example. Creep · hold all stresses starts from zero initial strain and the six incoming rates [0.001, −0.0005, −0.0005, 0.0004, −0.0002, 0.0003] per second. It holds the resulting initial stress for the displayed duration; look for a level stress curve and strain approaching a plateau. Select each Plot component to inspect all six responses. Choose Loading · constant strain rate to use the separate six loading-rate entries: strain grows linearly and viscous stress adds to the spring stress. Choose Strain hold · immediate viscous stress shedding to set all subsequent rates to zero. With the zero-strain preset, stress falls to zero at the initial event and stays there; a nonzero initial strain leaves a constant elastic stress. The full table shows both sides of the initial event.\n\nTo compare creep time scales at the same incoming stress, double τ and halve every incoming initial-rate component, keeping the initial strain and elastic moduli fixed. The strain approaches the same plateau more slowly. Changing τ alone while keeping the incoming rate fixed also changes the stress being held, so it compares a different loading condition. Maxwell relaxes stress during a strain hold; this Kelvin–Voigt variant instead sheds its viscous stress immediately and retains elastic stress.\n\nMaterial parameters\n\nK and G use pascals and τ uses seconds; all three are positive. The derived shear viscosity Gτ has units Pa·s. Use the complete illustrative coefficient set supplied by Reset, or a material-specific calibration. The displayed example is a model demonstration rather than a measured material fit.\n\nParameter\tMeaning\tUnits\nK · Bulk modulus\tSets resistance to volume change. Pure volume change is elastic and does not depend on the dashpot.\tPa\nG · Shear modulus\tSets the spring resistance to shape change. The dashpot viscosity is Gτ, so changing G with τ fixed changes both shear stiffness and viscosity.\tPa\nτ · Retardation time\tSets the time scale of delayed shear creep and, with G, the viscosity Gτ. It is not a stress-relaxation time during a strain hold.\ts\nStarting state\n\nSupply all six initial total-strain components and all six incoming initial strain-rate components. Their combination determines the incoming total stress; there is no independent initial-stress offset or hidden branch state. The order is xx, yy, zz, √2xy, √2yz, √2xz, with compression positive. The shear entries use the Mandel scaling √2 rather than engineering shear strain. Loading mode also requires its separate six subsequent rates. Reset provides a zero-strain illustrative preparation; it does not reconstruct a specimen history.\n\nScope and limitations\n\nThe ordinary isotropic Kelvin–Voigt law in COMSOL 6.3 Eq. 3-36 is used with deviatoric viscosity and purely elastic bulk. The laboratory advances physical seconds with three-dimensional infinitesimal strain, fixed spatial axes and zero spin. Stress is dry total Cauchy stress, with compression-positive stress and strain.\n\nThis variant has no bulk viscosity, plasticity, permanent-strain mechanism, thermal or pore-fluid coupling, fractional derivatives or finite-rotation update. A prescribed ideal strain step would require an impulse of viscous stress and is outside the finite-rate controls. The laboratory offers constant rate, strain hold and stress hold; a hold does not produce exponential strain relaxation.\n\nThe core equations\nRead more\nCOMSOL 6.3 · Kelvin–Voigt theory, Eq. 3-36 ↗\nCOMSOL 6.3 · Kelvin–Voigt settings and time/viscosity units ↗\nRelated models and formulations\nMaxwell viscoelasticity\nStandard Linear Solid (Zener) · deviatoric response\nBurgers viscoelasticity\nTechnical details, implementation and checks",
+  "bodyScrollWidth": 356,
+  "bodyWidth": 356,
+  "dialogWidth": 358,
+  "documentWidth": 390,
+  "links": [
+    {
+      "href": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441080",
+      "text": "COMSOL 6.3 · Kelvin–Voigt theory, Eq. 3-36 ↗"
+    },
+    {
+      "href": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_solid.07.016.html#4898977",
+      "text": "COMSOL 6.3 · Kelvin–Voigt settings and time/viscosity units ↗"
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/index.html#catalogue/maxwell-itasca900-zero-spin-ode",
+      "text": "Maxwell viscoelasticity"
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/index.html#catalogue/sls-comsol63-deviatoric-zero-spin-ode",
+      "text": "Standard Linear Solid (Zener) · deviatoric response"
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/index.html#catalogue/burgers-itasca900-dry-zero-spin-ode",
+      "text": "Burgers viscoelasticity"
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/engine-kelvin-voigt/kelvin-voigt-comsol63-deviatoric-zero-spin-ode.json",
+      "text": ""
+    },
+    {
+      "href": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441080",
+      "text": ""
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/engine-kelvin-voigt/review.html",
+      "text": ""
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/engine-kelvin-voigt/review.json",
+      "text": ""
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/engine-kelvin-voigt/approval.json",
+      "text": ""
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/docs/models/kelvin-voigt-comsol63.md.html",
+      "text": ""
+    },
+    {
+      "href": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441080",
+      "text": ""
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/evidence.json",
+      "text": ""
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/kelvin-voigt-comsol63-agent-v1.json",
+      "text": ""
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/kelvin-voigt-comsol63-agent-v1.json",
+      "text": ""
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json",
+      "text": ""
+    },
+    {
+      "href": "https://benjym.github.io/constitutive-atlas/index.html#catalogue/kelvin-voigt-comsol63-deviatoric-zero-spin-ode",
+      "text": "Link to this model"
+    }
+  ],
+  "parameterRows": [
+    "Parameter\tMeaning\tUnits",
+    "K · Bulk modulus\tSets resistance to volume change. Pure volume change is elastic and does not depend on the dashpot.\tPa",
+    "G · Shear modulus\tSets the spring resistance to shape change. The dashpot viscosity is Gτ, so changing G with τ fixed changes both shear stiffness and viscosity.\tPa",
+    "τ · Retardation time\tSets the time scale of delayed shear creep and, with G, the viscosity Gτ. It is not a stress-relaxation time during a strain hold.\ts"
+  ],
+  "profileFirst": "model-profile",
+  "technicalClosed": true,
+  "title": "Kelvin–Voigt · COMSOL 6.3 deviatoric response",
+  "url": "https://benjym.github.io/constitutive-atlas/index.html#catalogue/kelvin-voigt-comsol63-deviatoric-zero-spin-ode",
+  "width": 390
+}
