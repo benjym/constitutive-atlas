@@ -1,0 +1,119 @@
+{
+  "role": "native",
+  "completed": true,
+  "freeze_sha256": "0f63e88873abe46b21eece17a23786c26c9b94ef1c7c122d346266f7796d9558",
+  "started_utc": "2026-11-01T05:50:52.375295+00:00",
+  "commands": [
+    {
+      "label": "generate",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "-m",
+        "atlas.compiler",
+        "/private/tmp/atlas-mc-execution-v3/native/generated",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-current-collector-freeze-v3/models"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-mc-execution-v3/native",
+        "-B",
+        "/private/tmp/atlas-mc-execution-v3/native/build",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-mc-execution-v3/native/build",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "node",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-current-collector-freeze-v3/observe.mjs",
+        "native",
+        "/private/tmp/atlas-mc-execution-v3/native/build",
+        "/private/tmp/atlas-mc-execution-v3/native/observations"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "paths",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-current-collector-freeze-v3/assess_paths.py",
+        "/private/tmp/atlas-mc-execution-v3/native/observations/journal.json"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "replays",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-current-collector-freeze-v3/assess_replays.py",
+        "/private/tmp/atlas-mc-execution-v3/native/observations",
+        "native"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "compatibility-collect",
+      "argv": [
+        "node",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-execution-driver-v3/compatibility.mjs",
+        "native",
+        "/private/tmp/atlas-mc-execution-v3/native/build",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/declared-loading-mixed-v1/requests.json",
+        "/private/tmp/atlas-mc-execution-v3/native/observations/compatibility.json"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "compatibility-assess",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-execution-driver-v3/assess_compatibility.py",
+        "/private/tmp/atlas-mc-execution-v3/native/observations/compatibility.json",
+        "native"
+      ],
+      "status": 0,
+      "signal": null
+    }
+  ],
+  "artifacts": {
+    "atlas_solver": "83b9db7380e5d36cd31beb2423cb6f92133bc26f95559bb9323d324b04c51d54"
+  },
+  "observations": {
+    "calls.json": "7459f0e80fb4d24b71742f76d460a97f06bcd19378be74cf188dc865cebaf5cc",
+    "compatibility.json": "525cea622dccc92a7853782c640aafab5a2218c1f38eac49e33b0274f4f28ced",
+    "journal.json": "ba32a1f40ffb12a9525c1ae28a2693b074c9b1fc9f09ca532a35bcbe26ffda3a",
+    "rejections.json": "5b6c2f4771b6e1b516d13fab27fb05745b8553808332c0c26ebd7fe7744c1f07",
+    "replays.json": "59d004cc6995f2398f207a4a3f20332cb78e61c724a1a5ea2ab98344de65bc2d"
+  },
+  "finished_utc": "2026-11-01T05:51:04.322437+00:00"
+}
