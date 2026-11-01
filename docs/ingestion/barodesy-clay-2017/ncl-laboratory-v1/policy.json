@@ -1,0 +1,84 @@
+{
+  "id": "barodesy2017-ncl-laboratory-v1",
+  "frozen_before_compiled_observations": true,
+  "model_sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477",
+  "initial_state_example_sha256": "50b6b1c36d53bd1cf862bdacf2f53f998fa1c1930bf2d1fe2c74b6d03c54481b",
+  "settings": {
+    "version": "incremental-settings-0.1",
+    "norm": "scaled_component_max",
+    "residual_tolerance": 2e-10,
+    "rate_tolerance": 1e-06,
+    "max_iterations": 45,
+    "max_depth": 14,
+    "max_substeps": 20000,
+    "max_backtracks": 11
+  },
+  "cases": [
+    {
+      "id": "ncl-isotropic",
+      "protocol": 4,
+      "target": 0.01,
+      "steps": 100,
+      "initial": "accepted-analytical-ncl"
+    },
+    {
+      "id": "ncl-isotropic-refined",
+      "protocol": 4,
+      "target": 0.01,
+      "steps": 100,
+      "initial": "accepted-analytical-ncl",
+      "rate_tolerance": 1e-07
+    },
+    {
+      "id": "ncl-drained",
+      "protocol": 1,
+      "target": 0.01,
+      "steps": 100,
+      "initial": "accepted-analytical-ncl"
+    },
+    {
+      "id": "unchanged-default-drained",
+      "protocol": 1,
+      "target": 0.01,
+      "steps": 100,
+      "initial": "unchanged-model-default"
+    },
+    {
+      "id": "ncl-zero",
+      "protocol": 4,
+      "target": 0,
+      "steps": 1,
+      "initial": "accepted-analytical-ncl"
+    },
+    {
+      "id": "invalid-initial",
+      "protocol": 4,
+      "target": 0.01,
+      "steps": 100,
+      "initial": "zero-stress-invalid"
+    },
+    {
+      "id": "ncl-recovery",
+      "protocol": 4,
+      "target": 0.01,
+      "steps": 100,
+      "initial": "accepted-analytical-ncl"
+    }
+  ],
+  "gates": {
+    "all_named_positive_cases_success": true,
+    "complete_state_components": 7,
+    "loading_identity_and_finite_outputs": true,
+    "isotropic_reference": "At every caller point: eps_v=sum(strain normal), v=v0*exp(-eps_v), p=p0*exp(eps_v/lambda_star); independent Decimal90, no production expression oracle. Equal principal stress and zero shear.",
+    "maximum_pressure_relative_error": 0.0002,
+    "maximum_void_ratio_absolute_error": 2e-05,
+    "refinement": "Refined maximum pressure/e errors must not exceed ordinary errors plus 1e-10 relative-pressure/absolute-e roundoff allowance. No gate tuning after observation.",
+    "isotropic_deviatoric_relative_bound": 1e-10,
+    "backend_full_state_normalized_difference": 2e-10,
+    "zero_state_exact_identity": true,
+    "invalid_initial_rejected": true,
+    "recovery_identical_except_elapsed_ms": true
+  },
+  "scope": "Current frozen source common material-point engine and analytical NCL/isotropic plus named laboratory requests. No measured preparation, experimental match, complete release package/browser/live or general domain/parameter guarantee.",
+  "build_policy": "Coordinator only; native then Wasm, one explicit atlas_solver target per invocation --parallel 1. No author binaries."
+}

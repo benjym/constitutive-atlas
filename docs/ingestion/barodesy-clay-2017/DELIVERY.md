@@ -14,15 +14,15 @@ Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md).
 - [X] **E1 — Sources:** actual original PDF retained; separate agent visually inspected full governing body law and relevant appendices, accepted explicit body2p/zero-spin interpretation with source ambiguities retained. See accepted review below.
 - [-] **E2 — Contract:** current candidate already v0.3 with explicit frame/stress/sign/input/state/initialization. Independent scope/initialization assessment accepted; prospective current delivery qualification remains open.
 - [-] **E3 — Transcription:** exact mathematical bridge and existing source/algebra checks available; new analytical NCL state passes high-precision reference/inverse, supported initialization and three rejected inputs. Independent source/algebra/initial-state review accepted; current generator/release qualification remains separate.
-- [-] **E4 — Native/Wasm:** reuse existing rate/AD/finite-path/current-preview evidence with distinct identities. Historical studies are not fresh release certification; current example trajectory and release interfaces remain unqualified.
+- [-] **E4 — Native/Wasm:** reuse existing rate/AD/finite-path/current-preview evidence with distinct identities. Historical studies are not fresh release certification. New frozen working-source native/Wasm NCL isotropic/drained/default/zero/rejection/recovery requests pass, with independent NCL reference and refinement; separate interface review active. Source includes concurrently uncommitted13th model; clean release/complete package and regression qualification remain open.
 - [X] **E5 — Agent approval:** actual separate nine-item review and B17-01–06 accepted; exact canonical decision and generated registry entry verified through normal public projection. [Integration receipt](../../admission/barodesy2017-agent-v1/README.md).
-- [-] **E6 — Atlas:** existing public draft inclusion only; accepted exact review/approval now registered and normal public projection verified. Example trajectory/registry and current complete package integration remain pending.
+- [-] **E6 — Atlas:** existing public draft inclusion only; accepted exact review/approval now registered and normal public projection verified. New analytical example trajectory and normal builder/import checks pass in the isolated13model catalogue. Root example registry installation waits for matching catalogue integration; current complete package remains pending.
 - [ ] **E7 — Packaged website:** actual matching package/default/example controls/lifecycle/rollback and browser evidence remain to be qualified for the reviewed scope.
 - [ ] **E8 — Live delivery:** exact authorized commit/CI/Pages asset identity and actual live run remain unverified.
 
 ## Current handoff
 
-Working: independent B17-01–06/nine-item acceptance integrated. Coordinator replay matches exactly; all39 manifest bindings and normal catalogue review/approval projection pass. Next: scope current example/interface/package qualification, using the accepted source-located analytical initial state without claiming an evolved trajectory yet. Preserve old unsigned review sheets and failures. No new broad numerical campaign is justified by source typography decisions.
+Working: independent B17-01–06/nine-item acceptance integrated. Coordinator replay matches exactly; all39 manifest bindings and normal catalogue review/approval projection pass. New [NCL laboratory qualification](ncl-laboratory-v1/README.md) passes seven frozen requests/backend and independent Decimal pressure/e reference, with tighter-tolerance improvement; actual separate interface review is active. Next: integrate the prepared named example after matching13model source integration, then qualify the current complete package and actual browser. Preserve old unsigned review sheets and failures. No new broad numerical campaign is justified by source typography decisions.
 
 Analytical example pressure is chosen, not measured. Saturation/drainage/pore pressure/history are unassigned; no experimental preparation, calibration, FE tangent, finite-spin/finite-strain or author-code equivalence claim. Experimental validation remains unassessed.
 
@@ -32,3 +32,10 @@ Analytical example pressure is chosen, not measured. Saturation/drainage/pore pr
 - Approval: `barodesy-clay-2017-agent-v1-approval`, exact unchanged model hash above.
 - Evidence: [independent review](../../reviews/barodesy2017-agent-v1/README.md), [parent integration and verifier](../../admission/barodesy2017-agent-v1/README.md).
 - Current release engine/package/browser/live delivery and experimental validation remain unqualified. No remote action or new material execution occurred.
+
+## Current analytical trajectory qualification
+
+- Frozen source snapshot:490files, includes concurrently modified source and uncommitted OCC13; not a clean-release revision.
+- Pressure reference error <=8.18e-8 relative, refined <=2.05e-8; e error <=2.61e-10, refined <=6.51e-11. Backend full-state/strain normalized mismatch <=4.37e-16.
+- Exactzero and initial-state rejection/recovery pass; parsed responses saved, not opaque transport stdout. Native uses separate processes, Wasm one module. This does not replace historical increment rollback evidence.
+- Proposed document/entry pass ordinary example builder beside GIS; root registry unchanged pending matching catalogue. Current whole-package, browser and live delivery remain open.
