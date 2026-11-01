@@ -96,11 +96,11 @@ Evidence for E0–E4: board claim and DELIVERY.md; source-v1 receipts and 26 alg
 
 ## E5 — Independent agent review and approval
 
-- [ ] Hand the exact candidate, readable source receipts, dossier, prospective gates and complete saved results to a separate agent run. Record actual implementation/reviewer run IDs and independence basis. Do not ask the implementation agent to certify its own transcription.
-- [ ] The reviewer checks all nine items in [checklist v1](AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](AGENT_REVIEW_TEMPLATE.json).
-- [ ] Resolve blocking findings; rerun only affected qualification and regression checks when justified. Obtain a new or updated reviewer decision bound to the final model bytes and artifacts. Preserve superseded failures and decisions.
-- [ ] Store the accepted record under `catalogue/agent-reviews/`, validate it and generate the approval entry. Coordinator integration requires no human scientific sign-off or further user approval.
-- [ ] Confirm approval refers to the exact intended formulation and supported interfaces/parameter/protocol scope. Keep experimental validation separately assessed; no experimental match is required merely to illustrate an otherwise verified law.
+- [X] Hand the exact candidate, readable source receipts, dossier, prospective gates and complete saved results to a separate agent run. Record actual implementation/reviewer run IDs and independence basis. Do not ask the implementation agent to certify its own transcription.
+- [X] The reviewer checks all nine items in [checklist v1](AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](AGENT_REVIEW_TEMPLATE.json).
+- [X] Resolve blocking findings; rerun only affected qualification and regression checks when justified. Obtain a new or updated reviewer decision bound to the final model bytes and artifacts. Preserve superseded failures and decisions.
+- [X] Store the accepted record under `catalogue/agent-reviews/`, validate it and generate the approval entry. Coordinator integration requires no human scientific sign-off or further user approval.
+- [X] Confirm approval refers to the exact intended formulation and supported interfaces/parameter/protocol scope. Keep experimental validation separately assessed; no experimental match is required merely to illustrate an otherwise verified law.
 
 ```sh
 python3 -B -m atlas.agent_review catalogue/agent-reviews/MODEL-agent-v1.json --for-approval
@@ -111,25 +111,25 @@ python3 -B -m atlas.agent_review catalogue/agent-reviews/MODEL-agent-v1.json --a
 
 ## E6 — Integrate into the atlas
 
-- [ ] Coordinator installs the exact qualified model bytes and reviewed approval entry, dossier, examples and relevant evidence. Use `models/` only for profiles supported by the normal public engine; otherwise implement/qualify the required generic engine and browser routing. A separate research executable is not public atlas delivery.
-- [ ] Update the discovery/catalogue entry and lineage/source links, approval registry, evidence/publication mappings and protocol/example registries as required by their actual consumers. Do not manufacture a legacy human-review acceptance to make an exporter happy.
-- [ ] Preserve approval/evidence hashes. If integration changes model metadata, IDs, equations, numerical settings or dependencies covered by the review, rebind the review and rerun affected gates before using the old approval claim.
-- [ ] Regenerate the full public catalogue and verify engine metadata equals the definitions packaged with it. Ensure all prior models remain present and retain their qualified behavior.
-- [ ] Extend complete-coverage/default/profile policies deliberately for the new model and freeze expected outcomes before observing the new release gate. Keep prior policy/evidence identities and declared failures; do not skip the new model to obtain a green package.
-- [ ] Update current status/roadmap counts and model summaries from actual records. Count full formulations and restricted variants accurately. Export the database when part of the release; verify the exact model/source/approval identity survives export.
+- [X] Coordinator installs the exact qualified model bytes and reviewed approval entry, dossier, examples and relevant evidence. Use `models/` only for profiles supported by the normal public engine; otherwise implement/qualify the required generic engine and browser routing. A separate research executable is not public atlas delivery.
+- [X] Update the discovery/catalogue entry and lineage/source links, approval registry, evidence/publication mappings and protocol/example registries as required by their actual consumers. Do not manufacture a legacy human-review acceptance to make an exporter happy.
+- [X] Preserve approval/evidence hashes. If integration changes model metadata, IDs, equations, numerical settings or dependencies covered by the review, rebind the review and rerun affected gates before using the old approval claim.
+- [X] Regenerate the full public catalogue and verify engine metadata equals the definitions packaged with it. Ensure all prior models remain present and retain their qualified behavior.
+- [X] Extend complete-coverage/default/profile policies deliberately for the new model and freeze expected outcomes before observing the new release gate. Keep prior policy/evidence identities and declared failures; do not skip the new model to obtain a green package.
+- [X] Update current status/roadmap counts and model summaries from actual records. Count full formulations and restricted variants accurately. Export the database when part of the release; verify the exact model/source/approval identity survives export.
 
 **Exit:** the ordinary atlas generation path includes the model and its actual approval/evidence. No private adapter or hand-edited generated catalogue is required.
 
 ## E7 — Make the packaged website work
 
-- [ ] Use fresh matching Wasm/generated metadata and the standard web builder. Packaging must reject stale model/engine combinations. Include only permitted public assets; keep private sources and unapproved original measurement arrays out.
-- [ ] Ensure the model is selectable and reachable by its shareable URL; source/DOI links, equations, assumptions, author/variant attribution, initialization, parameter units and limitations are visible.
-- [ ] Display the accepted agent review and exact approved scope accurately. If the current exporter/UI only understands older review records, add and qualify generic support for agent-review/approval data; a registry entry alone does not make the website show it.
-- [ ] Provide the actual controls required by this model. Physical-time laws need honest time/rate/hold controls and labels; unsupported controls must be unavailable with a useful explanation. A static catalogue card or timed CLI alone is not the requested interactive delivery.
-- [ ] In an actual browser, run the public default/named preset; inspect meaningful plots, units, all required state and absence of worker/console/network failures. Exercise parameter/initial-state changes, supported protocols, reset and latest-request behavior.
-- [ ] Test export/import/replay and invalid input followed by recovery through the real exposed interface. Record fetched engine/catalogue identities so a stale browser cache cannot supply the evidence.
-- [ ] Exercise compatible measurement overlays and their toggle when data rights and model applicability permit. Otherwise show why comparison is unavailable; do not imply calibration, density matching or experimental validation from a plotted overlay.
-- [ ] Run relevant package, scope/parity, examples and browser checks. Save exact package manifest, requests/responses and UI evidence. Include at least one successful end-to-end request for this model; no silent unsupported-model filtering.
+- [X] Use fresh matching Wasm/generated metadata and the standard web builder. Packaging must reject stale model/engine combinations. Include only permitted public assets; keep private sources and unapproved original measurement arrays out.
+- [X] Ensure the model is selectable and reachable by its shareable URL; source/DOI links, equations, assumptions, author/variant attribution, initialization, parameter units and limitations are visible.
+- [X] Display the accepted agent review and exact approved scope accurately. If the current exporter/UI only understands older review records, add and qualify generic support for agent-review/approval data; a registry entry alone does not make the website show it.
+- [X] Provide the actual controls required by this model. Physical-time laws need honest time/rate/hold controls and labels; unsupported controls must be unavailable with a useful explanation. A static catalogue card or timed CLI alone is not the requested interactive delivery.
+- [X] In an actual browser, run the public default/named preset; inspect meaningful plots, units, all required state and absence of worker/console/network failures. Exercise parameter/initial-state changes, supported protocols, reset and latest-request behavior.
+- [X] Test export/import/replay and invalid input followed by recovery through the real exposed interface. Record fetched engine/catalogue identities so a stale browser cache cannot supply the evidence.
+- [X] Exercise compatible measurement overlays and their toggle when data rights and model applicability permit. Otherwise show why comparison is unavailable; do not imply calibration, density matching or experimental validation from a plotted overlay.
+- [X] Run relevant package, scope/parity, examples and browser checks. Save exact package manifest, requests/responses and UI evidence. Include at least one successful end-to-end request for this model; no silent unsupported-model filtering.
 
 Existing web build and package entry points:
 

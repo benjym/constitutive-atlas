@@ -3,7 +3,7 @@
   "kind": "numerical-evidence",
   "id": "ramberg-osgood-original-parity-v1",
   "created_at": "2026-11-02",
-  "source_commit": "0cd28fc2a18dea9a496795ad149a58afed809930",
+  "source_commit": "8718467f915c5f7c2aa87a7cef0903f493fde2d5",
   "model": {
     "id": "ramberg-osgood-ansys242",
     "definition_sha256": "c949cb14269846ec46a7e8f25718e17e8c8eab394b6ee09204f029e1ca15a3e2"
@@ -14,11 +14,12 @@
     "method": "analytical-and-scalar-reduction",
     "independent_review": false
   },
-  "scope": "Original strict native/Wasm parity failure retained; independent numerical checks passed but28 componentwise parity comparisons failed. Superseded by distinct current-v3 build-policy study with unchanged gates.",
+  "scope": "Original strict native/Wasm parity failure retained; independent numerical checks passed but28 componentwise parity comparisons failed. Superseded by distinct current-v3 build-policy study with unchanged gates. Historical13ordinary-model baseline8718467 plus frozen c949 candidate; default native contraction, before BUILD_POLICY_V2. Current v3 binary is not the original failed binary.",
   "limitations": [
     "No experimental validity or universal parameter qualification.",
     "Tangent checks cover defaultn5; fractionaln1.5/2.5 integration only.",
-    "Scientific approval is a separately indexed independent agent record."
+    "Scientific approval is a separately indexed independent agent record.",
+    "This command rechecks the retained original native response against the independent oracle; parity failures are retained verbatim in the hashed original report. Rebuilding original parity requires isolated8718467 core plus frozen candidate/reference and original default native flags, not the current v3 binary."
   ],
   "outcome": "failed",
   "artifacts": [
@@ -49,5 +50,5 @@
       "sha256": "c8a9de1a31e1d1d792045beb938b333d6939226267f2abb68a42496a1c91f38a"
     }
   ],
-  "reproduction_command": "python3 -B tools/check_ramberg_osgood.py --solver build-ramberg-native/atlas_solver --output /tmp/ramberg-checks.json"
+  "reproduction_command": "python3 -B tools/check_ramberg_osgood.py --responses docs/ingestion/ramberg-osgood-ansys242/execution-v1/original-v1/native-responses.json --output /tmp/ramberg-original-native-recheck.json"
 }

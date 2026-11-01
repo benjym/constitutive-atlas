@@ -24,13 +24,13 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 - [X] **E3 — Transcription:** exact candidate validates/generates; independent equation/reference checks pass.
 - [X] **E4 — Native/Wasm:** correct profile/interfaces, complete frozen numerical gates, rollback/recovery/restarts, useful preset, parity and regressions pass.
 - [X] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
-- [ ] **E6 — Atlas:** qualified model/approval/source/evidence integrated through normal generation; prior models preserved and public metadata/current database checked.
-- [ ] **E7 — Packaged website:** real controls/plots, source/review scope, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
+- [X] **E6 — Atlas:** qualified model/approval/source/evidence integrated through normal generation; prior models preserved and public metadata/current database checked.
+- [X] **E7 — Packaged website:** real controls/plots, source/review scope, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
 - [ ] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works.
 
 ## Current handoff
 
-- Current phase / overall state: E5 accepted; E6/E7 approval integration and release checks
+- Current phase / overall state: E0–E7 verified; E8 commit/push/CI/live underway
 - Current owner:
 - Blocker / missing evidence:
 - Smallest next action / next owner:
