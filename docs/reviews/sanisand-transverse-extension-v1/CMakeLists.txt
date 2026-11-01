@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.20)
+project(SanisandResidualDiagnostic LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+if(NOT DEFINED ATLAS_FROZEN_STAGE)
+  message(FATAL_ERROR "ATLAS_FROZEN_STAGE required")
+endif()
+add_executable(atlas_transverse_probe probe.cpp)
+target_include_directories(atlas_transverse_probe PRIVATE "${ATLAS_FROZEN_STAGE}/cpp/include" "${ATLAS_FROZEN_STAGE}/generated")

@@ -1,0 +1,51 @@
+{
+  "kind": "prospective-descriptive-diagnosis",
+  "cases": [
+    "extension-e0.735-p20000",
+    "extension-e0.833-p20000",
+    "extension-e0.907-p20000",
+    "extension-e0.735-p100000",
+    "extension-e0.735-p500000",
+    "compression-e0.735-p20000"
+  ],
+  "variational_configs": [
+    [
+      80,
+      "1e-10"
+    ],
+    [
+      80,
+      "1e-12"
+    ],
+    [
+      100,
+      "1e-12"
+    ]
+  ],
+  "nonlinear_cases": [
+    "extension-e0.735-p20000",
+    "extension-e0.735-p100000"
+  ],
+  "nonlinear_epsilon": [
+    "1e-16",
+    "1e-24"
+  ],
+  "nonlinear_signs": [
+    -1,
+    1
+  ],
+  "nonlinear_initialization": "At original exact elastic entry: add/subtract p0*epsilon/2 to yy/zz stress; no history alteration, yield projection or symmetry enforcement. Initial yield difference is second order, measured in output.",
+  "variation": "Analytic antisymmetric yy-minus-zz stress/backstress/fabric subsystem integrated alongside full Cartesian base ODE; no symmetry-constrained replacement model.",
+  "tangent_check": "100-digit central differences, epsilon1e-30, relative derivative gate1e-24 on all16plastic reference samples, 9components each",
+  "numerical_audit": {
+    "precision_variation_relative_difference": "1e-40",
+    "fine_medium_variation_relative_difference": "1e-4",
+    "nonlinear_opposite_sign_swap_scaled_error": "1e-20"
+  },
+  "budgets": {
+    "attempts_per_sample": 20000,
+    "minimum_step": "1e-30"
+  },
+  "nonlinear_local_tolerance": "1e-12",
+  "interpretation": "Diagnostic evidence only. Do not revise earlier candidate/policy or declare a cause from numerical gain alone. Compare analytic coefficients with independent full-rate derivatives; compiled AD covariance remains a separately frozen follow-up if not covered here."
+}
