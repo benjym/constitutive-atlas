@@ -1,0 +1,5 @@
+# Archive-corrective release plan
+
+Exact release `8e060a425015d65ffe087243204d17b8dba62ab8`; Actions41299887463. Both previous failed releases remain preserved with original logs and verdicts. The second failure exposed a missing historical Tresca receipt redirect. The complete committed-tree inventory then found19receipt pairs; all19 pass with eight additive redirects across six maps. Independent review accepted the exact minimal maps and five canonical prior-map archives. All28 affected saved checks pass against isolated committed source. No production/test expectation/model/source pin/numerical gate changed.
+
+The release merges the concurrent byte-identical Tresca correction and its separate evidence. It preserves all other committed work. Apply the original required CI/Pages, tested-upload/live identity and actual full-eight-state preset checks to this exact release. Use fresh pages-artifact-v3/pages-upload-v3 scratch paths. Retain original .002Pa stress and2e-10history budgets; no closure before all required gates pass.

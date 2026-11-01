@@ -1,0 +1,190 @@
+2026-11-01T10:59:56.4440440Z Download action repository 'actions/configure-pages@v6' (SHA:45bfe0192ca1faeb007ade9deae92b16b8254a0d)
+2026-11-01T10:59:57.7192420Z Complete job name: wasm
+2026-11-01T11:00:07.4043270Z Updating files:  71% (11018/15518)
+2026-11-01T11:00:08.1926670Z Updating files:  93% (14432/15518)
+2026-11-01T11:00:08.3279410Z Switched to a new branch 'main'
+2026-11-01T11:00:08.5385560Z   package-manager-cache: true
+2026-11-01T11:00:40.9019220Z python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/gis2024-wasm.json"
+2026-11-01T11:00:40.9044370Z emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
+2026-11-01T11:00:40.9045240Z cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+2026-11-01T11:00:40.9045770Z cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+2026-11-01T11:00:40.9046230Z cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+2026-11-01T11:00:40.9048080Z python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+2026-11-01T11:00:40.9048720Z emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+2026-11-01T11:00:40.9049320Z cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+2026-11-01T11:00:40.9049960Z python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+2026-11-01T11:00:40.9052110Z emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+2026-11-01T11:00:40.9053000Z cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
+2026-11-01T11:00:40.9054120Z python -B -m unittest tests.test_ensemble_package
+2026-11-01T11:00:40.9056820Z node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+2026-11-01T11:00:40.9057940Z node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+2026-11-01T11:00:41.1332950Z SSL_CERT_FILE = /Users/runner/work/_temp/emsdk/python/3.13.3_64bit/lib/python3.13/site-packages/certifi/cacert.pem
+2026-11-01T11:01:19.2419240Z [100%] Linking CXX executable atlas_history_solver
+2026-11-01T11:01:36.9693270Z /Users/runner/work/constitutive-atlas/constitutive-atlas/build/barodesy-rate-generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-01T11:03:38.0893270Z [ 33%] Generating clay2014-generated/models.hpp, clay2014-generated/models.json
+2026-11-01T11:03:41.7033840Z Browser experiment import, units, missing channels, ordering and visibility checks passed.
+2026-11-01T11:03:41.7396460Z Hosted experiment decoding, integrity, channel semantics and request validation passed.
+2026-11-01T11:03:41.7399340Z Comparison axes, display-unit conversions, drainage/loading filters and missing pairs passed.
+2026-11-01T11:03:43.4491750Z Native/WebAssembly parity passed for 55 positive model/protocol combinations and 5 explicit legacy-contract rejections.
+2026-11-01T11:03:43.4624520Z Native/WebAssembly increment diagnostics and rollback parity passed for 4 cases.
+2026-11-01T11:03:43.4684280Z Native/WebAssembly Cartesian-rate parity passed for 2 hypoplastic states.
+2026-11-01T11:03:43.4916740Z Native/WebAssembly IGS analytical crossing and cyclic history passed for 6 increments.
+2026-11-01T11:03:43.5373720Z Browser settings validation, default migration, wire mapping and stale-engine checks passed.
+2026-11-01T11:03:44.0195470Z Native/Wasm numerical settings and full-update tangent parity passed for 17 cases.
+2026-11-01T11:03:44.5340360Z {"passed":true,"phase_cases":1080,"exact_cyclic_controls":9720,"exact_ramp_samples":250,"negative_checks":60,"contract_cases":11,"material_calls":0}
+2026-11-01T11:04:03.6483790Z 134 native/Wasm pairs, 110 same-instance import/export replays and failed-prefix recovery passed.
+2026-11-01T11:04:06.9119960Z Scoped parity passed: 26 cases across 12 models, 32364 physical scalars; exact identity, controls and diagnostics.
+2026-11-01T11:04:07.9335190Z Recorded-run contract checks passed; 46 native/Wasm replay pairs passed.
+2026-11-01T11:04:08.2279350Z Physical-time analytical checks and native/Wasm parity passed for 5 success/failure cases.
+2026-11-01T11:04:08.2822240Z Generated tensor square: Cartesian native/Wasm checks passed for 24 tensors.
+2026-11-01T11:04:08.3811300Z Parent resets: 16 analytical cases, six reversal steps, repeated trials, parent boundaries and mixed-control native/Wasm checks passed.
+2026-11-01T11:04:11.8806250Z Timed controls: 8 analytical success/failure cases and observable native/Wasm verification passed.
+2026-11-01T11:04:24.7545230Z Terracotta research draft: 5 source-reference native/Wasm histories and out-of-scope rollback passed.
+2026-11-01T11:04:43.4182910Z Terracotta prepared creep: 9 native/Wasm pairs passed; numerical reference assessment is a separate required check.
+2026-11-01T11:04:43.4952790Z Prepared creep: both complete nine-case backends passed scalar-reference bounds and refinement.
+2026-11-01T11:04:44.2696520Z Clay2013 Wasm: 115 paired updates, persistent rollback/zero probes passed; exact-reference assessment required separately.
+2026-11-01T11:04:45.2731400Z 36 Wasm chained updates passed native parity; independent assessment required separately.
+2026-11-01T11:04:45.7635360Z Independent Wasm research-matrix assessment passed
+2026-11-01T11:04:45.9842760Z 38 Wasm rates passed native parity; independent assessment required separately.
+2026-11-01T11:04:46.0548790Z Independent Wasm research-matrix assessment passed
+2026-11-01T11:04:50.0001340Z GIS Wasm: 204 chained updates, native parity and persistent rollback/zero recovery passed; independent assessment required.
+2026-11-01T11:06:57.0118590Z Historical barodesy: original isotropic and wider native/Wasm policies passed; current engine remains separately qualified.
+2026-11-01T11:07:02.4080960Z emcmake: cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=/Users/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/Users/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /Users/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T11:07:03.2866420Z -- Build files have been written to: /Users/runner/work/constitutive-atlas/constitutive-atlas/build-sls-wasm
+2026-11-01T11:07:03.5864930Z [ 33%] Built target atlas_sls_models
+2026-11-01T11:07:03.6201260Z [ 66%] Building CXX object CMakeFiles/atlas_sls_solver.dir/Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp.o
+2026-11-01T11:07:05.9353400Z [100%] Linking CXX executable sls.js
+2026-11-01T11:07:06.9468400Z [100%] Built target atlas_sls_solver
+2026-11-01T11:07:07.6749130Z -- Build files have been written to: /Users/runner/work/constitutive-atlas/constitutive-atlas/build-burgers
+2026-11-01T11:07:07.8525430Z [ 33%] Built target atlas_burgers_models
+2026-11-01T11:07:07.8771250Z [ 66%] Building CXX object CMakeFiles/atlas_burgers_solver.dir/Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp.o
+2026-11-01T11:07:11.5811620Z [100%] Linking CXX executable atlas_burgers_solver
+2026-11-01T11:07:11.6620080Z [100%] Built target atlas_burgers_solver
+2026-11-01T11:07:16.8458350Z emcmake: cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/Users/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/Users/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /Users/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T11:07:17.3931070Z -- Build files have been written to: /Users/runner/work/constitutive-atlas/constitutive-atlas/build-burgers-wasm
+2026-11-01T11:07:17.5653650Z [ 33%] Built target atlas_burgers_models
+2026-11-01T11:07:17.5957520Z [ 66%] Building CXX object CMakeFiles/atlas_burgers_solver.dir/Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp.o
+2026-11-01T11:07:20.3742850Z [100%] Linking CXX executable burgers.mjs
+2026-11-01T11:07:23.0404290Z [100%] Built target atlas_burgers_solver
+2026-11-01T11:07:32.3868740Z emcmake: cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/Users/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/Users/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /Users/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-01T11:07:32.9640870Z -- Build files have been written to: /Users/runner/work/constitutive-atlas/constitutive-atlas/build-j2-wasm
+2026-11-01T11:07:33.1398980Z [ 33%] Built target atlas_j2_models
+2026-11-01T11:07:33.1675100Z [ 66%] Building CXX object CMakeFiles/atlas_j2_solver.dir/Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/main.cpp.o
+2026-11-01T11:07:35.6384470Z [100%] Linking CXX executable j2.js
+2026-11-01T11:07:37.6920690Z [100%] Built target atlas_j2_solver
+2026-11-01T11:09:15.1764130Z   "model": "burgers-itasca900-dry-zero-spin-ode"
+2026-11-01T11:11:35.1949680Z   "model": "sls-comsol63-deviatoric-zero-spin-ode",
+2026-11-01T11:11:35.1961660Z   "allPackageAssetsGuarded": 12,
+2026-11-01T11:11:35.4721950Z   "passed": true,
+2026-11-01T11:11:35.4722510Z   "calls": 327,
+2026-11-01T11:11:35.4722790Z   "stateComparisons": 1264,
+2026-11-01T11:11:35.4723110Z   "tangentComparisons": 192,
+2026-11-01T11:11:35.4728080Z     "model": "j2-linear-isotropic-hardening-be",
+2026-11-01T11:11:35.4732090Z     "wasm_sha256": "a100f0b70a0eab42de8cbec0b94ac57a1615e2548c293b22070d585fc32791e9",
+2026-11-01T11:11:35.5002090Z Packaged /Users/runner/work/constitutive-atlas/constitutive-atlas/web/dist
+2026-11-01T11:11:36.0049390Z ✔ 15 independent deterministic requests preserve direct radial source order and fixed preparation (95.319292ms)
+2026-11-01T11:11:37.7316550Z   "status": "passed",
+2026-11-01T11:11:37.7327070Z     {
+2026-11-01T11:11:37.7343950Z       "status": "passed",
+2026-11-01T11:11:37.7347260Z       "status": "passed",
+2026-11-01T11:11:37.7351600Z       "status": "passed",
+2026-11-01T11:11:37.7355300Z       "status": "passed",
+2026-11-01T11:11:37.7359220Z       "status": "passed",
+2026-11-01T11:11:37.7381920Z     {
+2026-11-01T11:11:38.0417910Z Browser experiment import, units, missing channels, ordering and visibility checks passed.
+2026-11-01T11:11:38.0810110Z Hosted experiment decoding, integrity, channel semantics and request validation passed.
+2026-11-01T11:11:48.4544690Z All 628 built experiments passed browser decoding and checksum checks.
+2026-11-01T11:11:48.4550230Z Comparison axes, display-unit conversions, drainage/loading filters and missing pairs passed.
+2026-11-01T11:11:48.6527160Z ✔ download identities match the packaged model and discovery bytes (4.865708ms)
+2026-11-01T11:11:48.6552170Z ✔ missing atlas.sqlite blocks package (4.079292ms)
+2026-11-01T11:11:48.6552950Z ✔ missing atlas-database.json blocks package (1.669875ms)
+2026-11-01T11:11:48.6553480Z ✔ missing models.json blocks package (1.398625ms)
+2026-11-01T11:11:48.6554290Z ✔ missing catalogue.json blocks package (1.264792ms)
+2026-11-01T11:11:48.6554960Z ✔ wrong kind blocks package (2.203167ms)
+2026-11-01T11:11:48.6555480Z ✔ wrong version blocks package (1.320334ms)
+2026-11-01T11:11:48.6556030Z ✔ unsafe filename blocks package (1.102542ms)
+2026-11-01T11:11:48.6556470Z ✔ wrong MIME blocks package (1.402958ms)
+2026-11-01T11:11:48.6556940Z ✔ wrong database hash blocks package (2.721875ms)
+2026-11-01T11:11:48.6557360Z ✔ wrong size blocks package (2.069667ms)
+2026-11-01T11:11:48.6557820Z ✔ wrong model hash blocks package (1.185ms)
+2026-11-01T11:11:48.6558320Z ✔ wrong catalogue hash blocks package (1.176375ms)
+2026-11-01T11:11:48.6560280Z ✔ missing membership blocks package (1.586583ms)
+2026-11-01T11:11:48.6560910Z ✔ different membership blocks package (1.786041ms)
+2026-11-01T11:11:48.6561460Z ✔ duplicate membership blocks package (1.094333ms)
+2026-11-01T11:11:48.6562030Z ✔ measurement declaration blocks package (1.542584ms)
+2026-11-01T11:11:48.6563730Z ✔ source document declaration blocks package (1.357167ms)
+2026-11-01T11:11:48.6564220Z ✔ engine declaration blocks package (1.315375ms)
+2026-11-01T11:11:48.6564710Z ✔ missing declaration blocks package (1.243125ms)
+2026-11-01T11:11:48.6565140Z ✔ corrupted database bytes block package (1.239917ms)
+2026-11-01T11:11:48.6566590Z ✔ changed packaged models.json blocks stale database (0.941875ms)
+2026-11-01T11:11:48.6567210Z ✔ changed packaged catalogue.json blocks stale database (2.97475ms)
+2026-11-01T11:11:48.7364080Z ✔ ordinary failure requires exact request and preserved initial (9.743917ms)
+2026-11-01T11:11:48.7777630Z ✔ declared failure and registered named success remain separate results (1.601416ms)
+2026-11-01T11:11:48.7779560Z ✔ unexpected ordinary failure rejects release (1.534666ms)
+2026-11-01T11:11:48.7879820Z ✔ changed failure signature rejects release (0.200417ms)
+2026-11-01T11:11:48.7883800Z ✔ named failure rejects release (0.675958ms)
+2026-11-01T11:11:48.8453990Z ✔ complete local package resolves beneath project prefix (5.642083ms)
+2026-11-01T11:11:48.8468230Z ✔ standard package gate requires the database artifacts before engine execution (2.320125ms)
+2026-11-01T11:11:48.8511920Z ℹ duration_ms 318.567375
+2026-11-01T11:11:49.9906820Z Supported-input package passed: 12 ordinary requests, 1 named examples; strict-default result unchanged.
+2026-11-01T11:11:51.3132720Z ./atlas.wasm
+2026-11-01T11:11:51.3144990Z ./engine-burgers/
+2026-11-01T11:11:51.3145570Z ./engine-burgers/burgers.mjs
+2026-11-01T11:11:51.3146710Z ./engine-burgers/models.json
+2026-11-01T11:11:51.3147480Z ./engine-burgers/burgers-itasca900-dry-zero-spin-ode.json
+2026-11-01T11:11:51.3147980Z ./engine-burgers/approval.json
+2026-11-01T11:11:51.3148500Z ./engine-burgers/identity.json
+2026-11-01T11:11:51.3149540Z ./engine-burgers/package.json
+2026-11-01T11:11:51.3149900Z ./engine-burgers/burgers.wasm
+2026-11-01T11:11:51.3153940Z ./engine-burgers/review.json
+2026-11-01T11:11:51.3154590Z ./engine-sls/
+2026-11-01T11:11:51.3155180Z ./engine-sls/package-manifest.json
+2026-11-01T11:11:51.3155720Z ./engine-sls/models.json
+2026-11-01T11:11:51.3157050Z ./engine-sls/sls-comsol63-deviatoric-zero-spin-ode.json
+2026-11-01T11:11:51.3157860Z ./engine-sls/sls.wasm
+2026-11-01T11:11:51.3211070Z ./engine-sls/review.html
+2026-11-01T11:11:51.3212070Z ./engine-sls/approval.json
+2026-11-01T11:11:51.3212960Z ./engine-sls/sls.mjs
+2026-11-01T11:11:51.3213610Z ./engine-sls/identity.json
+2026-11-01T11:11:51.3214210Z ./engine-sls/review.json
+2026-11-01T11:11:51.4260120Z ./experiments/CASTLEGATE-FAILURE-SUMMARY.json
+2026-11-01T11:11:51.4843270Z ./experiments/GEOLAB-LOCE-DIRECTS-CU-2-400.json
+2026-11-01T11:11:51.6241500Z ./experiments/SHALE-FAILURE-I-J.json
+2026-11-01T11:11:51.6855240Z ./experiments/SHALE-FAILURE-TAU-SIGMA.json
+2026-11-01T11:11:51.9192510Z ./experiments/LEAP-2022-EO_0_576_SIGV_40_CSR_0_160_TAU_0_.json
+2026-11-01T11:11:51.9327310Z ./experiments/LEAP-2018-TOR-RAW-F046-CONSOL.json
+2026-11-01T11:11:51.9327950Z ./experiments/CASTLEGATE-4AT38-ASCPS-BLOCK-02.json
+2026-11-01T11:11:52.1192510Z ./experiments/GEOLAB-GEBA-TRIAX-CD-2.json
+2026-11-01T11:11:52.1257020Z ./material-point-j2/
+2026-11-01T11:11:52.1258460Z ./material-point-j2/package-manifest.json
+2026-11-01T11:11:52.1259330Z ./material-point-j2/models.json
+2026-11-01T11:11:52.1260070Z ./material-point-j2/review.html
+2026-11-01T11:11:52.1260660Z ./material-point-j2/j2.js
+2026-11-01T11:11:52.1261340Z ./material-point-j2/approval.json
+2026-11-01T11:11:52.1262150Z ./material-point-j2/j2.wasm
+2026-11-01T11:11:52.1266040Z ./material-point-j2/identity.json
+2026-11-01T11:11:52.1267410Z ./material-point-j2/j2-linear-isotropic-hardening-be.json
+2026-11-01T11:11:52.1267790Z ./material-point-j2/review.json
+2026-11-01T11:11:52.1268250Z ./j2-contract.mjs
+2026-11-01T11:11:52.1327310Z ./applicability-records/docs/models/clay2005-laboratory-preview.md
+2026-11-01T11:11:52.1392330Z ./models/research/burgers/
+2026-11-01T11:11:52.1392930Z ./models/research/burgers/burgers-itasca900-dry-zero-spin-ode.json
+2026-11-01T11:11:52.1430100Z ./models/research/j2/
+2026-11-01T11:11:52.1430580Z ./models/research/j2/j2-linear-isotropic-hardening-be.json
+2026-11-01T11:11:52.1432530Z ./models/research/sls/
+2026-11-01T11:11:52.1433080Z ./models/research/sls/sls-comsol63-deviatoric-zero-spin-ode.json
+2026-11-01T11:11:52.1444510Z ./models/research/sls/README.md
+2026-11-01T11:11:52.1501560Z ./docs/models/burgers-main-laboratory-v1.md.html
+2026-11-01T11:11:52.1550460Z ./docs/models/burgers-main-laboratory-v1.md
+2026-11-01T11:11:52.1665190Z ./sls-atlas-contract.mjs
+2026-11-01T11:11:52.1687610Z ./sls-atlas-worker.mjs
+2026-11-01T11:11:52.1761480Z ./evidence-records/catalogue/agent-reviews/sls-comsol63-agent-v1.json
+2026-11-01T11:11:52.1769220Z ./evidence-records/catalogue/agent-reviews/burgers-agent-v2.json
+2026-11-01T11:11:52.1777740Z ./evidence-records/catalogue/agent-reviews/definitions/sls-comsol63-agent-v1.json
+2026-11-01T11:11:52.1782060Z ./evidence-records/catalogue/agent-reviews/definitions/burgers-agent-v2.json
+2026-11-01T11:11:52.1783200Z ./evidence-records/catalogue/agent-reviews/definitions/j2-linear-hardening-agent-v2.json
+2026-11-01T11:11:52.1785740Z ./evidence-records/catalogue/agent-reviews/j2-linear-hardening-agent-v2.json
+2026-11-01T11:11:52.1839570Z ./sls-laboratory.mjs
+2026-11-01T11:11:52.1857210Z ./j2-laboratory.mjs
+2026-11-01T11:11:52.1922940Z ##[end-action id=__actions_upload-pages-artifact.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-01T11:11:52.1925120Z ##[start-action display=Upload artifact;id=__actions_upload-pages-artifact.upload-artifact]
