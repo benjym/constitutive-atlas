@@ -2,6 +2,8 @@
 
 This is the operating checklist for a **full model-delivery assignment**. The lead agent carries one exact formulation from source acquisition through a working, independently agent-reviewed implementation to the atlas and a verified live website. A source packet, a successful solver run, approval or a local preview alone does not finish that assignment.
 
+Website delivery means adding the model to the **general atlas catalogue and main laboratory**. Integrate any required physical-time or other supported interface into that laboratory. A standalone model page is not required and does not satisfy atlas integration or browser delivery; do not create one to complete this checklist. Live verification uses the model’s route within the general atlas.
+
 Read [AGENTS.md](../AGENTS.md), the [live board](../IMPLEMENTATION_PLAN.md), [roadmap](../ROADMAP.md), [formulation contract](FORMULATION_CONTRACT.md) and [agent review policy](AGENT_REVIEW_POLICY.md). Use [the delivery ledger template](ingestion/DELIVERY_TEMPLATE.md) at `docs/ingestion/<model-id>/DELIVERY.md`; keep the scientific source packet in `README.md` using [its template](ingestion/TEMPLATE.md). Reuse existing work instead of starting another numerical or source-audit campaign without a demonstrated gap.
 
 ## Ownership, tracking and stopping rules
