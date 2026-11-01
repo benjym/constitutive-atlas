@@ -1,5 +1,7 @@
 # <model-id> — ingestion packet
 
+Delivery tracking: for a full model assignment, also create `DELIVERY.md` from `docs/ingestion/DELIVERY_TEMPLATE.md` and follow `docs/MODEL_DELIVERY_CHECKLIST.md` (repository-root paths). This packet closes the source phase only.
+
 Task ID: ING-<model-id>
 Owner / date:
 Scope / remaining work:
@@ -35,4 +37,4 @@ Derivation or reference provenance, exact commands, results and limitations. Rec
 
 ## Handoff
 
-Exact owned files; blockers and next actions; proposed shared capabilities; proposed next bounded study. Separately state source completeness, executable support, numerical verification and scientific admission. The coordinator records review/integration on the live board.
+Exact owned files; blockers and next actions; proposed shared capabilities; proposed next bounded study. For full delivery, identify the next E0–E8 phase/owner in `DELIVERY.md`; do not stop the umbrella task here. Separately state source completeness, executable support, numerical verification and scientific admission. The coordinator records review/integration on the live board.

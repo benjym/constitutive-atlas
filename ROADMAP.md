@@ -6,6 +6,8 @@ This is the implementation and research plan for the [repository](https://github
 
 Live model-ingestion assignments are tracked in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). Agents must read [AGENTS.md](AGENTS.md) before starting; the coordinator records exclusive ownership before dispatch.
 
+Operational new-model work follows [the full delivery checklist](docs/MODEL_DELIVERY_CHECKLIST.md), with an E0–E8 ledger per model. Source-only packets, agent approval, atlas inclusion and verified live website delivery are distinct stages; the lead owns continuation through handoffs.
+
 ## Current approval rule — 1 November 2026
 
 The user has replaced human scientific sign-off with [independent agent review against checklist v1](docs/AGENT_REVIEW_POLICY.md). A separate agent's accepted, exact-definition checklist is sufficient for model approval and the review requirements of every milestone below; no human signature or further user approval is required. Resolve in-scope blocking findings, retain limitations and independently check source/numerical claims. Historical review packets remain unchanged. Experimental validation and software delivery remain separate gates. Existing review tasks now target this agent pathway.

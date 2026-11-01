@@ -1,0 +1,9 @@
+# Full model-delivery workflow v1
+
+The user requested one checklist that an agent can follow from a new constitutive model to the atlas/website. `docs/MODEL_DELIVERY_CHECKLIST.md` defines E0–E8: claim/scope; sources; schema/integration contract; declarative transcription/independent checks; native/Wasm qualification; separate-agent approval; atlas integration; packaged-browser qualification; authorized publication and verified live delivery.
+
+The per-model `DELIVERY.md` template records phase checkboxes, owners, exact identities, evidence, blockers, approval and deployment receipts. Full-delivery leads retain responsibility through specialist handoffs. Source-only workers keep their bounded roles and whitelists. Agent coordination is an integration role, not a human scientific gate. A packet, approval, local preview or CLI-only implementation cannot close full website delivery. Existing authorization is reused; an authorization-only stop is honestly recorded as ready to publish.
+
+AGENTS.md, roadmap, ingestion template and review policy now route full-model work to this workflow. Generic capability gaps, physical-time UI support, defaults, independently derived references, rollback/recovery/restart, reviewer independence, evidence export, actual browser behavior, source/review links, data rights and exact live-asset identity are explicit gates. Previously completed studies are reused; no numerical campaign or model/paper change was undertaken.
+
+Verification: all nine canonical stages match the delivery ledger; local Markdown links and named tool paths resolve; command options were checked against current CLI/build/package implementations; 24 existing archive, CI-profile and agent-review checks pass. Six exact old source/map snapshots and five original receipt edges are preserved. No builds, model promotions, CI retries, pushes or deployment were performed for this documentation task.

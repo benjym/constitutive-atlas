@@ -2,6 +2,8 @@
 
 Effective 1 November 2026, at the user's instruction, **an independent agent review is sufficient for project model approval. Human scientific review, signatures, credentials and further user sign-off are not required.** This replaces the human-signature prerequisite in earlier plans and packets. Actual source and numerical checks remain required. It does not turn numerical test execution into an independent review.
 
+For source acquisition through implementation and live website delivery, use [the full model checklist](MODEL_DELIVERY_CHECKLIST.md). This review policy is its E5 gate; approval alone does not complete atlas/browser delivery.
+
 ## Approval pathway
 
 1. The implementation agent prepares the exact model, source dossier and numerical evidence. Freeze model bytes, source receipts, acceptance bounds, supported scope and known failures.
