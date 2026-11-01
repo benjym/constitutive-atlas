@@ -1,0 +1,138 @@
+{
+  "artifact_kind": "source_to_schema_crosswalk_not_executable_model",
+  "schema_version": "0.3",
+  "target_schema_sha256": "5a0f732e2fd2dae90aeb77ec9fa332e125907f61d74614b60af3f77abf798c6a",
+  "selected_publication_doi": "10.3208/sandf.44.2_53",
+  "proposed_identity": "nakai-hinokio-2004-subloading-tij-clay-full-extension-variant-pending",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "strain_path_rate",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "formulation_status": "proposed_zero_spin_small_strain_host; full strain-controlled rate inversion and branch policy not implemented",
+  "field_evidence": {
+    "time_dependence": "p68 conclusions time/age excluded; differential Eqs 50-52",
+    "equation_form": "proposed path-fraction conversion of differential source; finite algorithm not selected",
+    "kinematics": "bounded small-strain host approximation; differential strain law, no finite kinematics supplied",
+    "frame": "project zero-spin fixed-spatial restriction",
+    "objective_rate": "none only within proposed zero-spin restriction; source objective transport unspecified",
+    "tensor_representation": "project Mandel encoding of Table1 Cartesian symmetric tensors",
+    "stress_sign": "positive compressive principal stress in Eqs2,17 and triaxial figures",
+    "strain_sign": "positive compression Table1 and isotropic compression Eq43",
+    "inputs": "de proposed total infinitesimal strain increment; source gives differential stress/strain relations",
+    "stress": "effective interpretation: saturated specimens and p66 mean effective stress axes; proposed Cauchy small-strain binding"
+  },
+  "state_proposal": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "effective Cauchy stress under selected small-strain host",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "locator": "Table1/Eqs37,50-52"
+    },
+    {
+      "name": "eps_v_p",
+      "shape": "scalar",
+      "unit": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "plastic volumetric strain determining normal surface size",
+        "transformation": "scalar_invariant"
+      },
+      "locator": "Eqs26,28,29"
+    },
+    {
+      "name": "rho",
+      "shape": "scalar",
+      "unit": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "normal-current surface density gap in void-ratio units",
+        "transformation": "scalar_invariant"
+      },
+      "locator": "Eqs27-29"
+    }
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "eps_v_p",
+      "rho"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "initial_checks_prose": [
+    "positive-definite sigma and positive reference pressure",
+    "finite parameters and states; rho >= 0 in selected NC/OC domain",
+    "Eq28 consistency, explicit tolerance to be frozen before future integration study",
+    "e0 is fixed reference, not inferred current void ratio"
+  ],
+  "open_gates": [
+    {
+      "id": "MN-S01",
+      "issue": "Audit literal intermediate A8 equalities against Table1 and Eqs18/A10; no equation correction adopted."
+    },
+    {
+      "id": "MN-S02",
+      "issue": "Select negative-AF allowance versus AppendixV regionIV alternative."
+    },
+    {
+      "id": "MN-S03",
+      "issue": "Reconcile full-extension density/total-plastic-volume staging and sand two-a variant before executable transcription."
+    },
+    {
+      "id": "MN-S04",
+      "issue": "Acquire exact clay preparation dependency and specimen histories for benchmark reproduction."
+    },
+    {
+      "id": "MN-N01",
+      "issue": "Define full strain-controlled differential inversion, peak/loading equality policy, and independent regular-branch reference."
+    },
+    {
+      "id": "MN-C01",
+      "issue": "Demonstrate generic a(sigma) tensor construction and derivatives at repeated positive spectra; do not reject physical repeated states."
+    },
+    {
+      "id": "MN-C02",
+      "issue": "Define X=0 beta-dependent analytical continuation and derivative guarantees, without raw zero times infinity."
+    },
+    {
+      "id": "MN-H01",
+      "issue": "Fixed zero-spin approximation only; finite-rotation/objective host unsupported by this packet."
+    }
+  ],
+  "source_complete": false,
+  "executable": false,
+  "scientific_admission": "not_assessed"
+}

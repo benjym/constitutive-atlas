@@ -1,0 +1,387 @@
+{
+  "schema_version": "0.3",
+  "id": "nakai-hinokio-2004-clay-appendix-v-be",
+  "name": "Nakai–Hinokio 2004 subloading tij — clay / Appendix V / BE research",
+  "family": "critical-state plasticity",
+  "status": "draft",
+  "description": "Full one-a subloading tij clay with path-dependent AF/IC flow, softening and Appendix V region IV. Project endpoint backward-Euler differential discretization and constant-reference small-strain void bookkeeping; no finite rotation or scientific admission. smp is a persistent algebraic auxiliary for the positive matrix inverse square root. At exact isotropy the continuous flow value is used; the Newton branch derivative there is an algorithmic selection, not a classical material tangent.",
+  "sources": [
+    {
+      "url": "https://doi.org/10.3208/sandf.44.2_53",
+      "role": "formulation",
+      "locator": "Nakai/Hinokio2004 pp54–61 Table1 Eqs1–5,14–54; p70 AppendixIV/V A17–A28; one-a Table2 clay identity. Paper EqA8 intermediate equality not used. Project endpoint BE and density compatibility are separately documented in working-v1/README.md."
+    }
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "parameters": {
+    "p_ref": {
+      "default": 98000.0,
+      "min": 1.0,
+      "max": 1000000000.0,
+      "unit": "Pa",
+      "label": "Reference pressure and numerical stress scale"
+    },
+    "Cc": {
+      "default": 0.0508,
+      "min": 1e-05,
+      "max": 1.0,
+      "unit": "1",
+      "label": "lambda/(1+e0), Table 2"
+    },
+    "Ce": {
+      "default": 0.0112,
+      "min": 1e-06,
+      "max": 0.5,
+      "unit": "1",
+      "label": "kappa/(1+e0), Table 2"
+    },
+    "e_ref": {
+      "default": 0.83,
+      "min": 0.0,
+      "max": 3.0,
+      "unit": "1",
+      "label": "Fixed reference void ratio, not current e"
+    },
+    "Rcs": {
+      "default": 3.5,
+      "min": 1.01,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Critical triaxial compression principal-stress ratio"
+    },
+    "beta": {
+      "default": 1.5,
+      "min": 1.01,
+      "max": 4.0,
+      "unit": "1",
+      "label": "Yield shape exponent"
+    },
+    "a_density": {
+      "default": 500.0,
+      "min": 0.0,
+      "max": 10000.0,
+      "unit": "1",
+      "label": "Single clay density coefficient"
+    },
+    "nu": {
+      "default": 0.2,
+      "min": -0.9,
+      "max": 0.49,
+      "unit": "1",
+      "label": "Elastic Poisson ratio"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        98000.0,
+        98000.0,
+        98000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "rho",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.0,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "density_surface_gap",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.83,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio_constant_reference_small_strain",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "smp",
+      "shape": "sym",
+      "unit": "1",
+      "initial": [
+        0.5773502691896258,
+        0.5773502691896258,
+        0.5773502691896258,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "modified_stress_normal_auxiliary_algebraic_tensor",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "gamma_af",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.0,
+      "scale": "1",
+      "semantics": {
+        "role": "increment_unknown",
+        "quantity": "scaled_associated_flow_increment",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "gamma_ic",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.0,
+      "scale": "1",
+      "semantics": {
+        "role": "increment_unknown",
+        "quantity": "isotropic_plastic_volume_increment",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "S",
+      "expr": "sigma/p_ref"
+    },
+    {
+      "name": "U",
+      "expr": "(sigma-sigma_n)/p_ref"
+    },
+    {
+      "name": "pbar",
+      "expr": "trace(S)/3"
+    },
+    {
+      "name": "DS",
+      "expr": "dev(S)"
+    },
+    {
+      "name": "DS2",
+      "expr": "dot(DS,DS)"
+    },
+    {
+      "name": "Jthree",
+      "expr": "determinant(DS)"
+    },
+    {
+      "name": "Ithree",
+      "expr": "determinant(S)"
+    },
+    {
+      "name": "Itwo",
+      "expr": "3*pbar**2-DS2/2"
+    },
+    {
+      "name": "Ione",
+      "expr": "trace(S)"
+    },
+    {
+      "name": "adjS",
+      "expr": "tensor_square(S)-Ione*S+Itwo*I"
+    },
+    {
+      "name": "invS",
+      "expr": "adjS/Ithree"
+    },
+    {
+      "name": "tn",
+      "expr": "3*Ithree/Itwo"
+    },
+    {
+      "name": "nlog",
+      "expr": "invS-(Ione*I-S)/Itwo"
+    },
+    {
+      "name": "dtn",
+      "expr": "tn*nlog"
+    },
+    {
+      "name": "Xtwo",
+      "expr": "(pbar*DS2/3-Jthree)/Ithree"
+    },
+    {
+      "name": "gradXtwo",
+      "expr": "(DS2/9*I+2*pbar/3*DS-dev(tensor_square(DS))-Xtwo*adjS)/Ithree"
+    },
+    {
+      "name": "Xcs",
+      "expr": "sqrt(2)/3*(sqrt(Rcs)-1/sqrt(Rcs))"
+    },
+    {
+      "name": "Ycs",
+      "expr": "(1-sqrt(Rcs))/(sqrt(2)*(sqrt(Rcs)+0.5))"
+    },
+    {
+      "name": "Mpower",
+      "expr": "Xcs**beta+Xcs**(beta-1)*Ycs"
+    },
+    {
+      "name": "zeta",
+      "expr": "select(Xtwo > 0,Xtwo**(beta/2)/(beta*Mpower),0)"
+    },
+    {
+      "name": "coef",
+      "expr": "select(Xtwo > 0,Xtwo**(beta/2-1)/Mpower,0)"
+    },
+    {
+      "name": "tbar",
+      "expr": "(tensor_square(smp+S)-tensor_square(smp)-tensor_square(S))/2"
+    },
+    {
+      "name": "xbar",
+      "expr": "tbar/tn-smp"
+    },
+    {
+      "name": "mflow",
+      "expr": "(smp+coef*(xbar-Xtwo*smp))/tn"
+    },
+    {
+      "name": "nload",
+      "expr": "nlog+coef*gradXtwo/2"
+    },
+    {
+      "name": "Cp",
+      "expr": "Cc-Ce"
+    },
+    {
+      "name": "Kbar",
+      "expr": "pbar/Ce"
+    },
+    {
+      "name": "Gbar",
+      "expr": "3*Kbar*(1-2*nu)/(2*(1+nu))"
+    },
+    {
+      "name": "elastic_trial",
+      "expr": "Kbar*trace(de)*I+2*Gbar*dev(de)"
+    },
+    {
+      "name": "trial_load",
+      "expr": "dot(nload,elastic_trial)"
+    },
+    {
+      "name": "hard",
+      "expr": "(trace(mflow)+a_density*rho**2/tn)/Cp"
+    },
+    {
+      "name": "icmod",
+      "expr": "(1+a_density*rho**2/trace(smp))/Cp"
+    },
+    {
+      "name": "fsig",
+      "expr": "dot(nload,U)"
+    },
+    {
+      "name": "positive_dtn",
+      "expr": "max(dot(dtn,U),0)"
+    },
+    {
+      "name": "surface_size",
+      "expr": "tn*exp(zeta)"
+    },
+    {
+      "name": "ic_drive",
+      "expr": "positive_dtn/surface_size"
+    },
+    {
+      "name": "af_drive",
+      "expr": "fsig-ic_drive"
+    },
+    {
+      "name": "flow_af",
+      "expr": "gamma_af*mflow"
+    },
+    {
+      "name": "flow_ic",
+      "expr": "gamma_ic/3*I"
+    },
+    {
+      "name": "dep",
+      "expr": "flow_af+flow_ic"
+    }
+  ],
+  "domain": [
+    "Cc > Ce",
+    "Ione > 0",
+    "Itwo > 0",
+    "Ithree > 0",
+    "trace(smp) > 0",
+    "trace(smp)**2 > dot(smp,smp)",
+    "determinant(smp) > 0",
+    "Mpower > 0",
+    "e > -1"
+  ],
+  "equations": {
+    "sigma": "sigma-sigma_n-p_ref*(Kbar*trace(de-dep)*I+2*Gbar*dev(de-dep))",
+    "rho": "rho-rho_n-(1+e_ref)*(trace(dep)-Cp*fsig)",
+    "e": "e-e_n+(1+e_ref)*trace(de)",
+    "smp": "tensor_square(smp)-adjS/Itwo",
+    "gamma_af": "select(trial_load < 0,gamma_af,select(hard < 0,gamma_af*hard-fsig,select(af_drive < 0,gamma_af,gamma_af*hard-af_drive)))",
+    "gamma_ic": "select(trial_load < 0,gamma_ic,select(hard < 0,gamma_ic,select(af_drive < 0,gamma_ic*icmod-fsig,gamma_ic*icmod-ic_drive)))"
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "rho",
+      "e",
+      "smp"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "initial_checks": [
+    "rho >= -1e-10",
+    "norm(tensor_square(smp)-adjS/Itwo) <= 1e-8"
+  ]
+}

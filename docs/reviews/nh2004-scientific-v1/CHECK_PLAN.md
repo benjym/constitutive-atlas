@@ -1,0 +1,10 @@
+# SCI-nh2004-independent-review-v1: prospective independent checks
+
+Frozen before running the new review script, 2026-11-01. Read-only saved-evidence analysis and independent Python only; no compiled execution. These checks do not change historical qualification gates or admission policy.
+
+1. Reconstruct SMP quantities from positive principal stresses and orthogonal tensor products, with no Atlas or working reference imports. Verify transformed identities, Mandel contraction, loading-gradient central differences, and critical-state zero plastic volume (relative tolerances 1e-11 for algebra and 2e-6 for central differences). Use hydro, repeated spectra, and a non-diagonal orthogonal basis.
+2. Derive and inspect the absolute density/void reference invariant H=e+rho+(1+e_ref)[Cp ln(tN1/p_ref)+Ce ln(p/p_ref)]. H=N for the Table 2 reference. Independently report H at synthetic initial states and saved endpoints; finite BE drift is a diagnostic, not a newly chosen pass criterion. Test whether the declared initialization checks enforce this source-reference condition. Distinguish permissible alternative reference intercepts from specimen preparation.
+3. Check softening strain-controlled denominator D=h+n:D_el:m and resulting multiplier sign on a predeclared positive axisymmetric principal-ratio grid R=2,3.5,6,10,20,50,100,1000, rho=0,.01,.03, with default parameters and nu=-.9,-.5,0,.2,.49. These are permitted mathematical states/parameters, not assertions of material calibration. For h<0 report D<=0 witnesses; use de=D_el^-1:n so trial loading is strictly positive. A negative multiplier contradicts the source's Lambda>=0 plastic admissibility. No claim that the current compiled solver accepts a finite witness is authorized.
+4. Inspect retained finite-path/laboratory evidence and count coverage, branch coverage, convergence and rho extrema. Preserve all results, including failures. A single residual branch fixture does not establish path coverage of that branch.
+
+Smallest next steps depend on outcomes. No fitted constants, compiled studies, experimental acceptance gate or source amendment is introduced.
