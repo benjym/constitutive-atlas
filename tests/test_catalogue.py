@@ -1,3 +1,5 @@
+import hashlib
+import copy
 import json
 import sqlite3
 import tempfile
@@ -28,8 +30,50 @@ class CatalogueTests(unittest.TestCase):
         for entry in entries.values():
             self.assertEqual(entry['executable'], entry['id'] in definitions)
             if not entry['executable']:
-                self.assertEqual(entry['status'], 'candidate')
-                self.assertTrue(entry['capability_gap'])
+                if entry.get('timed_laboratory'):
+                    self.assert_timed_provenance(entry)
+                else:
+                    self.assertEqual(entry['status'], 'candidate')
+                    self.assertTrue(entry['capability_gap'])
+
+    def assert_timed_provenance(self, entry, approvals=None):
+        self.assertIn(entry['status'], ('numerically-tested', 'reviewed'))
+        page = Path(entry['timed_laboratory'])
+        self.assertFalse(page.is_absolute())
+        self.assertNotIn('..', page.parts)
+        self.assertTrue((ROOT / 'web' / page).is_file())
+        if approvals is None:
+            approvals = json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models']
+        records = [r for r in approvals if r['model_id'] == entry['id'] and r['status'] == 'approved']
+        self.assertTrue(records, entry['id'])
+        for record in records:
+            definition = record['definition']
+            path = ROOT / definition['path']
+            self.assertTrue(path.resolve().is_relative_to(ROOT))
+            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), definition['sha256'])
+            model = json.loads(path.read_text())
+            self.assertEqual(model['id'], entry['id'])
+            self.assertEqual(model['formulation']['time_dependence'], 'physical_time')
+            self.assertTrue(record['supporting_files'])
+            for evidence in record['supporting_files']:
+                path = ROOT / evidence['path']
+                self.assertTrue(path.resolve().is_relative_to(ROOT))
+                self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), evidence['sha256'])
+
+    def test_timed_catalogue_claim_requires_bound_approval_and_evidence(self):
+        manifest = json.loads((ROOT / 'catalogue/manifest.json').read_text())
+        entry = next(e for e in manifest['models'] if e.get('timed_laboratory'))
+        records = json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models']
+        records = [r for r in records if r['model_id'] == entry['id']]
+        with self.assertRaises(AssertionError):
+            self.assert_timed_provenance(entry, [])
+        for key in ('definition', 'supporting_files'):
+            corrupted = copy.deepcopy(records)
+            for record in corrupted:
+                target = record[key] if key == 'definition' else record[key][0]
+                target['sha256'] = '0' * 64
+            with self.subTest(key=key), self.assertRaises(AssertionError):
+                self.assert_timed_provenance(entry, corrupted)
 
     def test_database_keeps_candidate_and_executable_sources(self):
         manifest = json.loads((ROOT / 'catalogue/manifest.json').read_text())
