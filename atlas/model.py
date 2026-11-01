@@ -53,7 +53,7 @@ def integration_kind(model):
     """Engine dispatch; equation meaning is explicit in v0.3 documents."""
     if model.get('schema_version') == '0.3':
         return {'incremental_residual': 'residual', 'strain_path_rate': 'rate',
-                'ode': 'rate'}[model['formulation']['equation_form']]
+                'ode': 'rate', 'path_ode': 'path_ode'}[model['formulation']['equation_form']]
     return 'rate' if physical_time(model) else model['integration']
 
 
@@ -160,10 +160,15 @@ def validate(model):
     schema=f'model-v{version}.schema.json' if version != '0.1' else 'model.schema.json'
     check(model,json.loads((ROOT/'schemas'/schema).read_text()))
     physical=physical_time(model)
+    path=model.get('formulation',{}).get('equation_form')=='path_ode'
+    ode_state=physical or path
+    if path:
+        from .path import validate_inputs, PATH_RESERVED
+        validate_inputs(model)
     required = {'schema_version','id','name','family','status','sources','parameters','state', 'derived','equations','domain','description'}
     if not required <= model.keys():
         raise ValidationError(f"missing fields: {sorted(required-model.keys())}")
-    if not physical and integration_kind(model) not in ('residual','rate'):
+    if not ode_state and integration_kind(model) not in ('residual','rate'):
         raise ValidationError('unsupported schema version or integration kind')
     if not re.fullmatch(r'[a-z][a-z0-9-]*',model['id']):
         raise ValidationError('invalid model ID')
@@ -173,9 +178,9 @@ def validate(model):
         raise ValidationError('source URL, locator and role are required')
     symbols = {'I':Type('sym'), **equation_input_types(model)}
     advance_inputs = set(model['formulation']['inputs']['advance']) if version == '0.3' else set()
-    names = set()
+    names = set(equation_input_types(model)) if path else set()
     def declare(name, typ):
-        if not IDENT.fullmatch(name) or name in RESERVED or name in advance_inputs or name.endswith('_n') or name in names:
+        if not IDENT.fullmatch(name) or name in RESERVED or name in advance_inputs or name.endswith('_n') or name in names or (path and name in PATH_RESERVED):
             raise ValidationError(f'invalid, duplicate or reserved identifier: {name}')
         names.add(name)
         symbols[name]=typ
@@ -187,14 +192,14 @@ def validate(model):
             raise ValidationError(f'{name}: finite default, min and max required')
         if not field['min'] <= field['default'] <= field['max']:
             raise ValidationError(f'{name}: default outside bounds')
-    if not physical and (not model['state'] or model['state'][0]['name'] != 'sigma' or field_type(model['state'][0]) != Type('sym',DIMS['Pa'])):
+    if not ode_state and (not model['state'] or model['state'][0]['name'] != 'sigma' or field_type(model['state'][0]) != Type('sym',DIMS['Pa'])):
         raise ValidationError('first state must be symmetric stress sigma in Pa')
     count=0
     for field in model['state']:
         typ=field_type(field); name=field['name']
         declare(name,typ)
         role = state_role(field)
-        if not physical and (version != '0.3' or role == 'persistent'): symbols[name+'_n']=typ
+        if not ode_state and (version != '0.3' or role == 'persistent'): symbols[name+'_n']=typ
         initial=field['initial']
         if typ.shape=='sym':
             if not isinstance(initial,list) or len(initial)!=6: raise ValidationError(f'{name}: six Mandel components required')
@@ -208,7 +213,7 @@ def validate(model):
         scale_value=evaluate(scale,env)
         if not math.isfinite(scale_value) or scale_value<=0: raise ValidationError('state scale must be finite and positive')
         count+=6 if typ.shape=='sym' else 1
-        if physical and role != 'persistent':
+        if ode_state and role != 'persistent':
             raise ValidationError('physical-time ODE state must be persistent; incremental multipliers are unsupported')
         if role == 'plastic_multiplier' and (typ!=Type() or (version != '0.3' and not field.get('transient')) or integration_kind(model)!='residual'):
             raise ValidationError('multipliers must be dimensionless transient scalars in residual models')
@@ -223,7 +228,7 @@ def validate(model):
                 raise ValidationError('temporary solve state requires a residual profile and zero initial values')
     if count>MAX_STATE_COMPONENTS: raise ValidationError(f'at most {MAX_STATE_COMPONENTS} state components are supported')
     if 'solution_constraints' in model:
-        if version != '0.3' or physical or integration_kind(model) != 'residual':
+        if version != '0.3' or ode_state or integration_kind(model) != 'residual':
             raise ValidationError('solution constraints require a v0.3 incremental residual profile')
         solution_symbols={'I':Type('sym')}
         solution_symbols.update({n:field_type(f) for n,f in model['parameters'].items()})
@@ -282,7 +287,7 @@ def validate(model):
         if model['initialization']['required_state'] != persistent:
             raise ValidationError('initialization must require every persistent state field in layout order')
         stress = model['formulation']['stress']
-        if not physical:
+        if not ode_state:
             if (stress.get('source') != 'state' or stress.get('name') != 'sigma'
                     or stress.get('measure') != 'cauchy' or stress.get('scope') not in ('effective', 'total')):
                 raise ValidationError('incremental profile requires explicitly scoped effective/total Cauchy stress state sigma')
@@ -298,6 +303,8 @@ def validate(model):
                     raise ValidationError('stress observable must be bound by the formulation')
             elif stress['name'] != 'stress' or stress['name'] not in outputs or field_type(outputs[stress['name']]) != Type('sym', DIMS['Pa']):
                 raise ValidationError('physical-time stress must bind the symmetric Pa observable stress')
+    if path and any(k in model for k in ('increment_reset','solution_constraints')):
+        raise ValidationError('path ODE does not support incremental resets/constraints')
     return model
 
 
@@ -312,6 +319,8 @@ def axisymmetric_x(values):
 
 
 def evaluation_environment(model, state, previous, increment, parameters=None, *, time=None, _check_domain=True):
+    if integration_kind(model) == 'path_ode':
+        raise ValidationError('controlled-path evaluation requires atlas.path and explicit coordinate/controls')
     if model.get('schema_version') == '0.3' and (len(increment) != 6 or any(
             type(v) not in (int, float) or not math.isfinite(v) for v in increment)):
         raise ValueError('declared loading input requires six finite Mandel components')
@@ -354,7 +363,7 @@ def check_solution_state(model, state, parameters=None):
 
 def prepare_increment(model, state, increment, parameters=None):
     """Pure committed-parent reset, before any internal integration or trial stage."""
-    if physical_time(model):raise ValidationError('parent-increment resets require a legacy incremental definition')
+    if physical_time(model) or integration_kind(model)=='path_ode':raise ValidationError('parent-increment resets require an incremental definition')
     if len(increment)!=6 or any(not math.isfinite(v) for v in increment):
         raise ValueError('six finite Mandel increment components required')
     values={**defaults(model),**(parameters or {})}

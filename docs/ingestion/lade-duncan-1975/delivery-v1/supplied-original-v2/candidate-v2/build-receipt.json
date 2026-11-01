@@ -1,0 +1,96 @@
+{
+  "id": "lade1975-gap-builds-v2",
+  "date": "2026-11-01",
+  "owner": "coordinator /root",
+  "model_sha256": "e1a21278ac9ce65debd5bf81b181462509e57d7928cc8b8366c75cd6110c4e63",
+  "native_source_manifest_sha256": "79c0285df62739a39ebfc9fa6482154d83a19bafe69e28379305826f06356034",
+  "wasm_source_manifest_sha256": "73af8cfcea404a855365efa40e30b1b851b988d7f2b65d65f997b413ad211ec9",
+  "build_commands": [
+    "cmake -S .local/lade-duncan-candidate-v2/native-source -B .local/lade-duncan-candidate-v2/native-build -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build .local/lade-duncan-candidate-v2/native-build --target atlas_lade_gap_candidate --parallel 1",
+    "emcmake cmake -S .local/lade-duncan-candidate-v2/wasm-source -B .local/lade-duncan-candidate-v2/wasm-build -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build .local/lade-duncan-candidate-v2/wasm-build --target atlas_lade_gap_wasm --parallel 1",
+    "EM_CACHE=$PWD/.local/lade-duncan-candidate-v2/emscripten-cache cmake --build .local/lade-duncan-candidate-v2/wasm-build --target atlas_lade_gap_wasm --parallel 1"
+  ],
+  "native_build_success": true,
+  "wasm_attempt1": "FAIL: default compiler cache is outside writable roots; no escalation/protection bypass",
+  "wasm_attempt2": "PASS using local copy of46MB preexisting Emscripten cache; no source/build-flag change",
+  "logs": [
+    {
+      "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/candidate-v2/build-logs/configure-native.log",
+      "sha256": "aca855b02db3288fb16349ae5ad35cb381a1f2d67894a853dedf4aac33bf7c21"
+    },
+    {
+      "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/candidate-v2/build-logs/build-native.log",
+      "sha256": "f52c13aced48ee551837544b3bb389880706602de1e9c1eea85fa7ca870219c9"
+    },
+    {
+      "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/candidate-v2/build-logs/configure-wasm.log",
+      "sha256": "bf2dff48579c3516609dda9555a73968116754b2ef7a0fc450c8980f8dc59856"
+    },
+    {
+      "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/candidate-v2/build-logs/build-wasm-attempt1.log",
+      "sha256": "6f2b147892cb702d53fa0f199c421fc32d23dbb3995d2dc54b6548af3ab833e6"
+    },
+    {
+      "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/candidate-v2/build-logs/build-wasm-attempt2.log",
+      "sha256": "13fcb4d9cfbeb217f7c407c4f1d14838c04c85bf40de929afefb19913cf88771"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".local/lade-duncan-candidate-v2/native-build/atlas_lade_gap_candidate",
+      "sha256": "8a9feed3f4d48735dc944c334a815dbddc481918b8e57d4f60ec67f27d22fe37",
+      "size": 388424
+    },
+    {
+      "path": ".local/lade-duncan-candidate-v2/wasm-build/lade-gap.mjs",
+      "sha256": "740fdd7fef315754c4008fcf098ebe4e42d607b48b7df161692f689339274a56",
+      "size": 27579
+    },
+    {
+      "path": ".local/lade-duncan-candidate-v2/wasm-build/lade-gap.wasm",
+      "sha256": "11e6c40b3d81b99247b25ceca4b42735c452ea7ead0125a8a9a1616e521bd464",
+      "size": 497636
+    }
+  ],
+  "toolchains": {
+    "cmake": {
+      "command": [
+        "cmake",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "cmake version 4.4.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+      "stderr": ""
+    },
+    "native_cxx": {
+      "command": [
+        "c++",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "Apple clang version 21.0.0 (clang-2100.4.1.1)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+      "stderr": ""
+    },
+    "emscripten": {
+      "command": [
+        "em++",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.8-git\nCopyright (C) 2026 the Emscripten authors (see AUTHORS.txt)\nThis is free and open source software under the MIT license.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "stderr": ""
+    },
+    "node": {
+      "command": [
+        "node",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "v26.7.0\n",
+      "stderr": ""
+    }
+  },
+  "qualification": "Build success only. Source hydrostatic-domain and original56request Wasm parity gates FAIL. No E4 acceptance."
+}

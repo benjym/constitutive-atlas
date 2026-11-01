@@ -1,52 +1,22 @@
-"""Current13 failure contract rejects accidental successes and altered failures."""
-import copy
-import json
-from pathlib import Path
-from types import SimpleNamespace
-import unittest
-from tools.check_native_fixture_contracts import check_contract, check_observation
+"""Strict failure allocation rejects changed catalogue, branch or work signatures."""
+import json,unittest
+from atlas.model import ROOT
+from tools.check_native_fixture_contracts import OCC,OCC_HASH,GIS_FAILURE,DUNCAN,DUNCAN_HASH,PRIOR_THIRTEEN,check_recorded_failure
+class StrictFixtureContracts(unittest.TestCase):
+ def test_historical_gis_signature_stays_exact(self):
+  self.assertIn('historical',check_recorded_failure(GIS_FAILURE,{}))
+  with self.assertRaises(AssertionError):check_recorded_failure('other failure\n',{})
+ def test_current_occ_signature_and_catalogue_are_closed(self):
+  definitions=dict(PRIOR_THIRTEEN)
+  message='failed knot 1 residual 0.00086977407608239442 trials 1 de0 0.0001 de1 0\ndrained replay failed: '+OCC+' singular mixed-control system; last committed knot retained\n'
+  self.assertEqual(definitions[OCC],OCC_HASH);self.assertIn('current-thirteen',check_recorded_failure(message,definitions))
+  for bad in [message.replace('trials 1','trials 2'),message.replace('de1 0','de1 -0.00002'),message.replace('0.00086977407608239442','0'),GIS_FAILURE]:
+   with self.subTest(message=bad),self.assertRaises(AssertionError):check_recorded_failure(bad,definitions)
+  with self.assertRaises(AssertionError):check_recorded_failure(message,{**definitions,OCC:'0'*64})
 
-ROOT = Path(__file__).resolve().parents[1]
-
-
-class NativeFixtureContractTests(unittest.TestCase):
-    def setUp(self):
-        self.contract = json.loads((ROOT / 'catalogue/native-fixture-contracts-thirteen-occ-v1.json').read_text())
-        self.policy = json.loads((ROOT / 'catalogue/laboratory-package-policy.json').read_text())
-
-    def test_closed_identity_and_case_set(self):
-        check_contract(self.contract, self.policy)
-        for change in ('models', 'cases', 'returncode'):
-            bad = copy.deepcopy(self.contract)
-            if change == 'models':
-                bad['models'].pop(next(iter(bad['models'])))
-            elif change == 'cases':
-                bad['cases'][0] = bad['cases'][1]
-            else:
-                bad['cases'][0]['returncode'] = 0
-            with self.assertRaises(AssertionError):
-                check_contract(bad, self.policy)
-
-    def test_original_occ_failure_cannot_be_success_or_different_failure(self):
-        case = self.contract['cases'][2]
-        stderr = ('failed knot 1 residual 0.00086977407608239442 trials 1 de0 0.0001 de1 0\n'
-                  'drained replay failed: original-cam-clay-sw-electronic-log-recovery-v1 singular mixed-control system; last committed knot retained\n')
-        valid = SimpleNamespace(returncode=1, stdout=case['stdout'], stderr=stderr)
-        check_observation(case, valid)
-        changes = [dict(returncode=0), dict(stdout=''), dict(stderr=stderr+'extra\n'),
-                   dict(stderr=stderr.replace('0.00086977407608239442', '0')),
-                   dict(stderr=stderr.replace('knot 1', 'knot 2')),
-                   dict(stderr=stderr.replace('trials 1', 'trials 2')),
-                   dict(stderr=stderr.replace('last committed knot retained', 'state changed'))]
-        for change in changes:
-            with self.subTest(change=change), self.assertRaises(AssertionError):
-                check_observation(case, SimpleNamespace(**(vars(valid) | change)))
-
-    def test_both_unknown_profiles_reject_exactly(self):
-        for case in self.contract['cases']:
-            if case['profile'] != 'unknown':
-                continue
-            valid = SimpleNamespace(returncode=1, stdout='', stderr=case['stderr'])
-            check_observation(case, valid)
-            with self.assertRaises(AssertionError):
-                check_observation(case, SimpleNamespace(returncode=0, stdout='', stderr=''))
+ def test_fourteen_mapping_is_exact_and_closed(self):
+  message='failed knot 1 residual 0.00086977407608239442 trials 1 de0 0.0001 de1 0\ndrained replay failed: '+OCC+' singular mixed-control system; last committed knot retained\n'
+  definitions={**PRIOR_THIRTEEN,DUNCAN:DUNCAN_HASH}
+  self.assertIn('current-fourteen',check_recorded_failure(message,definitions))
+  for bad in [{**definitions,DUNCAN:'0'*64},{**definitions,'linear-elastic':'0'*64},{**definitions,'unknown-model':'0'*64},{k:v for k,v in definitions.items() if k!='linear-elastic'}]:
+   with self.subTest(definitions=bad),self.assertRaises(AssertionError):check_recorded_failure(message,bad)

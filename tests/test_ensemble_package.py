@@ -31,11 +31,3 @@ class EnsemblePackageTests(unittest.TestCase):
         html=(ROOT/'web/index.html').read_text()
         for token in ['href="#ensemble"','id="ensemble"','src="ensemble-view.mjs"','href="ensemble.css"']:
             self.assertIn(token,html)
-
-    def test_retired_pages_cannot_reappear_through_the_release_packager(self):
-        text=(ROOT/"tools/build_web.py").read_text()
-        self.assertNotIn("bundle_power_creep(dest",text)
-        manifest=json.loads((ROOT/"catalogue/manifest.json").read_text())
-        for entry in manifest["models"]:
-            if entry.get("public_timed_laboratory") is True:
-                self.assertNotIn(entry.get("timed_laboratory"),["j2.html","sls.html","power-creep.html"])

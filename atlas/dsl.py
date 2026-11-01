@@ -189,6 +189,22 @@ def _spectral_function(operation, shape):
     return apply
 
 
+def _repeated_extreme(a, maximum):
+    from .numerics.spectral_multiplicity import repeated_extremes
+    if not isinstance(a, Sym):
+        raise ValidationError('spectral multiplicity requires a symmetric tensor')
+    try:
+        return repeated_extremes(a.v)[0 if maximum else 1]
+    except (ValueError, ArithmeticError) as exc:
+        raise ValidationError(str(exc)) from exc
+
+
+FUNCTIONS.update({
+    'principal_max_repeated': lambda a: _repeated_extreme(a, True),
+    'principal_min_repeated': lambda a: _repeated_extreme(a, False),
+})
+
+
 FUNCTIONS.update({name: _spectral_function(operation, shape)
                   for name, (operation, shape, _) in SPECTRAL_FUNCTIONS.items()})
 
@@ -201,7 +217,8 @@ def has_value_only_dependency(node, aliases=()):
     """Include predicate dependencies for reset events, whose policy is stricter."""
     return any((isinstance(n, ast.Name) and n.id in aliases) or
                (isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and
-                (n.func.id in ("principal_range_le", "principal_centered_mid_gt") or
+                (n.func.id in ("principal_range_le", "principal_centered_mid_gt",
+                               "principal_max_repeated", "principal_min_repeated") or
                  n.func.id in SPECTRAL_FUNCTIONS and SPECTRAL_FUNCTIONS[n.func.id][2]))
                for n in ast.walk(node))
 
@@ -291,6 +308,10 @@ def infer(node, symbols):
         if name not in FUNCTIONS or len(args) != arity:
             raise ValidationError(f"unsupported function or arity: {name}")
         a = args[0]
+        if name in ("principal_max_repeated", "principal_min_repeated"):
+            if a.shape != "sym":
+                raise ValidationError(f'{name} requires a symmetric tensor')
+            return Type("bool")
         if name in ("principal_range_le", "principal_centered_mid_gt"):
             if a.shape != "sym" or args[1].shape != "scalar" or a.dim != args[1].dim:
                 raise ValidationError(f'{name} requires equally dimensioned tensor and scalar')
@@ -395,6 +416,8 @@ def _cpp_node(node):
     if isinstance(node,ast.Call):
         name=node.func.id
         if name == 'principal_centered_mid_gt': return f"atlas::principal_centered_mid_gt_or_mark({cpp(node.args[0])}, {cpp(node.args[1])}, atlas_eval_ok)"
+        if name in ('principal_max_repeated', 'principal_min_repeated'):
+            return f"atlas::{name}_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name == 'principal_range_le': return f"atlas::principal_range_le_or_mark({cpp(node.args[0])}, {cpp(node.args[1])}, atlas_eval_ok)"
         if name in ('trace', 'dev', 'determinant', 'normalized_determinant'): return f"atlas::{name}_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name in SPECTRAL_FUNCTIONS:

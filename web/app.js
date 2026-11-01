@@ -1,9 +1,12 @@
 import {setupJ2Laboratory} from './j2-laboratory.mjs';
 import {setupTimedLaboratory} from './timed-laboratory.mjs';
 import {setupSlsLaboratory} from './sls-laboratory.mjs';
+import {setupPathLaboratory} from './path-laboratory.mjs';
+import {setupMaxwellLaboratory} from './maxwell-laboratory.mjs';
+import {setupImplicitPathLaboratory} from './implicit-path-laboratory.mjs';
 import {createLaboratoryControllerRouter} from './laboratory-controller-router.mjs';
-import {timedLaboratoryRoute} from './timed-route.mjs';
 import {validateSupport,unsupportedReason,requireSupportedControl} from './laboratory-support.mjs';
+import {timedLaboratoryRoute} from './timed-route.mjs';
 import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';
 import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
 import {formulationSection,recordedDescription} from './formulation-view.mjs';
@@ -85,7 +88,16 @@ function selectLaboratory(id){
   if(timedView?.supports(id)){
     if(j2View?.active)j2View.select(false);
     if(!timedView.active)++experimentLoadSequence;
-    return timedView.select(id);
+    const active=timedView.select(id);
+    if(active)$('model').value=id;
+    if(active&&id==='lade-duncan-1975-midpoint-elastic-eq19-gap-v4'){
+      $('model-description').textContent='Lade–Duncan (1975) cohesionless-soil elastoplasticity. Midpoint elastic/local Eq. 19 integration; small strain, compression-positive total mechanical stress, fixed axes and zero pore pressure. Custom paths remain exploratory.';
+      $('model-family').textContent='Soil elastoplasticity';$('model-status').textContent='Approved bounded numerical scope';
+      $('model-sources').replaceChildren();
+      for(const [text,path] of [['Original 1975 source','https://doi.org/10.1061/AJGEB6.0000204'],['Independent scientific checklist','./engine-implicit-path/review.json'],['Exact approval and limitations','./engine-implicit-path/approval.json'],['Exact approved model JSON','./engine-implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json']]){const a=element('a',text+' ↗');a.href=path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}
+    }
+    $('import-run').hidden=active;
+    return active;
   }
   if(j2View?.active)j2View.select(false);
   if(timedView?.active)timedView.select(false);
@@ -94,9 +106,24 @@ function selectLaboratory(id){
   $('import-run').hidden=false;
   return false;
 }
-function route(){
+function activateLaboratoryModel(id,{run=true}={}){
+  if(id!==j2View?.modelId&&!timedView?.supports(id)&&!models.some(m=>m.id===id)){
+    toast('That model is not available in this laboratory.');return false;
+  }
+  cancel('');
+  if(selectLaboratory(id))return true;
+  $('model').value=id;populate();if(run)simulate();return true;
+}
+function route({initial=false}={}){
   const anchor=location.hash.slice(1),selection=catalogueRoute(location.hash),page=selection.page;
-  if(page==='laboratory'&&anchor.startsWith('laboratory?')){const id=new URLSearchParams(anchor.split('?')[1]).get('model');if(id===j2View?.modelId||timedView?.supports(id))selectLaboratory(id);}
+  if(page==='laboratory'&&anchor.startsWith('laboratory?')){
+    const query=new URLSearchParams(anchor.slice(anchor.indexOf('?')+1));
+    if(query.has('model')){
+      const id=query.get('model');
+      if(query.getAll('model').length!==1)toast('Use one model in a laboratory link.');
+      else if(id!==$('model').value||(id===j2View?.modelId&&!j2View.active)||(timedView?.supports(id)&&!timedView.active))activateLaboratoryModel(id,{run:!initial});
+    }
+  }
   const entry=catalogue.find(x=>x.id===selection.modelId);
   if(entry)showCatalogueModel(entry,models.find(x=>x.id===entry.id));
   else{if($('catalogue-dialog').open)$('catalogue-dialog').close();if(selection.modelId||selection.invalid)toast('That model link is not in this catalogue.');}
@@ -187,9 +214,10 @@ function updateControlSupport(){
 }
 function registeredModelReview(id){return (evidenceIndex?.agent_reviews||[]).find(r=>r.catalogue_id===id&&r.status==='accepted'&&r.definition_current&&r.registered_approval_id!==null);}
 function refreshModelSummary(){
+  if(specialLaboratoryActive())return;
   const m=model();if(!m)return;
   const entry=catalogue.find(e=>e.id===m.id);
-  $('model-description').textContent=entry?.id==='original-cam-clay-sw-electronic-log-recovery-v1'?entry.note:recordedDescription(m.description,m.id,evidenceIndex);
+  $('model-description').textContent=recordedDescription(entry?.dossier?entry.note:m.description,m.id,evidenceIndex);
   $('model-status').textContent=registeredModelReview(m.id)?'Approved scope':m.status;
 }
 function populate({loadExample=true}={}){
@@ -379,7 +407,7 @@ function renderCharts(){
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&entry.timed_laboratory==='index.html');if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
+  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
     const heading=element('h2'),open=element('a',entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
@@ -391,8 +419,7 @@ function catalogueCards(){
   if(!count)grid.append(element('p','No matching models. Try another name or availability.','catalogue-empty'));
 }
 function refreshCatalogueStatus(entry,spec){
-  const timedRoute=timedLaboratoryRoute(entry);
-  $('catalogue-detail-status').textContent=registeredModelReview(entry.id)||entry.id===j2View?.modelId?'Approved scope · independent agent review':timedView?.supports(entry.id)?'Approved bounded scope · physical-time laboratory':spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
+  $('catalogue-detail-status').textContent=entry.id===j2View?.modelId?'Approved scope · independent agent review':timedView?.supports(entry.id)?(entry.implicit_path_laboratory?'Approved bounded scope · implicit strain-path laboratory':entry.path_laboratory?'Approved bounded scope · controlled-path laboratory':'Approved bounded scope · physical-time laboratory'):registeredModelReview(entry.id)?'Approved scope · independent agent review':spec?'Available to test · '+spec.status:timedLaboratoryRoute(entry)?'Available to test · approved physical-time scope':'Research candidate';
 }
 function showCatalogueModel(entry,spec){
   const timedRoute=timedLaboratoryRoute(entry);
@@ -401,9 +428,9 @@ function showCatalogueModel(entry,spec){
   refreshCatalogueStatus(entry,spec);
   $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute||entry.id===j2View?.modelId||timedView?.supports(entry.id)?' available':'');
   body.append(element('p',recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',entry.id,evidenceIndex),'catalogue-detail-note'));
-  if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else if(timedRoute){const section=element('section');section.append(element('h3','Physical-time formulation'),element('p','Open the dedicated laboratory for supported controls, conventions and source/review links.'));body.append(section);}else body.append(formulationSection(document,spec,{evidenceIndex}));
-  if(!spec&&!timedRoute&&entry.id!==j2View?.modelId&&!timedView?.supports(entry.id)){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
+  if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else if(entry.implicit_path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes the original complete 1975 elastoplastic law through a bounded implicit strain-path realization, explicit Table 1 preparation and complete stress/history/work state. Total mechanical Cauchy stress; no pore-pressure law or experimental validation.'));const links=element('p');for(const [label,path] of [['Exact definition','engine-implicit-path/'+entry.id+'.json'],['Independent scientific checklist','engine-implicit-path/review.json'],['Approval and limitations','engine-implicit-path/approval.json']]){const a=element('a',label+' ↗');a.href='./'+path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}body.append(links);}else if(entry.path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes dimensionless shear progress, complete initial history and linearly changing stress controls for the original drained active axial law. Experimental comparison is unavailable.'));}else if(timedRoute){const section=element('section');section.append(element('h3','Physical-time formulation'),element('p','Open the dedicated laboratory for supported controls, conventions and source/review links.'));body.append(section);}else body.append(formulationSection(document,spec,{evidenceIndex}));
   if(typeof entry.dossier==='string'&&/^docs\/models\/[a-z0-9-]+\.md$/.test(entry.dossier)){const link=element('a','Source, numerics and limitations dossier ↗');link.href='./'+entry.dossier+'.html';link.target='_blank';link.rel='noopener';body.append(link);}
+  if(!spec&&!timedRoute&&entry.id!==j2View?.modelId&&!timedView?.supports(entry.id)){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);
   if(sources.length){
@@ -419,8 +446,8 @@ function showCatalogueModel(entry,spec){
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
   $('catalogue-detail-id').textContent=entry.id;
   $('catalogue-permalink').href=catalogueModelHash(entry.id);
-  const timed=timedView?.supports(entry.id)&&entry.timed_laboratory==='index.html';
-  const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute&&!timed&&entry.id!==j2View?.modelId;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(selectLaboratory(entry.id)){location.hash='laboratory?model='+encodeURIComponent(entry.id);}else{$('model').value=entry.id;populate();location.hash='laboratory';simulate();}$('model').focus({preventScroll:true});};
+  const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html');
+  const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute&&!timed&&entry.id!==j2View?.modelId;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(activateLaboratoryModel(entry.id))location.hash='laboratory?model='+encodeURIComponent(entry.id);$('model').focus({preventScroll:true});};
   if(!dialog.open)dialog.showModal();body.scrollTop=0;
 }
 function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
@@ -555,7 +582,7 @@ async function loadExperiments(files){
   }catch(e){if(id===experimentLoadSequence&&!specialLaboratoryActive())toast(e.message);}
   finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}
 }
-window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{cancel('');if(selectLaboratory($('model').value)){location.hash='laboratory?model='+encodeURIComponent($('model').value);return;}history.replaceState(null,'','#laboratory');populate();simulate();};$('protocol').onchange=()=>{setProtocol();refreshExperimentFilter();scheduleUpdate();};
+window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{if(activateLaboratoryModel($('model').value))location.hash='laboratory?model='+encodeURIComponent($('model').value);};$('protocol').onchange=()=>{setProtocol();refreshExperimentFilter();scheduleUpdate();};
 $('cycles').onchange=()=>{refreshExperimentFilter();const minimum=16*Number($('cycles').value);if(Number($('steps').value)<minimum)$('steps').value=minimum;scheduleUpdate();};
 $('load-model-example').onclick=()=>{try{cancel('');populate();simulate();}catch(e){toast(e.message);}};
 $('reset').onclick=()=>{cancel('');HTMLFormElement.prototype.reset.call($('controls'));populate();setProtocol();refreshExperimentFilter();simulate();};$('equations-button').onclick=()=>{if(j2View?.showEquations()||timedView?.showEquations())return;$('equations').open=true;$('equations').scrollIntoView({behavior:'smooth'});};
@@ -584,5 +611,5 @@ try{
   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
-  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

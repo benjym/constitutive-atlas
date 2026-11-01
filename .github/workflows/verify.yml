@@ -32,34 +32,34 @@ jobs:
           cmake --build build-sls --target atlas_sls_solver --parallel 1
           python tools/test_sls_native.py --solver build-sls/atlas_sls_solver --output "$RUNNER_TEMP/sls-native.json"
           node --test tests/test_sls_laboratory_contract.mjs tests/test_laboratory_controller_router.mjs
-      - name: Build and qualify Burgers physical-time schedules
-        run: |
-          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
-          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
-          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
-          node --test tests/test_burgers_web_contract.mjs
       - name: Build and qualify the approved J2 strain-increment model
         run: |
           cmake -S cmake/j2 -B build-j2 -DCMAKE_BUILD_TYPE=Release
           cmake --build build-j2 --target atlas_j2_solver --parallel 1
           python tools/test_j2_native.py --solver build-j2/atlas_j2_solver --output "$RUNNER_TEMP/j2-native"
           node --test tests/test_j2_contract.mjs tests/test_j2_main_routing.mjs
+      - name: Build and qualify Burgers physical-time schedules
+        run: |
+          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+          node --test tests/test_burgers_web_contract.mjs
       - name: Native checks and full exact archival replay
         if: runner.os == 'macOS'
         run: |
           ctest --test-dir build --output-on-failure -E "^atlas_recorded$"
-          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-v4 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
         env:
-          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-v3
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5
       - name: Linux native checks
         if: runner.os == 'Linux'
         run: |
           ctest --test-dir build --output-on-failure -E "^(atlas_python|atlas_recorded)$"
-          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-v4 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
         env:
-          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-v3
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5
       - name: Retain strict original native failures and reject unknown fixtures
-        run: python tools/check_native_fixture_contracts.py --fixture-contract catalogue/native-fixture-contracts-thirteen-occ-v1.json --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
+        run: python tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
       - name: Linux portable Python suite
         if: runner.os == 'Linux'
         env:
@@ -146,18 +146,24 @@ jobs:
           python tools/fetch_data.py --approved-only
           emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
           cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
           emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
-          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
-          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
-          python tools/build_web.py
+          python -B -m unittest tests.test_provision_maxwell_assets
+          python -B tools/provision_maxwell_assets.py
+          python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+          python -B tools/provision_implicit_path_assets.py
+          python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package
           node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
+          node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
@@ -203,18 +209,24 @@ jobs:
           python tools/fetch_data.py --approved-only
           emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
           cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
           emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
-          emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
-          cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
-          python tools/build_web.py
+          python -B -m unittest tests.test_provision_maxwell_assets
+          python -B tools/provision_maxwell_assets.py
+          python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+          python -B tools/provision_implicit_path_assets.py
+          python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package
           node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
+          node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"

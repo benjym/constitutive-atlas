@@ -25,8 +25,9 @@ def prepare(destination):
             path.write_text(json.dumps(model,indent=2)+'\n');paths.append(path)
     generate(destination/'generated',paths)
     cmake=['cmake_minimum_required(VERSION 3.20)',
-           'project(atlas_state_contract LANGUAGES CXX)',
+           'project(atlas_state_contract LANGUAGES C CXX)',
            'set(CMAKE_CXX_STANDARD 20)',
+               f'include({json.dumps(str(ROOT/"cmake/AtlasScalarFunctions.cmake"))})',
            f'add_executable(atlas_state_contract {json.dumps(str(ROOT/"cpp/main.cpp"))})',
            'target_include_directories(atlas_state_contract PRIVATE '+json.dumps(str(ROOT/'cpp/include'))+' '+json.dumps(str(destination/'generated'))+')']
     (destination/'CMakeLists.txt').write_text('\n'.join(cmake)+'\n')

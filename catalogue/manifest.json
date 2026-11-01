@@ -187,14 +187,32 @@
       "capability_gap": "Source extraction and logarithmic yield-domain treatment pending."
     },
     {
+      "id": "original-cam-clay-sw-electronic-log-recovery-v1",
+      "name": "Original Cam Clay — invariant log-recovery endpoint",
+      "family": "critical-state plasticity",
+      "status": "draft",
+      "executable": true,
+      "dossier": "docs/models/original-cam-clay-sw-electronic-log-recovery-v1.md",
+      "note": "Full source-derived invariant continuation of the disclosed Schofield/Wroth electronic transcription: zero recoverable shear, original corner cone, project BE volume/log recovery and explicit strain-interface selection. Native/Wasm qualified for nominal examples and exact recorded corpus. Separate independent review/registry records determine approval; frozen definition retains draft metadata. Stress-control qualification is monotonic only; cyclic stress unloading is unsupported. At tiny positive pressure absolute residual acceptance can give poor log-pressure accuracy. Fixed frame, illustrative state, no experimental validation."
+    },
+    {
       "id": "duncan-chang-1970",
       "name": "Duncan–Chang hyperbolic model (1970)",
       "family": "nonlinear elasticity",
       "status": "candidate",
       "executable": false,
       "discovery_url": "https://doi.org/10.1061/JSFEAQ.0001458",
-      "note": "Research candidate; bibliographic and formulation review pending.",
-      "capability_gap": "Pin loading/unloading and 3D generalization; the triaxial relation alone is insufficient."
+      "note": "Original1970 constant-Poisson 3D formulation is implemented as the separately identified endpoint-average realization. Family discovery record; do not count as a second executable formulation."
+    },
+    {
+      "id": "duncan-chang-1970-endpoint-average",
+      "name": "Duncan–Chang (1970), constant ν, endpoint-average",
+      "family": "nonlinear elasticity",
+      "status": "draft",
+      "executable": true,
+      "dossier": "docs/models/duncan-chang-1970-endpoint-average.md",
+      "discovery_url": "https://doi.org/10.1061/JSFEAQ.0001458",
+      "note": "Complete original constant-nu incremental3D closure with explicit Atlas finite endpoint averaging/history/branch/failure choices. Exact definition has accepted independent agent review and native/Wasm source qualification. Fixed spatial frame, effective stress, illustrative source coefficients; no pore-fluid/dilatancy/physical-time law, FE-host tangent qualification or experimental validation. Approval is determined by exact registry records; draft definition metadata is retained."
     },
     {
       "id": "lade-duncan-1975",
@@ -203,8 +221,25 @@
       "status": "candidate",
       "executable": false,
       "discovery_url": "https://doi.org/10.1061/AJGEB6.0000204",
-      "note": "Research candidate; bibliographic and formulation review pending.",
-      "capability_gap": "Full hardening/flow transcription and source checks pending; yield criterion alone is not a complete model."
+      "note": "Original full1975 formulation; family discovery record. The separately identified midpoint-elastic local Eq19 realization has exact independent review and a bounded main-laboratory route; do not count this family row as another executable formulation."
+    },
+    {
+      "id": "lade-duncan-1975-midpoint-elastic-eq19-gap-v4",
+      "name": "Lade–Duncan 1975 · midpoint-elastic local Eq. 19",
+      "family": "elastoplasticity",
+      "status": "reviewed",
+      "executable": false,
+      "implicit_path_laboratory": "index.html",
+      "dossier": "docs/models/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.md",
+      "discovery_url": "https://doi.org/10.1061/AJGEB6.0000204",
+      "note": "Original full1975 elastoplastic law with explicit Atlas midpoint elasticity and endpoint plastic/history choices. Independently reviewed bounded native/Wasm implementation; main-laboratory implicit strain-path controls. Total mechanical Cauchy stress; named source preparation, no postfailure continuation, general3D event theorem or experimental validation. Exact draft model metadata remains unchanged; approval is bound through the registry.",
+      "catalogue_sources": [
+        {
+          "url": "https://doi.org/10.1061/AJGEB6.0000204",
+          "role": "Original full1975 formulation",
+          "locator": "JGED101(10),1037–1053, equations1–19 and Table1; full supplied original privately retained SHA256bdebd928dbe9e4bac47c0a0328ed0bab79ab3e440a25390f1d646e9ed3749fc5; PDF not redistributed"
+        }
+      ]
     },
     {
       "id": "matsuoka-nakai",
@@ -223,13 +258,18 @@
       "status": "candidate",
       "executable": false,
       "discovery_url": "https://doi.org/10.1680/geot.1993.43.1.91",
-      "note": "Exact1993 identity retained; original equation images remain unverified after bounded acquisition attempts. Later NorSand variants are separate.",
-      "capability_gap": "Acquire exact original PDF and visually verify yield/image-pressure/initialization and rigid-plastic loading/unloading closure; provisional text inventory is not a verified3D formulation.",
+      "note": "Original1993 source verified from all13pages. Family discovery identity retained; the separately listed active axial variant has bounded independent agent approval. Later revisions remain separate.",
+      "capability_gap": "Family discovery is not a general3D implementation. Only the separately identified original active drained axial formulation is admitted within its reviewed numerical scope.",
       "research_sources": [
         {
           "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/norsand-1993-source-packet.md",
           "role": "Atlas exact-source access-gap dossier",
           "locator": "Bounded Downloads/primary/author routes; no original PDF/hash or image-certified equations"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/ingestion/norsand-1993/supplied-original-v2/README.md",
+          "role": "Verified original-source packet",
+          "locator": "Original13pages, printed91–103; equations5–12; private PDF hash in public receipt"
         }
       ]
     },
@@ -864,14 +904,41 @@
       "family": "physical-time creep",
       "status": "numerically-tested",
       "executable": false,
-      "public_timed_laboratory": false,
+      "public_timed_laboratory": true,
       "timed_laboratory": "power-creep.html",
-      "note": "User-approved bounded both-active law, independently agent-reviewed. Retained as a reviewed source formulation; excluded from the public laboratory and strain-path runtime. Dry zero-spin small strain, n>=1; illustrative parameters; no threshold switching or experimental validation. Exact tested definition retains historical draft metadata.",
+      "note": "User-approved bounded both-active law, independently agent-reviewed. Available in the dedicated physical-time laboratory; excluded from the strain-path runtime. Dry zero-spin small strain, n>=1; illustrative parameters; no threshold switching or experimental validation. Exact tested definition retains historical draft metadata.",
       "catalogue_sources": [
         {
           "url": "https://docs.itascacg.com/itasca900/common/models/power/doc/modelpower.html",
           "role": "Primary manual, Itasca9.0",
           "locator": "Eqs2–6 and Both Components Active option; Eq7 trace defect excluded explicitly."
+        }
+      ]
+    },
+    {
+      "id": "maxwell-itasca900-zero-spin-ode",
+      "name": "Maxwell continuum · continuous dry zero-spin",
+      "family": "Viscoelasticity",
+      "status": "reviewed",
+      "executable": false,
+      "timed_laboratory": "index.html",
+      "dossier": "docs/models/maxwell-itasca900-zero-spin-ode.md",
+      "note": "Independently agent-reviewed continuous Maxwell deviatoric viscosity with elastic volume response. Main-laboratory physical-time relaxation, creep, oedometer and load–hold–reverse controls. Dry total Cauchy stress, infinitesimal strain, fixed spatial axes/zero spin; illustrative uncalibrated parameters. Vendor discrete updates, finite rotations, broad parameter envelope and experimental validation excluded.",
+      "catalogue_sources": [
+        {
+          "url": "https://docs.itascacg.com/itasca900/common/models/viscous/doc/modelviscous.html",
+          "role": "vendor mathematical formulation",
+          "locator": "Eqs1–6, especially Eq4 coefficients G/eta; trace interpretation of malformed adjacent index expressions"
+        },
+        {
+          "url": "https://docs.itascacg.com/itasca900/common/docproject/source/manual/program_guide/modelformulation/signconventions.html",
+          "role": "tensor sign convention",
+          "locator": "direct stress, direct strain, strain rate"
+        },
+        {
+          "url": "https://docs.itascacg.com/itasca900/flac3d/zone/test3d/Creep/OedometerMaxwell/oedometermaxwell.html",
+          "role": "small-strain dry example and preparation",
+          "locator": "Eqs1–6, elastic-equilibrium paragraph, model large-strain off; no vendor code executed"
         }
       ]
     },
@@ -927,13 +994,23 @@
       "material_laboratory": "index.html"
     },
     {
-      "id": "original-cam-clay-sw-electronic-log-recovery-v1",
-      "name": "Original Cam Clay — invariant log-recovery endpoint",
+      "id": "norsand-jefferies-1993-active-axial",
+      "name": "NorSand 1993 · original drained active axial law",
       "family": "critical-state plasticity",
-      "status": "draft",
-      "executable": true,
-      "dossier": "docs/models/original-cam-clay-sw-electronic-log-recovery-v1.md",
-      "note": "Full source-derived invariant continuation of the disclosed Schofield/Wroth electronic transcription: zero recoverable shear, original corner cone, project BE volume/log recovery and explicit strain-interface selection. Native/Wasm qualified for nominal examples and exact recorded corpus. Separate independent review/registry records determine approval; frozen definition retains draft metadata. Stress-control qualification is monotonic only; cyclic stress unloading is unsupported. At tiny positive pressure absolute residual acceptance can give poor log-pressure accuracy. Fixed frame, illustrative state, no experimental validation."
+      "status": "reviewed",
+      "executable": false,
+      "path_laboratory": "index.html",
+      "dossier": "docs/models/norsand-1993-active-axial-v1.md",
+      "discovery_url": "https://doi.org/10.1680/geot.1993.43.1.91",
+      "note": "Independent agent approval for the exact original rigid-plastic active axial variant and frozen numerical examples. Main-atlas controlled-path interface; browser qualification recorded separately. No experimental validation or general3D claim.",
+      "catalogue_sources": [
+        {
+          "url": "https://doi.org/10.1680/geot.1993.43.1.91",
+          "role": "Original publication · Jefferies1993",
+          "locator": "Géotechnique43(1),91–103; equations5–12 and original image-pressure closure"
+        }
+      ],
+      "capability_gap": "Restricted active monotonic drained axial variant. Elasticity, unloading, cyclic response, general3D and experimental validation are unsupported."
     }
   ]
 }

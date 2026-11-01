@@ -1,0 +1,5 @@
+# Outer-transaction reuse outcome
+
+Native qualification PASS:157reuse/33hierarchical/10375derivative/49seed/16metric fixtures;3strict complete-response pairs; unchanged dense hardcase93.962252seconds; joint24/fixed24/source-interpreter12/domain704requests94gates/lifecycle38/legacy57/supplement88requests3818checks. Independent full-native saved review9170b06b verifies frozen gates and retained failures. Fixed-tolerance stress trends remain diagnostic nonmonotonic failures, not the jointly refined study.
+
+Wasm qualification FAIL/INCOMPLETE: exact matching serial Release build, accepted bounded wrapper,11completed literal responses; request12dense.005/N1600 exceeds unchanged120000ms including worker initialization (120003.739ms), ETIMEDOUT/SIGKILL, empty partial stdout/stderr. Immediate request manifest and raw streams retained. No aggregate parity report, selfchains or Wasm source gate; no E5/public/browser claim. All original source/error/resource/time limits remain. Further generic outer-control starting-guess assessment is separate prospective work.

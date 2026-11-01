@@ -1,0 +1,75 @@
+{
+  "id": "lade-outer-predictor-same-initialization-cache-fidelity-v1",
+  "baseline_exe": "/Users/bmar5496/code/constitutive-atlas/.local/lade-fused-linear-v1/native-build/atlas_lade_cold_cache_candidate",
+  "candidate_exe": "/Users/bmar5496/code/constitutive-atlas/.local/lade-fused-linear-v1/native-build/atlas_lade_domain_candidate",
+  "timeout_seconds": 120,
+  "fidelity": "Three strict entire parsed-response pairs, same new predictor and admission/fallback, cache disabled versus enabled; only elapsed_ms ignored. Each120seconds. Before fixed performance prerequisites. Prior cold initialization differs by declared algorithm; original independent source/domain/refinement/parity gates unchanged.",
+  "cases": [
+    {
+      "name": "drained-elastic-plastic",
+      "command": [
+        "/Users/bmar5496/code/constitutive-atlas/.local/lade-fused-linear-v1/native-build/atlas_lade_cold_cache_candidate",
+        "--model",
+        "lade-duncan-1975-midpoint-elastic-eq19-gap-v4",
+        "--parameters",
+        "101325,103,40,0.44,0.957,0.000255,1.32,2300,0.8,0",
+        "--initial",
+        "60000,60000,60000,0,0,0,13,0",
+        "--protocol",
+        "1",
+        "--target",
+        "0.001",
+        "--steps",
+        "100",
+        "--response-contract",
+        "stress-scope-0.1",
+        "--integration-settings",
+        "2e-10,1e-06,45,20,200000,11,1e-07,1"
+      ]
+    },
+    {
+      "name": "drained-plastic",
+      "command": [
+        "/Users/bmar5496/code/constitutive-atlas/.local/lade-fused-linear-v1/native-build/atlas_lade_cold_cache_candidate",
+        "--model",
+        "lade-duncan-1975-midpoint-elastic-eq19-gap-v4",
+        "--parameters",
+        "101325,103,40,0.44,0.957,0.000255,1.32,2300,0.8,0",
+        "--initial",
+        "60000,60000,60000,0,0,0,13,0",
+        "--protocol",
+        "1",
+        "--target",
+        "0.002",
+        "--steps",
+        "100",
+        "--response-contract",
+        "stress-scope-0.1",
+        "--integration-settings",
+        "2e-10,1e-06,45,20,200000,11,1e-07,1"
+      ]
+    },
+    {
+      "name": "undrained-stress",
+      "command": [
+        "/Users/bmar5496/code/constitutive-atlas/.local/lade-fused-linear-v1/native-build/atlas_lade_cold_cache_candidate",
+        "--model",
+        "lade-duncan-1975-midpoint-elastic-eq19-gap-v4",
+        "--parameters",
+        "101325,103,40,0.44,0.957,0.000255,1.32,2300,0.8,0",
+        "--initial",
+        "60000,60000,60000,0,0,0,13,0",
+        "--protocol",
+        "3",
+        "--target",
+        "1000",
+        "--steps",
+        "16",
+        "--response-contract",
+        "stress-scope-0.1",
+        "--integration-settings",
+        "2e-10,1e-06,45,20,200000,11,1e-07,1"
+      ]
+    }
+  ]
+}

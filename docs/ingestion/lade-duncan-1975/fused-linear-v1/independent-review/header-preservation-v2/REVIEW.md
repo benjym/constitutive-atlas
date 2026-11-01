@@ -1,0 +1,9 @@
+# Header preservation v2 — accepted
+
+Accepted for the exact frozen13 metadata writes and separately reviewed one-file app replacement. This is a preservation decision, not browser/package qualification. V1 remains immutable and blocked; no old result is reinterpreted.
+
+Independently verified all v2 frozen files, current old app/maps and new-map/old-snapshot absence preconditions. The exact b451→9612893 header source has separate independent acceptance704da5bd…. Ten sidecars preserve every old document pin and entry additively. Three canonical snapshots preserve exact old app/main-map/context-map bytes. The13-write whitelist equals those exact candidates; no other production metadata/source changes are permitted.
+
+All19 actual checked_receipt predicates pass in an isolated prospective overlay. A fresh independent scan of10348 non-map JSON documents, including prior installation/prospective/copied-receipt contexts, found exactly11 affected consumer pairs and zero uncovered pairs. Only the new header proposal context and central immutable canonical archives are excluded. This explicitly includes both revision-v4/TRUE_DELTA_MAPS pairs that blocked v1, and all conservative copied-receipt consumers. Self map metadata is not treated as a new receipt identity; exact changing map bytes and their actual JSON consumers are preserved.
+
+Reproduce with python3 -B check.py. Root must recheck live guards immediately before applying13 metadata writes plus one app replacement. Existing v1 site/archive/header failure must remain retained. Fresh standard package and actual selected-Lade/deeplink/dropdown/switch-away browser checks remain required. No source equations, model/controller/component bytes, runtime/artifact or scientific gates change. Reviewer executed no builds/material APIs or production writes.

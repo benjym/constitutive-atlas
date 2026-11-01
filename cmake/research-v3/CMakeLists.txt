@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(AtlasIsolatedResearchV3 LANGUAGES CXX)
+project(AtlasIsolatedResearchV3 LANGUAGES C CXX)
 
 # One reviewed declarative file, the ordinary compiler, and an existing generic
 # transport. This project neither packages nor promotes a public model.
@@ -9,6 +9,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 endif()
 get_filename_component(ATLAS_ROOT "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+include("${ATLAS_ROOT}/cmake/AtlasScalarFunctions.cmake")
 set(ATLAS_MODEL_FILE "" CACHE FILEPATH "One declarative research model JSON file")
 set(ATLAS_RESEARCH_TRANSPORT rate CACHE STRING "Transport: rate or integrate")
 set_property(CACHE ATLAS_RESEARCH_TRANSPORT PROPERTY STRINGS rate integrate)

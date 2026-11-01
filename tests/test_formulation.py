@@ -85,7 +85,8 @@ class FormulationTests(unittest.TestCase):
                         definition.write_text(json.dumps(model))
                         generate(base/label, [definition])
                     def executable(label):
-                        return [line for line in without_stress_scope_metadata((base/label/'models.hpp').read_text()).splitlines()
+                        header = 'path_models.hpp' if integration_kind(old)=='path_ode' else 'models.hpp'
+                        return [line for line in without_stress_scope_metadata((base/label/header).read_text()).splitlines()
                                 if 'inline const char* catalogue_hash()' not in line
                                 and 'inline bool explicit_initialization_required(' not in line
                                 and 'inline const char* describe_models()' not in line

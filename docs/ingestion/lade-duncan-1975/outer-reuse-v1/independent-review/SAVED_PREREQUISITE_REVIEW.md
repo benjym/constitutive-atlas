@@ -1,0 +1,9 @@
+# Saved build/helper/fidelity prerequisite audit
+
+Read-only audit verifies all28native-build-receipt file hashes, including6executable artifacts, serial build/configuration logs and exact freeze/review pins. No artifact was executed. The saved helper reports pass: outer157/0with12actual reuses/12avoided integrations; hierarchical33/0; tail10375/0; seed49/0; metric16/0. These are bounded helper facts, not a complete material qualification.
+
+Reviewer independently verifies all6fidelity request commands/executable hashes,12raw stdout/stderr hashes, successful process statuses and response ok=true, then reparses saved stdout with the corrected strict IntegerToken/binary64/kind parser. All3entire-response pairs match after removing only top-level elapsed_ms, and match their frozen case sequence (drained0.001,drained0.002,protocol3stress1000). This includes every response point/state/strain/control/diagnostic/metadata field, rather than a final-stress-only comparison. The full-key helper asserts genuine executed-call savings; fidelity itself establishes response identity in these bounded cases, not general performance equivalence.
+
+At this review request the exact120second hardcase was running. This saved-only audit does not adjudicate its outcome or any pending full joint/domain/lifecycle/legacy/supplement/Wasm campaign. No speed claim, numerical/scientific admission or E5 approval follows. Existing failures and all frozen acceptance gates remain binding. If the hardcase passes, complete the originally required studies and exact post-observation review; if it fails, preserve the failure before selecting any next separately prospective task.
+
+Reproduce using python3 -B docs/ingestion/lade-duncan-1975/outer-reuse-v1/independent-review/check_saved_prerequisites.py. It only reads/hashes/reparses saved files and writes its owned saved-prerequisite-check-results.json.

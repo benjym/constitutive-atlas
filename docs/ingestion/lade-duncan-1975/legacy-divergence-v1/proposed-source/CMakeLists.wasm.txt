@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.20)
+project(LadeGapWasm LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+add_executable(atlas_lade_gap_wasm main.cpp)
+target_include_directories(atlas_lade_gap_wasm PRIVATE include generated)
+target_compile_options(atlas_lade_gap_wasm PRIVATE -fexceptions)
+set_target_properties(atlas_lade_gap_wasm PROPERTIES OUTPUT_NAME "lade-gap" SUFFIX ".mjs")
+target_link_options(atlas_lade_gap_wasm PRIVATE "-sMODULARIZE=1" "-sEXPORT_ES6=1" "-sEXPORT_NAME=createLadeGap" "-sENVIRONMENT=web,worker,node" "-sALLOW_MEMORY_GROWTH=1" "-sMAXIMUM_MEMORY=268435456" "-sSTACK_SIZE=1048576" "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-fexceptions" "-sFILESYSTEM=0" "--no-entry")

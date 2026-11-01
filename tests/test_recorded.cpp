@@ -165,7 +165,7 @@ void additional_recorded_cases(){
 }
 int main(){try{
  const char* profile=std::getenv("ATLAS_NATIVE_FIXTURES");
- require(!profile||(std::string(profile)=="explicit-gis20-v2"||std::string(profile)=="explicit-gis20-occ-v3"||std::string(profile)=="explicit-gis20-occ-restart-v4"),"unknown native fixture profile");explicit_fixtures=profile!=nullptr;occ_restart_fixture=profile&&std::string(profile)=="explicit-gis20-occ-restart-v4";
+ require(!profile||(std::string(profile)=="explicit-gis20-v2"||std::string(profile)=="explicit-gis20-occ-v3"||(std::string(profile)=="explicit-gis20-occ-restart-v4"||std::string(profile)=="explicit-gis20-occ-restart-duncan-v5")),"unknown native fixture profile");explicit_fixtures=profile!=nullptr;occ_restart_fixture=profile&&(std::string(profile)=="explicit-gis20-occ-restart-v4"||std::string(profile)=="explicit-gis20-occ-restart-duncan-v5");
  std::cout<<(explicit_fixtures?"Explicit valid-domain/GIS-depth20 fixtures":"Strict original default fixtures")<<"; models="<<models().size()<<'\n';
  int model=-1;for(size_t i=0;i<models().size();++i)if(models()[i].id=="linear-elastic")model=int(i);
  require(model>=0,"linear-elastic absent");auto parameters=default_parameters(model);auto parent=initial_state(model);

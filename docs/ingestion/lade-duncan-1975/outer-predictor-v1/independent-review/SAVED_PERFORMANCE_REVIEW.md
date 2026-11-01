@@ -1,0 +1,11 @@
+# Saved exact native performance prerequisite
+
+Decision: PASS for this native prerequisite only. No compiled/material calls or builds were performed by the reviewer. Full native numerical/refinement/domain qualification, matching Wasm prerequisite and complete backend campaigns remain separate; no E5 approval follows.
+
+The saved report records the exact dense .005/N1600 protocol-1 request, model120b93f3, and unchanged settings `7.8125e-13,1e-06,45,20,200000,11,3.90625e-10,1`. The binary SHA-256 `81e1276e3909d0af57c0c916c4f3b642994247ea9cdc65ee9416ed5aea299588` matches the verified nine-target build receipt and helper/fidelity audit. All 75 frozen inputs and all 40 build pins still verify. Production retains the 30-iteration default and new predictor with the already reviewed admission/fallback policy.
+
+Saved subprocess status is zero and run status is true. Recorded elapsed wall time is 69.06169237499125 seconds under the original 120-second cap. Raw SHA-256 is `dd21573e188dda738c0c7353817e159a758efdb549dd5a70b7deba16ae9dcc6f`. The response has 1601 points, final control .005, finite eight-component states/six-component strains/controls throughout, positive-definite stresses and prefailure f<=k1(1+1e-10). Decoded history satisfies its structural physical bound; no postprocessing changes state. This check is not the full path-history/lifecycle campaign.
+
+Independent recalculation from the final point and pinned scalar source reference exactly reproduces the report errors: axial stress 4.30209694e-7, radial strain 3.42407396e-9, work 3.56432768e-6. All are within the unchanged .005/.0001/.02 bounds. This exact hardcase passes; a speed ratio against earlier runs is not a portable benchmark because host load/timing conditions need not match. The separate same-parent fixture's 112-to-70 integration reduction is retained as bounded work evidence.
+
+Reproduce saved-only checks with `python3 -B docs/ingestion/lade-duncan-1975/outer-predictor-v1/independent-review/check_saved_performance.py`. Next action remains the prospectively accepted matching Wasm single hardcase before all remaining campaigns. Original prior-runtime/native/Wasm timeouts remain retained failures under their own identities.

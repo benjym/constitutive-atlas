@@ -1,0 +1,60 @@
+{
+  "id": "lade-midpoint-native-build-v4",
+  "processes": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        ".local/lade-midpoint-control-v1/native-source",
+        "-B",
+        ".local/lade-midpoint-control-v1/native-build",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "log": "docs/ingestion/lade-duncan-1975/midpoint-control-v1/build-logs/configure-native.log",
+      "log_sha256": "9d96e35e4ff545711dc7ccecc13135413f90bd1f9045982418b4e7bd6f8330e6"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        ".local/lade-midpoint-control-v1/native-build",
+        "--target",
+        "atlas_lade_domain_candidate",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0,
+      "log": "docs/ingestion/lade-duncan-1975/midpoint-control-v1/build-logs/build-native.log",
+      "log_sha256": "47177f004619ab6e6b4823dfb79cfd3508dd9b2ba36ea8e495da2b133faf4cde"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        ".local/lade-midpoint-control-v1/native-build",
+        "--target",
+        "atlas_lade_domain_regression",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0,
+      "log": "docs/ingestion/lade-duncan-1975/midpoint-control-v1/build-logs/build-regression.log",
+      "log_sha256": "93ea2c85aa63254e4030c58e12e6e920b76305ec8044cd1b73de22d82bb7f9a2"
+    }
+  ],
+  "build_success": true,
+  "artifacts": [
+    {
+      "path": ".local/lade-midpoint-control-v1/native-build/atlas_lade_domain_candidate",
+      "sha256": "8e65dae2c162543d97510a56e92155935b81e4ab05336751a80122d8f2210c17"
+    },
+    {
+      "path": ".local/lade-midpoint-control-v1/native-build/atlas_lade_domain_regression",
+      "sha256": "c7502b69614ad22fdf3402f1e55642fb132c6bb3e7ca2b09dc08537d5556589d"
+    }
+  ],
+  "prospective_freeze_sha256": "1d3975d4568fcefea9be9db06275caafb6e9ea9a4eff4b2c219694a1988c3a0c",
+  "review_sha256": "cebff2ff29e66a6add2cb77ea6bfff1fd449067b51755d9206876992576e1c65",
+  "toolchain": "Apple clang version 21.0.0 (clang-2100.4.1.1)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n"
+}

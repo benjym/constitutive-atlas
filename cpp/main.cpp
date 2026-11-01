@@ -86,6 +86,18 @@ void write_settings(std::ostream& o,const atlas::IntegrationSettings& s){
       <<",\"rate_tolerance\":"<<s.rate_tolerance<<",\"max_iterations\":"<<s.max_iterations<<",\"max_depth\":"<<s.max_depth
       <<",\"max_substeps\":"<<s.max_substeps<<",\"max_backtracks\":"<<s.max_backtracks<<'}';
 }
+void write_partition_diagnostics(std::ostream& o,const atlas::Diagnostics& d,bool committed){
+    o<<",\"partition_committed\":"<<(committed?"true":"false")
+     <<",\"attempted_substeps\":"<<d.attempted_substeps<<",\"discarded_substeps\":"<<d.discarded_substeps
+     <<",\"partition_retries\":"<<d.partition_retries<<",\"first_attempt_substeps\":"<<d.first_attempt_substeps
+     <<",\"partition_defect\":";array(o,d.partition_defect);
+    o<<",\"accepted_increment_tensors\":[";
+    if(d.partition_retries)for(size_t i=0;i<d.accepted_increments.size();++i){if(i)o<<',';array(o,d.accepted_increments[i]);}
+    o<<"],\"discarded_increment_fractions\":";array(o,d.discarded_increment_fractions);
+    o<<",\"discarded_increment_tensors\":[";
+    for(size_t i=0;i<d.discarded_increments.size();++i){if(i)o<<',';array(o,d.discarded_increments[i]);}
+    o<<']';
+}
 }
 
 extern "C" ATLAS_EXPORT const char* atlas_describe(){return atlas::describe_models();}
@@ -105,7 +117,7 @@ static const char* run_response(const char*id,const char*parameters,const char*i
         o<<",\"points\":[";
         for(size_t i=0;i<run.points.size();++i){if(i)o<<',';const auto&point=run.points[i];const auto&v=point.state;auto sigma=atlas::tensor_from(v,0);
             o<<"{\"control\":"<<point.control<<",\"strain\":";array(o,atlas::State(point.strain.v.begin(),point.strain.v.end()));o<<",\"state\":";array(o,v);
-            o<<",\"p\":"<<atlas::trace(sigma)/3<<",\"q\":"<<atlas::deviatoric_stress_magnitude(sigma)<<",\"q_signed\":"<<v[0]-.5*(v[1]+v[2])<<",\"u\":";if(scope_aware&&!atlas::laboratory_pore_reconstruction(atlas::models()[m].stress_scope,protocol))o<<"null";else o<<point.pore_pressure;o<<",\"iterations\":"<<point.diagnostics.iterations<<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":"<<point.diagnostics.error<<'}';
+            o<<",\"p\":"<<atlas::trace(sigma)/3<<",\"q\":"<<atlas::deviatoric_stress_magnitude(sigma)<<",\"q_signed\":"<<v[0]-.5*(v[1]+v[2])<<",\"u\":";if(scope_aware&&!atlas::laboratory_pore_reconstruction(atlas::models()[m].stress_scope,protocol))o<<"null";else o<<point.pore_pressure;o<<",\"iterations\":"<<point.diagnostics.iterations<<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":"<<point.diagnostics.error;write_partition_diagnostics(o,point.diagnostics,true);o<<'}';
         }
         o<<"]}";output=o.str();return output.c_str();
     }catch(const std::exception&e){return failure(e.what());}
@@ -131,7 +143,7 @@ extern "C" ATLAS_EXPORT const char* atlas_evaluate(const char*id,const char*para
 }
 static const char* integrate_response(const char*id,const char*parameters,const char*initial,const char*strain,const char*settings_csv){
     try{int m=model_index(id);auto p=params_for(m,parameters),z=state_for(m,initial),d=parse_csv(strain);if(d.size()!=6)throw std::runtime_error("six Mandel strain components required");auto settings=settings_for(settings_csv);auto result=atlas::integrate(m,z,atlas::tensor_from(d,0),p,settings);
-        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"message\":"<<quote(result.message)<<",\"state\":";array(o,result.state);o<<",\"diagnostics\":{\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"rejected\":"<<result.diagnostics.rejected<<",\"increment_fractions\":";array(o,result.diagnostics.increment_fractions);o<<'}';
+        std::ostringstream o;o<<std::setprecision(17)<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"message\":"<<quote(result.message)<<",\"state\":";array(o,result.state);o<<",\"diagnostics\":{\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"rejected\":"<<result.diagnostics.rejected<<",\"increment_fractions\":";array(o,result.diagnostics.increment_fractions);write_partition_diagnostics(o,result.diagnostics,result.ok);o<<'}';
         if(settings_csv){o<<",\"integration_settings\":";write_settings(o,result.settings);
             o<<",\"catalogue_hash\":"<<quote(atlas::catalogue_hash())<<",\"model\":"<<quote(id)<<",\"parameters\":";array(o,p);
             o<<",\"initial\":";array(o,z);o<<",\"strain\":";array(o,d);}
@@ -160,7 +172,7 @@ static const char* linearize_response(const char*id,const char*parameters,const 
         if(!result.tangent_ok)o<<"null";
         else{ o<<'[';for(size_t i=0;i<result.state_tangent.size();++i){if(i)o<<',';array(o,result.state_tangent[i]);}o<<']'; }
         o<<",\"diagnostics\":{\"iterations\":"<<diag.iterations<<",\"substeps\":"<<diag.substeps<<",\"rejected\":"<<diag.rejected<<",\"increment_fractions\":";
-        array(o,diag.increment_fractions);o<<",\"error\":";if(std::isfinite(diag.error))o<<diag.error;else o<<"null";
+        array(o,diag.increment_fractions);write_partition_diagnostics(o,diag,a.ok);o<<",\"error\":";if(std::isfinite(diag.error))o<<diag.error;else o<<"null";
         o<<'}';if(settings_csv){o<<",\"integration_settings\":";write_settings(o,a.settings);}o<<'}';output=o.str();return output.c_str();
     }catch(const std::exception& e){
         output="{\"ok\":false,\"tangent_ok\":false,\"state_tangent\":null,\"message\":"+quote(e.what())+"}";
@@ -233,7 +245,7 @@ static const char* recorded_response(const char*id,const char*parameters,const c
             o<<",\"control_error\":"<<point.control_error<<",\"diagnostics\":{\"iterations\":"<<point.diagnostics.iterations
               <<",\"substeps\":"<<point.diagnostics.substeps<<",\"rejected\":"<<point.diagnostics.rejected<<",\"error\":";
             if(std::isfinite(point.diagnostics.error))o<<point.diagnostics.error;else o<<"null";
-            o<<",\"increment_fractions\":";array(o,point.diagnostics.increment_fractions);o<<"}}";
+            o<<",\"increment_fractions\":";array(o,point.diagnostics.increment_fractions);write_partition_diagnostics(o,point.diagnostics,true);o<<"}}";
         }
         o<<"]}";output=o.str();return output.c_str();
     }catch(const std::exception&e){return failure(e.what());}

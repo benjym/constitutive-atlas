@@ -1,0 +1,13 @@
+// Actual app hooks and actual controller.select body; no engine/browser calls.
+import fs from 'node:fs';import vm from 'node:vm';import path from 'node:path';import {createHash} from 'node:crypto';
+import {createLaboratoryControllerRouter} from '../../../../../../../web/laboratory-controller-router.mjs';
+const root=process.cwd(),appPath=process.argv[2]||'docs/ingestion/lade-duncan-1975/atlas-integration-v1/hooks-proposed-v1/rebased-v5/proposed/web/app.js';
+const controllerPath='web/implicit-path-laboratory.mjs',app=fs.readFileSync(appPath,'utf8'),source=fs.readFileSync(controllerPath,'utf8'),id='lade-duncan-1975-midpoint-elastic-eq19-gap-v4';
+function fn(name){const start=app.indexOf('function '+name+'(');return app.slice(start,app.indexOf('\n}',start)+2);}
+const method=source.match(/select\(id,\{auto=true\}=\{\}\)\{[^\n]+?return active;\}/)?.[0];if(!method)throw Error('Actual select method changed; inspect witness');
+const nodes=new Map();function node(id){if(!nodes.has(id))nodes.set(id,{value:'',hidden:false,textContent:'',open:false,scrollIntoView(){}});return nodes.get(id);}node('model').value='linear-elastic';
+const c={$:node,document:{querySelector:node,querySelectorAll:()=>[]},createLaboratoryControllerRouter,modelId:id,ordinary:node('ordinary'),links:node('links'),panel:node('panel'),runner:{cancel(){}},cancelOrdinary(){},location:{hash:''},window:{scrollTo(){}},URLSearchParams,requestAnimationFrame:f=>f(),catalogueRoute:()=>({page:'laboratory'}),trace:[]};vm.createContext(c);
+vm.runInContext(`let active=false,runs=0,experimentLoadSequence=0;function run(){++runs;}const implicit={modelId,get active(){return active;},${method}};const timedView=createLaboratoryControllerRouter([implicit]);const j2View={active:false,modelId:'j2',select(){return false;}};let models=[{id:'linear-elastic'}],catalogue=[];function cancel(){}function populate(){}function simulate(){}function toast(){}${fn('selectLaboratory')}\n${fn('activateLaboratoryModel')}\n${fn('route')}\nglobalThis.api={activate:activateLaboratoryModel,route,state:()=>({selected:$('model').value,active,runs})};`,c);
+c.api.activate(id);const afterCatalogueExplore=c.api.state();c.location.hash='#laboratory?model='+id;c.api.route();const afterHashChange=c.api.state();
+const hash=s=>createHash('sha256').update(s).digest('hex');
+console.log(JSON.stringify({app_path:appPath,app_sha256:hash(app),controller_path:controllerPath,controller_sha256:hash(source),expected_model:id,after_catalogue_explore:afterCatalogueExplore,after_hash_change:afterHashChange,dropdown_synchronized:afterCatalogueExplore.selected===id,duplicate_auto_run:afterHashChange.runs>afterCatalogueExplore.runs,compiledCalls:0},null,2));

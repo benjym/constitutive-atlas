@@ -1,0 +1,37 @@
+{
+  "id": "lade-domain-control-native-build-v3",
+  "commands": [
+    "cmake -S .local/lade-domain-control-v1/native-source -B .local/lade-domain-control-v1/native-build -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build .local/lade-domain-control-v1/native-build --target atlas_lade_domain_candidate --parallel 1",
+    "cmake --build .local/lade-domain-control-v1/native-build --target atlas_lade_domain_regression --parallel 1"
+  ],
+  "prospective_freeze_sha256": "d05c101ea2f2633766beb6f29e9545f117144d73a40b50ecc13899d6e9fdb294",
+  "model_sha256": "2665b192d3e25b163227037ef7c9f08d2a86e26563a2af8e70a29a91260a45fe",
+  "logs": [
+    {
+      "path": "docs/ingestion/lade-duncan-1975/domain-control-v1/build-logs/configure-native.log",
+      "sha256": "15a001c2064624f877cba71b67f4b37e257ee808d281a3480cc772561091e1b4"
+    },
+    {
+      "path": "docs/ingestion/lade-duncan-1975/domain-control-v1/build-logs/build-native.log",
+      "sha256": "47177f004619ab6e6b4823dfb79cfd3508dd9b2ba36ea8e495da2b133faf4cde"
+    },
+    {
+      "path": "docs/ingestion/lade-duncan-1975/domain-control-v1/build-logs/build-regression.log",
+      "sha256": "93ea2c85aa63254e4030c58e12e6e920b76305ec8044cd1b73de22d82bb7f9a2"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".local/lade-domain-control-v1/native-build/atlas_lade_domain_candidate",
+      "sha256": "5e3480fdee27a42169a7bd98350fe7b69d0f13b217e0802929656119d7168546"
+    },
+    {
+      "path": ".local/lade-domain-control-v1/native-build/atlas_lade_domain_regression",
+      "sha256": "2990e77f2c8e3f34d4e97511766a7537cce1c3b1beb7699a5e3b41241ca59abf"
+    }
+  ],
+  "toolchain": "Apple clang version 21.0.0 (clang-2100.4.1.1)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+  "build_success": true,
+  "scope": "Isolated build receipt; numerical gates pending, not qualification or approval"
+}

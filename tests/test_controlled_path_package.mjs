@@ -1,0 +1,24 @@
+// Package qualification: exact asset identities and source-reference endpoint.
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {resolve,join} from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {createHash} from 'node:crypto';
+const root=resolve(process.argv[2]),read=async name=>readFile(join(root,name)),json=async name=>JSON.parse(await read(name)),sha=b=>createHash('sha256').update(b).digest('hex');
+const identity=await json('engine-path/identity.json'),manifest=await json('engine-path/package-manifest.json');
+for(const [name,hash]of Object.entries(manifest.files))assert.equal(sha(await read(name)),hash,name);
+for(const [name,hash]of Object.entries(identity.files))assert.equal(sha(await read('engine-path/'+name)),hash,name);
+const definition=await json('engine-path/model.json'),approval=await json('engine-path/approval.json'),review=await json('engine-path/review.json');
+assert.equal(identity.model,definition.id);assert.equal(identity.definition_sha256,sha(await read('engine-path/model.json')));assert.equal(approval.definition.sha256,identity.definition_sha256);assert.equal(approval.review.sha256,sha(await read('engine-path/review.json')));assert.equal(review.status,'accepted');assert.equal(approval.status,'approved');
+const catalogue=await json('catalogue.json'),row=catalogue.models.find(m=>m.id===identity.model);assert.equal(row.path_laboratory,'index.html');
+const app=(await read('app.js')).toString();assert.ok(app.includes('setupPathLaboratory({chart'));assert.ok((await read('index.html')).toString().includes('id="laboratory"'));
+const example=await json('engine-path/example.json'),request={context:example.context,progress:example.advance.progress,controls_end:example.advance.controls_end,samples:40,settings:['absolute','relative','min_step','max_step','max_depth','max_trials'].map(k=>example.execution[k])};
+const {default:createModule}=await import(pathToFileURL(join(root,'engine-path/engine.mjs'))),{createPathEngine}=await import(pathToFileURL(join(root,'path-engine.mjs')));
+const module=await createModule({wasmBinary:await read('engine-path/engine.wasm')}),engine=createPathEngine(module,await json('engine-path/catalogue.json'));
+const result=engine.run(identity.model,request),end=result.points.at(-1),scale=[1,1,1,1];let error=0;
+for(const [i,name]of ['eta','e','ev','eq'].entries())error=Math.max(error,Math.abs(end.context.state[name]-example.qualification.endpoint.state[i])/scale[i]);assert.ok(error<2e-6,String(error));
+assert.deepEqual(engine.run(identity.model,structuredClone(request)),result);
+const zero=structuredClone(request);zero.progress=0;assert.deepEqual(engine.run(identity.model,zero).points.at(-1).context,zero.context);
+const invalid=structuredClone(request);invalid.controls_end.pressure_control=0;assert.throws(()=>engine.run(identity.model,invalid));assert.deepEqual(engine.run(identity.model,request),result);
+assert.equal(result.points.length,41);assert.equal(end.context.coordinate,7.16);
+console.log(JSON.stringify({result:'PASS',model:identity.model,hashed_assets:Object.keys(manifest.files).length,source_endpoint_max_error:error,points:result.points.length,exact_replay:true,zero_identity:true,late_failure_recovery:true,qualification_scope:'Node execution of exact packaged controlled-path engine; actual browser recorded separately'},null,2));

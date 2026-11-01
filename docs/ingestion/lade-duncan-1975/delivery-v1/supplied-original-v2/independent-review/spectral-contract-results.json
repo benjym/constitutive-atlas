@@ -1,0 +1,127 @@
+{
+  "id": "lade-original-v2-spectral-contract-probe",
+  "input_mandel_Pa": [
+    100000,
+    60000,
+    60000,
+    0,
+    0,
+    0
+  ],
+  "results": [
+    {
+      "expression": "principal_min(sigma)",
+      "status": "rejected",
+      "exception": "ValidationError",
+      "message": "selected_eigenvalue_unresolved"
+    },
+    {
+      "expression": "principal_min_value(sigma)",
+      "status": "returned",
+      "value": 60000.0
+    },
+    {
+      "expression": "principal_max(sigma)",
+      "status": "returned",
+      "value": 100000.0
+    },
+    {
+      "expression": "principal_min_repeated(sigma)",
+      "status": "returned",
+      "value": true
+    },
+    {
+      "residual_probe": "sigma - sigma_n - principal_min(sigma)*I",
+      "status": "type-validation-passed"
+    },
+    {
+      "residual_probe": "sigma - sigma_n - principal_min_value(sigma)*I",
+      "status": "rejected",
+      "exception": "ValidationError",
+      "message": "sigma: equation shape or dimensions mismatch"
+    },
+    {
+      "residual_probe": "sigma - sigma_n - principal_min_value(sigma_n)*I",
+      "status": "rejected",
+      "exception": "ValidationError",
+      "message": "sigma: equation shape or dimensions mismatch"
+    }
+  ],
+  "conclusion": "Minimum primitive exists, but ordinary differentiable minimum rejects the repeated selected minimum in triaxial compression. Value-only minimum handles the value but cannot supply a numeric residual, including from committed state. No missing scalar spectral primitive is claimed.",
+  "limitations": [
+    "Interpreter/type validation only",
+    "No generated or compiled code",
+    "Synthetic equations are type carriers, not a Lade candidate",
+    "Proposed cluster-average generalized branch is type/value-probed only; derivative/backend/path qualification remains pending"
+  ],
+  "repeat_safe_proposal": {
+    "expression": "select(principal_min_repeated(sigma), select(principal_max_repeated(sigma), trace(sigma)/3, (trace(sigma)-principal_max(sigma))/2), principal_min(sigma))",
+    "value_checks": [
+      {
+        "case": "triaxial_compression",
+        "input": [
+          100000,
+          60000,
+          60000,
+          0,
+          0,
+          0
+        ],
+        "value": 60000.0
+      },
+      {
+        "case": "hydrostatic",
+        "input": [
+          60000,
+          60000,
+          60000,
+          0,
+          0,
+          0
+        ],
+        "value": 60000.0
+      },
+      {
+        "case": "distinct",
+        "input": [
+          100000,
+          70000,
+          60000,
+          0,
+          0,
+          0
+        ],
+        "value": 60000.0
+      },
+      {
+        "case": "triaxial_extension",
+        "input": [
+          100000,
+          100000,
+          60000,
+          0,
+          0,
+          0
+        ],
+        "value": 60000.0
+      }
+    ],
+    "synthetic_residual_type_validation": "passed",
+    "generalized_policy": "(I-Pmax)/2 for a repeated lower pair; I/3 for hydrostatic triple",
+    "counterexample": {
+      "S_diagonal": [
+        100,
+        60,
+        60
+      ],
+      "H_diagonal": [
+        0,
+        1,
+        -1
+      ],
+      "one_sided_min_directional_derivative": -1,
+      "cluster_average_selected_derivative": 0
+    },
+    "interpretation": "Exact value expression and a permissible Clarke generalized derivative policy. Does not assert a unique classical derivative, actual directional derivative or guaranteed Newton convergence."
+  }
+}

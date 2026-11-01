@@ -1,0 +1,60 @@
+{
+  "schema_version": "0.1",
+  "kind": "laboratory-profile-test-allocation",
+  "id": "current-thirteen-occ-profiles-v1",
+  "supported_policy": {
+    "path": "catalogue/laboratory-package-policy.json",
+    "sha256": "84fe14c4cf8c7bcb36f9edf3ad0d4e5423b8ff5d312e57938794a863ec3b7d4b"
+  },
+  "cases": {
+    "path": "docs/ingestion/original-cam-clay/integration-v1/scoped-cases.json",
+    "sha256": "308868a7efd64afb766f8062b638c5449f90a6ed258f895addeb2153e9baae9e"
+  },
+  "case_count": 35,
+  "legacy_contract_rejections": [
+    {
+      "model": "tresca-associated-perfect-bk2022v1-be",
+      "message": "legacy laboratory contract requires effective stress"
+    }
+  ],
+  "parity_relative_tolerance": 1e-10,
+  "limitations": [
+    "All original legacy requests remain: effective-stress runs retain existing success/parity/replay bounds; the exact total-stress legacy rejection is checked instead of claiming an effective response.",
+    "The distinct scoped corpus covers all twelve models with at least one successful current-profile case each, including exact MC controls and GIS named success plus retained ordinary failure.",
+    "Backend parity and software contract tests do not establish scientific source accuracy, preparation or experimental validity.",
+    "OCC cyclic stress unloading remains an observed source/interface limitation. Legacy and browser-wire tests must exercise and verify the failed committed prefix; never count it as successful or silently omit it. Ordinary OCC and named strain/smooth-monotonic examples must pass."
+  ],
+  "declared_control_failures": [
+    {
+      "request": {
+        "model": "original-cam-clay-sw-electronic-log-recovery-v1",
+        "parameters": [
+          1000,
+          1.2,
+          0.2,
+          0.04,
+          2.5
+        ],
+        "initial": [
+          100000,
+          100000,
+          100000,
+          0,
+          0,
+          0,
+          1.7389659628023817
+        ],
+        "protocol": 3,
+        "target": 10000,
+        "steps": 64,
+        "cycles": 1
+      },
+      "expected_message": "control or constitutive solve failed at step 17; last committed point retained",
+      "expected_points": 17,
+      "evidence": {
+        "path": "docs/ingestion/original-cam-clay/execution-v2/cyclic-stress-diagnostic-raw.json",
+        "sha256": "fc3656e413d645de2f79cd6fb00e338e422cba7e808d27c2b8f57ffb1ea1ed1b"
+      }
+    }
+  ]
+}
