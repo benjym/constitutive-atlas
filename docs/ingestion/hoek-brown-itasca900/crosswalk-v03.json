@@ -1,0 +1,144 @@
+{
+  "target_schema_version": "0.3",
+  "kind": "capability-and-source-crosswalk-not-valid-model-definition",
+  "selected_identity": "Itasca9.0.182 hoek-brown tangent-MC implementation; online manual updated2025-11-12; not original criterion or PAC",
+  "proposed_profile": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress_scope": null,
+    "profile_status": "proposed fixed-frame material-point adaptation, not established vendor algorithm equivalence; stress scope remains unresolved"
+  },
+  "required_input": {
+    "de": "finite symmetric6 Mandel infinitesimal strain increment",
+    "duration": "not required by inspected constitutive equations",
+    "host_context": "zone/subzone volumes and coordinated property updates if full softening/regularization/host callbacks selected"
+  },
+  "source_sign_map": {
+    "HB": "p1>=p2>=p3 positive compression",
+    "MC": "t1<=t2<=t3 negative compression",
+    "conversion": "ti=-pi; epsilon_MC=-epsilon_Atlas; map order labels together, not reverse labels a second time",
+    "shear_yield": "p1-Nphi*p3-B",
+    "shear_flow_gradient": [
+      1,
+      0,
+      "-Npsi"
+    ],
+    "tension_yield": "-p3-T",
+    "strain_basis": "Mandel shear=sqrt(2)*tensor shear; never engineering shear"
+  },
+  "parameters": [
+    {
+      "symbol": "K,G",
+      "unit": "Pa",
+      "meaning": "positive moduli; isotropic elasticity"
+    },
+    {
+      "symbol": "sci",
+      "unit": "Pa",
+      "meaning": "intact unconfined compression strength, positive branch"
+    },
+    {
+      "symbol": "mb,s,a",
+      "unit": "1",
+      "meaning": "strength-envelope coefficients; real powers require positive sampled base for regular tangent"
+    },
+    {
+      "symbol": "mi,GSI,D",
+      "unit": "1",
+      "meaning": "alternative initializer; denominators28-14D and9-3D must not vanish; no physical range inferred solely from formulas"
+    },
+    {
+      "symbol": "psi or flag-dilation",
+      "unit": "angle or selector",
+      "meaning": "constant, associated, or fraction of current phi; manual angles require explicit degree-to-radian conversion"
+    },
+    {
+      "symbol": "tension",
+      "unit": "Pa",
+      "meaning": "nonnegative magnitude capped by supplied limit, s*sci/mb and c/tan(phi); limiting zero denominators need policy"
+    },
+    {
+      "symbol": "flag-evolution",
+      "unit": "selector",
+      "meaning": "0: least-compressive-direction plastic strain;1: shear measure, only shear yield"
+    },
+    {
+      "symbol": "table-a,table-mb,table-s,table-sci",
+      "unit": "typed functions",
+      "meaning": "current coefficients versus dimensionless evolution variable"
+    },
+    {
+      "symbol": "table-tension",
+      "unit": "typed function",
+      "meaning": "strength versus tensile plastic strain; incompatible with brittle flag"
+    },
+    {
+      "symbol": "table-multiplier",
+      "unit": "typed function",
+      "meaning": "multiplier versus confinement; action/ordering is not specified in inspected formulation"
+    },
+    {
+      "symbol": "flag-brittle",
+      "unit": "boolean",
+      "meaning": "tensile failure causes permanent tension loss"
+    },
+    {
+      "symbol": "length-calibration,zone-volume",
+      "unit": "m,m^3",
+      "meaning": "softening rate factor Lc/(Vz)^(1/3); zero calibration length disables adjustment"
+    },
+    {
+      "symbol": "flag-fos",
+      "unit": "selector",
+      "meaning": "host strength-reduction mode; not ordinary material evolution"
+    }
+  ],
+  "persistent_inventory": [
+    {
+      "field": "sigma",
+      "shape": "sym6",
+      "unit": "Pa",
+      "status": "required full Cartesian stress, not just ordered eigenvalues"
+    },
+    {
+      "field": "evolution strain",
+      "shape": "scalar",
+      "unit": "1",
+      "status": "required for nonconstant envelope; exact flag0 signed/magnitude definition unresolved"
+    },
+    {
+      "field": "tensile strain",
+      "shape": "scalar",
+      "unit": "1",
+      "status": "required with tension table"
+    },
+    {
+      "field": "current strengths and brittle history",
+      "shape": "selected scalars/flag",
+      "unit": "mixed",
+      "status": "persist or prove derivability from tables/history; cannot reset to constants on restart"
+    },
+    {
+      "field": "subzone/zone histories",
+      "shape": "host owned",
+      "unit": "mixed",
+      "status": "required for documented volume-averaged host; not reducible by silently choosing one tetrahedron"
+    }
+  ],
+  "transient_inventory": [
+    "elastic predictor",
+    "trial eigenvectors/eigenvalues",
+    "sampled confinement x",
+    "Nphi,phi,B,c,Npsi",
+    "plastic multipliers and branch identifiers"
+  ],
+  "no_source_void_ratio_equation": true,
+  "executable": false,
+  "scientific_admission": "pending"
+}

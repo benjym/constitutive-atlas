@@ -1,0 +1,29 @@
+{
+  "kind": "source-versus-proposed-transaction-contract",
+  "coordinate": "mechanical increment/strain path; no physical-time creep law in inspected equations",
+  "source_order": [
+    "form elastic trial from full parent stress and de",
+    "compute principal stresses/eigendirections",
+    "select composite shear or tensile correction through MC dependency",
+    "reconstruct stress in retained trial eigendirections",
+    "SSoft dependency updates zone hardening after stresses, then properties; precise HB delegation extent remains open"
+  ],
+  "proposed_atlas_requirements": [
+    "all trials read immutable accepted parent including current strengths/history/tables/version and host geometry",
+    "keep accepted internal substeps local until whole caller increment succeeds",
+    "rollback stress, all history, brittle drop, table position/current values and host aggregation on failure",
+    "restart serializes every physical field; eigensolver/Newton caches are not material state",
+    "caller changes in tables/FISH/property updates need versioned explicit boundary events; no hidden in-place changes",
+    "split table knots/brittle onset/branch events with declared ordering and derivative semantics"
+  ],
+  "hold": "A finite admissible parent with zero de and no external event should have identity response in a proposed rate-independent adapter; vendor zero-step handling of invalid/overstressed or externally edited parents is unverified. No blanket zero-load bypass.",
+  "subdivision": "Tangent refresh, alternating edges, strength evolution and zone averaging can make a subdivided update differ from one full update; require refinement and accepted-partition replay, not an identity assertion.",
+  "unsupported_current_contract": [
+    "general phased discrete-update law is not an existing v0.3 execution profile",
+    "typed tabulated evolution with knot/extrapolation policy",
+    "multi-subzone shared averaging and geometry input",
+    "external versioned property/callback events",
+    "finite-rotation transport/objective update"
+  ],
+  "next_gate": "Resolve HB01–08 against exact primary source/authoritative implementation explanation before declaring a complete runnable formulation. No model-specific handwritten kernel."
+}

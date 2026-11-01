@@ -1,0 +1,131 @@
+{
+  "kind": "source-mathematics-inventory-not-executable",
+  "convention": "p1>=p2>=p3, positive compression; x denotes capped sampling confinement, not a persistent stress replacement",
+  "main_equations": [
+    {
+      "source": "hoek",
+      "equation": 1,
+      "anchor": "equation-modelmhoekeqfo",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqfo",
+      "mathematics_or_issue": "p1=p3+sci*(mb*p3/sci+s)^a"
+    },
+    {
+      "source": "hoek",
+      "equation": 2,
+      "anchor": "equation-modelmheokeqm",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmheokeqm",
+      "mathematics_or_issue": "mb=mi*exp((GSI-100)/(28-14*D))"
+    },
+    {
+      "source": "hoek",
+      "equation": 3,
+      "anchor": "equation-modelmheokeqs",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmheokeqs",
+      "mathematics_or_issue": "s=exp((GSI-100)/(9-3*D))"
+    },
+    {
+      "source": "hoek",
+      "equation": 4,
+      "anchor": "equation-modelmheokeqa",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmheokeqa",
+      "mathematics_or_issue": "a=1/2+(exp(-GSI/15)-exp(-20/3))/6"
+    },
+    {
+      "source": "hoek",
+      "equation": 5,
+      "anchor": "equation-modelmhoekeqfn",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqfn",
+      "mathematics_or_issue": "p1=Nphi*p3+B; B=2*c*sqrt(Nphi)"
+    },
+    {
+      "source": "hoek",
+      "equation": 6,
+      "anchor": "equation-modelmhoekeqnphic",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqnphic",
+      "mathematics_or_issue": "Nphi=(1+sin(phi))/(1-sin(phi))"
+    },
+    {
+      "source": "hoek",
+      "equation": 7,
+      "anchor": "equation-modelmhoekeqphic",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqphic",
+      "mathematics_or_issue": "phi=asin((Nphi-1)/(Nphi+1))"
+    },
+    {
+      "source": "hoek",
+      "equation": 8,
+      "anchor": "equation-modelmhoekeqcc",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqcc",
+      "mathematics_or_issue": "c=B/(2*sqrt(Nphi))"
+    },
+    {
+      "source": "hoek",
+      "equation": 9,
+      "anchor": "equation-modelmhoekeqnphic2",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqnphic2",
+      "mathematics_or_issue": "Nphi=1+a*mb*(mb*x/sci+s)^(a-1)"
+    },
+    {
+      "source": "hoek",
+      "equation": 10,
+      "anchor": "equation-modelmhoekeqsucsc",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqsucsc",
+      "mathematics_or_issue": "B=x*(1-Nphi)+sci*(mb*x/sci+s)^a"
+    },
+    {
+      "source": "hoek",
+      "equation": 11,
+      "anchor": "equation-modelmhoekeqs3",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqs3",
+      "mathematics_or_issue": "x=max(p3,0) for the tangent coefficients"
+    },
+    {
+      "source": "hoek",
+      "equation": 12,
+      "anchor": "equation-modelmhoekeqdep",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqdep",
+      "mathematics_or_issue": "Printed increment subtracts one-third volumetric plastic increment in i=1,3 components; total/deviatoric interpretation needs reconciliation"
+    },
+    {
+      "source": "hoek",
+      "equation": 13,
+      "anchor": "equation-modelmhoekeqdepvol",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqdepvol",
+      "mathematics_or_issue": "plastic volume intensity=lambda*(dg/dp1+dg/dp2+dg/dp3)"
+    },
+    {
+      "source": "hoek",
+      "equation": 14,
+      "anchor": "equation-modelmhoekeqg",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqg",
+      "mathematics_or_issue": "g=p1-Npsi*p3"
+    },
+    {
+      "source": "hoek",
+      "equation": 15,
+      "anchor": "equation-modelmhoekeqnpsic",
+      "url": "https://docs.itascacg.com/itasca900/common/models/hoek/doc/modelhoek.html#equation-modelmhoekeqnpsic",
+      "mathematics_or_issue": "Npsi=(1+sin(psi))/(1-sin(psi))"
+    }
+  ],
+  "delegated_sections": [
+    {
+      "source": "mohr",
+      "locators": "Eqs1–3,4–15,16–30; Composite Failure Criterion; Apex Stress Correction; Implementation Procedures",
+      "role": "isotropic elasticity; ordered principal return; shear/tension branch and multiple tensile corrections; elastic trial and frozen trial eigendirections",
+      "limit": "Uses negative compression; mapped explicitly. Domain-divider numeric formula and degeneracy/equality policy not printed in inspected text; Figure2 unavailable."
+    },
+    {
+      "source": "ssoft",
+      "locators": "Eqs1–6; Hardening Parameters; User-Defined Functions; Implementation Procedure",
+      "role": "shear/tension hardening measures; zone volume averages; piecewise-linear property tables updated after stress correction",
+      "limit": "Delegation is explicit for tensile yield logic. Do not assume all SSoft hardening details also define HB flag-evolution0 or every HB update."
+    },
+    {
+      "source": "pac",
+      "locators": "Formulations; Flow Rules; Stress-Correction Scheme",
+      "role": "distinguishes alternative nonlinear iterative/PAC law",
+      "limit": "Not the selected implementation; no PAC interpolation/gamma/secant solver imported."
+    }
+  ]
+}
