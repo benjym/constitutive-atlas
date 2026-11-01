@@ -1,0 +1,140 @@
+{
+  "review_id": "kfs-development-agent-v1",
+  "new_native_calls": 0,
+  "new_builds": 0,
+  "new_fits": 0,
+  "independent_checks": [
+    {
+      "id": "law_sign_and_isotropy",
+      "result": "pass",
+      "detail": "Eq40 stress/stretching sign reversal gives negative nonlinear term; Eq42 F(0)=1; scalar algebra only"
+    },
+    {
+      "id": "mandel_contraction",
+      "result": "pass",
+      "detail": "Frobenius and sqrt(2)-weighted six-vector norms agree for nonzero shear witness"
+    },
+    {
+      "id": "information_partition",
+      "result": "pass",
+      "detail": "whole-test separation; four fitted/four inherited material constants; p_ref numerical"
+    },
+    {
+      "id": "calibration_selection",
+      "result": "pass",
+      "detail": "both calibration-only seed0; all six budget96; only selected alpha differs"
+    },
+    {
+      "id": "hybrid_states",
+      "result": "pass",
+      "detail": "only disputed e0 changes; all stress components retained"
+    },
+    {
+      "id": "independent_factorial_metrics",
+      "result": "pass",
+      "detail": {
+        "sixteen_private_predictions": "complete ordered residual integrals recomputed independently without Atlas metrics",
+        "four_scores": [
+          0.12934436297532315,
+          0.1367717339283584,
+          0.12470117631676819,
+          0.13229439741406743
+        ],
+        "twelve_equal_channel_weights": true
+      }
+    },
+    {
+      "id": "independent_gate_predicates",
+      "result": "pass",
+      "detail": {
+        "kfs-propagation-refinement-v1": {
+          "gate": false,
+          "failed": [
+            {
+              "test": "KFS-TMD7",
+              "vector": "file_initial",
+              "channel": "q"
+            },
+            {
+              "test": "KFS-TMD9",
+              "vector": "file_initial",
+              "channel": "q"
+            },
+            {
+              "test": "KFS-TMD7",
+              "vector": "original_table_disputed_e0",
+              "channel": "q"
+            },
+            {
+              "test": "KFS-TMD9",
+              "vector": "original_table_disputed_e0",
+              "channel": "q"
+            }
+          ]
+        },
+        "kfs-nested-partitions-v1": {
+          "gate": true,
+          "failed": []
+        }
+      }
+    },
+    {
+      "id": "saved_auditors",
+      "result": "pass",
+      "detail": {
+        "passed": 8,
+        "process_launch_guard": true
+      }
+    }
+  ],
+  "saved_auditors": [
+    {
+      "script": "current-source-build-v1/verify.py",
+      "result": "pass",
+      "stdout": "PASS: 351 source pins; six successful command receipts; nine-model catalogue; metadata only\n",
+      "stderr": ""
+    },
+    {
+      "script": "current-archived-vw96-v1/check_saved.py",
+      "result": "pass",
+      "stdout": "{\n  \"saved_reconstruction\": \"pass\",\n  \"native_processes_reconstructed\": 22,\n  \"overall_compatibility_pass\": true,\n  \"new_native_calls\": 0\n}\n",
+      "stderr": ""
+    },
+    {
+      "script": "current-kfs-tmd7-v1/check_saved.py",
+      "result": "pass",
+      "stdout": "PASS: complete prediction/command reconstruction;44current+44baseline receipts; scalar result exact; no native calls\n",
+      "stderr": ""
+    },
+    {
+      "script": "kfs-tmd13-calibration-sensitivity-v1/check_saved.py",
+      "result": "pass",
+      "stdout": "{\n  \"exact_scalar_replay\": true,\n  \"candidate_evaluations_verified\": 576,\n  \"native_process_receipts_verified\": 1734,\n  \"file_control_traces_reproduced\": 3,\n  \"negative_controls\": [\n    {\n      \"variant\": \"failed_process_marked_success\",\n      \"rejected\": true,\n      \"reason\": \"native failure/success classification differs\"\n    },\n    {\n      \"variant\": \"failed_candidate_removed\",\n      \"rejected\": true,\n      \"reason\": \"candidate journal differs from final fit\"\n    },\n    {\n      \"variant\": \"native_parameters_changed\",\n      \"rejected\": true,\n      \"reason\": \"native candidate/input binding differs\"\n    },\n    {\n      \"variant\": \"selected_objective_changed\",\n      \"rejected\": true,\n      \"reason\": \"best calibration candidate differs\"\n    }\n  ],\n  \"new_native_calls\": 0\n}\n",
+      "stderr": ""
+    },
+    {
+      "script": "kfs-tmd13-evaluation-propagation-v1/check_saved.py",
+      "result": "pass",
+      "stdout": "{\n  \"exact_scalar_replay\": true,\n  \"native_process_receipts_reconstructed\": 658,\n  \"historical_file_controls\": 6,\n  \"prior_alternative_controls\": 2,\n  \"negative_controls\": [\n    {\n      \"variant\": \"altered_command\",\n      \"rejected\": true,\n      \"reason\": \"unused native receipts\"\n    },\n    {\n      \"variant\": \"false_success_nonzero\",\n      \"rejected\": true,\n      \"reason\": \"unused native receipts\"\n    },\n    {\n      \"variant\": \"altered_prediction\",\n      \"rejected\": true,\n      \"reason\": \"native receipts do not reconstruct prediction\"\n    },\n    {\n      \"variant\": \"altered_score\",\n      \"rejected\": true,\n      \"reason\": \"saved evidence differs\"\n    }\n  ],\n  \"new_native_calls\": 0\n}\n",
+      "stderr": ""
+    },
+    {
+      "script": "kfs-propagation-refinement-v1/check_saved.py",
+      "result": "pass",
+      "stdout": "{\n  \"exact_scalar_replay\": true,\n  \"new_native_process_receipts_reconstructed\": 1316,\n  \"coarse_native_process_receipts_reconstructed\": 658,\n  \"gate_passed\": false,\n  \"failed_checks\": 4,\n  \"negative_controls\": [\n    {\n      \"variant\": \"altered_command\",\n      \"rejected\": true,\n      \"reason\": \"failed or incomplete refinement replay\"\n    },\n    {\n      \"variant\": \"false_success_nonzero\",\n      \"rejected\": true,\n      \"reason\": \"failed or incomplete refinement replay\"\n    },\n    {\n      \"variant\": \"altered_prediction\",\n      \"rejected\": true,\n      \"reason\": \"native receipts do not reconstruct prediction\"\n    },\n    {\n      \"variant\": \"altered_score\",\n      \"rejected\": true,\n      \"reason\": \"saved evidence differs\"\n    }\n  ],\n  \"new_native_calls\": 0\n}\n",
+      "stderr": ""
+    },
+    {
+      "script": "kfs-nested-partitions-v1/check_saved.py",
+      "result": "pass",
+      "stdout": "{\n  \"exact_scalar_replay\": true,\n  \"new_native_process_receipts_reconstructed\": 368,\n  \"baseline_native_process_receipts_reconstructed\": 1974,\n  \"gate_passed\": true,\n  \"original_refinement_gate_remains_failed\": true,\n  \"negative_controls\": [\n    {\n      \"variant\": \"altered_command\",\n      \"rejected\": true,\n      \"reason\": \"missing native segments\"\n    },\n    {\n      \"variant\": \"false_success_nonzero\",\n      \"rejected\": true,\n      \"reason\": \"missing native segments\"\n    },\n    {\n      \"variant\": \"altered_prediction\",\n      \"rejected\": true,\n      \"reason\": \"native receipts do not reconstruct prediction\"\n    },\n    {\n      \"variant\": \"altered_overlay\",\n      \"rejected\": true,\n      \"reason\": \"modified caller schedule differs\"\n    }\n  ],\n  \"new_native_calls\": 0\n}\n",
+      "stderr": ""
+    },
+    {
+      "script": "kfs-private-retention-v1/verify.py",
+      "result": "pass",
+      "stdout": "PASS: 225 exact retained private files; no compiled execution\n",
+      "stderr": ""
+    }
+  ]
+}
