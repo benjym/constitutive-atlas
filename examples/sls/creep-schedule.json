@@ -1,0 +1,81 @@
+{
+  "schema_version": "0.2",
+  "units": "SI",
+  "model": "sls-comsol63-deviatoric-zero-spin-ode",
+  "parameters": [
+    20000000.0,
+    8000000.0,
+    12000000.0,
+    2.0
+  ],
+  "initial": [
+    0.002,
+    0.001,
+    -0.001,
+    0.0005,
+    -0.0004,
+    0.0003,
+    5000.0,
+    -2000.0,
+    -3000.0,
+    1000.0,
+    -500.0,
+    250.0
+  ],
+  "initial_strain": [
+    0.002,
+    0.001,
+    -0.001,
+    0.0005,
+    -0.0004,
+    0.0003
+  ],
+  "initial_strain_rate": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "start_time": 0.0,
+  "segments": [
+    {
+      "id": "creep",
+      "duration": 8.0,
+      "samples": 4,
+      "controls": [
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        }
+      ]
+    }
+  ],
+  "solver": {
+    "method": "backward-euler-step-doubling",
+    "relative_tolerance": 1e-08,
+    "absolute_scale_fraction": 1e-11,
+    "maximum_substeps": 100000
+  }
+}

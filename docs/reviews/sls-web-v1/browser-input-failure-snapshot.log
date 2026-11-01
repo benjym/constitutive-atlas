@@ -1,0 +1,116 @@
+### Page
+- Page URL: http://127.0.0.1:18769/sls.html
+- Page Title: Standard Linear Solid · Constitutive Atlas
+- Console: 1 errors, 0 warnings
+### Snapshot
+```yaml
+- main [ref=f1e2]:
+  - generic [ref=f1e3]:
+    - generic [ref=f1e4]:
+      - generic [ref=f1e5]: Constitutive Atlas / physical-time laboratory
+      - heading "Standard Linear Solid" [level=1] [ref=f1e6]
+      - paragraph [ref=f1e7]: One relaxing deviatoric branch, an equilibrium spring and elastic bulk.
+    - generic [ref=f1e8]: Approved law · bounded synthetic evidence
+  - generic [ref=f1e9]: Scope of evidence. COMSOL 6.3 ordinary deviatoric SLS; dry total stress, infinitesimal strain, fixed spatial frame and zero spin. The preset has bounded native/Wasm numerical evidence and independent agent approval. Custom values are exploratory; the broad machine parameter envelope is unqualified. No material calibration or experimental validation. Exact passivity assumes traceless branch overstress. This interface is qualified separately from the scientific review.
+  - generic [ref=f1e10]:
+    - generic [ref=f1e11]:
+      - heading "Physical-time experiment" [level=2] [ref=f1e12]
+      - generic [ref=f1e13]: Control on all six components
+      - combobox "Control on all six components" [ref=f1e14]:
+        - option "Relaxation · strain hold (zero rate)" [selected]
+        - option "Creep · stress hold (zero rate)"
+        - option "Loading · constant strain rate"
+      - generic [ref=f1e15]:
+        - generic [ref=f1e16]:
+          - generic [ref=f1e17]: Duration (s)
+          - spinbutton "Duration (s)" [ref=f1e18]: "8"
+        - generic [ref=f1e19]:
+          - generic [ref=f1e20]: Output intervals
+          - spinbutton "Output intervals" [ref=f1e21]: "4"
+      - paragraph [ref=f1e22]: The hold advances physical seconds. Creep holds the initial total stress and solves for strain rate.
+      - group [ref=f1e23]:
+        - generic "Parameters & explicit initial history" [ref=f1e24] [cursor=pointer]
+        - paragraph [ref=f1e25]: "SI units. Mandel order: xx, yy, zz, √2xy, √2yz, √2xz. Compression positive. Every run starts from this complete state; parameter changes do not imply a physical transition."
+        - generic [ref=f1e26]:
+          - generic [ref=f1e27]:
+            - generic [ref=f1e28]: Bulk K (Pa)
+            - spinbutton "Bulk K (Pa)" [ref=f1e29]: "20000000"
+          - generic [ref=f1e30]:
+            - generic [ref=f1e31]: Equilibrium G∞ (Pa)
+            - spinbutton "Equilibrium G∞ (Pa)" [ref=f1e32]: "8000000"
+        - generic [ref=f1e33]:
+          - generic [ref=f1e34]:
+            - generic [ref=f1e35]: Branch G₁ (Pa)
+            - spinbutton "Branch G₁ (Pa)" [ref=f1e36]: "12000000"
+          - generic [ref=f1e37]:
+            - generic [ref=f1e38]: Relaxation τ (s)
+            - spinbutton "Relaxation τ (s)" [ref=f1e39]: "3"
+        - generic [ref=f1e40]: Initial total strain ε · six values
+        - textbox "Initial total strain ε · six values" [ref=f1e41]: 0.003,0.002,-0.002,0.0006,-0.0005,0.0004
+        - generic [ref=f1e42]: Initial branch overstress q (Pa) · six values
+        - textbox "Initial branch overstress q (Pa) · six values" [ref=f1e43]: 4001,-1000,-3000,800,-300,200
+        - paragraph [ref=f1e44]: q is stored branch stress, not source spring strain. Physical preparation has qxx+qyy+qzz=0. Numerical trace allowance is 10⁻¹⁰(G∞+G₁) Pa.
+        - generic [ref=f1e45]: Strain rates (1/s) · used only by Loading
+        - textbox "Strain rates (1/s) · used only by Loading" [ref=f1e46]: 0.001,-0.0002,0.0003,0.0007,-0.0006,0.0005
+      - button "Run experiment" [ref=f1e47] [cursor=pointer]
+      - button "Reset illustrative preset" [active] [ref=f1e48] [cursor=pointer]
+      - button "Export request & full result" [disabled] [ref=f1e49]
+      - generic [ref=f1e50]: Import exported JSON & replay
+      - button "Import exported JSON & replay" [ref=f1e51]
+      - status [ref=f1e52]: "Run failed: Initial branch overstress must be traceless within the numerical allowance."
+    - region "Simulation results" [ref=f1e53]:
+      - generic [ref=f1e54]:
+        - generic [ref=f1e55]:
+          - text: Physical time
+          - strong [ref=f1e56]: —
+        - generic [ref=f1e57]:
+          - text: Final σxx · total stress
+          - strong [ref=f1e58]: —
+      - generic [ref=f1e59]: Plot component · Mandel
+      - combobox "Plot component · Mandel" [ref=f1e60]:
+        - option "xx" [selected]
+        - option "yy"
+        - option "zz"
+        - option "√2xy"
+        - option "√2yz"
+        - option "√2xz"
+      - heading "Total Cauchy stress" [level=2] [ref=f1e61]
+      - generic [ref=f1e62]:
+        - generic [ref=f1e63]: Compression positive (MPa)
+        - generic [ref=f1e64]: Physical time (s) →
+      - img "Selected total stress against physical time" [ref=f1e65]
+      - heading "Total strain" [level=2] [ref=f1e66]
+      - generic [ref=f1e67]:
+        - generic [ref=f1e68]: Compression positive (%)
+        - generic [ref=f1e69]: Physical time (s) →
+      - img "Selected total strain against physical time" [ref=f1e70]
+      - paragraph [ref=f1e71]: Run the current inputs to inspect their response.
+      - paragraph [ref=f1e72]: "Experimental overlays unavailable: no compatible calibration or source experiment is supplied for this formulation. Curves are model responses."
+      - group [ref=f1e73]:
+        - generic "Inspect complete state and stress at every output" [ref=f1e74] [cursor=pointer]
+      - group [ref=f1e75]:
+        - generic "Exact model, engine and approval identities" [ref=f1e76] [cursor=pointer]
+  - generic [ref=f1e77]:
+    - text: "Source:"
+    - link "COMSOL 6.3 Linear Viscoelasticity · Standard Linear Solid" [ref=f1e78] [cursor=pointer]:
+      - /url: https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441011
+    - text: . Ordinary single branch; no bulk relaxation, finite rotation, thermal or fractional effects.
+    - link "Independent review & limitations" [ref=f1e79] [cursor=pointer]:
+      - /url: sls-review.html
+    - text: ·
+    - link "Approval record" [ref=f1e80] [cursor=pointer]:
+      - /url: sls-approval.json
+    - text: ·
+    - link "Review checklist" [ref=f1e81] [cursor=pointer]:
+      - /url: sls-agent-review.json
+    - text: ·
+    - link "Exact model" [ref=f1e82] [cursor=pointer]:
+      - /url: ./engine-sls/sls-comsol63-deviatoric-zero-spin-ode.json
+    - text: ·
+    - link "Atlas catalogue" [ref=f1e83] [cursor=pointer]:
+      - /url: index.html#catalogue
+```
+### Events
+- New console entries: .playwright-cli/console-2026-11-01T07-50-27-139Z.log#L1-L2
+- Downloading file sls-relaxation.json ...
+- Downloaded file sls-relaxation.json to ".playwright-cli/sls-relaxation.json"

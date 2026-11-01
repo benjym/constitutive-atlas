@@ -1,0 +1,51 @@
+# Independent SLS scientific review v1
+
+**Verdict: supported for bounded computational use; accepted checklist, no blocking findings.** Reviewer: separate agent run `/root/sls_scientific_review`, 2026-11-01; authors `/root/sls_ingestion` and `/root`. This run independently read original primary equations and wrote a new Decimal50 source-coordinate oracle. This is automated independent technical review, with no external human signature or experimental validation claimed.
+
+Exact model: `models/research/sls/sls-comsol63-deviatoric-zero-spin-ode.json`, SHA-256 `eccfeb372810afd81a5e9cddf5d8ac33e2cb5df6921fc88e14e9175c73e50906`. Review/admission must bind those bytes; its historical draft metadata is not rewritten.
+
+## source_provenance
+
+Reviewed privately retained unchanged COMSOL6.3 theory/settings HTML and original equation images003,008–010,023,078–080,170–172, plus surrounding generalized Maxwell/SLS/isochoric context. All21receipt hashes verified, including persistent ignored private copies. Primary theory identifies ordinary SLS as one Maxwell branch parallel to the equilibrium spring. Fractional, volumetric-relaxation and geometric-nonlinear versions are distinct. COMSOL6.3 is the source/version identity, not a claimed first publication or publication year. Receipt links remain public; copyrighted originals stay private.
+
+## equation_fidelity
+
+Image078 reads branch stress=2G1(source spring strain)=2eta1 gamma_dot=2G1(dev(eps)-gamma);079 reads tau gamma_dot+gamma=dev(eps);080 reads dissipation=branch stress:gamma_dot. For constant positive parameters, define project q=2G1(dev(eps)-gamma). Differentiation gives q_dot=2G1 dev(strain_rate)-q/tau, and eps_dot=strain_rate. Image023 plus elastic010 gives sigma=K tr(eps)I+2Ginf dev(eps)+q when initial offset and other inelastic strains vanish. No term, factor2 or relaxation-time error found. q is overstress in Pa, unlike the vendor's dimensionless spring-strain symbol. Vendor optional local integration172 and project numerical solvers are not asserted equivalent.
+
+## conventions_dimensions
+
+Source pressure=-tr(sigma)/3 establishes tension-positive tensor convention. Negating both stress and strain (and gamma/q) produces the project compression-positive form with unchanged equations and positive work. All terms in stress have Pa, rates Pa/s or1/s, eta=G1 tau has Pa s. Mandel sqrt2 shear factors preserve tensor contractions; source gamma is tensor strain rather than engineering shear. Small strain permits Cauchy identification here; finite-deformation PK2 context is excluded. Fixed-basis covariance does not imply finite-spin objectivity. Dry total stress has no pore-pressure conversion.
+
+## initialization_domain
+
+Both full eps and deviatoric q are persistent explicit initial state, not inferred zero preparation. For any exact traceless q, gamma=dev(eps)-q/(2G1) is an isochoric dashpot state. Nonzero eps with q=0 is relaxed preparation; instantaneous post-jump loading needs q=2G1 dev(eps), not a zero-duration call. Positive K,Ginf,G1,tau give stable equilibrium and branch energy. Degenerate zero-modulus limits are excluded. Source provides no empirical fit/range; numerical machine envelopes are not physical qualification.
+
+**SCI-SLS-001 (low, retained):** trace gate allows a small departure from exact isochoric physics. With q=(.0001,.0001,.0001,0,0,0)Pa and hydro rate=(-.001,-.001,-.001,0,0,0)/s, trace=.0003Pa passes the .002Pa gate at the tested moduli, yet sigma:eps_dot-psi_dot=-2.99999999375e-7W/m3. Exact passivity applies on tr(q)=0, not every admitted roundoff state. Source packet already discloses direct use/no projection. Bounded acceptance requires physically prepared deviatoric history and treating residual trace as numerical error; no unconditional exact-passivity claim for the entire tolerated set. Smallest improvement: keep this qualification explicit in downstream documentation; no model-byte change needed.
+
+## integration_transactions
+
+The law evolves per physical second and needs elapsed time on holds. Rates are simultaneous-stage quantities, with no lagged state or reset. Direct common solver is adaptive explicit midpoint with step doubling; schedules use backward-Euler step doubling with separate stress-control solve. These are Atlas choices, not vendor algorithm reproduction. Discontinuities split boundaries; branch history and total strain survive restart. Saved evidence includes repeated trials, seven rejection/recovery pairs, a budget failure after accepted substeps with full parent state/time rollback, and a restart whose actual initial state equals the prior computed endpoint. Persistent-module Wasm recovery is covered; native each CLI call starts a separate process, so native in-process recovery is not inferred. No algorithmic tangent, FE host, arbitrary history callback, event impulse or browser interface is qualified.
+
+## independent_numerical_evidence
+
+Before reading raw material outputs this run froze PLAN.md and check_review.py. The new Decimal50 oracle integrates the original dashpot gamma convolution and reconstructs q; it does not import Atlas or the author's oracle. Held-stress creep derives time constant tau*(Ginf+G1)/Ginf. Independent comparison passes34cases/68material calls per backend,67positive saved points/backend and7negative cases. Author frozen reference arrays independently agree within6.94e-18strain and5.82e-11Pa. All six components, stresses, source hashes and actual restart linkage are checked. Original direct bounds2e-8strain/1Pa and fine schedule2e-7/15Pa remain unchanged. Coarse diagnostic15.689627Pa uses its frozen1000Pa bound; fine error.154897Pa is smaller and satisfies15Pa. No general convergence-order or wider parameter claim follows.
+
+Free energy psi=K/2(tr eps)^2+Ginf dev(eps):dev(eps)+q:q/(4G1) is positive for positive parameters. On exact tr(q)=0, differentiating gives sigma:eps_dot-psi_dot=q:q/(2G1 tau)>=0, matching080. Pure hydro has no branch excitation; finite long-term shear modulus bounds creep. Source packet's ten algebra groups and400prospective pre-build energy/rotation checks supplement this fresh review; backend agreement alone is not used as equation verification.
+
+Reviewer attempt1 wrongly assumed one schedule row per reference time. Actual captures retain left/right boundary points. Its failure, script and freeze remain; distinct check_review_v2.py checks every boundary side against the same reference and full time coverage, with no changed equation or bound. Assessment correction is hashed. No failed material case was discarded.
+
+## backend_delivery
+
+Native and Wasm final reports pass the same frozen34cases/68calls each; separate read-only replay reproduces all2934physical scalar parity comparisons. Maximum parity discrepancies:3.25e-18strain,5.62e-11Pa branch stress,1.46e-11Pa observed stress. This review independently reproduces those maxima and all positive raw outputs against its oracle. Original native observation failure used unsupported --current; separate frozen harness repair uses --initial, preserves every original material-call response, and passes. Original logs/captures remain. Runtime archive, build receipts and build-source-context bind serial common-engine builds; the only changed helper atlas/agent_review.py was unused by the compiler, whose actual modules/generated native/Wasm bytes match. **SCI-SLS-003 (low, retained):** this helper also changed between freeze and archive creation, so the broad original claim of complete freeze/archive equality is false for that file. runtime-archive-context.json preserves both hashes and the first verifier failure. Imports were read independently: this helper is absent from the compiler/model dependency chain. Every remaining frozen archive member matches, as replayed by verify.py. This context exception does not affect constitutive generation or saved numerical evidence; future snapshots should be made atomically. The explicit exception qualifies all broad archive statements in this review. No reviewer build or compiled/vendor execution occurred.
+
+## applicability_claims
+
+Approval supports the exact ordinary, isotropic, dry, 3D infinitesimal, fixed-spatial zero-spin, total-stress ODE at the literal synthetic study cases/settings: K20MPa,Ginf8MPa,G1 12MPa, tau.2/2/20s for constant-rate tests, tau2s for schedules, with specified traceless histories. The separate source example Ginf4MPa/G1 6MPa is illustrative; no compiled accuracy claim for it is inferred. Relaxation, creep, load/hold/reversal, hydro/shear, rejected inputs, rollback and full-state restart are bounded material-point evidence.
+
+**SCI-SLS-002 (low, retained):** declared[1e-12,1e30]SI parameter envelopes are machine input bounds, not numerically surveyed or empirical applicability ranges. Keep literal tested values/protocols and settings in approval. Extreme stiffness/scale ratios may fail or lose accuracy. No experimental calibration/prediction, broad parameter-region guarantee, vendor executable equivalence, finite strain/spin, thermal shifts, fractional or bulk relaxation, FE/MPM/browser/deployment qualification is supplied. Smallest extension is a separately frozen parameter/stiffness study, if broader use is desired.
+
+## reproducibility_rights
+
+Run `python3 -B docs/reviews/sls-comsol63-scientific-v1/check_review_v2.py` for fresh independent saved-data assessment. `python3 -B docs/ingestion/sls-comsol63/verify_packet.py --source` and `python3 -B docs/ingestion/sls-comsol63/execution-v1/check_saved.py` also passed. These commands do not build or execute binaries. Input/model/source/report hashes appear in manifest.json; review.json binds the actual nine-item decision. Sources may be reobtained by exact version URLs and hashes; current unchanged originals are retained in ignored .local/private-sources/sls-comsol63. No vendor manual/image/code redistribution is authorized or performed. No external signature is fabricated.
+
+Final handoff: coordinator may integrate the exact accepted review under the current agent-review policy and retain both low findings/exclusions. No corrective scientific blocker remains. Files outside this review directory were read only; no staging, commit, push or admission edit was performed by this run.

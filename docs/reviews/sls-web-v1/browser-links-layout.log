@@ -1,0 +1,16 @@
+### Result
+{"links":[{"label":"COMSOL 6.3 Linear Viscoelasticity · Standard Linear Solid","href":"https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441011"},{"label":"Independent review & limitations","href":"http://127.0.0.1:18769/sls-review.html"},{"label":"Approval record","href":"http://127.0.0.1:18769/sls-approval.json"},{"label":"Review checklist","href":"http://127.0.0.1:18769/sls-agent-review.json"},{"label":"Exact model","href":"http://127.0.0.1:18769/engine-sls/sls-comsol63-deviatoric-zero-spin-ode.json"},{"label":"Atlas catalogue","href":"http://127.0.0.1:18769/index.html#catalogue"}],"local":[{"url":"http://127.0.0.1:18769/sls-review.html","status":200},{"url":"http://127.0.0.1:18769/sls-approval.json","status":200},{"url":"http://127.0.0.1:18769/sls-agent-review.json","status":200},{"url":"http://127.0.0.1:18769/engine-sls/sls-comsol63-deviatoric-zero-spin-ode.json","status":200}],"desktop":{"viewport":1280,"document":1280},"narrow":{"viewport":390,"document":390},"identity":{"model":"sls-comsol63-deviatoric-zero-spin-ode","model_sha256":"eccfeb372810afd81a5e9cddf5d8ac33e2cb5df6921fc88e14e9175c73e50906","catalogue_hash":"11dd07e8b896a71bdc72ce4ff93aba664916af583c703fd6b8671a0727a6ff6e","module_sha256":"0f6b5e3a2868bb8f73ef2cf033cbfc5b728ad8a2104e46505a9ae9dfa5750605","wasm_sha256":"edd2b5ef4c663e649c39f8c50c379ab97ccda0a09f2c72f141d58d92233df135","approval_sha256":"763c29f59b7156094fd15f9edb73b24b2de70c44e748704c8612a5d42170399b","review_sha256":"eda7775348b6b5fbd40cfedf2876d1550505f17c83fdd148b83eb153c2d7582c"}}
+### Ran Playwright code
+```js
+await (async (page) => {
+ const links=await page.locator('footer a').evaluateAll(els=>els.map(el=>({label:el.textContent,href:el.href})));
+ const local=[];for(const link of links.filter(x=>x.href.startsWith('http://127.0.0.1:18769')&&!x.href.includes('index.html'))){const res=await page.request.get(link.href);if(res.status()!==200)throw Error('Missing '+link.href);local.push({url:link.href,status:res.status()});}
+ if(!links.some(x=>x.href==='https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441011'))throw Error('Wrong primary source URL');
+ await page.getByText('Inspect complete state and stress at every output',{exact:true}).click();
+ await page.setViewportSize({width:1280,height:900});let desktop=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));if(desktop.viewport!==desktop.document)throw Error('Desktop horizontal overflow');await page.screenshot({path:'output/playwright/sls-desktop-final.png',fullPage:true});
+ await page.setViewportSize({width:390,height:844});let narrow=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));if(narrow.viewport!==narrow.document)throw Error('Narrow horizontal overflow');await page.screenshot({path:'output/playwright/sls-narrow.png',fullPage:true});
+ await page.setViewportSize({width:1280,height:900});
+ return {links,local,desktop,narrow,identity:JSON.parse(await page.locator('#identity').textContent())};
+}
+)(page);
+```

@@ -1,0 +1,17 @@
+### Result
+{"catalogueRoute":"./sls.html","url":"http://127.0.0.1:18770/sls.html","defaultStatus":"Completed 8 physical seconds · 4 output intervals · relaxation.","sourceDigest":"cf019ac6a6900d3fd6af91023cd806530d500812b100086062a91bfb1723cfcf","identity":{"model":"sls-comsol63-deviatoric-zero-spin-ode","model_sha256":"eccfeb372810afd81a5e9cddf5d8ac33e2cb5df6921fc88e14e9175c73e50906","catalogue_hash":"11dd07e8b896a71bdc72ce4ff93aba664916af583c703fd6b8671a0727a6ff6e","module_sha256":"0f6b5e3a2868bb8f73ef2cf033cbfc5b728ad8a2104e46505a9ae9dfa5750605","wasm_sha256":"edd2b5ef4c663e649c39f8c50c379ab97ccda0a09f2c72f141d58d92233df135","approval_sha256":"763c29f59b7156094fd15f9edb73b24b2de70c44e748704c8612a5d42170399b","review_sha256":"eda7775348b6b5fbd40cfedf2876d1550505f17c83fdd148b83eb153c2d7582c"}}
+### Ran Playwright code
+```js
+await (async (page) => {
+ await page.getByRole('searchbox',{name:'Search models',exact:true}).fill('sls-comsol63');
+ const entry=page.getByRole('link',{name:'Standard Linear Solid / Zener — COMSOL6.3 deviatoric',exact:true});await entry.waitFor();await entry.click();
+ const timed=page.getByRole('link',{name:'Open physical-time laboratory ↗',exact:true});await timed.waitFor();const href=await timed.getAttribute('href');if(href!=='./sls.html')throw Error('Wrong dedicated laboratory link');await timed.click();
+ await page.waitForURL('**/sls.html');await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Completed'),null,{timeout:180000});
+ const sourceDigest='cf019ac6a6900d3fd6af91023cd806530d500812b100086062a91bfb1723cfcf';if(!await page.locator('footer').textContent().then(s=>s.includes(sourceDigest)))throw Error('Missing source digest');
+ return {catalogueRoute:href,url:page.url(),defaultStatus:await page.locator('#status').textContent(),sourceDigest,identity:JSON.parse(await page.locator('#identity').textContent())};
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:18770/sls.html
+- Page Title: Standard Linear Solid · Constitutive Atlas

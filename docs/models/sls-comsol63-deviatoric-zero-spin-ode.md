@@ -1,0 +1,9 @@
+# Standard Linear Solid / Zener — COMSOL6.3 deviatoric ODE
+
+This bounded small-strain dry total-stress model has an equilibrium spring parallel to one Maxwell shear branch and an elastic bulk response. Native physical-time CLI and Wasm ABI qualification use the common Atlas solver, with no handwritten constitutive kernel.
+
+[Examples and isolated build instructions](../../examples/sls/README.md) provide held-strain relaxation, held-stress creep and load/hold/reversal. All twelve persistent components must be initialized explicitly: total infinitesimal strain eps, then deviatoric branch overstress q. A relaxed state has q=0; an instantaneous jump from zero has q=2G1 dev(eps). No arbitrary initial stress offset is supplied. The schedule's separate strain must agree with eps; example files do. Compression-positive Mandel conventions and SI units apply.
+
+[Source decisions](../ingestion/sls-comsol63/README.md), [execution evidence](../ingestion/sls-comsol63/execution-v1/README.md), and [independent agent review](../reviews/sls-comsol63-scientific-v1/README.md) define the scope. The exact model's draft metadata is historical; the bounded approval registry supplies current approval under the independent-agent checklist policy. There is no claim of calibrated or experimental predictive accuracy, general parameter-envelope coverage, unconditional numerical passivity, vendor-solver equivalence, finite-spin/finite-strain, thermal/fractional or volumetric-relaxation capability. Browser UI integration is separate.
+
+The trace tolerance is a project roundoff gate; exact deviatoric physics and energy/passivity identities assume trace(q)=0. Do not treat an admitted tiny volumetric branch component as an additional material mechanism. Positive illustrative parameters and frozen cases/settings, rather than all broad JSON bounds, are numerically qualified.

@@ -1,0 +1,14 @@
+### Result
+{"viewport":390,"width":390,"height":2090,"scrollY":933,"chart":{"x":48,"y":466,"width":294,"height":93.90625,"top":466,"right":342,"bottom":559.90625,"left":48}}
+### Ran Playwright code
+```js
+await (async (page) => {
+ await page.setViewportSize({width:390,height:844});await page.evaluate(()=>window.scrollTo(0,0));
+ await page.screenshot({path:'output/playwright/sls-narrow-top.png'});
+ await page.getByRole('heading',{name:'Total Cauchy stress',exact:true}).scrollIntoViewIfNeeded();
+ await page.screenshot({path:'output/playwright/sls-narrow-results.png'});
+ const state=await page.evaluate(()=>({viewport:innerWidth,width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,scrollY,chart:document.querySelector('#stressChart').getBoundingClientRect().toJSON()}));
+ if(state.viewport!==state.width)throw Error('Narrow horizontal overflow');await page.setViewportSize({width:1280,height:900});return state;
+}
+)(page);
+```

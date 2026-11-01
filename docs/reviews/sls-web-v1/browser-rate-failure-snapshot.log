@@ -1,0 +1,89 @@
+### Page
+- Page URL: http://127.0.0.1:18769/sls.html
+- Page Title: Standard Linear Solid · Constitutive Atlas
+### Snapshot
+```yaml
+- main [ref=f4e2]:
+  - generic [ref=f4e3]:
+    - generic [ref=f4e4]:
+      - generic [ref=f4e5]: Constitutive Atlas / physical-time laboratory
+      - heading "Standard Linear Solid" [level=1] [ref=f4e6]
+      - paragraph [ref=f4e7]: One relaxing deviatoric branch, an equilibrium spring and elastic bulk.
+    - generic [ref=f4e8]: Approved law · bounded synthetic evidence
+  - generic [ref=f4e9]: Scope of evidence. COMSOL 6.3 ordinary deviatoric SLS; dry total stress, infinitesimal strain, fixed spatial frame and zero spin. The preset has bounded native/Wasm numerical evidence and independent agent approval. Custom values are exploratory; the broad machine parameter envelope is unqualified. No material calibration or experimental validation. Exact passivity assumes traceless branch overstress. This interface is qualified separately from the scientific review.
+  - generic [ref=f4e10]:
+    - generic [ref=f4e11]:
+      - heading "Physical-time experiment" [level=2] [ref=f4e12]
+      - generic [ref=f4e13]: Control on all six components
+      - combobox "Control on all six components" [ref=f4e14]:
+        - option "Relaxation · strain hold (zero rate)"
+        - option "Creep · stress hold (zero rate)"
+        - option "Loading · constant strain rate" [selected]
+      - generic [ref=f4e15]:
+        - generic [ref=f4e16]:
+          - generic [ref=f4e17]: Duration (s)
+          - spinbutton "Duration (s)" [ref=f4e18]: "1"
+        - generic [ref=f4e19]:
+          - generic [ref=f4e20]: Output intervals
+          - spinbutton "Output intervals" [ref=f4e21]: "4"
+      - paragraph [ref=f4e22]: The hold advances physical seconds. Creep holds the initial total stress and solves for strain rate.
+      - group [ref=f4e23]:
+        - generic "Parameters & explicit initial history" [ref=f4e24] [cursor=pointer]
+      - button "Run experiment" [active] [ref=f4e25] [cursor=pointer]
+      - button "Reset illustrative preset" [ref=f4e26] [cursor=pointer]
+      - button "Export request & full result" [disabled] [ref=f4e27]
+      - generic [ref=f4e28]: Import exported JSON & replay
+      - button "Import exported JSON & replay" [ref=f4e29]
+      - status [ref=f4e30]: "Run failed: invalid component control"
+    - region "Simulation results" [ref=f4e31]:
+      - generic [ref=f4e32]:
+        - generic [ref=f4e33]:
+          - text: Physical time
+          - strong [ref=f4e34]: —
+        - generic [ref=f4e35]:
+          - text: Final σxx · total stress
+          - strong [ref=f4e36]: —
+      - generic [ref=f4e37]: Plot component · Mandel
+      - combobox "Plot component · Mandel" [ref=f4e38]:
+        - option "xx" [selected]
+        - option "yy"
+        - option "zz"
+        - option "√2xy"
+        - option "√2yz"
+        - option "√2xz"
+      - heading "Total Cauchy stress" [level=2] [ref=f4e39]
+      - generic [ref=f4e40]:
+        - generic [ref=f4e41]: Compression positive (MPa)
+        - generic [ref=f4e42]: Physical time (s) →
+      - img "Selected total stress against physical time" [ref=f4e43]
+      - heading "Total strain" [level=2] [ref=f4e44]
+      - generic [ref=f4e45]:
+        - generic [ref=f4e46]: Compression positive (%)
+        - generic [ref=f4e47]: Physical time (s) →
+      - img "Selected total strain against physical time" [ref=f4e48]
+      - paragraph [ref=f4e49]: Run the current inputs to inspect their response.
+      - paragraph [ref=f4e50]: "Experimental overlays unavailable: no compatible calibration or source experiment is supplied for this formulation. Curves are model responses."
+      - group [ref=f4e51]:
+        - generic "Inspect complete state and stress at every output" [ref=f4e52] [cursor=pointer]
+      - group [ref=f4e53]:
+        - generic "Exact model, engine and approval identities" [ref=f4e54] [cursor=pointer]
+  - generic [ref=f4e55]:
+    - text: "Source:"
+    - link "COMSOL 6.3 Linear Viscoelasticity · Standard Linear Solid" [ref=f4e56] [cursor=pointer]:
+      - /url: https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441011
+    - text: . Ordinary single branch; no bulk relaxation, finite rotation, thermal or fractional effects.
+    - link "Independent review & limitations" [ref=f4e57] [cursor=pointer]:
+      - /url: sls-review.html
+    - text: ·
+    - link "Approval record" [ref=f4e58] [cursor=pointer]:
+      - /url: sls-approval.json
+    - text: ·
+    - link "Review checklist" [ref=f4e59] [cursor=pointer]:
+      - /url: sls-agent-review.json
+    - text: ·
+    - link "Exact model" [ref=f4e60] [cursor=pointer]:
+      - /url: ./engine-sls/sls-comsol63-deviatoric-zero-spin-ode.json
+    - text: ·
+    - link "Atlas catalogue" [ref=f4e61] [cursor=pointer]:
+      - /url: index.html#catalogue
+```

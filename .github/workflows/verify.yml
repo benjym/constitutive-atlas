@@ -26,6 +26,11 @@ jobs:
       - run: python -m atlas.cli validate
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       - run: python tools/build_ci_targets.py build
+      - name: Build and qualify the approved SLS physical-time model
+        run: |
+          cmake -S cmake/sls -B build-sls -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-sls --target atlas_sls_solver --parallel 1
+          python tools/test_sls_native.py --solver build-sls/atlas_sls_solver --output "$RUNNER_TEMP/sls-native.json"
       - name: Native checks and full exact archival replay
         if: runner.os == 'macOS'
         run: ctest --test-dir build --output-on-failure
@@ -122,6 +127,8 @@ jobs:
           node tools/test_clay2014_rates_wasm.mjs --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-wasm.json"
           python -m tools.clay2014_rate_assessment --wasm-report "$RUNNER_TEMP/clay2014-wasm.json" --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm-transport "$RUNNER_TEMP/clay2014-wasm.transport.json" --native-transport "$RUNNER_TEMP/clay2014-native.transport.json" --artifact build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-assessment.json"
           python tools/fetch_data.py --approved-only
+          emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
@@ -166,6 +173,8 @@ jobs:
           node tools/test_scoped_parity.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/scoped-parity.json" catalogue/laboratory-profile-policy.json
           node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
           python tools/fetch_data.py --approved-only
+          emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs

@@ -1,0 +1,6 @@
+async (page) => {
+ await page.getByLabel('Import exported JSON & replay',{exact:true}).setInputFiles('/Users/bmar5496/code/constitutive-atlas/docs/reviews/sls-web-v1/browser-default.json');
+ await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('· relaxation.'),null,{timeout:180000});
+ const download=page.waitForEvent('download');await page.getByRole('button',{name:'Export request & full result',exact:true}).click();await (await download).saveAs('/Users/bmar5496/code/constitutive-atlas/docs/reviews/sls-web-v1/browser-replayed.json');
+ console.log(JSON.stringify({check:'import-replay',status:await page.locator('#status').textContent(),mode:await page.locator('#mode').inputValue()}));
+}

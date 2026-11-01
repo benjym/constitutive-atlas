@@ -15,12 +15,14 @@ from build_benchmark import bundle as bundle_benchmark
 from build_development import bundle as bundle_development
 from build_applicability import bundle as bundle_applicability
 from build_power_creep_web import bundle as bundle_power_creep
+from build_sls_web import bundle as bundle_sls
 
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--preview-experiments', action='store_true', help='Include pending datasets in web/preview for local review only')
     parser.add_argument('--wasm-dir',type=Path,default=ROOT/'build-wasm',help='Verified engine directory containing atlas.js, atlas.wasm and generated/models.json')
     parser.add_argument('--power-creep-wasm-dir',type=Path,help='Dedicated timed engine build; defaults to --wasm-dir')
+    parser.add_argument('--sls-wasm-dir',type=Path,default=ROOT/'build-sls-wasm',help='Dedicated qualified Standard Linear Solid engine build')
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
     args=parser.parse_args()
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
@@ -52,6 +54,8 @@ def main():
     print(f"Prepared {len(experiment_manifest['experiments'])} built-in experiments ({experiment_manifest['release']})")
     bundle_power_creep(dest,args.power_creep_wasm_dir or args.wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_power_creep_package.mjs'),str(dest)],check=True)
+    bundle_sls(dest,args.sls_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_sls_package.mjs'),str(dest)],check=True)
     (dest/'.nojekyll').touch()
     print(f'Packaged {dest}')
 

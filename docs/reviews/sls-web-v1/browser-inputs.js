@@ -1,0 +1,15 @@
+async (page) => {
+ await page.reload();await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Completed'),null,{timeout:180000});
+ await page.getByText('Parameters & explicit initial history',{exact:true}).click();
+ await page.getByLabel('Initial total strain ε · six values',{exact:true}).fill('0.003,0.002,-0.002,0.0006,-0.0005,0.0004');
+ await page.getByLabel('Initial branch overstress q (Pa) · six values',{exact:true}).fill('4000,-1000,-3000,800,-300,200');
+ await page.getByLabel('Relaxation τ (s)',{exact:true}).fill('3');
+ await page.getByRole('button',{name:'Run experiment',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Completed'),null,{timeout:180000});
+ let download=page.waitForEvent('download');await page.getByRole('button',{name:'Export request & full result',exact:true}).click();await (await download).saveAs('/Users/bmar5496/code/constitutive-atlas/docs/reviews/sls-web-v1/browser-custom.json');
+ await page.getByLabel('Initial branch overstress q (Pa) · six values',{exact:true}).fill('4001,-1000,-3000,800,-300,200');await page.getByRole('button',{name:'Run experiment',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('traceless'));
+ if(!await page.getByRole('button',{name:'Export request & full result',exact:true}).isDisabled())throw Error('Invalid state leaves stale export');
+ await page.getByRole('button',{name:'Reset illustrative preset',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Completed'),null,{timeout:180000});
+ download=page.waitForEvent('download');await page.getByRole('button',{name:'Export request & full result',exact:true}).click();await (await download).saveAs('/Users/bmar5496/code/constitutive-atlas/docs/reviews/sls-web-v1/browser-reset.json');
+ return {check:'custom/invalid-state/reset',status:await page.locator('#status').textContent()};
+}

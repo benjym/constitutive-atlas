@@ -1,0 +1,7 @@
+# Independent assessment freeze
+
+SCI-sls-comsol63-v1; reviewer run /root/sls_scientific_review, separate from /root and /root/sls_ingestion. Written before reading saved material outputs in this run. Read-only analysis only, no compiled or vendor execution.
+
+Use Decimal(50) direct convolution of the source dashpot strain gamma, then recover branch stress; held total stress uses equilibrium strain plus decaying transient with creep time tau*(Ginf+G1)/Ginf. Extract requests from frozen cases, never use their expected/reference arrays as the oracle. Check all positive direct/schedule points using original prospective bounds (direct 2e-8 strain/1 Pa, schedule 2e-7/15 Pa, coarse diagnostic1000 Pa). Compare frozen reference arrays separately to this new oracle at1e-11 strain/1e-6Pa, verify full-state actual restart request chain, exact duplicate calls, native original material-call preservation, all negative statuses and late rollback. Apply backend parity strain2e-7/overstress and stress1e-6Pa; check all states/observations. Check original source hashes and active model/freeze bindings. Completed parent reports required before final verdict.
+
+Assess exact isochoric-state energy identity independently; retain a counterexample demonstrating that permitted roundoff trace does not establish unconditional exact passivity. Do not widen scope from these tested synthetic parameters/protocols to declared machine bounds or other hosts. Existing first failed observation attempt remains unchanged.
