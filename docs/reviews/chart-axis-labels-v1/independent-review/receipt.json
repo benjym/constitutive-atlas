@@ -1,0 +1,79 @@
+{
+  "binding": {
+    "candidate_app_sha256": "d483b07ec1510f431b141d3ed38061775fa30954192279966028064e5ca4747d",
+    "candidate_style_sha256": "9c87069ffb7a91649bd7ede381af167b2c7140843403d346d8654083c24afc77",
+    "manifest_sha256": "3a07f7bd58541fe35d185a87866324f2c307b6cbea55956ff8eddf0e76763dab",
+    "plan_sha256": "3719c0b12db002ab4e48f08a325d66f073bdbc97e8d7c7e808b09c58fbf06fac",
+    "saved_inputs_sha256": "148356f91b1efd66304113f42958ea58d812539af3dfc0a011d78a0461ae8240"
+  },
+  "blockers": [],
+  "checks": {
+    "boundary_probe": {
+      "inherited_max_finite_rounding_overflow": true,
+      "subnormal_sign_retained": true
+    },
+    "exact_app_delta_only_formatter_class_margins": true,
+    "full_saved_points_equal_original_exports": {
+      "creep": 10,
+      "load-hold-reverse": 16,
+      "oedometer": 10,
+      "relaxation": 10
+    },
+    "passed": true,
+    "prior_stylesheet_preserved_as_prefix": true,
+    "reviewer_browser_actions": 0,
+    "reviewer_builds": 0,
+    "reviewer_compiled_calls": 0,
+    "saved_parent_checks": {
+      "builds": 0,
+      "candidate_out_of_bounds_labels": 0,
+      "candidate_viewports": [
+        390,
+        1280
+      ],
+      "charts_per_view": 16,
+      "label_checks": {
+        "maximum_label_characters": 10,
+        "passed": true,
+        "prior_tiny_value_loss_reproduced": true,
+        "saved_output_value_labels_checked": true,
+        "signed_exponent_cases": 1206
+      },
+      "new_solver_calls": 0,
+      "passed": true,
+      "prior_clipped_labels": 13,
+      "saved_points_and_rendered_coordinates_verified": true,
+      "shared_source_installed": false
+    }
+  },
+  "evidence": {
+    "check_saved.py": "472cf85d198ce5dd595a3d2b61ab5142a45a14b2105b5f90d1330aadbdd0a399",
+    "checks.log": "a034ff42e7ff63840d7fe06a1e2cc53fbaa78a5bd201c1efcba54e7f0d1d68c3",
+    "checks.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "inputs.json": "db567b304a41ac53f6e63115d5246b7b1157a05a975dfe3e2c2bb2e138effb1b",
+    "visual-inspection.json": "b6b81646e1cd6e306969252ca1274c73e1a8a6865fa0b9384961bdda50945dcc"
+  },
+  "findings": [
+    {
+      "description": "Both original and candidate numberLabel render \u00b1Number.MAX_VALUE as \u00b1Infinity because rounding to three significant digits overflows on conversion back to Number. The candidate does not regress this behavior; the 1206-case envelope stops at exponent 300.",
+      "id": "AXIS-N1",
+      "recommendation": "A future generic formatter hardening can format the finite value without a rounding-to-Number overflow and add near-maximum finite tests. No arbitrary finite-value coverage is inferred here.",
+      "severity": "nonblocking inherited boundary"
+    }
+  ],
+  "limits": [
+    "Acceptance is isolated renderer/stylesheet presentation only. Shared owner handoff, exact prior-source/receipt preservation, possible rebase and actual installed main-application checks remain required.",
+    "Synthetic ordinary/empty/tiny/wide fixtures test presentation only, not model scientific accuracy, full ordinary application behavior or arbitrary domains. Existing axis-range overflow behavior at extreme inputs is unchanged.",
+    "Initial favicon 404 and npm DNS failure remain documented; no pristine-console claim. No build, material call, browser action, remote action, model approval or live-delivery review was performed by reviewer."
+  ],
+  "reasons": [
+    "Exact app comparison confines changes to number formatting, atlas-chart class attachment and horizontal plot margins. axisRange, source values, measured points, event handlers and domain calculations are unchanged; stylesheet retains every prior byte before the appended common chart rule.",
+    "All full point objects from the four original hash-bound exports exactly equal the fixture data, including mixed-transition null rates. No solver or new trajectory is involved.",
+    "The pure formatter suite passes 1206 signed cases from exponents -300 through 300, preserves tiny nonzero signs and reproduces the old zero-loss witness.",
+    "Saved actual observations show 16 charts at 390px and 1280px, all candidate tick text inside the SVG, exact expected raw coordinates and unchanged data/domains; prior mobile has 13 clipped labels. Saved screenshots support the readability improvement."
+  ],
+  "reviewer_run": "/root/maxwell_checklist_review",
+  "scope": "Exact isolated generic chart presentation candidate and saved browser evidence only; prospective shared installation remains separate.",
+  "status": "accepted",
+  "task": "REVIEW-chart-axis-labels-v1"
+}

@@ -1,0 +1,7 @@
+# Observational legacy divergence diagnostic
+
+Purpose: locate earliest observable native/Wasm divergence in old baseline-v2 loose isotropic de[-2,-2,-2], default disabled controller. Exact original model/parameters/parent/defaultsettings unchanged. No material repair, extra iteration, solver retry, tolerance/depth/budget change, scientific acceptance or broad performance claim.
+
+Only this diagnostic source copy adds stderr JSON rows for recursive/implicit entry, scaled Jet residual/Jacobian, linear delta, line trials and failure reason. Values encoded as hexadecimal floating strings; sequence/index/phase identify call order. Split short-circuit checks retain exact original order. Arithmetic and branch tests remain unchanged; formatting uses separate output stream.
+
+Prospective separate review before any compilation. Native first then matching Wasm, one explicit serial Release target each --parallel1 after freshslotclaim. Each backend makes ONE exact legacycase API request (120s,64MiBstreams), captures fullstdout/stderr and hashes immediately. Full parsed response must equal its own uninstrumented saved backend response, including every diagnostic/status/state; no elapsed exception relevant to integrate API. If either fidelity fails, trace is not accepted as observational. Original aggregate failure remains FAIL. Sourceonly/savedtrace comparison after successful fidelity. No OSprofiling/elevation/authorcode/remoteaction.

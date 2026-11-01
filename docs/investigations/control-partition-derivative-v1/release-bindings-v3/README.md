@@ -1,0 +1,37 @@
+# AUDIT-md1997-release-bindings-v3
+
+Read-only bounded audit at exact published95210701c73718500ca41d0eb70a8281c585b1a3, delta fromec47f3e47b41d01a51c0cd1ef0bfecb344def694. It reuses immutable release-bindings-v2 at3873a48, without rerunning its broad repository text scan. No root source/map/registry/archive edit, build, compiled call or admission action occurred.
+
+The published root solver remains exactB094 (`b094c0f08d1f9ca71af5279c7946259e222c491b0bd97c3c70dbda392bbbe46e`), while our separately qualified582-source solver is05e6cc0c9dd6b6774597e07de0abe2beb7d9128383423d22b34c2e1d0a4d9218. The new audit never replaces an old receipt's expected hash with05e6cc. Latest exact selected published bytes are documentary copies under published-bytes/, and candidate old canonical bytes are under preservation-bytes/ inside this owned packet only. No root canonical installation is implied.
+
+## Changed approval consumers
+
+All four new reviews, their exact model definitions and184 total definition/artifact pins currently resolve live at952107. Each has exactly one matching approved registry entry, including exact review hash/model identity. VW96 directly pins B094 solver bytes in its artifact list. The other three do not directly pin the root header in their top-level artifact lists, though IGS inputs and Ramberg source freeze retain historical source identities. A validator that hashes only a saved input/freeze document does not recursively requalify its source or certify the patched runtime. Saved custom checker freshness must retain its own original context.
+
+The minimum **new changed-review active guard** preservation is explicit in active-minimum.json:
+
+1. Install exact B094 header bytes at its canonical `catalogue/source-snapshots/<B094>/cpp/include/atlas/solver.hpp` path; absent at952107.
+2. Extend existing catalogue/agent-reviews/source-archive-map.json, retaining every existing entry/document, with exact VW96 review document pin644975afbdd3e0dff5b41f6ab9aae069fad345812b263df3db6c573b04d4a20a and canonical B094 header entry. The immutable review and its registry approval remain unchanged.
+3. Before that sidecar changes, preserve its exact old04b58d45f6… bytes canonically and review the bounded four reverse receipts listed in active-minimum.json. Those documentary receipts pin the old map; their own map extensions require the broader historical closure classification. Do not blindly install every candidate map or repin those documents.
+
+The published atlas.agent_review validator uses checked_receipt only when the review's exact document is registered in its sibling sidecar. The unchanged review_export/build_evidence path retains those artifacts and compares the registry entry to the derived original approval. The root registry supporting_files duplicate is not itself a reason to assume review_export reads every supporting file raw. Consequently the catalogue/source-archive-map candidate from structural traversal is not automatically part of this minimum changed-review guard step. Other actual consumers must be classified separately.
+
+Ten synthetic adversarial checks execute the exact published Python checked_receipt function extracted from its AST: a changed live header cannot satisfy the old pin; exact canonical binding succeeds; missing/corrupt archive, wrong document pin, duplicate match, noncanonical location, changed original review and a substituted new expected hash all reject; restoring exact bytes recovers. These are source/receipt checks, never solver calls.
+
+## Bounded historical and latest-policy closure
+
+The bounded selection parses243JSON documents: changed noncopy JSON plus prior exact consumer/sidecar closure and four review JSON artifacts. It yields79 structural direct/reverse occurrences,30 direct exact-B094 document consumers,12 canonical candidates and29 sidecar candidates. Eleven of those12 canonical candidates are absent and one already verifies. These counts are **not** a replacement for v2's broader126-occurrence scan. Full delta paths, selected paths, skipped nested-copy/snapshot or over2MB paths, exact locators and older distinct pins are retained in audit.json. Nested snapshot trees were not blindly rescanned.
+
+The prior23 canonical targets retain their exact3873 identities:9 now verify at952107 and14 remain absent. Do not overwrite v2 with latest map bytes. The candidate plan refreshes each old target's latest availability; latest map versions are separate identities. Canonical/sidecar plans are proposed preservation tasks, not source freshness or blanket authorization to extend29maps.
+
+Latest published15-model policy/helper/CI/test bytes are retained exactly. They changed sinceec47 while common runtime, compiler/schema, build_web and scientific profile guards did not. critical_consumers records exact comparisons. The latest helper supports its exact published15 catalogue including Ramberg c949; it must not be substituted with the earlier14 helper or silently treated as supporting the new MD catalogue. The separate fixture/helper/CI plan owns that additive contract. A new model/policy installation needs current exact pairings, its own prospective checks, and final reverse-binding reinventory before edits. The current profile allocation loader compares its supported-policy path/hash raw; a historical map does not make a new policy current.
+
+## Fresh qualification and unresolved integration tasks
+
+The nine dedicated-surface classifications from v2 remain applicable because their inspected consumers are unchanged. Maxwell still requires a fresh complete-current-source manifest, actual artifacts/qualification and separate exact build review. NorSand still requires its complete current source closure/artifacts/qualification/build review; neither its current branch nor legacy live-header fallback is made fresh by canonical archives. Historical unchanged-reviewed Hill/Lade assets retain their qualified identities; a new common runtime does not silently alter their source bindings.
+
+Do not claim the isolated support tree2628 already includes these latest four approval closures. This audit did not edit or certify that tree. The previously identified literal Power packaging dependencies also remain separate: the actual legacy builder reads docs/admission/power-creep-approved-v1/approval.json and its original supporting manifests docs/ingestion/power-creep-itasca900/manifest.json and review-v1/manifest.json. The earlier three agent-v2 supporting-file divergences are historical-context facts, not demonstrated gates of that legacy builder. Install only exact proven missing published files under a new scoped support task, without guard edits or waivers.
+
+Smallest next actions: independently review active-minimum and historical candidate closure; assign exact-byte canonical/map installation separately; refresh the support context and any latest15 helper/policy dependencies under explicit scope; execute and independently review mandatory current profile qualifications; perform final exact-base integration reinventory. This source-only audit cannot approve admission, packaging, browser or release.
+
+Reproduce `python3 -B docs/investigations/control-partition-derivative-v1/release-bindings-v3/audit_delta.py` and `check_preservation.py` in this packet. They write only this owned packet, retain latest Git bytes, and call no build or solver. The final manifest binds the reviewable inventory.

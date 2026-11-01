@@ -1,0 +1,23 @@
+{
+  "paper_record_version": 1,
+  "phase": "development_only",
+  "purpose": "Initial-state source sensitivity using fixed earlier C2 calibrations; no recalibration or model ranking.",
+  "baseline_report": "paper/results/pilot-frozen96/report.json",
+  "calibration_package": "C2",
+  "model_ids": ["linear-elastic", "drucker-prager", "hypoplastic-sand-vw96"],
+  "experiment_ids": ["KFS-TMD12", "KFS-TMD13", "KFS-TMD14"],
+  "data_directory": "paper/results/development-data/normalized",
+  "maximum_axial_strain": 0.02,
+  "maximum_increments": [0.0002, 0.0001],
+  "initial_state_scenarios": ["file", "original_table"],
+  "volume_error_scale": 0.01,
+  "timeout_seconds_per_replay": 120,
+  "comparison": "trapezoidal endpoint errors weighted by absolute axial-strain travel; distinct from monotonic pilot metric",
+  "limitations": [
+    "Recorded strain is prescribed; measurement error and physical timing are not inferred.",
+    "Repeated coordinates do not imply a physical-time hold in these rate-independent models.",
+    "Original-table scenario varies e0 only, holding measured initial stress and fixed parameters unchanged.",
+    "Published table relative density is not an independent initialization input or recomputed from e0.",
+    "Scenarios are retained together; neither source is selected by prediction error."
+  ]
+}

@@ -36,7 +36,8 @@ def encoded(value):
 
 
 def source_manifest():
-    paths = {ROOT/'cmake/maxwell/CMakeLists.txt', ROOT/DEFINITION}
+    paths = {ROOT/'cmake/maxwell/CMakeLists.txt', ROOT/'cmake/AtlasScalarFunctions.cmake', ROOT/DEFINITION}
+    paths.update(p for p in (ROOT/'cpp/scalar-functions').rglob('*') if p.is_file())
     for directory, suffixes in [('atlas', {'.py'}), ('cpp', {'.cpp', '.hpp'}), ('schemas', {'.json'})]:
         paths.update(p for p in (ROOT/directory).rglob('*') if p.is_file() and p.suffix in suffixes and '__pycache__' not in p.parts)
     files = {p.relative_to(ROOT).as_posix(): digest(p.read_bytes()) for p in sorted(paths)}

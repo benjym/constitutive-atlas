@@ -19,9 +19,9 @@ for(const job of study.jobs){
  catch(error){job.status='error';job.message=String(error);}
  if(job.model==='linear-elastic'){
   try{
-   assert.equal(job.status,'completed');assert.equal(job.result.points.length,95);
+   assert.equal(job.status,'completed');assert.equal(job.result.points.length,record.rows.length);
    let maxStress=0,maxStrain=0;const {E,nu}=job.parameters;
-   for(let i=0;i<95;i++){
+   for(let i=0;i<record.rows.length;i++){
     const r=record.rows[i],p=job.result.points[i],dr=r.radial_effective_stress-103720,ea=r.axial_strain;
     const stress=103720+E*ea+2*nu*dr,volume=(1-2*nu)*ea+2*(1+nu)*(1-2*nu)*dr/E;
     const actualVolume=p.strain.slice(0,3).reduce((a,b)=>a+b,0);maxStress=Math.max(maxStress,Math.abs(p.state[0]-stress));maxStrain=Math.max(maxStrain,Math.abs(actualVolume-volume));

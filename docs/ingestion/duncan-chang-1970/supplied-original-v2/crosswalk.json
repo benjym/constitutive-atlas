@@ -1,0 +1,208 @@
+{
+  "identity": "duncan-chang-source-crosswalk-v2",
+  "target_schema_version": "0.3",
+  "artifact_kind": "non-executable crosswalk; not a model record",
+  "formulation_proposal": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "proposal_basis": {
+    "source": "Original Eq15 and consistent effective/total alternatives on1636; explicitly selected effective calibration",
+    "project_choices": [
+      "Fixed spatial infinitesimal3D zero-spin host; no objective rotation",
+      "Mandel conversion from engineering shear: compliance(1+nu)/E",
+      "Exact finite averaging, equality and crossing policies remain unselected",
+      "No production residual/candidate while source gates unresolved"
+    ]
+  },
+  "state_proposal": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "source": "Eq15/current and initial stresses"
+    },
+    {
+      "name": "h",
+      "shape": "scalar",
+      "unit": "Pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "maximum_historical_principal_stress_difference",
+        "transformation": "scalar_invariant"
+      },
+      "source": "p1645 previous maximum stress difference; finite update/event ordering unselected"
+    }
+  ],
+  "initialization_proposal": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "h"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "source_parameters": {
+    "c": "Pa",
+    "phi": "angle converted from degrees to radians for Atlas trig",
+    "Rf": "1",
+    "K": "1",
+    "Kur": "1",
+    "n": "1"
+  },
+  "additional_coefficients": {
+    "nu": "1; constant source closure",
+    "pa": "Pa; atmosphere pressure reference"
+  },
+  "source_table1": {
+    "dense": {
+      "c": 0,
+      "phi_degrees": 36.5,
+      "Rf": 0.91,
+      "K": 2000,
+      "Kur": 2120,
+      "n": 0.54,
+      "initial_e": 0.5,
+      "relative_density_percent": 100,
+      "parameter_locator": "Table1 p1642/PDF14",
+      "specimen_context_locator": "initial_e and relative density: specimen preparation p1636/PDF8"
+    },
+    "loose": {
+      "c": 0,
+      "phi_degrees": 30.4,
+      "Rf": 0.9,
+      "K": 295,
+      "Kur": 1090,
+      "n": 0.65,
+      "initial_e": 0.67,
+      "relative_density_percent": 38,
+      "parameter_locator": "Table1 p1642/PDF14",
+      "specimen_context_locator": "initial_e and relative density: specimen preparation p1636/PDF8"
+    }
+  },
+  "additional_example": {
+    "nu": 0.3,
+    "locator": "pp1644-45 changing-confinement tests"
+  },
+  "source_equations": [
+    {
+      "number": "1",
+      "locator": "1630/PDF2"
+    },
+    {
+      "number": "2",
+      "locator": "1630/PDF2"
+    },
+    {
+      "number": "3",
+      "locator": "1631/PDF3"
+    },
+    {
+      "number": "4",
+      "locator": "1631/PDF3"
+    },
+    {
+      "number": "5",
+      "locator": "1631/PDF3"
+    },
+    {
+      "number": "6",
+      "locator": "1632/PDF4"
+    },
+    {
+      "number": "7",
+      "locator": "1634/PDF6"
+    },
+    {
+      "number": "8",
+      "locator": "1635/PDF7"
+    },
+    {
+      "number": "9",
+      "locator": "1635/PDF7"
+    },
+    {
+      "number": "10",
+      "locator": "1635/PDF7"
+    },
+    {
+      "number": "11",
+      "locator": "1635/PDF7"
+    },
+    {
+      "number": "12",
+      "locator": "1635/PDF7"
+    },
+    {
+      "number": "13",
+      "locator": "1639/PDF11"
+    },
+    {
+      "number": "14",
+      "locator": "1641/PDF13"
+    },
+    {
+      "number": "15",
+      "locator": "1643/PDF15, a-f"
+    }
+  ],
+  "proposed_domain_not_universal_source_ranges": [
+    "positive finite pa,K,Kur,sigma3,Df",
+    "0<Rf<1",
+    "-1<nu<0.5",
+    "0<=D<=Df",
+    "h>=D; no inferred prehistory"
+  ],
+  "unresolved_blockers": [
+    "printed1647 absent and1645 duplicated",
+    "1971 erratum unread",
+    "Finite midpoint versus source-extrapolated average stress convention",
+    "Averaged principal values versus eigenvalues of averaged tensor for noncoaxial paths",
+    "Equality/reversal/crossing/history ordering and initial preparation",
+    "Named full-law postfailure modulus/rule versus declared bounded pre-failure support"
+  ],
+  "engine_capability_assessment": {
+    "spectral_values": "Existing atlas/symmetric_spectral.py supports principal values; repeated-eigenvalue derivative policy needs qualification",
+    "proven_generic_gap": null,
+    "no_shared_edits": true
+  },
+  "status": {
+    "source_complete": false,
+    "candidate": null,
+    "compiled": false,
+    "agent_model_approval": false,
+    "atlas_or_browser_delivery": false
+  }
+}

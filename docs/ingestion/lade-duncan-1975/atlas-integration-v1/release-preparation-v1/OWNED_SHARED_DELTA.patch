@@ -1,0 +1,751 @@
+--- a/web/app.js
++++ b/web/app.js
+@@ -3,6 +3,7 @@
+ import {setupSlsLaboratory} from './sls-laboratory.mjs';
+ import {setupPathLaboratory} from './path-laboratory.mjs';
+ import {setupMaxwellLaboratory} from './maxwell-laboratory.mjs';
++import {setupImplicitPathLaboratory} from './implicit-path-laboratory.mjs';
+ import {createLaboratoryControllerRouter} from './laboratory-controller-router.mjs';
+ import {validateSupport,unsupportedReason,requireSupportedControl} from './laboratory-support.mjs';
+ import {timedLaboratoryRoute} from './timed-route.mjs';
+@@ -87,7 +88,16 @@
+   if(timedView?.supports(id)){
+     if(j2View?.active)j2View.select(false);
+     if(!timedView.active)++experimentLoadSequence;
+-    return timedView.select(id);
++    const active=timedView.select(id);
++    if(active)$('model').value=id;
++    if(active&&id==='lade-duncan-1975-midpoint-elastic-eq19-gap-v4'){
++      $('model-description').textContent='Lade–Duncan (1975) cohesionless-soil elastoplasticity. Midpoint elastic/local Eq. 19 integration; small strain, compression-positive total mechanical stress, fixed axes and zero pore pressure. Custom paths remain exploratory.';
++      $('model-family').textContent='Soil elastoplasticity';$('model-status').textContent='Approved bounded numerical scope';
++      $('model-sources').replaceChildren();
++      for(const [text,path] of [['Original 1975 source','https://doi.org/10.1061/AJGEB6.0000204'],['Independent scientific checklist','./engine-implicit-path/review.json'],['Exact approval and limitations','./engine-implicit-path/approval.json'],['Exact approved model JSON','./engine-implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json']]){const a=element('a',text+' ↗');a.href=path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}
++    }
++    $('import-run').hidden=active;
++    return active;
+   }
+   if(j2View?.active)j2View.select(false);
+   if(timedView?.active)timedView.select(false);
+@@ -397,7 +407,7 @@
+ }
+ function catalogueCards(){
+   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
+-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
++  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
+     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
+     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
+     const heading=element('h2'),open=element('a',entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
+@@ -409,7 +419,7 @@
+   if(!count)grid.append(element('p','No matching models. Try another name or availability.','catalogue-empty'));
+ }
+ function refreshCatalogueStatus(entry,spec){
+-  $('catalogue-detail-status').textContent=entry.id===j2View?.modelId?'Approved scope · independent agent review':timedView?.supports(entry.id)?(entry.path_laboratory?'Approved bounded scope · controlled-path laboratory':'Approved bounded scope · physical-time laboratory'):registeredModelReview(entry.id)?'Approved scope · independent agent review':spec?'Available to test · '+spec.status:timedLaboratoryRoute(entry)?'Available to test · approved physical-time scope':'Research candidate';
++  $('catalogue-detail-status').textContent=entry.id===j2View?.modelId?'Approved scope · independent agent review':timedView?.supports(entry.id)?(entry.implicit_path_laboratory?'Approved bounded scope · implicit strain-path laboratory':entry.path_laboratory?'Approved bounded scope · controlled-path laboratory':'Approved bounded scope · physical-time laboratory'):registeredModelReview(entry.id)?'Approved scope · independent agent review':spec?'Available to test · '+spec.status:timedLaboratoryRoute(entry)?'Available to test · approved physical-time scope':'Research candidate';
+ }
+ function showCatalogueModel(entry,spec){
+   const timedRoute=timedLaboratoryRoute(entry);
+@@ -418,7 +428,7 @@
+   refreshCatalogueStatus(entry,spec);
+   $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute||entry.id===j2View?.modelId||timedView?.supports(entry.id)?' available':'');
+   body.append(element('p',recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',entry.id,evidenceIndex),'catalogue-detail-note'));
+-  if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else if(entry.path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes dimensionless shear progress, complete initial history and linearly changing stress controls for the original drained active axial law. Experimental comparison is unavailable.'));}else if(timedRoute){const section=element('section');section.append(element('h3','Physical-time formulation'),element('p','Open the dedicated laboratory for supported controls, conventions and source/review links.'));body.append(section);}else body.append(formulationSection(document,spec,{evidenceIndex}));
++  if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else if(entry.implicit_path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes the original complete 1975 elastoplastic law through a bounded implicit strain-path realization, explicit Table 1 preparation and complete stress/history/work state. Total mechanical Cauchy stress; no pore-pressure law or experimental validation.'));const links=element('p');for(const [label,path] of [['Exact definition','engine-implicit-path/'+entry.id+'.json'],['Independent scientific checklist','engine-implicit-path/review.json'],['Approval and limitations','engine-implicit-path/approval.json']]){const a=element('a',label+' ↗');a.href='./'+path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}body.append(links);}else if(entry.path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes dimensionless shear progress, complete initial history and linearly changing stress controls for the original drained active axial law. Experimental comparison is unavailable.'));}else if(timedRoute){const section=element('section');section.append(element('h3','Physical-time formulation'),element('p','Open the dedicated laboratory for supported controls, conventions and source/review links.'));body.append(section);}else body.append(formulationSection(document,spec,{evidenceIndex}));
+   if(typeof entry.dossier==='string'&&/^docs\/models\/[a-z0-9-]+\.md$/.test(entry.dossier)){const link=element('a','Source, numerics and limitations dossier ↗');link.href='./'+entry.dossier+'.html';link.target='_blank';link.rel='noopener';body.append(link);}
+   if(!spec&&!timedRoute&&entry.id!==j2View?.modelId&&!timedView?.supports(entry.id)){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
+   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
+@@ -436,7 +446,7 @@
+   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
+   $('catalogue-detail-id').textContent=entry.id;
+   $('catalogue-permalink').href=catalogueModelHash(entry.id);
+-  const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html');
++  const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html');
+   const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute&&!timed&&entry.id!==j2View?.modelId;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(activateLaboratoryModel(entry.id))location.hash='laboratory?model='+encodeURIComponent(entry.id);$('model').focus({preventScroll:true});};
+   if(!dialog.open)dialog.showModal();body.scrollTop=0;
+ }
+@@ -601,5 +611,5 @@
+   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
+   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
+   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
+-  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
++  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+ }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}
+--- a/tools/build_web.py
++++ b/tools/build_web.py
+@@ -26,6 +26,7 @@
+     parser.add_argument('--j2-wasm-dir',type=Path,default=ROOT/'build-j2-wasm',help='Qualified J2 material-point engine for the main laboratory')
+     parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'docs/ingestion/norsand-1993/shared-integration-v1/wasm-v2',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
+     parser.add_argument('--maxwell-wasm-dir',type=Path,default=ROOT/'build-maxwell-wasm',help='Dedicated Maxwell engine with exact accepted current-build qualification receipt')
++    parser.add_argument('--implicit-path-wasm-dir',type=Path,default=ROOT/'build-implicit-path-wasm',help='Exact independently qualified implicit strain-path engine')
+     parser.add_argument('--output',type=Path,help='Explicit local output directory')
+     args=parser.parse_args()
+     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
+@@ -96,6 +97,11 @@
+     bundle_controlled_path(dest,args.controlled_path_wasm_dir)
+     from build_maxwell_laboratory import bundle as bundle_maxwell
+     bundle_maxwell(dest,args.maxwell_wasm_dir)
++    from build_implicit_path_laboratory import bundle as bundle_implicit_path
++    bundle_implicit_path(dest,args.implicit_path_wasm_dir)
++    check_root=dest/'implicit-path-package-checks';check_root.mkdir(exist_ok=True)
++    check_report=Path(tempfile.mkdtemp(prefix='build-',dir=check_root))/'report.json'
++    subprocess.run([sys.executable,str(ROOT/'tools/test_implicit_path_package.py'),str(dest),'--output',str(check_report)],check=True)
+     (dest/'.nojekyll').touch()
+     print(f'Packaged {dest}')
+ 
+--- a/catalogue/manifest.json
++++ b/catalogue/manifest.json
+@@ -221,8 +221,25 @@
+       "status": "candidate",
+       "executable": false,
+       "discovery_url": "https://doi.org/10.1061/AJGEB6.0000204",
+-      "note": "Research candidate; bibliographic and formulation review pending.",
+-      "capability_gap": "Full hardening/flow transcription and source checks pending; yield criterion alone is not a complete model."
++      "note": "Original full1975 formulation; family discovery record. The separately identified midpoint-elastic local Eq19 realization has exact independent review and a bounded main-laboratory route; do not count this family row as another executable formulation."
++    },
++    {
++      "id": "lade-duncan-1975-midpoint-elastic-eq19-gap-v4",
++      "name": "Lade–Duncan 1975 · midpoint-elastic local Eq. 19",
++      "family": "elastoplasticity",
++      "status": "reviewed",
++      "executable": false,
++      "implicit_path_laboratory": "index.html",
++      "dossier": "docs/models/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.md",
++      "discovery_url": "https://doi.org/10.1061/AJGEB6.0000204",
++      "note": "Original full1975 elastoplastic law with explicit Atlas midpoint elasticity and endpoint plastic/history choices. Independently reviewed bounded native/Wasm implementation; main-laboratory implicit strain-path controls. Total mechanical Cauchy stress; named source preparation, no postfailure continuation, general3D event theorem or experimental validation. Exact draft model metadata remains unchanged; approval is bound through the registry.",
++      "catalogue_sources": [
++        {
++          "url": "https://doi.org/10.1061/AJGEB6.0000204",
++          "role": "Original full1975 formulation",
++          "locator": "JGED101(10),1037–1053, equations1–19 and Table1; full supplied original privately retained SHA256bdebd928dbe9e4bac47c0a0328ed0bab79ab3e440a25390f1d646e9ed3749fc5; PDF not redistributed"
++        }
++      ]
+     },
+     {
+       "id": "matsuoka-nakai",
+--- a/catalogue/publications.json
++++ b/catalogue/publications.json
+@@ -427,7 +427,8 @@
+         10
+       ],
+       "model_ids": [
+-        "lade-duncan-1975"
++        "lade-duncan-1975",
++        "lade-duncan-1975-midpoint-elastic-eq19-gap-v4"
+       ],
+       "evidence": [
+         {
+--- a/.github/workflows/verify.yml
++++ b/.github/workflows/verify.yml
+@@ -152,8 +152,10 @@
+           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+           python -B -m unittest tests.test_provision_maxwell_assets
+           python -B tools/provision_maxwell_assets.py
++          python -B tools/provision_implicit_path_assets.py
+           python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+           python tools/build_web.py
++          node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
+           node tools/test_experiments.mjs --built-assets web/dist/experiments
+           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+@@ -209,8 +211,10 @@
+           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+           python -B -m unittest tests.test_provision_maxwell_assets
+           python -B tools/provision_maxwell_assets.py
++          python -B tools/provision_implicit_path_assets.py
+           python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+           python tools/build_web.py
++          node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
+           node tools/test_experiments.mjs --built-assets web/dist/experiments
+           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+--- a/tools/provision_maxwell_assets.py
++++ b/tools/provision_maxwell_assets.py
+@@ -11,10 +11,10 @@
+ sys.path.insert(0, str(ROOT))
+ from tools.build_maxwell_laboratory import bundle
+ 
+-PACKET = ROOT / 'docs/ingestion/maxwell-itasca900/atlas-ci-v2'
++PACKET = ROOT / 'docs/ingestion/lade-duncan-1975/atlas-integration-v1/maxwell-rebind-v1'
+ ARCHIVE_SHA256 = '2ae27721254cabed74b289c9692d0286fda71bd9eab92933d736d74904f4c9dd'
+-QUALIFICATION_SHA256 = '2bfe6239807e33a55e9800df831c333b21ead5ba4d1c8720c947d7a89e0080c2'
+-REVIEW_SHA256 = '7c240bbad74a80d1d3c754711f1b41c5d690d07d53663cd2565f2767357e31d0'
++QUALIFICATION_SHA256 = '6c4de6ef03b2f993b24ba153db9b5702334ae9e92df578418f3bfafe67695f26'
++REVIEW_SHA256 = '3f509c9e7d6cfa027a6ff25570c7af278433ca42eb5f38ba1a51bf19bca8adf8'
+ MEMBERS = {
+     'wasm/maxwell.js': ('maxwell.js', 'module_sha256'),
+     'wasm/maxwell.wasm': ('maxwell.wasm', 'wasm_sha256'),
+@@ -52,7 +52,7 @@
+     if destination.exists() or destination.is_symlink():
+         raise ValueError('Refusing to replace existing Maxwell build directory')
+     qualification_bytes = (PACKET/'maxwell-qualification.json').read_bytes()
+-    review_bytes = (PACKET/'independent-review/final-v1/build-review.json').read_bytes()
++    review_bytes = (PACKET/'independent-review/build-review.json').read_bytes()
+     if digest(qualification_bytes) != QUALIFICATION_SHA256 or digest(review_bytes) != REVIEW_SHA256:
+         raise ValueError('Changed retained qualification or independent review')
+     qualification = json.loads(qualification_bytes)
+--- a/catalogue/approved-models.json
++++ b/catalogue/approved-models.json
+@@ -234,7 +234,7 @@
+         "immutable_identity_policy": "Exact qualified bytes preserved. This registry supplies current bounded user approval; historical draft metadata and reports remain unchanged."
+       },
+       "scope": {
+-        "law": "Nakai–Hinokio2004 full one-a clay with Appendix V, project endpoint backward Euler",
++        "law": "Nakai\u2013Hinokio2004 full one-a clay with Appendix V, project endpoint backward Euler",
+         "kinematics": "small_strain_3d",
+         "frame": "fixed_spatial",
+         "objective_rate": "none",
+@@ -636,7 +636,7 @@
+         "Original native22/27 accuracy failures retained; refined27/27 native/Wasm passes do not imply unconditional discrete dissipation.",
+         "Restart uses the same partition; clock-shift study checks stress response, with endpoint times separately checked in execution-v1. No arbitrary adaptive checkpoint or persistent native-process recovery claim.",
+         "Von-Mises norm gradient is undefined at zero; no physical norm-gradient, general FE tangent, FE/MPM, finite spin or coupled-pore-pressure qualification.",
+-        "Browser import/reset/invalid recovery/latest-request/full changed-parameter lifecycle, ordinary public selector integration and live deployment are not approved by this record; E6–E8 remain separate delivery gates.",
++        "Browser import/reset/invalid recovery/latest-request/full changed-parameter lifecycle, ordinary public selector integration and live deployment are not approved by this record; E6\u2013E8 remain separate delivery gates.",
+         "Original source HTML unavailable; readable extracted vendor text is durably private and hash bound, not redistributable source bytes.",
+         "Two review-v1 low findings retained and bounded by additive reproduction/clock clarification."
+       ],
+@@ -905,7 +905,7 @@
+         "policy": "agent-checklist-v1",
+         "identity": {
+           "kind": "agent",
+-          "name": "Drucker–Prager independent reviewing agent",
++          "name": "Drucker\u2013Prager independent reviewing agent",
+           "run_id": "/root/drucker_prager_agent_review",
+           "independence_basis": "Separate delegated reviewing run from /root; read original sources, wrote independent scalar oracle and assessed saved raw evidence. Did not author model/transcription or run compiled backends."
+         }
+@@ -1233,7 +1233,7 @@
+         "sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14"
+       },
+       "scope": {
+-        "use": "Exact legacy schema0.1 complete associated MCC Atlas discrete formulation: current endpoint pressure/volume elasticity, M² yield/associated flow, normalized temporary gamma, exponential total-volume/log-pc updates; compression-positive Mandel effective stress, infinitesimal3D fixed-frame zero-spin, explicit caller sigma/e/pc. Default vector and named57 saved native cases plus eleven frozen historical native/Wasm protocol0-4/default pairs only. No migration, current build/release/browser, Wasm failure-recovery, serialization restart, FE, finite-rotation, physical-time, experimental or general parameter/uniqueness claim."
++        "use": "Exact legacy schema0.1 complete associated MCC Atlas discrete formulation: current endpoint pressure/volume elasticity, M\u00b2 yield/associated flow, normalized temporary gamma, exponential total-volume/log-pc updates; compression-positive Mandel effective stress, infinitesimal3D fixed-frame zero-spin, explicit caller sigma/e/pc. Default vector and named57 saved native cases plus eleven frozen historical native/Wasm protocol0-4/default pairs only. No migration, current build/release/browser, Wasm failure-recovery, serialization restart, FE, finite-rotation, physical-time, experimental or general parameter/uniqueness claim."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -1717,7 +1717,7 @@
+         "sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477"
+       },
+       "scope": {
+-        "use": "Exact v0.3 complete Medicus-Fellin2017 body Eqs1–10 body 2p/incompressible-grain, fixed-spatial zero-spin infinitesimal Mandel compression-positive effective Cauchy stress/e material-point law. Explicit seven-state initialization, declared zero/hydro continuations and conservative interior/exponential support. Named complete Table 2 calibrations/frozen rate/path/preview matrices and separately pinned analytical London NCL 100 kPa assignment only. Direct exact-candidate evidence: historical13 requests/330 caller points per backend previewv1/v2 plus101 point default; historical research rate/AD/finite-path support connected by exact mathematical/state-layout equality. No current engine/package/browser/live-release, author UMAT/Appendix 6p, finite-rotation, integrated FE tangent, zero/near-hydro AD, restart, arbitraryparameter/domain or experimental claim."
++        "use": "Exact v0.3 complete Medicus-Fellin2017 body Eqs1\u201310 body 2p/incompressible-grain, fixed-spatial zero-spin infinitesimal Mandel compression-positive effective Cauchy stress/e material-point law. Explicit seven-state initialization, declared zero/hydro continuations and conservative interior/exponential support. Named complete Table 2 calibrations/frozen rate/path/preview matrices and separately pinned analytical London NCL 100 kPa assignment only. Direct exact-candidate evidence: historical13 requests/330 caller points per backend previewv1/v2 plus101 point default; historical research rate/AD/finite-path support connected by exact mathematical/state-layout equality. No current engine/package/browser/live-release, author UMAT/Appendix 6p, finite-rotation, integrated FE tangent, zero/near-hydro AD, restart, arbitraryparameter/domain or experimental claim."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -1928,7 +1928,7 @@
+         "Two low prior findings remain: original assessor mixes stress/history in refinement gate although both actual channels improve, and preserved model metadata describes the pre-integration checkpoint.",
+         "Current original source/prior-review verifier calls fail on historical atlas/dsl.py hash drift; successful released-context replays and unchanged model/source evidence are retained. No historical files repinned.",
+         "Native recovery uses separate processes; Wasm same-instance recovery is bounded to saved requests. No unconditional discrete dissipation or arbitrary failure-point proof.",
+-        "E6–E8 public main-laboratory/package/lifecycle/live delivery and dedicated current CI qualification require separate evidence; static live model availability and prior site deployment do not establish them."
++        "E6\u2013E8 public main-laboratory/package/lifecycle/live delivery and dedicated current CI qualification require separate evidence; static live model availability and prior site deployment do not establish them."
+       ],
+       "supporting_files": [
+         {
+@@ -2115,7 +2115,7 @@
+         "sha256": "452b49ef48668c0c5d8aba20dfca398235fa45431e853ee923be05a17c7c88a0"
+       },
+       "scope": {
+-        "use": "Exact Duncan–Chang1970 constant-nu effective-stress isotropic endpoint-principal-average incremental residual, compression-positive Mandel small-strain fixed-spatial zero-spin. Only frozen native/Wasm describe/evaluate/integrate_with_settings and the two source-coefficient drained run_with_settings presets, the exact execution-v2 requests and settings(2e-10,1e-6,45,14,20000,11), with explicitly diagnostic-only modified budgets. Qualified20column residualAD, not a Duncan discrete-update tangent. Exact-copy installation at the stated models path; no scientific metadata change authorized."
++        "use": "Exact Duncan\u2013Chang1970 constant-nu effective-stress isotropic endpoint-principal-average incremental residual, compression-positive Mandel small-strain fixed-spatial zero-spin. Only frozen native/Wasm describe/evaluate/integrate_with_settings and the two source-coefficient drained run_with_settings presets, the exact execution-v2 requests and settings(2e-10,1e-6,45,14,20000,11), with explicitly diagnostic-only modified budgets. Qualified20column residualAD, not a Duncan discrete-update tangent. Exact-copy installation at the stated models path; no scientific metadata change authorized."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -2128,7 +2128,7 @@
+         "Selected scalar exact-tie rows are not unique classical or proved whole-residual Clarke derivatives; numerically unresolved distinct spectra may reject.",
+         "Parity worst3.950669546611607e-8 is close to the frozen4e-8 bound; no bitwise backend equality claim. Non-dyadic loading split has a bounded disclosed exact-real roundoff defect.",
+         "No model-specific constitutive-update tangent, FE host, finite-rotation transport, pore-fluid coupling, dilatancy, physical clock, calibration or experimental validation is approved.",
+-        "Atlas packaging, actual browser qualification and live delivery remain separate E6–E8 gates; no push/deployment authorization is conveyed.",
++        "Atlas packaging, actual browser qualification and live delivery remain separate E6\u2013E8 gates; no push/deployment authorization is conveyed.",
+         "Source commit identifies the repository base; dirty qualified dependencies are separately frozen. Coordinator must install exact candidate bytes and validate final record/model paths before registry integration."
+       ],
+       "supporting_files": [
+@@ -2292,7 +2292,7 @@
+         "sha256": "67ff78f8cd56fd8812ba42f4456105b6e7ae217090dbcf40d8f8d5f839995d2c"
+       },
+       "scope": {
+-        "use": "Original Jefferies1993 active monotonic drained rigid-plastic axial formulation, current-volume incompressible-grain kinematics and adaptive midpoint policy; generic Python controlled-path API, flat native C ABI and Node-hosted Wasm harness only. Numerical qualification limited to nine frozen Latin-square cases and associated58-request/backend corpus: M1.2,h280,lambda.0135,Gamma.82,pref1000Pa,N0/.2/.39,psi0−.16/0/+.075,progress.16 and specified constant-cell/constant-mean/linear-changing controls under frozen settings. Exact model hash and target artifacts as bound."
++        "use": "Original Jefferies1993 active monotonic drained rigid-plastic axial formulation, current-volume incompressible-grain kinematics and adaptive midpoint policy; generic Python controlled-path API, flat native C ABI and Node-hosted Wasm harness only. Numerical qualification limited to nine frozen Latin-square cases and associated58-request/backend corpus: M1.2,h280,lambda.0135,Gamma.82,pref1000Pa,N0/.2/.39,psi0\u2212.16/0/+.075,progress.16 and specified constant-cell/constant-mean/linear-changing controls under frozen settings. Exact model hash and target artifacts as bound."
+       },
+       "review": {
+         "kind": "agent-model-review",
+@@ -2302,7 +2302,7 @@
+       "limitations": [
+         "Declared parameter bounds do not establish accuracy over the full box or arbitrary controls; nine sampled endpoint cases and qualified transactions only.",
+         "No experimental validation, figure digitization, nominal post-peak specimen response, inactive/interior unloading, elasticity, cyclic/fabric law, general3D/Lode/finite rotation/FE/MPM support or analytic tangent claim.",
+-        "No separately exposed user-facing CLI, main-atlas/package/actualbrowser/live delivery qualification; E6–E8 remain separate.",
++        "No separately exposed user-facing CLI, main-atlas/package/actualbrowser/live delivery qualification; E6\u2013E8 remain separate.",
+         "Current-volume void-ratio reconstruction and adaptive midpoint integration are explicit Atlas choices; accumulated strain increments are not exact finite principal stretches.",
+         "Candidate metadata retains its exact historical draft/staged wording; separate registry approval carries this bounded decision. Metadata edits require new hash binding."
+       ],
+@@ -2644,6 +2644,378 @@
+       ],
+       "experimental_validation": "not_assessed",
+       "deployment_authorized": false
++    },
++    {
++      "id": "lade-duncan-1975-midpoint-elastic-eq19-gap-v4-agent-review-v1-approval",
++      "model_id": "lade-duncan-1975-midpoint-elastic-eq19-gap-v4",
++      "status": "approved",
++      "approved_on": "2026-11-01T14:04:35Z",
++      "approval_authority": {
++        "kind": "independent-agent-review",
++        "policy": "agent-checklist-v1",
++        "identity": {
++          "kind": "agent",
++          "name": "Independent Lade source and numerical reviewer",
++          "run_id": "/root/lade_source_review",
++          "independence_basis": "Actual separately dispatched run, distinct from /root model transcription/implementation. Personally reviewed all 17 original rendered pages, source/convention algebra, contract choices and exact saved numerical/backend evidence. Reconciles independent work actually performed throughout this run, not a fresh-context claim. Authored review scripts/findings, not the model or material implementation; no compiled artifacts executed by reviewer."
++        }
++      },
++      "definition": {
++        "path": "models/research/implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json",
++        "sha256": "120b93f319543518b2b87221ab7457afaca2a1fb5de78af901276e8e89a22e63"
++      },
++      "scope": {
++        "use": "Exact complete Lade\u2013Duncan 1975 law in canonical v0.3 model120b93f3, with disclosed midpoint elasticity, endpoint local Eq19 plastic work, signed history carrier and generalized repeated-minimum choices. Fixed-frame small-strain compression-positive Mandel, zero-pore-pressure mechanical Cauchy stress; named Table1 preparations and frozen F parameter/protocol/native/Wasm API case matrices only. Exact installed generic F runtime acb8756e and accepted model/generated/artifact binding. Compiled-scope E5 approval; actual public packaging/preset/browser/live acceptance excluded."
++      },
++      "review": {
++        "kind": "agent-model-review",
++        "path": "catalogue/agent-reviews/lade-duncan-1975-midpoint-elastic-eq19-gap-v4-agent-v1.json",
++        "sha256": "0912247e7749c21fd9063ef865ea7febc2cbb23f550992b1ddf6c6352faa7de4"
++      },
++      "limitations": [
++        "No postfailure continuation or general three-dimensional domain-event/convergence theorem; the repeated-minimum cluster-average generalized Jacobian is not a classical directional derivative.",
++        "No arbitrary schema-parameter rectangle, initialization/history, cycles or custom browser input robustness claim. Named 60 kPa preparations differ from the 100 kPa schema example.",
++        "Fixed small-strain/spatial zero-pore-pressure mechanical embedding only; no coupled/undrained, physical-time, finite-rotation or FE claim.",
++        "Experimental calibration and measurement validation are absent. The supplied copyrighted original PDF remains private and is linked/hashed, not redistributed.",
++        "Four fixed-control nonmonotonic trend diagnostics remain false; joint refinement, source bounds and all eleven numerical gates pass. Earlier failures/timeouts and original/recovered prerequisite outputs remain retained.",
++        "Registry integration, actual asset restoration, public package/preset/actual-browser E7 and live E8 qualification remain separate guarded tasks. Deployment is not authorized."
++      ],
++      "supporting_files": [
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/checked_centered_middle.hpp",
++          "sha256": "c05d3b8b19d800e3a9313a9b118bc3cab7fbbb04e2ab04fd94d5f223de21c180"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/checked_determinant.hpp",
++          "sha256": "ba224de0e51b3150f1442576a895d9f4a5d1856f626368cb8655b3f9513ce0b3"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/checked_expression.hpp",
++          "sha256": "87a63032a8028a54c4261e5c9d5ca5a727293eb87d9506d1c1e3ea4c4c2bbec8"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/checked_normalized_determinant.hpp",
++          "sha256": "c7d2e07060b88b0f9bf8507fe5e8e83d06366b0e610c4b258865bf49166cb2ac"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/checked_principal_range.hpp",
++          "sha256": "73e8fe7dee760a7dc55cc5f9378c597bd984092046b5a38c71510f4db4a5692c"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/checked_spectral.hpp",
++          "sha256": "fcf04e3f7b3f47393005d79de58cc2dfa0663296404188abeef33a257c73c052"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/checked_spectral_multiplicity.hpp",
++          "sha256": "fd7883e8b468f6d03c4049f54dbe2cbba18138b31fb87f18f23ae95510619c78"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/checked_trace.hpp",
++          "sha256": "c7f1cc3a18529ec024c58b2d2b8281a574e2dc4619f0cdb6c7dde33684f2ca65"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/derivative_tail.hpp",
++          "sha256": "dad39be29cc7cdb5cfa904e32393922723abe6fed4e392bc0c5b06a2e9a73c9b"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/expm.hpp",
++          "sha256": "267a9044b686082ba4faf9777ec271ea91ec9eed3495219abd3d5559a680c85f"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/history_runtime.hpp",
++          "sha256": "aecb42fd96c0b5a318ce58680a0d35db7eb8ef8f9f807d695ff2572ae28517af"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/implicit_seed.hpp",
++          "sha256": "28485df22da5ae9ba90c61e2a61d8865b9a89ae54558d81372472848a3b0a6ce"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/linearize.hpp",
++          "sha256": "40f8ed4bc722636c3ce0573af150dcbe6afe59618e0dad1542aa9a2b9e7b4319"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/numerics/determinant.hpp",
++          "sha256": "60cfdf8d1449838b330dc5377b55237a661c76f6f0f6ec4c7429916ac925eea4"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/numerics/normalized_determinant.hpp",
++          "sha256": "13cf2016e9da929f2bcb573247be7b5c55bf676c15f824714ccd5bee1b8c80e6"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/numerics/symmetric_spectral.hpp",
++          "sha256": "a5784876a4d5a1e59dbed896fb88eb91356ce6a2e6c644d3d1edc6afb092173e"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/outer_predictor.hpp",
++          "sha256": "3fb9efd107718501bafb3adc84265c3ecb59c0f85caf3109a9c47788e68cd32d"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/outer_transaction.hpp",
++          "sha256": "a01488fcd922fa24497131e3269fad075a1d6173e56b086138560df32ab87869"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/path_error_control.hpp",
++          "sha256": "54a17383059b38ab16c87a0493c4b32502d7a5305e6e09f3f2718945ef85302c"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/recorded.hpp",
++          "sha256": "9c0f9fae85a033d1af1c8f6ffc718ea1f04e5f6ac6e94dacda233870d1ffaba6"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/schedule.hpp",
++          "sha256": "5c90e6cede9f24f124286cf10e2254a47a991e5d62f9bc7b3899ed62e6deb7e9"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/settings.hpp",
++          "sha256": "9f78719cb1cd86f52c3e521feb175f4706ebd6611ba1c496cd087dca6cf5eb16"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/solution_constraints.hpp",
++          "sha256": "e931b64a80dcd25c11cfd85bc255ea62c9c4fca0de7a222f1d892f1162af8a23"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/solver.hpp",
++          "sha256": "e2e517d9cb5a90383779d4d26eed66284b774d3646d1f74149541589f6ac1026"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/stress_observables.hpp",
++          "sha256": "5e0d7e7402f40e8be9d01c17bf74bcee51112044d0c5afb82300f48469c2e22f"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/tensor.hpp",
++          "sha256": "60bd884d25b0d2740a8d5715d1fd06364b0b6d214443bb6a2e5067b0e41a21bb"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/time.hpp",
++          "sha256": "7b9942fbb1eae296201ad12db210c0c767fb3cc53c1f37de37de3e517f13f4d1"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/include/atlas/trace_accuracy.hpp",
++          "sha256": "614b15ead09ee198dc9a92c755e27104031bab33e53eb03211324885c964ddb8"
++        },
++        {
++          "path": "cpp/profiles/implicit-path-v1/main.cpp",
++          "sha256": "e9aa2b6ba7d35ac6ac12f958864d409d2a3545c333290a7be312afa63b95f337"
++        },
++        {
++          "path": "docs/AGENT_REVIEW_POLICY.md",
++          "sha256": "8d35ca57150889ff1630626e6f677e7f4124997a58e26f9ef8555f9ba7dd6798"
++        },
++        {
++          "path": "docs/FORMULATION_CONTRACT.md",
++          "sha256": "5f3ee154c00ed61c9faf5f9d9cfd3ab52c4c9c206add88150316e579c3f24eab"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/atlas-integration-v1/EXPECTED_F_BINDING.json",
++          "sha256": "a2afc8030d12894cc1526f441c9edb925e07ffd05c1ffba5def5ff0822e4a1e7"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/atlas-integration-v1/asset-provision-v1/INDEX.json",
++          "sha256": "9d7c81df2989072ab83e6b4a7616a35da7a08545892a95101124e58b9eb98771"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/atlas-integration-v1/asset-provision-v1/SOURCE_FREEZE-v2.json",
++          "sha256": "a6c7d38f915068eae502539be574732d353af13c2e02f4038b5915dfb4c6824d"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/atlas-integration-v1/asset-provision-v1/compiled-assets-v1.tar.gz",
++          "sha256": "e527459cf66fe4703c66f4e9573bf614b3b2f50323a7cf7454aa0e6cf22b5880"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/atlas-integration-v1/profile-install-v1/coordinator-install-v1/INSTALLED.json",
++          "sha256": "d5402ee0e0078c8f4bbb45cff8268dcaac0512ee4b3ffdd34d2d745a0a98d0ec"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/atlas-integration-v1/profile-install-v1/coordinator-install-v1/generation-receipt.json",
++          "sha256": "2ddb504910d287ea4eec480d1f82eddaa00710bd5b17ff5b327b347f0e05e7d6"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/atlas-integration-v1/qualified-assets-v1/implicit-path-qualification.json",
++          "sha256": "61c68aed8407502c80e236a6fa4151098c06aa5515859b8b94e60089d4980a2a"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/README.md",
++          "sha256": "41be2e195d3eeca3575bcd51ab92f5362f6bc6b5e31738b70db005dd62a8627e"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/algebra-results.json",
++          "sha256": "6a60c285126d210ab0fea103a7240b1805278cf3750707e2f3524481ad11a9db"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/candidate-v1/triaxial_reference.py",
++          "sha256": "ef0ac091755f33d1739a27bb40de44bf8bd1a311fb8581561df7fe1b596dc828"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/check_algebra.py",
++          "sha256": "beca913777c5c3cab7eaf3e22f3f701aed10009c4af447d121ebd4eb48a0701a"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/check_policy.json",
++          "sha256": "9fe3f6062959abbbb5e5bff7f010b6536950b218a42cb6567819b0cfe162dc61"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/independent-review/README.md",
++          "sha256": "2c43a8989047062a59b7433eb8674b8e36777fa3d6cd5c6a74e8c0652f134da0"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/independent-review/algebra-results.json",
++          "sha256": "bf8022ce8a4938e63bb006685152a04a3832e1e401e0d7aa2d6431a767e5861d"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/independent-review/check_algebra.py",
++          "sha256": "b5b589f370a6434503db0ac486e2014ad18e0ad1cb537278a9ae176cefb7bc00"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/independent-review/spectral-contract-results.json",
++          "sha256": "5b5f6b3de0726a656dfa7f870d6117b197287ddb61fa5d5f3b251c81971f918a"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/delivery-v1/supplied-original-v2/source-receipt.json",
++          "sha256": "b73c13c16747220cc84e05e756095f01f4b3f563fe07150e580f275da101826d"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/FIDELITY_POLICY.json",
++          "sha256": "37b33d30bfc8fd3b2e5383f008f4c723fe64fc12151647682b68e08fb4157336"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/FINAL_SCOPE.md",
++          "sha256": "787518c5365ca13b9c75e6e79ebbd2c76f0802289e2a4633ada080a69535e94c"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/POLICY.json",
++          "sha256": "a35a37c46daef62db76f48e9bf3cd1b0ba8114299028bf4503f6c155ca6feef1"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/RESULTS.md",
++          "sha256": "e507be2a17b13b080c438f227319f844177b5b19a6335f1b4f6721270ebbf80a"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/SUPPLEMENT_POLICY.json",
++          "sha256": "338cb63ae2e52dd81b9fb79573d067e257a8748756f5f8b073a6cd7be306dd55"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/durable-evidence-v1/MANIFEST.json",
++          "sha256": "2cf5f3a557fdafd40a7a404823d4e00bb73283246321f5447f20c449289be94a"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/durable-evidence-v1/saved-evidence.tar.gz",
++          "sha256": "3aa84f704d9881885575ac98395a2fc83364ba6791eebb927eb66505b392f421"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/asset-provision-review-v2/qualified-assets-review-receipt.json",
++          "sha256": "90202b6834344c30f529d8b5c76ce992f1991ffc4c7992fc1ba859271bb23b52"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/asset-provision-review-v2/review-receipt.json",
++          "sha256": "696a8ebe7ceba234fb48a5b54a0a7b0b22233085fccc1a93b69edaacb668c6b8"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/durable-evidence-review/review-receipt.json",
++          "sha256": "6e3f14c861bb9c01d0d8230605eca7656b684fbc050d00fbec27a99343f9a9e2"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/MODEL_REVIEW.md",
++          "sha256": "1a2e7126678681b13b36c4871f2d2ec04cb773836d34e63341eda13e83aa8d65"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/binding-check-results.json",
++          "sha256": "6d197c3c309e45d3680475ae047c3f5a6ca3fda6382c00cca41f0326e1029b9d"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/check_final_binding.py",
++          "sha256": "56e81c8ef8f9b9ff3d3c8200dd15baf32ff188187e3b701b56c386bac60b7934"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/generated/models.hpp",
++          "sha256": "c00d9b0c8ed038810d5aa19d3c72def4824667696caac48076e3ab62d1c1ef13"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/generated/models.json",
++          "sha256": "2919cc4d5699cad7d4e0d8f8c30a7479333a4dfc3b7b185b685c96e64d68b591"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/write_record.py",
++          "sha256": "3bcfa17e1df981c4bfc53a7f04c988a047a2d690431e3014b24cac02fed84259"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/full-native-review-receipt.json",
++          "sha256": "be75b6aea24d09c030413bca04841ed573e2c08e1351a4cdb5c06956dfd63d09"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/profile-preservation-review/review-receipt.json",
++          "sha256": "56160ed4ca7602b52d3a246fe6c5a433ee0f5633868f78c2a4c9fd5afd2dce6c"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/qualified-build-v1/build-review.json",
++          "sha256": "e47890b8aba6d4f074f45635315acdcc569bc48a6acf5a47bc96798d4ab50e4a"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/recovery-review/review-receipt.json",
++          "sha256": "a564cd06fc7313f7a52010dca919e0f71e89ab6772ea69cb681a44ad146468f1"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/saved-native-early-gates-review-receipt.json",
++          "sha256": "f170e60fca01ddef407ad71969e887db6321f9ddaa9f8286d4a4387cdc116ad7"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/saved-wasm-chain-source-review-receipt.json",
++          "sha256": "574196c264cb53328598be1ed38da1ef03c84d8f6faf9ac28b9f8db835df7391"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/saved-wasm-full-review-receipt.json",
++          "sha256": "cdfff9aa36f613145aa85a1d32938bcf9780c13185fb69fe090fa964e4c63e72"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/legacy-prerequisite-recovery-v1/RECOVERY.json",
++          "sha256": "a1fb82caa767ef932087fa624ec51293471e08ace29ea6e84620213c56026ac6"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/lifecycle-corrected-policy.json",
++          "sha256": "e53c228b56d6346ee9d9b0ee468568e945db4c5cfc9d1cb0a159e056112d8f15"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/native-build-receipt.json",
++          "sha256": "01b3522a2dca4ee944c44f06870da72b9691cdc738c787e8fa4aa1562d5773aa"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/triaxial-policy.json",
++          "sha256": "8e00af1096a3f8e11c174715202a07618a6ce962298605a137b66e6b8eae179b"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/triaxial-reference-results.json",
++          "sha256": "664c06be77e5b693b5aa2ac0f0d63d33d1e4e70f7bd9a1123c0a96dbb94182fd"
++        },
++        {
++          "path": "docs/ingestion/lade-duncan-1975/fused-linear-v1/wasm-build-receipt.json",
++          "sha256": "b3fbe130c35a1248154b1367436b19061aea7ca9c7a7e70ac076b8608aac278f"
++        },
++        {
++          "path": "docs/models/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.md",
++          "sha256": "4d11f995cb8a2032b96d46c6c56b6f9a78167537f0bca010fb9798051401f7bb"
++        },
++        {
++          "path": "models/research/implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json",
++          "sha256": "120b93f319543518b2b87221ab7457afaca2a1fb5de78af901276e8e89a22e63"
++        },
++        {
++          "path": "schemas/model-v0.3.schema.json",
++          "sha256": "4bde28fab1b2d3defa98d11e94aeef1506d7e50f6e0e980686afb46069b29549"
++        },
++        {
++          "path": "tools/build_implicit_path_laboratory.py",
++          "sha256": "d84060987d6db5d99139194d4a2e03f1175767d7b1a73b163d65be413af8b1f2"
++        },
++        {
++          "path": "tools/generate_implicit_path.py",
++          "sha256": "f8899923305d00884cbd7cb839580937b48e6cf79171a18b6530256736be9222"
++        },
++        {
++          "path": "tools/provision_implicit_path_assets.py",
++          "sha256": "a537cd96ecf3bf0b214ef8d1a1b5c69c7e5e29df8a86aafe61e81300674cd599"
++        }
++      ],
++      "experimental_validation": "not_assessed",
++      "deployment_authorized": false
+     }
+   ]
+ }
+--- a/tests/test_j2_main_routing.mjs
++++ b/tests/test_j2_main_routing.mjs
+@@ -28,7 +28,7 @@
+ // The source keeps exact-ID lookup: a special ID cannot masquerade as VW96.
+ assert.match(source,/function model\(\)\{return models\.find\(x=>x\.id===\$\('model'\)\.value\);\}/);checks++;
+ for(const name of ['populate','simulate','renderCharts','describeExperiment','experimentOptions','scheduleUpdate','showExperiment','selectExperiment','matchExperiment','applyRunSpecification']){assert.ok(fn(name).includes('if(specialLaboratoryActive())return;'),name);checks++;}
+-for(const marker of ["import {setupTimedLaboratory}","import {setupJ2Laboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')})])","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
++for(const marker of ["import {setupTimedLaboratory}","import {setupJ2Laboratory}","import {setupImplicitPathLaboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})])","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
+ // Execute the exact ordinary import function with delayed file text; profile changes and
+ // newer ordinary revisions must suppress it before parsing/applying a stale request.
+ const applied=[];context.applied=applied;context.parseLaboratoryDocument=text=>({text});context.applyRunSpecification=spec=>applied.push(spec);context.toast=()=>{throw Error('Unexpected ordinary toast.');};
+--- a/docs/models/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.md
++++ b/docs/models/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.md
+@@ -3,9 +3,12 @@
+ Exact definition: `models/research/implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json`, SHA-256 `120b93f319543518b2b87221ab7457afaca2a1fb5de78af901276e8e89a22e63`.
+ This is the original full elastoplastic cohesionless-soil formulation, with
+ Atlas numerical choices. The 1977 curved-surface extension is a distinct law.
+-Current status is unapproved integration candidate; the
+-[delivery ledger](../ingestion/lade-duncan-1975/DELIVERY.md) records actual gates,
+-retained failures and eventual approval/browser status.
++The exact compiled realization has passed all eleven numerical qualification
++scopes and the separate nine-item independent agent review. The
++[accepted scientific report](../ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/MODEL_REVIEW.md),
++[current supported scope](../ingestion/lade-duncan-1975/fused-linear-v1/FINAL_SCOPE.md)
++and [delivery ledger](../ingestion/lade-duncan-1975/DELIVERY.md) distinguish this
++approval from pending packaged-browser and live-delivery qualification.
+ 
+ P. V. Lade and J. M. Duncan, *Elastoplastic Stress-Strain Theory for Cohesionless
+ Soil*, JGED 101(10), 1037–1053 (1975),
+@@ -43,8 +46,9 @@
+ all of the parent state. Warm initial guesses are always validated against the
+ actual parent; reused outer transactions require complete bitwise-identical
+ inputs. These are Atlas numerical choices, not a source-prescribed algorithm.
+-Generic explicit-fused linear arithmetic is under a distinct prospective
+-repair study; it does not alter the declarative law or relax numerical gates.
++Generic explicit-fused linear arithmetic is qualified in the distinct
++[fused-linear-v1 study](../ingestion/lade-duncan-1975/fused-linear-v1/RESULTS.md);
++it does not alter the declarative law or relax numerical gates.
+ 
+ Positive-definite stress and the closed numerical checks f≤k₁ and H≤k₁
+ bound this realization. A boundary endpoint permits no post-failure continuation. Source-derived
+@@ -71,6 +75,16 @@
+ four-model compiled catalogue includes historical regression witnesses;
+ public routing exposes this Lade definition alone. Profile packaging requires
+ exact model, source, generated catalogue, qualified artifact and independent
+-review identities. The current implementation and UI remain prospective until
+-the outstanding aggregate backend gate, independent approval and actual
+-packaged-browser tests pass.
++review identities. The installed generic runtime exactly matches the qualified
++fused-linear-v1 source digest. Actual main-atlas package/browser qualification
++and separately authorized live delivery remain pending; approval is limited to
++the exact compiled formulation, numerical policies and studied case matrices.
++All earlier failures and four nonmonotonic fixed-refinement diagnostics remain
++retained in the [qualification results](../ingestion/lade-duncan-1975/fused-linear-v1/RESULTS.md).
++
++Repeated minimum principal stresses use the exact lazy minimum with a
++cluster-average Clarke generalized Jacobian. This is a project numerical
++choice, not a classical directional derivative or a general Newton-convergence
++guarantee. The final supported-scope record details this choice together with
++midpoint elasticity, endpoint plastic sampling, transactional step doubling,
++validated reuse/predictor policies and explicit fused linear arithmetic.
+--- a/docs/STATUS.md
++++ b/docs/STATUS.md
+@@ -1,4 +1,6 @@
+-# Current project status — 1 November 2026
++# Current project status — 2 November 2026
++
++Lade–Duncan1975 compiled checkpoint — 2 November2026: the exact original full elastoplastic law, in its disclosed midpoint-elastic/local Eq19 implicit strain-path realization, passes all11 numerical scopes and the separate nine-item independent checklist. This is one exact reviewed formulation, separate from the14 ordinary definitions; its three internal regression witnesses and family discovery entry are not additional approvals. [Numerical results](ingestion/lade-duncan-1975/fused-linear-v1/RESULTS.md), [accepted scientific review](ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/MODEL_REVIEW.md) and [delivery ledger](ingestion/lade-duncan-1975/DELIVERY.md) distinguish compiled approval from atlas/package/browser and authorized live-delivery gates. Historical failures remain retained; no general parameter, postfailure, FE, finite-rotation or experimental-validation claim is added.
+ 
+ Current local ingestion checkpoint: **14 ordinary strain-path definitions**, including Original Cam Clay and Duncan–Chang1970 constant-nu endpoint-average. Implementation counts remain separate from scientific approval and live release; earlier12model tables below retain their historical checkpoint. Duncan E0–E5 are complete. The reviewed common scalar runtime is installed and fresh native/Wasm qualification passes the unchanged156browser-wire,36scoped and391scalar-case gates; all original failures are retained. The953file standard main-atlas package passes supported-input checks, exact-definition database export and actual Chrome source presets/replay/rejection/recovery/edits/reset, with12fetched asset hashes matching the package and no console/network errors. The predeclared GIS strict-default failure remains visible under its unchanged policy. [Current integration evidence](ingestion/duncan-chang-1970/integration-v2/README.md) and [delivery ledger](ingestion/duncan-chang-1970/DELIVERY.md) record the independent E6/E7 decision and release state. No gate relaxation, live delivery or remote action is claimed.
+ 
+--- a/ROADMAP.md
++++ b/ROADMAP.md
+@@ -1,8 +1,10 @@
+ # Constitutive Atlas roadmap
+ 
++Lade–Duncan1975 compiled checkpoint — 2 November2026: the exact original full elastoplastic law, in its disclosed midpoint-elastic/local Eq19 implicit strain-path realization, passes all11 numerical scopes and the separate nine-item independent checklist. This is one exact reviewed formulation, separate from the14 ordinary definitions; its three internal regression witnesses and family discovery entry are not additional approvals. [Numerical results](docs/ingestion/lade-duncan-1975/fused-linear-v1/RESULTS.md), [accepted scientific review](docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/MODEL_REVIEW.md) and [delivery ledger](docs/ingestion/lade-duncan-1975/DELIVERY.md) distinguish compiled approval from atlas/package/browser and authorized live-delivery gates. Historical failures remain retained; no general parameter, postfailure, FE, finite-rotation or experimental-validation claim is added.
++
+ Current Burgers delivery: the exact restricted continuous dry zero-spin timed formulation is source-mapped and independently approved, with fresh bounded native/Wasm qualification and main-laboratory creep/relaxation controls. It remains separate from the twelve ordinary strain-path formulations and does not claim experimental validation. Released5ae90008 passed all five required CI/deploy jobs;44live assets match the tested upload and actual relaxation/creep/full-result replay, source links and mobile layout pass. Exact dated receipts are tracked in [the Burgers ledger](docs/ingestion/burgers-itasca900/DELIVERY.md). Historical Burgers packets retain their original scope/metadata.
+ 
+-Last updated: 1 November 2026. Maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
++Last updated: 2 November 2026. Maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
+ 
+ This is the implementation and research plan for the [repository](https://github.com/benjym/constitutive-atlas) and [public laboratory](https://benjym.github.io/constitutive-atlas/). Progress is milestone-based, without a fixed deadline. Unchecked work below is planned, not delivered. The [research charter](docs/RESEARCH_CHARTER.md) governs admission and scientific claims; [architecture](docs/ARCHITECTURE.md) describes the current implementation.
+ 
+--- a/tests/test_laboratory_profile_policy.mjs
++++ b/tests/test_laboratory_profile_policy.mjs
+@@ -9,7 +9,7 @@
+ const catalogue={schema_version:'0.1',sha256:'0'.repeat(64),models:readdirSync(resolve(root,'models')).filter(p=>p.endsWith('.json')).sort().map(p=>JSON.parse(read('models/'+p)))};
+ const dep={definitionHash:id=>hash(read('models/'+id+'.json')),readEvidence:read};
+ const validate=(p=policy,s=supported,c=cases,d=dep)=>validateProfileAllocation(p,s,c,catalogue,d);
+-test('complete thirteen model allocation validates with every successful scope',()=>{assert.equal(validate().cases.length,35);assert.equal(loadProfileAllocation(resolve(root,'catalogue/laboratory-profile-policy.json'),catalogue).cases.length,35);});
++test('complete fourteen model allocation validates with every successful scope',()=>{assert.equal(validate().cases.length,36);assert.equal(loadProfileAllocation(resolve(root,'catalogue/laboratory-profile-policy.json'),catalogue).cases.length,36);});
+ for(const [name,mutate]of Object.entries({
+  'missing total rejection':p=>p.legacy_contract_rejections=[],
+  'effective model rejection':p=>p.legacy_contract_rejections.push({model:'linear-elastic',message:'legacy laboratory contract requires effective stress'}),

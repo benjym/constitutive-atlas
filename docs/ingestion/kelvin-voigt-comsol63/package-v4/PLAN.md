@@ -1,0 +1,3 @@
+# Current-origin normal package v4
+
+Prospective full standard build_web entrypoint, exact37d+Kelvin integration and independentlyacceptedV8y-axis-onlyfix. Fresh outputpackage-v4; exactreviewed15ordinarymainengine retained with existing41profilecases/policies, Hill and allotherdedicatedengines. Allmandatorybuildergatesand unchangedKelvin360valuechecks/replay/tamperrequired. Extra current15ordinarysupported-inputgate anddatabaseidentitycheck required. No localcompiledbuild required. Priorpackage-v3superseded beforeanycompiledobservations; physicalgates/references/model/backends unchanged. ParentownsactivePACKAGE-kelvin-current-origin-v4 slot.

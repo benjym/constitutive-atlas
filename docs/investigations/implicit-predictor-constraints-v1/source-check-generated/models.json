@@ -1,0 +1,153 @@
+{
+  "schema_version": "0.1",
+  "sha256": "a11a3eb270df7538d71a7679c515d9c8b5ce0ffdb7a6e9f73a1a79c50ae046e0",
+  "models": [
+    {
+      "schema_version": "0.3",
+      "id": "predictor-physical-constraint-fixture-v1",
+      "name": "Synthetic predictor physical-constraint fixture",
+      "family": "synthetic capability fixture",
+      "status": "draft",
+      "description": "Synthetic volumetric elastic-perfectly-plastic projection with independent physical cap; not a scientific material or public model.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "locator": "docs/investigations/implicit-predictor-constraints-v1/POLICY.md, synthetic closed-form projection capability fixture; no external material/source claim",
+          "role": "project synthetic analytical specification"
+        }
+      ],
+      "parameters": {
+        "K": {
+          "default": 100,
+          "min": 1,
+          "max": 1000,
+          "unit": "Pa",
+          "label": "K"
+        },
+        "Y": {
+          "default": 10,
+          "min": 1,
+          "max": 1000,
+          "unit": "Pa",
+          "label": "Y"
+        },
+        "physical_cap": {
+          "default": 100,
+          "min": 1,
+          "max": 1000,
+          "unit": "Pa",
+          "label": "physical_cap"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "initial": [
+            1,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "scale": "K",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "ep",
+          "shape": "scalar",
+          "unit": "1",
+          "initial": 0,
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "plastic_volume",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "gamma",
+          "shape": "scalar",
+          "unit": "1",
+          "initial": 0,
+          "scale": "1",
+          "semantics": {
+            "role": "plastic_multiplier",
+            "quantity": "incremental_plastic_volume",
+            "transformation": "scalar_invariant"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "mean",
+          "expr": "trace(sigma)/3"
+        },
+        {
+          "name": "f",
+          "expr": "(mean-Y)/K"
+        }
+      ],
+      "domain": [
+        "mean > 0*K"
+      ],
+      "solution_constraints": [
+        "(trace(sigma)/3-Y)/K <= 1e-10",
+        "trace(sigma)/3 <= physical_cap"
+      ],
+      "initial_checks": [
+        "f <= 1e-10"
+      ],
+      "equations": {
+        "sigma": "sigma-sigma_n-K*(trace(de)-gamma)*I",
+        "ep": "ep-ep_n-gamma",
+        "gamma": "sqrt(gamma**2+f**2)-gamma+f"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        },
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "total"
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "ep"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    }
+  ]
+}

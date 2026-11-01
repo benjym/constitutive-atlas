@@ -1,0 +1,5 @@
+# Accepted approval metadata — local commit
+
+Commit 147617cd50ac7f70d5deb2fac7538e0f16e81155 is preserved in isolated /private/tmp/atlas-clay2013-release-v2 with a portable textual commit.patch. Parent 6fed3e1e368337f02bbc67c2eef263d03b7c8c4a. Exact28reviewed metadata files only; all committed blobs equal the actual independent accepted decision4483d9ab, candidate clean and shared Git HEAD/index unchanged. Three normal review validators and complete9table export equality passed before commit. No equations/runtime/browser assets were changed.
+
+This source commit is ready for coordinated integration, not remote publication. It does not establish a final release base or candidate-wide CI/package/live status. All28write preconditions were independently verified against pinned pending Duncan0cd28fc2; recheck whichever final base is selected, preserve its repairs and qualify affected metadata before remote release. E8 remains open. No staging/commit in shared checkout, builds/materialcalls or remote action occurred.

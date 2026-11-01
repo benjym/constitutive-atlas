@@ -22,7 +22,8 @@ export function validateExperiment(record){
  require(stable(record.initial?.effective_stress)===stable([103720,103720,103720,0,0,0])&&record.initial?.void_ratio===.416,'Experiment initial state differs.');
  require(record.rows[0].axial_strain===0&&record.rows[0].radial_effective_stress===103720&&record.rows[0].q===0,'Source row zero contradicts initialization.');
  const rows=record.rows.filter(r=>r.axial_strain<=.01);
- require(rows.length===95&&rows.at(-1).axial_strain===.00992,'Source window differs.');return record;
+ require(rows.length===95&&rows.at(-1).axial_strain===.00992,'Source window differs.');
+ require(record.rows.at(-1).axial_strain===.1599,'Source endpoint differs.');return record;
 }
 export function defaultConfigurations(catalogue){
  return modelIds.map(id=>{const model=catalogue.models.find(m=>m.id===id);return {model:id,enabled:!!model,parameters:model?Object.fromEntries(Object.entries(model.parameters).map(([k,f])=>[k,f.default])):{},history:id==='modified-cam-clay'?{pc:200000}:{},variations:structuredClone(initialVariations[id])};});
@@ -41,11 +42,13 @@ function initialCheck(id,p,history){
   require(finite(history.pc)&&history.pc>0&&p.M*p.M*103720*(103720-history.pc)/(p.p_ref*p.p_ref)<=1e-8,'MCC starting stress lies outside its assumed yield surface.');
  }
 }
-export function makeStudy(record,catalogue,configurations){
+export function makeStudy(record,catalogue,configurations,lastRow=record.rows.length-1){
  validateExperiment(record);
  require(catalogue?.schema_version==='0.1'&&/^[a-f0-9]{64}$/.test(catalogue.sha256)&&Array.isArray(catalogue.models),'Exact compiled catalogue required.');
  require(Array.isArray(configurations)&&configurations.length===3&&new Set(configurations.map(c=>c.model)).size===3&&configurations.every(c=>modelIds.includes(c.model)),'Expected one configuration for each supported model.');
- const sourceRows=record.rows.slice(0,95),jobs=[],definitions=[];
+ // The original prefix remains available only for exact replay of saved studies.
+ require(lastRow===94||lastRow===record.rows.length-1,'Unsupported experiment window.');
+ const sourceRows=record.rows.slice(0,lastRow+1),jobs=[],definitions=[];
  const controls=Array.from({length:6},(_,i)=>({kind:i===1||i===2?'stress':'strain',coefficients:Array.from({length:6},(_,j)=>Number(i===j))}));
  const path={version:'experimental-recorded-path-0.1',coordinate:{name:'source_row_index',unit:'1',meaning:'path_order'},initial_strain:[0,0,0,0,0,0],controls,knots:sourceRows.map((r,i)=>({coordinate:i,targets:[r.axial_strain,r.radial_effective_stress,r.radial_effective_stress,0,0,0]}))};
  for(const config of configurations){
@@ -73,14 +76,14 @@ export function makeStudy(record,catalogue,configurations){
   }
  }
  require(jobs.length>0&&jobs.length<=39,'Select at least one available model (maximum 39 runs).');
- return structuredClone({version:'atlas-ensemble-study-0.1',experiment:{id:record.id,source_asset_sha256:record.source_asset_sha256,archive_sha256:record.provenance.archive_sha256,member_sha256:record.provenance.member_sha256,window:{first_row:0,last_row:94,max_axial_strain:.01,last_acquired_strain:.00992},control:'direct-author-membrane-corrected-radial-effective-stress',strain_origin:'first-observation',initial:record.initial,limitations:['Conditional replay: measured volumetric strain contributes to membrane-corrected radial input.','No consolidation history is inferred; MCC pc is an explicit unmeasured assumption.','Illustrative parameters; no calibration, applicability or experimental validation claim.']},catalogue_hash:catalogue.sha256,model_definitions:definitions,configurations,jobs});
+ return structuredClone({version:'atlas-ensemble-study-0.1',experiment:{id:record.id,source_asset_sha256:record.source_asset_sha256,archive_sha256:record.provenance.archive_sha256,member_sha256:record.provenance.member_sha256,window:{first_row:0,last_row:lastRow,max_axial_strain:lastRow===94?.01:sourceRows.at(-1).axial_strain,last_acquired_strain:sourceRows.at(-1).axial_strain},control:'direct-author-membrane-corrected-radial-effective-stress',strain_origin:'first-observation',initial:record.initial,limitations:['Conditional replay: measured volumetric strain contributes to membrane-corrected radial input.','No consolidation history is inferred; MCC pc is an explicit unmeasured assumption.','Illustrative parameters; no calibration, applicability or experimental validation claim.']},catalogue_hash:catalogue.sha256,model_definitions:definitions,configurations,jobs});
 }
 export function resultSeries(job,channel){
  if(!job.result)return [];
  return job.result.points.map(p=>[p.strain[0]*100,channel==='stress'?(p.state[0]-p.state[1])/1000:p.strain.slice(0,3).reduce((a,b)=>a+b,0)*100]);
 }
 export function exportStudy(study,catalogue,record){
- const expected=makeStudy(record,catalogue,study.configurations);
+ const expected=makeStudy(record,catalogue,study.configurations,study.experiment?.window?.last_row);
  for(const key of ['version','experiment','catalogue_hash','model_definitions','configurations'])require(stable(study[key])===stable(expected[key]),'Study identity mismatch: '+key);
  require(Array.isArray(study.jobs)&&study.jobs.length===expected.jobs.length,'Run count mismatch.');
  for(let i=0;i<study.jobs.length;i++){
@@ -97,5 +100,5 @@ export function importStudy(text,catalogue,record){
  const document=parseRecordedJSON(text);require(keys(document,['version','study'])&&document.version==='atlas-ensemble-export-0.1','Unsupported ensemble export.');
  exportStudy(document.study,catalogue,record);
  // Saved outcomes are inspected for identity, then all executable requests replay afresh.
- return makeStudy(record,catalogue,document.study.configurations);
+ return makeStudy(record,catalogue,document.study.configurations,document.study.experiment.window.last_row);
 }

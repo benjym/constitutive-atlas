@@ -1,0 +1,101 @@
+// Synthetic callback/analytical capability tests; no production material kernel.
+#include "atlas/solver.hpp"
+#include <iomanip>
+#include <iostream>
+#include <string>
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#define FIXTURE_EXPORT EMSCRIPTEN_KEEPALIVE
+#else
+#define FIXTURE_EXPORT
+#endif
+using namespace atlas;
+namespace {
+bool all=true;
+void number(std::ostream&o,double x){if(std::isfinite(x))o<<std::setprecision(17)<<x;else o<<"null";}
+void array(std::ostream&o,const State&v){o<<'[';for(size_t i=0;i<v.size();++i){if(i)o<<',';number(o,v[i]);}o<<']';}
+void tensor(std::ostream&o,const Sym<double>&x){array(o,State(x.v.begin(),x.v.end()));}
+void diagnostics(std::ostream&o,const Diagnostics&d){o<<"{\"substeps\":"<<d.substeps<<",\"partition_retries\":"<<d.partition_retries<<",\"increment_fractions\":";array(o,d.increment_fractions);o<<",\"accepted_increments\":[";for(size_t i=0;i<d.accepted_increments.size();++i){if(i)o<<',';array(o,d.accepted_increments[i]);}o<<"]}";}
+void advance_json(std::ostream&o,const Advance&a){o<<"{\"ok\":"<<(a.ok?"true":"false")<<",\"state\":";array(o,a.state);o<<",\"diagnostics\":";diagnostics(o,a.diagnostics);o<<'}';}
+Advance synthetic(const Sym<double>&t,const State&fractions={1.},int retry=0,double slope=78000000.){
+ Advance a;a.ok=true;a.state={0.,slope*t.v[1],slope*t.v[1],0.,0.,0.,.7};a.diagnostics.increment_fractions=fractions;a.diagnostics.partition_retries=retry;a.diagnostics.substeps=int(fractions.size());
+ for(double f:fractions){State x;for(double v:t.v)x.push_back(f*v);a.diagnostics.accepted_increments.push_back(x);}return a;
+}
+void emit(std::ostream&o,const std::string&id,bool passed,const std::string&extra=""){
+ if(!all){} // all is an aggregate verdict, never an early-exit selector.
+ static bool first=true;if(!first)o<<',';first=false;all=all&&passed;o<<"{\"id\":\""<<id<<"\",\"passed\":"<<(passed?"true":"false")<<extra<<'}';
+}
+std::string helper_json(const Advance&base,const Sym<double>&total,const Sym<double>&direction,double h,const ControlDerivative&r,int calls){
+ std::ostringstream o;o<<",\"parent\":[0,0,0,0,0,0,0.7],\"base\":";advance_json(o,base);o<<",\"total\":";tensor(o,total);o<<",\"direction\":";tensor(o,direction);o<<",\"initial_h\":";number(o,h);o<<",\"ok\":"<<(r.ok?"true":"false")<<",\"value\":";number(o,r.value);o<<",\"selected_h\":";number(o,r.h);o<<",\"evaluator_calls\":"<<calls<<",\"probes\":[";
+ for(size_t i=0;i<r.probes.size();++i){if(i)o<<',';const auto&p=r.probes[i];o<<"{\"h\":";number(o,p.h);o<<",\"representable\":"<<(p.representable?"true":"false")<<",\"comparable\":"<<(p.comparable?"true":"false")<<",\"finite_slope\":"<<(p.finite_slope?"true":"false")<<",\"slope\":";number(o,p.slope);o<<",\"increment\":";tensor(o,p.increment);o<<",\"advance\":";advance_json(o,p.advance);o<<'}';}o<<']';return o.str();
+}
+std::string run(){
+ all=true;std::ostringstream out;out<<"{\"identity\":\"control-partition-derivative-fixture-v1\",\"cases\":[";
+ Sym<double>total,direction;direction.v[1]=direction.v[2]=1.;const double h=.0001;auto base=synthetic(total);
+ auto observe=[](const State&z){return .5*(z[1]+z[2]);};
+ for(const std::string mode:{"jump-recovery","exact-boundary","failed-probe-reset","nonfinite-probe-reset","unstable-slopes","negative-slope","zero-slope","unrepresentable","protocol3-direction"}){
+  auto t=total,d=direction;auto b=base;int calls=0;double initial_h=h;
+  if(mode=="unrepresentable"){t.v[1]=t.v[2]=1e20;b=synthetic(t);initial_h=1e-9;}
+  if(mode=="negative-slope")b=synthetic(t,{1.},0,-78000000.);
+  if(mode=="zero-slope")b=synthetic(t,{1.},0,0.);
+  if(mode=="protocol3-direction"){d={};d.v[0]=1;d.v[1]=d.v[2]=-.5;}
+  const State untouched=b.state;
+  auto eval=[&](const Sym<double>&x){++calls;auto a=synthetic(x);if(mode=="jump-recovery"&&calls==1||mode=="exact-boundary"){a=synthetic(x,{.5,.5});a.state[1]-=15600;a.state[2]-=15600;}
+   if(mode=="failed-probe-reset"&&calls==2){a.ok=false;a.state=untouched;}
+   if(mode=="nonfinite-probe-reset"&&calls==2)a.state[1]=std::numeric_limits<double>::quiet_NaN();
+   if(mode=="unstable-slopes")a=synthetic(x,{1.},0,calls%2?78000000.:156000000.);
+   if(mode=="negative-slope")a=synthetic(x,{1.},0,-78000000.);
+   if(mode=="zero-slope")a=synthetic(x,{1.},0,0.);
+   if(mode=="protocol3-direction"){a.state[0]=78000000.*x.v[0];a.state[1]=a.state[2]=0;if(calls==1){a.diagnostics=synthetic(x,{.5,.5}).diagnostics;a.state[0]-=15600;}}
+   return a;};
+  auto obs=[&](const State&z){return mode=="protocol3-direction"?z[0]-.5*(z[1]+z[2]):observe(z);};
+  auto r=consistent_control_derivative(b,t,d,initial_h,eval,obs);
+  bool expected=mode!="exact-boundary"&&mode!="unstable-slopes"&&mode!="unrepresentable";
+  int expected_calls=mode=="unrepresentable"?0:!expected?11:mode=="jump-recovery"||mode=="protocol3-direction"?3:mode=="failed-probe-reset"||mode=="nonfinite-probe-reset"?4:2;
+  double want=mode=="negative-slope"?-78000000.:mode=="zero-slope"?0.:78000000.;
+  bool pass=r.ok==expected&&calls==expected_calls&&b.state==untouched;
+  if(expected)pass=pass&&r.h==std::ldexp(initial_h,-(expected_calls-1))&&std::abs(r.value-want)<=1e-6;
+  emit(out,mode,pass,helper_json(b,t,d,initial_h,r,calls));
+ }
+ // Actual-affine audit, including non-dyadic retry and unchanged zero/shear channels.
+ Sym<double>a,b;a.v={.003,-.002,0,.0004,-.0005,0};b=a;b.v[1]+=.00001;b.v[2]+=.00001;
+ auto x=synthetic(a,{1./3.,1.-1./3.},1),y=x;
+ for(int j=0;j<6;++j){x.diagnostics.accepted_increments[0][j]=a.v[j]/3.;x.diagnostics.accepted_increments[1][j]=a.v[j]-x.diagnostics.accepted_increments[0][j];}
+ y=x;for(size_t i=0;i<2;++i)for(int j=0;j<6;++j)y.diagnostics.accepted_increments[i][j]=x.diagnostics.accepted_increments[i][j]+x.diagnostics.increment_fractions[i]*(b.v[j]-a.v[j]);
+ emit(out,"non-dyadic-affine",comparable_control_partition(x,a,y,b));
+ for(const std::string defect:{"counts","order","retry","missing-increments","tensor-length","nonfinite-fraction","coverage","affine-defect","unchanged-channel"}){
+  auto bad=y;
+  if(defect=="counts")bad.diagnostics.increment_fractions.push_back(.1);
+  if(defect=="order")std::swap(bad.diagnostics.increment_fractions[0],bad.diagnostics.increment_fractions[1]);
+  if(defect=="retry")bad.diagnostics.partition_retries=0;
+  if(defect=="missing-increments")bad.diagnostics.accepted_increments.clear();
+  if(defect=="tensor-length")bad.diagnostics.accepted_increments[0].pop_back();
+  if(defect=="nonfinite-fraction")bad.diagnostics.increment_fractions[0]=std::numeric_limits<double>::quiet_NaN();
+  if(defect=="coverage"){auto xx=x;xx.diagnostics.increment_fractions={.4,.4};bad.diagnostics.increment_fractions={.4,.4};emit(out,"reject-"+defect,!comparable_control_partition(xx,a,bad,b));continue;}
+  if(defect=="affine-defect")bad.diagnostics.accepted_increments[0][1]+=1e-10;
+  if(defect=="unchanged-channel")bad.diagnostics.accepted_increments[0][5]=std::numeric_limits<double>::denorm_min();
+  emit(out,"reject-"+defect,!comparable_control_partition(x,a,bad,b));
+ }
+ // Real generated declarations exercise the production protocol1 path for
+ // residual and midpoint-rate laws, not a hand-written integration kernel.
+ for(size_t m=0;m<models().size();++m){
+  auto p=default_parameters(int(m));auto parent=initial_state(int(m));const auto saved=parent;
+  Sym<double>de;Advance ans;bool ok=controlled_step(int(m),parent,p,1,.001,100000.,0,de,ans);
+  const State expected={130000.,100000.,100000.,0.,0.,0.,.69915};bool pass=ok&&ans.state.size()==7&&parent==saved;
+  if(pass)for(int j=0;j<7;++j)pass=pass&&std::abs(ans.state[j]-expected[j])<=(j<6?1e-6:1e-12);
+  pass=pass&&std::abs(de.v[1]+.00025)<=1e-12&&std::abs(de.v[2]+.00025)<=1e-12;
+  auto trial=integrate(int(m),parent,de,p);auto probe_de=de;probe_de.v[1]+=1e-6;probe_de.v[2]+=1e-6;auto probe=integrate(int(m),parent,probe_de,p);
+  pass=pass&&comparable_control_partition(trial,de,probe,probe_de);
+  std::ostringstream extra;extra<<",\"model\":\""<<models()[m].id<<"\",\"parent\":";array(extra,parent);extra<<",\"increment\":";tensor(extra,de);extra<<",\"advance\":";advance_json(extra,ans);extra<<",\"affine_base\":";advance_json(extra,trial);extra<<",\"affine_probe\":";advance_json(extra,probe);
+  emit(out,models()[m].rate?"analytic-rate-control":"analytic-residual-control",pass,extra.str());
+  auto invalid=parent;invalid[6]=-1.;auto failed=integrate(int(m),invalid,de,p);auto recovery=integrate(int(m),parent,de,p);
+  std::ostringstream rr;rr<<",\"invalid_parent\":";array(rr,invalid);rr<<",\"failure\":";advance_json(rr,failed);rr<<",\"recovery\":";advance_json(rr,recovery);
+  emit(out,models()[m].rate?"rate-invalid-recovery":"residual-invalid-recovery",!failed.ok&&failed.state==invalid&&recovery.ok&&parent==saved,rr.str());
+ }
+ out<<"],\"passed\":"<<(all?"true":"false")<<'}';return out.str();
+}
+}
+extern "C" FIXTURE_EXPORT const char* atlas_control_partition_fixture(){static std::string result;result=run();return result.c_str();}
+#ifndef __EMSCRIPTEN__
+int main(){std::cout<<atlas_control_partition_fixture()<<'\n';return all?0:1;}
+#endif

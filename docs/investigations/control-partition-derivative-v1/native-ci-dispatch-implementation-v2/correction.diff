@@ -1,0 +1,235 @@
+--- v1/tools/check_native_fixture_dispatch.py
++++ v2/tools/check_native_fixture_dispatch.py
+@@ -12,6 +12,8 @@
+ TIMEOUT=120
+ CTEST_TIMEOUT=1800
+ SUITES={'macos-main':['-E','^atlas_recorded$'],'linux-main':['-E','^(atlas_python|atlas_recorded)$'],'recorded':['-R','^atlas_recorded$']}
++NATIVE_CMAKE_SHA256='61f7fb538fcb1f2d03259ed4eda531fc9f41bc6119ffed56f3ea49dd8c762a0d'
++REGISTRATIONS=[('atlas_numerical','atlas_numerical_tests',[]),('atlas_recorded','atlas_recorded_tests',[]),('atlas_tensor_square','atlas_tensor_square_tests',[]),('atlas_python',None,['-m','unittest','discover','-s','tests','-v']),('atlas_time','atlas_time_tests',[]),('atlas_capacity','atlas_capacity_tests',[]),('atlas_recorded_fixture','atlas_recorded_fixture_tests',[]),('atlas_expm_context','atlas_expm_probe',['0,0,0,0,0,0','1']),('atlas_log1p_context','atlas_log1p_probe',['0']),('atlas_scalar_functions',None,[])]
+ IDENTITIES={'14': {'models': {'barodesy-clay-2017': '0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477', 'barodesy-sand': '3a61b5373404d6973a2957bd0fa21692e10b49e974cdf87eff047d5531851239', 'drucker-prager': 'b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877', 'hypoplastic-clay-2005': '247de2f1792cf220748671b4563c7dd290c5b91fcc95eda5977ac03e01fa6ff5', 'hypoplastic-clay-2013': '6811580cf9c0678605b9bb7d93a524743bbe5b5cb1f547bd232d090aeda950e4', 'hypoplastic-sand-igs97': '83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86', 'hypoplastic-sand-vw96': '1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61', 'linear-elastic': '33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041', 'modified-cam-clay': 'e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14', 'mohr-coulomb': '6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5', 'research-hp-extracted-asbs-gis-2024-v03': '439b785e1da3075209c6d5ca43a991a441463a915f31f2e9c77b5c6835e20dbc', 'tresca-associated-perfect-bk2022v1-be': '19acebed37d59120e49c5dff698e2b7d2a2693bbce9ec35c8bcbc65954819e18', 'original-cam-clay-sw-electronic-log-recovery-v1': '637ba72335c3464fec427c773d214d21d06e9e26bc737d15307aae2f67111b34', 'duncan-chang-1970-endpoint-average': '452b49ef48668c0c5d8aba20dfca398235fa45431e853ee923be05a17c7c88a0'}, 'catalogue_embedded_sha256': '38f03e0099cfee9c89deaa59e729ac43563d4d39b17d321721a199e58d3b77d4', 'catalogue_file_sha256': '77e85070a62ada86d47af3890817f57d6ce0194e646a396dbf7ff75c75f9834a', 'policy_id': 'supported-package-fourteen-duncan-v1'}, '15': {'models': {'barodesy-clay-2017': '0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477', 'barodesy-sand': '3a61b5373404d6973a2957bd0fa21692e10b49e974cdf87eff047d5531851239', 'drucker-prager': 'b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877', 'hypoplastic-clay-2005': '247de2f1792cf220748671b4563c7dd290c5b91fcc95eda5977ac03e01fa6ff5', 'hypoplastic-clay-2013': '6811580cf9c0678605b9bb7d93a524743bbe5b5cb1f547bd232d090aeda950e4', 'hypoplastic-sand-igs97': '83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86', 'hypoplastic-sand-vw96': '1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61', 'linear-elastic': '33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041', 'modified-cam-clay': 'e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14', 'mohr-coulomb': '6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5', 'research-hp-extracted-asbs-gis-2024-v03': '439b785e1da3075209c6d5ca43a991a441463a915f31f2e9c77b5c6835e20dbc', 'tresca-associated-perfect-bk2022v1-be': '19acebed37d59120e49c5dff698e2b7d2a2693bbce9ec35c8bcbc65954819e18', 'original-cam-clay-sw-electronic-log-recovery-v1': '637ba72335c3464fec427c773d214d21d06e9e26bc737d15307aae2f67111b34', 'duncan-chang-1970-endpoint-average': '452b49ef48668c0c5d8aba20dfca398235fa45431e853ee923be05a17c7c88a0', 'ramberg-osgood-ansys242': 'c949cb14269846ec46a7e8f25718e17e8c8eab394b6ee09204f029e1ca15a3e2'}, 'catalogue_embedded_sha256': '29c12dec5d2ec9ce1ea84b8991757e4f03af1122a92095689c5b6f81b64c342f', 'catalogue_file_sha256': 'e07f3a21927b28aad8865085216f17d7152dc6f6a67c3663cabbe97c78b606ee', 'policy_id': 'supported-package-fifteen-ramberg-v1'}, '16': {'models': {'barodesy-clay-2017': '0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477', 'barodesy-sand': '3a61b5373404d6973a2957bd0fa21692e10b49e974cdf87eff047d5531851239', 'drucker-prager': 'b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877', 'hypoplastic-clay-2005': '247de2f1792cf220748671b4563c7dd290c5b91fcc95eda5977ac03e01fa6ff5', 'hypoplastic-clay-2013': '6811580cf9c0678605b9bb7d93a524743bbe5b5cb1f547bd232d090aeda950e4', 'hypoplastic-sand-igs97': '83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86', 'hypoplastic-sand-vw96': '1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61', 'linear-elastic': '33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041', 'modified-cam-clay': 'e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14', 'mohr-coulomb': '6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5', 'research-hp-extracted-asbs-gis-2024-v03': '439b785e1da3075209c6d5ca43a991a441463a915f31f2e9c77b5c6835e20dbc', 'tresca-associated-perfect-bk2022v1-be': '19acebed37d59120e49c5dff698e2b7d2a2693bbce9ec35c8bcbc65954819e18', 'original-cam-clay-sw-electronic-log-recovery-v1': '637ba72335c3464fec427c773d214d21d06e9e26bc737d15307aae2f67111b34', 'duncan-chang-1970-endpoint-average': '452b49ef48668c0c5d8aba20dfca398235fa45431e853ee923be05a17c7c88a0', 'ramberg-osgood-ansys242': 'c949cb14269846ec46a7e8f25718e17e8c8eab394b6ee09204f029e1ca15a3e2', 'manzari-dafalias-1997-constant-m-be-v1': '28ea763d0d7d059335ad3375476895d551f2e71c9ab81499141db80af0339064'}, 'catalogue_embedded_sha256': 'bedc53e3186a253e9f1e1545a7e46a5fc8fd9f76dce4f5b9721edc21347e9e7c', 'catalogue_file_sha256': 'f38da28fd2857e03e1def0c2ed70dc2a5b999984ef087360b324c933a2da3a99', 'policy_id': 'prospective16qualification-map; no scientific admission/policy16 fabricated'}}
+ HELPERS={'14':'2ec42239c58d823d7d0575f57918b07451186fc4f46ef44aacf4d9338fa34609','15':'37db9c734030735d2290e6e4e0935ed714a8b2e5d349678a881e6d69afb35a7a','16':'37db9c734030735d2290e6e4e0935ed714a8b2e5d349678a881e6d69afb35a7a'}
+ POLICIES={'14':'f0e242cfd9592ab3bf94ab1af16517a347a4bfcdded6fde24d84c73656297094','15':'915a91d2c6ee5ce7fba70f484a50beba313f4f4dc340283af0e2c4a823983029','16':'915a91d2c6ee5ce7fba70f484a50beba313f4f4dc340283af0e2c4a823983029'}
+@@ -63,6 +65,39 @@
+     helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+     return helper
+ 
++def validate_registrations(source,build,cache):
++    require(digest_file(source/'CMakeLists.txt')==NATIVE_CMAKE_SHA256,'unqualified native CMake source identity')
++    source_rows=re.findall(r'add_test\(NAME ([^ ]+) COMMAND', (source/'CMakeLists.txt').read_text())
++    require(source_rows==[r[0]for r in REGISTRATIONS],'source native registration inventory changed')
++    python_entries=[line.split('=',1)[1]for line in cache.splitlines()if line.startswith(('_Python3_EXECUTABLE:INTERNAL=','Python3_EXECUTABLE:FILEPATH='))]
++    require(python_entries and len({str(Path(p).resolve())for p in python_entries})==1,'missing/ambiguous CMake Python executable')
++    python=Path(python_entries[0])
++    require(python.is_absolute(),'CMake Python executable must be absolute')
++    suffix='.dylib'if sys.platform=='darwin'else '.so'if sys.platform.startswith('linux')else None
++    require(suffix is not None,'unqualified native platform')
++    scalar=build/('libatlas_scalar_probe'+suffix)
++    expected=[]
++    for name,target,args in REGISTRATIONS:
++        if name=='atlas_scalar_functions':command=[str(python),str(source/'tools/test_scalar_functions.py'),str(scalar)]
++        elif target is None:command=[str(python),*args]
++        else:command=[str(build/target),*args]
++        expected.append([name,*command])
++    text=(build/'CTestTestfile.cmake').read_text();observed=[]
++    for line in text.splitlines():
++        line=line.strip()
++        require(not re.match(r'(?:subdirs|include)\s*\(',line,re.I),'unexpected external CTest registration')
++        if re.match(r'add_test\b',line,re.I):
++            match=re.fullmatch(r'add_test\(((?:"(?:[^"\\]|\\.)*"\s*)+)\)',line)
++            require(match is not None,'unqualified CTest registration syntax')
++            observed.append([json.loads(token)for token in re.findall(r'"(?:[^"\\]|\\.)*"',match.group(1))])
++    require(observed==expected,'generated native registration identity/order/command mismatch')
++    require(not re.search(r'\b(?:WILL_FAIL|DISABLED|SKIP_RETURN_CODE|SKIP_REGULAR_EXPRESSION|PASS_REGULAR_EXPRESSION|FAIL_REGULAR_EXPRESSION|ENVIRONMENT_MODIFICATION)\b',text),'unexpected generated CTest outcome override')
++    # Bind every registration's executable and the scalar test's script/library,
++    # not only the two strict-contract executables.
++    artifacts={str(Path(row[1])):digest_file(Path(row[1]))for row in expected}
++    for path in [source/'tools/test_scalar_functions.py',scalar]:artifacts[str(path)]=digest_file(path)
++    return expected,artifacts
++
+ def context(catalogue,source,build):
+     require(__debug__,'original analytical helper requires Python assertions enabled')
+     source=source.resolve();build=build.resolve();catalogue=catalogue.resolve()
+@@ -76,10 +111,11 @@
+     cache=(build/'CMakeCache.txt').read_text()
+     entries=[line.split('=',1)[1] for line in cache.splitlines() if line.startswith('CMAKE_HOME_DIRECTORY:INTERNAL=')]
+     require(len(entries)==1 and Path(entries[0]).resolve()==source,'CMake build source binding mismatch')
++    registrations,registered_artifacts=validate_registrations(source,build,cache)
+     bindings={str(p.relative_to(source)):digest_file(p) for folder in ['models','cpp','atlas','schemas','tests','tools','cmake','catalogue','.github'] for p in sorted((source/folder).rglob('*')) if p.is_file() and p.suffix not in ['.pyc'] and '__pycache__' not in p.parts}
+     bindings['CMakeLists.txt']=digest_file(source/'CMakeLists.txt')
+     artifacts={name:digest_file(build/name) for name in ['atlas_numerical_tests','atlas_recorded_tests','generated/models.json','generated/models.hpp','CTestTestfile.cmake','CMakeCache.txt']}
+-    meta={'route':size,'catalogue_path':str(catalogue),'catalogue_file_sha256':sha(raw),'catalogue_embedded_sha256':blob['sha256'],'model_definitions':mapping,'source_root':str(source),'build':str(build),'source_files':bindings,'original_helper_sha256':digest_file(source/'tools/check_native_fixture_contracts.py'),'policy_sha256':digest_file(policy),'policy_id':policy_obj['id'],'artifacts':artifacts,'dispatcher_sha256':digest_file(Path(__file__)),'md_contract_helper_sha256':digest_file(Path(md.__file__))}
++    meta={'route':size,'catalogue_path':str(catalogue),'catalogue_file_sha256':sha(raw),'catalogue_embedded_sha256':blob['sha256'],'model_definitions':mapping,'source_root':str(source),'build':str(build),'source_files':bindings,'original_helper_sha256':digest_file(source/'tools/check_native_fixture_contracts.py'),'policy_sha256':digest_file(policy),'policy_id':policy_obj['id'],'artifacts':artifacts,'registrations':registrations,'registered_artifacts':registered_artifacts,'dispatcher_sha256':digest_file(Path(__file__)),'md_contract_helper_sha256':digest_file(Path(md.__file__))}
+     return meta,helper
+ 
+ def original_contracts(size):
+@@ -104,7 +140,7 @@
+         self.output.parent.mkdir(parents=True,exist_ok=True)
+         # Exclusive creation occurs before any observation, and never overwrites.
+         with self.output.open('x') as handle:handle.write('{}\n')
+-        self.value={'identity':'native-fixture-closed-dispatch-v1','operation':operation,'status':'running','processes':[]}
++        self.value={'identity':'native-fixture-closed-dispatch-v2','operation':operation,'status':'running','processes':[]}
+         self.save()
+     def save(self):
+         self.output.write_text(json.dumps(self.value,indent=2,allow_nan=False)+'\n')
+@@ -118,8 +154,13 @@
+             self.raw(row,result.stdout,result.stderr)
+             row['status']='completed';self.save();return row
+         except BaseException as exc:
+-            if isinstance(exc,subprocess.TimeoutExpired):self.raw(row,exc.stdout or b'',exc.stderr or b'')
+-            row.update(status='failed',error_type=type(exc).__name__,error=str(exc));self.save();raise
++            row.update(status='failed',error_type=type(exc).__name__,error=str(exc));self.save()
++            if isinstance(exc,subprocess.TimeoutExpired):
++                row['timeout_expired']=True;row['timeout_command']=list(map(str,exc.cmd))if isinstance(exc.cmd,(list,tuple))else str(exc.cmd);row['timeout_elapsed_limit']=exc.timeout;self.save()
++                try:self.raw(row,exc.stdout or b'',exc.stderr or b'')
++                except UnicodeDecodeError as decode:
++                    row['decode_error']={'type':type(decode).__name__,'message':str(decode)};self.save()
++            raise
+     def raw(self,row,stdout,stderr):
+         for key,data in [('stdout',stdout),('stderr',stderr)]:
+             require(type(data) is bytes,'transport must return raw bytes')
+@@ -176,7 +217,9 @@
+     env=md.selector_env(base_env,md.NATIVE,md.NUMERICAL if meta['route']=='16' and suite!='recorded' else None)
+     ctest_executable=shutil.which('ctest')
+     require(ctest_executable is not None,'ctest executable not found')
+-    receipt.value['ctest_executable_sha256']=digest_file(Path(ctest_executable))
++    resolved_ctest=Path(ctest_executable).resolve()
++    receipt.value['ctest_executable_sha256']=digest_file(resolved_ctest)
++    receipt.value['ctest_executable_path']=ctest_executable;receipt.value['ctest_executable_resolved_path']=str(resolved_ctest);receipt.save()
+     log=Path(meta['build'])/'Testing/Temporary/LastTest.log'
+     if log.is_file():
+         raw=log.read_bytes();receipt.value['previous_ctest_log']={'path':str(log),'sha256':sha(raw),'base64':base64.b64encode(raw).decode('ascii')};receipt.save()
+@@ -188,11 +231,17 @@
+     finally:
+         if log.is_file():
+             raw=log.read_bytes();receipt.value['ctest_log']={'path':str(log),'sha256':sha(raw),'base64':base64.b64encode(raw).decode('ascii')};receipt.save()
++    selected_after=shutil.which('ctest')
++    receipt.value['ctest_postflight']={'selected_path':selected_after,'same_path':selected_after==ctest_executable}
++    if selected_after==ctest_executable:
++        resolved_after=Path(selected_after).resolve()
++        receipt.value['ctest_postflight']['resolved_path']=str(resolved_after)
++        receipt.value['ctest_postflight']['sha256']=digest_file(resolved_after)
++    receipt.save()
++    require(selected_after==ctest_executable and receipt.value['ctest_postflight'].get('resolved_path')==str(resolved_ctest) and receipt.value['ctest_postflight'].get('sha256')==receipt.value['ctest_executable_sha256'],'CTest executable path/content changed during observation')
+     require(type(row['returncode']) is int and row['returncode']==0,'positive CTest suite failed')
+     require(log.is_file(),'missing positive CTest log')
+-    testfile=(Path(meta['build'])/'CTestTestfile.cmake').read_text()
+-    names=re.findall(r'^add_test\("([^"\n]+)" ',testfile,re.M)
+-    require(names and len(names)==len(set(names)) and len(names)==len(re.findall(r'^add_test\(',testfile,re.M)),'unknown/duplicate CTest registration syntax')
++    names=[row[0]for row in meta['registrations']]
+     expected=[n for n in names if (re.search(SUITES[suite][1],n) is not None)==(SUITES[suite][0]=='-R')]
+     observed=re.findall(r'^\d+/\d+ Testing: ([^\n]+)$',raw.decode('utf-8',errors='strict'),re.M)
+     require(expected and observed==expected,'CTest log coverage/order differs from full selected suite')
+--- v1/tools/check_md1997_native_fixture_contract.py
++++ v2/tools/check_md1997_native_fixture_contract.py
+@@ -38,7 +38,9 @@
+     matching=[section for section in sections if re.match(r'^\d+/\d+ Testing: atlas_numerical\n',section)]
+     require(len(matching)==1,'missing/duplicate numerical CTest log section')
+     section=matching[0]
+-    require(POSITIVE_STDOUT in section,'missing distinct MD positive fixture label')
+-    require(section.count(POSITIVE_STDOUT)==1 and text.count(POSITIVE_STDOUT)==1,'duplicate MD profile label')
++    require(section.count('\nOutput:\n----------------------------------------------------------\n')==1 and section.count('<end of output>\n')==1,'missing/ambiguous numerical output region')
++    output=section.split('\nOutput:\n----------------------------------------------------------\n',1)[1].split('<end of output>\n',1)[0]
++    require(output.splitlines(keepends=True).count(POSITIVE_STDOUT)==1,'missing exact MD positive fixture output line')
++    require(section.count(POSITIVE_STDOUT)==1 and text.count(POSITIVE_STDOUT)==1,'duplicate/metadata MD profile label')
+     require('Test Passed.' in section,'numerical test did not pass')
+     require('Strict original default fixtures;' not in section and 'Explicit valid-domain/GIS-depth20 fixtures;' not in section,'legacy profile used for positive numerical test')
+--- v1/tests/test_native_fixture_dispatch.py
++++ v2/tests/test_native_fixture_dispatch.py
+@@ -25,15 +25,21 @@
+                 data=base64.b64decode(ARCHIVAL[name])
+             else:data=(ROOT/name).read_bytes()
+             p.write_bytes(data)
+-        (source/'CMakeLists.txt').write_text('# explicit synthetic source\n')
++        (source/'CMakeLists.txt').write_bytes((ROOT/'CMakeLists.txt').read_bytes())
+         models=[json.loads((source/'models'/(name+'.json')).read_text()) for name in sorted(dispatch.IDENTITIES[size]['models'])]
+         blob={'schema_version':'0.1','sha256':dispatch.sha(json.dumps(models,sort_keys=True,separators=(',',':')).encode()),'models':models}
+         (build/'generated').mkdir(parents=True)
+         (build/'generated/models.json').write_text(json.dumps(blob,indent=2)+'\n')
+         (build/'generated/models.hpp').write_text('// synthetic, not compiled\n')
+-        (build/'CMakeCache.txt').write_text('CMAKE_HOME_DIRECTORY:INTERNAL='+str(source)+'\n')
+-        (build/'CTestTestfile.cmake').write_text(''.join('add_test("'+name+'" "stand-in")\n' for name in ['atlas_numerical','atlas_recorded','atlas_python','atlas_tensor_square']))
+-        for name in ['atlas_numerical_tests','atlas_recorded_tests','mock-ctest']:(build/name).write_bytes(b'NONEXECUTABLE SYNTHETIC INPUT\n')
++        (build/'CMakeCache.txt').write_text('CMAKE_HOME_DIRECTORY:INTERNAL='+str(source)+'\n_Python3_EXECUTABLE:INTERNAL='+str(build/'mock-python')+'\n')
++        (source/'tools/test_scalar_functions.py').write_text('# Explicit nonexecuted synthetic scalar test stand-in\n')
++        scalar='libatlas_scalar_probe'+('.dylib'if sys.platform=='darwin'else '.so')
++        for name in [row[1]for row in dispatch.REGISTRATIONS if row[1]]+['mock-ctest','mock-python',scalar]:(build/name).write_bytes(b'NONEXECUTABLE SYNTHETIC INPUT\n')
++        rows=[]
++        for name,target,args in dispatch.REGISTRATIONS:
++            command=[str(build/target),*args]if target else [str(build/'mock-python'),*args]if name=='atlas_python'else [str(build/'mock-python'),str(source/'tools/test_scalar_functions.py'),str(build/scalar)]
++            rows.append('add_test('+ ' '.join(json.dumps(x)for x in [name,*command])+')\n')
++        (build/'CTestTestfile.cmake').write_text(''.join(rows))
+         return source,build
+     def occ(self,source):
+         m=json.loads((source/'models/original-cam-clay-sw-electronic-log-recovery-v1.json').read_text());p={k:v['default']for k,v in m['parameters'].items()}
+@@ -130,8 +136,9 @@
+             self.assertEqual(argv[1:],['--test-dir',str(build),'--output-on-failure',*dispatch.SUITES[suite]])
+             self.assertEqual(env.get(md.SELECTORS[0]),md.NATIVE)
+             self.assertEqual(env.get(md.SELECTORS[1]),md.NUMERICAL if size=='16'and suite!='recorded'else None)
+-            names=['atlas_numerical','atlas_python','atlas_tensor_square']if suite=='macos-main'else ['atlas_numerical','atlas_tensor_square']if suite=='linux-main'else ['atlas_recorded']
+-            log='Start testing\n'+''.join(f'{i}/4 Testing: {n}\nOutput:\n----------------------------------------------------------\n'+(md.POSITIVE_STDOUT if size=='16'and n=='atlas_numerical'else 'prior fixture\n')+'<end of output>\n----------------------------------------------------------\nTest Passed.\n'for i,n in enumerate(names,1))+'End testing\n'
++            import re
++            names=[n for n,_,_ in dispatch.REGISTRATIONS if (re.search(dispatch.SUITES[suite][1],n)is not None)==(dispatch.SUITES[suite][0]=='-R')]
++            log='Start testing\n'+''.join(f'{i}/10 Testing: {n}\nOutput:\n----------------------------------------------------------\n'+(md.POSITIVE_STDOUT if size=='16'and n=='atlas_numerical'else 'prior fixture\n')+'<end of output>\n----------------------------------------------------------\nTest Passed.\n'for i,n in enumerate(names,1))+'End testing\n'
+             if bad=='missing-numerical':log=log.replace('Testing: atlas_numerical','Testing: unknown')
+             if bad=='wrong-label':log=log.replace(md.POSITIVE_STDOUT,'Explicit valid-domain/GIS-depth20 fixtures; models=16\n')
+             if bad=='failed-test':log=log.replace('Test Passed.','Test Failed.',1)
+@@ -176,6 +183,59 @@
+         report=json.loads((self.base/'ctest-timeout.json').read_text())
+         self.assertEqual(base64.b64decode(report['ctest_log']['base64']),b'incomplete CTest observations\n')
+         self.assertEqual(base64.b64decode(report['processes'][0]['stdout_base64']),b'partial ctest')
++    def test_full10_registry_adversaries_reject_before_all_suite_calls(self):
++        source,build=self.fixture();path=build/'CTestTestfile.cmake';original=path.read_text();lines=original.splitlines(True)
++        corruptions={'omitted8':''.join(lines[:2]),'extra':original+lines[-1].replace('atlas_scalar_functions','unknown_test'),'duplicate':original+lines[-1],'reordered':''.join(reversed(lines)),'wrong-command':original.replace('atlas_time_tests','atlas_capacity_tests'),'wrong-argument':original.replace('0,0,0,0,0,0','0,0,0,0,0,1'),'altered-python-suite':original.replace('"discover"','"different"'),'outcome-override':original+'set_tests_properties("atlas_numerical" PROPERTIES WILL_FAIL TRUE)\n','external-registration':original+'subdirs("hidden")\n'}
++        for name,text in corruptions.items():
++            path.write_text(text)
++            for suite in dispatch.SUITES:
++                with self.subTest(name=name,suite=suite),self.assertRaises(ValueError):self.execute(source,build,self.ctest_run(source,build,'16',suite),name+suite+'.json','ctest',suite)
++        self.assertEqual(self.calls,[]);path.write_text(original)
++        (source/'CMakeLists.txt').write_text((source/'CMakeLists.txt').read_text()+'# source drift\n')
++        with self.assertRaises(ValueError):self.execute(source,build,self.ctest_run(source,build,'16','macos-main'),'source-cmake-drift.json','ctest','macos-main')
++        self.assertEqual(self.calls,[])
++    def test_ctest_selected_tool_content_and_path_drift_rejected(self):
++        source,build=self.fixture()
++        for mode in ['content','path']:
++            original=self.ctest_run(source,build,'16','macos-main')
++            def run(argv,**kwargs):
++                result=original(argv,**kwargs)
++                if mode=='content':(build/'mock-ctest').write_bytes(b'CHANGED SYNTHETIC CTEST\n')
++                return result
++            selected=[str(build/'mock-ctest'),str(build/'mock-ctest-other')]if mode=='path'else [str(build/'mock-ctest')]*2
++            with patch.object(dispatch.shutil,'which',side_effect=selected),self.assertRaises(ValueError):self.execute(source,build,run,'tool-drift-'+mode+'.json','ctest','macos-main')
++            report=json.loads((self.base/('tool-drift-'+mode+'.json')).read_text());self.assertEqual(report['status'],'failed');self.assertIn('ctest_postflight',report)
++    def test_positive_label_exact_line_inside_output_only(self):
++        source,build=self.fixture()
++        for mode in ['prefix','suffix','duplicate','metadata-only','unterminated','outside-region']:
++            original=self.ctest_run(source,build,'16','macos-main')
++            def run(argv,**kwargs):
++                result=original(argv,**kwargs);p=build/'Testing/Temporary/LastTest.log';text=p.read_text()
++                if mode=='prefix':text=text.replace(md.POSITIVE_STDOUT,'WRONG-PREFIX '+md.POSITIVE_STDOUT)
++                elif mode=='suffix':text=text.replace(md.POSITIVE_STDOUT,md.POSITIVE_STDOUT.rstrip('\n')+' WRONG-SUFFIX\n')
++                elif mode=='duplicate':text=text.replace(md.POSITIVE_STDOUT,md.POSITIVE_STDOUT*2)
++                elif mode=='unterminated':text=text.replace(md.POSITIVE_STDOUT,md.POSITIVE_STDOUT.rstrip('\n'))
++                else:
++                    text=text.replace(md.POSITIVE_STDOUT,'')
++                    text=text.replace('Output:\n',md.POSITIVE_STDOUT+'Output:\n',1)if mode=='metadata-only'else text+md.POSITIVE_STDOUT
++                p.write_text(text);return result
++            with patch.object(dispatch.shutil,'which',return_value=str(build/'mock-ctest')),self.subTest(mode=mode),self.assertRaises(ValueError):self.execute(source,build,run,'bad-label-'+mode+'.json','ctest','macos-main')
++    def test_combined_timeout_nonutf8_retains_timeout_identity(self):
++        source,build=self.fixture()
++        def run(argv,**kwargs):raise subprocess.TimeoutExpired(argv,120,output=b'\xff',stderr=b'partial-timeout')
++        with self.assertRaises(subprocess.TimeoutExpired):self.execute(source,build,run,'timeout-nonutf8.json')
++        report=json.loads((self.base/'timeout-nonutf8.json').read_text());row=report['processes'][0]
++        self.assertEqual(report['error_type'],'TimeoutExpired');self.assertEqual(row['status'],'failed');self.assertEqual(row['error_type'],'TimeoutExpired');self.assertTrue(row['timeout_expired']);self.assertEqual(row['decode_error']['type'],'UnicodeDecodeError');self.assertEqual(base64.b64decode(row['stdout_base64']),b'\xff');self.assertEqual(base64.b64decode(row['stderr_base64']),b'partial-timeout')
++    def test_ctest_symlink_resolution_is_bound_and_target_drift_rejects(self):
++        source,build=self.fixture();link=build/'selected-ctest';link.symlink_to(build/'mock-ctest')
++        with patch.object(dispatch.shutil,'which',return_value=str(link)):
++            report=self.execute(source,build,self.ctest_run(source,build,'16','recorded'),'symlink-positive.json','ctest','recorded')
++        self.assertEqual(report['ctest_executable_resolved_path'],str(build/'mock-ctest'))
++        other=build/'other-ctest';other.write_bytes((build/'mock-ctest').read_bytes())
++        original=self.ctest_run(source,build,'16','recorded')
++        def drift(argv,**kwargs):
++            result=original(argv,**kwargs);link.unlink();link.symlink_to(other);return result
++        with patch.object(dispatch.shutil,'which',return_value=str(link)),self.assertRaises(ValueError):self.execute(source,build,drift,'symlink-drift.json','ctest','recorded')
+ 
+ ARCHIVAL={'tools/check_native_fixture_contracts.py': 'IiIiUmV0YWluIHN0cmljdCBvcmlnaW5hbCBhbmQgdW5rbm93bi1wcm9maWxlIG5hdGl2ZSBmYWlsdXJlczsgQ1Rlc3QgY2hlY2tzIHBvc2l0aXZlcy4iIiIKaW1wb3J0IGFyZ3BhcnNlCmltcG9ydCBoYXNobGliCmltcG9ydCBqc29uCmltcG9ydCBvcwppbXBvcnQgbWF0aAppbXBvcnQgcmUKZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBzdWJwcm9jZXNzCgpST09UPVBhdGgoX19maWxlX18pLnJlc29sdmUoKS5wYXJlbnRzWzFdCgoKT0NDPSdvcmlnaW5hbC1jYW0tY2xheS1zdy1lbGVjdHJvbmljLWxvZy1yZWNvdmVyeS12MScKT0NDX0hBU0g9JzYzN2JhNzIzMzVjMzQ2NGZlYzQyN2M3NzNkMjE0ZDIxZDA2ZTllMjZiYzczN2QxNTMwN2FhZTJmNjcxMTFiMzQnCkRVTkNBTj0nZHVuY2FuLWNoYW5nLTE5NzAtZW5kcG9pbnQtYXZlcmFnZScKRFVOQ0FOX0hBU0g9JzQ1MmI0OWVmNDg2NjhjMGM1ZDhhYmEyMGRmY2EzOTgyMzVmYTQ1NDMxZTg1M2VlOTIzYmUwNWExN2M3Yzg4YTAnCiMgRXhhY3QgcHJpb3IxMyBtYXBwaW5nIGZyb20gcHJlc2VydmVkIHBhY2thZ2UgcG9saWN5ODRmZTE0YzQuLi4sIG5vdCBtdXRhYmxlIGxpdmUgcG9saWN5LgpQUklPUl9USElSVEVFTj17CiAgICAiYmFyb2Rlc3ktY2xheS0yMDE3IjogIjBiZjRmZDI3ODkyNzRmMTI3MWI0MzhmZmVhNTcxNjg4NjZmN2ViZWE1NWNmY2Y4ZWY3ODY1MzI5MDNhYjM0NzciLAogICAgImJhcm9kZXN5LXNhbmQiOiAiM2E2MWI1MzczNDA0ZDY5NzNhMjk1N2JkMGZhMjE2OTJlMTBiNDllOTc0Y2RmODdlZmYwNDdkNTUzMTg1MTIzOSIsCiAgICAiZHJ1Y2tlci1wcmFnZXIiOiAiYjJhZTM0MGU5N2ZjYTQyMDllNjcxYjFmNjEwZGFjN2IxNTIwMzk0ZWVmZTMwNzA1NDhmMjk5YmQ2MDNlZTg3NyIsCiAgICAiaHlwb3BsYXN0aWMtY2xheS0yMDA1IjogIjI0N2RlMmYxNzkyY2YyMjA3NDg2NzFiNDU2M2M3ZGQyOTBjNWI5MWZjYzk1ZWRhNTk3N2FjMDNlMDFmYTZmZjUiLAogICAgImh5cG9wbGFzdGljLWNsYXktMjAxMyI6ICI2ODExNTgwY2Y5YzA2Nzg2MDViOWJiN2Q5M2E1MjQ3NDNiYmU1YjVjYjFmNTQ3YmQyMzJkMDkwYWVkYTk1MGU0IiwKICAgICJoeXBvcGxhc3RpYy1zYW5kLWlnczk3IjogIjgzNzc3NDU4ZWE0MzdhM2E3YzEzNjAxMTdkYmY0MzVmN2Q3NjM5MTNjZGEzOTkwOTllZjI5NjZlNjVhNjdlODYiLAogICAgImh5cG9wbGFzdGljLXNhbmQtdnc5NiI6ICIxZGY5NWY4MTI4YzRmMTYwNjYwMDRkZTc2MTUyODkwNzViYWZlOTZkMjE3NGUwNmU1Y2Q3NjcwNGY0NWJiZDYxIiwKICAgICJsaW5lYXItZWxhc3RpYyI6ICIzMzM4N2IyMDU4YTNmNTRlZDYxMTk0OTMxODI4OWRiMjRhYjJkNWI4ZWRkMTcyZDBhMjQ1NDA0MmM3OTc1MDQxIiwKICAgICJtb2RpZmllZC1jYW0tY2xheSI6ICJlMDc1MTE3ZTA3YTcxYTE3YTM1Y2U0N2RhYzY2MTcyYTBjYzQwMjg2MGY1YzZjZjEwNmY3ODgzZGI1NzIxYTE0IiwKICAgICJtb2hyLWNvdWxvbWIiOiAiNmEzYTEzOTIxOGZjNDEzZjA2NmFiZTViODUxYzVjN2FlZDg4OTllZTIzZWZiZDdhZTJhMmU2OGM3NjU1ZjBlNSIsCiAgICAicmVzZWFyY2gtaHAtZXh0cmFjdGVkLWFzYnMtZ2lzLTIwMjQtdjAzIjogIjQzOWI3ODVlMWRhMzA3NTIwOWM2ZDVjYTQzYTk5MWE0NDE0NjNhOTE1ZjMxZjJlOWM3N2I1YzY4MzVlMjBkYmMiLAogICAgInRyZXNjYS1hc3NvY2lhdGVkLXBlcmZlY3QtYmsyMDIydjEtYmUiOiAiMTlhY2ViZWQzN2Q1OTEyMGU0OWM1ZGZmNjk4ZTJiN2QyYTI2OTNiYmNlOWVjMzVjOGJjYmM2NTk1NDgxOWUxOCIsCiAgICAib3JpZ2luYWwtY2FtLWNsYXktc3ctZWxlY3Ryb25pYy1sb2ctcmVjb3ZlcnktdjEiOiAiNjM3YmE3MjMzNWMzNDY0ZmVjNDI3Yzc3M2QyMTRkMjFkMDZlOWUyNmJjNzM3ZDE1MzA3YWFlMmY2NzExMWIzNCIKfQpHSVNfRkFJTFVSRT0nbm9ubGluZWFyIHJlY29yZGVkIHJlcGxheSBmYWlsZWQ6IHJlc2VhcmNoLWhwLWV4dHJhY3RlZC1hc2JzLWdpcy0yMDI0LXYwMyBtYXRlcmlhbCB1cGRhdGUgZmFpbGVkIG9yIHRyaWFsIGJ1ZGdldCBleGhhdXN0ZWQ7IGxhc3QgY29tbWl0dGVkIGtub3QgcmV0YWluZWRcbicKCmRlZiBjaGVja19yZWNvcmRlZF9mYWlsdXJlKG1lc3NhZ2UsIGRlZmluaXRpb25zLCAqLCByb290PVJPT1QpOgogICAgaWYgT0NDIG5vdCBpbiBkZWZpbml0aW9uczoKICAgICAgICBhc3NlcnQgbWVzc2FnZT09R0lTX0ZBSUxVUkUKICAgICAgICByZXR1cm4gJ2hpc3RvcmljYWwtdHdlbHZlIEdJUyBmaXJzdCBmYWlsdXJlJwogICAgaWYgRFVOQ0FOIGluIGRlZmluaXRpb25zOgogICAgICAgIGFzc2VydCBkZWZpbml0aW9ucz09eyoqUFJJT1JfVEhJUlRFRU4sRFVOQ0FOOkRVTkNBTl9IQVNIfSwgJ3VucXVhbGlmaWVkIHN0cmljdCBmb3VydGVlbi1tb2RlbCBjYXRhbG9ndWUnCiAgICBlbHNlOgogICAgICAgIGFzc2VydCBsZW4oZGVmaW5pdGlvbnMpPT0xMyBhbmQgZGVmaW5pdGlvbnNbT0NDXT09T0NDX0hBU0gsICd1bnF1YWxpZmllZCBzdHJpY3QgY2F0YWxvZ3VlJwogICAgbWF0Y2g9cmUuZnVsbG1hdGNoKHInZmFpbGVkIGtub3QgMSByZXNpZHVhbCAoW14gXSspIHRyaWFscyAxIGRlMCAoW14gXSspIGRlMSAwXG5kcmFpbmVkIHJlcGxheSBmYWlsZWQ6ICcrcmUuZXNjYXBlKE9DQykrcicgc2luZ3VsYXIgbWl4ZWQtY29udHJvbCBzeXN0ZW07IGxhc3QgY29tbWl0dGVkIGtub3QgcmV0YWluZWRcbicsbWVzc2FnZSkKICAgIGFzc2VydCBtYXRjaCwgJ3N0cmljdCBPQ0MgZmFpbHVyZSBzaWduYXR1cmUgY2hhbmdlZCcKICAgIHJlc2lkdWFsLGF4aWFsPW1hcChmbG9hdCxtYXRjaC5ncm91cHMoKSkKICAgIGFzc2VydCBheGlhbD09MWUtNCBhbmQgbWF0aC5pc2Zpbml0ZShyZXNpZHVhbCkKICAgICMgSW5kZXBlbmRlbnQgY29uZSBlbmRwb2ludDogQkUgdm9sdW1lLCBzb3VyY2Ugbm9ybWFsLWNvbXByZXNzaW9uIHBhY2tpbmc7CiAgICAjIGluaXRpYWwgdHJhbnN2ZXJzZSBzdHJlc3MgaXMxMDBrUGEgYW5kIGZpeGVkIGNvbnRyb2wgc2NhbGUxMDBrUGEuCiAgICBtb2RlbD1qc29uLmxvYWRzKChyb290Lydtb2RlbHMnL2Yne09DQ30uanNvbicpLnJlYWRfdGV4dCgpKQogICAgcGFyYW1zPXtrOnZbJ2RlZmF1bHQnXSBmb3Igayx2IGluIG1vZGVsWydwYXJhbWV0ZXJzJ10uaXRlbXMoKX0KICAgIHZvbHVtZT1tb2RlbFsnc3RhdGUnXVsxXVsnaW5pdGlhbCddLygxK2F4aWFsKQogICAgcHJlc3N1cmU9cGFyYW1zWydwcmVmJ10qbWF0aC5leHAoKHBhcmFtc1snR2FtbWEnXStwYXJhbXNbJ2xhbWJkYV9jJ10tcGFyYW1zWydrYXBwYSddLXZvbHVtZSkvcGFyYW1zWydsYW1iZGFfYyddKQogICAgZXhwZWN0ZWQ9YWJzKHByZXNzdXJlLTEwMDAwMCkvMTAwMDAwCiAgICBhc3NlcnQgYWJzKHJlc2lkdWFsLWV4cGVjdGVkKTw9MmUtMTAqbWF4KDEsYWJzKGV4cGVjdGVkKSksICdzdHJpY3QgT0NDIGNvbmUgcmVzaWR1YWwgY2hhbmdlZCcKICAgIHJldHVybiAoJ2N1cnJlbnQtZm91cnRlZW4gRHVuY2FuL09DQycgaWYgRFVOQ0FOIGluIGRlZmluaXRpb25zIGVsc2UgJ2N1cnJlbnQtdGhpcnRlZW4gT0NDJykrJyBmaXJzdCBmYWlsdXJlOyBvcmlnaW5hbCByb2xsYmFjayBhc3NlcnRlZCBieSBleHBsaWNpdCBwb3NpdGl2ZSBzdWl0ZScKCmRlZiBtYWluKCk6CiAgICBwYXJzZXI9YXJncGFyc2UuQXJndW1lbnRQYXJzZXIoZGVzY3JpcHRpb249X19kb2NfXykKICAgIHBhcnNlci5hZGRfYXJndW1lbnQoJy0tYnVpbGQnLHR5cGU9UGF0aCxkZWZhdWx0PVJPT1QvJ2J1aWxkJykKICAgIHBhcnNlci5hZGRfYXJndW1lbnQoJy0tb3V0cHV0Jyx0eXBlPVBhdGgscmVxdWlyZWQ9VHJ1ZSkKICAgIGFyZ3M9cGFyc2VyLnBhcnNlX2FyZ3MoKQogICAgaWYgYXJncy5vdXRwdXQuZXhpc3RzKCk6cmFpc2UgVmFsdWVFcnJvcignUHJlc2VydmUgZXhpc3Rpbmcgb2JzZXJ2YXRpb25zJykKICAgIHBvbGljeT1qc29uLmxvYWRzKChST09ULydjYXRhbG9ndWUvbGFib3JhdG9yeS1wYWNrYWdlLXBvbGljeS5qc29uJykucmVhZF90ZXh0KCkpCiAgICBmb3IgbW9kZWwsZGlnZXN0IGluIHBvbGljeVsnbW9kZWxzJ10uaXRlbXMoKToKICAgICAgICBhc3NlcnQgaGFzaGxpYi5zaGEyNTYoKFJPT1QvJ21vZGVscycvZid7bW9kZWx9Lmpzb24nKS5yZWFkX2J5dGVzKCkpLmhleGRpZ2VzdCgpPT1kaWdlc3QKICAgIHJlcG9ydD17J3N0YXR1cyc6J3J1bm5pbmcnLCdwb2xpY3lfaWQnOnBvbGljeVsnaWQnXSwnbW9kZWxfY291bnQnOmxlbihwb2xpY3lbJ21vZGVscyddKSwncHJvY2Vzc2VzJzpbXX0KICAgIHNhdmU9bGFtYmRhOmFyZ3Mub3V0cHV0LndyaXRlX3RleHQoanNvbi5kdW1wcyhyZXBvcnQsaW5kZW50PTIpKydcbicpCiAgICBleHBlY3RlZD17J2F0bGFzX251bWVyaWNhbF90ZXN0cyc6J0ZEIHRlc3Qgb3V0c2lkZSBkb21haW5cbicsJ2F0bGFzX3JlY29yZGVkX3Rlc3RzJzpHSVNfRkFJTFVSRX0KICAgIHRyeToKICAgICAgICBmb3IgdGFyZ2V0LG1lc3NhZ2UgaW4gZXhwZWN0ZWQuaXRlbXMoKToKICAgICAgICAgICAgZm9yIHByb2ZpbGUgaW4gW05vbmUsJ3Vua25vd24nXToKICAgICAgICAgICAgICAgIGVudj1kaWN0KG9zLmVudmlyb24pO2Vudi5wb3AoJ0FUTEFTX05BVElWRV9GSVhUVVJFUycsTm9uZSkKICAgICAgICAgICAgICAgIGlmIHByb2ZpbGU6ZW52WydBVExBU19OQVRJVkVfRklYVFVSRVMnXT1wcm9maWxlCiAgICAgICAgICAgICAgICByZXN1bHQ9c3VicHJvY2Vzcy5ydW4oW3N0cihhcmdzLmJ1aWxkLnJlc29sdmUoKS90YXJnZXQpXSxlbnY9ZW52LGNhcHR1cmVfb3V0cHV0PVRydWUsdGV4dD1UcnVlLHRpbWVvdXQ9MTIwKQogICAgICAgICAgICAgICAgcm93PXsndGFyZ2V0Jzp0YXJnZXQsJ3Byb2ZpbGUnOnByb2ZpbGUsJ3JldHVybmNvZGUnOnJlc3VsdC5yZXR1cm5jb2RlLCdzdGRvdXQnOnJlc3VsdC5zdGRvdXQsJ3N0ZGVycic6cmVzdWx0LnN0ZGVycn07cmVwb3J0Wydwcm9jZXNzZXMnXS5hcHBlbmQocm93KTtzYXZlKCkKICAgICAgICAgICAgICAgIGFzc2VydCByZXN1bHQucmV0dXJuY29kZT09MSwodGFyZ2V0LHByb2ZpbGUscmVzdWx0LnJldHVybmNvZGUpCiAgICAgICAgICAgICAgICBpZiB0YXJnZXQ9PSdhdGxhc19yZWNvcmRlZF90ZXN0cycgYW5kIHByb2ZpbGUgaXMgTm9uZToKICAgICAgICAgICAgICAgICAgICByb3dbJ3N0cmljdF9jb250ZXh0J109Y2hlY2tfcmVjb3JkZWRfZmFpbHVyZShyZXN1bHQuc3RkZXJyLHBvbGljeVsnbW9kZWxzJ10pO3NhdmUoKQogICAgICAgICAgICAgICAgZWxzZToKICAgICAgICAgICAgICAgICAgICBhc3NlcnQgcmVzdWx0LnN0ZGVycj09KG1lc3NhZ2UgaWYgcHJvZmlsZSBpcyBOb25lIGVsc2UgJ3Vua25vd24gbmF0aXZlIGZpeHR1cmUgcHJvZmlsZVxuJykKICAgICAgICAgICAgICAgIGFzc2VydCByZXN1bHQuc3Rkb3V0PT0oJ1N0cmljdCBvcmlnaW5hbCBkZWZhdWx0IGZpeHR1cmVzOyBtb2RlbHM9JytzdHIocmVwb3J0Wydtb2RlbF9jb3VudCddKSsnXG4nIGlmIHByb2ZpbGUgaXMgTm9uZSBlbHNlICcnKQogICAgICAgIHJlcG9ydFsnc3RhdHVzJ109J3Bhc3NlZCc7c2F2ZSgpCiAgICBleGNlcHQgQmFzZUV4Y2VwdGlvbiBhcyBleGM6CiAgICAgICAgcmVwb3J0WydzdGF0dXMnXT0nZmFpbGVkJztyZXBvcnRbJ2Vycm9yJ109c3RyKGV4Yyk7c2F2ZSgpO3JhaXNlCiAgICBwcmludCgnT3JpZ2luYWwgbmF0aXZlIGZhaWx1cmUgc2lnbmF0dXJlcyBhbmQgY2xvc2VkIGZpeHR1cmUgc2VsZWN0aW9uIHZlcmlmaWVkIGZvciBib3RoIHRlc3QgZXhlY3V0YWJsZXMuJykKCmlmIF9fbmFtZV9fPT0nX19tYWluX18nOm1haW4oKQo=', 'catalogue/laboratory-package-policy.json': 'ewogICJzY2hlbWFfdmVyc2lvbiI6ICIwLjEiLAogICJraW5kIjogInN1cHBvcnRlZC1sYWJvcmF0b3J5LXBhY2thZ2UtcG9saWN5IiwKICAiaWQiOiAic3VwcG9ydGVkLXBhY2thZ2UtZm91cnRlZW4tZHVuY2FuLXYxIiwKICAib3JkaW5hcnkiOiAiZHJhaW5lZC0xcGN0LTEwMC1jdXJyZW50LXNldHRpbmdzIiwKICAibW9kZWxzIjogewogICAgImJhcm9kZXN5LWNsYXktMjAxNyI6ICIwYmY0ZmQyNzg5Mjc0ZjEyNzFiNDM4ZmZlYTU3MTY4ODY2ZjdlYmVhNTVjZmNmOGVmNzg2NTMyOTAzYWIzNDc3IiwKICAgICJiYXJvZGVzeS1zYW5kIjogIjNhNjFiNTM3MzQwNGQ2OTczYTI5NTdiZDBmYTIxNjkyZTEwYjQ5ZTk3NGNkZjg3ZWZmMDQ3ZDU1MzE4NTEyMzkiLAogICAgImRydWNrZXItcHJhZ2VyIjogImIyYWUzNDBlOTdmY2E0MjA5ZTY3MWIxZjYxMGRhYzdiMTUyMDM5NGVlZmUzMDcwNTQ4ZjI5OWJkNjAzZWU4NzciLAogICAgImh5cG9wbGFzdGljLWNsYXktMjAwNSI6ICIyNDdkZTJmMTc5MmNmMjIwNzQ4NjcxYjQ1NjNjN2RkMjkwYzViOTFmY2M5NWVkYTU5NzdhYzAzZTAxZmE2ZmY1IiwKICAgICJoeXBvcGxhc3RpYy1jbGF5LTIwMTMiOiAiNjgxMTU4MGNmOWMwNjc4NjA1YjliYjdkOTNhNTI0NzQzYmJlNWI1Y2IxZjU0N2JkMjMyZDA5MGFlZGE5NTBlNCIsCiAgICAiaHlwb3BsYXN0aWMtc2FuZC1pZ3M5NyI6ICI4Mzc3NzQ1OGVhNDM3YTNhN2MxMzYwMTE3ZGJmNDM1ZjdkNzYzOTEzY2RhMzk5MDk5ZWYyOTY2ZTY1YTY3ZTg2IiwKICAgICJoeXBvcGxhc3RpYy1zYW5kLXZ3OTYiOiAiMWRmOTVmODEyOGM0ZjE2MDY2MDA0ZGU3NjE1Mjg5MDc1YmFmZTk2ZDIxNzRlMDZlNWNkNzY3MDRmNDViYmQ2MSIsCiAgICAibGluZWFyLWVsYXN0aWMiOiAiMzMzODdiMjA1OGEzZjU0ZWQ2MTE5NDkzMTgyODlkYjI0YWIyZDViOGVkZDE3MmQwYTI0NTQwNDJjNzk3NTA0MSIsCiAgICAibW9kaWZpZWQtY2FtLWNsYXkiOiAiZTA3NTExN2UwN2E3MWExN2EzNWNlNDdkYWM2NjE3MmEwY2M0MDI4NjBmNWM2Y2YxMDZmNzg4M2RiNTcyMWExNCIsCiAgICAibW9oci1jb3Vsb21iIjogIjZhM2ExMzkyMThmYzQxM2YwNjZhYmU1Yjg1MWM1YzdhZWQ4ODk5ZWUyM2VmYmQ3YWUyYTJlNjhjNzY1NWYwZTUiLAogICAgInJlc2VhcmNoLWhwLWV4dHJhY3RlZC1hc2JzLWdpcy0yMDI0LXYwMyI6ICI0MzliNzg1ZTFkYTMwNzUyMDljNmQ1Y2E0M2E5OTFhNDQxNDYzYTkxNWYzMWYyZTljNzdiNWM2ODM1ZTIwZGJjIiwKICAgICJ0cmVzY2EtYXNzb2NpYXRlZC1wZXJmZWN0LWJrMjAyMnYxLWJlIjogIjE5YWNlYmVkMzdkNTkxMjBlNDljNWRmZjY5OGUyYjdkMmEyNjkzYmJjZTllYzM1YzhiY2JjNjU5NTQ4MTllMTgiLAogICAgIm9yaWdpbmFsLWNhbS1jbGF5LXN3LWVsZWN0cm9uaWMtbG9nLXJlY292ZXJ5LXYxIjogIjYzN2JhNzIzMzVjMzQ2NGZlYzQyN2M3NzNkMjE0ZDIxZDA2ZTllMjZiYzczN2QxNTMwN2FhZTJmNjcxMTFiMzQiLAogICAgImR1bmNhbi1jaGFuZy0xOTcwLWVuZHBvaW50LWF2ZXJhZ2UiOiAiNDUyYjQ5ZWY0ODY2OGMwYzVkOGFiYTIwZGZjYTM5ODIzNWZhNDU0MzFlODUzZWU5MjNiZTA1YTE3YzdjODhhMCIKICB9LAogICJkZWNsYXJlZF9mYWlsdXJlcyI6IFsKICAgIHsKICAgICAgIm1vZGVsIjogInJlc2VhcmNoLWhwLWV4dHJhY3RlZC1hc2JzLWdpcy0yMDI0LXYwMyIsCiAgICAgICJvcmRpbmFyeV9zcGVjaWZpY2F0aW9uIjogewogICAgICAgICJyZXNwb25zZV9jb250cmFjdCI6ICJzdHJlc3Mtc2NvcGUtMC4xIiwKICAgICAgICAic3RyZXNzX3Njb3BlIjogImVmZmVjdGl2ZSIsCiAgICAgICAgIm1vZGVsIjogInJlc2VhcmNoLWhwLWV4dHJhY3RlZC1hc2JzLWdpcy0yMDI0LXYwMyIsCiAgICAgICAgInBhcmFtZXRlcnMiOiBbCiAgICAgICAgICAxMDAwMDAsCiAgICAgICAgICAwLjU5MzQxMTk0NTY3ODA3MjEsCiAgICAgICAgICAxMTE3NDYwMDAsCiAgICAgICAgICAxLjAyNywKICAgICAgICAgIDAuODkzLAogICAgICAgICAgMC41MiwKICAgICAgICAgIDAuMzQ2LAogICAgICAgICAgMC4xNSwKICAgICAgICAgIDIuMiwKICAgICAgICAgIDAuMDAwMSwKICAgICAgICAgIDUsCiAgICAgICAgICAyLjUsCiAgICAgICAgICAwLjEsCiAgICAgICAgICA0LAogICAgICAgICAgMS43LAogICAgICAgICAgMC44LAogICAgICAgICAgMS41LAogICAgICAgICAgNDUsCiAgICAgICAgICAxCiAgICAgICAgXSwKICAgICAgICAiaW5pdGlhbCI6IFsKICAgICAgICAgIDEwMDAwMCwKICAgICAgICAgIDEwMDAwMCwKICAgICAgICAgIDEwMDAwMCwKICAgICAgICAgIDAsCiAgICAgICAgICAwLAogICAgICAgICAgMCwKICAgICAgICAgIDAuNTk1LAogICAgICAgICAgMCwKICAgICAgICAgIDAsCiAgICAgICAgICAwLAogICAgICAgICAgMCwKICAgICAgICAgIDAsCiAgICAgICAgICAwLAogICAgICAgICAgMAogICAgICAgIF0sCiAgICAgICAgInByb3RvY29sIjogMSwKICAgICAgICAidGFyZ2V0IjogMC4wMSwKICAgICAgICAic3RlcHMiOiAxMDAsCiAgICAgICAgImN5Y2xlcyI6IDAsCiAgICAgICAgImludGVncmF0aW9uX3NldHRpbmdzIjogewogICAgICAgICAgInZlcnNpb24iOiAiaW5jcmVtZW50YWwtc2V0dGluZ3MtMC4xIiwKICAgICAgICAgICJub3JtIjogInNjYWxlZF9jb21wb25lbnRfbWF4IiwKICAgICAgICAgICJyZXNpZHVhbF90b2xlcmFuY2UiOiAyZS0xMCwKICAgICAgICAgICJyYXRlX3RvbGVyYW5jZSI6IDFlLTA2LAogICAgICAgICAgIm1heF9pdGVyYXRpb25zIjogNDUsCiAgICAgICAgICAibWF4X2RlcHRoIjogMTQsCiAgICAgICAgICAibWF4X3N1YnN0ZXBzIjogMjAwMDAsCiAgICAgICAgICAibWF4X2JhY2t0cmFja3MiOiAxMQogICAgICAgIH0sCiAgICAgICAgImxvYWRpbmciOiB7CiAgICAgICAgICAidmVyc2lvbiI6ICJsYWJvcmF0b3J5LWNvbnRyb2xzLTAuMSIsCiAgICAgICAgICAiZW5jb2RpbmciOiAiaWVlZTc1NC1iaW5hcnk2NC1oZXgiLAogICAgICAgICAgInByb2R1Y2VyIjogewogICAgICAgICAgICAidmVyc2lvbiI6ICJsYWJvcmF0b3J5LXdhdmVmb3JtLTAuMSIsCiAgICAgICAgICAgICJhbGdvcml0aG0iOiAibGluZWFyLXJuZS12MSIsCiAgICAgICAgICAgICJ0YXJnZXRfYml0cyI6ICIzZjg0N2FlMTQ3YWUxNDdiIiwKICAgICAgICAgICAgInN0ZXBzIjogMTAwLAogICAgICAgICAgICAiY3ljbGVzIjogMAogICAgICAgICAgfSwKICAgICAgICAgICJjb250cm9sc19iaXRzIjogWwogICAgICAgICAgICAiMDAwMDAwMDAwMDAwMDAwMCIsCiAgICAgICAgICAgICIzZjFhMzZlMmViMWM0MzJkIiwKICAgICAgICAgICAgIjNmMmEzNmUyZWIxYzQzMmQiLAogICAgICAgICAgICAiM2YzM2E5MmEzMDU1MzI2MSIsCiAgICAgICAgICAgICIzZjNhMzZlMmViMWM0MzJkIiwKICAgICAgICAgICAgIjNmNDA2MjRkZDJmMWE5ZmMiLAogICAgICAgICAgICAiM2Y0M2E5MmEzMDU1MzI2MSIsCiAgICAgICAgICAgICIzZjQ2ZjAwNjhkYjhiYWM4IiwKICAgICAgICAgICAgIjNmNGEzNmUyZWIxYzQzMmQiLAogICAgICAgICAgICAiM2Y0ZDdkYmY0ODdmY2I5MiIsCiAgICAgICAgICAgICIzZjUwNjI0ZGQyZjFhOWZjIiwKICAgICAgICAgICAgIjNmNTIwNWJjMDFhMzZlMmYiLAogICAgICAgICAgICAiM2Y1M2E5MmEzMDU1MzI2MSIsCiAgICAgICAgICAgICIzZjU1NGM5ODVmMDZmNjk0IiwKICAgICAgICAgICAgIjNmNTZmMDA2OGRiOGJhYzgiLAogICAgICAgICAgICAiM2Y1ODkzNzRiYzZhN2VmYSIsCiAgICAgICAgICAgICIzZjVhMzZlMmViMWM0MzJkIiwKICAgICAgICAgICAgIjNmNWJkYTUxMTljZTA3NjAiLAogICAgICAgICAgICAiM2Y1ZDdkYmY0ODdmY2I5MiIsCiAgICAgICAgICAgICIzZjVmMjEyZDc3MzE4ZmM1IiwKICAgICAgICAgICAgIjNmNjA2MjRkZDJmMWE5ZmMiLAogICAgICAgICAgICAiM2Y2MTM0MDRlYTRhOGMxNSIsCiAgICAgICAgICAgICIzZjYyMDViYzAxYTM2ZTJmIiwKICAgICAgICAgICAgIjNmNjJkNzczMThmYzUwNDgiLAogICAgICAgICAgICAiM2Y2M2E5MmEzMDU1MzI2MSIsCiAgICAgICAgICAgICIzZjY0N2FlMTQ3YWUxNDdiIiwKICAgICAgICAgICAgIjNmNjU0Yzk4NWYwNmY2OTQiLAogICAgICAgICAgICAiM2Y2NjFlNGY3NjVmZDhhZSIsCiAgICAgICAgICAgICIzZjY2ZjAwNjhkYjhiYWM4IiwKICAgICAgICAgICAgIjNmNjdjMWJkYTUxMTljZTAiLAogICAgICAgICAgICAiM2Y2ODkzNzRiYzZhN2VmYSIsCiAgICAgICAgICAgICIzZjY5NjUyYmQzYzM2MTEzIiwKICAgICAgICAgICAgIjNmNmEzNmUyZWIxYzQzMmQiLAogICAgICAgICAgICAiM2Y2YjA4OWEwMjc1MjU0NiIsCiAgICAgICAgICAgICIzZjZiZGE1MTE5Y2UwNzYwIiwKICAgICAgICAgICAgIjNmNmNhYzA4MzEyNmU5N2EiLAogICAgICAgICAgICAiM2Y2ZDdkYmY0ODdmY2I5MiIsCiAgICAgICAgICAgICIzZjZlNGY3NjVmZDhhZGFjIiwKICAgICAgICAgICAgIjNmNmYyMTJkNzczMThmYzUiLAogICAgICAgICAgICAiM2Y2ZmYyZTQ4ZThhNzFkZiIsCiAgICAgICAgICAgICIzZjcwNjI0ZGQyZjFhOWZjIiwKICAgICAgICAgICAgIjNmNzBjYjI5NWU5ZTFiMDkiLAogICAgICAgICAgICAiM2Y3MTM0MDRlYTRhOGMxNSIsCiAgICAgICAgICAgICIzZjcxOWNlMDc1ZjZmZDIyIiwKICAgICAgICAgICAgIjNmNzIwNWJjMDFhMzZlMmYiLAogICAgICAgICAgICAiM2Y3MjZlOTc4ZDRmZGYzYyIsCiAgICAgICAgICAgICIzZjcyZDc3MzE4ZmM1MDQ4IiwKICAgICAgICAgICAgIjNmNzM0MDRlYTRhOGMxNTUiLAogICAgICAgICAgICAiM2Y3M2E5MmEzMDU1MzI2MSIsCiAgICAgICAgICAgICIzZjc0MTIwNWJjMDFhMzZlIiwKICAgICAgICAgICAgIjNmNzQ3YWUxNDdhZTE0N2IiLAogICAgICAgICAgICAiM2Y3NGUzYmNkMzVhODU4OCIsCiAgICAgICAgICAgICIzZjc1NGM5ODVmMDZmNjk0IiwKICAgICAgICAgICAgIjNmNzViNTczZWFiMzY3YTEiLAogICAgICAgICAgICAiM2Y3NjFlNGY3NjVmZDhhZSIsCiAgICAgICAgICAgICIzZjc2ODcyYjAyMGM0OWJiIiwKICAgICAgICAgICAgIjNmNzZmMDA2OGRiOGJhYzgiLAogICAgICAgICAgICAiM2Y3NzU4ZTIxOTY1MmJkNCIsCiAgICAgICAgICAgICIzZjc3YzFiZGE1MTE5Y2UwIiwKICAgICAgICAgICAgIjNmNzgyYTk5MzBiZTBkZWQiLAogICAgICAgICAgICAiM2Y3ODkzNzRiYzZhN2VmYSIsCiAgICAgICAgICAgICIzZjc4ZmM1MDQ4MTZmMDA2IiwKICAgICAgICAgICAgIjNmNzk2NTJiZDNjMzYxMTMiLAogICAgICAgICAgICAiM2Y3OWNlMDc1ZjZmZDIyMCIsCiAgICAgICAgICAgICIzZjdhMzZlMmViMWM0MzJkIiwKICAgICAgICAgICAgIjNmN2E5ZmJlNzZjOGI0M2EiLAogICAgICAgICAgICAiM2Y3YjA4OWEwMjc1MjU0NiIsCiAgICAgICAgICAgICIzZjdiNzE3NThlMjE5NjUzIiwKICAgICAgICAgICAgIjNmN2JkYTUxMTljZTA3NjAiLAogICAgICAgICAgICAiM2Y3YzQzMmNhNTdhNzg2ZCIsCiAgICAgICAgICAgICIzZjdjYWMwODMxMjZlOTdhIiwKICAgICAgICAgICAgIjNmN2QxNGUzYmNkMzVhODUiLAogICAgICAgICAgICAiM2Y3ZDdkYmY0ODdmY2I5MiIsCiAgICAgICAgICAgICIzZjdkZTY5YWQ0MmMzYzlmIiwKICAgICAgICAgICAgIjNmN2U0Zjc2NWZkOGFkYWMiLAogICAgICAgICAgICAiM2Y3ZWI4NTFlYjg1MWViOCIsCiAgICAgICAgICAgICIzZjdmMjEyZDc3MzE4ZmM1IiwKICAgICAgICAgICAgIjNmN2Y4YTA5MDJkZTAwZDIiLAogICAgICAgICAgICAiM2Y3ZmYyZTQ4ZThhNzFkZiIsCiAgICAgICAgICAgICIzZjgwMmRlMDBkMWI3MTc2IiwKICAgICAgICAgICAgIjNmODA2MjRkZDJmMWE5ZmMiLAogICAgICAgICAgICAiM2Y4MDk2YmI5OGM3ZTI4MyIsCiAgICAgICAgICAgICIzZjgwY2IyOTVlOWUxYjA5IiwKICAgICAgICAgICAgIjNmODBmZjk3MjQ3NDUzOGYiLAogICAgICAgICAgICAiM2Y4MTM0MDRlYTRhOGMxNSIsCiAgICAgICAgICAgICIzZjgxNjg3MmIwMjBjNDljIiwKICAgICAgICAgICAgIjNmODE5Y2UwNzVmNmZkMjIiLAogICAgICAgICAgICAiM2Y4MWQxNGUzYmNkMzVhOCIsCiAgICAgICAgICAgICIzZjgyMDViYzAxYTM2ZTJmIiwKICAgICAgICAgICAgIjNmODIzYTI5Yzc3OWE2YjUiLAogICAgICAgICAgICAiM2Y4MjZlOTc4ZDRmZGYzYyIsCiAgICAgICAgICAgICIzZjgyYTMwNTUzMjYxN2MyIiwKICAgICAgICAgICAgIjNmODJkNzczMThmYzUwNDgiLAogICAgICAgICAgICAiM2Y4MzBiZTBkZWQyODhjZiIsCiAgICAgICAgICAgICIzZjgzNDA0ZWE0YThjMTU1IiwKICAgICAgICAgICAgIjNmODM3NGJjNmE3ZWY5ZGMiLAogICAgICAgICAgICAiM2Y4M2E5MmEzMDU1MzI2MSIsCiAgICAgICAgICAgICIzZjgzZGQ5N2Y2MmI2YWU4IiwKICAgICAgICAgICAgIjNmODQxMjA1YmMwMWEzNmUiLAogICAgICAgICAgICAiM2Y4NDQ2NzM4MWQ3ZGJmNCIsCiAgICAgICAgICAgICIzZjg0N2FlMTQ3YWUxNDdiIgogICAgICAgICAgXQogICAgICAgIH0KICAgICAgfSwKICAgICAgIm1lc3NhZ2UiOiAiY29udHJvbCBvciBjb25zdGl0dXRpdmUgc29sdmUgZmFpbGVkIGF0IHN0ZXAgMTsgbGFzdCBjb21taXR0ZWQgcG9pbnQgcmV0YWluZWQiLAogICAgICAiY29tbWl0dGVkX3BvaW50cyI6IDEsCiAgICAgICJuYW1lZF9leGFtcGxlIjogImdpczIwMjQtc21hbGwtZHJhaW5lZCIsCiAgICAgICJldmlkZW5jZSI6IHsKICAgICAgICAicGF0aCI6ICJkb2NzL3Jldmlld3MvbWMtcm9vdC1pbnRlZ3JhdGlvbi12My9zdHJpY3QtZGVmYXVsdHMuanNvbiIsCiAgICAgICAgInNoYTI1NiI6ICJiYTcxNzkxNWQ5ODA0YzMyNjFlMjdiMzRiZTBmMmRlOTU1M2Q4YjgxMjk0MmQzMGE4ZTQzNjk3MTk3MjdmYWExIgogICAgICB9CiAgICB9CiAgXSwKICAibGltaXRhdGlvbnMiOiBbCiAgICAiVGhpcyBnYXRlIHZlcmlmaWVzIG9yZGluYXJ5IHJ1bnMgYW5kIGV4cGxpY2l0bHkgcmVnaXN0ZXJlZCBzdXBwb3J0ZWQgZXhhbXBsZXMsIG5vdCBzdWNjZXNzIG9mIGV2ZXJ5IG1vZGVsIGRlZmF1bHQuIFRoZSBzZXBhcmF0ZSBzdHJpY3QgYWxsLWRlZmF1bHQgZ2F0ZSByZW1haW5zIGZhaWxlZCBmb3IgdGhlIGRlY2xhcmVkIEdJUyBjYXNlLiIsCiAgICAiTm8gbW9kZWwtc291cmNlLCBzY2llbnRpZmljIGFwcGxpY2FiaWxpdHksIHByZXBhcmF0aW9uLCBjYWxpYnJhdGlvbiBvciBleHBlcmltZW50YWwgdmFsaWRhdGlvbiBpcyBjZXJ0aWZpZWQuIE5vIG5ldyBtb2RlbCBvciBhbHRlcmVkIGRlZmluaXRpb24gaXMgYWRtaXR0ZWQgYXV0b21hdGljYWxseS4iLAogICAgIk9DQyBleGFjdCBxdWFsaWZpZWQgbm9taW5hbCBmb3JtdWxhdGlvbjsgb3JkaW5hcnkgZHJhaW5lZCBkZWZhdWx0IG11c3Qgc3VjY2VlZC4gQ3ljbGljIHN0cmVzcyB1bmxvYWRpbmcgaXMgdW5zdXBwb3J0ZWQgYW5kIHNlcGFyYXRlbHkgcmV0YWluZWQ7IG5vIHVuaWZvcm0gdGlueS1wb3NpdGl2ZS1wcmVzc3VyZSByZWxhdGl2ZSBhY2N1cmFjeS4iLAogICAgIkR1bmNhbuKAk0NoYW5nIGNvbnN0YW50LW51IGVuZHBvaW50LWF2ZXJhZ2U6IGV4YWN0IGluZGVwZW5kZW50bHkgcmV2aWV3ZWQgZGVmaW5pdGlvbjsgc291cmNlLWNvZWZmaWNpZW50IHByZXNldHMgYXJlIGlsbHVzdHJhdGl2ZSwgd2l0aCBubyBjYWxpYnJhdGlvbiwgZXhwZXJpbWVudGFsIHZhbGlkYXRpb24gb3IgRkUtaG9zdCB0YW5nZW50IGNsYWltLiBPcmRpbmFyeSBkZWZhdWx0IGlzIGFuIGFkZGl0aW9uYWwgc29mdHdhcmUgcXVhbGlmaWNhdGlvbi4iCiAgXQp9Cg=='}
+ 

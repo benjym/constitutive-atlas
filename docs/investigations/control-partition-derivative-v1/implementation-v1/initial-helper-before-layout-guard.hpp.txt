@@ -1,0 +1,352 @@
+#pragma once
+#include "models.hpp"
+#include "atlas/settings.hpp"
+#include "atlas/solution_constraints.hpp"
+#include <limits>
+#include <stdexcept>
+#include <sstream>
+
+namespace atlas {
+using State=std::vector<double>;
+struct Diagnostics {
+    int iterations=0, substeps=0, rejected=0, nonmonotone_restarts=0, rounding_corrections=0;
+    int attempted_substeps=0, discarded_substeps=0, partition_retries=0, first_attempt_substeps=0;
+    double error=0;
+    State increment_fractions, partition_defect=State(6,0.), discarded_increment_fractions;
+    std::vector<State> accepted_increments, discarded_increments;
+};
+struct Advance { bool ok=false; State state; Diagnostics diagnostics; std::string message; IntegrationSettings settings; };
+inline State default_parameters(int model) { State p;for(const auto&v:models().at(model).parameters)p.push_back(v.value);return p; }
+inline State initial_state(int model){State z;for(const auto&f:models().at(model).fields)for(int i=0;i<f.size;++i)z.push_back(f.initial[i]);return z;}
+inline void reset_transients(int model,State&z){for(const auto&f:models().at(model).fields)if(f.transient)for(int j=0;j<f.size;++j)z[f.offset+j]=0;}
+inline bool finite(const State&z){for(double v:z)if(!std::isfinite(v))return false;return true;}
+inline bool valid_parameters(int model,const State&p){const auto&ps=models().at(model).parameters;if(p.size()!=ps.size())return false;for(size_t i=0;i<p.size();++i)if(!std::isfinite(p[i])||p[i]<ps[i].lower||p[i]>ps[i].upper)return false;return true;}
+inline bool solution_admissible(int model,const State& z,const State& p){return model>=0 && model<int(models().size()) && checked_solution_state(models()[model],z,p);}
+inline bool domain(int model,const State&z,const State&p,bool initial=false){State out;Sym<double> zero;return finite(z)&&solution_admissible(model,z,p)&&evaluate_model(model,z,z,zero,p,out,initial)&&finite(out);}
+inline double scaled_norm(const State&r,const State&scales){double n=0;for(size_t i=0;i<r.size();++i)n=std::max(n,std::abs(r[i]/scales[i]));return n;}
+inline bool solve_linear(std::vector<State> a,State b,State&x){
+    const int n=int(b.size());
+    for(int k=0;k<n;++k){int pivot=k;for(int i=k+1;i<n;++i)if(std::abs(a[i][k])>std::abs(a[pivot][k]))pivot=i;
+        if(!std::isfinite(a[pivot][k])||std::abs(a[pivot][k])<1e-14)return false;
+        std::swap(a[k],a[pivot]);std::swap(b[k],b[pivot]);
+        for(int i=k+1;i<n;++i){double f=a[i][k]/a[k][k];for(int j=k+1;j<n;++j)a[i][j]-=f*a[k][j];b[i]-=f*b[k];}
+    }
+    x.assign(n,0);for(int i=n-1;i>=0;--i){double s=b[i];for(int j=i+1;j<n;++j)s-=a[i][j]*x[j];x[i]=s/a[i][i];}return finite(x);
+}
+// A bounded representable-grid correction for a sub-tolerance but physically
+// inadmissible iterate. Candidate direction comes only from the Newton solve.
+inline bool rounding_neighbor(int model,const State&z,const State&zn,const Sym<double>&de,const State&p,const State&scales,const State&delta,double error,const IntegrationSettings&settings,State&accepted){
+    if(!std::isfinite(error)||!(error<settings.residual_tolerance)||solution_admissible(model,z,p))return false;
+    for(size_t i=0;i<z.size();++i){
+        const double direction=delta[i]*scales[i];
+        if(!std::isfinite(direction)||direction==0||z[i]+direction!=z[i])continue;
+        State trial=z,residual;trial[i]=std::nextafter(z[i],direction>0?std::numeric_limits<double>::infinity():-std::numeric_limits<double>::infinity());
+        if(!finite(trial)||!evaluate_model(model,trial,zn,de,p,residual)||!finite(residual)||!solution_admissible(model,trial,p))continue;
+        if(scaled_norm(residual,scales)<settings.residual_tolerance){accepted=trial;return true;}
+    }
+    return false;
+}
+inline bool implicit_step(int model,const State&zn,const Sym<double>&de,const State&p,State&z,Diagnostics&diag,const IntegrationSettings&settings={}){
+    const auto scales=model_scales(model,p);const int n=int(zn.size());z=zn;reset_transients(model,z);
+    if(!solution_admissible(model,z,p))return false;
+    bool restarted=false;
+    bool predictor=false;for(const auto&f:models().at(model).fields)predictor=predictor||f.multiplier;
+    for(int it=0;it<settings.max_iterations;++it){
+        ++diag.iterations;std::vector<Jet> x(n),xn(n),r;Sym<Jet>d;
+        for(int i=0;i<n;++i){x[i]=Jet(z[i]);x[i].d[i]=scales[i];xn[i]=Jet(zn[i]);}
+        for(int i=0;i<6;++i)d.v[i]=Jet(de.v[i]);
+        if(!evaluate_model(model,x,xn,d,p,r))return false;
+        if(predictor)for(const auto&f:models().at(model).fields)if(f.multiplier)r[f.offset]=x[f.offset];
+        State residual(n);std::vector<State> jac(n,State(n));
+        for(int i=0;i<n;++i){residual[i]=r[i].v/scales[i];for(int j=0;j<n;++j)jac[i][j]=r[i].d[j]/scales[i];}
+        if(!finite(residual))return false;
+        double err=0;for(double v:residual)err=std::max(err,std::abs(v));diag.error=err;
+        if(err<settings.residual_tolerance){
+            // evaluate_model has checked the predictor domain. Its elastic trial
+            // need not satisfy final physical constraints before plastic correction.
+            if(predictor){predictor=false;continue;}
+            if(solution_admissible(model,z,p))return true;
+        }
+        State delta;for(double&v:residual)v=-v;if(!solve_linear(jac,residual,delta))return false;
+        State rounded;
+        if(!predictor&&rounding_neighbor(model,z,zn,de,p,scales,delta,err,settings,rounded)){
+            z=rounded;++diag.rounding_corrections;return true;
+        }
+        bool accepted=false;
+        // Preserve feasible descent paths; allow provisional physical-constraint
+        // violations only when no feasible descent exists. Domain checks bind both.
+        for(int pass=0;pass<2&&!accepted;++pass){
+            for(int backtrack=0;backtrack<=settings.max_backtracks;++backtrack){double alpha=std::ldexp(1.,-backtrack);State trial=z,rt;for(int i=0;i<n;++i)trial[i]+=alpha*delta[i]*scales[i];
+                if(!finite(trial)||(pass==0&&!solution_admissible(model,trial,p))||!evaluate_model(model,trial,zn,de,p,rt)||!finite(rt))continue;
+                if(predictor)for(const auto&f:models().at(model).fields)if(f.multiplier)rt[f.offset]=trial[f.offset];
+                if(scaled_norm(rt,scales)<err){z=trial;accepted=true;break;}
+            }
+        }
+        // A discontinuous branch residual may have no descent departure from a
+        // boundary. One domain-valid full Newton restart is bounded by this solve.
+        if(!accepted&&!restarted){State trial=z,rt;for(int i=0;i<n;++i)trial[i]+=delta[i]*scales[i];
+            if(finite(trial)&&evaluate_model(model,trial,zn,de,p,rt)&&finite(rt)){
+                z=trial;accepted=true;restarted=true;++diag.nonmonotone_restarts;
+            }
+        }
+        if(!accepted)return false;
+    }
+    return false;
+}
+inline bool midpoint(int model,const State&zn,const Sym<double>&de,const State&p,State&z,State*endpoint_defect=nullptr){
+    State k1,k2,mid=zn;if(!evaluate_model(model,zn,zn,de,p,k1)||!finite(k1))return false;
+    for(size_t i=0;i<zn.size();++i)mid[i]+=.5*k1[i];
+    if(!finite(mid)||!evaluate_model(model,mid,zn,de,p,k2)||!finite(k2))return false;
+    z=zn;for(size_t i=0;i<zn.size();++i)z[i]+=k2[i];
+    if(!domain(model,z,p))return false;
+    // Step doubling alone can miss a branch entered after the final midpoint.
+    // Sample the endpoint and compare midpoint with Simpson-type quadrature.
+    // The defect is O(increment^3) on smooth paths and detects hidden crossings.
+    if(endpoint_defect){
+        State k3;if(!evaluate_model(model,z,zn,de,p,k3)||!finite(k3))return false;
+        endpoint_defect->resize(zn.size());
+        for(size_t i=0;i<zn.size();++i)(*endpoint_defect)[i]=(k1[i]-2*k2[i]+k3[i])/6.;
+        if(!finite(*endpoint_defect))return false;
+    }
+    return true;
+}
+inline bool advance_recursive(int model,const State&zn,const Sym<double>&de,const State&p,State&z,Diagnostics&diag,int depth,const IntegrationSettings&settings={}){
+    if(depth>settings.max_depth||diag.substeps>=settings.max_substeps)return false;
+    const bool rate=models().at(model).rate;
+    if(!rate){if(implicit_step(model,zn,de,p,z,diag,settings)){++diag.substeps;diag.increment_fractions.push_back(std::ldexp(1.,-depth));diag.accepted_increments.emplace_back(de.v.begin(),de.v.end());return true;}}
+    else {
+        State full,half,two,half_defect,two_defect;const auto halfde=.5*de;
+        if(midpoint(model,zn,de,p,full)&&midpoint(model,zn,halfde,p,half,&half_defect)&&midpoint(model,half,halfde,p,two,&two_defect)){
+            auto scales=model_scales(model,p);double error=0;
+            for(size_t i=0;i<zn.size();++i){
+                error=std::max(error,std::abs(full[i]-two[i])/scales[i]);
+                error=std::max(error,std::abs(half_defect[i])/scales[i]);
+                error=std::max(error,std::abs(two_defect[i])/scales[i]);
+            }
+            diag.error=error;
+            if(error<settings.rate_tolerance){if(diag.substeps>settings.max_substeps-2)return false;z=two;diag.substeps+=2;diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));diag.accepted_increments.emplace_back(halfde.v.begin(),halfde.v.end());diag.accepted_increments.emplace_back(halfde.v.begin(),halfde.v.end());return true;}
+        }
+    }
+    ++diag.rejected;State half;
+    if(!advance_recursive(model,zn,.5*de,p,half,diag,depth+1,settings))return false;
+    return advance_recursive(model,half,.5*de,p,z,diag,depth+1,settings);
+}
+// One non-dyadic alternative, with an error-free audit of its binary loading sum.
+inline bool alternate_partition(const Sym<double>&de,Sym<double>&left,Sym<double>&right,State&defect){
+    defect.assign(6,0.);
+    for(int i=0;i<6;++i){
+        const double incoming=de.v[i];
+        if(!std::isfinite(incoming))return false;
+        if(incoming==0.){left.v[i]=incoming;right.v[i]=incoming;continue;}
+        const double a=incoming/3.,b=incoming-a,sum=a+b;
+        if(!std::isfinite(a)||!std::isfinite(b)||a==0.||b==0.||sum!=incoming)return false;
+        const double virtual_b=sum-a;
+        const double remainder=(a-(sum-virtual_b))+(b-virtual_b);
+        if(!std::isfinite(remainder)||std::abs(remainder)/std::abs(incoming)>2*std::numeric_limits<double>::epsilon())return false;
+        left.v[i]=a;right.v[i]=b;defect[i]=remainder;
+    }
+    return true;
+}
+inline Advance integrate(int model,const State&zn,const Sym<double>&de,const State&p,const IntegrationSettings&settings={}){
+    Advance result;result.state=zn;result.settings=settings;
+    if(!valid_settings(settings)){result.message="invalid integration settings";return result;}
+    if(model<0||model>=int(models().size())){result.message="unknown model";return result;}
+    if(models()[model].physical_time){result.message="physical-time model requires the timed update API";return result;}
+    if(zn.size()!=initial_state(model).size()||!valid_parameters(model,p)||!domain(model,zn,p,true)||!std::isfinite(norm(de))){result.message="invalid parameters, inadmissible initial state or strain increment";return result;}
+    for(double s:model_scales(model,p))if(!std::isfinite(s)||s<=0){result.message="invalid state scales";return result;}
+    State prepared;
+    if(!prepare_model_increment(model,zn,de,p,prepared)||!domain(model,prepared,p)){
+        result.message="increment reset failed: nonfinite guard/state or domain boundary; state rolled back";return result;
+    }
+    State trial;
+    result.ok=advance_recursive(model,prepared,de,p,trial,result.diagnostics,0,settings);
+    auto&diag=result.diagnostics;
+    diag.attempted_substeps=diag.substeps;diag.first_attempt_substeps=diag.substeps;
+    if(!result.ok)diag.discarded_substeps=diag.substeps;
+    if(!result.ok&&!models()[model].rate&&settings.max_depth>0&&diag.substeps<settings.max_substeps){
+        Sym<double> left,right;State defect;
+        if(alternate_partition(de,left,right,defect)){
+            const Diagnostics first=diag;Diagnostics retry;State midpoint_state;
+            auto remaining=settings;remaining.max_substeps-=first.substeps;
+            bool ok=advance_recursive(model,prepared,left,p,midpoint_state,retry,1,remaining);
+            const size_t left_steps=retry.increment_fractions.size();
+            if(ok)ok=advance_recursive(model,midpoint_state,right,p,trial,retry,1,remaining);
+            constexpr double left_fraction=1./3.,right_fraction=1.-left_fraction;
+            for(size_t i=0;i<retry.increment_fractions.size();++i)retry.increment_fractions[i]*=2*(i<left_steps?left_fraction:right_fraction);
+            retry.iterations+=first.iterations;retry.rejected+=first.rejected;
+            retry.nonmonotone_restarts+=first.nonmonotone_restarts;retry.rounding_corrections+=first.rounding_corrections;
+            retry.partition_retries=1;retry.first_attempt_substeps=first.substeps;retry.partition_defect=defect;
+            retry.attempted_substeps=first.substeps+retry.substeps;
+            if(ok){
+                retry.discarded_substeps=first.substeps;
+                retry.discarded_increment_fractions=first.increment_fractions;retry.discarded_increments=first.accepted_increments;
+            }else{
+                retry.increment_fractions.insert(retry.increment_fractions.begin(),first.increment_fractions.begin(),first.increment_fractions.end());
+                retry.accepted_increments.insert(retry.accepted_increments.begin(),first.accepted_increments.begin(),first.accepted_increments.end());
+                retry.substeps=retry.attempted_substeps;retry.discarded_substeps=retry.attempted_substeps;
+            }
+            diag=std::move(retry);result.ok=ok;
+        }
+    }
+    if(result.ok && !solution_admissible(model,trial,p))result.ok=false;
+    if(!result.ok)diag.discarded_substeps=diag.attempted_substeps;
+    if(result.ok)result.state=trial;else result.message="integration failed: domain boundary, singular system or substep limit; state rolled back";
+    return result;
+}
+
+// Pore-pressure change is an external effective-stress boundary reconstruction.
+// A total/unspecified stress tensor supplies no pore-pressure law.
+inline bool laboratory_pore_reconstruction(StressScope scope,int protocol){
+    return scope==StressScope::effective&&(protocol==2||protocol==3);
+}
+struct Point { double control=0; Sym<double> strain; State state; Diagnostics diagnostics; double pore_pressure=0; };
+struct Run { bool ok=false; std::string message;std::vector<Point> points; IntegrationSettings settings; };
+// Same ordered adaptive partition, interpreted as an affine extension about
+// its actual accepted binary increments (including non-dyadic retry branches).
+inline bool comparable_control_partition(const Advance&base,const Sym<double>&base_total,const Advance&probe,const Sym<double>&probe_total){
+    if(!base.ok||!probe.ok)return false;
+    const auto&a=base.diagnostics;const auto&b=probe.diagnostics;
+    const size_t count=a.increment_fractions.size();
+    if(!count||b.increment_fractions.size()!=count||a.accepted_increments.size()!=count||b.accepted_increments.size()!=count||a.partition_retries<0||a.partition_retries!=b.partition_retries)return false;
+    double coverage_a=0,coverage_b=0;
+    for(size_t i=0;i<count;++i){
+        const double f=a.increment_fractions[i],g=b.increment_fractions[i];
+        if(!std::isfinite(f)||!std::isfinite(g)||f<=0||g<=0||f!=g||a.accepted_increments[i].size()!=6||b.accepted_increments[i].size()!=6)return false;
+        coverage_a+=f;coverage_b+=g;
+        for(int j=0;j<6;++j){
+            const double u=a.accepted_increments[i][j],v=b.accepted_increments[i][j];
+            if(!std::isfinite(base_total.v[j])||!std::isfinite(probe_total.v[j])||!std::isfinite(u)||!std::isfinite(v))return false;
+            if(base_total.v[j]==probe_total.v[j]){if(u!=v)return false;continue;}
+            const double delta=f*(probe_total.v[j]-base_total.v[j]),expected=u+delta;
+            const double bound=std::max(8*std::numeric_limits<double>::denorm_min(),8*std::numeric_limits<double>::epsilon()*std::max(std::abs(u),std::max(std::abs(v),std::abs(delta))));
+            if(!std::isfinite(delta)||!std::isfinite(expected)||!std::isfinite(bound)||std::abs(v-expected)>bound)return false;
+        }
+    }
+    return std::isfinite(coverage_a)&&std::isfinite(coverage_b)&&std::abs(coverage_a-1.)<=1e-12&&std::abs(coverage_b-1.)<=1e-12;
+}
+struct ControlDerivativeProbe {
+    double h=0,slope=0;bool representable=false,comparable=false,finite_slope=false;
+    Sym<double> increment;Advance advance;
+};
+struct ControlDerivative {
+    bool ok=false;double value=0,h=0;std::vector<ControlDerivativeProbe> probes;
+};
+// Evaluator must use the same committed parent/settings for every request.
+// Returned audit is local: probes never enter material state or budget counters.
+// h is the nominal scalar directional amplitude, as in the original finite
+// difference. Actual rounded totals are audited; all changed components must
+// remain representable. No replacement denominator or direction is inferred.
+template<class Evaluate,class Observe>
+inline ControlDerivative consistent_control_derivative(const Advance&base,const Sym<double>&total,const Sym<double>&direction,double initial_h,Evaluate evaluate,Observe observe){
+    ControlDerivative result;
+    if(!base.ok||!std::isfinite(initial_h)||initial_h<=0||!finite(base.state))return result;
+    const double baseline=observe(base.state);if(!std::isfinite(baseline))return result;
+    bool previous=false;double previous_slope=0;
+    for(int k=0;k<=10;++k){
+        ControlDerivativeProbe probe;probe.h=std::ldexp(initial_h,-k);probe.increment=total;
+        bool changed=false;probe.representable=std::isfinite(probe.h)&&probe.h>0;
+        for(int j=0;j<6;++j){
+            if(!std::isfinite(total.v[j])||!std::isfinite(direction.v[j]))probe.representable=false;
+            if(direction.v[j]!=0){changed=true;probe.increment.v[j]=total.v[j]+probe.h*direction.v[j];
+                if(!std::isfinite(probe.increment.v[j])||probe.increment.v[j]==total.v[j])probe.representable=false;}
+        }
+        if(!changed)probe.representable=false;
+        if(!probe.representable){result.probes.push_back(std::move(probe));return result;}
+        probe.advance=evaluate(probe.increment);
+        probe.comparable=comparable_control_partition(base,total,probe.advance,probe.increment);
+        if(probe.comparable&&finite(probe.advance.state)){
+            probe.slope=(observe(probe.advance.state)-baseline)/probe.h;probe.finite_slope=std::isfinite(probe.slope);
+        }
+        const bool valid=probe.comparable&&probe.finite_slope;
+        const bool stable=valid&&previous&&std::abs(probe.slope-previous_slope)<=1e-3*std::max(1.,std::max(std::abs(probe.slope),std::abs(previous_slope)));
+        result.probes.push_back(std::move(probe));const auto&saved=result.probes.back();
+        if(stable){result.ok=true;result.value=saved.slope;result.h=saved.h;return result;}
+        previous=valid;if(valid)previous_slope=saved.slope;
+    }
+    return result;
+}
+
+// Mixed axisymmetric control. Trial constitutive evaluations always start from
+// the same committed state. Outer Newton updates never accumulate trial history.
+inline bool controlled_step(int model,const State&zn,const State&p,int protocol,double axial,double reference,double current_axial,Sym<double>&de,Advance&result,const IntegrationSettings&settings={}){
+    de={};de.v[0]=axial;
+    if(protocol==0||protocol==4){de.v[1]=de.v[2]=protocol==4?axial:0.;result=integrate(model,zn,de,p,settings);return result.ok;}
+    if(protocol==2){de.v[1]=de.v[2]=-.5*axial;result=integrate(model,zn,de,p,settings);return result.ok;}
+    if(protocol==1){
+        double lateral=-.2*axial;
+        for(int it=0;it<30;++it){de.v[1]=de.v[2]=lateral;auto trial=integrate(model,zn,de,p,settings);if(!trial.ok)return false;
+            double residual=.5*(trial.state[1]+trial.state[2])-reference;
+            if(std::abs(residual)<std::max(1.,std::abs(reference))*1e-8){result=trial;return true;}
+            const double h=std::max(1e-9,std::abs(axial)*1e-3);Sym<double> direction;direction.v[1]=direction.v[2]=1.;
+            const auto slope=consistent_control_derivative(trial,de,direction,h,
+                [&](const Sym<double>&increment){return integrate(model,zn,increment,p,settings);},
+                [](const State&state){return .5*(state[1]+state[2]);});
+            if(!slope.ok)return false;const double derivative=slope.value;
+            if(!std::isfinite(derivative)||std::abs(derivative)<1e-6)return false;
+            double correction=-residual/derivative;bool accepted=false;
+            for(double a=1;a>=1./1024;a*=.5){auto testde=de;testde.v[1]=testde.v[2]=lateral+a*correction;auto test=integrate(model,zn,testde,p,settings);
+                if(test.ok&&std::abs(.5*(test.state[1]+test.state[2])-reference)<std::abs(residual)){lateral+=a*correction;accepted=true;break;}}
+            if(!accepted)return false;
+        }return false;
+    }
+    // protocol 3: prescribed deviator stress change and zero volume change.
+    if(protocol==3){
+        double da=0;double q0=zn[0]-.5*(zn[1]+zn[2]);
+        for(int it=0;it<30;++it){de.v[0]=da;de.v[1]=de.v[2]=-.5*da;auto trial=integrate(model,zn,de,p,settings);if(!trial.ok)return false;
+            double q=trial.state[0]-.5*(trial.state[1]+trial.state[2]);double residual=q-q0-axial;
+            if(std::abs(residual)<std::max(1.,std::abs(reference))*1e-8){result=trial;return true;}
+            auto dd=de;dd.v[0]+=1e-8;dd.v[1]-=5e-9;dd.v[2]-=5e-9;auto pert=integrate(model,zn,dd,p,settings);if(!pert.ok)return false;
+            double tangent=(pert.state[0]-.5*(pert.state[1]+pert.state[2])-q)/1e-8;if(std::abs(tangent)<1e-4)return false;
+            double correction=-residual/tangent;bool accepted=false;
+            for(double a=1;a>=1./1024;a*=.5){auto testde=de;testde.v[0]=da+a*correction;testde.v[1]=testde.v[2]=-.5*testde.v[0];auto test=integrate(model,zn,testde,p,settings);
+                if(test.ok&&std::abs(test.state[0]-.5*(test.state[1]+test.state[2])-q0-axial)<std::abs(residual)){da+=a*correction;accepted=true;break;}}
+            if(!accepted)return false;
+        }
+    }
+    (void)current_axial;return false;
+}
+// Research range is an explicit caller choice, not a kinematic validity claim.
+enum class LaboratoryRange { Interactive, ResearchQuarterStrain };
+inline Run run_protocol_impl(int model,const State&initial,const State&p,int protocol,double target,int steps,int cycles,const IntegrationSettings&settings,const State*controls,LaboratoryRange range=LaboratoryRange::Interactive){
+    Run run;run.settings=settings;if(!valid_settings(settings)||model<0||model>=int(models().size())||protocol<0||protocol>4||steps<1||steps>5000||cycles<0||cycles>100||!std::isfinite(target)||!valid_parameters(model,p)||initial.size()!=initial_state(model).size()||!domain(model,initial,p,true)){
+        run.message="invalid run specification";return run;}
+    if(std::abs(initial[1]-initial[2])>1e-6||std::abs(initial[3])+std::abs(initial[4])+std::abs(initial[5])>1e-12){run.message="laboratory protocols require axisymmetric initial stress";return run;}
+    if(cycles&&steps<16*cycles){run.message="cyclic loading requires at least 16 increments per cycle";return run;}
+    const double strain_limit=range==LaboratoryRange::ResearchQuarterStrain?.25:.1;
+    if((protocol==3&&std::abs(target)>1e8)||(protocol!=3&&std::abs(target)>strain_limit)){run.message="control amplitude exceeds laboratory limit";return run;}
+    Point committed;committed.control=controls?controls->front():0.;committed.state=initial;run.points.push_back(committed);
+    double lateral=.5*(initial[1]+initial[2]);
+    for(int i=1;i<=steps;++i){
+        double control=controls?(*controls)[i]:(cycles?target*::atlas_cyclic_sine(2*3.141592653589793*cycles*i/steps):target*i/steps);
+        auto previous=run.points.back();Sym<double> de;Advance result;
+        if(!controlled_step(model,previous.state,p,protocol,control-previous.control,lateral,previous.strain.v[0],de,result,settings)){
+            run.message="control or constitutive solve failed at step "+std::to_string(i)+"; last committed point retained";return run;}
+        Point point;point.control=control;point.state=result.state;point.strain=previous.strain+de;point.diagnostics=result.diagnostics;
+        if(laboratory_pore_reconstruction(models()[model].stress_scope,protocol))point.pore_pressure=lateral-.5*(point.state[1]+point.state[2]);
+        run.points.push_back(point);
+    }
+    run.ok=true;return run;
+}
+
+// Legacy producers retain their original arithmetic and endpoint semantics.
+inline Run run_protocol(int model,const State&initial,const State&p,int protocol,double target,int steps,int cycles,const IntegrationSettings&settings={}){
+    return run_protocol_impl(model,initial,p,protocol,target,steps,cycles,settings,nullptr);
+}
+// laboratory-controls-0.1: cumulative change relative to the initial point.
+// Protocol 3 specifies deviator stress change (Pa); all others specify strain.
+// The original controller consumes differences of consecutive caller values.
+// No interpolation, resampling, waveform generation or endpoint snapping.
+inline Run run_protocol_controls(int model,const State&initial,const State&p,int protocol,const State&controls,const IntegrationSettings&settings={},LaboratoryRange range=LaboratoryRange::Interactive){
+    Run invalid;invalid.settings=settings;
+    if(controls.size()<2||controls.size()>5001||controls.front()!=0){
+        invalid.message="explicit controls require 2..5001 points beginning at zero";return invalid;
+    }
+    double amplitude=0;
+    for(double control:controls){
+        if(!std::isfinite(control)){invalid.message="explicit controls must be finite";return invalid;}
+        amplitude=std::max(amplitude,std::abs(control));
+    }
+    return run_protocol_impl(model,initial,p,protocol,amplitude,int(controls.size())-1,0,settings,&controls,range);
+}
+
+}

@@ -1,0 +1,21 @@
+--- a/web/app.js
++++ b/web/app.js
+@@ -350,15 +350,15 @@
+     if(activeId!==null)pendingRun=job;else startRun(job);
+   }catch(error){invalidate();calculationError(error.message);}
+ }
+-function axisRange(values){
+-  if(!values.length)return [0,1];let lo=Infinity,hi=-Infinity;for(const v of values){lo=Math.min(lo,v);hi=Math.max(hi,v);}if(lo===hi){const pad=Math.max(Math.abs(lo)*.05,1e-3);lo-=pad;hi+=pad;}else{const pad=(hi-lo)*.07;lo-=pad;hi+=pad;}return [lo,hi];
++function axisRange(values,nearConstant=false){
++  if(!values.length)return [0,1];let lo=Infinity,hi=-Infinity;for(const v of values){lo=Math.min(lo,v);hi=Math.max(hi,v);}if(lo===hi||(nearConstant&&hi-lo<=64*Number.EPSILON*Math.max(1,Math.abs(lo),Math.abs(hi)))){const pad=Math.max(Math.abs(lo)*.05,1e-3);lo-=pad;hi+=pad;}else{const pad=(hi-lo)*.07;lo-=pad;hi+=pad;}return [lo,hi];
+ }
+ function numberLabel(v){if(Math.abs(v)<1e-10)return '0';return Number(v.toPrecision(3)).toString();}
+ function svgNode(name,attributes,text){const n=document.createElementNS('http://www.w3.org/2000/svg',name);for(const[k,v]of Object.entries(attributes))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n;}
+ function chart(id,xLabel,yLabel,predicted,measured=[],emptyMessage){
+   const svg=$(id);svg.replaceChildren();svg.append(svgNode('title',{},yLabel+' versus '+xLabel));
+   const left=62,top=27,w=392,h=211,all=[...predicted,...measured].filter(a=>a.every(Number.isFinite));
+-  const [xmin,xmax]=axisRange(all.map(p=>p[0])),[ymin,ymax]=axisRange(all.map(p=>p[1]));
++  const [xmin,xmax]=axisRange(all.map(p=>p[0])),[ymin,ymax]=axisRange(all.map(p=>p[1]),true);
+   const x=v=>left+(v-xmin)/(xmax-xmin)*w,y=v=>top+h-(v-ymin)/(ymax-ymin)*h;
+   for(let i=0;i<=4;i++){
+     const yy=top+i*h/4,xx=left+i*w/4;

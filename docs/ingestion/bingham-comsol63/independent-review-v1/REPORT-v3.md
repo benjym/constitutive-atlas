@@ -1,0 +1,13 @@
+# Independent pre-build packaging followup — accepted
+
+Reviewer `/root/bingham_review`, 2 November2026. **Prospective decision: accepted against freeze-v4.** E5 approval/backend delivery still awaits actual numerical results and the exact build receipt. No compiled execution/build/network call occurred. V1/v2 review files remain unchanged.
+
+Compared every prior freeze-v3 path/hash against freeze-v4. Of113prior inputs, only web/bingham-atlas-contract.mjs changed, as disclosed in ASSESSOR-REVISION-v4.json. Seven additional packaging/check/policy/revision inputs give120pins. All120current hashes match. Model, source receipts, analytical/reference cases, numerical assessor, parity, runtime, compiler, CMake, solver settings and accuracy/refinement/parity budgets are unchanged. The four interface files retained under superseded-implementation-v1 match their documented original hashes (including unchanged laboratory module). Exact findings and current bindings are in input-binding-v3.json.
+
+Read POLICY-v2.json, IMPLEMENTATION-REVISION-v2.json, updated browser contract/worker and package builder. Packaging now requires exactly one accepted-review artifact binding for execution-v1/build-receipt.json; that receipt must identify the exact candidate and provide module/Wasm/metadata artifact hashes. The builder validates the actual accepted review with the normal review validator, checks its receipt hash, exact candidate, generated metadata and each actual artifact hash before copying. Thus metadata alone no longer permits packaging arbitrary module/Wasm bytes.
+
+The worker fetches/hashes the packaged receipt and module/Wasm/metadata, checks accepted separate-agent approval, then checks receipt identity and all three artifact hashes against the package identity. The browser contract requires the receipt hash at the unique expected review-artifact path. This is a suitable exact reviewed engine binding for the static package workflow. It is fail closed until a real receipt and accepted exact E5 record exist; those must be assessed later rather than fabricated to enable packaging.
+
+No further prospective blocker found. The parent may conduct coordinator-owned serial native/Wasm observations under freeze-v4; numerical inputs and gates retain the accepted prospective scope in REPORT-v2. Final E5 review must bind actual module/Wasm/metadata receipts and actual qualification outputs; browser/release qualification remains separate.
+
+New owned files: REPORT-v3.md and input-binding-v3.json. Verification used Python SHA-256 reads and code inspection only; no synthetic numerical baseline was repeated because the numerical assessor and its inputs did not change.

@@ -1,0 +1,103 @@
+{
+  "identity": "kelvin-voigt-comsol63-source-schema-crosswalk-v1",
+  "schema_version_target": "0.3",
+  "model_sha256": "080fa946ea5d7743b133b62bbd39098b6b50ecf09d835f1a9966fa9283b6f8da",
+  "entries": [
+    {
+      "item": "identity",
+      "source_quantity": "COMSOL6.3 ordinary Kelvin\u2013Voigt, deviatoric viscosity with elastic bulk",
+      "locator": "theory3441080/3441129 and settings4898977/4898979",
+      "schema_field": "id",
+      "representation": "kelvin-voigt-comsol63-deviatoric-zero-spin-ode"
+    },
+    {
+      "item": "time",
+      "source_quantity": "source time derivative",
+      "locator": "Eq3-36 image074",
+      "schema_field": "formulation.time_dependence/equation_form",
+      "representation": "physical_time/ode"
+    },
+    {
+      "item": "kinematics",
+      "source_quantity": "linear infinitesimal variant, no geometric nonlinearity",
+      "locator": "opening elasticity after image010",
+      "schema_field": "formulation.kinematics/frame/objective_rate",
+      "representation": "small_strain_3d/fixed_spatial/none"
+    },
+    {
+      "item": "stress",
+      "source_quantity": "elastic + parallel dashpot",
+      "locator": "image010 + Eq3-36",
+      "schema_field": "observables.stress",
+      "representation": "K trace(eps) I +2G dev(eps)+2Gtau dev(strain_rate)"
+    },
+    {
+      "item": "viscosity",
+      "source_quantity": "eta=Gtau",
+      "locator": "anchor3441131",
+      "schema_field": "parameters",
+      "representation": "K Pa, G Pa, tau s; eta derived Pa s"
+    },
+    {
+      "item": "state",
+      "source_quantity": "no auxiliary strain DOFs",
+      "locator": "anchor3441130",
+      "schema_field": "state/initialization",
+      "representation": "eps sym6 persistent infinitesimal strain; explicit eps/time/all-six rates"
+    },
+    {
+      "item": "sign",
+      "source_quantity": "p=-trace(sigma)/3; p=-Ktrace(eps_el)",
+      "locator": "images003/008",
+      "schema_field": "formulation.stress_sign/strain_sign",
+      "representation": "compression_positive joint sign reversal"
+    },
+    {
+      "item": "tensor",
+      "source_quantity": "Cartesian symmetric stress/strain",
+      "locator": "Eq3-36 and isotropic opening",
+      "schema_field": "formulation.tensor_representation",
+      "representation": "mandel [xx,yy,zz,sqrt2xy,sqrt2yz,sqrt2xz]"
+    },
+    {
+      "item": "scope",
+      "source_quantity": "uncoupled total stress without inelastic strain",
+      "locator": "image010 and additive parallel branch",
+      "schema_field": "formulation.stress",
+      "representation": "observable stress / cauchy / total, dry"
+    },
+    {
+      "item": "dissipation",
+      "source_quantity": "sigma_q:epsdot_d = 2eta epsdot_d:epsdot_d",
+      "locator": "image075",
+      "schema_field": "independent reference",
+      "representation": "nonnegative for positive G,tau"
+    },
+    {
+      "item": "transactions",
+      "source_quantity": "not prescribed by vendor governing equation",
+      "locator": "Atlas time/schedule API",
+      "schema_field": "execution contract",
+      "representation": "parent-owned trial/commit/rollback, explicit discontinuity splits"
+    }
+  ],
+  "project_choices": [
+    "positive numerical parameter bounds1e-12..1e30",
+    "illustrative K20MPa/G12MPa/tau2s",
+    "Mandel transport and compression-positive joint conversion",
+    "eps strain bookkeeping as persistent state",
+    "all explicit stage/loading/lifecycle contract fields"
+  ],
+  "unsupported_or_excluded": [
+    "volumetric viscous branch",
+    "fractional derivatives",
+    "geometric nonlinearity/finite spin",
+    "thermal and other inelastic strains",
+    "initial stress offset",
+    "pore/effective stress conversion",
+    "impulsive strain step",
+    "experimental or broad parameter-envelope validation"
+  ],
+  "source_gaps_within_scope": [],
+  "shared_capability_requests": []
+}

@@ -1,0 +1,150 @@
+{
+  "note": "Native observations assessed before Wasm. No command executed by this document. Actual execution needs accepted freeze and fresh coordinator slot.",
+  "commands": {
+    "native_configure": [
+      "cmake",
+      "-S",
+      "/private/tmp/atlas-maxwell-current-v1/source/cmake/maxwell",
+      "-B",
+      "/private/tmp/atlas-maxwell-current-v1/native",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    "native_build": [
+      "cmake",
+      "--build",
+      "/private/tmp/atlas-maxwell-current-v1/native",
+      "--target",
+      "atlas_maxwell_solver",
+      "--parallel",
+      "1"
+    ],
+    "native_main": [
+      "python3",
+      "-B",
+      "/private/tmp/atlas-maxwell-current-v1/source/tests/test_maxwell.py",
+      "--solver",
+      "/private/tmp/atlas-maxwell-current-v1/native/atlas_maxwell_solver",
+      "--output",
+      "/private/tmp/atlas-maxwell-current-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/native-raw.json"
+    ],
+    "native_transactions": [
+      "python3",
+      "-B",
+      "/private/tmp/atlas-maxwell-current-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/check_transactions.py",
+      "--backend",
+      "native",
+      "--solver",
+      "/private/tmp/atlas-maxwell-current-v1/native/atlas_maxwell_solver"
+    ],
+    "wasm_configure": [
+      "emcmake",
+      "cmake",
+      "-S",
+      "/private/tmp/atlas-maxwell-current-v1/source/cmake/maxwell",
+      "-B",
+      "/private/tmp/atlas-maxwell-current-v1/wasm",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    "wasm_build": [
+      "cmake",
+      "--build",
+      "/private/tmp/atlas-maxwell-current-v1/wasm",
+      "--target",
+      "atlas_maxwell_solver",
+      "--parallel",
+      "1"
+    ],
+    "wasm_main": [
+      "node",
+      "/private/tmp/atlas-maxwell-current-v1/source/tools/test_maxwell_wasm.mjs",
+      "/private/tmp/atlas-maxwell-current-v1/wasm/maxwell.js",
+      "/private/tmp/atlas-maxwell-current-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json",
+      "/private/tmp/atlas-maxwell-current-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/wasm-raw.json"
+    ],
+    "wasm_analytical_assess": [
+      "python3",
+      "-B",
+      "/private/tmp/atlas-maxwell-current-v1/source/tests/test_maxwell.py",
+      "--assess",
+      "/private/tmp/atlas-maxwell-current-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/wasm-raw.json"
+    ],
+    "wasm_transactions": [
+      "python3",
+      "-B",
+      "/private/tmp/atlas-maxwell-current-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/check_transactions.py",
+      "--backend",
+      "wasm",
+      "--module",
+      "/private/tmp/atlas-maxwell-current-v1/wasm/maxwell.js"
+    ],
+    "parity": [
+      "python3",
+      "-B",
+      "/private/tmp/atlas-maxwell-current-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/compare_backends_v2.py"
+    ],
+    "native_preset_relaxation": [
+      "python3",
+      "-B",
+      "-m",
+      "atlas.cli",
+      "run",
+      "/private/tmp/atlas-maxwell-current-v1/source/examples/maxwell/relaxation.json",
+      "--solver",
+      "/private/tmp/atlas-maxwell-current-v1/native/atlas_maxwell_solver",
+      "--output",
+      "/private/tmp/atlas-maxwell-current-v1/presets/relaxation.json"
+    ],
+    "native_preset_creep": [
+      "python3",
+      "-B",
+      "-m",
+      "atlas.cli",
+      "run",
+      "/private/tmp/atlas-maxwell-current-v1/source/examples/maxwell/creep.json",
+      "--solver",
+      "/private/tmp/atlas-maxwell-current-v1/native/atlas_maxwell_solver",
+      "--output",
+      "/private/tmp/atlas-maxwell-current-v1/presets/creep.json"
+    ],
+    "native_preset_oedometer": [
+      "python3",
+      "-B",
+      "-m",
+      "atlas.cli",
+      "run",
+      "/private/tmp/atlas-maxwell-current-v1/source/examples/maxwell/oedometer.json",
+      "--solver",
+      "/private/tmp/atlas-maxwell-current-v1/native/atlas_maxwell_solver",
+      "--output",
+      "/private/tmp/atlas-maxwell-current-v1/presets/oedometer.json"
+    ],
+    "native_preset_load-hold-reverse": [
+      "python3",
+      "-B",
+      "-m",
+      "atlas.cli",
+      "run",
+      "/private/tmp/atlas-maxwell-current-v1/source/examples/maxwell/load-hold-reverse.json",
+      "--solver",
+      "/private/tmp/atlas-maxwell-current-v1/native/atlas_maxwell_solver",
+      "--output",
+      "/private/tmp/atlas-maxwell-current-v1/presets/load-hold-reverse.json"
+    ],
+    "assess_native_presets": [
+      "python3",
+      "-B",
+      "/Users/bmar5496/code/constitutive-atlas/docs/ingestion/maxwell-itasca900/atlas-build-v1/assess_presets.py",
+      "/private/tmp/atlas-maxwell-current-v1/source",
+      "/private/tmp/atlas-maxwell-current-v1/presets"
+    ]
+  },
+  "cwd": "/private/tmp/atlas-maxwell-current-v1/source",
+  "preset_mapping": {
+    "relaxation": "relaxation-schedule",
+    "creep": "creep-schedule",
+    "oedometer": "oedometer",
+    "load-hold-reverse": "load-hold-reverse"
+  },
+  "preset_output_directory": "/private/tmp/atlas-maxwell-current-v1/presets; create before CLI runs",
+  "new_assessor_sha256": "f8108773bd5272c9f4b0705c79ac9b6399c6ec0eb26ba0d8bc7159318459136c"
+}

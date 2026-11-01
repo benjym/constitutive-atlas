@@ -1,0 +1,7 @@
+# Clay2013 integration on newer release base
+
+Local integration commit e80e5311f2c97944876eada2dd5575739f9da391 applies exact independently accepted metadata147617cd onto pinned NorSand/Duncan dd7de01f in /private/tmp/atlas-clay2013-release-v3. Every28committed blob matches the accepted proposal; candidate clean. The new base workflow, serialhelper, cataloguefamilydisclosures and historicalarchive repairs remain intact.
+
+Normal before/after databasebundle and evidenceexport pass. Counter comparison across all9tables preserves every prior row, including duplicate source rows; exactly3approval and3agentreview rows are added (17→20 and13→16). Every approval definition/review identity is checked. Public envelope difference is exactly6new review/definition JSON envelopes plus4updated metadata files, with no removal. Downloadable database checker passes22definitions;14ordinary engine descriptors remain unchanged. PLAN.json and CHECKS.json retain exactinputs,expectedgates and results.
+
+This is metadata-only integration qualification, not a standard completepackage/browser/CI/live claim. No compiledcall/build occurred while Kelvin and queued owners hold execution scheduling. Fullpackage requalification and actual current browser checks follow a coordinator slot handoff. Obtain final source/integration review, reconcile any further release base advance, then prepare separately authorized remote CI/deploy/live verification. E8 remains open; no remote action performed.

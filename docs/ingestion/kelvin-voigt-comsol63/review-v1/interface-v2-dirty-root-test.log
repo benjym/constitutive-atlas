@@ -1,0 +1,173 @@
+✔ all-six initial rates and mode masks survive exact wire/import (2.718875ms)
+✔ strict controls reject invalid inputs and preserve caller (0.264375ms)
+✔ strict JSON rejects duplicates overflow and inexact integers (0.123459ms)
+✔ import/result guards cover identity full state incoming rate event and solver (2.648166ms)
+✔ full numerical replay rejects finite tampering (0.517042ms)
+✔ actual panel carries every six-component control and renders full state/stress plus six plot choices (2.316208ms)
+✔ latest request, reset and outgoing selection reject stale callbacks and clear export (0.466042ms)
+✔ invalid input, worker error and timeout recover with fresh valid runs (0.297042ms)
+✔ verified import replays full saved output; finite tampering fails and stale file read cannot reactivate (1.453667ms)
+✔ shared controller router deactivates outgoing Kelvin before another timed profile (0.280959ms)
+✖ coordinator release hook includes Kelvin in timed router and preserves actual ordinary async guard (1.227083ms)
+✔ synchronous Worker construction and postMessage faults clean up and recover on valid run (0.564167ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53.423541
+
+✖ failing tests:
+
+test at tests/test_kelvin_voigt_routing.mjs:41:1
+✖ coordinator release hook includes Kelvin in timed router and preserves actual ordinary async guard (1.227083ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /setupKelvinVoigtLaboratory\(\{chart,cancelOrdinary:/. Input:
+  
+  "import {setupJ2Laboratory} from './j2-laboratory.mjs';\n" +
+    "import {setupTimedLaboratory} from './timed-laboratory.mjs';\n" +
+    "import {setupSlsLaboratory} from './sls-laboratory.mjs';\n" +
+    "import {setupPathLaboratory} from './path-laboratory.mjs';\n" +
+    "import {setupMaxwellLaboratory} from './maxwell-laboratory.mjs';\n" +
+    "import {setupImplicitPathLaboratory} from './implicit-path-laboratory.mjs';\n" +
+    "import {createLaboratoryControllerRouter} from './laboratory-controller-router.mjs';\n" +
+    "import {validateSupport,unsupportedReason,requireSupportedControl} from './laboratory-support.mjs';\n" +
+    "import {timedLaboratoryRoute} from './timed-route.mjs';\n" +
+    "import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';\n" +
+    "import {validateApplicability,applicabilitySection} from './applicability-view.mjs';\n" +
+    "import {formulationSection,recordedDescription} from './formulation-view.mjs';\n" +
+    "import {createLoading,normalizeLoading,verifyReturnedLoading} from './loading.mjs';\n" +
+    "import {laboratoryStress,validateScopedLaboratory,verifyScopedLaboratory} from './laboratory-scope.mjs';\n" +
+    "import {laboratoryPresentation,laboratoryPoreView} from './laboratory-view.mjs';\n" +
+    "import {createLaboratoryDocument,parseLaboratoryDocument,laboratoryDocumentCSV} from './laboratory-document.mjs';\n" +
+    "import {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';\n" +
+    "import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';\n" +
+    "import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';\n" +
+    "import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';\n" +
+    'const $ = id => document.getElementById(id);\n' +
+    'let j2View=null,timedView=null;\n' +
+    'let compiledCatalogue=null, laboratoryExamples=null, controlSupport=null;\n' +
+    "let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;\n" +
+    'let experiments=[],builtinExperiments=[],experimentLoadSequence=0;\n' +
+    'const experimentCache=new Map();\n' +
+    "let applicabilityMatrix=null,applicabilityState='loading';\n" +
+    'async function loadApplicability(){\n' +
+    "  try{const response=await fetch('./applicability.json');if(!response.ok)throw Error('Applicability unavailable');applicabilityMatrix=validateApplicability(await response.json());applicabilityState='loaded';}\n" +
+    "  catch{applicabilityState='failed';}\n" +
+    '  const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);\n' +
+    "  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;body.querySelector('.catalogue-applicability')?.replaceWith(applicabilitySection(document,entry.id,applicabilityMatrix,applicabilityState));body.scrollTop=scroll;}\n" +
+    '}\n' +
+    "let evidenceIndex=null,evidenceState='loading';\n" +
+    'async function loadEvidenceIndex(){\n' +
+    "  try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());evidenceState='loaded';refreshRecordedDescriptions();refreshModelSummary();}\n" +
+    "  catch{evidenceState='failed';}\n" +
+    '  const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);\n' +
+    "  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;refreshCatalogueStatus(entry,models.find(m=>m.id===entry.id));body.querySelector('.catalogue-evidence')?.replaceWith(evidenceSection(document,entry.id,evidenceIndex,evidenceState));body.scrollTop=scroll;}\n" +
+    '}\n' +
+    'function refreshRecordedDescriptions(){\n' +
+    "  const selected=models.find(m=>m.id===$('model').value);\n" +
+    '  if(selected){\n' +
+    "    $('model-description').textContent=recordedDescription(selected.description,selected.id,evidenceIndex);\n" +
+    "    const equationDescription=$('equation-content')?.querySelector('p');\n" +
+    '    if(equationDescription)equationDescription.textContent=recordedDescription(selected.description,selected.id,evidenceIndex);\n' +
+    '  }\n' +
+    '  const id=catalogueRoute(location.hash).modelId,entry=catalogue.find(e=>e.id===id);\n' +
+    "  if(!entry||!$('catalogue-dialog').open)return;\n" +
+    "  const spec=models.find(m=>m.id===id),body=$('catalogue-detail-body');\n" +
+    "  const note=body.querySelector('.catalogue-detail-note');\n" +
+    "  if(note)note.textContent=recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',id,evidenceIndex);\n" +
+    "  const description=body.querySelector('.definition-description');\n" +
+    '  if(description&&spec)description.textContent=recordedDescription(spec.description,id,evidenceIndex);\n' +
+    '}\n' +
+    'function restoreCatalogueFocus(){\n' +
+    "  if(!$('catalogue').hidden&&!$('catalogue').contains(document.activeElement)){\n" +
+    "    const hash=catalogueModelHash($('catalogue-detail-id').textContent);\n" +
+    "    const link=[...document.querySelectorAll('#catalogue-grid .catalogue-open')].find(x=>x.hash===hash);\n" +
+    "    (link||$('search')).focus({preventScroll:true});\n" +
+    '  }\n' +
+    '}\n' +
+    "function closeCatalogue(){if(catalogueRoute(location.hash).modelId||catalogueRoute(location.hash).invalid){history.replaceState(null,'','#catalogue');route();}else $('catalogue-dialog').close();restoreCatalogueFocus();}\n" +
+    "const protocolNames=['Oedometer','Drained triaxial','Undrained triaxial','Undrained stress control','Isotropic compression'];\n" +
+    "function toast(message){$('toast').textContent=message;$('toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').style.display='none',7000);}\n" +
+    'function specialLaboratoryActive(){return !!(j2View?.active||timedView?.active);}\n' +
+    'function selectJ2(id){\n' +
+    '  const active=j2View?.select(id)??false;\n' +
+    "  document.querySelector('#laboratory > .lab-layout').hidden=active;\n" +
+    "  document.querySelector('#laboratory > .workspace-links').hidden=active;\n" +
+    "  $('import-run').hidden=active;\n" +
+    '  if(active){\n' +
+    "    $('model-description').textContent='Associated J2 plasticity with linear isotropic hardening. All-six prescribed strain increments; full stress and hardening history.';\n" +
+    "    $('model-family').textContent='Small-strain plasticity';$('model-status').textContent='Approved bounded scope';\n" +
+    "    $('model-sources').replaceChildren();\n" +
+    "    for(const [text,path] of [['Independent scientific review and limitations','review.html#law-review'],['Exact approval','approval.json'],['Exact approved definition','j2-linear-isotropic-hardening-be.json']]){const a=element('a',text+' ↗');a.href='./material-point-j2/'+path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}\n" +
+    '  }\n' +
+    '  return active;\n' +
+    '}\n' +
+    'function selectLaboratory(id){\n' +
+    '  if(j2View&&id===j2View.modelId){\n' +
+    "    // The timed profile's deactivation restores ordinary visibility, so it must\n" +
+    '    // run before the J2 helper establishes the selected workspace.\n' +
+    '    if(timedView?.active)timedView.select(false);\n' +
+    '    if(!j2View.active)++experimentLoadSequence;\n' +
+    '    return selectJ2(id);\n' +
+    '  }\n' +
+    '  if(timedView?.supports(id)){\n' +
+    '    if(j2View?.active)j2View.select(false);\n' +
+    '    if(!timedView.active)++experimentLoadSequence;\n' +
+    '    const active=timedView.select(id);\n' +
+    "    if(active)$('model').value=id;\n" +
+    "    if(active&&id==='lade-duncan-1975-midpoint-elastic-eq19-gap-v4'){\n" +
+    "      $('model-description').textContent='Lade–Duncan (1975) cohesionless-soil elastoplasticity. Midpoint elastic/local Eq. 19 integration; small strain, compression-positive total mechanical stress, fixed axes and zero pore pressure. Custom paths remain exploratory.';\n" +
+    "      $('model-family').textContent='Soil elastoplasticity';$('model-status').textContent='Approved bounded numerical scope';\n" +
+    "      $('model-sources').replaceChildren();\n" +
+    "      for(const [text,path] of [['Original 1975 source','https://doi.org/10.1061/AJGEB6.0000204'],['Independent scientific checklist','./engine-implicit-path/review.json'],['Exact approval and limitations','./engine-implicit-path/approval.json'],['Exact approved model JSON','./engine-implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json']]){const a=element('a',text+' ↗');a.href=path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}\n" +
+    '    }\n' +
+    "    $('import-run').hidden=active;\n" +
+    '    return active;\n' +
+    '  }\n' +
+    '  if(j2View?.active)j2View.select(false);\n' +
+    '  if(timedView?.active)timedView.select(false);\n' +
+    "  document.querySelector('#laboratory > .lab-layout').hidden=false;\n" +
+    "  document.querySelector('#laboratory > .workspace-links').hidden=false;\n" +
+    "  $('import-run').hidden=false;\n" +
+    '  return false;\n' +
+    '}\n' +
+    'function activateLaboratoryModel(id,{run=true}={}){\n' +
+    '  if(id!==j2View?.modelId&&!timedView?.supports(id)&&!models.some(m=>m.id===id)){\n' +
+    "    toast('That model is not available in this laboratory.');return false;\n" +
+    '  }\n' +
+    "  cancel('');\n" +
+    '  if(selectLaboratory(id))return true;\n' +
+    "  $('model').value=id;populate();if(run)simulate();return true;\n" +
+    '}\n' +
+    'function route({initial=false}={}){\n' +
+    '  const anchor=location.hash.slice(1),selection=catalogueRoute(location.hash),page=selection.page;\n' +
+    "  if(page==='laboratory'&&anchor.startsWith('laboratory?')){\n" +
+    "    const query=new URLSearchParams(anchor.slice(anchor.indexOf('?')+1));\n" +
+    "    if(query.has('model')){\n" +
+    "      const id=query.get('model');\n" +
+    "      if(query.getAll('model').length!==1)toast('Use one model in a laboratory link.');\n" +
+    "      else if(id!==$('model').value||(id===j2View?.modelId&&!j2View.active)||(timedView?.supports(id)&&!timedView.active))activateLaboratoryModel(id,{run:!initial});\n" +
+    '    }\n' +
+    '  }\n' +
+    '  const entry=catalogue.find(x=>x.id===selection.modelId);\n' +
+    '  if(entry)showCatalogueModel(entry,models.find(x=>x.id===entry.id));\n' +
+    "  else{if($('catalogue-dialog').open)$('catalogue-dialog').close();if(selection.modelId||selection.invalid)toast('That model link is not in this catalogue.');}\n" +
+    "  document.querySelectorAll('.page').forEach(x=>x.hidden=x.id!==page);\n" +
+    "  document.querySelectorAll('.rail nav a').forEach(x=>{const active=x.hash==='#'+page;x.classList.toggle('active',active);if(active)x.setAttribute('aria-current','page');else x.removeAttribute('aria-curre"... 46257 more characters
+  
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_kelvin_voigt_routing.mjs:43:9)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: "import {setupJ2Laboratory} from './j2-laboratory.mjs';\nimport {setupTimedLaboratory} from './timed-laboratory.mjs';\nimport {setupSlsLaboratory} from './sls-laboratory.mjs';\nimport {setupPathLaboratory} from './path-laboratory.mjs';\nimport {setupMaxwellLaboratory} from './maxwell-laboratory.mjs';\nimport {setupImplicitPathLaboratory} from './implicit-path-laboratory.mjs';\nimport {createLaboratoryControllerRouter} from './laboratory-controller-router.mjs';\nimport {validateSupport,unsupportedReason,requireSupportedControl} from './laboratory-support.mjs';\nimport {timedLaboratoryRoute} from './timed-route.mjs';\nimport {setupLaboratoryExamples} from './laboratory-examples-view.mjs';\nimport {validateApplicability,applicabilitySection} from './applicability-view.mjs';\nimport {formulationSection,recordedDescription} from './formulation-view.mjs';\nimport {createLoading,normalizeLoading,verifyReturnedLoading} from './loading.mjs';\nimport {laboratoryStress,validateScopedLaboratory,verifyScopedLaboratory} from './laboratory-scope.mjs';\nimport {laboratoryPresentation,laboratoryPoreView} from './laboratory-view.mjs';\nimport {createLaboratoryDocument,parseLaboratoryDocument,laboratoryDocumentCSV} from './laboratory-document.mjs';\nimport {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';\nimport {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';\nimport {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';\nimport {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';\nconst $ = id => document.getElementById(id);\nlet j2View=null,timedView=null;\nlet compiledCatalogue=null, laboratoryExamples=null, controlSupport=null;\nlet models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;\nlet experiments=[],builtinExperiments=[],experimentLoadSequence=0;\nconst experimentCache=new Map();\nlet applicabilityMatrix=null,applicabilityState='loading';\nasync function loadApplicability(){\n  try{const response=await fetch('./applicability.json');if(!response.ok)throw Error('Applicability unavailable');applicabilityMatrix=validateApplicability(await response.json());applicabilityState='loaded';}\n  catch{applicabilityState='failed';}\n  const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);\n  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;body.querySelector('.catalogue-applicability')?.replaceWith(applicabilitySection(document,entry.id,applicabilityMatrix,applicabilityState));body.scrollTop=scroll;}\n}\nlet evidenceIndex=null,evidenceState='loading';\nasync function loadEvidenceIndex(){\n  try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());evidenceState='loaded';refreshRecordedDescriptions();refreshModelSummary();}\n  catch{evidenceState='failed';}\n  const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);\n  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;refreshCatalogueStatus(entry,models.find(m=>m.id===entry.id));body.querySelector('.catalogue-evidence')?.replaceWith(evidenceSection(document,entry.id,evidenceIndex,evidenceState));body.scrollTop=scroll;}\n}\nfunction refreshRecordedDescriptions(){\n  const selected=models.find(m=>m.id===$('model').value);\n  if(selected){\n    $('model-description').textContent=recordedDescription(selected.description,selected.id,evidenceIndex);\n    const equationDescription=$('equation-content')?.querySelector('p');\n    if(equationDescription)equationDescription.textContent=recordedDescription(selected.description,selected.id,evidenceIndex);\n  }\n  const id=catalogueRoute(location.hash).modelId,entry=catalogue.find(e=>e.id===id);\n  if(!entry||!$('catalogue-dialog').open)return;\n  const spec=models.find(m=>m.id===id),body=$('catalogue-detail-body');\n  const note=body.querySelector('.catalogue-detail-note');\n  if(note)note.textContent=recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',id,evidenceIndex);\n  const description=body.querySelector('.definition-description');\n  if(description&&spec)description.textContent=recordedDescription(spec.description,id,evidenceIndex);\n}\nfunction restoreCatalogueFocus(){\n  if(!$('catalogue').hidden&&!$('catalogue').contains(document.activeElement)){\n    const hash=catalogueModelHash($('catalogue-detail-id').textContent);\n    const link=[...document.querySelectorAll('#catalogue-grid .catalogue-open')].find(x=>x.hash===hash);\n    (link||$('search')).focus({preventScroll:true});\n  }\n}\nfunction closeCatalogue(){if(catalogueRoute(location.hash).modelId||catalogueRoute(location.hash).invalid){history.replaceState(null,'','#catalogue');route();}else $('catalogue-dialog').close();restoreCatalogueFocus();}\nconst protocolNames=['Oedometer','Drained triaxial','Undrained triaxial','Undrained stress control','Isotropic compression'];\nfunction toast(message){$('toast').textContent=message;$('toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').style.display='none',7000);}\nfunction specialLaboratoryActive(){return !!(j2View?.active||timedView?.active);}\nfunction selectJ2(id){\n  const active=j2View?.select(id)??false;\n  document.querySelector('#laboratory > .lab-layout').hidden=active;\n  document.querySelector('#laboratory > .workspace-links').hidden=active;\n  $('import-run').hidden=active;\n  if(active){\n    $('model-description').textContent='Associated J2 plasticity with linear isotropic hardening. All-six prescribed strain increments; full stress and hardening history.';\n    $('model-family').textContent='Small-strain plasticity';$('model-status').textContent='Approved bounded scope';\n    $('model-sources').replaceChildren();\n    for(const [text,path] of [['Independent scientific review and limitations','review.html#law-review'],['Exact approval','approval.json'],['Exact approved definition','j2-linear-isotropic-hardening-be.json']]){const a=element('a',text+' ↗');a.href='./material-point-j2/'+path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}\n  }\n  return active;\n}\nfunction selectLaboratory(id){\n  if(j2View&&id===j2View.modelId){\n    // The timed profile's deactivation restores ordinary visibility, so it must\n    // run before the J2 helper establishes the selected workspace.\n    if(timedView?.active)timedView.select(false);\n    if(!j2View.active)++experimentLoadSequence;\n    return selectJ2(id);\n  }\n  if(timedView?.supports(id)){\n    if(j2View?.active)j2View.select(false);\n    if(!timedView.active)++experimentLoadSequence;\n    const active=timedView.select(id);\n    if(active)$('model').value=id;\n    if(active&&id==='lade-duncan-1975-midpoint-elastic-eq19-gap-v4'){\n      $('model-description').textContent='Lade–Duncan (1975) cohesionless-soil elastoplasticity. Midpoint elastic/local Eq. 19 integration; small strain, compression-positive total mechanical stress, fixed axes and zero pore pressure. Custom paths remain exploratory.';\n      $('model-family').textContent='Soil elastoplasticity';$('model-status').textContent='Approved bounded numerical scope';\n      $('model-sources').replaceChildren();\n      for(const [text,path] of [['Original 1975 source','https://doi.org/10.1061/AJGEB6.0000204'],['Independent scientific checklist','./engine-implicit-path/review.json'],['Exact approval and limitations','./engine-implicit-path/approval.json'],['Exact approved model JSON','./engine-implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json']]){const a=element('a',text+' ↗');a.href=path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}\n    }\n    $('import-run').hidden=active;\n    return active;\n  }\n  if(j2View?.active)j2View.select(false);\n  if(timedView?.active)timedView.select(false);\n  document.querySelector('#laboratory > .lab-layout').hidden=false;\n  document.querySelector('#laboratory > .workspace-links').hidden=false;\n  $('import-run').hidden=false;\n  return false;\n}\nfunction activateLaboratoryModel(id,{run=true}={}){\n  if(id!==j2View?.modelId&&!timedView?.supports(id)&&!models.some(m=>m.id===id)){\n    toast('That model is not available in this laboratory.');return false;\n  }\n  cancel('');\n  if(selectLaboratory(id))return true;\n  $('model').value=id;populate();if(run)simulate();return true;\n}\nfunction route({initial=false}={}){\n  const anchor=location.hash.slice(1),selection=catalogueRoute(location.hash),page=selection.page;\n  if(page==='laboratory'&&anchor.startsWith('laboratory?')){\n    const query=new URLSearchParams(anchor.slice(anchor.indexOf('?')+1));\n    if(query.has('model')){\n      const id=query.get('model');\n      if(query.getAll('model').length!==1)toast('Use one model in a laboratory link.');\n      else if(id!==$('model').value||(id===j2View?.modelId&&!j2View.active)||(timedView?.supports(id)&&!timedView.active))activateLaboratoryModel(id,{run:!initial});\n    }\n  }\n  const entry=catalogue.find(x=>x.id===selection.modelId);\n  if(entry)showCatalogueModel(entry,models.find(x=>x.id===entry.id));\n  else{if($('catalogue-dialog').open)$('catalogue-dialog').close();if(selection.modelId||selection.invalid)toast('That model link is not in this catalogue.');}\n  document.querySelectorAll('.page').forEach(x=>x.hidden=x.id!==page);\n  document.querySelectorAll('.rail nav a').forEach(x=>{const active=x.hash==='#'+page;x.classList.toggle('active',active);if(active)x.setAttribute('aria-current','page');else x.removeAttribute('aria-curre"... 46257 more characters,
+    expected: /setupKelvinVoigtLaboratory\(\{chart,cancelOrdinary:/,
+    operator: 'match',
+    diff: 'simple'
+  }

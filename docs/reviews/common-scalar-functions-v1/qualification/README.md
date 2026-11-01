@@ -1,0 +1,1 @@
+Generic probe source is prospective only. It evaluates the shared scalar library and existing Jet power wrapper, with no constitutive model or handwritten material kernel. Every scalar carries explicit classification/signbit; all38derivative lanes remain observable. Corpus/reference generation and final closure are required before compilation.

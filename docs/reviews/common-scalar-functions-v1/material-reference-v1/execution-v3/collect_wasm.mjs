@@ -1,0 +1,21 @@
+// Same prospective requests and production API as collect_native.py.
+import fs from 'node:fs';import crypto from 'node:crypto';import {pathToFileURL,fileURLToPath} from 'node:url';import path from 'node:path';
+const B=path.dirname(fileURLToPath(import.meta.url)),req=JSON.parse(fs.readFileSync(path.join(B,'requests.json'))),artifact=path.resolve(process.argv[2]);
+const {default:create}=await import(pathToFileURL(artifact));const lib=await create({wasmBinary:fs.readFileSync(artifact.replace(/\.js$/,'.wasm'))});
+const csv=v=>v.map(x=>Object.is(x,-0)?'-0':String(x)).join(','),paramnames=Object.keys(req.cases[0].parameters),params=c=>c.parameters_csv??(c.parameters?csv(paramnames.map(k=>c.parameters[k])):'');
+const model=req.model,settings=csv(req.settings),hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const call=(name,types,args)=>{const stdout=lib.ccall(name,'string',types,args);return {args,stdout,response:JSON.parse(stdout)}};
+const integrate=(c,z=c.initial??[],de=c.de??[],setting=req.settings)=>call('atlas_integrate_with_settings',Array(5).fill('string'),[model,params(c),c.initial_csv??csv(z),c.de_csv??csv(de),csv(setting)]);
+const evaluate=(c,z,zn,de)=>call('atlas_evaluate',Array(5).fill('string'),[model,params(c),csv(z),csv(zn),csv(de)]);
+const admissible=(c,z)=>call('atlas_study_admissible',['string','string'],[csv(z),params(c)]);
+const recovery=()=>integrate(req.cases[0]);
+const out={backend:'wasm',artifact_sha256:hash(artifact),wasm_sha256:hash(artifact.replace(/\.js$/,'.wasm')),requests_sha256:hash(path.join(B,'requests.json')),describe:call('atlas_describe',[],[])};
+out.cases=req.cases.map(c=>{const a=integrate(c),b=integrate(c);return {id:c.id,calls:[a,b],admissible:a.response.ok?admissible(c,a.response.state):null,residual:a.response.ok?evaluate(c,a.response.state,c.initial,c.de):null}});
+out.paths=req.paths.map(p=>{let z=p.initial;const calls=[],holds=[],constraints=[];for(const de of p.increments){const a=integrate(p,z,de);calls.push(a);if(!a.response.ok)break;z=a.response.state;constraints.push(admissible(p,z));holds.push(integrate(p,z,[0,0,0,0,0,0]));}const half=Math.floor(calls.length/2);z=half&&calls[half-1].response.ok?calls[half-1].response.state:p.initial;const restart=[];for(const de of p.increments.slice(half)){const a=integrate(p,z,de);restart.push(a);if(!a.response.ok)break;z=a.response.state;}return {id:p.id,calls,holds,constraints,restart,restart_index:half}});
+out.transactions=req.transactions.map(c=>({id:c.id,call:integrate(c,c.initial,c.de,c.settings),recovery:recovery()}));
+out.invalids=req.invalids.map(c=>({id:c.id,call:integrate(c),recovery:recovery()}));
+out.diagnostics=req.diagnostics.map(c=>({id:c.id,call:evaluate(c,c.current,c.previous,c.de)}));
+out.derivatives=req.derivatives.map(c=>({id:c.id,call:call('atlas_study_jacobian',Array(4).fill('string'),[csv(c.current),csv(c.previous),csv(c.de),params(c)])}));
+const runpreset=(c,initial=c.initial,target=c.target,steps=c.steps)=>call('atlas_run_with_settings',['string','string','string','number','number','number','number','string'],[model,params(c),csv(initial),c.protocol,target,steps,c.cycles,settings]);
+out.presets=req.presets.map(c=>{const a=runpreset(c),points=a.response.points??[],half=c.steps/2,mid=points[half]?.state??c.initial,end=points.at(-1)?.state??c.initial,bad={...c,parameters:{...c.parameters,p_ref:0}};return {id:c.id,call:a,replay:runpreset(c),hold:integrate(c,end,[0,0,0,0,0,0]),restart:runpreset(c,mid,c.target/2,half),invalid:runpreset(bad),recovery:runpreset(c)}});
+fs.writeFileSync(process.argv[3],JSON.stringify(out,null,2)+'\n');console.log('Saved Wasm material API observations');

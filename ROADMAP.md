@@ -1,8 +1,10 @@
 # Constitutive Atlas roadmap
 
+Lade–Duncan1975 compiled checkpoint — 2 November2026: the exact original full elastoplastic law, in its disclosed midpoint-elastic/local Eq19 implicit strain-path realization, passes all11 numerical scopes and the separate nine-item independent checklist. This is one exact reviewed formulation, separate from the14 ordinary definitions; its three internal regression witnesses and family discovery entry are not additional approvals. [Numerical results](docs/ingestion/lade-duncan-1975/fused-linear-v1/RESULTS.md), [accepted scientific review](docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/final-checklist-v1/MODEL_REVIEW.md) and [delivery ledger](docs/ingestion/lade-duncan-1975/DELIVERY.md) distinguish compiled approval from atlas/package/browser and authorized live-delivery gates. Historical failures remain retained; no general parameter, postfailure, FE, finite-rotation or experimental-validation claim is added.
+
 Current Burgers delivery: the exact restricted continuous dry zero-spin timed formulation is source-mapped and independently approved, with fresh bounded native/Wasm qualification and main-laboratory creep/relaxation controls. It remains separate from the twelve ordinary strain-path formulations and does not claim experimental validation. Released5ae90008 passed all five required CI/deploy jobs;44live assets match the tested upload and actual relaxation/creep/full-result replay, source links and mobile layout pass. Exact dated receipts are tracked in [the Burgers ledger](docs/ingestion/burgers-itasca900/DELIVERY.md). Historical Burgers packets retain their original scope/metadata.
 
-Last updated: 1 November 2026. Maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
+Last updated: 2 November 2026. Maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
 
 This is the implementation and research plan for the [repository](https://github.com/benjym/constitutive-atlas) and [public laboratory](https://benjym.github.io/constitutive-atlas/). Progress is milestone-based, without a fixed deadline. Unchecked work below is planned, not delivered. The [research charter](docs/RESEARCH_CHARTER.md) governs admission and scientific claims; [architecture](docs/ARCHITECTURE.md) describes the current implementation.
 
@@ -32,8 +34,10 @@ Literature discovery has broad geomechanics scope. The first executable release 
 
 ## Delivery focus — 1 November 2026
 
-The working tree contains thirteen top-level strain-path definitions: twelve are
-committed and Original Cam Clay is undergoing shared integration. Research and
+Duncan–Chang1970 constant-nu endpoint-average E0–E8 are complete within the exact independently approved scope. Published0b1b15ac passed all six required CI41340720867 jobs and Pages deployment7478200673. The tested995file atlas upload matches12liveHTTP and12actualChrome asset identities; complete101point default,129point dense source example and101point reset exports match the upload apart from elapsed_ms. Source/definition/review links200, meaningful kPa/percent plots and clean browser console verified. [Live model](https://benjym.github.io/constitutive-atlas/index.html#laboratory?model=duncan-chang-1970-endpoint-average), [receipt](docs/ingestion/duncan-chang-1970/release-v2/live-v4/DONE.json), [ledger](docs/ingestion/duncan-chang-1970/DELIVERY.md). Earlier arithmetic/release failures and the declared GIS strict-default limitation remain retained; no numerical gate or scientific scope was relaxed. No experimental, FE-host tangent, finite-rotation, physical-time or pore-fluid/dilatancy validation is claimed. Post-deployment receipt/tracking is local workspace evidence.
+
+The working tree contains fourteen top-level strain-path definitions, including
+Original Cam Clay and exact Duncan–Chang1970 constant-nu endpoint-average. Research and
 physical-time definitions are separate. These are implementation counts, not
 scientific admission or live-delivery counts. Historical `draft` labels and pending
 legacy reviews remain preserved; current exact-definition agent approvals live in
@@ -68,12 +72,15 @@ measurement redistribution rights, or certify new numerical trajectories. The
 and [separate passing nested regime](docs/benchmarks/kfs-nested-partitions-v1/README.md)
 remain distinct. Do not launch additional fits or sweeps to bypass these limits.
 
-For new common-engine capability, [NorSand](docs/ingestion/norsand-1993/DELIVERY.md)
-now has its original source and independently reviewed staged path-control
-implementation, with 58 requests per native/Wasm backend passing. Installation
-of that generic profile, durable CI coverage and final model approval/browser
-integration remain open under their own ownership. Staged capability success is
-not public atlas support.
+The exact [NorSand1993 active drained axial formulation](docs/ingestion/norsand-1993/DELIVERY.md)
+has original-source mapping, independent agent approval and native/Wasm58requests
+per backend. Verified live application3873a48b passes all six required CI/Pages
+jobs,23live/upload asset comparisons and actual41point/threeplot browser
+controls, replay, recovery and desktop/mobile checks. It is one restricted
+controlled-path variant, separate from ordinary strain-path model counts;
+elasticity, cyclic/general3D continuation and experimental validation remain
+excluded. The ledger retains historical acquisition and release failures and
+records final merged publication3873a48b/run41343952906 and separate actual-live acceptance.
 
 SANISAND and Terra Cotta remain near-term scientific targets, not completed
 formulations. [SANISAND's source-scope decision](docs/reviews/sanisand-source-scope-v1/decision.json)
@@ -150,6 +157,11 @@ Literature screening, data curation and prior-work analysis can proceed alongsid
 
 ## 6. M1 — review and verify the five current models
 
+**Current scientific review checkpoint — 2 November 2026:** Separate agents have accepted all five exact baseline formulations against the nine-item checklist. The [M1 status](docs/M1_REVIEW_STATUS.md), [canonical review records](catalogue/agent-reviews/) and [independent installed decision](docs/admission/baseline-hypoplastic-install-v1/installed-review/decision.json) supersede the historical pending-review statements below for their declared scientific scopes. No human scientific signature is required.
+
+**Current integrity exception:** A fresh [bounded integrity check](docs/reviews/roadmap-m1-reconciliation-v2/BASELINE_REVIEW_CHECK.json) confirms the exact current model/review/registry bindings for all five, and full review-artifact validation for elasticity, Drucker–Prager, Modified Cam Clay and IGS97. VW96 retains its accepted scientific decision, but its artifact validation currently fails on the pinned older `AGENTS.md`; resolving that exact policy-source binding remains open. This checkpoint does not claim all five current integrity checks pass, current compiled/browser/live qualification, experimental validation or wider parameter/path coverage.
+
+
 Prepare one source dossier per formulation. Each dossier must contain the exact original source/variant, persistent URL, complete governing equations, stress/strain conventions, state definitions, parameter units and ranges, initialization, domain restrictions, and all corrections or regularizations. Link every implemented equation to its source or label it as a project numerical choice.
 
 | Work item | Formulation | Review and verification focus |
@@ -160,9 +172,11 @@ Prepare one source dossier per formulation. Each dossier must contain the exact 
 | REV-04 | von Wolffersdorff sand hypoplasticity | Original-paper factors and tensor invariants, sign conversions, density/stress limits and reference parameter examples |
 | REV-05 | Hypoplasticity + IGS | Original overlay and history evolution, small-strain stiffness, reversal and cyclic response, comparison with the base law |
 
-- [ ] **REV-06:** Specify independent reference cases and their provenance. Use analytical results where available and independently sourced implementations or published numerical results otherwise; check reuse terms and exact variants.
-- [ ] **REV-07:** Add step-refinement studies, rotational covariance checks, domain/failure cases and failed-increment rollback checks appropriate to each law. Do not interpret fixed-frame covariance as finite-rotation objectivity.
-- [ ] **REV-08:** Record reviewer, date, tested revision, evidence and unresolved discrepancies. Fix disagreements or retain a lower status with an explicit reason.
+- [x] **REV-06:** Specify independent reference cases and their provenance. Use analytical results where available and independently sourced implementations or published numerical results otherwise; check reuse terms and exact variants.
+- [x] **REV-07:** Add step-refinement studies, rotational covariance checks, domain/failure cases and failed-increment rollback checks appropriate to each law. Do not interpret fixed-frame covariance as finite-rotation objectivity.
+- [x] **REV-08:** Record reviewer, date, tested revision, evidence and unresolved discrepancies. Fix disagreements or retain a lower status with an explicit reason.
+
+**Historical evidence development:** The following observations are retained from earlier checkpoints. Their pending-review wording records status at that time; use the current checkpoint above for scientific acceptance and the outstanding integrity exception. The [unchanged pre-reconciliation roadmap](docs/reviews/roadmap-m1-reconciliation-v2/ROADMAP.before.md) preserves the original bytes.
 
 The [elasticity dossier](docs/models/linear-elastic.md) and [29-case analytical report](catalogue/evidence/reports/linear-elastic-analytical-v1.json) now provide the first source mapping and numerical evidence example. All 29 native cases pass, and the rebuilt public catalogue passes native/Wasm parity. REV-01 remains open for independent review; the automated oracle does not supply independent authorship.
 
@@ -752,6 +766,14 @@ The model and its exact disclosures are integrated locally, bringing the executa
 
 The exact approved J2 linear isotropic hardening law now has a qualified main-laboratory interface: all six prescribed strain increments, full eight-component state, plots, export/import replay, failure-prefix recovery and exact engine/approval verification. The unchanged327-call package gate and actual mounted-browser checks pass; independent interface review and final integration addendum are accepted separately from unchanged scientific approval. Retired standalone J2 HTML is not restored. Release/CI/live E8 remains open in [the J2 delivery ledger](docs/ingestion/j2-linear-hardening/DELIVERY.md).
 
+
+NorSand1993: the separately identified original active drained axial variant now has exact-byte independent agent approval and58/58 native/Wasm qualification. The exact local main-atlas/browser delivery is independently accepted; experimental/general3D/live claims remain excluded. E8 awaits shared release gates and explicit remote authorization. See [delivery ledger](docs/ingestion/norsand-1993/DELIVERY.md).
+
 ### J2 main-laboratory closeout — 2026-11-02
 
 The approved bounded J2 formulation is delivered in the main laboratory. Release 8e060a42 passes all required native/Wasm/package/Pages gates;20 assets match the tested upload and the actual live preset passes 32full-state checks. Independent review and all original failures are retained in [the delivery ledger](docs/ingestion/j2-linear-hardening/DELIVERY.md). No broader or experimental validation is claimed.
+
+
+### Orthotropic OGS main-laboratory qualification — 2026-11-02
+
+The complete nine-constant fixed-aligned-axis OGS orthotropic law is delivered in the general atlas laboratory. Qualified application 462a450c/run 41341461226 passes all six CI/Pages jobs, independently assessed native/Wasm checks on macOS/Linux, 155 exact published-upload asset comparisons and actual desktop/mobile browser numerical/replay/recovery checks. All 53 delivery criteria are complete. The qualified 995-file package preserves 14 ordinary definitions; orthotropic is a separate common-solver profile. [Delivery ledger](docs/ingestion/orthotropic-ogs/DELIVERY.md) retains exact source/approval/review identities, all failures and final independent acceptance. No finite rotation, broad conditioning envelope or experimental validation is claimed.

@@ -1,0 +1,679 @@
+{
+  "paper_annotation_version": 2,
+  "status": "development_annotations_not_frozen_ontology",
+  "note": "Scientific annotations are separate from executable schema. Material-role counts are not proofs of identifiability. Supported-scope component counts distinguish stored stress, persistent internal state, bookkeeping and transient quantities. Unsupported 3D counts are null, not zero. Calibration requirements and independent material dimensions remain review questions.",
+  "models": [
+    {
+      "model_id": "linear-elastic",
+      "definition_path": "models/linear-elastic.json",
+      "definition_sha256_at_annotation": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+      "evidence_status": "repository_equation_interpretation_with_linked_sources; not independently reviewed",
+      "source_locators": [
+        {
+          "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticIsotropic.h",
+          "locator": "MaterialProperties::lambda, mu, bulk_modulus; elasticTangentStiffness",
+          "role": "Pinned reference formulation"
+        },
+        {
+          "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticIsotropic.cpp",
+          "locator": "LinearElasticIsotropic::integrateStress; sigma_prev + C * (eps_m - eps_m_prev)",
+          "role": "Pinned incremental stress update"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/linear-elastic.md",
+          "locator": "Equation mapping; project-specific void-ratio bookkeeping and small-strain limits",
+          "role": "Transcription dossier"
+        }
+      ],
+      "intended_material_and_scope": "Generic isotropic small-strain solid; sand use is a deliberately limited baseline.",
+      "role": "diagnostic_baseline",
+      "parent_model_ids": [],
+      "mechanisms": [
+        "constant_isotropic_stiffness"
+      ],
+      "material_parameter_groups": {
+        "elastic_stiffness": [
+          "E",
+          "nu"
+        ]
+      },
+      "nonmaterial_parameters": {
+        "p_ref": "reference scale used in numerical scaling, regularization and/or admissibility checks; not counted as independently fitted material behaviour"
+      },
+      "counts": {
+        "declared_parameters": 3,
+        "material_constants": 2,
+        "stress_components_3d": 6,
+        "persistent_internal_components_3d": 0,
+        "bookkeeping_components_3d": 1,
+        "transient_multiplier_components": 0
+      },
+      "persistent_internal_fields": [],
+      "bookkeeping_fields": [
+        "e"
+      ],
+      "initialization_requirements": [
+        "measured effective stress",
+        "measured initial void ratio for bookkeeping"
+      ],
+      "calibration_information_to_investigate": [
+        "stiffness response and lateral or volumetric strain"
+      ],
+      "limitations_and_review_questions": [
+        "No yield, plastic strain, dilatancy, hardening, or loading memory.",
+        "A fitted modulus over 2 percent strain is an effective secant compromise, not a small-strain modulus measurement."
+      ],
+      "pilot_admission": "included_development_only",
+      "review": {
+        "annotator": "Codex assisted repository audit",
+        "date": "2026-10-30",
+        "independent_reviewer": null,
+        "update_note": "Source links and dossier updated during concurrent atlas work; all non-source fields checked unchanged against archived pilot definition."
+      },
+      "component_count_scope": {
+        "kinematics": "small_strain_3d_symmetric",
+        "stored_stress_fields": [
+          "sigma"
+        ],
+        "stored_stress_components": 6,
+        "persistent_internal_components": 0,
+        "bookkeeping_components": 1,
+        "transient_multiplier_components": 0,
+        "stress_output_components": 6,
+        "independent_stress_output_components": 6,
+        "note": "Supported 3D component counts; axisymmetric laboratory solve dimensions are not these counts."
+      },
+      "independent_material_dimension": {
+        "value": null,
+        "status": "not established by role classification or fitting; independent review pending"
+      }
+    },
+    {
+      "model_id": "drucker-prager",
+      "definition_path": "models/drucker-prager.json",
+      "definition_sha256_at_annotation": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+      "evidence_status": "repository_equation_interpretation_with_linked_sources; not independently reviewed",
+      "source_locators": [
+        {
+          "url": "https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/DruckerPrager.html",
+          "locator": "Drucker–Prager yield and flow conventions; this entry is the explicitly stated perfect-plastic specialization",
+          "role": "formulation"
+        },
+        {
+          "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/DruckerPrager.cpp",
+          "locator": "plastic_integrator: smooth-cone correction under zero hardening; atlas omits separate tensile cutoff. Trial-direction elimination and apex subgradient are project derivations documented in docs/models/drucker-prager-apex.md.",
+          "role": "implementation reference"
+        },
+        {
+          "url": "https://docs.itascacg.com/itasca930/common/models/drucker/doc/modeldrucker.html",
+          "locator": "Equations 17–23 (radial scaling) and Apex Stress Correction; comparison source includes a separate tensile cutoff absent from this atlas law. Project derivation: docs/models/drucker-prager-apex.md.",
+          "role": "formulation reference"
+        }
+      ],
+      "intended_material_and_scope": "Explicit nonassociated perfect-plastic Drucker-Prager specialization, not the full linked OpenSees material.",
+      "role": "simple_frictional_baseline",
+      "parent_model_ids": [],
+      "mechanisms": [
+        "constant_isotropic_stiffness",
+        "pressure_dependent_yield",
+        "nonassociated_flow"
+      ],
+      "material_parameter_groups": {
+        "elastic_stiffness": [
+          "E",
+          "nu"
+        ],
+        "strength": [
+          "M",
+          "c"
+        ],
+        "plastic_flow": [
+          "Md"
+        ]
+      },
+      "nonmaterial_parameters": {
+        "p_ref": "reference scale for numerical residual scaling and a safe denominator at zero trial deviator; not independently fitted material behaviour"
+      },
+      "counts": {
+        "declared_parameters": 6,
+        "material_constants": 5,
+        "stress_components_3d": 6,
+        "persistent_internal_components_3d": 0,
+        "bookkeeping_components_3d": 1,
+        "transient_multiplier_components": 1
+      },
+      "persistent_internal_fields": [],
+      "bookkeeping_fields": [
+        "e"
+      ],
+      "initialization_requirements": [
+        "measured effective stress inside yield surface",
+        "measured initial void ratio for bookkeeping",
+        "gamma reset to zero each increment"
+      ],
+      "calibration_information_to_investigate": [
+        "stiffness and lateral response",
+        "strength over multiple effective pressures",
+        "plastic volume change"
+      ],
+      "limitations_and_review_questions": [
+        "No hardening, density dependence, fabric memory, tensile cap, or critical-state evolution.",
+        "Current Md>=0 bounds and flow sign allow dilation or zero plastic volume change, not plastic contraction.",
+        "Perfect-plastic specialization and sign/parameter mapping require review against sources."
+      ],
+      "pilot_admission": "included_development_only",
+      "review": {
+        "annotator": "Codex assisted repository audit",
+        "date": "2026-10-30",
+        "independent_reviewer": null,
+        "revision_note": "Updated after inspecting changed equations, unchanged parameter/state declarations and the local apex derivation; no independent reviewer added."
+      },
+      "implementation_revision_history": [
+        {
+          "definition_sha256": "9eff38d8ba9ea327d9b0590b03c966b7f5797a53f0aff9e1ecd0b923423a346e",
+          "description": "Previous regularized current-stress deviator direction; used in archived pressure, density and matched-count development pilots.",
+          "replaced_by_sha256": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+          "review": "Assisted equation comparison: trial-direction elimination and an explicit apex subgradient branch replace regularization. Material parameter roles, state counts, initialization classification and intended constitutive scope remain unchanged. See docs/models/drucker-prager-apex.md. Independent review remains pending."
+        }
+      ],
+      "component_count_scope": {
+        "kinematics": "small_strain_3d_symmetric",
+        "stored_stress_fields": [
+          "sigma"
+        ],
+        "stored_stress_components": 6,
+        "persistent_internal_components": 0,
+        "bookkeeping_components": 1,
+        "transient_multiplier_components": 1,
+        "stress_output_components": 6,
+        "independent_stress_output_components": 6,
+        "note": "Supported 3D component counts; axisymmetric laboratory solve dimensions are not these counts."
+      },
+      "independent_material_dimension": {
+        "value": null,
+        "status": "not established by role classification or fitting; independent review pending"
+      }
+    },
+    {
+      "model_id": "hypoplastic-sand-vw96",
+      "definition_path": "models/hypoplastic-sand-vw96.json",
+      "definition_sha256_at_annotation": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+      "evidence_status": "assisted_original_source_reconciliation_linked; independent scientific review pending",
+      "source_locators": [
+        {
+          "url": "https://www.uibk.ac.at/de/geotechnik/bodenmechanik/forschung/hypoplasticity-copy-2/",
+          "locator": "Wolfgang Fellin, Equations of the Hypoplastic Law (1999-10-01), section 5, visually inspected images 18–26 and Karlsruhe row. Image URLs/hashes: catalogue/source-audits/hypoplastic-sand-vw96-fellin-1999.json. Selected original-source reconciliation now linked; complete independent review remains pending.",
+          "role": "implementation-author equation summary"
+        },
+        {
+          "url": "https://doi.org/10.1002/(SICI)1099-1484(199607)1:3<251::AID-CFM13>3.0.CO;2-3",
+          "locator": "von Wolffersdorff (1996), Eqs. 1–2 p. 252; Eqs. 40–46 pp. 262–263; Table I p. 264; Appendix C p. 270. Shared assisted original review: docs/models/hypoplastic-sand-vw96-original.md",
+          "role": "original-publication locators from shared assisted review; not independently re-reviewed here"
+        }
+      ],
+      "intended_material_and_scope": "Uncemented granular material under positive effective compression; executable scope is small strain and zero spin.",
+      "role": "sand_backbone",
+      "parent_model_ids": [],
+      "mechanisms": [
+        "pressure_dependent_stiffness",
+        "density_dependent_response",
+        "critical_state",
+        "state_dependent_dilatancy",
+        "incrementally_nonlinear_response"
+      ],
+      "material_parameter_groups": {
+        "strength": [
+          "phi"
+        ],
+        "compression_and_limiting_densities": [
+          "hs",
+          "n",
+          "ed0",
+          "ec0",
+          "ei0"
+        ],
+        "density_effects": [
+          "alpha",
+          "beta"
+        ]
+      },
+      "nonmaterial_parameters": {
+        "p_ref": "reference scale used in numerical scaling, regularization and/or admissibility checks; not counted as independently fitted material behaviour"
+      },
+      "counts": {
+        "declared_parameters": 9,
+        "material_constants": 8,
+        "stress_components_3d": 6,
+        "persistent_internal_components_3d": 1,
+        "bookkeeping_components_3d": 0,
+        "transient_multiplier_components": 0
+      },
+      "persistent_internal_fields": [
+        "e"
+      ],
+      "bookkeeping_fields": [],
+      "initialization_requirements": [
+        "measured effective stress",
+        "measured void ratio satisfying limiting density domain"
+      ],
+      "calibration_information_to_investigate": [
+        "compression across pressures",
+        "drained shear stress and volume response across density and pressure"
+      ],
+      "limitations_and_review_questions": [
+        "No added reversal-specific intergranular memory.",
+        "All eight material constants need joint review; paper pilot fits only four.",
+        "Existing transfer parameter set comes from a later extension paper and is not an independent reference reproduction.",
+        "Original Table I Hochstetten calibration (beta=1.5) differs from both illustrative defaults and the IGS97 host specialization (beta=1). No historical pilot parameters were changed."
+      ],
+      "pilot_admission": "included_partial_calibration_development_only",
+      "review": {
+        "annotator": "Codex assisted repository audit",
+        "date": "2026-10-31",
+        "independent_reviewer": null,
+        "revision_note": "Paper annotations reconciled against hash-pinned shared original-source reviews. Exact implementation counts and historical pilots retained; source examples and host specialization separated. Independent scientific review remains open."
+      },
+      "component_count_scope": {
+        "kinematics": "small_strain_3d_symmetric",
+        "stored_stress_fields": [
+          "sigma"
+        ],
+        "stored_stress_components": 6,
+        "persistent_internal_components": 1,
+        "bookkeeping_components": 0,
+        "transient_multiplier_components": 0,
+        "stress_output_components": 6,
+        "independent_stress_output_components": 6,
+        "note": "Supported 3D component counts; axisymmetric laboratory solve dimensions are not these counts."
+      },
+      "independent_material_dimension": {
+        "value": null,
+        "status": "not established by role classification or fitting; independent review pending"
+      },
+      "implementation_revision_history": [
+        {
+          "definition_sha256": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31",
+          "replaced_by_sha256": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+          "review": "Source-locator and descriptive parameter-label revision. Constitutive declarations, defaults, bounds, units and state compared with archived development definition and unchanged. No independent review supplied."
+        }
+      ],
+      "source_reconciliation": {
+        "status": "assisted_shared_evidence_reconciliation_not_independent_review",
+        "date": "2026-10-31",
+        "inputs_sha256": {
+          "docs/models/hypoplastic-sand-vw96-original.md": "83d791c6c2d0618f589c6c159a0ed855f724825e7d6121d002dedb6b4a355293",
+          "catalogue/source-audits/original-papers-2026-10-31.json": "e0340c703ebe824960e0137941fcee2f429c0f0d8568c33f97e82d96f98fd2e7"
+        },
+        "counts_changed": false,
+        "historical_pilot_changed": false
+      }
+    },
+    {
+      "model_id": "hypoplastic-sand-igs97",
+      "definition_path": "models/hypoplastic-sand-igs97.json",
+      "definition_sha256_at_annotation": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+      "evidence_status": "assisted_original_source_reconciliation_linked; independent scientific review pending",
+      "source_locators": [
+        {
+          "url": "https://www.uibk.ac.at/de/geotechnik/bodenmechanik/forschung/hypoplasticity-copy-2/",
+          "locator": "Equations of the Hypoplastic Law, section 5, images 18–26; Karlsruhe parameter row",
+          "role": "equation transcription"
+        },
+        {
+          "url": "https://doi.org/10.1002/(SICI)1099-1484(199607)1:3<251::AID-CFM13>3.0.CO;2-3",
+          "locator": "von Wolffersdorff (1996), pp. 251–271",
+          "role": "original publication"
+        },
+        {
+          "url": "https://doi.org/10.1002/(SICI)1099-1484(199710)2:4<279::AID-CFM29>3.0.CO;2-8",
+          "locator": "Niemunis & Herle (1997), Eqs. 7–15 pp. 285–287, Appendix A pp. 295–296 (seven-parameter host), Appendix C p. 297 (history transport), Section 5 pp. 288–289 (integration) and Table I p. 292. Shared assisted original review: docs/models/hypoplastic-sand-igs97-original.md",
+          "role": "original-publication locators from shared assisted review; not independently re-reviewed here"
+        },
+        {
+          "url": "https://j-machacek.github.io/numgeo/2026-09/theory/constitutive-models/mechanical-models/hypo-igs.html#igs-extension",
+          "locator": "2026-09 theory manual, IGS Extension: stiffness operator, mobilisation/direction and history evolution displays. Atlas adds rho cap and 1% history admission band; see dossier.",
+          "role": "implementation-author continuous-equation cross-check; not external execution"
+        }
+      ],
+      "intended_material_and_scope": "Granular sand backbone plus intergranular-strain memory.",
+      "role": "parent_extension_candidate",
+      "parent_model_ids": [
+        "hypoplastic-sand-vw96"
+      ],
+      "mechanisms": [
+        "pressure_dependent_stiffness",
+        "density_dependent_response",
+        "critical_state",
+        "state_dependent_dilatancy",
+        "intergranular_strain_memory",
+        "reversal_dependent_stiffness"
+      ],
+      "material_parameter_groups": {
+        "strength": [
+          "phi"
+        ],
+        "compression_and_limiting_densities": [
+          "hs",
+          "n",
+          "ed0",
+          "ec0",
+          "ei0"
+        ],
+        "density_effects": [
+          "alpha",
+          "beta"
+        ],
+        "intergranular_memory": [
+          "R",
+          "mR",
+          "mT",
+          "beta_r",
+          "chi"
+        ]
+      },
+      "nonmaterial_parameters": {
+        "p_ref": "reference scale used in numerical scaling, regularization and/or admissibility checks; not counted as independently fitted material behaviour"
+      },
+      "counts": {
+        "declared_parameters": 14,
+        "material_constants": 13,
+        "stress_components_3d": 6,
+        "persistent_internal_components_3d": 7,
+        "bookkeeping_components_3d": 0,
+        "transient_multiplier_components": 0
+      },
+      "persistent_internal_fields": [
+        "e",
+        "h"
+      ],
+      "bookkeeping_fields": [],
+      "initialization_requirements": [
+        "measured effective stress and void ratio",
+        "intergranular strain from preparation/history or a documented assumption"
+      ],
+      "calibration_information_to_investigate": [
+        "backbone compression and shear tests",
+        "small-strain stiffness and reversal paths",
+        "cyclic loading"
+      ],
+      "limitations_and_review_questions": [
+        "Shared assisted original-source reconciliation is available; complete simulation/preparation review and independent scientific review remain open.",
+        "Zero h is an explicit erased-memory assumption, not a measured preparation state.",
+        "Original Appendix A specializes the eight-parameter host at beta=1. Current default beta=1.05 is a different host choice; retain 13 material slots for this implementation.",
+        "The failed v1 history check remains historical. Pinned v2 passes 303 cases with unchanged tolerances after a solver endpoint-defect correction; this does not certify current-engine cyclic accuracy, external-code agreement or experimental performance.",
+        "Setting mR=mT=1 does not recover the host for arbitrary history. Source strict parameter recommendations, overshoot correction, preparation resets and finite-spin transport differ from current numerical scope."
+      ],
+      "pilot_admission": "excluded_pending_independent_review_preparation_variant_and_task_specific_numerics",
+      "review": {
+        "annotator": "Codex assisted repository audit",
+        "date": "2026-10-31",
+        "independent_reviewer": null,
+        "revision_note": "Paper annotations reconciled against hash-pinned shared original-source reviews. Exact implementation counts and historical pilots retained; source examples and host specialization separated. Later v2 numerical evidence now linked alongside failed v1, without promoting benchmark admission."
+      },
+      "component_count_scope": {
+        "kinematics": "small_strain_3d_symmetric",
+        "stored_stress_fields": [
+          "sigma"
+        ],
+        "stored_stress_components": 6,
+        "persistent_internal_components": 7,
+        "bookkeeping_components": 0,
+        "transient_multiplier_components": 0,
+        "stress_output_components": 6,
+        "independent_stress_output_components": 6,
+        "note": "Supported 3D component counts; axisymmetric laboratory solve dimensions are not these counts."
+      },
+      "independent_material_dimension": {
+        "value": null,
+        "status": "not established by role classification or fitting; independent review pending"
+      },
+      "implementation_revision_history": [
+        {
+          "definition_sha256": "3780d1ffe547e6bed6fa0fd62cfc9cde71f2a28fb2c0fd15d5049ffccbb038de",
+          "replaced_by_sha256": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+          "review": "Compared against prior git definition: source references and descriptive labels changed; equations, defaults, bounds, state and domain unchanged. Current source dossier and failed numerical investigation inspected. Independent review remains open."
+        }
+      ],
+      "numerical_evidence": [
+        {
+          "path": "catalogue/evidence/hypoplastic-sand-igs97-investigation-v1.json",
+          "sha256": "37e093b4b64d8029ca881c05083339aa0406e88f3384a8508e85461f7e95ab21",
+          "definition_sha256": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+          "outcome": "failed",
+          "scope": "Project-authored instantaneous and history investigation; analytical history check confirms a native small-cycle discrepancy. This is not independent scientific review or benchmark admission."
+        },
+        {
+          "path": "catalogue/evidence/hypoplastic-sand-igs97-analytical-history-v2.json",
+          "sha256": "ab165d78d1fd6ee9d59abee147ec676e35e10cd5fcbbcd6f726d195b06d3de1b",
+          "definition_sha256": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+          "outcome": "passed",
+          "scope": "All 303 cases pass: 295 Cartesian rate, covariance, cap and rollback cases plus eight independently refined histories (15 increments). Collinear default-exponent history is eliminated analytically at RK4 stages; noncollinear paths use full-state RK4. Generic endpoint quadrature defects correct the native hidden-crossing error. Tolerances are unchanged from failed v1. Historical evidence for its pinned solver; not a test of the current working tree or independent scientific validation."
+        }
+      ],
+      "source_reconciliation": {
+        "status": "assisted_shared_evidence_reconciliation_not_independent_review",
+        "date": "2026-10-31",
+        "inputs_sha256": {
+          "docs/models/hypoplastic-sand-igs97-original.md": "cc08e1d0d6a507176ff0e72cc6433995edf414a11107e272229c470833228d6c",
+          "catalogue/source-audits/original-papers-2026-10-31.json": "e0340c703ebe824960e0137941fcee2f429c0f0d8568c33f97e82d96f98fd2e7",
+          "catalogue/evidence/reports/igs-analytical-history-v2.json": "333e8758c6d9ef690239542f8769d69bde79bda138f61cdf5a71a4cc30b91fb5"
+        },
+        "counts_changed": false,
+        "historical_pilot_changed": false
+      }
+    },
+    {
+      "model_id": "modified-cam-clay",
+      "definition_path": "models/modified-cam-clay.json",
+      "definition_sha256_at_annotation": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+      "evidence_status": "repository_equation_interpretation_with_linked_sources; not independently reviewed",
+      "source_locators": [
+        {
+          "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/web/content/docs/benchmarks/small-deformations/ModifiedCamClay/ModifiedCamClay_report.pdf",
+          "locator": "Silbermann & Nagel, 28 June 2023: equations 14–17 and 30b; equation 11 prints M while 30b uses M squared. Section 3.1 hardening differs from atlas exponential log-pc update. Project discretization and normalization: docs/models/modified-cam-clay.md.",
+          "role": "formulation"
+        },
+        {
+          "url": "https://docs.itascacg.com/itasca930/common/models/camclay/doc/modelcamclay.html",
+          "locator": "Equations 15, 18–25: stiffness, yield and associated flow; 31 and 8 have different finite-step hardening/volume updates. Initialization: 32 and 42. Not an executed cross-code comparison.",
+          "role": "formulation reference"
+        }
+      ],
+      "intended_material_and_scope": "Critical-state clay-type behaviour; not a density-dependent sand baseline in this pilot.",
+      "role": "clay_model_outside_sand_pilot",
+      "parent_model_ids": [],
+      "mechanisms": [
+        "pressure_dependent_elasticity",
+        "elliptical_yield",
+        "associated_flow",
+        "isotropic_hardening",
+        "critical_state"
+      ],
+      "material_parameter_groups": {
+        "critical_state_strength": [
+          "M"
+        ],
+        "compression_and_swelling": [
+          "lambda_c",
+          "kappa"
+        ],
+        "elastic_lateral_response": [
+          "nu"
+        ]
+      },
+      "nonmaterial_parameters": {
+        "p_ref": "reference scale used in numerical scaling, regularization and/or admissibility checks; not counted as independently fitted material behaviour"
+      },
+      "counts": {
+        "declared_parameters": 5,
+        "material_constants": 4,
+        "stress_components_3d": 6,
+        "persistent_internal_components_3d": 2,
+        "bookkeeping_components_3d": 0,
+        "transient_multiplier_components": 1
+      },
+      "persistent_internal_fields": [
+        "e",
+        "pc"
+      ],
+      "bookkeeping_fields": [],
+      "initialization_requirements": [
+        "measured effective stress and void ratio",
+        "preconsolidation pressure from consolidation history; initial admissibility",
+        "gamma reset to zero each increment"
+      ],
+      "calibration_information_to_investigate": [
+        "compression and unloading to constrain lambda_c and kappa",
+        "critical-state shear to constrain M",
+        "elastic lateral response to constrain nu"
+      ],
+      "limitations_and_review_questions": [
+        "pc is a state/history quantity, not an extra universal material constant.",
+        "A default pc cannot replace missing consolidation history.",
+        "Source stress and M conventions must be mapped explicitly."
+      ],
+      "pilot_admission": "excluded_material_scope_and_missing_consolidation_history",
+      "review": {
+        "annotator": "Codex assisted repository audit",
+        "date": "2026-10-30",
+        "independent_reviewer": null,
+        "revision_note": "Only description/source locators changed; equations, parameters, state, domain and counts compared against the previously annotated git definition and found unchanged. Source references do not constitute independent validation."
+      },
+      "component_count_scope": {
+        "kinematics": "small_strain_3d_symmetric",
+        "stored_stress_fields": [
+          "sigma"
+        ],
+        "stored_stress_components": 6,
+        "persistent_internal_components": 2,
+        "bookkeeping_components": 0,
+        "transient_multiplier_components": 1,
+        "stress_output_components": 6,
+        "independent_stress_output_components": 6,
+        "note": "Supported 3D component counts; axisymmetric laboratory solve dimensions are not these counts."
+      },
+      "independent_material_dimension": {
+        "value": null,
+        "status": "not established by role classification or fitting; independent review pending"
+      },
+      "implementation_revision_history": [
+        {
+          "definition_sha256": "124ad98fb85da007d510ef66c21428ef955e5dd36052b76b9c1c78fb8a3085f8",
+          "replaced_by_sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+          "review": "Metadata-only source/description revision; constitutive and integration declarations unchanged."
+        }
+      ]
+    },
+    {
+      "model_id": "terracotta-2024-fig1",
+      "definition_path": "models/research/terracotta-2024-fig1.json",
+      "definition_sha256_at_annotation": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "evidence_status": "assisted equation interpretation and paper normalization audit; independent review pending",
+      "source_locators": [
+        {
+          "url": "https://doi.org/10.1016/j.jmps.2024.105789",
+          "locator": "Figure 1; Eqs. (23),(24),(31),(32),(36)–(38),(42),(43),(48),(51),(54); Appendix C; Table 1",
+          "role": "Journal constitutive equations and units"
+        },
+        {
+          "url": "https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/images/theModel.png",
+          "locator": "All Figure 1 equations, visually inspected",
+          "role": "Pinned author equation summary"
+        },
+        {
+          "url": "https://github.com/MaxWiebicke/Terracotta-pq/blob/a4039d0124d8ff61e766f5201f44ddc163c4cff5/code/Terracotta_main.py",
+          "locator": "Kaolin coefficients and initial state, lines 12–45",
+          "role": "Pinned parameter and initialization example"
+        }
+      ],
+      "intended_material_and_scope": "Simplified Figure 1 clay formulation; physical time and fixed x-axis axisymmetric small-strain kinematics. Appendix B and general 3D variants are outside this record.",
+      "role": "survey_representation_stress_test; excluded_sand_pilot",
+      "parent_model_ids": [],
+      "mechanisms": [
+        "density_dependent_nonlinear_elasticity",
+        "coupled_viscoplastic_transport",
+        "mesoscopic_temperature_production_and_decay",
+        "instantaneous_rate_dependent_stress"
+      ],
+      "material_parameter_groups": {
+        "elastic_coefficients": [
+          "Kmod",
+          "Gmod"
+        ],
+        "critical_state_and_compression": [
+          "Mcrit",
+          "omega",
+          "pOne",
+          "Lambda"
+        ],
+        "rheological_entries_after_fixing_temperature_normalization": [
+          "alpha",
+          "gamma",
+          "eta"
+        ]
+      },
+      "nonmaterial_parameters": {
+        "Gamma": "Joint mesoscopic-temperature normalization convention only under coordinated rescaling of Tm, alpha, gamma and eta. Varying Gamma alone changes stress; it is not a free numerical tolerance."
+      },
+      "counts": {
+        "declared_parameters": 10,
+        "material_constants": 9,
+        "stress_components_3d": null,
+        "persistent_internal_components_3d": null,
+        "bookkeeping_components_3d": null,
+        "transient_multiplier_components": 0
+      },
+      "component_count_scope": {
+        "kinematics": "axisymmetric_x_small_strain",
+        "stored_stress_fields": [],
+        "stored_stress_components": 0,
+        "persistent_internal_components": 4,
+        "bookkeeping_components": 0,
+        "transient_multiplier_components": 0,
+        "stress_output_components": 6,
+        "independent_stress_output_components": 2,
+        "note": "Six-component algebraic output represents two signed stress invariants in fixed-axis kinematics. Four scalar persistent states are not a full 3D state count."
+      },
+      "independent_material_dimension": {
+        "value": null,
+        "upper_bound": 9,
+        "status": "One positive scaling redundancy derived from the pinned equations and tested through the interpreter; no proof of full structural or practical identifiability. Independent review pending.",
+        "normalization_derivation": "paper/study/terracotta_normalization.md"
+      },
+      "persistent_internal_fields": [
+        "ev_e",
+        "es_e",
+        "Tm",
+        "phi"
+      ],
+      "bookkeeping_fields": [],
+      "initialization_requirements": [
+        "Measured solid fraction or a documented conversion from void ratio.",
+        "Elastic volumetric and signed shear strains on the admissible positive branch, consistent with elastic stress and the chosen parameters.",
+        "Mesoscopic temperature or a justified zero-temperature history; this is not ordinary measured temperature.",
+        "Initial physical time and prescribed strain rate; nonzero-temperature total stress includes instantaneous rate-dependent contributions.",
+        "Recompute a consistent initial state after changing material parameters; the source preset elastic strains do not preserve pressure automatically."
+      ],
+      "calibration_information_to_investigate": [
+        "Nonlinear elastic and density response at stated rates.",
+        "Compression-state and critical-state evidence for the selected Figure 1 variant.",
+        "Multiple physical loading rates and durations, creep/relaxation or rate changes to distinguish transient mechanisms.",
+        "Joint normalization convention and initial mesoscopic state; do not count a scaling gauge as an extra independently identifiable coefficient."
+      ],
+      "limitations_and_review_questions": [
+        "Clay research draft cannot enter the current sand panel or rate-independent adapter.",
+        "Fixed-axis stress invariants do not establish general 3D, rotational or finite-strain applicability.",
+        "Physical time, durations, rate jumps and state/output continuity require explicit handling.",
+        "Author RHS comparisons, independent equation review, original numerical-procedure reproduction and experimental validation are distinct gates.",
+        "Figure 1/Appendix B distinctions, rounded pOne preset and author mixed-control discrepancies remain source-review limits.",
+        "Nine material-role entries after fixing normalization are not nine established identifiable material constants."
+      ],
+      "pilot_admission": "excluded_material_kinematic_and_time_scope; source_review_pending",
+      "review": {
+        "annotator": "Codex assisted repository equation and source-dossier audit",
+        "date": "2026-10-30",
+        "independent_reviewer": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+--- v6/check_freeze.py
++++ v7/check_freeze.py
+@@ -1,10 +1,13 @@
+ """Read-only whole packet and original-input byte verification."""
++import sys
++sys.dont_write_bytecode = True
+ import ast,json
+ from pathlib import Path
+ from frozen_logic import D,sha,frozen
+ frozen()
+ manifest=json.loads((D/'manifest.json').read_text())
++assert not any(p.is_symlink()or '__pycache__'in p.parts or p.suffix.lower()in{'.pdf','.dll','.zip','.png','.so','.dylib','.pyc','.pyo','.o','.a'}for p in D.rglob('*')),'forbidden generated/binary/cache artifact'
+ assert sorted(manifest)==sorted(str(p.relative_to(D))for p in D.rglob('*')if p.is_file()and p!=D/'manifest.json'),'exact packet inventory'
+ for name,digest in manifest.items():assert sha(D/name)==digest,'packet drift: '+name
+ for path in D.glob('*.py'):ast.parse(path.read_text(),filename=str(path))
+-print(json.dumps({'identity':'md1997-raw-link-freeze-v6','passed':True,'files':len(manifest),'manifest_sha256':sha(D/'manifest.json'),'compiled_calls':0}))
++print(json.dumps({'identity':'md1997-raw-link-freeze-v7','passed':True,'files':len(manifest),'manifest_sha256':sha(D/'manifest.json'),'compiled_calls':0}))
+--- v6/check_raw.py
++++ v7/check_raw.py
+@@ -1,4 +1,6 @@
+ """Read-only raw transport linkage. Never invokes a compiler, solver or Wasm."""
++import sys
++sys.dont_write_bytecode = True
+ from pathlib import Path
+ import argparse,gzip,hashlib,json,math,sys
+ from frozen_logic import D,P,sha,frozen,load,ordinary_case
+@@ -85,7 +87,7 @@
+   assert study=='md'and sha(folder/'report.json')=='efce4a7b9e73d3bafe471672a1bbfd50540531658f1596372d9df85145d9a45c','exact old native-v3 report only'
+   base=P/'execution-v3';backend='native';artifact=report['identity']['artifact_path'];assert report['identity']['artifact_sha256']=='25d976375238865ec43b8b4f512e6b76fbfef7f67bed9b125d5db1523f76db40','old artifact'
+  else:
+-  pre=load('runtime-rebind-v5/preflight.py');current=pre.check();binding=parse((folder/'runtime-binding.json').read_text());assert binding['identity']=='md1997-raw-link-runtime-binding-v6','new collector binding identity'
++  pre=load('runtime-rebind-v5/preflight.py');current=pre.check();binding=parse((folder/'runtime-binding.json').read_text());assert binding['identity']=='md1997-raw-link-runtime-binding-v7','new collector binding identity'
+   for key in ['source_freeze_sha256','source_directory','source_files','full_freeze_sha256','rebind_manifest_sha256']:equal(binding[key],current[key],'source binding '+key)
+   assert binding['v5_preflight_identity']==current['identity']and binding['study']==study and binding['subset']==[]and binding['delegate_returncode']==0,'collector process outcome'
+   assert binding['report_sha256']==sha(folder/'report.json')and binding['raw_link_manifest_sha256']==sha(D/'manifest.json'),'saved report/collector hash'
+@@ -110,7 +112,7 @@
+ 
+ 
+ def verify_transport(folder,study,backend,artifact,calls):
+- audit=parse((folder/'transport.json').read_text());expected={'identity':'md1997-raw-transport-v6','backend':backend,'artifact_path':artifact,'artifact_sha256':sha(artifact),'original_call_sha256':sha(P/'execution-v3/run_native.py'),'collector_sha256':sha(D/'collect.py'),'worker':None,'closed':True,'call_count':calls}
++ audit=parse((folder/'transport.json').read_text());expected={'identity':'md1997-raw-transport-v7','backend':backend,'artifact_path':artifact,'artifact_sha256':sha(artifact),'original_call_sha256':sha(P/'execution-v3/run_native.py'),'collector_sha256':sha(D/'collect.py'),'worker':None,'closed':True,'call_count':calls}
+  if backend=='wasm':
+   worker=audit.get('worker');assert isinstance(worker,dict),'worker audit'
+   script=P/('resolution-study-v4/run_wasm.mjs'if study=='md'else 'execution-v3/run_wasm.mjs');stderr=folder/'worker-stderr.txt'
+@@ -139,11 +141,11 @@
+  assert sorted(str(p.relative_to(folder))for p in folder.rglob('*.jsonl.gz'))==sorted(expected_files),'exact raw filename inventory'
+  assert sorted(str(p.relative_to(folder))for p in (folder/'controls').rglob('*')if p.is_file())==sorted(replay.controls),'exact control filename inventory'
+  transport_hash=None if historical else verify_transport(folder,study,backend,artifact,replay.calls)
+- return {'identity':'md1997-raw-link-verification-v6','passed_raw_linkage':True,'study':study,'backend':backend,'historical_structure_only':historical,'report_sha256':sha(folder/'report.json'),'source_binding':'old predictor578 receipt126d9bc3; NOT new qualification'if historical else 'current control582 receipt4bdaf4c5','calls':replay.calls,'cases':len(plan['cases'])if study=='md'else len(cases),'raw_files':replay.inventory,'transport_sha256':transport_hash,'compiled_calls_by_checker':0,'scope':'transport linkage only; unchanged source/parity/ordinary gates and independent acceptance still required'}
++ return {'identity':'md1997-raw-link-verification-v7','passed_raw_linkage':True,'study':study,'backend':backend,'historical_structure_only':historical,'report_sha256':sha(folder/'report.json'),'source_binding':'old predictor578 receipt126d9bc3; NOT new qualification'if historical else 'current control582 receipt4bdaf4c5','calls':replay.calls,'cases':len(plan['cases'])if study=='md'else len(cases),'raw_files':replay.inventory,'transport_sha256':transport_hash,'compiled_calls_by_checker':0,'scope':'transport linkage only; unchanged source/parity/ordinary gates and independent acceptance still required'}
+ 
+ if __name__=='__main__':
+  parser=argparse.ArgumentParser();parser.add_argument('folder');parser.add_argument('--study',choices=['md','ordinary'],required=True);parser.add_argument('--historical-native-v3',action='store_true');parser.add_argument('--output',required=True);args=parser.parse_args();out=Path(args.output);assert not out.exists(),'preserve prior checks'
+  try:result=verify(args.folder,args.study,args.historical_native_v3)
+  except Exception as error:
+-  out.write_text(json.dumps({'identity':'md1997-raw-link-verification-v6','passed_raw_linkage':False,'error':type(error).__name__+': '+str(error),'compiled_calls_by_checker':0},indent=2)+'\n');raise
++  out.write_text(json.dumps({'identity':'md1997-raw-link-verification-v7','passed_raw_linkage':False,'error':type(error).__name__+': '+str(error),'compiled_calls_by_checker':0},indent=2)+'\n');raise
+  out.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
+--- v6/collect.py
++++ v7/collect.py
+@@ -1,4 +1,6 @@
+ """Transport-only additive collector; actual calls remain coordinator-owned."""
++import sys
++sys.dont_write_bytecode = True
+ from pathlib import Path
+ import argparse,json,subprocess,sys
+ from frozen_logic import D,P,sha,frozen,load,ordinary_hook_source
+@@ -8,7 +10,7 @@
+  class Audited(original):
+   def __init__(self,args,out):
+    self.args=args;self.out=out;self.worker=None;self.calls=0
+-   self.audit={'identity':'md1997-raw-transport-v6','backend':'wasm'if args.wasm_engine else 'native','artifact_path':str(Path(args.wasm_engine or args.solver).resolve()),'artifact_sha256':sha(args.wasm_engine or args.solver),'original_call_sha256':sha(P/'execution-v3/run_native.py'),'collector_sha256':sha(D/'collect.py'),'worker':None,'closed':False}
++   self.audit={'identity':'md1997-raw-transport-v7','backend':'wasm'if args.wasm_engine else 'native','artifact_path':str(Path(args.wasm_engine or args.solver).resolve()),'artifact_sha256':sha(args.wasm_engine or args.solver),'original_call_sha256':sha(P/'execution-v3/run_native.py'),'collector_sha256':sha(D/'collect.py'),'worker':None,'closed':False}
+    self.save()
+    if args.wasm_engine:
+     command=['node',str(self.worker_script()),'--worker','--engine',str(Path(args.wasm_engine).resolve())]
+--- v6/frozen_logic.py
++++ v7/frozen_logic.py
+@@ -1,4 +1,6 @@
+ """Load only frozen Python orchestration; no original Backend is constructed here."""
++import sys
++sys.dont_write_bytecode = True
+ from pathlib import Path
+ import ast,hashlib,importlib.util,json,math,textwrap
+ D=Path(__file__).resolve().parent;P=D.parent
+--- v6/run_bound.py
++++ v7/run_bound.py
+@@ -1,4 +1,6 @@
+ """Coordinator execution wrapper; unchanged delegated requests and gates."""
++import sys
++sys.dont_write_bytecode = True
+ from pathlib import Path
+ import argparse,json,subprocess,sys
+ import sys
+@@ -11,7 +13,7 @@
+  assert study in ['md','ordinary'] and not a.case,'full unchanged study required'
+  original=P/('resolution-study-v4/run_native.py'if study=='md'else 'ordinary-regression-v7/run.py');delegate=D/'collect.py'
+  command=[sys.executable,'-B',str(delegate),'--study',study,'--wasm-engine'if a.wasm_engine else '--solver',str(Path(artifact).resolve()),'--output',str(out)]
+- binding.update(identity='md1997-raw-link-runtime-binding-v6',study=study,delegate_path=str(delegate),delegate_sha256=sha(delegate),delegate_command=command,subset=[],original_harness_path=str(original),original_harness_sha256=sha(original),raw_link_manifest_sha256=sha(D/'manifest.json'),v5_preflight_identity=binding['identity'])
++ binding.update(identity='md1997-raw-link-runtime-binding-v7',study=study,delegate_path=str(delegate),delegate_sha256=sha(delegate),delegate_command=command,subset=[],original_harness_path=str(original),original_harness_sha256=sha(original),raw_link_manifest_sha256=sha(D/'manifest.json'),v5_preflight_identity=binding['identity'])
+  status=None
+  try:status=subprocess.run(command).returncode
+  finally:
+--- v6/test_structure.py
++++ v7/test_structure.py
+@@ -1,4 +1,6 @@
+ """Historical serialization and synthetic transport negatives, zero backend calls."""
++import sys
++sys.dont_write_bytecode = True
+ from pathlib import Path
+ from types import SimpleNamespace
+ from unittest.mock import patch
+@@ -60,6 +62,6 @@
+   bad=copy.deepcopy(audit);edit(bad);(wasm/'transport.json').write_text(json.dumps(bad));reject(name,lambda:check.verify_transport(wasm,'md','wasm',str(artifact.resolve()),0))
+  (wasm/'transport.json').write_text(json.dumps(audit,indent=2)+'\n')
+  RESULTS.append({'case':'mock-process-transport-positive','observed':'native and mocked Wasm audit verified','actual_spawned_processes':0})
+- (D/'structure-results.json').write_text(json.dumps({'identity':'md1997-raw-link-structure-tests-v6','compiled_calls':0,'builds':0,'actual_spawned_processes':0,'results':RESULTS},indent=2)+'\n')
++ (D/'structure-results.json').write_text(json.dumps({'identity':'md1997-raw-link-structure-tests-v7','compiled_calls':0,'builds':0,'actual_spawned_processes':0,'results':RESULTS},indent=2)+'\n')
+  print(json.dumps({'checks':len(RESULTS),'compiled_calls':0}))
+ if __name__=='__main__':main()

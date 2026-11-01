@@ -1,0 +1,85 @@
+{
+  "identity": "native-ci-exact16-prospective-process-contracts-v2",
+  "timeout_seconds": 120,
+  "sanitize_selectors": [
+    "ATLAS_NATIVE_FIXTURES",
+    "ATLAS_NUMERICAL_FIXTURES"
+  ],
+  "cases": [
+    {
+      "id": "atlas_numerical_tests-default",
+      "target": "atlas_numerical_tests",
+      "native_selector": null,
+      "numerical_selector": null,
+      "returncode": 1,
+      "stdout": "Strict original default fixtures; models=16\n",
+      "stderr": "FD test outside domain\n"
+    },
+    {
+      "id": "atlas_numerical_tests-unknown-native",
+      "target": "atlas_numerical_tests",
+      "native_selector": "unknown",
+      "numerical_selector": null,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "unknown native fixture profile\n"
+    },
+    {
+      "id": "atlas_recorded_tests-default",
+      "target": "atlas_recorded_tests",
+      "native_selector": null,
+      "numerical_selector": null,
+      "returncode": 1,
+      "stdout": "Strict original default fixtures; models=16\n",
+      "stderr": "delegated exact published15 OCC signature and independent cone residual proof after exact16 validation"
+    },
+    {
+      "id": "atlas_recorded_tests-unknown-native",
+      "target": "atlas_recorded_tests",
+      "native_selector": "unknown",
+      "numerical_selector": null,
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "unknown native fixture profile\n"
+    },
+    {
+      "id": "md-legacy-explicit-v5",
+      "target": "atlas_numerical_tests",
+      "native_selector": "explicit-gis20-occ-restart-duncan-v5",
+      "numerical_selector": null,
+      "returncode": 1,
+      "stdout": "Explicit valid-domain/GIS-depth20 fixtures; models=16\n",
+      "stderr": "FD test outside domain\n"
+    },
+    {
+      "id": "unknown-numerical",
+      "target": "atlas_numerical_tests",
+      "native_selector": "explicit-gis20-occ-restart-duncan-v5",
+      "numerical_selector": "unknown",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "unknown numerical fixture profile\n"
+    },
+    {
+      "id": "missing-native",
+      "target": "atlas_numerical_tests",
+      "native_selector": null,
+      "numerical_selector": "md1997-source-admissible-v1",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "MD1997 numerical fixture requires explicit-gis20-occ-restart-duncan-v5\n"
+    },
+    {
+      "id": "incompatible-native",
+      "target": "atlas_numerical_tests",
+      "native_selector": "explicit-gis20-occ-restart-v4",
+      "numerical_selector": "md1997-source-admissible-v1",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "MD1997 numerical fixture requires explicit-gis20-occ-restart-duncan-v5\n"
+    }
+  ],
+  "positive_ctest_is_separate": true,
+  "proposed_new_positive_stdout": "Source-admissible MD1997 numerical fixtures; inherited explicit-gis20-occ-restart-duncan-v5; models=16\n",
+  "no_builds_or_compiled_calls": true
+}

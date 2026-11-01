@@ -6,7 +6,7 @@ extends the v0.2 physical-time declaration. The authoritative structural schema 
 [model-v0.3.schema.json](../schemas/model-v0.3.schema.json); `atlas.model.validate`
 additionally checks dimensions, symbols, state rules and stress bindings.
 
-This first contract defines three executable profiles. It makes the existing
+This contract defines four executable profiles. It makes the declared
 mathematics explicit; it does not add finite-deformation or objective updates.
 
 ```json
@@ -56,6 +56,7 @@ in v0.3. The top-level `integration` field is forbidden.
 | `strain_path` | `incremental_residual` | Symmetric strain increment `de` | Residual equal to zero, with the corresponding state's units; current and committed `_n` state are available. |
 | `strain_path` | `strain_path_rate` | Symmetric strain increment `de` | Derivative with respect to dimensionless path fraction, with the corresponding state's units; the fraction runs from zero to one over the supplied increment. This is not a derivative per second. |
 | `physical_time` | `ode` | Physical stage `time` in seconds and symmetric `strain_rate` in 1/s | Derivative per second of the corresponding persistent state. Previous-state symbols, `de`, `dt`, transient solve variables and incremental resets are unavailable. |
+| `strain_path` | `path_ode` | Dimensionless stage `path_coordinate` and explicitly bound scalar controls | Derivative per unit of the increasing declared path coordinate. Controls and their first derivatives are sampled at stages; no strain tensor or physical clock is inferred. |
 
 Only these pairings are allowed. There is one equation per state. The legacy
 incremental profiles retain their `1`/`Pa` declaration units and stress-first state
@@ -350,7 +351,7 @@ Legacy definitions that use temporary variables as `_n` history, nonzero
 temporary example values or temporary rate state fail migration and require
 source reconciliation; they are not silently rewritten to fit the contract.
 
-The native compiler supports all three v0.3 profiles. Python callers should use
+The native compiler supports the three existing profiles through its material-update catalogue and the controlled-path profile through a separate generated catalogue. Python callers should use
 `physical_time(model)` and `integration_kind(model)` rather than dispatching on
 schema version or assuming `integration` exists. Separately versioned transports,
 including the experimental v0.1-only history bridge, retain their acceptance
@@ -377,3 +378,50 @@ The native cases check rejection of missing v0.3 state, legacy default
 compatibility, exact old/new elasticity/plasticity update agreement, timed update
 agreement and rollback. This does not establish scientific admission or Wasm
 parity.
+
+## Controlled-path ODE execution
+
+The `path_ode` profile declares a dimensionless `path_coordinate` input and a
+closed set of scalar control channels. Each control input specifies
+`binding: {"control": "name", "derivative_order": 0}` for its value or order 1
+for its derivative per unit coordinate. Inputs sharing a control must have the
+same units. All declared controls are required, including unused channels.
+Each advance supplies complete finite start/end control mappings. Values are
+interpolated linearly and derivatives are constant over that advance.
+
+State consists of explicitly initialized persistent scalar or symmetric fields,
+with at most 32 components. Stress, when present, binds the symmetric Pa
+observable `stress`. `axisymmetric_x` restricts that output to equal radial
+components and zero shears. The profile supplies no finite-rotation adapter,
+physical-time interpretation, unloading rule or tangent.
+
+Python consumers use `atlas.path.initialize` and `atlas.path.advance`.
+A committed `Context` retains state, coordinate, parameters and current controls.
+The next start controls must exactly match that context. Restart requires all
+four parts. Positive progress must have a representably later finite endpoint;
+zero progress permits unchanged controls only and returns exact identity after
+validation. Reinitialization is a separate caller operation, never an implicit
+stress jump during advance. Every failure preserves the complete parent.
+
+The generic integrator uses explicit midpoint with a full step versus two half
+steps, Richardson factor 3, and declared state scales. It accepts the two-half
+state without extrapolation. Initial and trial stages must satisfy finite,
+domain and initialization requirements. Tolerances, step limits, refinement
+depth and trial budgets are explicit execution settings. An exhausted budget
+rejects the whole advance, including any internally accepted substeps.
+
+`tools/generate_controlled_path.py --output DIR MODEL...` generates the separate
+`path_catalogue.json`, `path_models.hpp` and flat C ABI `path_api.cpp`. Mixed
+controlled-path and legacy material-update catalogues reject explicitly.
+`cmake/controlled-path` builds the native/Wasm `atlas_path_capability` target;
+`ATLAS_PATH_MODELS` supplies an explicit semicolon-separated model list. Its
+checked C ABI exposes `path_size`, `path_evaluate` and `path_advance`, with
+control/state/observable order recorded in the generated metadata. Invalid
+layout, data, domain or execution settings return failure without modifying
+output buffers. The ordinary strain-increment, time and laboratory APIs do not
+gain controlled-path support merely because a model validates.
+
+The bounded [NorSand capability study](ingestion/norsand-1993/e2-v3/README.md)
+retains the prospective gates, independent source references, native/Wasm
+comparisons, independent review and original failures. Capability qualification
+is separate from model approval, atlas installation and browser delivery.

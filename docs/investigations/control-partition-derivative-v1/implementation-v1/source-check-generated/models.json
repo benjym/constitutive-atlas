@@ -1,0 +1,260 @@
+{
+  "schema_version": "0.1",
+  "sha256": "69d11c1cb60ae6d5aeb6cd553f4af45917a86101873f5f43465130a858138fcc",
+  "models": [
+    {
+      "schema_version": "0.3",
+      "id": "control-partition-rate-elastic-fixture-v1",
+      "name": "Synthetic rate constant elasticity control fixture",
+      "family": "synthetic generic capability fixture",
+      "status": "draft",
+      "description": "Generated isotropic linear elasticity plus fixed initial void bookkeeping, solely for protocol1 control derivative and rate partition diagnostic tests.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "locator": "docs/investigations/control-partition-derivative-v1/implementation-v1/POLICY.md, synthetic analytical fixture",
+          "role": "project synthetic test specification"
+        }
+      ],
+      "parameters": {
+        "E": {
+          "default": 30000000.0,
+          "min": 1.0,
+          "max": 1000000000000.0,
+          "unit": "Pa",
+          "label": "E"
+        },
+        "nu": {
+          "default": 0.25,
+          "min": -0.99,
+          "max": 0.499,
+          "unit": "1",
+          "label": "nu"
+        },
+        "e_initial": {
+          "default": 0.7,
+          "min": 0.1,
+          "max": 2.0,
+          "unit": "1",
+          "label": "e_initial"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "initial": [
+            100000.0,
+            100000.0,
+            100000.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": "E",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "shape": "scalar",
+          "unit": "1",
+          "initial": 0.7,
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "void_ratio",
+            "transformation": "scalar_invariant"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "K",
+          "expr": "E/(3*(1-2*nu))"
+        },
+        {
+          "name": "G",
+          "expr": "E/(2*(1+nu))"
+        }
+      ],
+      "domain": [
+        "e > 0"
+      ],
+      "equations": {
+        "sigma": "K*trace(de)*I+2*G*dev(de)",
+        "e": "-(1+e_initial)*trace(de)"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "strain_path_rate",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        },
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "total"
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "id": "control-partition-residual-elastic-fixture-v1",
+      "name": "Synthetic residual constant elasticity control fixture",
+      "family": "synthetic generic capability fixture",
+      "status": "draft",
+      "description": "Generated isotropic linear elasticity plus fixed initial void bookkeeping, solely for protocol1 control derivative and rate partition diagnostic tests.",
+      "sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "locator": "docs/investigations/control-partition-derivative-v1/implementation-v1/POLICY.md, synthetic analytical fixture",
+          "role": "project synthetic test specification"
+        }
+      ],
+      "parameters": {
+        "E": {
+          "default": 30000000.0,
+          "min": 1.0,
+          "max": 1000000000000.0,
+          "unit": "Pa",
+          "label": "E"
+        },
+        "nu": {
+          "default": 0.25,
+          "min": -0.99,
+          "max": 0.499,
+          "unit": "1",
+          "label": "nu"
+        },
+        "e_initial": {
+          "default": 0.7,
+          "min": 0.1,
+          "max": 2.0,
+          "unit": "1",
+          "label": "e_initial"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "initial": [
+            100000.0,
+            100000.0,
+            100000.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "scale": "E",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "shape": "scalar",
+          "unit": "1",
+          "initial": 0.7,
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "void_ratio",
+            "transformation": "scalar_invariant"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "K",
+          "expr": "E/(3*(1-2*nu))"
+        },
+        {
+          "name": "G",
+          "expr": "E/(2*(1+nu))"
+        }
+      ],
+      "domain": [
+        "e > 0"
+      ],
+      "equations": {
+        "sigma": "sigma-sigma_n-(K*trace(de)*I+2*G*dev(de))",
+        "e": "e-e_n+(1+e_initial)*trace(de)"
+      },
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        },
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "total"
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    }
+  ]
+}

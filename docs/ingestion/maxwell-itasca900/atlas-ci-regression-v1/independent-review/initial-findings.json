@@ -1,0 +1,51 @@
+{
+  "reviewer_run": "/root/maxwell_checklist_review",
+  "task": "REVIEW-maxwell-ci-regressions-v1",
+  "stage": "initial prospective source inspection",
+  "decision": "changes requested before compiled execution",
+  "files": {
+    "tools/check_maxwell_ci.py": "599fdc0737c6d522a72cec48d4529d9ef762c331ed3c07422f2d4371e13dccd6",
+    "tools/test_maxwell_public_presets.mjs": "ba130fda93d4aa8e5b0af619078498576dceaa2c2bf53df81e4cb908996c4e33",
+    "docs/ingestion/maxwell-itasca900/atlas-ci-regression-v1/PLAN.md": "0c6111c78cf80054191babc0a9a6701375f28dbdf1e1eb209e9fcf10294a8a93",
+    "docs/ingestion/maxwell-itasca900/atlas-ci-regression-v1/source-bindings.json": "b0e23e1e2970984ed2dfc3224e7e2b89acba3e62ed574c0a2c6cb568bbbfa5d6"
+  },
+  "findings": [
+    {
+      "id": "CI-R1",
+      "severity": "blocking for declared drift guarantee",
+      "reason": "Before/after binding_paths omits the two Node test files executed and four source example files read. Include these actual inputs and the loaded bundle helper."
+    },
+    {
+      "id": "CI-R2",
+      "severity": "blocking for declared partial observation retention",
+      "reason": "Public preset raw response is parsed and verified before being saved. First-call malformed/failing response or second-call replay rejection loses the observed raw output. Save each raw response before parse/verify."
+    },
+    {
+      "id": "CI-R3",
+      "severity": "documentation correction",
+      "reason": "Proposed exact Node command passes 21 tests; PLAN says 27. Prior 27 included six other regression groups."
+    },
+    {
+      "id": "CI-R4",
+      "severity": "recommendation",
+      "reason": "Pass actual guarded identity to export/import test instead of a synthetic release_revision to exercise complete qualified provenance."
+    }
+  ],
+  "checks": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "tests/test_maxwell_atlas_contract.mjs",
+        "tests/test_maxwell_atlas_runtime.mjs"
+      ],
+      "exit": 0,
+      "pass": 21,
+      "fail": 0
+    }
+  ],
+  "limits": [
+    "No builds, compiled calls, browser actions, remote CI or scientific approval performed.",
+    "This initial decision is preserved even if a later prospective decision accepts corrected sources."
+  ]
+}

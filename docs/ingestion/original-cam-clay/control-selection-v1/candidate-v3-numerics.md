@@ -1,0 +1,7 @@
+# Endpoint representability guard, candidate v3
+
+The original finite equations require positive endpoint pressure. Native execution-v1's frozen partial-transaction case unexpectedly returned success: the declared target exp(x) underflowed to zero, while the absolute scaled residual tolerance accepted a small positive current trial stress. The frozen expected rejection therefore failed and is retained with its exact source/model/build/request/output identities.
+
+Candidate v3 adds only domain `p_end > 0 * pref`. The endpoint is evaluated from committed state and loading; an unrepresentable target cannot be admitted merely because the current unknown remains tiny positive. This does not change the source law, branch selection, discretization, parameters, source references or acceptance budgets. It makes the already disclosed positive, representable endpoint requirement executable. No shared runtime/kernel changes. Candidate v2 and execution-v1 remain untouched; revised compiled qualification uses execution-v2 and newly bound independent review.
+
+Before compiled v3 observations, separate reviewer also required positive representable assembled target mean pressure. Added `trace(sigma_end) / (3 * pref) > 0` to ensure stress assembly retains a positive pressure whose normalized logarithm is representable. This guard concerns target representability and supplies no artificial physical pressure cutoff. Residual acceptance remains an absolute scaled criterion; uniform relative accuracy at arbitrarily tiny positive stress is not claimed.

@@ -12,10 +12,10 @@ const catalogue={schema_version:'0.1',sha256:'a'.repeat(64),models:['linear-elas
 const fresh=()=>makeStudy(record,catalogue,defaultConfigurations(catalogue));
 test('15 independent deterministic requests preserve direct radial source order and fixed preparation',()=>{
  const before=stable(record),s=fresh();assert.equal(s.jobs.length,15);assert.equal(new Set(s.jobs.map(j=>j.id)).size,15);assert.equal(stable(s),stable(fresh()));
- for(const j of s.jobs){assert.equal(j.status,'queued');assert.equal(j.specification.path.knots.length,95);assert.deepEqual(j.specification.initial.slice(0,7),[103720,103720,103720,0,0,0,.416]);
-  for(let i=0;i<95;i++)assert.deepEqual(j.specification.path.knots[i],{coordinate:i,targets:[record.rows[i].axial_strain,record.rows[i].radial_effective_stress,record.rows[i].radial_effective_stress,0,0,0]});
+ for(const j of s.jobs){assert.equal(j.status,'queued');assert.equal(j.specification.path.knots.length,1438);assert.deepEqual(j.specification.initial.slice(0,7),[103720,103720,103720,0,0,0,.416]);
+  for(let i=0;i<1438;i++)assert.deepEqual(j.specification.path.knots[i],{coordinate:i,targets:[record.rows[i].axial_strain,record.rows[i].radial_effective_stress,record.rows[i].radial_effective_stress,0,0,0]});
  }
- assert.equal(s.jobs[10].specification.initial[7],200000);assert.equal(s.jobs[0].specification.path.knots.at(-1).targets[0],.00992);
+ assert.equal(s.jobs[10].specification.initial[7],200000);assert.equal(s.jobs[0].specification.path.knots.at(-1).targets[0],.1599);
  s.jobs[0].specification.path.knots[0].targets[0]=12;assert.equal(s.jobs[1].specification.path.knots[0].targets[0],0);assert.equal(stable(record),before);
 });
 test('variations are OAT, deduplicated, explicit and never mutate baseline',()=>{
@@ -30,13 +30,21 @@ test('nonfinite baseline/history fail before snapshots can silently serialize nu
  for(const mutate of [c=>c[0].parameters.E=NaN,c=>c[2].history.pc=Infinity]){const c=defaultConfigurations(catalogue);mutate(c);assert.throws(()=>makeStudy(record,catalogue,c),/finite/);}
 });
 test('source conventions, window, ordering and model scope fail closed',()=>{
- for(const mutate of [r=>r.initial.void_ratio=.7,r=>r.rows.reverse(),r=>r.rows.pop(),r=>r.conventions.stress_unit='kPa',r=>r.provenance.member_sha256='0'.repeat(64)]){const r=structuredClone(record);mutate(r);assert.throws(()=>makeStudy(r,catalogue,defaultConfigurations(catalogue)));}
+ for(const mutate of [r=>r.initial.void_ratio=.7,r=>r.rows.reverse(),r=>r.rows.pop(),r=>r.rows.at(-1).axial_strain=.16,r=>r.conventions.stress_unit='kPa',r=>r.provenance.member_sha256='0'.repeat(64)]){const r=structuredClone(record);mutate(r);assert.throws(()=>makeStudy(r,catalogue,defaultConfigurations(catalogue)));}
  const c=structuredClone(catalogue);c.models[0].state[0].name='total_stress';assert.throws(()=>makeStudy(record,c,defaultConfigurations(c)));
 });
 test('queued export roundtrip validates catalogue, source, definitions and exact requests',()=>{
  const s=fresh(),doc=exportStudy(s,catalogue,record);assert.deepEqual(importStudy(JSON.stringify(doc),catalogue,record),s);
  for(const mutate of [d=>d.study.catalogue_hash='b'.repeat(64),d=>d.study.experiment.window.last_row=93,d=>d.study.model_definitions[0].parameters.E.default=1,d=>d.study.jobs[0].specification.initial[6]=.7,d=>d.study.jobs[0].status='completed',d=>d.study.jobs.reverse()]){const d=structuredClone(doc);mutate(d);assert.throws(()=>importStudy(JSON.stringify(d),catalogue,record));}
  assert.throws(()=>importStudy('{"version":1,"version":2}',catalogue,record));
+});
+test('historical prefix exports retain their exact replay while new studies use the full test',()=>{
+ const legacy=makeStudy(record,catalogue,defaultConfigurations(catalogue),94);
+ assert.equal(legacy.jobs[0].specification.path.knots.length,95);
+ assert.equal(legacy.experiment.window.last_acquired_strain,.00992);
+ assert.deepEqual(importStudy(JSON.stringify(exportStudy(legacy,catalogue,record)),catalogue,record),legacy);
+ assert.equal(fresh().experiment.window.last_row,1437);
+ assert.throws(()=>makeStudy(record,catalogue,defaultConfigurations(catalogue),100));
 });
 test('missing model is visibly excluded and cannot be silently substituted',()=>{
  const c={...catalogue,models:catalogue.models.slice(1)},configs=defaultConfigurations(c);assert.equal(configs[0].enabled,false);assert.equal(makeStudy(record,c,configs).jobs.length,10);configs[0].enabled=true;assert.throws(()=>makeStudy(record,c,configs));

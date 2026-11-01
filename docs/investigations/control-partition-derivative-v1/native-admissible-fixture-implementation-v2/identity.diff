@@ -1,0 +1,20 @@
+--- implementation-v1/test_solver.cpp
++++ implementation-v2/test_solver.cpp
+@@ -64,7 +64,7 @@
+         const bool md_admissible=numerical_profile!=nullptr;
+         require(!numerical_profile||std::string(numerical_profile)=="md1997-source-admissible-v1","unknown numerical fixture profile");
+         if(md_admissible){
+-            require(profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-v5","MD numerical fixture requires exact v5 pairing");
++            require(profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-v5","MD1997 numerical fixture requires explicit-gis20-occ-restart-duncan-v5");
+             int count=0;
+             for(size_t m=0;m<atlas::models().size();++m)if(atlas::models()[m].id=="manzari-dafalias-1997-constant-m-be-v1"){
+                 ++count;const auto&fields=atlas::models()[m].fields;
+@@ -75,7 +75,7 @@
+             require(count==1,"MD numerical fixture requires exactly one MD model");
+         }
+         const bool explicit_fixtures=profile!=nullptr;
+-        std::cout<<(explicit_fixtures?"Explicit valid-domain/GIS-depth20 fixtures":"Strict original default fixtures")<<"; models="<<atlas::models().size()<<'\n';
++        std::cout<<(md_admissible?"Source-admissible MD1997 numerical fixtures; inherited explicit-gis20-occ-restart-duncan-v5":explicit_fixtures?"Explicit valid-domain/GIS-depth20 fixtures":"Strict original default fixtures")<<"; models="<<atlas::models().size()<<'\n';
+         // Independently finite-difference each generated residual/rate Jacobian.
+         // This checks the AD implementation rather than merely matching its code.
+         for(size_t model=0;model<atlas::models().size();++model){

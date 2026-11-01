@@ -1,0 +1,9 @@
+# Candidate transcription assessment
+
+Source specialist `/root/hill_source`, 2026-11-02. This is an author-side source handoff, **not an independent scientific approval**.
+
+Read candidate `models/research/hill/hill-abaqus2025-perfect-be.json`, SHA-256 `0cefabcebaff5f9535d7e44a22e1c804c23ed1ae599cece111ce25255ff8437d` as supplied by coordinator. Its six extracted Mandel components, `As` expression, `q_squared`, normalized squared-yield function, stress residual and complementarity equation match the selected matrix formulation. State persistence/reset, explicit initial sigma, total stress binding and fixed-frame incremental v0.3 profile match this packet. Exact candidate numerical initial gate is `yield_scaled <= 1e-10`; this tolerance applies to squared-potential normalized stress and must not be described as exact strict yield admission.
+
+Two metadata findings sent before freeze: label `sigma_y` as **Reference Hill yield stress**, since it is neither generally the x-direction yield nor a von Mises equivalent for anisotropic coefficients; include the primary linear-elastic documentation source that supplies isotropic closure and total stress interpretation. No equation blocker identified in this bounded source assessment. This assessment applies only to the exact read bytes; later bytes require their own evidence bindings and the separate independent review.
+
+The selected coefficient range `1e-6..100` and stress/modulus UI bounds are project numerical input limits, not empirically calibrated material ranges. Positive-coefficient domain is mathematically sufficient for convexity; it does not prove convergence or accuracy across the entire declared range. The Decimal oracle is a bounded high-precision independent endpoint construction; it is not an Abaqus executable comparison. Extreme conditioning, arbitrary material parameters and arbitrary histories need separate qualification.

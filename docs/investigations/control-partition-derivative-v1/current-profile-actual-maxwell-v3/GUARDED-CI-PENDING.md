@@ -1,0 +1,1 @@
+These are the exact pre-independent-review profile stages only. The post-independent-build-review guarded command has NOT run. Actual build review and truthful binding qualification receipt remain required before that command; no guarded CI/package acceptance is inferred.

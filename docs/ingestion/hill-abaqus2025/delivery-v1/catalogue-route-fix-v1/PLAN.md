@@ -1,0 +1,5 @@
+# Catalogue routing correction — prospective plan
+
+Release f8416d77 Linux job124953204386 completes1487tests with one failure: Hill strain_path definition is routed with timed_laboratory, whose provenance contract requires physical_time. All dedicated Hill native/Wasm cases and both fullWasmpackagejobs pass. Retain original raw/readable log and original review/model/gates. MacOS originalrun remains observed, not cancelled/restarted or substituted.
+
+Before editing archive exact manifest and all direct/transitive current receipt contexts with the reviewed preservation algorithm, restricted to catalogue/manifest.json. Change only Hill timed_laboratory→material_laboratory (index.html), matching existing generic strain-increment route. Keep laboratory_kind, exact approval/model/source metadata and all other models. No test or tolerance change. Run unchanged tests.test_catalogue plus relevant approval/integrity/routing checks; fullstandardpackage and actualcatalogueExplore/mainLab browser including replay/peers. Separate reviewer checks narrowchange, then scopedfixcommit atop f841, newexactCI/Pages/live qualification. Originalfailure never reclassified aspass.

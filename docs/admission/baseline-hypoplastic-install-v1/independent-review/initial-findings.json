@@ -1,0 +1,17 @@
+{
+  "status": "changes_requested",
+  "candidate_sha256": "dd1cc192ec1d5a50a56ec8ee69f7b1a4769a509bb1c313114ea40e67a3940c5e",
+  "findings": [
+    {
+      "id": "R1",
+      "blocking": true,
+      "finding": "Generic accepted JSON is accepted without checking task, frozen-input hash, installer hash or exact ordered operations."
+    },
+    {
+      "id": "R2",
+      "blocking": true,
+      "finding": "Optimized Python removes assert-based path/current-byte/source-freeze/review/restart gates; no unconditional rejection."
+    }
+  ],
+  "bounded_reproduction": "Review-gate Boolean expression accepts {accepted:true} with no exact bindings; source has assert gates and no optimize guard. No production apply invoked."
+}

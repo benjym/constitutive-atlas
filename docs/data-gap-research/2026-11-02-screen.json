@@ -1,0 +1,426 @@
+{
+  "screen_date": "2026-11-02",
+  "scope": "New experimental-data gap research; read-only source screening, no public ingestion or model-validation claim.",
+  "selection_order": "Priority is order of useful next processing, taking access and compatibility into account; author-request leads may have greater scientific value.",
+  "baseline": {
+    "public_sources": 14,
+    "records": 628,
+    "normalized_experiments": 49,
+    "existing_survey_publicly_ingested": 23,
+    "existing_survey_candidates": 30
+  },
+  "constraints": [
+    "Six SoilModels datasets remain private without public-hosting permission.",
+    "4TU retrieval remains paused; no 4TU request made in this pass.",
+    "No author contact, compiled build, catalogue mutation, commit, push or deployment."
+  ],
+  "candidates": [
+    {
+      "id": "polito-uniroma1",
+      "priority": 1,
+      "gap": "Small-to-moderate strain stiffness reduction and damping in natural soils",
+      "url": "https://doi.org/10.1007/s10518-022-01573-y",
+      "rights": "Article CC BY 4.0; supplement linked by article; no separate notice in ZIP (only MAT and XLS). Check any per-source exclusions before release.",
+      "status": "downloaded-and-workbook-screened",
+      "findings": [
+        "252 test sheets: 110 RC and 142 CDSDSS; 2642 rows with numeric shear-strain and modulus pairs.",
+        "Shear strain %, modulus MPa, G/G0 and damping % explicitly labelled.",
+        "OCR numeric in 123 of 252 sheets; preserve missing values in remaining sheets.",
+        "Includes sample location, depth, index and grading properties; completeness varies."
+      ],
+      "limits": [
+        "Reduced response curves, not raw cyclic stress-strain-time histories.",
+        "252 tests do not imply 252 independent materials/specimens."
+      ],
+      "next_action": "Map all curves and available metadata; confirm supplement release terms and protocol applicability before adding public records."
+    },
+    {
+      "id": "estefania",
+      "priority": 2,
+      "gap": "Locally measured triaxial response and small-strain stiffness",
+      "url": "https://doi.org/10.5281/zenodo.10888728",
+      "rights": "Dataset API metadata explicitly cc-by-4.0; version 1.3.",
+      "status": "downloaded-checksummed-and-workbook-screened",
+      "findings": [
+        "Three drained constant-mean-effective-stress triaxial tests; nominal p levels 130, 300 and 400 kPa.",
+        "Axial strain %, volumetric strain %, mean effective stress kPa and deviator stress kPa are labelled separately from derived tangent stiffness.",
+        "84, 78 and 103 rows respectively contain all four numeric stress/strain channels (265 total). Other stiffness points are separate views.",
+        "Three grading sheets and two bender-element sheets, with specimen dimensions and water/density information."
+      ],
+      "limits": [
+        "Tests at 130, 300 and 400 kPa use intact material from 8, 18 and 21 m respectively: depth/material variation is confounded with stress level.",
+        "No timestamps in the stress-strain table; not evidence for rate/creep or unloading/reloading.",
+        "Need resolve strain signs and bender pressure reference from companion methods before normalization."
+      ],
+      "next_action": "Extract source-preserving stress-strain curves, specimen metadata and stiffness summaries separately; audit local-strain methods and sign conventions."
+    },
+    {
+      "id": "london-simple-shear",
+      "priority": 3,
+      "gap": "London Clay response under constant-vertical-stress simple shear",
+      "url": "https://doi.org/10.25405/data.ncl.22714831",
+      "rights": "CC BY 4.0 in API, workbook README and dataset PDF.",
+      "status": "downloaded-checksummed-and-workbook-screened",
+      "findings": [
+        "Fig 5.xlsx / Fig. 5c distinguishes experimental columns A:F from model results H:M.",
+        "Three experimental curves at vertical stress 388, 194 and 49 kPa; 26, 21 and 20 numeric shear-strain/stress pairs respectively.",
+        "Source attributed to Lau (1988); strain in %, stress in kPa."
+      ],
+      "limits": [
+        "Reproduced source curves; acquisition resolution and complete preparation history not established.",
+        "Most other workbooks are simulation/emulator/field/geometry data, not element-test histories.",
+        "Oedometer and other validation data mentioned on landing page live in separately cited datasets; not actually present in this workbook."
+      ],
+      "next_action": "Recover original Lau protocol/preparation, retain reproduced-curve provenance, and map only experimental columns."
+    },
+    {
+      "id": "bionics-triaxial",
+      "priority": 4,
+      "gap": "Undrained response of clay embankment fill with pore-pressure change",
+      "url": "https://doi.org/10.25405/data.ncl.22144442.v1",
+      "rights": "CC BY 4.0 in repository API; experimental/model distinction explicit in workbook.",
+      "status": "laboratory-workbook-downloaded-checksummed-and-screened",
+      "findings": [
+        "Fig 8.xlsx contains two experimental groups of three curves, separate from model predictions.",
+        "Effective confinements 50.7/100.6/197.7 kPa and 100/200/300 kPa.",
+        "Each experimental triplet labels axial strain %, change in pore pressure kPa and deviator stress kPa.",
+        "49/21/45 and 21/21/21 complete numeric triplets respectively (178 rows)."
+      ],
+      "limits": [
+        "Confirm group identities, density/preparation, saturation/drainage, initial pore pressure and specimen histories from methods.",
+        "Do not infer absolute pore pressure from the change channel.",
+        "Related Newcastle compilation cites the same measurements: do not count as independent replication."
+      ],
+      "next_action": "Read companion methods and preserve distinct groups; compare source identities against other Newcastle assets before ingestion."
+    },
+    {
+      "id": "opalinus-creep",
+      "priority": 5,
+      "gap": "Drained multistage creep in saturated clay shale",
+      "url": "https://doi.org/10.18154/RWTH-2025-01319",
+      "rights": "CC0 declared on repository landing page.",
+      "status": "metadata-only-access-blocked",
+      "findings": [
+        "Landing page links RAW_DATA.zip and READ_ME.pdf for long-term strength and creep of saturated shaly Opalinus Clay."
+      ],
+      "limits": [
+        "Direct URLs returned 248-byte HTML web-challenge pages, not data/PDF; no test-channel, time-history or specimen-count verification.",
+        "Clay shale is a separate material class from soft clay."
+      ],
+      "next_action": "Obtain original archive/readme through ordinary repository access; verify content before selecting timed comparisons."
+    },
+    {
+      "id": "opalinus-thermal-creep",
+      "priority": 6,
+      "gap": "Bedding and temperature dependence of clay-shale creep",
+      "url": "https://doi.org/10.18154/RWTH-2025-10330",
+      "rights": "CC0 declared on repository landing page.",
+      "status": "metadata-only-access-blocked",
+      "findings": [
+        "Repository lists experimental archive and readme for bedding-orientation/temperature creep study."
+      ],
+      "limits": [
+        "Readme URL returned the same 248-byte HTML challenge; files not verified.",
+        "Not a soft-clay or linear-viscoelastic validation dataset by default."
+      ],
+      "next_action": "Obtain original readme/archive and screen loading stages, thermal history and drainage."
+    },
+    {
+      "id": "boom-clay",
+      "priority": 7,
+      "gap": "Bedding-oriented CU response in Boom Clay",
+      "url": "https://publications.rwth-aachen.de/record/760229",
+      "rights": "CC BY 4.0 declared on repository landing page.",
+      "status": "metadata-only-access-blocked",
+      "findings": [
+        "Sample TMX-BoC 07: loading parallel to bedding in CU triaxial testing, up to 7% axial deformation; linked wider dissertation data compilation."
+      ],
+      "limits": [
+        "File-list request returned an HTML web challenge; archive not retrieved or screened.",
+        "One specimen is not a compression-extension/OCR family."
+      ],
+      "next_action": "Retrieve loading archive and follow wider compilation; verify whether matched orientations and histories are available."
+    },
+    {
+      "id": "chang-accelerating-creep",
+      "priority": 8,
+      "gap": "Fluid-injection-driven accelerating shear creep and localization",
+      "url": "https://doi.org/10.5281/zenodo.11513623",
+      "rights": "Dataset API explicitly cc-by-4.0.",
+      "status": "protocol-summary-downloaded-checksummed-and-screened",
+      "findings": [
+        "Repository contains 40 MAT measurement files and a protocol-summary workbook.",
+        "Summary distinguishes pre-sheared histories and lists simulated slope angles, loading rates kPa/h, elapsed times s and slip mm."
+      ],
+      "limits": [
+        "Raw MAT histories not downloaded/parsed in this pass.",
+        "Shear slip/localization experiment is not a homogeneous triaxial strain history; do not convert slip to strain without a justified geometry/kinematic model.",
+        "Useful for a separate friction/shear-zone capability, not direct evidence for current bulk clay creep models."
+      ],
+      "next_action": "Lower-priority specialist dataset: read methods and define compatible geometry/observable contract before full acquisition."
+    },
+    {
+      "id": "organic-clay-compression-extension",
+      "priority": 9,
+      "gap": "Matched monotonic/non-monotonic compression and extension in soft organic clay",
+      "url": "https://doi.org/10.1002/nag.70019",
+      "rights": "Article open access does not establish redistribution permission for author-supplied raw measurements.",
+      "status": "author-request-lead",
+      "findings": [
+        "2025 Chao, Muraro and Jommi study documents organic diatomaceous clay under monotonic and non-monotonic compression/extension stress paths.",
+        "Data availability statement: available from corresponding author upon request."
+      ],
+      "limits": [
+        "No public raw-data archive established in this pass; no data acquired or permission assumed."
+      ],
+      "next_action": "Prepare request for all measured histories, preparation/initial-state metadata and permission for attributed redistribution; do not send without user authorization."
+    },
+    {
+      "id": "london-clay-thermal-relaxation",
+      "priority": 10,
+      "gap": "Soft-clay rate changes, stress relaxation and creep across temperatures",
+      "url": "https://doi.org/10.1061/IJGNAI.GMENG-9074",
+      "rights": "Institutional manuscript page states personal-use restriction; no raw-data hosting grant established.",
+      "status": "author-request-lead",
+      "findings": [
+        "Study reports temperature-controlled CRS compression-relaxation at multiple rates and multistage oedometer creep, 20-55 degrees C."
+      ],
+      "limits": [
+        "No public measurement archive established.",
+        "Manuscript access alone does not supply machine-readable histories or grant measurement redistribution."
+      ],
+      "next_action": "Prepare request for paired time/load/displacement histories, drainage and thermal equilibration metadata, and explicit data reuse/hosting terms; do not send without authorization."
+    }
+  ],
+  "next_batch": [
+    "PoliTO stiffness/modulus/damping curves with missing metadata explicit.",
+    "Estefania source measurements and specimen metadata; keep derived stiffness separate.",
+    "London simple-shear and BIONICS undrained measurements after source/protocol checks."
+  ],
+  "gaps_remaining": [
+    "No newly qualified homogeneous soft-clay creep/relaxation/rate-step time histories.",
+    "No newly qualified complete same-material compression/extension/OCR family.",
+    "No newly qualified full small-strain unloading/reloading histories; stiffness curves are partial coverage only."
+  ],
+  "receipts": [
+    {
+      "name": "newcastle-44917534.pdf",
+      "url": "https://ndownloader.figshare.com/files/44917534",
+      "bytes": 216699,
+      "sha256": "e005484e4dc0402454bb8b22f1631afc20aa3a585dc8d8d68198de2a8e53a330",
+      "md5_matches": true,
+      "magic": "b'%PDF-1.5'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908753.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908753",
+      "bytes": 197442,
+      "sha256": "3d6cb7d92b9a92ccfbfa62c09da9fd8e51d79e4068d71ef446deac251e4866a6",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908756.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908756",
+      "bytes": 37201,
+      "sha256": "1f3fab35597c5802c6e029ecf3e4c0b45ed840accf7c004805f4b3e3b3cba992",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908759.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908759",
+      "bytes": 564378,
+      "sha256": "1b50ce9b33e2b79da3cd81ac450e96251681bd0f7c031c67e9782226a18398ae",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908762.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908762",
+      "bytes": 126371,
+      "sha256": "abad51d3d5e7a7593a60523d6d4b1655be302920d50d4c5a5b7d39509361ef6e",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908765.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908765",
+      "bytes": 25222,
+      "sha256": "04ddcd7884698644259b48b75c70a6872d0d2431f75aaab3704d88b7eb19cbe5",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908768.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908768",
+      "bytes": 700757,
+      "sha256": "250d61df1813e9f6ab73deb0cf824c91300b885f78ef7d5648f7b6ce248e9fb8",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908771.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908771",
+      "bytes": 295739,
+      "sha256": "07cf2d6b9a03e18ae7cf7209b2d587b6f0197ec8a340f68711f3f6ad633b163e",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908774.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908774",
+      "bytes": 507507,
+      "sha256": "abaf5a5dbd3b3c96b019851c700e3f17133b6f9373828054679e734ede3ae2a2",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908777.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908777",
+      "bytes": 322670,
+      "sha256": "9e5e9c4740ad05d73e16db26bd86b677b98d81bcdebd3b3f2d23d54901545ddf",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908780.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908780",
+      "bytes": 3604753,
+      "sha256": "7e8dc60f881c0355943c80155da2ea14ef194221b9d6b09c1b83d308368d9933",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "newcastle-44908783.xlsx",
+      "url": "https://ndownloader.figshare.com/files/44908783",
+      "bytes": 293565,
+      "sha256": "8c6b44636f976df68745c8213bf3645b04d8c0556ac69071fcfeac739d9bf822",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "estefania-AE-Data-PSD.xlsx",
+      "url": "https://zenodo.org/api/records/10888728/files/AE-Data-PSD.xlsx/content",
+      "bytes": 13887,
+      "sha256": "74ee38ad3c11bfc40e2aff7d15c356a7231d301fe013c0ad0f8017fd33a95e34",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "estefania-AE-Data-Triaxial.xlsx",
+      "url": "https://zenodo.org/api/records/10888728/files/AE-Data-Triaxial.xlsx/content",
+      "bytes": 403180,
+      "sha256": "34031f4fa83181f439003d7a0bf15128da6fc7ae090e5c2464ef1b2c7ca8f234",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "estefania-AE-Data-BenderElements.xlsx",
+      "url": "https://zenodo.org/api/records/10888728/files/AE-Data-BenderElements.xlsx/content",
+      "bytes": 154612,
+      "sha256": "4a801fbf2b5e7bfb08f1804bc539ffb0f986faa8d0b8c43853421d1fc2356df3",
+      "md5_matches": true,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x06\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "polito.zip",
+      "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1007%2Fs10518-022-01573-y/MediaObjects/10518_2022_1573_MOESM1_ESM.zip",
+      "bytes": 284275,
+      "sha256": "a0aca1a80225124d9cfa1252f522d168a67954c4ba6912986124d5857171a0ef",
+      "md5_matches": null,
+      "magic": "b'PK\\x03\\x04\\x14\\x00\\x02\\x00'",
+      "content_valid": true,
+      "status": "retrieved"
+    },
+    {
+      "name": "opalinus-RAW_DATA.zip",
+      "url": "https://publications.rwth-aachen.de/record/1004000/files/RAW_DATA.zip",
+      "bytes": 248,
+      "sha256": "4681fa6e4303ecc351521fa1c7c836c9f3d6774b11725d39885ec3bf8ff16561",
+      "md5_matches": null,
+      "magic": "b'<html>\\n '",
+      "content_valid": false,
+      "status": "html-challenge-not-requested-content"
+    },
+    {
+      "name": "opalinus-READ_ME.pdf",
+      "url": "https://publications.rwth-aachen.de/record/1004000/files/READ_ME.pdf",
+      "bytes": 248,
+      "sha256": "4681fa6e4303ecc351521fa1c7c836c9f3d6774b11725d39885ec3bf8ff16561",
+      "md5_matches": null,
+      "magic": "b'<html>\\n '",
+      "content_valid": false,
+      "status": "html-challenge-not-requested-content"
+    },
+    {
+      "name": "opalinus-thermal-READ_ME.pdf",
+      "url": "https://publications.rwth-aachen.de/record/1022887/files/READ_ME.pdf",
+      "bytes": 248,
+      "sha256": "4681fa6e4303ecc351521fa1c7c836c9f3d6774b11725d39885ec3bf8ff16561",
+      "md5_matches": null,
+      "magic": "b'<html>\\n '",
+      "content_valid": false,
+      "status": "html-challenge-not-requested-content"
+    },
+    {
+      "name": "chang-Summary_of_Experiments.xlsx",
+      "bytes": 16581,
+      "sha256": "2b02d095729f39be26554be1a337386add38d5a0446ca4a08c2ec45f216fb358",
+      "status": "retrieved",
+      "published_md5_verified": true
+    },
+    {
+      "name": "bionics-Fig 8.xlsx",
+      "bytes": 48973,
+      "sha256": "224f33396e14bbf3c02721851e3a236b912b91cb110e8f93ed15b9c9f2376f32",
+      "status": "retrieved",
+      "published_md5_verified": true
+    },
+    {
+      "name": "bionics-Morsy et al (2023) JGGE Data Cover Sheet.pdf",
+      "bytes": 26963,
+      "sha256": "e7fe12595f3a83720967cde9ef08e411a14b8c0a916bbc34b65c0a3ed5c19199",
+      "status": "retrieved",
+      "published_md5_verified": true
+    }
+  ],
+  "local_evidence_directory": "tmp/experimental-gap-screen-2026-11-02",
+  "verification": [
+    "Downloaded 15 Newcastle/Estefania source files and all matched published MD5 checksums.",
+    "PoliTO supplement ZIP validated and XLS parsed without executing supplied code.",
+    "BIONICS cover/workbook and Chang protocol summary each matched published MD5.",
+    "HTML challenge responses retained and explicitly rejected as archive/PDF content.",
+    "Workbook headers/counts read using openpyxl and xlrd; no source workbook edited."
+  ]
+}

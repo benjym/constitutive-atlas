@@ -1,0 +1,35 @@
+# Native failure review — E4 blocked, no E5 acceptance
+
+Reviewer `/root/md1997_review`, separate actual run, 2026-11-02. Owned only this new review directory. Read saved build/qualification/raw/ordinary evidence and the exact frozen runtime source; executed only Python analysis of retained bytes and source algebra. No compiled calls, builds, production/policy/model changes or fabricated approval.
+
+## Verified observed outcome
+
+The native build receipt and every bound configure/build/describe input verify. Executable SHA256b6f18a38638d82d5ae6d319de1919a99e89536f5c7ca849c23caabc98caae18f matches qualification identity. Embedded describe object equals the exact generated16model catalogue; generated JSON/header hashes match build receipt. Candidate remains28ea763d… and embedded catalogue remainsbedc53e3…. Thus this is an actual failure of the intended native realization, not evidence from an older/missing model.
+
+Frozen qualification contains all35planned cases and46raw API calls. All raw case responses parse to their recorded response without a transport/harness error. Main checker correctly reports1881checks/334failures.32cases fail operationally; only hydrostatic positive/negative and the quarter-first-yield elastic cycle succeed. All8axisymmetric source paths fail at/near plastic entry under both resolutions. All6interior-Lode source paths at both resolutions fail their first direct update, with returned full parent and partition_committed=false. Public protocol1/2defaults both fail at step1. Restart and rotated histories also fail before reaching their intended comparison boundaries.
+
+334failed checks are not334independent equation discrepancies. Most reflect missing downstream checkpoints/refinement from these early failures:174checkpoint,82refinement,32operational,32point-count,10matching-point,3AD and1restart-receipt channels. AD request is explicitly unavailable because its prerequisite interior parent was never produced; no update tangent/FD observation exists. Replay and covariance are likewise unqualified, rather than demonstrated numerically inaccurate. Do not claim their passes or diagnose their algorithms from absent results.
+
+Zero/hold, tiny clean elastic update, invalid-input rejection and recovery, forced rollback and clean recovery have retained passing evidence. Complete failed direct-step parents are preserved. These bounded successes do not waive the plastic/native source gates. Ordinary16model regression independently fails only MD1997; the other14expected-success cases pass and historical GIS failure retains its exact expected signature. That is useful unaffected operational evidence, not a full scientific regression of every prior model.
+
+## Generic predictor/corrector obstruction
+
+The frozen generated table marks gamma as a multiplier/transient and binds MD1997 to solution_constraints_9, enforcing normalized yield<=1e-8. Frozen cpp/include/atlas/solver.hpp implicit_step enables predictor whenever a multiplier exists. In predictor mode it replaces each multiplier residual with x_gamma, forcing an elastic gamma=0 solve. However it switches predictor=false only within:
+
+`err < residual_tolerance && solution_admissible(model,z,p)`.
+
+An elastic predictor beyond yield cannot satisfy that final physical constraint, even when its predictor equations have converged. It consequently never enters the complementarity corrector. At the elastic root a zero/tiny Newton correction cannot produce descent, leading to restart/backtracking/subdivision failure. This control-flow dependency is generic to constrained multiplier models; removing the physical yield constraint would conceal it rather than fix it.
+
+The saved first dense interior cosine0/128 request provides a simple source-algebra witness: p=160000Pa, G=41629542.45779023Pa and trace-free strain norm7.8125e-5. With gamma=0, alpha unchanged and source elasticity, the elastic predictor exceeds yield by6504.616009Pa, normalized0.04065385006 versus the physical limit1e-8. Even ideal depth14 subdivision leaves normalized elastic excess≈2.4813e-6, still outside the physical limit. `check_saved.py` reproduces this from the saved request without a production/compiled call. The original on-yield parent is admissible; negative pressure or singular hardening distance is not implied by this example.
+
+This is a compelling static obstruction consistent with every observed first-plastic failure. The saved generic error message alone does not prove the exact iteration exit or existence of an admissible MD backward-Euler root. Independent scalar BE root evidence and an isolated generic phase trace are therefore still useful. Fixing this obstruction cannot be assumed to resolve all later plastic/softening/default/refinement gates.
+
+## Smallest next action
+
+Coordinator should claim a separately scoped generic solver capability task. Preserve all current candidate/reference/policy/runtime/build/failure identities. Use an analytical synthetic multiplier fixture to expose phase transition independently of MD: trace-free unit n, fixed positive mean pressure, elastic-perfect-plastic deviatoric radiusY, stress residual sigma-sigma_n-2G*de+gamma*2G*n=0, complementarity gamma>=0/f<=0/gamma*f=0, f=norm(dev sigma)-Y, and final constraint f<=tolerance. Start at dev(sigma_n)=Y*n with de=h*n, h>0. The exact corrector root is sigma=sigma_n,gamma=h, while the elastic predictor violates yield by2G*h. The common engine must reach the corrector while preserving the final physical constraint and transaction semantics.
+
+Instrument only an isolated generic diagnostic if needed to record predictor flag, predictor residual norm, solution admissibility, correction norm and exit reason for one existing saved failing request. The likely generic correction is to let a domain-valid converged elastic predictor transition to the true multiplier equations even when final physical constraints are not yet met; require final admissibility on the corrected solution. This is a recommendation for separately owned implementation/review, not a reviewer-authored patch.
+
+After that independent fixture/phase evidence and the separate source BE root study, run a coordinator-owned bounded replay of the exact saved first interior request under a new runtime/build identity. A successful diagnostic is not qualification. Rerun the unchanged full native source/default/refinement/transaction/AD gates and ordinary policy; proceed to Wasm only after native behavior is understood and qualified. Preserve any additional failures and require independent review of the generic change. Do not enlarge iteration/depth/tolerances or remove yield admissibility merely to obtain a pass.
+
+Public-control-scope-v1's intended protocol3disablement is an honest prospective restriction for unqualified inverse cyclic stress control. It does not waive the current protocol1/2failures, replace the full3D law with elastic behavior, or permit atlas/browser approval now. E4/E5/E6 remain blocked on numerical capability; experimental and live delivery remain separate.

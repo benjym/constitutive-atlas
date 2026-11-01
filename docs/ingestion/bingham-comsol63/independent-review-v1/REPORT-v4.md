@@ -1,0 +1,11 @@
+# Independent build-source closure followup — accepted
+
+Reviewer `/root/bingham_review`, 2 November2026. **Prospective acceptance for coordinator-owned build under build-inputs-v1.json, extending freeze-v4.** This remains prospective; no compiled execution/build occurred in this reviewer run and no E5 approval is issued.
+
+Verified all138manifest pins against actual bytes. All120freeze-v4 path/hash bindings remain unchanged. The exact18entry extension is freeze-v4.json itself plus every17file recursively present under cpp/scalar-functions. This includes twelve C files, three headers, COPYRIGHT and NOTICES.txt. The directory enumeration found no omitted file. No numerical inputs, equations, cases, references, assessor, runtime, compiler or acceptance budget changed.
+
+Read cmake/bingham/CMakeLists.txt and cmake/AtlasScalarFunctions.cmake. The dedicated C/C++ target includes the scalar helper, which declares a static library of twelve C sources and applies it to subsequent targets via link_libraries. Every listed scalar C source and its local headers is now bound. The helper's existing rounding option -ffp-contract=off remains unchanged. The dedicated main source, project headers, compiler Python/schema/model inputs and CMake files are included by the retained freeze; the extension corrects the previously omitted scalar-source identity. REPORT-v3's120pins alone were not a complete project compilation-source closure.
+
+input-binding-v4.json records the manifest SHA, all138checked bindings, unchanged prior bindings, exact added set and CMake source enumeration. Actual toolchain binaries/versions, generated files, compile/link flags, static archives and executable/module/Wasm hashes remain future build-receipt evidence and must be inspected/bound during final review. This prospective source closure does not claim that platform SDK/system headers or external toolchain binaries have already been frozen.
+
+No remaining prospective blocker found. Parent may conduct the authorized serial dedicated build and observations under this source manifest, retaining all actual commands/results/failures and producing the exact reviewed build receipt before E5/package acceptance. New files only: REPORT-v4.md and input-binding-v4.json. Prior review versions remain preserved.

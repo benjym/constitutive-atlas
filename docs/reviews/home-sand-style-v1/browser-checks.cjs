@@ -1,0 +1,62 @@
+async page => {
+ const assert=(v,m)=>{if(!v)throw Error(m);};
+ const checks=[];
+ await page.setViewportSize({width:1440,height:1000});
+ await page.goto('http://127.0.0.1:19484/');
+ await page.waitForSelector('#home:not([hidden])');
+ await page.waitForFunction(()=>document.querySelector('.home-cover-image').complete&&document.querySelector('.home-cover-image').naturalWidth===1536);
+ await page.evaluate(()=>document.fonts.ready);
+ assert(await page.title()==='Constitutive Atlas','Home document title');
+ assert(await page.locator('.home-destinations>a').count()===4,'Four destination links');
+ for(const route of ['laboratory','catalogue','ensemble','methods']) {
+  await page.locator('.home-destinations>a[href="#'+route+'"]').click();
+  await page.waitForSelector('#'+route+':not([hidden])');
+  assert(await page.locator('.page:not([hidden])').count()===1,'One visible page for '+route);
+  assert(await page.locator('.rail nav a[aria-current="page"]').getAttribute('href')==='#'+route,'Active navigation '+route);
+  await page.getByRole('link',{name:'Constitutive Atlas home',exact:true}).click();
+  await page.waitForSelector('#home:not([hidden])');
+ }
+ checks.push('Root landing page, cover loaded, all four cards, brand return, active navigation');
+ await page.locator('.home-scroll').click();
+ await page.waitForFunction(()=>document.querySelector('#home').hidden===false&&location.hash==='#explore-atlas');
+ await page.getByRole('link',{name:'Constitutive Atlas home',exact:true}).click();
+ await page.locator('.home-button').click();
+ await page.waitForSelector('#laboratory:not([hidden])');
+ await page.goto('http://127.0.0.1:19484/#laboratory?model=linear-elastic');
+ await page.waitForFunction(()=>document.querySelector('#model').value==='linear-elastic');
+ await page.waitForFunction(()=>document.querySelector('#run-state').textContent==='✓ Response up to date');
+ await page.screenshot({path:'output/playwright/home-sand-style-laboratory-v4.png',fullPage:true});
+ await page.goBack();
+ await page.getByRole('link',{name:'Constitutive Atlas home',exact:true}).click();
+ checks.push('Discover anchor, start action, direct laboratory model link and browser history');
+ await page.locator('.rail nav a[href="#ensemble"]').click();
+ await page.waitForSelector('#ensemble[data-ready="true"]');
+ await page.locator('#ensemble-run').click();
+ await page.waitForFunction(()=>document.querySelector('#ensemble-status').textContent==='15 completed');
+ assert(await page.locator('#ensemble-stress polyline').count()===16,'Full ensemble plot');
+ await page.screenshot({path:'output/playwright/home-sand-style-ensemble-v4.png',fullPage:true});
+ checks.push('Styled ensemble retains all15realWasm full-range completions');
+ await page.getByRole('link',{name:'Constitutive Atlas home',exact:true}).click();
+ await page.waitForFunction(()=>getComputedStyle(document.querySelector('#toast')).display==='none');
+ await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+ await page.screenshot({path:'output/playwright/home-sand-style-desktop-final-v4.png',fullPage:true});
+ const sizes=[];
+ for(const width of [390,760,900]){
+  await page.setViewportSize({width,height:844});
+  for(const route of ['home','laboratory','ensemble','catalogue','methods']){
+   await page.locator('.rail nav a[href="#'+route+'"]').click();
+   await page.waitForSelector('#'+route+':not([hidden])');
+   const g=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth,header:document.querySelector('.rail').getBoundingClientRect().bottom,main:document.querySelector('.page:not([hidden])').getBoundingClientRect().top+scrollY}));
+   assert(g.scroll<=width,'No horizontal overflow '+route+' '+width+': '+g.scroll);
+   assert(g.main>=g.header-1,'Header does not cover content '+route+' '+width);
+   sizes.push({route,...g});
+  }
+ }
+ await page.setViewportSize({width:390,height:844});
+ await page.locator('.rail nav a[href="#home"]').click();
+ await page.waitForFunction(()=>document.documentElement.scrollHeight<=Math.ceil(document.querySelector('#home').getBoundingClientRect().height)+134);
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ await page.screenshot({path:'output/playwright/home-sand-style-mobile-final-v5.png',fullPage:true});
+ checks.push('390px,760px,900px layouts: every route, no overflow or header overlap');
+ return {status:'passed',checks,sizes};
+}

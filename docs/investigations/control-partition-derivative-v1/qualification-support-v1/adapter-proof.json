@@ -1,0 +1,48 @@
+[
+  {
+    "adapter": "adapters/check_sls_saved.py",
+    "adapter_sha256": "8add9b7a775a9dc7f4bef6a4d0a7b2196a4f9c621f9bda9d7c690a8b94aeb35a",
+    "exact_reverse_substitution": true,
+    "replacements": [
+      {
+        "original": "BASE=Path(__file__).resolve().parent;ROOT=BASE.parents[3]",
+        "replacement": "import os\nROOT=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()\nBASE=Path(os.environ['ATLAS_QUALIFICATION_OUTPUT']).resolve()\nassert BASE != ROOT and not BASE.is_relative_to(ROOT), 'Fresh output must be outside support source'\nassert BASE.is_dir(), 'Create fresh output directory explicitly'\nINPUT_BASE=ROOT/'docs/ingestion/sls-comsol63/execution-v1'"
+      },
+      {
+        "original": "BASE/'study.py'",
+        "replacement": "INPUT_BASE/'study.py'"
+      },
+      {
+        "original": "BASE/'cases.json'",
+        "replacement": "INPUT_BASE/'cases.json'"
+      }
+    ],
+    "source": "docs/ingestion/sls-comsol63/execution-v1/check_saved.py",
+    "source_sha256": "09e92ea1ab985da39c449a63ed30785ca3a8aea5ecaa6d68974a783063e98ba4"
+  },
+  {
+    "adapter": "adapters/check_maxwell_transactions.py",
+    "adapter_sha256": "8ea5d5d97f346a913a7c67159ee3bb5ce81f947adb96146a4991b5c2e21fc22a",
+    "exact_reverse_substitution": true,
+    "replacements": [
+      {
+        "original": "ROOT=Path(__file__).resolve().parents[4]",
+        "replacement": "import os\nROOT=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()\nBASE=Path(os.environ['ATLAS_QUALIFICATION_OUTPUT']).resolve()\nassert BASE != ROOT and not BASE.is_relative_to(ROOT), 'Fresh output must be outside support source'\nassert BASE.is_dir(), 'Create fresh output directory explicitly'\nINPUT_BASE=ROOT/'docs/ingestion/maxwell-itasca900/integration-v1'"
+      },
+      {
+        "original": "BASE=Path(__file__).resolve().parent",
+        "replacement": ""
+      },
+      {
+        "original": "BASE/'reference-cases.json'",
+        "replacement": "INPUT_BASE/'reference-cases.json'"
+      },
+      {
+        "original": "Path('/private/tmp/atlas-maxwell-execution-v1/cli')",
+        "replacement": "BASE/'cli'"
+      }
+    ],
+    "source": "docs/ingestion/maxwell-itasca900/integration-v1/check_transactions.py",
+    "source_sha256": "9da339b845dd380b1cbb193b938e94cb7229a6ce68f87814b53011ad78a0d5d4"
+  }
+]

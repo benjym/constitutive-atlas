@@ -1,0 +1,7 @@
+# Numerical build policy assessment — prospective second study
+
+Separate reviewer `/root/ramberg_review`, 2026-11-02. Parent reports native/Wasm each pass the 1141 independent checks but original strict backend parity fails by1.662224e−8Pa at a nearly zero vendor-example lateral component. The original failure is retained. I have not executed any compiled artifact or yet accepted the supplied result counts.
+
+Disabling floating-point multiply-add contraction in the native build is a defensible numerical reproducibility choice for comparison with a Wasm target using separately rounded arithmetic. It changes instruction rounding, not the constitutive equations, scientific reference, parameter meaning or acceptance bound. It is acceptable to test this choice under a distinct prospectively frozen study with unchanged model and strict original parity criterion. The old result must not be overwritten or labeled passing, and contraction must not be asserted as the demonstrated cause before a controlled comparison supports it.
+
+The final build policy needs explicit flags, target/toolchain scope and logs. Final native qualification and CI/release must use the tested policy. A pass only in a local ad hoc rebuild would not qualify a default differently configured release. Backend agreement remains supplementary to the independent scalar oracle; it cannot establish equation fidelity. Browser interface qualification remains pending.

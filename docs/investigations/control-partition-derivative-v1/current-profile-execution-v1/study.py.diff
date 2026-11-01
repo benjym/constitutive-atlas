@@ -1,0 +1,30 @@
+--- /private/tmp/atlas-control-partition-support-v3/source/docs/ingestion/burgers-itasca900/integration-v1/study.py
++++ adapters/study.py
+@@ -2,7 +2,8 @@
+ from pathlib import Path
+ import argparse,copy,hashlib,json,subprocess,sys
+ from decimal import Decimal as D
+-R=Path(__file__).resolve().parent
++import os
++R=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()/'docs/ingestion/burgers-itasca900/integration-v1'
+ sys.path.insert(0,str(R.parents[3]))
+ from atlas.schedule import schedule_command,validate_schedule
+ from reference import reference
+@@ -30,7 +31,7 @@
+         if self.node:self.node.stdin.close();assert self.node.wait(timeout=30)==0
+ 
+ def execute(backend):
+-    req=json.loads((R/'requests.json').read_text());model=json.loads((R/'model.json').read_text());mid=model['id'];params=req['ode'][0]['parameters'];initial=req['ode'][0]['initial']
++    req=json.loads((R/'requests.json').read_text());model=json.loads((R.parents[3]/'models/research/burgers/burgers-itasca900-dry-zero-spin-ode.json').read_text());mid=model['id'];params=req['ode'][0]['parameters'];initial=req['ode'][0]['initial']
+     backend.call('descriptor','atlas_describe',[],['--describe'])
+     def ode(case,label=None):
+         args=[mid,csv(case['parameters']),csv(case['initial']),csv(case['rate']),case['start'],case['duration'],case['rtol'],case['atol'],case['min_step'],case['max_step'],case['budget']]
+@@ -78,7 +79,7 @@
+     return backend.calls
+ 
+ def assess(calls):
+-    policy=json.loads((R/'acceptance.json').read_text());req=json.loads((R/'requests.json').read_text());refs=json.loads((R/'references.json').read_text());model=json.loads((R/'model.json').read_text())
++    policy=json.loads((R/'acceptance.json').read_text());req=json.loads((R/'requests.json').read_text());refs=json.loads((R/'references.json').read_text());model=json.loads((R.parents[3]/'models/research/burgers/burgers-itasca900-dry-zero-spin-ode.json').read_text())
+     d={x['label']:x['response'] for x in calls};assert len(d)==len(calls)
+     desc=d['descriptor'];assert desc['models']==[model]
+     catalogue_hash=desc.get('catalogue_hash')

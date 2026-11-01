@@ -1,0 +1,1213 @@
+{
+  "paper_record_version": 1,
+  "date": "2026-10-31",
+  "status": "source_processing_formula_transcription_not_admission",
+  "inputs_sha256": {
+    "paper/study/ottawa_cyclic_inventory.json": "fc71c511bc99453aece38e29dde936f2e2b5986ba6f2d96bf513583f0fb03d3c",
+    "paper/scripts/extract_torsion_transformations.py": "d4a67ab03158f23b679e6d4bac53678a529446dc84d39fd420e2e8618a049c16"
+  },
+  "reader": "xlrd 2.0.2; restricted BIFF8 RPN decoder",
+  "exposure": "Selected first-row formulas, all shared formula definitions intersecting H:K, and cached metadata inspected. A subsequent integrity check reads C:F/H:K at fixed rows22 and I16+1 plus H18:K18 baseline summaries; only identity residuals retained. No response fitting, scoring, plotting or threshold analysis.",
+  "limits": "Shared zeroing definitions are decoded and fixed-row cache identities checked. No full-history cache evaluation, physical validation, sensor-accuracy or correction-admission claim.",
+  "interpretation": {
+    "geometry": "D2 is consolidated height in cm; G2/H2 are consolidated outer/inner radii in cm. Cross-check against the separately extracted N4/N5/N6 geometry before use.",
+    "engineering_shear_strain": "M22 = rotation_in_radians * (outer_radius + inner_radius) / (2*height) *100 percent.",
+    "shear_stress": "N22 = 3*torque / (2*pi*(outer_radius^3-inner_radius^3)); using torque in N m and radii in cm, multiply by1000 for kPa.",
+    "pressure": "P22 = K22 - initial_back_pressure; Q22 = P22 / I2. I2 is the cached initial mean effective stress, not nominal100kPa.",
+    "normal_stress": "S22 converts processed axial-force channel J22 in N over consolidated area K10 in cm2 to kPa; T22 adds it to initial vertical effective stress and subtracts excess pressure. R22 subtracts excess pressure from initial radial effective stress.",
+    "qualification": "These identify the processed first-row observation map, not the normal boundary control or instrument/membrane calibration. Shared source tokens subtract absolute H18 from each channel five columns to the right of its raw input. This applies a torque baseline to unlike units; ON/OFF labels do not establish operational switch behaviour. Provider clarification is required before admission."
+  },
+  "specimens": [
+    {
+      "curated_loading_id": "LEAP-2018-TOR-DR50-0P10-LOADING",
+      "source_file": "PRJ-2136/Dr50/Dr50-0.10(20181114)/Data sheet for Dr50-0.10.xls",
+      "source_file_sha256": "5c36664f3316fc0c78db54aeb4e187022c501e7415cacb9f3d4a4a9b98a053f7",
+      "metadata_cells": {
+        "D2": 9.8890006,
+        "F2": 6.001042371194968,
+        "G2": 5.002532825239066,
+        "H2": 3.000521185597484,
+        "I2": 103.1151231193823,
+        "I16": 85.0,
+        "H17": "ON",
+        "I17": "ON",
+        "J17": "OFF",
+        "K17": "OFF"
+      },
+      "first_processing_row_formulas": {
+        "M22": {
+          "biff8_rpn_hex": "44150008c0415601440100060044010007000315051e020044010003000515061e640005",
+          "grouped_expression": "(((RADIANS(I22)*($G$2+$H$2))/(2*$D$2))*100)"
+        },
+        "N22": {
+          "biff8_rpn_hex": "1e030044150007c01e64000515051e02004113000544010006001e03000744010007001e03000704150515061e0a0005",
+          "grouped_expression": "(((3*(H22*100))/((2*PI())*(($G$2^3)-($H$2^3))))*10)"
+        },
+        "O22": {
+          "biff8_rpn_hex": "4415000dc0440100080006",
+          "grouped_expression": "(N22/$I$2)"
+        },
+        "P22": {
+          "biff8_rpn_hex": "4415000ac0440600010004",
+          "grouped_expression": "(K22-$B$7)"
+        },
+        "Q22": {
+          "biff8_rpn_hex": "4415000fc0440100080006",
+          "grouped_expression": "(P22/$I$2)"
+        },
+        "R22": {
+          "biff8_rpn_hex": "44040001004415000fc004",
+          "grouped_expression": "($B$5-P22)"
+        },
+        "S22": {
+          "biff8_rpn_hex": "44150009c01ee80306154409000a001e1027061506",
+          "grouped_expression": "((J22/1000)/($K$10/10000))"
+        },
+        "T22": {
+          "biff8_rpn_hex": "440300010044150012c0034415000fc004",
+          "grouped_expression": "(($B$4+S22)-P22)"
+        },
+        "U22": {
+          "biff8_rpn_hex": "44150013c01e020044150011c00503151e030006",
+          "grouped_expression": "((T22+(2*R22))/3)"
+        },
+        "V22": {
+          "biff8_rpn_hex": "44150012c044030001004404000100041503151e020006151e0200074415000dc01e02000703411400",
+          "grouped_expression": "SQRT(((((S22+($B$4-$B$5))/2)^2)+(N22^2)))"
+        },
+        "W22": {
+          "biff8_rpn_hex": "44150011c044150013c006",
+          "grouped_expression": "(R22/T22)"
+        },
+        "X22": {
+          "biff8_rpn_hex": "1e010044150010c004",
+          "grouped_expression": "(1-Q22)"
+        }
+      },
+      "shared_channel_formulas": [
+        {
+          "range": "H22:K23",
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "status": "decoded_shared_reference"
+        }
+      ],
+      "shared_zeroing_variants": [
+        {
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "block_count": 1353,
+          "example_range": "H22:K23",
+          "expression_at_example_top_left": "(C22-$H$18)",
+          "last_row": 21613
+        }
+      ],
+      "fixed_row_cache_identity_checks": [
+        {
+          "cell": "H22",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I22",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.06412500999999995
+        },
+        {
+          "cell": "J22",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.055812500000000015
+        },
+        {
+          "cell": "K22",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 201.0146546874999
+        },
+        {
+          "cell": "H86",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I86",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.06412500999999995
+        },
+        {
+          "cell": "J86",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.055812500000000015
+        },
+        {
+          "cell": "K86",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 201.0146546874999
+        }
+      ]
+    },
+    {
+      "curated_loading_id": "LEAP-2018-TOR-DR50-0P13-LOADING",
+      "source_file": "PRJ-2136/Dr50/Dr50-0.13(20181109)/Data sheet for Dr50-0.13.xls",
+      "source_file_sha256": "57568f832643f6412f8c628e6bac480d1e00cf979182a6ea706e867024a6efa8",
+      "metadata_cells": {
+        "D2": 9.919667200000001,
+        "F2": 6.002209365386521,
+        "G2": 5.006834656428911,
+        "H2": 3.0011046826932604,
+        "I2": 104.47983960770522,
+        "I16": 84.0,
+        "H17": "ON",
+        "I17": "ON",
+        "J17": "OFF",
+        "K17": "OFF"
+      },
+      "first_processing_row_formulas": {
+        "M22": {
+          "biff8_rpn_hex": "44150008c0415601440100060044010007000315051e020044010003000515061e640005",
+          "grouped_expression": "(((RADIANS(I22)*($G$2+$H$2))/(2*$D$2))*100)"
+        },
+        "N22": {
+          "biff8_rpn_hex": "1e030044150007c01e64000515051e02004113000544010006001e03000744010007001e03000704150515061e0a0005",
+          "grouped_expression": "(((3*(H22*100))/((2*PI())*(($G$2^3)-($H$2^3))))*10)"
+        },
+        "O22": {
+          "biff8_rpn_hex": "4415000dc0440100080006",
+          "grouped_expression": "(N22/$I$2)"
+        },
+        "P22": {
+          "biff8_rpn_hex": "4415000ac0440600010004",
+          "grouped_expression": "(K22-$B$7)"
+        },
+        "Q22": {
+          "biff8_rpn_hex": "4415000fc0440100080006",
+          "grouped_expression": "(P22/$I$2)"
+        },
+        "R22": {
+          "biff8_rpn_hex": "44040001004415000fc004",
+          "grouped_expression": "($B$5-P22)"
+        },
+        "S22": {
+          "biff8_rpn_hex": "44150009c01ee80306154409000a001e1027061506",
+          "grouped_expression": "((J22/1000)/($K$10/10000))"
+        },
+        "T22": {
+          "biff8_rpn_hex": "440300010044150012c0034415000fc004",
+          "grouped_expression": "(($B$4+S22)-P22)"
+        },
+        "U22": {
+          "biff8_rpn_hex": "44150013c01e020044150011c00503151e030006",
+          "grouped_expression": "((T22+(2*R22))/3)"
+        },
+        "V22": {
+          "biff8_rpn_hex": "44150012c044030001004404000100041503151e020006151e0200074415000dc01e02000703411400",
+          "grouped_expression": "SQRT(((((S22+($B$4-$B$5))/2)^2)+(N22^2)))"
+        },
+        "W22": {
+          "biff8_rpn_hex": "44150011c044150013c006",
+          "grouped_expression": "(R22/T22)"
+        },
+        "X22": {
+          "biff8_rpn_hex": "1e010044150010c004",
+          "grouped_expression": "(1-Q22)"
+        }
+      },
+      "shared_channel_formulas": [
+        {
+          "range": "H22:K23",
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "status": "decoded_shared_reference"
+        }
+      ],
+      "shared_zeroing_variants": [
+        {
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "block_count": 201,
+          "example_range": "H22:K23",
+          "expression_at_example_top_left": "(C22-$H$18)",
+          "last_row": 3216
+        }
+      ],
+      "fixed_row_cache_identity_checks": [
+        {
+          "cell": "H22",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I22",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0031746031746031763
+        },
+        {
+          "cell": "J22",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.03180952380952381
+        },
+        {
+          "cell": "K22",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.93126349206352
+        },
+        {
+          "cell": "H85",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I85",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0031746031746031763
+        },
+        {
+          "cell": "J85",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.031809523809523815
+        },
+        {
+          "cell": "K85",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.93126349206352
+        }
+      ]
+    },
+    {
+      "curated_loading_id": "LEAP-2018-TOR-DR50-0P15-LOADING",
+      "source_file": "PRJ-2136/Dr50/Dr50-0.15(20181115)/Data sheet for Dr50-0.15.xls",
+      "source_file_sha256": "373a895b5de93347217953514a662817a9a003540eba67238c424632e1779f91",
+      "metadata_cells": {
+        "D2": 9.916000400000001,
+        "F2": 6.001361571636202,
+        "G2": 5.002798914126017,
+        "H2": 3.000680785818101,
+        "I2": 102.93397697086334,
+        "I16": 89.0,
+        "H17": "ON",
+        "I17": "ON",
+        "J17": "OFF",
+        "K17": "OFF"
+      },
+      "first_processing_row_formulas": {
+        "M22": {
+          "biff8_rpn_hex": "44150008c0415601440100060044010007000315051e020044010003000515061e640005",
+          "grouped_expression": "(((RADIANS(I22)*($G$2+$H$2))/(2*$D$2))*100)"
+        },
+        "N22": {
+          "biff8_rpn_hex": "1e030044150007c01e64000515051e02004113000544010006001e03000744010007001e03000704150515061e0a0005",
+          "grouped_expression": "(((3*(H22*100))/((2*PI())*(($G$2^3)-($H$2^3))))*10)"
+        },
+        "O22": {
+          "biff8_rpn_hex": "4415000dc0440100080006",
+          "grouped_expression": "(N22/$I$2)"
+        },
+        "P22": {
+          "biff8_rpn_hex": "4415000ac0440600010004",
+          "grouped_expression": "(K22-$B$7)"
+        },
+        "Q22": {
+          "biff8_rpn_hex": "4415000fc0440100080006",
+          "grouped_expression": "(P22/$I$2)"
+        },
+        "R22": {
+          "biff8_rpn_hex": "44040001004415000fc004",
+          "grouped_expression": "($B$5-P22)"
+        },
+        "S22": {
+          "biff8_rpn_hex": "44150009c01ee80306154409000a001e1027061506",
+          "grouped_expression": "((J22/1000)/($K$10/10000))"
+        },
+        "T22": {
+          "biff8_rpn_hex": "440300010044150012c0034415000fc004",
+          "grouped_expression": "(($B$4+S22)-P22)"
+        },
+        "U22": {
+          "biff8_rpn_hex": "44150013c01e020044150011c00503151e030006",
+          "grouped_expression": "((T22+(2*R22))/3)"
+        },
+        "V22": {
+          "biff8_rpn_hex": "44150012c044030001004404000100041503151e020006151e0200074415000dc01e02000703411400",
+          "grouped_expression": "SQRT(((((S22+($B$4-$B$5))/2)^2)+(N22^2)))"
+        },
+        "W22": {
+          "biff8_rpn_hex": "44150011c044150013c006",
+          "grouped_expression": "(R22/T22)"
+        },
+        "X22": {
+          "biff8_rpn_hex": "1e010044150010c004",
+          "grouped_expression": "(1-Q22)"
+        }
+      },
+      "shared_channel_formulas": [
+        {
+          "range": "H22:K23",
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "status": "decoded_shared_reference"
+        }
+      ],
+      "shared_zeroing_variants": [
+        {
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "block_count": 102,
+          "example_range": "H22:K23",
+          "expression_at_example_top_left": "(C22-$H$18)",
+          "last_row": 1631
+        }
+      ],
+      "fixed_row_cache_identity_checks": [
+        {
+          "cell": "H22",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I22",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.027941176470588254
+        },
+        {
+          "cell": "J22",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.2323529411764702
+        },
+        {
+          "cell": "K22",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.50795882352924
+        },
+        {
+          "cell": "H90",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I90",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.027941176470588254
+        },
+        {
+          "cell": "J90",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.23235294117647026
+        },
+        {
+          "cell": "K90",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.50795882352924
+        }
+      ]
+    },
+    {
+      "curated_loading_id": "LEAP-2018-TOR-DR50-0P19-LOADING",
+      "source_file": "PRJ-2136/Dr50/Dr50-0.19(20181107)/Data sheet for Dr50-0.19.xls",
+      "source_file_sha256": "232aedf703535494af7a5ab91dfcaf98068688ad6ad0a62643dddd78492688ce",
+      "metadata_cells": {
+        "D2": 9.9073336,
+        "F2": 6.000166788431399,
+        "G2": 5.001802930123346,
+        "H2": 3.0000833942156997,
+        "I2": 106.09348431578326,
+        "I16": 76.0,
+        "H17": "ON",
+        "I17": "ON",
+        "J17": "OFF",
+        "K17": "OFF"
+      },
+      "first_processing_row_formulas": {
+        "M22": {
+          "biff8_rpn_hex": "44150008c0415601440100060044010007000315051e020044010003000515061e640005",
+          "grouped_expression": "(((RADIANS(I22)*($G$2+$H$2))/(2*$D$2))*100)"
+        },
+        "N22": {
+          "biff8_rpn_hex": "1e030044150007c01e64000515051e02004113000544010006001e03000744010007001e03000704150515061e0a0005",
+          "grouped_expression": "(((3*(H22*100))/((2*PI())*(($G$2^3)-($H$2^3))))*10)"
+        },
+        "O22": {
+          "biff8_rpn_hex": "4415000dc0440100080006",
+          "grouped_expression": "(N22/$I$2)"
+        },
+        "P22": {
+          "biff8_rpn_hex": "4415000ac0440600010004",
+          "grouped_expression": "(K22-$B$7)"
+        },
+        "Q22": {
+          "biff8_rpn_hex": "4415000fc0440100080006",
+          "grouped_expression": "(P22/$I$2)"
+        },
+        "R22": {
+          "biff8_rpn_hex": "44040001004415000fc004",
+          "grouped_expression": "($B$5-P22)"
+        },
+        "S22": {
+          "biff8_rpn_hex": "44150009c01ee80306154409000a001e1027061506",
+          "grouped_expression": "((J22/1000)/($K$10/10000))"
+        },
+        "T22": {
+          "biff8_rpn_hex": "440300010044150012c0034415000fc004",
+          "grouped_expression": "(($B$4+S22)-P22)"
+        },
+        "U22": {
+          "biff8_rpn_hex": "44150013c01e020044150011c00503151e030006",
+          "grouped_expression": "((T22+(2*R22))/3)"
+        },
+        "V22": {
+          "biff8_rpn_hex": "44150012c044030001004404000100041503151e020006151e0200074415000dc01e02000703411400",
+          "grouped_expression": "SQRT(((((S22+($B$4-$B$5))/2)^2)+(N22^2)))"
+        },
+        "W22": {
+          "biff8_rpn_hex": "44150011c044150013c006",
+          "grouped_expression": "(R22/T22)"
+        },
+        "X22": {
+          "biff8_rpn_hex": "1e010044150010c004",
+          "grouped_expression": "(1-Q22)"
+        }
+      },
+      "shared_channel_formulas": [],
+      "shared_zeroing_variants": [
+        {
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "block_count": 44,
+          "example_range": "H23:H86",
+          "expression_at_example_top_left": "(C23-$H$18)",
+          "last_row": 697
+        }
+      ],
+      "fixed_row_cache_identity_checks": [
+        {
+          "cell": "H22",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I22",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.038909090909090935
+        },
+        {
+          "cell": "J22",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 6.9219636363636345
+        },
+        {
+          "cell": "K22",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.2284781818183
+        },
+        {
+          "cell": "H77",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I77",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.038909090909090935
+        },
+        {
+          "cell": "J77",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 6.9219636363636345
+        },
+        {
+          "cell": "K77",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.2284781818183
+        }
+      ]
+    },
+    {
+      "curated_loading_id": "LEAP-2018-TOR-DR60-0P12-LOADING",
+      "source_file": "PRJ-2136/Dr60/Dr60-0.12(20181113)/Data sheet for Dr60-0.12.xls",
+      "source_file_sha256": "e68624c395bccb52173e5bb4342c13d60fd181f9ae588e09ce1fb8fc38fe4ace",
+      "metadata_cells": {
+        "D2": 9.9060004,
+        "F2": 6.001473190302908,
+        "G2": 5.0028919606352025,
+        "H2": 3.000736595151454,
+        "I2": 102.63634735467969,
+        "I16": 95.0,
+        "H17": "ON",
+        "I17": "ON",
+        "J17": "OFF",
+        "K17": "OFF"
+      },
+      "first_processing_row_formulas": {
+        "M22": {
+          "biff8_rpn_hex": "44150008c0415601440100060044010007000315051e020044010003000515061e640005",
+          "grouped_expression": "(((RADIANS(I22)*($G$2+$H$2))/(2*$D$2))*100)"
+        },
+        "N22": {
+          "biff8_rpn_hex": "1e030044150007c01e64000515051e02004113000544010006001e03000744010007001e03000704150515061e0a0005",
+          "grouped_expression": "(((3*(H22*100))/((2*PI())*(($G$2^3)-($H$2^3))))*10)"
+        },
+        "O22": {
+          "biff8_rpn_hex": "4415000dc0440100080006",
+          "grouped_expression": "(N22/$I$2)"
+        },
+        "P22": {
+          "biff8_rpn_hex": "4415000ac0440600010004",
+          "grouped_expression": "(K22-$B$7)"
+        },
+        "Q22": {
+          "biff8_rpn_hex": "4415000fc0440100080006",
+          "grouped_expression": "(P22/$I$2)"
+        },
+        "R22": {
+          "biff8_rpn_hex": "44040001004415000fc004",
+          "grouped_expression": "($B$5-P22)"
+        },
+        "S22": {
+          "biff8_rpn_hex": "44150009c01ee80306154409000a001e1027061506",
+          "grouped_expression": "((J22/1000)/($K$10/10000))"
+        },
+        "T22": {
+          "biff8_rpn_hex": "440300010044150012c0034415000fc004",
+          "grouped_expression": "(($B$4+S22)-P22)"
+        },
+        "U22": {
+          "biff8_rpn_hex": "44150013c01e020044150011c00503151e030006",
+          "grouped_expression": "((T22+(2*R22))/3)"
+        },
+        "V22": {
+          "biff8_rpn_hex": "44150012c044030001004404000100041503151e020006151e0200074415000dc01e02000703411400",
+          "grouped_expression": "SQRT(((((S22+($B$4-$B$5))/2)^2)+(N22^2)))"
+        },
+        "W22": {
+          "biff8_rpn_hex": "44150011c044150013c006",
+          "grouped_expression": "(R22/T22)"
+        },
+        "X22": {
+          "biff8_rpn_hex": "1e010044150010c004",
+          "grouped_expression": "(1-Q22)"
+        }
+      },
+      "shared_channel_formulas": [
+        {
+          "range": "H22:K23",
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "status": "decoded_shared_reference"
+        }
+      ],
+      "shared_zeroing_variants": [
+        {
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "block_count": 3997,
+          "example_range": "H22:K23",
+          "expression_at_example_top_left": "(C22-$H$18)",
+          "last_row": 63908
+        }
+      ],
+      "fixed_row_cache_identity_checks": [
+        {
+          "cell": "H22",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I22",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.013621621621621631
+        },
+        {
+          "cell": "J22",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.37394594594594543
+        },
+        {
+          "cell": "K22",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 201.01604324324308
+        },
+        {
+          "cell": "H96",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I96",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.013621621621621631
+        },
+        {
+          "cell": "J96",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.37394594594594543
+        },
+        {
+          "cell": "K96",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 201.01604324324308
+        }
+      ]
+    },
+    {
+      "curated_loading_id": "LEAP-2018-TOR-DR60-0P13-LOADING",
+      "source_file": "PRJ-2136/Dr60/Dr60-0.13(20181115)/Data sheet for Dr60-0.13.xls",
+      "source_file_sha256": "33fc7392d0454a1a370f6167e250ab75e060b19793199e74d96c037a534ab418",
+      "metadata_cells": {
+        "D2": 9.908334,
+        "F2": 6.0018037425135535,
+        "G2": 5.0031675124780195,
+        "H2": 3.0009018712567768,
+        "I2": 102.5154852931571,
+        "I16": 91.0,
+        "H17": "ON",
+        "I17": "ON",
+        "J17": "OFF",
+        "K17": "OFF"
+      },
+      "first_processing_row_formulas": {
+        "M22": {
+          "biff8_rpn_hex": "44150008c0415601440100060044010007000315051e020044010003000515061e640005",
+          "grouped_expression": "(((RADIANS(I22)*($G$2+$H$2))/(2*$D$2))*100)"
+        },
+        "N22": {
+          "biff8_rpn_hex": "1e030044150007c01e64000515051e02004113000544010006001e03000744010007001e03000704150515061e0a0005",
+          "grouped_expression": "(((3*(H22*100))/((2*PI())*(($G$2^3)-($H$2^3))))*10)"
+        },
+        "O22": {
+          "biff8_rpn_hex": "4415000dc0440100080006",
+          "grouped_expression": "(N22/$I$2)"
+        },
+        "P22": {
+          "biff8_rpn_hex": "4415000ac0440600010004",
+          "grouped_expression": "(K22-$B$7)"
+        },
+        "Q22": {
+          "biff8_rpn_hex": "4415000fc0440100080006",
+          "grouped_expression": "(P22/$I$2)"
+        },
+        "R22": {
+          "biff8_rpn_hex": "44040001004415000fc004",
+          "grouped_expression": "($B$5-P22)"
+        },
+        "S22": {
+          "biff8_rpn_hex": "44150009c01ee80306154409000a001e1027061506",
+          "grouped_expression": "((J22/1000)/($K$10/10000))"
+        },
+        "T22": {
+          "biff8_rpn_hex": "440300010044150012c0034415000fc004",
+          "grouped_expression": "(($B$4+S22)-P22)"
+        },
+        "U22": {
+          "biff8_rpn_hex": "44150013c01e020044150011c00503151e030006",
+          "grouped_expression": "((T22+(2*R22))/3)"
+        },
+        "V22": {
+          "biff8_rpn_hex": "44150012c044030001004404000100041503151e020006151e0200074415000dc01e02000703411400",
+          "grouped_expression": "SQRT(((((S22+($B$4-$B$5))/2)^2)+(N22^2)))"
+        },
+        "W22": {
+          "biff8_rpn_hex": "44150011c044150013c006",
+          "grouped_expression": "(R22/T22)"
+        },
+        "X22": {
+          "biff8_rpn_hex": "1e010044150010c004",
+          "grouped_expression": "(1-Q22)"
+        }
+      },
+      "shared_channel_formulas": [
+        {
+          "range": "H22:K23",
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "status": "decoded_shared_reference"
+        }
+      ],
+      "shared_zeroing_variants": [
+        {
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "block_count": 469,
+          "example_range": "H22:K23",
+          "expression_at_example_top_left": "(C22-$H$18)",
+          "last_row": 7487
+        }
+      ],
+      "fixed_row_cache_identity_checks": [
+        {
+          "cell": "H22",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I22",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.007657142857142863
+        },
+        {
+          "cell": "J22",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.024171428571428566
+        },
+        {
+          "cell": "K22",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.63783142857153
+        },
+        {
+          "cell": "H92",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I92",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.007657142857142862
+        },
+        {
+          "cell": "J92",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.024171428571428566
+        },
+        {
+          "cell": "K92",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.63783142857153
+        }
+      ]
+    },
+    {
+      "curated_loading_id": "LEAP-2018-TOR-DR60-0P15-LOADING",
+      "source_file": "PRJ-2136/Dr60/Dr60-0.15(20181112)/Data sheet for Dr60-0.15.xls",
+      "source_file_sha256": "4f72ce0845572d7bf30d6028bdcc8c6953e9b6251b32c0489666ebafc78779fa",
+      "metadata_cells": {
+        "D2": 9.894000600000002,
+        "F2": 6.002651354061831,
+        "G2": 5.010532605581283,
+        "H2": 3.0013256770309154,
+        "I2": 105.42584133241529,
+        "I16": 98.0,
+        "H17": "ON",
+        "I17": "ON",
+        "J17": "OFF",
+        "K17": "OFF"
+      },
+      "first_processing_row_formulas": {
+        "M22": {
+          "biff8_rpn_hex": "44150008c0415601440100060044010007000315051e020044010003000515061e640005",
+          "grouped_expression": "(((RADIANS(I22)*($G$2+$H$2))/(2*$D$2))*100)"
+        },
+        "N22": {
+          "biff8_rpn_hex": "1e030044150007c01e64000515051e02004113000544010006001e03000744010007001e03000704150515061e0a0005",
+          "grouped_expression": "(((3*(H22*100))/((2*PI())*(($G$2^3)-($H$2^3))))*10)"
+        },
+        "O22": {
+          "biff8_rpn_hex": "4415000dc0440100080006",
+          "grouped_expression": "(N22/$I$2)"
+        },
+        "P22": {
+          "biff8_rpn_hex": "4415000ac0440600010004",
+          "grouped_expression": "(K22-$B$7)"
+        },
+        "Q22": {
+          "biff8_rpn_hex": "4415000fc0440100080006",
+          "grouped_expression": "(P22/$I$2)"
+        },
+        "R22": {
+          "biff8_rpn_hex": "44040001004415000fc004",
+          "grouped_expression": "($B$5-P22)"
+        },
+        "S22": {
+          "biff8_rpn_hex": "44150009c01ee80306154409000a001e1027061506",
+          "grouped_expression": "((J22/1000)/($K$10/10000))"
+        },
+        "T22": {
+          "biff8_rpn_hex": "440300010044150012c0034415000fc004",
+          "grouped_expression": "(($B$4+S22)-P22)"
+        },
+        "U22": {
+          "biff8_rpn_hex": "44150013c01e020044150011c00503151e030006",
+          "grouped_expression": "((T22+(2*R22))/3)"
+        },
+        "V22": {
+          "biff8_rpn_hex": "44150012c044030001004404000100041503151e020006151e0200074415000dc01e02000703411400",
+          "grouped_expression": "SQRT(((((S22+($B$4-$B$5))/2)^2)+(N22^2)))"
+        },
+        "W22": {
+          "biff8_rpn_hex": "44150011c044150013c006",
+          "grouped_expression": "(R22/T22)"
+        },
+        "X22": {
+          "biff8_rpn_hex": "1e010044150010c004",
+          "grouped_expression": "(1-Q22)"
+        }
+      },
+      "shared_channel_formulas": [
+        {
+          "range": "H22:K23",
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "status": "decoded_shared_reference"
+        }
+      ],
+      "shared_zeroing_variants": [
+        {
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "block_count": 381,
+          "example_range": "H22:K23",
+          "expression_at_example_top_left": "(C22-$H$18)",
+          "last_row": 6053
+        }
+      ],
+      "fixed_row_cache_identity_checks": [
+        {
+          "cell": "H22",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I22",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.011896103896103905
+        },
+        {
+          "cell": "J22",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.010441558441558446
+        },
+        {
+          "cell": "K22",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.73391818181838
+        },
+        {
+          "cell": "H99",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I99",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.011896103896103905
+        },
+        {
+          "cell": "J99",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.010441558441558474
+        },
+        {
+          "cell": "K99",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.73391818181838
+        }
+      ]
+    },
+    {
+      "curated_loading_id": "LEAP-2018-TOR-DR60-0P18-LOADING",
+      "source_file": "PRJ-2136/Dr60/Dr60-0.18(20181114)/Data sheet for Dr60-0.18.xls",
+      "source_file_sha256": "83609c9b0dd18430b1bbd11d8eb667d836d857da052893fcb092731a9256f9ac",
+      "metadata_cells": {
+        "D2": 9.896667000000003,
+        "F2": 6.0026822705141845,
+        "G2": 5.010558412159648,
+        "H2": 3.0013411352570922,
+        "I2": 104.07751119917515,
+        "I16": 94.0,
+        "H17": "ON",
+        "I17": "ON",
+        "J17": "OFF",
+        "K17": "OFF"
+      },
+      "first_processing_row_formulas": {
+        "M22": {
+          "biff8_rpn_hex": "44150008c0415601440100060044010007000315051e020044010003000515061e640005",
+          "grouped_expression": "(((RADIANS(I22)*($G$2+$H$2))/(2*$D$2))*100)"
+        },
+        "N22": {
+          "biff8_rpn_hex": "1e030044150007c01e64000515051e02004113000544010006001e03000744010007001e03000704150515061e0a0005",
+          "grouped_expression": "(((3*(H22*100))/((2*PI())*(($G$2^3)-($H$2^3))))*10)"
+        },
+        "O22": {
+          "biff8_rpn_hex": "4415000dc0440100080006",
+          "grouped_expression": "(N22/$I$2)"
+        },
+        "P22": {
+          "biff8_rpn_hex": "4415000ac0440600010004",
+          "grouped_expression": "(K22-$B$7)"
+        },
+        "Q22": {
+          "biff8_rpn_hex": "4415000fc0440100080006",
+          "grouped_expression": "(P22/$I$2)"
+        },
+        "R22": {
+          "biff8_rpn_hex": "44040001004415000fc004",
+          "grouped_expression": "($B$5-P22)"
+        },
+        "S22": {
+          "biff8_rpn_hex": "44150009c01ee80306154409000a001e1027061506",
+          "grouped_expression": "((J22/1000)/($K$10/10000))"
+        },
+        "T22": {
+          "biff8_rpn_hex": "440300010044150012c0034415000fc004",
+          "grouped_expression": "(($B$4+S22)-P22)"
+        },
+        "U22": {
+          "biff8_rpn_hex": "44150013c01e020044150011c00503151e030006",
+          "grouped_expression": "((T22+(2*R22))/3)"
+        },
+        "V22": {
+          "biff8_rpn_hex": "44150012c044030001004404000100041503151e020006151e0200074415000dc01e02000703411400",
+          "grouped_expression": "SQRT(((((S22+($B$4-$B$5))/2)^2)+(N22^2)))"
+        },
+        "W22": {
+          "biff8_rpn_hex": "44150011c044150013c006",
+          "grouped_expression": "(R22/T22)"
+        },
+        "X22": {
+          "biff8_rpn_hex": "1e010044150010c004",
+          "grouped_expression": "(1-Q22)"
+        }
+      },
+      "shared_channel_formulas": [
+        {
+          "range": "H22:K23",
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "status": "decoded_shared_reference"
+        }
+      ],
+      "shared_zeroing_variants": [
+        {
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "block_count": 109,
+          "example_range": "H22:K23",
+          "expression_at_example_top_left": "(C22-$H$18)",
+          "last_row": 1743
+        }
+      ],
+      "fixed_row_cache_identity_checks": [
+        {
+          "cell": "H22",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I22",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.034958904109589066
+        },
+        {
+          "cell": "J22",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.018136986301369867
+        },
+        {
+          "cell": "K22",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.2917136986303
+        },
+        {
+          "cell": "H95",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I95",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.034958904109589066
+        },
+        {
+          "cell": "J95",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": -0.018136986301369874
+        },
+        {
+          "cell": "K95",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.2917136986303
+        }
+      ]
+    },
+    {
+      "curated_loading_id": "LEAP-2018-TOR-DR60-0P20-LOADING",
+      "source_file": "PRJ-2136/Dr60/Dr60-0.20(20181112)/Data sheet for Dr60-0.20.xls",
+      "source_file_sha256": "e28bdb162acdae206f4f91fc2357f629165c37d918099ed069f8bc9d7c0efd38",
+      "metadata_cells": {
+        "D2": 9.868666800000002,
+        "F2": 6.000244189418409,
+        "G2": 4.998539529953661,
+        "H2": 3.0001220947092047,
+        "I2": 103.67336091721445,
+        "I16": 80.0,
+        "H17": "ON",
+        "I17": "ON",
+        "J17": "OFF",
+        "K17": "OFF"
+      },
+      "first_processing_row_formulas": {
+        "M22": {
+          "biff8_rpn_hex": "44150008c0415601440100060044010007000315051e020044010003000515061e640005",
+          "grouped_expression": "(((RADIANS(I22)*($G$2+$H$2))/(2*$D$2))*100)"
+        },
+        "N22": {
+          "biff8_rpn_hex": "1e030044150007c01e64000515051e02004113000544010006001e03000744010007001e03000704150515061e0a0005",
+          "grouped_expression": "(((3*(H22*100))/((2*PI())*(($G$2^3)-($H$2^3))))*10)"
+        },
+        "O22": {
+          "biff8_rpn_hex": "4415000dc0440100080006",
+          "grouped_expression": "(N22/$I$2)"
+        },
+        "P22": {
+          "biff8_rpn_hex": "4415000ac0440600010004",
+          "grouped_expression": "(K22-$B$7)"
+        },
+        "Q22": {
+          "biff8_rpn_hex": "4415000fc0440100080006",
+          "grouped_expression": "(P22/$I$2)"
+        },
+        "R22": {
+          "biff8_rpn_hex": "44040001004415000fc004",
+          "grouped_expression": "($B$5-P22)"
+        },
+        "S22": {
+          "biff8_rpn_hex": "44150009c01ee80306154409000a001e1027061506",
+          "grouped_expression": "((J22/1000)/($K$10/10000))"
+        },
+        "T22": {
+          "biff8_rpn_hex": "440300010044150012c0034415000fc004",
+          "grouped_expression": "(($B$4+S22)-P22)"
+        },
+        "U22": {
+          "biff8_rpn_hex": "44150013c01e020044150011c00503151e030006",
+          "grouped_expression": "((T22+(2*R22))/3)"
+        },
+        "V22": {
+          "biff8_rpn_hex": "44150012c044030001004404000100041503151e020006151e0200074415000dc01e02000703411400",
+          "grouped_expression": "SQRT(((((S22+($B$4-$B$5))/2)^2)+(N22^2)))"
+        },
+        "W22": {
+          "biff8_rpn_hex": "44150011c044150013c006",
+          "grouped_expression": "(R22/T22)"
+        },
+        "X22": {
+          "biff8_rpn_hex": "1e010044150010c004",
+          "grouped_expression": "(1-Q22)"
+        }
+      },
+      "shared_channel_formulas": [
+        {
+          "range": "H22:K23",
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "status": "decoded_shared_reference"
+        }
+      ],
+      "shared_zeroing_variants": [
+        {
+          "biff8_rpn_hex": "4c0000fbc0441100070004",
+          "block_count": 65,
+          "example_range": "H22:K23",
+          "expression_at_example_top_left": "(C22-$H$18)",
+          "last_row": 1011
+        }
+      ],
+      "fixed_row_cache_identity_checks": [
+        {
+          "cell": "H22",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I22",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.013694915254237298
+        },
+        {
+          "cell": "J22",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.5119322033898306
+        },
+        {
+          "cell": "K22",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.7806152542374
+        },
+        {
+          "cell": "H81",
+          "unit": "N m",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.0
+        },
+        {
+          "cell": "I81",
+          "unit": "degree",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.013694915254237298
+        },
+        {
+          "cell": "J81",
+          "unit": "N",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 0.5119322033898306
+        },
+        {
+          "cell": "K81",
+          "unit": "kPa",
+          "cached_minus_raw_minus_H18": 0.0,
+          "cached_minus_raw_minus_own_baseline": 200.7806152542374
+        }
+      ]
+    }
+  ]
+}

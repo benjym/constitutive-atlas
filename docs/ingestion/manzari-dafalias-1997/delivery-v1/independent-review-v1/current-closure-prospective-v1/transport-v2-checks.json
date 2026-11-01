@@ -1,0 +1,50 @@
+{
+  "scope": "mocked subprocess only, no executable invoked",
+  "transport_sha256": "a80f9037fd15d3e0533828ae8dfa0b85ee621f6b79ac2917977f4ced74c1108b",
+  "tests": [
+    {
+      "token": "NaN",
+      "raw_retained": true,
+      "uncaught_exception": null,
+      "normalized_response": {
+        "ok": false,
+        "harness_error": "nonfinite JSON token: NaN"
+      }
+    },
+    {
+      "token": "Infinity",
+      "raw_retained": true,
+      "uncaught_exception": null,
+      "normalized_response": {
+        "ok": false,
+        "harness_error": "nonfinite JSON token: Infinity"
+      }
+    },
+    {
+      "token": "-Infinity",
+      "raw_retained": true,
+      "uncaught_exception": null,
+      "normalized_response": {
+        "ok": false,
+        "harness_error": "nonfinite JSON token: -Infinity"
+      }
+    },
+    {
+      "token": "1e999",
+      "raw_retained": false,
+      "uncaught_exception": "ValueError('Out of range float values are not JSON compliant: inf')",
+      "normalized_response": null
+    },
+    {
+      "token": "1e100",
+      "raw_retained": true,
+      "uncaught_exception": null,
+      "normalized_response": {
+        "ok": false,
+        "state": [
+          1e+100
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+# Additive integration review
+
+Decision: accepted for the inspected additions and retained saved common-backend observations. Actual browser interaction and final package/public approval presentation remain pending. Reviewer separate run /root/occ_selection_review; zero compiled calls.
+
+Old twelve-catalogue GIS protocol retains its exact prior manifest hash and file bytes. New thirteen-catalogue protocol is a distinct document: its specification exactly equals the old specification and prospective request, and its result exactly equals the newly retained successful nine-point result. Manifest changes only document_path and document_sha256 (both verified); model, label, description, scientific limitation and evidence link remain unchanged. Replaying instead of relabeling old results is appropriate catalogue identity handling.
+
+Applicability addition preserves every existing row and all other fields by JSON equality after removing the single appended OCC row. Its model and evidence hashes match actual files; assessment is not_assessed and scientific_eligibility undetermined. It makes no experimental/material applicability inference from source or numerical approval.
+
+Workflow numerical target selects explicit-gis20-occ-v3 and recorded target selects explicit-gis20-occ-restart-v4. test_solver.cpp exactly matches the originally frozen qualified covariance fixture. This resolves the possibility of applying a recorded-only selector to the numerical target.
+
+Read process receipts: scoped parity35cases/43116physical scalars; browser-wire145pairs/120same-instance replays; Wasm59positive plus5explicit total-stress legacy rejections and1retained unsupported stress-cycle failure. All report success. Independently recursively compared native/Wasm saved outputs in scoped/browser-wire records, including object identities, all array lengths and finite numeric entries, excluding timing only:270923scalar comparisons under unchanged1e-10current/1e-7legacy budgets. These include nonphysical counters and metadata, hence exceed the reported physical-only count; they are not additional engine runs. No success is claimed for the retained cyclic-stress failure.
+
+Reproduce with python3 -B docs/ingestion/original-cam-clay/integration-v1/independent-review/additive-check.py. Hash-bound results are additive-results.json. These checks load JSON only, not compiled engines. Package builder completion and exact public registry/evidence export remain separate; missing-assets observations from an unfinished build cannot qualify or fail a final package gate. No blocker found in these inspected additions.

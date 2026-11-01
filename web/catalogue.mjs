@@ -6,6 +6,7 @@ export function catalogueRoute(hash){
     try{const id=decodeURIComponent(anchor.slice(10));return {page:'catalogue',modelId:id||null,invalid:!id};}
     catch{return {page:'catalogue',modelId:null,invalid:true};}
   }
+  if(!anchor||anchor==='home'||anchor==='explore-atlas')return {page:'home',modelId:null,invalid:false};
   return {page:['catalogue','methods','ensemble'].includes(anchor)?anchor:'laboratory',modelId:null,invalid:false};
 }
 const safePath=path=>typeof path==='string'&&path.length>0&&!path.startsWith('/')&&!path.split('/').some(x=>!x||x==='.'||x==='..')&&/^[a-zA-Z0-9_./-]+$/.test(path);

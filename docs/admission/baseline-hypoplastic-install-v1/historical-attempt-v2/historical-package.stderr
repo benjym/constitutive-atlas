@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-lade-historical-sd86dyti/docs/ingestion/lade-duncan-1975/fused-linear-v1/independent-review/actual-package-v2/check.py", line 29, in <module>
+    package=check(S);assert package['status']=='passed' and len(package['checks'])==106
+  File "/private/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-lade-historical-sd86dyti/tools/test_implicit_path_package.py", line 107, in check
+    generation = regenerate(temporary)
+  File "/private/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-lade-historical-sd86dyti/tools/generate_implicit_path.py", line 26, in regenerate
+    generate(destination, [ROOT / name for name in INPUTS])
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-lade-historical-sd86dyti/atlas/compiler.py", line 27, in generate
+    models=all_models() if model_paths is None else [load(p) for p in sorted(model_paths)]; dest=Path(destination); dest.mkdir(parents=True,exist_ok=True)
+                                                     ~~~~^^^
+  File "/private/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-lade-historical-sd86dyti/atlas/model.py", line 30, in load
+    model = json.loads(Path(path).read_text(), object_pairs_hook=reject_duplicate_keys,
+                       ~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/private/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/atlas-lade-historical-sd86dyti/tests/fixtures/implicit-path-v1/baseline-v2.json'

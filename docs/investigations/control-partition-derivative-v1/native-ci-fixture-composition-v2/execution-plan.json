@@ -1,0 +1,257 @@
+{
+  "identity": "md1997-native-ci-fixture-execution-plan-v2",
+  "source": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+  "build": "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+  "evidence": "/private/tmp/atlas-md1997-native-ci-fixture-v2/evidence",
+  "source_freeze_sha256": "afabf002ccb69ab484302b645f2acdcdd4912ecd23383be19a24ed1ae51af3d0",
+  "steps": [
+    {
+      "id": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+        "-B",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DBUILD_TESTING=ON"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "build-atlas_time_tests",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--target",
+        "atlas_time_tests",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "build-atlas_capacity_tests",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--target",
+        "atlas_capacity_tests",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "build-atlas_recorded_fixture_tests",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--target",
+        "atlas_recorded_fixture_tests",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "build-atlas_tensor_square_tests",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--target",
+        "atlas_tensor_square_tests",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "build-atlas_numerical_tests",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--target",
+        "atlas_numerical_tests",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "build-atlas_recorded_tests",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--target",
+        "atlas_recorded_tests",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "build-atlas_expm_probe",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--target",
+        "atlas_expm_probe",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "build-atlas_log1p_probe",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--target",
+        "atlas_log1p_probe",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "build-atlas_scalar_probe",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--target",
+        "atlas_scalar_probe",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "check-strict-eight",
+      "argv": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/source/tools/check_native_fixture_dispatch.py",
+        "check",
+        "--catalogue",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build/generated/models.json",
+        "--source-root",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--output",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/evidence/check-strict-eight.json"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "ctest-linux-main",
+      "argv": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/source/tools/check_native_fixture_dispatch.py",
+        "ctest",
+        "--catalogue",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build/generated/models.json",
+        "--source-root",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--output",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/evidence/ctest-linux-main.json",
+        "--suite",
+        "linux-main"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    },
+    {
+      "id": "ctest-recorded",
+      "argv": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/source/tools/check_native_fixture_dispatch.py",
+        "ctest",
+        "--catalogue",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build/generated/models.json",
+        "--source-root",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+        "--build",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/native-build",
+        "--output",
+        "/private/tmp/atlas-md1997-native-ci-fixture-v2/evidence/ctest-recorded.json",
+        "--suite",
+        "recorded"
+      ],
+      "cwd": "/private/tmp/atlas-md1997-native-ci-fixture-v2/source",
+      "env": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "retain_complete_raw_process": true
+    }
+  ],
+  "positive_scope": "Closed linux-main selects8 of10registered tests (excludes Python and recorded); recorded separately selects1. Exact8strictnegativecontracts retained beforepositives.",
+  "pending_preconditions": [
+    "IndependentcorrectedCIhelperR2acceptance/newcomposition",
+    "Independentcomposition/execution-planacceptance",
+    "freshboard/priorownerexplicitrelease/idleprocess/serialclaim",
+    "pinactualcompiler/CMake/CTest/Python beforeandafter"
+  ],
+  "not_claimed": "FullmacOS/Pythoncurrentpublishedworkflow; minimal592source inheritedPythonimportsnotcomplete."
+}

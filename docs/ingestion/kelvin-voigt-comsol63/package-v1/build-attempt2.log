@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "finitePhysicalScalarComparisons": 594,
+  "nullRateMaskComparisons": 6,
+  "exactReplay": true,
+  "model": "burgers-itasca900-dry-zero-spin-ode"
+}
+Power-creep package: identity, Pages-relative paths, analytical creep and relaxation passed
+{
+  "ok": true,
+  "model": "sls-comsol63-deviatoric-zero-spin-ode",
+  "fullStateStressComparisons": 324,
+  "nullRateMaskEntries": 6,
+  "exactReplay": true,
+  "failedRequestRecovery": true,
+  "allPackageAssetsGuarded": 12,
+  "standalonePageAbsent": true
+}
+file:///private/tmp/atlas-kelvin-voigt-delivery-v1/package-v2/kelvin-voigt-contract.mjs:40
+  if(p.strain.some((v,j)=>Math.abs(v-p.state[j])>64*Number.EPSILON*Math.max(1,Math.abs(v),Math.abs(p.state[j]))))throw Error('Stored strain/state mismatch.');
+                                                                                                                       ^
+
+Error: Stored strain/state mismatch.
+    at verifyResult (file:///private/tmp/atlas-kelvin-voigt-delivery-v1/package-v2/kelvin-voigt-contract.mjs:40:120)
+    at importRun (file:///private/tmp/atlas-kelvin-voigt-delivery-v1/package-v2/kelvin-voigt-contract.mjs:55:2)
+    at file:///private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/test_kelvin_voigt_package.mjs:40:138
+
+Node.js v26.7.0
+Prepared 628 built-in experiments (public)
+Traceback (most recent call last):
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/build_web.py", line 118, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/build_web.py", line 101, in main
+    subprocess.run(['node',str(ROOT/'tools/test_kelvin_voigt_package.mjs'),str(dest)],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['node', '/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/test_kelvin_voigt_package.mjs', '/private/tmp/atlas-kelvin-voigt-delivery-v1/package-v2']' returned non-zero exit status 1.

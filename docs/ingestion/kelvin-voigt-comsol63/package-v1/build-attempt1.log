@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/build_web.py", line 118, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/build_web.py", line 71, in main
+    bundle_database(dest)
+    ~~~~~~~~~~~~~~~^^^^^^
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/tools/build_database.py", line 89, in bundle
+    export_database(database)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/atlas/research.py", line 229, in export_database
+    expected = approval_entry(file, root=ROOT)
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/atlas/agent_review.py", line 101, in approval_entry
+    record = validate_review(path, root, for_approval=True)
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/atlas/agent_review.py", line 72, in validate_review
+    artifacts[name] = _file(root, name)
+                      ~~~~~^^^^^^^^^^^^
+  File "/private/tmp/atlas-kelvin-voigt-delivery-v1/release-source/atlas/agent_review.py", line 28, in _file
+    raise ValidationError('Review artifact must be an existing file within repository: ' + name)
+atlas.dsl.ValidationError: Review artifact must be an existing file within repository: docs/ingestion/kelvin-voigt-comsol63/execution-v1/native-assessment.log

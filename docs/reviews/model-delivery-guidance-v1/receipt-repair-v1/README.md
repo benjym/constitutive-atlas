@@ -1,0 +1,3 @@
+# Checklist receipt repair
+
+An optional parent documentation addition invalidated the existing Maxwell/NorSand exact checklist dependency and blocked complete database export. Exact enhanced bytes and failure are retained here. The canonical checklist is restored byte-for-byte to its prior b370revision; all9stages/53checks remain. Ledger fields linking the individual checklist/version remain available in DELIVERY_TEMPLATE.md. Optional review-context snapshot guidance remains recorded in the parent guidance packet; no scientific policy or evidence was changed. Complete current-root database export now passes.

@@ -1,0 +1,39 @@
+{
+  "paper_record_version": 1,
+  "date": "2026-10-31",
+  "status": "assisted_static_processing_review_not_admission",
+  "inputs_sha256": {
+    "paper/study/torsion_processing_formulas.json": "1c3b2d023dbbb8bfd8de8412c7be4fdb131d7f03cdd3754b4cf2b04487b67990",
+    "paper/study/torsion_vba_source_inventory.json": "cabeba3663850147f7b27afb5586be2292f3e156bfe5ea4db998edc550ec1db9"
+  },
+  "findings": [
+    {
+      "locator": "Loading shared formula blocks intersecting H:K, all nine XLS files; fixed cached rows22 and I16+1",
+      "finding": "Every inspected shared zeroing definition subtracts absolute H18 from the raw input five columns to the left. H18 is the torque baseline, whereas rotation, axial load and pressure have different units. Fixed-row cache residuals are zero for this common-baseline identity in all nine files. This is a source-processing inconsistency requiring clarification; no corrected histories are created.",
+      "limits": "All shared definitions were inspected, but complete row coverage and every cached sample were not evaluated. ON/OFF labels do not establish effective switch behaviour. Do not assert what the provider intended."
+    },
+    {
+      "locator": "Five VBA modules per workbook, named module offsets from the compressed project directory;45 statically decompressed sources",
+      "finding": "Only Sheet1 contains an executable procedure in the extracted source; other modules contain attributes. Two Sheet1 source variants differ in calculation/display toggles. Neither source variant contains zeroing-switch logic. Compiled VBA cache was not interpreted."
+    },
+    {
+      "locator": "Sheet1.CommandButton1_Click, source lines51-66 and74-181 in longer variant; shorter variant shifted by6 lines",
+      "finding": "Cycle windows use frequency and sampling interval, offset by a pretrigger row. Summaries use window extrema; half-cycle strain amplitudes combine successive extrema on quarter-cycle-labelled coordinates. Threshold comparisons are strict greater-than and store bracketing coordinates. These are derived summaries, not independent measurements.",
+      "limits": "Final worksheet interpolation and end-of-record behaviour are not audited. No summary values were recalculated or compared with response outcomes."
+    }
+  ],
+  "decisions": {
+    "shared_data_modified": false,
+    "macros_executed": false,
+    "recalculation_performed": false,
+    "corrected_histories_created": false,
+    "scientific_admission": "not_assessed; processing inconsistency is an unresolved gate",
+    "independent_review": "pending"
+  },
+  "questions": [
+    "Why do shared H:K formulas subtract torque baseline H18 for all four units, rather than documented per-channel zeroing? What processing version produced the release?",
+    "Are ON/OFF labels intended as operational controls, and where is their implementation?",
+    "Can original calibrated channels, processing instructions and intended zeroing/correction formulas be supplied?",
+    "How are partial final cycles, pretrigger samples and worksheet threshold interpolation handled?"
+  ]
+}

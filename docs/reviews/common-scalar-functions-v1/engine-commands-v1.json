@@ -1,0 +1,57 @@
+{
+  "native_configure": [
+    "cmake",
+    "-S",
+    "/private/tmp/atlas-common-scalar-functions-v1/engine-source-v1",
+    "-B",
+    "/private/tmp/atlas-common-scalar-functions-v1/engine-native-v1",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "native_build_atlas_solver": [
+    "cmake",
+    "--build",
+    "/private/tmp/atlas-common-scalar-functions-v1/engine-native-v1",
+    "--target",
+    "atlas_solver",
+    "--parallel",
+    "1"
+  ],
+  "native_build_atlas_numerical_tests": [
+    "cmake",
+    "--build",
+    "/private/tmp/atlas-common-scalar-functions-v1/engine-native-v1",
+    "--target",
+    "atlas_numerical_tests",
+    "--parallel",
+    "1"
+  ],
+  "native_build_atlas_recorded_tests": [
+    "cmake",
+    "--build",
+    "/private/tmp/atlas-common-scalar-functions-v1/engine-native-v1",
+    "--target",
+    "atlas_recorded_tests",
+    "--parallel",
+    "1"
+  ],
+  "wasm_configure": [
+    "emcmake",
+    "cmake",
+    "-S",
+    "/private/tmp/atlas-common-scalar-functions-v1/engine-source-v1",
+    "-B",
+    "/private/tmp/atlas-common-scalar-functions-v1/engine-wasm-v1",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "wasm_build_atlas_solver": [
+    "cmake",
+    "--build",
+    "/private/tmp/atlas-common-scalar-functions-v1/engine-wasm-v1",
+    "--target",
+    "atlas_solver",
+    "--parallel",
+    "1"
+  ]
+}

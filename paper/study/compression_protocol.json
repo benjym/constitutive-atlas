@@ -1,0 +1,61 @@
+{
+  "paper_record_version": 1,
+  "id": "kfs-compression-initialization-feasibility-v1",
+  "phase": "development_only_not_calibration_admission",
+  "data_directory": "paper/results/compression-development-v1",
+  "source_manifest": "paper/study/compression_sources.json",
+  "experiment_ids": [
+    "KFS-OE1",
+    "KFS-OE12"
+  ],
+  "minimum_axial_stresses_Pa": [
+    1000,
+    5000,
+    10000
+  ],
+  "threshold_basis": "1 kPa is a published simulation start, not a measured full initial state. 5 and 10 kPa are analyst-selected development sensitivity scenarios, not independently justified admission thresholds.",
+  "selection": "First measured observation at or above threshold on the original first-loading branch; no interpolation. End before the first strictly decreasing axial-stress step; retain repeated controls. This data-only diagnostic does not discard observations from normalized records.",
+  "source_evidence": [
+    {
+      "local_copy": "paper/results/sources/wichtmann-2016-part1.pdf",
+      "sha256": "de1cb4945548850539d4b312a1a703a3152bd1836bfdb6f032e19110aa75336c",
+      "locator": "Section 3.1, paragraphs describing Figure 3 simulations",
+      "established": "Simulations start at 1 kPa axial stress; IGS is assumed fully mobilized in the vertical direction. The four displayed oedometer tests supplied hs, n and beta calibration information.",
+      "not_established": "The reviewed passage does not specify initial lateral stress; source IGS initialization does not apply to a base law without that state."
+    },
+    {
+      "local_copy": "paper/results/sources/wichtmann-2019-model-comparison.pdf",
+      "sha256": "21a7c959b62e0d7e809068df3fb84c363e07c65bafe49a5c4e66db41fae4548e",
+      "locator": "Section 3, first paragraph discussing Figure 2",
+      "established": "The comparison again starts oedometer simulations at 1 kPa axial stress and assumes vertically mobilized intergranular strain for hypoplastic/ISA models; first-loading curves were calibration evidence.",
+      "not_established": "This is not a complete initialization recipe for the current base-law adapter or independent validation of those first-loading curves."
+    },
+    {
+      "local_copy": "models/linear-elastic.json",
+      "sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+      "locator": "equations.e",
+      "established": "The residual imposes 1+e_new=(1+e_old)*exp(-trace(de)) for a prescribed increment.",
+      "not_established": "This analytical continuity diagnostic does not run or verify stress integration and does not change the declared infinitesimal/zero-spin constitutive scope."
+    },
+    {
+      "local_copy": "models/hypoplastic-sand-vw96.json",
+      "sha256": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+      "locator": "equations.e",
+      "established": "The rate is de/ds=-(1+e)*trace(D); its exact integral has exponential continuity for the imposed accumulated strain coordinate.",
+      "not_established": "This analytical continuity diagnostic does not run or verify stress integration and does not change the declared infinitesimal/zero-spin constitutive scope."
+    }
+  ],
+  "review": {
+    "annotator": "Codex assisted targeted source review",
+    "date": "2026-10-30",
+    "independent_reviewer": null
+  },
+  "open_decisions": [
+    "Supply and justify full initial stress, including lateral stress, without describing an assumed K0 as measured.",
+    "Choose and qualify the loading coordinate. Engineering increments in the native exponential void-ratio continuity law differ from constant-solid-volume geometry. A logarithmic height coordinate restores that geometry but is not itself a finite-strain extension of the stress law.",
+    "Review dry-test effective-stress interpretation and material-point applicability.",
+    "Keep zero-stress unloading/reloading outside a positive-pressure replay until an explicit admissible path and history policy exist; do not independently restart reloading and call it a continuous cycle.",
+    "Declare objective channels and weighting without counting linked strain and void ratio as independent measurements.",
+    "Run initialization/coordinate sensitivity and numerical refinement before adding compression to common-information calibration."
+  ]
+}

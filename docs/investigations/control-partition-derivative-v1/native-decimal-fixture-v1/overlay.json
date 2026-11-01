@@ -1,0 +1,56 @@
+{
+  "identity": "md1997-decimal-fixture-exact-overlay-v1",
+  "changes": [
+    {
+      "original": "#include <stdexcept>",
+      "replacement": "#include <stdexcept>\n#include <sstream>\n#include <iomanip>\n#include <locale>"
+    },
+    {
+      "original": "const std::vector<atlas::Jet>&r){\n    const auto branch=",
+      "replacement": "const std::vector<atlas::Jet>&r,bool decimal_reference=false){\n    const auto branch="
+    },
+    {
+      "original": "for(int j=0;j<14;++j){atlas::State v(14,0.);v[j]=1;direction(v,j>=7&&j<=9?5e-11:1e-6);}",
+      "replacement": "if(!decimal_reference)for(int j=0;j<14;++j){atlas::State v(14,0.);v[j]=1;direction(v,j>=7&&j<=9?5e-11:1e-6);}"
+    },
+    {
+      "original": "\nint main(){",
+      "replacement": "\n// Test-only transport. It exports actual generated Jet derivatives and actual\n// endpoint probes; the independent frozen Decimal assessor decides accuracy.\nvoid md_decimal_json_string(std::ostream&out,const std::string&value){\n    const char*hex=\"0123456789abcdef\";out<<'\"';\n    for(unsigned char c:value){\n        if(c=='\"'||c=='\\\\')out<<'\\\\'<<char(c);\n        else if(c<32)out<<\"\\\\u00\"<<hex[c>>4]<<hex[c&15];\n        else out<<char(c);\n    }\n    out<<'\"';\n}\nvoid md_decimal_hex(std::ostream&out,double value){\n    require(std::isfinite(value),\"MD Decimal export nonfinite number\");\n    out<<'\"'<<std::nouppercase<<std::hexfloat<<value<<std::defaultfloat<<'\"';\n}\nvoid md_decimal_vector(std::ostream&out,const atlas::State&values){\n    out<<'[';for(size_t i=0;i<values.size();++i){if(i)out<<',';md_decimal_hex(out,values[i]);}out<<']';\n}\nbool md_decimal_binding_valid(const char*value){\n    if(!value||std::string(value).size()!=64)return false;\n    for(const char*c=value;*c;++c)if(!((*c>='0'&&*c<='9')||(*c>='a'&&*c<='f')))return false;\n    return true;\n}\nstd::string md_decimal_export(int model,const atlas::State&z,const atlas::State&zn,const atlas::State&p,const atlas::State&scales,const atlas::Sym<double>&de,const std::vector<atlas::Jet>&r,const std::string&binding){\n    require(z.size()==14&&zn.size()==14&&p.size()==17&&scales.size()==14&&r.size()==14,\"MD Decimal export layout\");\n    const auto branch=md_fixture_branch(z,p);const auto&metadata=atlas::models()[model];\n    std::ostringstream out;out.imbue(std::locale::classic());\n    out<<\"{\\\"identity\\\":\\\"md1997-decimal-ad-export-v1\\\",\\\"selector\\\":\\\"md1997-decimal-fd-reference-v1\\\",\\\"status\\\":\\\"exported-unassessed\\\",\\\"models\\\":\"<<atlas::models().size()<<\",\\\"bindings\\\":{\";\n    // Frozen oracle/source identities, not runtime-injectable requests.\n    out<<\"\\\"evaluator_sha256\\\":\\\"c0d7c733db1432f67370d832c6f4a9dc6db5b94ba2ddfa0955cec39aadf91668\\\"\";\n    out<<\",\\\"policy_sha256\\\":\\\"79152e516054320064d67b9dc333be0945d6738362b4ab17b968ffaaf84f087c\\\"\";\n    out<<\",\\\"base_source_freeze_sha256\\\":\\\"19a8d836efb0cc6b043dded7d2b06eb7d0bb61d6b9c7340349b39feb329ac54c\\\"\";\n    out<<\",\\\"model_sha256\\\":\\\"28ea763d0d7d059335ad3375476895d551f2e71c9ab81499141db80af0339064\\\"\";\n    out<<\",\\\"request_sha256\\\":\\\"ee4158da6cc5f8f9bec55bb56183fd465e8ba1f710d83d1fa0f08d631e3bc098\\\"\";\n    out<<\",\\\"reference_sha256\\\":\\\"74ae57a2b70b7042ef8e8408b589911d8fce723f8c27aac62accb34f4299e299\\\"\";\n    out<<\",\\\"build_binding_sha256\\\":\";md_decimal_json_string(out,binding);out<<\"},\\\"base\\\":{\\\"layout\\\":[\";\n    for(size_t i=0;i<metadata.fields.size();++i){\n        const auto&field=metadata.fields[i];if(i)out<<',';out<<\"{\\\"name\\\":\";md_decimal_json_string(out,field.name);out<<\",\\\"shape\\\":\";md_decimal_json_string(out,field.size==6?\"sym\":\"scalar\");out<<\",\\\"offset\\\":\"<<field.offset<<\",\\\"size\\\":\"<<field.size<<'}';\n    }\n    out<<\"],\\\"state_hex\\\":\";md_decimal_vector(out,z);out<<\",\\\"previous_hex\\\":\";md_decimal_vector(out,zn);\n    atlas::State loading(6);for(int i=0;i<6;++i)loading[i]=de.v[i];out<<\",\\\"loading_hex\\\":\";md_decimal_vector(out,loading);out<<\",\\\"parameters_hex\\\":{\";\n    require(metadata.parameters.size()==p.size(),\"MD Decimal parameter layout\");\n    for(size_t i=0;i<p.size();++i){if(i)out<<',';md_decimal_json_string(out,metadata.parameters[i].name);out<<':';md_decimal_hex(out,p[i]);}\n    out<<\"},\\\"scales_hex\\\":\";md_decimal_vector(out,scales);out<<\"},\\\"endpoints\\\":[\";\n    bool first=true;\n    for(int column=0;column<14;++column){\n        atlas::State direction(14,0.);direction[column]=1.;const double h=column>=7&&column<=9?5e-11:1e-6;\n        for(int level=0;level<2;++level){\n            const double step=level?h/2:h;auto plus=z,minus=z;\n            for(int j=0;j<14;++j){plus[j]+=step*scales[j]*direction[j];minus[j]-=step*scales[j]*direction[j];}\n            require(md_fixture_branch(plus,p)==branch&&md_fixture_branch(minus,p)==branch,\"MD FD branch changed\");\n            atlas::State rp,rm;require(atlas::evaluate_model(model,plus,zn,de,p,rp)&&atlas::evaluate_model(model,minus,zn,de,p,rm),\"MD FD outside domain\");\n            require(rp.size()==14&&rm.size()==14&&atlas::finite(rp)&&atlas::finite(rm),\"MD FD residual finite layout\");\n            for(int sign:{1,-1}){\n                if(!first)out<<',';first=false;out<<\"{\\\"column\\\":\"<<column<<\",\\\"level\\\":\"<<level<<\",\\\"sign\\\":\"<<sign<<\",\\\"step_hex\\\":\";md_decimal_hex(out,step);\n                out<<\",\\\"direction_hex\\\":\";md_decimal_vector(out,direction);out<<\",\\\"state_hex\\\":\";md_decimal_vector(out,sign==1?plus:minus);\n                out<<\",\\\"domain\\\":true,\\\"branch\\\":true}\";\n            }\n        }\n    }\n    out<<\"],\\\"ad_hex\\\":[\";\n    for(int row=0;row<14;++row){\n        require(atlas::finite_value(r[row]),\"MD Decimal export nonfinite Jet\");if(row)out<<',';out<<'[';\n        for(int column=0;column<14;++column){if(column)out<<',';md_decimal_hex(out,r[row].d[column]);}out<<']';\n    }\n    out<<']';return out.str(); // caller appends C++ check flags only after ALL checks\n}\n\nint main(){"
+    },
+    {
+      "original": "const bool md_admissible=numerical_profile!=nullptr;",
+      "replacement": "const bool md_decimal=numerical_profile&&std::string(numerical_profile)==\"md1997-decimal-fd-reference-v1\";\n        const bool md_admissible=numerical_profile!=nullptr;"
+    },
+    {
+      "original": "require(!numerical_profile||std::string(numerical_profile)==\"md1997-source-admissible-v1\",\"unknown numerical fixture profile\");",
+      "replacement": "require(!numerical_profile||std::string(numerical_profile)==\"md1997-source-admissible-v1\"||md_decimal,\"unknown numerical fixture profile\");\n        const char*decimal_binding=std::getenv(\"ATLAS_MD1997_DECIMAL_BUILD_BINDING_SHA256\");\n        std::string decimal_payload;"
+    },
+    {
+      "original": "            require(count==1,\"MD numerical fixture requires exactly one MD model\");\n        }",
+      "replacement": "            require(count==1,\"MD numerical fixture requires exactly one MD model\");\n        }\n        require(!decimal_binding||md_decimal,\"MD Decimal build binding requires Decimal profile\");\n        require(!md_decimal||md_decimal_binding_valid(decimal_binding),\"MD Decimal build binding must be 64 lowercase hex characters\");\n        if(md_decimal)require(atlas::models().size()==16,\"MD Decimal profile requires exactly 16 models\");"
+    },
+    {
+      "original": "std::cout<<(md_admissible?",
+      "replacement": "if(!md_decimal)std::cout<<(md_admissible?"
+    },
+    {
+      "original": "md_fixture_derivatives(int(model),z,zn,p,scales,de,r);",
+      "replacement": "if(md_decimal){require(decimal_payload.empty(),\"MD Decimal duplicate model export\");decimal_payload=md_decimal_export(int(model),z,zn,p,scales,de,r,decimal_binding);}\n                md_fixture_derivatives(int(model),z,zn,p,scales,de,r,md_decimal);"
+    },
+    {
+      "original": "std::cout<<\"AD Jacobians, fixed-frame rotation covariance and integration-settings checks passed\\n\";",
+      "replacement": "if(md_decimal){require(!decimal_payload.empty(),\"MD Decimal missing model export\");std::cout<<decimal_payload<<\",\\\"cpp_checks\\\":{\\\"rank13\\\":true,\\\"rotation\\\":true,\\\"other_models\\\":true}}\\n\";}\n        else std::cout<<\"AD Jacobians, fixed-frame rotation covariance and integration-settings checks passed\\n\";"
+    }
+  ],
+  "base_sha256": "1b4555f246d6b572b8f653e5ca771c37177ee48883e2466fda96dc7665d85623",
+  "new_sha256": "d8e43466e34f1fd1c8daf20c0cbd5583cf3b648423110173e8933f96af1a1cad",
+  "inverse_exact": true,
+  "frozen_bindings": {
+    "evaluator_sha256": "c0d7c733db1432f67370d832c6f4a9dc6db5b94ba2ddfa0955cec39aadf91668",
+    "policy_sha256": "79152e516054320064d67b9dc333be0945d6738362b4ab17b968ffaaf84f087c",
+    "base_source_freeze_sha256": "19a8d836efb0cc6b043dded7d2b06eb7d0bb61d6b9c7340349b39feb329ac54c",
+    "model_sha256": "28ea763d0d7d059335ad3375476895d551f2e71c9ab81499141db80af0339064",
+    "request_sha256": "ee4158da6cc5f8f9bec55bb56183fd465e8ba1f710d83d1fa0f08d631e3bc098",
+    "reference_sha256": "74ae57a2b70b7042ef8e8408b589911d8fce723f8c27aac62accb34f4299e299"
+  }
+}

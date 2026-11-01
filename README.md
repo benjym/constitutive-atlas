@@ -38,12 +38,14 @@ The command downloads the pinned source data, builds the archived Atlas solver s
 
 - [Live implementation board](IMPLEMENTATION_PLAN.md) — task status, owners, bounded scope and handoffs.
 - [Full model-delivery checklist](docs/MODEL_DELIVERY_CHECKLIST.md) — E0–E8, from source acquisition and schema to solver qualification, independent agent review and the live atlas.
+- [New-model agent assignment](docs/ingestion/AGENT_ASSIGNMENT_TEMPLATE.md) — copyable brief, stage outputs, integration responsibilities and handoff format.
 - [Delivery ledger template](docs/ingestion/DELIVERY_TEMPLATE.md) — copy to `docs/ingestion/<model-id>/DELIVERY.md`; track `[ ]` unstarted, `[-]` working/blocked and `[X]` verified complete with evidence.
 - [Agent instructions](AGENTS.md) and [source-packet template](docs/ingestion/TEMPLATE.md) — ownership, coordination and the source-ingestion subtask.
 - [Models](models/) and [schemas](schemas/) — authoritative definitions and file formats.
 - [Architecture](docs/ARCHITECTURE.md) — engine design, mathematical language and conventions.
 - [Formulation contract](docs/FORMULATION_CONTRACT.md) — explicit equation, kinematic and stress-output semantics; v0.3 schema and migration.
 - [Experimental data](docs/DATA_REUSE.md) — sources, attribution and reuse terms.
+- [Local storage](docs/STORAGE.md) — artifact consolidation, evidence preservation and disk usage.
 - [Literature screening](docs/LITERATURE_SCREENING.md) — discovery and review process.
 - [Working manuscript](paper/article/main.tex) and [research charter](docs/RESEARCH_CHARTER.md).
 

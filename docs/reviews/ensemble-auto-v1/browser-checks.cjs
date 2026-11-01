@@ -1,0 +1,70 @@
+async page=>{
+ const assert=(v,m)=>{if(!v)throw Error(m);};
+ const done=async(n=15)=>page.waitForFunction(n=>document.querySelector('#ensemble-status')?.textContent===n+' completed',n);
+ const exact=async()=>JSON.parse(await page.locator('#ensemble-selected').textContent());
+ const workers=()=>page.evaluate(()=>window.ensembleWorkers);
+ await page.addInitScript(()=>{
+  if(window.ensembleWorkerInstrumented)return;window.ensembleWorkerInstrumented=true;
+  window.ensembleWorkers={created:0,active:0,maxActive:0,requests:0};
+  const NativeWorker=window.Worker;
+  window.Worker=class extends NativeWorker{
+   constructor(url,options){super(url,options);this.tracked=String(url).includes('ensemble-worker.mjs');if(this.tracked){const s=window.ensembleWorkers;s.created++;s.active++;s.maxActive=Math.max(s.active,s.maxActive);}}
+   postMessage(...args){if(this.tracked)window.ensembleWorkers.requests++;return super.postMessage(...args);}
+   terminate(){if(this.tracked){window.ensembleWorkers.active--;this.tracked=false;}return super.terminate();}
+  };
+ });
+ await page.setViewportSize({width:1440,height:1000});
+ await page.goto('http://127.0.0.1:19486/?auto=v1#home');
+ await page.waitForSelector('#ensemble[data-ready="true"]',{state:'attached'});
+ assert((await workers()).created===0,'No hidden ensemble compute on home');
+ await page.locator('.rail nav a[href="#ensemble"]').click();
+ await done();
+ assert(await page.locator('#ensemble-run').count()===0,'Run button removed');
+ assert((await exact()).result.points.length===1438,'Initial full test auto-run');
+ const checks=['First explorer visit runs all15jobs,1438points; home does not run; no Run button'];
+ const E=page.locator('[data-parameter="E"]').first();
+ const before=(await workers()).created;
+ await E.fill('31000000');await E.fill('32000000');await E.fill('33000000');
+ await done();
+ assert((await exact()).parameters.E===33000000,'Debounce uses latest inputs');
+ assert((await workers()).created===before+1,'Rapid edits coalesce to one ensemble');
+ checks.push('Rapid edits debounced to one latest-parameter ensemble');
+ await E.fill('');
+ await page.waitForFunction(()=>document.querySelector('#ensemble-status').textContent.startsWith('Cannot update:'));
+ assert(await page.locator('#ensemble-export').isDisabled(),'Invalid incomplete inputs cannot export old results');
+ await E.fill('34000000');await done();
+ assert((await exact()).parameters.E===34000000,'Valid edit recovers');
+ checks.push('Incomplete input retained visibly; next valid edit recovers');
+ await page.route('**/ensemble-worker.mjs',async route=>{await new Promise(r=>setTimeout(r,700));try{await route.continue();}catch{}});
+ await E.fill('35000000');
+ await page.waitForFunction(()=>window.ensembleWorkers.active===1);
+ await E.fill('36000000');await done(14);
+ assert((await exact()).parameters.E===36000000,'Edit during active worker supersedes cancelled study');
+ assert((await workers()).maxActive===1,'At most one ensemble worker');
+ checks.push('Active work cancelled and settled before latest study; no overlapping workers');
+ await E.fill('37000000');
+ await page.waitForFunction(()=>window.ensembleWorkers.active===1);
+ await page.locator('#ensemble-cancel').click();
+ await page.waitForFunction(()=>window.ensembleWorkers.active===0&&document.querySelector('#ensemble-status').textContent.includes('cancelled'));
+ const cancelled=(await workers()).created;
+ await page.waitForTimeout(900);
+ assert((await workers()).created===cancelled,'Cancel does not restart');
+ await page.unrouteAll({behavior:'ignoreErrors'});
+ await E.fill('38000000');await done();
+ checks.push('Cancel remains stopped until another parameter edit');
+ const download=page.waitForEvent('download');await page.locator('#ensemble-export').click();
+ await(await download).saveAs('output/playwright/ensemble-auto-v1-export.json');
+ await E.fill('39000000');
+ await page.locator('#ensemble-file').setInputFiles('output/playwright/ensemble-auto-v1-export.json');
+ await done();
+ assert((await exact()).parameters.E===38000000,'Import cancels pending edit and replays recorded parameters');
+ checks.push('Full-history export/import replays exact inputs despite pending edit');
+ await page.getByRole('checkbox',{name:'Include this model',exact:true}).first().uncheck();await done(10);
+ await page.getByRole('checkbox',{name:'Include this model',exact:true}).first().check();await done();
+ checks.push('Model inclusion changes automatically rerun');
+ await page.screenshot({path:'output/playwright/ensemble-auto-v1-desktop.png',fullPage:true});
+ await page.setViewportSize({width:390,height:844});
+ assert(await page.evaluate(()=>document.documentElement.scrollWidth===390),'Mobile width');
+ await page.screenshot({path:'output/playwright/ensemble-auto-v1-mobile.png',fullPage:true});
+ return {status:'passed',checks,workers:await workers()};
+}

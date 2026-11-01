@@ -1,0 +1,121 @@
+--- origin0b/web/app.js
+
++++ Hill additive/web/app.js
+
+@@ -1,3 +1,4 @@
+
++import {setupHillLaboratory} from './hill-laboratory.mjs';
+ import {setupOrthotropicLaboratory} from './orthotropic-laboratory.mjs';
+ import {setupJ2Laboratory} from './j2-laboratory.mjs';
+ import {setupTimedLaboratory} from './timed-laboratory.mjs';
+@@ -421,7 +422,7 @@
+
+   if(!count)grid.append(element('p','No matching models. Try another name or availability.','catalogue-empty'));
+ }
+ function refreshCatalogueStatus(entry,spec){
+-  $('catalogue-detail-status').textContent=entry.id===j2View?.modelId?'Approved scope · independent agent review':timedView?.supports(entry.id)?(entry.material_laboratory?'Approved bounded scope · strain-increment laboratory':entry.implicit_path_laboratory?'Approved bounded scope · implicit strain-path laboratory':entry.path_laboratory?'Approved bounded scope · controlled-path laboratory':'Approved bounded scope · physical-time laboratory'):registeredModelReview(entry.id)?'Approved scope · independent agent review':spec?'Available to test · '+spec.status:timedLaboratoryRoute(entry)?'Available to test · approved physical-time scope':'Research candidate';
++  $('catalogue-detail-status').textContent=entry.id===j2View?.modelId?'Approved scope · independent agent review':timedView?.supports(entry.id)?(entry.laboratory_kind==='strain_path'?'Approved bounded scope · strain-increment laboratory':entry.material_laboratory?'Approved bounded scope · strain-increment laboratory':entry.implicit_path_laboratory?'Approved bounded scope · implicit strain-path laboratory':entry.path_laboratory?'Approved bounded scope · controlled-path laboratory':'Approved bounded scope · physical-time laboratory'):registeredModelReview(entry.id)?'Approved scope · independent agent review':spec?'Available to test · '+spec.status:timedLaboratoryRoute(entry)?'Available to test · approved physical-time scope':'Research candidate';
+ }
+ function showCatalogueModel(entry,spec){
+   const timedRoute=timedLaboratoryRoute(entry);
+@@ -613,5 +614,5 @@
+
+   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
+   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
+   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
+-  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
++  populate();timedView=createLaboratoryControllerRouter([setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+ }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}
+--- origin0b/tools/build_web.py
+
++++ Hill additive/tools/build_web.py
+
+@@ -30,6 +30,7 @@
+
+     parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'docs/ingestion/norsand-1993/shared-integration-v1/wasm-v2',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
+     parser.add_argument('--maxwell-wasm-dir',type=Path,default=ROOT/'build-maxwell-wasm',help='Dedicated Maxwell engine with exact accepted current-build qualification receipt')
+     parser.add_argument('--implicit-path-wasm-dir',type=Path,default=ROOT/'build-implicit-path-wasm',help='Exact independently qualified implicit strain-path engine')
++    parser.add_argument('--hill-wasm-dir',type=Path,default=ROOT/'web/engines/hill',help='Exact reviewed Hill engine for main laboratory')
+     parser.add_argument('--output',type=Path,help='Explicit local output directory')
+     args=parser.parse_args()
+     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
+@@ -107,6 +108,9 @@
+
+     subprocess.run([sys.executable,str(ROOT/'tools/test_implicit_path_package.py'),str(dest),'--output',str(check_report)],check=True)
+     bundle_orthotropic(dest,args.orthotropic_wasm_dir)
+     subprocess.run(['node',str(ROOT/'tools/test_orthotropic_package.mjs'),str(dest)],check=True)
++    from build_hill_laboratory import bundle as bundle_hill
++    bundle_hill(dest,args.hill_wasm_dir)
++    subprocess.run(['node',str(ROOT/'tools/test_hill_package.mjs'),str(dest)],check=True)
+     (dest/'.nojekyll').touch()
+     print(f'Packaged {dest}')
+ 
+--- origin0b/.github/workflows/verify.yml
+
++++ Hill additive/.github/workflows/verify.yml
+
+@@ -65,6 +65,12 @@
+
+           cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+           python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+           node --test tests/test_burgers_web_contract.mjs
++      - name: Build and qualify Hill anisotropic plasticity
++        run: |
++          cmake -S cmake/hill -B build-hill -DCMAKE_BUILD_TYPE=Release
++          cmake --build build-hill --target atlas_hill_solver --parallel 1
++          python tools/test_hill_native.py --solver build-hill/atlas_hill_solver --output "$RUNNER_TEMP/hill-native"
++          node --test tests/test_hill_contract.mjs
+       - name: Native checks and full exact archival replay
+         if: runner.os == 'macOS'
+         run: |
+@@ -187,6 +193,9 @@
+
+           cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
+           node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
+           python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
++          emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
++          cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
++          node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
+           python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
+           node --test tests/test_ensemble.mjs
+           python -B -m unittest tests.test_ensemble_package
+@@ -263,6 +272,9 @@
+
+           cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
+           node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
+           python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
++          emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
++          cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
++          node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
+           python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
+           node --test tests/test_ensemble.mjs
+           python -B -m unittest tests.test_ensemble_package
+--- origin0b/tests/test_j2_main_routing.mjs
+
++++ Hill additive/tests/test_j2_main_routing.mjs
+
+@@ -28,7 +28,22 @@
+
+ // The source keeps exact-ID lookup: a special ID cannot masquerade as VW96.
+ assert.match(source,/function model\(\)\{return models\.find\(x=>x\.id===\$\('model'\)\.value\);\}/);checks++;
+ for(const name of ['populate','simulate','renderCharts','describeExperiment','experimentOptions','scheduleUpdate','showExperiment','selectExperiment','matchExperiment','applyRunSpecification']){assert.ok(fn(name).includes('if(specialLaboratoryActive())return;'),name);checks++;}
+-for(const marker of ["import {setupTimedLaboratory}","import {setupJ2Laboratory}","import {setupImplicitPathLaboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})])","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
++for(const marker of ["import {setupTimedLaboratory}","import {setupJ2Laboratory}","import {setupImplicitPathLaboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
++// Extensible membership preserves every existing controller and its exact wiring.
++const registration=source.match(/timedView=createLaboratoryControllerRouter\(\[([^\n]+?)\]\)/)?.[1];
++assert.ok(registration,'Main controller router registration');checks++;
++const setups=[...registration.matchAll(/\b(setup[A-Za-z]+Laboratory)\(/g)].map(match=>match[1]);
++assert.equal(new Set(setups).size,setups.length,'Duplicate controller registration');checks++;
++for(const setup of ['setupTimedLaboratory','setupSlsLaboratory','setupPathLaboratory','setupMaxwellLaboratory','setupImplicitPathLaboratory']){
++ assert.equal(setups.filter(name=>name===setup).length,1,setup);
++ assert.ok(registration.includes(`${setup}({chart,cancelOrdinary:()=>cancel('')})`),setup+' exact existing hooks');checks+=2;
++}
++assert.equal(setups.filter(name=>name==='setupHillLaboratory').length,1);checks++;
++assert.ok(registration.includes("setupHillLaboratory({cancelOrdinary:()=>cancel('')})"));checks++;
++assert.ok(source.includes("import {setupHillLaboratory} from './hill-laboratory.mjs';"));checks++;
++assert.equal(setups.filter(name=>name==='setupOrthotropicLaboratory').length,1);checks++;
++assert.ok(registration.includes("setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')})"));checks++;
++assert.ok(source.includes("import {setupOrthotropicLaboratory} from './orthotropic-laboratory.mjs';"));checks++;
+ // Execute the exact ordinary import function with delayed file text; profile changes and
+ // newer ordinary revisions must suppress it before parsing/applying a stale request.
+ const applied=[];context.applied=applied;context.parseLaboratoryDocument=text=>({text});context.applyRunSpecification=spec=>applied.push(spec);context.toast=()=>{throw Error('Unexpected ordinary toast.');};

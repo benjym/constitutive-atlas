@@ -1,0 +1,127 @@
+- complementary:
+  - link "Constitutive Atlas home":
+    - /url: "#laboratory"
+    - text: Constitutive
+    - text: Atlas
+  - navigation "Main navigation":
+    - link "◫ Model testing":
+      - /url: "#laboratory"
+      - text: ◫
+      - generic: Model testing
+    - link "≋ Ensemble explorer":
+      - /url: "#ensemble"
+      - text: ≋
+      - generic: Ensemble explorer
+    - link "⌕ Model catalogue 47":
+      - /url: "#catalogue"
+      - text: ⌕
+      - generic: Model catalogue
+      - generic: "47"
+    - link "≋ Methods & evidence":
+      - /url: "#methods"
+      - text: ≋
+      - generic: Methods & evidence
+  - paragraph:
+    - text: By
+    - link "Benjy Marks":
+      - /url: https://github.com/benjym
+    - link "François Guillard":
+      - /url: https://github.com/Franzzzzzzzz
+- main:
+  - generic: A LIVING LITERATURE MAP
+  - heading "The model catalogue." [level=1]
+  - paragraph:
+    - link "Download database (SQLite)":
+      - /url: atlas.sqlite
+    - text: ·
+    - link "Database contents & checksums":
+      - /url: atlas-database.json
+  - paragraph: Choose a model to explore its formulation and sources. Research candidates are not yet available for testing.
+  - text: Search models
+  - searchbox "Search models": Kelvin
+  - text: Availability
+  - combobox "Availability":
+    - option "All entries" [selected]
+    - option "Available to test"
+    - option "Research candidates"
+  - status: 1 model found
+  - article:
+    - generic: linear viscoelasticity
+    - generic: Available to test
+    - heading "Kelvin–Voigt — COMSOL6.3 deviatoric" [level=2]:
+      - link "Kelvin–Voigt — COMSOL6.3 deviatoric":
+        - /url: "#catalogue/kelvin-voigt-comsol63-deviatoric-zero-spin-ode"
+    - generic: View details
+    - generic: ↗
+- dialog "Kelvin–Voigt — COMSOL6.3 deviatoric":
+  - banner:
+    - generic: linear viscoelasticity
+    - generic: Approved bounded scope · physical-time laboratory
+    - button "Close model details" [active]: ×
+    - heading "Kelvin–Voigt — COMSOL6.3 deviatoric" [level=2]
+  - paragraph: Recorded description. Review status in this text reflects when it was written; see the accepted review for its current scope. Bounded source-linked ordinary Kelvin–Voigt law with deviatoric viscosity and purely elastic bulk. Six-strain physical-time state; creep, constant rate and strain hold in the main laboratory. Small strain, dry total stress, fixed frame/zero spin. Explicit incoming rates determine initial stress. Illustrative uncalibrated parameters; no experimental validation or broad parameter qualification.
+  - heading "Definition, conventions & preparation" [level=3]
+  - paragraph: "COMSOL 6.3 Kelvin–Voigt Eq. 3-36: parallel deviatoric spring and dashpot with purely elastic bulk. Physical seconds; six persistent total infinitesimal strain components. Fixed spatial frame, zero spin; compression-positive Mandel tensors and dry total Cauchy stress. Parameters K, G (Pa), tau (s); viscosity G tau. Creep holds the incoming stress defined by explicit initial strain and initial rate. A strain hold immediately sheds viscous stress and then preserves elastic stress. No experimental validation or broad material calibration is claimed."
+  - paragraph:
+    - link "Exact definition ↗":
+      - /url: ./engine-kelvin-voigt/kelvin-voigt-comsol63-deviatoric-zero-spin-ode.json
+    - text: ·
+    - link "Source Eq. 3-36 ↗":
+      - /url: https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441080
+    - text: ·
+    - link "Readable independent review ↗":
+      - /url: ./engine-kelvin-voigt/review.html
+    - text: ·
+    - link "Independent scientific checklist ↗":
+      - /url: ./engine-kelvin-voigt/review.json
+    - text: ·
+    - link "Approval and limitations ↗":
+      - /url: ./engine-kelvin-voigt/approval.json
+    - text: ·
+  - link "Source, numerics and limitations dossier ↗":
+    - /url: ./docs/models/kelvin-voigt-comsol63.md.html
+  - heading "Sources & references" [level=3]
+  - list:
+    - link "Primary COMSOL6.3 theory ↗":
+      - /url: https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441080
+    - paragraph: Ordinary Kelvin–Voigt Eq3-36, eta=Gtau; elasticity image010; dissipation image075
+  - heading "Source review and numerical evidence" [level=3]
+  - generic "What this evidence covers"
+  - heading "Independent agent checklist reviews" [level=4]
+  - article:
+    - heading "kelvin-voigt-comsol63-agent-review-v1" [level=4]
+    - paragraph: "Recorded agent-review status: accepted · Matches current definition bytes"
+    - paragraph: Codex independent reviewer /root/kelvin_scientific_review · /root/kelvin_scientific_review · 2026-11-02
+    - paragraph: "COMSOL6.3 ordinary isotropic Kelvin–Voigt, deviatoric viscosity and elastic bulk, dry total Cauchy stress; physical-time small-strain3D fixed-spatial zero-spin compression-positive Mandel eps6 ODE/instantaneous observable. Exact model080fa946…3b6f8da and execution-v3 synthetic43cases: K20MPa,G12MPa,tau0.2/2/20s; declared finite vectors/histories and fine solver rtol3e-11,atol3e-14,budget1e6 (intentional failure budget2), coarse diagnostic1e-5/1e-8. Common native/Wasm integrate-time/observe-time/schedule APIs with direct endpoint restart, full schedule replay and bounded failure lifecycle; historical interface-v3 source/pure transport tests only. Actual packaged browser/live delivery and subsequent interface-v4 changes are not approved or claimed by this record."
+    - paragraph: Registered project approval for this exact definition and scope.
+    - paragraph: Experimental validation, current build qualification and live deployment remain separate. Review identity and independence are recorded declarations; packaging does not authenticate the reviewer.
+    - list:
+      - listitem: No experimental data match, material calibration, specimen preparation or predictive material validity is established.
+      - listitem: Machine parameter bounds1e-12–1e30 and arbitrary custom controls/continuous parameter hull are unqualified; only exact named synthetic cases/settings pass.
+      - listitem: No finite-strain/finite-rotation objectivity, FE-host adapter/consistent tangent, volumetric viscosity, anisotropy, thermal/fractional/pore/coupled behavior or ideal strain impulse is approved.
+      - listitem: Passive orthonormal basis covariance is not finite-rotation evolution; some synthetic strains are appreciable and do not establish physical small-strain applicability at those amplitudes.
+      - listitem: Native requests are isolated processes; persistent-instance failure/recovery is evidenced by a single Wasm module. Direct actual-endpoint restart/full schedule replay do not establish arbitrary schedule-checkpoint restart.
+      - listitem: Original v1 CLI-harness failure, v2 genuine accuracy failures and prior interface issues remain retained; only the separate prospectively frozen v3 qualification passes.
+      - listitem: Scientific/API acceptance does not establish actual packaged browser operation, live availability, remote CI or review of subsequent interface-v4 hardening.
+    - paragraph:
+      - link "Original agent-review record":
+        - /url: ./evidence-records/catalogue/agent-reviews/kelvin-voigt-comsol63-agent-v1.json
+      - text: ·
+      - link "Exact reviewed definition JSON":
+        - /url: ./evidence-records/catalogue/agent-reviews/definitions/kelvin-voigt-comsol63-agent-v1.json
+      - text: ·
+      - link "Approval registry":
+        - /url: ./evidence-records/catalogue/approved-models.json
+    - generic "Checklist, independence and exact identity"
+  - heading "Recorded source reviews" [level=4]
+  - paragraph: Legacy source-review records retain the status and questions recorded at creation. All retained revisions are shown; later agent checklist decisions above may resolve earlier questions within their stated scope. A matching model definition alone does not imply acceptance of its numerical implementation or scientific use.
+  - paragraph: No formal source-review record for this formulation is indexed. This does not mean its sources have been scientifically accepted.
+  - heading "Retained numerical evidence" [level=4]
+  - paragraph: No evidence record for this formulation is indexed in this build. This does not establish that an implementation is absent.
+  - heading "Model–experiment applicability" [level=3]
+  - paragraph: No model–experiment assessment is indexed for this formulation in this build.
+  - contentinfo:
+    - generic: kelvin-voigt-comsol63-deviatoric-zero-spin-ode
+    - link "Link to this model":
+      - /url: "#catalogue/kelvin-voigt-comsol63-deviatoric-zero-spin-ode"
+    - button "Test this model →"

@@ -1,0 +1,20 @@
+--- docs/ingestion/sls-comsol63/execution-v1/check_saved.py
++++ adapters/check_sls_saved.py
+@@ -1,9 +1,14 @@
+ """Read-only frozen SLS raw evidence/reference/parity verification."""
+ import importlib.util,json,hashlib
+ from pathlib import Path
+-BASE=Path(__file__).resolve().parent;ROOT=BASE.parents[3]
+-spec=importlib.util.spec_from_file_location('sls_study',BASE/'study.py');study=importlib.util.module_from_spec(spec);spec.loader.exec_module(study)
+-cases=json.loads((BASE/'cases.json').read_text())['cases']
++import os
++ROOT=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()
++BASE=Path(os.environ['ATLAS_QUALIFICATION_OUTPUT']).resolve()
++assert BASE != ROOT and not BASE.is_relative_to(ROOT), 'Fresh output must be outside support source'
++assert BASE.is_dir(), 'Create fresh output directory explicitly'
++INPUT_BASE=ROOT/'docs/ingestion/sls-comsol63/execution-v1'
++spec=importlib.util.spec_from_file_location('sls_study',INPUT_BASE/'study.py');study=importlib.util.module_from_spec(spec);spec.loader.exec_module(study)
++cases=json.loads((INPUT_BASE/'cases.json').read_text())['cases']
+ rows={b:json.loads((BASE/('native-observe-v2-raw.json'if b=='native'else 'wasm-raw.json')).read_text())for b in ['native','wasm']}
+ for backend,data in rows.items():
+     report=study.assess(cases,data)

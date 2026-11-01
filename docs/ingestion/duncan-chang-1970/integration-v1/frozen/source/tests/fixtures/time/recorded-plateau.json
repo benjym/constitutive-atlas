@@ -1,0 +1,86 @@
+{
+  "schema_version": "0.1",
+  "status": "draft",
+  "id": "test-recorded-plateau",
+  "name": "Synthetic feasible-nullspace plateau",
+  "family": "engine verification only",
+  "description": "Piecewise linear plateau and persistent quadratic memory for bounded restart verification; not a physical constitutive model.",
+  "parameters": {
+    "p_ref": {
+      "default": 1000,
+      "min": 1,
+      "max": 1000000000.0,
+      "unit": "Pa"
+    },
+    "gap": {
+      "default": 0.001,
+      "min": 0,
+      "max": 0.1,
+      "unit": "1"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "p_ref",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "memory",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    }
+  ],
+  "derived": [
+    {
+      "name": "dx",
+      "expr": "dot(de,sym(1,0,0,0,0,0))"
+    },
+    {
+      "name": "dy",
+      "expr": "dot(de,sym(0,1,0,0,0,0))"
+    },
+    {
+      "name": "dz",
+      "expr": "dot(de,sym(0,0,1,0,0,0))"
+    },
+    {
+      "name": "dxy",
+      "expr": "dot(de,sym(0,0,0,1,0,0))"
+    },
+    {
+      "name": "dyz",
+      "expr": "dot(de,sym(0,0,0,0,1,0))"
+    },
+    {
+      "name": "dxz",
+      "expr": "dot(de,sym(0,0,0,0,0,1))"
+    }
+  ],
+  "domain": [
+    "memory >= 0"
+  ],
+  "integration": "residual",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/RECORDED_RESTARTS.md",
+      "locator": "Synthetic plateau and persistent trial-memory transaction test",
+      "role": "Analytical engine verification specification"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma - sigma_n - p_ref * sym(dx,max(dy-gap,0),max(dz-gap,0),dxy,dyz,dxz)",
+    "memory": "memory - memory_n - dot(de,de)"
+  }
+}

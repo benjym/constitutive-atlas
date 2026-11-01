@@ -1,0 +1,15 @@
+--- fixture-v2/test_solver.cpp
++++ fixture-v3/test_solver.cpp
+@@ -118,6 +118,12 @@
+             const bool md_rotation=md_admissible&&atlas::models()[m].id=="manzari-dafalias-1997-constant-m-be-v1";
+             if(md_rotation){z[0]=640500;z[1]=639500;z[2]=640000;z[3]=100;z[4]=z[5]=0;}
+             atlas::Sym<double>de;de.v={.0001,-.00002,.00001,.00003,.00001,-.00001};auto zr=z;
++            if(atlas::models()[m].id=="ramberg-osgood-ansys242"){
++                // Independently derived consistent source-compliance fixture.
++                const double eps[]={0.0018750073153125002,0.0014583260180208333,0.0016666666666666668,4.166812972916667e-05,0.,0.};
++                for(int j=0;j<6;++j)z[6+j]=eps[j];
++                zr=z;atlas::put_tensor(zr,6,rotate(atlas::tensor_from(z,6)));
++            }
+             atlas::put_tensor(zr,0,rotate(atlas::tensor_from(z,0)));
+             if(md_rotation){require(atlas::domain(int(m),z,p,true)&&atlas::domain(int(m),zr,p,true),"MD rotation initial domain");md_fixture_branch(z,p);md_fixture_branch(zr,p);}
+             atlas::IntegrationSettings fixture_settings;

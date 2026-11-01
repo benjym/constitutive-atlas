@@ -1,0 +1,39 @@
+{
+  "native_configure": [
+    "cmake",
+    "-S",
+    "/Users/bmar5496/code/constitutive-atlas/docs/reviews/common-scalar-functions-v1/material-reference-v1/execution-v3",
+    "-B",
+    "/private/tmp/atlas-common-scalar-functions-v1/material-native-v1",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "native_build": [
+    "cmake",
+    "--build",
+    "/private/tmp/atlas-common-scalar-functions-v1/material-native-v1",
+    "--target",
+    "atlas_duncan_api",
+    "--parallel",
+    "1"
+  ],
+  "wasm_configure": [
+    "emcmake",
+    "cmake",
+    "-S",
+    "/Users/bmar5496/code/constitutive-atlas/docs/reviews/common-scalar-functions-v1/material-reference-v1/execution-v3",
+    "-B",
+    "/private/tmp/atlas-common-scalar-functions-v1/material-wasm-v1",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "wasm_build": [
+    "cmake",
+    "--build",
+    "/private/tmp/atlas-common-scalar-functions-v1/material-wasm-v1",
+    "--target",
+    "atlas_duncan_api",
+    "--parallel",
+    "1"
+  ]
+}

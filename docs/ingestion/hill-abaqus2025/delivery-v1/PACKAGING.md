@@ -1,0 +1,7 @@
+# Prospective Hill main-atlas package qualification
+
+General builder in isolated release source, current committed base8718467f plus scoped model/UI/approval hooks; fresh ordinary native then Wasm engine, unchanged ordinary catalogue. Dedicated Hill module/Wasm retain exact reviewed bytes; manifest hashes bound to the accepted scientific review through build receipt. Production retained web/engines/hill/ assets are project-generated, no vendor code. Cross-platform fresh builds have separate behavioral qualification; no artifact identity conflation.
+
+Require full standard builder, all existing dedicated package gates, Hill 31-case source-reference/replay/rollback/recovery gate, supported-input ordinary package regression, SQLite exact definition/approval/review export and real browser controls/source/plots/allstates/import/replay/invalid/reset/parameter/latest/mobile. No experimental overlay is available for this fixed-axis dry metal model with illustrative parameters. Save each failure separately; no threshold relaxation.
+
+Retained operational errors: disk exhaustion; denied process inventory; shared-source CMake configuration corrected before any compile; wrong working-directory builder invocation rejected unknown flag without packaging; new source catalogue entry initially lacked required role key, fixed before release. Scientific failure remains original prevalidation state-echo assessor; review explicitly scopes it separately from real material rollback.

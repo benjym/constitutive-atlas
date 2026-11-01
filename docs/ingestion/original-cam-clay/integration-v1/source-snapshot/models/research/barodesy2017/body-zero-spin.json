@@ -1,0 +1,266 @@
+{
+  "schema_version": "0.1",
+  "status": "draft",
+  "id": "research-barodesy-clay-2017-body-zero-spin",
+  "name": "Barodesy clay2017 body-law zero-spin research fragment",
+  "family": "barodesy research only",
+  "description": "Isolated instantaneous bodyEqs1\u201310 research selection,not admitted/public model. Compression-positive stress/stretching;zero spin;incompressiblegrains. Seven physical statecomponents,nohistory/reset. Exact zero/hydrostatic continuations declared; no unique zero-step physicalADtangent claimed. SPD/e>=0 researchsupport,not fullphysicaldomain. Body2p selected,appendix6p and finite-spinprint unresolved. Numerical stress support uses normalized Cartesian Sylvester minors with a declared 64-epsilon interior margin; boundary/ill-conditioned SPD tensors may be rejected, and this is not a certified SPD theorem.",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1007/s11440-016-0458-4",
+      "role": "Primary body equations and declared source differences",
+      "locator": "Medicus/Fellin2017 pp366\u2013367Eqs1\u201310,Table1; p368Table2; p369Sec4.3; p374Eq32/footnote13; p375App3Eq41distinct6p; publisherPDFSHA256bd049a3fd874c9e4945e1c77f5af5b84ac14c26a08cee1b953428b4312e6af15"
+    }
+  ],
+  "integration": "rate",
+  "parameters": {
+    "phi_c": {
+      "default": 0.3944444109507185,
+      "min": 0.0001,
+      "max": 1.56,
+      "unit": "1",
+      "label": "Criticalfrictionangle,radians"
+    },
+    "N": {
+      "default": 1.375,
+      "min": -10,
+      "max": 10,
+      "unit": "1"
+    },
+    "lambda_star": {
+      "default": 0.11,
+      "min": 1e-05,
+      "max": 1,
+      "unit": "1"
+    },
+    "kappa_star": {
+      "default": 0.016,
+      "min": 1e-06,
+      "max": 0.999,
+      "unit": "1"
+    },
+    "sigma_star": {
+      "default": 1000,
+      "min": 1000,
+      "max": 1000,
+      "unit": "Pa",
+      "label": "Fixedsource1kPareference,notfifthsoilinput"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "sigma_star",
+      "initial": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0.8
+    }
+  ],
+  "derived": [
+    {
+      "name": "sphi",
+      "expr": "sin(phi_c)"
+    },
+    {
+      "name": "c2",
+      "expr": "-(3*sqrt(2)+3)/2"
+    },
+    {
+      "name": "c1",
+      "expr": "(1-sphi)/(2*c2**2*sphi)"
+    },
+    {
+      "name": "c5",
+      "expr": "(1+sphi)/(1-sphi)"
+    },
+    {
+      "name": "t",
+      "expr": "c5*lambda_star"
+    },
+    {
+      "name": "c3",
+      "expr": "(-sqrt(3)/lambda_star+sqrt(3)/kappa_star)/(2**t+(1/500)**t-2)"
+    },
+    {
+      "name": "c6",
+      "expr": "1/(2*(-sqrt(3)/(c3*kappa_star)+2**t-1))"
+    },
+    {
+      "name": "p",
+      "expr": "trace(sigma)/3"
+    },
+    {
+      "name": "critical_plus_one",
+      "expr": "exp(N)*(2*p/sigma_star)**(-lambda_star)"
+    },
+    {
+      "name": "density",
+      "expr": "(1+e)/critical_plus_one"
+    },
+    {
+      "name": "rate_norm",
+      "expr": "norm(de)"
+    },
+    {
+      "name": "lxx",
+      "expr": "sym(1,0,0,0,0,0)"
+    },
+    {
+      "name": "lyy",
+      "expr": "sym(0,1,0,0,0,0)"
+    },
+    {
+      "name": "lzz",
+      "expr": "sym(0,0,1,0,0,0)"
+    },
+    {
+      "name": "lxy",
+      "expr": "sym(0,0,0,1,0,0)"
+    },
+    {
+      "name": "lyz",
+      "expr": "sym(0,0,0,0,1,0)"
+    },
+    {
+      "name": "lxz",
+      "expr": "sym(0,0,0,0,0,1)"
+    },
+    {
+      "name": "loading_abs_sum",
+      "expr": "abs(dot(de,lxx))+abs(dot(de,lyy))+abs(dot(de,lzz))+abs(dot(de,lxy))+abs(dot(de,lyz))+abs(dot(de,lxz))"
+    },
+    {
+      "name": "hydro_measure",
+      "expr": "abs(dot(de,lxx)-dot(de,lyy))+abs(dot(de,lyy)-dot(de,lzz))+abs(dot(de,lzz)-dot(de,lxx))+abs(dot(de,lxy))+abs(dot(de,lyz))+abs(dot(de,lxz))"
+    },
+    {
+      "name": "U",
+      "expr": "select(rate_norm > 0, de/rate_norm, 0*I)"
+    },
+    {
+      "name": "delta",
+      "expr": "select(rate_norm > 0, select(hydro_measure > 0, -trace(U), select(trace(de) > 0,-sqrt(3),sqrt(3))),0)"
+    },
+    {
+      "name": "q",
+      "expr": "select(hydro_measure > 0,norm(dev(U)),0)"
+    },
+    {
+      "name": "m",
+      "expr": "select(q > 0,-sqrt(1.5)*delta/q,0)"
+    },
+    {
+      "name": "x",
+      "expr": "select(q > 0,c1*(m-c2)**2,1)"
+    },
+    {
+      "name": "logK",
+      "expr": "select(q > 0,select(x > 1,-log1p(1/x),log(x)-log1p(x)),0)"
+    },
+    {
+      "name": "a",
+      "expr": "select(q > 0,logK/(sqrt(1.5)*q),0)"
+    },
+    {
+      "name": "dir_B",
+      "expr": "select(q > 0,expm(-a*U),I)"
+    },
+    {
+      "name": "dir_P",
+      "expr": "dir_B/norm(dir_B)"
+    },
+    {
+      "name": "Lambda",
+      "expr": "-(lambda_star-kappa_star)*delta/(2*sqrt(3))+(lambda_star+kappa_star)/2"
+    },
+    {
+      "name": "beta",
+      "expr": "-1/(c3*Lambda)+(2**t-1)/sqrt(3)"
+    },
+    {
+      "name": "f",
+      "expr": "c6*beta*delta-1/2"
+    },
+    {
+      "name": "g",
+      "expr": "(1-c6)*beta*delta+density**c5-1/2"
+    },
+    {
+      "name": "stress_norm",
+      "expr": "norm(sigma)"
+    },
+    {
+      "name": "stress_unit",
+      "expr": "select(stress_norm > 0*sigma_star,sigma/stress_norm,0*I)"
+    },
+    {
+      "name": "stress_xx",
+      "expr": "dot(stress_unit,lxx)"
+    },
+    {
+      "name": "stress_yy",
+      "expr": "dot(stress_unit,lyy)"
+    },
+    {
+      "name": "stress_zz",
+      "expr": "dot(stress_unit,lzz)"
+    },
+    {
+      "name": "stress_xy",
+      "expr": "dot(stress_unit,lxy)"
+    },
+    {
+      "name": "stress_yz",
+      "expr": "dot(stress_unit,lyz)"
+    },
+    {
+      "name": "stress_xz",
+      "expr": "dot(stress_unit,lxz)"
+    },
+    {
+      "name": "minor_two",
+      "expr": "stress_xx*stress_yy-stress_xy**2/2"
+    },
+    {
+      "name": "stress_det",
+      "expr": "stress_xx*stress_yy*stress_zz-(stress_xx*stress_yz**2+stress_yy*stress_xz**2+stress_zz*stress_xy**2)/2+stress_xy*stress_yz*stress_xz/sqrt(2)"
+    }
+  ],
+  "domain": [
+    "lambda_star > kappa_star",
+    "c1 > 0",
+    "p > 0*sigma_star",
+    "e >= 0",
+    "critical_plus_one > 0",
+    "density > 0",
+    "Lambda > 0",
+    "x > 0",
+    "abs(a) <= 64",
+    "select(loading_abs_sum > 0,rate_norm > 0,rate_norm >= 0)",
+    "select(hydro_measure > 0,q > 0,q >= 0)",
+    "stress_norm > 0*sigma_star",
+    "stress_xx > 0",
+    "stress_yy > 0",
+    "stress_zz > 0",
+    "minor_two > 1.4210854715202004e-14",
+    "stress_det > 1.4210854715202004e-14"
+  ],
+  "equations": {
+    "sigma": "select(rate_norm > 0,c3*rate_norm*(f*norm(sigma)*dir_P+g*sigma),0*sigma)",
+    "e": "-(1+e)*trace(de)"
+  }
+}

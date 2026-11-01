@@ -1,0 +1,50 @@
+"""Pure checks of retained actual browser exports; no compiled engines imported."""
+from pathlib import Path
+import json,hashlib,math
+from urllib.parse import urlsplit
+R=Path('/Users/bmar5496/code/constitutive-atlas');P=Path(__file__).parent;B=P/'browser'
+read=lambda p:json.loads(p.read_text());sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+for n,h in read(P/'evidence-manifest-v2.json')['files'].items():assert sha(R/n)==h,n
+for n,h in read(P/'policy-v1.json')['files'].items():assert sha(R/n)==h,n
+M=read(R/'docs/reviews/ordinary-model-deeplinks-v1/package-manifest-v1.json')['files']
+def asset(x):
+ path=x.get('path') or urlsplit(x['url']).path.removeprefix('/constitutive-atlas/')
+ assert x['status']==200 and x['sha256']==M[path]['sha256'] and x.get('size',x.get('bytes'))==M[path]['bytes'],path
+assets=read(B/'fetched-assets.json')
+for x in assets:asset(x)
+sources=read(B/'source-links.json');reviews=read(B/'review-links-v2.json')
+for x in sources['local']+reviews['local']:asset(x)
+assert any('10.1007/s11440-016-0458-4' in x['url'] for x in sources['links'])
+assert 'Recorded agent-review status: accepted' in (B/'review-snapshot.yml').read_text()
+assert 'Registered project approval for this exact definition and scope.' in reviews['text']
+approval=read(R/'docs/admission/barodesy2017-agent-v1/approval-entry.json')
+canonical=approval['review']
+assert sha(R/canonical['path'])==canonical['sha256']
+assert any(x['sha256']==canonical['sha256'] and urlsplit(x['url']).path.endswith('/'+canonical['path']) for x in reviews['local'])
+cases={x['id']:x['result'] for x in read(R/'docs/ingestion/barodesy-clay-2017/ncl-current-v2/results/wasm.json')}
+def trimmed(x):return {k:v for k,v in x.items() if k!='elapsed_ms'}
+for name in ['named','replayed','recovered','restored','reset']:
+ d=read(B/(name+'-export.json'));key='unchanged-default-drained' if name=='reset' else 'ncl-isotropic'
+ assert trimmed(d['result'])==trimmed(cases[key]),name
+assert read(B/'named-export.json')['specification']==read(B/'replayed-export.json')['specification']
+for name in ['recovered','restored']:assert read(B/(name+'-export.json'))['specification']==read(B/'named-export.json')['specification']
+d=read(B/'changed-inputs-export.json')
+assert d['specification']['parameters'][1]==1.376 and d['specification']['initial'][-1]==1.384 and d['specification']['target']==.01
+assert d['result']['parameters']==d['specification']['parameters'] and d['result']['initial']==d['specification']['initial'] and d['result']['ok']
+inv=read(B/'invalid-ui.json');assert inv['exportDisabled'] and any('invalid run specification' in x for x in inv['visibleStatuses'])
+def finite(node):
+ if isinstance(node,dict):return all(finite(x) for x in node.values())
+ if isinstance(node,list):return all(finite(x) for x in node)
+ return not isinstance(node,(int,float)) or math.isfinite(node)
+for protocol in range(5):
+ d=read(B/('protocol-'+str(protocol)+'.json'));s=d['specification'];v=d['result']
+ assert s['protocol']==v['protocol']==protocol and s['cycles']==0 and v['ok'] and v['model']=='barodesy-clay-2017'
+ assert len(v['points'])==101 and all(len(x['state'])==7 and len(x['strain'])==6 for x in v['points']) and finite(v)
+ assert s['parameters']==v['parameters'] and s['initial']==v['initial']
+d=read(B/'cyclic-export.json');assert d['specification']['cycles']==1 and d['result']['ok'] and len(d['result']['points'])==101 and finite(d)
+ui=read(B/'protocol-ui.json');assert sorted(int(x['protocol']) for x in ui)==list(range(5)) and all(x['exportEnabled'] for x in ui)
+mobile=read(B/'mobile-charts-v2.json');assert mobile['viewport']=={'width':390,'height':844} and mobile['documentWidth']==390 and len(mobile['charts'])==4 and all(x['width']==328 and x['height']>0 and x['label'] for x in mobile['charts'])
+over=read(B/'overlay-toggle.json');assert [x['enabled'] for x in over]==[True,False,True,False]
+assert all('CC BY 4.0' in x['measurementText'] and 'GEOLAB-BASKARP' in x['measurementText'] and 'Simulation settings are unchanged' in x['measurementText'] for x in over)
+for n in ['console-errors.log','final-console.log']:assert (B/n).read_text().strip()=='Total messages: 0 (Errors: 0, Warnings: 0)'
+print(json.dumps({'passed':True,'actual_browser_exports':12,'exact_qualified_complete_results':5,'monotonic_protocols':5,'cyclic_drained':True,'changed_inputs_final_target':True,'fetched_assets':len(assets),'local_source_review_links':len(sources['local'])+len(reviews['local']),'mobile_width':390,'mobile_charts':4,'overlay_toggles':[True,False,True,False],'console_messages':0,'scope':'Local E7 interface checks; new parameter/protocol runs are not independent scientific accuracy evidence. No live delivery or all-default release pass.'},indent=2))

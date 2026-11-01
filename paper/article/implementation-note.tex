@@ -1,0 +1,131 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,booktabs,graphicx,xcolor}
+\usepackage[colorlinks=true,allcolors=blue!45!black]{hyperref}
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}
+\lhead{\small Constitutive Atlas}\rhead{\small Working methods draft, v0.1}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+\title{\textbf{Toward an executable atlas of geomechanical constitutive models}\\[5pt]
+\large A declarative representation, material-point engine, and reproducible comparison pipeline}
+\author{Benjy Marks \and Fran\c{c}ois Guillard}
+\date{30 October 2026 --- working draft, not a submission}
+\begin{document}
+\maketitle
+\begin{abstract}
+Constitutive-model comparisons require traceable equations, reliable integration, and experimental protocols that distinguish calibration from validation. This working paper describes an initial software implementation joining restricted tensor expressions, dimensional checks, a Python reference interpreter, generated C++ kernels, and a WebAssembly material-point laboratory. Five formulations are executable: isotropic linear elasticity, a stated perfect-plastic Drucker--Prager specialization, Modified Cam Clay, von Wolffersdorff sand hypoplasticity, and its intergranular-strain extension. Numerical checks address analytical elasticity, plastic consistency, unloading, step refinement, automatic-differentiation Jacobians, and fixed-frame rotation covariance. An initial experiment pipeline normalizes 17 original Karlsruhe fine sand triaxial records. A five-test demonstration transfers published hypoplastic constants to drained tests without recalibration. These preliminary errors demonstrate an auditable workflow; they do not establish predictive validity or a model ranking. A 20-entry seed catalogue and an explicit capability backlog define the next research stages.
+\end{abstract}
+\textbf{Status.} This is an implementation report and manuscript starting point. The systematic review, six-model architecture gate, 20-model executable release, and controlled held-out validation programme are incomplete. No claim of comprehensive literature coverage is made.
+
+\section{Research objective and related infrastructure}
+The intended research product combines a literature atlas, executable mathematical definitions, and reproducible experimental evidence. Publications, constitutive formulations, numerical algorithms, and calibrated parameter sets are distinct records. This distinction prevents paper counts, extensions, and alternative parameterizations from being presented as independent model families.
+
+Existing constitutive-language infrastructure, notably MFront/TFEL, already generates C++ behaviours from domain-specific languages and supports several integration schemes \cite{mfront}. The novelty of a future atlas paper must therefore be evaluated against this prior work. The proposed emphasis is geomechanical provenance, a restricted mathematical representation, shared experimental protocols, and transparent applicability records. Novelty is not asserted by this preliminary report.
+
+The first executable collection concentrates on local, three-dimensional soil mechanics under infinitesimal kinematics. Rock, interfaces, coupled processes, finite deformation, and nonlocal models remain part of the wider research catalogue rather than supported numerical capabilities.
+
+\section{Mathematical representation}
+Model definitions are stored as canonical JSON, which is a subset of YAML. Structural validation precedes semantic checking of symbols, dimensions, tensor shapes, and equations. Expressions permit finite numerical literals, declared symbols, arithmetic, selected mathematical functions, tensor invariants, comparisons, and lazy conditional expressions. Attribute access, arbitrary function calls, executable source code, and embedded language snippets are excluded.
+
+A definition contains bibliographic locators, applicability notes, parameters and bounds, state initialization, derived quantities, governing equations, domain checks, and integration kind. The same parsed expression tree supports reference evaluation and C++ generation. An exact canonical catalogue hash accompanies each simulation.
+
+Stress and strain are compression-positive. Units are SI, and symmetric tensors use Mandel coordinates,
+\[
+\boldsymbol{a}_{M}=(a_{xx},a_{yy},a_{zz},\sqrt{2}a_{xy},\sqrt{2}a_{yz},\sqrt{2}a_{xz})^\mathsf{T}.
+\]
+Consequently their Euclidean inner product equals the tensor double contraction. We define
+\[
+p'=\tfrac{1}{3}\operatorname{tr}\boldsymbol{\sigma}',\qquad
+q=\sqrt{\tfrac{3}{2}\operatorname{dev}\boldsymbol{\sigma}':\operatorname{dev}\boldsymbol{\sigma}'}.
+\]
+The laboratory additionally reports signed axisymmetric deviator stress $\sigma'_a-\sigma'_r$, preserving compression and extension directions.
+
+Two integration forms are currently supported. Residual models define
+\[
+\boldsymbol{R}(\boldsymbol{z}_{n+1},\boldsymbol{z}_n,\Delta\boldsymbol{\varepsilon};\boldsymbol{\theta})=\boldsymbol{0}.
+\]
+Rate models define evolution along a normalized increment parameter $s$:
+\[
+\frac{d\boldsymbol{z}}{ds}=\boldsymbol{H}(\boldsymbol{z},\Delta\boldsymbol{\varepsilon};\boldsymbol{\theta}),\quad 0\leq s\leq1.
+\]
+This initial rate representation addresses rate-independent laws; physical-time-dependent creep requires an explicit extension.
+
+\section{Numerical implementation and verification}
+The C++20 engine has no external numerical dependency. Small dense systems use pivoted elimination; a shared forward-mode automatic-differentiation type evaluates residual Jacobians. A generic elastic predictor sets declared transient plastic multipliers to zero before complementarity correction. This avoids selecting a plastic branch during elastic unloading from a yield surface. Newton updates use scaling and line search; rejected steps are recursively subdivided. Rate models use midpoint integration with step-doubling error estimation. Failed increments roll back their state.
+
+For yield models, a nonnegative multiplier $\gamma$ and normalized yield value $\bar f$ are related through
+\[
+\sqrt{\gamma^2+\bar f^2}-\gamma+\bar f=0.
+\]
+The Drucker--Prager entry explicitly defines $f=q-Mp'-c$, with a separate dilatancy slope. Its deviatoric direction has a documented very small regularization. The Modified Cam Clay entry uses pressure-dependent elasticity, associated flow, exponential hardening, and a stated backward-Euler discretization. Sand hypoplasticity follows the published tensor law \cite{vw96}; the intergranular-strain extension is separately identified \cite{nh97}. Source transcription remains subject to independent review.
+
+Laboratory drivers implement oedometer loading, isotropic compression, drained and undrained triaxial strain control, and undrained deviator-stress control. Mixed-control trial evaluations start from the same committed state. The undrained driver assumes incompressible grains and fluid and imposes zero total volumetric strain. Pore-pressure changes follow from fixed radial total stress; this is not a general coupled poromechanics solver.
+
+Verification includes analytical elastic responses, yield consistency, complementarity, hardening and unloading, zero increments, interpreter/generated-equation agreement, fixed-frame rotation covariance, and finite-difference checks of automatic-differentiation residual Jacobians. Fixed-frame covariance does not establish finite-rotation objectivity. Automated tests are run against native builds; the browser uses the same generated model source.
+
+\section{Experimental pipeline and preliminary transfer demonstration}
+The Karlsruhe fine sand database of Wichtmann and Triantafyllidis \cite{wt1,wt2} provides monotonic and cyclic loading measurements. Initial ingestion covers five drained records (TMD1--5) and twelve undrained records (TMU1--12). Original archives are kept locally and unchanged. Normalized records retain source URLs, original headers, member and archive checksums, transformations, and review warnings.
+
+Strain percentages are converted to dimensionless values; kPa values are converted to Pa. The drained files label the void-ratio column as a percentage although the numerical values represent dimensionless void ratio. This interpretation is recorded explicitly rather than dividing those values by 100. Undrained absolute pore pressures are preserved alongside changes relative to the first measurement. Missing initial void ratios in undrained files are not invented.
+
+For a first end-to-end demonstration, base hypoplastic constants reported for Karlsruhe fine sand in Table 3 of Macha\v{c}ek et al. \cite{overshoot} are transferred to the five drained tests. This uses the hypoplastic backbone, not the paper's projection operators or its complete extended-model simulations. Initial stresses and void ratios come from each measurement record. No optimization is performed.
+
+Each simulation uses 400 equal axial-strain increments and stops at the last measured point not exceeding 2\% axial strain. Predictions and observations are linearly interpolated onto 101 equally spaced points over their common strain interval. Extrapolation and sorting of reversed strain histories are prohibited. At exactly repeated strain values, the last observation is retained; the count is recorded. The result is a declared early-strain transfer exercise, not a replay of pauses or the complete measured history.
+
+The reported root-mean-square errors are
+\[
+\mathrm{RMSE}=\sqrt{\frac{1}{N}\sum_{i=1}^{N}(y_i^{\mathrm{pred}}-y_i^{\mathrm{obs}})^2}.
+\]
+Table~\ref{tab:errors} is generated from the benchmark report. Volumetric-strain errors are expressed in percentage points.
+
+\begin{table}[ht]
+\centering
+\caption{Preliminary published-parameter transfer demonstration. All tests belong to a demonstration set; none is labelled held-out validation.}
+\label{tab:errors}
+\begin{tabular}{lrr}
+\toprule
+Test & $q$ RMSE (kPa) & $\varepsilon_v$ RMSE (percentage points)\\
+\midrule
+\input{results.tex}
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\linewidth]{images/transfer.png}
+\caption{Illustrative transfer comparison for TMD1, TMD3 and TMD5. Solid lines are simulated responses; dots are original measurements. Plotting an agreement or discrepancy does not independently verify the transcription.}
+\label{fig:transfer}
+\end{figure}
+
+The stress errors are substantial. They cannot by themselves distinguish parameter transfer, differences in state preparation, integration conventions, transcription errors, or limitations of the constitutive law. Independent reference-implementation comparisons and a controlled calibration programme are required before scientific conclusions are drawn.
+
+\section{Browser laboratory and reproducibility}
+Emscripten compiles the same generated C++ kernels to WebAssembly. A browser Worker executes simulations without a server solver. The interface exposes model parameters, initial state, laboratory controls, stress--strain and stress-path plots, volumetric response, and applicable pore-pressure changes. Run exports include the catalogue hash, complete inputs, and outputs. Experimental overlays load user-selected normalized files locally; original experimental data are not bundled in the hosted application.
+
+Canonical model files remain the source of truth. SQLite and browser catalogues are generated views. A benchmark report contains configuration, parameter-set, experiment, raw-member, catalogue, and solver hashes. Generated figures and the numerical table are derived from that report. Timings are diagnostic and are not portable performance claims.
+
+\section{Limitations and next research gates}
+The current language has scalar and symmetric-tensor values, a restricted unit vocabulary, and a fixed state-size limit. It does not yet represent reversal-triggered history updates, general fourth-order anisotropic operators, finite-strain stress measures, spatial gradients, or coupled fields. SANISAND-2004 remains a source-extraction and language-capability task; it is not approximated under the original name. The six-model proof is therefore not complete.
+
+The release target is 20 executable formulations, while the present 20-entry manifest contains five executable definitions and fifteen research candidates. Some candidates identify model families or failure criteria whose exact constitutive variant still needs selection. They must not be counted as complete formulations. Independent equation review is outstanding for all implementations, particularly the IGS transcription.
+
+Next gates are: (i) complete SANISAND and the declarative history/event representation; (ii) freeze source-specific identities for the larger collection; (iii) validate against independent numerical implementations; (iv) establish whole-test calibration and held-out splits with declared optimization budgets; and (v) expand data ingestion to cyclic sand tests and kaolin with complete preparation metadata. The full paper will report these results and literature-screening counts only after those activities have occurred.
+
+\section*{Data and software availability}
+The local repository contains the compiler, C++ engine, model definitions, schemas, tests, benchmark configuration, browser sources, and manuscript. Experimental archives are downloaded from the original author's website and excluded from the source repository pending redistribution review. Bibliographic discovery output is an unscreened search queue rather than an included-study set. No DOI or archival-release claim is made for this draft.
+
+\begin{thebibliography}{9}
+\bibitem{mfront} TFEL/MFront developers. Mechanical behaviours in MFront. \url{https://thelfer.github.io/tfel/web/behaviours.html}.
+\bibitem{vw96} P.-A. von Wolffersdorff (1996). A hypoplastic relation for granular materials with a predefined limit state surface. \emph{Mechanics of Cohesive-Frictional Materials}, 1, 251--271.
+\bibitem{nh97} A. Niemunis and I. Herle (1997). Hypoplastic model for cohesionless soils with elastic strain range. \emph{Mechanics of Cohesive-Frictional Materials}, 2, 279--299.
+\bibitem{wt1} T. Wichtmann and Th. Triantafyllidis (2016). An experimental data base for the development, calibration and verification of constitutive models for sand with focus to cyclic loading. Part I: tests with monotonic loading and stress cycles. \emph{Acta Geotechnica}, 11, 739--761. \url{https://doi.org/10.1007/s11440-015-0402-z}.
+\bibitem{wt2} T. Wichtmann and Th. Triantafyllidis (2016). Part II: tests with strain cycles and combined loading. \emph{Acta Geotechnica}, 11, 763--774. \url{https://doi.org/10.1007/s11440-015-0412-x}.
+\bibitem{overshoot} J. Macha\v{c}ek, M. Tafili and C. Grandas Tavera (2026). Overshooting of hypoplastic models with intergranular strain: manifestation, implications and remedy. \emph{International Journal for Numerical and Analytical Methods in Geomechanics}, 50, 5068--5091. \url{https://doi.org/10.1002/nag.70375}.
+\end{thebibliography}
+\end{document}

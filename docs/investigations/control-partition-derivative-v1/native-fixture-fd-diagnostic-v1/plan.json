@@ -1,0 +1,39 @@
+{
+  "identity": "md1997-native-fixture-fd-diag-v1",
+  "source": "/private/tmp/atlas-md1997-native-fixture-fd-diag-v1/source",
+  "build": "/private/tmp/atlas-md1997-native-fixture-fd-diag-v1/native-build",
+  "parent_composition_manifest_sha256": "1390ac8a36132a5b0c47013350111b6cdaac1d20351f80f3453c898e4c186eab",
+  "source_freeze_sha256": "bfb869500dcc002adb12fb3a1ceb934ca3f07570cd86acc972bb504443468432",
+  "only_change": "Conditionalstderr logging immediately before originalunchangedfailedrequire; inverse removal exact.",
+  "commands": [
+    [
+      "cmake",
+      "-S",
+      "/private/tmp/atlas-md1997-native-fixture-fd-diag-v1/source",
+      "-B",
+      "/private/tmp/atlas-md1997-native-fixture-fd-diag-v1/native-build",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DBUILD_TESTING=ON"
+    ],
+    [
+      "cmake",
+      "--build",
+      "/private/tmp/atlas-md1997-native-fixture-fd-diag-v1/native-build",
+      "--target",
+      "atlas_numerical_tests",
+      "--parallel",
+      "1"
+    ],
+    [
+      "/private/tmp/atlas-md1997-native-fixture-fd-diag-v1/native-build/atlas_numerical_tests"
+    ]
+  ],
+  "env": {
+    "PYTHONOPTIMIZE": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "ATLAS_NATIVE_FIXTURES": "explicit-gis20-occ-restart-duncan-v5",
+    "ATLAS_NUMERICAL_FIXTURES": "md1997-source-admissible-v1"
+  },
+  "expected_last_exit": 1,
+  "scope": "Failure localization only; allbudgets/steps/initialstates/assertionsunchanged. No sourcefidelityacceptance."
+}

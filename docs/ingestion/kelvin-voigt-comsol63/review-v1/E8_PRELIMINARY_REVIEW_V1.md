@@ -1,0 +1,11 @@
+# Independent preliminary E8 review — not final acceptance
+
+Read-only local evidence assessment for application commit e32f8a86df44298f100394b34e084e313d48b195, parent e9bed5166722dfac845c0d065b4f1b937c07c485 and workflow41354004618. No network, browser, compiled artifact or build was invoked.
+
+Exact Git commit/parent and 875 changed paths checked. No paper/private originals/shared atlas/compiler/C++/schema migration or compiled Wasm/shared-library/PDF file is included. The only CMake addition is the explicitly assigned Kelvin wrapper cmake/kelvin-voigt/CMakeLists.txt; an initial reviewer path exclusion was narrowed to distinguish that authorized addition from unrelated shared migration. Exact committed candidate and accepted scientific review retain their approved hashes. All original registry records remain equal, with one Kelvin append. Committed app, standard builder and both public-profile data/renderer files equal independently reviewed isolated bytes.
+
+Saved native Linux and macOS CI report/capture objects compare equal and each passes43cases/86calls/eightnegative-recoverypairs. This supports those two backend results only. Prospective release gates correctly require terminal success of all six named workflow jobs, exact current commit identity, actual tested Pages upload and all live/upload byte comparisons, plus real live model/profile behavior. No final success is inferred from a running workflow.
+
+The release checker currently checks SQLite integrity/FK but not the PLAN's full public row identity; coordinator agreed to supplement actual upload checking. Final independent audit will compare tested-upload SQL rows against exact committed registry/model/review bytes and full model-ID union, not only current living documentation. Exact profile assets, actual profile/laboratory links and final uploaded/live fetched engine identity also remain required.
+
+Saved summary: E8_PRELIMINARY_CHECK_V1.json. E8 remains pending: final six-job results, tested upload/database/profile binding, all-assets live match, actual live illustrative/profile browser evidence and ledger closure have not yet been supplied. Await the coordinator's final evidence handoff; do not mark current57criteria complete on this preliminary assessment.

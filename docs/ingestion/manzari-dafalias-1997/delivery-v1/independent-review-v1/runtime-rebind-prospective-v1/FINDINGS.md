@@ -1,0 +1,15 @@
+# Independent prospective corrected-runtime rebind review v1
+
+Reviewer `/root/md1997_review`, 2026-11-02, separate from all implementation/reference/harness authors. No builds or compiled calls. This new review directory alone is owned for MD work.
+
+**Accepted prospective readiness for a separately receipted full-model native build and unchanged qualification execution. No full capability, MD numerical or E5 approval.**
+
+Full-freeze SHA256 `10f6b384e0725970c56334dba2e537cd164b2a06f15428eb7061505865853225` and rebind manifest `b1fa2d3d1ca7aad6fcac6da1e63456eda98c508296fee240e707f2bd351daf1c` verify. Source receipt `126d9bc3a221b6e0098c769eee267306d5be3d03f2b02725c824a6063243aa44` binds578 exact files. The prior576-file MD closure differs only in the reviewed generic solver and two standalone fixture/CMake additions. The MD candidate remains `28ea763d0d7d059335ad3375476895d551f2e71c9ab81499141db80af0339064`.
+
+Read source wrappers, policies, manifests and equality checker; reproduced check_rebind.py comparisons exactly and ran read-only preflight successfully. The ordinary-v6 runner is byte-for-byte ordinary-v5 with exactly three identity/path replacements. The local policy changes only identity and source-freeze hash; all16 literal case objects, defaults, settings, numerical gates and the historical GIS expected failure are unchanged. Execution-v3 transport/requests/main checker, parity-v6 and inherited parity-v4 gate policy, scalar/interior source references all retain frozen byte identities. Source and evidence failures are preserved; no failed MD case has become expected failure.
+
+The new wrapper runs preflight first, refuses an existing output, delegates the unchanged execution-v3 command, records corrected source and actual artifact/report hashes, propagates the delegate exit status and labels any explicit case subset. Two Python-only mocked delegate tests (success and failure) confirm exit0/1 propagation, report/artifact hash binding, exact command and subset preservation. The text README used as a fake artifact is never executed. This tests metadata plumbing only and is not actual numerical evidence.
+
+The wrapper deliberately retains the delegate's original material request/checker identities while adding runtime-binding.json, which makes the corrected source identity explicit. Build/source/toolchain/generated-catalogue/binary receipts remain essential: neither wrapper hashes nor identical catalogues prove compilation correspondence. Native/Wasm artifact sets must be reviewed separately; main+parity-v6 remain mandatory for paired MD acceptance. A --case diagnostic never satisfies full35-case qualification. All16 ordinary plus separate dedicated-profile/transaction and later app/browser checks remain required.
+
+No prospective blocker identified. Coordinator owns serial explicit-target parallel1 builds and actual execution under the new runtime identity. The old runtime's failed qualification remains failed and must stay retained. The accepted analytical fixture pair is supporting capability evidence, not a substitute for actual source-reference MD checks or broad generic regression coverage.

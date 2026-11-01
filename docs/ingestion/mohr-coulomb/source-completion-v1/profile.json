@@ -1,0 +1,72 @@
+{
+  "summary": "Frictional yielding defined by cohesion and friction angle, with a separate dilation angle.",
+  "introduction": "Mohr–Coulomb describes pressure-dependent shear strength using the largest and smallest principal stresses. Its angular yield surface distinguishes loading directions that a smooth cone treats alike.",
+  "behaviours": [
+    [
+      "Confinement-dependent strength",
+      "Increasing compressive confinement raises the shear strength."
+    ],
+    [
+      "Plastic dilation",
+      "The dilation angle controls plastic volume change independently of the friction angle."
+    ]
+  ],
+  "scope": "The Atlas formulation uses three-dimensional small strain, fixed spatial axes and compression-positive stress and strain. Stresses are effective stresses; the surrounding drainage formulation supplies any pore-pressure response. Changing elapsed time alone does not produce creep or relaxation.",
+  "limits": "The Atlas variant has constant cohesion and elastic stiffness, with no hardening, cap or separate tensile cutoff. This realization uses strictly positive cohesion, friction and dilation angles; some nearly repeated-stress states can be rejected.",
+  "preparation": "Supply an admissible effective stress. This variant carries stress history without a void-ratio evolution law.",
+  "parameters": [
+    {
+      "name": "E",
+      "symbol": "E",
+      "meaning": "Young modulus",
+      "help": "Sets the slope of the elastic axial stress–strain response.",
+      "unit": "Pa"
+    },
+    {
+      "name": "nu",
+      "symbol": "ν",
+      "meaning": "Poisson ratio",
+      "help": "Controls the balance of lateral and axial elastic deformation.",
+      "unit": "1"
+    },
+    {
+      "name": "c",
+      "symbol": "c",
+      "meaning": "Cohesion",
+      "help": "Sets the cohesive part of shear strength.",
+      "unit": "Pa"
+    },
+    {
+      "name": "phi",
+      "symbol": "φ",
+      "meaning": "Friction angle",
+      "help": "Sets the dependence of strength on normal compression.",
+      "unit": "rad"
+    },
+    {
+      "name": "psi",
+      "symbol": "ψ",
+      "meaning": "Dilation angle",
+      "help": "Controls plastic volume expansion during shearing.",
+      "unit": "rad"
+    }
+  ],
+  "stateLabels": {},
+  "references": [
+    {
+      "label": "Sysala and Čermák — implicit Mohr–Coulomb integration",
+      "url": "https://arxiv.org/abs/1508.07435v3"
+    }
+  ],
+  "related": [
+    "drucker-prager",
+    "extended-mohr-coulomb-2013"
+  ],
+  "contentSources": [
+    "models/mohr-coulomb.json"
+  ],
+  "explorationTitle": "Explore the response",
+  "exploration": "Choose Drained triaxial and a monotonic ramp. Compare two positive dilation angles while keeping cohesion, friction and initial stress fixed. Look at the volume response after yielding.",
+  "parameterNote": "Use consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.",
+  "title": "Mohr–Coulomb · nonassociated perfect plasticity"
+}

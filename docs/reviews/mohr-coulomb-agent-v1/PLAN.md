@@ -1,0 +1,7 @@
+# Independent Mohr–Coulomb scientific review
+
+Review the exact current model `models/mohr-coulomb.json`, SHA-2566a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5. The full formulation is the existing two-author versioned preprint H=0 perfect-plastic specialization, constant isotropic elasticity and nonassociated flow, zero-spin3D effective compression-positive Mandel backward-Euler material point. No source or numerical choice is changed by this assignment.
+
+The actual separate agent must assess all nine policy items, read readable governing source pages visually where needed, inspect every equation/branch against the source and retained independent reference evidence, preserve original failures and report a verdict for its exact supported scope. Source receipt and dossier identify the private PDF and all main study pointers. Current compiled artifacts, browser release and experiments must not be inferred from old saved passes. No compiled execution, builds, source/model/schema/runtime edits or automatic approval.
+
+Reviewer owns only `independent-review/`. Parent owns this plan/input freeze and subsequent preservation/registry handoff. Use a new actual schema-valid review record with hashed findings and evidence; report missing exact context as a blocker instead of silently repinning or inventing an acceptance. Core checklist items cannot be waived. Historical author run IDs are unknown except where actual receipts identify them; distinguish prior technical reviewers from scientific review.

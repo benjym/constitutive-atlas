@@ -1,0 +1,41 @@
+--- /private/tmp/atlas-control-partition-support-v3/source/tools/study_j2.py
++++ adapters/study_j2.py
+@@ -12,7 +12,8 @@
+ import subprocess
+ import sys
+ 
+-ROOT = Path(__file__).resolve().parents[1]
++import os
++ROOT = Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve()
+ BASE = ROOT / 'docs/ingestion/j2-linear-hardening/execution-v2'
+ MODEL = 'j2-linear-isotropic-hardening-be'
+ SETTINGS = '1e-11,1e-6,60,0,1,20'  # no subdivision: named BE update
+@@ -169,12 +170,12 @@
+ def main():
+     ap=argparse.ArgumentParser();ap.add_argument('mode',choices=['freeze','native','assess','parity']);ap.add_argument('paths',nargs='*');a=ap.parse_args()
+     if a.mode=='freeze':
+-        assert not (BASE/'references.json').exists(),'references already frozen'
+-        dump(BASE/'references.json',dict(version='j2-reference-1',cases=cases(),settings=SETTINGS,
++        assert not (Path(os.environ['ATLAS_J2_REFERENCE'])).exists(),'references already frozen'
++        dump(Path(os.environ['ATLAS_J2_REFERENCE']),dict(version='j2-reference-1',cases=cases(),settings=SETTINGS,
+              budgets=dict(stress_Pa=.002,history=2e-10,stress_tangent_Pa=.2,history_tangent=2e-8,
+                           backend_stress_Pa=1e-5,backend_history=1e-11,backend_tangent_Pa=.01)))
+     elif a.mode=='native':
+-        solver,dest=a.paths;cs=json.loads((BASE/'references.json').read_text())['cases'];rows=[]
++        solver,dest=a.paths;cs=json.loads((Path(os.environ['ATLAS_J2_REFERENCE'])).read_text())['cases'];rows=[]
+         for c in cs:
+             calls=[]
+             for _ in range(2):
+@@ -183,10 +184,10 @@
+             rows.append(dict(id=c['id'],calls=calls));dump(Path(dest),rows)
+         print(json.dumps(assess_rows(cs,rows),indent=2))
+     elif a.mode=='assess':
+-        cs=json.loads((BASE/'references.json').read_text())['cases'];rows=json.loads(Path(a.paths[0]).read_text())
++        cs=json.loads((Path(os.environ['ATLAS_J2_REFERENCE'])).read_text())['cases'];rows=json.loads(Path(a.paths[0]).read_text())
+         print(json.dumps(assess_rows(cs,rows),indent=2))
+     else:
+-        cs=json.loads((BASE/'references.json').read_text())['cases'];left,right=[json.loads(Path(p).read_text()) for p in a.paths]
++        cs=json.loads((Path(os.environ['ATLAS_J2_REFERENCE'])).read_text())['cases'];left,right=[json.loads(Path(p).read_text()) for p in a.paths]
+         assess_rows(cs,left);assess_rows(cs,right)
+         for c,l,r in zip(cs,left,right):
+             x,y=[json.loads(v['calls'][0]['stdout']) for v in (l,r)]

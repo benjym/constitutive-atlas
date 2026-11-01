@@ -1,0 +1,26 @@
+--- docs/ingestion/j2-linear-hardening/execution-v2/check_paths.py
++++ adapters/check_j2_paths.py
+@@ -3,10 +3,13 @@
+ import json
+ from pathlib import Path
+ import sys
+-ROOT=Path(__file__).resolve().parents[4];sys.path.insert(0,str(ROOT))
++import os
++ROOT=Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve();sys.path.insert(0,str(ROOT))
++OUTPUT=Path(os.environ['ATLAS_QUALIFICATION_OUTPUT']).resolve()
++assert OUTPUT.is_dir() and not OUTPUT.is_relative_to(ROOT), 'Fresh external output directory required'
+ from tools.study_j2 import close
+ from tools.run_j2 import run
+-BASE=Path(__file__).resolve().parent
++BASE=ROOT/'docs/ingestion/j2-linear-hardening/execution-v2'
+ 
+ def assess(paths,raw):
+     assert len(paths)==len(raw)
+@@ -29,6 +32,6 @@
+     paths=json.loads((BASE/'paths.json').read_text())
+     if a.mode=='native':
+         raw=[dict(id=s['id'],repeats=[run(a.path,s),run(a.path,s)]) for s in paths]
+-        (BASE/'native-paths-raw.json').write_text(json.dumps(raw,indent=2)+'\n')
++        (OUTPUT/'native-paths-raw.json').write_text(json.dumps(raw,indent=2)+'\n')
+     else:raw=json.loads(Path(a.path).read_text())
+     print(json.dumps(assess(paths,raw),indent=2))

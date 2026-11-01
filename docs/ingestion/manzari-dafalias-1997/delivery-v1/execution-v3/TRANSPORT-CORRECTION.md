@@ -1,0 +1,5 @@
+# Prospective strict response parser correction
+
+Preserve execution-v1. Before any compiled observation, separate reviewer mocked transport showed that Python json.loads accepts NaN/Infinity, after which strict log serialization raised before retaining the raw response. V2 rejects nonfinite JSON constants inside the existing response-parse try/catch. The failure response contains a harness_error, and the original raw stdout string, stderr, request and return code are retained in the raw record. No material request, source gate, tolerance, solver setting, control, checker logic, kernel or reference changed. requests.json and POLICY.md retain exact v1 bytes. check_reports.py also retains exact bytes but now binds identity.manifest_sha256 to this directory's manifest.
+
+Final execution combination is execution-v2/check_reports.py plus parity-v5/check.py. V1 and prior parity evidence remain preserved. Independent prospective review must accept this substitution before execution. No backend call/build occurred to motivate or test this correction; use mocked transport only before the coordinator handoff.

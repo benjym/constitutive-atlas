@@ -1,0 +1,32 @@
+# Independent prospective review: implicit predictor constraints v1
+
+Reviewer: `/root/md1997_review`, separate agent run, 2026-11-02. Reviewer authored none of the implementation, fixture, requests, collector or acceptance policy. Owned only this new review directory. No builds or compiled calls; mocked subprocess transport returns analytical synthetic JSON only. This is generic capability review, not E5 model acceptance.
+
+Decision: **source change and analytical fixture accepted prospectively; saved-report parity gate needs an additive integrity supplement before final execution acceptance. Actual capability acceptance remains pending native/Wasm evidence and regressions.**
+
+## Exact scope and source assessment
+
+Reviewed packet manifest `1fef4b10498f8ed6b94a9855db46b73b44a088c61db68b09b6545baa47b4b560`, solver `7a3aacf4c283ca4ba32e0e0dc996142c6543bf9193685ab7281ac3435b2cbbc5`, requests `efa5403f19c6013ddc1ecb6de17c89caf9a2cc102ae7df94dc4a080784c28302` and coordinator source freeze `126d9bc3a221b6e0098c769eee267306d5be3d03f2b02725c824a6063243aa44`. All packet file hashes and all 578 source hashes agree. Relative to the frozen MD runtime, exactly 575 old files are unchanged, only solver.hpp changes and the two authorized standalone CMake/fixture files are added. Eight excluded generated Python caches are individually hashed and the complete inventory has no unexplained files. Prior inventory failure remains retained by coordinator. Release, single explicit target and parallel1 build policy is explicit.
+
+The solver is exactly the retained original with one convergence conditional replaced. The replacement allows a residual-converged predictor to enter the corrector before requiring final physical constraints. `evaluate_model` checks the equation domain and finite expressions; the residual is checked finite. No predictor success return is introduced. Full corrector success still requires `solution_admissible`, representable-neighbor success requires it, and integrate applies its final check. Initial admissibility, settings, line search, iteration budgets, subdivision and full-parent rollback are byte-identical. Non-multiplier models retain the same convergence predicate logically. This addresses the previously identified generic obstruction without relaxing the MD physical yield constraint or inserting model-specific behavior. It does not prove that later MD nonlinear trajectories converge or pass source-reference refinement.
+
+The synthetic eight-component fixture correctly uses `p=p_n+K*(trace(de)-gamma)`, persistent `ep=ep_n+gamma`, and complementarity `sqrt(gamma^2+f^2)-gamma+f=0` for f=(p-Y)/K. The closed form gives trial21 and corrected p10/gamma.11. Cap8 excludes that only complementarity root while initial p1 remains admissible. The no-domain-root case and one-iteration failure are meaningful negative controls. Independently recalculated all seven literal successful endpoint expectations; reproduced all11 source-only checks. Generated metadata binds gamma as multiplier/transient, and pressure-domain/yield/cap checks correctly. Parameter/state ordering and Mandel labels agree with current runtime.
+
+Standalone CMake generation uses only the fixture directory, includes current shared headers and compiles cpp/main.cpp. Native CLI option and five-string Wasm `atlas_integrate_with_settings` signature match the retained main.cpp; KEEPALIVE export, ES module factory and ccall flags are consistent. This is static interface assessment, not a toolchain/link/runtime result.
+
+## Collector and corruption evidence
+
+The literal schedule contains 11 cases and four explicit failure/recovery pairs, giving 19 calls/backend. The collector uses the previous actual successful state for unload/reload/hold and fails rather than inventing missing parent state. All eight returned state components are checked; failure rollback compares the complete original request state. Mock ideal transport passes19 rows. Independent corruptions of shear, ep, gamma, rollback, expected outcome and nonfinite success state all fail. Native process isolation does not demonstrate shared mutable-engine recovery; persistent Wasm execution provides that separate test. Native transaction regressions remain required.
+
+The parity checker detects unequal row counts and cross-backend state corruption. However, two synthetic false accepts are retained:
+
+- Both reports claim `status=passed` but contain zero rows: parity reports passed.
+- Both reports use a wrong request hash and equally altered request parameters: parity reports passed.
+
+The checker compares the two claims rather than independently binding them to the frozen plan. It also does not require native versus Wasm backend labels or reapply analytic/rollback gates to the saved evidence. The collector can produce a correctly gated report, but a standalone report verifier should reject missing or equally corrupted evidence rather than trust status fields. An additive prospective checker should pin the request hash, exactly19 ordered requests (including the actual preceding chain state), backend roles, raw/response consistency and independently recompute per-row outcome/full-state/physical/rollback gates before cross-backend parity. Preserve current files and this false-accept evidence. No numerical gate needs changing.
+
+## Reproduction and remaining work
+
+Run `python3 -B docs/investigations/implicit-predictor-constraints-v1/independent-review-v1/check_review.py` in a fresh copied review directory or remove only its own newly generated mock outputs first: the author collector intentionally refuses overwriting report directories. This performs no subprocess executable calls: subprocess.run is mocked. Source reproduction command is recorded in source-reproduction.json's accompanying source checker and can be repeated with a fresh output path. checks.json and mock reports preserve all observed false accepts and rejected corruptions.
+
+After the report-integrity supplement is frozen and reviewed, coordinator owns serial actual native/Wasm execution with exact runtime/toolchain/catalogue closure, unchanged35-case MD gates and all16 ordinary plus dedicated-profile/transaction regressions. Actual evidence and independent follow-up are mandatory before shared installation. Existing MD/native failures, model/reference identities and acceptance policies remain unchanged. No approval, generalized convergence claim, E5 acceptance or public delivery follows from this prospective review.

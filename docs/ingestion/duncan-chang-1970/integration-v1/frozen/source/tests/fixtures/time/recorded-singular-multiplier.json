@@ -1,0 +1,71 @@
+{
+  "schema_version": "0.1",
+  "status": "draft",
+  "parameters": {
+    "p_ref": {
+      "default": 1000,
+      "min": 1,
+      "max": 1000000000.0,
+      "unit": "Pa"
+    },
+    "limit": {
+      "default": 100,
+      "min": 0.001,
+      "max": 1000000000.0,
+      "unit": "1"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "p_ref",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "coordinate",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0,
+      "transient": true,
+      "multiplier": true
+    },
+    {
+      "name": "anchor",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    }
+  ],
+  "derived": [],
+  "domain": [
+    "abs(coordinate) < limit"
+  ],
+  "integration": "residual",
+  "id": "test-recorded-singular-multiplier",
+  "name": "Synthetic linear stress with singular multiplier residual",
+  "family": "engine verification only",
+  "description": "Recorded-driver fallback only: elastic predictor reaches zero cubic multiplier; material update succeeds but full-state implicit tangent is singular.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/RECORDED_PATHS.md",
+      "role": "Analytical engine verification specification",
+      "locator": "Singular multiplier fallback fixture"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma - sigma_n - p_ref * de",
+    "coordinate": "coordinate**3",
+    "anchor": "anchor-anchor_n"
+  }
+}

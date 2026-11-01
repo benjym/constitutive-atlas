@@ -1,0 +1,5 @@
+# Native v1 review finding — observation transport
+
+Reviewer `/root/kelvin_scientific_review`,2026-11-02. After native-raw.json contained all43cases, a read-only invocation of the frozen study.assess over those saved responses stopped at study.py line106 (`assert obs['ok']`). The first direct case's independently saved observation response is `{"ok":false,"message":"option unsupported by timed mode: --current"}`. The direct integration response itself reports ok:true and the intended catalogue/model. Standalone observe-case argv also uses --current.
+
+This is an in-scope harness/API transport defect and blocks treating v1 as passing compiled evidence. It does not establish a constitutive equation failure. Preserve exact v1 model, references, gates, collector and raw observations. Repair the native observation option against the actual common CLI under a distinct prospective study identity, without weakening numerical gates. Recollect affected requests/observations and assess all required behaviors. Native/Wasm acceptance remains pending. No compiled artifact was executed by this reviewer.

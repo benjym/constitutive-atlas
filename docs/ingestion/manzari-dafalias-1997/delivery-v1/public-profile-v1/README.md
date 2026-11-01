@@ -1,0 +1,9 @@
+# Public profile draft v1
+
+This draft supplies the public explanation missing from the earlier technical dossier. `profile.json` follows the existing profile content contract, with all seventeen exact parameter names and units, initial-state guidance, three source equations and the original DOI. Its runnable instructions are prospective until matching Wasm, admission, app integration and actual browser verification pass. No shared web or catalogue file is changed.
+
+The profile describes the original constant-m, first-reference-distance realization and Atlas's fixed-frame backward-Euler and infinitesimal-volume choices. It does not infer physical-time, fabric, evolving-m or full cyclic support. The 160 kPa/e=.65/alpha=0 monotonic strain examples match the native public-default study; browser field behavior remains to be verified.
+
+`control-support-entry.json` makes the previously declared qualification boundary explicit for every current host option: protocols 1/2/4 are monotonic only; protocol 0 (oedometer) and protocol 3 (axial stress) are blocked at every cycle count. The original prospective study did not include oedometer control or full plastic cycles. Earlier public-control-scope-v1/v2 remain unchanged; their protocol-3 declaration alone would leave these other unsupported options exposed. These are qualification exclusions, not invented observed numerical failures. The existing generic consumer supports each entry without an app branch or new policy schema. Actual browser tests must verify blocked requests are never sent and supported recovery works.
+
+Parent-authored structural checks confirm parameter/state identities, units and local provenance. Independent content/scope review is required before E6 installation, and the shared profile checker and browser checks remain delivery gates. The material definition, source packets and numerical policies are unchanged.

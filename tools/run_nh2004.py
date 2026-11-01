@@ -21,15 +21,16 @@ PROTOCOLS={'oedometric':0,'drained':1,'undrained':2,'stress-controlled':3,'isotr
 
 def build(directory):
     directory=Path(directory).resolve();directory.mkdir(parents=True,exist_ok=True)
-    source=[MODEL,ROOT/'cpp/main.cpp',*sorted((ROOT/'cpp/include').rglob('*.hpp')),
+    source=[MODEL,ROOT/'cpp/main.cpp',ROOT/'cmake/AtlasScalarFunctions.cmake',*sorted((ROOT/'cpp/scalar-functions').glob('*')),*sorted((ROOT/'cpp/include').rglob('*.hpp')),
             *sorted((ROOT/'atlas').rglob('*.py')),ROOT/'schemas/model-v0.3.schema.json']
     digest=hashlib.sha256()
     for f in source:digest.update(str(f.relative_to(ROOT)).encode());digest.update(f.read_bytes())
     fingerprint=digest.hexdigest();stamp=directory/'source-sha256.txt';binary=directory/'build/nh2004_solver'
     if not binary.exists() or not stamp.exists() or stamp.read_text().strip()!=fingerprint:
         generate(directory/'generated',[MODEL])
-        cmake=['cmake_minimum_required(VERSION 3.20)','project(nh2004_research LANGUAGES CXX)',
-               'set(CMAKE_CXX_STANDARD 20)',f'add_executable(nh2004_solver {json.dumps(str(ROOT/"cpp/main.cpp"))})',
+        cmake=['cmake_minimum_required(VERSION 3.20)','project(nh2004_research LANGUAGES C CXX)',
+               'set(CMAKE_CXX_STANDARD 20)',
+               f'include({json.dumps(str(ROOT/"cmake/AtlasScalarFunctions.cmake"))})',f'add_executable(nh2004_solver {json.dumps(str(ROOT/"cpp/main.cpp"))})',
                'target_include_directories(nh2004_solver PRIVATE '+json.dumps(str(ROOT/'cpp/include'))+' '+json.dumps(str(directory/'generated'))+')']
         (directory/'CMakeLists.txt').write_text('\n'.join(cmake)+'\n')
         for cmd in [['cmake','-S',str(directory),'-B',str(directory/'build'),'-DCMAKE_BUILD_TYPE=Debug'],

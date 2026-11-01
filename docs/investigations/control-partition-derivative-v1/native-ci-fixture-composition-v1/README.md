@@ -1,0 +1,3 @@
+Native CI and fixture composition v1
+
+The immutable592-file CI-v2 source receives only the exact independently accepted fixture-v3 C++ file. All other files remain byteexact. This combines published15-model Ramberg fixtures with the MD source-admissible FD/rotation fixtures and strict CI contracts. No compilation or backend observation has occurred. Execution remains blocked on independent CI-v2 and composition/plan acceptance and a fresh serialized slot. The13stage plan builds nine explicit targets serially, retains eight strict negative contracts, runs the closed Linux positive suite and recorded separately. Python/macOS full workflow closure remains a later canonical-integration requirement.

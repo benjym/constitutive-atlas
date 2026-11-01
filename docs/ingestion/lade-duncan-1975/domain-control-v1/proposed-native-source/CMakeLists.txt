@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.20)
+project(LadeGapCandidate LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+add_executable(atlas_lade_domain_candidate main.cpp)
+target_include_directories(atlas_lade_domain_candidate PRIVATE include generated)
+
+add_executable(atlas_lade_domain_regression test_path_error_control.cpp)
+target_include_directories(atlas_lade_domain_regression PRIVATE include generated)

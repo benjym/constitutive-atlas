@@ -1,0 +1,38 @@
+{
+  "kind": "kelvin-voigt-interface-freeze-v3",
+  "scope": "new public solver controls and separately bounded transport strain/state roundoff; unchanged physical acceptance",
+  "files": {
+    "web/kelvin-voigt-laboratory.mjs": "814bc61dc5d522770a19efd363d360743864d10f29f9365190ffbb2a066bd50f",
+    "web/kelvin-voigt-contract.mjs": "b2324915a6329166019fa48a07262e932f357048c7be73f7448c03209b1dba0c",
+    "web/kelvin-voigt-worker.mjs": "70576d12d381f81733ac64c93d18df15d6203fd22354bbb8a2faf917bf5c7ec2",
+    "tools/test_kelvin_voigt_package.mjs": "5b3980b4f543af1293662b238346715d8aa694dbc3287e6834b188c942f4bc00",
+    "tests/test_kelvin_voigt_contract.mjs": "9393da20c1ba955108c4dc26b315f3dcde0c2df83cc85e0c3d508adb01ef91f4",
+    "tests/test_kelvin_voigt_routing.mjs": "1cb88ddb7c1e2dd9cad219ca3647f636ea1fef3b6dc9675f085d1d630f50ee07"
+  },
+  "prior_files": {
+    "prior/tests/test_kelvin_voigt_contract.mjs": "b811228c7f249f792cfa372e5e9d45c4576d78b4f7e8e8af64a4fa06d314575c",
+    "prior/tests/test_kelvin_voigt_routing.mjs": "1cb88ddb7c1e2dd9cad219ca3647f636ea1fef3b6dc9675f085d1d630f50ee07",
+    "prior/tools/test_kelvin_voigt_package.mjs": "5b3980b4f543af1293662b238346715d8aa694dbc3287e6834b188c942f4bc00",
+    "prior/web/kelvin-voigt-contract.mjs": "a5d9f1c1a88e218039fe626c56195c3482dd4c500b458039802397f3b09e67d8",
+    "prior/web/kelvin-voigt-laboratory.mjs": "814bc61dc5d522770a19efd363d360743864d10f29f9365190ffbb2a066bd50f",
+    "prior/web/kelvin-voigt-worker.mjs": "70576d12d381f81733ac64c93d18df15d6203fd22354bbb8a2faf917bf5c7ec2"
+  },
+  "new_solver": {
+    "relative_tolerance": 3e-11,
+    "absolute_scale_fraction": 3e-14,
+    "maximum_substeps": 1000000
+  },
+  "strain_state_transport_roundoff": "abs(a-b) <=64*Number.EPSILON*max(1,abs(a),abs(b))",
+  "physical_gate_unchanged": {
+    "state_absolute_tolerance": 3e-08,
+    "stress_absolute_tolerance_Pa": 1,
+    "scalar_comparisons": 360
+  },
+  "exact_replay": "unchanged exact canonical full output comparison",
+  "compiled_or_browser_observation_of_v3": false,
+  "pure_tests": {
+    "passed": 13,
+    "failed": 0
+  },
+  "retained_prior_failure": "Parent native v2 qualification: defaultcreep3.655e-8 and tau20 2.714e-7 exceed frozen3e-8; original gate remains unchanged."
+}

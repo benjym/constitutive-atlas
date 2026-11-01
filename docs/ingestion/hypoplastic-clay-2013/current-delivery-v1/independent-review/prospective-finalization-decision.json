@@ -1,0 +1,20 @@
+{
+  "task": "REVIEW-clay2013-current-delivery-v1",
+  "phase": "prospective-native-metadata-finalization",
+  "reviewer_run_id": "/root/contour_lifecycle_review",
+  "accepted": true,
+  "finalizer_sha256": "fa1b485e5b488af5fa9e8746e7a88cc9656cff3d199f6e7c1336e0f5ce45108a",
+  "prospective_freeze_sha256": "7305860501a8fdf193b53b2634f7a3bfcd651f911cb6028e126e2ff4526787a7",
+  "inputs": {
+    "finalize_native.py": "fa1b485e5b488af5fa9e8746e7a88cc9656cff3d199f6e7c1336e0f5ce45108a",
+    "native/receipt.json": "57a10a01fee3374e022de290f2798a1555e9a24fe0e512fc268de86f0a3081b0",
+    "native/journal.json": "1a874e7e2de2d45abec55a88c50ae867a87fed136b255954e89e4f57a71c0e9b",
+    "INPUT_FREEZE.json": "51182e3d28635fd1bbd92c9155cd10684b01f1da91126002295e725bf8c4fd0e"
+  },
+  "reason": "All21raw records and returncodes already independently inspected; finalizer verifies exact raw stdout, stderr, argv, ordered requests and source/artifact pins; archives actual incomplete metadata and explicitly unknown collector exit before atomic recovered dataset receipt write. No numerical gate change or repeated material call.",
+  "limitations": [
+    "Original collector filesystem failure and stale running status remain historical, not successful process execution",
+    "Post-finalization archive/report/native gate verification remains required",
+    "On partial metadata failure preserve recovery directory; do not rerun material calls"
+  ]
+}

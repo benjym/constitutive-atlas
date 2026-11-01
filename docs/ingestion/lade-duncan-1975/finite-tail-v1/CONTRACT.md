@@ -1,0 +1,5 @@
+# Duplicate derivative finiteness checks, v1
+
+Inherits derivative-tail-v1 exact representative-tail source argument and complete fixed38storage. Under the internal opt-in state-Jacobian scope every lane n..37 is bitwise identical. Thus checking all distinct lanes0..n has the same result as checking all38, including uniformNaN/infinity and active-lane errors. Ordinary default38 still checks arbitrary nonuniform external lanes. This changes two finite-check loops only beyond the accepted representative-tail implementation; it does not assume inactive derivatives are zero. Full failure/signedzero/checked-transaction behavior and scope restoration remain required.
+
+Same midpoint v4 model bytes, all source/reference/error/resources/settings/timeouts. No speed claim before exact hardcase; no model/engine/public admission. New fixtures add a literal full-storage finite oracle and nonuniform external highlane rejection. Existing scalar/tensor/trace/spectral/projector/full model Jacobian/tie/rotation/failure/scope corpus remains, expanded to uniformNaN/infinity tails. All previous failed checkpoints immutable.

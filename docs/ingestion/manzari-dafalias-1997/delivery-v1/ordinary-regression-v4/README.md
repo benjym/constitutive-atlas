@@ -1,0 +1,1 @@
+V4 preserves all ordinary-regression-v3 gates and immutable16case policy-v2, changing only generic transport dependency to execution-v2 strict JSON parsing. V3 remains preserved; no backend observations. Source-only mocked review required before calls.

@@ -1,0 +1,164 @@
+{
+  "schema_version": "experimental-history-0.1",
+  "id": "synthetic-ordered-history",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/HISTORY_TRANSACTIONS.md",
+      "locator": "Synthetic arithmetic acceptance fixture, not a constitutive model."
+    }
+  ],
+  "fields": {
+    "x": {
+      "shape": "scalar",
+      "unit": "1",
+      "storage": "state"
+    },
+    "y": {
+      "shape": "scalar",
+      "unit": "1",
+      "storage": "state"
+    },
+    "lag": {
+      "shape": "scalar",
+      "unit": "1",
+      "storage": "lag"
+    },
+    "seed": {
+      "shape": "scalar",
+      "unit": "1",
+      "storage": "preparation"
+    },
+    "mode": {
+      "shape": "scalar",
+      "unit": "1",
+      "storage": "mode",
+      "enum": [
+        0,
+        1
+      ]
+    },
+    "clock": {
+      "shape": "scalar",
+      "unit": "s",
+      "storage": "context"
+    },
+    "stress": {
+      "shape": "sym",
+      "unit": "Pa",
+      "storage": "state"
+    }
+  },
+  "inputs": {
+    "delta": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "dt": {
+      "shape": "scalar",
+      "unit": "s"
+    },
+    "prepare": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "load": {
+      "shape": "sym",
+      "unit": "Pa"
+    }
+  },
+  "phases": [
+    {
+      "name": "prepared",
+      "kind": "prepare",
+      "base": "parent",
+      "guard": "-command",
+      "bindings": {
+        "command": {
+          "input": "prepare"
+        },
+        "oldx": {
+          "snapshot": "parent",
+          "field": "x"
+        },
+        "oldy": {
+          "snapshot": "parent",
+          "field": "y"
+        }
+      },
+      "writes": {
+        "x": "oldy",
+        "y": "oldx",
+        "seed": "oldx",
+        "mode": "1"
+      }
+    },
+    {
+      "name": "copy",
+      "kind": "advance",
+      "base": "prepared",
+      "bindings": {
+        "oldx": {
+          "snapshot": "prepared",
+          "field": "x"
+        },
+        "oldy": {
+          "snapshot": "prepared",
+          "field": "y"
+        },
+        "oldlag": {
+          "snapshot": "prepared",
+          "field": "lag"
+        },
+        "t": {
+          "snapshot": "prepared",
+          "field": "clock"
+        },
+        "s": {
+          "snapshot": "prepared",
+          "field": "stress"
+        },
+        "delta": {
+          "input": "delta"
+        },
+        "dt": {
+          "input": "dt"
+        },
+        "load": {
+          "input": "load"
+        }
+      },
+      "writes": {
+        "x": "oldy+delta",
+        "y": "oldx",
+        "lag": "oldx",
+        "clock": "t+dt",
+        "stress": "s+load"
+      },
+      "checks": [
+        "x > 0",
+        "clock > clock*0"
+      ]
+    },
+    {
+      "name": "ordered",
+      "kind": "advance",
+      "base": "copy",
+      "bindings": {
+        "current": {
+          "snapshot": "copy",
+          "field": "x"
+        },
+        "priorlag": {
+          "snapshot": "prepared",
+          "field": "lag"
+        }
+      },
+      "writes": {
+        "lag": "current+priorlag"
+      },
+      "checks": [
+        "x > 0"
+      ]
+    }
+  ]
+}

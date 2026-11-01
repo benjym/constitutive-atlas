@@ -30,3 +30,11 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Stages refe
 - After acquisition: separate agent audits full Figure1 equation/parameter/domain/initialization coverage; implementation owner then freezes the exact v0.3 candidate and prospective gates, preserving older definitions and failures before any migration.
 - Numerical limits: stress-hold inversion at zero meso-temperature is singular; no hidden temperature floor. Author mixed-control halving/outer-step behavior and equality-domain choices remain unresolved. Existing high-workload refinement settings are study-specific.
 - Experimental comparison/rights: unassessed for this formulation; source/code access grants no measurement reuse permission.
+
+## New journal rights/access metadata — acquisition v2
+
+[New primary metadata/access packet](journal-acquisition-v2/README.md) records publisher coredata and Crossref version-of-record licence fields confirming CC BY4.0 for the journal article. This resolves the journal licence uncertainty at metadata level only; it does not apply the SSRN/code terms to the journal or establish third-party measurement rights. Publisher metadata response is2001bytes with no equation/body pages. Ordinary full-view/PDF requests returned401/403; API PDF negotiation406. Exact pinned author tree contains no PDF/TeX; OpenAlex supplies publisher/SSRN landing pages and no direct PDF. Existing first-page scan is not repeated or broadened.
+
+E1/E2 remain blocked on readable journal pages and Figure1/Eq54/Table1/AppendixB reconciliation; E3–E8 unchanged. No model correction, source-completeness claim, numerical experiment or approval follows from access/licence metadata. Separate saved-metadata review pending final receipt.
+
+Separate [metadata/access review](journal-acquisition-v2/independent-review/receipt.json) accepted the bounded new inference, SHA-256 `b70c55d100ca8b711cf62027db2feefd246b4e7d199375bf6b43769c681cdfd4`. The acquisition child is complete as a metadata/access handoff; E1/full ingestion remains blocked. No readable pages or source/model approval were obtained.

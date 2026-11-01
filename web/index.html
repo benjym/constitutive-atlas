@@ -5,24 +5,50 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="A source-linked geomechanics model atlas and WebAssembly material-point laboratory.">
-  <title>Constitutive Atlas · Model testing</title>
+  <title>Constitutive Atlas</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23274e40'/%3E%3Cpath d='M20 5 34 13v15l-14 8-14-8V13Z M6 13l14 8 14-8M20 21v15' fill='none' stroke='%23d8e1d8' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="ensemble.css">
+  <link rel="stylesheet" href="atlas-theme.css">
+  <link rel="preload" as="image" href="assets/constitutive-cover.webp">
 </head>
 
 <body>
   <aside class="rail">
-    <a class="brand" href="#laboratory" aria-label="Constitutive Atlas home"><svg viewBox="0 0 42 48" aria-hidden="true">
-        <path d="M21 2 40 13v22L21 46 2 35V13Z M2 13l19 11 19-11M21 24v22" fill="none" stroke="currentColor" stroke-width="2" />
-      </svg><span>Constitutive<br><b>Atlas</b></span></a>
-    <nav aria-label="Main navigation"><a href="#laboratory" class="active">◫ <span>Model testing</span></a><a href="#ensemble">≋ <span>Ensemble explorer</span></a><a href="#catalogue">⌕ <span>Model catalogue</span><small id="catalogue-count">32</small></a><a href="#methods">≋ <span>Methods & evidence</span></a></nav>
+    <a class="brand" href="#home" aria-label="Constitutive Atlas home"><span>Constitutive Atlas</span></a>
+    <nav aria-label="Main navigation"><a href="#home" class="active" aria-current="page"><span>Home</span></a><a href="#laboratory"><span>Model testing</span></a><a href="#ensemble"><span>Ensemble explorer</span></a><a href="#catalogue"><span>Model catalogue</span><small id="catalogue-count">32</small></a><a href="#methods"><span>Methods &amp; evidence</span></a></nav>
     <footer>
       <p>By<br><a href="https://github.com/benjym" target="_blank" rel="noopener">Benjy Marks</a><br><a href="https://github.com/Franzzzzzzzz" target="_blank" rel="noopener">François Guillard</a></p>
     </footer>
   </aside>
   <main>
-    <section id="laboratory" class="page">
+    <section id="home" class="page">
+      <section class="home-cover" aria-labelledby="home-title">
+        <img class="home-cover-image" src="assets/constitutive-cover.webp" alt="Layered sandstone and angular mineral grains against a dark background" width="1536" height="1024" fetchpriority="high">
+        <div class="home-cover-copy">
+          <h1 id="home-title">The Constitutive Atlas</h1>
+          <p class="home-subtitle">Explore the models.<br>See how materials respond.</p>
+          <a class="home-button" href="#laboratory">Start exploring</a>
+        </div>
+      </section>
+      <div id="explore-atlas" class="home-destinations" aria-label="Explore the atlas">
+        <a class="home-tile home-tile-laboratory" href="#laboratory">
+          <div><h2>Model testing</h2><p>Choose a model. Set the loading. Explore its response.</p></div>
+        </a>
+        <a class="home-tile home-tile-catalogue" href="#catalogue">
+          <div><h2>Model catalogue</h2><p>Find formulations, parameters and original sources.</p></div>
+        </a>
+        <a class="home-tile home-tile-ensemble" href="#ensemble">
+          <svg class="home-traces" viewBox="0 0 600 300" preserveAspectRatio="none" aria-hidden="true"><path d="M0 280C90 240 100 155 200 130S410 95 600 90M0 280C100 250 140 180 225 155S450 120 600 125M0 280C100 245 160 100 270 85S490 65 600 50M0 280 600 10"/></svg>
+          <div><h2>Ensemble explorer</h2><p>One experiment. Multiple models. The full test.</p></div>
+        </a>
+        <a class="home-tile home-tile-methods" href="#methods">
+          <div><h2>Methods &amp; evidence</h2><p>Explore the equations, numerical methods and checks behind the atlas.</p></div>
+        </a>
+      </div>
+      <footer class="home-footer"><div><p class="home-footer-title">The Constitutive Atlas</p><p>An open, source-linked geomechanics laboratory.</p></div><div><a href="https://github.com/benjym/constitutive-atlas" target="_blank" rel="noopener">Explore the project</a><p>By <a href="https://github.com/benjym">Benjy Marks</a> &amp; <a href="https://github.com/Franzzzzzzzz">François Guillard</a></p></div></footer>
+    </section>
+    <section id="laboratory" class="page" hidden>
       <div class="intro">
         <div>
           <h1>Explore material behaviour.</h1>
@@ -58,6 +84,7 @@
               <option value="3">3 sinusoidal cycles</option>
               <option value="10">10 sinusoidal cycles</option>
             </select></label>
+          <p id="control-support" class="control-hint" role="status" hidden></p>
           <div class="divider"></div>
           <div class="eyebrow">INITIAL STATE</div>
           <button type="button" id="load-model-example" class="text-button">Load model example</button>
@@ -97,36 +124,6 @@
           </div>
         </form>
         <div class="results-column">
-          <section id="measurements" class="experiment-card" aria-labelledby="experiment-title">
-            <div class="eyebrow">EXPERIMENTAL COMPARISON</div>
-            <h2 id="experiment-title">Compare with measurements</h2>
-            <p>Tests are filtered by drainage protocol, loading path and verified plot axes. Assess model–material suitability, parameter calibration and specimen preparation separately. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.</p>
-            <p id="experiment-filter-note" class="comparison-filter-note"></p>
-            <label>Find measurements<input id="experiment-search" type="search" placeholder="Material or test ID" autocomplete="off" name="experiment-search"></label>
-            <label class="experiment-selector">Experimental test<select id="experiment-select" disabled name="experiment-select">
-                <option value="">Loading available tests…</option>
-              </select></label>
-            <div class="experiment-toolbar"><label class="experiment-toggle"><input id="show-experiment" type="checkbox" role="switch" disabled name="show-experiment"> Show measurements</label><button id="match-experiment" class="text-button" disabled>Match available test inputs</button><button id="retry-experiment" class="text-button" hidden>Retry loading measurements</button></div>
-            <p class="control-hint">Matching uses supplied stress and protocol, and void ratio only when this model provides that input. Other internal-state inputs keep their explicit values; specimen preparation remains unassessed.</p>
-            <p id="experiment-status" role="status" aria-live="polite">Loading available tests…</p>
-            <details id="experiment-details" hidden>
-              <summary>Data notes &amp; limitations</summary>
-              <p id="experiment-warnings"></p>
-            </details>
-            <p id="experiment-attribution" hidden></p><a id="experiment-source" target="_blank" rel="noopener noreferrer" hidden>Data source &amp; citation ↗</a>
-            <a id="experiment-license" target="_blank" rel="noopener noreferrer" hidden></a>
-            <section id="source-record-view" hidden aria-label="Source measurement channels">
-              <p><span id="source-unit-note"></span></p>
-              <div class="source-axis-controls"><label>X channel <select id="source-x" name="source-x"></select></label><label>Y channel <select id="source-y" name="source-y"></select></label></div>
-              <svg id="source-chart" viewBox="0 0 480 290" role="img" aria-label="Selected source measurement channels"></svg>
-            </section>
-            <label class="experiment-toggle"><input id="browse-source-records" type="checkbox" name="browse-source-records"> Browse all source records (includes tests without model overlays)</label>
-            <details class="local-experiments">
-              <summary>Compare your own measurements</summary>
-              <p>Load original TMD/TMU .dat files or Atlas experiment JSON. Your files stay in this browser.</p>
-              <div class="experiment-toolbar"><label class="secondary file-label">Load local measurements<input id="experiment-file" type="file" accept=".dat,.json,application/json,text/plain" multiple hidden name="experiment-file"></label><button id="clear-experiments" class="text-button" disabled>Clear local files</button></div>
-            </details>
-          </section>
           <div class="run-summary" id="response" role="status" aria-live="polite"><span id="run-state"><span class="dot"></span> Preparing live response</span><span id="run-detail">Double precision · compression positive</span></div>
           <div class="charts" id="response-charts" aria-label="Simulation results">
             <section class="chart-panel">
@@ -163,6 +160,40 @@
             <p id="result-note">Parameters are examples. Numerical verification does not establish experimental validity.</p>
             <div><button id="export-csv" class="text-button" disabled>↓ Results CSV</button><button id="export-run" class="text-button" disabled>↓ Reproducible run</button></div>
           </div>
+
+          <details id="measurements" class="experiment-card">
+            <summary>Compare measurements</summary>
+            <div class="experiment-content">
+            <p id="experiment-filter-note" class="comparison-filter-note"></p>
+            <div class="experiment-picker">
+            <label>Find measurements<input id="experiment-search" type="search" placeholder="Material or test ID" autocomplete="off" name="experiment-search"></label>
+            <label class="experiment-selector">Experimental test<select id="experiment-select" disabled name="experiment-select">
+                <option value="">Loading available tests…</option>
+              </select></label>
+            </div>
+            <div class="experiment-toolbar"><label class="experiment-toggle"><input id="show-experiment" type="checkbox" role="switch" disabled name="show-experiment"> Show measurements</label><button id="match-experiment" class="text-button" disabled>Match available test inputs</button><button id="retry-experiment" class="text-button" hidden>Retry loading measurements</button></div>
+            <p id="experiment-status" role="status" aria-live="polite">Loading available tests…</p>
+            <details id="experiment-details" hidden>
+              <summary>Data notes &amp; attribution</summary>
+              <p class="control-hint">Matching updates available initial inputs and protocol. Material parameters and other state inputs stay as set; specimen preparation is not matched.</p>
+              <p id="experiment-attribution" hidden></p>
+              <p id="experiment-warnings"></p>
+            </details>
+            <a id="experiment-source" target="_blank" rel="noopener noreferrer" hidden>Data source &amp; citation ↗</a>
+            <a id="experiment-license" target="_blank" rel="noopener noreferrer" hidden></a>
+            <section id="source-record-view" hidden aria-label="Source measurement channels">
+              <p><span id="source-unit-note"></span></p>
+              <div class="source-axis-controls"><label>X channel <select id="source-x" name="source-x"></select></label><label>Y channel <select id="source-y" name="source-y"></select></label></div>
+              <svg id="source-chart" viewBox="0 0 480 290" role="img" aria-label="Selected source measurement channels"></svg>
+            </section>
+            <label class="experiment-toggle"><input id="browse-source-records" type="checkbox" name="browse-source-records"> Browse all source records</label>
+            <details class="local-experiments">
+              <summary>Compare your own measurements</summary>
+              <p>Load original TMD/TMU .dat files or Atlas experiment JSON. Your files stay in this browser.</p>
+              <div class="experiment-toolbar"><label class="secondary file-label">Load local measurements<input id="experiment-file" type="file" accept=".dat,.json,application/json,text/plain" multiple hidden name="experiment-file"></label><button id="clear-experiments" class="text-button" disabled>Clear local files</button></div>
+            </details>
+            </div>
+          </details>
 
           <details id="equations">
             <summary>Equations & source provenance</summary>
@@ -252,7 +283,7 @@
           <article id="tmd2-benchmark"><span class="eyebrow">REPRODUCING A PUBLISHED CALCULATION</span>
             <h3>Does Atlas recover the published model response?</h3>
             <p>The TMD2 study uses VW96 with intergranular strain for loose Karlsruhe fine sand at 100 kPa. Three native resolutions over 0–25% accumulated axial strain agree with published model curves within frozen figure precision; adjacent refinement checks pass.</p>
-            <p>This is a published-calculation reproduction. Measured-data errors belong to the calibration campaign; historical strain conversion and independent scientific review remain open.</p>
+            <p>Independent agent review accepts qualified reporting of this published-calculation reconstruction. Measured-data errors describe the calibration campaign; historical strain conversion, general model admission and measurement reuse rights remain open.</p>
             <p><a href="./tmd2.html">Inspect the formulation, inputs and reproduction →</a></p>
           </article>
           <article id="kfs-development"><span class="eyebrow">EXAMINING A MODEL–DATA COMPARISON</span>
@@ -279,6 +310,7 @@
   </dialog>
   <div id="toast" role="status" aria-live="polite"></div>
   <script type="module" src="app.js"></script>
+  <script type="module" src="navigation.mjs"></script>
   <script type="module" src="ensemble-view.mjs"></script>
 </body>
 

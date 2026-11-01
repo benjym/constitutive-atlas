@@ -1,0 +1,13 @@
+# Corrected catalogue integration: E6/E7 closure
+
+Reviewer `/root/hill_scientific_review` accepts the corrected bounded local integration and browser delivery. This additive report closes the reopened E6/E7 condition; E8 remains open.
+
+Independent source comparison of `f8416d7732100b7502d2b4e6212c82420603bfcd` to `3873a48b256ed37cbc78378ee6b41d73139676f8` confirms the exact previously accepted semantic delta: replace only Hill’s `timed_laboratory` with `material_laboratory`, both `index.html`. All other manifest data are identical. The merged manifest SHA-256 is `99be323f56fbea0246ea75d44cf2c8017a9c82176bbca3fb90b90fd84449c02c`; its JSON property position differs from the earlier candidate serialization, without changing data. The v6 packaged catalogue equals the merged manifest as JSON. No differences exist in web, tools, workflows, model definitions, approval registry/records, scientific reviews or tests across those commits.
+
+The full v6 builder log ends in successful packaging. Independently comparing v5 and v6 finds all 76 JavaScript, module and Wasm assets byte-identical. All 15 Hill package-manifest files match their recorded hashes; the exact approved model, module, Wasm, review and approval identities remain unchanged. This metadata fix therefore needs no altered numerical reference or scientific approval.
+
+The retained actual Chrome runs pass 26 core checks and 28 expanded checks. Their scripts install page/console/request failure listeners before navigation. Both report zero errors or request failures, exact approved identity, parameter and initial-state effects, invalid-input export blocking, reset and replay, shear loading, mobile containment, ordinary/J2/orthotropic switching and return, and successful evidence links. The expanded run additionally enters Hill through the catalogue, confirms the strain-increment label and opens the correct main laboratory URL. These observations address the metadata path that failed the unchanged Linux test. The earlier manifest-only review and passing focused 16-test run remain applicable; the original Linux failure remains retained.
+
+`check_closure.py` reproduces the source comparisons, 76 asset comparisons, 15 hash checks and saved browser-report assertions without compiled execution. `check-results.json` records exact hashes; raw scripts/reports and the builder log are retained in this directory. The reviewer performed no build, compiled call, shared edit, commit or deployment.
+
+No remaining E6/E7 blocker is identified for this exact corrected release. Required remote checks and verified live delivery remain the coordinator’s E8 obligation; this report does not claim that the running remote workflow or Pages deployment has succeeded.

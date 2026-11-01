@@ -1,0 +1,5 @@
+# Full package attempt 1 retained; receipt correction for attempt 2
+
+Attempt 1 exited1 after mandatory Burgers, power-creep, SLS, Kelvin and J2 checks passed. The unchanged controlled-path host rejected old-source dependency identity. The V2 input assembly copied the qualified engine module/Wasm/catalogue but omitted the current build qualification receipt and its actual accepted independent review, so the host fell back to the older source-freeze path. This was an input-assembly defect.
+
+The retained qualified Kelvin v7 package contains the complete receipt. Its121source files exactly match the clean candidate, its two artifacts and three generated files exactly match the snapshotted controlled-path engine, and the distinct actual reviewer decision binds the same source/build/gates. No source, model, tolerance or host check changes. `freeze-v3.json` adds only those exact two receipt files in a new private input directory. Attempt1/log/freeze remain unchanged; output for the complete retry is separate `site-v2`. The standard builder must rerun all gates; prior partial successes do not establish a complete package.

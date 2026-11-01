@@ -1,0 +1,13 @@
+--- /private/tmp/atlas-control-partition-support-v3/source/docs/ingestion/maxwell-itasca900/integration-v1/compare_backends_v2.py
++++ adapters/compare_maxwell.py
+@@ -1,7 +1,9 @@
+ """Apply the prospectively frozen physical parity limits to retained raw data."""
+ import json,math
+ from pathlib import Path
+-BASE=Path(__file__).resolve().parent
++import os
++BASE=Path(os.environ['ATLAS_QUALIFICATION_OUTPUT']).resolve()
++assert BASE.is_dir() and not BASE.is_relative_to(Path(os.environ['ATLAS_QUALIFICATION_SOURCE']).resolve())
+ COUNT=0;MAX_STRESS=0;MAX_STRAIN=0
+ 
+ def compare(a,b,path=''):

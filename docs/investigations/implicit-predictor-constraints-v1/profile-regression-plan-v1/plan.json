@@ -1,0 +1,144 @@
+{
+  "identity": "predictor-profile-regressions-plan-v1",
+  "source_receipt": "docs/investigations/implicit-predictor-constraints-v1/coordinator-v1/source-freeze.json",
+  "source_receipt_sha256": "126d9bc3a221b6e0098c769eee267306d5be3d03f2b02725c824a6063243aa44",
+  "source_directory": "/private/tmp/atlas-predictor-constraints-v1/source",
+  "published_consumer_base": "d1c3a19409adaa32791c105429a4167e5bac9d9d",
+  "profiles": [
+    {
+      "profile": "power-creep",
+      "cmake_directory": ".",
+      "target": "atlas_power_creep_solver",
+      "build_type": "Release",
+      "wasm_module": "power-creep.js",
+      "policy_root": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2",
+      "commands": [
+        "python tools/power_creep_refined_study.py native --solver {N}/atlas_power_creep_solver --output {O}/native",
+        "node tools/collect_power_creep_wasm.mjs docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/study.json {W}/power-creep.js {O}/wasm",
+        "python tools/power_creep_refined_study.py assess --output {O}/native",
+        "python tools/power_creep_refined_study.py assess --output {O}/wasm --native {O}/native"
+      ],
+      "execution_status": "not executed by plan author",
+      "requires_support_context": true
+    },
+    {
+      "profile": "burgers",
+      "cmake_directory": "cmake/burgers",
+      "target": "atlas_burgers_solver",
+      "build_type": "Release",
+      "wasm_module": "burgers.mjs",
+      "policy_root": "docs/ingestion/burgers-itasca900/integration-v1",
+      "commands": [
+        "python tools/test_burgers_native.py {N}/atlas_burgers_solver {O}/native",
+        "python tools/test_burgers_native.py {W}/burgers.mjs {O}/wasm --wasm"
+      ],
+      "execution_status": "not executed by plan author",
+      "requires_support_context": true
+    },
+    {
+      "profile": "sls",
+      "cmake_directory": "cmake/sls",
+      "target": "atlas_sls_solver",
+      "build_type": "Debug",
+      "wasm_module": "sls.js",
+      "policy_root": "docs/ingestion/sls-comsol63/execution-v1",
+      "commands": [
+        "python tools/test_sls_native.py --solver {N}/atlas_sls_solver --output {O}/native.json",
+        "node docs/ingestion/sls-comsol63/execution-v1/collect_wasm.mjs {W}/sls.js docs/ingestion/sls-comsol63/execution-v1/cases.json {O}/wasm-raw.json"
+      ],
+      "execution_status": "not executed by plan author",
+      "requires_support_context": true
+    },
+    {
+      "profile": "j2",
+      "cmake_directory": "cmake/j2",
+      "target": "atlas_j2_solver",
+      "build_type": "Release",
+      "wasm_module": "j2.js",
+      "policy_root": "docs/ingestion/j2-linear-hardening/execution-v2",
+      "commands": [
+        "python tools/test_j2_native.py --solver {N}/atlas_j2_solver --output {O}/native",
+        "node tools/collect_j2_wasm.mjs {W}/j2.js docs/ingestion/j2-linear-hardening/execution-v2/references.json {O}/wasm-main-raw.json",
+        "node tools/collect_j2_wasm.mjs {W}/j2.js docs/ingestion/j2-linear-hardening/execution-v2/default-references.json {O}/wasm-defaults-raw.json",
+        "node tools/collect_j2_paths.mjs {W}/j2.js docs/ingestion/j2-linear-hardening/execution-v2/paths.json {O}/wasm-paths-raw.json"
+      ],
+      "execution_status": "not executed by plan author",
+      "requires_support_context": true
+    },
+    {
+      "profile": "orthotropic",
+      "cmake_directory": "cmake/orthotropic",
+      "target": "atlas_orthotropic_solver",
+      "build_type": "Release",
+      "wasm_module": "orthotropic.js",
+      "policy_root": "docs/ingestion/orthotropic-ogs/execution-v1",
+      "commands": [
+        "python tools/test_orthotropic_native.py --solver {N}/atlas_orthotropic_solver --output {O}/native",
+        "node tools/test_orthotropic_wasm.mjs {W} docs/ingestion/orthotropic-ogs/execution-v1/references.json {O}/wasm-raw.json"
+      ],
+      "execution_status": "not executed by plan author",
+      "requires_support_context": true
+    },
+    {
+      "profile": "maxwell",
+      "cmake_directory": "cmake/maxwell",
+      "target": "atlas_maxwell_solver",
+      "build_type": "Release",
+      "wasm_module": "maxwell.js",
+      "policy_root": "docs/ingestion/maxwell-itasca900/integration-v1",
+      "commands": [
+        "python tests/test_maxwell.py --solver {N}/atlas_maxwell_solver --output {O}/native-raw.json",
+        "node tools/test_maxwell_wasm.mjs {W}/maxwell.js docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json {O}/wasm-raw.json",
+        "python tests/test_maxwell.py --assess {O}/native-raw.json",
+        "python tests/test_maxwell.py --assess {O}/wasm-raw.json",
+        "python tools/check_maxwell_ci.py --build {W} --output {O}/guarded-ci"
+      ],
+      "execution_status": "not executed by plan author",
+      "requires_support_context": true
+    },
+    {
+      "profile": "norsand",
+      "cmake_directory": "cmake/controlled-path",
+      "target": "atlas_path_capability",
+      "build_type": "Debug",
+      "wasm_module": "atlas_path_capability.mjs",
+      "policy_root": "docs/ingestion/norsand-1993/e2-v3",
+      "commands": [
+        "python -B docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py {N}/libatlas_path_capability.dylib docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json {O}/native.json",
+        "python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json {O}/native.json",
+        "node docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs {W}/atlas_path_capability.mjs {W}/atlas_path_capability.wasm docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json {O}/wasm.json",
+        "python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json {O}/native.json {O}/wasm.json"
+      ],
+      "execution_status": "not executed by plan author",
+      "requires_support_context": true
+    },
+    {
+      "profile": "lade-implicit-path",
+      "cmake_directory": "cmake/implicit-path-v1",
+      "target": "atlas_implicit_path_v1",
+      "build_type": "Release",
+      "wasm_module": "lade-domain.mjs",
+      "policy_root": "docs/ingestion/lade-duncan-1975",
+      "commands": [
+        "python tools/test_implicit_path_package.py {PACKAGE} --output {O}/package.json",
+        "node tools/test_implicit_path_public_presets.mjs {PACKAGE}/engine-implicit-path {O}/presets.json {PACKAGE}/engine-implicit-path/identity.json"
+      ],
+      "execution_status": "not executed by plan author",
+      "requires_support_context": true
+    }
+  ],
+  "placeholders": {
+    "N": "new native build directory for this profile",
+    "W": "new Wasm build directory for this profile",
+    "O": "new evidence directory for this profile",
+    "PACKAGE": "new guarded package with reviewed current receipts"
+  },
+  "native_build": [
+    "cmake -S {SOURCE}/{cmake_directory} -B {N} -DCMAKE_BUILD_TYPE={build_type}",
+    "cmake --build {N} --target {target} --parallel 1"
+  ],
+  "wasm_build": [
+    "emcmake cmake -S {SOURCE}/{cmake_directory} -B {W} -DCMAKE_BUILD_TYPE={build_type}",
+    "cmake --build {W} --target {target} --parallel 1"
+  ]
+}

@@ -1,0 +1,37 @@
+--- a/.github/workflows/verify.yml
++++ b/.github/workflows/verify.yml
+@@ -82,22 +82,24 @@
+         with:
+           name: hill-native-${{ matrix.os }}
+           path: ${{ runner.temp }}/hill-native/
++      - name: Retain strict original and MD legacy failures and reject unknown fixtures
++        run: python -B tools/check_native_fixture_dispatch.py check --catalogue build/generated/models.json --source-root . --build build --output "$RUNNER_TEMP/native-ci-dispatch/contracts.json"
+       - name: Native checks and full exact archival replay
+         if: runner.os == 'macOS'
+         run: |
+-          ctest --test-dir build --output-on-failure -E "^atlas_recorded$"
+-          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+-        env:
+-          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5
++          python -B tools/check_native_fixture_dispatch.py ctest --catalogue build/generated/models.json --source-root . --build build --suite macos-main --output "$RUNNER_TEMP/native-ci-dispatch/macos-main.json"
++          python -B tools/check_native_fixture_dispatch.py ctest --catalogue build/generated/models.json --source-root . --build build --suite recorded --output "$RUNNER_TEMP/native-ci-dispatch/macos-recorded.json"
+       - name: Linux native checks
+         if: runner.os == 'Linux'
+         run: |
+-          ctest --test-dir build --output-on-failure -E "^(atlas_python|atlas_recorded)$"
+-          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+-        env:
+-          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5
+-      - name: Retain strict original native failures and reject unknown fixtures
+-        run: python tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
++          python -B tools/check_native_fixture_dispatch.py ctest --catalogue build/generated/models.json --source-root . --build build --suite linux-main --output "$RUNNER_TEMP/native-ci-dispatch/linux-main.json"
++          python -B tools/check_native_fixture_dispatch.py ctest --catalogue build/generated/models.json --source-root . --build build --suite recorded --output "$RUNNER_TEMP/native-ci-dispatch/linux-recorded.json"
++      - name: Retain native dispatch process evidence
++        if: always()
++        uses: actions/upload-artifact@v4
++        with:
++          name: native-ci-dispatch-${{ matrix.os }}
++          path: ${{ runner.temp }}/native-ci-dispatch/
+       - name: Linux portable Python suite
+         if: runner.os == 'Linux'
+         env:

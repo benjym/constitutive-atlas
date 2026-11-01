@@ -1,0 +1,7 @@
+# Mohr–Coulomb current-public package qualification
+
+Source-only preparation uses local commit `000ab5e79619038e0b56483e0146cf2e9ce4bd18`, based on public `e32f8a86df44298f100394b34e084e313d48b195`. The source is clean. The normal generator produces exactly the retained ordinary engine catalogue, including Mohr–Coulomb. No model, runtime, gate or web source changes are needed.
+
+`freeze.json` records the complete standard builder command and exact retained engine inputs before execution. Ordinary and SLS inputs are byte-identical copies of the qualified Kelvin v7 package engine in the layout required by the unchanged builder. The initial preparation rejected the mutable main-engine directory because both Wasm and catalogue hashes differed. Its failure and resolution are retained in freeze.json; the ordinary replacement matches the original prospective Kelvin v7 freeze and current generated catalogue. Other inputs retain their original paths. No compiled call has run for this task.
+
+Wait for the active regression owner to release the serial slot; freshly check the board and process state, claim this execution, verify all source and engine pins, then run the command once with a full exit receipt and log. Preserve any failures. Run the unchanged supported-package checks and actual browser qualification only after a successful complete package. Do not mark E7 or E8 complete from this preparation. No build, push, deployment or remote CI is authorized by this packet.

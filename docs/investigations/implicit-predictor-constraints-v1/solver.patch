@@ -1,0 +1,16 @@
+--- a/cpp/include/atlas/solver.hpp
++++ b/cpp/include/atlas/solver.hpp
+@@ -61,7 +61,12 @@
+         for(int i=0;i<n;++i){residual[i]=r[i].v/scales[i];for(int j=0;j<n;++j)jac[i][j]=r[i].d[j]/scales[i];}
+         if(!finite(residual))return false;
+         double err=0;for(double v:residual)err=std::max(err,std::abs(v));diag.error=err;
+-        if(err<settings.residual_tolerance && solution_admissible(model,z,p)){if(predictor){predictor=false;continue;}return true;}
++        if(err<settings.residual_tolerance){
++            // evaluate_model has checked the predictor domain. Its elastic trial
++            // need not satisfy final physical constraints before plastic correction.
++            if(predictor){predictor=false;continue;}
++            if(solution_admissible(model,z,p))return true;
++        }
+         State delta;for(double&v:residual)v=-v;if(!solve_linear(jac,residual,delta))return false;
+         State rounded;
+         if(!predictor&&rounding_neighbor(model,z,zn,de,p,scales,delta,err,settings,rounded)){

@@ -2582,5 +2582,224 @@ export const modelProfiles = {
     "exploration": "Use a small monotonic strain path, then reverse it to explore reversible nonlinearity.",
     "parameterNote": "Use consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.",
     "title": "Ramberg–Osgood · reversible nonlinear elasticity"
+  },
+  "orthotropic-linear-elastic-ogs": {
+    "title": "Orthotropic linear elasticity",
+    "summary": "Elastic stiffness can differ along three perpendicular material directions, with separate shear stiffnesses and lateral coupling.",
+    "introduction": "This nine-constant model describes a reversible linear response in a material with three perpendicular symmetry directions. It is useful when one Young modulus and one Poisson ratio cannot describe the directional stiffness.",
+    "behaviours": [
+      [
+        "Directional stiffness",
+        "The same axial strain can produce different stresses along the three material axes. Each direction has its own Young modulus."
+      ],
+      [
+        "Coupled normal response",
+        "Poisson ratios couple axial loading to lateral deformation. The reciprocal ratios follow from symmetry of the compliance."
+      ],
+      [
+        "Elastic shear and reversal",
+        "Each material plane has its own shear modulus. Unloading and reversing an increment follow the same linear stiffness, without plastic strain."
+      ]
+    ],
+    "preparation": "Supply the complete initial stress and align the three material axes with the laboratory Cartesian axes. Zero stress is a useful starting point; accumulated plotted strain is measured from the supplied starting state.",
+    "scope": "Three-dimensional small-strain elasticity with constant parameters, fixed aligned material axes and dry total Cauchy stress. The laboratory prescribes all six strain increments.",
+    "limits": "All moduli must be positive and the coupled compliance must be positive definite. This formulation does not include rotated material axes, finite rotation, plasticity, thermal or pore-pressure coupling.",
+    "explorationTitle": "Try directional loading and reversal",
+    "exploration": "Use the load–reverse–hold example, then compare axial loading along different axes. Change one Young modulus or shear modulus to see its directional effect. A zero strain increment holds stress.",
+    "parameterNote": "Use a consistent stress unit for all moduli. Choose Poisson ratios together with the moduli so the compliance remains positive definite; numerical input bounds are not material calibration ranges.",
+    "parameters": [
+      {
+        "name": "E1",
+        "symbol": "E1",
+        "meaning": "Young modulus along axis 1",
+        "help": "Sets axial elastic stiffness along material axis 1.",
+        "unit": "Pa"
+      },
+      {
+        "name": "E2",
+        "symbol": "E2",
+        "meaning": "Young modulus along axis 2",
+        "help": "Sets axial elastic stiffness along material axis 2.",
+        "unit": "Pa"
+      },
+      {
+        "name": "E3",
+        "symbol": "E3",
+        "meaning": "Young modulus along axis 3",
+        "help": "Sets axial elastic stiffness along material axis 3.",
+        "unit": "Pa"
+      },
+      {
+        "name": "G12",
+        "symbol": "G12",
+        "meaning": "Shear modulus in plane 12",
+        "help": "Sets shear stiffness in material plane 12.",
+        "unit": "Pa"
+      },
+      {
+        "name": "G23",
+        "symbol": "G23",
+        "meaning": "Shear modulus in plane 23",
+        "help": "Sets shear stiffness in material plane 23.",
+        "unit": "Pa"
+      },
+      {
+        "name": "G13",
+        "symbol": "G13",
+        "meaning": "Shear modulus in plane 13",
+        "help": "Sets shear stiffness in material plane 13.",
+        "unit": "Pa"
+      },
+      {
+        "name": "nu12",
+        "symbol": "ν12",
+        "meaning": "Poisson ratio 12",
+        "help": "Minus transverse strain along axis 2 divided by axial strain along axis 1 under uniaxial stress along axis 1. The reverse-direction ratio follows by elastic reciprocity.",
+        "unit": "1"
+      },
+      {
+        "name": "nu23",
+        "symbol": "ν23",
+        "meaning": "Poisson ratio 23",
+        "help": "Minus transverse strain along axis 3 divided by axial strain along axis 2 under uniaxial stress along axis 2. The reverse-direction ratio follows by elastic reciprocity.",
+        "unit": "1"
+      },
+      {
+        "name": "nu13",
+        "symbol": "ν13",
+        "meaning": "Poisson ratio 13",
+        "help": "Minus transverse strain along axis 3 divided by axial strain along axis 1 under uniaxial stress along axis 1. The reverse-direction ratio follows by elastic reciprocity.",
+        "unit": "1"
+      }
+    ],
+    "stateLabels": {
+      "sigma": "Initial total stress"
+    },
+    "references": [
+      {
+        "label": "OpenGeoSys · orthotropic elastic compliance and stress update",
+        "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticOrthotropic.cpp"
+      },
+      {
+        "label": "OpenGeoSys · engineering constants and reciprocal Poisson ratios",
+        "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticOrthotropic.h"
+      }
+    ],
+    "contentSources": [
+      "models/research/orthotropic/orthotropic-linear-elastic-ogs.json"
+    ],
+    "related": [
+      "linear-elastic"
+    ]
+  },
+  "hill-abaqus2025-perfect-be": {
+    "title": "Hill anisotropic perfect plasticity",
+    "summary": "Directional yielding with a quadratic Hill yield surface, associative plastic flow and isotropic elastic stiffness.",
+    "introduction": "Hill plasticity allows yielding to depend on the loading direction relative to fixed material axes. This version combines the quadratic yield surface with isotropic elasticity and perfect plasticity: the yield surface does not expand as plastic deformation develops.",
+    "behaviours": [
+      [
+        "Directional yielding",
+        "Six coefficients shape the yield surface. Normal-stress differences and shear stresses contribute differently, allowing different yield strengths by direction."
+      ],
+      [
+        "Elastic loading and plastic flow",
+        "Stress changes elastically while inside the yield surface. At yield, associative flow follows the surface normal and the stress update enforces the yield constraint."
+      ],
+      [
+        "Perfect plasticity and unloading",
+        "Plastic loading does not harden the material. Unloading is elastic until the stress reaches the yield surface again. Hydrostatic stress does not drive this yield criterion."
+      ]
+    ],
+    "preparation": "Align the material axes with the laboratory Cartesian axes and supply an initial stress inside or on the Hill yield surface. Zero stress is a convenient initial state. The latest plastic multiplier is a solve quantity, not accumulated plastic strain.",
+    "scope": "Fixed-axis, small-strain, dry total-stress plasticity with isotropic elasticity and a backward-Euler stress update. The laboratory prescribes all six strain increments and uses positive Hill coefficients.",
+    "limits": "This version has no hardening, viscosity, damage or finite rotation. Directional yielding does not imply directional elastic stiffness. Numerical reference stress is a solver scale, not an extra physical strength parameter.",
+    "explorationTitle": "Compare loading directions",
+    "exploration": "Start with the load–reverse–hold preset. Change the Hill coefficients to compare directional yielding and observe elastic unloading. Each increment row is one backward-Euler step, so the increment size is part of the numerical experiment.",
+    "parameterNote": "K, G and the reference yield stress use the same stress unit. Hill coefficients are dimensionless and must be calibrated together with the reference yield stress; changing both can otherwise obscure the intended directional strengths.",
+    "parameters": [
+      {
+        "name": "K",
+        "symbol": "K",
+        "meaning": "Bulk modulus",
+        "help": "Controls elastic response to volumetric strain.",
+        "unit": "Pa"
+      },
+      {
+        "name": "Gmod",
+        "symbol": "G",
+        "meaning": "Shear modulus",
+        "help": "Controls isotropic elastic shear response.",
+        "unit": "Pa"
+      },
+      {
+        "name": "sigma_y",
+        "symbol": "Y",
+        "meaning": "Reference Hill yield stress",
+        "help": "Sets the stress scale of the quadratic yield surface together with its directional coefficients.",
+        "unit": "Pa"
+      },
+      {
+        "name": "F",
+        "symbol": "F",
+        "meaning": "Hill coefficient F",
+        "help": "Weights the squared difference between normal stresses on axes 2 and 3.",
+        "unit": "1"
+      },
+      {
+        "name": "Gh",
+        "symbol": "Gₕ",
+        "meaning": "Hill coefficient Gₕ",
+        "help": "Weights the squared difference between normal stresses on axes 3 and 1; distinct from the elastic shear modulus.",
+        "unit": "1"
+      },
+      {
+        "name": "Hh",
+        "symbol": "H",
+        "meaning": "Hill coefficient H",
+        "help": "Weights the squared difference between normal stresses on axes 1 and 2.",
+        "unit": "1"
+      },
+      {
+        "name": "L",
+        "symbol": "L",
+        "meaning": "Hill coefficient L",
+        "help": "Weights yielding in the 23 shear plane.",
+        "unit": "1"
+      },
+      {
+        "name": "M",
+        "symbol": "M",
+        "meaning": "Hill coefficient M",
+        "help": "Weights yielding in the 13 shear plane.",
+        "unit": "1"
+      },
+      {
+        "name": "N",
+        "symbol": "N",
+        "meaning": "Hill coefficient N",
+        "help": "Weights yielding in the 12 shear plane.",
+        "unit": "1"
+      }
+    ],
+    "stateLabels": {
+      "sigma": "Initial total stress"
+    },
+    "references": [
+      {
+        "label": "Abaqus 2025 · Hill anisotropic yield and associative flow",
+        "url": "https://docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-anisoyield.htm"
+      },
+      {
+        "label": "Abaqus 2025 · perfect plasticity",
+        "url": "https://docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-metalplastic.htm"
+      }
+    ],
+    "contentSources": [
+      "models/research/hill/hill-abaqus2025-perfect-be.json"
+    ],
+    "related": [
+      "linear-elastic",
+      "j2-linear-isotropic-hardening-be"
+    ]
   }
 };

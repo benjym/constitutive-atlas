@@ -1,0 +1,11 @@
+# Reference revision v2: reject overflow and inconsistent retained radii
+
+This additive revision supersedes only the executable geometric reference and saved checks in the parent packet. The parent's source/event/transaction proposal and its limitations remain unchanged. It is not a material model, source-equivalent program or public implementation.
+
+Actual separate reviewer `/root/contour_lifecycle_review` found that parent v1's sum-of-squares norm could overflow for finite x=(1e308,0,0). For a malformed restart with gamma=0, the old comparison became infinity>infinity, which is false; v1 accepted the inconsistent state. The original reference, result, manifest and counterexample are retained. No old payload is rewritten and no prior pass is represented as having covered this case.
+
+v2 uses stable `math.hypot` and rejects nonfinite derived distances. Restart validation additionally requires the endpoint to lie inside every retained contour, within the same 1e-13 relative/absolute consistency tolerance already used for gamma. This catches ordinary malformed radii as well as overflow. That tolerance checks saved floating-point geometry; it does not relax any constitutive qualification gate or supply a hidden radius floor. All arithmetic failures leave the caller's committed state untouched because proposals are deep copies.
+
+The 22 original geometric/transaction checks remain. Five new regression witnesses reject the reviewer's exact inconsistent restart, accept a consistent large finite restart without norm overflow, reject an overflowing finite increment while preserving parent memory, and reject endpoints outside active or inactive retained radii. `checks.json` records all27. `retained-v1-counterexample.json` records the original behavior and exact old source hash.
+
+Run `python3 -B check.py` from this directory. The whole-law, projection/work metric, critical-state inhibition, coupled convergence, multipoint host and native/Wasm qualification limitations in the parent README remain mandatory. Separate review is still required. This reference's modest validation checks are not a complete schema/checkpoint serialization validator or proof of full constitutive state admissibility.

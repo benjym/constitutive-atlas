@@ -1,0 +1,1 @@
+Exact independent Maxwell/NorSand accepted reviews copied unchanged into fresh build qualification receipts. Frozen numerical bodies and binding/gates remain exact. Actual reviewer_run /root/md1997_final_review is distinct from /root. Initial studies/archives are untouched. Guarded CI/package commands remain pending serial handoff. No compiled calls in this task.

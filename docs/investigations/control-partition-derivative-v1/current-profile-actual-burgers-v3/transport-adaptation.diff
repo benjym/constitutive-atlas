@@ -1,0 +1,39 @@
+--- Power-reviewed-v5
++++ Burgers-freshstart
+@@ -1,14 +1,14 @@
+-"""Transport-only exact eight-stage Power profile execution; stops on any failure."""
++"""Transport-only exact reviewed Burgers profile execution; stops on any failure."""
+ import datetime,hashlib,json,os,pathlib,subprocess,re
+ if not __debug__:raise RuntimeError('Unoptimized execution required')
+ D=pathlib.Path(__file__).resolve().parent
+ P=D.parent/'current-profile-execution-v3'
+ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+ read=lambda p:json.loads(p.read_text())
+-f=read(D/'freeze-v5.json');plan=read(P/'plan.json');tool=read(P/'toolchain.json')
+-profile=next(x for x in plan['profiles']if x['profile']=='power-creep')
++f=read(D/'freeze.json');plan=read(P/'plan.json');tool=read(P/'toolchain.json')
++profile=next(x for x in plan['profiles']if x['profile']=='burgers')
+ evidence=pathlib.Path(profile['output'])
+-actual_binding_hashes=dict(f['existing_actual_bindings'])
++actual_binding_hashes={}
+ def verify():
+  for n,h in f['inputs'].items():
+   if sha(pathlib.Path(n))!=h:raise RuntimeError('Execution input changed '+n)
+@@ -73,15 +73,9 @@
+  with path.open('x')as stream:stream.write(json.dumps(receipt,indent=2)+'\n')
+  actual_binding_hashes[str(path)]=sha(path)
+  verify()
+-# Five completed original commands and all source/log/receipt bytes are frozen.
+-verify()
+-for stage in ['native-configure','native-build','native-collect','native-assess','wasm-configure']:
+- pre=read(evidence/'stage-receipts'/(stage+'.pre.json'));post=read(evidence/'stage-receipts'/(stage+'.post.json'))
+- if pre.get('passed')is not True or post.get('passed')is not True or post.get('exit_status')!=0:raise RuntimeError('Original stage did not pass '+stage)
+-configure_receipt('wasm-configure')
+-for st in profile['steps'][5:]:
++for st in profile['steps']:
+  verify();env={**os.environ,**st['env']};name=st['stage'];folder=evidence/'processes'/name
+- base=['python3','-B',str(P/'stage_receipt.py'),'--profile','power-creep','--stage',name]
++ base=['python3','-B',str(P/'stage_receipt.py'),'--profile','burgers','--stage',name]
+  pre=base+['--phase','pre','--output',str(evidence/'stage-receipts'/(name+'.pre.json'))]
+  if capture(pre,st['cwd'],env,evidence/'processes'/(name+'.pre')):raise RuntimeError('Precondition failed '+name)
+  status=capture(st['argv'],st['cwd'],env,folder)

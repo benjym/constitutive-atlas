@@ -1,0 +1,16 @@
+--- 
++++ 
+@@ -145,6 +145,13 @@
+   // Match existing drained control endpoints using a different outer solver.
+   auto drained=path;drained.knots.clear();drained.controls[1].stress=drained.controls[2].stress=true;
+   for(int k=0;k<5;++k){RecordedKnot knot;knot.coordinate=k;knot.targets[0]=factors[k]*1e-4;knot.targets[1]=z[1];knot.targets[2]=z[2];drained.knots.push_back(knot);}
++  if(explicit_fixtures&&models()[m].id=="original-cam-clay-sw-electronic-log-recovery-v1"){
++   const auto original=replay_recorded(int(m),z,p,drained,fixture_settings);++cases;
++   require(!original.ok&&original.failed_knot==1&&original.points.size()==1&&original.state==z&&original.strain.v==Sym<double>{}.v&&original.material_trials==1&&original.message=="singular mixed-control system; last committed knot retained","original OCC mixed-control corner failure/rollback changed");
++   // Opt in to existing generic feasible-nullspace globalization; source law,
++   // targets, tolerance, trial budget and legacy endpoint gates are unchanged.
++   fixture_settings.max_restarts=4;
++  }
+   auto controlled=replay_recorded(int(m),z,p,drained,fixture_settings);++cases;if(!controlled.ok)std::cerr<<std::setprecision(17)<<"failed knot "<<controlled.failed_knot<<" residual "<<controlled.last_control_error<<" trials "<<controlled.material_trials<<" de0 "<<controlled.last_trial_increment.v[0]<<" de1 "<<controlled.last_trial_increment.v[1]<<"\n";require(controlled.ok,"drained replay failed: "+models()[m].id+" "+controlled.message);
+   parent=z;double axial=0;
+   for(size_t k=1;k<drained.knots.size();++k){

@@ -1,0 +1,7 @@
+# Baseline hypoplastic canonical integration proposal
+
+Two actual accepted independent review records are copied byte-for-byte to proposed canonical paths. Approval entries are regenerated for those actual paths. The normal agent-review exporter exports both exact current approvals, scopes and limits; the normal database exporter retains both definitions, approvals, reviews and every source URL in an explicitly isolated two-model context. Three forged-scope/limits/duplicate-entry probes reject. No material execution, new scientific review or compiled build occurs.
+
+The database context supplies exactly these two models and intentionally omits unrelated screening/lineage records. It is integration evidence for these models, not a complete database or website qualification. Evidence export includes only its ordinary public record/definition/registry outputs, not raw review artifacts or private PDFs.
+
+registry-observed.json preserves the shared baseline and registry-proposed.json is an additive proposal only. Production files remain unchanged. Installation requires the active package owner handoff, preservation of all consumers pinned to the old registry, confirmation that both exact models/reviews remain current, and regeneration against any newer registry. Do not replace an evolved registry with this proposal. Run complete normal catalogue/database projection and relevant package checks after actual installation; retain all bounded scope limitations and historical pending records. M1 remains open.

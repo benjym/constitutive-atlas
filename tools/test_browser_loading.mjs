@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {loadProfileAllocation,assertDeclaredOrdinaryFailure}from './laboratory_profile_policy.mjs';
+import {loadProfileAllocation,assertDeclaredOrdinaryFailure,declaredControlFailure,assertDeclaredControlFailure}from './laboratory_profile_policy.mjs';
 import {readFileSync,writeFileSync,mkdtempSync,existsSync} from 'node:fs';
 import {resolve,join} from 'node:path';
 import {tmpdir} from 'node:os';
@@ -51,7 +51,8 @@ for(const m of metadata.models){
   for(const mode of ['legacy','current']){
    const s=mode==='current'?{...base,loading:createLoading(base)}:base;
    const rejection=allocation?.policy.legacy_contract_rejections.find(e=>e.model===m.id);if(rejection){checkRejected(mode+'/'+m.id+'/'+protocol,s,rejection);continue;}
-   const row=check(mode+'/'+m.id+'/'+protocol,s,mode==='current'?1e-10:1e-7);assert.equal(row.native.ok,true,row.native.message);
+   const row=check(mode+'/'+m.id+'/'+protocol,s,mode==='current'?1e-10:1e-7);
+   if(declaredControlFailure(allocation,s)){assertDeclaredControlFailure(allocation,s,row.native);assertDeclaredControlFailure(allocation,s,row.wasm);row.retained_unsupported_control=true;}else assert.equal(row.native.ok,true,row.native.message);
    if(mode==='legacy'){
     const types=['string','string','string','number','number','number','number','string'];
     const args=[s.model,s.parameters.join(','),s.initial.join(','),s.protocol,s.target,s.steps,s.cycles,settingsCsv(s.integration_settings)];

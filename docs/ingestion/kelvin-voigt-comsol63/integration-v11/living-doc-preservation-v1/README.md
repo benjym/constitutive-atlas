@@ -1,0 +1,7 @@
+# Living-document preservation before closeout edits
+
+Coordinator requested exact current IMPLEMENTATION_PLAN.md, ROADMAP.md and docs/STATUS.md preservation before updating only Kelvin stage/count paragraphs. All three current files were canonically archived. The exact initial integration-v8 merged board (6fe3db29…) was also preserved from its unchanged proposed/IMPLEMENTATION_PLAN.md, since later task claims had already altered the live board. No living-document bytes were changed by this work.
+
+The additive closure preserves seven source/map bindings in five map contexts: integration-v5 merge receipt's ROADMAP; integration-v8 board/status; review-v1 merged-source-check ROADMAP; and the earlier integration-v7/v9 installation receipts that pin affected maps. All older map bytes were archived before replacement. Their original installation manifests/documents remain unchanged. New sidecars in integration-v7/current-origin-37d-v1 and integration-v9/approval-origin952-v1 register every existing sibling JSON and redirect only exact old map path/hash pairs.
+
+receipt.json lists exact canonical files, map files, original document hashes and bindings. All seven bindings and the earlier installation receipts/manifests replay. All14 pure archive tests pass. This does not pin the evolving live board or updated living-doc content; future E8 closeout may reuse exact archived original bytes and must freeze new content under its own identity. No app, registry, runtime, model, physical gate, compiled artifact, Git state or unrelated root work was changed.

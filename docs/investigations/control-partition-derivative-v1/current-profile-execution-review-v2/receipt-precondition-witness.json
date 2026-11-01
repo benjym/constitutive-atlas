@@ -1,0 +1,55 @@
+{
+  "identity": "profile-v2-pre-receipt-integrity-witness",
+  "synthetic_only": true,
+  "exact_expression": "q['passed'] and q['command'] == st",
+  "cases": [
+    {
+      "case": "missing-all-identity",
+      "pre": {
+        "passed": true,
+        "command": {
+          "argv": [
+            "synthetic-only"
+          ],
+          "env": {}
+        }
+      },
+      "accepted_by_exact_post_precondition": true
+    },
+    {
+      "case": "nonboolean-passed",
+      "pre": {
+        "passed": "false",
+        "command": {
+          "argv": [
+            "synthetic-only"
+          ],
+          "env": {}
+        }
+      },
+      "accepted_by_exact_post_precondition": true
+    },
+    {
+      "case": "wrong-profile-phase-source-tool",
+      "pre": {
+        "passed": true,
+        "command": {
+          "argv": [
+            "synthetic-only"
+          ],
+          "env": {}
+        },
+        "identity": "wrong",
+        "phase": "post",
+        "profile": "wrong",
+        "stage": "wrong",
+        "packet_manifest_sha256": "wrong",
+        "source_freeze_sha256": "wrong",
+        "toolchain_sha256": "wrong"
+      },
+      "accepted_by_exact_post_precondition": true
+    }
+  ],
+  "compiled_calls": 0,
+  "collector_main_calls": 0
+}

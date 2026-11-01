@@ -8,6 +8,8 @@ Copy to `docs/ingestion/<model-id>/DELIVERY.md`. Follow `docs/MODEL_DELIVERY_CHE
 - Intended native/browser scope and exclusions:
 - Source packet / dossier:
 - Public profile / content provenance: `web/model-profile-data.mjs` entry, packet draft and [content contract](../PUBLIC_MODEL_PROFILES.md)
+- Detailed model-local checklist: [CHECKLIST.md](CHECKLIST.md) (copy every E0–E8 check and exit condition; retain evidence per item)
+- Canonical checklist at assignment: path, SHA-256 or committed revision, and date:
 - Candidate definition path / SHA-256:
 - Worktree / authorized path whitelist:
 - Implementation run ID(s):

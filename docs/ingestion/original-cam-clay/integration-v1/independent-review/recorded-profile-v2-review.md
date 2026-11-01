@@ -1,0 +1,13 @@
+# REVIEW-occ-integration-v1: recorded-profile-v2
+
+Decision: NOT QUALIFIED. Existing generic restart allocation is scientifically defensible as a distinct host-solver experiment, but actual retained v2 result fails. No compiled calls by reviewer. This review cannot approve recorded OCC package coverage.
+
+Read prospective.json, exact before/after test snapshots, result.json, original native-regressions.json, RecordedSettings and feasible-nullspace restart implementation. All original targets, constitutive integration settings, material trial cap, control tolerance1e-10 and final legacy state comparison2e-7scaled/relative remain. Failure assertions retain knot1, exact initial state/strain, one material trial and singular-control message before trying restart. Restart probes immutable same-parent candidates in the strain-feasible nullspace. It does not alter source equations or commit failed guesses. Thus opt-in search itself is not gate relaxation or model-specific kernel.
+
+However result.json records returncode1, knot1 residual0.00086977407608239442 after49trials and bounded-restart failure. Original native run failed after1trial at the same residual. The setting change has not passed its own frozen acceptance policy. Preserve both failure records; any later choice must have a distinct prospective identity and retain original gates.
+
+Two source-allocation findings were sent before review output: (1) the new branch uses explicit_fixtures, which applies to both historical explicit-gis20-v2 and explicit-gis20-occ-v3, silently changing their behavior. A further profile must use a distinct explicit selector and retain historical selectors unchanged; (2) max_restarts is set4 but restart_levels8/restart_step1e-4 are implicit inherited defaults. Bind them by assertions or explicit assignments, including original max_restarts0, in the next profile. These do not explain the observed v2 failure but prevent ambiguous study allocation.
+
+The local singularity is consistent with the source shear-rigid strain inverse and does not itself establish a missing law. This bounded probe search need not land on a useful branch: first radius1e-4 and doubled radii are discrete nullspace guesses. Do not change residual/endpoint tolerance to mask it. Next smallest action is a separately frozen host-solver initialization/globalization study with retained v2 failure and unchanged source/model/gates. No universal recorded stress or cyclic-stress capability follows from eventual success of this strain-axial/radial-stress history.
+
+Exact inputs/results are hash-bound in recorded-profile-v2-manifest.json. The reviewer only inspected retained results and source; no native execution/build.

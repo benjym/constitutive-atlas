@@ -1,0 +1,99 @@
+diff --git a/Users/bmar5496/code/constitutive-atlas/docs/investigations/control-partition-derivative-v1/implementation-v1/original/solver.hpp b/private/tmp/atlas-control-partition-v1/source/cpp/include/atlas/solver.hpp
+index 45946891..7eb81c0e 100644
+--- a/Users/bmar5496/code/constitutive-atlas/docs/investigations/control-partition-derivative-v1/implementation-v1/original/solver.hpp
++++ b/private/tmp/atlas-control-partition-v1/source/cpp/include/atlas/solver.hpp
+@@ -124,7 +124,7 @@ inline bool advance_recursive(int model,const State&zn,const Sym<double>&de,cons
+                 error=std::max(error,std::abs(two_defect[i])/scales[i]);
+             }
+             diag.error=error;
+-            if(error<settings.rate_tolerance){if(diag.substeps>settings.max_substeps-2)return false;z=two;diag.substeps+=2;diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));return true;}
++            if(error<settings.rate_tolerance){if(diag.substeps>settings.max_substeps-2)return false;z=two;diag.substeps+=2;diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));diag.increment_fractions.push_back(std::ldexp(1.,-depth-1));diag.accepted_increments.emplace_back(halfde.v.begin(),halfde.v.end());diag.accepted_increments.emplace_back(halfde.v.begin(),halfde.v.end());return true;}
+         }
+     }
+     ++diag.rejected;State half;
+@@ -201,6 +201,71 @@ inline bool laboratory_pore_reconstruction(StressScope scope,int protocol){
+ }
+ struct Point { double control=0; Sym<double> strain; State state; Diagnostics diagnostics; double pore_pressure=0; };
+ struct Run { bool ok=false; std::string message;std::vector<Point> points; IntegrationSettings settings; };
++// Same ordered adaptive partition, interpreted as an affine extension about
++// its actual accepted binary increments (including non-dyadic retry branches).
++inline bool comparable_control_partition(const Advance&base,const Sym<double>&base_total,const Advance&probe,const Sym<double>&probe_total){
++    if(!base.ok||!probe.ok)return false;
++    const auto&a=base.diagnostics;const auto&b=probe.diagnostics;
++    const size_t count=a.increment_fractions.size();
++    if(!count||b.increment_fractions.size()!=count||a.accepted_increments.size()!=count||b.accepted_increments.size()!=count||a.partition_retries<0||a.partition_retries!=b.partition_retries)return false;
++    double coverage_a=0,coverage_b=0;
++    for(size_t i=0;i<count;++i){
++        const double f=a.increment_fractions[i],g=b.increment_fractions[i];
++        if(!std::isfinite(f)||!std::isfinite(g)||f<=0||g<=0||f!=g||a.accepted_increments[i].size()!=6||b.accepted_increments[i].size()!=6)return false;
++        coverage_a+=f;coverage_b+=g;
++        for(int j=0;j<6;++j){
++            const double u=a.accepted_increments[i][j],v=b.accepted_increments[i][j];
++            if(!std::isfinite(base_total.v[j])||!std::isfinite(probe_total.v[j])||!std::isfinite(u)||!std::isfinite(v))return false;
++            if(base_total.v[j]==probe_total.v[j]){if(u!=v)return false;continue;}
++            const double delta=f*(probe_total.v[j]-base_total.v[j]),expected=u+delta;
++            const double bound=std::max(8*std::numeric_limits<double>::denorm_min(),8*std::numeric_limits<double>::epsilon()*std::max(std::abs(u),std::max(std::abs(v),std::abs(delta))));
++            if(!std::isfinite(delta)||!std::isfinite(expected)||!std::isfinite(bound)||std::abs(v-expected)>bound)return false;
++        }
++    }
++    return std::isfinite(coverage_a)&&std::isfinite(coverage_b)&&std::abs(coverage_a-1.)<=1e-12&&std::abs(coverage_b-1.)<=1e-12;
++}
++struct ControlDerivativeProbe {
++    double h=0,slope=0;bool representable=false,comparable=false,finite_slope=false;
++    Sym<double> increment;Advance advance;
++};
++struct ControlDerivative {
++    bool ok=false;double value=0,h=0;std::vector<ControlDerivativeProbe> probes;
++};
++// Evaluator must use the same committed parent/settings for every request.
++// Returned audit is local: probes never enter material state or budget counters.
++// h is the nominal scalar directional amplitude, as in the original finite
++// difference. Actual rounded totals are audited; all changed components must
++// remain representable. No replacement denominator or direction is inferred.
++template<class Evaluate,class Observe>
++inline ControlDerivative consistent_control_derivative(const Advance&base,const Sym<double>&total,const Sym<double>&direction,double initial_h,Evaluate evaluate,Observe observe){
++    ControlDerivative result;
++    if(!base.ok||base.state.empty()||!std::isfinite(initial_h)||initial_h<=0||!finite(base.state))return result;
++    const double baseline=observe(base.state);if(!std::isfinite(baseline))return result;
++    bool previous=false;double previous_slope=0;
++    for(int k=0;k<=10;++k){
++        ControlDerivativeProbe probe;probe.h=std::ldexp(initial_h,-k);probe.increment=total;
++        bool changed=false;probe.representable=std::isfinite(probe.h)&&probe.h>0;
++        for(int j=0;j<6;++j){
++            if(!std::isfinite(total.v[j])||!std::isfinite(direction.v[j]))probe.representable=false;
++            if(direction.v[j]!=0){changed=true;probe.increment.v[j]=total.v[j]+probe.h*direction.v[j];
++                if(!std::isfinite(probe.increment.v[j])||probe.increment.v[j]==total.v[j])probe.representable=false;}
++        }
++        if(!changed)probe.representable=false;
++        if(!probe.representable){result.probes.push_back(std::move(probe));return result;}
++        probe.advance=evaluate(probe.increment);
++        probe.comparable=comparable_control_partition(base,total,probe.advance,probe.increment);
++        if(probe.comparable&&probe.advance.state.size()==base.state.size()&&finite(probe.advance.state)){
++            probe.slope=(observe(probe.advance.state)-baseline)/probe.h;probe.finite_slope=std::isfinite(probe.slope);
++        }
++        const bool valid=probe.comparable&&probe.finite_slope;
++        const bool stable=valid&&previous&&std::abs(probe.slope-previous_slope)<=1e-3*std::max(1.,std::max(std::abs(probe.slope),std::abs(previous_slope)));
++        result.probes.push_back(std::move(probe));const auto&saved=result.probes.back();
++        if(stable){result.ok=true;result.value=saved.slope;result.h=saved.h;return result;}
++        previous=valid;if(valid)previous_slope=saved.slope;
++    }
++    return result;
++}
++
+ // Mixed axisymmetric control. Trial constitutive evaluations always start from
+ // the same committed state. Outer Newton updates never accumulate trial history.
+ inline bool controlled_step(int model,const State&zn,const State&p,int protocol,double axial,double reference,double current_axial,Sym<double>&de,Advance&result,const IntegrationSettings&settings={}){
+@@ -212,8 +277,11 @@ inline bool controlled_step(int model,const State&zn,const State&p,int protocol,
+         for(int it=0;it<30;++it){de.v[1]=de.v[2]=lateral;auto trial=integrate(model,zn,de,p,settings);if(!trial.ok)return false;
+             double residual=.5*(trial.state[1]+trial.state[2])-reference;
+             if(std::abs(residual)<std::max(1.,std::abs(reference))*1e-8){result=trial;return true;}
+-            double h=std::max(1e-9,std::abs(axial)*1e-3);auto dd=de;dd.v[1]=dd.v[2]=lateral+h;auto pert=integrate(model,zn,dd,p,settings);
+-            if(!pert.ok)return false;double derivative=(.5*(pert.state[1]+pert.state[2])-.5*(trial.state[1]+trial.state[2]))/h;
++            const double h=std::max(1e-9,std::abs(axial)*1e-3);Sym<double> direction;direction.v[1]=direction.v[2]=1.;
++            const auto slope=consistent_control_derivative(trial,de,direction,h,
++                [&](const Sym<double>&increment){return integrate(model,zn,increment,p,settings);},
++                [](const State&state){return .5*(state[1]+state[2]);});
++            if(!slope.ok)return false;const double derivative=slope.value;
+             if(!std::isfinite(derivative)||std::abs(derivative)<1e-6)return false;
+             double correction=-residual/derivative;bool accepted=false;
+             for(double a=1;a>=1./1024;a*=.5){auto testde=de;testde.v[1]=testde.v[2]=lateral+a*correction;auto test=integrate(model,zn,testde,p,settings);

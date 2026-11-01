@@ -1,0 +1,11 @@
+# Prospective generic endpoint Newton policy v2
+
+Distinct policy after retained native-v3 failures. Original gates and numerical budgets remain unchanged. Original single-deletion policy caused nine oldTresca corpus failures plus history failures; those exact sources, raw observations and independent assessments remain retained. Do not call the original policy accepted.
+
+A. Preserve original feasible-descent route first. Scan the existing full backtracking range for a finite, solution-admissible, domain-valid strict residual descent trial. Only if none exists, scan the same range allowing provisional solution-inadmissible trials, retaining all finite/domain/descent checks. Models with successful old feasible steps keep their original trajectory exactly.
+
+B. Convergence requires BOTH the unchanged scaled residual tolerance and exact declared solution admissibility. If residual is small but endpoint infeasible, continue Newton within the unchanged iteration budget instead of immediately returning failure. Never commit an infeasible state.
+
+C. If neither descent scan accepts, permit ONE finite, domain-valid full Newton trial as a nonmonotone restart per implicit solve. The flag is local to the solve, cannot reset inside iterations/backtracks, consumes the ordinary iteration budget and does not project or alter state. Track restart count in Diagnostics for qualification. A later stalled iteration cannot take a second restart. Nonfinite/domain-invalid full trials still fail. Final acceptance remains unchanged residual plus exact physical checks. No general convergence/uniqueness claim.
+
+Independent scalar witness: r(x)=x+1 for x>=0, x+4 for x<0; x0=0. Newton delta=-1, every backtracked trial has residual4-alpha>initial1, so strict descent cannot leave boundary. One full restart gives x=-1 then ordinary Newton reaches valid root x=-4. Companion r=x+1 for x>=0, x-1 for x<0 has no valid root and must fail/rollback with at most one restart. Synthetic implementation uses a scalar Pa unknown and fixed stress, separate from Duncan. Keep old eight synthetic and70Duncan success expectations and all original Tresca source gates. Native then Wasm with exact new freeze; no reclassification/relaxation from observed failures.

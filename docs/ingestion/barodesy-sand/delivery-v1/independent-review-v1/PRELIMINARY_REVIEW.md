@@ -1,0 +1,48 @@
+# Independent preliminary review: Barodesy sand 2015
+
+Reviewer: actual separate agent run `/root/barodesy_sand_review`, 2 November 2026. The reviewer did not author the candidate, original source packet, rate oracle or compiled studies. Scope is source/equation assessment and prospective E5 gap identification; **not a canonical approval**, current backend qualification or live-delivery certification. Owned output is this new directory only. No builds, compiled calls, author binaries or shared-source edits occurred.
+
+Exact candidate: `models/barodesy-sand.json`, SHA-256 `3a61b5373404d6973a2957bd0fa21692e10b49e974cdf87eff047d5531851239`. Input hashes and actual independent check results are in `source-checks.json`. Private originals were read from the received source paths, checked against their source-audit hashes, and inspected visually using the PDF skill. Raw PDFs/images/text are not copied into this public report.
+
+## Source and transcription findings
+
+No blocking transcription error was identified in the selected **nonzero compressive stress, fixed spatial frame, zero-spin interior** law. This statement does not certify every operational-domain boundary or parameter combination.
+
+- Visually inspected original Kolymbas2015 printed pp53–56 and59: p53 defines Cauchy stress, symmetric stretching, Euclidean/Frobenius norm and normalization; p54 Eq9 is a matrix exponential; p55 Eqs20/23 define density evolution and stiffness; p56 Eqs26–27/29–31 give critical void ratio, scalar factors and complete final stress rate. Original p59 identifies the finite-spin ambiguity and drained lateral-rate closure. The p53 repeated `D22` trace typo is real and its explicitly declared standard-trace interpretation is justified by the adjacent strain trace and Eq20.
+- Set source `T=-Sigma`, `D=-E`, `U=E/|E|`, `v=tr(U)`. Source `delta=-v`, `R=-P`, `R0=-P0`, `T0=-Sigma0`, `h=-K`. Thus the implemented compression-positive rate is `K[(v-c3*ec)P0+c3*e*Sigma0]|E|`, with `P=expm[-c1*exp(-c2*v)*U]`. Density rate is `-(1+e)*tr(E)`. Both signs match. Replacing physical time by a monotone dimensionless strain-path parameter is justified by positive degree-one rate homogeneity.
+- Mandel ordering and normalized determinant/minor expressions match Cartesian tensors: squared shears divide by2, and the determinant triple-shear term divides by sqrt(2). All seven persistent physical components are present; ec is an algebraic stage quantity. There is no omitted hardening, fabric or yield state in this selected final equation.
+- Visually inspected 2019 manuscript printed pp4–5, including Table1: defaults `[-1.0246,1,-2.3,465,28,.87,.35]` are separately attributed correctly, with stress-unit conversion to465000Pa. This is a supporting author manuscript, not an assertion of publisher equivalence or an exact2015 calibration. Conventional minimum void ratio .63 in the prose is distinct from the internal .35 table parameter; the original2015 discussion permits that distinction.
+- Explicit stress/e initialization is complete for this law. Examples are not a laboratory preparation protocol. Numerical parameter bounds, SPD/minor margins, positive-density separation and matrix-exponential limits are implementation restrictions, not measured admissibility claims. Zero stress remains unsupported. The exact-zero loading extension is reasonable by homogeneity but must remain disclosed; no unique zero-loading material derivative follows.
+- Effective stress must be interpreted as the disclosed dry/zero-pore or explicitly supplied effective-stress material scope; no pore-pressure evolution is inferred. Small-strain, W=0 excludes general finite rotations. Arbitrary oblique stretching in a fixed zero-spin frame can be numerically checked without claiming finite-spin objectivity.
+
+Independent reviewer script `check_source.py` imports no Atlas code. It recomputes all38 reference void channels using exact rational actual-binary64 arithmetic and independently derives12 source stress-rate witnesses using three scalar exponentials for diagonal stretching (including an oblique stress tensor and the cancellation witness). All pass; maximum stress scaled discrepancy is2.512e-16, below the retained source-rate2e-12 budget. This is additional equation evidence, not a finite-step integrator.
+
+## Remaining E5 blockers and required qualification
+
+**B1 — independently integrated stress paths.** The old preview explicitly checks incompressible-grain void closure, controls and native/Wasm parity. It does not independently verify stress trajectories. The instantaneous Cartesian rate study cannot substitute for integrating a path. Before approving the proposed public finite-path interface, provide an independently constructed source ODE reference and prospective caller-point stress/state comparisons, with refinement. The exact public default or named useful preset must be among these paths. Every claimed UI control should have representative monotonic and reversal stress-reference coverage, or be explicitly excluded from approval scope.
+
+A suitable plan uses diagonal source equations and scalar exponentials for the five axisymmetric controls. Source p59 requires solving the drained lateral stretching from zero lateral **stress rate at each stage**, rather than prescribing an arbitrary Poisson ratio or lagging the closure. For stress-controlled paths independently derive/solve the corresponding source rate constraint as well. Keep the production outer endpoint controller and independent continuous constrained ODE mathematically distinct, and account prospectively for the discretization difference through caller refinement. Include a finite oblique all-six-component fully strain-controlled path using an independently computed Cartesian matrix exponential to exercise tensor transport beyond the diagonal laboratory paths. Do not use the production DSL evaluator, emitted kernels or production integrator inside the independent reference. Freeze references, uncertainties and tolerances before any new compiled observations; retain nonconvergence or failed comparisons under a distinct study identity.
+
+**B2 — current backend and transaction evidence.** Old raw studies remain valid only for their frozen artifacts. Reusing them as historical evidence is appropriate; certifying those artifacts as current is not. Bind fresh/current native and Wasm source/toolchain/generated-model/artifact identities to the exact candidate and prospective plan, then assess both against B1 references. Demonstrate invalid initialization/domain rejection, exact-zero hold, reversal, complete-parent rollback after an attempted failing increment, same-instance subsequent recovery where claimed, and checkpoint/restart continuation of all seven physical states. A new process after a rejection is weaker than material-instance rollback and must be named accurately. Replay/restart continuity may use a predeclared numeric tolerance; an exact replay claim requires exact bits where specified.
+
+**B3 — final nine-item evidence record and exposed-interface scope.** The final package/source/approval identities, exact public preset, applicability wording and reproducibility inventory have not yet arrived. All nine checklist decisions must be made against those exact bytes and current evidence. Tangents/FE may remain explicitly excluded; zero-loading derivative ambiguity must not be hidden by a successful zero-update. No further experimental comparison or human signature is required merely to approve a bounded numerical formulation.
+
+## Preliminary checklist disposition
+
+| Checklist item | Current assessment |
+| --- | --- |
+| source_provenance | Source identity, received hashes, original readable equations and variant distinctions support a pass for the selected law. |
+| equation_fidelity | Source/sign/stage laws and additional independent scalar checks support a pass for exact candidate; no correction requested. |
+| conventions_dimensions | Explicit v0.3 Mandel/compression-positive/fixed-frame contract is consistent; retain dry/effective stress and zero-spin restrictions. |
+| initialization_domain | Complete explicit seven-component initialization and implementation domain are adequate within disclosed restrictions; no physical preparation/general envelope claim. |
+| integration_transactions | Source law contract understood; current interface rollback/restart evidence still required under B2. |
+| independent_numerical_evidence | Instantaneous evidence is useful; B1 blocks finite-path approval. |
+| backend_delivery | B2 and exposed public interface/package evidence remain required. Old studies are historical only. |
+| applicability_claims | Existing limitations are appropriate. Final wording must not infer general stress trajectories, experimental validation, finite spin or update tangents. |
+| reproducibility_rights | Private source hashes and separate retention are appropriate. Final study/tool/artifact/reproduction pins remain required. |
+
+The smallest next action is a prospectively frozen independently integrated source-stress-path reference and current-backend qualification plan, followed by actual coordinator execution and a new all-nine final review. This preliminary report intentionally leaves E5 open.
+
+## Reproduction
+
+From the repository root: `python3 -B docs/ingestion/barodesy-sand/delivery-v1/independent-review-v1/check_source.py`. The private originals at source-audit paths are required only for their byte-hash check; the public mathematical checks use the retained public literal inputs/references. Compare printed JSON with `source-checks.json`. No public copy of a copyrighted PDF is required or authorized.
