@@ -31,6 +31,7 @@ jobs:
           cmake -S cmake/sls -B build-sls -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls --target atlas_sls_solver --parallel 1
           python tools/test_sls_native.py --solver build-sls/atlas_sls_solver --output "$RUNNER_TEMP/sls-native.json"
+          node --test tests/test_sls_laboratory_contract.mjs tests/test_laboratory_controller_router.mjs
       - name: Build and qualify Burgers physical-time schedules
         run: |
           cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release

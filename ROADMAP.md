@@ -16,6 +16,8 @@ The user has replaced human scientific sign-off with [independent agent review a
 
 Power-creep delivery now covers the independently approved Itasca9.0 both-active physical-time formulation through its dedicated common-engine laboratory and exact-definition database export. It remains one restricted timed formulation, separate from ordinary strain-path model counts. The [delivery ledger](docs/ingestion/power-creep-itasca900/DELIVERY.md) records final CI and live-site qualification; threshold switching, material calibration and experimental validation remain outside this approval.
 
+The exact COMSOL6.3 ordinary deviatoric Standard Linear Solid with elastic bulk has accepted independent scientific review and bounded native/Wasm qualification. It is now qualified inside the general atlas laboratory with physical-time relaxation, creep and rate loading, complete12state/6stress history, guarded common Wasm, exact replay, tamper rejection and ordinary/Burgers/SLS switching. All12ordinary model package requests and the named-example gate remain qualified. [Current delivery evidence](docs/ingestion/sls-comsol63/main-atlas-v1/) supersedes the historical standalone interface; standalone SLS pages remain removed. E6–E7 pass; E8 awaits exact scoped commit/CI/Pages/live verification. The committed database export retains its exact definition and approval. Experimental validation and the broad parameter envelope remain unqualified.
+
 ## 1. Destination and immediate priority
 
 The project has three final products:

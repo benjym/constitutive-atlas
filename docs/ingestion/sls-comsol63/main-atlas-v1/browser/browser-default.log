@@ -1,0 +1,19 @@
+### Result
+{"url":"http://127.0.0.1:18871/index.html#laboratory?model=sls-comsol63-deviatoric-zero-spin-ode","browser":"156.0.8078.74","status":"Completed 8 physical seconds · 4 output intervals · relaxation.","table":{"rows":7,"columns":19},"threePlots":3}
+### Ran Playwright code
+```js
+await (async(page)=>{
+ const model='sls-comsol63-deviatoric-zero-spin-ode';await page.getByRole('combobox',{name:'Select a model',exact:true}).selectOption(model);
+ await page.waitForFunction(()=>document.querySelector('#sls-status').textContent.startsWith('Completed'),null,{timeout:180000});
+ if(!await page.locator('#sls-laboratory').isVisible()||await page.locator('#laboratory > .lab-layout').isVisible())throw Error('SLS did not replace ordinary controls inside main laboratory');
+ if(await page.locator('iframe').count())throw Error('Embedded laboratory must not use an iframe');
+ await page.getByText('All12state and6stress components at every output',{exact:true}).click();
+ const table=await page.locator('#sls-state').evaluate(el=>({rows:el.rows.length,columns:el.rows[0].cells.length}));if(table.rows!==7||table.columns!==19)throw Error('Incomplete full-state table');
+ const download=page.waitForEvent('download');await page.getByRole('button',{name:'Export complete SLS run',exact:true}).click();await(await download).saveAs('/Users/bmar5496/code/constitutive-atlas/docs/ingestion/sls-comsol63/main-atlas-v1/browser/default.json');
+ return {url:page.url(),browser:page.context().browser().version(),status:await page.locator('#sls-status').textContent(),table,threePlots:await page.locator('#sls-laboratory svg polyline').count()};
+}
+)(page);
+```
+### Events
+- Downloading file sls-atlas-relaxation.json ...
+- Downloaded file sls-atlas-relaxation.json to ".playwright-cli/sls-atlas-relaxation.json"

@@ -1,0 +1,84 @@
+--- a/web/app.js
++++ b/web/app.js
+@@ -1,5 +1,7 @@
+ import {timedLaboratoryRoute} from './timed-route.mjs';
+ import {setupTimedLaboratory} from './timed-laboratory.mjs';
++import {setupSlsLaboratory} from './sls-laboratory.mjs';
++import {createLaboratoryControllerRouter} from './laboratory-controller-router.mjs';
+ import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';
+ import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
+ import {formulationSection,recordedDescription} from './formulation-view.mjs';
+@@ -58,7 +60,7 @@
+ function toast(message){$('toast').textContent=message;$('toast').style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').style.display='none',7000);}
+ function route(){
+   const anchor=location.hash.slice(1),selection=catalogueRoute(location.hash),page=selection.page;
+-  if(page==='laboratory'&&anchor.startsWith('laboratory?')){const id=new URLSearchParams(anchor.split('?')[1]).get('model');if(id===timedView?.modelId)timedView.select(id);}
++  if(page==='laboratory'&&anchor.startsWith('laboratory?')){const id=new URLSearchParams(anchor.split('?')[1]).get('model');if(timedView?.supports(id))timedView.select(id);}
+   const entry=catalogue.find(x=>x.id===selection.modelId);
+   if(entry)showCatalogueModel(entry,models.find(x=>x.id===entry.id));
+   else{if($('catalogue-dialog').open)$('catalogue-dialog').close();if(selection.modelId||selection.invalid)toast('That model link is not in this catalogue.');}
+@@ -323,7 +325,7 @@
+ }
+ function catalogueCards(){
+   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
+-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||(entry.id===timedView?.modelId&&entry.timed_laboratory==='index.html');if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
++  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||(timedView?.supports(entry.id)&&entry.timed_laboratory==='index.html');if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id).toLowerCase().includes(query))continue;
+     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
+     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Research candidate','catalogue-availability'+(executable?' available':'')));
+     const heading=element('h2'),open=element('a',entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
+@@ -338,11 +340,11 @@
+   const timedRoute=timedLaboratoryRoute(entry);
+   const dialog=$('catalogue-dialog'),body=$('catalogue-detail-body');body.replaceChildren();
+   $('catalogue-detail-title').textContent=entry.name;$('catalogue-detail-family').textContent=entry.family;
+-  $('catalogue-detail-status').textContent=entry.id===timedView?.modelId?'Approved bounded scope · physical-time laboratory':spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
+-  $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute||entry.id===timedView?.modelId?' available':'');
++  $('catalogue-detail-status').textContent=timedView?.supports(entry.id)?'Approved bounded scope · physical-time laboratory':spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
++  $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute||timedView?.supports(entry.id)?' available':'');
+   body.append(element('p',recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',entry.id,evidenceIndex),'catalogue-detail-note'));
+   body.append(formulationSection(document,spec,{evidenceIndex}));
+-  if(!spec&&!timedRoute&&entry.id!==timedView?.modelId){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
++  if(!spec&&!timedRoute&&!timedView?.supports(entry.id)){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
+   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
+   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);
+   if(sources.length){
+@@ -358,7 +360,7 @@
+   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
+   $('catalogue-detail-id').textContent=entry.id;
+   $('catalogue-permalink').href=catalogueModelHash(entry.id);
+-  const timed=entry.id===timedView?.modelId&&entry.timed_laboratory==='index.html';
++  const timed=timedView?.supports(entry.id)&&entry.timed_laboratory==='index.html';
+   const explore=$('catalogue-explore');explore.hidden=!spec&&!timed&&!timedRoute;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(timed){timedView.select(entry.id);location.hash='laboratory?model='+encodeURIComponent(entry.id);}else{timedView?.select(entry.id);$('model').value=entry.id;populate();location.hash='laboratory';simulate();}$('model').focus({preventScroll:true});};
+   if(!dialog.open)dialog.showModal();body.scrollTop=0;
+ }
+@@ -515,5 +517,5 @@
+   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
+   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
+   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:applyRunSpecification,onError:toast});
+-  populate();timedView=setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')});catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
++  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')})]);catalogueCards();route();simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+ }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}
+--- a/tools/build_web.py
++++ b/tools/build_web.py
+@@ -64,6 +64,9 @@
+     from build_burgers_web import bundle as bundle_burgers
+     bundle_burgers(dest,args.burgers_wasm_dir)
+     subprocess.run(['node',str(ROOT/'tools/test_burgers_package.mjs'),str(dest)],check=True)
++    from build_sls_laboratory import bundle as bundle_sls_laboratory
++    bundle_sls_laboratory(dest,args.sls_wasm_dir)
++    subprocess.run(['node',str(ROOT/'tools/test_sls_laboratory_package.mjs'),str(dest)],check=True)
+     (dest/'.nojekyll').touch()
+     print(f'Packaged {dest}')
+ 
+--- a/catalogue/manifest.json
++++ b/catalogue/manifest.json
+@@ -881,8 +881,8 @@
+       "family": "linear viscoelasticity",
+       "status": "reviewed",
+       "executable": false,
+-      "timed_laboratory": "sls.html",
+-      "note": "Approved by separate-agent checklist for bounded native/Wasm material-point cases. One Maxwell shear branch in parallel with equilibrium stiffness; elastic bulk. Dry, zero-spin small strain; exact passivity assumes traceless branch stress. Illustrative parameters, no experimental validation. Dedicated physical-time controls; not the strain-path runtime.",
++      "timed_laboratory": "index.html",
++      "note": "Independently agent-reviewed bounded COMSOL6.3 ordinary deviatoric SLS plus elastic bulk; physical-time relaxation, creep and rate loading in the main atlas laboratory. Dry total stress, infinitesimal strain, fixed frame/zero spin. Exact passivity assumes traceless branch stress. Illustrative parameters; no calibration or experimental validation; broad machine parameter envelope unqualified.",
+       "catalogue_sources": [
+         {
+           "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441011",

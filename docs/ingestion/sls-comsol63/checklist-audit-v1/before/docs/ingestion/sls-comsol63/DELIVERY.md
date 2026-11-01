@@ -1,0 +1,25 @@
+# SLS — end-to-end delivery ledger
+
+Umbrella: MODEL-sls-comsol63. Lead /root; date2026-11-01. Exact formulation: ordinary COMSOL6.3 deviatoric single-Maxwell-branch Standard Linear Solid, elastic bulk; dry total-stress small-strain fixed frame. Explicit whitelist on live board. Source specialist /root/sls_ingestion; scientific reviewer /root/sls_scientific_review; browser specialist /root/sls_browser_delivery; integration/build/push owner /root. Remote instruction: user requested “same loop … ingestion through to review and commit/push”; existing workflow publishes Pages on push. No further scientific signature needed.
+
+- [X] E0: exact scope and ownership claimed; newly integrated full-delivery checklist adopted during run.
+- [X] E1: full selected source law and21readable primary files pinned; durable private copies retained.
+- [X] E2: complete v0.3 ODE/state/initialization contract and prospective numerical cases.
+- [X] E3: candidate validates; ten source algebra groups and400tensor/energy/reference checks pass.
+- [X] E4: native/Wasm34cases/68material calls perbackend, exact source-coordinate analytical comparisons, seven failure/recovery pairs, full-state restart,2934physical parity scalars;18contract tests(3optional skips).
+- [X] E5: accepted exact-hash independent nine-item checklist at catalogue/agent-reviews/sls-comsol63-agent-v1.json; no blockers.
+- [X] E6: exact generated approval, dossier/examples and model installed; standard full catalogue/package integration passes;12ordinary models plus two distinct timed laboratories,36discovery entries.
+- [X] E7: full standard package plus deterministic final SLS refresh;216packaged-Wasm and324real-browser reference comparisons pass; exact reset/import/replay, all-state edits, rejection/recovery, tamper rejection, desktop/narrow layouts and catalogue navigation verified. Saved WEB-sls-comsol63-v1 evidence includes retained failures and freeze-v4.
+- [X] E8: implementation9a27359b committed/pushed; exact combined revisionf18db8e7 passed all four native/Wasm jobs and Pages deploy in run41289504263. Actual live browser216reference comparisons and10SLSasset hashes pass; eight additional main entry/engine/catalogue assets match the tested upload.
+
+Definition: models/research/sls/sls-comsol63-deviatoric-zero-spin-ode.json SHA256 eccfeb372810afd81a5e9cddf5d8ac33e2cb5df6921fc88e14e9175c73e50906. Source dossier docs/models/sls-comsol63-deviatoric-zero-spin-ode.md. Frozen build/engine receipts and all failures: execution-v1/. No model bytes changed after review. Exact-passivity trace caveat, unsurveyed parameter envelope and unused helper snapshot delta retained. Experimental validation absent.
+
+Completed handoff: E0–E8 verified for the exact delivered revision. Parent records the final publication receipt with a scoped commit/push; no SLS application/scientific bytes changed. Browser evidence: docs/reviews/sls-web-v1/README.md. Integration evidence: docs/reviews/sls-atlas-integration-v1/README.md.
+
+E8 publication progress: SLS commit9a27359b38671e07150c717934c1248798d0aa65 pushed successfully. Original run41287314779 LinuxWasm conclusion cancelled despite completed successful steps; no complete-run pass claimed. Parallel test/archive-only integration commitd5f7b320f50ab8180402a3c3cdbd0a7ab0f7b084 contains unchanged SLS application/scientific bytes. Exact combined run41287657999 is the current acceptance target; original plan/result and prospective unchanged-gate replacement in docs/reviews/sls-release-v1/. Live checker v2 remains pending success and exact uploaded artifact.
+
+Combined run41287657999 failed at final recorded-path replay on both native platforms (pre-existing GIS depth14 and total-stress Tresca legacy-API calls); both Wasm jobs and SLS native qualification passed, deployment skipped. Exact failures retained in sls-release-v1/combined-run-v2-failed.*. Existing shared integration work is correcting the profile-aware calls with original failures retained. E8 stays open pending a new exact combined revision; the frozen SLS law/approval/interface is unchanged.
+
+Current prospective acceptance v3: f18db8e75d27cf182f2c03dfcd6534b7f51d5a86, run41289504263. Shared replay fixtures corrected with original failures retained, source equations and SLS application bytes unchanged. Require all four native/Wasm jobs, successful exact Pages deployment and unchanged live browser/asset gates. PLAN-v3.md and live preparation-v3.json precede observations.
+
+Verified live closeout: https://benjym.github.io/constitutive-atlas/sls.html . Exact release f18db8e75d27cf182f2c03dfcd6534b7f51d5a86, CI https://github.com/benjym/constitutive-atlas/actions/runs/41289504263 , deployment7470820389 status21099220266 success. Real Chromium default/rate results match216source-reference scalars;10SLSassets and8main entry/catalogue/engine assets equal tested upload13076512926; browser console has zero warnings/errors, desktop1280/narrow390 fit. Parent inspected the live default screenshot. Exact receipts: docs/reviews/sls-release-v1/ and docs/reviews/sls-live-v1/. Final receipt commit is additive; the verified deployment identity remains explicit.

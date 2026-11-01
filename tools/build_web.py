@@ -64,6 +64,9 @@ def main():
     from build_burgers_web import bundle as bundle_burgers
     bundle_burgers(dest,args.burgers_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_burgers_package.mjs'),str(dest)],check=True)
+    from build_sls_laboratory import bundle as bundle_sls_laboratory
+    bundle_sls_laboratory(dest,args.sls_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_sls_laboratory_package.mjs'),str(dest)],check=True)
     (dest/'.nojekyll').touch()
     print(f'Packaged {dest}')
 

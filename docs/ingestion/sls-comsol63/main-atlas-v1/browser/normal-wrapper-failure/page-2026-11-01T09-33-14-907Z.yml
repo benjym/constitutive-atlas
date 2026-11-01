@@ -1,0 +1,106 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - link "Constitutive Atlas home" [ref=e3] [cursor=pointer]:
+      - /url: "#laboratory"
+      - generic [ref=e6]: ConstitutiveAtlas
+    - navigation "Main navigation" [ref=e7]:
+      - link "◫ Model testing" [ref=e8] [cursor=pointer]:
+        - /url: "#laboratory"
+        - text: ◫
+        - generic [ref=e9]: Model testing
+      - link "⌕ Model catalogue 37" [ref=e10] [cursor=pointer]:
+        - /url: "#catalogue"
+        - text: ⌕
+        - generic [ref=e11]: Model catalogue
+        - generic [ref=e12]: "37"
+      - link "≋ Methods & evidence" [ref=e13] [cursor=pointer]:
+        - /url: "#methods"
+        - text: ≋
+        - generic [ref=e14]: Methods & evidence
+    - paragraph [ref=e16]:
+      - text: By
+      - link "Benjy Marks" [ref=e17] [cursor=pointer]:
+        - /url: https://github.com/benjym
+      - link "François Guillard" [ref=e18] [cursor=pointer]:
+        - /url: https://github.com/Franzzzzzzzz
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - heading "Explore material behaviour." [level=1] [ref=e23]
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]: CONSTITUTIVE MODEL
+          - generic [ref=e27]: Approved bounded scope
+        - generic [ref=e28]: Select a model
+        - combobox "Select a model" [ref=e29]:
+          - option "Barodesy clay 2017 — body law, zero spin (draft)"
+          - option "Barodesy sand (2015) — fixed-frame draft"
+          - option "Drucker–Prager, nonassociated perfect plasticity"
+          - option "Mašín clay hypoplasticity (2005) — zero-spin draft"
+          - option "Clay hypoplasticity 2013 — Appendix law, zero spin (draft)"
+          - option "Sand hypoplasticity + intergranular strain (1997)"
+          - option "Sand hypoplasticity — von Wolffersdorff (1996)"
+          - option "Linear isotropic elasticity"
+          - option "Modified Cam Clay"
+          - option "Mohr–Coulomb — nonassociated perfect plasticity H=0 (draft)"
+          - option "HP extracted ASBS + GIS2024 — v0.3 zero-spin research draft"
+          - option "Associated Tresca perfect plasticity — BK2022v1, project BE (draft)"
+          - option "Burgers · physical-time creep / relaxation"
+          - option "Standard Linear Solid · physical-time relaxation / creep" [selected]
+        - paragraph [ref=e30]: "Standard Linear Solid: one relaxing deviatoric branch, equilibrium spring and elastic bulk. Physical seconds; complete strain and branch-stress history."
+        - group [ref=e31]:
+          - generic "Sources & model definition" [ref=e32] [cursor=pointer]
+        - generic [ref=e33]:
+          - generic [ref=e34]: Linear viscoelasticity
+          - generic [ref=e35]: 3D · small strain
+          - button "View equations ↗" [ref=e36] [cursor=pointer]
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - heading "Standard Linear Solid" [level=2] [ref=e40]
+          - paragraph [ref=e41]: COMSOL6.3 ordinary deviatoric SLS · elastic bulk · dry total stress · infinitesimal strain · fixed spatial frame, zero spin.
+          - generic [ref=e42]:
+            - text: Physical-time experiment
+            - combobox "Physical-time experiment" [ref=e43]:
+              - option "Relaxation · hold all strains" [selected]
+              - option "Creep · hold all stresses"
+              - option "Loading · constant strain rate"
+          - generic [ref=e44]:
+            - text: Duration (s)
+            - spinbutton "Duration (s)" [ref=e45]: "8"
+          - generic [ref=e46]:
+            - text: Output intervals
+            - spinbutton "Output intervals" [ref=e47]: "4"
+          - generic [ref=e48]:
+            - text: Start time (s)
+            - spinbutton "Start time (s)" [ref=e49]: "0"
+          - group [ref=e50]:
+            - generic "Coefficients & complete initial history" [ref=e51] [cursor=pointer]
+          - paragraph [ref=e52]: Illustrative tested preset; no calibration or experimental validation. Holds advance physical seconds. Fixed qualified solver settings; custom values/time/history are exploratory, without a broad accuracy guarantee.
+          - generic [ref=e53]:
+            - button "Run physical-time history" [ref=e54] [cursor=pointer]
+            - button "Reset SLS preset" [ref=e55] [cursor=pointer]
+            - button "Import & replay SLS" [ref=e56] [cursor=pointer]
+            - button "Export complete SLS run" [disabled] [ref=e57]
+            - status [ref=e58]: "Run failed: Aborted(`Module.wasmBinary` was supplied but `wasmBinary` not included in INCOMING_MODULE_JS_API)"
+        - generic [ref=e59]:
+          - generic [ref=e60]:
+            - heading "Physical-time response" [level=2] [ref=e61]
+            - paragraph [ref=e62]: No current result.
+            - generic [ref=e63]:
+              - text: Plot component · Mandel
+              - combobox "Plot component · Mandel" [ref=e64]:
+                - option "xx" [selected]
+                - option "yy"
+                - option "zz"
+                - option "√2xy"
+                - option "√2yz"
+                - option "√2xz"
+            - img "Selected total stress against physical time" [ref=e65]
+            - img "Selected strain against physical time" [ref=e66]
+            - img "Selected branch overstress against physical time" [ref=e67]
+            - group [ref=e68]:
+              - generic "All12state and6stress components at every output" [ref=e69] [cursor=pointer]
+            - group [ref=e70]:
+              - generic "Fetched model, source, review and engine identities" [ref=e71] [cursor=pointer]
+            - paragraph [ref=e72]: "Measurement comparison is unavailable: no compatible source experiment or calibrated material is supplied. Curves are model responses; no experimental validation is implied."
+          - group [ref=e73]:
+            - generic "Equations, sources & approved scope" [ref=e74] [cursor=pointer]

@@ -1,0 +1,913 @@
+{
+  "schema_version": "0.1",
+  "release_target": 20,
+  "search_cutoff": "2026-10-30",
+  "coverage_claim": "Seed catalogue, not a systematic or exhaustive literature review.",
+  "models": [
+    {
+      "id": "drucker-prager",
+      "name": "Drucker\u2013Prager, nonassociated perfect plasticity",
+      "family": "elastoplasticity",
+      "status": "transcribed",
+      "executable": true,
+      "note": "Smooth Drucker\u2013Prager cone f=q-M p-c with separate dilatancy slope Md. Backward Euler; q direction regularized at 1e-12 p_ref. No tensile cap."
+    },
+    {
+      "id": "hypoplastic-sand-igs97",
+      "name": "Sand hypoplasticity + intergranular strain (1997)",
+      "family": "hypoplasticity",
+      "status": "draft",
+      "executable": true,
+      "note": "Draft IGS overlay on the von Wolffersdorff base law; compression-positive h and strain. Equation transcription requires independent review before scientific use.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/istrain/",
+          "role": "SoilModels discovery",
+          "locator": "Intergranular Strain Extensions; description and references (accessed 2026-10-30); 2024 generalized concept is explicitly referenced. Existing IGS and ISA entries are related lineage candidates, not claims of identical formulations or implementations."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-sand-vw96",
+      "name": "Sand hypoplasticity \u2014 von Wolffersdorff (1996)",
+      "family": "hypoplasticity",
+      "status": "transcribed",
+      "executable": true,
+      "note": "Compression-positive transcription of the von Wolffersdorff stress-rate law. Uses the published Karlsruhe sand parameter example (not Wichtmann calibration). Infinitesimal kinematics; zero spin.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hyposand/",
+          "role": "SoilModels discovery",
+          "locator": "Sand Hypoplasticity (von Wolffersdorff, 1996); description and references (accessed 2026-10-30); Existing transcription retained; directory coverage does not constitute independent review."
+        }
+      ]
+    },
+    {
+      "id": "linear-elastic",
+      "name": "Linear isotropic elasticity",
+      "family": "elasticity",
+      "status": "transcribed",
+      "executable": true,
+      "note": "Infinitesimal isotropic elasticity. Demonstration parameters, not calibrated to a soil."
+    },
+    {
+      "id": "modified-cam-clay",
+      "name": "Modified Cam Clay",
+      "family": "critical-state plasticity",
+      "status": "transcribed",
+      "executable": true,
+      "note": "Associated Modified Cam Clay with pressure/void-ratio dependent elasticity, exponential hardening, and backward-Euler integration. Demonstration parameters; finite rotation is unsupported."
+    },
+    {
+      "id": "sanisand-2004",
+      "name": "SANISAND \u2014 Dafalias & Manzari (2004)",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1061/(ASCE)0733-9399(2004)130:6(622)",
+      "note": "Original 2004 formulation targeted; pinned selected-function execution and tensor/unit conventions audit available. Full original-paper extraction, full reference integration and independent review pending.",
+      "capability_gap": "The 25-component layout (26 with multiplier) fits the verified 32-component bound; tensor square and an experimental parent-increment reset scope are available. Full original-paper extraction, canonical reversal/initialization policy, source-variant reconciliation and independent reference execution remain open.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/sanisand/",
+          "role": "SoilModels discovery",
+          "locator": "SANISAND (Dafalias and Manzari, 2004); description and references (accessed 2026-10-30); Existing candidate retained."
+        }
+      ],
+      "reference_implementation_url": "https://github.com/OpenSees/OpenSees",
+      "reference_implementation_commit": "8a0273db3e2f5a14c05924a179c1e439500c852c",
+      "research_sources": [
+        {
+          "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/ManzariDafalias.cpp",
+          "role": "Pinned primary implementation; selected state/tensor functions executed",
+          "locator": "18 selected functions checked against Cartesian algebra; full integration and numerical variant reconciliation pending"
+        },
+        {
+          "url": "https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/ManzariDafalias.html",
+          "role": "Official implementation documentation",
+          "locator": "Theory and parameter table; displayed deviator/markup issues recorded in dossier"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/sanisand-2004.md",
+          "role": "Atlas source brief (partial)",
+          "locator": "Target variant, source audit and remaining extraction tasks"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/SANISAND_CAPABILITIES.md",
+          "role": "Atlas provisional capability analysis",
+          "locator": "State capacity, tensor square and reversal transactions; no executable admission"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/PARENT_INCREMENT_RESETS.md",
+          "role": "Experimental engine contract",
+          "locator": "Committed-parent reset scope and synthetic acceptance checks; not a canonical SANISAND policy"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/sanisand-2004-conventions.md",
+          "role": "Atlas source-conventions and selected-function audit",
+          "locator": "Engineering shear, work/tangent/unit mapping; 87 cases; low-pressure unit dependence; no executable admission"
+        }
+      ]
+    },
+    {
+      "id": "terracotta-2024",
+      "name": "Terracotta (Terra Cotta) \u2014 Wiebicke & Einav (2024)",
+      "family": "rate-dependent hydrodynamic clay model",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1016/j.jmps.2024.105789",
+      "priority": "near-term",
+      "reference_implementation_url": "https://github.com/MaxWiebicke/Terracotta-pq",
+      "reference_implementation_commit": "a4039d0124d8ff61e766f5201f44ddc163c4cff5",
+      "note": "A source-pinned Figure 1 research draft runs in a separate native/Wasm catalogue, with five author-RHS histories, typed initialization and a separate prepared-creep scalar reference/native refinement study. Restricted to axisymmetric small strain; scientific review and public laboratory admission remain pending.",
+      "capability_gap": "Source-complete journal visual review, original outer-step/mixed-control reconciliation, external source-matched creep histories, new-case Wasm parity, scientific review and timed browser controls remain open. Not a full 3D law or part of the twenty-model 3D gate.",
+      "research_sources": [
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/models/research/terracotta-2024-fig1.json",
+          "role": "Research draft JSON",
+          "locator": "Figure 1; restricted axisymmetric scope; not independently reviewed"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/terracotta-2024-transcription.md",
+          "role": "Transcription and numerical evidence",
+          "locator": "Source mapping, reference boundary adaptation and remaining gates"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/INITIALIZATION_RECIPES.md",
+          "role": "Experimental typed initialization",
+          "locator": "Positive stable root from explicit total stress, temperature, solid fraction and rate; no inferred preparation"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/TERRACOTTA_CREEP_REFERENCE.md",
+          "role": "Separate scalar prepared-creep numerical reference",
+          "locator": "Three preparations, nine native refinements; AI mathematical implementation, not independent scientific review"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/terracotta-2024-tc01-reconciliation.md",
+          "role": "Atlas Figure1/AppendixB source reconciliation",
+          "locator": "Separate pressure/transport variants and coefficient units; complete journal equation/table images still required; TC-01 remains open"
+        }
+      ]
+    },
+    {
+      "id": "mohr-coulomb",
+      "name": "Mohr\u2013Coulomb \u2014 nonassociated perfect plasticity H=0 (draft)",
+      "family": "elastoplasticity",
+      "status": "draft",
+      "executable": true,
+      "discovery_url": "https://opensees.github.io/OpenSeesDocumentation/",
+      "note": "Sysala\u2013Cermak arXiv1508.07435v3, constant-cohesion nonassociated H=0 backward-Euler specialization; effective Cauchy stress, fixed-frame infinitesimal strain. Bounded native/Wasm source-path and compatibility qualification; independent scientific review pending. Strict positive cohesion/friction/dilation; no cap, tension cutoff, hardening or void-ratio law. Illustrative parameters/state are not soil calibration or experimental preparation.",
+      "capability_gap": "General representability and near-apex selected spectral-gap limits remain; bounded finite-path software qualification does not close independent scientific review.",
+      "catalogue_sources": [
+        {
+          "url": "https://arxiv.org/abs/1508.07435v3",
+          "locator": "Sysala and Cermak; exact preprint SHA256 bf35ee09d500b8e21aabdddbdfac363c5f68368f150890c60343bc62447c83ca; pp7\u201313 Eqs3.1\u20133.6,4.8\u20134.29 H=0 specialization; grouped return/tangents pp14\u201316. Atlas compression signs reversed; effective stress is explicit host specialization.",
+          "role": "primary formulation and backward-Euler algorithm"
+        }
+      ]
+    },
+    {
+      "id": "tresca",
+      "name": "Tresca perfect plasticity",
+      "family": "elastoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://www.opengeosys.org/",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Requires nonsmooth multisurface formulation and edge/apex tests."
+    },
+    {
+      "id": "original-cam-clay",
+      "name": "Original Cam Clay",
+      "family": "critical-state plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://www.icevirtuallibrary.com/doi/book/10.1680/cssm.02041",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Source extraction and logarithmic yield-domain treatment pending."
+    },
+    {
+      "id": "duncan-chang-1970",
+      "name": "Duncan\u2013Chang hyperbolic model (1970)",
+      "family": "nonlinear elasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1061/JSFEAQ.0001458",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Pin loading/unloading and 3D generalization; the triaxial relation alone is insufficient."
+    },
+    {
+      "id": "lade-duncan-1975",
+      "name": "Lade\u2013Duncan elastoplastic model (1975)",
+      "family": "elastoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1061/AJGEB6.0000204",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Full hardening/flow transcription and source checks pending; yield criterion alone is not a complete model."
+    },
+    {
+      "id": "matsuoka-nakai",
+      "name": "Matsuoka\u2013Nakai plasticity",
+      "family": "elastoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://www.jstage.jst.go.jp/browse/sandf",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Choose and pin a complete flow/hardening formulation; distinguish the failure criterion from constitutive models."
+    },
+    {
+      "id": "norsand-1993",
+      "name": "NorSand \u2014 Jefferies (1993)",
+      "family": "critical-state plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1680/geot.1993.43.1.91",
+      "note": "Exact1993 identity retained; original equation images remain unverified after bounded acquisition attempts. Later NorSand variants are separate.",
+      "capability_gap": "Acquire exact original PDF and visually verify yield/image-pressure/initialization and rigid-plastic loading/unloading closure; provisional text inventory is not a verified3D formulation.",
+      "research_sources": [
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/norsand-1993-source-packet.md",
+          "role": "Atlas exact-source access-gap dossier",
+          "locator": "Bounded Downloads/primary/author routes; no original PDF/hash or image-certified equations"
+        }
+      ]
+    },
+    {
+      "id": "manzari-dafalias-1997",
+      "name": "Manzari\u2013Dafalias sand model (1997)",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1680/geot.1997.47.2.255",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Backstress memory, surfaces and source-specific initialization pending."
+    },
+    {
+      "id": "hypoplastic-clay-2005",
+      "name": "Clay hypoplasticity \u2014 Ma\u0161\u00edn (2005)",
+      "family": "hypoplasticity",
+      "status": "draft",
+      "executable": true,
+      "discovery_url": "https://web.natur.cuni.cz/uhigug/masin/plaxumat/node2.html",
+      "note": "Provisional zero-spin Appendix C base law. Source Table I parameters and 100kPa/e=.8 are illustrative; passing bounded instantaneous-rate/finite-preview evidence is separate from preparation, scientific admission and experimental validation.",
+      "capability_gap": "Final publisher equivalence, general boundary/path accuracy, source-matched preparation, finite spin, consistent tangent and experimental validation remain open."
+    },
+    {
+      "id": "hypoplastic-clay-2013",
+      "name": "Clay hypoplasticity with explicit asymptotic states \u2014 Ma\u0161\u00edn (2013)",
+      "family": "hypoplasticity",
+      "status": "draft",
+      "executable": true,
+      "discovery_url": "https://web.natur.cuni.cz/uhigug/masin/plaxumat/node2.html",
+      "note": "Local v0.3 zero-spin regular-interior draft. Complete declared10kPa/e=.8 illustrative example, settings-aware native/Wasm paths and actual browser export pass frozen checks. Original incompatible100kPa drained default failure is retained; no scientific or experimental admission.",
+      "capability_gap": "Publisher/full-manuscript reconciliation, physical preparation/calibration, arbitrary near-boundary precision, finite spin and update tangent remain open. Material-domain validity does not guarantee mixed-control solvability; the2014 anisotropic extension remains separate.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hypoclay/",
+          "role": "SoilModels discovery",
+          "locator": "Clay Hypoplasticity; description and references (accessed 2026-10-30); Description names the 2014 law; references distinguish the 2013 base formulation. The older 2005 candidate remains separate."
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://doi.org/10.1007/s11440-012-0199-y",
+          "role": "Primary publication identity",
+          "locator": "Acta Geotechnica8(5),481\u2013496; online2012, issue2013"
+        },
+        {
+          "url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_AG12-pp.pdf",
+          "role": "Pinned author manuscript",
+          "locator": "SHA25621834ab9da81ec2cdebdf3a3d7f97b691d47bf481a24432bc0562aca9f503281; PDFpp13\u201314 Eqs43\u201358; full final-version equivalence unverified"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/clay2013-source-rate.md",
+          "role": "Atlas source-rate checks",
+          "locator": "Typed reduced and independent Cartesian/Decimal algebra; no integrated model admission"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/catalogue/source-audits/clay-hypoplasticity-2013-rate.json",
+          "role": "Atlas typed equation fragment",
+          "locator": "Zero-spin rates, explicit physical parameters/reference pressure and numerical-domain policy"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/clay2013-research-integration.md",
+          "role": "Atlas coupled research checks",
+          "locator": "Isolated native/Wasm target, exact isotropic trajectories, explicit scale and admission limits"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/models/research/clay2013/hypoplastic-clay-2013-research.json",
+          "role": "Atlas research schema",
+          "locator": "Seven-component zero-spin research draft; illustrative parameters; not publicly admitted"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/clay2013-initialization-policy.md",
+          "role": "Atlas source/preparation review",
+          "locator": "ASBS outward-rate witness; algebraic domain is distinct from physical initial-state policy"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/CLAY2013_CARTESIAN_PATH_REFERENCE.md",
+          "role": "Atlas nonisotropic native/Wasm evidence",
+          "locator": "Two full-tensor paths and rotated companions; independent Cartesian RK4 refinement, chained backend endpoints and reviewed evidence identity; no scientific admission"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/clay2013-laboratory-preview.md",
+          "role": "Atlas provisional laboratory preview",
+          "locator": "Frozen complete-example settings-aware native/Wasm/browser study and retained incompatible100kPa default failure; examples are not specimen preparation."
+        }
+      ]
+    },
+    {
+      "id": "s-clay1",
+      "name": "S-CLAY1 \u2014 Wheeler et al. (2003)",
+      "family": "anisotropic critical-state plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1139/t02-119",
+      "note": "Wheeler, N\u00e4\u00e4t\u00e4nen, Karstunen & Lojander (2003), An anisotropic elastoplastic model for soft clays, Canadian Geotechnical Journal 40(2), 403\u2013418. Bibliographic identity verified; original full-text/equation review pending.",
+      "capability_gap": "Source-pinned rotational-hardening transcription pending.",
+      "catalogue_sources": [
+        {
+          "url": "https://research.chalmers.se/en/publication/173097",
+          "role": "author institutional bibliographic record",
+          "locator": "Title, four authors, CGJ 40(2), 403\u2013418 and DOI 10.1139/t02-119; verified 2026-10-31; metadata only, not full-text equation evidence."
+        },
+        {
+          "url": "https://strathprints.strath.ac.uk/3809/",
+          "role": "author institutional bibliographic record",
+          "locator": "Same title/authors/journal/pages/DOI; explicitly reports full text unavailable; verified 2026-10-31."
+        }
+      ]
+    },
+    {
+      "id": "barodesy-sand",
+      "name": "Barodesy sand (2015) \u2014 fixed-frame draft",
+      "family": "barodesy",
+      "status": "draft",
+      "executable": true,
+      "discovery_url": "https://doi.org/10.1680/geot.14.P.151",
+      "note": "Kolymbas2015 Eq31 zero-spin fixed-frame draft with explicit v0.3 stress/e state. Default parameters are a separate2019 illustrative calibration. Independent instantaneous-rate and bounded actual-driver finite-path studies pass; no experimental validation or scientific admission.",
+      "capability_gap": "Draft restrictions: conservative nonzero positive-definite stress/density/loading numerical interior, zero-spin only; zero-stress law, update tangents, physical preparation, source-matched calibration and experimental/admission gates remain open.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/barodesy/",
+          "role": "SoilModels discovery",
+          "locator": "Barodesy (Kolymbas, Medicus, Schneider-Muntau, Fellin); description and references (accessed 2026-10-30); Directory implementation explicitly names clay 2017; existing sand placeholder remains unpinned. Other cited extensions need further screening."
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://doi.org/10.1680/geot.14.P.151",
+          "role": "Selected2015 original sand law",
+          "locator": "Kolymbas2015 Eqs9,20,23,26\u201331; fixed-frame research specialization and numerical support declared separately."
+        },
+        {
+          "url": "https://doi.org/10.1002/nag.2984",
+          "role": "Separate2019 illustrative default parameter calibration",
+          "locator": "Kolymbas/Bathaeian2019 author manuscript Table1; c4=465kPa converted to465000Pa; not a2015 experiment reproduction."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-isa",
+      "name": "Hypoplasticity + ISA \u2014 Fuentes et al.",
+      "family": "hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1007/s11440-019-00846-2",
+      "note": "Exact ISA cyclic-mobility paper (online2019, issue2020) acquired and inventoried:16 parameters and26 full-symmetric retained scalar components. Main mobility extension and older appendix rules remain distinct; source conflicts prevent a canonical executable transcription.",
+      "capability_gap": "Resolve printed rate normalization, host-factor equations, updated hardening versus older appendix, elastic/yield branches, all-history initialization and exact author-code version. Do not replace full h/c/Z by deviators or borrow GIS/IGS rules.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/istrain/",
+          "role": "SoilModels discovery",
+          "locator": "Intergranular Strain Extensions; description and references (accessed 2026-10-30); 2024 generalized concept is explicitly referenced. Existing IGS and ISA entries are related lineage candidates, not claims of identical formulations or implementations."
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://doi.org/10.1007/s11440-019-00846-2",
+          "role": "Primary publication identity",
+          "locator": "Fuentes, Wichtmann, Gil and Lascarro; ISA-Hypoplasticity accounting for cyclic mobility effects for liquefaction analysis; Acta Geotechnica15,1513-1531(2020), online1July2019"
+        },
+        {
+          "url": "https://link.springer.com/content/pdf/10.1007/s11440-019-00846-2.pdf",
+          "role": "Pinned publisher full text",
+          "locator": "SHA25697b8762b7773e86a7778835f24f46734bb82522052c0856f63e42bc98ba76821; source equations and initialization inspected; PDF not bundled"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/hypoplastic-isa-2020-original.md",
+          "role": "Atlas exact-source inventory",
+          "locator": "Selected paired host,16parameters,26retainedslots, source-conflict diagnostics and incomplete Figure4 reproduction gates"
+        }
+      ]
+    },
+    {
+      "id": "hca-sand-2005",
+      "name": "High-cycle accumulation \u2014 Niemunis et al. (2005)",
+      "family": "cycle-averaged accumulation",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1016/j.compgeo.2005.03.002",
+      "note": "Research candidate; bibliographic and formulation review pending.",
+      "capability_gap": "Requires a cycle-count driver, amplitude/history representation and suitable long-cycle data; not an instantaneous stress-rate law.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hca/",
+          "role": "SoilModels discovery",
+          "locator": "A High-Cycle Accumulation Model for Sand (Niemunis et al., 2005); description and references (accessed 2026-10-30); Existing cycle-averaged candidate retained."
+        }
+      ]
+    },
+    {
+      "id": "pm4sand",
+      "name": "PM4Sand2D 3.3 \u2014 Boulanger & Ziotopoulou",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/pm4sand/",
+      "note": "Plane-strain 3.3 candidate. Vendor manual pinned (June 2023); equivalence to author-listed May 2024 revision unresolved. Partial documentary review only; PM4Sand3D has a separate identity.",
+      "capability_gap": "Reconcile manual editions; complete plane-strain equations, initialization, cyclic history and integration extraction. Restrict unsupported 3D paths and verify source-matched calibrations.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/pm4sand/",
+          "role": "SoilModels discovery",
+          "locator": "PM4Sand (Boulanger & Ziotopoulou); description and references (accessed 2026-10-30); Exact numbered release remains to be pinned; original sources discuss plane strain."
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/",
+          "role": "Author overview",
+          "locator": "Background: separate PM4Sand2D and PM4Sand3D; 3D authorship"
+        },
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/pm4sand-files",
+          "role": "Author release listing",
+          "locator": "Version 3.1, 3.2 and 3.3 sections; scope and calibration changes"
+        },
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/pm4sand-references",
+          "role": "Author bibliography",
+          "locator": "Manual report identities and 2013 formulation/implementation papers"
+        },
+        {
+          "url": "https://ucdavis.box.com/s/op92sb4hxh9zzw8imfsvib16hjuepzuk",
+          "role": "Author-linked 3.3 manual; not inspected",
+          "locator": "Report UCD/CGM-23/01; exact bytes and revision pending"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/pm4sand-versions.md",
+          "role": "Atlas version and dimensional-scope screening",
+          "locator": "2D and 3D identities, calibration/version distinctions and remaining source tasks"
+        },
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Boulanger_Ziotopoulou_PM4Sand_v3.3_CGM-23-01.pdf",
+          "role": "Vendor-hosted author manual; partial inspection",
+          "locator": "June 2023 edition, PDF pages 1-3; report UCD/CGM-23/01. Checksum in manual audit; not established as May 2024 author revision."
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/pm4sand3d-1.0-manual.md",
+          "role": "Atlas partial manual audit",
+          "locator": "Edition discrepancies, integration scope and pending source-matched cases"
+        }
+      ]
+    },
+    {
+      "id": "pm4silt",
+      "name": "PM4Silt \u2014 Boulanger & Ziotopoulou",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/pm4silt/",
+      "note": "Exact Version1(2018), UCD/CGM-18/01 manual and matching author DLL/calibration-driver archives are privately pinned; plane-strain implementation remains separate from PM4Sand and later PM4Silt releases.",
+      "capability_gap": "Complete source-derived2D state/history/initialization and homogeneous-point versus four-subzone update contract; resolve startup modulus and signed pressure ambiguities; source/license, integration/reference and experimental/scientific review remain open.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/pm4silt/",
+          "role": "SoilModels discovery",
+          "locator": "PM4Silt (Boulanger & Ziotopoulou); description and references (accessed 2026-10-30); Version 1 (2018) is cited; exact implementation release remains to be pinned."
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://pm4silt.engr.ucdavis.edu/pm4silt-files",
+          "role": "Primary release inventory",
+          "locator": "Retained Version1 manual UCD/CGM-18/01 and17January2018 author-listed FLAC8 DLL; later versions separate"
+        },
+        {
+          "url": "https://ucdavis.box.com/shared/static/3b0vysopws6tsl96akj8y1mcdr05sqz1.pdf",
+          "role": "Pinned original manual",
+          "locator": "First editionJanuary2018;109PDFpages; SHA2567eccd740249d72861e9727bc17d26fc07d382cfe4624902371e744d559b317ea"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/pm4silt-v1-source.md",
+          "role": "Atlas source/release and plane-strain dossier",
+          "locator": "Private manual/archive receipts; independent in-plane algebra; no author binary execution"
+        }
+      ]
+    },
+    {
+      "id": "extended-mohr-coulomb-2013",
+      "name": "Extended Mohr\u2013Coulomb (EMC) \u2014 Doherty & Muir Wood (2013)",
+      "family": "hardening elastoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/emc/",
+      "note": "G\u00e9otechnique 63(8), 661\u2013673: Mohr\u2013Coulomb yielding with Cam Clay flow and asymptotic hardening. Distinct from the perfect-plastic Mohr\u2013Coulomb candidate.",
+      "capability_gap": "Extract the complete flow/hardening law and calibrations; establish edge/apex integration and unloading behavior.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/emc/",
+          "role": "SoilModels discovery",
+          "locator": "Extended Mohr\u2013Coulomb (EMC); description and references (accessed 2026-10-30); Distinct hardening law; not merged with generic Mohr\u2013Coulomb."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-interface-2016",
+      "name": "Hypoplastic interface \u2014 Stutz, Ma\u0161\u00edn & Wuttke (2016)",
+      "family": "interface hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/hypointerface/",
+      "note": "Enhanced soil\u2013structure interface formulation, Acta Geotechnica 11(6), 1249\u20131261; the related 2017 general conversion approach requires separate reconciliation.",
+      "capability_gap": "Needs an interface contract for traction, slip, in-plane stress and shear-zone thickness, reduced tensor operations and objective frame treatment.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hypointerface/",
+          "role": "SoilModels discovery",
+          "locator": "Hypoplastic Interface Model (Stutz et al., 2016); description and references (accessed 2026-10-30); 2016 enhancement selected as candidate; 2017 conversion approach needs lineage review."
+        }
+      ]
+    },
+    {
+      "id": "multilaminate-schadlich-schweiger",
+      "name": "Multilaminate model \u2014 Sch\u00e4dlich & Schweiger",
+      "family": "multilaminate plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/multilaminate/",
+      "note": "Stiff-soil formulation described in Sch\u00e4dlich\u2019s 2012 thesis and the 2013/2014 papers; includes small-strain anisotropy and overconsolidation extensions.",
+      "capability_gap": "Pin the exact thesis/paper variant, plane quadrature, per-plane states, Hvorslev surface and small-strain memory; reconcile the implementation documentation.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/multilaminate/",
+          "role": "SoilModels discovery",
+          "locator": "Multilaminate Model (Sch\u00e4dlich & Schweiger); description and references (accessed 2026-10-30); Thesis and 2013/2014 extensions require variant reconciliation."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-thermal-ma-2017",
+      "name": "Thermal-cycle hypoplasticity \u2014 Ma et al. (2017)",
+      "family": "thermomechanical hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/hypotherm/",
+      "note": "Ma, Ng, Ma\u0161\u00edn & Zhou, Canadian Geotechnical Journal 54(6), 896\u2013901; thermal-cycle volume-change extension for fine-grained soils.",
+      "capability_gap": "Needs prescribed temperature paths, thermal strain and stabilization history; determine from equations whether evolution uses temperature increments or physical time.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hypotherm/",
+          "role": "SoilModels discovery",
+          "locator": "Hypoplastic Model for Thermal Cycles (Ma et al., 2017); description and references (accessed 2026-10-30); Thermal inputs and history require a distinct capability contract."
+        }
+      ]
+    },
+    {
+      "id": "vibe-2026",
+      "name": "Viscohypoplastic bentonite (VIBE) \u2014 Ma\u0161\u00edn (2026)",
+      "family": "thermo-hydro-mechanical viscohypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://doi.org/10.1016/j.enggeo.2026.108827",
+      "note": "Double-structure bentonite model with creep and relaxation; Engineering Geology 370, 108827.",
+      "capability_gap": "Needs coupled thermal/hydraulic inputs, double-structure state initialization, physical-time evolution and source-matched creep/relaxation references.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/vibe/",
+          "role": "SoilModels discovery",
+          "locator": "Viscohypoplastic bentonite (VIBE) model; description and references (accessed 2026-10-30); Physical-time THM candidate; model/data/code reuse rights require individual review."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-generalized-igs-2024",
+      "name": "Generalized intergranular strain \u2014 Mugele, Stutz & Ma\u0161\u00edn (2024)",
+      "family": "hypoplasticity extension",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/istrain/",
+      "note": "Selected VW96 HP+extracted-ASBS+GIS pairing represented in an isolated 14-state research schema. Typed host actions and independent Cartesian rates agree through Python/native/Wasm checks. Candidate remains non-executable publicly; not interchangeable with IGS97 or ISA. Bounded interior finite paths now match independent Cartesian references through204updates per native/Wasm backend.",
+      "capability_gap": "Eighteen physical parameters plus numerical stress scale; zero-spin rates and selected interior finite paths verified. Memory-origin/saturation/boundary integration, wider paths, source preparation, author-code discretization/license, experimental comparisons and scientific review remain open.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/istrain/",
+          "role": "SoilModels discovery",
+          "locator": "Intergranular Strain Extensions; description and references (accessed 2026-10-30); 2024 generalized concept is explicitly referenced. Existing IGS and ISA entries are related lineage candidates, not claims of identical formulations or implementations."
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://doi.org/10.1016/j.compgeo.2024.106480",
+          "role": "Primary publication identity",
+          "locator": "Generalized intergranular strain concept and its application to hypoplastic models,2024"
+        },
+        {
+          "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+          "role": "Pinned institutional full text",
+          "locator": "SHA25639ec8356a26b82ae651be8feb4cdb3e49bb86ded9a850adc4c7eee5e9ec3bdc3; pp5\u20137 Eqs33\u201343"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/gis-2024-supplied-host-rates.md",
+          "role": "Atlas supplied-host GIS algebra",
+          "locator": "Directional rates, host-action boundary, sign/zero policies and Cartesian checks; full HP pairing now documented separately"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/catalogue/source-audits/gis-2024-supplied-host-rates.json",
+          "role": "Atlas typed equation fragment",
+          "locator": "Continuous full symmetric h/Omega rates, supplied E,m,C,S,f; no finite-step update"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/gis-2024-hp-extracted-asbs-host.md",
+          "role": "Atlas typed HP/extracted-ASBS host",
+          "locator": "Structured actions, independently inverted Cartesian reference and singular-domain limits"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/gis2024-research-rates.md",
+          "role": "Atlas coupled research rates",
+          "locator": "14-state isolated schema; Python/native/Wasm instantaneous comparisons and strict radius policy; no finite integration admission"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/models/research/gis2024/hp-extracted-asbs-gis-2024-research.json",
+          "role": "Atlas research schema",
+          "locator": "Source-linked continuous sigma6,e,h6,Omega law with explicit physical parameters and units"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/gis2024-research-integration.md",
+          "role": "Atlas bounded interior finite-path evidence",
+          "locator": "20trajectories/204updates per backend; independent RK4/refinement/partition/rollback/recovery; boundary and physical admission open"
+        }
+      ]
+    },
+    {
+      "id": "barodesy-clay-2017",
+      "name": "Barodesy clay 2017 \u2014 body law, zero spin (draft)",
+      "family": "barodesy",
+      "status": "draft",
+      "executable": true,
+      "discovery_url": "https://soilmodels.com/barodesy/",
+      "note": "Draft laboratory preview of the explicitly selected body-Eqs1\u201310 zero-spin law. Schema v0.3 declares all conventions and explicit state initialization. Native/Wasm checks cover all five monotonic and cyclic laboratory protocols; prior research provides separately bounded rate/derivative/finite-path evidence. Body2p versus Appendix6p and printed spin discrepancies remain unresolved. No experimental validation, reviewed status, author-code equivalence, finite rotation or validated zero/near-hydrostatic update tangent.",
+      "capability_gap": "Near-hydrostatic/zero derivative policy, broader support and physical initialization, experimental/scientific review, body/appendix critical-density discrepancy, objective-rate typography and exact author-code pairing remain open. Stress support is a conservative normalized Cartesian interior; bounded path matrices do not establish universal integration accuracy.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/barodesy/",
+          "role": "SoilModels discovery",
+          "locator": "Barodesy (Kolymbas, Medicus, Schneider-Muntau, Fellin); description and references (accessed 2026-10-30); Directory implementation explicitly names clay 2017; existing sand placeholder remains unpinned. Other cited extensions need further screening."
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://doi.org/10.1007/s11440-016-0458-4",
+          "role": "Primary publication identity",
+          "locator": "Medicus and Fellin, An improved version of barodesy for clay, Acta Geotechnica12,365-376; issue2017"
+        },
+        {
+          "url": "https://link.springer.com/content/pdf/10.1007/s11440-016-0458-4.pdf",
+          "role": "Pinned publisher full text",
+          "locator": "SHA256 bd049a3fd874c9e4945e1c77f5af5b84ac14c26a08cee1b953428b4312e6af15; bodyEqs1-10/Table1 and appendices visually inspected; PDF not bundled"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/barodesy-clay-2017-source-packet.md",
+          "role": "Atlas source and variant inventory",
+          "locator": "Body2p versus Appendix6p discrepancy; source-defined matrix exponential and explicit numerical-branch gates"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/barodesy2017-research-rates.md",
+          "role": "Atlas isolated research implementation and bounded numerical evidence",
+          "locator": "111 canonical plus 3 support rates, 16 rejections per backend; 21 regular 7x13 Jacobians and 20 rejection/recovery pairs; source choices and remaining gates explicit"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/barodesy2017-finite-study.md",
+          "role": "Atlas bounded common-engine finite-path evidence",
+          "locator": "45 isotropic compression trajectories and459chainedupdates per native/persistent-Wasm backend; independent scalar targets, refinement/partition/volume/rollback and raw transport audit; no experimental or public admission"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/barodesy2017-hydro-ad-study.md",
+          "role": "Atlas exact nonzero-hydrostatic derivative evidence",
+          "locator": "36 supplied 7x13 Jacobians and 48 rejection/recovery pairs per native/persistent Wasm; analytic reference and 133 raw-call audit; no near-hydro, zero-loading or public admission"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/barodesy2017-wider-integration-results.md",
+          "role": "Atlas off-NCL, reversal and tensor finite-path evidence",
+          "locator": "48 trajectories/576 chained updates per native/persistent-Wasm backend; independent references at every caller point, refinement/partition/rollback and both583-row raw transport audits; no experimental/public admission"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/barodesy2017-laboratory-preview.md",
+          "role": "Atlas draft laboratory preview and exact scope",
+          "locator": "v0.3 explicit formulation/state contract; all five protocols monotonic/cyclic in native/Wasm; no scientific admission or deployment claim."
+        }
+      ]
+    },
+    {
+      "id": "hypoplastic-clay-2014",
+      "name": "Anisotropic clay hypoplasticity \u2014 Ma\u0161\u00edn (2014)",
+      "family": "hypoplasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://soilmodels.com/hypoclay/",
+      "note": "Author manuscript source-linked; isolated seven-state printed-Am/proposed-Eq49 fixed-plane base research rate passes37 independent Cartesian native/Wasm cases and16 rejection/recovery pairs per backend. No public admission or final-publisher equivalence.",
+      "capability_gap": "Printed Eq14 Am versus trace(L:I) and AppendixB IGS factor4.5 discrepancies remain unresolved. Derivatives, finite paths, physical preparation, axis transport, final-version equivalence, IGS pairing and experimental/scientific review remain open.",
+      "catalogue_sources": [
+        {
+          "url": "https://soilmodels.com/hypoclay/",
+          "role": "SoilModels discovery",
+          "locator": "Clay Hypoplasticity; description and references (accessed 2026-10-30); Description names the 2014 law; references distinguish the 2013 base formulation. The older 2005 candidate remains separate."
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://doi.org/10.1680/geot.13.P.065",
+          "role": "Primary publication identity; author manuscript inspected separately",
+          "locator": "Clay hypoplasticity model including stiffness anisotropy; separate from Ma\u0161\u00edn\u2013Rott review"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/clay-2013-2014-source-packet.md",
+          "role": "Atlas dependency/access packet",
+          "locator": "Historical dependency/access snapshot; later2014 manuscript acquisition documented separately"
+        },
+        {
+          "url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_Geot14-pp.pdf",
+          "role": "Inspected author manuscript",
+          "locator": "16pages; SHA2562eb8598297e3ac9cf245161f56674d6cef622b35fc612adc89dc129568b55202; final publisher equivalence unverified"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/hypoplastic-clay-2014-original.md",
+          "role": "Atlas source and anisotropic-action dossier",
+          "locator": "Independent Cartesian contractions; printed normalization conflict retained without repair"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/clay2014-rate-results.md",
+          "role": "Atlas bounded full-base research rate evidence",
+          "locator": "Printed-Am/proposed-Eq49 fixed-plane variant;37 independent Cartesian rates,16 rejection/recovery pairs and70 raw responses per native/persistent-Wasm backend; retained audit failure and additive assessment; no admission"
+        }
+      ]
+    },
+    {
+      "id": "pm4sand3d-1.0",
+      "name": "PM4Sand3D 1.0 \u2014 Kippen, Boulanger & Ziotopoulou",
+      "family": "bounding-surface plasticity",
+      "status": "candidate",
+      "executable": false,
+      "discovery_url": "https://pm4sand.engr.ucdavis.edu/pm4sand3d-files",
+      "note": "Separate 3D generalization, UCD/CGM-26/01. Author page cites May 2026; pinned vendor PDF says June. Partial surface/flow algebra and 30-group history/lag inventory are documented; full equations, source algorithm reconciliation and reference execution remain incomplete.",
+      "capability_gap": "Complete tensor/state extraction, reconcile manual editions and algorithm ambiguities, specify host averaging and lagged history, and verify matching reference cases. No constitutive source or DLL executed.",
+      "catalogue_sources": [
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/",
+          "role": "Author overview",
+          "locator": "Background: separate PM4Sand2D and PM4Sand3D; 3D authorship"
+        },
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/pm4sand3d-files",
+          "role": "Author release listing",
+          "locator": "Version 1: May 2026 manual and FLAC3D 9.X distribution; example driver paths"
+        }
+      ],
+      "research_sources": [
+        {
+          "url": "https://pm4sand.engr.ucdavis.edu/pm4sand-references",
+          "role": "Author bibliography",
+          "locator": "Manual report identities and 2013 formulation/implementation papers"
+        },
+        {
+          "url": "https://github.com/katerinaziot/PM4Sand3D_drivers_auto",
+          "role": "Author calibration drivers; not executed",
+          "locator": "README v1.0 June 2026; FLAC3D input generation and postprocessing; not constitutive source"
+        },
+        {
+          "url": "https://ucdavis.box.com/s/l1i2qm704l6ii9g3v6lodx6uwwu8x5t1",
+          "role": "Author-linked 3D 1.0 manual; not inspected",
+          "locator": "Kippen, Boulanger and Ziotopoulou (2026), report UCD/CGM-26/01"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/pm4sand-versions.md",
+          "role": "Atlas version and dimensional-scope screening",
+          "locator": "Distinct 3D candidate; no equation extraction or numerical admission"
+        },
+        {
+          "url": "https://itasca-software.s3.amazonaws.com/udm-library/Kippen_et_al_PM4Sand3D_v1_CGM-26-01.pdf",
+          "role": "Vendor-hosted author manual; partial inspection",
+          "locator": "June 2026 edition; printed pages 70-78 (PDF 75-83), integration and initialization. Partial review and checksum in manual audit."
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/pm4sand3d-1.0-manual.md",
+          "role": "Atlas partial manual audit",
+          "locator": "Edition discrepancies, integration scope and pending source-matched cases"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/pm4sand3d-1.0-flow.md",
+          "role": "Typed instantaneous flow fragment",
+          "locator": "Section 2 Eqs. 35\u201337 with supplied D, separate Cartesian oracle and unresolved algorithm discrepancy"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/models/pm4sand3d-1.0-history.md",
+          "role": "Draft state/event/lagged-update inventory",
+          "locator": "Thirty field groups, caller-step chronology, host context, non-minimal storage ledger and unresolved source gates"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/pm4sand3d-1.0-order-reconciliation.md",
+          "role": "Bounded update-chronology source review",
+          "locator": "Caller-step D/Kp lag, corrected-zone reversal, late anchor/fabric snapshots, Eq27/Eq47 equality discrepancy and zero-distance branch remain explicit source gates"
+        }
+      ]
+    },
+    {
+      "id": "tresca-associated-perfect-bk2022v1-be",
+      "name": "Associated Tresca perfect plasticity \u2014 BK2022v1, project BE (draft)",
+      "family": "elastoplasticity",
+      "status": "draft",
+      "executable": true,
+      "note": "Full sigma6/ep6 associated total-stress closure with constant positive Lam\u00e9 moduli and shear strength. BK2022v1 continuum law; project backward-Euler return, numerically qualified on bounded corpora. Independent scientific review pending; example parameters are not soil calibration. No pore-pressure law or effective-stress experimental overlay.",
+      "catalogue_sources": [
+        {
+          "url": "https://arxiv.org/abs/2207.12719v1",
+          "role": "Primary author preprint, exact version",
+          "locator": "Boulmezaoud & Khouider (2022), pp.2\u20133 Eqs.1\u20138, p.7 Eqs.32\u201345, pp.15\u201316 Eqs.77\u201381; project discrete update separately derived."
+        }
+      ]
+    },
+    {
+      "id": "research-hp-extracted-asbs-gis-2024-v03",
+      "name": "HP extracted ASBS + GIS2024 \u2014 v0.3 zero-spin research draft",
+      "family": "hypoplasticity with generalized intergranular strain",
+      "status": "draft",
+      "executable": true,
+      "note": "Selected HP/extracted-ASBS+GIS2024, f=0, zero-spin v0.3 research draft. Distinct from generic GIS discovery and IGS97/ISA. Pending unsigned source review; strict computed norm(h)<=R without projection. Illustrative full state is not prepared/calibrated. Tiny-path qualification only; ordinary 1%/100step/depth14 run fails; use the explicitly labelled small run example. Local browser acceptance pending.",
+      "catalogue_sources": [
+        {
+          "url": "https://doi.org/10.1016/j.compgeo.2024.106480",
+          "locator": "Mugele, Stutz and Masin2024, Eqs8\u201312,22,26\u201335,39\u201343; AppendixB. Selected extracted-ASBS HP pairing, distinct from S=Y.",
+          "role": "primary publication"
+        },
+        {
+          "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+          "locator": "Published institutional PDF SHA256 39ec8356a26b82ae651be8feb4cdb3e49bb86ded9a850adc4c7eee5e9ec3bdc3; source tension/extension signs mapped consistently to compression-positive Mandel.",
+          "role": "pinned primary PDF"
+        }
+      ]
+    },
+    {
+      "id": "power-creep-itasca900-both-active-ode",
+      "name": "Two-component power creep \u2014 Itasca9.0 both active",
+      "family": "physical-time creep",
+      "status": "numerically-tested",
+      "executable": false,
+      "public_timed_laboratory": true,
+      "timed_laboratory": "power-creep.html",
+      "note": "User-approved bounded both-active law, independently agent-reviewed. Available in the dedicated physical-time laboratory; excluded from the strain-path runtime. Dry zero-spin small strain, n>=1; illustrative parameters; no threshold switching or experimental validation. Exact tested definition retains historical draft metadata.",
+      "catalogue_sources": [
+        {
+          "url": "https://docs.itascacg.com/itasca900/common/models/power/doc/modelpower.html",
+          "role": "Primary manual, Itasca9.0",
+          "locator": "Eqs2\u20136 and Both Components Active option; Eq7 trace defect excluded explicitly."
+        }
+      ]
+    },
+    {
+      "id": "sls-comsol63-deviatoric-zero-spin-ode",
+      "name": "Standard Linear Solid / Zener \u2014 COMSOL6.3 deviatoric",
+      "family": "linear viscoelasticity",
+      "status": "reviewed",
+      "executable": false,
+      "timed_laboratory": "index.html",
+      "note": "Independently agent-reviewed bounded COMSOL6.3 ordinary deviatoric SLS plus elastic bulk; physical-time relaxation, creep and rate loading in the main atlas laboratory. Dry total stress, infinitesimal strain, fixed frame/zero spin. Exact passivity assumes traceless branch stress. Illustrative parameters; no calibration or experimental validation; broad machine parameter envelope unqualified.",
+      "catalogue_sources": [
+        {
+          "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441011",
+          "role": "Primary vendor theory COMSOL6.3",
+          "locator": "Standard Linear Solid Model, equation images078\u2013080; ordinary deviatoric variant"
+        }
+      ]
+    },
+    {
+      "id": "burgers-itasca900-dry-zero-spin-ode",
+      "name": "Burgers continuum \u00b7 continuous dry zero-spin",
+      "family": "Viscoelasticity",
+      "status": "reviewed",
+      "executable": false,
+      "timed_laboratory": "index.html",
+      "dossier": "docs/models/burgers-main-laboratory-v1.md",
+      "note": "Independently reviewed bounded continuous Burgers law; physical-time creep/relaxation in the main laboratory. Illustrative uncalibrated parameters; vendor centered update and finite rotations excluded.",
+      "research_sources": [
+        {
+          "url": "https://docs.itascasoftware.com/itasca900/common/models/burgers/doc/modelburgers.html",
+          "role": "Governing manual equations",
+          "locator": "Itasca9.0.184 source-pinned continuum Burgers equations"
+        }
+      ],
+      "capability_gap": "Broader host/coupling/finite-rotation and general parameter envelopes remain unqualified."
+    }
+  ]
+}
