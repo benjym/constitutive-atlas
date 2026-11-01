@@ -1,0 +1,1 @@
+import fs from 'node:fs'; import create from './atlas-loading-boundary.js'; await create({wasmBinary:fs.readFileSync(new URL('./atlas-loading-boundary.wasm',import.meta.url)),print:x=>process.stdout.write(x+'\n'),printErr:x=>process.stderr.write(x+'\n')});

@@ -60,6 +60,10 @@ def generate(destination, model_paths=None):
     for i,m in enumerate(models):
         reset_types=reset_derived_types(m)
         lines.append(f'case {i}: {{'); scales.append(f'case {i}: {{'); obs_scales.append(f'case {i}: {{')
+        if m.get('schema_version') == '0.3':
+            # Declared inputs are required even when absent from the AST. Check
+            # primal loading here; executed-node checks retain Jet derivative rules.
+            lines.append('for (const auto& component : loading.v) if (!std::isfinite(atlas::value(component))) return false;')
         if physical_time(m):
             lines += ['if (!std::isfinite(evaluation_time)) return false;', 'const T time=T(evaluation_time);', 'const auto& strain_rate=loading;']
         else:

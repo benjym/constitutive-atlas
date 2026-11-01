@@ -88,7 +88,10 @@ class FormulationTests(unittest.TestCase):
                         return [line for line in without_stress_scope_metadata((base/label/'models.hpp').read_text()).splitlines()
                                 if 'inline const char* catalogue_hash()' not in line
                                 and 'inline bool explicit_initialization_required(' not in line
-                                and 'inline const char* describe_models()' not in line]
+                                and 'inline const char* describe_models()' not in line
+                                # v0.3 validates declared loading even when unused;
+                                # this boundary guard is separate from material math.
+                                and line != 'for (const auto& component : loading.v) if (!std::isfinite(atlas::value(component))) return false;']
                     self.assertEqual(executable('old'), executable('new'))
 
     def test_required_contract_and_unsupported_claims(self):

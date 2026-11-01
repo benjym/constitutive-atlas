@@ -1,0 +1,53 @@
+{
+  "backend": "wasm",
+  "host": "macOS-26.7.1-arm64-arm-64bit-Mach-O",
+  "started_utc": "2026-11-01T04:48:39.084878+00:00",
+  "commands": [
+    {
+      "label": "configure",
+      "argv": [
+        "/opt/homebrew/bin/emcmake",
+        "cmake",
+        "-S",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/declared-loading-boundary-v2",
+        "-B",
+        "/private/tmp/atlas-loading-boundary-v2-wasm",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-loading-boundary-v2-wasm",
+        "--target",
+        "atlas_loading_boundary",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "/private/tmp/atlas-loading-boundary-v2-wasm/observe.mjs"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas-loading-boundary.js": {
+      "sha256": "06f9de0620b0b926c7b43687e272d42d6da69bddbf76f25c4b79fcfcd1927b19",
+      "bytes": 66554
+    },
+    "atlas-loading-boundary.wasm": {
+      "sha256": "ed8e847842112340f4fd407a9f0c15bd717a31e3e1152b3ce7efd89b465efe9f",
+      "bytes": 230962
+    }
+  },
+  "frozen_inputs_unchanged_after_run": true,
+  "finished_utc": "2026-11-01T04:48:42.853839+00:00"
+}
