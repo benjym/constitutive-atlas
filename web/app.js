@@ -11,7 +11,6 @@ import {createLaboratoryControllerRouter} from './laboratory-controller-router.m
 import {validateSupport,unsupportedReason,requireSupportedControl} from './laboratory-support.mjs';
 import {timedLaboratoryRoute} from './timed-route.mjs';
 import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';
-import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
 import {formulationSection,recordedDescription} from './formulation-view.mjs';
 import {modelProfile,modelProfileSection} from './model-profiles.mjs';
 import {createLoading,normalizeLoading,verifyReturnedLoading} from './loading.mjs';
@@ -19,7 +18,7 @@ import {laboratoryStress,validateScopedLaboratory,verifyScopedLaboratory} from '
 import {laboratoryPresentation,laboratoryPoreView} from './laboratory-view.mjs';
 import {createLaboratoryDocument,parseLaboratoryDocument,laboratoryDocumentCSV} from './laboratory-document.mjs';
 import {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';
-import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
+import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex} from './catalogue.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
 const $ = id => document.getElementById(id);
@@ -28,19 +27,12 @@ let compiledCatalogue=null, laboratoryExamples=null, controlSupport=null;
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
 const experimentCache=new Map();
-let applicabilityMatrix=null,applicabilityState='loading';
-async function loadApplicability(){
-  try{const response=await fetch('./applicability.json');if(!response.ok)throw Error('Applicability unavailable');applicabilityMatrix=validateApplicability(await response.json());applicabilityState='loaded';}
-  catch{applicabilityState='failed';}
-  const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);
-  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;body.querySelector('.catalogue-applicability')?.replaceWith(applicabilitySection(document,entry.id,applicabilityMatrix,applicabilityState));body.scrollTop=scroll;}
-}
-let evidenceIndex=null,evidenceState='loading';
+let evidenceIndex=null;
 async function loadEvidenceIndex(){
-  try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());evidenceState='loaded';refreshRecordedDescriptions();refreshModelSummary();}
-  catch{evidenceState='failed';}
+  try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());refreshRecordedDescriptions();refreshModelSummary();}
+  catch{}
   const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);
-  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;refreshCatalogueStatus(entry,models.find(m=>m.id===entry.id));body.querySelector('.catalogue-evidence')?.replaceWith(evidenceSection(document,entry.id,evidenceIndex,evidenceState));body.scrollTop=scroll;}
+  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;refreshCatalogueStatus(entry,models.find(m=>m.id===entry.id));body.scrollTop=scroll;}
 }
 function refreshRecordedDescriptions(){
   const selected=models.find(m=>m.id===$('model').value);
@@ -52,8 +44,6 @@ function refreshRecordedDescriptions(){
   const id=catalogueRoute(location.hash).modelId,entry=catalogue.find(e=>e.id===id);
   if(!entry||!$('catalogue-dialog').open)return;
   const spec=models.find(m=>m.id===id),body=$('catalogue-detail-body');
-  const note=body.querySelector('.catalogue-detail-note');
-  if(note)note.textContent=recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',id,evidenceIndex);
   const description=body.querySelector('.definition-description');
   if(description&&spec)description.textContent=recordedDescription(spec.description,id,evidenceIndex);
 }
@@ -458,7 +448,6 @@ function showCatalogueModel(entry,spec){
     technical.append(element('summary','Technical details, implementation and checks'));
     body.append(technical);body=technical;
   }
-  body.append(element('p',recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',entry.id,evidenceIndex),'catalogue-detail-note'));
   if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else if(entry.id==='kelvin-voigt-comsol63-deviatoric-zero-spin-ode'&&timedView?.supports(entry.id)){const section=element('section');section.append(element('h3','Definition, conventions & preparation'),element('p','COMSOL 6.3 Kelvin–Voigt Eq. 3-36: parallel deviatoric spring and dashpot with purely elastic bulk. Physical seconds; six persistent total infinitesimal strain components. Fixed spatial frame, zero spin; compression-positive Mandel tensors and dry total Cauchy stress. Parameters K, G (Pa), tau (s); viscosity G tau. Creep holds the incoming stress defined by explicit initial strain and initial rate. A strain hold immediately sheds viscous stress and then preserves elastic stress. No experimental validation or broad material calibration is claimed.'));const links=element('p');for(const [label,path] of [['Exact definition','./engine-kelvin-voigt/'+entry.id+'.json'],['Source Eq. 3-36','https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441080'],['Readable independent review','./engine-kelvin-voigt/review.html'],['Independent scientific checklist','./engine-kelvin-voigt/review.json'],['Approval and limitations','./engine-kelvin-voigt/approval.json']]){const a=element('a',label+' ↗');a.href=path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}section.append(links);body.append(section);}else if(entry.implicit_path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes the original complete 1975 elastoplastic law through a bounded implicit strain-path realization, explicit Table 1 preparation and complete stress/history/work state. Total mechanical Cauchy stress; no pore-pressure law or experimental validation.'));const links=element('p');for(const [label,path] of [['Exact definition','engine-implicit-path/'+entry.id+'.json'],['Independent scientific checklist','engine-implicit-path/review.json'],['Approval and limitations','engine-implicit-path/approval.json']]){const a=element('a',label+' ↗');a.href='./'+path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}body.append(links);}else if(entry.path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes dimensionless shear progress, complete initial history and linearly changing stress controls for the original drained active axial law. Experimental comparison is unavailable.'));}else if(timedRoute){const section=element('section');section.append(element('h3','Physical-time formulation'),element('p','Open the dedicated laboratory for supported controls, conventions and source/review links.'));body.append(section);}else body.append(formulationSection(document,spec,{evidenceIndex}));
   if(typeof entry.dossier==='string'&&/^docs\/models\/[a-z0-9-]+\.md$/.test(entry.dossier)){const link=element('a','Source, numerics and limitations dossier ↗');link.href='./'+entry.dossier+'.html';link.target='_blank';link.rel='noopener';body.append(link);}
   if(!spec&&!timedRoute&&entry.id!==j2View?.modelId&&!timedView?.supports(entry.id)){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
@@ -472,8 +461,6 @@ function showCatalogueModel(entry,spec){
     }
     body.append(section);
   }
-  body.append(evidenceSection(document,entry.id,evidenceIndex,evidenceState));
-  body.append(applicabilitySection(document,entry.id,applicabilityMatrix,applicabilityState));
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
   $('catalogue-detail-id').textContent=entry.id;
   $('catalogue-permalink').href=catalogueModelHash(entry.id);
@@ -642,5 +629,5 @@ try{
   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
   models.forEach(m=>$('model').append(new Option(modelProfile(m.id)?.title??m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
-  populate();timedView=createLaboratoryControllerRouter([setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+  populate();timedView=createLaboratoryControllerRouter([setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}
