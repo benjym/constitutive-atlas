@@ -1,0 +1,1162 @@
+{
+  "record_version": 1,
+  "task_id": "AUDIT-production-admission-agent-v1",
+  "review_kind": "AI technical assessment",
+  "reviewer": "admission_reviewer (Codex AI subagent)",
+  "date": "2026-11-01",
+  "scientific_signature": null,
+  "canonical_admission": false,
+  "independence": "Fresh dispatched review context; no authorship of reviewed inputs; parent assignment contained scope and file locations. Project evidence remains largely AI/project-authored; no human credentials or scientific signature asserted.",
+  "decisions": [
+    {
+      "id": "EL-01",
+      "model_id": "linear-elastic",
+      "model_definition_path": "models/linear-elastic.json",
+      "model_definition_sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+      "question": "Accept the constant-E/nu source specialization and paired stress/strain sign plus Mandel mapping?",
+      "judgment": "supported",
+      "rationale": "Pinned OGS header constructs lambda I\u2297I+2G Isym; cpp updates previous stress by C times mechanical strain difference. Reversing both tensor signs preserves this equation. Kelvin ordering and sqrt2 scaling match Mandel. Constant parameters are a defensible explicit specialization.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/linear-elastic/formulation-crosswalk.json",
+          "locator": "equation_crosswalk; transactions; initialization"
+        },
+        {
+          "path": "models/linear-elastic.json",
+          "locator": "derived K,G; sigma/e equations"
+        },
+        {
+          "path": "docs/ingestion/linear-elastic/source-receipts.json",
+          "locator": "all three pinned primary files; privately read"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Varying source fields, thermal/process decomposition and full OGS equivalence."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "EL-02",
+      "model_id": "linear-elastic",
+      "model_definition_path": "models/linear-elastic.json",
+      "model_definition_sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+      "question": "Accept effective-stress interpretation and exponential void bookkeeping as explicit Atlas host/numerical choices?",
+      "judgment": "supported",
+      "rationale": "Effective-stress binding is an Atlas host interpretation. The exponential e update is an uncoupled bookkeeping convention and is correctly identified as project mathematics. Its exact multiplicative composition is consistent with the chosen volume convention.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/linear-elastic/formulation-crosswalk.json",
+          "locator": "equation_crosswalk; transactions; initialization"
+        },
+        {
+          "path": "models/linear-elastic.json",
+          "locator": "derived K,G; sigma/e equations"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Source-attributed poromechanics, finite-strain stress or soil calibration."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "EL-03",
+      "model_id": "linear-elastic",
+      "model_definition_path": "models/linear-elastic.json",
+      "model_definition_sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+      "question": "Do the analytical tensor/control cases and independent rational checks support the named numerical claim?",
+      "judgment": "supported",
+      "rationale": "Independent Cartesian recomputation of all 29 saved actual endpoints passes the original per-channel budgets; worst fraction 6.55035e-6. Source stiffness algebra agrees. The 30 rational columns cover coefficient identities rather than runtime conditioning.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/linear-elastic/formulation-crosswalk.json",
+          "locator": "equation_crosswalk; transactions; initialization"
+        },
+        {
+          "path": "models/linear-elastic.json",
+          "locator": "derived K,G; sigma/e equations"
+        },
+        {
+          "path": "catalogue/evidence/reports/linear-elastic-analytical-v1.json",
+          "locator": "29 cases, original budgets/runtime"
+        },
+        {
+          "path": "docs/reviews/production-admission-agent-v1/checks.json",
+          "locator": "elasticity_independent_saved_endpoint_check"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Fresh current-binary execution, general parameter conditioning theorem and curve-level replay from endpoints alone."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "EL-04",
+      "model_id": "linear-elastic",
+      "model_definition_path": "models/linear-elastic.json",
+      "model_definition_sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+      "question": "Is explicit stress/e state with examples-only defaults sufficient for this material-point scope?",
+      "judgment": "supported",
+      "rationale": "Stress/e plus complete resolved constants close this memory-free mechanical problem. Explicit examples-only initialization is sufficient for hypothetical material points. A v0.3 crosswalk is not enforcement by the legacy v0.1 low-level binary.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/linear-elastic/formulation-crosswalk.json",
+          "locator": "equation_crosswalk; transactions; initialization"
+        },
+        {
+          "path": "models/linear-elastic.json",
+          "locator": "derived K,G; sigma/e equations"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Physical preparation, calibrated NCL/OCR or implicit default rejection in legacy APIs."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "EL-05",
+      "model_id": "linear-elastic",
+      "model_definition_path": "models/linear-elastic.json",
+      "model_definition_sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+      "question": "Which parameter/control region and release checks must the pinned reviewed release retain?",
+      "judgment": "conditional",
+      "rationale": "The named controls and three nu regimes have bounded evidence; the declared boxes are much broader. Positive stiffness alone cannot qualify every numerical scaling. e>0 also restricts volumetric advancement independently of elastic stress.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/linear-elastic/formulation-crosswalk.json",
+          "locator": "equation_crosswalk; transactions; initialization"
+        },
+        {
+          "path": "models/linear-elastic.json",
+          "locator": "derived K,G; sigma/e equations"
+        },
+        {
+          "path": "catalogue/evidence/reports/linear-elastic-analytical-v1.json",
+          "locator": "nu=-.2,.25,.49 and four controls/reversal"
+        }
+      ],
+      "conditions": [
+        "Freeze exact release definition/build and supported parameter/control settings; retain original tensor/control/zero/rollback regressions, with explicit e-domain rejection. Qualify any enlarged conditioning range prospectively."
+      ],
+      "excluded_claims": [
+        "All-box solver guarantee, finite rotations and FE coupling qualification."
+      ],
+      "follow_up": "Choose the bounded release matrix; no broad new elasticity campaign is justified by this review."
+    },
+    {
+      "id": "DP-01",
+      "model_id": "drucker-prager",
+      "model_definition_path": "models/drucker-prager.json",
+      "model_definition_sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+      "question": "Accept the uncapped constant-elastic perfect-plastic specialization and documented source parameter/multiplier conversions?",
+      "judgment": "supported",
+      "rationale": "Static OpenSees invariants and correction give M=3sqrt(3/2)rho, Md=3sqrt(3/2)rhoBar, c=sigmaY and gamma=sqrt(2/3)source multiplier. Dropping hardening/backstress/tensile surface defines the named ideal cone, rather than reproducing the whole implementation.",
+      "evidence": [
+        {
+          "path": "models/drucker-prager.json",
+          "locator": "trial_s/trial_q_safe, sigma/gamma residuals, domain Md<=M"
+        },
+        {
+          "path": "docs/models/drucker-prager-apex.md",
+          "locator": "Governing law and project derivation"
+        },
+        {
+          "path": "docs/ingestion/drucker-prager/source-receipts.json",
+          "locator": "pinned cpp receipt; Itasca comparison not independently reread"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Full OpenSees/Itasca algorithm or original1952 paper equivalence."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "DP-02",
+      "model_id": "drucker-prager",
+      "model_definition_path": "models/drucker-prager.json",
+      "model_definition_sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+      "question": "Approve the corrected admissible 0<=Md<=M domain and distinguish the preserved old negative-work witness?",
+      "judgment": "supported",
+      "rationale": "Current bytes add precisely Md<=M. On the ideal cone D=gamma[(M-Md)p+c] is nonnegative for gamma>=0,c>=0,0<=Md<=M,p>=-c/M; M=Md=0 is the separate J2 limit. The old -70Pa witness is retained and not attributed to current bytes.",
+      "evidence": [
+        {
+          "path": "models/drucker-prager.json",
+          "locator": "trial_s/trial_q_safe, sigma/gamma residuals, domain Md<=M"
+        },
+        {
+          "path": "docs/models/drucker-prager-apex.md",
+          "locator": "Governing law and project derivation"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/previous-definition.json",
+          "locator": "pre-guard identity"
+        },
+        {
+          "path": "docs/reviews/production-admission-agent-v1/checks.json",
+          "locator": "dp_negative_work_witness_old_definition_Pa"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Universal thermodynamic admissibility or convergence."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "DP-03",
+      "model_id": "drucker-prager",
+      "model_definition_path": "models/drucker-prager.json",
+      "model_definition_sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+      "question": "Accept trial-direction elimination and the ideal norm subgradient at the apex?",
+      "judgment": "supported",
+      "rationale": "The radial return derives q=max(qt-3Ggamma,0) and p=pt+KMd gamma. At qt=0, st=0, so the safe denominator adds no stress floor. At apex the norm subgradient permits deviatoric removal only once gamma>=qt/(3G). Md=0 cannot correct an exterior tensile pt; rejection is mathematically appropriate.",
+      "evidence": [
+        {
+          "path": "models/drucker-prager.json",
+          "locator": "trial_s/trial_q_safe, sigma/gamma residuals, domain Md<=M"
+        },
+        {
+          "path": "docs/models/drucker-prager-apex.md",
+          "locator": "Governing law and project derivation"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Smooth tangent at apex/junction or guaranteed solvability for nondilatant tension."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "DP-04",
+      "model_id": "drucker-prager",
+      "model_definition_path": "models/drucker-prager.json",
+      "model_definition_sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+      "question": "Do the current 83 native cases and separately retained Wasm/browser checks cover the requested bounded behavior?",
+      "judgment": "supported",
+      "rationale": "Fresh scalar formulas reproduced all 83 saved native responses: 77 successes inside original budgets (worst fraction7.8881e-5) and six failures with exact parent state. Separate saved Release-Wasm report passes83; its persistent recovery claim differs correctly from independent native CLI calls. Debug-Wasm memory trap remains unresolved.",
+      "evidence": [
+        {
+          "path": "models/drucker-prager.json",
+          "locator": "trial_s/trial_q_safe, sigma/gamma residuals, domain Md<=M"
+        },
+        {
+          "path": "docs/models/drucker-prager-apex.md",
+          "locator": "Governing law and project derivation"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/results/raw.json",
+          "locator": "all83 raw stdout/returncodes"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/results/report.json",
+          "locator": "83 Release-Wasm cases"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/README.md",
+          "locator": "Failures retained"
+        },
+        {
+          "path": "docs/reviews/production-admission-agent-v1/checks.json",
+          "locator": "dp_independent_saved_check"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Current-build qualification, Debug-Wasm correctness or hosted deployment."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "DP-05",
+      "model_id": "drucker-prager",
+      "model_definition_path": "models/drucker-prager.json",
+      "model_definition_sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+      "question": "Accept explicit sigma/e, temporary gamma lifecycle, scaled tolerances and project void bookkeeping?",
+      "judgment": "supported",
+      "rationale": "sigma/e are sufficient persistent data for this perfect-plastic variant; gamma is an increment-local unknown, not hardening history. Scaled yield, iteration tolerances and void bookkeeping are correctly declared numerical choices. Exact zero-load identity holds for exact f<=0 parents; a slightly exterior tolerance-admitted parent has nonzero FB residual at unchanged state.",
+      "evidence": [
+        {
+          "path": "models/drucker-prager.json",
+          "locator": "trial_s/trial_q_safe, sigma/gamma residuals, domain Md<=M"
+        },
+        {
+          "path": "docs/models/drucker-prager-apex.md",
+          "locator": "Governing law and project derivation"
+        },
+        {
+          "path": "docs/ingestion/drucker-prager/formulation-crosswalk.json",
+          "locator": "historical lifecycle reasoning; current guard supersedes old domain"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Exact no-drift theorem for every tolerance-admitted parent or accumulated-gamma interpretation."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "DP-06",
+      "model_id": "drucker-prager",
+      "model_definition_path": "models/drucker-prager.json",
+      "model_definition_sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+      "question": "Accept the proposed release exclusions and specify any remaining numerical qualification?",
+      "judgment": "conditional",
+      "rationale": "Exclusions match known cone, initialization and numerical limits. Existing cases support the bounded material-point law; release integration is still a distinct task.",
+      "evidence": [
+        {
+          "path": "models/drucker-prager.json",
+          "locator": "trial_s/trial_q_safe, sigma/gamma residuals, domain Md<=M"
+        },
+        {
+          "path": "docs/models/drucker-prager-apex.md",
+          "locator": "Governing law and project derivation"
+        },
+        {
+          "path": "docs/admission/production-readiness-v1/drucker-prager.md",
+          "locator": "DP-06 and release procedure"
+        }
+      ],
+      "conditions": [
+        "Pin release artifact/toolchain and acceptance matrix; retain invalid-parameter, apex, recovery and rollback gates. State Release-Wasm-only qualification and exact versus tolerant zero-load caveat."
+      ],
+      "excluded_claims": [
+        "Global convergence, arbitrary paths/parameters, globally smooth tangent, FE/experimental qualification."
+      ],
+      "follow_up": "Integrate technical source decisions and freeze bounded release regression; investigate Debug trap only if that profile is required."
+    },
+    {
+      "id": "MCC-01",
+      "model_id": "modified-cam-clay",
+      "model_definition_path": "models/modified-cam-clay.json",
+      "model_definition_sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+      "question": "Approve M-squared yield and selected volume balance despite the source Eq11/Eq30b and Eq7/Eqs8-9 conflicts?",
+      "judgment": "supported",
+      "rationale": "Direct visual reading confirms Eq11 p3 prints M and Eq30b p6 M\u00b2. The critical-slope witness p=pc/2,q=Mpc/2 satisfies M\u00b2 yield and leaves2.4e9Pa\u00b2 in the single-M reading at selected values. Eq7 p2 conflicts with Eqs8\u20139 and Eq30d; the selected differential volume relation is internally consistent. These are defensible explicit source selections, not a universal erratum claim.",
+      "evidence": [
+        {
+          "path": "models/modified-cam-clay.json",
+          "locator": "all derived/residual/domain declarations"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/formulation-crosswalk.json",
+          "locator": "source_conflicts; equation_crosswalk; transactions"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/source-receipts.json",
+          "locator": "private PDF hash; rendered pp2,3,6 independently read"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Verbatim equivalence to every printed equation or confirmed author erratum."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "MCC-02",
+      "model_id": "modified-cam-clay",
+      "model_definition_path": "models/modified-cam-clay.json",
+      "model_definition_sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+      "question": "Accept endpoint pressure/volume stiffness and gamma/pc_n flow normalization?",
+      "judgment": "supported",
+      "rationale": "Endpoint K=vp/kappa and G(nu,K), with gamma/pc_n associated-gradient scaling, agree with the declared residuals. Source gradient-norm normalization is different; positive scaling changes multiplier normalization without changing flow direction. This is an identified Atlas discretization.",
+      "evidence": [
+        {
+          "path": "models/modified-cam-clay.json",
+          "locator": "all derived/residual/domain declarations"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/formulation-crosswalk.json",
+          "locator": "source_conflicts; equation_crosswalk; transactions"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Exact source finite-step implementation equivalence."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "MCC-03",
+      "model_id": "modified-cam-clay",
+      "model_definition_path": "models/modified-cam-clay.json",
+      "model_definition_sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+      "question": "Accept exponential volume/log-pc updates and temporary multiplier semantics?",
+      "judgment": "supported",
+      "rationale": "Exponential volume and endpoint backward Euler on log(pc) agree with the selected continuous signs. sigma/e/pc persist; gamma resets each subsolve and returned gamma describes only the final accepted increment. No physical time is introduced.",
+      "evidence": [
+        {
+          "path": "models/modified-cam-clay.json",
+          "locator": "all derived/residual/domain declarations"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/formulation-crosswalk.json",
+          "locator": "source_conflicts; equation_crosswalk; transactions"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Finite-deformation law, creep and accumulated multiplier history."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "MCC-04",
+      "model_id": "modified-cam-clay",
+      "model_definition_path": "models/modified-cam-clay.json",
+      "model_definition_sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+      "question": "Does the scalar/tensor/refinement evidence support the requested bounded discrete implementation?",
+      "judgment": "supported",
+      "rationale": "All57 saved case outcomes inspected. Actual-partition yield crossing uses [.5,.5]; full-step pressure differs by2711.38581Pa and remains explicitly inapplicable/failed. Recomputed continuum refinements have minimum orders1.00190 elastic and.986365 plastic, and final relative errors1.23815e-4 and3.96431e-5 within frozen5e-4. This supports the bounded discrete implementation and two isotropic continuum paths.",
+      "evidence": [
+        {
+          "path": "models/modified-cam-clay.json",
+          "locator": "all derived/residual/domain declarations"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/formulation-crosswalk.json",
+          "locator": "source_conflicts; equation_crosswalk; transactions"
+        },
+        {
+          "path": "catalogue/evidence/reports/modified-cam-clay-scalar-v2.json",
+          "locator": "overconsolidated-yield-crossing; two continuum refinement cases"
+        },
+        {
+          "path": "docs/reviews/production-admission-agent-v1/checks.json",
+          "locator": "mcc_report_assessment"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Independent full3D continuum oracle, global branch uniqueness or adaptive-error controller proof."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "MCC-05",
+      "model_id": "modified-cam-clay",
+      "model_definition_path": "models/modified-cam-clay.json",
+      "model_definition_sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+      "question": "Accept explicit admissible sigma/e/pc with illustrative OCR, without an inferred calibrated NCL state?",
+      "judgment": "supported",
+      "rationale": "Explicit admissible sigma/e/pc closes the mechanical residual but does not fix material NCL intercept or preparation. Default OCR2 is illustrative. The initial scaled yield allowance is a numerical criterion, not exact surface admission.",
+      "evidence": [
+        {
+          "path": "models/modified-cam-clay.json",
+          "locator": "all derived/residual/domain declarations"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/formulation-crosswalk.json",
+          "locator": "source_conflicts; equation_crosswalk; transactions"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Calibrated NCL reconstruction or physically consistent specimen history from defaults."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "MCC-06",
+      "model_id": "modified-cam-clay",
+      "model_definition_path": "models/modified-cam-clay.json",
+      "model_definition_sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+      "question": "Which further branch/control/parameter checks are necessary for the proposed release claim?",
+      "judgment": "conditional",
+      "rationale": "Endpoint stiffness and near lambda=kappa are specific failure mechanisms outside guaranteed scope. For e_n=.7,kappa=.04,V=.03 the full-step elastic trial denominator is-.237318; a positive elastic trial cannot be assumed. Existing plastic/subdivision success does not contradict this restriction.",
+      "evidence": [
+        {
+          "path": "models/modified-cam-clay.json",
+          "locator": "all derived/residual/domain declarations"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/formulation-crosswalk.json",
+          "locator": "source_conflicts; equation_crosswalk; transactions"
+        },
+        {
+          "path": "docs/reviews/production-admission-agent-v1/checks.json",
+          "locator": "mcc_counterexample_elastic_trial"
+        }
+      ],
+      "conditions": [
+        "Define supported finite increments, parameters, controls and failure semantics in a release freeze; retain actual-partition and continuum gates. Any broader accuracy claim needs a separate continuous reference and prospectively fixed bounds."
+      ],
+      "excluded_claims": [
+        "Global branch/control accuracy, near-singular parameter qualification, FE tangent and experiment prediction."
+      ],
+      "follow_up": "Bound intended operating range and freeze release checks; do not replace actual-partition tests with unpartitioned targets."
+    },
+    {
+      "id": "B17-01",
+      "model_id": "barodesy-clay-2017",
+      "model_definition_path": "models/barodesy-clay-2017.json",
+      "model_definition_sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477",
+      "question": "Accept the named body 2p law, retaining Appendix 6p discrepancy and excluding erratum/author-code equivalence claims.",
+      "judgment": "supported",
+      "rationale": "Direct source images confirm body Eq8 p367 and Appendix2 Eq32 p374 use2p, while Appendix3 Eq41 p375 gives6p under the stated p definition. Fresh NCL reductions for all three complete Table2 soils give1/lambda only for2p;6p even changes sign for London/Dresden. Named body selection is supported.",
+      "evidence": [
+        {
+          "path": "models/barodesy-clay-2017.json",
+          "locator": "explicit formulation; Table1-derived constants; sigma/e rates; numerical guards"
+        },
+        {
+          "path": "docs/reviews/barodesy-clay-2017-source-packet.md",
+          "locator": "Eqs1\u201310/Table1, source discrepancy inventory"
+        },
+        {
+          "path": "docs/reviews/production-admission-agent-v1/checks.json",
+          "locator": "barodesy_independent_NCL"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Confirmed erratum, all-printed-equation equivalence or unacquired2018 UMAT equivalence."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "B17-02",
+      "model_id": "barodesy-clay-2017",
+      "model_definition_path": "models/barodesy-clay-2017.json",
+      "model_definition_sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477",
+      "question": "Accept fixed-spatial zero-spin small-strain scope, source sign/unit map, four independent parameters and explicit seven-state contract.",
+      "judgment": "supported",
+      "rationale": "With T=-sigma,D=-E, source signs yield c3 norm(E)[f norm(sigma)P+g sigma], P=normalized exp(-aU), exactly the model. Source p366 effective stress and p374 incompressible-grain void rate support the state meanings. Four soil inputs plus fixed1kPa are complete. Zero spin avoids the printed WT cancellation ambiguity.",
+      "evidence": [
+        {
+          "path": "models/barodesy-clay-2017.json",
+          "locator": "explicit formulation; Table1-derived constants; sigma/e rates; numerical guards"
+        },
+        {
+          "path": "docs/reviews/barodesy-clay-2017-source-packet.md",
+          "locator": "Eqs1\u201310/Table1, source discrepancy inventory"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Finite rotation/strain, physical-time creep and hidden preparation histories."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "B17-03",
+      "model_id": "barodesy-clay-2017",
+      "model_definition_path": "models/barodesy-clay-2017.json",
+      "model_definition_sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477",
+      "question": "Accept declared exact-zero/hydro continuations, conservative stress interior and abs(a)<=64 numerical restriction for the proposed scope.",
+      "judgment": "supported",
+      "rationale": "Exact zero rate and P=I/sqrt3 hydro branches are defensible declared continuations. Stable q/logK algebra avoids cancellation; m=c2 remains a genuine omitted singular direction. Normalized stress determinant/minor floors and abs(a)<=64 define software support, not source admissibility. No regularization or neighborhood flattening should be inferred.",
+      "evidence": [
+        {
+          "path": "models/barodesy-clay-2017.json",
+          "locator": "explicit formulation; Table1-derived constants; sigma/e rates; numerical guards"
+        },
+        {
+          "path": "docs/reviews/barodesy-clay-2017-source-packet.md",
+          "locator": "Eqs1\u201310/Table1, source discrepancy inventory"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-independent-review.md",
+          "locator": "Singular and reference branches"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Complete paper domain, rotationally invariant floating boundary classifier, near-hydro/zero full-update tangent and arbitrary parameter coverage."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "B17-04",
+      "model_id": "barodesy-clay-2017",
+      "model_definition_path": "models/barodesy-clay-2017.json",
+      "model_definition_sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477",
+      "question": "Accept evidence applicability to the pinned current definition, with historical runtime/reference and complete-update tangent limitations retained.",
+      "judgment": "conditional",
+      "rationale": "Current preview direct hashes and exact parameters/derived/domain/equation equality to historical research law are verified. Wider historical evidence has48trajectories/576updates and full caller checks; finest nonproportional stress error is about.00160Pa versus reference uncertainty1.8e-7Pa. That is useful accuracy evidence. Changed compiler/runtime artifacts cannot inherit historical execution qualification solely through the mathematical bridge.",
+      "evidence": [
+        {
+          "path": "models/barodesy-clay-2017.json",
+          "locator": "explicit formulation; Table1-derived constants; sigma/e rates; numerical guards"
+        },
+        {
+          "path": "docs/reviews/barodesy-clay-2017-source-packet.md",
+          "locator": "Eqs1\u201310/Table1, source discrepancy inventory"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-preview-v2/assessment.json",
+          "locator": "13requests/backend; error metrics"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-wider-integration-v1/wasm-assessment.json",
+          "locator": "48trajectory errors/uncertainties and caller partitions"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/production-closure-v1/verification.json",
+          "locator": "mathematical/layout bridge"
+        }
+      ],
+      "conditions": [
+        "Agree exact intended-use applicability and qualify the selected release binaries; keep rate AD distinct from full-update derivative. Reuse references where mathematically identical with an explicit applicability record."
+      ],
+      "excluded_claims": [
+        "Current binary full-stress-trajectory attestation or FE tangent qualification."
+      ],
+      "follow_up": "Do the release applicability decision; run only targeted checks justified by changed artifact or enlarged claim."
+    },
+    {
+      "id": "B17-05",
+      "model_id": "barodesy-clay-2017",
+      "model_definition_path": "models/barodesy-clay-2017.json",
+      "model_definition_sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477",
+      "question": "Approve one separately pinned preparation recipe and its analytical or measured provenance; no implicit example substitution.",
+      "judgment": "unresolved",
+      "rationale": "No separately pinned approved preparation recipe is supplied. Table2 constants plus100kPaI,e=.8 do not establish source-matched preparation. NCL is an available analytical reference, not measured specimen provenance.",
+      "evidence": [
+        {
+          "path": "models/barodesy-clay-2017.json",
+          "locator": "explicit formulation; Table1-derived constants; sigma/e rates; numerical guards"
+        },
+        {
+          "path": "docs/reviews/barodesy-clay-2017-source-packet.md",
+          "locator": "Eqs1\u201310/Table1, source discrepancy inventory"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/production-closure-v1/README.md",
+          "locator": "Physical preparation: remaining usable-example gap"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Measured preparation, calibration or universal NCL reset."
+      ],
+      "follow_up": "Select one analytical software example or one sourced material/protocol; freeze state/units/preparation before observation, with missing metadata retained."
+    },
+    {
+      "id": "B17-06",
+      "model_id": "barodesy-clay-2017",
+      "model_definition_path": "models/barodesy-clay-2017.json",
+      "model_definition_sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477",
+      "question": "Sign independent equation/numerical review and exact release scope; record excluded uses and unresolved conditions.",
+      "judgment": "unresolved",
+      "rationale": "This AI technical assessment can support bounded source/numerical decisions but supplies no human scientific signature, approved recipe, source-to-release attestation or admitted status.",
+      "evidence": [
+        {
+          "path": "models/barodesy-clay-2017.json",
+          "locator": "explicit formulation; Table1-derived constants; sigma/e rates; numerical guards"
+        },
+        {
+          "path": "docs/reviews/barodesy-clay-2017-source-packet.md",
+          "locator": "Eqs1\u201310/Table1, source discrepancy inventory"
+        },
+        {
+          "path": "docs/admission/REVIEWER_INSTRUCTIONS.md",
+          "locator": "Role and independence; Deliverables"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Canonical signed scientific review or release authorization."
+      ],
+      "follow_up": "Coordinator integrates technical assessment; separately agreed scientific/release procedure resolves remaining gates."
+    },
+    {
+      "id": "TC-P01",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "Journal page acquisition and independent source/variant/strictness/preset decisions",
+      "judgment": "unresolved",
+      "rationale": "Author image/code were independently inspected and match the disclosed divergences. Complete journal equation/table/stability pages remain unavailable. A prior403 or no filename match is not proof of absence; no access retries occurred.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        },
+        {
+          "path": "docs/ingestion/terracotta-2024/journal-followup-v1/source-receipts.json",
+          "locator": "journal absent; author source hashes/locators"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Journal source completeness or AppendixB equivalence."
+      ],
+      "follow_up": "Acquire readable legitimate exact journal page packet, hash/render and settle the named source questions."
+    },
+    {
+      "id": "TC-A01",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "Temperature equation: unhalved production/sink versus author mixed-control halving",
+      "judgment": "unresolved",
+      "rationale": "Image and TmRate139\u2013146 show unhalved alpha Dv\u00b2+gamma Ds\u00b2-eta Tm\u00b2. Mixed-control line301 halves the full expression. These genuinely define different dynamics. Image support is sufficient for the named research reference but cannot settle journal Eq36 p10 without its readable original.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Full author mixed-control equivalence or journal resolution."
+      ],
+      "follow_up": "Compare complete journal Eq36 and its definitions; select any correction under a new reviewed identity."
+    },
+    {
+      "id": "TC-A02",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "Initialization: pressure-only meso-stress versus author example adding Tm squared to both entries",
+      "judgment": "unresolved",
+      "rationale": "Image has Tm\u00b2/Gamma in pressure only; code example36 adds Tm\u00b2 to both entries. Tm=0 masks the discrepancy. Pressure-only interpretation is consistent with the image but general initialized journal scope awaits originals.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Arbitrary-temperature example equivalence."
+      ],
+      "follow_up": "Review journal pressure/q definitions and prepare a nonzero-Tm initialization fixture prospectively."
+    },
+    {
+      "id": "TC-A03",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "Four-state ODE numerical adaptation",
+      "judgment": "supported",
+      "rationale": "Four persistent ODE states correspond directly to author-image rates; author code also evolves stress/viscous/total-strain components. The reduced state identity is explicitly different.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Full ten-state author BDF/mixed-control numerical equivalence."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "TC-A04",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "Algebraic stress and mixed-control adaptation",
+      "judgment": "supported",
+      "rationale": "Algebraic stress depends on current rate. A stress hold is an inverse control problem, not zero-rate relaxation. Incoming-rate stress capture and left/right transition metadata are necessary.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Full ten-state author BDF/mixed-control numerical equivalence."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "TC-A05",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "Integration settings versus full author BDF/outer-step algorithm",
+      "judgment": "supported",
+      "rationale": "Author BDF and outer-step acceleration terms have a different integration algorithm from the Atlas ODE/control solver. Passing reference comparisons cannot establish algorithm identity;2.5e-9 is a study setting, not an approved default.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Full ten-state author BDF/mixed-control numerical equivalence."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "TC-P02",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "New explicit v0.3 identity by migration/integration owner; preserve historical v0.2",
+      "judgment": "conditional",
+      "rationale": "Existing v0.3 crosswalk correctly names physical_time/ode,axisymmetric_x,fixed_spatial,Mandel,total observable stress and explicit state/rate/time. Migration can be scoped after source decisions; historical v0.2 evidence must retain its identity.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        },
+        {
+          "path": "docs/ingestion/terracotta-2024/journal-followup-v1/schema-crosswalk-v03.json",
+          "locator": "formulation/state/init mapping"
+        }
+      ],
+      "conditions": [
+        "Resolve TC-P01 choices and bind a new exact definition; inspect state physical meanings and dimensional consistency, preserving historical bytes."
+      ],
+      "excluded_claims": [
+        "Automatic inherited old-hash qualification, general3D or finite rotations."
+      ],
+      "follow_up": "After source decisions, migration owner stages the new candidate under its own identity."
+    },
+    {
+      "id": "TC-P03",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "New hash-bound native/Wasm qualification and failure/restart matrix; reuse unchanged independent references where equations identical",
+      "judgment": "conditional",
+      "rationale": "Saved refined study passes each phase/channel on both backends; independently recomputed maximum fraction.586009. Parent full-path accuracy remains failed. This supports reuse of unchanged reference bytes, not a new definition pass.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        },
+        {
+          "path": "catalogue/investigations/terracotta-preparation-hold-refinement-v2/assessment.json",
+          "locator": "both backends/errors"
+        },
+        {
+          "path": "docs/reviews/production-admission-agent-v1/checks.json",
+          "locator": "terracotta_saved_component_check"
+        }
+      ],
+      "conditions": [
+        "Freeze new artifact/compiler/reference/policy; retain own preparation/capture/clock and the23-to22observation mapping; add model-specific rejection/restart cases before public host qualification."
+      ],
+      "excluded_claims": [
+        "Current-artifact release evidence, endpoint-only accuracy or silently loosened gates."
+      ],
+      "follow_up": "Execute the defined changed-artifact matrix only after source/identity decisions; do not repeat old reference generation."
+    },
+    {
+      "id": "TC-P04",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "Restricted timed host packaging, explicit init, provenance, controls, failure/recovery and workload qualification",
+      "judgment": "conditional",
+      "rationale": "The required clock,state,strain,finite endpoint-rate restart and failed-interval semantics are appropriate. The recorded86,098\u201392,404substeps per30s path consume86\u201392%of100,000cap; no evidence establishes browser workload suitability or complete model-specific recovery.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        }
+      ],
+      "conditions": [
+        "Freeze real timed host fixtures, workload limits, unsupported axisymmetry cases and state/strain/clock rollback; qualify actual package and explicit numerical settings."
+      ],
+      "excluded_claims": [
+        "Approved interactive default or complete-update tangent."
+      ],
+      "follow_up": "After TC-P03, run the bounded packaged host/restart/workload matrix under new identity."
+    },
+    {
+      "id": "TC-P05",
+      "model_id": "terracotta-2024",
+      "model_definition_path": "models/research/terracotta-2024-fig1.json",
+      "model_definition_sha256": "8bf19720d44c3d6015b8c04ccc81bd2ab5d29684c65fd1dd6a3ad74de10e134a",
+      "question": "Model-hash-bound independent admission decision; experimental claims separate",
+      "judgment": "unresolved",
+      "rationale": "Journal identity/inequalities, new definition, host qualification and scientific procedure remain open. Passing numerical refinement does not close these conditions.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/terracotta-2024/production-closure-v1/README.md",
+          "locator": "Source identity and remaining decisions; ordered work"
+        },
+        {
+          "path": "models/research/terracotta-2024-fig1.json",
+          "locator": "Figure1 four-state ODE/domain/observables"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Reviewed production admission and experimental validation."
+      ],
+      "follow_up": "Keep research label; decide exact scoped admission only after TC-P01\u201304 outcomes."
+    },
+    {
+      "id": "D01",
+      "model_id": "sanisand-2004",
+      "model_definition_path": "models/research/sanisand-2004-fixed-memory-be.json",
+      "model_definition_sha256": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+      "question": "Original-law target and named algorithm",
+      "judgment": "supported",
+      "rationale": "A separately named fixed-memory backward-Euler research variant is a coherent bounded target. Original2004 law, OpenSees numerical modifications and canonical reversal have distinct identities. Source original pages623,628,629,631 were independently read.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/sanisand-2004/production-closure-v1/README.md",
+          "locator": "Decisions; singular branches; ordered acceptance"
+        },
+        {
+          "path": "docs/models/sanisand-2004-original.md",
+          "locator": "continuous equation mapping"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Canonical full cyclic2004 release or complete OpenSees implementation equivalence."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "D02",
+      "model_id": "sanisand-2004",
+      "model_definition_path": "models/research/sanisand-2004-fixed-memory-be.json",
+      "model_definition_sha256": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+      "question": "Equation identity",
+      "judgment": "supported",
+      "rationale": "Original Eq3 explicitly uses current e. Printed Eq20 numerator lacks K in the volumetric term while its preceding relation n:ds-(n:r)dp and dp=K[dv-LD] require K; dimensions and elimination both support the disclosed correction. Uneliminated stress/plastic residual avoids copying the faulty loading numerator.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/sanisand-2004/production-closure-v1/README.md",
+          "locator": "Decisions; singular branches; ordered acceptance"
+        },
+        {
+          "path": "docs/models/sanisand-2004-original.md",
+          "locator": "continuous equation mapping"
+        },
+        {
+          "path": "docs/models/sanisand-2004-fixed-memory-be.md",
+          "locator": "Finite product residuals; source correction"
+        },
+        {
+          "path": "catalogue/source-audits/sanisand-2004-original-equations.json",
+          "locator": "typed source equations/correction"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Verbatim printed Eq20 or an undisclosed source erratum."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "D03",
+      "model_id": "sanisand-2004",
+      "model_definition_path": "models/research/sanisand-2004-fixed-memory-be.json",
+      "model_definition_sha256": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+      "question": "Explicit preparation",
+      "judgment": "supported",
+      "rationale": "Explicit sigma,e,alpha,fabric,alpha_in is necessary:25persistent scalar components plus temporary gamma. Isotropic zero histories are a manufactured initial hypothesis, not universal Toyoura specimen preparation. e0 is critical-line intercept, not initial specimen e.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/sanisand-2004/production-closure-v1/README.md",
+          "locator": "Decisions; singular branches; ordered acceptance"
+        },
+        {
+          "path": "docs/models/sanisand-2004-original.md",
+          "locator": "continuous equation mapping"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Automatic preparation from Table1, density alone or scalar z=0 example."
+      ],
+      "follow_up": "No new implementation required for this technical finding; scientific/release decisions remain separate."
+    },
+    {
+      "id": "D04",
+      "model_id": "sanisand-2004",
+      "model_definition_path": "models/research/sanisand-2004-fixed-memory-be.json",
+      "model_definition_sha256": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+      "question": "Singular hardening",
+      "judgment": "conditional",
+      "rationale": "For d>0, L=dA/(Hbar+dE) and Lh=b0 A/(Hbar+dE) are exact branch algebra. At d\u21920+,Hbar>0 the latter remains finite while plastic strain vanishes. Independent rational convergence confirms that setting L=0 prematurely loses backstress evolution. These are continuous limits, not a proof of all finite-step roots.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/sanisand-2004/production-closure-v1/README.md",
+          "locator": "Decisions; singular branches; ordered acceptance"
+        },
+        {
+          "path": "docs/models/sanisand-2004-original.md",
+          "locator": "continuous equation mapping"
+        },
+        {
+          "path": "docs/models/sanisand-2004-hardening-limit.md",
+          "locator": "regular one-sided limit"
+        },
+        {
+          "path": "docs/reviews/production-admission-agent-v1/checks.json",
+          "locator": "sanisand_finite_product_limit"
+        }
+      ],
+      "conditions": [
+        "Independent full-state plastic reference and precision/branch gates must test regular initiation and reject unsupported simultaneous-zero,Hbar<=0,d<0 and singular loading denominators."
+      ],
+      "excluded_claims": [
+        "Universal singular-state continuation or finite-step uniqueness."
+      ],
+      "follow_up": "Freeze and review finite-path reference before observing new candidate outputs."
+    },
+    {
+      "id": "D05",
+      "model_id": "sanisand-2004",
+      "model_definition_path": "models/research/sanisand-2004-fixed-memory-be.json",
+      "model_definition_sha256": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+      "question": "Discrete algorithm and domain",
+      "judgment": "conditional",
+      "rationale": "Off-cone n normalization, centre fallback, exponential volume and complementarity are disclosed project choices. The exact elastic locator rejects a whole predictor leaving domain even if yield may occur earlier, so it cannot silently serve as a production event integrator.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/sanisand-2004/production-closure-v1/README.md",
+          "locator": "Decisions; singular branches; ordered acceptance"
+        },
+        {
+          "path": "docs/models/sanisand-2004-original.md",
+          "locator": "continuous equation mapping"
+        },
+        {
+          "path": "docs/models/sanisand-2004-elastic-entry.md",
+          "locator": "audit domain and complete predictor restriction"
+        }
+      ],
+      "conditions": [
+        "Freeze exact domain/tolerance/branch rejection and transaction policy; retain gamma=Delta_lambda*h semantics rather than calling it accumulated plastic strain."
+      ],
+      "excluded_claims": [
+        "Source-prescribed finite-step algorithm or universal yield/domain event order."
+      ],
+      "follow_up": "Resolve D08 reference/event conventions; use existing implicit update initially and measure entry refinement."
+    },
+    {
+      "id": "D06",
+      "model_id": "sanisand-2004",
+      "model_definition_path": "models/research/sanisand-2004-fixed-memory-be.json",
+      "model_definition_sha256": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+      "question": "Bounded implementation scope",
+      "judgment": "conditional",
+      "rationale": "Monotonic fixed memory is suitable for a bounded research milestone, not immediately production-ready. Fresh first-yield identities match18signed entries on the3x3density/pressure grid; no full independent plastic trajectory is present.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/sanisand-2004/production-closure-v1/README.md",
+          "locator": "Decisions; singular branches; ordered acceptance"
+        },
+        {
+          "path": "docs/models/sanisand-2004-original.md",
+          "locator": "continuous equation mapping"
+        },
+        {
+          "path": "docs/reviews/production-admission-agent-v1/checks.json",
+          "locator": "sanisand_first_yield; extension uses negative magnitude"
+        }
+      ],
+      "conditions": [
+        "Resolve D04/D05/D08, construct oracle then stage a new v0.3 candidate. Enforce/publish the monotonic-use restriction and bind new evidence."
+      ],
+      "excluded_claims": [
+        "Correct reversals from successful calls or original-model scientific admission."
+      ],
+      "follow_up": "REF-sanisand-monotonic-v1 is the next execution-free reference task after agreed scope."
+    },
+    {
+      "id": "D07",
+      "model_id": "sanisand-2004",
+      "model_definition_path": "models/research/sanisand-2004-fixed-memory-be.json",
+      "model_definition_sha256": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+      "question": "Canonical reversal or separate variant",
+      "judgment": "unresolved",
+      "rationale": "Original p631 explicitly delegates negative-distance loading-process updates to Dafalias1986 and distinguishes conjugate-point distances. Exact1986 rules unavailable. Parent Ce*de guard and cone-normal criterion need not have the same sign; more success counts cannot establish equivalence.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/sanisand-2004/production-closure-v1/README.md",
+          "locator": "Decisions; singular branches; ordered acceptance"
+        },
+        {
+          "path": "docs/models/sanisand-2004-original.md",
+          "locator": "continuous equation mapping"
+        },
+        {
+          "path": "catalogue/source-audits/sanisand-1986-loading-process.json",
+          "locator": "missing primary source and conditional mapping identity"
+        }
+      ],
+      "conditions": [],
+      "excluded_claims": [
+        "Canonical reversal, nested/process mapping or partition invariance of parent-reset variant."
+      ],
+      "follow_up": "Obtain exact1986 readable source or choose a separately reviewed parent-reset project variant with partition dependence disclosed."
+    },
+    {
+      "id": "D08",
+      "model_id": "sanisand-2004",
+      "model_definition_path": "models/research/sanisand-2004-fixed-memory-be.json",
+      "model_definition_sha256": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+      "question": "Prospective evidence and numerical policy",
+      "judgment": "conditional",
+      "rationale": "The eight reference families identify useful gaps and deliberately leave numeric budgets unfrozen. This is honest readiness planning; source-review acceptance, precision adequacy and per-channel/event/derivative budgets are still missing, so backend observation is premature.",
+      "evidence": [
+        {
+          "path": "docs/ingestion/sanisand-2004/production-closure-v1/README.md",
+          "locator": "Decisions; singular branches; ordered acceptance"
+        },
+        {
+          "path": "docs/models/sanisand-2004-original.md",
+          "locator": "continuous equation mapping"
+        },
+        {
+          "path": "docs/ingestion/sanisand-2004/production-closure-v1/reference-plan.json",
+          "locator": "must_freeze_before_candidate; familiesE01\u2013B01"
+        }
+      ],
+      "conditions": [
+        "Complete the stated prospective decimal/binary controls, sample grid, oracle precision, accuracy/control/event/rollback budgets and corruption review before candidate runs."
+      ],
+      "excluded_claims": [
+        "Frozen production policy, independent full-state trajectory pass or release readiness."
+      ],
+      "follow_up": "Turn reference-plan into a separately named reviewed freeze without candidate observations."
+    }
+  ]
+}

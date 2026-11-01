@@ -1,0 +1,218 @@
+{
+  "record_version": 1,
+  "status": "prospective_not_yet_frozen",
+  "candidate_observations_in_this_task": false,
+  "no_gate_relaxation": true,
+  "schema_target": {
+    "schema_version": "0.3",
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress_scope": "effective",
+    "advance": {},
+    "required_persistent_state": [
+      "sigma",
+      "e",
+      "alpha",
+      "fabric",
+      "alpha_in"
+    ],
+    "temporary_state": {
+      "gamma": "plastic_multiplier"
+    }
+  },
+  "first_yield_grid": {
+    "parameters": "Original Table1, explicitly selected p_at=100000Pa; all decimal strings exact",
+    "void_ratios": [
+      "0.735",
+      "0.833",
+      "0.907"
+    ],
+    "pressures_pa": [
+      "20000",
+      "100000",
+      "500000"
+    ],
+    "directions": [
+      "compression",
+      "extension"
+    ],
+    "alpha": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "fabric": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "alpha_in": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "G0": "125",
+    "nu": "0.05",
+    "m": "0.01",
+    "M": "1.25",
+    "c": "0.712",
+    "h0": "7.05",
+    "ch": "0.968",
+    "nb": "1.1",
+    "e0": "0.934",
+    "lambda_c": "0.019",
+    "xi": "0.7",
+    "p_at": "100000",
+    "note": "Verification grid, not exact Figure5\u201310 experiments or physical universal preparation"
+  },
+  "families": [
+    {
+      "id": "E01",
+      "purpose": "Continuous constant-volume elastic first yield",
+      "inputs": "18 explicit isotropic cases generated from first_yield_grid",
+      "oracle": "Exact p*m/(3G) axial yield magnitude; constant e,p through elastic leg; full Cartesian stress",
+      "coverage": [
+        "compression",
+        "extension",
+        "three densities",
+        "three pressures",
+        "zero-distance regular branch"
+      ],
+      "gate": "Signed stress/state/yield-entry and precision budgets; no reference to candidate outputs"
+    },
+    {
+      "id": "E02",
+      "purpose": "Mixed-volume elastic entry and domain boundary",
+      "inputs": "Freeze exact valid compression/expansion/shear increments plus a predictor leaving domain after potential earlier yield",
+      "oracle": "Existing exact elastic solution, independently rederived in Cartesian high precision; first-yield bracket",
+      "coverage": [
+        "zero/tiny volumetric strain",
+        "on-cone outward",
+        "on-cone inward/opposite entry",
+        "invalid parent",
+        "domain boundary priority"
+      ],
+      "gate": "Event bracket width and constitutive accuracy are separate budgets; unsupported domain path rejects unchanged"
+    },
+    {
+      "id": "P01",
+      "purpose": "Monotonic plastic continuation",
+      "inputs": "Use E01 parents; continuous compression/extension and fully sheared Mandel directions; freeze endpoint/sample grids and three or more refinement levels",
+      "oracle": "Independent Cartesian continuous original-law solver with regular hardening products and fixed alpha_in, two precisions and independent step refinements",
+      "coverage": [
+        "current e stiffness",
+        "fabric dilation switching",
+        "signed softening on admissible branch",
+        "all histories"
+      ],
+      "gate": "Full-state curve accuracy AND convergence; residual alone cannot pass"
+    },
+    {
+      "id": "P02",
+      "purpose": "Singular and branch rejection",
+      "inputs": "Freeze d=0,Hbar>0 outward/inward/zero loading; d<0; Hbar<=0 at d=0; Hbar+dE=0; p<=0; e boundary; nondeviatoric histories",
+      "oracle": "Source-located symbolic branch expectations and exact supplied state bytes",
+      "coverage": [
+        "regular one-sided limits",
+        "simultaneous-zero rejection",
+        "no hidden cap",
+        "no silent projection"
+      ],
+      "gate": "Declared rejection status plus complete unchanged incoming layout; zero-step no drift"
+    },
+    {
+      "id": "T01",
+      "purpose": "Trials, restart and late failure",
+      "inputs": "Retain nonzero loaded histories; successful trial A, rejected trial B after accepted internal work, repeat A; serialize/restart at a prepared parent",
+      "oracle": "Immutable parent bytes and independent successful-state reference",
+      "coverage": [
+        "all25persistent components",
+        "temporary multiplier restoration on failure",
+        "trial ordering",
+        "restart identity"
+      ],
+      "gate": "Exact parent rollback/replay and separately bounded response accuracy"
+    },
+    {
+      "id": "C01",
+      "purpose": "Controls and update derivatives",
+      "inputs": "Freeze elastic radial-stress and zero-volume prescribed-q examples, plastic control paths, failed outer trial, smooth-branch directional perturbations",
+      "oracle": "Analytical elastic finite-residual solution plus independent source trajectories/control solve",
+      "coverage": [
+        "outer control residual distinct from material residual",
+        "cumulative q drift",
+        "all38state/control AD columns where exposed",
+        "event-boundary directional sides"
+      ],
+      "gate": "No complete-update tangent claim from residual AD; smooth tangents require separate freeze, otherwise mark unsupported"
+    },
+    {
+      "id": "V01",
+      "purpose": "Parent-reset variant only, contingent D07 alternative",
+      "inputs": "Freeze proportional cycle, nonproportional shear rotation, nested reversals, guard-zero neighbors, caller split vs unsplit, failed reset transaction",
+      "oracle": "Independent explicit parent guard/transaction model; canonical source oracle only after 1986 mapping",
+      "coverage": [
+        "partition dependence",
+        "immutable candidate parent",
+        "retained fabric",
+        "event equality",
+        "no reset accumulation in outer controls"
+      ],
+      "gate": "Variant identity first; no false partition-invariance requirement or canonical equivalence"
+    },
+    {
+      "id": "B01",
+      "purpose": "Native/Wasm/browser production integration",
+      "inputs": "All frozen eligible cases plus explicit initialization export/import/restart and failed-request recovery",
+      "oracle": "Independent equations first; cross-backend comparisons second; actual C-ABI package",
+      "coverage": [
+        "source URLs",
+        "schema/state semantics",
+        "loading restrictions",
+        "all current model regressions"
+      ],
+      "gate": "All eligible backend requests pass original accuracy/rejection policy; packaging is not scientific admission"
+    }
+  ],
+  "must_freeze_before_candidate": [
+    "reviewer-approved source corrections and variant scope",
+    "exact binary64 controls versus intended decimal controls",
+    "initial/prepared state bytes and parameter units",
+    "oracle algorithm, event convention, two precision levels and precision adequacy",
+    "complete sample grid and refinement partitions",
+    "per-channel absolute and relative accuracy budgets with units/scales",
+    "constitutive residual and outer control budgets separately",
+    "event bracket and branch-boundary classification policy",
+    "full rollback/state serialization equality rules",
+    "derivative claim and smooth-branch step/adequacy policy",
+    "assessor corruption matrix and failure retention",
+    "native/Wasm toolchain/build/model/compiler hashes"
+  ],
+  "available_without_new_engine_feature": [
+    "25persistent+1temporary capacity",
+    "tensor_square and cube_trace",
+    "typed scalar/tensor branching",
+    "incremental residual complementarity",
+    "parent_increment reset for separately named variant",
+    "complete incoming-state rollback"
+  ],
+  "conditional_generic_design_only_if_required": [
+    "Located yield/domain/reversal events need a separately approved event lifecycle contract; no source-derived canonical requirement demonstrated yet",
+    "Complete update tangent through reset/events is not exposed; do not substitute inner residual AD"
+  ]
+}

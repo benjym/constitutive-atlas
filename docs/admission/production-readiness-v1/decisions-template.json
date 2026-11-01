@@ -1,0 +1,235 @@
+{
+  "version": "production-readiness-decisions-v1",
+  "kind": "unsigned_decision_template_not_a_canonical_review",
+  "reviewer": null,
+  "reviewed_at": null,
+  "independence_statement": null,
+  "answers": {
+    "linear-elastic": [
+      {
+        "id": "EL-01",
+        "question": "Accept the constant-E/nu source specialization and paired stress/strain sign plus Mandel mapping?",
+        "proposed_bounded_disposition": "Accept the constant isotropic infinitesimal law only; source fields varying with position/state are excluded.",
+        "evidence": [
+          "docs/ingestion/linear-elastic/README.md",
+          "docs/ingestion/linear-elastic/source-receipts.json"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "EL-02",
+        "question": "Accept effective-stress interpretation and exponential void bookkeeping as explicit Atlas host/numerical choices?",
+        "proposed_bounded_disposition": "Do not attribute the void update to the OGS elasticity source or infer poromechanics/finite strain.",
+        "evidence": [
+          "docs/models/linear-elastic.md",
+          "docs/ingestion/linear-elastic/formulation-crosswalk.json"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "EL-03",
+        "question": "Do the analytical tensor/control cases and independent rational checks support the named numerical claim?",
+        "proposed_bounded_disposition": "Assess 29 native cases separately from 30 rational stiffness columns and saved endpoint residuals; no all-parameter conditioning theorem.",
+        "evidence": [
+          "catalogue/evidence/linear-elastic-analytical-v1.json",
+          "docs/ingestion/linear-elastic/crosswalk-checks.json"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "EL-04",
+        "question": "Is explicit stress/e state with examples-only defaults sufficient for this material-point scope?",
+        "proposed_bounded_disposition": "Accept explicit mechanical inputs; exclude soil calibration and source-matched physical specimen preparation.",
+        "evidence": [
+          "docs/ingestion/linear-elastic/formulation-crosswalk.json"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "EL-05",
+        "question": "Which parameter/control region and release checks must the pinned reviewed release retain?",
+        "proposed_bounded_disposition": "Retain named analytical/control/rollback regressions; separately qualify nearly incompressible behavior and any FE-host tangent claim.",
+        "evidence": [
+          "catalogue/evidence/reports/linear-elastic-analytical-v1.json",
+          "docs/FORMULATION_CONTRACT.md"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      }
+    ],
+    "drucker-prager": [
+      {
+        "id": "DP-01",
+        "question": "Accept the uncapped constant-elastic perfect-plastic specialization and documented source parameter/multiplier conversions?",
+        "proposed_bounded_disposition": "Accept only this selected ideal cone; no equivalence to complete OpenSees/Itasca models with tensile cutoff/hardening.",
+        "evidence": [
+          "docs/ingestion/drucker-prager/README.md",
+          "docs/models/drucker-prager-apex.md"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "DP-02",
+        "question": "Approve the corrected admissible 0<=Md<=M domain and distinguish the preserved old negative-work witness?",
+        "proposed_bounded_disposition": "Use the exact current candidate; old source crosswalk/checks pin the pre-guard definition and are historical rather than current-root commands.",
+        "evidence": [
+          "catalogue/investigations/dp-dilatancy-domain-v1/README.md",
+          "catalogue/investigations/dp-dilatancy-domain-v1/previous-definition.json",
+          "catalogue/investigations/dp-dilatancy-domain-v1/candidate-definition.json"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "DP-03",
+        "question": "Accept trial-direction elimination and the ideal norm subgradient at the apex?",
+        "proposed_bounded_disposition": "The q_trial=0 denominator is a safe algebraic branch, not a stress floor. Md=0 beyond the tensile apex remains an expected transactional failure.",
+        "evidence": [
+          "docs/models/drucker-prager-apex.md",
+          "docs/models/drucker-prager-dilatancy.md"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "DP-04",
+        "question": "Do the current 83 native cases and separately retained Wasm/browser checks cover the requested bounded behavior?",
+        "proposed_bounded_disposition": "Review all outcomes and failure/recovery meanings; independent CLI recovery is not persistent-process recovery; preserve failed v1 and earlier v2.",
+        "evidence": [
+          "catalogue/evidence/drucker-prager-dilatancy-v3.json",
+          "docs/reviews/dp-dilatancy-web-v1/README.md"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "DP-05",
+        "question": "Accept explicit sigma/e, temporary gamma lifecycle, scaled tolerances and project void bookkeeping?",
+        "proposed_bounded_disposition": "Gamma is final-subsolve temporary data, not accumulated plastic history. Yield/domain tolerances are numerical choices.",
+        "evidence": [
+          "docs/ingestion/drucker-prager/formulation-crosswalk.json",
+          "docs/models/drucker-prager-dilatancy.md"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "DP-06",
+        "question": "Accept the proposed release exclusions and specify any remaining numerical qualification?",
+        "proposed_bounded_disposition": "Exclude global convergence, arbitrary parameter/path coverage, smooth tangent through all branches and experimental calibration.",
+        "evidence": [
+          "catalogue/reviews/drucker-prager-source-v4.json",
+          "docs/FORMULATION_CONTRACT.md"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      }
+    ],
+    "modified-cam-clay": [
+      {
+        "id": "MCC-01",
+        "question": "Approve M-squared yield and selected volume balance despite the source Eq11/Eq30b and Eq7/Eqs8-9 conflicts?",
+        "proposed_bounded_disposition": "Accept the explicitly derived selected branch only; record that this is not verbatim equivalence to all printed equations.",
+        "evidence": [
+          "docs/ingestion/modified-cam-clay/README.md",
+          "docs/ingestion/modified-cam-clay/source-receipts.json"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "MCC-02",
+        "question": "Accept endpoint pressure/volume stiffness and gamma/pc_n flow normalization?",
+        "proposed_bounded_disposition": "Treat these as named Atlas finite-step choices, distinct from source lagging and gradient-norm multiplier normalization.",
+        "evidence": [
+          "docs/models/modified-cam-clay.md",
+          "docs/ingestion/modified-cam-clay/formulation-crosswalk.json"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "MCC-03",
+        "question": "Accept exponential volume/log-pc updates and temporary multiplier semantics?",
+        "proposed_bounded_disposition": "State persistent sigma/e/pc and final-subsolve gamma separately; no finite-deformation or elapsed-time law.",
+        "evidence": [
+          "docs/ingestion/modified-cam-clay/README.md"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "MCC-04",
+        "question": "Does the scalar/tensor/refinement evidence support the requested bounded discrete implementation?",
+        "proposed_bounded_disposition": "Review 57 passing cases separately from the failed unpartitioned v1; actual-partition agreement is not a general adaptive-error proof.",
+        "evidence": [
+          "catalogue/evidence/modified-cam-clay-scalar-v2.json",
+          "catalogue/evidence/modified-cam-clay-investigation-v1.json"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "MCC-05",
+        "question": "Accept explicit admissible sigma/e/pc with illustrative OCR, without an inferred calibrated NCL state?",
+        "proposed_bounded_disposition": "Require caller-supplied consolidation/preparation for experiments; do not derive a material NCL intercept from example values.",
+        "evidence": [
+          "docs/ingestion/modified-cam-clay/formulation-crosswalk.json",
+          "docs/ingestion/modified-cam-clay/README.md"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      },
+      {
+        "id": "MCC-06",
+        "question": "Which further branch/control/parameter checks are necessary for the proposed release claim?",
+        "proposed_bounded_disposition": "Exclude global branch uniqueness, near-singular parameter behavior, full FE tangent qualification and calibrated prediction unless separately evidenced.",
+        "evidence": [
+          "catalogue/reviews/modified-cam-clay-source-v3.json",
+          "docs/FORMULATION_CONTRACT.md"
+        ],
+        "decision": null,
+        "rationale": null,
+        "reviewer": null,
+        "reviewed_at": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "identity": "terracotta-production-closure-v1",
+  "date": "2026-11-01",
+  "status": "passed bounded documentary preflight",
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "docs/ingestion/terracotta-2024/production-closure-v1/verify.py"
+      ],
+      "returncode": 0,
+      "result": {
+        "status": "passed",
+        "pinned_files": 27,
+        "original_accuracy_outcome": "failed",
+        "refined_accuracy_outcome": "passed",
+        "source_complete": false,
+        "scientific_signoff": false,
+        "new_compiled_execution": false,
+        "new_reference_generation": false
+      }
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "tests.test_terracotta_preparation_hold",
+        "-v"
+      ],
+      "returncode": 0,
+      "tests": 6,
+      "note": "Pure request/evidence-contract regression; synthetic responses, no material calls"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "docs/ingestion/terracotta-2024/production-closure-v1/"
+      ],
+      "returncode": 0,
+      "note": "Packet files are new/untracked; this command does not inspect their whitespace. A separate direct whitespace check was performed."
+    }
+  ],
+  "limitations": [
+    "No saved-only full study verifier rerun; historical verification.json is pinned as reported evidence.",
+    "No artifact bytes rehashed by this packet; pins are documentary inputs, not a new complete executable-source closure.",
+    "No new numerical observation, reference regeneration, author execution, PDF inspection, build, source closure, independent scientific signature or promotion.",
+    "Downloads search was filename-only; no new concrete legal acquisition lead."
+  ],
+  "local_links_resolved": 9,
+  "direct_whitespace_check": "passed for all five packet files"
+}

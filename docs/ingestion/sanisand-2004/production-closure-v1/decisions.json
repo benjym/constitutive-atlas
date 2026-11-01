@@ -1,0 +1,113 @@
+{
+  "record_version": 1,
+  "date": "2026-11-01",
+  "status": "unsigned_proposal",
+  "reviewer": null,
+  "signature": null,
+  "decisions": [
+    {
+      "id": "D01",
+      "title": "Original-law target and named algorithm",
+      "proposal": "2004 continuous law with project fixed-memory backward-Euler discretization; effective stress, small strain, fixed frame, no objective rate",
+      "open_issue": "Do not equate this with complete OpenSees or original canonical reversals",
+      "depends_on": [],
+      "status": "unapproved",
+      "reviewer": null,
+      "signed_date": null
+    },
+    {
+      "id": "D02",
+      "title": "Equation identity",
+      "proposal": "Current void ratio elasticity; uneliminated elastic/plastic stress relation; disclose dimensional correction of printed Eq20",
+      "open_issue": "Independent source review must accept missing K correction and appendix cross-reference ambiguity",
+      "depends_on": [
+        "D01"
+      ],
+      "status": "unapproved",
+      "reviewer": null,
+      "signed_date": null
+    },
+    {
+      "id": "D03",
+      "title": "Explicit preparation",
+      "proposal": "Require supplied sigma,e,alpha,fabric,alpha_in; zero-history isotropic grid is a verification hypothesis only",
+      "open_issue": "No universal initialization inferred from Table1 or p626 scalar z example",
+      "depends_on": [
+        "D01"
+      ],
+      "status": "unapproved",
+      "reviewer": null,
+      "signed_date": null
+    },
+    {
+      "id": "D04",
+      "title": "Singular hardening",
+      "proposal": "Finite-product residuals and regular zero-distance positive-Hbar limit; reject unsupported singular branches",
+      "open_issue": "General finite-step uniqueness and simultaneous-zero continuation unproved",
+      "depends_on": [
+        "D02",
+        "D03"
+      ],
+      "status": "unapproved",
+      "reviewer": null,
+      "signed_date": null
+    },
+    {
+      "id": "D05",
+      "title": "Discrete algorithm and domain",
+      "proposal": "Declare normalized off-cone direction/zero-centre branch, complementarity, exponential volume closure, solver/domain checks and rollback",
+      "open_issue": "Do not import pressure floors, finite hardening cap, shifted pressure or source projection",
+      "depends_on": [
+        "D02",
+        "D04"
+      ],
+      "status": "unapproved",
+      "reviewer": null,
+      "signed_date": null
+    },
+    {
+      "id": "D06",
+      "title": "Bounded implementation scope",
+      "proposal": "New v0.3 fixed-memory monotonic research candidate; entry error and refinement against independent reference",
+      "open_issue": "Reversal success is not correctness; public scope restriction needs review",
+      "depends_on": [
+        "D03",
+        "D04",
+        "D05"
+      ],
+      "status": "unapproved",
+      "reviewer": null,
+      "signed_date": null
+    },
+    {
+      "id": "D07",
+      "title": "Canonical reversal or separate variant",
+      "proposal": "Canonical original event policy remains blocked; explicit parent-reset project variant is an alternative requiring a separate signed identity",
+      "open_issue": "1986 exact loading-process and mapped-image rules missing; parent guard is not cone-normal rule",
+      "depends_on": [
+        "D01",
+        "D03"
+      ],
+      "status": "unapproved",
+      "reviewer": null,
+      "signed_date": null
+    },
+    {
+      "id": "D08",
+      "title": "Prospective evidence and numerical policy",
+      "proposal": "Freeze input corpus, oracle precision, error budgets, corruption tests and smooth/event derivative policy before candidate observations",
+      "open_issue": "No new tolerance, independent reviewer or release approval supplied by this packet",
+      "depends_on": [
+        "D01",
+        "D02",
+        "D03",
+        "D04",
+        "D05",
+        "D06"
+      ],
+      "status": "unapproved",
+      "reviewer": null,
+      "signed_date": null
+    }
+  ]
+}

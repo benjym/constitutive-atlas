@@ -1,0 +1,211 @@
+{
+  "version": "production-readiness-work-packages-v1",
+  "created_at": "2026-11-01",
+  "source_commit": "527aacea0b6eba7b9e171229e0a9c4c9e2576f62",
+  "kind": "unsigned_admission_work_packages",
+  "scope": "bounded_material_point_library_and_laboratory",
+  "models": [
+    {
+      "model_id": "linear-elastic",
+      "definition": {
+        "path": "models/linear-elastic.json",
+        "sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+        "schema_version": "0.1",
+        "status": "transcribed"
+      },
+      "pending_review": {
+        "path": "catalogue/reviews/linear-elastic-source-v2.json",
+        "sha256": "fc4127a240cbe5a906b4fdfbbd2a13660c6770d37967636c4f688240b5eeb200"
+      },
+      "proposed_scope": {
+        "strain_kinematics": "infinitesimal_3d",
+        "frame": "fixed_spatial_zero_spin",
+        "stress": "compression_positive_effective_cauchy",
+        "tensor": "mandel_xx_yy_zz_sqrt2xy_sqrt2yz_sqrt2xz",
+        "initialization": "explicit_caller_supplied_persistent_state",
+        "experimental_validation": false,
+        "finite_element_host_qualification": false,
+        "universal_convergence": false
+      },
+      "scientific_reviewer": null,
+      "scientific_review_complete": false,
+      "release_attestation": null,
+      "evidence": [
+        {
+          "path": "catalogue/evidence/linear-elastic-analytical-v1.json",
+          "id": "linear-elastic-analytical-v1",
+          "model_binding": "exact_current_definition",
+          "outcome": "passed",
+          "scope": "29 native closed-form cases: Cartesian tensor stress, all shear planes, three elastic parameter regimes and axisymmetric controls. Void ratio is separately checked as project bookkeeping."
+        }
+      ],
+      "decision_ids": [
+        "EL-01",
+        "EL-02",
+        "EL-03",
+        "EL-04",
+        "EL-05"
+      ],
+      "next_action": "Obtain independent decisions on the named source/numerical scope before a new release freeze; retain existing status."
+    },
+    {
+      "model_id": "drucker-prager",
+      "definition": {
+        "path": "models/drucker-prager.json",
+        "sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+        "schema_version": "0.1",
+        "status": "transcribed"
+      },
+      "pending_review": {
+        "path": "catalogue/reviews/drucker-prager-source-v4.json",
+        "sha256": "8b3737d9c56833dd2aad968ab8818ed782aa3d3d5fdfd1caed0d17f9c23116bb"
+      },
+      "proposed_scope": {
+        "strain_kinematics": "infinitesimal_3d",
+        "frame": "fixed_spatial_zero_spin",
+        "stress": "compression_positive_effective_cauchy",
+        "tensor": "mandel_xx_yy_zz_sqrt2xy_sqrt2yz_sqrt2xz",
+        "initialization": "explicit_caller_supplied_persistent_state",
+        "experimental_validation": false,
+        "finite_element_host_qualification": false,
+        "universal_convergence": false
+      },
+      "scientific_reviewer": null,
+      "scientific_review_complete": false,
+      "release_attestation": null,
+      "evidence": [
+        {
+          "path": "catalogue/evidence/drucker-prager-dilatancy-v3.json",
+          "id": "drucker-prager-dilatancy-v3",
+          "model_binding": "exact_current_definition",
+          "outcome": "passed",
+          "scope": "83nativeCLI cases under prospective freeze: unchanged73historical reference cases plus invalid dilatancy rejection, exact failure state, valid independent request recovery and valid J2/associated boundaries."
+        }
+      ],
+      "decision_ids": [
+        "DP-01",
+        "DP-02",
+        "DP-03",
+        "DP-04",
+        "DP-05",
+        "DP-06"
+      ],
+      "next_action": "Obtain independent decisions on the named source/numerical scope before a new release freeze; retain existing status."
+    },
+    {
+      "model_id": "modified-cam-clay",
+      "definition": {
+        "path": "models/modified-cam-clay.json",
+        "sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+        "schema_version": "0.1",
+        "status": "transcribed"
+      },
+      "pending_review": {
+        "path": "catalogue/reviews/modified-cam-clay-source-v3.json",
+        "sha256": "3cee6101d72185211b616376a370ba4439bf3d3516e00d97ff7169bd378566f1"
+      },
+      "proposed_scope": {
+        "strain_kinematics": "infinitesimal_3d",
+        "frame": "fixed_spatial_zero_spin",
+        "stress": "compression_positive_effective_cauchy",
+        "tensor": "mandel_xx_yy_zz_sqrt2xy_sqrt2yz_sqrt2xz",
+        "initialization": "explicit_caller_supplied_persistent_state",
+        "experimental_validation": false,
+        "finite_element_host_qualification": false,
+        "universal_convergence": false
+      },
+      "scientific_reviewer": null,
+      "scientific_review_complete": false,
+      "release_attestation": null,
+      "evidence": [
+        {
+          "path": "catalogue/evidence/modified-cam-clay-scalar-v2.json",
+          "id": "modified-cam-clay-scalar-v2",
+          "model_binding": "exact_current_definition",
+          "outcome": "passed",
+          "scope": "57 native cases: independent scalar reduction on actual accepted partitions, wet/dry plastic tensor increments, noncoaxial loading, isotropic/critical special cases, rollback and two isotropic continuum refinement studies. Raw unpartitioned comparisons and applicability remain in each report case."
+        }
+      ],
+      "decision_ids": [
+        "MCC-01",
+        "MCC-02",
+        "MCC-03",
+        "MCC-04",
+        "MCC-05",
+        "MCC-06"
+      ],
+      "next_action": "Obtain independent decisions on the named source/numerical scope before a new release freeze; retain existing status."
+    }
+  ],
+  "inputs": {
+    "catalogue/evidence/drucker-prager-apex-v2.json": "29866e5f58ce880e987f795261a3645e301012728d08f10ccf88d3c50bf7da13",
+    "catalogue/evidence/drucker-prager-dilatancy-v3.json": "454ada2b7608e34f347b562dab190654009de7b3ad4c8e9a25e75f96d3c62245",
+    "catalogue/evidence/drucker-prager-investigation-v1.json": "65c8c0f43eb1db361071d4f9576aeb1a444c6dcbff090d5a9751bae2efb64582",
+    "catalogue/evidence/linear-elastic-analytical-v1.json": "a2d82780a90a499f204ff4c91c99793f3b731473e3b7c0ceb5d90eddf9bf24ab",
+    "catalogue/evidence/modified-cam-clay-investigation-v1.json": "468e2792d4b43c1140769793e19e60183ce6b2ddaa4e0796d5eb58c5f33bf4db",
+    "catalogue/evidence/modified-cam-clay-scalar-v2.json": "d88322b7f9b6f7f8a6888456b0c653e0373d8ea9ab7ed67d53f24094cc747d02",
+    "catalogue/evidence/reports/drucker-prager-apex-v2.json": "9601c68ff84676825201e57c28a955d104cb962f3b79bd311faead230ecb656d",
+    "catalogue/evidence/reports/drucker-prager-investigation-v1.json": "ae27dd88a2110e54b68aa73ea618508a9227bc407e98bdc39810005d98092cad",
+    "catalogue/evidence/reports/linear-elastic-analytical-v1.json": "cdfdb5a25b912daa131259b4901642139772450d171ebbf65f4e17ba313aa417",
+    "catalogue/evidence/reports/modified-cam-clay-investigation-v1.json": "df546157324e60d87b23497e24ed9e66873ca35ef04f63e3156ab181396d3e8e",
+    "catalogue/evidence/reports/modified-cam-clay-scalar-v2.json": "20e91b6f1f288657c8d764bc35aad8b20a6a07a145cf2e59898b09a0d047495b",
+    "catalogue/investigations/dp-dilatancy-domain-v1/README.md": "7edd878648c5c0861e19b92df50e9bef87d4121e9ba572200e7638407d506f61",
+    "catalogue/investigations/dp-dilatancy-domain-v1/archive-audit.json": "e2e0a10ab02e21bfbed6e5fea244b0eff0fa8f444828b4463721f8a6d09de195",
+    "catalogue/investigations/dp-dilatancy-domain-v1/archive-inventory.json": "a84eda5a0ff155bdfd6e2b042509c7e1cc6758a126c46d84537105c93b614d2a",
+    "catalogue/investigations/dp-dilatancy-domain-v1/candidate-definition.json": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+    "catalogue/investigations/dp-dilatancy-domain-v1/manifest.json": "1d942ff9bbcfafacff5161e5c166426972cec5e9bc97ce6e01b549edd3ad6d46",
+    "catalogue/investigations/dp-dilatancy-domain-v1/previous-definition.json": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d",
+    "catalogue/investigations/dp-dilatancy-domain-v1/prospective-freeze.json": "1b4fe0aa4dfe0e3c1727df57bb0183415dd154af645ea0b6f775ee80fc25193d",
+    "catalogue/investigations/dp-dilatancy-domain-v1/results/raw.json": "763ae3aba2bff3e95a4a920169f51f988f5758525af711167956a348ada9574d",
+    "catalogue/investigations/dp-dilatancy-domain-v1/results/report.json": "d611ab77ca9019528e2f6450f71e7787574bf65a9622c0e968499224f1164a0e",
+    "catalogue/reviews/drucker-prager-source-v4.json": "8b3737d9c56833dd2aad968ab8818ed782aa3d3d5fdfd1caed0d17f9c23116bb",
+    "catalogue/reviews/linear-elastic-source-v2.json": "fc4127a240cbe5a906b4fdfbbd2a13660c6770d37967636c4f688240b5eeb200",
+    "catalogue/reviews/modified-cam-clay-source-v3.json": "3cee6101d72185211b616376a370ba4439bf3d3516e00d97ff7169bd378566f1",
+    "catalogue/source-snapshots/0ad4a4204e5212d4f5e49e2db59bc1296281819af6c3fc6b79a2f6a1bab1252f/tools/build_evidence.py": "0ad4a4204e5212d4f5e49e2db59bc1296281819af6c3fc6b79a2f6a1bab1252f",
+    "catalogue/source-snapshots/1dbcc9083d0370bd28418853574238b9a5365dfc71904de7f58404d837774706/web/app.js": "1dbcc9083d0370bd28418853574238b9a5365dfc71904de7f58404d837774706",
+    "catalogue/source-snapshots/2741fa1be8c03a3388370c1e4a996af9f0d717eb792b5bbdaf8467cd375fcd3f/web/recorded-view.mjs": "2741fa1be8c03a3388370c1e4a996af9f0d717eb792b5bbdaf8467cd375fcd3f",
+    "catalogue/source-snapshots/31e7c27f978acf268c7d7a047ab08458710bc70da7367a8b18dff2287afdfa45/catalogue/manifest.json": "31e7c27f978acf268c7d7a047ab08458710bc70da7367a8b18dff2287afdfa45",
+    "catalogue/source-snapshots/46dbf7bda6b89212d75fd6b95ae318e1370483ab3f53299ad9a2d342756fa381/web/style.css": "46dbf7bda6b89212d75fd6b95ae318e1370483ab3f53299ad9a2d342756fa381",
+    "catalogue/source-snapshots/6eed95fea0aafa38e630081fa2775c46566cc6d972904740453506e533c12318/web/catalogue.mjs": "6eed95fea0aafa38e630081fa2775c46566cc6d972904740453506e533c12318",
+    "catalogue/source-snapshots/9021d113bcc5bc908de023e031a1137968b87ea821d66ec77908063d58b89c33/tools/benchmark_tmd2.py": "9021d113bcc5bc908de023e031a1137968b87ea821d66ec77908063d58b89c33",
+    "docs/FORMULATION_CONTRACT.md": "bbeda817fc0f0dc6108a92eb327c6cd0ea6ca0496cc31c6be43ffb42e95db38f",
+    "docs/RESEARCH_CHARTER.md": "29a15c0fc60e70691861b69f067de7334868244464cf0170dfe5b2c3c2a23ecd",
+    "docs/admission/production-readiness-v1/dp-replay-bindings.json": "6e555cebc7da1f934fe7ce722df6eb41caa791bd63303777f870ee473a8d1e0d",
+    "docs/admission/production-readiness-v1/dp-replay-sources/4aa34a1f76a06011c2083b750e79f2f40ec7b6e42218f4b1c4496a18c0406be2/tools/build_web.py": "4aa34a1f76a06011c2083b750e79f2f40ec7b6e42218f4b1c4496a18c0406be2",
+    "docs/admission/production-readiness-v1/dp-replay-sources/6a4ceaee0046b28afd99d098126f75f2d2875836a1ad307be6443eeca2d574d2/web/index.html": "6a4ceaee0046b28afd99d098126f75f2d2875836a1ad307be6443eeca2d574d2",
+    "docs/ingestion/drucker-prager/README.md": "aed23739420da7dad947cd6013df05fe4b03f8fbc52983da3362c94cd5ef630c",
+    "docs/ingestion/drucker-prager/check_crosswalk.py": "c349ab8287e3d8461ebd27a43a06d16fc5a8aa54849f1c18c75e0452e195ff1f",
+    "docs/ingestion/drucker-prager/crosswalk-checks.json": "b0a6074cf0ed872de62fa83b0d476ef6cda25f480438c98b5c2241c48ff6f19f",
+    "docs/ingestion/drucker-prager/formulation-crosswalk.json": "1b382316a8214e20dfe90b8db40cda3fa3e95a6c0c9272fa043bbcf54adaa9ae",
+    "docs/ingestion/drucker-prager/source-receipts.json": "73e8b48e15920bc68bf4c73fc27b193561c3599bad881701c026008d5e2675b3",
+    "docs/ingestion/linear-elastic/README.md": "93f01d83542dbcb3e7f80bbe5b40baa99d6e10d9561f783e90a114b700beb9a5",
+    "docs/ingestion/linear-elastic/check_crosswalk.py": "6c6252a75226184f0a7813dd7a104a4abfbc577b0ea2580a77517fb9c55125ff",
+    "docs/ingestion/linear-elastic/crosswalk-checks.json": "f9e6e074baef168b3e7b32b33fa91f3a232c13f791e8f32d2ba1b6bb9c43ba1a",
+    "docs/ingestion/linear-elastic/formulation-crosswalk.json": "20a68c6708cba0db5bc5458624ea61832db0f708a1cde25408ce15b0bb750427",
+    "docs/ingestion/linear-elastic/source-receipts.json": "edbbbd777d5d3d36d39d88bf218265a9bef98bac59233b01b995c4a4505d0b49",
+    "docs/ingestion/modified-cam-clay/README.md": "1012ae0c3fc7c38d6a7d0fdee93c6a46ff5262a11be5c29ed3aeaf33cb9ff3f4",
+    "docs/ingestion/modified-cam-clay/check_crosswalk.py": "537e812ce48f46ebe60ce320e81d10077d978976aea0fa9bf2038ad406099eb2",
+    "docs/ingestion/modified-cam-clay/crosswalk-checks.json": "a71d20fc051a6fefeb71a231e202f74ce7a495ee1ede796b8a759c739f56c319",
+    "docs/ingestion/modified-cam-clay/formulation-crosswalk.json": "fbfda4838cb35edcd533a604d33bf9dcedc54ed099d5ad655ad1967c0023c0f6",
+    "docs/ingestion/modified-cam-clay/source-receipts.json": "6628686f98f44ee7b9d30dc99621d24a8422065dee291b398eb44dcde98cacb0",
+    "docs/models/drucker-prager-apex.md": "117c08653d80b14a7eb2da7261b0a4581b6daab6ea4fbf9334638f0f6c2ba5b4",
+    "docs/models/drucker-prager-dilatancy.md": "32e7fe8cd322a82a7420b21122f142e42a22d6cf90c1abe79065714b51046f52",
+    "docs/models/linear-elastic.md": "5c14d5393c25a9077e8fe6afa429eabc85511c54605a49fe58bd58fd23b71b03",
+    "docs/models/modified-cam-clay.md": "ad054620d1936c3c177e2051c9f9e1208dad467cd575471ac730bcdb735568d4",
+    "docs/reviews/dp-dilatancy-web-v1/README.md": "f6377d03c1a45462d6b1fe815f1a1b24a6c9a3ad685a659553f58891163bb01d",
+    "docs/reviews/dp-dilatancy-web-v1/check.mjs": "f476efbfe185b74f665201c2de76f3964cb4b0631c9ff3972693d64a75376412",
+    "docs/reviews/dp-dilatancy-web-v1/manifest.json": "b1a5d103cdce2069dd94227ab9426c970325db079ff56176175198f53147aeca",
+    "docs/reviews/dp-dilatancy-web-v1/prospective-freeze.json": "b1ea659d572499e5808e355463487cb7f764ec33bce6e72ab111912da663dec6",
+    "docs/reviews/dp-dilatancy-web-v1/results/raw.json": "598f60872c92fe7e121fee5e991baa226b82646a575c0555e8c7809481f2830c",
+    "docs/reviews/dp-dilatancy-web-v1/results/report.json": "61d814228fec1221ce85b4572ebea584fc4445578eb1569ffe8b15ee7e899fa6",
+    "docs/reviews/dp-dilatancy-web-v1/verify.py": "1d036d607b28cf9d026f6319763d3baaa4f00050c2ba09e6a3ffa86052556919",
+    "models/drucker-prager.json": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+    "models/linear-elastic.json": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+    "models/modified-cam-clay.json": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+    "schemas/evidence.schema.json": "69f51ecf54e328269c7ad57df43644dfffa275abcc8c4273289d7d4bd017e6ad",
+    "schemas/model-v0.3.schema.json": "d08e7ed7e060eb3fae4bcd37ceea0b6fee59a19ce31e2d752827beb8af8eb0ab",
+    "schemas/review.schema.json": "fa53511a11050863b6c3a538410739bf1d4db16926cd492eadb3353778cf347d"
+  },
+  "compiled_execution_authorized_by_this_packet": false,
+  "status_promotion_authorized_by_this_packet": false
+}
