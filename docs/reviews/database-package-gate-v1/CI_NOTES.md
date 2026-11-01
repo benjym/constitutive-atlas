@@ -1,0 +1,7 @@
+# Expanded CI command and shared integration boundary
+
+Both existing static package-test commands in the verification workflow include the new database mutation suite. `workflow-delta.json` and `proposed-verify.yml` bind the exact two filename insertions on committed source; concurrent native fixture edits are excluded. `workflow-before.json` retains exact pre-edit working bytes. No workflow was remotely triggered.
+
+The expanded command runs 81 tests. In the shared working tree, 80 pass and the existing profile allocation positive test fails: its other-owner assertion expects 35 cases, while current Duncan integration supplies 36. The profile module alone reproduces 15 passes and the same failure, without importing the new database validator. That test and its policies were not changed by this task. Logs are preserved in `shared-ci-command.txt` and `shared-profile-baseline.txt`; overall current CI is not qualified.
+
+A fresh clean archive of c88f307c plus only the four owned gate/tool/test files passes all 81 tests. The committed twelve-model profile policy and its original exact count remain unchanged. `ci-results.json` records the exact overlay hashes and `clean-ci-command.txt` contains the output. This establishes the bounded committed change's static regression result, not the newer shared model integration or full website qualification. The latter owner must freeze and verify its own final profile allocation; this task does not waive or repair it.

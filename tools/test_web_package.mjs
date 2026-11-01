@@ -1,5 +1,6 @@
 // Test the completed Pages artifact, including its own Wasm and browser settings module.
 import assert from 'node:assert/strict';
+import {validateDatabasePackage} from './validate_database_package.mjs';
 import {readFileSync,writeFileSync,existsSync} from 'node:fs';
 import {resolve,dirname,join} from 'node:path';
 import {pathToFileURL,fileURLToPath} from 'node:url';
@@ -41,6 +42,7 @@ export function validatePackage(directory){
   }
  }
  for(const name of ['atlas.js','atlas.wasm','worker.js','numerics.mjs','loading.mjs','recorded.mjs','state-contract.mjs','.nojekyll'])assert.ok(existsSync(join(directory,name)),'Missing package asset: '+name);
+ validateDatabasePackage(directory);
  return metadata;
 }
 
