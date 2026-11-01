@@ -222,6 +222,15 @@ def validate(model):
             if role != 'persistent' and (integration_kind(model) != 'residual' or any(v != 0 for v in initial)):
                 raise ValidationError('temporary solve state requires a residual profile and zero initial values')
     if count>MAX_STATE_COMPONENTS: raise ValidationError(f'at most {MAX_STATE_COMPONENTS} state components are supported')
+    if 'solution_constraints' in model:
+        if version != '0.3' or physical or integration_kind(model) != 'residual':
+            raise ValidationError('solution constraints require a v0.3 incremental residual profile')
+        solution_symbols={'I':Type('sym')}
+        solution_symbols.update({n:field_type(f) for n,f in model['parameters'].items()})
+        solution_symbols.update({f['name']:field_type(f) for f in model['state'] if state_role(f)=='persistent'})
+        for constraint in model['solution_constraints']:
+            if infer(parse(constraint),solution_symbols)!=Type('bool'):
+                raise ValidationError('solution constraints must be Boolean state/parameter-only expressions')
     value_only_dependencies=set()
     for field in model['derived']:
         tree=parse(field['expr'])
@@ -324,6 +333,25 @@ def evaluation_environment(model, state, previous, increment, parameters=None, *
     return env
 
 
+def check_solution_state(model, state, parameters=None):
+    """Physical-state check; raw residual evaluation deliberately remains separate."""
+    if not model.get('solution_constraints'):return True
+    values={**defaults(model),**(parameters or {})}
+    if set(values)!=set(model['parameters']):raise ValidationError('solution constraint parameter layout mismatch')
+    for name,f in model['parameters'].items():
+        x=values[name]
+        if type(x) not in (int,float) or not math.isfinite(x) or not f['min']<=x<=f['max']:
+            raise ValidationError('invalid solution constraint parameter')
+    if set(state)!={f['name'] for f in model['state']}:raise ValidationError('solution constraint state layout mismatch')
+    env={'I':I,**values}
+    for f in model['state']:
+        x=state[f['name']];v=x if f['shape']=='sym' else [x]
+        if (f['shape']=='sym' and (not isinstance(v,(list,tuple)) or len(v)!=6)) or any(type(y) not in (int,float) or not math.isfinite(y) for y in v):
+            raise ValidationError('invalid solution constraint state')
+        if state_role(f)=='persistent':env[f['name']]=Sym(tuple(v)) if f['shape']=='sym' else x
+    return all(evaluate(parse(expr),env) for expr in model['solution_constraints'])
+
+
 def prepare_increment(model, state, increment, parameters=None):
     """Pure committed-parent reset, before any internal integration or trial stage."""
     if physical_time(model):raise ValidationError('parent-increment resets require a legacy incremental definition')
@@ -340,6 +368,7 @@ def prepare_increment(model, state, increment, parameters=None):
             raise ValueError('invalid increment reset state')
         scale=evaluate(parse(f['scale']),values)
         if not math.isfinite(scale) or scale<=0:raise ValueError('invalid state scale')
+    if not check_solution_state(model,state,values):raise ValueError('parent violates solution constraints')
     initial_env=evaluation_environment(model,state,state,[0]*6,values)
     if not all(evaluate(parse(c),initial_env) for c in model.get('initial_checks',[])):
         raise ValueError('inadmissible parent state')
@@ -354,6 +383,7 @@ def prepare_increment(model, state, increment, parameters=None):
     if any(not math.isfinite(v) for f in model['state'] for v in (prepared[f['name']] if f.get('shape')=='sym' else [prepared[f['name']]])):
         raise ValueError('nonfinite increment reset state')
     evaluation_environment(model,prepared,prepared,[0]*6,values)
+    if not check_solution_state(model,prepared,values):raise ValueError('prepared state violates solution constraints')
     return prepared
 
 

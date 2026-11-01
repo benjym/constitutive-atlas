@@ -5,7 +5,11 @@ P=Path(__file__).parent;ROOT=P.parents[2]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def verify(packet=P,root=ROOT):
     for n,h in json.loads((packet/'prospective-freeze.json').read_text())['files'].items():assert sha(root/n)==h,n
-    for n,h in json.loads((packet/'source-pins.json').read_text()).items():assert sha(root/n)==h,n
+    for n,h in json.loads((packet/'source-pins.json').read_text()).items():
+        import sys
+        sys.path.insert(0,str(root))
+        from atlas.evidence import checked_receipt
+        checked_receipt(root,str((packet/'source-pins.json').relative_to(root)),n,h)
     wire=gzip.decompress((packet/'requests.txt.gz').read_bytes());assert hashlib.sha256(wire).hexdigest()==json.loads((packet/'prospective-freeze.json').read_text())['wire_sha256']
     assert (packet/'requests.json').read_bytes()==(root/'catalogue/investigations/tresca-rounded-backends-v1/requests.json').read_bytes()
     assert (packet/'requests.txt.gz').read_bytes()==(root/'catalogue/investigations/tresca-rounded-backends-v1/requests.txt.gz').read_bytes()

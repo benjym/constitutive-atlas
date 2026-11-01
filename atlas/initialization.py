@@ -7,7 +7,7 @@ import hashlib
 import json
 import math
 from .dsl import I, Sym, Type, ValidationError, evaluate, infer, parse
-from .model import ROOT, IDENT, RESERVED, evaluation_environment, field_type, observe, physical_time, state_role, validate
+from .model import ROOT, IDENT, RESERVED, evaluation_environment, field_type, observe, physical_time, state_role, validate, check_solution_state
 from .structure import check
 
 
@@ -65,6 +65,8 @@ def initialize_state(model, state, parameters, *, loading=None, time=None):
                 raise ValidationError('initialization state scale must be positive at supplied parameters')
         env = evaluation_environment(model, named, None if physical else named,
                                      loading, parameters, time=time)
+        if not check_solution_state(model,named,parameters):
+            raise ValidationError('initial state fails solution_constraints')
         if not all(evaluate(parse(expr), env) for expr in model.get('initial_checks', [])):
             raise ValidationError('initial state fails declared initial_checks')
         observations = observe(model, named, loading, parameters, time=time) if physical else {}
@@ -79,7 +81,7 @@ def initialize_state(model, state, parameters, *, loading=None, time=None):
             'named_state': named, 'initial': flat, 'parameters': dict(parameters),
             'initial_time': time, 'initial_loading': list(loading), 'observables': observations,
             'provenance': {'model_sha256': canonical_hash(model),
-                           'validation': 'declared_domain_and_initial_checks_only',
+                           'validation': ('declared_domain_initial_checks_and_solution_constraints' if model.get('solution_constraints') else 'declared_domain_and_initial_checks_only'),
                            'preparation_history': 'not_inferred'}}
 
 

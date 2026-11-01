@@ -7,7 +7,11 @@ def module(name,path):
 
 def verify():
     for name,h in json.loads((P/'prospective-freeze.json').read_text())['files'].items():assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==h,name
-    for name,h in json.loads((P/'source-pins.json').read_text()).items():assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==h,name
+    for name,h in json.loads((P/'source-pins.json').read_text()).items():
+        import sys
+        sys.path.insert(0,str(ROOT))
+        from atlas.evidence import checked_receipt
+        checked_receipt(ROOT,str((P/'source-pins.json').relative_to(ROOT)),name,h)
     assert (P/'assess_corpus.py').read_bytes()==(ROOT/'catalogue/investigations/tresca-pressure-split-v2/assess.py').read_bytes()
     assert (P/'assess_history.py').read_bytes()==(ROOT/'catalogue/investigations/tresca-continuous-history-v1/assess.py').read_bytes()
     assert (P/'corpus-requests.json').read_bytes()==(ROOT/'catalogue/investigations/tresca-pressure-split-v2/requests.json').read_bytes()

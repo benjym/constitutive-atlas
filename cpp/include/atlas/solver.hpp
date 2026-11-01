@@ -1,6 +1,7 @@
 #pragma once
 #include "models.hpp"
 #include "atlas/settings.hpp"
+#include "atlas/solution_constraints.hpp"
 #include <limits>
 #include <stdexcept>
 #include <sstream>
@@ -14,7 +15,8 @@ inline State initial_state(int model){State z;for(const auto&f:models().at(model
 inline void reset_transients(int model,State&z){for(const auto&f:models().at(model).fields)if(f.transient)for(int j=0;j<f.size;++j)z[f.offset+j]=0;}
 inline bool finite(const State&z){for(double v:z)if(!std::isfinite(v))return false;return true;}
 inline bool valid_parameters(int model,const State&p){const auto&ps=models().at(model).parameters;if(p.size()!=ps.size())return false;for(size_t i=0;i<p.size();++i)if(!std::isfinite(p[i])||p[i]<ps[i].lower||p[i]>ps[i].upper)return false;return true;}
-inline bool domain(int model,const State&z,const State&p,bool initial=false){State out;Sym<double> zero;return finite(z)&&evaluate_model(model,z,z,zero,p,out,initial)&&finite(out);}
+inline bool solution_admissible(int model,const State& z,const State& p){return model>=0 && model<int(models().size()) && checked_solution_state(models()[model],z,p);}
+inline bool domain(int model,const State&z,const State&p,bool initial=false){State out;Sym<double> zero;return finite(z)&&solution_admissible(model,z,p)&&evaluate_model(model,z,z,zero,p,out,initial)&&finite(out);}
 inline double scaled_norm(const State&r,const State&scales){double n=0;for(size_t i=0;i<r.size();++i)n=std::max(n,std::abs(r[i]/scales[i]));return n;}
 inline bool solve_linear(std::vector<State> a,State b,State&x){
     const int n=int(b.size());
@@ -27,6 +29,7 @@ inline bool solve_linear(std::vector<State> a,State b,State&x){
 }
 inline bool implicit_step(int model,const State&zn,const Sym<double>&de,const State&p,State&z,Diagnostics&diag,const IntegrationSettings&settings={}){
     const auto scales=model_scales(model,p);const int n=int(zn.size());z=zn;reset_transients(model,z);
+    if(!solution_admissible(model,z,p))return false;
     bool predictor=false;for(const auto&f:models().at(model).fields)predictor=predictor||f.multiplier;
     for(int it=0;it<settings.max_iterations;++it){
         ++diag.iterations;std::vector<Jet> x(n),xn(n),r;Sym<Jet>d;
@@ -38,11 +41,11 @@ inline bool implicit_step(int model,const State&zn,const Sym<double>&de,const St
         for(int i=0;i<n;++i){residual[i]=r[i].v/scales[i];for(int j=0;j<n;++j)jac[i][j]=r[i].d[j]/scales[i];}
         if(!finite(residual))return false;
         double err=0;for(double v:residual)err=std::max(err,std::abs(v));diag.error=err;
-        if(err<settings.residual_tolerance){if(predictor){predictor=false;continue;}return true;}
+        if(err<settings.residual_tolerance){if(predictor){predictor=false;continue;}return solution_admissible(model,z,p);}
         State delta;for(double&v:residual)v=-v;if(!solve_linear(jac,residual,delta))return false;
         bool accepted=false;
         for(int backtrack=0;backtrack<=settings.max_backtracks;++backtrack){double alpha=std::ldexp(1.,-backtrack);State trial=z,rt;for(int i=0;i<n;++i)trial[i]+=alpha*delta[i]*scales[i];
-            if(!finite(trial)||!evaluate_model(model,trial,zn,de,p,rt)||!finite(rt))continue;
+            if(!finite(trial)||!solution_admissible(model,trial,p)||!evaluate_model(model,trial,zn,de,p,rt)||!finite(rt))continue;
             if(predictor)for(const auto&f:models().at(model).fields)if(f.multiplier)rt[f.offset]=trial[f.offset];
             if(scaled_norm(rt,scales)<err){z=trial;accepted=true;break;}
         }
@@ -101,6 +104,7 @@ inline Advance integrate(int model,const State&zn,const Sym<double>&de,const Sta
     }
     State trial;
     result.ok=advance_recursive(model,prepared,de,p,trial,result.diagnostics,0,settings);
+    if(result.ok && !solution_admissible(model,trial,p))result.ok=false;
     if(result.ok)result.state=trial;else result.message="integration failed: domain boundary, singular system or substep limit; state rolled back";
     return result;
 }
