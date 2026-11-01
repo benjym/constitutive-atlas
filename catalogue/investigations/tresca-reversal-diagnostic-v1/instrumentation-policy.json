@@ -1,0 +1,16 @@
+{
+  "version": "tresca-reversal-instrumentation-0.1",
+  "preservation": [
+    "original baseline solver/header bytes untouched",
+    "separate namespace and include paths for traced copies; no ODR collisions",
+    "original finite/constraint/raw evaluation short-circuit ordering preserved",
+    "constraint/raw/descent wrappers call same original predicate or comparison once; record only returned data",
+    "all floating arithmetic and Newton/line-search budgets unchanged",
+    "extra raw/physical probes performed after instrumented integrate finishes",
+    "require baseline and traced verdict, complete state, diagnostic counters and error bits identical",
+    "Jacobian-evaluation wrapper calls original evaluation once, records verdict after it returns",
+    "generated trace copy records already-computed derived values after branch declaration; no expression replacements"
+  ],
+  "success_of_diagnostic": "Retain all observations regardless of solve verdict; demonstrate instrumentation equivalence and explain rejection with exact independent physical checks and raw residual/Jacobian probes. No fix in this study.",
+  "material_qualification": "Not a new pass; original laboratory failure remains false."
+}
