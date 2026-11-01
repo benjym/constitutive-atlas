@@ -1,0 +1,36 @@
+{
+  "phase": "prospective before actual live evidence",
+  "verdict": "revision_required_for_offline_closeout",
+  "findings": [
+    {
+      "id": "E8-CHECK-001",
+      "severity": "medium",
+      "blocking_closeout_checker": true,
+      "finding": "Live asset cardinality is checked but unique required membership is not. Twenty duplicate or incomplete rows can satisfy the current offline checker.",
+      "required_resolution": "Bind saved uploaded package-manifest bytes/hash; require unique exact expected path set including engine/model/approval/review and root routing assets."
+    },
+    {
+      "id": "E8-CHECK-002",
+      "severity": "medium",
+      "blocking_closeout_checker": true,
+      "finding": "Uploaded engine identity and export provenance are only equal to each other. Offline check does not bind identity fields to uploaded file hashes or exact approved model/review/approval.",
+      "required_resolution": "Check identity model ID, exact immutable approved hashes and each module/wasm/catalogue/model/approval/review upload hash; bind uploaded identity and package manifest contents to their tested-upload hashes."
+    },
+    {
+      "id": "E8-CHECK-003",
+      "severity": "medium",
+      "blocking_closeout_checker": true,
+      "finding": "The offline checker has no saved upload artifact metadata binding to the exact run/head, while the downloader consumes whichever single artifact.tar is in scratch.",
+      "required_resolution": "Retain verified download/run/artifact metadata for Actions41299887463 and exact release8e060a; verify it offline. Require fresh/empty extraction or assert extracted payload identity; preserve failed attempts."
+    },
+    {
+      "id": "E8-CHECK-004",
+      "severity": "medium",
+      "blocking_closeout_checker": true,
+      "finding": "Saved browser gate checks workspace/status/export but does not require actual live route/model selection, meaningful plotted output or resolved source/review/approval links required by E8.",
+      "required_resolution": "Record and check canonical live URL, exact selected model, nonempty meaningful plots, and successful source/review/approval link observations; distinguish actual browser observations from network hash comparisons."
+    }
+  ],
+  "reviewer_network_calls": 0,
+  "reviewer_compiled_calls": 0
+}

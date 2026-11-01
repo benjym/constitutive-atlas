@@ -751,3 +751,7 @@ The model and its exact disclosures are integrated locally, bringing the executa
 ### J2 main laboratory delivery — 2026-11-01
 
 The exact approved J2 linear isotropic hardening law now has a qualified main-laboratory interface: all six prescribed strain increments, full eight-component state, plots, export/import replay, failure-prefix recovery and exact engine/approval verification. The unchanged327-call package gate and actual mounted-browser checks pass; independent interface review and final integration addendum are accepted separately from unchanged scientific approval. Retired standalone J2 HTML is not restored. Release/CI/live E8 remains open in [the J2 delivery ledger](docs/ingestion/j2-linear-hardening/DELIVERY.md).
+
+### J2 main-laboratory closeout — 2026-11-02
+
+The approved bounded J2 formulation is delivered in the main laboratory. Release 8e060a42 passes all required native/Wasm/package/Pages gates;20 assets match the tested upload and the actual live preset passes 32full-state checks. Independent review and all original failures are retained in [the delivery ledger](docs/ingestion/j2-linear-hardening/DELIVERY.md). No broader or experimental validation is claimed.

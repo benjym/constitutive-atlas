@@ -1,0 +1,5 @@
+# Corrective release plan
+
+Exact release75d36e7ad1f28700916ad18ae9c56d1e7a39f152; Actions41297711154. Original f8252c16 failed both native suites in two extracted-VM fixtures; browser jobs passed, deployment skipped. Original PLAN and complete logs remain. ci-fixture-fix-v1 records the narrow independently accepted repair and exact prior source/archive redirects. The production J2 application/module/contract/builder/checker/model/review/approval bytes are unchanged. Concurrent committed ensemble/database/provenance changes remain included, with their own owners/evidence; the current full workflow must pass.
+
+Apply the original upload/live/full-eight-state preset gates to this exact corrective release, without substituting the old artifact. New artifact scratch paths end pages-artifact-v2 and pages-upload-v2; existing prior artifact remains retained. Numerical budgets remain original .002Pa stress and2e-10history; actual live export must match the frozen public preset. No task closure before all required jobs/deployment and live checks pass.
