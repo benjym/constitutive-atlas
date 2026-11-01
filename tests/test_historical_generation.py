@@ -7,6 +7,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from atlas.evidence import checked_receipt
 from atlas.compiler import generate
 from atlas.model import ROOT, all_models
 from atlas.stress import stress_scope
@@ -42,7 +43,9 @@ class HistoricalGenerationTests(unittest.TestCase):
         paths = [verified(item) for item in data['current_models']]
         self.assertEqual(set(paths), set((ROOT / 'models').glob('*.json')))
         self.assertEqual(len(paths), 12)
-        verified(data['current_catalogue'])
+        catalogue = data['current_catalogue']
+        checked_receipt(ROOT, Path('tests/fixtures/historical-test-contexts.json'),
+                        catalogue['path'], catalogue['sha256'])
         models = all_models()
         self.assertEqual({m['id'] for m in models if stress_scope(m) == 'total'},
                          {'tresca-associated-perfect-bk2022v1-be'})

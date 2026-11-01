@@ -1,6 +1,7 @@
 """Independent reference construction, replay and meaningful receipt corruptions."""
 from pathlib import Path
 import gzip,hashlib,json,shutil,subprocess,tempfile,unittest
+from tests.reference_gzip_transport import subprocess
 from atlas.model import ROOT
 P=ROOT/'docs/reviews/tresca-rounded-reference-v1'
 class TrescaRoundedReferencesTests(unittest.TestCase):

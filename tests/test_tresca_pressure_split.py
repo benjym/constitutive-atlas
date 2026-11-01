@@ -3,6 +3,7 @@ from tests.historical_generation import generate as historical_generate
 from pathlib import Path
 from fractions import Fraction as F
 import copy,gzip,hashlib,importlib.util,json,subprocess,tempfile,unittest
+from tests.reference_gzip_transport import subprocess
 from atlas.model import ROOT,load
 from atlas.compiler import generate
 P=ROOT/'docs/reviews/tresca-pressure-split-v1'
