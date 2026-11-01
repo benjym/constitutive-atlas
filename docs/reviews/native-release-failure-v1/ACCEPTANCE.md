@@ -1,0 +1,5 @@
+# Diagnostic freeze
+
+No original gate is relaxed. Preserve the exact current twelve-model C++ fixtures and hosted failures. The interpreter enumerates all scaled central finite-difference probes from test_solver.cpp; the negative GIS Omega probe must report its exact domain violation. Six raw GIS native/Wasm evaluator calls check the original base/plus/minus and an interior Omega=0.5 candidate; compare status and domain response, without claiming an AD Jacobian or independent law validation.
+
+Replay the exact original all-strain GIS five-knot reversal through the existing qualified native/Wasm engines and compare the committed prefix, failed knot, diagnostics and full state at1e-10 physical relative tolerance. Repeat each original material segment directly from its committed parent until failure; preserve the first failing request and rollback. No smaller amplitude, changed default, increased budget, model/solver patch, scientific promotion or expected-failure release waiver is authorized by this diagnostic. A repair requires a separate prospective decision after cause analysis.

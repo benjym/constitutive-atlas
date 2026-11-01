@@ -1,0 +1,15 @@
+# Native release failure diagnosis
+
+Release1b18d1393c67dadfbf407ec962eadb46778757c0 was pushed under explicit user authorization. Hosted run [41282257917](https://github.com/benjym/constitutive-atlas/actions/runs/41282257917) passes the fresh Linux native/Wasm browser/package job, including all12supported models,134loading pairs/110replays,26scoped cases and628public experiment assets. Linux CTest fails two broader fixtures, blocking Pages. Other jobs were still live at this checkpoint; their result is not inferred.
+
+## Findings
+
+1. The generic central finite-difference fixture starts GIS cyclic memory Omega at0 and perturbs every state component by plus/minus1e-6times its scale. The negative Omega probe violates the explicit Omega>=0 domain. Source interpretation enumerates all208probes across all104components/twelve models: exactly this one is invalid. Six actual native/Wasm evaluations retain the original base/plus/minus and test the separately identified interior Omega=.5 plus/minus candidates. The original negative probe rejects; the other five evaluate. This identifies a fixture/domain incompatibility, not failed AD accuracy. An interior candidate still needs the complete unchanged AD/FD accuracy gate before installation.
+
+2. The exact original GIS all-strain five-knot reversal fails at its first knot in native and Wasm. Direct integration of that same first increment also fails, preserves the complete parent and records0accepted substeps/15rejections. Thus this is a material resolution failure, not recorded-control reconstruction.156strict native evaluator receipts mirror the original full/half/two midpoint stages at depths0..14. Depth0midpoint violates the history-radius bound; depths1..14evaluate, but at depth14the maximum scaled error is3.521071401228803e-6, governed by the first intergranular-strain component, above the unchanged1e-6rate tolerance. No permitted first increment can be accepted. The saved stage mirror diagnoses the first recursive branch; it does not prove the later history or qualify a higher-depth run.
+
+## Decision and next bounded action
+
+No runtime, model, default, CMake, test, workflow or tolerance was changed. Do not turn the observed recorded failure into an automatic waiver or remove the model. Keep the exact original tests/failure. A separate prospective repair must (a) qualify valid-domain Jacobian fixtures while retaining the original invalid-domain rejection, and (b) decide how a complete declared fixture allocation should preserve this known under-resolved original path and test successful GIS histories, restart and same-parent replay. Alternatively, changing integration/preparation needs an independently scoped numerical qualification. The existing supported-input browser release does not imply that every generic path/default succeeds. Scientific review remains pending/unassigned.
+
+`freeze.json`, `stage-freeze.json`, requests and raw compressed observations preserve the pre-observation policy and process responses. `verify.py` rechecks saved observations and error arithmetic without executing material code. No build occurred.
