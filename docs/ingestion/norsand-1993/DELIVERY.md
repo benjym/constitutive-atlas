@@ -7,7 +7,8 @@
 - Ownership: coordinator’s explicit shared whitelist is on INT-norsand-atlas-v1; generic source/build/review child tasks separately recorded on the board. No unrelated files staged, committed or overwritten.
 - Independent scientific reviewer: `/root/norsand_original_review`; interface/runtime reviewer `/root/norsand_path_review`.
 - Native/Wasm builds: coordinator, serial explicit `atlas_path_capability --parallel 1`; slot released after qualification. No author binaries executed.
-- Remote authorization: absent for this model; no push/deployment/remoteCI performed.
+- Remote authorization: user2026-11-02 explicitly instructed “Ok finish the implementation and publish”. Scoped push/CI/Pages authorized; isolated release/norsand-1993 preserves the shared checkout. See [release plan](release-v1/PLAN.md).
+- Detailed per-item canonical checklist: [CHECKLIST.md](CHECKLIST.md), captured with canonical SHA in release-v1/checklist-source.json.
 
 ## Stage status
 
@@ -19,13 +20,13 @@
 - [X] **E5 — Agent approval:** separate reviewer accepted all nine checklist items with no blockers. Canonical exact review `catalogue/agent-reviews/norsand-1993-agent-v1.json`, SHA2569cfe9b7d58632c5dbc3099fb6debe40a8fdcea47ae66b7077a5e60bf8bebf6b7. Generated approval integrated into registry; exact source/equation/numerical scope only. [Report](approval-v1/REPORT.md).
 - [X] **E6 — Atlas (exact bounded model integration):** exact approval/definition/publication/source entries and main-router hooks installed; database preserves exact definition/approval/source identity and integrity. All12installed interface bindings independently accepted;928frozen package files match. Current14ordinary models remain present and supported-input requests pass; the new controlled-path variant remains a separate exact admission. Unrelated global Duncan discovery coverage failure is retained and blocks a global release claim.
 - [X] **E7 — Packaged website (exact local package):** standard-builder site-v2,928files and15path package members match; packaged Node check PASS (41points, replay/zero/latefailure recovery; source endpoint error1.47741e−8<2e−6). Actual browser V6 completes default/changed controls/state/parameters, reset, latest cancellation, invalid recovery, real export/import/replay, three tamper negatives, catalogue links and ordinary-model return. Three plots/complete state/source/scope/units and desktop/mobile screenshots inspected;19fetchedassets match; consoleerrors=[] and networkfailures=[]. [Audit](atlas-v1/delivery-check-v1.json). [Independent final package/browser/download review](atlas-v1/independent-review/PACKAGE_BROWSER_DOWNLOAD_REVIEW_V6.md) accepts the exact bounded local evidence.
-- [ ] **E8 — Live delivery:** no remote authorization; shared release/native parity gates and exact live deployment unverified. Never equate local preview with deployment.
+- [-] **E8 — Live delivery:** explicitly authorized2026-11-02. Remote main b529a0ef already contains exact NorSand model/approval/main UI and concurrent source-compatible runtime. Isolated branch adds an unchanged58+58native/Wasm deployment gate and preserves all current jobs. Independent review, exact scoped push, terminal CI/Pages/upload/livebrowser verification underway; no completion inferred yet.
 
 ## Current handoff
 
 The exact restricted model is independently approved and works in the normal locally packaged main atlas. [Download the public replay package](atlas-v1/downloads/norsand-1993-qualified.zip):517547bytes, SHA25612043a4b5b78de55aa3e89f66f7de69c8a04d3ecd0b994fade29826806dc8ef2. It includes exact JSON, qualified Wasm, source/review receipts and the actual browser-exported complete run. Extracted ZIP offline replay passes exactly; raw PDF excluded.
 
-The accepted portable Wasm is reused only after checking all three freshly generated files and six compiled runtime headers/target CMake. Ordinary14model supported-input packaging passes; the other delivery’s Duncan native/Wasm parity/native fixture and global catalogue coverage findings are retained. No global release gate is waived. E8 remains open for shared release resolution, a scoped release handoff and explicit remote authorization.
+The accepted portable Wasm is reused only after checking all three freshly generated files and six compiled runtime headers/target CMake. Ordinary14model supported-input packaging passes; the other delivery’s Duncan native/Wasm parity/native fixture and global catalogue coverage findings are retained. No global release gate is waived. E8 is authorized and underway in the isolated release branch. Existing shared release fixes are preserved from actualremote main; new required controlled-path job must pass before deployment.
 
 ## Evidence index
 
@@ -52,6 +53,6 @@ No experimental validation, elasticity, inactive/interior unloading, cyclic/fabr
 ## Deployment receipt
 
 - Local package: `/private/tmp/atlas-norsand-main-atlas-v1/site` and refreshed `site-v2`.
-- Live URL/revision/Actions/deployment identity: not established.
-- Source commit/remote publication: no scoped commit or remote action performed.
-- Smallest remaining action: resolve separately owned global release findings and obtain explicit scoped remote authorization. Final independent local-browser review is accepted. No ready-for-live or live-complete claim.
+- Intended live model route: https://benjym.github.io/constitutive-atlas/#laboratory?model=norsand-jefferies-1993-active-axial; exact release deployment verification pending.
+- Release base: b529a0efc3415b2bc567178a68174575c220cadc; isolated branch release/norsand-1993. Publication authorized, exact scoped commit and deployment receipts pending.
+- Smallest remaining action: accept independent release review, push exact scoped branch to main preserving any advance, monitor allrequired gates to terminal result, compare actualuploaded/live assets and execute actuallive model. E8 remains open until evidence is complete.

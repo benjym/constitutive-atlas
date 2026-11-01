@@ -1,0 +1,15 @@
+# Installed NorSand release review V2
+
+Reviewer `/root/norsand_path_review`; task `REVIEW-norsand-release-v1`.
+
+Accept the exact installed workflow and bounded release scope as ready for staging review. This adds installed/preservation acceptance to the prospective V1 decision, without deciding terminal CI or live delivery.
+
+All five V2 prospective and three V2 installed source bindings match. The installed workflow equals the reviewed proposal; existing job semantics and deployment guard remain intact. The ledger accurately records current user authorization, exact published base/model/review identity and E8 still in progress. The checklist retains all 53 canonical item texts and marks only the now-observed authorization item within E8. Its introductory relative links are corrected. One remaining inherited template link, AGENT_REVIEW_TEMPLATE.json, was reported for rebasing; this is a documentation followup, not a numerical/deployment gate waiver.
+
+I independently resolved all 33 original preservation pairs through atlas.evidence.checked_receipt after actual workflow/ledger edits: PASS. Each archived file also matches its original hash. The initial checklist is archived at its exact 2640b769... identity. I added only a standard sibling source-archive-map.json in this exclusive reviewer directory to preserve the old checklist pin in my immutable prospective V1 binding; its checked_receipt now passes. No earlier reviewer record changed.
+
+The preservation closure extends ten sidecars. Existing tracked sidecar document maps remain equal and existing entries are retained; additions preserve workflow, ledger and recursively pinned prior sidecar identities. All nine newly added content-addressed snapshot files independently match their containing SHA-256 directories. Current untracked additions are release documentation/review/preservation tooling, inventory evidence and those justified snapshots; no PDF, supplied author binary, private key or compiled artifact was introduced. Tracked delta contains only the workflow, model ledger, ownership board rows and preservation closure. No model, compiler, runtime, registry or application source change is part of this release delta.
+
+The retained focused-test receipt reports 31 tests completed successfully with three native opt-in skips. It retains a nonfatal ResourceWarning rather than hiding it. These checks do not establish fresh compiled target qualification: the required remote job must still pass all 58 native and 58 Wasm requests against actual current scalar-function dependencies, alongside all existing required jobs. Global historical unresolved receipts are not claimed repaired.
+
+No reviewer build, compiled material call, browser action, stage/commit or remote action was performed. Next: review the exact staged manifest and source identities, then observe authorized remote CI, tested Pages upload and actual live model route. This is staging readiness, not permission to substitute a prior green run or a local package for the delivered revision.
