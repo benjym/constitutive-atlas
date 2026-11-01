@@ -1,0 +1,31 @@
+# GIS2024 bounded local draft integration — browser closure
+
+1 November 2026. All twelve **local, bounded draft** browser gates are complete. The ordinary GIS1%/100step/depth14default remains **failed**, so the all-eleven ordinary-default gate is not green and this is not deployment approval, scientific admission or experimental validation. [Per-case status](case-status.json) identifies the two evidence packets. The broader roadmap remains active.
+
+B01/B05/B06/B07/B08/B09 are retained in the [installed-browser checkpoint](../gis2024-installed-browser-v1/README.md):20 actual protocol runs,260 full14points, seven invalid inputs/eight recoveries, forced-update rollback and exact fresh replay/import rejection. This closure executes B02/B03/B04/B10/B11/B12. The corrected package differs from the original in exactly3assets: one dynamic button-label string, the evidence index and one new evidence envelope. All other assets, engine, definitions and numerical settings are byte-identical. `compatibility.json` proves the exact one-string app change; historical packet identities and original failures are preserved.
+
+## Remaining gates executed
+
+- **B02:** Actual DOI, institutional-source and JSON clicks. DOI opens the publisher route; the institutional PDF opens as a download, closing its popup (the original navigation-wait error is retained). Its private downloaded bytes exactly match the pinned source SHA39ec8356…; no copyrighted PDF is committed. JSON opens the exact model. The catalogue shows the exact current-definition review as pending/unsigned, separately from bounded numerical evidence, preparation/applicability limits and the ordinary-default failure. Selected HP/extracted-ASBS+GIS2024,f=0 remains distinct from generic GIS discovery, IGS97, ISA and S=Y.
+- **B03/B04:** Explicit model selection loads100kPa isotropic stress,e=.595,all h6=0,Omega=0 and19parameters. Named example preview does not replace inputs; its explicit action exposes0.001%/8increments/depth20. Edited full h=[2e-5,-1e-5,-1e-5,0,0,0],Omega=.25 runs and re-runs from identical inputs with exact full-point equality. Model-example loading/model switches explicitly clear all memory. Reset restores ordinary depth14/1%/100steps and reproduces the recorded initial-point-only failure.
+- **B10:** First public drainage-only selection has no supplied initial stress/density. A second existing public OPARA100record supplies103720Pa and e=.416; matching changes only confinement/void ratio and retains h6/Omega/parameters/settings. The matched unprepared state is **rejected at initialization** by GIS and remains recorded; it is not a successful model–experiment comparison or calibration. The measured-field action and adjacent note explicitly leave preparation unassessed. Overlay toggles send no worker requests. Effective axes are visible; existing protocol2/3 pore reconstruction remains bound to the prior frozen full-protocol results. No measurement is newly bundled.
+- **B11:** Visible zero spin,small strain3D,strain-path rate,selected host/f=0 and strict computed norm(h)<=R limits. Reload selects the ordinary VW96 laboratory example with matching parameter/state fields; the GIS catalogue route and source/review links remain independently available. No implicit memory continuation or mixed-model DOM state.
+- **B12:** Corrected-package checks pass all ten prior ordinary defaults(101points each), plus the explicit9point small GIS example; the ordinary GIS failure remains a separate failed outcome. Actual Tresca ordinary default returns101 total-stress points, unavailable/null pore channel, zero effective-overlay points and disabled measured-initial-state matching. Overlay toggles do not run the model.37focused Python tests pass with3optional skips. Final browser console has zero errors/warnings; screenshots inspected.
+
+## Observed disclosure corrections
+
+The initial GIS catalogue showed a pending source review but no indexed numerical record. A new exact-definition numerical envelope exposes the already-qualified Stage A instantaneous Cartesian-rate/controller/rollback/parity evidence; it also pins/discloses the separate ordinary-default failure. It does not create a fresh qualification or scientific signature.
+
+Source inspection found the dynamic measured-field label still said “Use initial state & protocol”, overriding the improved static HTML when supplied initial metadata is present. Its one-string correction now says “Match measured stress, density & protocol”. The first browser measurement exercised only the drainage-only branch; the initial correction summary overstated that branch observation. Its original summary/audit are retained, and the corrected supplied-field branch is verified with OPARA100. No mathematical, tolerance, domain, radius or global-default changes.
+
+Before shared changes,5exact historical source/map snapshots preserved3original receipt edges. `archive-plan.json`/`archive-result.json` and additive document-bound sidecars retain earlier evidence. The old package remains unchanged. `corrected-package-inventory.json` pins all804new-package assets and the3asset delta. Raw CLI outputs, initial findings, literal worker messages, downloads and screenshots are retained; the private PDF is represented only by its hash/path receipt.
+
+## Reproduction and stop
+
+```sh
+python3 -B docs/reviews/gis2024-browser-closure-v1/verify.py
+```
+
+This saved-only verifier checks original frozen drivers, prior browser evidence, exact compatibility, source/status/reset/matching/Tresca observations and corrected-package regression results. It never opens a browser, compiles or runs a constitutive engine. Acquisition scripts preserve the executed local paths; they are not routine rerun instructions.
+
+Local-draft integration is complete to this scope. All20source reviews remain pending;11definitions execute locally,7as drafts. The unchanged default failure still blocks an all-model ordinary-default release. No build, push, hosted CI, deployment, new numerical campaign, fit, scientific promotion or data-reuse grant occurred. Return to the roadmap source/review/admission queue; do not extend this into more UI work or post-failure tuning. Terra Cotta/SANISAND source gates require readable source/new evidence rather than repeated blocked retries.

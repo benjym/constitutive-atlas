@@ -1,0 +1,14 @@
+async (page) => {
+ const root='/Users/bmar5496/code/constitutive-atlas/docs/reviews/gis2024-installed-browser-v1/inputs/';
+ let n=await page.evaluate(()=>window.__wires.length);await page.locator('#run-file').setInputFiles(root+'case-12.json');await page.waitForFunction(n=>window.__wires.slice(n).some(x=>x.direction==='response'),n);
+ await page.waitForFunction(()=>document.querySelector('#experiment-select').options.length>1);const entry=await page.locator('#experiment-select').evaluate(el=>[...el.options].find(x=>x.value.startsWith('builtin:'))?.value);if(!entry)throw Error('No actual compatible measurements');await page.locator('#experiment-select').selectOption(entry);await page.waitForFunction(()=>!document.querySelector('#match-experiment').disabled);
+ const before=await page.locator('#controls').evaluate(el=>Object.fromEntries([...el.querySelectorAll('input[id],select[id]')].filter(x=>x.type!=='file').map(x=>[x.id,x.value])));
+ const label=await page.locator('#match-experiment').textContent(),note=await page.locator('#match-experiment').locator('xpath=../following-sibling::p[1]').textContent();
+ n=await page.evaluate(()=>window.__wires.length);await page.locator('#match-experiment').click();await page.waitForFunction(n=>window.__wires.slice(n).some(x=>x.direction==='response'),n);
+ const after=await page.locator('#controls').evaluate(el=>Object.fromEntries([...el.querySelectorAll('input[id],select[id]')].filter(x=>x.type!=='file').map(x=>[x.id,x.value])));
+ if(after['state-h']!==before['state-h']||after['state-Omega']!==before['state-Omega'])throw Error('Matching overwrote memory');
+ const changes=Object.keys(before).filter(k=>before[k]!==after[k]);if(changes.some(k=>!['confinement','stress-ratio','state-e','protocol','cycles'].includes(k)))throw Error('Matching overwrote other inputs');
+ const matchWires=await page.evaluate(n=>window.__wires.slice(n),n);n=await page.evaluate(()=>window.__wires.length);await page.locator('#show-experiment').uncheck();await page.locator('#show-experiment').check();const toggleWires=await page.evaluate(n=>window.__wires.slice(n),n);if(toggleWires.length)throw Error('Overlay toggle ran a simulation');
+ const report={measurement:entry,label,note,before,after,changed_fields:changes,matching_wires:matchWires,overlay_wires:toggleWires,axes:await page.locator('#response-charts').innerText(),filter:await page.locator('#experiment-filter-note').textContent()};
+ const pending=page.waitForEvent('download');await page.evaluate(report=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));a.download='context-audit.json';a.click();},report);const d=await pending;await d.saveAs('output/playwright/gis-closure/context-audit.json');return {measurement:entry,label,changed_fields:changes,memory_retained:true,overlay_requests:toggleWires.length};
+}

@@ -1,0 +1,28 @@
+### Result
+{"origin_components":14,"parameters":19,"preview_inputs_unchanged":true,"nonzero_memory_replay":true,"reset_max_depth":"14"}
+### Ran Playwright code
+```js
+await (async (page) => {
+ const mid='research-hp-extracted-asbs-gis-2024-v03';
+ const inputs=()=>page.locator('#controls').evaluate(el=>Object.fromEntries([...el.querySelectorAll('input[id],select[id]')].filter(x=>x.type!=='file'&&x.id!=='named-example').map(x=>[x.id,x.value])));
+ async function action(callback){const n=await page.evaluate(()=>window.__wires.length);await callback();await page.waitForFunction(n=>window.__wires.slice(n).some(x=>x.direction==='response'),n);return await page.evaluate(n=>window.__wires.slice(n),n);}
+ const selection=await action(()=>page.locator('#model').selectOption(mid));const origin=await inputs();
+ if(origin['state-e']!=='0.595'||origin['state-h']!=='0,0,0,0,0,0'||origin['state-Omega']!=='0'||origin.confinement!=='100'||origin['stress-ratio']!=='1'||Object.keys(origin).filter(n=>n.startsWith('param-')).length!==19)throw Error('Incomplete origin example');
+ const hints=await page.locator('#controls').innerText();if(!hints.includes('do not establish specimen preparation'))throw Error('Missing preparation disclaimer');
+ await page.locator('#named-examples').evaluate(el=>el.open=true);await page.locator('#named-example').selectOption('gis2024-small-drained');await page.waitForFunction(()=>!document.querySelector('#load-named-example').disabled);const preview=await page.locator('#named-example-status').textContent();if(JSON.stringify(await inputs())!==JSON.stringify(origin))throw Error('Preview replaced inputs');
+ const loaded=await action(()=>page.locator('#load-named-example').click());const named=await inputs();if(named.target!=='0.001'||named.steps!=='8'||named['numerical-max_depth']!=='20')throw Error('Named settings not visible');
+ const edited=await action(()=>page.locator('#controls').evaluate(el=>{document.querySelector('#state-h').value='0.00002,-0.00001,-0.00001,0,0,0';document.querySelector('#state-Omega').value='.25';document.querySelector('#state-Omega').dispatchEvent(new Event('input',{bubbles:true}));}));const editedInputs=await inputs();const first=edited.find(x=>x.direction==='response').data.result;if(!first.ok||first.initial.length!==14||first.initial[13]!==.25)throw Error('Full edited state missing');
+ const repeated=await action(()=>page.locator('#controls').evaluate(el=>el.requestSubmit()));const second=repeated.find(x=>x.direction==='response').data.result;if(JSON.stringify(first.points)!==JSON.stringify(second.points)||JSON.stringify(await inputs())!==JSON.stringify(editedInputs))throw Error('Repeated run continued instead of replaying');
+ const modelExample=await action(()=>page.locator('#load-model-example').click());const resetExample=await inputs();if(resetExample['state-h']!=='0,0,0,0,0,0'||resetExample['state-Omega']!=='0')throw Error('Model example left old memory');
+ const away=await action(()=>page.locator('#model').selectOption('hypoplastic-sand-vw96'));const back=await action(()=>page.locator('#model').selectOption(mid));const switched=await inputs();if(switched['state-Omega']!=='0'||switched['state-h']!=='0,0,0,0,0,0')throw Error('Model switch left memory');
+ const reset=await action(()=>page.locator('#reset').click());const defaults=await inputs();if(defaults.target!=='1'||defaults.steps!=='100'||defaults['numerical-max_depth']!=='14')throw Error('Global defaults changed');
+ const report={selection,origin,hints,preview,loaded,named,edited,editedInputs,repeated,modelExample,resetExample,away,back,switched,reset,defaults};const pending=page.waitForEvent('download');await page.evaluate(report=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));a.download='state-audit.json';a.click();},report);const d=await pending;await d.saveAs('output/playwright/gis-closure/state-audit.json');return {origin_components:14,parameters:19,preview_inputs_unchanged:true,nonzero_memory_replay:true,reset_max_depth:defaults['numerical-max_depth']};
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:18958/constitutive-atlas/#laboratory
+- Page Title: Constitutive Atlas · Model testing
+### Events
+- Downloading file state-audit.json ...
+- Downloaded file state-audit.json to ".playwright-cli/state-audit.json"

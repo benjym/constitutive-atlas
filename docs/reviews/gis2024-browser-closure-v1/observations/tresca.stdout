@@ -1,0 +1,19 @@
+### Result
+{"default_points":101,"total_stress":true,"pore":"unavailable","effective_overlay_points":0,"matching_disabled":true}
+### Ran Playwright code
+```js
+await (async (page) => {
+ await page.evaluate(()=>location.hash='laboratory');await page.waitForFunction(()=>!document.querySelector('#catalogue-dialog').open);
+ async function action(callback){const n=await page.evaluate(()=>window.__wires.length);await callback();await page.waitForFunction(n=>window.__wires.slice(n).some(x=>x.direction==='response'),n);return await page.evaluate(n=>window.__wires.slice(n),n);}
+ const selected=await action(()=>page.locator('#model').selectOption('tresca-associated-perfect-bk2022v1-be'));const defaults=await action(()=>page.locator('#reset').click());const request=defaults.find(x=>x.direction==='request').data.specification,result=defaults.find(x=>x.direction==='response').data.result;
+ if(!result.ok||result.points.length!==101||result.stress.scope!=='total'||result.pore_pressure.availability!=='unavailable'||result.points.some(x=>x.u!==null))throw Error('Tresca total/pore/default regression');
+ await page.locator('#browse-source-records').check();await page.waitForFunction(()=>[...document.querySelector('#experiment-select').options].some(x=>x.value==='builtin:OPARA-TXCD-100'));await page.locator('#experiment-select').selectOption('builtin:OPARA-TXCD-100');await page.waitForFunction(()=>!document.querySelector('#show-experiment').disabled);
+ const n=await page.evaluate(()=>window.__wires.length);await page.locator('#show-experiment').uncheck();await page.locator('#show-experiment').check();const guard=await page.evaluate(n=>({matching_disabled:document.querySelector('#match-experiment').disabled,overlay_points:document.querySelectorAll('#response-charts .experiment-point').length,wire_count:window.__wires.length-n,filter:document.querySelector('#experiment-filter-note').textContent,status:document.querySelector('#experiment-status').textContent,axes:document.querySelector('#response-charts').textContent}),n);
+ if(!guard.matching_disabled||guard.overlay_points||guard.wire_count||!guard.filter.includes('effective-stress model'))throw Error('Tresca admitted effective overlay/matching');
+ const report={selected,defaults,guard};const pending=page.waitForEvent('download');await page.evaluate(report=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));a.download='tresca-audit.json';a.click();},report);const d=await pending;await d.saveAs('output/playwright/gis-closure/tresca-audit.json');return {default_points:result.points.length,total_stress:true,pore:'unavailable',effective_overlay_points:guard.overlay_points,matching_disabled:guard.matching_disabled};
+}
+)(page);
+```
+### Events
+- Downloading file tresca-audit.json ...
+- Downloaded file tresca-audit.json to ".playwright-cli/tresca-audit.json"

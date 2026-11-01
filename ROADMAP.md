@@ -27,7 +27,7 @@ formal reviews remain pending, with exact current-definition coverage of all
 eleven. The [local Tresca integration](docs/reviews/tresca-draft-integration-v1/README.md)
 retains its bounded numerical and browser checks separately from admission. The [four added draft records](docs/reviews/additional-executable-source-coverage-v1/README.md)
 expose existing source/preparation/numerical questions; this is not scientific signoff.
-The exact [GIS2024 draft installation](docs/reviews/gis2024-draft-installation-v1/README.md) adds a separately labelled small run example, pending source review and unassessed applicability. Its ordinary global-default run still fails; actual B01–B12 browser acceptance remains open. No new build, fit or deployment is implied.
+The exact [GIS2024 draft installation](docs/reviews/gis2024-draft-installation-v1/README.md) adds a separately labelled small run example, pending source review and unassessed applicability. Its ordinary global-default run still fails. [Local B01–B12 browser gates](docs/reviews/gis2024-browser-closure-v1/README.md) are complete for the bounded draft, including explicit full-history replay/preparation disclosure; scientific admission and deployment remain separate. No new build, fit or deployment is implied.
 These counts do not close scientific admission, the six-model proof or the
 twenty-formulation release target. Historical delivery notes are not new assignments.
 
