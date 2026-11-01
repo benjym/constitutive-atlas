@@ -1,0 +1,56 @@
+{
+  "backend": "wasm",
+  "started_utc": "2026-11-01T04:55:15.943591+00:00",
+  "commands": [
+    {
+      "label": "configure",
+      "argv": [
+        "/opt/homebrew/bin/emcmake",
+        "cmake",
+        "-S",
+        "/Users/bmar5496/code/constitutive-atlas",
+        "-B",
+        "/private/tmp/atlas-loading-mixed-v1/wasm",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-loading-mixed-v1/wasm",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "/opt/homebrew/bin/node",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/declared-loading-mixed-v1/collect_wasm.mjs",
+        "/private/tmp/atlas-loading-mixed-v1/wasm/atlas.js",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/declared-loading-mixed-v1/requests.json"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas.js": {
+      "path": "/private/tmp/atlas-loading-mixed-v1/wasm/atlas.js",
+      "sha256": "bec27fc22249532ce073fd56cac289233abcb7c456745a8feab4a26dc727e9bb",
+      "bytes": 27569
+    },
+    "atlas.wasm": {
+      "path": "/private/tmp/atlas-loading-mixed-v1/wasm/atlas.wasm",
+      "sha256": "364315dbc6490a9b9857534b6a4959234ab85ce1cbe5a850ad69b07c6390e438",
+      "bytes": 1098031
+    }
+  },
+  "all_build_inputs_unchanged_after_collection": true,
+  "finished_utc": "2026-11-01T04:55:35.733260+00:00"
+}

@@ -1,0 +1,50 @@
+{
+  "backend": "native",
+  "started_utc": "2026-11-01T04:54:40.289840+00:00",
+  "commands": [
+    {
+      "label": "configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "/Users/bmar5496/code/constitutive-atlas",
+        "-B",
+        "/private/tmp/atlas-loading-mixed-v1/native",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-loading-mixed-v1/native",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/declared-loading-mixed-v1/collect_native.py",
+        "/private/tmp/atlas-loading-mixed-v1/native/atlas_solver"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": {
+    "atlas_solver": {
+      "path": "/private/tmp/atlas-loading-mixed-v1/native/atlas_solver",
+      "sha256": "099baaaac2fdd15a406884fefa19ffa0160b1f45324d1bc12dc5c972ac37391e",
+      "bytes": 1087360
+    }
+  },
+  "all_build_inputs_unchanged_after_collection": true,
+  "finished_utc": "2026-11-01T04:54:49.151402+00:00"
+}
