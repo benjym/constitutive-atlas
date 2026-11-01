@@ -1,0 +1,7 @@
+namespace reversal_study {
+int run(){using namespace atlas;std::cout<<std::setprecision(17);State p{1024.,3072.,2048.,8.},parent={0x1.2aaaaabc00000p+4,0x1.1555555e00000p+5,0x1.1555555e00000p+5,0x0.0p+0,0x0.0p+0,0x0.0p+0,-0x1.5555554000000p-9,0x1.5555554000002p-10,0x1.5555554000002p-10,0x0.0p+0,0x0.0p+0,0x0.0p+0},nearest={0x1.2aaaaaaf00000p+6,0x1.d555555e00000p+5,0x1.d555555e00000p+5,0x0.0p+0,0x0.0p+0,0x0.0p+0,-0x1.5555554000000p-9,0x1.5555554000002p-10,0x1.5555554000002p-10,0x0.0p+0,0x0.0p+0,0x0.0p+0};const auto before=parent;Sym<double>de;de.v[0]=1./128;IntegrationSettings settings;settings.max_depth=0;
+ auto result=integrate(0,parent,de,p,settings);State residual;bool raw=evaluate_model(0,nearest,parent,de,p,residual);std::vector<Jet>z(12),zn(12),r;Sym<Jet>d;d.v[0]=Jet(1./128);for(int i=0;i<12;++i){z[i]=Jet(nearest[i]);z[i].d[i]=1.;zn[i]=Jet(parent[i]);}bool jet=evaluate_model(0,z,zn,d,p,r);
+ State good{64.,64.,64.,0.,0.,0.,0.,0.,0.,0.,0.,0.};auto recovery=integrate(0,good,Sym<double>{},p,settings);bool recovered=recovery.ok&&corpus_study::same(recovery.state,good);
+ std::cout<<"{\"ok\":"<<(result.ok?"true":"false")<<",\"raw_ok\":"<<(raw?"true":"false")<<",\"jet_ok\":"<<(jet?"true":"false")<<",\"input_unchanged\":"<<(corpus_study::same(parent,before)?"true":"false")<<",\"recovery\":"<<(recovered?"true":"false")<<",\"iterations\":"<<result.diagnostics.iterations<<",\"substeps\":"<<result.diagnostics.substeps<<",\"state\":";corpus_study::array(result.state);std::cout<<"}\n";return 0;
+}
+}
