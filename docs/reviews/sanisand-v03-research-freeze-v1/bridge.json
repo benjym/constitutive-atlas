@@ -1,0 +1,27 @@
+{
+  "legacy_path": "models/research/sanisand-2004-fixed-memory-be.json",
+  "legacy_sha256": "9600ea80ce1c63ab496e6ec860dac10a27f0ea79bc791ad0fb2370299999ec81",
+  "candidate_sha256": "5b825c76bc802e426ecdd9d7ebbc9066bbf0eb92a1eb8340b67560a08462f5b7",
+  "identical_fields": [
+    "parameters",
+    "derived",
+    "domain",
+    "equations"
+  ],
+  "state_numeric_fields_unchanged": [
+    "name",
+    "shape",
+    "unit",
+    "scale",
+    "initial"
+  ],
+  "added_initial_guard": "select(relative_norm > 0, select(hardening_distance <= 0, dot(alpha_b-alpha,n) > 0, 1 > 0), 1 > 0)",
+  "guard_equivalence": "Within original domain hardening_distance>=0, <=0 selects exactly zero. Nonzero normalized direction must have dot(alpha_b-alpha,n)>0 there; cone centre is exempt for elastic interior. This conservative initial restriction is a project branch support choice, not a newly printed equation.",
+  "state_semantics": {
+    "sigma": "Cauchy effective spatial stress",
+    "e": "scalar void ratio",
+    "alpha/fabric/alpha_in": "symmetric spatial tensors from source tensor definitions/contractions; source-derived passive orthogonal basis transformation only, no objective finite-rotation update",
+    "gamma": "temporary Delta_lambda*h_endpoint; no _n access, not accumulated plastic strain"
+  },
+  "scope": "No claim of full mathematical equivalence at excluded initiation states; unchanged residual law on common accepted scope."
+}
