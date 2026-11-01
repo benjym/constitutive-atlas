@@ -1,0 +1,23 @@
+#ensemble .ensemble-layout{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:24px;align-items:start;margin-top:24px}
+#ensemble .ensemble-controls{position:static;min-width:0;max-height:none}
+#ensemble .ensemble-model{padding:14px 0;border-top:1px solid var(--line)}
+#ensemble .ensemble-model summary{border-left:4px solid;padding-left:10px;font-weight:600;margin-bottom:12px}
+#ensemble .ensemble-fields{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+#ensemble .ensemble-fields label{min-width:0}
+#ensemble input{min-width:0;max-width:100%;box-sizing:border-box}
+#ensemble .ensemble-check{display:flex;align-items:center;gap:8px;margin:10px 0;font-size:13px}
+#ensemble .ensemble-check input{width:16px;min-width:16px;height:16px;margin:0;accent-color:var(--green)}
+#ensemble .ensemble-actions{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+#ensemble .ensemble-actions button,#ensemble-single-export{padding:9px 12px;border:1px solid var(--line);border-radius:5px;background:var(--paper,#fff);color:var(--ink);cursor:pointer}
+#ensemble #ensemble-run{background:var(--green);color:#fff}
+#ensemble button:disabled{opacity:.5;cursor:default}
+#ensemble .ensemble-legend{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
+#ensemble .ensemble-run-row{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;border:1px solid var(--line);border-left:4px solid;border-radius:4px;background:transparent;padding:10px 12px;margin:6px 0;font:inherit;font-size:12px;color:var(--ink);cursor:pointer}
+#ensemble .ensemble-run-row[aria-pressed=true]{background:#e9eee3;outline:1px solid var(--green)}
+#ensemble .ensemble-run-row[data-status=error],#ensemble .ensemble-run-row[data-status=stopped],#ensemble .ensemble-run-row[data-status=rejected],#ensemble .ensemble-run-row[data-status=timeout]{background:#fff1e9}
+#ensemble pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:450px;overflow:auto;font-size:11px}
+#ensemble .chart-panel svg{display:block;width:100%;height:auto;font:11px var(--font,system-ui)}
+#ensemble details p{font-size:13px;line-height:1.6}
+#ensemble-status{font-size:13px;line-height:1.6}
+@media(max-width:900px){#ensemble .ensemble-layout{grid-template-columns:1fr}#ensemble .ensemble-controls{width:auto}}
+@media(max-width:900px){#ensemble .ensemble-controls,#ensemble .results-column{grid-column:auto;grid-row:auto;width:100%;box-sizing:border-box}}
