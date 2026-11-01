@@ -25,9 +25,9 @@ Use the [canonical E0–E8 checklist](../../MODEL_DELIVERY_CHECKLIST.md). These 
 
 ## Current handoff
 
-- State: working; E5 accepted; E6 registry handoff pending, with the E2 migration dependency recorded; E1 private retention verified.
+- State: working; E5 accepted; E6 registry insertion verified, export/visibility pending, with the E2 migration dependency recorded; E1 private retention verified.
 - Reviewer handoff: accepted; [review and source/numerical checks](../../reviews/linear-elastic-agent-v1/README.md) retained unchanged.
-- Next coordinator action: hand off the generated entry to the current registry owner, then verify exact integration; coordinate migration without modifying historical evidence. Scope a release only after required current-definition/package checks.
+- Next coordinator action: complete normal approval/source/evidence export and visible scope checks; coordinate migration without modifying historical evidence. Scope a release only after required current-definition/package checks.
 - Retained failure: reviewer rerun of the historical admission preflight reports `pinned input changed: docs/FORMULATION_CONTRACT.md`. Preserve the failed invocation and assess the document delta separately; do not repin it to make the old check pass.
 
 ## Evidence index
@@ -41,6 +41,6 @@ Use the [canonical E0–E8 checklist](../../MODEL_DELIVERY_CHECKLIST.md). These 
 
 ## Review, integration and deployment receipts
 
-Accepted canonical record SHA-256: `ff9fef9bc608fbe276d70253f68d648201e4df05a99e4b1f24023072c1652f39`. Generated entry: `docs/admission/linear-elastic-agent-v1/approval-entry.json`. Registry insertion, current native/Wasm receipts, packaged catalogue/engine identity, release commit, successful Actions/deployment URL and live browser evidence remain **pending**.
+Accepted canonical record SHA-256: `ff9fef9bc608fbe276d70253f68d648201e4df05a99e4b1f24023072c1652f39`. Generated entry: `docs/admission/linear-elastic-agent-v1/approval-entry.json`. [Registry insertion](../../admission/linear-elastic-registry-v1/README.md) is verified. Website export/visibility, current native/Wasm receipts, packaged catalogue/engine identity, release commit, successful Actions/deployment URL and live browser evidence remain **pending**.
 
 Experimental validation remains unassessed. This baseline is an illustrative material-point law, not an experimentally calibrated soil model.
