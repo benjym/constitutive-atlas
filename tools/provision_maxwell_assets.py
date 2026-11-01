@@ -11,10 +11,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from tools.build_maxwell_laboratory import bundle
 
-PACKET = ROOT / 'docs/ingestion/lade-duncan-1975/atlas-integration-v1/maxwell-rebind-v1'
+PACKET = ROOT / 'docs/reviews/ci-followup-v3/maxwell-rebind-v2'
+ARCHIVE = ROOT / 'docs/ingestion/lade-duncan-1975/atlas-integration-v1/maxwell-rebind-v1/compiled-closure-v1.tar.gz'
 ARCHIVE_SHA256 = '2ae27721254cabed74b289c9692d0286fda71bd9eab92933d736d74904f4c9dd'
-QUALIFICATION_SHA256 = '6c4de6ef03b2f993b24ba153db9b5702334ae9e92df578418f3bfafe67695f26'
-REVIEW_SHA256 = '3f509c9e7d6cfa027a6ff25570c7af278433ca42eb5f38ba1a51bf19bca8adf8'
+QUALIFICATION_SHA256 = '5cff7c500d75ba34fa91a734f5f155a559956520a65ccd7dc9b2b3079946296d'
+REVIEW_SHA256 = '42404423e9f1fa4e43656e43e59bb475e724dfb30caf18ec15ee3b7e3b1ab98d'
 MEMBERS = {
     'wasm/maxwell.js': ('maxwell.js', 'module_sha256'),
     'wasm/maxwell.wasm': ('maxwell.wasm', 'wasm_sha256'),
@@ -56,7 +57,7 @@ def provision(destination):
     if digest(qualification_bytes) != QUALIFICATION_SHA256 or digest(review_bytes) != REVIEW_SHA256:
         raise ValueError('Changed retained qualification or independent review')
     qualification = json.loads(qualification_bytes)
-    selected = selected_bytes(PACKET/'compiled-closure-v1.tar.gz', qualification['binding'])
+    selected = selected_bytes(ARCHIVE, qualification['binding'])
     selected['maxwell-qualification.json'] = qualification_bytes
     selected['build-review.json'] = review_bytes
     destination.parent.mkdir(parents=True, exist_ok=True)

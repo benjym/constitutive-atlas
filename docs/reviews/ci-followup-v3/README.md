@@ -1,0 +1,7 @@
+# CI follow-up: retained Maxwell provenance
+
+Run 41358886751 failed both Wasm jobs at Maxwell provisioning after the measurement-data unit aliases changed the conservative 149-file source manifest. The Linux native job was interrupted by runner shutdown. Original failed Wasm logs are retained compressed with an uncompressed hash in failure.json.
+
+The actual separate review in maxwell-rebind-v2/independent-review/ accepted a provenance-only binding update for the sole changed source. The original model, source/reference policy, generated catalogue, compiled artifacts and five numerical gates remain unchanged. New qualification and review documents have separate identities; original receipts are untouched. Provisioning reads the original archive and retains exact source/artifact/gate equality. No new compilation or scientific admission is claimed.
+
+Local checks passed: static DOM tests; original frozen Ramberg requests on macOS and Linux amd64 Python3.12; 12 Maxwell package corruption/guard tests; five provisioning tests; profile/catalogue/routing Node tests; actual database bundle (48 model identities,24 approvals,20 reviews); actual Maxwell provisioning and retained-engine analytical/preset/replay regression. Regression results and provision hashes are retained here. Sparse-checkout omissions encountered during local checks were materialized from unchanged tracked inputs before successful reruns. CI and deployment remain to be verified after push.
