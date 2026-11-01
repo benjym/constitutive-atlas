@@ -2,6 +2,8 @@
 
 Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). **E0–E8 are complete for the exact independently approved bounded formulation.** Published source `0b1b15ac5f4c8038bce3b26a098d31116c28b537` passed every job in [CI41340720867](https://github.com/benjym/constitutive-atlas/actions/runs/41340720867), including Pages deployment. Twelve live HTTP assets and twelve actual Chrome asset identities match the exact tested995file upload. Live default/dense/reset exports match complete upload specifications and numerical results apart from measured elapsed time. [Final live receipt](release-v2/live-v4/DONE.json) retains exact identities, source/review links, visual checks and failures. The umbrella is closed; scientific scope is unchanged.
 
+Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). E0–E7 are complete for the exact independently approved bounded formulation and accepted local standard package. The original failures remain retained; the installed generic arithmetic remedy passes unchanged gates. E8 remains open: tested package retained; authorized isolated source release assembly/review is in progress; no live-delivery evidence. The umbrella remains open.
+
 - Umbrella: MODEL-duncan-chang-1970; coordinating parent /2026-11-01.
 - Exact formulation: Duncan/Chang1970, *Nonlinear Analysis of Stress and Strain in Soils*,96(5),1629–1653, DOI10.1061/JSFEAQ.0001458. Original constant-nu incremental3D law. The separately reconciled1971 erratum DOI10.1061/JSFEAQ.0001706 corrects a later discussion's Eq26, not original Eqs1–15. No later E-nu/E-B substitution.
 - Intended contract: explicit v0.3 strain-path incremental residual, small-strain3D, fixed spatial/zero spin, compression-positive Mandel, effective Cauchy stress; sigma6 and max-D history. Source-supported law plus visibly identified project discretization. No pore-pressure evolution, finite-rotation host or experimental validation claim.
@@ -11,6 +13,8 @@ Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). **E0–E8 are complete for 
 - Independent runs: /root/duncan_source_gate_review, /root/duncan_supplied_review, /root/duncan_erratum_review, /root/duncan_complete_review, /root/spectral_multiplicity_review. Source/contract and generic-capability reviews plus a separate exact9item E5 review by /root/duncan_complete_review; accepted record is linked below.
 - Build owner: coordinator, serial explicit targets/--parallel1. Full E4 material/API native/Wasm and ordinary14model standard targets have been built and their exact artifacts retained. Serial build slot released. No generic build-policy change was made from the separately failed no-contraction diagnostic.
 - Remote authorization: user explicitly answered “Yes” to pushing reviewed commit b529a0ef to main, running remote CI, deploying GitHub Pages and verifying live delivery. The exact reviewed release is pushed from /private/tmp/atlas-duncan-closeout-v2; shared dirty checkout is not staged.
+
+- Remote authorization: user instruction2026-11-02 “Ok please do the last tasks” authorizes the remaining E8 push/deployment/remote CI. Scoped source release assembly and final review are in progress in /private/tmp/atlas-duncan-release-v1; shared dirty checkout remains untouched by Git staging.
 
 - [X] **E0 — Claim/scope:** exact original formulation and dependent source/design/review tasks claimed before dispatch; prior dossier, schema/contract/checklist and historical inputs read/pinned.
 - [X] **E1 — Sources:** complete original acquired across retained copies. First scan has readable main law but lacks1647; alternate SHA256 `ff4ea5af81cfb9c618d77fcd66555aa98d364c747bd43acd5221c9ae6330eb1f` supplies actual1647 and25-page1629–1653 sequence. Alternate1651 fading is supplemented by first scan's readable PDF23. [Receipt](complete-copy-v4/receipt.json), [source supplement](complete-copy-v4/README.md), [independent review](complete-copy-v4/independent-review/README.md). Erratum scope resolved under [v3](erratum-v3/README.md). Private sources stay ignored; historical failed acquisition receipts remain unchanged.
@@ -26,6 +30,13 @@ Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). **E0–E8 are complete for 
 
 - Phase: E0–E8 complete for the exact independently accepted scope; live delivery verified2026-11-02 Australia/Sydney.
 - Next action: none for this delivery. Post-deployment receipt and final mutable tracking are local workspace evidence; published application revision is0b1b15ac. Dirty shared root index was never staged or committed.
+
+- [-] **E8 — Live delivery:** exact953file tested public artifact retained under [release handoff](integration-v2/release-handoff-v1/README.md). Scoped release commit, remote CI, deployment and live-browser verification remain outstanding; push/deployment is now authorized. Concurrent shared work prevents treating current HEAD or the whole dirty checkout as the reviewed release revision.
+
+## Current handoff
+
+- Phase: E0–E7 complete for the independently accepted local scope. E8 open; no live delivery.
+- Next owner/action: consolidate the exact reviewed shared dependencies in an isolated scoped release checkout, inspect the source diff and obtain explicit push/deployment authorization. Then monitor required remote gates and verify exact live assets plus the Duncan example. No staging, commit, push, deployment or remote CI has occurred.
 - Fresh source verification preserves the independent receipt and reports later concurrent Lade UI drift separately in [source recheck](integration-v2/release-handoff-v1/source-recheck-v1.json). The accepted953package files still match. This does not silently repin or certify the current shared tree.
 - Limitations: fixed-spatial small-strain effective-stress endpoint-average project realization; no unique classical/full-residual Clarke tangent, Duncan discrete-update FE tangent, finite-rotation admission, pore-fluid/dilatancy law, physical clock, calibration or experimental validation. Strict GIS default failure and older qualified dedicated engines remain explicit.
 
@@ -57,6 +68,16 @@ Earlier b529 CI41337427969 failed the unchanged three-PNG packet rule. Concurren
 ## Completion statement
 
 E0–E8 and MODEL-duncan-chang-1970 are complete for the exact original1970 constant-nu endpoint-average realization and approved bounded scope. [Open the live model](https://benjym.github.io/constitutive-atlas/index.html#laboratory?model=duncan-chang-1970-endpoint-average). Experimental validation, FE-host tangent, finite rotation, physical time and pore-fluid/dilatancy behavior remain outside admission. Source definition and accepted review hashes are unchanged. Post-deployment evidence/tracking is saved locally; no subsequent source revision is implied.
+
+Accepted E5 record catalogue/agent-reviews/duncan-chang-1970-endpoint-average-agent-v1.json binds approved definition452b49ef…; installed-path validation and registry integration pass. Native/Wasm material artifacts are retained under the E4 receipts. Ordinary catalogue/package/browser qualification and deployment remain separate; no live identity exists. Historical reviews/receipts retain original bytes. Mutable tracking does not replace hash-bound evidence.
+
+## Deployment receipt
+
+E8 authorization received2026-11-02. Isolated release checkout `/private/tmp/atlas-duncan-release-v1`; exact source/evidence reconstruction and metadata-only family-discovery correction are under independent review. No release commit, Actions result or live revision yet. [Release preparation](release-v1/) retains source/transport inventories and failed initial assembly checks.
+
+## Completion statement
+
+E0–E7 are independently accepted for the bounded local scope. E8 is active and authorized; source release assembly, required remote workflow and live browser verification remain unfinished. No scientific gate has been weakened or approval scope extended.
 
 The following continuation notes preserve the historical E3/E4 sequence; current stage status above supersedes their then-current open/queued statements.
 
@@ -114,3 +135,9 @@ The initial f4fce681 source assembly is superseded by remote c6dfd937, which con
 Commit `b529a0efc3415b2bc567178a68174575c220cadc` in `/private/tmp/atlas-duncan-closeout-v2` combines the exact accepted closeout with remote6fed, preserving both release histories. Independent final merged-stage review accepts the scoped normal push;689normal receipt queries and36canonical metadata identities pass, and21affected tests pass after repair. The980file standard package and actual local Chrome qualification remain accepted. All failures and earlier repair proposals remain retained.
 
 E8 remains open, **ready to publish**. Automatic approval review rejected the push before execution because explicit remote-publication authorization was not established under AGENTS.md; no bypass was attempted. No new remote CI, Pages or live result is claimed. Explicit user authorization to push this commit to main, run CI and deploy Pages is the next required action. Recheck remote and reconcile any advance before retry. See release-v2/PUBLISH_HANDOFF.json and release-v1/independent-review/FINAL_MERGE6FED_STAGE_REVIEW_V6.md.
+
+### Current-base package qualification — 2 November 2026
+
+Remote base9cefd1a6 includes the concurrent scalar-target and provenance repairs. The scoped closeout adds independent scalar assessment in all native/Wasm jobs, both family capability disclosures and strict approved implicit-path catalogue provenance controls. Forty-two focused Python tests pass. Three preservation rounds and the remote/local map union verify205bindings without changing original document pins. Historical unresolved receipt edges and failed drafts remain explicitly retained.
+
+The current standard980file package passes all mandatory build-time guards and the14ordinary/one named alternate supported-package gate. Actual Chrome verifies11lifecycle/catalogue/source checks and12fetched assets, with zero console errors/warnings. Exported default/dense/loose responses match the previously qualified results; replay comparison excludes elapsed execution time. Invalid input disables export while retaining the prior plot as context. Qualified compiled assets are reused explicitly; no fresh local compilation is claimed. See release-v2/browser-proof-v1.json, package-process-v1.json, supported-package-v1.json and remote-map-union-v1/installed.json. Independent final review, remote CI and live deployment remain required for E8.

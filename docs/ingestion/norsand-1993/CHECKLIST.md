@@ -2,6 +2,8 @@
 
 Canonical source: docs/MODEL_DELIVERY_CHECKLIST.md, SHA256b370c525b8650492c8b0fb49e1107a765009b5be8f16818675196541eb128289, captured2026-11-02. Exact original active drained axial formulation; historical evidence remains immutable. This file carries every canonical check and exit condition; E8 observations are complete for the exact published application3873a48b, run41343952906; final actual-publication acceptance is recorded below.
 
+Canonical source: docs/MODEL_DELIVERY_CHECKLIST.md, SHA256b370c525b8650492c8b0fb49e1107a765009b5be8f16818675196541eb128289, captured2026-11-02. Exact original active drained axial formulation; historical evidence remains immutable. This file carries every canonical check and exit condition; E8 remains pending until actual observations.
+
 # Deliver a constitutive model from source to the live atlas
 
 This is the operating checklist for a **full model-delivery assignment**. The lead agent carries one exact formulation from source acquisition through a working, independently agent-reviewed implementation to the atlas and a verified live website. A source packet, a successful solver run, approval or a local preview alone does not finish that assignment.

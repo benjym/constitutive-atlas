@@ -75,12 +75,16 @@ remain distinct. Do not launch additional fits or sweeps to bypass these limits.
 The exact [NorSand1993 active drained axial formulation](docs/ingestion/norsand-1993/DELIVERY.md)
 has original-source mapping, independent agent approval and native/Wasm58requests
 per backend. Verified live application3873a48b passes all six required CI/Pages
+
+per backend. Verified live applicationdd7de01f passes all six required CI/Pages
 jobs,23live/upload asset comparisons and actual41point/threeplot browser
 controls, replay, recovery and desktop/mobile checks. It is one restricted
 controlled-path variant, separate from ordinary strain-path model counts;
 elasticity, cyclic/general3D continuation and experimental validation remain
 excluded. The ledger retains historical acquisition and release failures and
 records final merged publication3873a48b/run41343952906 and separate actual-live acceptance.
+
+tracks the final concurrent-release-preserving publication.
 
 SANISAND and Terra Cotta remain near-term scientific targets, not completed
 formulations. [SANISAND's source-scope decision](docs/reviews/sanisand-source-scope-v1/decision.json)
@@ -777,3 +781,17 @@ The approved bounded J2 formulation is delivered in the main laboratory. Release
 ### Orthotropic OGS main-laboratory qualification — 2026-11-02
 
 The complete nine-constant fixed-aligned-axis OGS orthotropic law is delivered in the general atlas laboratory. Qualified application 462a450c/run 41341461226 passes all six CI/Pages jobs, independently assessed native/Wasm checks on macOS/Linux, 155 exact published-upload asset comparisons and actual desktop/mobile browser numerical/replay/recovery checks. All 53 delivery criteria are complete. The qualified 995-file package preserves 14 ordinary definitions; orthotropic is a separate common-solver profile. [Delivery ledger](docs/ingestion/orthotropic-ogs/DELIVERY.md) retains exact source/approval/review identities, all failures and final independent acceptance. No finite rotation, broad conditioning envelope or experimental validation is claimed.
+
+The complete nine-constant fixed-aligned-axis OGS orthotropic law is delivered in the general atlas laboratory. Qualified application 462a450c/run 41341461226 passes all six CI/Pages jobs, independently assessed native/Wasm checks on macOS/Linux, 155 exact published-upload asset comparisons and actual desktop/mobile browser numerical/replay/recovery checks. All 53 delivery criteria are complete. The qualified 995-file package preserves 14 ordinary definitions; orthotropic is a separate common-solver profile. [Delivery ledger](docs/ingestion/orthotropic-ogs/DELIVERY.md) retains exact source/approval/review identities, all failures and final independent acceptance. No finite rotation, broad conditioning envelope or experimental validation is claimed.
+
+
+### Hill anisotropic perfect plasticity — 2026-11-02
+
+The exact Abaqus2025 fixed-axis, infinitesimal, dry-total-stress associative perfect-plastic Hill law with isotropic elasticity is independently agent-approved and integrated into the general atlas/main laboratory. This adds one bounded complete formulation:45discovery entries and14ordinary engine models, with dedicated common-generated material-point routing for Hill. Frozen31cases/41increments repeated twice/backend,74independent source checks, current-source native/Wasm requalification, full standard package and real desktop/mobile browser controls/replay/recovery pass. No hardening, evolving axes, FE-host or experimental validation is claimed. E0–E7 complete; CI/Pages/live E8 remains open in [the delivery ledger](docs/ingestion/hill-abaqus2025/DELIVERY.md).
+
+### Kelvin–Voigt COMSOL6.3
+
+- [X] Exact ordinary deviatoric law/elasticbulk source receipt and v0.3 formulation; independent references and native/Wasm43case qualification.
+- [X] Separate scientific/API approval bound to080fa946…; source and original failures retained.
+- [X] General atlas and main physical-time laboratory integration; complete standard package-v7, public profile with parameter/preparation guidance, source/approval/database identity, actual browser-v5 desktop/mobile and prior controls/protocols/replay/recovery checks, and reviewed y-axis correction. All current E0–E7 criteria independently accepted. No standalone model page.
+- [-] Authorized scoped publication, all required CI/Pages jobs, exact tested-upload/live assets and actual public main-laboratory run.

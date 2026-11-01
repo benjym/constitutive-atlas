@@ -1,0 +1,9 @@
+# Duncan–Chang1970 E8 release candidate
+
+The exact original constant-nu endpoint-average realization and generic arithmetic remedy have independent scientific/numerical review. Package v6 has953files:951 match the previously accepted package exactly; only a truthful family-discovery capability disclosure and its database-download metadata change. The default101point Chrome run matches the preceding qualified run exactly. Scientific limitations and original failures remain retained.
+
+The source base is f4fce681, with a deterministic isolated overlay from accepted source freezes and archived exact bytes. Three installed production packagers supersede their earlier numeric-study versions. The separately reviewed Maxwell149source transport retains29 noncompiled profile sources solely as exact provenance; no Lade public model or interface is integrated. The exact qualified NorSand Wasm is a deliberate production binary exception required by the selected workflow. Other historical native/Wasm binaries and transport-control sandboxes stay local; original numerical reference JSON and receipts remain retained. No raw source PDF, vendor binary, private attachment, paper-tree change or unrelated deletion is staged.
+
+The historical workflow is extended with the unchanged independent391case scalar reference gates and explicit qualified NorSand transport. It retains the existing native, Python, Wasm, package and deployment gates. The exact final file allowlist and independent release-scope decision govern staging; the dirty shared checkout is never staged. User authorization for push/deployment was received2November2026.
+
+E8 is pending: this source candidate does not assert a passing remote workflow or live deployment. The coordinator must record the exact commit/run, wait for every required job and deployment, compare deployed assets with the tested upload and execute the live Duncan example. See DELIVERY.md in the parent directory for current status.

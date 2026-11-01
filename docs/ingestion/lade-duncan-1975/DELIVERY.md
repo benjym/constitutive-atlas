@@ -2,6 +2,8 @@
 
 Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). MODEL-lade-duncan-1975 is complete through verified E8 live delivery for the exact bounded scope below.
 
+Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). MODEL-lade-duncan-1975 remains open until actual live delivery; local qualification and publication are separate.
+
 - Lead: coordinator `/root`, claimed 2026-11-01 after the user redirected this session from OCC. Current update 2026-11-02.
 - Exact source: Lade & Duncan, *Elastoplastic Stress-Strain Theory for Cohesionless Soil*, JGED101(10),1037–1053 (1975), DOI10.1061/AJGEB6.0000204. The supplied filename2021 is a delivery label; 1977 is supporting evidence for a different extension.
 - Exact canonical model: [Lade1975 midpoint-elastic/local-Eq19 signed-gap realization](../../../models/research/implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json), SHA256 `120b93f319543518b2b87221ab7457afaca2a1fb5de78af901276e8e89a22e63`.
@@ -9,6 +11,8 @@ Follow [E0–E8](../../MODEL_DELIVERY_CHECKLIST.md). MODEL-lade-duncan-1975 is c
 - Owners/whitelist: coordinator board child tasks authorize versioned runtime installation, exact old-byte/map preservation, model/catalogue/approval/wiring/provisioning/workflow, standard package and browser evidence. Other models, shared migrations and paper work remain outside this assignment. No shared checkout staging or commits.
 - Independent runs: `/root/lade_source_review` for source, exact numerical evidence and canonical nine-item approval; `/root/lade_interface_review` for separate interface/header/source checks. Actual independence basis is recorded in the accepted receipts. Neither approval nor Node transport fixtures imply browser qualification.
 - Remote authorization: explicit user “Publish please” (2026-11-02). Published revision `6fed3e1e368337f02bbc67c2eef263d03b7c8c4a`; all five CI/deployment jobs and actual live browser verification pass. Independent final acceptance `e9940d960a062c167f13648ab2686bc21562efbbff2413b5d4f378caf1bafaf2`. Shared checkout was not staged or committed.
+
+- Remote authorization: pending. No push, deployment or remote CI has been performed.
 
 - [X] **E0 — Claim/scope:** exact formulation, ownership and dependent board tasks recorded.
 - [X] **E1 — Sources:** complete1975 original, all17pages visually read; equations1–19/Table1 inventoried and independently audited. Private source SHA256 `bdebd928dbe9e4bac47c0a0328ed0bab79ab3e440a25390f1d646e9ed3749fc5`; retained privately, not redistributed.
@@ -41,6 +45,11 @@ Source complete: original1975full law,1977 supporting context only. Executable: 
 
 ## Historical local handoff before publication
 
+
+- [ ] **E8 — Live delivery:** scoped release preparation, authorized remote CI/deployment and exact live asset/run verification pending. Shared checkout contains substantial unrelated uncommitted work, so it must not be staged wholesale.
+
+## Current handoff
+
 The exact versioned29-file runtime is installed (`acb8756e5d80b3a9f967a5e3985a2e4b3c5d0f0ca1011172732155c3d9c25928`). All11 numerical gates and exact canonical approval are complete; no numerical blocker remains within the approved scope. Four fixed-tolerance trend diagnostics remain false and are retained as limitations; the separately prospectively defined joint-refinement gates pass. All old failures and raw evidence remain unchanged.
 
 The reviewed107-operation shared installation preserves43791 bindings. A separate reviewed positive fixture count correction restores all81 package unit tests; no acceptance policy was changed. Actual standard sitev1,106 dedicated package checks, four public Dense/Loose/replay calls,25 qualified-bundle adversarial checks and supported ordinary package gate pass. V1 archive `720f700e4c708a9302861078ee8e6337524949e28d9124d4de495447cd4d4dd0` is retained with its browser header failure. Header fix is presentation only: current app `9612893e73052b905959d47affd535404f355986d27b2088c204857b53b55a4b`; separate installed audit `19286d0dd3ec48be7d3a38b620b668ab1af28aec8e13d92bc89d369800671ee7` confirms14 operations/19 preserved bindings. Compiled model/runtime/assets and five reviewed components are unchanged.
@@ -48,6 +57,8 @@ The reviewed107-operation shared installation preserves43791 bindings. A separat
 Current local delivery is independently accepted through E7. Exact website archive SHA256 `ace661fddee71afcbe78f1649f66b98dd4c792d6a6835569637ac7b830ce161c`,980files/121467005bytes; [download tested website](atlas-integration-v1/actual-package-v2/website.tar.gz), [manifest](atlas-integration-v1/actual-package-v2/PACKAGE_MANIFEST.json), [browser evidence](atlas-integration-v1/actual-package-v2/BROWSER_RESULTS.json), [signed-zero supplement](atlas-integration-v1/actual-package-v2/SIGNED_ZERO_RESULTS.json), [independent package audit](fused-linear-v1/independent-review/actual-package-v2/REVIEW.md) and [independent browser audit](fused-linear-v1/independent-review/browser-v2/REVIEW.md). The full site build took155.006s; all8194 frozen source files remained unchanged through packaging. Current source and exact qualified components remain pinned; the accepted public numerical/physical scope is unchanged.
 
 Smallest next action is monitor [the exact current publication run](https://github.com/benjym/constitutive-atlas/actions/runs/41330422584) to terminal results and require every gate, then compare the actual tested upload with live assets and exercise both named public preparations in Chrome. [Release evidence](atlas-integration-v1/live-release-v1/CI_FOLLOWUP_RELEASE-v2.json) records the independently reviewed isolated source baseline, remote preservation and dependency repair. Original local-only website archives and private PDFs remain private. E8 and the umbrella remain open until actual live verification.
+
+Smallest next action is E8 shared-baseline coordination, followed by a scoped release commit and new remote authorization. [Release preparation](atlas-integration-v1/release-preparation-v1/README.md) contains the tested website, exact12-file reviewed source delta and isolated patch reconstruction. Its159 qualified-source differences from HEAD include concurrent compiler/schema/other-model work; the scoped delta is not self-contained on HEAD. AGENTS.md forbids staging/committing other agents' shared work. No shared staging/commit, push, remote CI or deployment occurred. E8 remains blocked on an integration-owner handoff for that baseline; this is not a scientific or local browser blocker. The full model umbrella remains open and no live-delivery claim is made.
 
 The current exact accepted model, canonical review, runtime, assets and package are recorded above. Experimental validation remains unassessed; custom parameters/initial states and broader controls remain exploratory, not newly admitted by UI success.
 

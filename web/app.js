@@ -1,3 +1,6 @@
+import {setupKelvinVoigtLaboratory} from './kelvin-voigt-laboratory.mjs';
+import {setupHillLaboratory} from './hill-laboratory.mjs';
+import {setupOrthotropicLaboratory} from './orthotropic-laboratory.mjs';
 import {setupJ2Laboratory} from './j2-laboratory.mjs';
 import {setupTimedLaboratory} from './timed-laboratory.mjs';
 import {setupSlsLaboratory} from './sls-laboratory.mjs';
@@ -91,6 +94,7 @@ function selectLaboratory(id){
     if(j2View?.active)j2View.select(false);
     if(!timedView.active)++experimentLoadSequence;
     const active=timedView.select(id);
+    if(active&&id==='orthotropic-linear-elastic-ogs'){ $('model-description').textContent='Nine-constant orthotropic linear elasticity; all-six strain increments and complete stress state. Constant parameters, fixed aligned material axes, dry total Cauchy stress; illustrative parameters and no experimental validation.'; $('model-family').textContent='Orthotropic elasticity';$('model-status').textContent='Approved bounded scope';$('model-sources').replaceChildren();for(const [text,path] of [['Pinned governing OpenGeoSys source','https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticOrthotropic.cpp'],['Independent review and source mapping','./material-point-orthotropic/review.html'],['Exact approval','./material-point-orthotropic/approval.json'],['Exact approved definition','./material-point-orthotropic/model.json']]){const a=element('a',text+' ↗');a.href=path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}}
     if(active)$('model').value=id;
     if(active&&id==='lade-duncan-1975-midpoint-elastic-eq19-gap-v4'){
       $('model-description').textContent='Lade–Duncan (1975) cohesionless-soil elastoplasticity. Midpoint elastic/local Eq. 19 integration; small strain, compression-positive total mechanical stress, fixed axes and zero pore pressure. Custom paths remain exploratory.';
@@ -99,7 +103,7 @@ function selectLaboratory(id){
       for(const [text,path] of [['Original 1975 source','https://doi.org/10.1061/AJGEB6.0000204'],['Independent scientific checklist','./engine-implicit-path/review.json'],['Exact approval and limitations','./engine-implicit-path/approval.json'],['Exact approved model JSON','./engine-implicit-path/lade-duncan-1975-midpoint-elastic-eq19-gap-v4.json']]){const a=element('a',text+' ↗');a.href=path;a.target='_blank';a.rel='noopener';const row=element('p');row.append(a);$('model-sources').append(row);}
     }
     $('import-run').hidden=active;
-    return active;
+    if(active)refreshPublicModelSummary(id);return active;
   }
   if(j2View?.active)j2View.select(false);
   if(timedView?.active)timedView.select(false);
@@ -113,7 +117,7 @@ function activateLaboratoryModel(id,{run=true}={}){
     toast('That model is not available in this laboratory.');return false;
   }
   cancel('');
-  if(selectLaboratory(id)){refreshPublicModelSummary(id);return true;}
+  if(selectLaboratory(id))return true;
   $('model').value=id;populate();if(run)simulate();return true;
 }
 function route({initial=false}={}){
@@ -364,15 +368,15 @@ function simulate(s){
     if(activeId!==null)pendingRun=job;else startRun(job);
   }catch(error){invalidate();calculationError(error.message);}
 }
-function axisRange(values){
-  if(!values.length)return [0,1];let lo=Infinity,hi=-Infinity;for(const v of values){lo=Math.min(lo,v);hi=Math.max(hi,v);}if(lo===hi){const pad=Math.max(Math.abs(lo)*.05,1e-3);lo-=pad;hi+=pad;}else{const pad=(hi-lo)*.07;lo-=pad;hi+=pad;}return [lo,hi];
+function axisRange(values,nearConstant=false){
+  if(!values.length)return [0,1];let lo=Infinity,hi=-Infinity;for(const v of values){lo=Math.min(lo,v);hi=Math.max(hi,v);}if(lo===hi||(nearConstant&&hi-lo<=64*Number.EPSILON*Math.max(1,Math.abs(lo),Math.abs(hi)))){const pad=Math.max(Math.abs(lo)*.05,1e-3);lo-=pad;hi+=pad;}else{const pad=(hi-lo)*.07;lo-=pad;hi+=pad;}return [lo,hi];
 }
 function numberLabel(v){if(Math.abs(v)<1e-10)return '0';return Number(v.toPrecision(3)).toString();}
 function svgNode(name,attributes,text){const n=document.createElementNS('http://www.w3.org/2000/svg',name);for(const[k,v]of Object.entries(attributes))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n;}
 function chart(id,xLabel,yLabel,predicted,measured=[],emptyMessage){
   const svg=$(id);svg.replaceChildren();svg.append(svgNode('title',{},yLabel+' versus '+xLabel));
   const left=62,top=27,w=392,h=211,all=[...predicted,...measured].filter(a=>a.every(Number.isFinite));
-  const [xmin,xmax]=axisRange(all.map(p=>p[0])),[ymin,ymax]=axisRange(all.map(p=>p[1]));
+  const [xmin,xmax]=axisRange(all.map(p=>p[0])),[ymin,ymax]=axisRange(all.map(p=>p[1]),true);
   const x=v=>left+(v-xmin)/(xmax-xmin)*w,y=v=>top+h-(v-ymin)/(ymax-ymin)*h;
   for(let i=0;i<=4;i++){
     const yy=top+i*h/4,xx=left+i*w/4;
@@ -425,7 +429,7 @@ function renderCharts(){
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),profile=modelProfile(entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id+' '+(profile?.summary??'')).toLowerCase().includes(query))continue;
+  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),profile=modelProfile(entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id+' '+(profile?.summary??'')).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Reading profile','catalogue-availability'+(executable?' available':'')));
     const heading=element('h2'),open=element('a',profile?.title??entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
@@ -455,7 +459,7 @@ function showCatalogueModel(entry,spec){
     body.append(technical);body=technical;
   }
   body.append(element('p',recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',entry.id,evidenceIndex),'catalogue-detail-note'));
-  if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else if(entry.implicit_path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes the original complete 1975 elastoplastic law through a bounded implicit strain-path realization, explicit Table 1 preparation and complete stress/history/work state. Total mechanical Cauchy stress; no pore-pressure law or experimental validation.'));const links=element('p');for(const [label,path] of [['Exact definition','engine-implicit-path/'+entry.id+'.json'],['Independent scientific checklist','engine-implicit-path/review.json'],['Approval and limitations','engine-implicit-path/approval.json']]){const a=element('a',label+' ↗');a.href='./'+path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}body.append(links);}else if(entry.path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes dimensionless shear progress, complete initial history and linearly changing stress controls for the original drained active axial law. Experimental comparison is unavailable.'));}else if(timedRoute){const section=element('section');section.append(element('h3','Physical-time formulation'),element('p','Open the dedicated laboratory for supported controls, conventions and source/review links.'));body.append(section);}else body.append(formulationSection(document,spec,{evidenceIndex}));
+  if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else if(entry.id==='kelvin-voigt-comsol63-deviatoric-zero-spin-ode'&&timedView?.supports(entry.id)){const section=element('section');section.append(element('h3','Definition, conventions & preparation'),element('p','COMSOL 6.3 Kelvin–Voigt Eq. 3-36: parallel deviatoric spring and dashpot with purely elastic bulk. Physical seconds; six persistent total infinitesimal strain components. Fixed spatial frame, zero spin; compression-positive Mandel tensors and dry total Cauchy stress. Parameters K, G (Pa), tau (s); viscosity G tau. Creep holds the incoming stress defined by explicit initial strain and initial rate. A strain hold immediately sheds viscous stress and then preserves elastic stress. No experimental validation or broad material calibration is claimed.'));const links=element('p');for(const [label,path] of [['Exact definition','./engine-kelvin-voigt/'+entry.id+'.json'],['Source Eq. 3-36','https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441080'],['Readable independent review','./engine-kelvin-voigt/review.html'],['Independent scientific checklist','./engine-kelvin-voigt/review.json'],['Approval and limitations','./engine-kelvin-voigt/approval.json']]){const a=element('a',label+' ↗');a.href=path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}section.append(links);body.append(section);}else if(entry.implicit_path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes the original complete 1975 elastoplastic law through a bounded implicit strain-path realization, explicit Table 1 preparation and complete stress/history/work state. Total mechanical Cauchy stress; no pore-pressure law or experimental validation.'));const links=element('p');for(const [label,path] of [['Exact definition','engine-implicit-path/'+entry.id+'.json'],['Independent scientific checklist','engine-implicit-path/review.json'],['Approval and limitations','engine-implicit-path/approval.json']]){const a=element('a',label+' ↗');a.href='./'+path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}body.append(links);}else if(entry.path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes dimensionless shear progress, complete initial history and linearly changing stress controls for the original drained active axial law. Experimental comparison is unavailable.'));}else if(timedRoute){const section=element('section');section.append(element('h3','Physical-time formulation'),element('p','Open the dedicated laboratory for supported controls, conventions and source/review links.'));body.append(section);}else body.append(formulationSection(document,spec,{evidenceIndex}));
   if(typeof entry.dossier==='string'&&/^docs\/models\/[a-z0-9-]+\.md$/.test(entry.dossier)){const link=element('a','Source, numerics and limitations dossier ↗');link.href='./'+entry.dossier+'.html';link.target='_blank';link.rel='noopener';body.append(link);}
   if(!spec&&!timedRoute&&entry.id!==j2View?.modelId&&!timedView?.supports(entry.id)){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
@@ -473,7 +477,7 @@ function showCatalogueModel(entry,spec){
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
   $('catalogue-detail-id').textContent=entry.id;
   $('catalogue-permalink').href=catalogueModelHash(entry.id);
-  const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html');
+  const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html');
   const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute&&!timed&&entry.id!==j2View?.modelId;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(activateLaboratoryModel(entry.id))location.hash='laboratory?model='+encodeURIComponent(entry.id);$('model').focus({preventScroll:true});};
   if(!dialog.open)dialog.showModal();$('catalogue-detail-body').scrollTop=0;
 }
@@ -609,7 +613,6 @@ async function loadExperiments(files){
   }catch(e){if(id===experimentLoadSequence&&!specialLaboratoryActive())toast(e.message);}
   finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}
 }
-document.querySelector('.workspace-links a[href="#measurements"]').onclick=()=>{$('measurements').open=true;};
 window.addEventListener('hashchange',route);$('controls').onsubmit=e=>{e.preventDefault();simulate();};$('cancel-button').onclick=()=>cancel();$('model').onchange=()=>{if(activateLaboratoryModel($('model').value))location.hash='laboratory?model='+encodeURIComponent($('model').value);};$('protocol').onchange=()=>{setProtocol();refreshExperimentFilter();scheduleUpdate();};
 $('cycles').onchange=()=>{refreshExperimentFilter();const minimum=16*Number($('cycles').value);if(Number($('steps').value)<minimum)$('steps').value=minimum;scheduleUpdate();};
 $('load-model-example').onclick=()=>{try{cancel('');populate();simulate();}catch(e){toast(e.message);}};
@@ -639,5 +642,5 @@ try{
   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
   models.forEach(m=>$('model').append(new Option(modelProfile(m.id)?.title??m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
-  populate();timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+  populate();timedView=createLaboratoryControllerRouter([setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

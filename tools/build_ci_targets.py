@@ -3,7 +3,7 @@ import argparse
 import subprocess
 
 ENGINES = (
-    'atlas_power_creep_solver', 'atlas_solver', 'atlas_time_solver', 'atlas_research_solver',
+    'atlas_scalar_probe', 'atlas_power_creep_solver', 'atlas_solver', 'atlas_time_solver', 'atlas_research_solver',
     'atlas_history_solver', 'atlas_clay2013_solver', 'atlas_gis2024_solver',
     'atlas_expm_probe', 'atlas_log1p_probe', 'atlas_barodesy_rate_probe',
     'atlas_barodesy_material_ad_probe', 'atlas_barodesy_solver',

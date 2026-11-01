@@ -26,6 +26,8 @@
 
 The exact restricted model is independently approved and published in the main atlas. [Download the public replay package](atlas-v1/downloads/norsand-1993-qualified.zip):517547bytes, SHA25612043a4b5b78de55aa3e89f66f7de69c8a04d3ecd0b994fade29826806dc8ef2. It includes exact JSON, qualified Wasm, source/review receipts and the actual browser-exported complete run. Extracted ZIP offline replay passes exactly; raw PDF excluded.
 
+The exact restricted model is independently approved and works in the normal locally packaged main atlas. [Download the public replay package](atlas-v1/downloads/norsand-1993-qualified.zip):517547bytes, SHA25612043a4b5b78de55aa3e89f66f7de69c8a04d3ecd0b994fade29826806dc8ef2. It includes exact JSON, qualified Wasm, source/review receipts and the actual browser-exported complete run. Extracted ZIP offline replay passes exactly; raw PDF excluded.
+
 The current common-math-compatible controlled-path browser artifact is checked by its generated metadata, source/runtime bindings and accepted build review; it is distinct from the older qualified offline replay ZIP. Exact approved definition and scientific review remain unchanged. Current ordinary/profile release gates are preserved, and no gate or numerical tolerance is waived. The inherited screenshot source-packet failure, initial missing ZIP and missing committed historical alias are retained below. Concurrent main462a450c supplies the independently reviewed exact alias correction and additional model work; all are preserved in the final merge.
 
 ## Evidence index

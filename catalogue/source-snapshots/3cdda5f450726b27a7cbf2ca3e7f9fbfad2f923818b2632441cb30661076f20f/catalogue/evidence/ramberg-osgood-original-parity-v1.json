@@ -1,0 +1,53 @@
+{
+  "schema_version": "0.1",
+  "kind": "numerical-evidence",
+  "id": "ramberg-osgood-original-parity-v1",
+  "created_at": "2026-11-02",
+  "source_commit": "0cd28fc2a18dea9a496795ad149a58afed809930",
+  "model": {
+    "id": "ramberg-osgood-ansys242",
+    "definition_sha256": "c949cb14269846ec46a7e8f25718e17e8c8eab394b6ee09204f029e1ca15a3e2"
+  },
+  "executor": {
+    "name": "Atlas independent scalar reduction checker",
+    "automated": true,
+    "method": "analytical-and-scalar-reduction",
+    "independent_review": false
+  },
+  "scope": "Original strict native/Wasm parity failure retained; independent numerical checks passed but28 componentwise parity comparisons failed. Superseded by distinct current-v3 build-policy study with unchanged gates.",
+  "limitations": [
+    "No experimental validity or universal parameter qualification.",
+    "Tangent checks cover defaultn5; fractionaln1.5/2.5 integration only.",
+    "Scientific approval is a separately indexed independent agent record."
+  ],
+  "outcome": "failed",
+  "artifacts": [
+    {
+      "path": "docs/ingestion/ramberg-osgood-ansys242/execution-v1/original-v1/parity-failed.json",
+      "sha256": "958de70a98b0cf0b60f9c09aa4050689d8d984338d868d8ae688f9ed39c86ab2"
+    },
+    {
+      "path": "docs/ingestion/ramberg-osgood-ansys242/execution-v1/original-v1/native-results.json",
+      "sha256": "c68d973f698438d2c6a3b4b664ead84af89095871dbb0c2d82ed4040973b69bf"
+    },
+    {
+      "path": "docs/ingestion/ramberg-osgood-ansys242/execution-v1/original-v1/wasm-results.json",
+      "sha256": "31aa4d4087134c111f3b8d262461aee239910bda126f125c817bd5c4a55a051d"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "models/ramberg-osgood-ansys242.json",
+      "sha256": "c949cb14269846ec46a7e8f25718e17e8c8eab394b6ee09204f029e1ca15a3e2"
+    },
+    {
+      "path": "tools/check_ramberg_osgood.py",
+      "sha256": "f4257c0231b7188a4cd3b37aa7a552a2c3f54b46c70cc63f45b5fc9611abf5b2"
+    },
+    {
+      "path": "tools/check_ramberg_osgood_wasm.mjs",
+      "sha256": "c8a9de1a31e1d1d792045beb938b333d6939226267f2abb68a42496a1c91f38a"
+    }
+  ],
+  "reproduction_command": "python3 -B tools/check_ramberg_osgood.py --solver build-ramberg-native/atlas_solver --output /tmp/ramberg-checks.json"
+}

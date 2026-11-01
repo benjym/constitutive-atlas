@@ -1,0 +1,31 @@
+### Result
+[
+  {
+    "path": "evidence-records/catalogue/agent-reviews/duncan-chang-1970-endpoint-average-agent-v1.json",
+    "status": 200,
+    "bytes": 13517,
+    "sha256": "189d1da073877eea9278be757548119334814b218d63bee0e97882e5b67151ab"
+  },
+  {
+    "path": "evidence-records/catalogue/agent-reviews/definitions/duncan-chang-1970-endpoint-average-agent-v1.json",
+    "status": 200,
+    "bytes": 6966,
+    "sha256": "452b49ef48668c0c5d8aba20dfca398235fa45431e853ee923be05a17c7c88a0"
+  },
+  {
+    "path": "evidence-records/catalogue/approved-models.json",
+    "status": 200,
+    "bytes": 167655,
+    "sha256": "39ab123fb57d8233f60fd174649ce1e921b4b51c9343a7341503582603ac9932"
+  },
+  {
+    "path": "docs/models/duncan-chang-1970-endpoint-average.md.html",
+    "status": 200,
+    "bytes": 6993,
+    "sha256": "85190e9d8319bacd453093b83d69b632b69fdbb5b1b068477611367b392d9808"
+  }
+]
+### Ran Playwright code
+```js
+await page.evaluate('async()=>{const paths=[\'evidence-records/catalogue/agent-reviews/duncan-chang-1970-endpoint-average-agent-v1.json\',\'evidence-records/catalogue/agent-reviews/definitions/duncan-chang-1970-endpoint-average-agent-v1.json\',\'evidence-records/catalogue/approved-models.json\',\'docs/models/duncan-chang-1970-endpoint-average.md.html\'];return Promise.all(paths.map(async path=>{const r=await fetch(\'./\'+path,{cache:\'no-store\'}),b=await r.arrayBuffer();return {path,status:r.status,bytes:b.byteLength,sha256:Array.from(new Uint8Array(await crypto.subtle.digest(\'SHA-256\',b))).map(x=>x.toString(16).padStart(2,\'0\')).join(\'\')}}))}');
+```
