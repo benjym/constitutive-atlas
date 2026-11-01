@@ -147,11 +147,11 @@ Use the current workflow's other parity/profile/browser commands for the actual 
 
 - [X] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
 - [X] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
-- [ ] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
-- [ ] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
-- [ ] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
-- [ ] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
-- [ ] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
+- [X] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
+- [X] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
+- [X] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
+- [X] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
+- [X] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
 
 **Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its sources/approval/evidence; the packaged and live website can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.
 
@@ -162,3 +162,5 @@ Every handoff names the umbrella task and phase, exact files/hashes, passed/fail
 Full-delivery dispatch prompt:
 
 > Read AGENTS.md and docs/MODEL_DELIVERY_CHECKLIST.md. Lead MODEL-<id> from existing source work through E0–E8 for the exact assigned variant and website scope. Maintain docs/ingestion/<id>/DELIVERY.md and the coordinator-owned board. Use the assigned worktree/whitelist; arrange specialist capability and separate-agent review handoffs, serial native/Wasm qualification and actual browser checks. Continue after packet handoff to atlas integration and verified live delivery when remote authorization exists. Preserve failures, sources and other workers' files. Report exact evidence and honest blocked/ready/live state; do not equate a packet or approval with delivery.
+
+E8 evidence: release-v4/ci-terminal.json (all six jobs success), artifact-receipt.json, artifact-review.md, live-assets-v1.json (80 exact comparisons), live-browser.txt/png, live-console.json and live-catalogue.txt. Delivered source ecd1f3b12381dd8edec34fe6121b80a0bd5792aa; no experimental validation claimed.

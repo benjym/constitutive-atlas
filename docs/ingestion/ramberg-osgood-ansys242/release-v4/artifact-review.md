@@ -1,0 +1,9 @@
+# Independent descendant upload artifact review
+
+Separate reviewer `/root/ramberg_review`,2026-11-02. **PASS for actual upload provenance/database/unchanged verification gates.** No network, build or compiled execution; no production or canonical record changes.
+
+Independently matched the retained artifact API object and exact run41357170257/head ecd1f3b12381dd8edec34fe6121b80a0bd5792aa. Rehashed actual ZIP3ff3890d82e3159492957a027a4f3d8b1805f207356f74627a32457d7dd5df6c against API digest; its sole member is artifact.tar with digestad79a9f1fe819560c05bc0afed49851b79a72476d4ee7844fb0153949a7182d6. Recomputed the full extracted manifest and independently compared all1049 regular tar members to extracted file bytes. Acquisition was authenticated by coordinator; this review audits retained API data and actual downloaded bytes without a new network request.
+
+Compared both verifier sources with previously reviewed v2: live checker changes only exact run/head; database checker changes only preceding revisione32f8a86 and exact population counts. Model/review/catalogue pins, exact canonical model equality, archive/manifest bindings, prior-row preservation and live HTTP/hash gates remain unchanged. Independently reran database checker against read-only uploaded SQLite; result equals upload-database.json exactly:47public and48database identities, explicit one preexisting Nakai research identity,24approvals; all47preceding public objects and24prior approval objects preserved, exact Ramberg model/review/approval and ANSYS primary-source link. Reverified all50 canonical evidence artifact hashes unchanged.
+
+No upload/database/gate blocker identified. This report does not claim pending controlled-path/terminal CI/deployment success, live hash comparison or actual final-browser qualification. Those remain separate required delivery evidence.
