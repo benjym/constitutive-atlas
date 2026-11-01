@@ -1,0 +1,9 @@
+# Explicit supported-input package gate
+
+`tools/test_supported_package.mjs` implements the prospective [acceptance policy](ACCEPTANCE.md). The new exact-definition policy binds all12models and a single existing GIS first-point failure to its preserved report and registered small example. It does not infer exceptions from new failures. Missing/stale definitions or evidence, altered requests/failures, unregistered/bad examples, unexpected success, nonfinite history and incomplete progress fail the gate.
+
+30new decision-boundary tests and16existing example/package tests pass. A serial run using the already-qualified root Wasm package executes all12ordinary requests:11succeed; the GIS ordinary request retains its exact declared failure and unchanged initial point. Its registered small example also succeeds with complete history. Full replies are saved in `actual.json.gz`; no build, material law/default change, scientific promotion, push or deployment occurred.
+
+The original `tools/test_web_package.mjs` and workflow are unchanged; the original strict all-default result remains failed. The new check makes a different, explicit supported-input claim. CI integration is pending: older parity/loading loops apply legacy effective-stress APIs across every model without an explicit source/profile case allocation. The next bounded task must verify retained legacy cases and current scoped cases before changing workflow calls; do not silently skip models, weaken old policies or deploy before these release dependencies pass.
+
+`prospective.json` pins checker, tests, policy, acceptance and original strict checker/workflow before the actual run. `python3 -B docs/reviews/supported-package-gate-v1/verify.py` rechecks retained hashes/replies without executing a material model. The numerical/browser/scientific evidence retains its original scope.
