@@ -20,8 +20,9 @@ class ClassicPublicationTests(unittest.TestCase):
         old=json.loads(content); graph=load_publications()
         self.assertEqual(graph['publications'][:len(old['publications'])],old['publications'])
         self.assertEqual(graph['relations'][:len(old['relations'])],old['relations'])
-        self.assertEqual(len(graph['publications']),len(old['publications'])+3)
-        self.assertEqual(len(graph['relations']),len(old['relations'])+1)
+        # Later independently sourced additions must not invalidate this historical prefix.
+        self.assertGreaterEqual(len(graph['publications']),len(old['publications'])+3)
+        self.assertGreaterEqual(len(graph['relations']),len(old['relations'])+1)
         self.assertEqual(graph['independent_review'],'pending')
         m=json.loads((HERE/'manifest.json').read_bytes())
         for group in ['files','dependencies']:
