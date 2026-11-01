@@ -1,0 +1,12 @@
+{
+  "attempt": 1,
+  "command": "python3 -B docs/reviews/j2-scientific-v1/check_review.py",
+  "exit_code": 1,
+  "failure": "AssertionError on expected original model hash at live models/research/j2/j2-linear-isotropic-hardening-be.json; coordinator replaced live path with a corrected candidate during review.",
+  "resolution": "Bind unchanged candidate-v03.json and archived frozen study instead; preserve exact original model and execution identities. No gate or tolerance relaxed.",
+  "scientific_failure_retained": "SCI-J2-001 reverse-direction zero-residual root",
+  "second_attempt": {
+    "failure": "Replay output equality failed because live-path drift metadata changed during concurrent v2 work.",
+    "resolution": "Remove live path reads and dynamic drift list; bind only unchanged historical candidate and frozen archive. Scientific and numerical gates unchanged."
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "schema_version": "0.3",
+  "id": "j2-linear-isotropic-hardening-be",
+  "name": "J2 associative linear isotropic hardening, backward Euler",
+  "family": "elastoplasticity",
+  "description": "Small-strain fixed-frame dry total-stress J2 law; linear isotropic specialization of OpenSees J2Plasticity with sigma_infty=sigma_0 and eta=0. Exact mathematical radial return, not replication of vendor numerical gamma shrink. No finite rotation, saturation or viscosity.",
+  "status": "draft",
+  "sources": [
+    {
+      "url": "https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/J2Plasticity.html",
+      "locator": "THEORY: elastic law, yield, hardening, flow; eta=0 rate-independent case. Specialize sigInf=sig0.",
+      "role": "primary formulation"
+    },
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/955ceb0a55f7b5764856ea82fc9a9cc7f07a1eea/SRC/material/nD/J2Plasticity.cpp",
+      "locator": "plastic_integrator, q, qprime; source-norm multiplier converted to equivalent-plastic-strain increment. See ingestion derivation. Vendor gamma *= (1-1e-8) deliberately excluded.",
+      "role": "pinned implementation equation reference"
+    },
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/955ceb0a55f7b5764856ea82fc9a9cc7f07a1eea/SRC/material/nD/J2ThreeDimensional.cpp",
+      "locator": "setTrialStrain/getStress: engineering shear inputs, tensor shear outputs; Atlas converts to common Mandel representation.",
+      "role": "tensor convention reference"
+    }
+  ],
+  "parameters": {
+    "p_ref": {
+      "default": 100000000.0,
+      "min": 1,
+      "max": 1000000000000000.0,
+      "unit": "Pa",
+      "label": "Numerical reference stress, not constitutive"
+    },
+    "K": {
+      "default": 166666666666.66666,
+      "min": 1,
+      "max": 1000000000000000.0,
+      "unit": "Pa",
+      "label": "Bulk modulus"
+    },
+    "G": {
+      "default": 80000000000.0,
+      "min": 1,
+      "max": 1000000000000000.0,
+      "unit": "Pa",
+      "label": "Shear modulus"
+    },
+    "sigma_y": {
+      "default": 250000000.0,
+      "min": 1,
+      "max": 10000000000000.0,
+      "unit": "Pa",
+      "label": "Initial von Mises yield stress"
+    },
+    "H": {
+      "default": 1000000000.0,
+      "min": 0,
+      "max": 1000000000000000.0,
+      "unit": "Pa",
+      "label": "Linear isotropic hardening modulus"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "alpha",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "equivalent_plastic_strain",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "gamma",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0,
+      "scale": "1",
+      "semantics": {
+        "role": "plastic_multiplier",
+        "quantity": "equivalent_plastic_strain_increment",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "trial_s",
+      "expr": "dev(sigma_n) + 2 * G * dev(de)"
+    },
+    {
+      "name": "trial_q",
+      "expr": "sqrt(1.5 * dot(trial_s, trial_s))"
+    },
+    {
+      "name": "trial_q_safe",
+      "expr": "select(trial_q > 0 * p_ref, trial_q, p_ref)"
+    },
+    {
+      "name": "q",
+      "expr": "sqrt(1.5 * dot(dev(sigma), dev(sigma)))"
+    },
+    {
+      "name": "yield_scaled",
+      "expr": "(q - sigma_y - H * alpha) / p_ref"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma - sigma_n - K * trace(de) * I - 2 * G * dev(de) + (3 * G * gamma / trial_q_safe) * trial_s",
+    "alpha": "alpha - alpha_n - gamma",
+    "gamma": "sqrt(gamma**2 + yield_scaled**2) - gamma + yield_scaled"
+  },
+  "domain": [
+    "K > 0 * p_ref",
+    "G > 0 * p_ref",
+    "sigma_y > 0 * p_ref",
+    "H >= 0 * p_ref"
+  ],
+  "initial_checks": [
+    "alpha >= 0",
+    "yield_scaled <= 1e-10"
+  ],
+  "solution_constraints": [
+    "alpha >= 0"
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "total"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "alpha"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
+}

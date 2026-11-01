@@ -1,0 +1,50 @@
+{
+  "version": "j2-build-receipt-1",
+  "source_freeze_sha256": "e8cfa67b4b113fcc6d3b975c095f90bfd18185805a4be6185ab0c7df3f6a4156",
+  "source_archive_sha256": "755b68a51ef6830515a180911a8f7c65e7fdbac87570445e61dd5ca7bd83604e",
+  "source": "/private/tmp/atlas-j2-execution-v1/source",
+  "build_policy": "serial native then Wasm, one explicit target, --parallel 1",
+  "target": "atlas_j2_solver",
+  "cmake_project": "cmake/j2",
+  "configuration": "Release",
+  "commands": [
+    "cmake -S /private/tmp/atlas-j2-execution-v1/source/cmake/j2 -B /private/tmp/atlas-j2-execution-v1/native -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build /private/tmp/atlas-j2-execution-v1/native --target atlas_j2_solver --parallel 1",
+    "EM_CACHE=/private/tmp/atlas-j2-execution-v1/emcache emcmake cmake -S /private/tmp/atlas-j2-execution-v1/source/cmake/j2 -B /private/tmp/atlas-j2-execution-v1/wasm -DCMAKE_BUILD_TYPE=Release",
+    "EM_CACHE=/private/tmp/atlas-j2-execution-v1/emcache cmake --build /private/tmp/atlas-j2-execution-v1/wasm --target atlas_j2_solver --parallel 1"
+  ],
+  "toolchains": {
+    "native": "Apple clang version 21.0.0 (clang-2100.4.1.1)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+    "wasm": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.8-git\nCopyright (C) 2026 the Emscripten authors (see AUTHORS.txt)\nThis is free and open source software under the MIT license.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "cmake": "cmake version 4.4.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\n",
+    "node": "v26.7.0\n",
+    "python": "Python 3.14.7\n"
+  },
+  "artifacts": [
+    {
+      "private_path": "/private/tmp/atlas-j2-execution-v1/native/atlas_j2_solver",
+      "sha256": "0ce8aa950ef6be150b9a62ec110607f97b035a9560897c60958222a1cc6b4737",
+      "bytes": 336080
+    },
+    {
+      "private_path": "/private/tmp/atlas-j2-execution-v1/wasm/j2.js",
+      "sha256": "e0a74ad032d716cc747be51a544f82e085be12f3ad707b3e6de3924f3834c3c2",
+      "bytes": 27371
+    },
+    {
+      "private_path": "/private/tmp/atlas-j2-execution-v1/wasm/j2.wasm",
+      "sha256": "719c79bf1e89477427c8e5465dd5079c957d5fe100803bbe90459adcd2969586",
+      "bytes": 429876
+    },
+    {
+      "private_path": "/private/tmp/atlas-j2-execution-v1/native/generated/models.json",
+      "sha256": "a5a7a5aea6a51e8f719c34ce11fc3bf569b6e79a705c39e5ac497f0503c4a095",
+      "bytes": 6122
+    },
+    {
+      "private_path": "/private/tmp/atlas-j2-execution-v1/wasm/generated/models.json",
+      "sha256": "a5a7a5aea6a51e8f719c34ce11fc3bf569b6e79a705c39e5ac497f0503c4a095",
+      "bytes": 6122
+    }
+  ]
+}
