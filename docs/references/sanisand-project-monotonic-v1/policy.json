@@ -1,0 +1,44 @@
+{
+  "freeze_before_reference_execution": true,
+  "candidate_observations": false,
+  "scientific_signature": null,
+  "method": "Independent Decimal Cartesian Dormand-Prince5(4); state sigma9/alpha9/fabric9, exact constant e and zero anchor; no state projection",
+  "cases": 27,
+  "samples_per_case": 18,
+  "precisions": [
+    50,
+    80
+  ],
+  "tolerances": [
+    "1e-8",
+    "1e-10",
+    "1e-12"
+  ],
+  "precision_comparison_tolerance": "1e-12",
+  "state_scale": "stress: initial pressure, all other components:1",
+  "gates": {
+    "all_cases_generated": true,
+    "arithmetic_precision_scaled_difference": "1e-20",
+    "fine_medium_scaled_difference": "1e-8",
+    "refinement_ratio_max": "0.5",
+    "refinement_ratio_ignored_below": "1e-10",
+    "yield_drift_over_initial_pressure": "1e-7",
+    "trace_and_symmetry_scaled_error": "1e-25",
+    "positive_pressure": true,
+    "nonnegative_distance": true,
+    "plastic_history_nonzero": true
+  },
+  "gates_are_reference_adequacy_only": true,
+  "backend_budgets_not_frozen": true,
+  "attempts_per_case": 20000,
+  "minimum_step": "1e-30",
+  "negative_branches": "Reject nonpositive pressure, invalid e, negative distance, d=0 with Hbar<=0, zero denominator; intermediate RK trials may cut back without committing",
+  "unsupported": [
+    "reversal/events after first yield",
+    "mixed volume/loading controls",
+    "parameter variation",
+    "general prepared nonzero anchor",
+    "candidate derivatives/transactions/backend correctness",
+    "experimental calibration"
+  ]
+}
