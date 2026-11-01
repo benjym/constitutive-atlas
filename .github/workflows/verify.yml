@@ -38,6 +38,12 @@ jobs:
           cmake --build build-burgers --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
           node --test tests/test_burgers_web_contract.mjs
+      - name: Build and qualify the approved orthotropic strain-increment model
+        run: |
+          cmake -S cmake/orthotropic -B build-orthotropic -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-orthotropic --target atlas_orthotropic_solver --parallel 1
+          python tools/test_orthotropic_native.py --solver build-orthotropic/atlas_orthotropic_solver --output "$RUNNER_TEMP/orthotropic-native"
+          node --test tests/test_orthotropic_contract.mjs
       - name: Build and qualify the approved J2 strain-increment model
         run: |
           cmake -S cmake/j2 -B build-j2 -DCMAKE_BUILD_TYPE=Release
@@ -150,6 +156,10 @@ jobs:
           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
           emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
+          emcmake cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
+          node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
+          python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
           python tools/build_web.py
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package
@@ -207,6 +217,10 @@ jobs:
           python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
           emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
+          emcmake cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
+          node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
+          python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
           python tools/build_web.py
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package

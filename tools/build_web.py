@@ -15,8 +15,11 @@ from build_development import bundle as bundle_development
 from build_applicability import bundle as bundle_applicability
 from build_j2_laboratory import bundle as bundle_material_point
 
+from build_orthotropic_laboratory import bundle as bundle_orthotropic
+
 def main():
     parser=argparse.ArgumentParser()
+    parser.add_argument('--orthotropic-wasm-dir',type=Path,default=ROOT/'build-orthotropic-wasm',help='Qualified orthotropic strain-increment engine for the main laboratory')
     parser.add_argument('--preview-experiments', action='store_true', help='Include pending datasets in web/preview for local review only')
     parser.add_argument('--wasm-dir',type=Path,default=ROOT/'build-wasm',help='Verified engine directory containing atlas.js, atlas.wasm and generated/models.json')
     parser.add_argument('--power-creep-wasm-dir',type=Path,help='Qualified dedicated physical-time power-creep engine; defaults to --wasm-dir')
@@ -75,6 +78,8 @@ def main():
     subprocess.run(['node',str(ROOT/'tools/test_sls_laboratory_package.mjs'),str(dest)],check=True)
     bundle_material_point(dest,args.j2_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)
+    bundle_orthotropic(dest,args.orthotropic_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_orthotropic_package.mjs'),str(dest)],check=True)
     (dest/'.nojekyll').touch()
     print(f'Packaged {dest}')
 

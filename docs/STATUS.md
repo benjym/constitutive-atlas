@@ -728,3 +728,8 @@ The exact approved J2 linear isotropic hardening law now has a qualified main-la
 ### J2 main-laboratory closeout — 2026-11-02
 
 The approved bounded J2 formulation is delivered in the main laboratory. Release 8e060a42 passes all required native/Wasm/package/Pages gates;20 assets match the tested upload and the actual live preset passes 32full-state checks. Independent review and all original failures are retained in [the delivery ledger](ingestion/j2-linear-hardening/DELIVERY.md). No broader or experimental validation is claimed.
+
+
+## Orthotropic OGS local delivery — 2 November 2026
+
+The full nine-constant fixed-axis small-strain orthotropic law has exact independent agent approval, 121 requests per native/Wasm backend, independent compliance/tangent checks, and a qualified main-atlas laboratory. The standard 895-file package preserves the twelve-model ordinary catalogue and its unchanged supported-input policy; the orthotropic engine is a separate dedicated common-solver profile, not a thirteenth ordinary definition. Actual desktop/mobile browser tests cover all material constants, six-component prestress/increments, replay, rejection/recovery and model switching. Three unique source identities survive SQLite export (six rows from the existing definition/catalogue union). See the [delivery ledger](ingestion/orthotropic-ogs/DELIVERY.md). E8 release/CI/live verification remains open. No experimental validation, finite rotation or broad parameter-conditioning claim is made.
