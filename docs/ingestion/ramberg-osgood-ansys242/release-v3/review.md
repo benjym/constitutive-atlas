@@ -1,0 +1,11 @@
+# Independent review of residual Linux regeneration correction
+
+Reviewer `/root/ramberg_review`,2026-11-02. **Accepted: strict frozen-byte gate preserved.** No network, build or compiled execution; no production/model/canonical-record changes.
+
+Read retained Linux-v2 failure and recursive diagnostic: all18 differences are confined to n2.5-uniaxial input preparation and corresponding prescribed strain, differing by1–2ULP. Read the controlled pow diagnostic and both actual-platform outputs. Both use identical q99999.99999999999 and z0.9999999999999999; macOS returns z**1.5 hex0x1.ffffffffffffep-1 while Linux returns0x1.fffffffffffffp-1. The explicit mathematically equivalent product z*sqrt(z) gives0x1.ffffffffffffep-1 on both. Thus libm fractional power is an actually observed residual cause, not merely an assumed Python summation cause. The prior fsum-only correction was insufficient and its failed CI evidence remains retained.
+
+Inspected portable_preparation: directly implements the source full compliance formula with explicit fsum and the declared product operation only for exponent1.5. It does not read the expected freeze, look up stored values or substitute reference stresses. It is patched only during make_requests regeneration inside the exact whole-object equality test; all other preparation/oracle/production execution remains unchanged. Frozen requests, independent stress oracle, model bytes and numerical acceptance bounds remain unchanged. The arithmetic operation order is now explicit and has actual tested portability for this bounded corpus, rather than a relaxed equality tolerance.
+
+Independently reran all9focused historical-generation/Ramberg tests: PASS. Reverified all50 canonical evidence artifact hashes unchanged. Read retained macOS3.12,macOS3.14 and actual Linuxamd64 Python3.12 logs, each9PASS. This covers the actual observed platform distinction and supports the proposed correction. It does not establish arbitrary-platform transcendental reproducibility or supersede a new terminal CI run.
+
+No unresolved blocker to this test portability correction or the next authorized push. Retain earlier failed studies; final CI/upload/live verification must bind the resulting new release revision separately.

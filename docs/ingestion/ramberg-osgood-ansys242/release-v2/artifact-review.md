@@ -1,0 +1,11 @@
+# Independent corrected-release artifact review
+
+Reviewer `/root/ramberg_review`,2026-11-02. Reviewed actual release8cab145bacde8b0f25cb93c0aebef826e318710f/run41350895734 artifact and verifier deltas. No network, builds, compiled execution, production edits or canonical-record changes.
+
+**PASS for actual upload provenance, database and unchanged verifier gates.** Matched exact artifact13100884121 object against the retained API response. Rehashed local ZIP69933e67822b3191e15090721556101f28d37c31efb040096f96ac92dc691ecf against API digest and independently verified the sole artifact.tar member. Verified tar40eac1b95257b73c4b4e3dd6d4abf1dfe25d2cd1c5051060aef970a264b2bde7 and extracted manifeste84fcd3763f2eda44b07503b7e0daf26c6a43eda07f0b11f57a8e0ad17991491. Independently matched every1030 regular tar member byte hash to the extracted site's corresponding file. Authenticated acquisition was performed by coordinator; I audited retained metadata and actual local bytes.
+
+Live-verifier difference from reviewed v1 is solely exact run/head constants. It retains exact model/review pins, registry cross-reference, expected compiled catalogue hash/full candidate equality, actual archive/extracted manifest bindings and HTTP/hash failure gates. Database-verifier difference is solely preceding revision95210701 and exact expected counts (46prior public rows/23prior approvals); preservation/equality/source tests are unchanged. Reran final database verifier in read-only SQLite mode: exact result equality with upload-database.json. Database has47 model identities (46public plus explicit existing Nakai research identity),23approvals, exact Ramberg definition/review/approval and primary-source link; all46preceding manifest rows and23prior approval entries preserved.
+
+Reverified frozen modelc949 and all50 canonical review artifacts unchanged. Read the retained Python3.12 focused-test log reporting all9tests passing; combined with my previously executed local nine-test pass, this supports the summation portability correction but does not substitute for terminal required CI success.
+
+No remaining upload/database/gate blocker. This report does not assert terminal native CI/deployment completion or successful actual live comparison/browser while those checks remain in progress.

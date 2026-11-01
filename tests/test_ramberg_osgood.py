@@ -9,6 +9,21 @@ from atlas.initialization import initialize_state
 from atlas.model import ROOT, defaults, load, validate
 from tools.check_ramberg_osgood import make_requests, rotate, strain_from_stress, stress_oracle
 
+def portable_preparation(sigma, p):
+    """Replay preparation using an explicit operation order for z^(3/2).
+
+    Linux and macOS libm pow differ at the frozen n=2.5 uniaxial point.
+    z*sqrt(z) preserves the original bytes on both, with no stored-value lookup.
+    This helper prepares inputs only; the independent stress oracle is unchanged.
+    """
+    m=math.fsum(sigma[:3])/3
+    dev=[sigma[i]-(m if i<3 else 0) for i in range(6)]
+    q=math.sqrt(1.5*math.fsum(x*x for x in dev))
+    z=q/p['sigma0']; exponent=p['n']-1
+    power=z*math.sqrt(z) if exponent==1.5 else z**exponent
+    factor=(1+p['nu']+1.5*p['alpha']*power)/p['E']
+    return [factor*dev[i]+((1-2*p['nu'])*m/p['E'] if i<3 else 0) for i in range(6)]
+
 class RambergOsgoodTests(unittest.TestCase):
     def setUp(self):
         self.model=load(ROOT/'models/ramberg-osgood-ansys242.json')
@@ -53,7 +68,8 @@ class RambergOsgoodTests(unittest.TestCase):
         frozen=json.loads((ROOT/'docs/ingestion/ramberg-osgood-ansys242/execution-v1/requests.json').read_text())
         # Python 3.12 and 3.14 use different builtin floating summation.
         # Explicit correctly rounded summation regenerates the unchanged freeze.
-        with patch('tools.check_ramberg_osgood.sum', math.fsum, create=True):
+        with patch('tools.check_ramberg_osgood.sum', math.fsum, create=True), \
+             patch('tools.check_ramberg_osgood.strain_from_stress', portable_preparation):
             self.assertEqual(frozen,make_requests())
         self.assertEqual(len({c['id'] for c in frozen['cases']}),len(frozen['cases']))
         self.assertTrue(any(c.get('require_rollback') for c in frozen['cases']))
