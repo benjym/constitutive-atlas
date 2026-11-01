@@ -14,7 +14,6 @@ from build_benchmark import bundle as bundle_benchmark
 from build_development import bundle as bundle_development
 from build_applicability import bundle as bundle_applicability
 from build_j2_laboratory import bundle as bundle_material_point
-from build_power_creep_web import bundle as bundle_power_creep
 
 def main():
     parser=argparse.ArgumentParser()
@@ -47,6 +46,10 @@ def main():
             shutil.rmtree(dest/name)
     for name in ['timed-route.mjs','laboratory-support.mjs','index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','laboratory-scope.mjs','laboratory-document.mjs','laboratory-view.mjs','laboratory-worker.mjs','recorded.mjs','recorded-scope.mjs','recorded-scope-execution.mjs','recorded-document.mjs','recorded-worker.mjs','catalogue.mjs','state-contract.mjs','laboratory-examples.mjs','laboratory-examples-view.mjs','formulation-view.mjs','applicability-view.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
+    from build_ensemble_web import bundle as bundle_ensemble
+    bundle_ensemble(dest)
+    for name in ['ensemble.mjs', 'ensemble-queue.mjs', 'ensemble-view.mjs', 'ensemble-worker.mjs', 'ensemble.css']:
+        shutil.copyfile(ROOT/'web'/name,dest/name)
     shutil.copyfile(ROOT/'docs/benchmarks/kfs-tmd2-research-range-v1/results/reproduction.png',dest/'tmd2-reproduction.png')
     for name in ['atlas.js','atlas.wasm']:
         shutil.copyfile(args.wasm_dir/name,dest/name)
@@ -73,8 +76,7 @@ def main():
     shutil.copytree(ROOT/'models',dest/'models',dirs_exist_ok=True)
     experiment_manifest=bundle(dest/'experiments', preview=args.preview_experiments)
     print(f"Prepared {len(experiment_manifest['experiments'])} built-in experiments ({experiment_manifest['release']})")
-    bundle_power_creep(dest,args.power_creep_wasm_dir or args.wasm_dir)
-    subprocess.run(['node',str(ROOT/'tools/test_power_creep_package.mjs'),str(dest)],check=True)
+    # Dedicated power-creep page remains retired; scientific source tools are retained.
     from build_burgers_web import bundle as bundle_burgers
     bundle_burgers(dest,args.burgers_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_burgers_package.mjs'),str(dest)],check=True)

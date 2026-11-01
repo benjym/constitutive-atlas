@@ -1,0 +1,149 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - link "Constitutive Atlas home" [ref=e3] [cursor=pointer]:
+      - /url: "#laboratory"
+      - generic [ref=e6]: ConstitutiveAtlas
+    - navigation "Main navigation" [ref=e7]:
+      - link "◫ Model testing" [ref=e8] [cursor=pointer]:
+        - /url: "#laboratory"
+        - text: ◫
+        - generic [ref=e9]: Model testing
+      - link "⌕ Model catalogue 32" [ref=e10] [cursor=pointer]:
+        - /url: "#catalogue"
+        - text: ⌕
+        - generic [ref=e11]: Model catalogue
+        - generic [ref=e12]: "32"
+      - link "≋ Methods & evidence" [ref=e13] [cursor=pointer]:
+        - /url: "#methods"
+        - text: ≋
+        - generic [ref=e14]: Methods & evidence
+    - paragraph [ref=e16]:
+      - text: By
+      - link "Benjy Marks" [ref=e17] [cursor=pointer]:
+        - /url: https://github.com/benjym
+      - link "François Guillard" [ref=e18] [cursor=pointer]:
+        - /url: https://github.com/Franzzzzzzzz
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - heading "Explore material behaviour." [level=1] [ref=e23]
+        - button "↑ Import run" [ref=e24] [cursor=pointer]
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: CONSTITUTIVE MODEL
+          - generic [ref=e28]: Loading
+        - generic [ref=e29]: Select a model
+        - combobox "Select a model" [ref=e30]
+        - paragraph
+        - group [ref=e31]:
+          - generic "Sources & model definition" [ref=e32] [cursor=pointer]
+        - generic [ref=e33]:
+          - generic [ref=e34]: 3D · small strain
+          - button "View equations ↗" [ref=e35] [cursor=pointer]
+      - navigation "Model testing sections" [ref=e36]:
+        - link "Test controls ↓" [ref=e37] [cursor=pointer]:
+          - /url: "#controls"
+        - link "Response plots ↓" [ref=e38] [cursor=pointer]:
+          - /url: "#response"
+        - link "Compare measurements ↓" [ref=e39] [cursor=pointer]:
+          - /url: "#measurements"
+        - link "Equations & sources ↓" [ref=e40] [cursor=pointer]:
+          - /url: "#equations"
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - heading "Test controls" [level=2] [ref=e44]
+            - button "Reset" [ref=e45] [cursor=pointer]
+          - paragraph [ref=e46]: Live updates as you adjust
+          - generic [ref=e48]:
+            - text: Loading protocol
+            - combobox "Loading protocol" [ref=e49]:
+              - option "Drained triaxial" [selected]
+              - option "Undrained triaxial"
+              - option "Oedometer"
+              - option "Isotropic compression"
+              - option "Undrained · stress control"
+          - generic [ref=e50]:
+            - generic [ref=e51]: Axial strain (%)
+            - spinbutton "Axial strain (%)" [ref=e52]: "1"
+          - slider "Axial strain (%) slider" [ref=e53] [cursor=pointer]: "550"
+          - generic [ref=e54]:
+            - text: Loading history
+            - combobox "Loading history" [ref=e55]:
+              - option "Monotonic ramp" [selected]
+              - option "1 sinusoidal cycle"
+              - option "3 sinusoidal cycles"
+              - option "10 sinusoidal cycles"
+          - generic [ref=e57]: INITIAL STATE
+          - button "Load model example" [ref=e58] [cursor=pointer]
+          - paragraph [ref=e59]: Selecting a model loads its example parameters and full initial state. These illustrative values do not establish specimen preparation or experimental calibration. Loading an example replaces parameter and state edits.
+          - generic [ref=e60]:
+            - generic [ref=e61]: Radial effective stress (kPa)
+            - spinbutton "Radial effective stress (kPa)" [ref=e62]: "100"
+          - slider "Radial effective stress (kPa) slider" [ref=e63] [cursor=pointer]: "500"
+          - group [ref=e64]:
+            - generic "Initial state details" [ref=e65] [cursor=pointer]
+          - group [ref=e66]:
+            - generic "Material parameters Adjust model constants" [ref=e67] [cursor=pointer]:
+              - text: Material parameters
+              - generic [ref=e68]: Adjust model constants
+          - group [ref=e69]:
+            - generic "Solver settings" [ref=e70] [cursor=pointer]
+            - option "Reproducible · current" [selected]
+            - option "Legacy · earlier saved runs"
+          - status [ref=e72]: Changes update the plots automatically.
+        - generic [ref=e73]:
+          - region [ref=e74]:
+            - generic [ref=e75]: EXPERIMENTAL COMPARISON
+            - heading "Compare with measurements" [level=2] [ref=e76]
+            - paragraph [ref=e77]: Tests are filtered by drainage protocol, loading path and verified plot axes. Assess model–material suitability, parameter calibration and specimen preparation separately. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.
+            - paragraph [ref=e78]
+            - generic [ref=e79]:
+              - text: Find measurements
+              - searchbox "Find measurements" [ref=e80]
+            - generic [ref=e81]:
+              - text: Experimental test
+              - combobox "Experimental test" [disabled] [ref=e82]:
+                - option "Loading available tests…" [selected]
+            - generic [ref=e83]:
+              - generic [ref=e84]:
+                - switch "Show measurements" [disabled] [ref=e85]
+                - text: Show measurements
+              - button "Match available test inputs" [disabled] [ref=e86]
+            - paragraph [ref=e87]: Matching uses supplied stress and protocol, and void ratio only when this model provides that input. Other internal-state inputs keep their explicit values; specimen preparation remains unassessed.
+            - status [ref=e88]: Loading available tests…
+            - generic [ref=e89]:
+              - checkbox "Browse all source records (includes tests without model overlays)" [ref=e90]
+              - text: Browse all source records (includes tests without model overlays)
+            - group [ref=e91]:
+              - generic "Compare your own measurements" [ref=e92] [cursor=pointer]
+          - status [ref=e93]:
+            - generic [ref=e94]: Preparing live response
+            - generic [ref=e96]: Double precision · compression positive
+          - generic "Simulation results" [ref=e97]:
+            - generic [ref=e98]:
+              - heading "Stress–strain response" [level=2] [ref=e100]
+              - img "Deviator stress versus axial strain" [ref=e101]
+              - generic [ref=e102]:
+                - text: Model prediction
+                - generic [ref=e104]: ● Experiment
+            - generic [ref=e105]:
+              - heading "Effective stress path" [level=2] [ref=e107]
+              - img "Deviator stress versus effective mean stress" [ref=e108]
+              - generic [ref=e109]: Model prediction
+            - generic [ref=e111]:
+              - heading "Volumetric response" [level=2] [ref=e113]
+              - img "Volumetric versus axial strain" [ref=e114]
+              - generic [ref=e115]: Model prediction
+            - generic [ref=e117]:
+              - heading "Pore-pressure change" [level=2] [ref=e119]
+              - img "Pore-pressure change versus axial strain" [ref=e120]
+              - generic [ref=e121]: Model prediction
+              - paragraph [ref=e123]: Reconstructed only for undrained protocols
+          - generic [ref=e124]:
+            - paragraph [ref=e125]: Parameters are examples. Numerical verification does not establish experimental validity.
+            - generic [ref=e126]:
+              - button "↓ Results CSV" [disabled] [ref=e127]
+              - button "↓ Reproducible run" [disabled] [ref=e128]
+          - group [ref=e129]:
+            - generic "Equations & source provenance" [ref=e130] [cursor=pointer]

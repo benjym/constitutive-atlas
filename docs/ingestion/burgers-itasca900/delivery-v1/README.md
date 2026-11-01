@@ -25,5 +25,3 @@ All encountered development/probe failures are retained in [retained-failures.md
 ## Release boundary
 
 This is local package/interface evidence. [The mutable delivery ledger](../DELIVERY.md) records commit, terminal CI, exact upload/live asset comparison and actual live browser proof when available. E8 cannot be inferred from local evidence or an older successful deployment. Private copyrighted source originals remain outside public distribution.
-
-Final wrapper reconciliation preserves concurrent61b8635a power-creep publication and74542342 current-review description context. [Reconcile-v4](reconcile-v4/README.md) is the final package/browser source; [separate additive review](../../../reviews/burgers-browser-reconcile-v2/README.md) accepted exact coexistence. Earlier scoped package/review identities remain retained.

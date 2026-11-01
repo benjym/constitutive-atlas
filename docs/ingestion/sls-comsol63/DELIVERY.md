@@ -19,13 +19,13 @@ Current scope is interactive SLS inclusion in the **general atlas laboratory**. 
 - [X] **E5 — Agent approval:** accepted exact-hash nine-item independent checklist, no blockers; approval equals registry member. Experimental validation remains unassessed.
 - [X] **E6 — Atlas:** main selector/catalogue/controller routing and normal generation qualified in the composed release source. Committed generic SQLite exporter now retains exact SLS definition, three source rows, one approval and accepted review, with no foreign-key violations ([current check](main-atlas-v1/database-current.json)). Shared owner handoff5ae90008 is complete; exact additive source is retained in main-atlas-v1/proposed-source/. Scoped commit is E8.
 - [X] **E7 — Packaged website:** embedded controls, all12state/6stress values, physical-time protocols, exact replay checks and guarded dedicated common Wasm implemented. Component324reference comparisons and contract/router tests pass. Actual full-atlas browser qualification passes all three protocols, custom full state, replay twice, tamper rejection, invalid recovery, latest-request cancellation, ordinary/Burgers/SLS switching, source/equations links, desktop/narrow layout and final catalogue→Explore navigation. The unsupported initialization-hook failure and supported-hook correction remain preserved. [Separate final interface review](../../reviews/sls-main-atlas-v1/decision.json) accepted exactv3 with no blockers.
-- [-] **E8 — Live delivery:** new scoped commit/push, terminal exact CI/Pages success, tested-upload/live identity comparisons and actual live main-atlas run remain required.
+- [X] **E8 — Live delivery:** application302f2adc committed and pushed; all five jobs in exact CI41294652646 passed, including Pages deployment7471552199. Actual tested upload and21live assets match byte-for-byte. Actual published main-atlas browser run passes108reference comparisons,15upload-asset checks, source/review/approval links, plots/full state, clean console and1280/390layout. [Release receipt](main-atlas-v1/release-v1/README.md); [live browser evidence](main-atlas-live-v1/README.md).
 
 ## Current handoff
 
-- State: working on general-atlas E8; lead/integration owner /root.
+- State: E0–E8 complete; all53checklist criteria passed for the bounded approved formulation; lead/integration owner /root.
 - Shared dependency: handed off in5ae90008; SLS preserves all unrelated concurrent changes.
-- Next action: commit/push reviewed owned paths, then verify exact CI/upload/live main-atlas run.
+- Handoff: completed general-atlas delivery; final receipt-only commit records the verified application revision without changing its production files.
 - Limitations: exact passivity requires traceless branch stress; admitted trace roundoff is numerical; illustrative parameters; broad parameter envelope, finite strain/spin, calibration and experimental validation unqualified.
 - Retained failures: original CLI observer fixture, original release cancellations/legacy replay fixture failure, imported-result/same-file defects and full-browser unsupported Wasm initialization. Corrections have distinct receipts; no numerical gate was relaxed.
 
@@ -38,6 +38,7 @@ Current scope is interactive SLS inclusion in the **general atlas laboratory**. 
 | E5 | docs/admission/sls-comsol63-approved-v1/check.py; independent review | Exact approval/source/evidence checks pass |
 | Retrospective audit | checklist-audit-v1/CHECKLIST.md and manifest |53criteria mapped;265original bindings preserved; scope clarification additive |
 | Current E6–E7 | main-atlas-v1/ | Prospective composed freezes, complete package and actual main-browser receipts |
+| Current E8 | main-atlas-v1/release-v1/ and main-atlas-live-v1/ | Exact302f2adc all-five-job CI/Pages, tested upload/live identity and actual live browser pass |
 | Historical E6–E8 | docs/reviews/sls-atlas-integration-v1/, sls-web-v1/, sls-release-v1/, sls-live-v1/ | Historical standalone release only |
 
 ## Review and integration identity
@@ -46,9 +47,17 @@ Current scope is interactive SLS inclusion in the **general atlas laboratory**. 
 - Approval: `docs/admission/sls-comsol63-approved-v1/approval.json`; SHA256 `763c29f59b7156094fd15f9edb73b24b2de70c44e748704c8612a5d42170399b`; exact registry member in `catalogue/approved-models.json`.
 - Native/Wasm toolchains, binaries/source closure and settings: execution-v1/build-input-receipt.json, binary-receipt.json and manifests. Serial explicit targets; no rebuild needed for this saved-evidence audit.
 - Packaged SLS catalogue hash: `11dd07e8b896a71bdc72ce4ff93aba664916af583c703fd6b8671a0727a6ff6e`; CI/live Wasm SHA256 `1f39471279e8eb01b45f036ef73062c42ab9e3c039bb1ff48e04c7945e7b8e6c`.
-- Reviewed model bytes unchanged. Browser delivery was separately qualified; later packaging removal changes availability, not the governing equations. Original unused helper archive-context delta remains explicit.
+- Reviewed model bytes unchanged. General-atlas browser delivery was separately qualified at302f2adc; historical standalone removal remains in place. Original unused helper archive-context delta remains explicit.
 
-## Deployment receipt and retained history
+## Current deployment
+
+- [Live general atlas SLS laboratory](https://benjym.github.io/constitutive-atlas/#laboratory?model=sls-comsol63-deviatoric-zero-spin-ode).
+- Application revision `302f2adc06d39b634e1865899e24ff088cc32f72`; [all-five-job successful CI41294652646](https://github.com/benjym/constitutive-atlas/actions/runs/41294652646).
+- Pages deployment7471552199/status21101638675 succeeded for that exact revision; upload artifact13079515310. Public assets match the actual tested upload. Standalone `/sls.html` returns404.
+- Actual live Chrome156 run at2026-11-01T10:11:55UTC passed108full-state/stress reference scalars. Parent inspected narrow-screen results and verified frozen local/live packet hashes.
+- Receipt-only commits do not replace the qualified application revision or its exact CI/deployment evidence.
+
+## Historical deployment receipts
 
 - Implementation commit `9a27359b38671e07150c717934c1248798d0aa65`, pushed.
 - Original run41287314779 cancelled; combinedd5 run41287657999 failed legacy GIS/Tresca recorded-path fixture calls, deployment skipped. Neither is counted as passing. Original logs and prospective replacement plans remain unchanged.
@@ -59,4 +68,4 @@ Current scope is interactive SLS inclusion in the **general atlas laboratory**. 
 
 ## Completion statement
 
-Source complete; exact common-engine native/Wasm model independently qualified and approved. Current main-atlas integration and packaged/live delivery remain in progress until the current E6–E8 evidence above is complete. No experimental validation is claimed.
+Source complete; exact common-engine native/Wasm model independently qualified and approved. General-atlas integration, packaged browser and actual live delivery are complete: E0–E8 and all53criteria pass for the documented bounded scope. No experimental validation is claimed.

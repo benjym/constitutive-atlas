@@ -1,0 +1,78 @@
+{
+  "id": "REVIEW-database-approval-integrity-v1",
+  "checks": [
+    {
+      "id": "focused_tests",
+      "result": "pass",
+      "detail": {
+        "tests": 9,
+        "skipped": 0
+      }
+    },
+    {
+      "id": "independent_discriminator_probes",
+      "result": "pass",
+      "detail": [
+        {
+          "variant": "change_kind",
+          "rejected": true,
+          "reason": "Agent approval requires an agent-model-review record"
+        },
+        {
+          "variant": "remove_kind",
+          "rejected": true,
+          "reason": "Agent approval requires an agent-model-review record"
+        },
+        {
+          "variant": "remove_review",
+          "rejected": true,
+          "reason": "Agent approval requires an agent-model-review record"
+        }
+      ]
+    },
+    {
+      "id": "archive_preservation",
+      "result": "pass",
+      "detail": {
+        "old_source": "2668e732edb0298d6e9efa096def78bf58a28d12f739dfe9732f32d03009dadc",
+        "old_checklist": "3436962d01128c5edad02ecb2d3334483370ec6bce8d3f1eae54beb92125af77",
+        "all_prior_dirty_map_entries_and_documents_preserved": true,
+        "owned_projection": {
+          "documents": {
+            "catalogue/agent-reviews/drucker-prager-agent-v1.json": "6af74fadcea351006571f4e0559e2c19ee2d46ad787e0941d8484ccbaacce8ee",
+            "catalogue/agent-reviews/burgers-agent-v2.json": "8166bcdfb15847601cb7e03a6b82377db0a16598923936617838f1a1ea1423ce"
+          },
+          "entries": [
+            {
+              "original_path": "docs/MODEL_DELIVERY_CHECKLIST.md",
+              "sha256": "3436962d01128c5edad02ecb2d3334483370ec6bce8d3f1eae54beb92125af77",
+              "archived_path": "catalogue/source-snapshots/3436962d01128c5edad02ecb2d3334483370ec6bce8d3f1eae54beb92125af77/docs/MODEL_DELIVERY_CHECKLIST.md"
+            }
+          ]
+        },
+        "other_working_entries_not_approved_for_staging": true
+      }
+    },
+    {
+      "id": "current_working_database",
+      "result": "pass",
+      "detail": {
+        "ordinary_executable_definitions": 13,
+        "approved_records": 13,
+        "agent_reviews": 9,
+        "distinct_user_authority_records": 4,
+        "exact_records_and_generated_fields": true,
+        "idempotent": true,
+        "working_registry_sha256": "c3cdebd696c91c6e08bfc1ce9927f0474005a598b9ef13104e30d039fb90c48f",
+        "working_source_map_sha256": "d0b6eec7a4ce2418b5ae48085c40bf82ffecdc297267e5c268731383dbd87c87",
+        "not_staged_or_release_proof": true
+      }
+    }
+  ],
+  "test_log": "test_accepted_label_and_matching_hash_cannot_bypass_review_semantics (tests.test_database_approval_integrity.DatabaseApprovalIntegrity.test_accepted_label_and_matching_hash_cannot_bypass_review_semantics) ... ok\ntest_agent_authority_cannot_bypass_review_validation_by_changing_kind (tests.test_database_approval_integrity.DatabaseApprovalIntegrity.test_agent_authority_cannot_bypass_review_validation_by_changing_kind) ... ok\ntest_corrupt_evidence_and_stale_review_hash_reject (tests.test_database_approval_integrity.DatabaseApprovalIntegrity.test_corrupt_evidence_and_stale_review_hash_reject) ... ok\ntest_failed_reexport_preserves_existing_database (tests.test_database_approval_integrity.DatabaseApprovalIntegrity.test_failed_reexport_preserves_existing_database) ... ok\ntest_project_metadata_can_extend_an_exact_approval (tests.test_database_approval_integrity.DatabaseApprovalIntegrity.test_project_metadata_can_extend_an_exact_approval) ... ok\ntest_registry_claims_must_match_generated_approval (tests.test_database_approval_integrity.DatabaseApprovalIntegrity.test_registry_claims_must_match_generated_approval) ... ok\ntest_valid_export_preserves_exact_provenance_sources_and_membership (tests.test_database_approval_integrity.DatabaseApprovalIntegrity.test_valid_export_preserves_exact_provenance_sources_and_membership) ... ok\ntest_current_database_retains_timed_definition_review_and_source (tests.test_approved_export.ApprovedExport.test_current_database_retains_timed_definition_review_and_source) ... ok\ntest_stale_identity_path_escape_and_conflicting_approval_rejected (tests.test_approved_export.ApprovedExport.test_stale_identity_path_escape_and_conflicting_approval_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 0.496s\n\nOK\n",
+  "source_sha256": "279f5564d9484514f9d66db9b8a5fa4482dc534a6c9d4954b0e10001ad7b2c0a",
+  "tests_sha256": "aad4d04913a806e48cbb33160d7e7e5d9e78d83a92a35ba11df3b2d6933d43a1",
+  "new_builds": 0,
+  "new_material_calls": 0,
+  "new_fits": 0
+}
