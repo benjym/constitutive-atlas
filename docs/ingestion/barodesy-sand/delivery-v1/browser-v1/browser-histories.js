@@ -1,0 +1,18 @@
+async (page) => {
+ const base='/Users/bmar5496/code/constitutive-atlas/output/playwright/barodesy-sand-v1/';
+ const errors=[]; page.on('pageerror', e=>errors.push(String(e))); page.on('console', m=>{if(m.type()==='error')errors.push(m.text())});
+ await page.getByText('Solver settings',{exact:true}).click();
+ const wait=async()=>{await page.waitForFunction(()=>document.querySelector('#response-charts').getAttribute('aria-busy')==='false'&&!document.querySelector('#export-run').disabled);};
+ const rows=[];
+ for(const protocol of [0,1,2,3,4]) for(const cycles of [0,1]) {
+   await page.locator('#protocol').selectOption(String(protocol));
+   await page.locator('#cycles').selectOption(String(cycles));
+   await page.locator('#steps').fill(String(cycles?128:100));
+   await page.locator('#target').fill(String(protocol===3?1:(protocol===1&&!cycles?1:0.2)));
+   await wait();
+   const id=`protocol-${protocol}-${cycles?'cyclic':'monotonic'}`;
+   const d=page.waitForEvent('download'); await page.locator('#export-run').click(); await (await d).saveAs(base+id+'.json');
+   rows.push({id,status:await page.locator('#run-state').innerText(),curves:await page.locator('svg polyline').count()});
+ }
+ console.log(JSON.stringify({rows,errors}));
+}
