@@ -27,3 +27,7 @@ State: working; independent scientific acceptance and registry insertion complet
 Evidence: [review](../../reviews/drucker-prager-agent-v1/README.md), [parent integration](../../admission/drucker-prager-agent-v1/README.md), [83-case native study](../../../catalogue/investigations/dp-dilatancy-domain-v1/README.md), [historical Release-Wasm/UI evidence](../../reviews/dp-dilatancy-web-v1/README.md). Saved-response checks are not new binary execution. The original direct web verifier fails against changed root files; exact historical reconstruction reproduces its report. All older failures remain retained.
 
 Registry entry: `drucker-prager-agent-v1-approval`. Current build receipts, package/engine/catalogue identity, release commit, Actions/deployment URL and live browser evidence: pending. Experimental validation: unassessed.
+
+## Catalogue review visibility follow-up
+
+[Generic normal export and actual local browser check](../../reviews/agent-review-catalogue-v1/README.md) now shows this accepted exact review/registered scope, retained definition download and historical source-review records. E6 database/current package identity and E7/E8 remain unverified; the preview reused an existing frozen engine/package and is not the next full release qualification.

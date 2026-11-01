@@ -44,3 +44,7 @@ Use the [canonical E0–E8 checklist](../../MODEL_DELIVERY_CHECKLIST.md). These 
 Accepted canonical record SHA-256: `ff9fef9bc608fbe276d70253f68d648201e4df05a99e4b1f24023072c1652f39`. Generated entry: `docs/admission/linear-elastic-agent-v1/approval-entry.json`. [Registry insertion](../../admission/linear-elastic-registry-v1/README.md) is verified. Website export/visibility, current native/Wasm receipts, packaged catalogue/engine identity, release commit, successful Actions/deployment URL and live browser evidence remain **pending**.
 
 Experimental validation remains unassessed. This baseline is an illustrative material-point law, not an experimentally calibrated soil model.
+
+## Catalogue review visibility follow-up
+
+[Generic normal export and actual local browser check](../../reviews/agent-review-catalogue-v1/README.md) now shows this accepted exact review/registered scope, retained definition download and historical source-review records. E6 database/current package identity and E7/E8 remain unverified; the preview reused an existing frozen engine/package and is not the next full release qualification.

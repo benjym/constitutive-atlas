@@ -4,6 +4,7 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from atlas.evidence import validate_record,verify_manifest_files
 from atlas.model import ROOT
+from atlas.review_export import collect as collect_agent_reviews
 
 RESEARCH_BINDINGS=(
  ('barodesy-clay-2017','models/research/barodesy2017/body-zero-spin.json','barodesy2017-runtime-v1'),
@@ -112,8 +113,10 @@ def bundle(destination,root=ROOT,*,bindings=RESEARCH_BINDINGS):
    evidence_ids=copy.deepcopy(record['evidence_ids']),unresolved=copy.deepcopy(record['unresolved'])))
   originals[relative]=raw
   dossiers[record['dossier']]=read_bytes(root,record['dossier'])
+ agent_reviews,agent_originals,omitted_agent_reviews=collect_agent_reviews(root,by_id)
+ originals.update(agent_originals)
  omitted=sorted(p.relative_to(root).as_posix()for p in(root/'catalogue/investigations').glob('*/manifest.json')if p.relative_to(root).as_posix()not in selected)
- index={'schema_version':'0.1','kind':'catalogue-evidence-index','coverage_note':'Top-level numerical evidence envelopes are auto-discovered, including historical failed outcomes. Research coverage is restricted to explicit canonical-catalogue/definition/manifest bindings; other investigation manifests are omitted. Source-review envelopes from catalogue/reviews are separately indexed verbatim; recorded identity, status and independence are not authenticated or inferred. No latest-review selection or automatic admission is performed. Checked receipts establish retained-file integrity only: no scientific checker, binary, experimental validation or admission is rerun. Missing manifest scope/limitations are left empty; complete retained metadata is supplied in details.','coverage':{'numerical_record_directory':'catalogue/evidence','research_manifest_allowlist':sorted(selected),'omitted_investigation_manifests':omitted,'scientific_rerun':False,'source_review_directory':'catalogue/reviews'},'records':records,'reviews':reviews}
+ index={'schema_version':'0.1','kind':'catalogue-evidence-index','coverage_note':'Top-level numerical evidence envelopes are auto-discovered, including historical failed outcomes. Research coverage is restricted to explicit canonical-catalogue/definition/manifest bindings; other investigation manifests are omitted. Source-review envelopes from catalogue/reviews are separately indexed verbatim; recorded identity, status and independence are not authenticated or inferred. Independent-agent checklist records are separately indexed with exact retained definition bytes and matching explicit registry approvals; an accepted historical review never approves changed current bytes. Agent reviews without a canonical model ID are explicitly omitted. No latest-review selection or automatic admission is performed. Checked receipts establish retained-file integrity only: no scientific checker, binary, experimental validation or admission is rerun. Missing manifest scope/limitations are left empty; complete retained metadata is supplied in details.','coverage':{'numerical_record_directory':'catalogue/evidence','research_manifest_allowlist':sorted(selected),'omitted_investigation_manifests':omitted,'scientific_rerun':False,'source_review_directory':'catalogue/reviews','agent_review_directory':'catalogue/agent-reviews','omitted_agent_reviews_without_catalogue_binding':omitted_agent_reviews},'records':records,'reviews':reviews,'agent_reviews':agent_reviews}
  views={path:dossier_view(path,raw)for path,raw in dossiers.items()}
  encoded=(json.dumps(index,indent=2,allow_nan=False)+'\n').encode()
  # Replace only this exporter's private subtree; preserve builder-owned assets.

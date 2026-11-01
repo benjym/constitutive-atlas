@@ -33,6 +33,27 @@ export function validateEvidenceIndex(index){
       seen.add(r.record_path);
     }
   }
+  if(index.agent_reviews!==undefined){
+    if(!Array.isArray(index.agent_reviews))throw Error('Malformed agent reviews.');
+    const checklistIds=['source_provenance','equation_fidelity','conventions_dimensions','initialization_domain','integration_transactions','independent_numerical_evidence','backend_delivery','applicability_claims','reproducibility_rights'];
+    const nonempty=x=>typeof x==='string'&&x.length>0;
+    const strings=x=>Array.isArray(x)&&x.every(y=>typeof y==='string');
+    const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
+    for(const r of index.agent_reviews){
+      if(!r||!nonempty(r.catalogue_id)||!nonempty(r.id)||!safePath(r.record_path)||!r.record_path.startsWith('catalogue/agent-reviews/')||seen.has(r.record_path)||
+        !safePath(r.definition_path)||!r.definition_path.startsWith('models/')||!safePath(r.definition_record_path)||!r.definition_record_path.startsWith('catalogue/agent-reviews/definitions/')||
+        !hash(r.record_sha256)||!hash(r.definition_sha256)||!(r.current_definition_sha256===null||hash(r.current_definition_sha256))||
+        typeof r.definition_current!=='boolean'||r.definition_current!==(r.current_definition_sha256===r.definition_sha256)||
+        !['pending','changes-requested','accepted'].includes(r.status)||!nonempty(r.created_at)||!nonempty(r.scope)||!strings(r.limitations)||!r.limitations.length||!strings(r.blocking_findings)||
+        r.reviewer?.kind!=='agent'||!['name','run_id','independence_basis'].every(k=>nonempty(r.reviewer[k]))||
+        !(r.registered_approval_id===null||nonempty(r.registered_approval_id))||
+        !Array.isArray(r.checklist)||r.checklist.length!==9||new Set(r.checklist.map(x=>x?.id)).size!==9||
+        r.checklist.some(x=>!x||!checklistIds.includes(x.id)||!['pending','pass','fail','not-applicable'].includes(x.outcome)||!nonempty(x.reason)||!strings(x.evidence)||!x.evidence.length)||
+        (r.status==='accepted'&&(r.blocking_findings.length||r.checklist.some(x=>x.outcome!=='pass'&&!(x.id==='backend_delivery'&&x.outcome==='not-applicable'))))||
+        (r.registered_approval_id!==null&&r.status!=='accepted'))throw Error('Malformed agent review.');
+      seen.add(r.record_path);
+    }
+  }
   return index;
 }
 export function evidenceSection(document,id,index,state='loading'){
@@ -40,8 +61,24 @@ export function evidenceSection(document,id,index,state='loading'){
   const section=el('section');section.className='catalogue-evidence';section.append(el('h3','Source review and numerical evidence'));
   if(!index){section.append(el('p',state==='failed'?'Evidence could not be loaded. Availability and source links remain usable.':'Loading evidence index…'));return section;}
   const coverage=el('details'),coverageLink=el('a','Evidence index and coverage gaps');coverageLink.href='./evidence.json';coverage.append(el('summary','What this evidence covers'),el('p',index.coverage_note),el('p','Packaging checks receipt and artifact integrity. It does not rerun numerical studies, establish independent scientific review or demonstrate experimental validity.'),coverageLink);section.append(coverage);
+  section.append(el('h4','Independent agent checklist reviews'));
+  const agentReviews=(index.agent_reviews||[]).filter(r=>r.catalogue_id===id);
+  if(!agentReviews.length)section.append(el('p',index.agent_reviews===undefined?'Agent checklist reviews were not indexed in this build.':'No independent-agent checklist review is indexed for this formulation.'));
+  for(const r of agentReviews){
+    const entry=el('article');entry.className='catalogue-evidence-record';
+    entry.append(el('h4',r.id),el('p','Recorded agent-review status: '+r.status+' · '+(r.definition_current?'Matches current definition bytes':'Historical definition; current bytes differ or are unavailable')));
+    entry.append(el('p',r.reviewer.name+' · '+r.reviewer.run_id+' · '+r.created_at),el('p',r.scope));
+    if(r.registered_approval_id!==null)entry.append(el('p',r.definition_current?'Registered project approval for this exact definition and scope.':'Historical registered approval; it does not approve the current definition.'));
+    else entry.append(el('p','No matching registry approval is recorded for this review.'));
+    entry.append(el('p','Experimental validation, current build qualification and live deployment remain separate. Review identity and independence are recorded declarations; packaging does not authenticate the reviewer.'));
+    const list=el('ul');for(const limit of r.limitations)list.append(el('li',limit));for(const finding of r.blocking_findings)list.append(el('li','Blocking finding: '+finding));entry.append(list);
+    const links=el('p');links.append(Object.assign(el('a','Original agent-review record'),{href:'./evidence-records/'+r.record_path}),document.createTextNode(' · '),Object.assign(el('a','Exact reviewed definition JSON'),{href:'./evidence-records/'+r.definition_record_path}));
+    if(r.registered_approval_id!==null)links.append(document.createTextNode(' · '),Object.assign(el('a','Approval registry'),{href:'./evidence-records/catalogue/approved-models.json'}));
+    entry.append(links);
+    const metadata=el('details');metadata.append(el('summary','Checklist, independence and exact identity'),el('p',r.reviewer.independence_basis),el('p','Definition SHA-256: '+r.definition_sha256),el('p','Record SHA-256: '+r.record_sha256),el('pre',JSON.stringify(r.checklist,null,2)));entry.append(metadata);section.append(entry);
+  }
   section.append(el('h4','Recorded source reviews'));
-  section.append(el('p','Review records describe the definition and questions at the time they were written. All retained revisions are shown; later records may document progress. A matching model definition does not imply acceptance of its numerical implementation or scientific use.'));
+  section.append(el('p','Legacy source-review records retain the status and questions recorded at creation. All retained revisions are shown; later agent checklist decisions above may resolve earlier questions within their stated scope. A matching model definition alone does not imply acceptance of its numerical implementation or scientific use.'));
   const reviews=(index.reviews||[]).filter(r=>r.catalogue_id===id);
   if(!reviews.length)section.append(el('p',index.reviews===undefined?'Source reviews were not indexed in this build.':'No formal source-review record for this formulation is indexed. This does not mean its sources have been scientifically accepted.'));
   for(const r of reviews){
@@ -49,7 +86,7 @@ export function evidenceSection(document,id,index,state='loading'){
     entry.append(el('h4',r.id),el('p','Recorded source-review status: '+r.status+' · '+(r.definition_current?'Matches current definition bytes':'Historical definition; current bytes differ or are unavailable')));
     entry.append(el('p','Independence declared: '+(r.independent?'yes':'no')+' · Review date: '+(r.reviewed_at||'not recorded')));
     if(r.reviewer)entry.append(el('p','Recorded attribution: '+r.reviewer));
-    if(r.status==='pending')entry.append(el('p','Scientific decision pending. Technical checks and numerical passes do not supply acceptance.'));
+    if(r.status==='pending')entry.append(el('p','Scientific decision pending in this retained source-review record. Technical checks and numerical passes do not supply acceptance.'));
     if(r.unresolved.length){entry.append(el('p','Recorded unresolved questions'));const list=el('ul');for(const question of r.unresolved)list.append(el('li',question));entry.append(list);}
     const receipt=el('a','Original source-review record');receipt.href='./evidence-records/'+r.record_path;entry.append(receipt);
     const metadata=el('details');metadata.append(el('summary','Review identity and evidence references'),el('p','Definition SHA-256: '+r.definition_sha256),el('p','Record SHA-256: '+r.record_sha256),Object.assign(el('a','Source dossier'),{href:'./'+r.dossier+'.html',target:'_blank',rel:'noopener'}),el('pre',JSON.stringify({evidence_ids:r.evidence_ids},null,2)));entry.append(metadata);section.append(entry);
