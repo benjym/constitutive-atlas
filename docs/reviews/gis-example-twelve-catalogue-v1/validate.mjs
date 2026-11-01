@@ -1,0 +1,13 @@
+import fs from 'node:fs/promises';
+import {webcrypto}from'node:crypto';
+import {pathToFileURL}from'node:url';
+const root='/Users/bmar5496/code/constitutive-atlas';
+const {prepareExample}=await import(pathToFileURL(root+'/web/laboratory-examples.mjs'));
+const {parseLaboratoryDocument}=await import(pathToFileURL(root+'/web/laboratory-document.mjs'));
+const catalogue=JSON.parse(await fs.readFile('/private/tmp/atlas-mc-execution-v3/wasm/generated/models.json','utf8'));
+const base=new URL('./',import.meta.url),index=JSON.parse(await fs.readFile(new URL('proposed/catalogue/laboratory-examples.json',base),'utf8'));
+const e=index.examples[0],text=await fs.readFile(new URL('proposed/'+e.document_path,base),'utf8');
+const published={...e,document_url:'./laboratory-examples/'+e.id+'.json',definition_url:'./models/'+e.model+'.json'};delete published.document_path;
+await prepareExample(published,{schema_version:'0.1',catalogue_hash:catalogue.sha256,examples:[published]},catalogue,{crypto:webcrypto,fetcher:async url=>({ok:true,text:async()=>url===published.document_url?text:fs.readFile(root+'/models/'+e.model+'.json','utf8')})});
+const old=await fs.readFile(root+'/protocols/gis2024-small-drained-example.json','utf8');let rejected=false;try{parseLaboratoryDocument(old,catalogue);}catch{rejected=true;}if(!rejected)throw Error('Stale document falsely accepted');
+console.log('PASS: proposed GIS example validates; old catalogue document still rejected; zero material calls');

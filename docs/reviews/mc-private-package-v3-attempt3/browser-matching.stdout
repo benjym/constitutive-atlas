@@ -1,0 +1,6 @@
+### Result
+{"matchingEnabled":true,"voidRatioInputs":0,"status":["Live · changes update automatically.","OPARA-TXCD-100 · Clayey-silty sand (Ullmann et al.) · drained-triaxial · initial p′ 104 kPa · e₀ 0.416. 1438 measured rows. Matching measured channel pairs are overlaid. Simulation settings are unchanged. Source limitations apply; see data notes. Initial radial effective stress differs from the plotted simulation.","✓ Response up to date100 increments · 36.3 ms · Drained triaxial · effective stress"]}
+### Ran Playwright code
+```js
+await (async (page) => { await page.getByRole("combobox",{name:"Experimental test",exact:true}).selectOption({label:"OPARA-TXCD-100 · 104 kPa · e₀ 0.416"}); await page.screenshot({path:"/private/tmp/atlas-mc-private-package-v3-attempt3/mc-matching-disclosure.png",fullPage:true}); return {matchingEnabled:await page.getByRole("button",{name:"Match measured stress, density & protocol",exact:true}).isEnabled(),voidRatioInputs:await page.locator("#state-e").count(),status:await page.getByRole("status").allTextContents()}; })(page);
+```
