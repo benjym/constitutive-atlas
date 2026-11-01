@@ -1,0 +1,109 @@
+{
+  "version": "tresca-v5-technical-crosswalk-0.1",
+  "basis": "assembled pinned source packet and current code inspection; no new PDF inspection or independent scientific signature",
+  "rows": [
+    {
+      "item": "continuum identity",
+      "basis": [
+        "docs/ingestion/tresca/README.md#identity-and-sources",
+        "docs/ingestion/tresca/COORDINATOR_REVIEW.md"
+      ],
+      "candidate": [
+        "sources",
+        "family",
+        "status"
+      ],
+      "finding": "Selected BK2022v1 author preprint supplies Hooke elasticity, constant Tresca set and normal-cone flow. The discrete BE projection is project-derived; it must not be attributed to a printed source algorithm.",
+      "judgment": "technical-crosswalk-consistent; independent-review-pending"
+    },
+    {
+      "item": "signs and stress",
+      "basis": [
+        "docs/ingestion/tresca/README.md#complete-law-units-signs-and-state"
+      ],
+      "candidate": [
+        "formulation"
+      ],
+      "finding": "Host sigma=-tau, de=-delta epsilon and ep=-epsilon_p preserve centrally symmetric yield set, isotropic elasticity, normal cone and plastic work. Explicit total Cauchy, Mandel, small strain, fixed frame and objective_rate none.",
+      "judgment": "technical-crosswalk-consistent; no effective-stress reinterpretation"
+    },
+    {
+      "item": "elasticity and strength",
+      "basis": [
+        "docs/ingestion/tresca/README.md#complete-law-units-signs-and-state"
+      ],
+      "candidate": [
+        "parameters",
+        "domain"
+      ],
+      "finding": "Strict positive lambda, mu and k preserve the selected source range. p_ref is a positive numerical scale. Defaults are examples; parameters are not calibrated. Uniaxial yield width is 2k.",
+      "judgment": "technical-crosswalk-consistent; experimental-applicability-unestablished"
+    },
+    {
+      "item": "persistent state and preparation",
+      "basis": [
+        "docs/ingestion/tresca/COORDINATOR_REVIEW.md"
+      ],
+      "candidate": [
+        "state",
+        "initialization",
+        "initial_checks",
+        "solution_constraints"
+      ],
+      "finding": "Both sigma6 and ep6 are required explicitly. Compatible initial total strain is implied by ep plus elastic compliance of sigma; laboratory strain is change from preparation. No clock, density, creep or reversal reset exists.",
+      "judgment": "full-state-preserved; physical-preparation-review-pending"
+    },
+    {
+      "item": "equivalent residual rows",
+      "basis": [
+        "docs/reviews/tresca-pressure-split-v1/README.md",
+        "catalogue/investigations/tresca-certified-corners-v5/assessment.json"
+      ],
+      "candidate": [
+        "derived",
+        "equations"
+      ],
+      "finding": "New ep residual subtracts C^-1 times the stress residual from the original ep row. The block row transformation is invertible, preserves physical roots, and changes off-root current-state derivatives. Pressure-preserved returned stress permits the split deviator formula. Transformed independent references cover all 38 columns.",
+      "judgment": "source-equivalent-project-numerics; not-identical-off-root-source-rows"
+    },
+    {
+      "item": "strict branches and tangents",
+      "basis": [
+        "docs/reviews/certified-centered-middle-v1/PROOF.md",
+        "catalogue/investigations/tresca-reversal-diagnostic-v1/README.md",
+        "catalogue/investigations/tresca-certified-corners-v5/README.md"
+      ],
+      "candidate": [
+        "derived"
+      ],
+      "finding": "Certified predicates preserve source strict corner inequalities; true face/corner equality remains face, true yield equality elastic. AD is a selected branch extension, not a unique tangent at nonsmooth boundaries. Selected projectors must remain isolated.",
+      "judgment": "numerically-qualified-with-stated-boundary-limits"
+    },
+    {
+      "item": "mathematical residual domain versus physical states",
+      "basis": [
+        "docs/SOLUTION_CONSTRAINTS.md",
+        "catalogue/investigations/tresca-solution-constraints-v4/README.md"
+      ],
+      "candidate": [
+        "domain",
+        "solution_constraints"
+      ],
+      "finding": "Raw residual extensions remain evaluable outside the solution set where defined; physical initialization, feasible iterates and commits enforce strict exact yield membership. Failing integration retains the full parent.",
+      "judgment": "explicit-separate-contracts; mixed-catalogue-regression-required"
+    },
+    {
+      "item": "browser/experiment interpretation",
+      "basis": [
+        "catalogue/investigations/tresca-certified-corners-v5/assessment.json",
+        "web/experiments.mjs",
+        "web/laboratory-scope.mjs"
+      ],
+      "candidate": [
+        "formulation.stress"
+      ],
+      "finding": "Scoped total-stress API gives unavailable/null pore pressure; legacy effective routes reject. The existing experiment overlay is effective-only. Public integration must retain scope labels and block incompatible overlays; Node-Wasm qualification is not rendered-browser evidence.",
+      "judgment": "local-draft-integration-conditional-on-package-and-browser-gates"
+    }
+  ]
+}
