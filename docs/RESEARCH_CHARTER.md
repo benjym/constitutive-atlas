@@ -21,7 +21,9 @@ The eventual paper asks whether a shared declarative representation can faithful
 
 Use stable IDs for formulations. Parameter sets, implementations and algorithm choices are related records, not new model families. Corrections and extensions reference a parent. A failure criterion without a flow rule, stiffness and evolution law is not counted as a complete constitutive model.
 
-Statuses: `candidate` (discovery only), `draft` (incomplete or unreviewed transcription), `transcribed` (executable with source locators), `numerically-tested` (named numerical evidence recorded), and `reviewed` (independent equation/numerical review signed). Experimental validation is a separate per-model/per-protocol evidence claim. The software does not promote a model because tests happened to pass.
+Statuses: `candidate` (discovery only), `draft` (incomplete or unreviewed transcription), `transcribed` (executable with source locators), `numerically-tested` (named numerical evidence recorded), and `reviewed` (independent agent equation/numerical review accepted against the project checklist). Experimental validation is a separate per-model/per-protocol evidence claim. The software does not promote a model because tests happened to pass.
+
+Approval follows [the independent agent checklist](AGENT_REVIEW_POLICY.md); no human scientific signature or further user sign-off is required. Record actual separate-agent identity, exact model bytes, supported scope and resolved blocking findings. Existing historical reviews and approvals retain their original identities.
 
 Each equation must identify its source location and any sign conversion, regularization, correction or ambiguity. Current model files group related equations under section/image locators; equation-by-equation original-paper review remains a release gate.
 

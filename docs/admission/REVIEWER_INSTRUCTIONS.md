@@ -5,13 +5,15 @@ package. The coordinator supplies a task ID, input packages, decision IDs, owned
 output directory and any explicit execution authorization. Review the actual
 evidence; the package author's proposed disposition is a hypothesis to test.
 
+Current approval authority is [independent agent checklist v1](../AGENT_REVIEW_POLICY.md). A completed separate-agent checklist is sufficient for model approval; human scientific sign-off and further user approval are not required. This supersedes earlier instructions that kept an agent review outside the admission gate. Preserve exact model/scope binding and resolve blocking findings.
+
 ## Role and independence
 
 - Start from a fresh context where practical. State reviewer identity, date, agent
-  or human status, prior involvement and the basis and limits of independence.
+  run identity, prior involvement and the basis and limits of independence.
 - An agent can independently challenge another agent's work. Label the result
   **AI technical review**, without inventing human credentials or a scientific
-  signature. Repository scientific admission and release gates remain separate.
+  signature. An accepted checklist permits bounded project admission. Deployment and experimental validation remain separate.
 - Assess the exact named formulation and bounded use, not the reputation of its
   model family. Separate source fidelity, executable support, numerical evidence,
   experimental applicability and release qualification.
@@ -82,7 +84,7 @@ record receipts, hashes and locators instead of copying source PDFs into the rep
 
 ## Deliverables
 
-Create a new review output; never fill or overwrite the unsigned input template.
+Create a new review output; never overwrite a historical input template. Include `agent-review.json` using [the current template](../AGENT_REVIEW_TEMPLATE.json): assess all nine checklist items, name hashed artifacts and exact model bytes, and record the actual separate-agent run. An accepted record must pass `python3 -B -m atlas.agent_review RECORD --for-approval`.
 
 - `README.md`: review scope, identity/independence, verdict per model, findings
   ordered by severity, evidence limits, checks and smallest next actions.
@@ -96,8 +98,7 @@ Create a new review output; never fill or overwrite the unsigned input template.
 - Check logs or independently derived results, if performed, with reproducible
   commands and output identities. A skipped check must remain a skipped check.
 
-Do not create a canonical signed review, promote a model or declare a release.
+Submit the actual agent checklist decision for coordinator integration; do not modify the model or approval registry directly or declare a release.
 Return the task ID, exact files, checks, findings, unresolved issues and smallest
 next action to the coordinator. Only the coordinator integrates the review and
-marks its delivery task complete. Scientific admission remains governed by the
-research charter and the separately agreed review/release procedure.
+marks its delivery task complete. An accepted agent checklist permits bounded model approval under the research charter; no additional human scientific sign-off is needed. Release authorization remains separate.

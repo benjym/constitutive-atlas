@@ -6,6 +6,10 @@ This is the implementation and research plan for the [repository](https://github
 
 Live model-ingestion assignments are tracked in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). Agents must read [AGENTS.md](AGENTS.md) before starting; the coordinator records exclusive ownership before dispatch.
 
+## Current approval rule — 1 November 2026
+
+The user has replaced human scientific sign-off with [independent agent review against checklist v1](docs/AGENT_REVIEW_POLICY.md). A separate agent's accepted, exact-definition checklist is sufficient for model approval and the review requirements of every milestone below; no human signature or further user approval is required. Resolve in-scope blocking findings, retain limitations and independently check source/numerical claims. Historical review packets remain unchanged. Experimental validation and software delivery remain separate gates. Existing review tasks now target this agent pathway.
+
 ## 1. Destination and immediate priority
 
 The project has three final products:
@@ -33,7 +37,7 @@ twenty-formulation release target. Historical delivery notes are not new assignm
 
 The immediate scientific deliverable remains a qualified model-to-experiment
 comparison. The [KFS scientific-review handoff](docs/benchmarks/kfs-development-review-v1/README.md)
-is assembled and unsigned; no reviewer is assigned. Original VW96 technical
+is assembled; an independent checklist review agent remains to be assigned. Original VW96 technical
 reading and baseline source/initialization reconciliations are complete to their
 recorded scopes. Independent judgment, historical coordinate/preparation issues
 and public data-reuse permission remain open. Do not repeat the technical review
@@ -154,10 +158,10 @@ now adds a full original-paper second-agent technical audit, 21 exact algebra
 checks and a complete explicit-state v0.3 crosswalk. Nine source-contract/init
 checks pass and the 576-case Python rate report reproduces exactly. The root
 remains unchanged/draft; general-host review, numerical-policy assessment,
-complete original preparation and independent signed scientific admission remain
+complete original preparation and independent agent checklist admission remain
 open. This completes a scoped source/gap-report task, not REV-05 or M1.
 
-**Acceptance:** all five dossiers and evidence records are complete, with review independent of the original transcription. If no suitable independent reference exists, document the gap and keep that model below the reviewed gate. Existing IGS draft status is not promoted solely because CI passes.
+**Acceptance:** all five dossiers and evidence records are complete, with agent checklist review independent of the original transcription. If no suitable independent reference exists, document the gap and keep that model below the reviewed gate. Existing IGS draft status is not promoted solely because CI passes.
 
 ## 7. M2 — SANISAND-2004 and the six-model proof
 

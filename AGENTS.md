@@ -12,6 +12,10 @@ Use [model-v0.3.schema.json](schemas/model-v0.3.schema.json) and [FORMULATION_CO
 
 Another agent owns migration of existing records. Do not migrate existing model JSON, rewrite hash-pinned evidence, or modify the shared schema/compiler as part of ingestion. Historical packets and receipts retain their original identities; new crosswalks target v0.3. Read the current schema and contract before starting because this version is being integrated concurrently.
 
+## Agent review and model approval
+
+Follow [AGENT_REVIEW_POLICY.md](docs/AGENT_REVIEW_POLICY.md). A separate agent run reviews the exact model/source/numerical evidence against checklist v1. An accepted, hash-bound checklist permits coordinator integration into the approval registry without human scientific review, signatures or another user approval. Do not self-review, invent reviewer decisions, waive blocking findings or infer experimental validation from approval. Existing pending records are historical; create a new agent-review record rather than rewriting them. The coordinator may dispatch an explicitly scoped independent review to a separate agent when this approval step is needed.
+
 ## Claiming and coordination
 
 1. Ask the coordinator to claim one unstarted task. The coordinator alone edits the shared board: set `[ ]` to `[-]`, record owner, date, scope and output directory **before dispatch**. Re-read the board before starting. A queued owner starts after handing off prior work; do not run two unrelated assignments simultaneously in one worker.
