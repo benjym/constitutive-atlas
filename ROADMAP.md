@@ -1,6 +1,6 @@
 # Constitutive Atlas roadmap
 
-Current Burgers delivery: the exact restricted continuous dry zero-spin timed formulation is source-mapped and independently approved, with fresh bounded native/Wasm qualification and main-laboratory creep/relaxation controls. It remains separate from the twelve ordinary strain-path formulations and does not claim experimental validation. Local package/browser evidence and remaining CI/live gates are tracked in [the Burgers ledger](docs/ingestion/burgers-itasca900/DELIVERY.md). Historical Burgers packets retain their original scope/metadata.
+Current Burgers delivery: the exact restricted continuous dry zero-spin timed formulation is source-mapped and independently approved, with fresh bounded native/Wasm qualification and main-laboratory creep/relaxation controls. It remains separate from the twelve ordinary strain-path formulations and does not claim experimental validation. Released5ae90008 passed all five required CI/deploy jobs;44live assets match the tested upload and actual relaxation/creep/full-result replay, source links and mobile layout pass. Exact dated receipts are tracked in [the Burgers ledger](docs/ingestion/burgers-itasca900/DELIVERY.md). Historical Burgers packets retain their original scope/metadata.
 
 Last updated: 1 November 2026. Maintainers: [Benjy Marks](https://github.com/benjym) and [François Guillard](https://github.com/Franzzzzzzzz).
 
