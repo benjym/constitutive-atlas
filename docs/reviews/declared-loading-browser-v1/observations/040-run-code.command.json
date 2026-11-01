@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "/Users/bmar5496/.codex/skills/playwright/scripts/playwright_cli.sh",
+    "--session",
+    "atlas-loading-rollout",
+    "run-code",
+    "async(page)=>{\n await page.waitForFunction(()=>document.querySelector('#catalogue-dialog').open&&document.querySelector('#catalogue-detail-body').textContent.includes('Recorded source-review status: pending'));\n const body=page.locator('#catalogue-detail-body');const a={title:await page.locator('#catalogue-detail-title').textContent(),text:await body.innerText(),links:await body.locator('a').evaluateAll(ls=>ls.map(l=>({text:l.textContent,href:l.href})))};\n const link=a.links.find(x=>x.text==='Original source-review record');a.review=await(await page.request.get(link.href)).json();\n if(a.review.status!=='pending'||a.review.independent||a.review.reviewer||!a.text.includes('Retained numerical evidence')||!a.text.includes('Pair assessment: not assessed.'))throw Error('Disclosure regression');\n const s=page.waitForEvent('download');await page.evaluate(a=>{let l=document.createElement('a');l.href=URL.createObjectURL(new Blob([JSON.stringify(a,null,2)],{type:'application/json'}));l.download='disclosure-audit.json';l.click()},a);await(await s).saveAs('output/playwright/loading-rollout/disclosure-audit.json');return{pending_unsigned:true,numerical_evidence_visible:true,pair_unassessed:true};\n}\n"
+  ],
+  "exit_code": 0
+}

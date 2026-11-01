@@ -1,0 +1,9 @@
+### Result
+{"worker_requests":2,"target":"1","steps":"100"}
+### Ran Playwright code
+```js
+await (async(page)=>{
+ return await page.evaluate(()=>{window.__previewBefore={inputs:Object.fromEntries([...document.querySelectorAll('#controls input[id],#controls select[id]')].filter(x=>x.id!=='named-example').map(x=>[x.id,x.value])),worker_requests:window.__wires.filter(x=>x.direction==='request').length};return {worker_requests:window.__previewBefore.worker_requests,target:window.__previewBefore.inputs.target,steps:window.__previewBefore.inputs.steps};});
+}
+)(page);
+```

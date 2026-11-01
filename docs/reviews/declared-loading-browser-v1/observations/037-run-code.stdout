@@ -1,0 +1,15 @@
+### Result
+{"points":101,"matching_disabled":true,"u_unavailable":true}
+### Ran Playwright code
+```js
+await (async(page)=>{
+ await page.waitForFunction(()=>!document.querySelector('#export-run').disabled&&window.__wires.filter(x=>x.direction==='response').at(-1)?.data.result?.points?.length===101);
+ const a=await page.evaluate(()=>{let r=window.__wires.filter(x=>x.direction==='response').at(-1);return{request:window.__wires.find(x=>x.direction==='request'&&x.data.id===r.data.id).data,result:r.data.result,wires:window.__wires,matching_disabled:document.querySelector('#match-experiment').disabled,text:document.querySelector('#controls').innerText}});
+ if(a.result.points.some(p=>p.u!==null)||!a.matching_disabled)throw Error('Total stress disclosure failure');
+ const s=page.waitForEvent('download');await page.evaluate(a=>{let l=document.createElement('a');l.href=URL.createObjectURL(new Blob([JSON.stringify(a,null,2)],{type:'application/json'}));l.download='tresca-audit.json';l.click()},a);await(await s).saveAs('output/playwright/loading-rollout/tresca-audit.json');return{points:a.result.points.length,matching_disabled:a.matching_disabled,u_unavailable:true};
+}
+)(page);
+```
+### Events
+- Downloading file tresca-audit.json ...
+- Downloaded file tresca-audit.json to ".playwright-cli/tresca-audit.json"
