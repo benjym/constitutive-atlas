@@ -1,0 +1,28 @@
+### Result
+{"ok":true,"invalid_import_recovery":true,"custom_material_state_time":true,"latest_request":true,"asset_hash_rejection_recovery":true}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.reload();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ await page.locator('#timed-file').setInputFiles('output/playwright/burgers-invalid-import.json');await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Import rejected:'));
+ if(!(await page.locator('#timed-export').isDisabled()))throw Error('Rejected import kept stale result');
+ await page.locator('#timed-file').setInputFiles('output/playwright/burgers-default.json');await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ await page.locator('#timed-controls details').nth(0).locator('summary').click();await page.locator('#timed-parameters').fill('[11000000,6000000,2000000,6000000,4000000]');
+ await page.locator('#timed-controls details').nth(1).locator('summary').click();await page.locator('#timed-initial').fill('[140000,80000,80000,12000,-8000,4000,0,0,0,0,0,0]');await page.locator('#timed-duration').fill('1');await page.locator('#timed-samples').fill('4');
+ await page.locator('#timed-run').click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ const custom=page.waitForEvent('download');await page.locator('#timed-export').click();await(await custom).saveAs('output/playwright/burgers-custom.json');
+ await page.locator('#timed-duration').fill('100');await page.locator('#timed-run').click();await page.locator('#timed-duration').fill('0.5');await page.locator('#timed-run').click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ if(!(await page.locator('#timed-summary').textContent()).includes('0.5 s'))throw Error('Older worker overwrote latest request');
+ await page.route('**/engine-burgers/burgers.wasm',r=>r.fulfill({body:Buffer.from('corrupt wasm')}));await page.locator('#timed-run').click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Run failed:'));
+ if(!(await page.locator('#timed-status').textContent()).includes('hash mismatch'))throw Error('Asset corruption not identified');
+ await page.unroute('**/engine-burgers/burgers.wasm');await page.locator('#timed-run').click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ await page.locator('#model').selectOption('linear-elastic');
+ return {ok:true,invalid_import_recovery:true,custom_material_state_time:true,latest_request:true,asset_hash_rejection_recovery:true};
+})(page);
+```
+### Page
+- Page URL: http://127.0.0.1:8976/site/index.html#laboratory
+- Page Title: Constitutive Atlas · Model testing
+### Events
+- Downloading file burgers-relaxation.json ...
+- Downloaded file burgers-relaxation.json to ".playwright-cli/burgers-relaxation.json"

@@ -31,6 +31,12 @@ jobs:
           cmake -S cmake/sls -B build-sls -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls --target atlas_sls_solver --parallel 1
           python tools/test_sls_native.py --solver build-sls/atlas_sls_solver --output "$RUNNER_TEMP/sls-native.json"
+      - name: Build and qualify Burgers physical-time schedules
+        run: |
+          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+          node --test tests/test_burgers_web_contract.mjs
       - name: Native checks and full exact archival replay
         if: runner.os == 'macOS'
         run: ctest --test-dir build --output-on-failure
@@ -129,6 +135,12 @@ jobs:
           python tools/fetch_data.py --approved-only
           emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+          emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
@@ -175,6 +187,12 @@ jobs:
           python tools/fetch_data.py --approved-only
           emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+          cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+          emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+          python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
           python tools/build_web.py
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs

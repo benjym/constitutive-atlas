@@ -1,0 +1,23 @@
+# Burgers delivery checklist audit v1
+
+Audited 1 November 2026 by coordinating parent `/root`, against the newly added E0–E8 checklist. This is a retrospective delivery audit, not a new scientific approval or execution campaign. The audit scope is the exact agreed restricted continuous dry zero-spin formulation, not the whole Burgers family or vendor centered algorithm.
+
+## Findings
+
+1. **High — E6/E7/E8 public interactive delivery is unfinished.** The research definition and approval exist, but ordinary public catalogue discovery/routing and the Burgers browser engine/controls are absent. The release's `tools/build_web.py`, web sources, catalogue manifest and workflow contain no Burgers integration. `docs/BURGERS_TIMED.md` explicitly excludes it from the strain-path catalogue and public packaging. The static definition is publicly served, but there is no model-specific packaged/live browser run, import/export/recovery qualification or engine/catalogue/upload identity comparison. Successful site deployment does not close this gap.
+2. **Medium — E5 has no new-policy nine-item record.** An actual separate agent approved the exact bounded scope, and the explicit-user approval remains valid under the policy's grandfathering rule. No Burgers record exists under `catalogue/agent-reviews/`. Reconcile the original review into a new, separately reviewed nine-item hash-bound record; do missing review work rather than fabricating decisions. Do not rewrite the historical approval or infer loss of its recorded validity.
+3. **Medium — E4 regression delivery is partial.** Historical native/Wasm qualification and saved evidence regressions pass, but this release's workflow does not explicitly build/execute `atlas_burgers_solver`. Fresh CI qualification of the public Burgers package/interface must be added with the browser integration. Passing existing suite jobs is not evidence that this new timed target was compiled there.
+4. **Low — delivery tracking was missing.** Added `../DELIVERY.md` and an open umbrella board row. Original specialist tasks remain completed for their recorded scopes; they never established E6–E8 delivery.
+5. **Low — original scientific follow-ups remain.** Separately gate Kelvin-strain refinement in a new assessor identity (the actual saved Kelvin errors improve), and revise stale embedded pre-integration metadata only with archive/review rebinding. Neither finding establishes an equation error. Preserve historical bytes.
+
+## Rechecked evidence
+
+The exact released source revision is `f18db8e75d27cf182f2c03dfcd6534b7f51d5a86`. It was extracted with `git archive` into `/private/tmp/burgers-checklist-release-audit`, avoiding unrelated active changes in the shared checkout. [Checks](checks.json) record commands, exit codes and hashed raw outputs. All five commands pass: 515 portable source cases; 44 saved calls and 88 analytical schedule points per backend plus 6,168 parity scalars; separate-review replay (1,584 independent reference scalars and 100 rational cases); eight focused tests; approval integrity including 47 retained bindings, three durably retained private-source hashes and five corruption rejections. The approval checker writes only its extracted temporary copy. These are saved-data/interpreter replays, with zero new compiled calls or builds.
+
+[Release receipt](release-run.json) was fetched again from GitHub: all five jobs succeeded for that exact revision, including deployment. This proves that release, not the current dirty checkout or any subsequent Pages revision. A fresh HTTP fetch of the live model definition matches SHA-256 `1452a27d5d3b50989ca66df5beb7f08e22434596800133983339466d3571933c`; see [asset receipt](live-asset.json). No live interactive Burgers run was possible from the implemented delivery. Current latest Pages revision, full upload/live asset equivalence and browser behavior are not claimed by this audit.
+
+No existing model, hash-pinned evidence, source receipt, runtime or web implementation was changed. No push, deployment or scientific approval was performed in this audit. Reproduction uses the exact source revision and the commands in checks.json; private-source verification requires the retained local originals referenced by the admission receipt. Raw copyrighted originals remain private.
+
+## Next action
+
+Coordinator assigns public physical-time Burgers routing/package ownership and a separate reviewer for E5 reconciliation. Reuse the frozen cases and existing common timed engine; no handwritten law kernel or replacement source campaign. Qualify the actual exposed preset/control/transaction behavior, then compare tested upload and live assets and run Burgers in the live browser. Keep the umbrella open through those gates.

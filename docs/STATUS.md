@@ -1,5 +1,7 @@
 # Current project status — 1 November 2026
 
+Current Burgers delivery: the exact restricted continuous dry zero-spin timed formulation is source-mapped and independently approved, with fresh bounded native/Wasm qualification and main-laboratory creep/relaxation controls. It remains separate from the twelve ordinary strain-path formulations and does not claim experimental validation. Local package/browser evidence and remaining CI/live gates are tracked in [the Burgers ledger](ingestion/burgers-itasca900/DELIVERY.md). Historical Burgers packets retain their original scope/metadata.
+
 Model approval now requires [independent agent checklist review](AGENT_REVIEW_POLICY.md), without human scientific sign-off. Historical pending records remain unchanged; no model is promoted by this policy change alone.
 
 This summary describes the current local repository. The delivery history below

@@ -1,0 +1,17 @@
+### Result
+{"ok":true,"ordinary_after_switch":{"model":"linear-elastic","status":"✓ Response up to date"},"catalogue_to_main_timed":true,"mobile_no_overflow":true}
+### Ran Playwright code
+```js
+await (async page => {
+ await page.waitForFunction(()=>document.querySelector('#run-state').textContent.includes('up to date'));
+ const ordinary={model:await page.locator('#model').inputValue(),status:await page.locator('#run-state').textContent()};
+ await page.goto('http://127.0.0.1:8976/site/index.html#catalogue/burgers-itasca900-dry-zero-spin-ode');await page.waitForFunction(()=>document.querySelector('#catalogue-dialog').open);
+ if(await page.locator('#catalogue-explore').isHidden())throw Error('Missing catalogue run route');await page.locator('#catalogue-explore').click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ await page.setViewportSize({width:390,height:844});await page.screenshot({path:'output/playwright/burgers-mobile.png',fullPage:true});
+ const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);if(overflow)throw Error('Mobile horizontal overflow');
+ return {ok:true,ordinary_after_switch:ordinary,catalogue_to_main_timed:true,mobile_no_overflow:true};
+})(page);
+```
+### Page
+- Page URL: http://127.0.0.1:8976/site/index.html#laboratory?model=burgers-itasca900-dry-zero-spin-ode
+- Page Title: Constitutive Atlas · Model testing

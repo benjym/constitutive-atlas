@@ -1,0 +1,25 @@
+### Result
+{"identity":{"model":"burgers-itasca900-dry-zero-spin-ode","model_sha256":"1452a27d5d3b50989ca66df5beb7f08e22434596800133983339466d3571933c","catalogue_hash":"43b5e940e56860d9cd3875c165374fe239b29578caff36f9e98d7ce29abeb841","catalogue_file_sha256":"cc619435a6df62cee61b7abb2a521b92b4a645d9efe11189c53056b07bc986fa","module_sha256":"83d325e24de5faa51605b991bd67e7ca4f84b276aac96912318c0bfe3f5e307d","wasm_sha256":"8de94fbda3c5cbb455504797c70ed8cfc9cd1ec46ab4a5dbba6e5b17c7ab98e5","review_sha256":"8166bcdfb15847601cb7e03a6b82377db0a16598923936617838f1a1ea1423ce","approval_sha256":"6178f2462dec33a68152e037da7145c476ac8f2830bddb1b30c84a76f5935426","release_revision":"61b8635a03b4c0405199cd839716116487354f19"},"creep":"creep: 2 s; final axial strain 0.01838976, total axial stress 140000.0 Pa.","powerURL":"http://127.0.0.1:8976/reconciled-site/power-creep.html","burgersURL":"http://127.0.0.1:8976/reconciled-site/index.html#laboratory?model=burgers-itasca900-dry-zero-spin-ode","plots":0,"errors":[]}
+### Ran Playwright code
+```js
+await (async (page) => {
+const errors=[]; page.on('pageerror',e=>errors.push(String(e)));
+await page.goto('http://127.0.0.1:8976/reconciled-site/index.html#laboratory?model=burgers-itasca900-dry-zero-spin-ode');await page.locator('#timed-status').filter({hasText:'Completed 8 output intervals.'}).waitFor();
+const identity=await page.evaluate(async()=>await(await fetch('engine-burgers/identity.json')).json());
+const download=page.waitForEvent('download');await page.locator('#timed-export').click();await(await download).saveAs('output/playwright/burgers-reconciled-default.json');
+await page.locator('#timed-mode').selectOption('creep');await page.locator('#timed-run').click();await page.locator('#timed-status').filter({hasText:'Completed 8 output intervals.'}).waitFor();
+const creep=await page.locator('#timed-summary').innerText();
+await page.locator('#model').selectOption('linear-elastic');await page.locator('#run-state').filter({hasText:'Response up to date'}).waitFor();
+await page.evaluate(()=>location.hash='catalogue/power-creep-itasca900-both-active-ode');await page.locator('#catalogue-dialog').waitFor({state:'visible'});
+await page.locator('#catalogue-explore').click();await page.waitForURL('**/power-creep.html');await page.waitForTimeout(1000);
+const powerURL=page.url();await page.goto('http://127.0.0.1:8976/reconciled-site/index.html#catalogue/burgers-itasca900-dry-zero-spin-ode');await page.locator('#catalogue-explore').click();await page.locator('#timed-status').filter({hasText:'Completed 8 output intervals.'}).waitFor();
+await page.screenshot({path:'output/playwright/burgers-reconciled.png',fullPage:true});
+return {identity,creep,powerURL,burgersURL:page.url(),plots:await page.locator('#timed-stress path').count(),errors};
+})(page);
+```
+### Events
+- New console entries: .playwright-cli/console-2026-11-01T09-32-47-294Z.log#L1
+- Downloading file burgers-relaxation.json ...
+- Downloaded file burgers-relaxation.json to ".playwright-cli/burgers-relaxation.json"
+- Downloading file burgers-creep.json ...
+- Downloaded file burgers-creep.json to ".playwright-cli/burgers-creep.json"

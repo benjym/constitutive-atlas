@@ -1,0 +1,1897 @@
+{
+  "schema_version": "0.1",
+  "kind": "bounded-model-approval-registry",
+  "description": "Explicit project approvals bound to exact model bytes and supported scope. Authority, scientific-review provenance, numerical qualification and experimental validation remain separately recorded.",
+  "models": [
+    {
+      "id": "maxwell-user-approval-v1",
+      "model_id": "maxwell-itasca900-zero-spin-ode",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "explicit-user-instruction",
+        "identity": "requesting user in this conversation",
+        "instruction": "Ok let's add it as an approved model",
+        "basis": "User approval following separate-agent review and native/Wasm qualification; no human reviewer credentials or signature inferred"
+      },
+      "definition": {
+        "path": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+        "sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+        "schema_version": "0.3",
+        "embedded_status": "draft",
+        "immutable_identity_policy": "Approval is attached to exact tested bytes. Embedded historical draft metadata is preserved; the approval status is authoritative in this registry for the declared scope."
+      },
+      "scope": {
+        "law": "continuous Maxwell deviatoric viscoelasticity with elastic volumetric response",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "stress_scope": "total",
+        "material_assumption": "dry uncoupled material point",
+        "use": "bounded material-point use supported by the exact frozen qualification cases and example settings",
+        "interfaces": [
+          "native physical-time CLI",
+          "Wasm physical-time ABI",
+          "ordered timed strain/stress schedules"
+        ],
+        "build_target": "atlas_maxwell_solver",
+        "build_project": "cmake/maxwell",
+        "examples": [
+          "examples/maxwell/creep.json",
+          "examples/maxwell/relaxation.json",
+          "examples/maxwell/oedometer.json",
+          "examples/maxwell/load-hold-reverse.json"
+        ],
+        "qualification_requests": "docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json",
+        "qualification_policy": "docs/ingestion/maxwell-itasca900/integration-v1/PLAN.md"
+      },
+      "review": {
+        "kind": "fresh-context AI technical review",
+        "path": "docs/reviews/maxwell-scientific-agent-v1/README.md",
+        "decisions": "docs/reviews/maxwell-scientific-agent-v1/decisions.json",
+        "human_scientific_signature": false,
+        "bounded_source_and_saved_numerical_claims_supported": true
+      },
+      "conditions": {
+        "MW-14": "closed by exact durable private source retention; source-retention.json receipt"
+      },
+      "limitations": [
+        "Approved scope is limited to the named frozen cases/settings; broad declared parameter ranges and arbitrary solver tolerances are not qualified.",
+        "Continuous dissipation is not an unconditional numerical energy guarantee; loose permitted midpoint tolerances can admit artificial growth.",
+        "Saved schedule failure tests cover t=0 entry rollback, not failure after a nonzero-time regular sample.",
+        "No experimental calibration/prediction, FE/MPM host qualification, saturation/pore-pressure coupling or finite-rotation objectivity.",
+        "No vendor central-difference algorithm, complete vendor example/host equivalence or Jaeger first-publication reconciliation.",
+        "Browser timed-control UI and release/deployment qualification are outside this approval."
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false,
+      "dossier": "docs/models/maxwell-itasca900-zero-spin-ode.md",
+      "supporting_files": [
+        {
+          "path": "docs/reviews/maxwell-scientific-agent-v1/manifest.json",
+          "sha256": "e55730ebf317989f98c65d7d22748df055bb7200e1b4737a44a7a088c480e001"
+        },
+        {
+          "path": "docs/reviews/maxwell-scientific-agent-v1/decisions.json",
+          "sha256": "14ac0de064a017442e3ae9acecdbb563845cb5d0f7e323548e325e42073f927d"
+        },
+        {
+          "path": "docs/reviews/maxwell-scientific-agent-v1/README.md",
+          "sha256": "a579fcd214d49820f9d36f24c43eb5b215a449e98957d6791b5d193729f26403"
+        },
+        {
+          "path": "docs/reviews/maxwell-scientific-integration-v1/manifest.json",
+          "sha256": "2611606e70f2ac7a3832b655eacdef57123df6046ec9ce0ed900958888815cc4"
+        },
+        {
+          "path": "docs/ingestion/maxwell-itasca900/manifest.json",
+          "sha256": "1cd9b940c33fdd653953027a5508f53f4fd6fcf4bb391a2afe6cd47379917282"
+        },
+        {
+          "path": "docs/ingestion/maxwell-itasca900/integration-v1/manifest.json",
+          "sha256": "b16927df3cb743b714b530f65ac417a70cdd5eb701709a4ef4e14474809cb992"
+        },
+        {
+          "path": "docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json",
+          "sha256": "f29bf379737a1cfa98c4345660f938561412a181e83e89e7411efceff28e0e96"
+        },
+        {
+          "path": "docs/ingestion/maxwell-itasca900/integration-v1/parity-results-v2.json",
+          "sha256": "97996c5dcf2a56a4f81cb56c1733057d8ececb703c1a99f3a2d20f5a7f0c99db"
+        },
+        {
+          "path": "docs/admission/maxwell-approved-v1/source-retention.json",
+          "sha256": "ad2070606469bc42fb679f0a945befafa08670ccda87e14dd61f59b7897f5da0"
+        }
+      ]
+    },
+    {
+      "id": "burgers-user-approval-v1",
+      "model_id": "burgers-itasca900-dry-zero-spin-ode",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "explicit-user-instruction",
+        "identity": "requesting user in this conversation",
+        "instruction": "Ok my approval granted, let's add it",
+        "basis": "Explicit user approval following separate-agent scientific review and native/Wasm qualification; no human scientific credentials inferred"
+      },
+      "definition": {
+        "path": "models/research/burgers/burgers-itasca900-dry-zero-spin-ode.json",
+        "sha256": "1452a27d5d3b50989ca66df5beb7f08e22434596800133983339466d3571933c",
+        "schema_version": "0.3",
+        "embedded_status": "draft",
+        "immutable_identity_policy": "Approval binds exact tested bytes. Historical draft and pre-integration descriptive metadata remain unchanged; this registry records current bounded project approval."
+      },
+      "scope": {
+        "law": "continuous Burgers deviatoric viscoelasticity with elastic volumetric response",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "stress_scope": "total",
+        "material_assumption": "dry uncoupled material point",
+        "use": "bounded material-point use supported by exact frozen qualification cases and settings",
+        "interfaces": [
+          "native physical-time CLI",
+          "Wasm physical-time ABI",
+          "ordered timed strain/stress schedules"
+        ],
+        "build_target": "atlas_burgers_solver",
+        "examples": [
+          "examples/burgers/creep.json",
+          "examples/burgers/relaxation.json",
+          "examples/burgers/mixed.json",
+          "examples/burgers/strain-reversal-hold.json"
+        ],
+        "qualification_requests": "docs/ingestion/burgers-itasca900/integration-v1/requests.json",
+        "qualification_policy": "docs/ingestion/burgers-itasca900/integration-v1/acceptance.json"
+      },
+      "review": {
+        "kind": "separate-agent automated scientific review",
+        "path": "docs/reviews/burgers-scientific-v1/README.md",
+        "verdict": "approve within stated scope",
+        "human_scientific_signature": false,
+        "bounded_source_and_saved_numerical_claims_supported": true
+      },
+      "retained_findings": [
+        {
+          "severity": "low",
+          "finding": "Original relaxation refinement assessor does not separately gate Kelvin-strain improvement; saved evidence improves in both channels",
+          "disposition": "Retained nonblocking; separately identified assessor correction remains follow-up"
+        },
+        {
+          "severity": "low",
+          "finding": "Hash-pinned definition contains stale pre-integration description",
+          "disposition": "Current approval and executable status documented in separate dossier; original exact tested bytes preserved"
+        }
+      ],
+      "limitations": [
+        "Only frozen cases/settings qualified; broad parameter ranges, arbitrary tolerances, long-time stiffness extremes and all control classes are not qualified.",
+        "Returned instantaneous rate accuracy is not independently qualified; backend rate parity does not supply it.",
+        "No unconditional discrete energy or full-host/FE/MPM guarantee.",
+        "No experimental calibration/prediction, finite rotations, pore-pressure coupling, plasticity or contact Burgers behavior.",
+        "No vendor centered-step parity or original-publication/book reconciliation.",
+        "Browser timed-control UI and release/deployment qualification remain separate."
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false,
+      "dossier": "docs/models/burgers-itasca900-dry-zero-spin-ode.md",
+      "supporting_files": [
+        {
+          "path": "docs/reviews/burgers-scientific-v1/manifest.json",
+          "sha256": "40f3648a9aa3159e2b6889e0039ec4559f4c062f0032e92e43d5bf74d0a7acc0"
+        },
+        {
+          "path": "docs/reviews/burgers-scientific-v1/README.md",
+          "sha256": "6ad41af05a8e20d6aaf181a1e97d1702f04ad2e32a50a031ec55d1fc5d8713e2"
+        },
+        {
+          "path": "docs/reviews/burgers-scientific-v1/independent-results.json",
+          "sha256": "50521b6ebbbdf0611562cdbc32ff9841d340285a76b2dd541d192980b8f30488"
+        },
+        {
+          "path": "docs/ingestion/burgers-itasca900/manifest.json",
+          "sha256": "29ddea316ad0e5173e29ae1a35d4bf066d2f5b4130c6ebd451283335284ed280"
+        },
+        {
+          "path": "docs/ingestion/burgers-itasca900/integration-v1/manifest.json",
+          "sha256": "84ddc0e66e878b1aed6518639baa0b18cf406358b4776d23f55d8c3535df2af9"
+        },
+        {
+          "path": "docs/ingestion/burgers-itasca900/integration-v1/assessment.json",
+          "sha256": "6e006dba0b29d4158c3e4b6e6809e4c7b3c9f1de117da08dc96ac12fa66144ea"
+        },
+        {
+          "path": "docs/ingestion/burgers-itasca900/integration-v1/requests.json",
+          "sha256": "b23ce7e65b08d1887d31ba6927c71459df929bddfcd9900726d70aa7d1444524"
+        },
+        {
+          "path": "docs/ingestion/burgers-itasca900/integration-v1/acceptance.json",
+          "sha256": "d1c83e777fc9a675832b8ce822df7966d5e763d42c5bcbbaea38890215a85a54"
+        },
+        {
+          "path": "docs/admission/burgers-approved-v1/source-retention.json",
+          "sha256": "61680605e116e1eea617d763b2b7ba4a6883cb88194805ec25d715f70869f2e7"
+        }
+      ]
+    },
+    {
+      "id": "nh2004-user-approval-v1",
+      "model_id": "nakai-hinokio-2004-clay-appendix-v-be",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "explicit-user-instruction",
+        "identity": "requesting user in this conversation",
+        "instruction": "Ok I accept. Add it to the atlas, commit and push",
+        "basis": "User acceptance of separate-agent conditional scientific assessment; no external scientific signature inferred"
+      },
+      "definition": {
+        "path": "models/research/nh2004/nakai-hinokio-2004-clay-appendix-v-be.json",
+        "sha256": "a93d2d47ed0808135f804fb2b0ac0ebb289b3421a43a03c563cbfddffb447ce8",
+        "schema_version": "0.3",
+        "embedded_status": "draft",
+        "immutable_identity_policy": "Exact qualified bytes preserved. This registry supplies current bounded user approval; historical draft metadata and reports remain unchanged."
+      },
+      "scope": {
+        "law": "Nakai\u2013Hinokio2004 full one-a clay with Appendix V, project endpoint backward Euler",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "stress_scope": "effective",
+        "use": "Qualified short synthetic material paths and five laboratory protocols at frozen settings",
+        "interfaces": [
+          "native common laboratory CLI",
+          "Wasm C ABI"
+        ],
+        "runner": "tools/run_nh2004.py",
+        "qualification_policy": "docs/ingestion/matsuoka-nakai/working-v1/PLAN.md"
+      },
+      "review": {
+        "kind": "fresh-context automated scientific assessment",
+        "path": "docs/reviews/nh2004-scientific-v1/README.md",
+        "verdict": "conditionally supported as a bounded research transcription",
+        "human_scientific_signature": false
+      },
+      "limitations": [
+        "Initialization must use a compatible density/void/reference state; independent pressure, rho and void options do not enforce the Table2 reference invariant.",
+        "Sustained softening, peak crossings and general cyclic path accuracy are unqualified; softening currently has residual-level evidence.",
+        "Finite backward Euler updates exhibit quantified reference-invariant drift.",
+        "Source-matched specimen preparation, experimental reproduction and external scientific signature remain open.",
+        "No general classical hydro tangent, finite rotation/strain, anisotropy, structure or creep capability.",
+        "Browser catalogue and hosted browser-engine qualification remain separate from this bounded Atlas admission."
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false,
+      "dossier": "docs/models/nakai-hinokio-2004-clay-appendix-v-be.md",
+      "supporting_files": [
+        {
+          "path": "docs/ingestion/matsuoka-nakai/manifest.json",
+          "sha256": "c38216c43fb0fc91ef852ba7df19946d7bfc5dc8a5d26918f8637eb257719145"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/working-v1/manifest.json",
+          "sha256": "071ec86c720ee804d703e3a50d76766943178b3432065106add999781a219136"
+        },
+        {
+          "path": "docs/reviews/nh2004-scientific-v1/README.md",
+          "sha256": "c4880f84570357aae09295dc12b15f775429c2e27cf992d16c7617d4bfe0bafa"
+        },
+        {
+          "path": "docs/reviews/nh2004-scientific-v1/input-manifest.json",
+          "sha256": "330af5b155d8f33401412e6ae3f1c117586f0f0c481f4b14f7db07197dfa4641"
+        },
+        {
+          "path": "docs/reviews/nh2004-scientific-v1/check-results.json",
+          "sha256": "fc8307c0ce87900272f7ac5f9ed6c896ca05eaf0164d322c6125ba4a10cda778"
+        }
+      ]
+    },
+    {
+      "id": "power-creep-user-approval-v1",
+      "model_id": "power-creep-itasca900-both-active-ode",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "explicit-user-instruction",
+        "identity": "requesting user in this conversation",
+        "instruction": "Ok let's accept into the atlas and put it on the website, then commit and push",
+        "basis": "User acceptance after separate-agent technical review; no human scientific signature inferred"
+      },
+      "definition": {
+        "path": "models/research/power-creep/power-creep-itasca900-both-active-ode.json",
+        "sha256": "67f3fabd6aecfda19b977bf3baeae2dce45f9081fa81a4436a750a41825a4bef",
+        "schema_version": "0.3",
+        "embedded_status": "draft",
+        "immutable_identity_policy": "Approval attaches to exact tested bytes; historical draft metadata remains unchanged."
+      },
+      "scope": {
+        "law": "Itasca9.0 both-components-active two-component Norton power creep; elastic volume",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "stress_scope": "effective",
+        "material_assumption": "dry uncoupled zero pore pressure, n_i>=1",
+        "use": "bounded tested cases/settings; illustrative parameters",
+        "interfaces": [
+          "native physical-time CLI",
+          "Wasm physical-time ABI",
+          "ordered timed strain/stress schedules",
+          "dedicated browser creep/relaxation laboratory"
+        ],
+        "build_target": "atlas_power_creep_solver",
+        "qualification_policy": "docs/ingestion/power-creep-itasca900/execution-v1/PLAN.md",
+        "qualification_requests": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/study.json"
+      },
+      "review": {
+        "kind": "independent separate-agent technical review",
+        "path": "docs/ingestion/power-creep-itasca900/review-v1/README.md",
+        "human_scientific_signature": false,
+        "bounded_source_and_saved_numerical_claims_supported": true
+      },
+      "limitations": [
+        "Thresholded full family, equality/event behavior and vendor finite-step equivalence are excluded.",
+        "Only named frozen cases/settings qualified; parameter ranges and arbitrary solver tolerances are not qualified.",
+        "Earlier loose-setting failures retained; no unconditional discrete dissipation guarantee.",
+        "Additional history clock test qualifies stress-response invariance; execution-v1 separately asserts endpoint times.",
+        "No experimental calibration/prediction, finite-rotation, pore-pressure or FE/MPM host qualification."
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": true,
+      "dossier": "docs/models/power-creep-itasca900-both-active-ode.md",
+      "supporting_files": [
+        {
+          "path": "docs/ingestion/power-creep-itasca900/manifest.json",
+          "sha256": "dc9001e7e6eb29e8ac311743dc25344c7f93790591a6c2b7f290573a0829a547"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/manifest.json",
+          "sha256": "4780730fffe128eed162e9f48d90193a6bbb3645985b4aa8d249c665e1d90c30"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/native-report.json",
+          "sha256": "315e9eeb4afc20f300fcf11c32f08234e849111144aa6c2177406beca1f40341"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/wasm-report.json",
+          "sha256": "f00bfba440b36738abfe30bb53f59789db5a93eb39f3d9b68e8f5c50021bd46e"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/verification-v1/manifest.json",
+          "sha256": "3ca21b77f095da1259d569f9085bd985f0f64f73efc2ea328c62888f5bc3b142"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/review-v1/manifest.json",
+          "sha256": "0569adee222cc04123165107febda4340daff6378fa0b4a622b7252357587e47"
+        }
+      ]
+    },
+    {
+      "id": "j2-linear-hardening-agent-v2-approval",
+      "model_id": "j2-linear-isotropic-hardening-be",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "independent-agent-review",
+        "policy": "agent-checklist-v1",
+        "identity": {
+          "kind": "agent",
+          "name": "j2_scientific_review",
+          "run_id": "/root/j2_scientific_review",
+          "independence_basis": "Separate agent run from /root and /root/j2_ingestion; read private originals and independently found the v1 blocker, derived witness/uniqueness/tangents and inspected saved revised numerical evidence. Same reviewer continuation after authors corrected v1; no authorship of model/source/backend implementation."
+        }
+      },
+      "definition": {
+        "path": "models/research/j2/j2-linear-isotropic-hardening-be.json",
+        "sha256": "a28068cbb8cfc660e49eb648d6ce7fcbf993ea50b45e8eb0d325c6b75f4ffc3b"
+      },
+      "scope": {
+        "use": "Exact mathematical backward-Euler associative J2 model with nonnegative linear isotropic hardening, specialized from pinned OpenSees equations with sigInf=sig0 and eta=0; dry total Cauchy stress, fixed-frame zero-spin infinitesimal strain, common Mandel components. Source/algebra acceptance plus isolated material-point native CLI and Wasm C ABI interfaces exercised by execution-v2: named 115 main cases,27 actual-history steps repeated,16 default supplement cases, frozen solver/settings/budgets. Includes H=0 and named linear hardening cases; no generic full-range/host/browser/experimental qualification."
+      },
+      "review": {
+        "kind": "agent-model-review",
+        "path": "catalogue/agent-reviews/j2-linear-hardening-agent-v2.json",
+        "sha256": "949eefe828ae1e8a6b6830517a8f97087af60134d6402a2de313464f80256d33"
+      },
+      "limitations": [
+        "Broad schema parameter envelope is not numerically qualified; default qualification covers selected named cases only.",
+        "No tangent qualification at switching or zero norm, finite rotations/objective transport, physical time, pore pressure, parameter changes, softening, saturation, stress-controlled protocol or browser packaging.",
+        "No experimental calibration/validation, specimen-preparation verification, independently fresh third reviewer or human signed scientific approval."
+      ],
+      "supporting_files": [
+        {
+          "path": "docs/reviews/j2-scientific-v2/README.md",
+          "sha256": "6ee1fa01384a5427fe994f66d4e9ed9fa5ef923882909f9f884bb54b98f486fc"
+        },
+        {
+          "path": "docs/reviews/j2-scientific-v2/check_review.py",
+          "sha256": "5e643a260cd8fc6978ef2c1f0bf1fcc07acfce27640fb6d131fe0a99769ae767"
+        },
+        {
+          "path": "docs/reviews/j2-scientific-v2/results.json",
+          "sha256": "cd32de79bdb971eec35f3445684539fdf0152aefe7a65014102a268b4d725d26"
+        },
+        {
+          "path": "docs/reviews/j2-scientific-v2/decisions.json",
+          "sha256": "6451dc9c39dba337f84d9090d147df5d67ed22c96650fc5393287d6516233f03"
+        },
+        {
+          "path": "docs/reviews/j2-scientific-v2/retained-failures.json",
+          "sha256": "91b2aaf27c4f7203ea751220c014e1f7a3f368eaae278267b368ec5fe4cf255b"
+        },
+        {
+          "path": "docs/reviews/j2-scientific-v2/input-manifest.json",
+          "sha256": "42a5501b68eac6fd34334f29973dfd30fa31bf4436a2b34ebe817355682c182f"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/README.md",
+          "sha256": "68c1fb13d9da8422e64683312f58c63c16e925ac028a44e7402a7f7904f907f3"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/source-receipts.json",
+          "sha256": "2d90f9ec6bb85a5c5f973c9184dfe08cf56cd6d35e4c17ec60ffdce68838e2bf"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/candidate-v03-v2.json",
+          "sha256": "a28068cbb8cfc660e49eb648d6ce7fcbf993ea50b45e8eb0d325c6b75f4ffc3b"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/CORRECTION-v2.md",
+          "sha256": "0b59aa49739f69b8a5baea6a4e01e7b316d770f0bf9453d2af930ae570235deb"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/PLAN.md",
+          "sha256": "528a6a4a534d22b5a05a36cfba0f4c5fbdfc8a69a21d0144ad4fe45288ffc257"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/execution-freeze.json",
+          "sha256": "7d715ced64fb4c598528bba352169ed956b1523f47754aa34677a1c659318bfc"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/source-closure.tar.gz",
+          "sha256": "86bf63087db49d5824b89b02e8b2252b055ceee990b1a725905e52905d02a2a8"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/references.json",
+          "sha256": "8e5006a6d8896e7fd8aa84096fa62bd7a01cc5112c542b9e35a385e3d1088243"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/paths.json",
+          "sha256": "eac1ef7605e7133d2848d5fba954eed6ab5ef611b4b547c5934d51ca5fea8f5d"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/default-references.json",
+          "sha256": "b055ad13f0306091806b5c17f6ddf9b51050c727fec489b4c1b082395dbc9e8d"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/default-study-freeze.json",
+          "sha256": "a98a77c53a229e9f0c06ebc8d45fdba3b5abd854c3ba5be1937010b2687afeef"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/native-raw.json",
+          "sha256": "1319307b02b8dbe0c3e8e5e96e631b6e0ce5fcd055bb6706c3edcda38bf34585"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/wasm-raw.json",
+          "sha256": "cb6f507af387929feccfdfb33526692d7595c9cb35649cd427c74334a0fd9e80"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/native-paths-raw.json",
+          "sha256": "486bc3d36d91ebec767970e371b3990ce80afc01cb1d2a425481f2d1af2abe11"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/wasm-paths-raw.json",
+          "sha256": "039d6cd90cec6eb0a9b262bb817cebaf939b3f24824f526691ecc56c43ffd6a4"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/native-default-raw.json",
+          "sha256": "5a0e236e81984e1151e096791589b525144db0088dc13fb166279bd61c9077aa"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/wasm-default-raw.json",
+          "sha256": "28f7c610da0b2e60dbc3c086925b5c11689c6530afd7eeb0dd6906eb0a8aa367"
+        },
+        {
+          "path": "docs/ingestion/j2-linear-hardening/execution-v2/pre-freeze-test-correction.json",
+          "sha256": "6a3b5071147cb931eb398d0d47ea467fa76624a9f21217da06e38c0ef60af0e5"
+        },
+        {
+          "path": "docs/reviews/j2-scientific-v1/README.md",
+          "sha256": "faeee92d69a4343cd8b873bad7c5dd10fd67b5138fed7523e8cc9edb42560880"
+        },
+        {
+          "path": "docs/reviews/j2-scientific-v1/results.json",
+          "sha256": "42ee8909d23ed3fea626c9ac3eef08c2a9f513bf0e488f2cb1385d7acd3be654"
+        },
+        {
+          "path": "docs/AGENT_REVIEW_POLICY.md",
+          "sha256": "50c5aecec85559df4234daeec3b6fd4e2486385ff5849858b473fdf7fdd7fbec"
+        },
+        {
+          "path": "schemas/agent-review.schema.json",
+          "sha256": "ff1e3a55ab38036b08efba5c41b50b241158f4c01928c37272fca015f69a4884"
+        }
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false
+    },
+    {
+      "id": "sls-comsol63-scientific-agent-v1-approval",
+      "model_id": "sls-comsol63-deviatoric-zero-spin-ode",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "independent-agent-review",
+        "policy": "agent-checklist-v1",
+        "identity": {
+          "kind": "agent",
+          "name": "sls_scientific_review",
+          "run_id": "/root/sls_scientific_review",
+          "independence_basis": "Separate run from transcription and execution authors; original equations visually read, independent Decimal50 source-gamma oracle and exact saved-output inspection performed."
+        }
+      },
+      "definition": {
+        "path": "models/research/sls/sls-comsol63-deviatoric-zero-spin-ode.json",
+        "sha256": "eccfeb372810afd81a5e9cddf5d8ac33e2cb5df6921fc88e14e9175c73e50906"
+      },
+      "scope": {
+        "use": "Exact eccfeb372810afd8 model; ordinary deviatoric SLS plus elastic bulk, dry total-stress infinitesimal fixed-spatial zero-spin ODE; bounded native CLI and common Wasm material-point synthetic cases/settings in frozen execution-v1/cases.json. K20MPa,Ginf8MPa,G1 12MPa,tau.2/2/20s direct; tau2s schedules; explicit physical traceless branch histories."
+      },
+      "review": {
+        "kind": "agent-model-review",
+        "path": "catalogue/agent-reviews/sls-comsol63-agent-v1.json",
+        "sha256": "eda7775348b6b5fbd40cfedf2876d1550505f17c83fdd148b83eb153c2d7582c"
+      },
+      "limitations": [
+        "SCI-SLS-001: exact passivity requires tr(q)=0; numerical trace allowance is an approximation and cannot justify unconditional exact passivity.",
+        "SCI-SLS-002: declared machine parameter envelope is unqualified; approval limited to literal tested synthetic parameters/protocols/settings.",
+        "No experimental, first-publication, vendor executable equivalence, broad parameter, finite strain/spin, thermal/fractional/bulk relaxation, FE/MPM/browser/deployment or physical-time tangent claim.",
+        "Native process recovery not established by separate CLI invocations; persistent-module Wasm recovery and full-state restart are tested.",
+        "Original failed native observation harness and reviewer boundary-count attempt are retained; separate corrections preserve physical responses and bounds.",
+        "SCI-SLS-003: unused agent_review.py changed between freeze and archive; documented exact context-only exception retained. All constitutive/compiler dependencies and generated bytes match; no complete all-file freeze/archive equality asserted."
+      ],
+      "supporting_files": [
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/PLAN.md",
+          "sha256": "ff8dbb46d624ec1679749fab66f7adf42a68a89959b64c4c2ff108afed52d67b"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/README.md",
+          "sha256": "84bc8e5051c11af1e3798ae82f9f35ce24b6449e974a9c8bf4ade4af71a3c698"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/assessment-correction.json",
+          "sha256": "877b7ac02d6c93d7b28b3142331b52d7f560bcb157a12f7c83aa426932728411"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/attempt1.stderr",
+          "sha256": "1ebaca749412e8570febe8c77a70e89e96829dc0f042735975244fbf3f1175be"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/auxiliary-checks.json",
+          "sha256": "1e79665ebd5672d8cfbecd8e0063d32ee4aa2e0e5468a206b47fabeb5a9d12df"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/check.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/check_review.py",
+          "sha256": "321af773b8eb4876858ae9ceffd1a7cdea0a3e35bb73c38647556c0b10edd6bb"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/check_review_v2.py",
+          "sha256": "9017203284aade1594354c334574ed253dfc578403e4ddacfe407ecc3ef75ec5"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/freeze.json",
+          "sha256": "35c6ed29bdc531fdc07c16c388f5e0bccf995951ddaca6d32ec13298cda19349"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/manifest.json",
+          "sha256": "a90c7960fc127760fad4a1f63f60b3875c916d799e102c66fb83aff6827cbd91"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/results-attempt1.json",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "docs/reviews/sls-comsol63-scientific-v1/results.json",
+          "sha256": "9f857b54b67002b5d15c54df500a6101836e777b91c6b03f6583fab6d7ce536b"
+        }
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false
+    },
+    {
+      "id": "power-creep-agent-v2-approval",
+      "model_id": "power-creep-itasca900-both-active-ode",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "independent-agent-review",
+        "policy": "agent-checklist-v1",
+        "identity": {
+          "kind": "agent",
+          "name": "review_power_creep",
+          "run_id": "/root/review_power_creep",
+          "independence_basis": "Actual separate agent run from /root transcription/execution author; performed read-only review-v1 and this reviewer-authored complete checklist reconciliation, reading retained source, implementation and saved evidence and independently checking source equations/derivatives. Same reviewer resumed with existing context; no claim of fresh-context review."
+        }
+      },
+      "definition": {
+        "path": "models/research/power-creep/power-creep-itasca900-both-active-ode.json",
+        "sha256": "67f3fabd6aecfda19b977bf3baeae2dce45f9081fa81a4436a750a41825a4bef"
+      },
+      "scope": {
+        "use": "Exact both-active power-creep model hash67f3fabd6aecfda19; dry u=0 small-strain fixed-spatial zero-spin compression-positive Mandel Cauchy-stress ODE. Literal synthetic parameters/states/protocols and strict settings in execution-v1/refinement-v2 and verification-v1; native physical-time CLI, common Wasm material interfaces and named timed schedules. Browser scope restricted to saved two default10s creep/relaxation observations/package gates and earlier JSON export/native replay, not full browser lifecycle or live delivery."
+      },
+      "review": {
+        "kind": "agent-model-review",
+        "path": "catalogue/agent-reviews/power-creep-agent-v2.json",
+        "sha256": "04fa4c142bfc477ca5cb4f1adaac530b582c9a10129479cb52a44d0bd17668cd"
+      },
+      "limitations": [
+        "Full threshold family, equality/events, n<1, vendor finite-step equivalence, calibrated prediction and experimental validation excluded.",
+        "Machine parameter envelope is unqualified; approval covers named frozen synthetic cases/settings only, not arbitrary tolerances or broad parameters.",
+        "Original native22/27 accuracy failures retained; refined27/27 native/Wasm passes do not imply unconditional discrete dissipation.",
+        "Restart uses the same partition; clock-shift study checks stress response, with endpoint times separately checked in execution-v1. No arbitrary adaptive checkpoint or persistent native-process recovery claim.",
+        "Von-Mises norm gradient is undefined at zero; no physical norm-gradient, general FE tangent, FE/MPM, finite spin or coupled-pore-pressure qualification.",
+        "Browser import/reset/invalid recovery/latest-request/full changed-parameter lifecycle, ordinary public selector integration and live deployment are not approved by this record; E6\u2013E8 remain separate delivery gates.",
+        "Original source HTML unavailable; readable extracted vendor text is durably private and hash bound, not redistributable source bytes.",
+        "Two review-v1 low findings retained and bounded by additive reproduction/clock clarification."
+      ],
+      "supporting_files": [
+        {
+          "path": "docs/ingestion/power-creep-itasca900/review-v2/README.md",
+          "sha256": "f032ae87f6c795e1b603b91966e4fe06c31be234f4a11581c5a535404b97a5d5"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/review-v2/results.json",
+          "sha256": "f796bdf886fd30eea64b275d1038c5d1ff6194e4d12363a63cabe95703055979"
+        },
+        {
+          "path": "docs/FORMULATION_CONTRACT.md",
+          "sha256": "16bfcf37e51ca3ad42b89ea989ed6640a666aa4998023a12e4ca5a2d31fffbc9"
+        },
+        {
+          "path": "docs/admission/power-creep-approved-v1/results.json",
+          "sha256": "0f0c6468796c1c25edde3829b508c291e4243f951ea2e41d1982bb373b342c84"
+        },
+        {
+          "path": "docs/admission/power-creep-approved-v1/source-retention.json",
+          "sha256": "0d313453b31d6b2bf56e4b4a93832dbb9f9317375234353b04d1ae810b1e3e54"
+        },
+        {
+          "path": "docs/admission/power-creep-approved-v1/website-freeze.json",
+          "sha256": "eafa34ee83ab3e4d997de0de197fdf48d7ee74ed77d882901e3432d5706d3e4a"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/PLAN.md",
+          "sha256": "e0bacd3acdee1af1856659fdf77a2a42a09f7bc28230b46b283f39d7df524f36"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/browser-report.json",
+          "sha256": "632f27586bef942b488797040a26a52fe35697fa92a1ec4589e773fab5a5d209"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/frozen/generated/models.hpp",
+          "sha256": "3b7b0e827c5eb7cfc07def854aca557ab0dc2b513625738919625d82d57a18a0"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/frozen/source/cpp/include/atlas/schedule.hpp",
+          "sha256": "5c90e6cede9f24f124286cf10e2254a47a991e5d62f9bc7b3899ed62e6deb7e9"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/frozen/source/cpp/include/atlas/tensor.hpp",
+          "sha256": "966a6a413b8ea4d50f400bc96860644774cabfb15f69e8bfec9c3fb215b7e144"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/frozen/source/cpp/include/atlas/time.hpp",
+          "sha256": "7b9942fbb1eae296201ad12db210c0c767fb3cc53c1f37de37de3e517f13f4d1"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/initialization.json",
+          "sha256": "462b014f733d163ff50b2af8915152d653226cee220b63f41198a9bc61ce0a32"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/manifest.json",
+          "sha256": "4780730fffe128eed162e9f48d90193a6bbb3645985b4aa8d249c665e1d90c30"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/native-report.json",
+          "sha256": "315e9eeb4afc20f300fcf11c32f08234e849111144aa6c2177406beca1f40341"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/study.json",
+          "sha256": "a68ca0ce07c049093e15b09f5e2aad95a005d41160c1bcd6240a4fbe9abbdcde"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/execution-v1/refinement-v2/wasm-report.json",
+          "sha256": "f00bfba440b36738abfe30bb53f59789db5a93eb39f3d9b68e8f5c50021bd46e"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/formulation-crosswalk.json",
+          "sha256": "494170004b3cbc7436adc9d57d6ef67b28f23465347fb8b85edc5df6b6153531"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/review-v1/README.md",
+          "sha256": "f6ab183d713e5473bddf91ec7637b5f07745d893afcdc519b1efc3c73891c7fd"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/review-v2/check_review.py",
+          "sha256": "43b0da9efdb8c5fabebd95921b4746e9b0821a3a0f869ce46788f4bc91e8f0f3"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/source-receipts.json",
+          "sha256": "31b9b5e403cc4a4c7052a7e22969d3601dcfd2e9b2b5a21a1f1c6e2c8efc5cd4"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/verification-v1/manifest.json",
+          "sha256": "3ca21b77f095da1259d569f9085bd985f0f64f73efc2ea328c62888f5bc3b142"
+        },
+        {
+          "path": "docs/ingestion/power-creep-itasca900/verification-v1/report.json",
+          "sha256": "ea7d3911e94a2a1f3315e660b77fe8212846c866b7c87a0998871fec6df34954"
+        },
+        {
+          "path": "docs/models/power-creep-itasca900-both-active-ode.md",
+          "sha256": "a6d7398f5b4145874c690221277875d832499a30b3306339ef503d8654fd9f67"
+        },
+        {
+          "path": "tools/test_power_creep_package.mjs",
+          "sha256": "2fca21267f0e38b66adee62313f317e2e45e92e9c20b0cd32ac74409514049de"
+        },
+        {
+          "path": "web/power-creep.html",
+          "sha256": "97dfc67a922a3d199d6c1df9546b98aa88da82d55b48bb9d0b20088683680ee5"
+        }
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false
+    },
+    {
+      "id": "linear-elastic-agent-v1-approval",
+      "model_id": "linear-elastic",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "independent-agent-review",
+        "policy": "agent-checklist-v1",
+        "identity": {
+          "kind": "agent",
+          "name": "Independent linear elasticity reviewing agent",
+          "run_id": "/root/linear_elastic_agent_review",
+          "independence_basis": "Separate assigned reviewing run; no prior authorship of this transcription, reconciliation or historical numerical reports. Parent /root authored current reconciliation. Historical author run IDs unavailable and expressly unknown; no invented provenance or credentials."
+        }
+      },
+      "definition": {
+        "path": "models/linear-elastic.json",
+        "sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041"
+      },
+      "scope": {
+        "use": "Exact legacy schema0.1 constant-E/nu 3D infinitesimal fixed-spatial zero-spin compression-positive Mandel effective-stress material-point law, with explicit caller sigma/e and uncoupled positive-e Atlas exponential bookkeeping. Scientific acceptance and inspected historical native/Wasm tensor/control evidence only; no migration, current-build, browser, public-release, FE-host, finite-rotation, poromechanics or experimental qualification. Named tensor cases nu=-.2,.25,.49 and saved default-parameter protocols0-4/default/failure-recovery; algebraic positivity/stiffness checks at declared nu endpoints are distinct from numerical conditioning."
+      },
+      "review": {
+        "kind": "agent-model-review",
+        "path": "catalogue/agent-reviews/linear-elastic-agent-v1.json",
+        "sha256": "ff9fef9bc608fbe276d70253f68d648201e4df05a99e4b1f24023072c1652f39"
+      },
+      "limitations": [
+        "Exact legacy schema0.1 definition only; v0.3 crosswalk validated in memory, not migration or current-build qualification.",
+        "Historical saved numerical/backend evidence only; no compiled calls or browser UI inspected by this reviewer. No public release/deployment authorization.",
+        "Constant E/nu, infinitesimal fixed-frame zero-spin material points; no finite strain/rotation, variable source fields, thermal interface, poromechanics or FE-host tangent qualification.",
+        "No soil calibration, source-matched specimen preparation or experimental prediction. Explicit caller state required within accepted use; legacy default APIs not changed.",
+        "Numerical evidence restricted to named cases; no all-parameter conditioning guarantee, including near incompressibility or arbitrary p_ref/E ratios.",
+        "Historical admission preflight remains failed on three changed shared policy/schema pins; fresh review pins current inputs without rewriting history.",
+        "Historical transcription/evidence author run identities are unknown; current coordinator packet author is /root.",
+        "Original private source retention is required for local reproduction; fresh clones must acquire exact linked bytes."
+      ],
+      "supporting_files": [
+        {
+          "path": "docs/reviews/linear-elastic-agent-v1/README.md",
+          "sha256": "dc30f84580c5fb48339231d0ea649cace8c2e16d97d316741382942bafc31bb6"
+        },
+        {
+          "path": "docs/reviews/linear-elastic-agent-v1/check_review.py",
+          "sha256": "d2ead53ee8a29b6ebd54f594552cccf51f9f9cfc7016beec249d4f35de9de2b5"
+        },
+        {
+          "path": "docs/reviews/linear-elastic-agent-v1/check-results.json",
+          "sha256": "9f2531d7d571e93e3f8e653929fc48559d035c669fa547d22ec2218aafc51783"
+        },
+        {
+          "path": "docs/reviews/linear-elastic-agent-v1/crosswalk-rerun.json",
+          "sha256": "f9e6e074baef168b3e7b32b33fa91f3a232c13f791e8f32d2ba1b6bb9c43ba1a"
+        },
+        {
+          "path": "docs/reviews/linear-elastic-agent-v1/command-log.json",
+          "sha256": "81d12062286ca5722e2698b51c26b6e473655c6511175b7a4c51f463970415e3"
+        },
+        {
+          "path": "docs/reviews/linear-elastic-agent-v1/inputs.json",
+          "sha256": "a4ad181fb0f751ebe3dddfb63e4192b119ddcb7620264ed3f15d10da8559701f"
+        },
+        {
+          "path": "docs/reviews/linear-elastic-agent-v1/decisions.json",
+          "sha256": "033f2b65f0127738a6339faf94f79780a9e16fb75d6ed0ca314a777e92d82152"
+        },
+        {
+          "path": "catalogue/evidence/linear-elastic-analytical-v1.json",
+          "sha256": "a2d82780a90a499f204ff4c91c99793f3b731473e3b7c0ceb5d90eddf9bf24ab"
+        },
+        {
+          "path": "catalogue/evidence/reports/linear-elastic-analytical-v1.json",
+          "sha256": "cdfdb5a25b912daa131259b4901642139772450d171ebbf65f4e17ba313aa417"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/evidence-manifest.json",
+          "sha256": "2793a0d09acb1114b58c94c5b219afd6caefb6d15f454a780d3505d1af090ca1"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/frozen/models/linear-elastic.json",
+          "sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/manifest.json",
+          "sha256": "42dd291cf755102d04a8f936b4103ad8367f227a3e29c8b80e5ad44d5f2baeec"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/native/receipt.json",
+          "sha256": "752b66935293f0cd9ae96345dcfddcbb625b58866d01bf07db2b1c8baaccbe34"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/post/backend-results.json",
+          "sha256": "c3f04608b501ebefe40b8ca4327a0948b9e475ba881c47258fee5c32538d3d66"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/post/backend-results.json.raw.json",
+          "sha256": "36b4be62250a668e68e3b9039b7616080abb6ca0478b7264232dd2360ac93352"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/post/receipt.json",
+          "sha256": "483e52ad95e52df400cd3be51b29b8269a16ea8d98d426d4387f60acefe95896"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/prospective-freeze.json",
+          "sha256": "86e375eb1e9cd0e1fb9b3d7fedbba494f3ae831bafacadd65afa0be514cdeb49"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/wasm/receipt.json",
+          "sha256": "04ecbf3f88f323d76baba93e93258c817cad64183b68a9ff45a1a6b7cb8c001b"
+        },
+        {
+          "path": "catalogue/investigations/solver-rollback-v1/expected.json",
+          "sha256": "713a9998360fd260cde40dfbd829d9b5b8f252bd61748dc64d5f204f85974efc"
+        },
+        {
+          "path": "catalogue/investigations/solver-rollback-v1/native/observe.stdout.txt",
+          "sha256": "a68a73b29b1c082c617bbd85c73a680425d9972d5489d896fa621017136957e9"
+        },
+        {
+          "path": "catalogue/investigations/solver-rollback-v1/wasm/observe.stdout.txt",
+          "sha256": "a68a73b29b1c082c617bbd85c73a680425d9972d5489d896fa621017136957e9"
+        },
+        {
+          "path": "docs/ingestion/linear-elastic/formulation-crosswalk.json",
+          "sha256": "20a68c6708cba0db5bc5458624ea61832db0f708a1cde25408ce15b0bb750427"
+        },
+        {
+          "path": "docs/ingestion/linear-elastic/retention-v1/receipts.json",
+          "sha256": "aec724de8fa78219b4d4facdefe2507226607eba076c5a4186b4868a2be05df6"
+        },
+        {
+          "path": "docs/ingestion/linear-elastic/source-receipts.json",
+          "sha256": "edbbbd777d5d3d36d39d88bf218265a9bef98bac59233b01b995c4a4505d0b49"
+        },
+        {
+          "path": "docs/models/linear-elastic.md",
+          "sha256": "5c14d5393c25a9077e8fe6afa429eabc85511c54605a49fe58bd58fd23b71b03"
+        },
+        {
+          "path": "models/linear-elastic.json",
+          "sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041"
+        }
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false
+    },
+    {
+      "id": "drucker-prager-agent-v1-approval",
+      "model_id": "drucker-prager",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "independent-agent-review",
+        "policy": "agent-checklist-v1",
+        "identity": {
+          "kind": "agent",
+          "name": "Drucker\u2013Prager independent reviewing agent",
+          "run_id": "/root/drucker_prager_agent_review",
+          "independence_basis": "Separate delegated reviewing run from /root; read original sources, wrote independent scalar oracle and assessed saved raw evidence. Did not author model/transcription or run compiled backends."
+        }
+      },
+      "definition": {
+        "path": "models/drucker-prager.json",
+        "sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877"
+      },
+      "scope": {
+        "use": "Exact legacy v0.1 model b2ae340e: uncapped, constant-isotropic-elastic nonassociated perfect-plastic ideal cone, compression-positive Mandel infinitesimal3D fixed-frame zero-spin effective stress material point. Explicit sigma/e with temporary gamma. Bounded numerical/interface scope is exactly the83frozen requests, parameter values and expected success/rejection/rollback/load-unload-reversal cases in catalogue/investigations/dp-dilatancy-domain-v1/cases.json, frozen nativeCLI and ReleaseWasm evidence, and historical local UI rejection/Reset observations. Scientific source/algebra acceptance does not qualify a new/current or hosted release."
+      },
+      "review": {
+        "kind": "agent-model-review",
+        "path": "catalogue/agent-reviews/drucker-prager-agent-v1.json",
+        "sha256": "6af74fadcea351006571f4e0559e2c19ee2d46ad787e0941d8484ccbaacce8ee"
+      },
+      "limitations": [
+        "No global convergence, arbitrary parameter/path region, FE/MPM host, finite strain/spin, hardening/backstress/tensile cap, globally smooth tangent, calibration or experimental validation claim.",
+        "Md0 beyond tensile apex has no admissible volumetric correction; expected transactional failure is preserved. e>0 bookkeeping can reject a stress-solvable update.",
+        "Legacy low-level example fallback unchanged; scope requires explicit supplied sigma/e and full layout gamma0, not v0.3 API migration. Gamma is temporary final-subsolve data, not accumulated history.",
+        "Native recovery consists of separate CLI requests; Wasm evidence reuses one module. No native persistent-process, serialized checkpoint, interrupted-run or general host restart qualification.",
+        "DebugWasm first-call memory trap remains unresolved. Only frozen ReleaseWasm is accepted. Local packaged/browser checks are historical; no current package or hosted delivery claim.",
+        "Direct old web verify.py fails against evolved root; exact frozen historical closure reconstructed from archives and hash-matching git blobs replays unchanged83-case report. Original failure is retained.",
+        "OpenSees originals privately durably retained under ignored .local/private-sources/drucker-prager; Itasca current page read dated2026-11-01, version9.4.29 despite930URL, no retained rawhash/immutable-version claim.",
+        "Historical v1 apex failure, old Md>M negative work, attempt1 configuration failure, premature package check and15preexisting archive-binding failures remain retained."
+      ],
+      "supporting_files": [
+        {
+          "path": "catalogue/evidence/drucker-prager-apex-v2.json",
+          "sha256": "29866e5f58ce880e987f795261a3645e301012728d08f10ccf88d3c50bf7da13"
+        },
+        {
+          "path": "catalogue/evidence/drucker-prager-dilatancy-v3.json",
+          "sha256": "454ada2b7608e34f347b562dab190654009de7b3ad4c8e9a25e75f96d3c62245"
+        },
+        {
+          "path": "catalogue/evidence/drucker-prager-investigation-v1.json",
+          "sha256": "65c8c0f43eb1db361071d4f9576aeb1a444c6dcbff090d5a9751bae2efb64582"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/README.md",
+          "sha256": "7edd878648c5c0861e19b92df50e9bef87d4121e9ba572200e7638407d506f61"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/archive-audit.json",
+          "sha256": "e2e0a10ab02e21bfbed6e5fea244b0eff0fa8f444828b4463721f8a6d09de195"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/attempt1/configure.log",
+          "sha256": "c431839e4a8d8b5397c7852677cb7117a755e0763ad3a6762ab8346140e62ccd"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/attempt1/prospective-freeze.json",
+          "sha256": "56cabcaa94814d8fc54dc33ff68a4bc08805adb4952bd80bed9906d0fb987cda"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/candidate-definition.json",
+          "sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/cases.json",
+          "sha256": "6cf5eb0485912af8931fc58059578acd4ad4f3b9d4cc3736ebe5e75d8db0ef42"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/formulation-crosswalk.json",
+          "sha256": "b68031eb59dd2bef1802ffbeded600171e4d433c724b69a22aef9c36fb9ea91c"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/manifest.json",
+          "sha256": "1d942ff9bbcfafacff5161e5c166426972cec5e9bc97ce6e01b549edd3ad6d46"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/previous-definition.json",
+          "sha256": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/prospective-freeze.json",
+          "sha256": "1b4fe0aa4dfe0e3c1727df57bb0183415dd154af645ea0b6f775ee80fc25193d"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/results/raw.json",
+          "sha256": "763ae3aba2bff3e95a4a920169f51f988f5758525af711167956a348ada9574d"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/results/report.json",
+          "sha256": "d611ab77ca9019528e2f6450f71e7787574bf65a9622c0e968499224f1164a0e"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/run_study.py",
+          "sha256": "e067291ec2db3d0bf2fbfaa3fe11c3fd6cc46ebf92926136afc5fbed0fa308e1"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/source/cpp/include/atlas/solver.hpp",
+          "sha256": "c0f0e6d788bc337077a665b7576c0cdcd88d6ef3a3ce96870da29ba679f97a66"
+        },
+        {
+          "path": "catalogue/investigations/dp-dilatancy-domain-v1/source/cpp/include/atlas/tensor.hpp",
+          "sha256": "966a6a413b8ea4d50f400bc96860644774cabfb15f69e8bfec9c3fb215b7e144"
+        },
+        {
+          "path": "catalogue/source-snapshots/0ad4a4204e5212d4f5e49e2db59bc1296281819af6c3fc6b79a2f6a1bab1252f/tools/build_evidence.py",
+          "sha256": "0ad4a4204e5212d4f5e49e2db59bc1296281819af6c3fc6b79a2f6a1bab1252f"
+        },
+        {
+          "path": "catalogue/source-snapshots/1655a69aaf8fa29f75f8043eee97aaf69539800af22d56816b993f2e34527a9d/web/experiments.mjs",
+          "sha256": "1655a69aaf8fa29f75f8043eee97aaf69539800af22d56816b993f2e34527a9d"
+        },
+        {
+          "path": "catalogue/source-snapshots/170758fe682f46674e75fec42cbda02c954e5744acf7628aaf72cba4ad055635/tools/test_wasm.mjs",
+          "sha256": "170758fe682f46674e75fec42cbda02c954e5744acf7628aaf72cba4ad055635"
+        },
+        {
+          "path": "catalogue/source-snapshots/1dbcc9083d0370bd28418853574238b9a5365dfc71904de7f58404d837774706/web/app.js",
+          "sha256": "1dbcc9083d0370bd28418853574238b9a5365dfc71904de7f58404d837774706"
+        },
+        {
+          "path": "catalogue/source-snapshots/2741fa1be8c03a3388370c1e4a996af9f0d717eb792b5bbdaf8467cd375fcd3f/web/recorded-view.mjs",
+          "sha256": "2741fa1be8c03a3388370c1e4a996af9f0d717eb792b5bbdaf8467cd375fcd3f"
+        },
+        {
+          "path": "catalogue/source-snapshots/31e7c27f978acf268c7d7a047ab08458710bc70da7367a8b18dff2287afdfa45/catalogue/manifest.json",
+          "sha256": "31e7c27f978acf268c7d7a047ab08458710bc70da7367a8b18dff2287afdfa45"
+        },
+        {
+          "path": "catalogue/source-snapshots/38330cfc4646575a632569a04831d7a3d0f15ffadba86b89f93266889f0533d5/web/recorded.mjs",
+          "sha256": "38330cfc4646575a632569a04831d7a3d0f15ffadba86b89f93266889f0533d5"
+        },
+        {
+          "path": "catalogue/source-snapshots/46dbf7bda6b89212d75fd6b95ae318e1370483ab3f53299ad9a2d342756fa381/web/style.css",
+          "sha256": "46dbf7bda6b89212d75fd6b95ae318e1370483ab3f53299ad9a2d342756fa381"
+        },
+        {
+          "path": "catalogue/source-snapshots/490e73f10d838473989049478f81e5eb20b21faf477606ea6456d8813ed47226/web/state-contract.mjs",
+          "sha256": "490e73f10d838473989049478f81e5eb20b21faf477606ea6456d8813ed47226"
+        },
+        {
+          "path": "catalogue/source-snapshots/654998eb4379da6405300f4c2a3c8d616eb812eabb6c6d01937a48b7e36c5553/tools/test_web_package.mjs",
+          "sha256": "654998eb4379da6405300f4c2a3c8d616eb812eabb6c6d01937a48b7e36c5553"
+        },
+        {
+          "path": "catalogue/source-snapshots/6eed95fea0aafa38e630081fa2775c46566cc6d972904740453506e533c12318/web/catalogue.mjs",
+          "sha256": "6eed95fea0aafa38e630081fa2775c46566cc6d972904740453506e533c12318"
+        },
+        {
+          "path": "catalogue/source-snapshots/9021d113bcc5bc908de023e031a1137968b87ea821d66ec77908063d58b89c33/tools/benchmark_tmd2.py",
+          "sha256": "9021d113bcc5bc908de023e031a1137968b87ea821d66ec77908063d58b89c33"
+        },
+        {
+          "path": "catalogue/source-snapshots/ead05028e99702b681cae30b052f20d93d83ea422d843c6b5ea5e21a2fea97d2/web/worker.js",
+          "sha256": "ead05028e99702b681cae30b052f20d93d83ea422d843c6b5ea5e21a2fea97d2"
+        },
+        {
+          "path": "docs/AGENT_REVIEW_POLICY.md",
+          "sha256": "8d35ca57150889ff1630626e6f677e7f4124997a58e26f9ef8555f9ba7dd6798"
+        },
+        {
+          "path": "docs/AGENT_REVIEW_TEMPLATE.json",
+          "sha256": "82be9c6e685a2aafb1d5ce6114cb20844f934d702967757ee6bff1a6a812c183"
+        },
+        {
+          "path": "docs/FORMULATION_CONTRACT.md",
+          "sha256": "16bfcf37e51ca3ad42b89ea989ed6640a666aa4998023a12e4ca5a2d31fffbc9"
+        },
+        {
+          "path": "docs/MODEL_DELIVERY_CHECKLIST.md",
+          "sha256": "3436962d01128c5edad02ecb2d3334483370ec6bce8d3f1eae54beb92125af77"
+        },
+        {
+          "path": "docs/admission/production-readiness-v1/drucker-prager.md",
+          "sha256": "d27b27328acc2acca88d27ac6b46af0c7f3ea699bcbabf847bbee659a68c9102"
+        },
+        {
+          "path": "docs/ingestion/drucker-prager/README.md",
+          "sha256": "aed23739420da7dad947cd6013df05fe4b03f8fbc52983da3362c94cd5ef630c"
+        },
+        {
+          "path": "docs/ingestion/drucker-prager/crosswalk-checks.json",
+          "sha256": "b0a6074cf0ed872de62fa83b0d476ef6cda25f480438c98b5c2241c48ff6f19f"
+        },
+        {
+          "path": "docs/ingestion/drucker-prager/formulation-crosswalk.json",
+          "sha256": "1b382316a8214e20dfe90b8db40cda3fa3e95a6c0c9272fa043bbcf54adaa9ae"
+        },
+        {
+          "path": "docs/ingestion/drucker-prager/retention-v1/README.md",
+          "sha256": "580a777f260b807c446f654ad0408f7906fa68c8b6e55f6a069580382d03dd5e"
+        },
+        {
+          "path": "docs/ingestion/drucker-prager/retention-v1/receipts.json",
+          "sha256": "b7b4dd4792fc30492eaa0f4008347329aa4d7a63afb259c4f95a319c474b1423"
+        },
+        {
+          "path": "docs/ingestion/drucker-prager/source-receipts.json",
+          "sha256": "73e8b48e15920bc68bf4c73fc27b193561c3599bad881701c026008d5e2675b3"
+        },
+        {
+          "path": "docs/models/drucker-prager-apex.md",
+          "sha256": "117c08653d80b14a7eb2da7261b0a4581b6daab6ea4fbf9334638f0f6c2ba5b4"
+        },
+        {
+          "path": "docs/models/drucker-prager-dilatancy.md",
+          "sha256": "32e7fe8cd322a82a7420b21122f142e42a22d6cf90c1abe79065714b51046f52"
+        },
+        {
+          "path": "docs/models/drucker-prager.md",
+          "sha256": "0f478ce6d6608ce5e8162560679f2c2fff0a1e679fdef4cff0bbc6157cc80836"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/README.md",
+          "sha256": "f6377d03c1a45462d6b1fe815f1a1b24a6c9a3ad685a659553f58891163bb01d"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/check.mjs",
+          "sha256": "f476efbfe185b74f665201c2de76f3964cb4b0631c9ff3972693d64a75376412"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/debug-attempt/artifacts.json",
+          "sha256": "3b95638dfb31607b7052220acf086cb911c8c2d34fd64d2a7ff831e7745e7592"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/debug-attempt/failure.txt",
+          "sha256": "24e1f479fe2b18c8ae7d349c12ac5ababd601bb5085b4c276ec737356a48ece4"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/manifest.json",
+          "sha256": "b1a5d103cdce2069dd94227ab9426c970325db079ff56176175198f53147aeca"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/package-inventory.json",
+          "sha256": "b8d25f90e1175d14c688bf13c721728a79c0ecb378d4b1d40ffa8609095874d8"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/package-premature.json",
+          "sha256": "194df2afd43e115223060f187efbb2dbcce5e02187bf2252170b13b467218bad"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/package-smoke.json",
+          "sha256": "e66e52cb8c533c69299dbafae074a7b83ce3828abd2780ee87b59860ff9baac3"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/prospective-freeze.json",
+          "sha256": "b1ea659d572499e5808e355463487cb7f764ec33bce6e72ab111912da663dec6"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/release-prospective-freeze.json",
+          "sha256": "b13cb5396fc1bd9c960d3d758589962ce79e00c929dd304cc00dae2b833d66fb"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/results/raw.json",
+          "sha256": "598f60872c92fe7e121fee5e991baa226b82646a575c0555e8c7809481f2830c"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/results/report.json",
+          "sha256": "61d814228fec1221ce85b4572ebea584fc4445578eb1569ffe8b15ee7e899fa6"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/source-archive-map.json",
+          "sha256": "18e9702528f5be891f613b7bed2954455d4ed6a20494098d60dec647a452e727"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/ui-domain.png",
+          "sha256": "4591a7cc641ab64115ce23ae18103b48fc5f3f61c78d8074598a5bba66b3fea5"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/ui-recovered.txt",
+          "sha256": "3430d7492fe3e5ae43d6e06e77b4cf32e00385d267d6c41721ddc08ca3fe60b0"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/ui-rejected.txt",
+          "sha256": "d60999beb0feedba6168f0cc56c053be0f779d1cec81fe016b5dac081522559e"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/ui-valid.txt",
+          "sha256": "7b41855fc31e3ed2ccf35207881252ba9d2e2cf4a44900aa0014098f2c8ee7c6"
+        },
+        {
+          "path": "docs/reviews/dp-dilatancy-web-v1/verify.py",
+          "sha256": "1d036d607b28cf9d026f6319763d3baaa4f00050c2ba09e6a3ffa86052556919"
+        },
+        {
+          "path": "models/drucker-prager.json",
+          "sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877"
+        },
+        {
+          "path": "schemas/agent-review.schema.json",
+          "sha256": "ff1e3a55ab38036b08efba5c41b50b241158f4c01928c37272fca015f69a4884"
+        },
+        {
+          "path": "docs/reviews/drucker-prager-agent-v1/README.md",
+          "sha256": "e1ef067d363312f67e87d2f2120cae46cad583cfa2ec58546e5154136f36abf6"
+        },
+        {
+          "path": "docs/reviews/drucker-prager-agent-v1/check_review.py",
+          "sha256": "8e865663ac04fdfc85f794df26d8ffd06b596c3320b7de7f905268eb7ba69bbd"
+        },
+        {
+          "path": "docs/reviews/drucker-prager-agent-v1/results.json",
+          "sha256": "6bd8139636e7f5521c2d575d0b63151552cb3b7a222d255f8060affe91e62f56"
+        },
+        {
+          "path": "docs/reviews/drucker-prager-agent-v1/manifest.json",
+          "sha256": "04b551b8405935ed13dd3453d46557ae7cebfc1ee2b56f4909ffd9b505e419bd"
+        }
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false
+    },
+    {
+      "id": "modified-cam-clay-agent-v1-approval",
+      "model_id": "modified-cam-clay",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "independent-agent-review",
+        "policy": "agent-checklist-v1",
+        "identity": {
+          "kind": "agent",
+          "name": "Independent Modified Cam Clay reviewing agent",
+          "run_id": "/root/mcc_agent_review",
+          "independence_basis": "Separate assigned review run, no authorship of reviewed model/transcription/reconciliation/evidence. Parent /root authored current reconciliation; historical author run identities unavailable and explicitly unknown. Original PDF visual reading and new independent saved-data scalar checks actually performed."
+        }
+      },
+      "definition": {
+        "path": "models/modified-cam-clay.json",
+        "sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14"
+      },
+      "scope": {
+        "use": "Exact legacy schema0.1 complete associated MCC Atlas discrete formulation: current endpoint pressure/volume elasticity, M\u00b2 yield/associated flow, normalized temporary gamma, exponential total-volume/log-pc updates; compression-positive Mandel effective stress, infinitesimal3D fixed-frame zero-spin, explicit caller sigma/e/pc. Default vector and named57 saved native cases plus eleven frozen historical native/Wasm protocol0-4/default pairs only. No migration, current build/release/browser, Wasm failure-recovery, serialization restart, FE, finite-rotation, physical-time, experimental or general parameter/uniqueness claim."
+      },
+      "review": {
+        "kind": "agent-model-review",
+        "path": "catalogue/agent-reviews/mcc-agent-v1.json",
+        "sha256": "7b90353709b8a505c9b2aac40db647678af6fbf0f641683f8738f4b5592c7e7f"
+      },
+      "limitations": [
+        "Exact legacy schema0.1 bytes and named default-parameter material-point cases only; no v0.3 migration or current-build/release/browser certification.",
+        "Selected complete associated MCC law uses declared Atlas endpoint stiffness, multiplier normalization and exponential volume/log-pc choices; source printed M/volume conflicts are retained.",
+        "Fixed-frame infinitesimal effective stress only; no objective finite-rotation/strain, FE tangent, physical-time/creep or pore-pressure constitutive law.",
+        "Explicit caller sigma/e/pc required within accepted use; low-level defaults remain illustrative and unchanged, without NCL calibration or preparation inference.",
+        "Actual-partition agreement does not establish adaptive error control, global branch uniqueness or arbitrary parameter conditioning; reference requires positive finite elastic trial pressure.",
+        "Historical native57 and frozen native/Wasm11 interface pairs inspected; no compiled calls. No MCC-specific Wasm failure/recovery or general restart transport qualification claimed.",
+        "Historical failed unpartitionedv1 and direct preflight drift preserved; exact archived preflight reconstruction is distinct.",
+        "Historical transcription/evidence author run identities are unknown; current coordinator/reconciliation author is /root.",
+        "No experimental validation or external-code benchmark. Original PDF private retention needed; mutable Itasca newly dated reading has no raw HTML hash."
+      ],
+      "supporting_files": [
+        {
+          "path": "docs/reviews/mcc-agent-v1/README.md",
+          "sha256": "73a8e524265e1f0dc55749e8f6abebe18a4b95f01c3fe6c01356d1fbc750ebb9"
+        },
+        {
+          "path": "docs/reviews/mcc-agent-v1/check_review.py",
+          "sha256": "a31d944f7a598eb469ce330d339550a08cc7f4696908c3910d78a7821cd98b77"
+        },
+        {
+          "path": "docs/reviews/mcc-agent-v1/check-results.json",
+          "sha256": "c2c7f94d3e59695f12d859cefb0b5331bfc5176ea7e6e3e2c0e399240c04cd7d"
+        },
+        {
+          "path": "docs/reviews/mcc-agent-v1/crosswalk-results.json",
+          "sha256": "a71d20fc051a6fefeb71a231e202f74ce7a495ee1ede796b8a759c739f56c319"
+        },
+        {
+          "path": "docs/reviews/mcc-agent-v1/reconstruct_preflight.py",
+          "sha256": "9b29af9c37f74084b8ecea90a8e313db6f492fed38f75b67de0cac3a77d324b4"
+        },
+        {
+          "path": "docs/reviews/mcc-agent-v1/archived-preflight.json",
+          "sha256": "6d084129b106e9602527a2282622af053f8cc91f7ff2fd68a8b66aed1a8b2adc"
+        },
+        {
+          "path": "docs/reviews/mcc-agent-v1/direct-preflight-failure.txt",
+          "sha256": "a5f8498f5994bef99ffab52f211f25b0cfc40719993dbdc1bed2c3940bf2f812"
+        },
+        {
+          "path": "models/modified-cam-clay.json",
+          "sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14"
+        },
+        {
+          "path": "catalogue/evidence/modified-cam-clay-scalar-v2.json",
+          "sha256": "d88322b7f9b6f7f8a6888456b0c653e0373d8ea9ab7ed67d53f24094cc747d02"
+        },
+        {
+          "path": "catalogue/evidence/reports/modified-cam-clay-scalar-v2.json",
+          "sha256": "20e91b6f1f288657c8d764bc35aad8b20a6a07a145cf2e59898b09a0d047495b"
+        },
+        {
+          "path": "catalogue/evidence/modified-cam-clay-investigation-v1.json",
+          "sha256": "468e2792d4b43c1140769793e19e60183ce6b2ddaa4e0796d5eb58c5f33bf4db"
+        },
+        {
+          "path": "catalogue/evidence/reports/modified-cam-clay-investigation-v1.json",
+          "sha256": "df546157324e60d87b23497e24ed9e66873ca35ef04f63e3156ab181396d3e8e"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/frozen/models/modified-cam-clay.json",
+          "sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/manifest.json",
+          "sha256": "42dd291cf755102d04a8f936b4103ad8367f227a3e29c8b80e5ad44d5f2baeec"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/evidence-manifest.json",
+          "sha256": "2793a0d09acb1114b58c94c5b219afd6caefb6d15f454a780d3505d1af090ca1"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/native/receipt.json",
+          "sha256": "752b66935293f0cd9ae96345dcfddcbb625b58866d01bf07db2b1c8baaccbe34"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/wasm/receipt.json",
+          "sha256": "04ecbf3f88f323d76baba93e93258c817cad64183b68a9ff45a1a6b7cb8c001b"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/post/receipt.json",
+          "sha256": "483e52ad95e52df400cd3be51b29b8269a16ea8d98d426d4387f60acefe95896"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/prospective-freeze.json",
+          "sha256": "86e375eb1e9cd0e1fb9b3d7fedbba494f3ae831bafacadd65afa0be514cdeb49"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/post/backend-results.json",
+          "sha256": "c3f04608b501ebefe40b8ca4327a0948b9e475ba881c47258fee5c32538d3d66"
+        },
+        {
+          "path": "catalogue/investigations/laboratory-q-cancellation-v1/post/backend-results.json.raw.json",
+          "sha256": "36b4be62250a668e68e3b9039b7616080abb6ca0478b7264232dd2360ac93352"
+        },
+        {
+          "path": "docs/admission/production-readiness-v1/work-packages.json",
+          "sha256": "36e89bc475e8abe26cf864912878bd5b0af2aceb25c14936ff44621f51907a16"
+        },
+        {
+          "path": "docs/models/modified-cam-clay.md",
+          "sha256": "ad054620d1936c3c177e2051c9f9e1208dad467cd575471ac730bcdb735568d4"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/README.md",
+          "sha256": "1012ae0c3fc7c38d6a7d0fdee93c6a46ff5262a11be5c29ed3aeaf33cb9ff3f4"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/source-receipts.json",
+          "sha256": "6628686f98f44ee7b9d30dc99621d24a8422065dee291b398eb44dcde98cacb0"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/formulation-crosswalk.json",
+          "sha256": "fbfda4838cb35edcd533a604d33bf9dcedc54ed099d5ad655ad1967c0023c0f6"
+        },
+        {
+          "path": "docs/ingestion/modified-cam-clay/check_crosswalk.py",
+          "sha256": "537e812ce48f46ebe60ce320e81d10077d978976aea0fa9bf2038ad406099eb2"
+        },
+        {
+          "path": "cpp/include/atlas/solver.hpp",
+          "sha256": "9f9df81222c267dcb228d557fbbf08a0fbc3c5670d97c672ab7337a25cceb28c"
+        },
+        {
+          "path": "docs/admission/production-readiness-v1/modified-cam-clay.md",
+          "sha256": "8af52d81e1a2e0ff076c415867a42edc080dbbe27e9c01febf7812882ec275b6"
+        }
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false
+    },
+    {
+      "id": "original-cam-clay-sw-electronic-log-recovery-agent-v1-approval",
+      "model_id": "original-cam-clay-sw-electronic-log-recovery-v1",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "independent-agent-review",
+        "policy": "agent-checklist-v1",
+        "identity": {
+          "kind": "agent",
+          "name": "Independent OCC source/finite-law reviewer",
+          "run_id": "/root/occ_selection_review",
+          "independence_basis": "Separate agent run from implementation /root; authored source critiques, independent Decimal/Fraction references and evidence checks only, never candidate transcription/shared runtime/builds. Personally read original selected PDF and independently replayed saved native/Wasm evidence; zero reviewer compiled calls. Inherited context is disclosed."
+        }
+      },
+      "definition": {
+        "path": "models/original-cam-clay-sw-electronic-log-recovery-v1.json",
+        "sha256": "637ba72335c3464fec427c773d214d21d06e9e26bc737d15307aae2f67111b34"
+      },
+      "scope": {
+        "use": "Exact electronic-artifact-derived fixed-frame small-strain effective-stress OCC invariant log-recovery endpoint with disclosed BE-volume/nearest-admissible zero-distortion selection and normal cone. Numerical approval: nominal pref1000Pa/M1.2/lambda.2/kappa.04/Gamma2.5; exact407stored finite requests,21supplemental controls,2fixed-smooth-branch tangents, frozen failure/recovery/restart/partial-rollback and source undrained/hydro paths; explicit equivalent pref100Pa/Gamma conversion. Native/common Wasm monotonic protocols0-4 from exact100kPa isotropic/v1.7389659628023817 example at64steps,target.01strain or10000Pa stress; one-cycle strain protocols0/2/4 amplitude.002/64steps. Protocol3 stress control is monotonic-only. Numerical grid envelope is descriptive, not arbitrary continuous parameter/control coverage. Browser/package/live delivery unclaimed."
+      },
+      "review": {
+        "kind": "agent-model-review",
+        "path": "catalogue/agent-reviews/original-cam-clay-sw-electronic-log-recovery-agent-v1.json",
+        "sha256": "a02f6524ee34d98d293453973aec3598251c34adc5ffd9b18082d19edfe0b790"
+      },
+      "limitations": [
+        "Exact2005 electronic transcription is selected; original1968 first-edition facsimile fidelity and literal original-author3D implementation are not authenticated. This is a disclosed source-derived invariant continuation with project numerical selection.",
+        "Zero recoverable shear compliance makes the strain inverse discontinuous and stress/mixed controls potentially nonunique. Cyclic stress protocol3 fails at first unloading step17 and is unsupported; only the exact monotonic stress example is qualified.",
+        "Absolute stress-floor residual tolerance can give poor log-pressure/recovery accuracy at tiny positive targets. Retained witness: targetp1.1599856702799458e-168Pa versus hypothetical1e-48I state gives residual1e-51 but recovery mismatch-.625263. Such extreme histories/uniform relative accuracy are outside approved numerical scope.",
+        "Minimum-subnormal CSV finite-404 explicitly rejects with stod:out-of-range on native and Wasm; portable mathematical target succeeds. No all-binary64 transport/accuracy guarantee; invalid/nonrepresentable endpoints may reject atomically.",
+        "Parameter UI bounds are not a scientifically or numerically qualified parameter region. No arbitrary protocol/state/parameter coverage, specimen preparation, calibration or experimental validation is claimed.",
+        "Fixed frame/zero spin only; no finite rotation, physical-time creep, pore-pressure constitutive law, FE/global tangent or unique derivative at switches/jumps. Tangent evidence covers2fixedsmoothbranches only.",
+        "Native/Wasm isolated common-engine qualification is accepted; full catalogue/package regressions, actual browser interaction and live deployment remain separate E6-E8 tasks. Approval does not authorize publication/deployment."
+      ],
+      "supporting_files": [
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/e5-v1/REPORT.md",
+          "sha256": "155cfeab52a089253956e862620dac6576e3c2155def26a0692f511535061078"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/e5-v1/check_evidence.py",
+          "sha256": "2a1980879d93798f677a3efc0d163cd46ca6be734631b183169fd0cb8216ca86"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/e5-v1/evidence-check-results.json",
+          "sha256": "998aaa24cd32eee8d88e79a9ad133ca83a5ab385b7f3b5ebe7ccd1ac991ffefc"
+        },
+        {
+          "path": "docs/AGENT_REVIEW_POLICY.md",
+          "sha256": "8d35ca57150889ff1630626e6f677e7f4124997a58e26f9ef8555f9ba7dd6798"
+        },
+        {
+          "path": "docs/AGENT_REVIEW_TEMPLATE.json",
+          "sha256": "82be9c6e685a2aafb1d5ce6114cb20844f934d702967757ee6bff1a6a812c183"
+        },
+        {
+          "path": "docs/FORMULATION_CONTRACT.md",
+          "sha256": "16bfcf37e51ca3ad42b89ea989ed6640a666aa4998023a12e4ca5a2d31fffbc9"
+        },
+        {
+          "path": "schemas/model-v0.3.schema.json",
+          "sha256": "5a0f732e2fd2dae90aeb77ec9fa332e125907f61d74614b60af3f77abf798c6a"
+        },
+        {
+          "path": "docs/models/original-cam-clay-sw-electronic-log-recovery-v1.md",
+          "sha256": "bf03c02e8ffb8501a2e07111a2ad7507ae24671b9cb7128181e99fe4f6e6967f"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/source-receipt.json",
+          "sha256": "b494142a31d3eb3108d171de6b7b7be60e9ac90999c5cf35987782c812477967"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/CONTRACT.md",
+          "sha256": "d9bbb5f0b8c142e13687a3dbccf5e8576f825c2c96fb62a7f8479e58e177c38b"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/candidate-v3-numerics.md",
+          "sha256": "7d36b08d1c9f1b3e36486a72e1b1d861c3073f4f6b8b853e24287346ef5a7074"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/README.md",
+          "sha256": "af8d7aa37e305666f3065ce1b2cf792b80f7d80807834b89078e82ac74a6c71a"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/check_constraints.py",
+          "sha256": "9f1f1e560f4e8ca3efde5b7c888915e3b503caec5e56bd91497df221b75f33d8"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/constraint-results.json",
+          "sha256": "8d5045a0969b2176c4779f1f0e1671f5b22ea994a05048b54bd1cf696ee038ca"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/candidate-v3-review.md",
+          "sha256": "3d78b764306a4b58ecb41d26d642c4ea78b0a037b39116f109e265723712012c"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/candidate-v3-check.py",
+          "sha256": "07a892848073a475ca32d44c191689313a8b9ff83fed6d73cccc04083ad0864c"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/candidate-v3-results-637ba72335c3.json",
+          "sha256": "f104f5b179c7704b1e6c2559a3685ecae5c73fe541e652fbc36cd146bb37032d"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/candidate-v3-guard-check.py",
+          "sha256": "2ff3827d6d4964363cd40510220950c9ffa0d7ced7f544660af209e3ec1afb7e"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/independent-review/candidate-v3-guard-results.json",
+          "sha256": "ce111d7e5e700d2ddb2d7680908d63b5adeff50cba30a7242e43040b130ced14"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/candidate-v03-v2.json",
+          "sha256": "36012205c441860b28c722d3177330f37d102a2028d5c3b3afce7786fd36b13a"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/control-selection-v1/failed-rotation-v1/failure.json",
+          "sha256": "9e50c68c2f5c70b7f0e22d3fc318a67bcf98785fc38d66ce7e0524a4e973b36a"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v1/native-transaction-raw.json",
+          "sha256": "8da303bb0cb445776d1cb66c9095ba1d685b0adc9d78c13ca8c9f4baa9189510"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/README.md",
+          "sha256": "56f7681405ef813c89bbbfa6321ba69a5aaaeb6dd186777e7b9b41925514dba8"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/freeze-manifest.json",
+          "sha256": "fcd09ede3a11c86b89fbff5eb2f3925bd2e3119f895cade79c8029743aab70de"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/toolchain.json",
+          "sha256": "27459b6aa616826571c61158c5311af6f412f0727911b5c9039f6cf412fa16e9"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-build.json",
+          "sha256": "5671340a45d56be16d345709b23ae87209d454406095dcbd12d7648ad7b773d2"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-build.json",
+          "sha256": "c74999bc6f12714c0f2d26c54a25a23f82685f48e57d863cb57bbec10f02bf2e"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-build-cache-retry.json",
+          "sha256": "5128267b92a8659f0f4ddeb3568505939eeb3a8f3853a7ecaa877f964d085ee7"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-artifact-receipt.json",
+          "sha256": "a13ab076325f44e4e200fb47da5baae5baa11b6de1f613d8d079d4ef5b93963a"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-artifact-receipt.json",
+          "sha256": "2f57699997ef86aaea5af38ee7dc26bfc7a621f39dc7d637517f1922dcc1137d"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/regression-receipt.json",
+          "sha256": "881d246b0f671d4ebbf7ca3291f0dd01c88905abd34520301bbb8dcb34700269"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/requests.json",
+          "sha256": "1e6034399b1067125f4451c4892ac1b4315f37371bcee6da4d28b48548821bb7"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/supplement-requests.json",
+          "sha256": "949c3b00a0bd71fa8a6741b458b8f943bb83963811704048ecca01d80749569b"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/transaction-requests.json",
+          "sha256": "896297f014fbb4a3323ebc0dc3fd55c97a24d8c676effed0fafae996262f2514"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/public-requests.json",
+          "sha256": "c313d805341379ab82f1ef47938363d3f1612a1b3cda0b22c803acc4569055b9"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/hydro-requests.json",
+          "sha256": "9274b9a5110c4d2f5ff88196af609bddced328cffdd4208d03b66c5dcd8a4c7a"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/backend_study.py",
+          "sha256": "a77090e65dc82b45aa7d9e45dbb5941a5b5ffad3364212ec1fd69eb1e988d092"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/supplement.py",
+          "sha256": "a5b04a850b7e30d7e23227dfbf9762a674047e83ac6663a03f3ede38a3f16fb1"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/transactions.py",
+          "sha256": "9184ba6672c5fa2d989582466bf74384071441a3531f8f7661570d10cc995ba4"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/public_controls.py",
+          "sha256": "eee6c9e5a6fe261188696f010c9fa09778c76259bb322275ef8d821a6b6dcc87"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/assess_public.py",
+          "sha256": "db005df54e4801e784283c99f2b37994c7834f9e0bc4f1df4b64595a6603c7b6"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/hydro.py",
+          "sha256": "9902715a5a2596bd1e81ee83471c5f25ff8444fc085bef77fdbcb4f00eecdc34"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/collect_wasm.mjs",
+          "sha256": "c5b3d202d5517bc6d44e97b4c8241479a63668e604ac52362cc6fed53ab99ddb"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/collect_extra_wasm.mjs",
+          "sha256": "b88ebd288cc198eba550e1d7d76220c053ebb31fd609c3d3bfb2d81d63d0a7bf"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/collect_hydro_wasm.mjs",
+          "sha256": "cd5faa83fda77b5ed2c23095d8d08ac0ba9fd192f0be9a35a094891b1caeb6a6"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/parity.py",
+          "sha256": "83c17cd4d6b35032efe6a6c59f74d16c1e0c1132f448b14792da10de78978277"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/parity_extra.py",
+          "sha256": "aeb3cc04f213a4c38cac1180f42267a2ec4b17a9d414eae3930a0c9af50cb075"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/parity-results.json",
+          "sha256": "f79e1fb72d86351f78163a0381726cb4527f4ad71636b9185c024e1916e73ec8"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/extra-parity-results.json",
+          "sha256": "9ee4d85a1db3d18b504435bcc7ace3749c06d072314a251c9c6d948331df5c73"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/cyclic-stress-prospective.json",
+          "sha256": "31022c309c339d4d373c0659748e38a14ae7c7b656684426031270a1bc7f261d"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/cyclic-stress-diagnostic-raw.json",
+          "sha256": "fc3656e413d645de2f79cd6fb00e338e422cba7e808d27c2b8f57ffb1ea1ed1b"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-raw.json",
+          "sha256": "0bcb2bb342d1e1c96ad6ad9289c4a5d6a961a5ee437ba066f118ded8e50cdc2e"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-raw-assessment.json",
+          "sha256": "8ba7f42d942f478e4c795fb30be73d03c433335b5cdcb44659f5bf6171289830"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-supplement-raw.json",
+          "sha256": "1d8a8d74696cc69798944b81852c9668473f581a3064b6010bcd80db050c87e5"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-supplement-raw-assessment.json",
+          "sha256": "1db08786fbef287d00c6727e28aa07c0cec8617fe423cba51692bca1f349110f"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-public-raw.json",
+          "sha256": "1516f6cd32dcdec903630deb5bc714e04fcf4d11c1c2f7fbf8f07a943f80b0de"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-public-raw-assessment.json",
+          "sha256": "8c1c3f89f7ba23c6495c1593566883066d0e40814c5cc143f2486caf279e8c5a"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-transaction-raw.json",
+          "sha256": "0d79013c8038b46e59677a51fd09dc093f062b15702fdc4975639041deb0c696"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-transaction-raw-assessment.json",
+          "sha256": "ae79655a56c2115acd68e81baa40a14ad4993c5452e12fa3cecdad74d264873f"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-hydro-raw.json",
+          "sha256": "7a16a077c67a15535141e68a8446187974da6abd96cc389693590dab36313124"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/native-hydro-raw-assessment.json",
+          "sha256": "638f2b1033429663a87eecbb132e8cbcbcd0cf681c6ace05ea504daf68620137"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-raw.json",
+          "sha256": "22fe34453b9826f5095fb7e8209514b800d240ac6d7a4dd81bab1f6b128a60d4"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-raw-assessment.json",
+          "sha256": "fb6a294582230785a59e385343b935186b7bfcf56d1d6abbe826f7292ebb4545"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-supplement-raw.json",
+          "sha256": "34a5a06849fcc7601a47cb8151ca0341996640b8260a97b7214d775c94d36411"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-supplement-raw-assessment.json",
+          "sha256": "ac8fd5015e4629693a42a304d6a8cc045a507296046ceae2e87a8511b13a8407"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-public-raw.json",
+          "sha256": "432acaaf1dc98e63fb061d5d4255e11ac65f1114005ddf06210a289c4109a7f7"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-public-raw-assessment.json",
+          "sha256": "dc615cbedce411d9cd6acf16d46851a1271622e44552f09857cdd5ba41b14087"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-transaction-raw.json",
+          "sha256": "51782f0c7479e3d1e0875e509b17eab7586be816628016329a31aba7c4b5faa9"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-transaction-raw-assessment.json",
+          "sha256": "86621008d217651aee4269ecf5879713206a09a691eb7226637f5f5fbcb9571a"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-hydro-raw.json",
+          "sha256": "42e85d60bf70af3734a4dd7b2368e97a0be16c0c92fc9553875e58d02a19cdef"
+        },
+        {
+          "path": "docs/ingestion/original-cam-clay/execution-v2/wasm-hydro-raw-assessment.json",
+          "sha256": "7ee87ccb87edc03dd9af7ecb032f35b809204aecf5b85eaadfcd854b4a523d34"
+        }
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false
+    },
+    {
+      "id": "barodesy-clay-2017-agent-v1-approval",
+      "model_id": "barodesy-clay-2017",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "independent-agent-review",
+        "policy": "agent-checklist-v1",
+        "identity": {
+          "kind": "agent",
+          "name": "Independent Barodesy 2017 body-law reviewing agent",
+          "run_id": "/root/barodesy2017_agent_review",
+          "independence_basis": "Separate assigned reviewer run; did not author model, original studies or current reconciliation/analytical example. Newly inspected actual publisher PDF and saved evidence, independently wrote dense Decimal source-law checks and reran saved-only audits. Parent/current reconciliation/example author is /root; historical author run identities unknown."
+        }
+      },
+      "definition": {
+        "path": "models/barodesy-clay-2017.json",
+        "sha256": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477"
+      },
+      "scope": {
+        "use": "Exact v0.3 complete Medicus-Fellin2017 body Eqs1\u201310 body 2p/incompressible-grain, fixed-spatial zero-spin infinitesimal Mandel compression-positive effective Cauchy stress/e material-point law. Explicit seven-state initialization, declared zero/hydro continuations and conservative interior/exponential support. Named complete Table 2 calibrations/frozen rate/path/preview matrices and separately pinned analytical London NCL 100 kPa assignment only. Direct exact-candidate evidence: historical13 requests/330 caller points per backend previewv1/v2 plus101 point default; historical research rate/AD/finite-path support connected by exact mathematical/state-layout equality. No current engine/package/browser/live-release, author UMAT/Appendix 6p, finite-rotation, integrated FE tangent, zero/near-hydro AD, restart, arbitraryparameter/domain or experimental claim."
+      },
+      "review": {
+        "kind": "agent-model-review",
+        "path": "catalogue/agent-reviews/barodesy2017-agent-v1.json",
+        "sha256": "e8c55ac7d5ae697f46fd79989fe9b9297adec9857ec08a7f218a5835df7df75e"
+      },
+      "limitations": [
+        "BodyEq 8 and Appendix2Eq 32 use2p while Appendix3Eq 41 implies6p; printed spin relation repeats WT. Named body law/W=0 selection accepted, no external erratum or completeauthor UMAT equivalence asserted.",
+        "All seven stress/e persistent components and complete bounded parameters explicit. Current default state unchanged/illustrative; sourceTable 2 inputs are examples, not universal clay calibration.",
+        "Analytical NCL 100 kPa assignment only. No measured specimen, simulated consolidation/preparation, saturation/drainage/pore pressure metadata or experimental validation.",
+        "Conservative normalized Cartesian stress minors/determinant margin64eps and abs(a)<=64 are software support restrictions; ill-conditioned SPD may reject and boundary acceptance need not be rotation invariant. No arbitrary domain preservation or parameter box conditioning proof.",
+        "Exactzero/hydro continuations are declared numerical choices. Stress-free/K=0/projector limit/norm underflow/out-of-range exponential requests unsupported; no clipping/floor inferred from source.",
+        "Historical research numerical support has equal equations/parameters/domain/physical state layout to exact currentv0.3definition; it does not attest current engine or binary. Direct exact candidate historical preview evidence separately assessed.",
+        "Instantaneous regular/exactnonzerohydro Jacobians only in their frozen studies. No full integrated FE tangent, zero/near-hydro AD, second derivatives, finite rotation or general implicit FE host certification.",
+        "Finite path original scalar/caller references and empirical RK4 uncertainties are bounded evidence, not general adaptive error control. Preserve observed budget/domain failures and exact rollback/recovery; native finite CLI process persistence and serialization restart unqualified.",
+        "No new builds/compiled material calls/browser/deployment in this review. Current release/package/live website qualification remains separate and deployment is not authorized.",
+        "Original private PDF/source hashes retained; no raw source/code/data redistribution. Historical transcription/run authors unknown; /root identifies only current reconciliation/example author."
+      ],
+      "supporting_files": [
+        {
+          "path": "docs/reviews/barodesy2017-agent-v1/README.md",
+          "sha256": "f39485b493e9a7f80c356a94cc88995c989fa54b95020af2cf97a5784b49a3da"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-agent-v1/check_review.py",
+          "sha256": "fcbe7a166a3cbc84361c375dbeb819d3d39a728deaa46f60b9b6a6fde4069ac2"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-agent-v1/check-results.json",
+          "sha256": "7dcc2fffef654c7fb88068cff5678c357e573b07a324992833692a1907d5f6a7"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-agent-v1/reconstruct_preflight.py",
+          "sha256": "c64cce6c2eb4426810115f734d8a70936190a3a996f951a47e693db08ee35596"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-agent-v1/archived-preflight.json",
+          "sha256": "ad1a26008223119ff8eaeab3dc477376d4077ba957ea56d71c87c97f24d7c9d4"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-agent-v1/direct-preflight-failure.txt",
+          "sha256": "e78743eb7b3530a025f4c3eeadfbbfd075f9b0a8478294765ba73a3680a82828"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-agent-v1/saved-audits.txt",
+          "sha256": "d99ed272cd76cfc757f22e857d7b964806b642d33fdc6edadf0485d35b652db4"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-agent-v1/ncl-parent-check-replay.json",
+          "sha256": "3cbf367e2affa28fae82e770fa010f253dfdf9820405aed1ae8fbc859bda79d0"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-agent-v1/body-scope-decisions.json",
+          "sha256": "607e7945861d9095c98883b0824f0f8abe30b36a1ea87c099928582c1fcd6f13"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/production-closure-v1/README.md",
+          "sha256": "cb16aa067eea243fec776cd5998bc3c94db1336b4a2ea7ae1ca50b1459c779dd"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/production-closure-v1/pins.json",
+          "sha256": "d4803aace5f22a36002fda2a4d1cd7c1c6e0a6588eff0801d24661929e687d78"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/production-closure-v1/preflight.py",
+          "sha256": "6222f0d6a8c65b714f0c84b1768f529011d2b56c4c784d8452d04b6bec14cea3"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/production-closure-v1/review-sheet.json",
+          "sha256": "de4970e55e6e9f75de3336f1bf12481a1f719694aa84035e5d4ad00623eef132"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/production-closure-v1/source-archive-map.json",
+          "sha256": "c2b167c397f56ff1bf3016df42889c63a293b9400a2c4022281daa5936c9b1f0"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/ncl-example-v1/README.md",
+          "sha256": "126416b876c7b50770acaecc6a10eec341f303a1656bf8a73fde0b06eba273c3"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/ncl-example-v1/example.json",
+          "sha256": "50b6b1c36d53bd1cf862bdacf2f53f998fa1c1930bf2d1fe2c74b6d03c54481b"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/ncl-example-v1/policy.json",
+          "sha256": "2ebd365b5da56cf6d985ca087bd7590f7321fad61db9d45840a2c6452ee28509"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/ncl-example-v1/check.py",
+          "sha256": "51b6fd628d8fbdb6fa29cd9410b41c4ea245b8bf1ea088e0509608590ab14e95"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/ncl-example-v1/results.json",
+          "sha256": "3cbf367e2affa28fae82e770fa010f253dfdf9820405aed1ae8fbc859bda79d0"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/ncl-example-v1/source-locators.json",
+          "sha256": "21875fbc0572e743bc812a7bb01ef3a29ee56f128ebfdf778d372a11adb5fc38"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/ncl-example-v1/manifest.json",
+          "sha256": "a8dce337dadc1788426f40bfbeda4be4c52d7ba3d8e1e96205d42ac47f73389e"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/retention-v1/README.md",
+          "sha256": "0381d6949150bce61f5210106a2ff3a40d3482992fcaa1508d1d0ad4d1c07e20"
+        },
+        {
+          "path": "docs/ingestion/barodesy-clay-2017/retention-v1/receipts.json",
+          "sha256": "6be2d44f7502424e2a9b65daab5b37a38c102d925181b6081c4766c406818fdf"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-runtime-v1/manifest.json",
+          "sha256": "fae2ce7c7a717a088199ccd162a9a6b35c179d28dd573596bcc09ba9c81ae35b"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-hydro-ad-v1/manifest.json",
+          "sha256": "994a697949caf3b41e4c89013dc663e22eb23bb18c22e11d95abd1d7d3715a00"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-integration-v1/manifest.json",
+          "sha256": "92dc862c1888133faa95f957456b53b59a643c479d559718dd3ed779619f92ee"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-wider-integration-v1/manifest.json",
+          "sha256": "34b6f71657e6b5eeb2655be9cdf995a3bf132c7c9fbdc5368660453fd5f01f34"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-preview-v1/manifest.json",
+          "sha256": "3d6bfedc1c3e8b3cc2411651891743dcf85d4f46fc65b2d142f6838bb667bd15"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-preview-v2/manifest.json",
+          "sha256": "170a451dac8b7a0885b7d8f6a82653396237f02c3cd99b99f0e832e55f1c3227"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-preview-v2/browser-default-v1/manifest.json",
+          "sha256": "d01ab858070c294d1381bd274a879a466797aa8cca7991b306c6db4bb810ad85"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-preview-v2/assessment.json",
+          "sha256": "f87be4b35ea7bdbf34a9faa51bab65a2922ecca27cc0a27bd2fded57e9f81840"
+        },
+        {
+          "path": "catalogue/investigations/barodesy2017-preview-v2/browser-default-v1/assessment.json",
+          "sha256": "d957ecaae154deed91de262202ae8d6945cfe14cd92942a348f80e781013b9b4"
+        },
+        {
+          "path": "models/research/barodesy2017/body-zero-spin.json",
+          "sha256": "16e0ef4de35ea1b47c4dc9122f01a264c56993d6851ba2387e974c0ff5f0af4f"
+        },
+        {
+          "path": "docs/reviews/barodesy-clay-2017-source-packet.md",
+          "sha256": "e2026e4bc811f39bd5589a09ec5dca0fc54b9c34fc2e6927fbe357601b3d51a4"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-independent-review.md",
+          "sha256": "64b09aa27ec2467ee525df831159b1ba51869397947634c8327c4648d1ff3d89"
+        },
+        {
+          "path": "docs/models/barodesy2017-research-rates.md",
+          "sha256": "30a2220cbca11a9ae27dd606a3abf5de42cce74349beb2da6ce19c91c2c784e8"
+        },
+        {
+          "path": "docs/models/barodesy2017-laboratory-preview.md",
+          "sha256": "2cd1bd935c4c268ad8e9ff447fe1905f9de90159315a5a223a5ffd3c3ebab0da"
+        },
+        {
+          "path": "docs/reviews/barodesy2017-wider-integration-results.md",
+          "sha256": "98efed1f36b3cadf903a135790f355eefecca67ca7b0f02fc105a69695babfe9"
+        }
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false
+    }
+  ]
+}

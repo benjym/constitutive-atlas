@@ -1,0 +1,46 @@
+[
+  {
+    "name": "historical-source-replay",
+    "command": [
+      "python3",
+      "-B",
+      "/private/tmp/burgers-checklist-release-audit/docs/ingestion/burgers-itasca900/verify.py"
+    ],
+    "returncode": 0,
+    "output": "historical-source-replay.txt"
+  },
+  {
+    "name": "historical-review-replay",
+    "command": [
+      "python3",
+      "-B",
+      "/private/tmp/burgers-checklist-release-audit/docs/reviews/burgers-scientific-v1/verify.py"
+    ],
+    "returncode": 0,
+    "output": "historical-review-replay.txt"
+  },
+  {
+    "name": "independent-reference-replay",
+    "command": [
+      "python3",
+      "-B",
+      "docs/reviews/burgers-scientific-v1/independent_check.py"
+    ],
+    "returncode": 0,
+    "output": "independent-reference-replay.txt"
+  },
+  {
+    "name": "regressions",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "tests.test_burgers",
+      "tests.test_time.TemporalLanguageTests",
+      "-q"
+    ],
+    "returncode": 0,
+    "output": "regressions.txt"
+  }
+]

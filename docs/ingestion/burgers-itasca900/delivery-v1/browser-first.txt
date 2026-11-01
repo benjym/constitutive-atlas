@@ -1,0 +1,28 @@
+### Ran Playwright code
+```js
+await (async page => {
+ await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const before=await page.locator('#timed-state').textContent();
+ const download=page.waitForEvent('download');await page.getByRole('button',{name:'Export full result',exact:true}).click();await(await download).saveAs('output/playwright/burgers-default.json');
+ await page.locator('#timed-duration').fill('0');await page.getByRole('button',{name:'Run physical-time history',exact:true}).click();
+ if(!(await page.locator('#timed-status').textContent()).startsWith('Invalid input:'))throw Error('Invalid duration not rejected');
+ if(!(await page.getByRole('button',{name:'Export full result',exact:true}).isDisabled()))throw Error('Stale export after invalid input');
+ await page.getByRole('button',{name:'Reset example',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ if(await page.locator('#timed-state').textContent()!==before)throw Error('Reset state mismatch');
+ await page.locator('#timed-file').setInputFiles('output/playwright/burgers-default.json');await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ const second=page.waitForEvent('download');await page.getByRole('button',{name:'Export full result',exact:true}).click();await(await second).saveAs('output/playwright/burgers-replay.json');
+ if(await page.locator('#timed-state').textContent()!==before)throw Error('Imported replay state mismatch');
+ await page.locator('#timed-mode').selectOption('creep');await page.getByRole('button',{name:'Run physical-time history',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ const creep=page.waitForEvent('download');await page.getByRole('button',{name:'Export full result',exact:true}).click();await(await creep).saveAs('output/playwright/burgers-creep.json');
+ await page.screenshot({path:'output/playwright/burgers-main-laboratory.png',fullPage:true});
+ console.log(JSON.stringify({ok:true,default_reset_replay:true,invalid_duration_recovery:true,creep:await page.locator('#timed-summary').textContent(),console_errors:errors}));
+})(page);
+```
+### Events
+- Downloading file burgers-relaxation.json ...
+- Downloaded file burgers-relaxation.json to ".playwright-cli/burgers-relaxation.json"
+- Downloading file burgers-relaxation.json ...
+- Downloaded file burgers-relaxation.json to ".playwright-cli/burgers-relaxation.json"
+- Downloading file burgers-creep.json ...
+- Downloaded file burgers-creep.json to ".playwright-cli/burgers-creep.json"

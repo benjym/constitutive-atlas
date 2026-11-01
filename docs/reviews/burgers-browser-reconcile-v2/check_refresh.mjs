@@ -1,0 +1,20 @@
+// Execute only source-extracted description refresh, never a compiled engine.
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+import {recordedDescription} from '../../../web/formulation-view.mjs';
+const app=readFileSync(new URL('../../ingestion/burgers-itasca900/delivery-v1/reconcile-v4/source/web/app.js',import.meta.url),'utf8');
+const refresh=app.slice(app.indexOf('function refreshRecordedDescriptions(){'),app.indexOf('function restoreCatalogueFocus(){'));
+const id='burgers-itasca900-dry-zero-spin-ode';
+const nodes={model:{value:id},'model-description':{textContent:'bounded timed description'},'equation-content':{querySelector:()=>({textContent:'timed equations'})},'catalogue-dialog':{open:false}};
+const before=JSON.stringify(nodes);
+const context=vm.createContext({models:[{id:'ordinary',description:'ordinary'}],catalogue:[{id,note:'bounded timed note'}],location:{hash:'#laboratory?model='+id},catalogueRoute:()=>({modelId:null}),evidenceIndex:{agent_reviews:[{catalogue_id:id,status:'accepted',definition_current:true,registered_approval_id:'approval'}]},recordedDescription,$:key=>nodes[key]});
+vm.runInContext(refresh,context);vm.runInContext('refreshRecordedDescriptions()',context);
+assert.equal(JSON.stringify(nodes),before);
+const body={querySelector:s=>s==='.catalogue-detail-note'?note:null},note={textContent:'bounded timed note'};
+nodes['catalogue-dialog'].open=true;nodes['catalogue-detail-body']=body;
+context.catalogueRoute=()=>({modelId:id});vm.runInContext('refreshRecordedDescriptions()',context);
+assert.equal(nodes['model-description'].textContent,'bounded timed description');
+assert.equal(note.textContent,recordedDescription('bounded timed note',id,context.evidenceIndex));
+assert.ok(note.textContent.endsWith('bounded timed note'));
+console.log(JSON.stringify({burgers_selected_refresh_checks:4,compiled_calls:0}));

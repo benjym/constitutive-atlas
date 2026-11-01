@@ -1,0 +1,34 @@
+### Result
+{"ok":true,"package":"scoped12modelrelease","actual_default_creep":true,"download_import_exact_state":true,"invalid_reset_recovery":true,"ordinary_switch":true,"catalogue_route":true,"internal_source_review_links":["http://127.0.0.1:8976/release-site/engine-burgers/review.json","http://127.0.0.1:8976/release-site/engine-burgers/approval.json","http://127.0.0.1:8976/release-site/engine-burgers/burgers-itasca900-dry-zero-spin-ode.json","http://127.0.0.1:8976/release-site/docs/models/burgers-main-laboratory-v1.md.html"],"mobile_no_overflow":true,"page_errors":[]}
+### Ran Playwright code
+```js
+await (async page => {
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.setViewportSize({width:1440,height:1000});
+ await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ const first=page.waitForEvent('download');await page.locator('#timed-export').click();await(await first).saveAs('output/playwright/burgers-release-default.json');
+ const state=await page.locator('#timed-state').textContent();
+ await page.locator('#timed-duration').fill('0');await page.locator('#timed-run').click();if(!(await page.locator('#timed-status').textContent()).startsWith('Invalid input:'))throw Error('Invalid input');
+ await page.locator('#timed-reset').click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ await page.locator('#timed-file').setInputFiles('output/playwright/burgers-release-default.json');await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ if(await page.locator('#timed-state').textContent()!==state)throw Error('Replay differs');
+ const replay=page.waitForEvent('download');await page.locator('#timed-export').click();await(await replay).saveAs('output/playwright/burgers-release-replay.json');
+ await page.locator('#timed-mode').selectOption('creep');await page.locator('#timed-run').click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ const creep=page.waitForEvent('download');await page.locator('#timed-export').click();await(await creep).saveAs('output/playwright/burgers-release-creep.json');
+ await page.screenshot({path:'output/playwright/burgers-release-desktop.png',fullPage:true});
+ await page.locator('#model').selectOption('linear-elastic');await page.waitForFunction(()=>document.querySelector('#run-state').textContent.includes('up to date'));
+ await page.goto('http://127.0.0.1:8976/release-site/index.html#catalogue/burgers-itasca900-dry-zero-spin-ode');await page.waitForFunction(()=>document.querySelector('#catalogue-dialog').open);await page.locator('#catalogue-explore').click();await page.waitForFunction(()=>document.querySelector('#timed-status').textContent.startsWith('Completed'));
+ await page.locator('#equations-button').click();
+ const links=await page.locator('#timed-equations a').evaluateAll(a=>a.filter(x=>x.origin===location.origin).map(x=>x.href));
+ for(const url of links){const r=await page.request.get(url);if(!r.ok())throw Error('Broken source/review link '+url);}
+ await page.setViewportSize({width:390,height:844});await page.screenshot({path:'output/playwright/burgers-release-mobile.png',fullPage:true});if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1))throw Error('Mobile overflow');
+ if(errors.length)throw Error(errors.join(';'));
+ return {ok:true,package:'scoped12modelrelease',actual_default_creep:true,download_import_exact_state:true,invalid_reset_recovery:true,ordinary_switch:true,catalogue_route:true,internal_source_review_links:links,mobile_no_overflow:true,page_errors:errors};
+})(page);
+```
+### Events
+- Downloading file burgers-relaxation.json ...
+- Downloaded file burgers-relaxation.json to ".playwright-cli/burgers-relaxation.json"
+- Downloading file burgers-relaxation.json ...
+- Downloaded file burgers-relaxation.json to ".playwright-cli/burgers-relaxation.json"
+- Downloading file burgers-creep.json ...
+- Downloaded file burgers-creep.json to ".playwright-cli/burgers-creep.json"

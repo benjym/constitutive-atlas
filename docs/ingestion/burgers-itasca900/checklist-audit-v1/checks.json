@@ -1,0 +1,66 @@
+[
+  {
+    "name": "source-replay",
+    "command": [
+      "python3",
+      "-B",
+      "docs/ingestion/burgers-itasca900/verify.py"
+    ],
+    "revision": "f18db8e75d27cf182f2c03dfcd6534b7f51d5a86",
+    "returncode": 0,
+    "output": "source-replay.txt",
+    "sha256": "e0cd97357ce1356c88f4052fcc9b7a7b6e00badbd76daac35e887fb4a5416f01"
+  },
+  {
+    "name": "integration-replay",
+    "command": [
+      "python3",
+      "-B",
+      "docs/ingestion/burgers-itasca900/integration-v1/verify.py"
+    ],
+    "revision": "f18db8e75d27cf182f2c03dfcd6534b7f51d5a86",
+    "returncode": 0,
+    "output": "integration-replay.txt",
+    "sha256": "6e006dba0b29d4158c3e4b6e6809e4c7b3c9f1de117da08dc96ac12fa66144ea"
+  },
+  {
+    "name": "scientific-review-replay",
+    "command": [
+      "python3",
+      "-B",
+      "docs/reviews/burgers-scientific-v1/verify.py"
+    ],
+    "revision": "f18db8e75d27cf182f2c03dfcd6534b7f51d5a86",
+    "returncode": 0,
+    "output": "scientific-review-replay.txt",
+    "sha256": "e68ce871bc5ddf5486475b94bda170631921500d7553bcdcdca58942c69becff"
+  },
+  {
+    "name": "regressions",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "tests.test_burgers",
+      "tests.test_time.TemporalLanguageTests",
+      "-q"
+    ],
+    "revision": "f18db8e75d27cf182f2c03dfcd6534b7f51d5a86",
+    "returncode": 0,
+    "output": "regressions.txt",
+    "sha256": "618b403c3235d81c7220201ee1c6456bd1e99ff0ec72e1bdaef17b8167f36801"
+  },
+  {
+    "name": "approval-integrity",
+    "command": [
+      "python3",
+      "-B",
+      "docs/admission/burgers-approved-v1/check.py"
+    ],
+    "revision": "f18db8e75d27cf182f2c03dfcd6534b7f51d5a86",
+    "returncode": 0,
+    "output": "approval-integrity.txt",
+    "sha256": "61ae94b96fe5a44a5f914b28050e1445c9ae6bc2b3c9e81285b33e101f366699"
+  }
+]
