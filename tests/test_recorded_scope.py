@@ -7,6 +7,7 @@ import unittest
 from unittest.mock import patch
 from atlas.dsl import ValidationError
 from atlas.model import ROOT,all_models,load,migrate_formulation
+from atlas.stress import stress_binding
 from atlas.recorded import execute_recorded,recorded_wire
 from atlas.recorded_scope import validate_scoped_recorded_run,validate_scoped_recorded_model,scoped_recorded_wire
 from tests.test_recorded_api import specimen
@@ -15,7 +16,10 @@ from tests.test_recorded_api import specimen
 def corpus():
     rows=[];request={**specimen(),'version':'experimental-recorded-run-0.2','stress_scope':'effective'}
     for model in all_models():
-        s=copy.deepcopy(request);s['model']=model['id'];rows.append(dict(name=model['id'],request=s,model=model,accepted=True))
+        s=copy.deepcopy(request);s['model']=model['id'];s['stress_scope']=stress_binding(model)['scope']
+        rows.append(dict(name=model['id'],request=s,model=model,accepted=True))
+        wrong=copy.deepcopy(s);wrong['stress_scope']='total' if s['stress_scope']=='effective' else 'effective'
+        rows.append(dict(name=model['id']+'-opposite-scope',request=wrong,model=copy.deepcopy(model),accepted=False))
     model=migrate_formulation(load(ROOT/'models/linear-elastic.json'))
     for scope in ['effective','total']:
         m=copy.deepcopy(model);m['formulation']['stress']['scope']=scope
@@ -58,7 +62,10 @@ class RecordedScopeTests(unittest.TestCase):
         result=subprocess.run(['node','tests/test_recorded_scope_browser.mjs'],cwd=ROOT,input=json.dumps(rows,allow_nan=False),capture_output=True,text=True,timeout=30)
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
         self.assertEqual(json.loads(result.stdout),expected);self.assertEqual(rows,before)
-        self.assertEqual(len(rows),28)
+        models=all_models()
+        self.assertEqual({row['name'] for row in rows if row['accepted'] and not row['name'].startswith('explicit-')},{model['id'] for model in models})
+        self.assertEqual(sum(row['name'].endswith('-opposite-scope') for row in rows),len(models))
+        self.assertEqual(len(rows),2*len(models)+2+17)
 
     def test_ordered_wire_is_identical_to_legacy_mechanics(self):
         for row in corpus():
