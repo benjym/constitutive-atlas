@@ -1,0 +1,32 @@
+{
+  "kind": "prospective-power10-homogeneous-variation-v2",
+  "case": "extension-e0.907-p20000",
+  "configs": [
+    [
+      80,
+      "1e-10"
+    ],
+    [
+      80,
+      "1e-12"
+    ],
+    [
+      100,
+      "1e-12"
+    ]
+  ],
+  "representation": "phi=10**exponent * psi; after accepted RK step shift=max(abs(psi)).adjusted(); psi=scaleb(psi,-shift); exponent+=shift. Base27 unchanged by rescaling.",
+  "local_error_contract": "Original base scales (stress/p0, histories/1); variation errors use max(1,abs(psi_high)) componentwise in normalized coordinates. New coordinate/error-control contract, not original v1 norm.",
+  "budgets": {
+    "attempts_per_sample": 20000,
+    "minimum_step": "1e-30"
+  },
+  "unchanged_output_gates": {
+    "arithmetic": "1e-40",
+    "temporal": "1e-4",
+    "nonlinear_swap": "1e-20"
+  },
+  "base_scaled_error_max": "1e-8",
+  "reuse": "Exact historical 15 completed variation runs and 8 nonlinear runs; replace only three failed runs in separately named composite audit. Original failures stay immutable.",
+  "stop": "Only three new independent ODE runs. No compiled builds, candidate integration, changed model or scientific admission."
+}
