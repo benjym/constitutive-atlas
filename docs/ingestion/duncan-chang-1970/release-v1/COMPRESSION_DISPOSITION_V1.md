@@ -1,0 +1,1 @@
+No core numerical-reference compression is proposed in this release. Keep the explicit raw scientific-reference JSON and receipt inputs on the public source allowlist. Historical compiled control sandboxes/native binaries remain preserved locally and excluded from staging.

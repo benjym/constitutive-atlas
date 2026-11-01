@@ -1,0 +1,1 @@
+Actual IAB CUA http://127.0.0.1:18815/#laboratory: exact OCC selected;100increments drained complete63.7ms; warn/error logs scoped18815 empty. Standardpackagev5 and supported-input check pass; separate renewed merge preservation accepted. App/engine/model source unchanged. Required main CI/deploy/live pending.

@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import crypto from 'node:crypto';
+import {pathToFileURL} from 'node:url';
+import {decodeRequest} from './transport.mjs';
+const request=JSON.parse(fs.readFileSync(0,'utf8'));
+const args=decodeRequest(request);
+const hash=x=>crypto.createHash('sha256').update(x).digest('hex');
+const wasm=fs.readFileSync(request.wasm),loader=fs.readFileSync(request.loader);
+if(hash(wasm)!==request.wasm_sha256||hash(loader)!==request.loader_sha256)throw Error('artifact identity mismatch');
+const {default:create}=await import(pathToFileURL(request.loader));
+const module=await create({wasmBinary:wasm});
+const output=module.ccall(request.name,request.result,request.types,args);
+if(typeof output!=='string')throw Error('API must return JSON string');
+JSON.parse(output);process.stdout.write(output);

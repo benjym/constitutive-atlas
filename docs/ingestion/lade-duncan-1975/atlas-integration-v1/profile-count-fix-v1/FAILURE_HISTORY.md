@@ -1,0 +1,3 @@
+The initial pre-acceptance consumer scan included duplicate receipt copies under frozen shared-hook v4/v5 prospective contexts (10 maps,18metadata,129checks). Its exact outputs/source are retained in initial-proposal/. The corrected active-consumer scope excludes prior prospective contexts, matching previous preservation planners:8maps,16metadata,123checks. All genuine current receipt consumers remain preserved.
+
+The first freeze-writer snippet stopped before creating SOURCE_FREEZE.json because its relative proposal path could not be made relative to an absolute repository root. Correcting the writer to resolve the proposal directory fixed this local evidence-emission error. No proposal/policy gate or production file changed.

@@ -1,0 +1,322 @@
+{
+  "schema_version": "0.3",
+  "id": "norsand-jefferies-1993-active-axial",
+  "name": "NorSand Jefferies 1993 \u2014 active drained axial formulation",
+  "family": "critical-state sand plasticity",
+  "description": "Exact original active monotonic rigid-plastic axial equations; no elasticity, unloading/cyclic, general Lode or finite-rotation law. Current-volume void-ratio reconstruction and midpoint integration are explicit Atlas numerical choices. Staged capability candidate; not approved or installed. Parameter bounds are prospective numerical study bounds, not universal source ranges.",
+  "status": "draft",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1680/geot.1993.43.1.91",
+      "locator": "pp91\u2013103; Eqs5\u201312; p98 forward integration and consistency; p101 elasticity limitation",
+      "role": "original source, supplied private PDF SHA256 fee99108e493f34eb987c759eddf73cfc86e77102c73e42d099c00f1209851b9"
+    }
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "path_ode",
+    "kinematics": "axisymmetric_x",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "path_coordinate": {
+          "quantity": "path_coordinate",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "C": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "pressure_control",
+            "derivative_order": 0
+          }
+        },
+        "Cs": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "pressure_control",
+            "derivative_order": 1
+          }
+        },
+        "K": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "stress_ratio_control",
+            "derivative_order": 0
+          }
+        },
+        "Ks": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "stress_ratio_control",
+            "derivative_order": 1
+          }
+        }
+      },
+      "advance": {
+        "start_coordinate": {
+          "quantity": "path_coordinate",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "start",
+          "constraint": "finite"
+        },
+        "progress": {
+          "quantity": "path_progress",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "interval",
+          "constraint": "nonnegative_finite"
+        }
+      }
+    },
+    "stress": {
+      "source": "observable",
+      "name": "stress",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "parameters": {
+    "M": {
+      "unit": "1",
+      "default": 1.2,
+      "min": 0.8,
+      "max": 1.8
+    },
+    "N": {
+      "unit": "1",
+      "default": 0.2,
+      "min": 0,
+      "max": 0.39
+    },
+    "h": {
+      "unit": "1",
+      "default": 280,
+      "min": 10,
+      "max": 500
+    },
+    "lam": {
+      "unit": "1",
+      "default": 0.0135,
+      "min": 0.005,
+      "max": 0.04
+    },
+    "Gamma": {
+      "unit": "1",
+      "default": 0.82,
+      "min": 0.5,
+      "max": 1.5
+    },
+    "pref": {
+      "unit": "Pa",
+      "default": 1000,
+      "min": 1000,
+      "max": 1000
+    }
+  },
+  "state": [
+    {
+      "name": "eta",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "axial_stress_ratio",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0.59,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "ev",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "accumulated_current_volume_strain",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "eq",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "accumulated_work_conjugate_shear_strain",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "B",
+      "expr": "1-K*eta"
+    },
+    {
+      "name": "p",
+      "expr": "C/B"
+    },
+    {
+      "name": "q",
+      "expr": "p*eta"
+    },
+    {
+      "name": "r",
+      "expr": "select(N > 0, ((1-N*eta/M)/(1-N))**((N-1)/N), exp(eta/M-1))"
+    },
+    {
+      "name": "pi",
+      "expr": "p*r"
+    },
+    {
+      "name": "psi_i",
+      "expr": "e-Gamma+lam*log(pi/pref)"
+    },
+    {
+      "name": "rL",
+      "expr": "select(N > 0, (1+3.5*psi_i*N/M)**((N-1)/N), exp(-3.5*psi_i/M))"
+    },
+    {
+      "name": "D",
+      "expr": "(M-eta)/(1-N)"
+    },
+    {
+      "name": "Y",
+      "expr": "select(N > 0, (p/pi)**(N/(1-N)), 1)"
+    },
+    {
+      "name": "eta_rate",
+      "expr": "M*Y*B/(B+K*M*Y)*(h*(rL/r-1)-Cs/C-Ks*eta/B)"
+    }
+  ],
+  "equations": {
+    "eta": "eta_rate",
+    "e": "-(1+e)*D",
+    "ev": "D",
+    "eq": "1"
+  },
+  "domain": [
+    "M > 0",
+    "h > 0",
+    "lam > 0",
+    "N >= 0",
+    "N <= 0.39",
+    "C > 0*C",
+    "B > 0",
+    "p > 0*p",
+    "e > 0",
+    "eta >= 0",
+    "1-N*eta/M > 0",
+    "1+3.5*psi_i*N/M > 0",
+    "B+K*M*Y > 0"
+  ],
+  "observables": [
+    {
+      "name": "stress",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "pref",
+      "expr": "sym(p+2*q/3,p-q/3,p-q/3,0*p,0*p,0*p)"
+    },
+    {
+      "name": "mean_pressure",
+      "shape": "scalar",
+      "unit": "Pa",
+      "scale": "pref",
+      "expr": "p"
+    },
+    {
+      "name": "deviatoric_stress",
+      "shape": "scalar",
+      "unit": "Pa",
+      "scale": "pref",
+      "expr": "q"
+    },
+    {
+      "name": "image_pressure",
+      "shape": "scalar",
+      "unit": "Pa",
+      "scale": "pref",
+      "expr": "pi"
+    },
+    {
+      "name": "image_state_parameter",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "psi_i"
+    },
+    {
+      "name": "dilatancy",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "D"
+    },
+    {
+      "name": "axial_strain",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "eq+ev/3"
+    },
+    {
+      "name": "radial_strain",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "ev/3-eq/2"
+    }
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "eta",
+      "e",
+      "ev",
+      "eq"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
+}

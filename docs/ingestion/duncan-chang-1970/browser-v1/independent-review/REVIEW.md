@@ -1,0 +1,29 @@
+# Independent saved main-browser, package and database review
+
+Reviewer `/root/duncan_complete_review`,2026-11-01, separate from coordinator `/root`. **The bounded saved browser/package/database checks pass. Full E6/E7 remain NOT ACCEPTED because the original cross-backend browser-wire diagnostic gate still fails and aborts its coverage.** This does not waive that gate, authorize publication, or claim live delivery. No compiled code or browser-control API was executed by this reviewer.
+
+Read the actual retained action logs, referenced page snapshots, exports, fetched-asset records and check_saved_browser.py. That checker writes copied snapshots and a new result file; I did not rerun its mutation path. Instead, `audit_saved.py` independently reproduces the saved assertions read-only and adds direct result-control/history checks, full package hashing and read-only database queries. Every file pinned by browser-audit-results.json rehashes correctly.
+
+## Browser evidence
+
+The snapshots show the actual main catalogue/laboratory at local127.0.0.1 with the exact Duncan variant, accepted independent-review scope, private-source provenance, explicit formulation/limitations and pair applicability not assessed. The retained catalogue-to-laboratory navigation is real action evidence, not an isolated custom Duncan page. The saved screenshot was visually inspected: the selected loose source example has effective-stress response, axial strain in%, stress in kPa, plausible nonlinear stress response and the expected constant-ν volumetric response; the unavailable pore-pressure channel is labelled accordingly. There is no selected measurement overlay. The generic measurement selector remains visible, but no calibration, experimental comparison or suitability is established by this session.
+
+Both named128-increment source presets were previewed, loaded, completed and exported in the actual UI. Each exported specification and all129complete point objects equal its registered Wasm document, including seven-component state and point diagnostics. The dense document was actually imported and freshly replayed, then exported with identical specification and complete point history. Equality here is saved browser-to-same-Wasm evidence, not a native/Wasm bitwise claim or new independent source reference.
+
+The retained invalid-history snapshot shows h=−1kPa, a stopped response and disabled reproducible export. Subsequent recovery uses h=200kPa and K=1800. Rapid target fills0.2/0.3/0.4% are recorded. Independent checks confirm not only exported specification target0.004, but final result control0.004 and result initial history200000Pa, so the saved response is consistent with the latest request rather than merely a stale response with edited metadata. This is a bounded interaction test, not exhaustive scheduling/race verification. Reset restores all ten default parameters, all seven state values,1% target and100steps; its exported101point run succeeds.
+
+Eight assets actually fetched by that browser have status200 and exact size/hash matches to the tested package: JS/Wasm engine, generated catalogue, exact definition, evidence, examples, app and worker. Recorded final console has zero messages/errors/warnings; recorded request output has no404/500 entries. These observations do not establish unobserved session/network behavior or a production deployment.
+
+## Package and database evidence
+
+The package manifest has exactly928files. Independently verified both complete file sets and every hash in the built site-v2 and its durable private copy. The exact packaged model retains452b49ef… and fourteen-ordinary-model catalogue38f03e… . This is the retained locally tested package identity, regardless of later concurrent live source metadata changes.
+
+The SQLite file hash matches database-check.json. Read-only queries independently confirm semantic equality of the stored definition JSON to the exact model, the approval's exact definition hash/record, the exact review path/hash/record and both source rows. Foreign-key checking reports no errors. Database JSON serialization need not duplicate the model file's whitespace; the separately packaged model bytes and stored hash identify the exact approved definition. The extra discovery-reference source row remains distinguishable from the original constitutive-source locator. This validates export integrity, not scientific applicability.
+
+The saved supported-package report has14ordinary outcomes:13required successes including Duncan and only the unchanged declared GIS ordinary failure. It additionally checks one named GIS success. It does **not** test every named example; Duncan named histories have their separate material/export/browser evidence described above. The applicability appendix remains not_assessed/undetermined, with no experimental response access or scientific suitability inferred.
+
+## Remaining blocker and handoff
+
+The original browser-loading test fails on legacy Duncan protocol1 at point23, native5versusWasm4iterations, under its unchanged comparator. Its36saved pairs are an interrupted prefix; later requests remain unqualified. The isolated no-contraction experiment also fails a later cyclic-stress request and is not an accepted remedy. Neither these successful actual-UI actions nor package/database success closes that cross-backend gate. E6/E7 remain incomplete and E8 has no publication authorization.
+
+Reproduce this bounded saved-evidence audit with `python3 -B docs/ingestion/duncan-chang-1970/browser-v1/independent-review/audit_saved.py`. Exact reviewed files/results are pinned in `receipt.json`; no source or earlier review was modified. The smallest next action is a separately scoped, prospectively frozen remedy for the browser-wire diagnostic disagreement, followed by the complete unchanged gate and independent review of its results. Preserve the original failure and all current scientific/reference budgets.

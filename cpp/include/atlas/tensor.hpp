@@ -1,4 +1,5 @@
 #pragma once
+#include "atlas/scalar_functions.hpp"
 #include <limits>
 #include <algorithm>
 #include <array>
@@ -65,11 +66,11 @@ inline double acos(double a){return std::cos(a);}
 inline Jet acos(const Jet&a){return unary(a,std::cos(a.v),-std::sin(a.v));}
 inline double aabs(double a){return std::abs(a);}
 inline Jet aabs(const Jet&a){return unary(a,std::abs(a.v),a.v>=0?1:-1);}
-inline double apow(double a,double b){return std::pow(a,b);}
+inline double apow(double a,double b){return ::atlas_scalar_power(a,b);}
 inline Jet apow(const Jet&a,const Jet&b){
-    const double v=std::pow(a.v,b.v);Jet c(v);
+    const double v=::atlas_scalar_power(a.v,b.v);Jet c(v);
     for(int i=0;i<max_derivatives;++i) {
-        const double da=a.d[i]==0?0:b.v*std::pow(a.v,b.v-1)*a.d[i];
+        const double da=a.d[i]==0?0:b.v*::atlas_scalar_power(a.v,b.v-1)*a.d[i];
         const double db=b.d[i]==0?0:v*std::log(a.v)*b.d[i];
         c.d[i]=da+db;
     }

@@ -1,0 +1,32 @@
+{
+  "id": "lade1975-triaxial-reference-v1",
+  "frozen_before_reference_and_compiled_results": true,
+  "scope": "Monotonic drained-equivalent uncoupled total mechanical triaxial compression, radial stresses60000Pa fixed, initial sigma60000I, Table1 dense/loose; no pore evolution",
+  "independent_reference": "Stress-driven axial/radial strain compliance quadrature from scalar triaxial source gradient and work law; split at exact ft crossing, invert axial strain by bisection; constant pressure gives Eq16 work analytic crosscheck",
+  "targets_axial_strain": [
+    0.0002,
+    0.001,
+    0.002,
+    0.005
+  ],
+  "quadrature_abs_strain_tolerances": [
+    1e-11,
+    1e-13
+  ],
+  "reference_convergence": {
+    "relative_axial_stress": 1e-07,
+    "absolute_radial_strain": 1e-09
+  },
+  "native_refinement_steps": [
+    100,
+    400,
+    1600
+  ],
+  "native_final_reference_bounds": {
+    "relative_axial_stress": 0.005,
+    "absolute_radial_strain": 0.0001,
+    "relative_work_using_1Pa_floor": 0.02
+  },
+  "native_required": "last refinement passes all bounds and differences decrease for smooth plastic targets; retained failures block gate",
+  "limitations": "Only this restricted protocol; does not qualify arbitrary3D, rollback, history reversals, Wasm or browser; policies for remaining gates must be frozen separately before observation"
+}

@@ -55,7 +55,7 @@ class RecordedBrowserTests(unittest.TestCase):
         self.assertIn("'recorded.mjs'",builder)
         self.assertNotIn('bundle_j2(dest',builder)
         self.assertNotIn('bundle_sls(dest',builder)
-        self.assertNotIn('bundle_power_creep(dest',builder)
+        self.assertIn('bundle_power_creep(dest',builder)
 
 
 if __name__=='__main__':unittest.main()

@@ -1,0 +1,5 @@
+# Additive dossier/input preflight review
+
+Reviewer `/root/duncan_complete_review`,2026-11-01. Read the new DOSSIER.md and additive check_inputs.py/input-results.json after the114-file freeze. These additions do not mutate that closure or acceptance policy. Dossier law, conventions, numerical choices, source limitations and rights agree with the reviewed candidate; it remains a candidate under qualification. Clerical feedback to the coordinator: Eq1 begins on printed1630; restart needs seven components of two persistent fields; inline equation delimiters should render clearly. These do not affect the frozen scientific/engine bytes.
+
+Independently reran check_inputs.py with its sole write intercepted and compared output text exactly with saved input-results.json:72 final-candidate source/interpreter residual/branch comparisons, candidate identity and recursive exact-wire preflight reproduce. This evaluates residual expressions, not a material update. No compiled call/build or material update occurred. The prospective design acceptance remains unchanged; no numerical/E5/delivery decision is added. Earlier review reports/receipts remain unchanged.

@@ -1,0 +1,11 @@
+# Prospective solver trial-feasibility blocker
+
+Reviewer: `/root/duncan_complete_review`,2026-11-01. Source/algebra inspection only; zero compiled material observations.
+
+Current cpp/include/atlas/solver.hpp implicit_step calls solution_admissible on the initial Newton state, every line-search trial, and the converged state. The candidate physical solution constraint requires h>=principal_max_value(sigma)-principal_min_value(sigma).
+
+At a hydrostatic committed/current stress pI with h=0, the accepted exact-triple-repeat branch sets both principal extrema to trace(sigma/3). Therefore their selected linear rows coincide, dD=0, and the history residual h-D has linearization dh. The first Newton solve has delta_h=0. Choose nonzero compression-positive axial strain with transverse strain=-nu*axial strain. Its elastic stress predictor is anisotropic, so the stress Newton direction is nonhydrostatic. More explicitly, with Ei=K pa(p/pa)^n and t=Ei*de_axial, the primary stress block is a rank-one perturbation: delta_sigma_xx=t/[1-t*n/(6p)], other stress components zero, provided this denominator is positive; delta_h=0. This holds for ordinary sufficiently small positive axial increments within the source domain.
+
+For every nonzero line-search fraction yielding a representably changed stress, the trial has positive D but unchanged h=0, so the physical endpoint constraint rejects it. A fraction rounding the stress back to its starting value cannot strictly reduce the residual. Subdivision leaves the same obstruction unless it reduces loading beneath stopping tolerance, which is not meaningful advancement. This is a real mismatch between the chosen nonsmooth Newton row and feasibility of every trial, not missing source information or an endpoint law error.
+
+Required resolution is a separately scoped/reviewed generic solver mechanism: distinguish arithmetic/material trial domain from constraints required of a converged accepted solution, or provide a justified feasible predictor/globalization. Retain physical h>=D at initialization and accepted endpoints, source residual/branch rules, final diagnostics and full rollback. Merely removing the physical endpoint constraint, perturbing hydrostatic stress, fabricating h, or raising tolerances does not resolve the qualification requirement. No implementation choice is approved by this report.

@@ -38,7 +38,7 @@ class ClassicPublicationTests(unittest.TestCase):
         self.assertIn('Erratum for',correction['title'])
         self.assertEqual(original['model_ids'],['duncan-chang-1970'])
         self.assertEqual(correction['model_ids'],original['model_ids'])
-        self.assertEqual(lade['model_ids'],['lade-duncan-1975'])
+        self.assertEqual(lade['model_ids'],['lade-duncan-1975', 'lade-duncan-1975-midpoint-elastic-eq19-gap-v4'])
         self.assertNotIn('doi:10.1061/ajgeb6.0000208',nodes)
         edge=next(e for e in graph['relations'] if e['source']==correction['id'])
         self.assertEqual((edge['target'],edge['relation']),(original['id'],'corrects'))
@@ -61,7 +61,7 @@ class ClassicPublicationTests(unittest.TestCase):
                     row=db.execute('SELECT record_json FROM publications WHERE id=?',(ident,)).fetchone()
                     self.assertEqual(json.loads(row[0]),expected[ident])
                     bindings=db.execute('SELECT model_id FROM publication_models WHERE publication_id=?',(ident,)).fetchall()
-                    self.assertEqual(bindings,[(expected[ident]['model_ids'][0],)])
+                    self.assertCountEqual(bindings,[(model,) for model in expected[ident]['model_ids']])
                 for mid in ['duncan-chang-1970','lade-duncan-1975']:
                     self.assertEqual(db.execute('SELECT executable,definition_json FROM models WHERE id=?',(mid,)).fetchone(),(0,None))
             package=root/'web';bundle(package)

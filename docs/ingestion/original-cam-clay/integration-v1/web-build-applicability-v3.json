@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "tools/build_web.py",
+    "--wasm-dir",
+    "/private/tmp/atlas-occ-integration-v1/build-wasm",
+    "--power-creep-wasm-dir",
+    "/private/tmp/atlas-power-creep-execution-v1/wasm",
+    "--sls-wasm-dir",
+    "/private/tmp/atlas-sls-execution-v1/wasm",
+    "--j2-wasm-dir",
+    "/private/tmp/atlas-j2-execution-v2/wasm",
+    "--output",
+    "/private/tmp/atlas-occ-integration-v1/site"
+  ],
+  "returncode": 1,
+  "stdout": "Prepared 628 built-in experiments (public)\n",
+  "stderr": "Traceback (most recent call last):\n  File \"/Users/bmar5496/code/constitutive-atlas/tools/build_web.py\", line 78, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"/Users/bmar5496/code/constitutive-atlas/tools/build_web.py\", line 69, in main\n    bundle_power_creep(dest,args.power_creep_wasm_dir or args.wasm_dir)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/tools/build_power_creep_web.py\", line 22, in bundle\n    if catalogue.read_bytes()!=expected:raise ValueError('Stale power-creep catalogue: rebuild dedicated target')\n       ~~~~~~~~~~~~~~~~~~~~^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py\", line 777, in read_bytes\n    with self.open(mode='rb', buffering=0) as f:\n         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py\", line 771, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/atlas-power-creep-execution-v1/wasm/power-creep-generated/models.json'\n"
+}

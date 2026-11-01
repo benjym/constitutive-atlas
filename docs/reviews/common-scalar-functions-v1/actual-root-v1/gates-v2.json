@@ -1,0 +1,87 @@
+{
+  "native_numerical": {
+    "command": [
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-native-v1/atlas_numerical_tests"
+    ],
+    "environment": {
+      "ATLAS_NATIVE_FIXTURES": "explicit-gis20-occ-restart-duncan-v5"
+    }
+  },
+  "native_recorded": {
+    "command": [
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-native-v1/atlas_recorded_tests"
+    ],
+    "environment": {
+      "ATLAS_NATIVE_FIXTURES": "explicit-gis20-occ-restart-duncan-v5"
+    }
+  },
+  "native_strict": {
+    "command": [
+      "python3",
+      "tools/check_native_fixture_contracts.py",
+      "--build",
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-native-v1",
+      "--output",
+      "docs/reviews/common-scalar-functions-v1/actual-root-v1/strict.json"
+    ]
+  },
+  "legacy": {
+    "command": [
+      "node",
+      "tools/test_wasm.mjs",
+      "--native",
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-native-v1/atlas_solver",
+      "--wasm-dir",
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-wasm-v1",
+      "--profile-policy",
+      "catalogue/laboratory-profile-policy.json"
+    ]
+  },
+  "scoped": {
+    "command": [
+      "node",
+      "tools/test_scoped_parity.mjs",
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-native-v1/atlas_solver",
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-wasm-v1",
+      "docs/reviews/common-scalar-functions-v1/actual-root-v1/scoped.json",
+      "catalogue/laboratory-profile-policy.json"
+    ]
+  },
+  "browser_wire": {
+    "command": [
+      "node",
+      "tools/test_browser_loading.mjs",
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-native-v1/atlas_solver",
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-wasm-v1",
+      "docs/reviews/common-scalar-functions-v1/actual-root-v1/browser-wire.json",
+      "catalogue/laboratory-profile-policy.json"
+    ]
+  },
+  "scalar_native": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/test_scalar_functions.py",
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-native-v1/libatlas_scalar_probe.dylib",
+      "--output-dir",
+      "/Users/bmar5496/code/constitutive-atlas/docs/reviews/common-scalar-functions-v1/actual-root-v1/scalar-native"
+    ]
+  },
+  "scalar_wasm_collect": {
+    "command": [
+      "node",
+      "tools/collect_scalar_functions_wasm.mjs",
+      "/private/tmp/atlas-common-scalar-functions-v1/actual-root-wasm-v1/scalar-functions.js",
+      "/Users/bmar5496/code/constitutive-atlas/docs/reviews/common-scalar-functions-v1/actual-root-v1/scalar-wasm-raw.json"
+    ]
+  },
+  "scalar_wasm_assess": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/check_scalar_functions.py",
+      "/Users/bmar5496/code/constitutive-atlas/docs/reviews/common-scalar-functions-v1/actual-root-v1/scalar-wasm-raw.json",
+      "/Users/bmar5496/code/constitutive-atlas/docs/reviews/common-scalar-functions-v1/actual-root-v1/scalar-wasm-assessment.json"
+    ]
+  }
+}

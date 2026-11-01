@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "tools/build_web.py",
+    "--wasm-dir",
+    "/private/tmp/atlas-occ-integration-v1/build-wasm",
+    "--power-creep-wasm-dir",
+    "/private/tmp/atlas-power-creep-execution-v1/wasm",
+    "--sls-wasm-dir",
+    "/private/tmp/atlas-sls-execution-v1/wasm",
+    "--j2-wasm-dir",
+    "/private/tmp/atlas-j2-execution-v2/wasm",
+    "--output",
+    "/private/tmp/atlas-occ-integration-v1/site"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "file:///Users/bmar5496/code/constitutive-atlas/web/laboratory-document.mjs:6\nconst require=(v,message)=>{if(!v)throw Error(message);};\n                                        ^\n\nError: Invalid scoped laboratory envelope or catalogue.\n    at require (file:///Users/bmar5496/code/constitutive-atlas/web/laboratory-document.mjs:6:41)\n    at parseLaboratoryDocument (file:///Users/bmar5496/code/constitutive-atlas/web/laboratory-document.mjs:42:2)\n    at prepareExample (file:///Users/bmar5496/code/constitutive-atlas/web/laboratory-examples.mjs:24:83)\n    at async bundle (file:///Users/bmar5496/code/constitutive-atlas/tools/build_laboratory_examples.mjs:17:36)\n    at async file:///Users/bmar5496/code/constitutive-atlas/tools/build_laboratory_examples.mjs:24:170\n\nNode.js v26.7.0\nTraceback (most recent call last):\n  File \"/Users/bmar5496/code/constitutive-atlas/tools/build_web.py\", line 78, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"/Users/bmar5496/code/constitutive-atlas/tools/build_web.py\", line 46, in main\n    subprocess.run(['node',str(ROOT/'tools/build_laboratory_examples.mjs'),str(ROOT),str(dest),str(generated/'models.json')],check=True)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py\", line 578, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['node', '/Users/bmar5496/code/constitutive-atlas/tools/build_laboratory_examples.mjs', '/Users/bmar5496/code/constitutive-atlas', '/private/tmp/atlas-occ-integration-v1/site', '/private/tmp/atlas-occ-integration-v1/build-wasm/generated/models.json']' returned non-zero exit status 1.\n"
+}

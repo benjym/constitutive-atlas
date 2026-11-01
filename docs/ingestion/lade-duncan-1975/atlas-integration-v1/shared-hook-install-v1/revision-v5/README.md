@@ -1,0 +1,7 @@
+# Final narrow consumer supplement v5
+
+Frozen v4 remains unchanged. A new current immutable chart-axis-labels-v1/PLAN.json consumer appeared after its scan and pins the old app bytes. This revision carries all v4 preservation candidates and proofs, freshly scans recognized immutable JSON source/map pairs, and adds the missing chart receipt-bound sidecar plus any transitive map consumers. No previous map entry/document pin or historical receipt is changed or repointed.
+
+The eleven source replacements are exactly the v3/v4 proposals. All v4 live guards are checked unchanged before completing this supplement. Every new binding is checked through the actual unchanged atlas.evidence.checked_receipt API in a prospective file overlay. The 43,760 v3 passing predicates retain the v4 exact composition partition, full replay and all 78 pre-existing diagnostics; v4's 25,611 direct API checks are carried forward. SUPPLEMENT_RESULTS.json records the additional checks and candidate deltas. The independent reviewer must verify complete consumer coverage and the cached exhaustive resolution proof before any application.
+
+This directory contains a nonmutating proposal only. Run supplement.py only in a new revision if shared inputs change. The coordinator helper must use this final exact identity after independent acceptance and revalidate all live guards immediately before writing snapshots, then maps, then the eleven sources. The three outside-write drifts first recorded in v4 remain untouched.

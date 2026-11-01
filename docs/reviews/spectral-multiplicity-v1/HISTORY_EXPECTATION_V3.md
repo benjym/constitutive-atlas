@@ -1,0 +1,7 @@
+# Revised study v3 — exact successful history event expectation
+
+Study v2's native observation failed at zero: `history_recovery` was false. The complete native responses, exact driver and failing assessor stderr are retained under retained-failures/history-expectation-v2/. No numerical gate or production behavior is changed to turn that report into a pass.
+
+The synthetic history program has one unconditional advance phase. Its gate selects the written expression, not whether that phase fires. Source history_compiler.py emits `if (fires) r.events.push_back(0)` and then increments generation, including the gate0 identity write. Thus the v2 driver expected the wrong successful-recovery event sequence: empty rather than `[0]`. Failed-write rollback must still have an empty event sequence. The distinction is already specified by the generated source frozen before the v2 observation.
+
+Separate revised study v3 changes only the successful-recovery assertion to require the exact event list `[0]`, alongside full identity state, generation8, epoch3, successful status and unchanged parent. This corrects a test's misunderstanding of existing history semantics; it does not remove event coverage or waive a production failure. The numerical reference corpus, tolerances, expected numerical failures, all38 columns,1404 nonfinite checks, other transaction assertions and assessor are unchanged. Freeze v3 sources and obtain independent review before new native/Wasm observations. Never present the retained v2 failure as a pass.

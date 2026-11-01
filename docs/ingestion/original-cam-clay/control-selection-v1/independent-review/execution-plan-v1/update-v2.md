@@ -1,0 +1,31 @@
+# Revised execution-plan review
+
+Reviewer `/root/occ_selection_review`, 1 November 2026. Additive follow-up; the initial changes-requested review and bindings remain preserved. Exact revised input hashes are in `update-v2-bindings.json`. No compiled program was executed by this reviewer, and no compiled numerical outcome was used to choose or relax a gate. This is prospective plan review, not E5 approval.
+
+**Accept the revised plan for its stated finite-law, supplemental tensor/branch/tangent, public-controller and transaction studies.** Initial backend observations may proceed under the frozen gates. Acceptance is of the experiment design; success of any protocol, fallback, tangent or transaction remains an empirical result to be assessed, rather than implied by this review. Hydrostatic continuous-source refinement and integration/regression/artifact receipts remain separate E4 completion work.
+
+## Findings resolved
+
+The main collector now reads frozen model/parameters/settings. The assessor binds the minsub exception to exact `finite-404` controls and only the identified `stod`/out-of-range response without a state. Exact all-zero holds are checked against every incoming physical state field. Ordered path and negative IDs are asserted before traversal, and all propagated states require7 finite components. The independent407 references and numerical budgets are unchanged.
+
+The supplemental plan adds21 cases covering rational rotated actual controls, signed Mandel shear, both signed axial branches, an explicit axial-history reversal from a source-derived committed compression endpoint, exact nonisotropic hold, critical mechanism and dry-side softening. Its2 tangent cases use a nondegenerate smooth branch and a strict interior corner-cone branch. The latter finite endpoint map is smooth while the cone inequalities remain strict, so this is a legitimate fixed-branch derivative check; no tangent at a switching boundary is promised. Independent finite-difference references at `1e-7` and `1e-8` have a prospective convergence check and retain the `1e-5` derivative gate.
+
+Supplement assessment now requires exact case/tangent counts,7 finite state values and finite7-by6 tangent values before max-error tests. Transaction assessment checks7 finite state values, complete ordered names, required failure, at least one accepted substep, exact full-state rollback and good subsequent recovery. Public assessment checks complete ordered names, expected path lengths and7 finite state/6 finite strain components. Extra parity has its own request bindings and should be assessed together with the independent backend source/shape checks rather than used alone to certify source correctness.
+
+One small guard remained at the directly read `assess_public.py` hash: its final reference-pressure result comparison still used zip without explicitly asserting7 finite state entries. Add that shape/finiteness assertion before pressure-conversion assessment; it does not change the corpus/reference or numerical gate. The same general rule applies to every future comparison: finite full physical state first, then tolerance.
+
+## Study interpretation
+
+The ordinary/default-settings controls are frozen to require success for5 monotonic protocols and3 cyclic strain protocols, plus a physically equivalent pref/Gamma conversion. Stress/mixed-control success is a proposed outcome, not established source uniqueness. If a controller fails, preserve its frozen request/result as failed and keep that control unqualified; do not convert it to a pass by changing the expected outcome. A separately justified scope revision would need a separate identity and updated public claims.
+
+Public source checks reconstruct explicit strain increments for strain-controlled protocols and bind actual returned strain differences for mixed controls. They require a single accepted material substep and do not silently substitute the unsplit finite-law oracle for a subdivided response. A subdivided path is correctly reported as requiring an independent accepted-fraction trace. Native/Wasm parity cannot replace these checks.
+
+The accepted-prefix transaction request is source-motivated. Its total volumetric strain increment is `-2.997`, with depth2. Quarter increments have `E=-.74925`, positive backward Euler denominators, and large elastic volume increases; repeated recovery eventually drives pressure outside representable range. Earlier quarter endpoints can be representable before a later quarter fails. Requiring diagnostics to prove an accepted prefix prevents an immediate rejection from masquerading as partial-failure rollback. This is a plausible prospective test, not an assertion that the compiled engine must produce that path. Its actual outcome must remain visible.
+
+The stated native default and Wasm settings are equivalent through their respective common APIs. Wasm supplemental/controller/transaction collection uses one module, making subsequent-recovery checks meaningful. Native CLI calls restart fresh processes; they verify deterministic explicit-state transactions rather than persistence of a hidden native session. Exact midpoint replay remains a useful explicit-state restart test.
+
+## Remaining E4 scope
+
+The updated corpus is adequate to begin the scoped backend studies. Complete E4 still needs actual passing or honestly bounded results, parity, exact candidate/embedded metadata and toolchain/JS/Wasm artifact receipts, appropriate existing-model regressions and the hydrostatic continuous-source trajectory promised by the design. Freeze that trajectory's exact source relation, loading path, refinement resolutions and tolerance before observing its compiled results; do not infer it from ordinary protocol4 finite-equation agreement. No new numerical gate is supplied by this review.
+
+The recorded108-file precompiled freeze manifest predates some mechanical assessment guards reviewed here. Preserve its identity and create an additive exact current source/checker manifest rather than claiming its old hash covers later bytes. The scientific references, source/model identity, requested controls and tolerances must remain frozen. Mechanical guard additions strengthen evidence completeness and should be distinguished from a changed scientific acceptance policy.

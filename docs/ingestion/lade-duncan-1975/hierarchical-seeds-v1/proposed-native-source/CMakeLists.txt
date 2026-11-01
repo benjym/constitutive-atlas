@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 3.20)
+project(LadeGapCandidate LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+add_executable(atlas_lade_domain_candidate main.cpp)
+target_include_directories(atlas_lade_domain_candidate PRIVATE include generated)
+
+add_executable(atlas_lade_domain_regression test_path_error_control.cpp)
+target_include_directories(atlas_lade_domain_regression PRIVATE include generated)
+
+add_executable(atlas_implicit_seed_regression test_implicit_seed.cpp)
+target_include_directories(atlas_implicit_seed_regression PRIVATE include generated)
+
+add_executable(atlas_derivative_tail_regression test_derivative_tail.cpp)
+target_include_directories(atlas_derivative_tail_regression PRIVATE include generated)
+
+add_executable(atlas_hierarchical_seed_regression test_hierarchical_seeds.cpp)
+target_include_directories(atlas_hierarchical_seed_regression PRIVATE include generated)

@@ -1,0 +1,1 @@
+First pre-build generation rejected synthetic empty sources metadata. No build or compiled observation. Corrected fixture provenance and lexicographic filenames to pin generated model indexes before execution.

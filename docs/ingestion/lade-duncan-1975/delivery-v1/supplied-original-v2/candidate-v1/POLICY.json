@@ -1,0 +1,46 @@
+{
+  "id": "lade1975-local-eq19-be-policy-v1",
+  "frozen_before_candidate_execution": true,
+  "source": "../source-receipt.json",
+  "scope": "Isolated pre-failure1975-law numerical realization; not a public model or1977 variant",
+  "formulation_choices": {
+    "profile": "strain_path/incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "stress_scope": "total, restricted uncoupled mechanical/zero-pore-pressure embedding; no fluid interpretation or source total/effective decomposition claimed",
+    "sigma3": "current minimum principal stress",
+    "sampling": "all coefficients evaluated at endpoint stress",
+    "discretization": "backward-Euler Eq19, only positive newly reached f beyond committed h>=ft",
+    "kappa2": "evaluate at current f then hold fixed in potential stress gradient",
+    "history": [
+      "sigma",
+      "h=max(initial threshold, historical reached f)",
+      "wp accumulated local Eq19 work density"
+    ],
+    "initial_example": "sigma=100000I Pa,h=ft,wp=0 relative to start of shearing; not computed consolidation",
+    "minimum_ties": "lazy-select exact min; (trace-max)/2 at double minimum, trace/3 hydrostatic; Clarke cluster-average generalized Jacobian, not classical directional derivative",
+    "failure": "reject f>kappa1; no postfailure extension",
+    "hold": "zero mechanical increment gives identical state; no physical clock"
+  },
+  "qualification_before_approval": [
+    "bothTable1sets",
+    "independent source-gradient and Euler work checks",
+    "exact hydrostatic elastic endpoint and proportional-stress no-plasticity checks",
+    "prescribed-stress source-increment reference inversion",
+    "threshold and unload/reload maximum history",
+    "decreasing pressure and repeated-eigenvalue branch paths",
+    "step refinement toward independently stress-driven differential reference",
+    "rotated fixed-frame covariance including ties",
+    "zero increment,invalid input,fullstate rollback,recovery,restart",
+    "native/Wasm interfaces and actual browser"
+  ],
+  "early_gates": {
+    "validation_generation": "must validate exact candidate and generate standalone normal engine",
+    "hydrostatic_endpoint_stress_relative_tolerance": 1e-08,
+    "algebraic_endpoint_state_scaled_residual_tolerance": 1e-09,
+    "zero_increment_state_max_scaled_absolute_error": 1e-12
+  },
+  "path_gate_policy": "Freeze separate converged reference/tolerances before compiled path results; early gates alone cannot qualify full model.",
+  "failure_policy": "Retain failures; no implicit stress perturbation, clipping, coefficient freezing or pressure regularization."
+}

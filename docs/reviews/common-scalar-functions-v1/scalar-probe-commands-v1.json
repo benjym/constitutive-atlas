@@ -1,0 +1,41 @@
+{
+  "native_configure": [
+    "cmake",
+    "-S",
+    "/private/tmp/atlas-common-scalar-functions-v1/scalar-probe-source-v1/qualification",
+    "-B",
+    "/private/tmp/atlas-common-scalar-functions-v1/scalar-probe-native-v1",
+    "-DATLAS_ROOT=/private/tmp/atlas-common-scalar-functions-v1/scalar-probe-source-v1",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "native_build": [
+    "cmake",
+    "--build",
+    "/private/tmp/atlas-common-scalar-functions-v1/scalar-probe-native-v1",
+    "--target",
+    "atlas_scalar_probe",
+    "--parallel",
+    "1"
+  ],
+  "wasm_configure": [
+    "emcmake",
+    "cmake",
+    "-S",
+    "/private/tmp/atlas-common-scalar-functions-v1/scalar-probe-source-v1/qualification",
+    "-B",
+    "/private/tmp/atlas-common-scalar-functions-v1/scalar-probe-wasm-v1",
+    "-DATLAS_ROOT=/private/tmp/atlas-common-scalar-functions-v1/scalar-probe-source-v1",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "wasm_build": [
+    "cmake",
+    "--build",
+    "/private/tmp/atlas-common-scalar-functions-v1/scalar-probe-wasm-v1",
+    "--target",
+    "atlas_scalar_probe",
+    "--parallel",
+    "1"
+  ]
+}

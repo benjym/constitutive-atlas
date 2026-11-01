@@ -8,7 +8,13 @@
 
 namespace atlas {
 using State=std::vector<double>;
-struct Diagnostics { int iterations=0, substeps=0, rejected=0; double error=0; std::vector<double> increment_fractions; };
+struct Diagnostics {
+    int iterations=0, substeps=0, rejected=0, nonmonotone_restarts=0, rounding_corrections=0;
+    int attempted_substeps=0, discarded_substeps=0, partition_retries=0, first_attempt_substeps=0;
+    double error=0;
+    State increment_fractions, partition_defect=State(6,0.), discarded_increment_fractions;
+    std::vector<State> accepted_increments, discarded_increments;
+};
 struct Advance { bool ok=false; State state; Diagnostics diagnostics; std::string message; IntegrationSettings settings; };
 inline State default_parameters(int model) { State p;for(const auto&v:models().at(model).parameters)p.push_back(v.value);return p; }
 inline State initial_state(int model){State z;for(const auto&f:models().at(model).fields)for(int i=0;i<f.size;++i)z.push_back(f.initial[i]);return z;}
@@ -27,9 +33,23 @@ inline bool solve_linear(std::vector<State> a,State b,State&x){
     }
     x.assign(n,0);for(int i=n-1;i>=0;--i){double s=b[i];for(int j=i+1;j<n;++j)s-=a[i][j]*x[j];x[i]=s/a[i][i];}return finite(x);
 }
+// A bounded representable-grid correction for a sub-tolerance but physically
+// inadmissible iterate. Candidate direction comes only from the Newton solve.
+inline bool rounding_neighbor(int model,const State&z,const State&zn,const Sym<double>&de,const State&p,const State&scales,const State&delta,double error,const IntegrationSettings&settings,State&accepted){
+    if(!std::isfinite(error)||!(error<settings.residual_tolerance)||solution_admissible(model,z,p))return false;
+    for(size_t i=0;i<z.size();++i){
+        const double direction=delta[i]*scales[i];
+        if(!std::isfinite(direction)||direction==0||z[i]+direction!=z[i])continue;
+        State trial=z,residual;trial[i]=std::nextafter(z[i],direction>0?std::numeric_limits<double>::infinity():-std::numeric_limits<double>::infinity());
+        if(!finite(trial)||!evaluate_model(model,trial,zn,de,p,residual)||!finite(residual)||!solution_admissible(model,trial,p))continue;
+        if(scaled_norm(residual,scales)<settings.residual_tolerance){accepted=trial;return true;}
+    }
+    return false;
+}
 inline bool implicit_step(int model,const State&zn,const Sym<double>&de,const State&p,State&z,Diagnostics&diag,const IntegrationSettings&settings={}){
     const auto scales=model_scales(model,p);const int n=int(zn.size());z=zn;reset_transients(model,z);
     if(!solution_admissible(model,z,p))return false;
+    bool restarted=false;
     bool predictor=false;for(const auto&f:models().at(model).fields)predictor=predictor||f.multiplier;
     for(int it=0;it<settings.max_iterations;++it){
         ++diag.iterations;std::vector<Jet> x(n),xn(n),r;Sym<Jet>d;
@@ -41,13 +61,28 @@ inline bool implicit_step(int model,const State&zn,const Sym<double>&de,const St
         for(int i=0;i<n;++i){residual[i]=r[i].v/scales[i];for(int j=0;j<n;++j)jac[i][j]=r[i].d[j]/scales[i];}
         if(!finite(residual))return false;
         double err=0;for(double v:residual)err=std::max(err,std::abs(v));diag.error=err;
-        if(err<settings.residual_tolerance){if(predictor){predictor=false;continue;}return solution_admissible(model,z,p);}
+        if(err<settings.residual_tolerance && solution_admissible(model,z,p)){if(predictor){predictor=false;continue;}return true;}
         State delta;for(double&v:residual)v=-v;if(!solve_linear(jac,residual,delta))return false;
+        State rounded;
+        if(!predictor&&rounding_neighbor(model,z,zn,de,p,scales,delta,err,settings,rounded)){
+            z=rounded;++diag.rounding_corrections;return true;
+        }
         bool accepted=false;
-        for(int backtrack=0;backtrack<=settings.max_backtracks;++backtrack){double alpha=std::ldexp(1.,-backtrack);State trial=z,rt;for(int i=0;i<n;++i)trial[i]+=alpha*delta[i]*scales[i];
-            if(!finite(trial)||!solution_admissible(model,trial,p)||!evaluate_model(model,trial,zn,de,p,rt)||!finite(rt))continue;
-            if(predictor)for(const auto&f:models().at(model).fields)if(f.multiplier)rt[f.offset]=trial[f.offset];
-            if(scaled_norm(rt,scales)<err){z=trial;accepted=true;break;}
+        // Preserve feasible descent paths; allow provisional physical-constraint
+        // violations only when no feasible descent exists. Domain checks bind both.
+        for(int pass=0;pass<2&&!accepted;++pass){
+            for(int backtrack=0;backtrack<=settings.max_backtracks;++backtrack){double alpha=std::ldexp(1.,-backtrack);State trial=z,rt;for(int i=0;i<n;++i)trial[i]+=alpha*delta[i]*scales[i];
+                if(!finite(trial)||(pass==0&&!solution_admissible(model,trial,p))||!evaluate_model(model,trial,zn,de,p,rt)||!finite(rt))continue;
+                if(predictor)for(const auto&f:models().at(model).fields)if(f.multiplier)rt[f.offset]=trial[f.offset];
+                if(scaled_norm(rt,scales)<err){z=trial;accepted=true;break;}
+            }
+        }
+        // A discontinuous branch residual may have no descent departure from a
+        // boundary. One domain-valid full Newton restart is bounded by this solve.
+        if(!accepted&&!restarted){State trial=z,rt;for(int i=0;i<n;++i)trial[i]+=delta[i]*scales[i];
+            if(finite(trial)&&evaluate_model(model,trial,zn,de,p,rt)&&finite(rt)){
+                z=trial;accepted=true;restarted=true;++diag.nonmonotone_restarts;
+            }
         }
         if(!accepted)return false;
     }
@@ -73,7 +108,7 @@ inline bool midpoint(int model,const State&zn,const Sym<double>&de,const State&p
 inline bool advance_recursive(int model,const State&zn,const Sym<double>&de,const State&p,State&z,Diagnostics&diag,int depth,const IntegrationSettings&settings={}){
     if(depth>settings.max_depth||diag.substeps>=settings.max_substeps)return false;
     const bool rate=models().at(model).rate;
-    if(!rate){if(implicit_step(model,zn,de,p,z,diag,settings)){++diag.substeps;diag.increment_fractions.push_back(std::ldexp(1.,-depth));return true;}}
+    if(!rate){if(implicit_step(model,zn,de,p,z,diag,settings)){++diag.substeps;diag.increment_fractions.push_back(std::ldexp(1.,-depth));diag.accepted_increments.emplace_back(de.v.begin(),de.v.end());return true;}}
     else {
         State full,half,two,half_defect,two_defect;const auto halfde=.5*de;
         if(midpoint(model,zn,de,p,full)&&midpoint(model,zn,halfde,p,half,&half_defect)&&midpoint(model,half,halfde,p,two,&two_defect)){
@@ -91,6 +126,22 @@ inline bool advance_recursive(int model,const State&zn,const Sym<double>&de,cons
     if(!advance_recursive(model,zn,.5*de,p,half,diag,depth+1,settings))return false;
     return advance_recursive(model,half,.5*de,p,z,diag,depth+1,settings);
 }
+// One non-dyadic alternative, with an error-free audit of its binary loading sum.
+inline bool alternate_partition(const Sym<double>&de,Sym<double>&left,Sym<double>&right,State&defect){
+    defect.assign(6,0.);
+    for(int i=0;i<6;++i){
+        const double incoming=de.v[i];
+        if(!std::isfinite(incoming))return false;
+        if(incoming==0.){left.v[i]=incoming;right.v[i]=incoming;continue;}
+        const double a=incoming/3.,b=incoming-a,sum=a+b;
+        if(!std::isfinite(a)||!std::isfinite(b)||a==0.||b==0.||sum!=incoming)return false;
+        const double virtual_b=sum-a;
+        const double remainder=(a-(sum-virtual_b))+(b-virtual_b);
+        if(!std::isfinite(remainder)||std::abs(remainder)/std::abs(incoming)>2*std::numeric_limits<double>::epsilon())return false;
+        left.v[i]=a;right.v[i]=b;defect[i]=remainder;
+    }
+    return true;
+}
 inline Advance integrate(int model,const State&zn,const Sym<double>&de,const State&p,const IntegrationSettings&settings={}){
     Advance result;result.state=zn;result.settings=settings;
     if(!valid_settings(settings)){result.message="invalid integration settings";return result;}
@@ -104,7 +155,36 @@ inline Advance integrate(int model,const State&zn,const Sym<double>&de,const Sta
     }
     State trial;
     result.ok=advance_recursive(model,prepared,de,p,trial,result.diagnostics,0,settings);
+    auto&diag=result.diagnostics;
+    diag.attempted_substeps=diag.substeps;diag.first_attempt_substeps=diag.substeps;
+    if(!result.ok)diag.discarded_substeps=diag.substeps;
+    if(!result.ok&&!models()[model].rate&&settings.max_depth>0&&diag.substeps<settings.max_substeps){
+        Sym<double> left,right;State defect;
+        if(alternate_partition(de,left,right,defect)){
+            const Diagnostics first=diag;Diagnostics retry;State midpoint_state;
+            auto remaining=settings;remaining.max_substeps-=first.substeps;
+            bool ok=advance_recursive(model,prepared,left,p,midpoint_state,retry,1,remaining);
+            const size_t left_steps=retry.increment_fractions.size();
+            if(ok)ok=advance_recursive(model,midpoint_state,right,p,trial,retry,1,remaining);
+            constexpr double left_fraction=1./3.,right_fraction=1.-left_fraction;
+            for(size_t i=0;i<retry.increment_fractions.size();++i)retry.increment_fractions[i]*=2*(i<left_steps?left_fraction:right_fraction);
+            retry.iterations+=first.iterations;retry.rejected+=first.rejected;
+            retry.nonmonotone_restarts+=first.nonmonotone_restarts;retry.rounding_corrections+=first.rounding_corrections;
+            retry.partition_retries=1;retry.first_attempt_substeps=first.substeps;retry.partition_defect=defect;
+            retry.attempted_substeps=first.substeps+retry.substeps;
+            if(ok){
+                retry.discarded_substeps=first.substeps;
+                retry.discarded_increment_fractions=first.increment_fractions;retry.discarded_increments=first.accepted_increments;
+            }else{
+                retry.increment_fractions.insert(retry.increment_fractions.begin(),first.increment_fractions.begin(),first.increment_fractions.end());
+                retry.accepted_increments.insert(retry.accepted_increments.begin(),first.accepted_increments.begin(),first.accepted_increments.end());
+                retry.substeps=retry.attempted_substeps;retry.discarded_substeps=retry.attempted_substeps;
+            }
+            diag=std::move(retry);result.ok=ok;
+        }
+    }
     if(result.ok && !solution_admissible(model,trial,p))result.ok=false;
+    if(!result.ok)diag.discarded_substeps=diag.attempted_substeps;
     if(result.ok)result.state=trial;else result.message="integration failed: domain boundary, singular system or substep limit; state rolled back";
     return result;
 }
@@ -164,7 +244,7 @@ inline Run run_protocol_impl(int model,const State&initial,const State&p,int pro
     Point committed;committed.control=controls?controls->front():0.;committed.state=initial;run.points.push_back(committed);
     double lateral=.5*(initial[1]+initial[2]);
     for(int i=1;i<=steps;++i){
-        double control=controls?(*controls)[i]:(cycles?target*std::sin(2*3.141592653589793*cycles*i/steps):target*i/steps);
+        double control=controls?(*controls)[i]:(cycles?target*::atlas_cyclic_sine(2*3.141592653589793*cycles*i/steps):target*i/steps);
         auto previous=run.points.back();Sym<double> de;Advance result;
         if(!controlled_step(model,previous.state,p,protocol,control-previous.control,lateral,previous.strain.v[0],de,result,settings)){
             run.message="control or constitutive solve failed at step "+std::to_string(i)+"; last committed point retained";return run;}

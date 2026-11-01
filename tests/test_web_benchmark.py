@@ -17,18 +17,20 @@ class BenchmarkSnapshotTests(unittest.TestCase):
     def test_historical_identity_public_allowlist_and_stale_cleanup(self):
         pins = bundle(self.output)
         target = self.output / 'benchmark-tmd2'
-        self.assertEqual(set(pins), set(FILES) | {'model.json'})
+        self.assertEqual(set(pins), set(FILES) | {'model.json', 'review/decision.json', 'review/review.md', 'review/review.html'})
         self.assertEqual(pins['model.json'], '83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86')
         for name, source in FILES.items():
             self.assertEqual((target / name).read_bytes(), (ROOT / PACKET / source).read_bytes())
         page = (self.output / 'tmd2.html').read_text()
-        self.assertIn('Independent scientific review remains pending', page)
+        self.assertIn('Independent agent review accepts qualified reporting', page)
+        self.assertNotIn('Independent scientific review remains pending', page)
+        self.assertIn('General IGS model admission', page)
         self.assertIn('0.975', page)
         self.assertNotIn('0.975289261', page)  # Private measured void ratio in case.json.
         self.assertNotIn('100022.10666666666', page)  # Private first-row stress.
         (target / 'stale-private-record.json').write_text('not a public asset')
         self.assertEqual(bundle(self.output), pins)
-        self.assertEqual(set(p.name for p in target.iterdir()), set(pins))
+        self.assertEqual(set(p.relative_to(target).as_posix() for p in target.rglob('*') if p.is_file()), set(pins))
 
     def fixture(self):
         root = Path(self.temp.name) / 'fixture'
@@ -38,6 +40,10 @@ class BenchmarkSnapshotTests(unittest.TestCase):
             dest = packet / name
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / PACKET / name, dest)
+        review = Path('docs/benchmarks/kfs-tmd2-reporting-agent-v1')
+        (root / review).mkdir(parents=True)
+        for name in ['manifest.json', 'decision.json', 'README.md']:
+            shutil.copyfile(ROOT / review / name, root / review / name)
         return root, packet
 
     def test_corrupt_input_fails_before_public_output(self):

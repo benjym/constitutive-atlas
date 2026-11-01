@@ -1,0 +1,241 @@
+{
+  "commands": {
+    "maxwell_native_main": {
+      "command": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/tests/test_maxwell.py",
+        "--solver",
+        "/private/tmp/atlas-common-scalar-functions-v1/consumers-native-v1/maxwell/atlas_maxwell_solver",
+        "--output",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/native-raw.json"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_native_transactions": {
+      "command": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/check_transactions.py",
+        "--backend",
+        "native",
+        "--solver",
+        "/private/tmp/atlas-common-scalar-functions-v1/consumers-native-v1/maxwell/atlas_maxwell_solver"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_wasm_main": {
+      "command": [
+        "node",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/tools/test_maxwell_wasm.mjs",
+        "/private/tmp/atlas-common-scalar-functions-v1/consumers-wasm-v1/maxwell/maxwell.js",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/wasm-raw.json"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_wasm_analytical_assess": {
+      "command": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/tests/test_maxwell.py",
+        "--assess",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/wasm-raw.json"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_wasm_transactions": {
+      "command": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/check_transactions.py",
+        "--backend",
+        "wasm",
+        "--module",
+        "/private/tmp/atlas-common-scalar-functions-v1/consumers-wasm-v1/maxwell/maxwell.js"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_parity": {
+      "command": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/maxwell-itasca900/integration-v1/compare_backends_v2.py"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_native_preset_relaxation": {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "atlas.cli",
+        "run",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/examples/maxwell/relaxation.json",
+        "--solver",
+        "/private/tmp/atlas-common-scalar-functions-v1/consumers-native-v1/maxwell/atlas_maxwell_solver",
+        "--output",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/presets/relaxation.json"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_native_preset_creep": {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "atlas.cli",
+        "run",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/examples/maxwell/creep.json",
+        "--solver",
+        "/private/tmp/atlas-common-scalar-functions-v1/consumers-native-v1/maxwell/atlas_maxwell_solver",
+        "--output",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/presets/creep.json"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_native_preset_oedometer": {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "atlas.cli",
+        "run",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/examples/maxwell/oedometer.json",
+        "--solver",
+        "/private/tmp/atlas-common-scalar-functions-v1/consumers-native-v1/maxwell/atlas_maxwell_solver",
+        "--output",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/presets/oedometer.json"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_native_preset_load-hold-reverse": {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "atlas.cli",
+        "run",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/examples/maxwell/load-hold-reverse.json",
+        "--solver",
+        "/private/tmp/atlas-common-scalar-functions-v1/consumers-native-v1/maxwell/atlas_maxwell_solver",
+        "--output",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/presets/load-hold-reverse.json"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "maxwell_assess_native_presets": {
+      "command": [
+        "python3",
+        "-B",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/maxwell-itasca900/atlas-build-v1/assess_presets.py",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/presets"
+      ],
+      "cwd": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source"
+    },
+    "norsand_native_configure": {
+      "command": [
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/cmake/controlled-path",
+        "-B",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-native",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DATLAS_PATH_MODELS=/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/models/research/norsand/norsand-jefferies-1993-active-axial.json;/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/tests/fixtures/controlled-path/synthetic-curved.json;/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/tests/fixtures/controlled-path/synthetic-model.json"
+      ]
+    },
+    "norsand_native_build": {
+      "command": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-native",
+        "--target",
+        "atlas_path_capability",
+        "--parallel",
+        "1"
+      ]
+    },
+    "norsand_native_run": {
+      "command": [
+        "python3",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-native/libatlas_path_capability.dylib",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-native-results.json"
+      ]
+    },
+    "norsand_wasm_configure": {
+      "command": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/cmake/controlled-path",
+        "-B",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-wasm",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DATLAS_PATH_MODELS=/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/models/research/norsand/norsand-jefferies-1993-active-axial.json;/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/tests/fixtures/controlled-path/synthetic-curved.json;/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/tests/fixtures/controlled-path/synthetic-model.json"
+      ]
+    },
+    "norsand_wasm_build": {
+      "command": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-wasm",
+        "--target",
+        "atlas_path_capability",
+        "--parallel",
+        "1"
+      ]
+    },
+    "norsand_wasm_run": {
+      "command": [
+        "node",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-wasm/atlas_path_capability.mjs",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-wasm/atlas_path_capability.wasm",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-wasm-results.json"
+      ]
+    },
+    "norsand_assess": {
+      "command": [
+        "python3",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source/docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-native-results.json",
+        "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/norsand-wasm-results.json"
+      ]
+    }
+  },
+  "source": "/private/tmp/atlas-common-scalar-functions-v1/dependents-v1/source",
+  "unchanged_inputs": {
+    "tests/test_maxwell.py": "57868b967d9f992b723d08944c6c5a4d1dee545a621a7d33ce9199c0c6a9c643",
+    "docs/ingestion/maxwell-itasca900/atlas-build-v1/assess_presets.py": "f8108773bd5272c9f4b0705c79ac9b6399c6ec0eb26ba0d8bc7159318459136c",
+    "docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json": "f29bf379737a1cfa98c4345660f938561412a181e83e89e7411efceff28e0e96",
+    "docs/ingestion/maxwell-itasca900/integration-v1/check_transactions.py": "9da339b845dd380b1cbb193b938e94cb7229a6ce68f87814b53011ad78a0d5d4",
+    "docs/ingestion/maxwell-itasca900/integration-v1/compare_backends_v2.py": "d44d40518f49f077f8b88fe8e33b6ae7997ec8a7282155c1036f59a9e34ac991",
+    "docs/ingestion/maxwell-itasca900/integration-v1/PLAN.md": "535d67393a97283b0880d9a297e8d55645f50afbed82d241cb4c51452aa29cac",
+    "examples/maxwell/relaxation.json": "e96a87ecd909ed8734b2c32d2a5197fe4c94830036f2a21d30ee84bdf8c02f89",
+    "examples/maxwell/creep.json": "bf7e17a1303e3cd857fd2c2cec032574c9c1cc617108c1d7b9ad0ffc77c4cd44",
+    "examples/maxwell/oedometer.json": "462f527f381200496a84734d0858b73adee25d9643d7790554c6b93e891ee11f",
+    "examples/maxwell/load-hold-reverse.json": "9cb9e243581de1ab91df4a49796b775a97b79702cd0a9a6d70783681422d04a2",
+    "docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py": "061476975b8b512427b7ff94fca3bc1703de40390b334295a0de45bcd48a1017",
+    "docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs": "06908882e1384e3e120a5548e4dab5a118d7d399c70e99779e730424731c909a",
+    "docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py": "0532def97319cc4401bd1ba40ba81c15948dc418530f7bcd85ebe221a2e555b7",
+    "docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json": "f28617310e4d204ab9e0568b23e9b62b2b2d29a1057825763560288a1acf619a",
+    "docs/ingestion/norsand-1993/e2-v3/CONTRACT.md": "be4ff7f559abb768e528047bf4ea9c6bd322383540fcfa38af2a5a1b6e3343c0"
+  },
+  "driver_path_patches": [
+    {
+      "path": "docs/ingestion/maxwell-itasca900/integration-v1/check_transactions.py",
+      "original_sha256": "9da339b845dd380b1cbb193b938e94cb7229a6ce68f87814b53011ad78a0d5d4",
+      "copied_sha256": "e8bebbfcd774c8d8a093e2d248bc104ef91256d4b2797547aa3fe6b00e67d596",
+      "change": "Only hardcoded temporary CLI replay output directory; all requests/tolerances/logic unchanged"
+    }
+  ],
+  "Maxwell_artifacts": "Exact acceptedconsumer native/Wasm maxwell targets; provenance consumer-source-freeze-v1/actualaudits mustverify beforecalls",
+  "gate_policy": "Unchanged Maxwell48main+28supplement+4CLI presets/5962parity; NorSand58=40success18rejections plus exactold2e-11 parity; no tolerancechanges"
+}

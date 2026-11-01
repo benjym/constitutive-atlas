@@ -1,4 +1,4 @@
-"""Historical byte gates stay complete; current generation covers all 12 models."""
+"""Historical byte gates stay complete; current generation covers all 13 models."""
 import ast
 import copy
 import hashlib
@@ -41,8 +41,16 @@ class HistoricalGenerationTests(unittest.TestCase):
         data = contexts()
         # This is a release identity guard, separate from the historical nine.
         paths = [verified(item) for item in data['current_models']]
-        self.assertEqual(set(paths), set((ROOT / 'models').glob('*.json')))
-        self.assertEqual(len(paths), 12)
+        self.assertEqual(len(paths), 12)  # Retained historical twelve-model context.
+        live = json.loads((ROOT / 'tests/fixtures/current-fourteen-duncan-v1.json').read_text())
+        self.assertEqual(live['id'], 'current-fourteen-duncan-v1')
+        current_paths = {ROOT / item['path'] for item in live['models']}
+        self.assertEqual(current_paths, set((ROOT / 'models').glob('*.json')))
+        self.assertEqual(len(current_paths), 14)
+        self.assertTrue(set(paths) < current_paths)
+        for item in live['models']:
+            self.assertEqual(hashlib.sha256((ROOT / item['path']).read_bytes()).hexdigest(), item['sha256'])
+        self.assertEqual(hashlib.sha256((ROOT / live['catalogue']['path']).read_bytes()).hexdigest(), live['catalogue']['sha256'])
         catalogue = data['current_catalogue']
         checked_receipt(ROOT, Path('tests/fixtures/historical-test-contexts.json'),
                         catalogue['path'], catalogue['sha256'])
@@ -56,7 +64,7 @@ class HistoricalGenerationTests(unittest.TestCase):
             self.assertEqual({m['id']: m for m in metadata['models']}, {m['id']: m for m in models})
             header = (Path(directory) / 'models.hpp').read_text()
             self.assertEqual(header.count(',StressScope::total'), 1)
-            self.assertEqual(header.count(',StressScope::effective'), 11)
+            self.assertEqual(header.count(',StressScope::effective'), 13)
 
     def test_original_methods_and_unmodified_gates_are_retained(self):
         failures = json.loads((P / 'original-failures.json').read_text())

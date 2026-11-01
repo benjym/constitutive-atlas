@@ -1,0 +1,21 @@
+{
+  "focused_tests": {
+    "command": "python3 -B -m unittest tests.test_provision_maxwell_assets -v",
+    "returncode": 0,
+    "tests": 5,
+    "observed": "All five passed: corruption, duplicate/symlink rejection, guarded staging cleanup, selective read and existing-destination preservation"
+  },
+  "restoration": {
+    "command": "python3 -B tools/provision_maxwell_assets.py --output /private/tmp/atlas-maxwell-ci-assets-common-v2",
+    "returncode": 0,
+    "status": "passed",
+    "files": {
+      "build-review.json": "7c240bbad74a80d1d3c754711f1b41c5d690d07d53663cd2565f2767357e31d0",
+      "generated/models.json": "f6df0b221124e371b7f32a61bdffe5616a9256e8d940e3f816cc300e4b1bfa8d",
+      "maxwell-qualification.json": "2bfe6239807e33a55e9800df831c333b21ead5ba4d1c8720c947d7a89e0080c2",
+      "maxwell.js": "b7c4eb34acd014c9b0df775483ec8a5d49f65c2044d329c8afca74b07daee99c",
+      "maxwell.wasm": "fb415e8e539ebe6a344bbc84afa0767a0192489d7c75a578e0069ea794d271e5"
+    }
+  },
+  "scope": "Python-only installer and guard; no compiled solver execution or rebuild"
+}

@@ -1,0 +1,30 @@
+name: Manual macOS check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+jobs:
+  native:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - run: python -m atlas.cli validate
+      - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - run: python tools/build_ci_targets.py build
+      - name: Qualified current13 native fixtures
+        env:
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-v3
+        run: |
+          ctest --test-dir build --output-on-failure -E "^atlas_recorded$"
+          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-v4 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+      - name: Preserve strict failures and closed fixture selection
+        run: python tools/check_native_fixture_contracts.py --fixture-contract catalogue/native-fixture-contracts-thirteen-occ-v1.json --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
+      - name: Verify recorded-path JSON replay
+        env:
+          ATLAS_RECORDED_SOLVER: ${{ github.workspace }}/build/atlas_solver
+        run: python -m unittest tests.test_experiment_replay tests.test_recorded_api tests.test_recorded_path -v

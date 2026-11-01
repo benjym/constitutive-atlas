@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
-project(ConstitutiveAtlas VERSION 0.1.0 LANGUAGES CXX)
+project(ConstitutiveAtlas VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/AtlasScalarFunctions.cmake")
 
 # Physical-time power-creep research law: opt-in, separate from public catalogue.
 # Build explicitly with --target atlas_power_creep_solver --parallel 1.
@@ -338,3 +339,15 @@ if(EMSCRIPTEN)
   get_target_property(BURGERS_WASM_OPTIONS atlas_solver LINK_OPTIONS)
   target_link_options(atlas_burgers_solver PRIVATE ${BURGERS_WASM_OPTIONS})
 endif()
+
+# Independent bounded common-scalar value/Jet contract; same generic runtime.
+if(EMSCRIPTEN)
+  add_executable(atlas_scalar_probe EXCLUDE_FROM_ALL tests/scalar_functions_probe.cpp)
+  set_target_properties(atlas_scalar_probe PROPERTIES OUTPUT_NAME scalar-functions SUFFIX .js)
+  target_compile_options(atlas_scalar_probe PRIVATE -fexceptions)
+  target_link_options(atlas_scalar_probe PRIVATE "-sMODULARIZE=1" "-sEXPORT_ES6=1" "-sEXPORT_NAME=createAtlasScalarFunctions" "-sENVIRONMENT=web,worker,node" "-sALLOW_MEMORY_GROWTH=1" "-sMAXIMUM_MEMORY=268435456" "-sSTACK_SIZE=1048576" "-sEXPORTED_RUNTIME_METHODS=['ccall']" "-fexceptions" "-sFILESYSTEM=0" "--no-entry")
+else()
+  add_library(atlas_scalar_probe SHARED tests/scalar_functions_probe.cpp)
+  add_test(NAME atlas_scalar_functions COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tools/test_scalar_functions.py" "$<TARGET_FILE:atlas_scalar_probe>")
+endif()
+target_include_directories(atlas_scalar_probe PRIVATE cpp/include)

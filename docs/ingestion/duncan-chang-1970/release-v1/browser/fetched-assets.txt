@@ -1,0 +1,4 @@
+### Ran Playwright code
+```js
+await (async page => { const result = await page.evaluate(async () => { const assets=[]; for (const n of ["catalogue.json","atlas-database.json","atlas.js","atlas.wasm","models.json","models/duncan-chang-1970-endpoint-average.json","evidence-records/catalogue/agent-reviews/duncan-chang-1970-endpoint-average-agent-v1.json"]) { const r=await fetch(n,{cache:"no-store"}); const b=await r.arrayBuffer(); const h=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",b)),v=>v.toString(16).padStart(2,"0")).join(""); assets.push({path:n,status:r.status,bytes:b.byteLength,sha256:h}); } return {url:location.href,assets}; }); console.log(JSON.stringify(result)); })(page);
+```

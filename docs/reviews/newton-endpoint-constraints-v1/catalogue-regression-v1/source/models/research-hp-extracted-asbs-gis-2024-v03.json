@@ -1,0 +1,573 @@
+{
+  "schema_version": "0.3",
+  "id": "research-hp-extracted-asbs-gis-2024-v03",
+  "name": "HP extracted ASBS + GIS2024 \u2014 v0.3 zero-spin research draft",
+  "family": "hypoplasticity with generalized intergranular strain",
+  "description": "Flattened selected HP/extracted-ASBS+GIS source rates; stress6,e,h6,Omega. Explicit18 physical parameters plus numerical stress scale. Zero spin, no hidden preparation or clamping, no author-code algorithm equivalence or experimental validation. Initial state is a software fixture; source preparation must be supplied explicitly. The full pairing requires computed memory norm <= R with no enlarged tolerance shell; exact sphere arithmetic and finite integration remain explicit verification gates.",
+  "status": "draft",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1016/j.compgeo.2024.106480",
+      "locator": "Mugele, Stutz and Masin2024, Eqs8\u201312,22,26\u201335,39\u201343; AppendixB. Selected extracted-ASBS HP pairing, distinct from S=Y.",
+      "role": "primary publication"
+    },
+    {
+      "url": "https://publikationen.bibliothek.kit.edu/1000171366/153009465",
+      "locator": "Published institutional PDF SHA256 39ec8356a26b82ae651be8feb4cdb3e49bb86ded9a850adc4c7eee5e9ec3bdc3; source tension/extension signs mapped consistently to compression-positive Mandel.",
+      "role": "pinned primary PDF"
+    }
+  ],
+  "parameters": {
+    "p_scale": {
+      "default": 100000,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "Numerical stress error scale; not physical parameter"
+    },
+    "phi": {
+      "default": 0.5934119456780721,
+      "min": 0.01,
+      "max": 1.4,
+      "unit": "1",
+      "label": "Critical friction angle, radians (Table1:34degrees)"
+    },
+    "hs": {
+      "default": 111746000.0,
+      "min": 1,
+      "max": 100000000000000.0,
+      "unit": "Pa",
+      "label": "Granular hardness (Table1:111746kPa)"
+    },
+    "ei0": {
+      "default": 1.027,
+      "min": 0.001,
+      "max": 5.0,
+      "unit": "1",
+      "label": "Loose limiting void ratio at zero pressure"
+    },
+    "ec0": {
+      "default": 0.893,
+      "min": 0.001,
+      "max": 5.0,
+      "unit": "1",
+      "label": "Critical limiting void ratio at zero pressure"
+    },
+    "ed0": {
+      "default": 0.52,
+      "min": 0.001,
+      "max": 5.0,
+      "unit": "1",
+      "label": "Dense limiting void ratio at zero pressure"
+    },
+    "n": {
+      "default": 0.346,
+      "min": 0.001,
+      "max": 0.999,
+      "unit": "1",
+      "label": "Pressure exponent"
+    },
+    "alpha": {
+      "default": 0.15,
+      "min": 0.001,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Density influence exponent"
+    },
+    "beta": {
+      "default": 2.2,
+      "min": 0,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Density stiffness exponent"
+    },
+    "R": {
+      "default": 0.0001,
+      "min": 1e-10,
+      "max": 0.1,
+      "unit": "1",
+      "label": "Intergranular memory radius"
+    },
+    "m_R": {
+      "default": 5.0,
+      "min": 1,
+      "max": 1000000.0,
+      "unit": "1",
+      "label": "180degree reversal stiffness multiplier"
+    },
+    "m_T": {
+      "default": 2.5,
+      "min": 1,
+      "max": 1000000.0,
+      "unit": "1",
+      "label": "90degree reversal stiffness multiplier"
+    },
+    "beta_R": {
+      "default": 0.1,
+      "min": 0.001,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Intergranular memory evolution exponent"
+    },
+    "chi_R": {
+      "default": 4.0,
+      "min": 0.001,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Intergranular stiffness interpolation exponent"
+    },
+    "gamma_chi": {
+      "default": 1.7,
+      "min": 0.001,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Suppression exponent factor"
+    },
+    "chi_0": {
+      "default": 0.8,
+      "min": 0.001,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Initial suppression exponent parameter"
+    },
+    "chi_max": {
+      "default": 1.5,
+      "min": 0.001,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Maximum suppression exponent parameter"
+    },
+    "C_Omega": {
+      "default": 45.0,
+      "min": 0,
+      "max": 1000000.0,
+      "unit": "1",
+      "label": "Cyclic-preloading evolution coefficient"
+    },
+    "gamma_Omega": {
+      "default": 1.0,
+      "min": 0.001,
+      "max": 100.0,
+      "unit": "1",
+      "label": "Independent cyclic-preloading exponent"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "p_scale",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.595,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "h",
+      "shape": "sym",
+      "unit": "1",
+      "initial": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "R",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "intergranular_strain",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "Omega",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.0,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cyclic_preloading_memory",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "p",
+      "expr": "trace(sigma)/3"
+    },
+    {
+      "name": "H",
+      "expr": "sigma/trace(sigma)"
+    },
+    {
+      "name": "Hdev",
+      "expr": "dev(dev(sigma))/trace(sigma)"
+    },
+    {
+      "name": "Q",
+      "expr": "dot(H,H)"
+    },
+    {
+      "name": "j2",
+      "expr": "dot(Hdev,Hdev)"
+    },
+    {
+      "name": "tanpsi",
+      "expr": "sqrt(3*j2)"
+    },
+    {
+      "name": "cos3theta",
+      "expr": "select(j2>0,-sqrt(6)*cube_trace(Hdev)/j2**1.5,0)"
+    },
+    {
+      "name": "Fden",
+      "expr": "2+sqrt(2)*tanpsi*cos3theta"
+    },
+    {
+      "name": "Frad",
+      "expr": "tanpsi**2/8+(2-tanpsi**2)/Fden"
+    },
+    {
+      "name": "F",
+      "expr": "sqrt(Frad)-tanpsi/(2*sqrt(2))"
+    },
+    {
+      "name": "a",
+      "expr": "sqrt(3/8)*(3-sin(phi))/sin(phi)"
+    },
+    {
+      "name": "compression",
+      "expr": "exp(-(3*p/hs)**n)"
+    },
+    {
+      "name": "ei",
+      "expr": "ei0*compression"
+    },
+    {
+      "name": "ec",
+      "expr": "ec0*compression"
+    },
+    {
+      "name": "ed",
+      "expr": "ed0*compression"
+    },
+    {
+      "name": "fd",
+      "expr": "((e-ed)/(ec-ed))**alpha"
+    },
+    {
+      "name": "fsden",
+      "expr": "3+a**2-a*sqrt(3)*((ei0-ed0)/(ec0-ed0))**alpha"
+    },
+    {
+      "name": "fs",
+      "expr": "hs/n*(ei/e)**beta*(1+ei)/ei*(3*p/hs)**(1-n)/fsden"
+    },
+    {
+      "name": "N",
+      "expr": "-F*a/Q*(H+Hdev)"
+    },
+    {
+      "name": "inverse_den",
+      "expr": "F**2+a**2*Q"
+    },
+    {
+      "name": "B",
+      "expr": "Q/F**2*(N-a**2*H*dot(H,N)/inverse_den)"
+    },
+    {
+      "name": "Bnorm",
+      "expr": "norm(B)"
+    },
+    {
+      "name": "sigma_unit",
+      "expr": "sigma/norm(sigma)"
+    },
+    {
+      "name": "Caux",
+      "expr": "Q/F**2*(sigma_unit-a**2*H*dot(H,sigma_unit)/inverse_den)/fs"
+    },
+    {
+      "name": "G",
+      "expr": "n/hs*trace(sigma_unit)*(3*p/hs)**(n-1)"
+    },
+    {
+      "name": "ratio",
+      "expr": "(1+e)/e"
+    },
+    {
+      "name": "asbs_den",
+      "expr": "G-ratio*trace(Caux)"
+    },
+    {
+      "name": "asbs_t",
+      "expr": "ratio*trace(B)/asbs_den"
+    },
+    {
+      "name": "asbs_vector",
+      "expr": "B+asbs_t*Caux"
+    },
+    {
+      "name": "asbs_norm",
+      "expr": "norm(asbs_vector)"
+    },
+    {
+      "name": "fdAstar",
+      "expr": "1/asbs_norm"
+    },
+    {
+      "name": "m",
+      "expr": "-B/Bnorm"
+    },
+    {
+      "name": "C",
+      "expr": "Bnorm*fdAstar"
+    },
+    {
+      "name": "S",
+      "expr": "fd/fdAstar"
+    },
+    {
+      "name": "f",
+      "expr": "0*I"
+    },
+    {
+      "name": "hn",
+      "expr": "norm(h)"
+    },
+    {
+      "name": "hdir",
+      "expr": "select(hn>0,h/hn,0*I)"
+    },
+    {
+      "name": "rho",
+      "expr": "hn/R"
+    },
+    {
+      "name": "dn",
+      "expr": "norm(de)"
+    },
+    {
+      "name": "h_loading",
+      "expr": "dot(hdir,de)"
+    },
+    {
+      "name": "h_rhs",
+      "expr": "select(h_loading>0,de-hdir*(rho**beta_R)*h_loading,de)"
+    },
+    {
+      "name": "chi",
+      "expr": "chi_0+Omega*(chi_max-chi_0)"
+    },
+    {
+      "name": "gamma",
+      "expr": "gamma_chi*chi"
+    },
+    {
+      "name": "Omega_rhs",
+      "expr": "C_Omega*(1-rho**gamma_Omega-Omega)*dn"
+    },
+    {
+      "name": "q",
+      "expr": "select(dn>0,h_loading/dn,0)"
+    },
+    {
+      "name": "k",
+      "expr": "select(h_loading>0,(1-rho**chi_R)*m_R+rho**chi_R*((1-q)*m_T+q),rho**chi_R*(1+q)*m_T+(1-rho**chi_R*(1+q))*m_R)"
+    },
+    {
+      "name": "suppression",
+      "expr": "select(dn>0,S**(k**gamma),0)"
+    },
+    {
+      "name": "effective_de",
+      "expr": "de-m*C*suppression*dn+f"
+    },
+    {
+      "name": "E_effective_de",
+      "expr": "fs*(F**2*effective_de+a**2*H*dot(H,effective_de))/Q"
+    },
+    {
+      "name": "sigma_rhs",
+      "expr": "k*E_effective_de"
+    },
+    {
+      "name": "h_absolute_components",
+      "expr": "abs(dot(h,sym(1,0,0,0,0,0)))+abs(dot(h,sym(0,1,0,0,0,0)))+abs(dot(h,sym(0,0,1,0,0,0)))+abs(dot(h,sym(0,0,0,1,0,0)))+abs(dot(h,sym(0,0,0,0,1,0)))+abs(dot(h,sym(0,0,0,0,0,1)))"
+    },
+    {
+      "name": "de_absolute_components",
+      "expr": "abs(dot(de,sym(1,0,0,0,0,0)))+abs(dot(de,sym(0,1,0,0,0,0)))+abs(dot(de,sym(0,0,1,0,0,0)))+abs(dot(de,sym(0,0,0,1,0,0)))+abs(dot(de,sym(0,0,0,0,1,0)))+abs(dot(de,sym(0,0,0,0,0,1)))"
+    },
+    {
+      "name": "spherical_residual",
+      "expr": "abs(dot(sigma,sym(1,-1,0,0,0,0)))+abs(dot(sigma,sym(0,1,-1,0,0,0)))+abs(dot(sigma,sym(0,0,0,1,0,0)))+abs(dot(sigma,sym(0,0,0,0,1,0)))+abs(dot(sigma,sym(0,0,0,0,0,1)))"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma_rhs",
+    "e": "-(1+e)*trace(de)",
+    "h": "h_rhs",
+    "Omega": "Omega_rhs"
+  },
+  "domain": [
+    "e > 0",
+    "ed0 < ec0",
+    "ec0 < ei0",
+    "p > 0*p_scale",
+    "ed < e",
+    "e < ei",
+    "m_T <= m_R",
+    "chi_0 <= chi_max",
+    "Omega >= 0",
+    "Omega <= 1",
+    "hn <= R",
+    "select(hn>0,0,h_absolute_components) <= 0",
+    "select(dn>0,0,de_absolute_components) <= 0",
+    "abs(asbs_den) > 0/p_scale",
+    "cos3theta >= -1-1.4210854715202004e-14",
+    "cos3theta <= 1+1.4210854715202004e-14",
+    "q >= -1-1.4210854715202004e-14",
+    "q <= 1+1.4210854715202004e-14",
+    "select(dn>0,suppression,1) > 0",
+    "select(j2>0,0*p_scale,spherical_residual) <= 0*p_scale",
+    "p > 0*p_scale",
+    "abs(p) <= p_scale*1e280",
+    "norm(H) <= 1e280",
+    "norm(Hdev) <= 1e280",
+    "Q > 0",
+    "abs(Q) <= 1e280",
+    "abs(j2) <= 1e280",
+    "abs(tanpsi) <= 1e280",
+    "abs(cos3theta) <= 1e280",
+    "Fden > 0",
+    "abs(Fden) <= 1e280",
+    "Frad > 0",
+    "abs(Frad) <= 1e280",
+    "F > 0",
+    "abs(F) <= 1e280",
+    "abs(a) <= 1e280",
+    "compression > 0",
+    "abs(compression) <= 1e280",
+    "ei > 0",
+    "abs(ei) <= 1e280",
+    "ec > 0",
+    "abs(ec) <= 1e280",
+    "ed > 0",
+    "abs(ed) <= 1e280",
+    "fd > 0",
+    "abs(fd) <= 1e280",
+    "fsden > 0",
+    "abs(fsden) <= 1e280",
+    "fs > 0*p_scale",
+    "abs(fs) <= p_scale*1e280",
+    "norm(N) <= 1e280",
+    "inverse_den > 0",
+    "abs(inverse_den) <= 1e280",
+    "norm(B) <= 1e280",
+    "Bnorm > 0",
+    "abs(Bnorm) <= 1e280",
+    "norm(sigma_unit) <= 1e280",
+    "norm(Caux) <= 1e280/p_scale",
+    "abs(G) <= 1e280/p_scale",
+    "abs(ratio) <= 1e280",
+    "abs(asbs_den) <= 1e280/p_scale",
+    "abs(asbs_t) <= p_scale*1e280",
+    "norm(asbs_vector) <= 1e280",
+    "asbs_norm > 0",
+    "abs(asbs_norm) <= 1e280",
+    "fdAstar > 0",
+    "abs(fdAstar) <= 1e280",
+    "norm(m) <= 1e280",
+    "C > 0",
+    "abs(C) <= 1e280",
+    "S > 0",
+    "abs(S) <= 1e280",
+    "norm(f) <= 1e280",
+    "abs(hn) <= 1e280",
+    "norm(hdir) <= 1e280",
+    "abs(rho) <= 1e280",
+    "abs(dn) <= 1e280",
+    "abs(h_loading) <= 1e280",
+    "norm(h_rhs) <= 1e280",
+    "abs(chi) <= 1e280",
+    "abs(gamma) <= 1e280",
+    "abs(Omega_rhs) <= 1e280",
+    "abs(q) <= 1e280",
+    "k > 0",
+    "abs(k) <= 1e280",
+    "abs(suppression) <= 1e280",
+    "norm(effective_de) <= 1e280",
+    "norm(E_effective_de) <= p_scale*1e280",
+    "norm(sigma_rhs) <= p_scale*1e280",
+    "abs(h_absolute_components) <= 1e280",
+    "abs(de_absolute_components) <= 1e280"
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "strain_path_rate",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e",
+      "h",
+      "Omega"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "id": "lade1975-lifecycle-diagnostic-v2",
+  "original_study": "native-lifecycle-results.json",
+  "original_study_remains_failed": true,
+  "findings": [
+    {
+      "set": "dense",
+      "kind": "checker defect",
+      "detail": "Original lifecycle physical-H helper treated Mandel shear components as tensor shear, unlike model/source/reference. Correct decoding divides shears by sqrt2.",
+      "correct_H_direct": 40.00000000001023,
+      "correct_H_rotated": 40.00000000001024,
+      "correct_H_difference": 7.105427357601002e-15
+    },
+    {
+      "set": "dense",
+      "kind": "large unloading outcome needs review",
+      "finite_increment": [
+        -2,
+        -2,
+        -2,
+        0,
+        0,
+        0
+      ],
+      "native_ok": false,
+      "native_final_state": [
+        60000,
+        60000,
+        60000,
+        0,
+        0,
+        0,
+        13,
+        0
+      ],
+      "continuous_hydrostatic_zero_pressure_strain_per_axis": -0.0019576231669514417,
+      "detail": "The test labeled a finite \u2212200percent strain increment invalid although schema only requires finite strain and the endpoint backward-Euler relation can admit positive pressure for arbitrarily large finite unloading. Continuous positive-pressure differential path instead reaches zero at finite extension. Need distinguish invalid-input expectation/test defect, finite-step domain-event behavior and actual source applicability. No original gate changed; no unsupported pass claim."
+    },
+    {
+      "set": "loose",
+      "kind": "checker defect",
+      "detail": "Original lifecycle physical-H helper treated Mandel shear components as tensor shear, unlike model/source/reference. Correct decoding divides shears by sqrt2.",
+      "correct_H_direct": 33.00000000000016,
+      "correct_H_rotated": 33.000000000000156,
+      "correct_H_difference": 7.105427357601002e-15
+    },
+    {
+      "set": "loose",
+      "kind": "large unloading outcome needs review",
+      "finite_increment": [
+        -2,
+        -2,
+        -2,
+        0,
+        0,
+        0
+      ],
+      "native_ok": true,
+      "native_final_state": [
+        5.7145063583093926e-11,
+        5.714506358470115e-11,
+        5.714506357740566e-11,
+        0,
+        0,
+        0,
+        6.000000000000036,
+        0
+      ],
+      "continuous_hydrostatic_zero_pressure_strain_per_axis": -0.004148516588075819,
+      "detail": "The test labeled a finite \u2212200percent strain increment invalid although schema only requires finite strain and the endpoint backward-Euler relation can admit positive pressure for arbitrarily large finite unloading. Continuous positive-pressure differential path instead reaches zero at finite extension. Need distinguish invalid-input expectation/test defect, finite-step domain-event behavior and actual source applicability. No original gate changed; no unsupported pass claim."
+    }
+  ]
+}

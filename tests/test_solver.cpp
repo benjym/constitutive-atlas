@@ -8,7 +8,7 @@ void require(bool value,const char*message){if(!value)throw std::runtime_error(m
 int main(){
     try{
         const char* profile=std::getenv("ATLAS_NATIVE_FIXTURES");
-        require(!profile||std::string(profile)=="explicit-gis20-v2","unknown native fixture profile");
+        require(!profile||(std::string(profile)=="explicit-gis20-v2"||std::string(profile)=="explicit-gis20-occ-v3"||(std::string(profile)=="explicit-gis20-occ-restart-v4"||std::string(profile)=="explicit-gis20-occ-restart-duncan-v5")),"unknown native fixture profile");
         const bool explicit_fixtures=profile!=nullptr;
         std::cout<<(explicit_fixtures?"Explicit valid-domain/GIS-depth20 fixtures":"Strict original default fixtures")<<"; models="<<atlas::models().size()<<'\n';
         // Independently finite-difference each generated residual/rate Jacobian.
@@ -16,7 +16,7 @@ int main(){
         for(size_t model=0;model<atlas::models().size();++model){
             auto p=atlas::default_parameters(int(model)),z=atlas::initial_state(int(model)),zn=z;
             auto scales=atlas::model_scales(int(model),p);z[0]=110000;z[1]=95000;z[2]=100000;z[3]=500;
-            for(const auto&f:atlas::models()[model].fields){if(f.multiplier)z[f.offset]=.0001;if(f.name=="h"){z[f.offset]=.00002;z[f.offset+1]=-.00001;}}
+            for(const auto&f:atlas::models()[model].fields){if(f.multiplier)z[f.offset]=.0001;if(f.name=="h"&&f.size==6){z[f.offset]=.00002;z[f.offset+1]=-.00001;}}
             if(explicit_fixtures&&atlas::models()[model].id=="research-hp-extracted-asbs-gis-2024-v03"){
                 bool found=false;
                 for(const auto& f:atlas::models()[model].fields)if(f.name=="Omega"){
@@ -27,6 +27,7 @@ int main(){
                 }
                 require(found,"GIS derivative fixture requires declared Omega state");
             }
+            if(profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"&&atlas::models()[model].id=="duncan-chang-1970-endpoint-average")z[6]=50000.;
             const int n=int(z.size());std::vector<atlas::Jet>x(n),xn(n),r;atlas::Sym<double>de;de.v={.00001,-.000005,-.000005,.000003,0,0};atlas::Sym<atlas::Jet>d;
             for(int i=0;i<n;++i){x[i]=atlas::Jet(z[i]);x[i].d[i]=scales[i];xn[i]=atlas::Jet(zn[i]);}
             for(int i=0;i<6;++i)d.v[i]=atlas::Jet(de.v[i]);
@@ -42,11 +43,17 @@ int main(){
         auto rotate=[](atlas::Sym<double>a){atlas::Sym<double>b;b.v={a.v[1],a.v[0],a.v[2],-a.v[3],a.v[5],-a.v[4]};return b;};
         for(size_t m=0;m<atlas::models().size();++m){
             auto p=atlas::default_parameters(int(m)),z=atlas::initial_state(int(m));z[0]=105000;z[1]=95000;z[3]=1000;
+            // OCC source admissibility: overconsolidated packing for this anisotropic prestress.
+            if(profile&&(std::string(profile)=="explicit-gis20-occ-v3"||(std::string(profile)=="explicit-gis20-occ-restart-v4"||std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"))&&atlas::models()[m].id=="original-cam-clay-sw-electronic-log-recovery-v1")
+                z[6]=2.5+.16*(1-std::log(150000./1000.))-.04*std::log(100000./1000.);
+            const bool duncan_fixture=profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"&&atlas::models()[m].id=="duncan-chang-1970-endpoint-average";
+            if(duncan_fixture)z[6]=50000.;
             atlas::Sym<double>de;de.v={.0001,-.00002,.00001,.00003,.00001,-.00001};auto zr=z;
             atlas::put_tensor(zr,0,rotate(atlas::tensor_from(z,0)));
             atlas::IntegrationSettings fixture_settings;
             if(explicit_fixtures&&atlas::models()[m].id=="research-hp-extracted-asbs-gis-2024-v03")fixture_settings.max_depth=20;
             auto a=atlas::integrate(int(m),z,de,p,fixture_settings),b=atlas::integrate(int(m),zr,rotate(de),p,fixture_settings);require(a.ok&&b.ok,"rotation integration failed");
+            if(duncan_fixture)require(a.state.size()==7&&b.state.size()==7&&a.state[6]==50000.&&b.state[6]==50000.,"scalar maxhistory rotation fixture changed");
             auto want=rotate(atlas::tensor_from(a.state,0));for(int i=0;i<6;++i)require(std::abs(want.v[i]-b.state[i])<.01,"fixed-frame rotation covariance failed");
         }
         // Hidden zero-history crossing: both midpoint estimates sample unloading

@@ -9,6 +9,9 @@ import shutil
 import tarfile
 
 ROOT = Path(__file__).resolve().parents[1]
+import sys
+sys.path.insert(0, str(ROOT))
+from tools.build_tmd2_review import projection as review_projection
 PACKET = Path('docs/benchmarks/kfs-tmd2-research-range-v1')
 FILES = {
     'parameters.json': 'inputs/parameter-set.json',
@@ -57,6 +60,9 @@ def bundle(destination, root=ROOT):
         if request['parameters'] != [params['parameters'][name] for name in names] or request['initial'] != case['initial']['flat_state']:
             raise ValueError('TMD2 request/input binding mismatch')
 
+    review_assets, review_section = review_projection(root, assets, model_hash)
+    assets.update(review_assets)
+
     def code(value):
         return '<code>' + escape(str(value)) + '</code>'
 
@@ -70,7 +76,7 @@ def bundle(destination, root=ROOT):
 <style>main{{margin:0 auto;max-width:1100px}}table{{border-collapse:collapse}}th,td{{padding:.4rem 1rem;text-align:left;border-bottom:1px solid #ddd}}pre{{overflow:auto}}code{{overflow-wrap:anywhere}}li{{margin:.6rem 0}}img{{max-width:100%;height:auto}}</style></head>
 <body><main><header class="topbar"><a href="./index.html#methods">← Methods &amp; evidence</a></header><section class="page">
 <div class="eyebrow">READ-ONLY BENCHMARK SNAPSHOT</div><h1>TMD2: exact calculation inputs.</h1>
-<p class="page-lead">A qualified published-model reconstruction. Independent scientific review remains pending.</p>
+<p class="page-lead">A qualified published-model reconstruction. Independent agent review accepts qualified reporting.</p>
 <p>This archived VW96 + IGS definition and its inputs generated the saved benchmark curves. Laboratory defaults and later catalogue revisions are separate. The snapshot preserves its historical schema; it is not a new v0.3 model record.</p>
 <figure><a href="./benchmark-tmd2/reproduction.png"><img src="./benchmark-tmd2/reproduction.png" alt="Atlas paths at 400, 800 and 1600 increments compared with published model curves and frozen precision envelopes"></a><figcaption>Model curves only. Original measurements are not included.</figcaption></figure>
 <h2>Formulation and material</h2><p>Karlsruhe fine sand; model definition SHA-256 {code(model_hash)}. Thirteen material constants plus the project stress scale p_ref. Values below use SI units; phi is in radians.</p>
@@ -79,9 +85,10 @@ def bundle(destination, root=ROOT):
 <p>Drained axisymmetric compression at 100 kPa radial effective stress, zero spin. Three native paths use 400, 800 and 1600 increments from 0 to 0.25 direct accumulated axial strain; volume is the trace of accumulated normal strain. Physical time is not inferred for this rate-independent case. Exact controls and settings are in requests.json.</p>
 <details><summary>Project numerical settings</summary><pre>{settings}</pre></details>
 <h2>What the result establishes</h2><p>All three paths pass the frozen publication-precision and adjacent-refinement gates. The downloadable summary retains every gate and aggregate experimental error. These are calibration-campaign comparisons, not held-out validation. Historical strain conversion, original-code equivalence, finite-deformation validity and scientific admission remain open. This native research calculation does not extend the interactive laboratory's 10% limit.</p>
+{review_section}
 <h2>Inspect the snapshot</h2><p>Files are copied from the recorded study after hash checks. Packaging does not rerun or independently verify the constitutive calculation. Original measurements, PDFs and author implementation code are excluded.</p><ul>{downloads}</ul>
 <h2>Reproduce locally</h2><p>From a checkout of Constitutive Atlas, choose a fresh writable output directory. Python, CMake, a C++20 compiler and Matplotlib are required. This command downloads original data locally, performs one serial native build and runs the three paths.</p><pre>python3 tools/benchmark_tmd2.py --output /tmp/tmd2-local-reproduction</pre>
-<p><a href="https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-tmd2-portable-v1">Reproduction guide</a> · <a href="https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-tmd2-appendix-law-v1">Source/input review and unsigned scientific checklist</a></p>
+<p><a href="https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-tmd2-portable-v1">Reproduction guide</a> · <a href="https://github.com/benjym/constitutive-atlas/tree/main/docs/benchmarks/kfs-tmd2-appendix-law-v1">Source/input audit and historical checklist</a></p>
 <p><a href="https://doi.org/10.1007/s11440-015-0402-z">Wichtmann &amp; Triantafyllidis (2016), Tables 2–3 and Figure 4</a> · <a href="https://doi.org/10.1016/j.soildyn.2019.05.001">Wichtmann et al. (2019), Table 1 and Figure 3</a></p>
 </section></main></body></html>'''
     # Only this owned asset directory is replaced, removing stale previous files.
@@ -90,7 +97,9 @@ def bundle(destination, root=ROOT):
         shutil.rmtree(target)
     target.mkdir(parents=True)
     for name, data in assets.items():
-        (target / name).write_bytes(data)
+        path = target / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(data)
     (destination / 'tmd2.html').write_text(page, encoding='utf-8')
     return {name: digest(data) for name, data in assets.items()}
 

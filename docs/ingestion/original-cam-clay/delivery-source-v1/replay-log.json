@@ -1,0 +1,51 @@
+[
+  {
+    "command": [
+      "python3",
+      "-B",
+      "docs/ingestion/original-cam-clay/check_packet.py",
+      "--source",
+      ".local/private-sources/original-cam-clay/schofield-wroth-electronic-transcription.pdf",
+      "--output",
+      "docs/ingestion/original-cam-clay/delivery-source-v1/packet-replay.json"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "docs/ingestion/original-cam-clay/test_packet.py"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "test_complete_algebra (__main__.AnalyticalPacketTests.test_complete_algebra) ... ok\ntest_invalid_parameters (__main__.AnalyticalPacketTests.test_invalid_parameters) ... ok\ntest_invalid_path_domain (__main__.AnalyticalPacketTests.test_invalid_path_domain) ... ok\ntest_no_MCC_critical_pressure_substitution (__main__.AnalyticalPacketTests.test_no_MCC_critical_pressure_substitution) ... ok\ntest_small_positive_distortion_not_lost (__main__.AnalyticalPacketTests.test_small_positive_distortion_not_lost) ... ok\ntest_source_hash_corruption (__main__.AnalyticalPacketTests.test_source_hash_corruption) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.004s\n\nOK\n"
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "docs/ingestion/original-cam-clay/smooth-reference-v1/reference.py",
+      "--output",
+      "docs/ingestion/original-cam-clay/delivery-source-v1/smooth-replay.json"
+    ],
+    "exit_code": 0,
+    "stdout": "{\n  \"passed\": true,\n  \"paths\": [\n    {\n      \"steps\": 16,\n      \"maximum_scaled_state_error\": 3.1258582706504968e-06,\n      \"maximum_scaled_yield_drift\": 3.985528684424935e-06,\n      \"maximum_scaled_dissipation_residual\": 1.4551915228366853e-16,\n      \"maximum_packing_identity_drift\": 5.005167862393023e-07\n    },\n    {\n      \"steps\": 32,\n      \"maximum_scaled_state_error\": 1.807697286858456e-07,\n      \"maximum_scaled_yield_drift\": 2.287378234177595e-07,\n      \"maximum_scaled_dissipation_residual\": 1.4551915228366853e-16,\n      \"maximum_packing_identity_drift\": 2.805762999713579e-08\n    },\n    {\n      \"steps\": 64,\n      \"maximum_scaled_state_error\": 1.0864287978620268e-08,\n      \"maximum_scaled_yield_drift\": 1.3700798881473019e-08,\n      \"maximum_scaled_dissipation_residual\": 1.4551915228366853e-16,\n      \"maximum_packing_identity_drift\": 1.6615198106251228e-09\n    }\n  ],\n  \"adjacent_error_improvement\": [\n    17.291934293284434,\n    16.638893321088386\n  ]\n}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "tests.test_occ_smooth_reference",
+      "-v"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "test_boolean_nonfinite_and_invalid_step_inputs_rejected (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_boolean_nonfinite_and_invalid_step_inputs_rejected) ... ok\ntest_corrupted_hardening_is_not_hidden_by_exact_pressure_and_q (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_corrupted_hardening_is_not_hidden_by_exact_pressure_and_q) ... ok\ntest_frozen_three_resolution_study_passes (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_frozen_three_resolution_study_passes) ... ok\ntest_incomplete_or_reordered_coordinate_frames_are_rejected (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_incomplete_or_reordered_coordinate_frames_are_rejected) ... ok\ntest_no_undrained_volume_change_is_silently_reinitialized (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_no_undrained_volume_change_is_silently_reinitialized) ... ok\ntest_source_vertex_and_critical_mechanism_are_excluded (tests.test_occ_smooth_reference.OriginalCamClaySmoothReference.test_source_vertex_and_critical_mechanism_are_excluded) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.003s\n\nOK\n"
+  }
+]

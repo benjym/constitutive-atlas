@@ -1,0 +1,138 @@
+{
+  "target_schema": "0.3",
+  "kind": "non-executable source-to-schema crosswalk; not a model definition",
+  "source_sha256": "fee99108e493f34eb987c759eddf73cfc86e77102c73e42d099c00f1209851b9",
+  "declarations": {
+    "time_dependence": {
+      "value": "strain_path",
+      "status": "source-supported rate independence,p92; no physical clock"
+    },
+    "equation_form": {
+      "value": null,
+      "status": "rate relations plus algebraic yield and mixed controls; finite residual/explicit-rate policy not selected"
+    },
+    "kinematics": {
+      "value": null,
+      "status": "source axial symmetry; v0.3 strain-path profiles require small_strain_3d, axisymmetric_x only available in physical-time profile"
+    },
+    "frame": {
+      "value": "fixed_spatial",
+      "status": "proposed fixed coaxial Atlas interface"
+    },
+    "objective_rate": {
+      "value": "none",
+      "status": "proposed zero-spin scope; no source objective-rate extension"
+    },
+    "tensor_representation": {
+      "value": "mandel",
+      "status": "proposed embedding only; source uses scalar axial invariants"
+    },
+    "stress_sign": {
+      "value": "compression_positive",
+      "status": "source notation/plots pp100\u2013102"
+    },
+    "strain_sign": {
+      "value": "compression_positive",
+      "status": "source contraction/dilatancy notation and plots"
+    },
+    "stress": {
+      "value": {
+        "measure": "cauchy",
+        "scope": "effective"
+      },
+      "status": "effective stress explicit p92; proposed Cauchy representation, state/observable binding pending profile"
+    },
+    "inputs": {
+      "value": null,
+      "status": "required mixed effective cell pressure and axial/shear progress unavailable as declared v0.3 strain-path inputs"
+    }
+  },
+  "parameters": {
+    "M": {
+      "unit": "1",
+      "locator": "Eq5a,pp94\u201395",
+      "domain": "positive; no universal source box"
+    },
+    "N": {
+      "unit": "1",
+      "locator": "Eq6/7,p95\u201396",
+      "domain": "real-sand discussion0<=N<.4; N=.5 shape comparison; N=1 singular"
+    },
+    "h": {
+      "unit": "1",
+      "locator": "Eq12,p97",
+      "domain": "positive; source examples25\u2013280 are not a universal box"
+    },
+    "lambda_c": {
+      "unit": "1",
+      "locator": "Eq5b,p94; notationp102",
+      "domain": "positive; examples not universal box"
+    },
+    "Gamma_ref": {
+      "unit": "1",
+      "locator": "Eq5b,p94; notationp102",
+      "domain": "paired with explicit pressure reference; source no complete universal preset"
+    }
+  },
+  "state_proposal": [
+    {
+      "name": "p",
+      "unit": "Pa",
+      "role": "persistent",
+      "transformation": "scalar_invariant",
+      "quantity": "mean_effective_stress"
+    },
+    {
+      "name": "q",
+      "unit": "Pa",
+      "role": "persistent",
+      "transformation": "fixed_components",
+      "quantity": "signed_axial_stress_difference; not general3D vonMises norm"
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "role": "persistent",
+      "transformation": "scalar_invariant",
+      "quantity": "void_ratio"
+    },
+    {
+      "name": "pi",
+      "unit": "Pa",
+      "role": "persistent",
+      "transformation": "scalar_invariant",
+      "quantity": "image_pressure"
+    }
+  ],
+  "state_constraints": [
+    "Eq7 yield relates p,q,pi; not four independent initial values",
+    "positive pressures and valid power bases",
+    "signed axial q>=0 in proposed monotonic compression scope"
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": "pending supported profile; complete physical state and control context required",
+    "validation": "domain_and_initial_checks plus source yield/control consistency; no projection"
+  },
+  "capability_requests": [
+    {
+      "id": "NS-HOST-01",
+      "need": "generic mixed-control path-coordinate contract for rigid-plastic axial laws",
+      "minimal_example": "Eq6 D1.5625 at eta0=0,M1.25,N.2 conflicts with arbitrary isochoric imposed de; fixed cell plus increasing eps_q instead determines radial response",
+      "not_proven": "need for model-specific kernel, state capacity increase or physical-time integration"
+    },
+    {
+      "id": "NS-NUM-01",
+      "need": "reviewed finite void-ratio kinematic/discretization and monotonic/no-progress/failure-restart semantics",
+      "minimal_example": "source dot equations do not specify finite engineering-strain e update or full forward-difference consistency algorithm"
+    }
+  ],
+  "nonclaims": [
+    "No candidate model",
+    "No legacy top-level integration field",
+    "No scientific admission",
+    "No derived production kernel",
+    "No later elasticity/cyclic/general3D substitution"
+  ]
+}

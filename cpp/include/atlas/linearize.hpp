@@ -26,10 +26,21 @@ inline LinearizedAdvance linearize_update(int model,const State& parent,const Sy
     if(!prepare_model_increment(model,previous,total,parameters,prepared,&result.reset_guard_at_zero)){
         result.message="AD preparation failed";return result;
     }
-    previous=prepared;double covered=0.;
+    previous=prepared;double covered=0.;size_t partition_index=0;
+    if(result.advance.diagnostics.partition_retries && result.advance.diagnostics.accepted_increments.size()!=result.advance.diagnostics.increment_fractions.size()){
+        result.message="actual accepted partition is incomplete";return result;
+    }
     for(double fraction:result.advance.diagnostics.increment_fractions){
         if(!std::isfinite(fraction)||fraction<=0){result.message="invalid accepted partition";return result;}
-        covered+=fraction;const auto de=Jet(fraction)*total;
+        covered+=fraction;auto de=Jet(fraction)*total;
+        // Fixed affine extension of the actual binary subincrement, not a
+        // derivative of rounding or of adaptive partition selection.
+        if(result.advance.diagnostics.partition_retries){
+            const auto&actual=result.advance.diagnostics.accepted_increments[partition_index];
+            if(actual.size()!=6||!finite(actual)){result.message="invalid actual accepted subincrement";return result;}
+            for(int j=0;j<6;++j)de.v[j].v=actual[j];
+        }
+        ++partition_index;
         if(models().at(model).rate){
             std::vector<Jet> k1,k2,mid=previous;
             if(!evaluate_model(model,previous,previous,de,parameters,k1)){result.message="rate replay failed";return result;}
@@ -65,7 +76,10 @@ inline LinearizedAdvance linearize_update(int model,const State& parent,const Sy
     if(std::abs(covered-1.)>1e-12){result.message="accepted partition does not cover the increment";return result;}
     result.state_tangent.assign(n,State(6));
     for(int i=0;i<n;++i){
-        if(!std::isfinite(previous[i].v)||std::abs(previous[i].v-result.advance.state[i])/scales[i]>1e-9){
+        const bool differs=result.advance.diagnostics.partition_retries
+            ? previous[i].v!=result.advance.state[i]
+            : std::abs(previous[i].v-result.advance.state[i])/scales[i]>1e-9;
+        if(!std::isfinite(previous[i].v)||differs){
             result.state_tangent.clear();result.message="AD replay endpoint differs from accepted update";return result;
         }
         for(int j=0;j<6;++j){

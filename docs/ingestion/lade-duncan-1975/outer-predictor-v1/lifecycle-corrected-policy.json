@@ -1,0 +1,14 @@
+{
+  "id": "lade1975-gap-lifecycle-corrected-v2",
+  "frozen_before_corrected_campaign": true,
+  "reason": "Correct proved Mandel decoding defect; replace mislabeled finite-strain invalid input with forced solver exhaustion and actual invalid requests. Preserve original lifecycle study FAIL and separately test hydrostatic domain event.",
+  "base_policy": "lifecycle-policy.json",
+  "base_gates_unchanged": "All hold, history, restart, near-tie, covariance tolerances retained",
+  "Mandel_decode": "offdiagonal physical shear = stored Mandel component/sqrt(2)",
+  "forced_failed_increment": [0.0001, -0.00002, 0.00001, 0.00002, -0.000015, 0.00001],
+  "forced_failure_settings": [2e-10, 1e-6, 1, 0, 1, 0],
+  "failure_justification": "One iteration, no subdivision/backtracking budget; failure must preserve valid parent exactly; retry under ordinary settings must equal direct request exactly",
+  "invalid_requests": ["negative Kur parameter", "nonfinite strain CSV", "negative-pressure initial stress"],
+  "invalid_requirement": "All must reject; domain-invalid parent returned exactly; parser/parameter errors need not return a state because the request API is stateless",
+  "no_claims": ["hydrostatic pressure-zero event conformance", "passing original failed study", "E4 complete", "E5 acceptance"]
+}
