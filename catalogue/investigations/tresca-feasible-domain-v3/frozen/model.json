@@ -1,0 +1,180 @@
+{
+  "schema_version": "0.3",
+  "id": "tresca-associated-perfect-bk2022v1-be-feasible-domain-research",
+  "name": "Associated Tresca perfect plasticity \u2014 feasible-domain research draft",
+  "family": "elastoplasticity",
+  "status": "draft",
+  "description": "Private BK2022v1/project backward-Euler pressure-split/exact-range variant requiring source stress admissibility in the ordinary model domain. The source solution roots already satisfy this condition; generic Newton/backtracking restricts computational trial states. Equations, parameters, full state and source are unchanged. No clipping, fitted yield tolerance, increased iteration budget or scientific admission is claimed.",
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2207.12719v1",
+      "locator": "Boulmezaoud and Khouider,2022v1; exactPDF SHA256 db7fb284eb9bb622883d5daff6361db37cab912b890b8a24ed99a2428abc7805,258014bytes25pages. pp2\u20133Eqs1\u20138 additive/Hooke/normality, p7Eqs34\u201337 positiveconstantLameelasticity,pp15\u201316Eqs77\u201381 Tresca k>0,pp18\u201321Eqs89\u2013108 repeatednormalcone.",
+      "role": "primary complete continuum associated perfect-plastic closure; not printed finite BE algorithm"
+    }
+  ],
+  "parameters": {
+    "p_ref": {
+      "default": 100000.0,
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "unit": "Pa",
+      "label": "Numerical reference stress (not soil parameter)"
+    },
+    "lame_lambda": {
+      "default": 30000000.0,
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "unit": "Pa",
+      "label": "Constant positive first Lame modulus"
+    },
+    "mu": {
+      "default": 20000000.0,
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "unit": "Pa",
+      "label": "Constant positive shear modulus"
+    },
+    "k": {
+      "default": 50000.0,
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "unit": "Pa",
+      "label": "Constant positive maximum-shear yield strength; uniaxial Y=2k"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "ep",
+      "shape": "sym",
+      "unit": "1",
+      "initial": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "infinitesimal_plastic_strain",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "width",
+      "expr": "2*k"
+    },
+    {
+      "name": "trial_dev",
+      "expr": "dev(sigma_n)+2*mu*dev(de)"
+    },
+    {
+      "name": "mean_trial",
+      "expr": "trace(sigma_n)/3+(lame_lambda+2*mu/3)*trace(de)"
+    },
+    {
+      "name": "trace_trial",
+      "expr": "trace(trial_dev)"
+    },
+    {
+      "name": "vmax",
+      "expr": "principal_max_value(trial_dev)"
+    },
+    {
+      "name": "vmid",
+      "expr": "principal_mid_value(trial_dev)"
+    },
+    {
+      "name": "vmin",
+      "expr": "principal_min_value(trial_dev)"
+    },
+    {
+      "name": "branch",
+      "expr": "select(principal_range_le(trial_dev,width),0,select(3*vmid>trace_trial+width,1,select(3*vmid<trace_trial-width,2,3)))"
+    },
+    {
+      "name": "returned_dev",
+      "expr": "select(branch<0.5,trial_dev,select(branch<1.5,((trace_trial+width)/3)*I-width*projector_min(trial_dev),select(branch<2.5,((trace_trial-width)/3)*I+width*projector_max(trial_dev),trial_dev-((principal_max(trial_dev)-principal_min(trial_dev)-width)/2)*(projector_max(trial_dev)-projector_min(trial_dev)))))"
+    },
+    {
+      "name": "returned",
+      "expr": "mean_trial*I+returned_dev"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma-returned",
+    "ep": "ep-ep_n-(trial_dev-returned_dev)/(2*mu)"
+  },
+  "domain": [
+    "p_ref>0*p_ref",
+    "lame_lambda>0*p_ref",
+    "mu>0*p_ref",
+    "k>0*p_ref",
+    "principal_range_le(sigma,width)"
+  ],
+  "initial_checks": [
+    "principal_range_le(sigma,width)"
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "total"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "ep"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
+}
