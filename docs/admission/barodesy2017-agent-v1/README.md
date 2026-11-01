@@ -1,0 +1,11 @@
+# Barodesy clay 2017 — bounded independent approval integration
+
+The actual separate `/root/barodesy2017_agent_review` [review](../../reviews/barodesy2017-agent-v1/README.md) accepts the exact unchanged v0.3 complete Medicus–Fellin 2017 body Eqs1–10 formulation with body2p and zero spin. The [canonical decision](../../../catalogue/agent-reviews/barodesy2017-agent-v1.json) is byte-identical to that review. All 39 manifest bindings verify. The original unsigned sheet and historical pending descriptions remain unchanged.
+
+The coordinator independently reran the source/algebra/saved-report checker against the durably retained private PDF. [Parent results](parent-results.json) match the review results exactly: the independent Decimal matrix exponential checks 111 saved primal cases per backend; the analytical London NCL assignment and initialization checks pass. The 15 original saved-only audits were also rerun. No build or compiled material call was performed.
+
+The [generated approval entry](approval-entry.json) is registered exactly once. Acceptance resolves B17-01–06 only within the recorded scope: named complete Table2 calibrations, frozen historical rate/path/preview matrices and the analytical initial-state assignment. Body2p/Appendix6p and printed-spin ambiguities, conservative software domain restrictions and retained numerical failures remain disclosed. No author-code equivalence, current binary/package/browser/live release, finite rotation, FE tangent, general parameter/domain guarantee or experimental validation is asserted. The analytical assignment is not measured preparation or a qualified website trajectory.
+
+Run `PYTHONPATH=. python3 -B docs/admission/barodesy2017-agent-v1/verify.py` from the repository root. It checks the original manifest, exact current model/review/approval binding, deterministic parent result and the normal public catalogue projection. Export includes the original decision and definition, not private sources. For the source-dependent checker use the durable PDF path in the review README.
+
+Current release qualification, example trajectory and actual browser/live delivery remain open in the [delivery ledger](../../ingestion/barodesy-clay-2017/DELIVERY.md). This integration authorizes no remote publication.
