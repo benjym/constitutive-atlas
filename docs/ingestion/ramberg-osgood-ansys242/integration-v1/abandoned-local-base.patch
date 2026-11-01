@@ -1,0 +1,357 @@
+diff --git a/catalogue/laboratory-package-policy.json b/catalogue/laboratory-package-policy.json
+index 6f9c4407..ac1bf1df 100644
+--- a/catalogue/laboratory-package-policy.json
++++ b/catalogue/laboratory-package-policy.json
+@@ -1,7 +1,7 @@
+ {
+   "schema_version": "0.1",
+   "kind": "supported-laboratory-package-policy",
+-  "id": "supported-package-twelve-v1",
++  "id": "supported-package-thirteen-ramberg-v1",
+   "ordinary": "drained-1pct-100-current-settings",
+   "models": {
+     "barodesy-clay-2017": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477",
+@@ -15,7 +15,8 @@
+     "modified-cam-clay": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+     "mohr-coulomb": "6a3a139218fc413f066abe5b851c5c7aed8899ee23efbd7ae2a2e68c7655f0e5",
+     "research-hp-extracted-asbs-gis-2024-v03": "439b785e1da3075209c6d5ca43a991a441463a915f31f2e9c77b5c6835e20dbc",
+-    "tresca-associated-perfect-bk2022v1-be": "19acebed37d59120e49c5dff698e2b7d2a2693bbce9ec35c8bcbc65954819e18"
++    "tresca-associated-perfect-bk2022v1-be": "19acebed37d59120e49c5dff698e2b7d2a2693bbce9ec35c8bcbc65954819e18",
++    "ramberg-osgood-ansys242": "c949cb14269846ec46a7e8f25718e17e8c8eab394b6ee09204f029e1ca15a3e2"
+   },
+   "declared_failures": [
+     {
+diff --git a/catalogue/laboratory-profile-policy.json b/catalogue/laboratory-profile-policy.json
+index 60ab4e12..3d4b73ae 100644
+--- a/catalogue/laboratory-profile-policy.json
++++ b/catalogue/laboratory-profile-policy.json
+@@ -1,20 +1,24 @@
+ {
+   "schema_version": "0.1",
+   "kind": "laboratory-profile-test-allocation",
+-  "id": "current-twelve-profiles-v1",
++  "id": "current-thirteen-ramberg-profiles-v1",
+   "supported_policy": {
+     "path": "catalogue/laboratory-package-policy.json",
+-    "sha256": "12c39b7bf91a6011d1e1337880442caff7664fd2b4f1ff78c2a21c31bd1a9e25"
++    "sha256": "99e1f83cfb4b905edb4822737d04b74aeba63bc332aeaceecb556025ab4756cf"
+   },
+   "cases": {
+-    "path": "docs/reviews/current-profile-parity-v1/cases.json",
+-    "sha256": "20c1158ab387a285972b8901a3a7f660b119e68f0b26c29d46f63ad29dbb5cbd"
++    "path": "docs/ingestion/ramberg-osgood-ansys242/integration-v1/profile-cases.json",
++    "sha256": "ce74b60c05214ce04db9a46bf241dca4c4dad330638d3e612605b697252d5a84"
+   },
+-  "case_count": 26,
++  "case_count": 31,
+   "legacy_contract_rejections": [
+     {
+       "model": "tresca-associated-perfect-bk2022v1-be",
+       "message": "legacy laboratory contract requires effective stress"
++    },
++    {
++      "model": "ramberg-osgood-ansys242",
++      "message": "legacy laboratory contract requires effective stress"
+     }
+   ],
+   "parity_relative_tolerance": 1e-10,
+diff --git a/catalogue/manifest.json b/catalogue/manifest.json
+index 37941bb7..fb8f9236 100644
+--- a/catalogue/manifest.json
++++ b/catalogue/manifest.json
+@@ -925,6 +925,22 @@
+       ],
+       "approval_record": "docs/admission/j2-approved-v2/approval.json",
+       "material_laboratory": "index.html"
++    },
++    {
++      "id": "ramberg-osgood-ansys242",
++      "name": "Ramberg\u2013Osgood nonlinear elasticity \u2014 ANSYS2024R2",
++      "family": "nonlinear elasticity",
++      "status": "numerically-tested",
++      "executable": true,
++      "dossier": "docs/models/ramberg-osgood-ansys242.md",
++      "note": "Full three-dimensional reversible isotropic small-strain Ramberg\u2013Osgood deformation law, ANSYS2024R2 constant-parameter mechanical formulation. Unloading retraces loading; no yield surface, permanent plastic strain or hysteresis. Dry total Cauchy stress, compression-positive Mandel components, fixed spatial axes/zero spin. Project implicit endpoint compliance residual and explicit full stress/strain initialization. Illustrative parameters, no experimental or finite-deformation/host qualification. Source postprocessing energy inconsistency is excluded; no energy output claimed.",
++      "catalogue_sources": [
++        {
++          "url": "https://ansyshelp.ansys.com/public/Views/Secured/corp/v242/en/ans_mat/ramberg-osgood.html",
++          "locator": "Sec4.17.1 full3D equation, volumetric/deviatoric split and equivalent scalar relation; Sec4.17.2 constants table. Exact2024R2 mechanical law, not proprietary integration algorithm or energy output.",
++          "role": "Primary equation and parameter domain"
++        }
++      ]
+     }
+   ]
+ }
+diff --git a/catalogue/publications.json b/catalogue/publications.json
+index 038d799f..0ccee2d6 100644
+--- a/catalogue/publications.json
++++ b/catalogue/publications.json
+@@ -2,7 +2,7 @@
+   "schema_version": "0.1",
+   "kind": "publication-lineage",
+   "updated_on": "2026-11-01",
+-  "scope": "Seed hypoplasticity, Terra Cotta and classic soil-model publication identities, including Mašín clay2005/2013/2014; not exhaustive. Publication relations and formulation bindings do not certify equation equivalence, executable availability or scientific admission.",
++  "scope": "Seed hypoplasticity, Terra Cotta and classic soil-model publication identities, including Ma\u0161\u00edn clay2005/2013/2014; not exhaustive. Publication relations and formulation bindings do not certify equation equivalence, executable availability or scientific admission.",
+   "reviewer": "Codex (AI-assisted source screening)",
+   "independent_review": "pending",
+   "publications": [
+@@ -382,7 +382,7 @@
+       "id": "doi:10.1061/jsfeaq.0001706",
+       "doi": "10.1061/jsfeaq.0001706",
+       "url": "https://doi.org/10.1061/jsfeaq.0001706",
+-      "title": "Erratum for “Nonlinear Analysis of Stress and Strain in Soils”",
++      "title": "Erratum for \u201cNonlinear Analysis of Stress and Strain in Soils\u201d",
+       "authors": [
+         "James M. Duncan",
+         "Chin-Yung Chang"
+@@ -449,7 +449,7 @@
+       "url": "https://doi.org/10.1002/nag.416",
+       "title": "A hypoplastic constitutive model for clays",
+       "authors": [
+-        "David Mašín"
++        "David Ma\u0161\u00edn"
+       ],
+       "publication_type": "journal-article",
+       "version_role": "version-of-record",
+@@ -473,7 +473,7 @@
+       "unresolved": [
+         "Bibliographic identity only: full source reconciliation and independent scientific admission remain separate.",
+         "Print date selected; online and issued dates remain distinct in the unmodified metadata response.",
+-        "Publisher-deposited author family name is corrupted; display normalized to David Mašín using the existing author-manuscript dossier, without changing the raw metadata."
++        "Publisher-deposited author family name is corrupted; display normalized to David Ma\u0161\u00edn using the existing author-manuscript dossier, without changing the raw metadata."
+       ]
+     },
+     {
+@@ -482,7 +482,7 @@
+       "url": "https://doi.org/10.1007/s11440-012-0199-y",
+       "title": "Clay hypoplasticity with explicitly defined asymptotic states",
+       "authors": [
+-        "David Mašín"
++        "David Ma\u0161\u00edn"
+       ],
+       "publication_type": "journal-article",
+       "version_role": "version-of-record",
+@@ -513,7 +513,7 @@
+       "url": "https://doi.org/10.1680/geot.13.p.065",
+       "title": "Clay hypoplasticity model including stiffness anisotropy",
+       "authors": [
+-        "David Mašín"
++        "David Ma\u0161\u00edn"
+       ],
+       "publication_type": "journal-article",
+       "version_role": "version-of-record",
+@@ -629,7 +629,7 @@
+         }
+       ],
+       "unresolved": [
+-        "Original equation images and exact rigid-plastic/image-pressure closure remain unverified. Deposited title contains the typo “simle”; raw metadata and title are preserved.",
++        "Original equation images and exact rigid-plastic/image-pressure closure remain unverified. Deposited title contains the typo \u201csimle\u201d; raw metadata and title are preserved.",
+         "Independent scientific review remains pending; metadata does not establish equation fidelity."
+       ]
+     },
+@@ -640,7 +640,7 @@
+       "title": "An anisotropic elastoplastic model for soft clays",
+       "authors": [
+         "Simon J Wheeler",
+-        "Anu Näätänen",
++        "Anu N\u00e4\u00e4t\u00e4nen",
+         "Minna Karstunen",
+         "Matti Lojander"
+       ],
+@@ -804,7 +804,7 @@
+       "authors": [
+         "L. Mugele",
+         "H.H. Stutz",
+-        "D. Mašín"
++        "D. Ma\u0161\u00edn"
+       ],
+       "publication_type": "journal-article",
+       "version_role": "version-of-record",
+@@ -828,6 +828,34 @@
+         "Selected extracted-ASBS HP pairing, f=0, zero spin; not every host covered by this publication. Ordinary interactive default failure and unsigned source review remain open.",
+         "Independent scientific review remains pending; metadata does not establish equation fidelity."
+       ]
++    },
++    {
++      "id": "ansys-material-reference-2024r2-ramberg-osgood",
++      "title": "Material Reference, Release2024R2, \u00a74.17 Ramberg-Osgood Model",
++      "authors": [
++        "ANSYS, Inc."
++      ],
++      "publication_type": "technical-documentation",
++      "version_role": "versioned-primary-documentation",
++      "publication_date_parts": [
++        2024
++      ],
++      "url": "https://ansyshelp.ansys.com/public/Views/Secured/corp/v242/en/ans_mat/ramberg-osgood.html",
++      "model_ids": [
++        "ramberg-osgood-ansys242"
++      ],
++      "evidence": [
++        {
++          "url": "https://ansyshelp.ansys.com/public/Views/Secured/corp/v242/en/ans_mat/ramberg-osgood.html",
++          "locator": "\u00a74.17.1 mechanical tensor/scalar equations; \u00a74.17.2 constants table",
++          "accessed_on": "2026-11-02",
++          "path": "docs/ingestion/ramberg-osgood-ansys242/source-v1/source-receipt.json",
++          "sha256": "f3fbe0d0303c66d811a541a74704d4b808de9929ec67c5a41e67911051acd65e"
++        }
++      ],
++      "unresolved": [
++        "Optional energy formula has inconsistent hydrostatic term; retained and excluded from mechanical scope."
++      ]
+     }
+   ],
+   "relations": [
+diff --git a/docs/ingestion/candidate-publication-bindings-v1/source-archive-map.json b/docs/ingestion/candidate-publication-bindings-v1/source-archive-map.json
+index dcff2491..169132e1 100644
+--- a/docs/ingestion/candidate-publication-bindings-v1/source-archive-map.json
++++ b/docs/ingestion/candidate-publication-bindings-v1/source-archive-map.json
+@@ -2,7 +2,19 @@
+   "version": "immutable-source-archive-map-0.1",
+   "documents": {
+     "docs/ingestion/candidate-publication-bindings-v1/archive-plan.json": "4132790db1cacd2293ca554036c26af87fceac8ccda01603bcb6eb99438e1b55",
+-    "docs/ingestion/candidate-publication-bindings-v1/manifest.json": "a22d13a37d2ddf58d9835c0bbd40d5c0a77ada5f5a1007e08b29be1d7fe6f8b1"
++    "docs/ingestion/candidate-publication-bindings-v1/manifest.json": "a22d13a37d2ddf58d9835c0bbd40d5c0a77ada5f5a1007e08b29be1d7fe6f8b1",
++    "docs/ingestion/candidate-publication-bindings-v1/barodesy-sand-crossref.json": "e26360cfc3d9805726194b22c070c4df4d15ecd84608efa8517e890242a1615e",
++    "docs/ingestion/candidate-publication-bindings-v1/s-clay1-crossref.json": "9057b18c93d2e0721ecc1fc6e31eef997c6088274e86c5da0b7c8e67712da1ee",
++    "docs/ingestion/candidate-publication-bindings-v1/binding-scope.json": "c257eaf2a6b34de744bf905288cd9c1d71530e2f4e4dcb6a498179e5e7b4a646",
++    "docs/ingestion/candidate-publication-bindings-v1/sanisand-2004-crossref.json": "343bcd817ff714fd70346e6736c6552d6f91b5b8e063193b759f0a1002490a28",
++    "docs/ingestion/candidate-publication-bindings-v1/manzari-dafalias-1997-crossref.json": "ec69a98844f81b38a9ee313b79d7f7f7f468d07d1d418c8666704532a4acd559",
++    "docs/ingestion/candidate-publication-bindings-v1/hca-sand-2005-crossref.json": "5a4ea5e3c144caabb3a5e7a96999f772e65b9f7fdb635f97a2346aae24c8a972",
++    "docs/ingestion/candidate-publication-bindings-v1/archive-result.json": "e3bcaf99ba5cb8f261fe2721288225df398853cc95f4106d93a6a8d3446c6259",
++    "docs/ingestion/candidate-publication-bindings-v1/source-receipts.json": "09e3ff0667e6fb391eb9a76b2888230e6e4a9dc28d3e51b80245aac46a45b5b2",
++    "docs/ingestion/candidate-publication-bindings-v1/research-hp-extracted-asbs-gis-2024-v03-crossref.json": "8492186092de634708c230602631d8ebd6de8a8fba12d0b391b804516e12456f",
++    "docs/ingestion/candidate-publication-bindings-v1/barodesy-clay-2017-crossref.json": "04cd7147a7c8e50242e4265410bb13889f3a80f3258b891ad0d23a81c9c692cc",
++    "docs/ingestion/candidate-publication-bindings-v1/hypoplastic-sand-igs97-crossref.json": "487e49808756575252fc908199c33b6fb3390e6b426e71b760308f2225183c73",
++    "docs/ingestion/candidate-publication-bindings-v1/norsand-1993-crossref.json": "329d300a1f56dbec14ca705d2f9496e7acaf6bc45d7ee7675f740e1ef2bfb237"
+   },
+   "entries": [
+     {
+@@ -44,6 +56,11 @@
+       "original_path": "docs/reviews/sanisand-v03-research-freeze-v1/source-archive-map.json",
+       "sha256": "4c5c92c8e973d454648332b94367cf5965a1152bb4cdd4a16c958ce503919626",
+       "archived_path": "catalogue/source-snapshots/4c5c92c8e973d454648332b94367cf5965a1152bb4cdd4a16c958ce503919626/docs/reviews/sanisand-v03-research-freeze-v1/source-archive-map.json"
++    },
++    {
++      "original_path": "catalogue/publications.json",
++      "sha256": "6611c99b9abeeab262de144cffe582a2a6826390a44974c13b293db891f86c98",
++      "archived_path": "catalogue/source-snapshots/6611c99b9abeeab262de144cffe582a2a6826390a44974c13b293db891f86c98/catalogue/publications.json"
+     }
+   ]
+ }
+diff --git a/docs/reviews/current-profile-parity-v1/source-archive-map.json b/docs/reviews/current-profile-parity-v1/source-archive-map.json
+index 1491e347..222c1279 100644
+--- a/docs/reviews/current-profile-parity-v1/source-archive-map.json
++++ b/docs/reviews/current-profile-parity-v1/source-archive-map.json
+@@ -2,7 +2,12 @@
+   "version": "immutable-source-archive-map-0.1",
+   "documents": {
+     "docs/reviews/current-profile-parity-v1/archive-plan.json": "76c66c1c3da698e34a8d62a3936cc790d79e12e420ca754de9dd116f77ca926a",
+-    "docs/reviews/current-profile-parity-v1/provenance.json": "7ba54f9fbbea8e0443a33b6596028896cd6f80a3d97c994b4420d120f41a57be"
++    "docs/reviews/current-profile-parity-v1/provenance.json": "7ba54f9fbbea8e0443a33b6596028896cd6f80a3d97c994b4420d120f41a57be",
++    "docs/reviews/current-profile-parity-v1/results.json": "7348d5e83fc9f2c2f6bccef99238543d6ef85306f5f3884f80883160ab5392fe",
++    "docs/reviews/current-profile-parity-v1/cases.json": "20c1158ab387a285972b8901a3a7f660b119e68f0b26c29d46f63ad29dbb5cbd",
++    "docs/reviews/current-profile-parity-v1/manifest.json": "b03f0e8e0c184717198a5b55c7f75281e5bc95e5f8ce6d59f01192419f60d872",
++    "docs/reviews/current-profile-parity-v1/archive-result.json": "8135cd140f809a22aaaceb915747e26f8cdab12d87e691e23f0d226e7a15410f",
++    "docs/reviews/current-profile-parity-v1/freeze.json": "104423c8297fb68c905a43d0cc65bd5d428077d75299586300eb210a76eb5c09"
+   },
+   "entries": [
+     {
+@@ -74,6 +79,16 @@
+       "original_path": "docs/reviews/v03-laboratory-integration/source-archive-map.json",
+       "sha256": "1eb3e0d93b95eea286e7cc26ecd9670b883668612a01b5b12c0af41ce1ffd833",
+       "archived_path": "catalogue/source-snapshots/1eb3e0d93b95eea286e7cc26ecd9670b883668612a01b5b12c0af41ce1ffd833/docs/reviews/v03-laboratory-integration/source-archive-map.json"
++    },
++    {
++      "original_path": "catalogue/laboratory-profile-policy.json",
++      "sha256": "844baddff81bdd87a3296479e84227514956778a4afd32866411b794b679ed32",
++      "archived_path": "catalogue/source-snapshots/844baddff81bdd87a3296479e84227514956778a4afd32866411b794b679ed32/catalogue/laboratory-profile-policy.json"
++    },
++    {
++      "original_path": "tests/test_laboratory_profile_policy.mjs",
++      "sha256": "5330f7859faca3c0440039d1a35fc7638341ed1b425d34143ca69aefde3dd051",
++      "archived_path": "catalogue/source-snapshots/5330f7859faca3c0440039d1a35fc7638341ed1b425d34143ca69aefde3dd051/tests/test_laboratory_profile_policy.mjs"
+     }
+   ]
+ }
+diff --git a/docs/reviews/native-contract-fixtures-v2/source-archive-map.json b/docs/reviews/native-contract-fixtures-v2/source-archive-map.json
+index 937bbd92..5649e765 100644
+--- a/docs/reviews/native-contract-fixtures-v2/source-archive-map.json
++++ b/docs/reviews/native-contract-fixtures-v2/source-archive-map.json
+@@ -1,7 +1,15 @@
+ {
+   "version": "immutable-source-archive-map-0.1",
+   "documents": {
+-    "docs/reviews/native-contract-fixtures-v2/archive-plan.json": "0685462a6fba2f291532dc32cfa9d6b97c2bdbcb78bb6eaa74b2d9787e97d113"
++    "docs/reviews/native-contract-fixtures-v2/archive-plan.json": "0685462a6fba2f291532dc32cfa9d6b97c2bdbcb78bb6eaa74b2d9787e97d113",
++    "docs/reviews/native-contract-fixtures-v2/pre-build-freeze.json": "82441de459aeff9a8b27a6d8497d01683563f2c2f9b1efc0ac713607431a2f40",
++    "docs/reviews/native-contract-fixtures-v2/native-v2-original-contracts.json": "325ad010c02cd796bd320eace38c311ac8c69737feb259b384bb170449af3a2c",
++    "docs/reviews/native-contract-fixtures-v2/native-v2-numerical.json": "ee3c0b51808ad49cc5869a801e9b0e151bce4d36357310778d9005700859bd02",
++    "docs/reviews/native-contract-fixtures-v2/results.json": "f6090be903859169cd33e704294d0dd5a55783eeb1694149a553d54db9884b07",
++    "docs/reviews/native-contract-fixtures-v2/native-v2-recorded.json": "80c5ffedafe9e570e2551b0cf22dbe1fa8e9df8b533f99b98dcf8b3600754bef",
++    "docs/reviews/native-contract-fixtures-v2/manifest.json": "4007f2f0d0dba815343817a673972cde19a5f2c75656133c67132b9b4a021b3f",
++    "docs/reviews/native-contract-fixtures-v2/archive-result.json": "8b8cf83fbe53c71fb754c80bb332ed112f55db3960c1e086c3235688183f4f86",
++    "docs/reviews/native-contract-fixtures-v2/post-build-gate-freeze.json": "c4a331d344b73913fc42843af255e34d148e75d3401a02fefc946222dd9afdc4"
+   },
+   "entries": [
+     {
+@@ -68,6 +76,11 @@
+       "original_path": "docs/reviews/sanisand-v03-research-freeze-v1/source-archive-map.json",
+       "sha256": "d846a91f9c8b9ef6111c1ae7886549eb25f6f69e7176453e389bd538bf76b82c",
+       "archived_path": "catalogue/source-snapshots/d846a91f9c8b9ef6111c1ae7886549eb25f6f69e7176453e389bd538bf76b82c/docs/reviews/sanisand-v03-research-freeze-v1/source-archive-map.json"
++    },
++    {
++      "original_path": "tests/test_solver.cpp",
++      "sha256": "24aef2e32c9b327109b35a910fcb2cb91d61bad33c0606c8cbd3f533331349c0",
++      "archived_path": "catalogue/source-snapshots/24aef2e32c9b327109b35a910fcb2cb91d61bad33c0606c8cbd3f533331349c0/tests/test_solver.cpp"
+     }
+   ]
+ }
+diff --git a/docs/reviews/supported-package-gate-v1/source-archive-map.json b/docs/reviews/supported-package-gate-v1/source-archive-map.json
+index 4047a1a4..dae7e6c2 100644
+--- a/docs/reviews/supported-package-gate-v1/source-archive-map.json
++++ b/docs/reviews/supported-package-gate-v1/source-archive-map.json
+@@ -10,6 +10,11 @@
+       "original_path": ".github/workflows/verify.yml",
+       "sha256": "12fc6f8e567b2b0f696b3e336d0ce8991fa25371da8d6e801dcc9b01af010bf0",
+       "archived_path": "catalogue/source-snapshots/12fc6f8e567b2b0f696b3e336d0ce8991fa25371da8d6e801dcc9b01af010bf0/.github/workflows/verify.yml"
++    },
++    {
++      "original_path": "catalogue/laboratory-package-policy.json",
++      "sha256": "12c39b7bf91a6011d1e1337880442caff7664fd2b4f1ff78c2a21c31bd1a9e25",
++      "archived_path": "catalogue/source-snapshots/12c39b7bf91a6011d1e1337880442caff7664fd2b4f1ff78c2a21c31bd1a9e25/catalogue/laboratory-package-policy.json"
+     }
+   ]
+ }
+diff --git a/tests/test_laboratory_profile_policy.mjs b/tests/test_laboratory_profile_policy.mjs
+index 15139931..4ca27edb 100644
+--- a/tests/test_laboratory_profile_policy.mjs
++++ b/tests/test_laboratory_profile_policy.mjs
+@@ -9,7 +9,7 @@ const policy=JSON.parse(read('catalogue/laboratory-profile-policy.json')),suppor
+ const catalogue={schema_version:'0.1',sha256:'0'.repeat(64),models:readdirSync(resolve(root,'models')).filter(p=>p.endsWith('.json')).sort().map(p=>JSON.parse(read('models/'+p)))};
+ const dep={definitionHash:id=>hash(read('models/'+id+'.json')),readEvidence:read};
+ const validate=(p=policy,s=supported,c=cases,d=dep)=>validateProfileAllocation(p,s,c,catalogue,d);
+-test('complete twelve model allocation validates with every successful scope',()=>{assert.equal(validate().cases.length,26);assert.equal(loadProfileAllocation(resolve(root,'catalogue/laboratory-profile-policy.json'),catalogue).cases.length,26);});
++test('complete current model allocation validates with every successful scope',()=>{assert.equal(validate().cases.length,policy.case_count);assert.equal(loadProfileAllocation(resolve(root,'catalogue/laboratory-profile-policy.json'),catalogue).cases.length,policy.case_count);});
+ for(const [name,mutate]of Object.entries({
+  'missing total rejection':p=>p.legacy_contract_rejections=[],
+  'effective model rejection':p=>p.legacy_contract_rejections.push({model:'linear-elastic',message:'legacy laboratory contract requires effective stress'}),
+diff --git a/tests/test_solver.cpp b/tests/test_solver.cpp
+index 056c7caa..2056900b 100644
+--- a/tests/test_solver.cpp
++++ b/tests/test_solver.cpp
+@@ -43,6 +43,14 @@ int main(){
+         for(size_t m=0;m<atlas::models().size();++m){
+             auto p=atlas::default_parameters(int(m)),z=atlas::initial_state(int(m));z[0]=105000;z[1]=95000;z[3]=1000;
+             atlas::Sym<double>de;de.v={.0001,-.00002,.00001,.00003,.00001,-.00001};auto zr=z;
++            if(atlas::models()[m].id=="ramberg-osgood-ansys242"){
++                // Independent source-compliance fixture for the imposed stress.
++                // Both persistent spatial tensors must be consistently prepared
++                // and re-expressed; this law has no arbitrary strain offset.
++                const double eps[]={0.0018750073153125002,0.0014583260180208333,0.0016666666666666668,4.166812972916667e-05,0.,0.};
++                for(int j=0;j<6;++j)z[6+j]=eps[j];
++                zr=z;atlas::put_tensor(zr,6,rotate(atlas::tensor_from(z,6)));
++            }
+             atlas::put_tensor(zr,0,rotate(atlas::tensor_from(z,0)));
+             atlas::IntegrationSettings fixture_settings;
+             if(explicit_fixtures&&atlas::models()[m].id=="research-hp-extracted-asbs-gis-2024-v03")fixture_settings.max_depth=20;
