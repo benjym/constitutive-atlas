@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "/Users/bmar5496/code/constitutive-atlas/docs/reviews/sanisand-v03-monotonic-v1",
+    "-p",
+    "test_assess.py",
+    "-v"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "test_anchor_changed (test_assess.AssessorTests.test_anchor_changed) ... ok\ntest_complete_synthetic_campaign_and_corruptions (test_assess.AssessorTests.test_complete_synthetic_campaign_and_corruptions) ... ok\ntest_control (test_assess.AssessorTests.test_control) ... ok\ntest_coordinate (test_assess.AssessorTests.test_coordinate) ... ok\ntest_endpoint (test_assess.AssessorTests.test_endpoint) ... ok\ntest_entry_accuracy (test_assess.AssessorTests.test_entry_accuracy) ... ok\ntest_fine_accuracy (test_assess.AssessorTests.test_fine_accuracy) ... FAIL\ntest_identity (test_assess.AssessorTests.test_identity) ... ok\ntest_missing_outputs_never_pass (test_assess.AssessorTests.test_missing_outputs_never_pass) ... ok\ntest_negative_gamma (test_assess.AssessorTests.test_negative_gamma) ... ok\ntest_nonfinite_state (test_assess.AssessorTests.test_nonfinite_state) ... ok\ntest_parameters (test_assess.AssessorTests.test_parameters) ... ok\ntest_positive_synthetic_path (test_assess.AssessorTests.test_positive_synthetic_path) ... ok\ntest_probe_acceptance_and_rollback (test_assess.AssessorTests.test_probe_acceptance_and_rollback) ... ok\ntest_settings (test_assess.AssessorTests.test_settings) ... ok\ntest_strain (test_assess.AssessorTests.test_strain) ... ok\ntest_trace (test_assess.AssessorTests.test_trace) ... ok\ntest_truncated_history (test_assess.AssessorTests.test_truncated_history) ... ok\ntest_unsuccessful_path (test_assess.AssessorTests.test_unsuccessful_path) ... ok\ntest_yield (test_assess.AssessorTests.test_yield) ... ok\n\n======================================================================\nFAIL: test_fine_accuracy (test_assess.AssessorTests.test_fine_accuracy)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/sanisand-v03-monotonic-v1/test_assess.py\", line 53, in test_fine_accuracy\n    def test_fine_accuracy(self):self.reject(lambda v:v['points'][100]['state'].__setitem__(6,0.8),'fine trajectory accuracy')\n                                 ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/sanisand-v03-monotonic-v1/test_assess.py\", line 34, in reject\n    with self.assertRaisesRegex(ValueError,gate):inspect_path(self.request,value,self.ctx)\n         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\nAssertionError: ValueError not raised\n\n----------------------------------------------------------------------\nRan 20 tests in 5.201s\n\nFAILED (failures=1)\n",
+  "test_sha256": "cb7ac6e99fa3cfca42ed175f5f2ffc342247b9c4bcf0849581eaadcaf6aa93a6",
+  "correction": "Fine-accuracy test injected error at unsampled knot100; change fixture injection to the frozen reference sample index65. The policy compares reference accuracy only at18sampled knots; all-knot domain/history/control checks already pass. No candidate integration or gate change."
+}

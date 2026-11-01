@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "python3",
+    "/Users/bmar5496/code/constitutive-atlas/docs/reviews/sanisand-v03-monotonic-v1/verify.py"
+  ],
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/sanisand-v03-monotonic-v1/verify.py\", line 31, in <module>\n    if __name__=='__main__':print(json.dumps(verify(),indent=2))\n                                             ~~~~~~^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/sanisand-v03-monotonic-v1/verify.py\", line 18, in verify\n    require(diagnose(HERE/'native-results')==load(HERE/'saved-diagnosis.json'),'descriptive audit replay')\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/bmar5496/code/constitutive-atlas/docs/reviews/sanisand-v03-monotonic-v1/assess.py\", line 27, in require\n    raise ValueError(message)\nValueError: descriptive audit replay\n",
+  "correction": "Saved descriptive audit has JSON string object keys; normalize reconstructed descriptive audit through JSON before equality. Numerical assessment exactly reproduced before this failure; no frozen driver/assessor/model/policy changed."
+}
