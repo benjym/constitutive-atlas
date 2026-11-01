@@ -1,0 +1,26 @@
+{
+  "version": "tresca-laboratory-policy-0.1",
+  "frozen_before_material_observations": true,
+  "source": "unchanged BK2022v1 total-stress associated perfect Tresca / project BE v4",
+  "checks": [
+    "all five protocols and both initial states, complete sigma6/ep6 and strain6 paths",
+    "independent Fraction recurrence with exact input binary64 values; no Atlas material imports",
+    "actual rounded committed state exact principal range using independent Fraction polynomial and Sturm check",
+    "scoped total Cauchy descriptor; unavailable pore pressure; u null",
+    "unattainable stress requires exactly four committed prefix points, no invalid point appended",
+    "legacy total and malformed/invalid cases reject; same-instance zero-step recovery after every request",
+    "exact request identity, settings, control wire, full layout and history; no resampling"
+  ],
+  "tolerances": {
+    "state_stress_absolute_Pa": 2e-06,
+    "strain_and_plastic_absolute": 2e-09,
+    "control_absolute": 0,
+    "p_q_absolute_Pa": 3e-06,
+    "controller_radial_or_q_absolute_Pa": 1.28e-06
+  },
+  "justification": "outer mixed controller uses max(1,initial radial stress)*1e-8=6.4e-7Pa; state gate covers two such boundary residuals and residual solve rounding. Strain/plastic gate retains prior 2e-9 value scale. This lab gate is distinct from original one-step/derivative study, which remains unchanged.",
+  "solver": "2e-10,1e-6,45,0,20000,11",
+  "build": "one explicit serial target per backend --parallel 1, native then Wasm",
+  "public_installation": false,
+  "scientific_admission": false
+}
