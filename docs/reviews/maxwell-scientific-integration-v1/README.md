@@ -1,0 +1,13 @@
+# Maxwell agent review integration
+
+The user-requested fresh-context [AI technical review](../maxwell-scientific-agent-v1/README.md) is integrated. It assesses exact model SHA-256 `dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f`. The parent verified all 10 review output bindings and all 153 examined input bindings, then replayed the final independent check script from this separate directory after inspecting its execution paths. Final result objects agree exactly; the agent output files were not rewritten. No compiled/vendor execution or build occurred.
+
+The 16 decisions comprise 11 supported, three rejected stronger claims, one conditional decision on durable private source retention, and one unresolved wider-source/vendor reconciliation. The bounded dry, fixed-frame, small-strain continuous Maxwell formulation and saved numerical evidence are supported; no blocking coefficient, sign, tensor or analytical-reference defect was found. The model remains a draft, with no canonical scientific signature, scientific admission, experimental validation or release promotion.
+
+Preserve the review findings: loose permitted temporal tolerances do not guarantee numerical dissipation; declared parameter bounds exceed the verified computational envelope; original manual pages need durable private retention; the saved schedule failure covers t=0 entry rollback, not failure after a nonzero-time regular sample. Source-derived continuous and vendor discrete methods stay separate. The loose-tolerance growth witness is algebraic, not a newly executed compiled case.
+
+The reviewer independently reproduces all pinned source/model/catalogue identities, three exact rational algebra regimes, all saved main/transaction trajectories, the retained parity-v1 failure and 5,962 v2 comparisons. Its original vacuous endpoint diagnostic is retained as attempt1; the final diagnostic checks 106 regular points per backend. These are explicitly bounded checks, not new current-build evidence.
+
+The board is the only reviewed input updated during integration. `board-before-integration.md` retains its exact prior bytes; source-archive-map.json binds the historical reviewer input hash to this archive. All other reviewed source/model/evidence inputs and reviewer outputs remain unchanged. The copied script, parent results, stdout and stderr are retained here for reproduction.
+
+Smallest next actions are durable private original-source retention and preserving the bounded qualification settings in consumers. Wider tolerance/parameter, energy-policy, nonzero-time rollback and vendor-original claims require distinct prospective studies if sought. No such stronger claim has been admitted here.

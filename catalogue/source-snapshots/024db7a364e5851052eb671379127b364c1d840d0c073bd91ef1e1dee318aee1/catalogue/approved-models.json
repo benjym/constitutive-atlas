@@ -1,0 +1,109 @@
+{
+  "schema_version": "0.1",
+  "kind": "bounded-model-approval-registry",
+  "description": "Explicit project approvals bound to exact model bytes and supported scope. Authority, scientific-review provenance, numerical qualification and experimental validation remain separately recorded.",
+  "models": [
+    {
+      "id": "maxwell-user-approval-v1",
+      "model_id": "maxwell-itasca900-zero-spin-ode",
+      "status": "approved",
+      "approved_on": "2026-11-01",
+      "approval_authority": {
+        "kind": "explicit-user-instruction",
+        "identity": "requesting user in this conversation",
+        "instruction": "Ok let's add it as an approved model",
+        "basis": "User approval following separate-agent review and native/Wasm qualification; no human reviewer credentials or signature inferred"
+      },
+      "definition": {
+        "path": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+        "sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+        "schema_version": "0.3",
+        "embedded_status": "draft",
+        "immutable_identity_policy": "Approval is attached to exact tested bytes. Embedded historical draft metadata is preserved; the approval status is authoritative in this registry for the declared scope."
+      },
+      "scope": {
+        "law": "continuous Maxwell deviatoric viscoelasticity with elastic volumetric response",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "stress_scope": "total",
+        "material_assumption": "dry uncoupled material point",
+        "use": "bounded material-point use supported by the exact frozen qualification cases and example settings",
+        "interfaces": [
+          "native physical-time CLI",
+          "Wasm physical-time ABI",
+          "ordered timed strain/stress schedules"
+        ],
+        "build_target": "atlas_maxwell_solver",
+        "build_project": "cmake/maxwell",
+        "examples": [
+          "examples/maxwell/creep.json",
+          "examples/maxwell/relaxation.json",
+          "examples/maxwell/oedometer.json",
+          "examples/maxwell/load-hold-reverse.json"
+        ],
+        "qualification_requests": "docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json",
+        "qualification_policy": "docs/ingestion/maxwell-itasca900/integration-v1/PLAN.md"
+      },
+      "review": {
+        "kind": "fresh-context AI technical review",
+        "path": "docs/reviews/maxwell-scientific-agent-v1/README.md",
+        "decisions": "docs/reviews/maxwell-scientific-agent-v1/decisions.json",
+        "human_scientific_signature": false,
+        "bounded_source_and_saved_numerical_claims_supported": true
+      },
+      "conditions": {
+        "MW-14": "closed by exact durable private source retention; source-retention.json receipt"
+      },
+      "limitations": [
+        "Approved scope is limited to the named frozen cases/settings; broad declared parameter ranges and arbitrary solver tolerances are not qualified.",
+        "Continuous dissipation is not an unconditional numerical energy guarantee; loose permitted midpoint tolerances can admit artificial growth.",
+        "Saved schedule failure tests cover t=0 entry rollback, not failure after a nonzero-time regular sample.",
+        "No experimental calibration/prediction, FE/MPM host qualification, saturation/pore-pressure coupling or finite-rotation objectivity.",
+        "No vendor central-difference algorithm, complete vendor example/host equivalence or Jaeger first-publication reconciliation.",
+        "Browser timed-control UI and release/deployment qualification are outside this approval."
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false,
+      "dossier": "docs/models/maxwell-itasca900-zero-spin-ode.md",
+      "supporting_files": [
+        {
+          "path": "docs/reviews/maxwell-scientific-agent-v1/manifest.json",
+          "sha256": "e55730ebf317989f98c65d7d22748df055bb7200e1b4737a44a7a088c480e001"
+        },
+        {
+          "path": "docs/reviews/maxwell-scientific-agent-v1/decisions.json",
+          "sha256": "14ac0de064a017442e3ae9acecdbb563845cb5d0f7e323548e325e42073f927d"
+        },
+        {
+          "path": "docs/reviews/maxwell-scientific-agent-v1/README.md",
+          "sha256": "a579fcd214d49820f9d36f24c43eb5b215a449e98957d6791b5d193729f26403"
+        },
+        {
+          "path": "docs/reviews/maxwell-scientific-integration-v1/manifest.json",
+          "sha256": "2611606e70f2ac7a3832b655eacdef57123df6046ec9ce0ed900958888815cc4"
+        },
+        {
+          "path": "docs/ingestion/maxwell-itasca900/manifest.json",
+          "sha256": "1cd9b940c33fdd653953027a5508f53f4fd6fcf4bb391a2afe6cd47379917282"
+        },
+        {
+          "path": "docs/ingestion/maxwell-itasca900/integration-v1/manifest.json",
+          "sha256": "b16927df3cb743b714b530f65ac417a70cdd5eb701709a4ef4e14474809cb992"
+        },
+        {
+          "path": "docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json",
+          "sha256": "f29bf379737a1cfa98c4345660f938561412a181e83e89e7411efceff28e0e96"
+        },
+        {
+          "path": "docs/ingestion/maxwell-itasca900/integration-v1/parity-results-v2.json",
+          "sha256": "97996c5dcf2a56a4f81cb56c1733057d8ececb703c1a99f3a2d20f5a7f0c99db"
+        },
+        {
+          "path": "docs/admission/maxwell-approved-v1/source-retention.json",
+          "sha256": "ad2070606469bc42fb679f0a945befafa08670ccda87e14dd61f59b7897f5da0"
+        }
+      ]
+    }
+  ]
+}

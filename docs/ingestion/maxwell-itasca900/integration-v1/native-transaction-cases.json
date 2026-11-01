@@ -1,0 +1,1392 @@
+{
+  "cases": [
+    {
+      "id": "late-budget-rollback",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "3",
+        "--duration",
+        "4",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        ".25",
+        "--max-substeps",
+        "2"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0,0,0,0,0,0",
+        3,
+        4,
+        1e-09,
+        1e-12,
+        1e-12,
+        0.25,
+        2
+      ],
+      "ok": false,
+      "expected": [
+        140000,
+        80000,
+        80000,
+        3000,
+        -2000,
+        1000
+      ],
+      "time": 3,
+      "tolerance": 0.05
+    },
+    {
+      "id": "recovery-after-late-budget-rollback",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--strain-rate",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        "--start-time",
+        "3",
+        "--duration",
+        "1.0",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        3,
+        1.0,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": true,
+      "expected": [
+        158222.6943332413,
+        99167.02074993096,
+        108610.28491682776,
+        15040.161812793416,
+        -12544.978319701424,
+        10049.79482660943
+      ],
+      "time": 4.0,
+      "tolerance": 0.05
+    },
+    {
+      "id": "zero-duration",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "3",
+        "--duration",
+        "0",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0,0,0,0,0,0",
+        3,
+        0,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": false,
+      "expected": null,
+      "time": 7,
+      "tolerance": 0.05
+    },
+    {
+      "id": "recovery-after-zero-duration",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--strain-rate",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        "--start-time",
+        "3",
+        "--duration",
+        "1.0",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        3,
+        1.0,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": true,
+      "expected": [
+        158222.6943332413,
+        99167.02074993096,
+        108610.28491682776,
+        15040.161812793416,
+        -12544.978319701424,
+        10049.79482660943
+      ],
+      "time": 4.0,
+      "tolerance": 0.05
+    },
+    {
+      "id": "negative-viscosity",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,-1",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "3",
+        "--duration",
+        "4",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,-1",
+        "140000,80000,80000,3000,-2000,1000",
+        "0,0,0,0,0,0",
+        3,
+        4,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": false,
+      "expected": null,
+      "time": 7,
+      "tolerance": 0.05
+    },
+    {
+      "id": "recovery-after-negative-viscosity",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--strain-rate",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        "--start-time",
+        "3",
+        "--duration",
+        "1.0",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        3,
+        1.0,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": true,
+      "expected": [
+        158222.6943332413,
+        99167.02074993096,
+        108610.28491682776,
+        15040.161812793416,
+        -12544.978319701424,
+        10049.79482660943
+      ],
+      "time": 4.0,
+      "tolerance": 0.05
+    },
+    {
+      "id": "missing-state",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "3",
+        "--duration",
+        "4",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "",
+        "0,0,0,0,0,0",
+        3,
+        4,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": false,
+      "expected": null,
+      "time": 7,
+      "tolerance": 0.05
+    },
+    {
+      "id": "recovery-after-missing-state",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--strain-rate",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        "--start-time",
+        "3",
+        "--duration",
+        "1.0",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        3,
+        1.0,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": true,
+      "expected": [
+        158222.6943332413,
+        99167.02074993096,
+        108610.28491682776,
+        15040.161812793416,
+        -12544.978319701424,
+        10049.79482660943
+      ],
+      "time": 4.0,
+      "tolerance": 0.05
+    },
+    {
+      "id": "short-state",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "1,2",
+        "--strain-rate",
+        "0,0,0,0,0,0",
+        "--start-time",
+        "3",
+        "--duration",
+        "4",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "1,2",
+        "0,0,0,0,0,0",
+        3,
+        4,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": false,
+      "expected": null,
+      "time": 7,
+      "tolerance": 0.05
+    },
+    {
+      "id": "recovery-after-short-state",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--strain-rate",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        "--start-time",
+        "3",
+        "--duration",
+        "1.0",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        3,
+        1.0,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": true,
+      "expected": [
+        158222.6943332413,
+        99167.02074993096,
+        108610.28491682776,
+        15040.161812793416,
+        -12544.978319701424,
+        10049.79482660943
+      ],
+      "time": 4.0,
+      "tolerance": 0.05
+    },
+    {
+      "id": "schedule-budget-rollback",
+      "kind": "schedule",
+      "specification": {
+        "schema_version": "0.2",
+        "units": "SI",
+        "model": "maxwell-itasca900-zero-spin-ode",
+        "parameters": [
+          20000000.0,
+          12000000.0,
+          24000000.0
+        ],
+        "initial": [
+          140000,
+          80000,
+          80000,
+          3000,
+          -2000,
+          1000
+        ],
+        "initial_strain": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initial_strain_rate": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "start_time": 0,
+        "segments": [
+          {
+            "id": "relax",
+            "duration": 4,
+            "samples": 4,
+            "controls": [
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              }
+            ]
+          }
+        ],
+        "solver": {
+          "method": "backward-euler-step-doubling",
+          "relative_tolerance": 1e-08,
+          "absolute_scale_fraction": 1e-11,
+          "maximum_substeps": 2
+        }
+      },
+      "argv": [
+        "--mode",
+        "schedule",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--start-time",
+        "0",
+        "--segments",
+        "4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+        "--segment-ids",
+        "relax",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--initial-strain",
+        "0,0,0,0,0,0",
+        "--initial-strain-rate",
+        "0,0,0,0,0,0",
+        "--rtol",
+        "1e-08",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "2",
+        "--nonlinear-tolerance",
+        "1e-10",
+        "--max-iterations",
+        "40"
+      ],
+      "call": "atlas_run_schedule",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0,0,0,0,0,0",
+        "0,0,0,0,0,0",
+        "4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+        "relax",
+        0,
+        1e-08,
+        1e-11,
+        1e-12,
+        1000000.0,
+        2,
+        1e-10,
+        40
+      ],
+      "ok": false,
+      "references": [
+        {
+          "time": 0,
+          "state": [
+            140000,
+            80000,
+            80000,
+            3000,
+            -2000,
+            1000
+          ],
+          "strain": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "tolerance": 15,
+      "strain_tolerance": 2e-07,
+      "time": 0
+    },
+    {
+      "id": "recovery-after-schedule-budget-rollback",
+      "kind": "direct",
+      "argv": [
+        "--mode",
+        "integrate-time",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--strain-rate",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        "--start-time",
+        "3",
+        "--duration",
+        "1.0",
+        "--rtol",
+        "1e-09",
+        "--atol",
+        "1e-12",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000"
+      ],
+      "call": "atlas_integrate_time",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0.001,-0.00020000000000000001,0.00029999999999999997,0.00069999999999999999,-0.00059999999999999995,0.00050000000000000001",
+        3,
+        1.0,
+        1e-09,
+        1e-12,
+        1e-12,
+        1000000.0,
+        100000
+      ],
+      "ok": true,
+      "expected": [
+        158222.6943332413,
+        99167.02074993096,
+        108610.28491682776,
+        15040.161812793416,
+        -12544.978319701424,
+        10049.79482660943
+      ],
+      "time": 4.0,
+      "tolerance": 0.05
+    },
+    {
+      "id": "restart-creep",
+      "kind": "schedule",
+      "specification": {
+        "schema_version": "0.2",
+        "units": "SI",
+        "model": "maxwell-itasca900-zero-spin-ode",
+        "parameters": [
+          20000000.0,
+          12000000.0,
+          24000000.0
+        ],
+        "initial": [
+          140000,
+          80000,
+          80000,
+          3000,
+          -2000,
+          1000
+        ],
+        "initial_strain": [
+          0.003333333333333334,
+          -0.0016666666666666668,
+          -0.0016666666666666672,
+          0.0002499999999999999,
+          -0.00016666666666666666,
+          8.333333333333333e-05
+        ],
+        "initial_strain_rate": [
+          0.0008333333333333335,
+          -0.00041666666666666664,
+          -0.0004166666666666668,
+          6.249999999999999e-05,
+          -4.166666666666667e-05,
+          2.0833333333333336e-05
+        ],
+        "start_time": 4,
+        "segments": [
+          {
+            "id": "continue",
+            "duration": 2,
+            "samples": 4,
+            "controls": [
+              {
+                "quantity": "stress",
+                "kind": "hold"
+              },
+              {
+                "quantity": "stress",
+                "kind": "hold"
+              },
+              {
+                "quantity": "stress",
+                "kind": "hold"
+              },
+              {
+                "quantity": "stress",
+                "kind": "hold"
+              },
+              {
+                "quantity": "stress",
+                "kind": "hold"
+              },
+              {
+                "quantity": "stress",
+                "kind": "hold"
+              }
+            ]
+          }
+        ],
+        "solver": {
+          "method": "backward-euler-step-doubling",
+          "relative_tolerance": 1e-08,
+          "absolute_scale_fraction": 1e-11,
+          "maximum_substeps": 100000
+        }
+      },
+      "argv": [
+        "--mode",
+        "schedule",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--start-time",
+        "4",
+        "--segments",
+        "2,4,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0",
+        "--segment-ids",
+        "continue",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "140000,80000,80000,3000,-2000,1000",
+        "--initial-strain",
+        "0.003333333333333334,-0.0016666666666666668,-0.0016666666666666672,0.0002499999999999999,-0.00016666666666666666,8.3333333333333331e-05",
+        "--initial-strain-rate",
+        "0.0008333333333333335,-0.00041666666666666664,-0.0004166666666666668,6.2499999999999988e-05,-4.1666666666666672e-05,2.0833333333333336e-05",
+        "--rtol",
+        "1e-08",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000",
+        "--nonlinear-tolerance",
+        "1e-10",
+        "--max-iterations",
+        "40"
+      ],
+      "call": "atlas_run_schedule",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "140000,80000,80000,3000,-2000,1000",
+        "0.003333333333333334,-0.0016666666666666668,-0.0016666666666666672,0.0002499999999999999,-0.00016666666666666666,8.3333333333333331e-05",
+        "0.0008333333333333335,-0.00041666666666666664,-0.0004166666666666668,6.2499999999999988e-05,-4.1666666666666672e-05,2.0833333333333336e-05",
+        "2,4,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0",
+        "continue",
+        4,
+        1e-08,
+        1e-11,
+        1e-12,
+        1000000.0,
+        100000,
+        1e-10,
+        40
+      ],
+      "ok": true,
+      "references": [
+        {
+          "time": 4,
+          "state": [
+            140000,
+            80000,
+            80000,
+            3000,
+            -2000,
+            1000
+          ],
+          "strain": [
+            0.0033333333333333335,
+            -0.0016666666666666668,
+            -0.0016666666666666668,
+            0.00025,
+            -0.00016666666666666666,
+            8.333333333333333e-05
+          ]
+        },
+        {
+          "time": 4.5,
+          "state": [
+            140000,
+            80000,
+            80000,
+            3000,
+            -2000,
+            1000
+          ],
+          "strain": [
+            0.00375,
+            -0.001875,
+            -0.001875,
+            0.00028125,
+            -0.0001875,
+            9.375e-05
+          ]
+        },
+        {
+          "time": 5.0,
+          "state": [
+            140000,
+            80000,
+            80000,
+            3000,
+            -2000,
+            1000
+          ],
+          "strain": [
+            0.004166666666666667,
+            -0.0020833333333333333,
+            -0.0020833333333333333,
+            0.0003125,
+            -0.00020833333333333335,
+            0.00010416666666666667
+          ]
+        },
+        {
+          "time": 5.5,
+          "state": [
+            140000,
+            80000,
+            80000,
+            3000,
+            -2000,
+            1000
+          ],
+          "strain": [
+            0.004583333333333333,
+            -0.0022916666666666667,
+            -0.0022916666666666667,
+            0.00034375,
+            -0.00022916666666666666,
+            0.00011458333333333333
+          ]
+        },
+        {
+          "time": 6.0,
+          "state": [
+            140000,
+            80000,
+            80000,
+            3000,
+            -2000,
+            1000
+          ],
+          "strain": [
+            0.005,
+            -0.0025,
+            -0.0025,
+            0.000375,
+            -0.00025,
+            0.000125
+          ]
+        }
+      ],
+      "tolerance": 15,
+      "strain_tolerance": 2e-07,
+      "time": 6
+    },
+    {
+      "id": "restart-relax",
+      "kind": "schedule",
+      "specification": {
+        "schema_version": "0.2",
+        "units": "SI",
+        "model": "maxwell-itasca900-zero-spin-ode",
+        "parameters": [
+          20000000.0,
+          12000000.0,
+          24000000.0
+        ],
+        "initial": [
+          100733.2364008486,
+          99633.38179957535,
+          99633.38179957535,
+          54.99273006366322,
+          -36.661820042442365,
+          18.330910021221182
+        ],
+        "initial_strain": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "initial_strain_rate": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "start_time": 8,
+        "segments": [
+          {
+            "id": "continue",
+            "duration": 2,
+            "samples": 4,
+            "controls": [
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              },
+              {
+                "quantity": "strain",
+                "kind": "hold"
+              }
+            ]
+          }
+        ],
+        "solver": {
+          "method": "backward-euler-step-doubling",
+          "relative_tolerance": 1e-08,
+          "absolute_scale_fraction": 1e-11,
+          "maximum_substeps": 100000
+        }
+      },
+      "argv": [
+        "--mode",
+        "schedule",
+        "--model",
+        "maxwell-itasca900-zero-spin-ode",
+        "--start-time",
+        "8",
+        "--segments",
+        "2,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+        "--segment-ids",
+        "continue",
+        "--parameters",
+        "20000000,12000000,24000000",
+        "--initial",
+        "100733.2364008486,99633.381799575349,99633.381799575349,54.992730063663217,-36.661820042442365,18.330910021221182",
+        "--initial-strain",
+        "0,0,0,0,0,0",
+        "--initial-strain-rate",
+        "0,0,0,0,0,0",
+        "--rtol",
+        "1e-08",
+        "--atol",
+        "1e-11",
+        "--min-time-step",
+        "1e-12",
+        "--max-time-step",
+        "1000000.0",
+        "--max-substeps",
+        "100000",
+        "--nonlinear-tolerance",
+        "1e-10",
+        "--max-iterations",
+        "40"
+      ],
+      "call": "atlas_run_schedule",
+      "types": [
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "string",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number",
+        "number"
+      ],
+      "args": [
+        "maxwell-itasca900-zero-spin-ode",
+        "20000000,12000000,24000000",
+        "100733.2364008486,99633.381799575349,99633.381799575349,54.992730063663217,-36.661820042442365,18.330910021221182",
+        "0,0,0,0,0,0",
+        "0,0,0,0,0,0",
+        "2,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+        "continue",
+        8,
+        1e-08,
+        1e-11,
+        1e-12,
+        1000000.0,
+        100000,
+        1e-10,
+        40
+      ],
+      "ok": true,
+      "references": [
+        {
+          "time": 8,
+          "state": [
+            100732.62555554937,
+            99633.68722222532,
+            99633.68722222532,
+            54.94691666620253,
+            -36.631277777468355,
+            18.315638888734178
+          ],
+          "strain": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 8.5,
+          "state": [
+            100570.56935635996,
+            99714.71532182001,
+            99714.71532182001,
+            42.79270172699777,
+            -28.52846781799851,
+            14.264233908999255
+          ],
+          "strain": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 9.0,
+          "state": [
+            100444.3598615297,
+            99777.82006923515,
+            99777.82006923515,
+            33.32698961472692,
+            -22.21799307648461,
+            11.108996538242305
+          ],
+          "strain": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 9.5,
+          "state": [
+            100346.06780812482,
+            99826.96609593759,
+            99826.96609593759,
+            25.955085609361902,
+            -17.303390406241267,
+            8.651695203120633
+          ],
+          "strain": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "time": 10.0,
+          "state": [
+            100269.51787996342,
+            99865.24106001829,
+            99865.24106001829,
+            20.2138409972564,
+            -13.475893998170934,
+            6.737946999085467
+          ],
+          "strain": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "tolerance": 15,
+      "strain_tolerance": 2e-07,
+      "time": 10
+    }
+  ]
+}

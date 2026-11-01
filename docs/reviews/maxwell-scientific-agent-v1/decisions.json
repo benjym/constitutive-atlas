@@ -1,0 +1,284 @@
+{
+  "review_id": "SCI-maxwell-agent-v1",
+  "review_kind": "AI technical review",
+  "reviewer": "fresh-context maxwell_scientific_review agent",
+  "date": "2026-11-01",
+  "prior_involvement": "none in reviewed ingestion/implementation",
+  "canonical_scientific_signature": false,
+  "scientific_admission": false,
+  "decisions": [
+    {
+      "id": "MW-01",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Is the selected source/version and exact model identity adequately established?",
+      "judgment": "supported",
+      "rationale": "Original HTML title, footer/version and source receipts identify the Itasca 9.0.182 manual, updated 2025-11-12. All four source hashes match. The model and ingestion candidate are byte-identical.",
+      "evidence": [
+        "/private/tmp/atlas-maxwell-itasca900-sources/modelviscous.html: title, DOCUMENTATION_OPTIONS, footer",
+        "docs/ingestion/maxwell-itasca900/source-receipts.json",
+        "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+        "docs/ingestion/maxwell-itasca900/candidate-v03.json"
+      ],
+      "conditions": [],
+      "excluded_claims": "First-publication or book reconciliation; full vendor product verification.",
+      "follow_up": "No additional work required for the bounded judgment."
+    },
+    {
+      "id": "MW-02",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Is replacing the printed ij subtraction with a kk trace projector justified?",
+      "judgment": "supported",
+      "rationale": "The printed repeated indices do not define a trace contraction. Componentwise subtraction fails on isotropic input. The unique isotropic trace-free projector is consistent with deviatoric wording, Eq5 trace and Eq6 reconstruction. This is an explicit interpretation, not literal source transcription.",
+      "evidence": [
+        "/private/tmp/atlas-maxwell-itasca900-sources/modelviscous.html: definitions immediately after Eq4, Eqs5-6",
+        "docs/ingestion/maxwell-itasca900/README.md: Printed anomaly",
+        "docs/reviews/maxwell-scientific-agent-v1/results.json: counterexamples"
+      ],
+      "conditions": [],
+      "excluded_claims": "A claim that the printed indices are mathematically correct.",
+      "follow_up": "Retain explicit correction locator; publisher clarification may corroborate but is not necessary for this bounded algebraic interpretation."
+    },
+    {
+      "id": "MW-03",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Does the selected tensor law have relaxation rate G/eta rather than 2G/eta?",
+      "judgment": "supported",
+      "rationale": "Exact rearrangement of Eq4 yields trapezoidal averaging with G/(2eta) multiplying the stress sum. The continuous coefficient is G/eta. Independently substituting the oedometer solution and its exponent confirms the same factor.",
+      "evidence": [
+        "/private/tmp/atlas-maxwell-itasca900-sources/modelviscous.html: Eq4 and C1/C2",
+        "/private/tmp/atlas-maxwell-itasca900-sources/oedometer.html: Eqs1-6",
+        "docs/reviews/maxwell-scientific-agent-v1/check_review.py: exact algebra loop"
+      ],
+      "conditions": [],
+      "excluded_claims": "Blind substitution of k=2G into scalar damping; alternate viscosity normalization.",
+      "follow_up": "No additional work required for the bounded judgment."
+    },
+    {
+      "id": "MW-04",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Are compression signs, tensor shear and Mandel maps consistent?",
+      "judgment": "supported",
+      "rationale": "The source uses tension/extension positive and symmetric tensor shear; changing every stress and strain sign preserves this linear law. Mandel sqrt(2) maps preserve tensor contraction and the work identity. Engineering shear requires its separate factor.",
+      "evidence": [
+        "/private/tmp/atlas-maxwell-itasca900-sources/sign.html: direct stress, shear stress, strain rate, direct strain and shear strain",
+        "docs/ingestion/maxwell-itasca900/check_packet.py: Cartesian pack/cart_rate checks",
+        "docs/FORMULATION_CONTRACT.md: Kinematics, frame and representation",
+        "docs/reviews/maxwell-scientific-agent-v1/check_review.py: Mandel work/sign checks"
+      ],
+      "conditions": [],
+      "excluded_claims": "Negating only normal components; using engineering shear directly as a tensor component.",
+      "follow_up": "No additional work required for the bounded judgment."
+    },
+    {
+      "id": "MW-05",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Are physical time, state, units, parameter signs and v0.3 bindings appropriate?",
+      "judgment": "supported",
+      "rationale": "Six persistent Pa stress components, strain-rate input per second and physical start/duration match the continuous closure. K,G in Pa and eta in Pa s yield rates in Pa/s. Positive constants imply the dissipative continuous regime. Explicit total observable stress and initialization/state semantics match the supported profile.",
+      "evidence": [
+        "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+        "schemas/model-v0.3.schema.json: physical_time ODE branch",
+        "docs/FORMULATION_CONTRACT.md",
+        "docs/ingestion/maxwell-itasca900/check_packet.py: structural/semantic/dimensional checks"
+      ],
+      "conditions": [],
+      "excluded_claims": "Qualified numerical parameter range; implicit preparation defaults; unsupported physical-time residual profile.",
+      "follow_up": "No additional work required for the bounded judgment."
+    },
+    {
+      "id": "MW-06",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Are source discrete integration and continuous Atlas ODE correctly distinguished?",
+      "judgment": "supported",
+      "rationale": "Source Eq4 is the trapezoidal discrete map. Direct midpoint and scheduled backward Euler approximate its continuous limit with separate errors. Source hold h=4tau gives -1/3 versus positive exp(-4), so discrete equivalence is rejected explicitly.",
+      "evidence": [
+        "/private/tmp/atlas-maxwell-itasca900-sources/modelviscous.html: Eqs2-5",
+        "cpp/include/atlas/time.hpp: time_midpoint/time_recursive",
+        "cpp/include/atlas/schedule.hpp: controlled_backward_euler",
+        "docs/ingestion/maxwell-itasca900/README.md: Temporal integration"
+      ],
+      "conditions": [],
+      "excluded_claims": "Exact source central-difference or finite-step vendor equivalence; a physical-time discrete-map implementation.",
+      "follow_up": "No additional work required for the bounded judgment."
+    },
+    {
+      "id": "MW-07",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Is the dry total-stress fixed-frame zero-spin scope defensible?",
+      "judgment": "supported",
+      "rationale": "Dry uncoupled total stress and zero spin define an explicit mechanically closed specialization. The small-strain oedometer setting corroborates that restricted use. This does not require resolving general vendor poromechanics or objective rotation behavior.",
+      "evidence": [
+        "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json formulation and description",
+        "/private/tmp/atlas-maxwell-itasca900-sources/oedometer.html: model large-strain off",
+        "docs/ingestion/maxwell-itasca900/README.md: stress and host scope"
+      ],
+      "conditions": [],
+      "excluded_claims": "Saturated effective-stress conversion; arbitrary host rotations; finite deformation, FE/MPM qualification or experimental applicability.",
+      "follow_up": "No additional work required for the bounded judgment."
+    },
+    {
+      "id": "MW-08",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Is initialization and analytical oedometer preparation correct?",
+      "judgment": "supported",
+      "rationale": "Stress is sufficient Markov state for future stress under prescribed strain rate. Oedometer elastic-equilibrium values P/A and P(1-2G/A) match the source closed form and saved input. Absolute strain reference is supplied separately. The zero illustrative initial state is not used as a preparation substitute.",
+      "evidence": [
+        "/private/tmp/atlas-maxwell-itasca900-sources/oedometer.html: Eqs1-6 and elastic-equilibrium/reset paragraph",
+        "docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json: oedometer",
+        "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json initialization",
+        "docs/reviews/maxwell-scientific-agent-v1/results.json: independent_exact_algebra"
+      ],
+      "conditions": [],
+      "excluded_claims": "Reproduction of actual vendor equilibrium cycles or specimen preparation; complete example data-file reproduction.",
+      "follow_up": "No additional work required for the bounded judgment."
+    },
+    {
+      "id": "MW-09",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Do saved cases support the claimed trial/commit/rollback and restart lifecycle?",
+      "judgment": "supported",
+      "rationale": "Direct late budget failure restores complete incoming stress/time after nonzero accepted substeps. Schedule failure retains initial entry at t=0. Six failure/recovery pairs and actual endpoint creep/relaxation restarts pass, with complete state/strain/rate/time. Source vendor transaction APIs are unspecified.",
+      "evidence": [
+        "docs/ingestion/maxwell-itasca900/integration-v1/native-raw.json: late-budget-rollback and schedule-budget-rollback",
+        "docs/ingestion/maxwell-itasca900/integration-v1/wasm-raw.json",
+        "docs/ingestion/maxwell-itasca900/integration-v1/native-transaction-cases.json",
+        "docs/ingestion/maxwell-itasca900/integration-v1/wasm-transactions-raw.json",
+        "cpp/include/atlas/time.hpp: integrate_time_history",
+        "cpp/include/atlas/schedule.hpp: run_schedule"
+      ],
+      "conditions": [],
+      "excluded_claims": "Saved demonstration of schedule failure after a nonzero-time committed regular sample; arbitrary host mutation/rollback or vendor API equivalence.",
+      "follow_up": "If that stronger schedule claim is needed, prospectively freeze one nonzero committed prefix followed by forced failure and exact complete-prefix retention gates."
+    },
+    {
+      "id": "MW-10",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Does continuous dissipation imply numerical energy decay for every accepted legal update?",
+      "judgment": "rejected",
+      "rationale": "Continuous work minus elastic-energy rate is s:s/(2eta)>=0. The legal midpoint hold witness h/tau=6 and rtol=0.5 accepts the two-half multiplier 25/4 with estimator <=18/25, increasing stored energy by 625/16. This is independently derived from inspected code, not a compiled observation.",
+      "evidence": [
+        "docs/reviews/maxwell-scientific-agent-v1/results.json: legal_loose_tolerance_direct_hold",
+        "cpp/include/atlas/time.hpp: error estimator and acceptance",
+        "docs/ingestion/maxwell-itasca900/check_packet.py: continuous energy identity"
+      ],
+      "conditions": [],
+      "excluded_claims": "An unconditional numerical dissipativity or structure-preservation claim. Frozen tight-setting evidence is unaffected.",
+      "follow_up": "Retain the bounded numerical claim. If an energy guarantee is wanted, define and freeze a separate numerical energy policy before any new compiled observations."
+    },
+    {
+      "id": "MW-11",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Are analytical references and retained trajectory successes supported independently?",
+      "judgment": "supported",
+      "rationale": "Fresh rational substitutions and exponential formulas agree with source law and saved responses. Both backends pass original saved-data assessors and independent stress/strain checks for 24 main plus 14 transaction cases, repeated twice. Direct reference disagreement <=9.1e-13 Pa; direct max error .0238843 Pa and fine schedule max 1.375203 Pa remain within original budgets.",
+      "evidence": [
+        "docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json",
+        "docs/ingestion/maxwell-itasca900/integration-v1/native-raw.json",
+        "docs/ingestion/maxwell-itasca900/integration-v1/wasm-raw.json",
+        "tests/test_maxwell.py",
+        "docs/reviews/maxwell-scientific-agent-v1/results.json"
+      ],
+      "conditions": [],
+      "excluded_claims": "Experimental validation; new-build execution; arbitrary loading histories or numerical energy guarantee.",
+      "follow_up": "No additional work required for the bounded judgment."
+    },
+    {
+      "id": "MW-12",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Does the evidence qualify every parameter/state/loading combination admitted by the broad model bounds?",
+      "judgment": "rejected",
+      "rationale": "Frozen study varies tau at fixed K,G and named histories/settings. Bounds permit tau=1e-42 s, thirty orders below the 1e-12 s minimum half-step setting. A nontrivial relaxation at that scale cannot be resolved under that configuration. Bounds are illustrative mathematical domain declarations, not a qualified computing envelope.",
+      "evidence": [
+        "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json parameters",
+        "docs/ingestion/maxwell-itasca900/integration-v1/PLAN.md",
+        "docs/ingestion/maxwell-itasca900/integration-v1/reference-cases.json",
+        "docs/reviews/maxwell-scientific-agent-v1/results.json: counterexamples"
+      ],
+      "conditions": [],
+      "excluded_claims": "Full-domain production accuracy, stiffness-ratio, stress-scale, arbitrary tolerance and long-time performance guarantees.",
+      "follow_up": "Keep current envelope disclosures. Freeze any desired expanded envelope and its independent references before running it."
+    },
+    {
+      "id": "MW-13",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Is the revised parity result a defensible distinct same-budget physical comparison?",
+      "judgment": "supported",
+      "rationale": "Original v1 failure reproduces at initial_strain_rate[2]. V2 classifies initial physical fields with the already frozen stress/strain/rate budgets; it does not increase limits. V2 replay passes 5962 comparisons; all retained sources and raw responses remain unchanged.",
+      "evidence": [
+        "docs/ingestion/maxwell-itasca900/integration-v1/PLAN.md: cross-backend physical limits",
+        "docs/ingestion/maxwell-itasca900/integration-v1/compare_backends.py",
+        "docs/ingestion/maxwell-itasca900/integration-v1/compare_backends_v2.py",
+        "docs/ingestion/maxwell-itasca900/integration-v1/parity-v1-failure.json",
+        "docs/ingestion/maxwell-itasca900/integration-v1/parity-v2-classification-checks.json",
+        "docs/reviews/maxwell-scientific-agent-v1/results.json: parity_replay"
+      ],
+      "conditions": [],
+      "excluded_claims": "A claim that v1 passed; parity as independent equation verification; proof of pre-observation chronology from hashes alone.",
+      "follow_up": "No additional work required for the bounded judgment."
+    },
+    {
+      "id": "MW-14",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Is original-source evidence durably recoverable independently of temporary storage?",
+      "judgment": "conditional",
+      "rationale": "Current original HTML receipts match and are readable. Executable source closure is complete and hash-correct, but intentionally excludes copyrighted manuals; originals remain in /private/tmp. Durability remains open, not source access at review time.",
+      "evidence": [
+        "docs/ingestion/maxwell-itasca900/source-receipts.json",
+        "docs/ingestion/maxwell-itasca900/integration-v1/source-closure.tar.gz",
+        "docs/reviews/maxwell-scientific-agent-v1/inputs.json"
+      ],
+      "conditions": [
+        "Durable private retention of the four exact source files must be recorded."
+      ],
+      "excluded_claims": "Permanent recoverability from source URL/hash alone.",
+      "follow_up": "Preserve all four exact original source bytes in durable private storage and append a new storage receipt without rewriting pinned evidence."
+    },
+    {
+      "id": "MW-15",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Does this package authorize scientific admission, experimental prediction or unrestricted production release?",
+      "judgment": "rejected",
+      "rationale": "The exact record remains draft. This independent AI technical review supports bounded source/algebra/saved numerical claims only. No human scientific signature, calibration, material data, general host qualification or release procedure is supplied.",
+      "evidence": [
+        "docs/RESEARCH_CHARTER.md: Admission and identity; Rights and reproducibility",
+        "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json status",
+        "docs/ingestion/maxwell-itasca900/integration-v1/README.md: retained limits",
+        "docs/reviews/maxwell-scientific-agent-v1/README.md"
+      ],
+      "conditions": [],
+      "excluded_claims": "Canonical reviewed status; experimental, FE/MPM or general production qualification; deployment.",
+      "follow_up": "Coordinator integrates this bounded review. Follow separately agreed scientific-admission/release procedure for any promotion."
+    },
+    {
+      "id": "MW-16",
+      "model_definition": "models/research/maxwell/maxwell-itasca900-zero-spin-ode.json",
+      "model_sha256": "dc378ac0eb6956f7d0028b1fa5927d2906bf05e14ab45b116bc447c25e6b885f",
+      "question": "Are first-publication lineage and full vendor implementation/example equivalence settled?",
+      "judgment": "unresolved",
+      "rationale": "Jaeger 1969 was not inspected. Linked source figures and the called parameter file are unavailable in this packet; full vendor objective-rate, host stress and preparation semantics were not acquired. Selected manual equations are decidable without those missing materials, wider equivalence is not.",
+      "evidence": [
+        "/private/tmp/atlas-maxwell-itasca900-sources/modelviscous.html: References",
+        "/private/tmp/atlas-maxwell-itasca900-sources/oedometer.html: linked figures, parameter call and preparation",
+        "docs/ingestion/maxwell-itasca900/README.md: identity/gaps"
+      ],
+      "conditions": [],
+      "excluded_claims": "Original Jaeger reconciliation; full vendor example/host/finite-rotation equivalence.",
+      "follow_up": "Only if the wider claim is required, obtain the exact missing book pages/example dependencies and host documentation, hash them privately, and scope a new bounded reconciliation."
+    }
+  ]
+}
