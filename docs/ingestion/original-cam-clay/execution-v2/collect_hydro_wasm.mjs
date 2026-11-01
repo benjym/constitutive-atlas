@@ -1,0 +1,4 @@
+import{readFileSync,writeFileSync}from'node:fs';import{resolve,join}from'node:path';import{pathToFileURL}from'node:url';import{createHash}from'node:crypto';
+const[modulePath,base]=process.argv.slice(2),p=join(base,'hydro-requests.json'),bytes=readFileSync(p),req=JSON.parse(bytes),m=await(await import(pathToFileURL(resolve(modulePath)))).default(),csv=a=>a.map(String).join(',');
+const paths=req.paths.map(p=>{let z=p.initial;const calls=[];for(let i=0;i<p.count;i++){let args=[req.model,csv(req.parameters),csv(z),csv(p.de),req.settings],stdout=m.ccall('atlas_integrate_with_settings','string',Array(5).fill('string'),args),out=JSON.parse(stdout);calls.push({args,stdout,returncode:out.ok?0:1,stderr:''});if(!out.ok)break;z=out.state;}return{id:p.id,calls};});
+writeFileSync(join(base,'wasm-hydro-raw.json'),JSON.stringify({backend:'wasm',request_sha256:createHash('sha256').update(bytes).digest('hex'),paths},null,2)+'\n');console.log('Saved hydro source-refinement paths');

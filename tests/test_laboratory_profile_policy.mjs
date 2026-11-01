@@ -9,7 +9,7 @@ const policy=JSON.parse(read('catalogue/laboratory-profile-policy.json')),suppor
 const catalogue={schema_version:'0.1',sha256:'0'.repeat(64),models:readdirSync(resolve(root,'models')).filter(p=>p.endsWith('.json')).sort().map(p=>JSON.parse(read('models/'+p)))};
 const dep={definitionHash:id=>hash(read('models/'+id+'.json')),readEvidence:read};
 const validate=(p=policy,s=supported,c=cases,d=dep)=>validateProfileAllocation(p,s,c,catalogue,d);
-test('complete twelve model allocation validates with every successful scope',()=>{assert.equal(validate().cases.length,26);assert.equal(loadProfileAllocation(resolve(root,'catalogue/laboratory-profile-policy.json'),catalogue).cases.length,26);});
+test('complete thirteen model allocation validates with every successful scope',()=>{assert.equal(validate().cases.length,35);assert.equal(loadProfileAllocation(resolve(root,'catalogue/laboratory-profile-policy.json'),catalogue).cases.length,35);});
 for(const [name,mutate]of Object.entries({
  'missing total rejection':p=>p.legacy_contract_rejections=[],
  'effective model rejection':p=>p.legacy_contract_rejections.push({model:'linear-elastic',message:'legacy laboratory contract requires effective stress'}),

@@ -8,7 +8,7 @@ void require(bool value,const char*message){if(!value)throw std::runtime_error(m
 int main(){
     try{
         const char* profile=std::getenv("ATLAS_NATIVE_FIXTURES");
-        require(!profile||std::string(profile)=="explicit-gis20-v2","unknown native fixture profile");
+        require(!profile||(std::string(profile)=="explicit-gis20-v2"||std::string(profile)=="explicit-gis20-occ-v3"),"unknown native fixture profile");
         const bool explicit_fixtures=profile!=nullptr;
         std::cout<<(explicit_fixtures?"Explicit valid-domain/GIS-depth20 fixtures":"Strict original default fixtures")<<"; models="<<atlas::models().size()<<'\n';
         // Independently finite-difference each generated residual/rate Jacobian.
@@ -42,6 +42,9 @@ int main(){
         auto rotate=[](atlas::Sym<double>a){atlas::Sym<double>b;b.v={a.v[1],a.v[0],a.v[2],-a.v[3],a.v[5],-a.v[4]};return b;};
         for(size_t m=0;m<atlas::models().size();++m){
             auto p=atlas::default_parameters(int(m)),z=atlas::initial_state(int(m));z[0]=105000;z[1]=95000;z[3]=1000;
+            // OCC source admissibility: overconsolidated packing for this anisotropic prestress.
+            if(profile&&std::string(profile)=="explicit-gis20-occ-v3"&&atlas::models()[m].id=="original-cam-clay-sw-electronic-log-recovery-v1")
+                z[6]=2.5+.16*(1-std::log(150000./1000.))-.04*std::log(100000./1000.);
             atlas::Sym<double>de;de.v={.0001,-.00002,.00001,.00003,.00001,-.00001};auto zr=z;
             atlas::put_tensor(zr,0,rotate(atlas::tensor_from(z,0)));
             atlas::IntegrationSettings fixture_settings;

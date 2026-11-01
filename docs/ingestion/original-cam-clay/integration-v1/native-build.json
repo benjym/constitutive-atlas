@@ -1,0 +1,61 @@
+{
+  "backend": "native",
+  "environment_overrides": {},
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-occ-integration-v1/source",
+        "-B",
+        "/private/tmp/atlas-occ-integration-v1/build-native",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "stdout": "-- The CXX compiler identification is AppleClang 21.0.0.21000401\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /usr/bin/c++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- Found Python3: /opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14 (found version \"3.14.7\") found components: Interpreter\n-- Configuring done (0.6s)\n-- Generating done (0.1s)\n-- Build files have been written to: /private/tmp/atlas-occ-integration-v1/build-native\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-occ-integration-v1/build-native",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0,
+      "stdout": "[ 33%] Generating generated/models.hpp, generated/models.json\n[ 33%] Built target atlas_models\n[ 66%] Building CXX object CMakeFiles/atlas_solver.dir/cpp/main.cpp.o\n[100%] Linking CXX executable atlas_solver\n[100%] Built target atlas_solver\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-occ-integration-v1/build-native",
+        "--target",
+        "atlas_numerical_tests",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0,
+      "stdout": "[ 33%] Built target atlas_models\n[ 66%] Building CXX object CMakeFiles/atlas_numerical_tests.dir/tests/test_solver.cpp.o\n[100%] Linking CXX executable atlas_numerical_tests\n[100%] Built target atlas_numerical_tests\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-occ-integration-v1/build-native",
+        "--target",
+        "atlas_recorded_tests",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0,
+      "stdout": "[ 33%] Built target atlas_models\n[ 66%] Building CXX object CMakeFiles/atlas_recorded_tests.dir/tests/test_recorded.cpp.o\n[100%] Linking CXX executable atlas_recorded_tests\n[100%] Built target atlas_recorded_tests\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "backend": "wasm",
+  "environment_overrides": {
+    "EM_CACHE": "/private/tmp/atlas-occ-integration-v1/em-cache"
+  },
+  "commands": [
+    {
+      "command": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-occ-integration-v1/source",
+        "-B",
+        "/private/tmp/atlas-occ-integration-v1/build-wasm",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "stdout": "-- Found Python3: /opt/homebrew/Frameworks/Python.framework/Versions/3.14/bin/python3.14 (found version \"3.14.7\") found components: Interpreter\n-- Configuring done (0.6s)\n-- Generating done (0.1s)\n-- Build files have been written to: /private/tmp/atlas-occ-integration-v1/build-wasm\n",
+      "stderr": "emcmake: cmake -S /private/tmp/atlas-occ-integration-v1/source -B /private/tmp/atlas-occ-integration-v1/build-wasm -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/opt/homebrew/Cellar/emscripten/6.0.8/libexec/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/opt/homebrew/opt/node/bin/node in directory /Users/bmar5496/code/constitutive-atlas\n"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-occ-integration-v1/build-wasm",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0,
+      "stdout": "[ 33%] Generating generated/models.hpp, generated/models.json\n[ 33%] Built target atlas_models\n[ 66%] Building CXX object CMakeFiles/atlas_solver.dir/cpp/main.cpp.o\n[100%] Linking CXX executable atlas.js\n[100%] Built target atlas_solver\n",
+      "stderr": ""
+    }
+  ]
+}

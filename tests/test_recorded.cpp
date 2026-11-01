@@ -11,7 +11,7 @@
 using namespace atlas;
 namespace {
 int checks=0, cases=0;
-bool explicit_fixtures=false;
+bool explicit_fixtures=false,occ_restart_fixture=false;
 void require(bool value,const std::string& label){++checks;if(!value)throw std::runtime_error(label);}
 void close(double a,double b,double absolute,double relative,const std::string& label){
  require(std::isfinite(a)&&std::isfinite(b)&&std::abs(a-b)<=absolute+relative*std::max(std::abs(a),std::abs(b)),label);
@@ -145,6 +145,14 @@ void additional_recorded_cases(){
   // Match existing drained control endpoints using a different outer solver.
   auto drained=path;drained.knots.clear();drained.controls[1].stress=drained.controls[2].stress=true;
   for(int k=0;k<5;++k){RecordedKnot knot;knot.coordinate=k;knot.targets[0]=factors[k]*1e-4;knot.targets[1]=z[1];knot.targets[2]=z[2];drained.knots.push_back(knot);}
+  if(occ_restart_fixture&&models()[m].id=="original-cam-clay-sw-electronic-log-recovery-v1"){
+   const auto original=replay_recorded(int(m),z,p,drained,fixture_settings);++cases;
+   require(!original.ok&&original.failed_knot==1&&original.points.size()==1&&original.state==z&&original.strain.v==Sym<double>{}.v&&original.material_trials==1&&original.message=="singular mixed-control system; last committed knot retained","original OCC mixed-control corner failure/rollback changed");
+   // Opt in to existing generic feasible-nullspace globalization; source law,
+   // targets, tolerance, trial budget and legacy endpoint gates are unchanged.
+   require(fixture_settings.max_restarts==0&&fixture_settings.restart_levels==8&&fixture_settings.restart_step==1e-4,"original restart settings changed");
+   fixture_settings.max_restarts=4;fixture_settings.restart_levels=8;fixture_settings.restart_step=1e-5;
+  }
   auto controlled=replay_recorded(int(m),z,p,drained,fixture_settings);++cases;if(!controlled.ok)std::cerr<<std::setprecision(17)<<"failed knot "<<controlled.failed_knot<<" residual "<<controlled.last_control_error<<" trials "<<controlled.material_trials<<" de0 "<<controlled.last_trial_increment.v[0]<<" de1 "<<controlled.last_trial_increment.v[1]<<"\n";require(controlled.ok,"drained replay failed: "+models()[m].id+" "+controlled.message);
   parent=z;double axial=0;
   for(size_t k=1;k<drained.knots.size();++k){
@@ -157,7 +165,7 @@ void additional_recorded_cases(){
 }
 int main(){try{
  const char* profile=std::getenv("ATLAS_NATIVE_FIXTURES");
- require(!profile||std::string(profile)=="explicit-gis20-v2","unknown native fixture profile");explicit_fixtures=profile!=nullptr;
+ require(!profile||(std::string(profile)=="explicit-gis20-v2"||std::string(profile)=="explicit-gis20-occ-v3"||std::string(profile)=="explicit-gis20-occ-restart-v4"),"unknown native fixture profile");explicit_fixtures=profile!=nullptr;occ_restart_fixture=profile&&std::string(profile)=="explicit-gis20-occ-restart-v4";
  std::cout<<(explicit_fixtures?"Explicit valid-domain/GIS-depth20 fixtures":"Strict original default fixtures")<<"; models="<<models().size()<<'\n';
  int model=-1;for(size_t i=0;i<models().size();++i)if(models()[i].id=="linear-elastic")model=int(i);
  require(model>=0,"linear-elastic absent");auto parameters=default_parameters(model);auto parent=initial_state(model);

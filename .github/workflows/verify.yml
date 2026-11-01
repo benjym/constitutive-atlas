@@ -46,16 +46,20 @@ jobs:
           node --test tests/test_j2_contract.mjs tests/test_j2_main_routing.mjs
       - name: Native checks and full exact archival replay
         if: runner.os == 'macOS'
-        run: ctest --test-dir build --output-on-failure
+        run: |
+          ctest --test-dir build --output-on-failure -E "^atlas_recorded$"
+          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-v4 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
         env:
-          ATLAS_NATIVE_FIXTURES: explicit-gis20-v2
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-v3
       - name: Linux native checks
         if: runner.os == 'Linux'
-        run: ctest --test-dir build --output-on-failure -E atlas_python
+        run: |
+          ctest --test-dir build --output-on-failure -E "^(atlas_python|atlas_recorded)$"
+          ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-v4 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
         env:
-          ATLAS_NATIVE_FIXTURES: explicit-gis20-v2
+          ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-v3
       - name: Retain strict original native failures and reject unknown fixtures
-        run: python tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
+        run: python tools/check_native_fixture_contracts.py --fixture-contract catalogue/native-fixture-contracts-thirteen-occ-v1.json --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
       - name: Linux portable Python suite
         if: runner.os == 'Linux'
         env:

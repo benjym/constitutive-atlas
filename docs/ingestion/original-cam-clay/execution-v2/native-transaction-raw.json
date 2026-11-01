@@ -1,0 +1,46 @@
+{
+  "backend": "native",
+  "request_sha256": "896297f014fbb4a3323ebc0dc3fd55c97a24d8c676effed0fafae996262f2514",
+  "cases": [
+    {
+      "name": "accepted-prefix-then-fail",
+      "args": [
+        "--mode",
+        "integrate",
+        "--model",
+        "original-cam-clay-sw-electronic-log-recovery-v1",
+        "--parameters",
+        "1000,1.2,0.20000000000000001,0.040000000000000001,2.5",
+        "--initial",
+        "99551.6445155611,86245.947181715572,86245.947181715572,0,0,0,1.7389659628023817",
+        "--strain",
+        "-0.999,-0.999,-0.999,0,0,0",
+        "--integration-settings",
+        "1e-11,1e-6,60,2,4,20"
+      ],
+      "returncode": 1,
+      "stdout": "{\"ok\":false,\"message\":\"integration failed: domain boundary, singular system or substep limit; state rolled back\",\"state\":[99551.6445155611,86245.947181715572,86245.947181715572,0,0,0,1.7389659628023817],\"diagnostics\":{\"iterations\":91,\"substeps\":2,\"rejected\":4,\"increment_fractions\":[0.25,0.25]},\"integration_settings\":{\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":9.9999999999999994e-12,\"rate_tolerance\":9.9999999999999995e-07,\"max_iterations\":60,\"max_depth\":2,\"max_substeps\":4,\"max_backtracks\":20},\"catalogue_hash\":\"2ca78c5e18597d11f716a1c789f417bbb4ae7f4867ba44818a364a551a65a5c3\",\"model\":\"original-cam-clay-sw-electronic-log-recovery-v1\",\"parameters\":[1000,1.2,0.20000000000000001,0.040000000000000001,2.5],\"initial\":[99551.6445155611,86245.947181715572,86245.947181715572,0,0,0,1.7389659628023817],\"strain\":[-0.999,-0.999,-0.999,0,0,0]}\n",
+      "stderr": ""
+    },
+    {
+      "name": "subsequent-recovery",
+      "args": [
+        "--mode",
+        "integrate",
+        "--model",
+        "original-cam-clay-sw-electronic-log-recovery-v1",
+        "--parameters",
+        "1000,1.2,0.20000000000000001,0.040000000000000001,2.5",
+        "--initial",
+        "138.58333003429141,133.71125983777335,133.71125983777335,0,0,0,3.052",
+        "--strain",
+        "0.49966666666666665,-0.25033333333333335,-0.25033333333333335,0,0,0",
+        "--integration-settings",
+        "1e-11,1e-6,60,0,1,20"
+      ],
+      "returncode": 0,
+      "stdout": "{\"ok\":true,\"message\":\"\",\"state\":[112.7952227455705,38.228809776123477,38.228809776123477,0,0,0,3.0550550550550555],\"diagnostics\":{\"iterations\":2,\"substeps\":1,\"rejected\":0,\"increment_fractions\":[1]},\"integration_settings\":{\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":9.9999999999999994e-12,\"rate_tolerance\":9.9999999999999995e-07,\"max_iterations\":60,\"max_depth\":0,\"max_substeps\":1,\"max_backtracks\":20},\"catalogue_hash\":\"2ca78c5e18597d11f716a1c789f417bbb4ae7f4867ba44818a364a551a65a5c3\",\"model\":\"original-cam-clay-sw-electronic-log-recovery-v1\",\"parameters\":[1000,1.2,0.20000000000000001,0.040000000000000001,2.5],\"initial\":[138.58333003429141,133.71125983777335,133.71125983777335,0,0,0,3.052],\"strain\":[0.49966666666666665,-0.25033333333333335,-0.25033333333333335,0,0,0]}\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "backend": "wasm",
+  "time_utc": "2026-11-01T08:25:05.927497+00:00",
+  "commands": [
+    {
+      "command": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-occ-execution-v2/source",
+        "-B",
+        "/private/tmp/atlas-occ-execution-v2/build-wasm",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "stdout": "-- Configuring done (0.5s)\n-- Generating done (0.0s)\n-- Build files have been written to: /private/tmp/atlas-occ-execution-v2/build-wasm\n",
+      "stderr": "emcmake: cmake -S /private/tmp/atlas-occ-execution-v2/source -B /private/tmp/atlas-occ-execution-v2/build-wasm -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/opt/homebrew/Cellar/emscripten/6.0.8/libexec/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/opt/homebrew/opt/node/bin/node in directory /Users/bmar5496/code/constitutive-atlas\n"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-occ-execution-v2/build-wasm",
+        "--target",
+        "atlas_occ_solver",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 2,
+      "stdout": "[ 50%] Building CXX object CMakeFiles/atlas_occ_solver.dir/cpp/main.cpp.o\n[100%] Linking CXX executable occ.js\n",
+      "stderr": "Traceback (most recent call last):\n  File \"/opt/homebrew/Cellar/emscripten/6.0.8/libexec/em++.py\", line 13, in <module>\n    sys.exit(emcc.main(sys.argv))\n             ~~~~~~~~~^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py\", line 85, in inner\n    return func(*args, **kwds)\n  File \"/opt/homebrew/Cellar/emscripten/6.0.8/libexec/emcc.py\", line 377, in main\n    return link.run(linker_args)\n           ~~~~~~~~^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/link.py\", line 3171, in run\n    js_info = get_js_sym_info()\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py\", line 85, in inner\n    return func(*args, **kwds)\n  File \"/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/link.py\", line 244, in get_js_sym_info\n    file_content = emscripten.get_cached_file('symbol_lists', f'{content_hash}.json', generate_json, cache_limit=500)\n  File \"/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/emscripten.py\", line 317, in get_cached_file\n    with filelock.FileLock(cache_file + '.lock'):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/filelock.py\", line 330, in __enter__\n    self.acquire()\n    ~~~~~~~~~~~~^^\n  File \"/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/filelock.py\", line 278, in acquire\n    self._acquire()\n    ~~~~~~~~~~~~~^^\n  File \"/opt/homebrew/Cellar/emscripten/6.0.8/libexec/tools/filelock.py\", line 391, in _acquire\n    fd = os.open(self._lock_file, open_mode)\nPermissionError: [Errno 1] Operation not permitted: '/opt/homebrew/Cellar/emscripten/6.0.8/libexec/cache/symbol_lists/b0847ac9c15fc1a11b3e8887078210bf4896533c.json.lock'\nmake[3]: *** [occ.js] Error 1\nmake[2]: *** [CMakeFiles/atlas_occ_solver.dir/all] Error 2\nmake[1]: *** [CMakeFiles/atlas_occ_solver.dir/rule] Error 2\nmake: *** [atlas_occ_solver] Error 2\n"
+    }
+  ]
+}

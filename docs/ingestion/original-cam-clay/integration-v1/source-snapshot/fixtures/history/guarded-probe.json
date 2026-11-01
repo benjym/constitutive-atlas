@@ -1,0 +1,93 @@
+{
+  "schema_version": "experimental-history-0.1",
+  "id": "synthetic-guarded-history",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/HISTORY_TRANSACTIONS.md",
+      "locator": "Synthetic finite-intermediate and transactional rollback acceptance probe."
+    }
+  ],
+  "fields": {
+    "x": {
+      "shape": "scalar",
+      "unit": "1",
+      "storage": "state"
+    },
+    "mode": {
+      "shape": "scalar",
+      "unit": "1",
+      "storage": "mode",
+      "enum": [
+        0,
+        1
+      ]
+    },
+    "s": {
+      "shape": "sym",
+      "unit": "1",
+      "storage": "state"
+    }
+  },
+  "inputs": {
+    "command": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "bad": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "branch": {
+      "shape": "scalar",
+      "unit": "1"
+    },
+    "modevalue": {
+      "shape": "scalar",
+      "unit": "1"
+    }
+  },
+  "phases": [
+    {
+      "name": "guarded",
+      "kind": "advance",
+      "base": "parent",
+      "guard": "-command",
+      "bindings": {
+        "command": {
+          "input": "command"
+        },
+        "bad": {
+          "input": "bad"
+        },
+        "branch": {
+          "input": "branch"
+        },
+        "modevalue": {
+          "input": "modevalue"
+        },
+        "s": {
+          "snapshot": "parent",
+          "field": "s"
+        }
+      },
+      "writes": {
+        "x": "select(branch > 1, min(norm(s*bad),1), select(branch > 0, min(exp(bad),1),sqrt(bad)))",
+        "mode": "modevalue",
+        "s": "s*2"
+      },
+      "checks": [
+        "x > 0"
+      ]
+    },
+    {
+      "name": "late",
+      "kind": "advance",
+      "base": "guarded",
+      "bindings": {},
+      "writes": {},
+      "checks": [
+        "x < 5"
+      ]
+    }
+  ]
+}
