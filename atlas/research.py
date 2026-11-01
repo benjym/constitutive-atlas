@@ -213,13 +213,22 @@ def export_database(path):
                 connection.execute('INSERT INTO model_approvals VALUES(?,?,?,?,?)',
                     (approval['id'], approval['model_id'], pin['path'], pin['sha256'], json.dumps(approval)))
                 review = approval.get('review', {})
-                if review.get('kind') == 'agent-model-review':
+                agent_authority = approval.get('approval_authority', {}).get('kind') == 'independent-agent-review'
+                if review.get('kind') == 'agent-model-review' or agent_authority:
+                    if review.get('kind') != 'agent-model-review':
+                        raise ValidationError('Agent approval requires an agent-model-review record')
                     relative = Path(review['path'])
                     file = (ROOT / relative).resolve()
                     if relative.is_absolute() or '..' in relative.parts or not file.is_relative_to((ROOT/'catalogue/agent-reviews').resolve()):
                         raise ValidationError('Unsafe agent review path')
                     if hashlib.sha256(file.read_bytes()).hexdigest() != review['sha256']:
                         raise ValidationError('Agent review hash mismatch')
+                    # A matching hash/status alone cannot certify the claimed scope,
+                    # reviewer independence, checklist completion or evidence bindings.
+                    from .agent_review import approval_entry
+                    expected = approval_entry(file, root=ROOT)
+                    if any(approval.get(key) != value for key, value in expected.items()):
+                        raise ValidationError('Approval does not match exact accepted agent review: ' + review['path'])
                     record = json.loads(file.read_text())
                     if record['model']['id'] != approval['model_id'] or record['model']['sha256'] != pin['sha256'] or record['status'] != 'accepted':
                         raise ValidationError('Agent review does not bind accepted definition')
