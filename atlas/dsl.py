@@ -145,6 +145,14 @@ def normalized_determinant(a):
         raise ValidationError(str(exc)) from exc
 
 
+def principal_range_le(a, width):
+    from .numerics.principal_range import principal_range_le as exact_range
+    if not isinstance(a, Sym):
+        raise ValidationError('principal_range_le requires a symmetric tensor')
+    try:return exact_range(a.v, width)
+    except ValueError as exc:raise ValidationError(str(exc)) from exc
+
+
 def tensor_expm(a):
     from .symmetric_expm import symmetric_expm
     if not isinstance(a,Sym):raise ValidationError('expm requires dimensionless symmetric tensor')
@@ -157,7 +165,8 @@ FUNCTIONS = {"sym": lambda *values: Sym(tuple(values)), "sqrt": math.sqrt, "exp"
              "min": min, "max": max, "trace": trace, "dev": dev,
              "dot": dot, "norm": lambda a: math.sqrt(dot(a, a)),
              "cube_trace": cube_trace, "tensor_square": tensor_square, "expm": tensor_expm,
-             "determinant": determinant, "normalized_determinant": normalized_determinant}
+             "determinant": determinant, "normalized_determinant": normalized_determinant,
+             "principal_range_le": principal_range_le}
 
 
 def _spectral_function(operation, shape):
@@ -184,7 +193,8 @@ def has_value_only_dependency(node, aliases=()):
     """Include predicate dependencies for reset events, whose policy is stricter."""
     return any((isinstance(n, ast.Name) and n.id in aliases) or
                (isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and
-                n.func.id in SPECTRAL_FUNCTIONS and SPECTRAL_FUNCTIONS[n.func.id][2])
+                (n.func.id == "principal_range_le" or
+                 n.func.id in SPECTRAL_FUNCTIONS and SPECTRAL_FUNCTIONS[n.func.id][2]))
                for n in ast.walk(node))
 
 
@@ -269,10 +279,14 @@ def infer(node, symbols):
             if len(args) != 6 or any(a.shape != "scalar" or not _same_physical_type(a, args[0]) for a in args):
                 raise ValidationError("sym requires six equally dimensioned scalars in Mandel order")
             return Type("sym", args[0].dim, value_only)
-        arity = 2 if name in ("dot", "min", "max") else 1
+        arity = 2 if name in ("dot", "min", "max", "principal_range_le") else 1
         if name not in FUNCTIONS or len(args) != arity:
             raise ValidationError(f"unsupported function or arity: {name}")
         a = args[0]
+        if name == "principal_range_le":
+            if a.shape != "sym" or args[1].shape != "scalar" or a.dim != args[1].dim:
+                raise ValidationError('principal_range_le requires equally dimensioned tensor and scalar')
+            return Type("bool")
         if name in SPECTRAL_FUNCTIONS:
             _, shape, primitive_value_only = SPECTRAL_FUNCTIONS[name]
             if a.shape != 'sym':
@@ -372,6 +386,7 @@ def _cpp_node(node):
         return f"({cpp(node.left)} {op} {cpp(node.comparators[0])})"
     if isinstance(node,ast.Call):
         name=node.func.id
+        if name == 'principal_range_le': return f"atlas::principal_range_le_or_mark({cpp(node.args[0])}, {cpp(node.args[1])}, atlas_eval_ok)"
         if name in ('trace', 'dev', 'determinant', 'normalized_determinant'): return f"atlas::{name}_or_mark({cpp(node.args[0])}, atlas_eval_ok)"
         if name in SPECTRAL_FUNCTIONS:
             operation, shape, _ = SPECTRAL_FUNCTIONS[name]

@@ -1,0 +1,133 @@
+{
+  "schema_version": "0.3",
+  "id": "synthetic-exact-range-predicate",
+  "name": "Synthetic exact range predicate",
+  "family": "verification",
+  "status": "draft",
+  "description": "Generic predicate routing fixture; not a constitutive model.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas",
+      "locator": "Synthetic generic predicate qualification fixture",
+      "role": "Project verification fixture; no physical law claim"
+    }
+  ],
+  "parameters": {
+    "p_ref": {
+      "default": 100000.0,
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "unit": "Pa",
+      "label": "Numerical reference stress (not soil parameter)"
+    },
+    "lame_lambda": {
+      "default": 30000000.0,
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "unit": "Pa",
+      "label": "Constant positive first Lame modulus"
+    },
+    "mu": {
+      "default": 20000000.0,
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "unit": "Pa",
+      "label": "Constant positive shear modulus"
+    },
+    "k": {
+      "default": 50000.0,
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "unit": "Pa",
+      "label": "Constant positive maximum-shear yield strength; uniaxial Y=2k"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "ep",
+      "shape": "sym",
+      "unit": "1",
+      "initial": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "infinitesimal_plastic_strain",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    }
+  ],
+  "derived": [],
+  "equations": {
+    "sigma": "sigma-sigma_n",
+    "ep": "ep-ep_n"
+  },
+  "domain": [],
+  "initial_checks": [
+    "principal_range_le(sigma, p_ref)"
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "total"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "ep"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
+}
