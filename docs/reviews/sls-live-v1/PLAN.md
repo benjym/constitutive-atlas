@@ -1,0 +1,11 @@
+# LIVE-sls-comsol63-v1 — prospective live acceptance
+
+Owner /root/sls_browser_delivery,2026-11-01. Owned only docs/reviews/sls-live-v1/. No frozen web/local evidence edits, builds, commits or remote mutations. Parent monitors CI and provides exact deployed Pages revision and upload artifact. Expected requested revision:9a27359b38671e07150c717934c1248798d0aa65; queued CI41287314779. Preparation is not a deployment observation.
+
+Before live acceptance, parent must supply successful exact-revision CI/Pages upload/deploy evidence and matching artifact directory/manifest. Preserve that evidence; do not infer revision from a live URL alone. CI-built module/Wasm bytes may differ from local build; compare live files to exact CI uploaded artifact, while model/page/review/approval definitions remain frozen locally. Record every mismatch/failure and retain original attempts.
+
+At https://benjym.github.io/constitutive-atlas/sls.html use actual headless Chrome through cached Playwright CLI. Default must complete8 physical seconds/4intervals using frozen preset, render2plots and expose7table rows/19columns. Export full request/result/provenance. Run finite-rate loading1s/4intervals, export all12state and6observable stress, reset and verify recovery. Compare every live default/rate point against existing frozen execution-v1 references, strains atol3e-8, branch/observable stress atol1Pa; no new science/broad-envelope/material validation claims.
+
+Fetch and SHA256 all9 SLS package assets plus manifest in actual browser; record200/status/size/hash. Verify live package manifest/model/page/identity/runtime/review/approval against exact CI upload artifact before calling delivery verified. Validate catalogue identity in results and all finite12state+6stress entries. Record source primary href+retained source digest and source/review/approval/checklist/model link statuses, final browser console/network. Record browser version and screenshots. Source external access failure is reported separately from packaged asset failure, never hidden.
+
+Do not count a successful default/rate run as proof of deployed revision. Final assessment requires artifact-to-live hash equality plus exact-revision CI/Pages proof. Parent owns release closeout and any evidence commit. All remote actions in this child are read-only fetch/navigation.

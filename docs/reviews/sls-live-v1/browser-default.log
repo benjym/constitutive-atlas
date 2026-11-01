@@ -1,0 +1,18 @@
+### Result
+{"url":"https://benjym.github.io/constitutive-atlas/sls.html","browser":"156.0.8078.74","status":"Completed 8 physical seconds · 4 output intervals · relaxation.","table":{"rows":7,"columns":19},"identity":{"model":"sls-comsol63-deviatoric-zero-spin-ode","model_sha256":"eccfeb372810afd81a5e9cddf5d8ac33e2cb5df6921fc88e14e9175c73e50906","catalogue_hash":"11dd07e8b896a71bdc72ce4ff93aba664916af583c703fd6b8671a0727a6ff6e","module_sha256":"0f6b5e3a2868bb8f73ef2cf033cbfc5b728ad8a2104e46505a9ae9dfa5750605","wasm_sha256":"1f39471279e8eb01b45f036ef73062c42ab9e3c039bb1ff48e04c7945e7b8e6c","approval_sha256":"763c29f59b7156094fd15f9edb73b24b2de70c44e748704c8612a5d42170399b","review_sha256":"eda7775348b6b5fbd40cfedf2876d1550505f17c83fdd148b83eb153c2d7582c"}}
+### Ran Playwright code
+```js
+await (async (page) => {
+ await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Completed'),null,{timeout:180000});
+ await page.getByText('Inspect complete state and stress at every output',{exact:true}).click();
+ const table=await page.locator('#stateTable').evaluate(el=>({rows:el.rows.length,columns:el.rows[0].cells.length}));
+ if(table.rows!==7||table.columns!==19||await page.locator('svg polyline').count()!==2)throw Error('Incomplete default display');
+ const download=page.waitForEvent('download');await page.getByRole('button',{name:'Export request & full result',exact:true}).click();await(await download).saveAs('/Users/bmar5496/code/constitutive-atlas/docs/reviews/sls-live-v1/browser-default.json');
+ await page.screenshot({path:'output/playwright/sls-live-default.png',fullPage:true});
+ return {url:page.url(),browser:page.context().browser().version(),status:await page.locator('#status').textContent(),table,identity:JSON.parse(await page.locator('#identity').textContent())};
+}
+)(page);
+```
+### Events
+- Downloading file sls-relaxation.json ...
+- Downloaded file sls-relaxation.json to ".playwright-cli/sls-relaxation.json"

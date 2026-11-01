@@ -1,0 +1,13 @@
+# Standard Linear Solid publication
+
+Exact delivered formulation: COMSOL6.3 ordinary deviatoric single-Maxwell-branch Standard Linear Solid with equilibrium shear spring and elastic bulk; small-strain fixed frame/zero spin, dry total stress. The declarative model, independent accepted review and original numerical/browser evidence remain unchanged.
+
+Implementation commit: `9a27359b38671e07150c717934c1248798d0aa65`. Qualified combined publication revision: `f18db8e75d27cf182f2c03dfcd6534b7f51d5a86`. [Exact CI run](https://github.com/benjym/constitutive-atlas/actions/runs/41289504263): both native jobs, both Wasm jobs and Pages deployment succeeded. Deployment7470820389, successful status21099220266; machine-verifiable receipts are `combined-run-v3-success.json`, `deployments-v3.json`, `deployment-statuses-v3.json` and `deployment-proof-v3.json`.
+
+The fresh github-pages artifact13076512926 is bound in `artifacts-v3.json` and `upload-verification-v3.json`. All nine SLS manifest assets match their hashes, including the exact frozen page, model, accepted review and generated approval. Eight additional live entry/catalogue/ordinary-engine assets match this tested upload in `live-entry-verification-v3.json`. Actual browser observations and independent source-reference comparisons belong to `../sls-live-v1/`.
+
+Retained attempts: original9a run41287314779 was cancelled; combinedd5 run41287657999 failed at separate legacy recorded-path replay fixtures and skipped deployment. Neither is represented as passing. Original terminal reports, failure logs and prospective plans remain here. The shared fixture correction retains original rejection witnesses and numerical tolerances; SLS governing equations and application files were unchanged. PLAN-v3 and browser preparation-v3 preceded current observations.
+
+Reproduce public entry verification: `python3 -B docs/reviews/sls-release-v1/check_live_entry.py` with the exact extracted upload at its recorded private path. Reproduce browser-reference/artifact checks using `python3 -B docs/reviews/sls-live-v1/check_live_v3.py /private/tmp/sls-pages-extracted-f18 --deployment-proof docs/reviews/sls-release-v1/deployment-proof-v3.json`.
+
+Public laboratory: https://benjym.github.io/constitutive-atlas/sls.html . Numerical qualification is bounded to the recorded illustrative protocols/parameters; the wider machine parameter envelope is unqualified. Exact passivity assumes traceless branch overstress. No calibration or experimental validation is claimed. Source originals remain private; public receipts, equations, review and scope disclosures are linked in the laboratory.
