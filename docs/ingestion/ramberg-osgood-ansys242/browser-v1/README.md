@@ -1,0 +1,13 @@
+# Actual packaged browser verification v1
+
+Parent run /root-power-successor-ramberg-20261102 used the real in-app browser at http://127.0.0.1:8793/index.html#laboratory?model=ramberg-osgood-ansys242, standard builder package (15 ordinary models).
+
+Default fixed radial total stress: 100 increments, finite meaningful stress–strain/total stress path/volume plots. All five public controls were exercised: fixed radial total stress, zero volumetric strain cycle, one-dimensional strain cycle, isotropic strain and signed q control. Saved AX snapshots record completion and explicit total-stress labeling. Fractional exponent n=2.5 ran at0.2% strain. Changing E30→60MPa while retaining epsilon was rejected as invalid run specification with last committed state retained and exports disabled. Entering epsilon_ii=0.0008333333333333334 restored success. This is expected explicit initialization, not automatic projection. Reset restored E30MPa,n5,epsilon_ii=0.0016666666666666668 and default protocol. Rapid stress target edits10→15kPa exercised latest settings (saved snapshot).
+
+Actual Reproducible run button downloaded exported-run.json. The public Import run chooser loaded that exact file and returned a successful 100-increment Ramberg run with E60MPa,n2.5 and all12 initial state components retained. The exported object contains101 complete12-component states, exact current catalogue identity and explicit total response contract. Actual UI replay completion is saved in replayed-state.txt; broader exact replay is independently qualified by167 native/Wasm pairs and130 same-instance export/import replays (integration-v1/browser-loading.json), not inferred from a screenshot.
+
+Sources & model definition exposes ANSYS primary manual and exact JSON. Source scope/exclusions are visible. Measurement overlay is disabled with explanation: normalized overlays require effective stress; this dry total stress law has no pore-pressure law or calibration. Console warning/error capture is empty. package-identities.json hashes actual served engine/catalogue/app/model bytes. plots.png was visually inspected and shows nonlinear response with correctly labeled SI display conversions. No experimental validation is claimed.
+
+Retained automation issue: download.path returned only after about69minutes despite a5s requested timeout; file chooser setFiles likewise took about6minutes. Neither changed model or acceptance gates. Actual export/import succeeded; use captured files rather than repeating those blocking calls.
+
+Agent review display awaits E5 installation and final-package recheck; live deployment remains E8 pending.

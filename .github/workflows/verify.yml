@@ -53,6 +53,11 @@ jobs:
           cmake --build build-burgers --target atlas_burgers_solver --parallel 1
           python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
           node --test tests/test_burgers_web_contract.mjs
+      - name: Qualify Ramberg–Osgood against independent scalar references
+        run: |
+          cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+          cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+          python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
       - name: Native checks and full exact archival replay
         if: runner.os == 'macOS'
         run: |
@@ -112,6 +117,11 @@ jobs:
           python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
           node tools/test_experiments.mjs
           node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
+          cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+          cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+          python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+          node tools/check_ramberg_osgood_wasm.mjs build-wasm "$RUNNER_TEMP/ramberg-wasm.json" "$RUNNER_TEMP/ramberg-native.json"
+          python -B tools/check_ramberg_osgood.py --responses "$RUNNER_TEMP/ramberg-wasm.json" --output "$RUNNER_TEMP/ramberg-wasm-checks.json"
           node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
           node tools/test_loading.mjs
           node tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json
@@ -216,6 +226,11 @@ jobs:
           python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
           node tools/test_experiments.mjs
           node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
+          cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+          cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+          python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+          node tools/check_ramberg_osgood_wasm.mjs build-wasm "$RUNNER_TEMP/ramberg-wasm.json" "$RUNNER_TEMP/ramberg-native.json"
+          python -B tools/check_ramberg_osgood.py --responses "$RUNNER_TEMP/ramberg-wasm.json" --output "$RUNNER_TEMP/ramberg-wasm-checks.json"
           node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
           node tools/test_loading.mjs
           node tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json

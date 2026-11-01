@@ -728,3 +728,7 @@ The exact approved J2 linear isotropic hardening law now has a qualified main-la
 ### J2 main-laboratory closeout — 2026-11-02
 
 The approved bounded J2 formulation is delivered in the main laboratory. Release 8e060a42 passes all required native/Wasm/package/Pages gates;20 assets match the tested upload and the actual live preset passes 32full-state checks. Independent review and all original failures are retained in [the delivery ledger](ingestion/j2-linear-hardening/DELIVERY.md). No broader or experimental validation is claimed.
+
+## Ramberg–Osgood2024R2 delivery in progress (2026-11-02)
+
+The ordinary engine now contains15 definitions, adding the exact ANSYS2024R2 full3D reversible nonlinear elastic mechanical law. Definition c949cb14 is source complete and independently agent accepted;83frozen cases pass1141checks/backend and3276strictparityvalues. No experimental validation, plasticity, energy, finite-deformation or pore-pressure claim. Packaged browser runs, recovery and actual export/import verified; approval display and live publication remain pending in docs/ingestion/ramberg-osgood-ansys242/DELIVERY.md.
