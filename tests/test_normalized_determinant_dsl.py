@@ -1,4 +1,5 @@
 """Normalized determinant typing, independent references and transaction routing."""
+from tests.historical_generation import generate as historical_generate
 from tests.test_stress_scope import without_stress_scope_metadata
 import copy,json,struct,tempfile,unittest
 from fractions import Fraction as F
@@ -42,7 +43,7 @@ class NormalizedDeterminantDsl(unittest.TestCase):
   for study in ('clay2005-rates-v3','clay2005-determinant-rates-v1'):
    h=ROOT/'catalogue/investigations'/study
    with tempfile.TemporaryDirectory()as tmp:
-    generate(tmp,[h/'model.json'])
+    historical_generate(tmp,[h/'model.json'],study)
     self.assertEqual((Path(tmp)/'models.json').read_bytes(),(h/'expected-generated/models.json').read_bytes())
     self.assertEqual(without_stress_scope_metadata((Path(tmp)/'models.hpp').read_text()),(h/'expected-generated/models.hpp').read_text())
  def test_history_header_and_transaction(self):

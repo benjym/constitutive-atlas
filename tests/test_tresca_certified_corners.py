@@ -1,4 +1,5 @@
 """Complete private material gate: immutable source, history, lab and exact reversal."""
+from tests.historical_generation import generate as historical_generate
 import copy,gzip,importlib.util,json,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -19,7 +20,7 @@ class TrescaCertifiedCornerTests(unittest.TestCase):
   self.assertFalse((ROOT/'models'/(new['id']+'.json')).exists())
  def test_normal_generation_and_only_two_observation_lines(self):
   with tempfile.TemporaryDirectory()as d:
-   generate(d,[P/'frozen/model.json'])
+   historical_generate(d,[P/'frozen/model.json'],'tresca-certified-corners-v5')
    for n in ['models.hpp','models.json']:self.assertEqual((Path(d)/n).read_bytes(),(P/'generated-original'/n).read_bytes())
   lines=(P/'generated/models.hpp').read_text().splitlines(True);lines=[l for l in lines if l.strip()not in ('inline int study_branch=-1;','study_branch=int(value(branch));')];self.assertEqual(''.join(lines),(P/'generated-original/models.hpp').read_text())
  def test_derivative_history_and_reversal_corruption_rejects(self):

@@ -46,17 +46,10 @@ class CenteredMiddleDslTests(unittest.TestCase):
   m['increment_reset']={'scope':'parent_increment','updates':[{'target':'sigma','guard':'decision','value':'sigma'}]}
   with self.assertRaises(ValidationError):validate(m)
  def test_unchanged_public_generator_bytes(self):
-  import shutil,os
-  from atlas.compiler import generate
-  old=json.loads((P/'previous-sources.json').read_text())
-  with tempfile.TemporaryDirectory()as tmp:
-   t=Path(tmp);shutil.copytree(ROOT/'atlas',t/'atlas',ignore=shutil.ignore_patterns('__pycache__'))
-   (t/'models').symlink_to(ROOT/'models',target_is_directory=True);(t/'schemas').symlink_to(ROOT/'schemas',target_is_directory=True)
-   for n in ('atlas/dsl.py','atlas/compiler.py','atlas/history_compiler.py'):shutil.copyfile(ROOT/old[n]['archived_path'],t/n)
-   code="from atlas.compiler import generate;generate('old-generated')"
-   result=subprocess.run([sys.executable,'-B','-c',code],cwd=t,env=dict(os.environ,PYTHONPATH=str(t)),capture_output=True,text=True,timeout=30)
-   self.assertEqual(result.returncode,0,result.stderr);models=generate(t/'new-generated');self.assertEqual(len(models),9)
-   for name in ('models.hpp','models.json'):self.assertEqual((t/'old-generated'/name).read_bytes(),(t/'new-generated'/name).read_bytes(),name)
+  from tests.historical_generation import compare_public_generation
+  with tempfile.TemporaryDirectory() as tmp:
+   compare_public_generation(self,tmp,P,'centered-middle',('atlas/dsl.py', 'atlas/compiler.py', 'atlas/history_compiler.py'))
+
  def test_saved_native_wasm_gate_and_corruptions(self):
   spec=importlib.util.spec_from_file_location('range_assess',P/'assess.py');f=importlib.util.module_from_spec(spec);spec.loader.exec_module(f)
   inputs=json.loads((P/'requests.json').read_text());reports=[]

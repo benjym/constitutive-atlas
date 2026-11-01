@@ -1,4 +1,5 @@
 """Total profile admission is semantic only; no compiled or material execution."""
+from tests.historical_generation import public_paths
 import copy,hashlib,importlib.util,json,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -54,7 +55,7 @@ class TotalProfileActivationTests(unittest.TestCase):
             self.assertIn('projector_min',header);self.assertIn('projector_max',header)
         self.assertEqual(path.read_bytes(),original)
     def test_public_generation_is_byte_identical_to_frozen_validator(self):
-        paths=sorted((ROOT/'models').glob('*.json'));self.assertEqual(len(paths),9)
+        paths=public_paths();self.assertEqual(len(paths),9)
         with tempfile.TemporaryDirectory() as d:
             p=Path(d);generate(p/'new',paths)
             with patch('atlas.compiler.load',side_effect=prior_validator().load):generate(p/'old',paths)
@@ -66,5 +67,8 @@ class TotalProfileActivationTests(unittest.TestCase):
             total=load(Path(d)/'fixtures/scope-synthetic-total-elastic.json')
             self.assertEqual(total,synthetic_total())
             generated=json.loads((Path(d)/'generated/models.json').read_text())
-            self.assertEqual(len(generated['models']),10)
+            from atlas.model import all_models
+            self.assertEqual({m['id'] for m in generated['models']}, {m['id'] for m in all_models()} | {total['id']})
+            self.assertEqual(len(generated['models']),len(all_models())+1)
+            for model in all_models():self.assertIn(model,generated['models'])
             self.assertIn(total,generated['models'])

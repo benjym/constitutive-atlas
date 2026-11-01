@@ -36,12 +36,6 @@ class SolutionConstraintTests(unittest.TestCase):
    with self.assertRaises(ValidationError):check_solution_state(m,good,p)
   self.assertTrue(check_solution_state(m,good,pars))
  def test_unused_public_generation_bytes_unchanged(self):
-  import subprocess,sys,shutil,os
-  from atlas.compiler import generate
-  prev=json.loads((ROOT/'docs/reviews/solution-state-constraints-v1/previous-sources.json').read_text())
-  with tempfile.TemporaryDirectory()as d:
-   t=Path(d);shutil.copytree(ROOT/'atlas',t/'atlas',ignore=shutil.ignore_patterns('__pycache__'));(t/'models').symlink_to(ROOT/'models',target_is_directory=True);(t/'schemas').symlink_to(ROOT/'schemas',target_is_directory=True)
-   for n in ['atlas/compiler.py','atlas/model.py']:shutil.copyfile(ROOT/prev[n]['archived_path'],t/n)
-   out=subprocess.run([sys.executable,'-B','-c',"from atlas.compiler import generate;generate('old')"],cwd=t,env=dict(os.environ,PYTHONPATH=str(t)),capture_output=True,text=True,timeout=30);self.assertEqual(out.returncode,0,out.stderr)
-   self.assertEqual(len(generate(t/'new')),9)
-   for name in ['models.hpp','models.json']:self.assertEqual((t/'old'/name).read_bytes(),(t/'new'/name).read_bytes())
+  from tests.historical_generation import compare_public_generation
+  with tempfile.TemporaryDirectory() as tmp:
+   compare_public_generation(self,tmp,ROOT/'docs/reviews/solution-state-constraints-v1','solution-constraints',('atlas/compiler.py', 'atlas/model.py'))

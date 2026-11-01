@@ -1,4 +1,5 @@
 """Saved failing numerical gate is immutable and sensitive to new regressions."""
+from tests.historical_generation import generate as historical_generate
 from pathlib import Path
 import copy,gzip,hashlib,importlib.util,json,tempfile,unittest
 from atlas.model import ROOT
@@ -25,7 +26,7 @@ class TrescaBackendEvidenceTests(unittest.TestCase):
                 result=m.assess(rows,requests,ref,policy);self.assertGreater(len(result['failures']),5);self.assertIn(expected,[v['kind']for v in result['failures']])
     def test_normal_generation_and_instrumentation_only(self):
         with tempfile.TemporaryDirectory()as d:
-            generate(d,[P/'frozen/model.json'])
+            historical_generate(d,[P/'frozen/model.json'],'tresca-rounded-backends-v1')
             for n in ('models.hpp','models.json'):self.assertEqual((Path(d)/n).read_bytes(),(P/'generated-original'/n).read_bytes())
         modified=(P/'generated/models.hpp').read_text();self.assertEqual(modified.replace('\ninline int study_branch=-1;','').replace('study_branch=int(value(branch));\n',''),(P/'generated-original/models.hpp').read_text())
         original=json.loads((ROOT/'docs/reviews/tresca-declarative-v1/model.json').read_text());self.assertEqual(original,json.loads((P/'frozen/model.json').read_text()))

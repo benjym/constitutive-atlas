@@ -1,4 +1,5 @@
 """Complete residual and physical-history qualification through the common API."""
+from tests.historical_generation import generate as historical_generate
 import copy,importlib.util,json,gzip,tempfile,unittest
 from pathlib import Path
 from atlas.model import ROOT,load
@@ -18,7 +19,7 @@ class TrescaSolutionConstraintTests(unittest.TestCase):
   self.assertEqual({k for k in new if old.get(k)!=new[k]},{'id','name','description','solution_constraints'})
   self.assertEqual(new['solution_constraints'],['principal_range_le(sigma,2*k)']);self.assertEqual(old['domain'],new['domain'])
   with tempfile.TemporaryDirectory()as d:
-   generate(d,[P/'frozen/model.json'])
+   historical_generate(d,[P/'frozen/model.json'],'tresca-solution-constraints-v4')
    for n in ['models.hpp','models.json']:self.assertEqual((Path(d)/n).read_bytes(),(P/'generated-original'/n).read_bytes())
   self.assertFalse((ROOT/'models'/(new['id']+'.json')).exists())
  def test_full_column_and_history_recovery_corruption_rejected(self):

@@ -1,4 +1,5 @@
 """Ninth draft identity, explicit inputs, preserved catalogue and frozen preview gates."""
+from tests.historical_generation import catalogue as historical_catalogue
 from tests.historical_sources import preserved_model
 import importlib.util,json,unittest
 from pathlib import Path
@@ -23,7 +24,7 @@ class Clay2005LabPreview(unittest.TestCase):
   prior=json.loads((I/'prior-models.json').read_text())
   import hashlib
   for name,pin in prior.items():self.assertEqual(hashlib.sha256(preserved_model(ROOT,Path(name).name)).hexdigest(),pin)
-  before=json.loads((I/'prior-catalogue.json').read_text())['models'];after=json.loads((ROOT/'catalogue/manifest.json').read_text())['models'];self.assertEqual(len(after),32)
+  before=json.loads((I/'prior-catalogue.json').read_text())['models'];after=historical_catalogue('clay2005')['models'];self.assertEqual(len(after),32)
   for old,new in zip(before,after):
    if old['id']!='hypoplastic-clay-2005':self.assertEqual(old,new)
    else:self.assertIs(new['executable'],True);self.assertEqual(new['status'],'draft')

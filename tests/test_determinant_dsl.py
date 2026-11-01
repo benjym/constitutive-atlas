@@ -1,4 +1,5 @@
 """Dimension/interpretation registration and independent archived receipt checks."""
+from tests.historical_generation import generate as historical_generate
 import copy
 import json
 import math
@@ -45,7 +46,7 @@ class DeterminantDsl(unittest.TestCase):
   self.assertIn('atlas::determinant_or_mark(',cpp(parse('determinant(A)')))
   h=ROOT/'catalogue/investigations/clay2005-rates-v3'
   with tempfile.TemporaryDirectory()as tmp:
-   generate(tmp,[h/'model.json'])
+   historical_generate(tmp,[h/'model.json'],'clay2005-rates-v3')
    for name in ('models.hpp','models.json'):
     self.assertEqual((Path(tmp)/name).read_bytes(),(h/'expected-generated'/name).read_bytes())
  def test_history_registration_and_original_bindings(self):

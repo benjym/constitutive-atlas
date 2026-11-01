@@ -1,4 +1,5 @@
 """Complete one-step/restart qualification stays distinct from admission."""
+from tests.historical_generation import generate as historical_generate
 from pathlib import Path
 import copy,gzip,hashlib,importlib.util,json,tempfile,unittest
 from atlas.model import ROOT,load
@@ -21,7 +22,7 @@ class TrescaPressureSplitBackendsTests(unittest.TestCase):
    if old['name']=='branch':self.assertEqual(new['expr'],old['expr'].replace('vmax-vmin<=width','principal_range_le(trial_dev,width)'))
    else:self.assertEqual(old,new)
   with tempfile.TemporaryDirectory()as d:
-   generate(d,[P/'frozen/model.json'])
+   historical_generate(d,[P/'frozen/model.json'],'tresca-pressure-split-v2')
    for n in ('models.hpp','models.json'):self.assertEqual((Path(d)/n).read_bytes(),(P/'generated-original'/n).read_bytes())
   self.assertFalse((ROOT/'models'/(candidate['id']+'.json')).exists())
  def test_assessor_rejects_values_all38_columns_membership_and_rollback_corruption(self):

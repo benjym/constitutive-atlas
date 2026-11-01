@@ -21,7 +21,8 @@ class LaboratoryScopeContractTests(unittest.TestCase):
         self.assertEqual(result['saved_processes'],48);self.assertEqual(result['native_calls'],0)
 
     def test_production_total_profile_stays_disabled(self):
-        with self.assertRaisesRegex(ValidationError,'effective Cauchy'):validate(synthetic_total())
+        from tests.test_total_profile_activation import prior_validator
+        with self.assertRaisesRegex(ValidationError,'effective Cauchy'):prior_validator().validate(synthetic_total())
 
     def test_changed_scope_pore_wire_response_and_exit_are_rejected(self):
         mutations=['scope','null','wire','mechanics','returncode','missing']

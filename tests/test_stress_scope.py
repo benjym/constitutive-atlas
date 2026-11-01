@@ -1,4 +1,5 @@
 """Metadata scope is explicit without enabling new material profiles."""
+from tests.historical_generation import public_models, public_paths, generate as historical_generate
 import copy
 import importlib.util
 import json
@@ -42,7 +43,7 @@ class StressScopeTests(unittest.TestCase):
         fixtures=scope_fixtures();self.assertEqual(set(fixtures),set(expected))
         for name,model in fixtures.items():
             self.assertEqual(stress_scope(model),expected[name][0],name)
-        for model in all_models():self.assertEqual(stress_scope(model),'effective',model['id'])
+        for model in public_models():self.assertEqual(stress_scope(model),'effective',model['id'])
         self.assertEqual(stress_binding(fixtures['scope-legacy-timed'])['measure'],'unspecified')
 
     def test_binding_returns_detached_metadata(self):
@@ -71,8 +72,8 @@ class StressScopeTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);fixtures=root/'fixtures';fixtures.mkdir()
             for name,model in scope_fixtures().items():(fixtures/(name+'.json')).write_text(json.dumps(model))
-            for name,paths in [('public',None),('scope',list(fixtures.glob('*.json')))]:
-                old=root/(name+'-old');new=root/(name+'-new');prior.generate(old,paths);generate(new,paths)
+            for name,paths in [('public',public_paths()),('scope',list(fixtures.glob('*.json')))]:
+                old=root/(name+'-old');new=root/(name+'-new');prior.generate(old,paths);historical_generate(new,paths,'stress-scope')
                 self.assertEqual((new/'models.json').read_bytes(),(old/'models.json').read_bytes(),name)
                 old_header=(old/'models.hpp').read_text();new_header=(new/'models.hpp').read_text()
                 self.assertEqual(without_stress_scope_metadata(new_header),old_header,name)

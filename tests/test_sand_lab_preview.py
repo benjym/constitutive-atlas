@@ -1,4 +1,5 @@
 """Source identity, explicit initialization and frozen sand-preview integration."""
+from tests.historical_generation import catalogue as historical_catalogue
 from tests.historical_sources import preserved_model
 import hashlib,json,unittest
 from pathlib import Path
@@ -25,7 +26,7 @@ class SandLabPreview(unittest.TestCase):
   folder=ROOT/'catalogue/investigations/barodesy2015-preview-v1'
   for p in(folder/'models').glob('*.json'):
    self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name),p.name)
-  catalogue=json.loads((ROOT/'catalogue/manifest.json').read_text())['models']
+  catalogue=historical_catalogue('sand')['models']
   self.assertEqual(len(catalogue),32);entry=next(m for m in catalogue if m['id']=='barodesy-sand')
   self.assertIs(entry['executable'],True);self.assertEqual(entry['status'],'draft')
   self.assertEqual(len(list((folder/'models').glob('*.json'))),7)

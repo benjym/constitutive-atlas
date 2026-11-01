@@ -1,4 +1,5 @@
 """Feasible physical history cannot hide residual-extension regressions."""
+from tests.historical_generation import generate as historical_generate
 import copy,importlib.util,json,gzip,tempfile,unittest
 from pathlib import Path
 from atlas.model import ROOT,load
@@ -18,7 +19,7 @@ class TrescaFeasibleDomainTests(unittest.TestCase):
   self.assertEqual({k for k in base if base[k]!=new[k]},{'id','name','description','domain'})
   self.assertEqual(new['domain'],base['domain']+['principal_range_le(sigma,width)'])
   with tempfile.TemporaryDirectory()as d:
-   generate(d,[P/'frozen/model.json'])
+   historical_generate(d,[P/'frozen/model.json'],'tresca-feasible-domain-v3')
    for n in ['models.hpp','models.json']:self.assertEqual((Path(d)/n).read_bytes(),(P/'generated-original'/n).read_bytes())
   modified=(P/'generated/models.hpp').read_text();self.assertEqual(modified.replace('\ninline int study_branch=-1;','').replace('study_branch=int(value(branch));\n',''),(P/'generated-original/models.hpp').read_text())
   self.assertFalse((ROOT/'models'/(new['id']+'.json')).exists())

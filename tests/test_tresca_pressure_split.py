@@ -1,4 +1,5 @@
 """Source/row equivalence and unchanged state/history; no candidate evaluation."""
+from tests.historical_generation import generate as historical_generate
 from pathlib import Path
 from fractions import Fraction as F
 import copy,gzip,hashlib,importlib.util,json,subprocess,tempfile,unittest
@@ -15,7 +16,7 @@ class TrescaPressureSplitTests(unittest.TestCase):
         self.assertEqual(m['initial_checks'],old['initial_checks']);self.assertEqual(m['initialization']['required_state'],['sigma','ep'])
         self.assertEqual(sum(6 if f['shape']=='sym' else 1 for f in m['state']),12)
         with tempfile.TemporaryDirectory()as d:
-            generate(d,[P/'model.json']);expected=json.loads((P/'candidate-validation.json').read_text())['generated_sha256']
+            historical_generate(d,[P/'model.json'],'tresca-pressure-split-v1');expected=json.loads((P/'candidate-validation.json').read_text())['generated_sha256']
             for n,pin in expected.items():self.assertEqual(hashlib.sha256((Path(d)/n).read_bytes()).hexdigest(),pin)
     def test_saved_independent_equivalence(self):
         result=module('split_saved',P/'verify.py').verify(P,ROOT)

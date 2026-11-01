@@ -1,4 +1,5 @@
 """Effective experiment mapping is guarded independently of model execution support."""
+from tests.historical_generation import public_models, public_paths, generate as historical_generate
 import copy
 import importlib.util
 import json
@@ -47,7 +48,7 @@ class EffectiveReplayScopeTests(unittest.TestCase):
         path=ROOT/previous['atlas/experiment_replay.py']['archived_path']
         spec=importlib.util.spec_from_file_location('atlas._prior_experiment_replay_scope_test',path)
         prior=importlib.util.module_from_spec(spec);spec.loader.exec_module(prior)
-        models=all_models();self.assertEqual(len(models),9)
+        models=public_models();self.assertEqual(len(models),9)
         for model in models:
             configuration=copy.deepcopy(self.config);configuration['model']=model['id']
             configuration['parameters']={name:field['default'] for name,field in model['parameters'].items()}
