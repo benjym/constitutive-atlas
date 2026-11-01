@@ -68,12 +68,15 @@ measurement redistribution rights, or certify new numerical trajectories. The
 and [separate passing nested regime](docs/benchmarks/kfs-nested-partitions-v1/README.md)
 remain distinct. Do not launch additional fits or sweeps to bypass these limits.
 
-For new common-engine capability, [NorSand](docs/ingestion/norsand-1993/DELIVERY.md)
-now has its original source and independently reviewed staged path-control
-implementation, with 58 requests per native/Wasm backend passing. Installation
-of that generic profile, durable CI coverage and final model approval/browser
-integration remain open under their own ownership. Staged capability success is
-not public atlas support.
+The exact [NorSand1993 active drained axial formulation](docs/ingestion/norsand-1993/DELIVERY.md)
+has original-source mapping, independent agent approval and native/Wasm58requests
+per backend. Verified live applicationdd7de01f passes all six required CI/Pages
+jobs,23live/upload asset comparisons and actual41point/threeplot browser
+controls, replay, recovery and desktop/mobile checks. It is one restricted
+controlled-path variant, separate from ordinary strain-path model counts;
+elasticity, cyclic/general3D continuation and experimental validation remain
+excluded. The ledger retains historical acquisition and release failures and
+tracks the final concurrent-release-preserving publication.
 
 SANISAND and Terra Cotta remain near-term scientific targets, not completed
 formulations. [SANISAND's source-scope decision](docs/reviews/sanisand-source-scope-v1/decision.json)
@@ -755,3 +758,8 @@ The exact approved J2 linear isotropic hardening law now has a qualified main-la
 ### J2 main-laboratory closeout — 2026-11-02
 
 The approved bounded J2 formulation is delivered in the main laboratory. Release 8e060a42 passes all required native/Wasm/package/Pages gates;20 assets match the tested upload and the actual live preset passes 32full-state checks. Independent review and all original failures are retained in [the delivery ledger](docs/ingestion/j2-linear-hardening/DELIVERY.md). No broader or experimental validation is claimed.
+
+
+### Orthotropic OGS main-laboratory qualification — 2026-11-02
+
+The complete nine-constant fixed-aligned-axis OGS law is independently source/numerically approved and works in the general atlas laboratory. Exact-source compliance references, all-six state histories and tangents, native/Wasm parity, immutable approval, standard packaging and actual browser replay/recovery/layout are qualified. It is counted separately from the twelve ordinary definitions at this release baseline. [Delivery ledger](docs/ingestion/orthotropic-ogs/DELIVERY.md) tracks remaining E8 CI/Pages/live verification; no standalone page or experimental qualification is claimed.

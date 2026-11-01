@@ -1,5 +1,7 @@
 # Current project status — 1 November 2026
 
+Current NorSand delivery —2November2026: the exact Jefferies1993 active monotonic drained axial law is source-mapped and independently approved. Verified applicationdd7de01f passes all six required CI/Pages jobs and fresh58native+58Wasm requests. Actual23live assets match the tested979file upload; the41point/threeplot live run, controls/history/reset/latest/recovery, real export/import/replay, three tamper negatives and desktop/mobile pass with zero browser/network failures. This restricted controlled-path formulation is separate from ordinary strain-path counts; no elasticity, cyclic/general3D or experimental validation is claimed. [Delivery ledger](ingestion/norsand-1993/DELIVERY.md) retains failures and final concurrent-release-preserving closeout receipts.
+
 Current Burgers delivery: the exact restricted continuous dry zero-spin timed formulation is source-mapped and independently approved, with fresh bounded native/Wasm qualification and main-laboratory creep/relaxation controls. It remains separate from the twelve ordinary strain-path formulations and does not claim experimental validation. Released5ae90008 passed all five required CI/deploy jobs;44live assets match the tested upload and actual relaxation/creep/full-result replay, source links and mobile layout pass. Exact dated receipts are tracked in [the Burgers ledger](ingestion/burgers-itasca900/DELIVERY.md). Historical Burgers packets retain their original scope/metadata.
 
 Model approval now requires [independent agent checklist review](AGENT_REVIEW_POLICY.md), without human scientific sign-off. Historical pending records remain unchanged; no model is promoted by this policy change alone.
@@ -728,3 +730,8 @@ The exact approved J2 linear isotropic hardening law now has a qualified main-la
 ### J2 main-laboratory closeout — 2026-11-02
 
 The approved bounded J2 formulation is delivered in the main laboratory. Release 8e060a42 passes all required native/Wasm/package/Pages gates;20 assets match the tested upload and the actual live preset passes 32full-state checks. Independent review and all original failures are retained in [the delivery ledger](ingestion/j2-linear-hardening/DELIVERY.md). No broader or experimental validation is claimed.
+
+
+## Orthotropic OGS local delivery — 2 November 2026
+
+The full nine-constant fixed-axis small-strain orthotropic law has exact independent agent approval, 121 requests per native/Wasm backend, independent compliance/tangent checks, and a qualified main-atlas laboratory. The standard 895-file package preserves the twelve-model ordinary catalogue and its unchanged supported-input policy; the orthotropic engine is a separate dedicated common-solver profile, not a thirteenth ordinary definition. Actual desktop/mobile browser tests cover all material constants, six-component prestress/increments, replay, rejection/recovery and model switching. Three unique source identities survive SQLite export (six rows from the existing definition/catalogue union). See the [delivery ledger](ingestion/orthotropic-ogs/DELIVERY.md). E8 release/CI/live verification remains open. No experimental validation, finite rotation or broad parameter-conditioning claim is made.
