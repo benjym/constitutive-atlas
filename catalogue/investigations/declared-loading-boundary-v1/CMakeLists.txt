@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.20)
+project(AtlasLoadingBoundary LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_executable(atlas_loading_boundary EXCLUDE_FROM_ALL probe.cpp)
+target_include_directories(atlas_loading_boundary PRIVATE frozen/cpp/include generated)
+target_compile_options(atlas_loading_boundary PRIVATE -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -fno-fast-math -ffp-contract=off)

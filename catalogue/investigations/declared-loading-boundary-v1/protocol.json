@@ -1,0 +1,11 @@
+{
+  "kind": "prospective-required-input-boundary-policy",
+  "frozen_before_native_observation": true,
+  "source_requirement": "docs/FORMULATION_CONTRACT.md: all listed inputs required even when equation does not reference them; finite constraint",
+  "cases": "NaN, +Inf and -Inf individually in each of six loading components; normal/check-only plus timed observable routes; immediate finite recovery; timed invalid-clock controls; same loading through public integrate/integrate_time",
+  "expected": "nonfinite required input rejects; finite immediate recovery accepts; caller-owned state, parameters and loading bytes unchanged",
+  "scope": "double primal inputs only; no new Jet-input contract, tangent or primitive-internal policy",
+  "production_changes": false,
+  "build_policy": "one explicit native target, --parallel 1; no Wasm build this slice",
+  "scratch_output_on_failure": "unspecified"
+}
