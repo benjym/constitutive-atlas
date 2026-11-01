@@ -419,7 +419,7 @@ function showExperiment(data){
   experiment=data;$('retry-experiment').hidden=true;
   $('match-experiment').hidden=!!data&&data.kind!=='experiment';
   $('show-experiment').disabled=!data;$('show-experiment').checked=!!data;$('match-experiment').disabled=!data||data.kind!=='experiment'||!supportsEffectiveExperiment(model());
-  $('match-experiment').textContent=data&&!data.initial?.effective_stress&&!Number.isFinite(data.initial?.void_ratio)?'Use drainage protocol':'Match measured stress, density & protocol';
+  $('match-experiment').textContent=data&&!data.initial?.effective_stress&&!Number.isFinite(data.initial?.void_ratio)?'Use drainage protocol':'Match available test inputs';
   const link=$('experiment-source'),url=data?.provenance?.source_url;link.hidden=true;
   if(typeof url==='string'&&/^https?:\/\//i.test(url)){link.href=url;link.hidden=false;}
   const license=$('experiment-license'),licenseUrl=data?.provenance?.license_url;license.hidden=true;

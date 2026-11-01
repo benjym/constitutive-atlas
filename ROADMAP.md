@@ -717,3 +717,10 @@ The [DP packet](docs/ingestion/drucker-prager/README.md) reconciles source param
 ## DP dilatancy-domain correction — 2026-11-01
 
 The [native study](catalogue/investigations/dp-dilatancy-domain-v1/README.md) adds only Md<=M, preserving valid equations/defaults and exact prior definition with27historical receipt bindings. All83prospectively frozen cases and two native regression groups pass. The initial incomplete-source configuration failure is retained; the completed source closure builds one serial target normally.9archive units pass; broader sibling-binding failures are19before/15after/0new. Native numerical evidence v3 and pending review v4 bind the new guard; old failed/passed reports remain historical. Wasm/browser packaging and scientific admission remain open; no deployment.
+
+
+## 2026-11-01 — Twelve-model browser delivery closure
+
+The exact Mohr–Coulomb nonassociated H=0 draft now has [complete private browser evidence](docs/reviews/mc-browser-closure-v3/README.md):26packaged-worker requests,14actual UI imports/834points, full-state round trips, strict invalid-import rejection and input recovery pass against retained qualified responses. Source hyperlinks, pending/unassigned review, experiment-applicability limits and both maintainers remain visible. Qualified Wasm is reused without building. Historical failures remain unchanged.
+
+The model and its exact disclosures are integrated locally, bringing the executable inventory to12. No scientific or experimental admission follows. GIS remains supported by its named small example; its ordinary default still fails visibly. Next finish root-package/release checks and the explicitly authorized push/Pages refresh, then return to source/preparation and independent-review gates, Wichtmann comparisons and the paper. Do not reopen a broad numerical campaign for this delivery step.
