@@ -1,0 +1,8 @@
+// Distinct prospective material-failure study: one Newton iteration, no backtracking.
+// Expected failed nonproportional plastic trial echoes incoming state; recovery exact.
+import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+const base=path.dirname(new URL(import.meta.url).pathname),engine=await(await import(pathToFileURL(process.argv[2]))).default(),r=JSON.parse(fs.readFileSync(path.join(base,'references.json'))),c=r.cases.find(x=>x.id==='mixed-nonproportional'),csv=x=>x.join(','),args=[r.model,csv(c.parameters),csv(c.initial),csv(c.increments[0])];
+const call=settings=>JSON.parse(engine.ccall('atlas_integrate_with_settings','string',Array(5).fill('string'),[...args,settings]));
+const before=call(r.settings),failed=call('1e-11,1e-6,1,0,1,0'),after=call(r.settings);let native;
+try{native=JSON.parse(execFileSync(process.argv[3],['--mode','integrate','--model',r.model,'--parameters',args[1],'--initial',args[2],'--strain',args[3],'--integration-settings','1e-11,1e-6,1,0,1,0'],{encoding:'utf8'}));}catch(e){native=JSON.parse(e.stdout);}
+fs.writeFileSync(path.join(base,'rollback-raw.json'),JSON.stringify({before,failed,after,native},null,2)+'\n');assert.equal(before.ok,true);assert.equal(failed.ok,false);assert.equal(native.ok,false);assert.deepEqual(failed.state,c.initial);assert.deepEqual(native.state,c.initial);assert.deepEqual(after,before);fs.writeFileSync(path.join(base,'rollback-assessment.json'),JSON.stringify({passed:true,native_and_wasm_full_state_rollback:true,same_instance_recovery_exact:true},null,2)+'\n');

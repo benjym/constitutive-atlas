@@ -760,3 +760,8 @@ The approved bounded J2 formulation is delivered in the main laboratory. Release
 ### Orthotropic OGS main-laboratory qualification — 2026-11-02
 
 The complete nine-constant fixed-aligned-axis OGS law is independently source/numerically approved and works in the general atlas laboratory. Exact-source compliance references, all-six state histories and tangents, native/Wasm parity, immutable approval, standard packaging and actual browser replay/recovery/layout are qualified. It is counted separately from the twelve ordinary definitions at this release baseline. [Delivery ledger](docs/ingestion/orthotropic-ogs/DELIVERY.md) tracks remaining E8 CI/Pages/live verification; no standalone page or experimental qualification is claimed.
+
+
+### Hill anisotropic perfect plasticity — 2026-11-02
+
+The exact Abaqus2025 fixed-axis, infinitesimal, dry-total-stress associative perfect-plastic Hill law with isotropic elasticity is independently agent-approved and integrated into the general atlas/main laboratory. This adds one bounded complete formulation:45discovery entries and14ordinary engine models, with dedicated common-generated material-point routing for Hill. Frozen31cases/41increments repeated twice/backend,74independent source checks, current-source native/Wasm requalification, full standard package and real desktop/mobile browser controls/replay/recovery pass. No hardening, evolving axes, FE-host or experimental validation is claimed. E0–E7 complete; CI/Pages/live E8 remains open in [the delivery ledger](docs/ingestion/hill-abaqus2025/DELIVERY.md).
