@@ -1,4 +1,4 @@
-"""Historical byte gates stay complete; current generation covers all 13 models."""
+"""Historical byte gates stay complete; current generation covers all 15 models."""
 import ast
 import copy
 import hashlib
@@ -42,11 +42,11 @@ class HistoricalGenerationTests(unittest.TestCase):
         # This is a release identity guard, separate from the historical nine.
         paths = [verified(item) for item in data['current_models']]
         self.assertEqual(len(paths), 12)  # Retained historical twelve-model context.
-        live = json.loads((ROOT / 'tests/fixtures/current-fourteen-duncan-v1.json').read_text())
-        self.assertEqual(live['id'], 'current-fourteen-duncan-v1')
+        live = json.loads((ROOT / 'tests/fixtures/current-fifteen-ramberg-v1.json').read_text())
+        self.assertEqual(live['id'], 'current-fifteen-ramberg-v1')
         current_paths = {ROOT / item['path'] for item in live['models']}
         self.assertEqual(current_paths, set((ROOT / 'models').glob('*.json')))
-        self.assertEqual(len(current_paths), 14)
+        self.assertEqual(len(current_paths), 15)
         self.assertTrue(set(paths) < current_paths)
         for item in live['models']:
             self.assertEqual(hashlib.sha256((ROOT / item['path']).read_bytes()).hexdigest(), item['sha256'])
@@ -56,14 +56,14 @@ class HistoricalGenerationTests(unittest.TestCase):
                         catalogue['path'], catalogue['sha256'])
         models = all_models()
         self.assertEqual({m['id'] for m in models if stress_scope(m) == 'total'},
-                         {'tresca-associated-perfect-bk2022v1-be'})
+                         {'tresca-associated-perfect-bk2022v1-be', 'ramberg-osgood-ansys242'})
         with tempfile.TemporaryDirectory() as directory:
             emitted = generate(directory)
             metadata = json.loads((Path(directory) / 'models.json').read_text())
             self.assertEqual({m['id'] for m in emitted}, {m['id'] for m in models})
             self.assertEqual({m['id']: m for m in metadata['models']}, {m['id']: m for m in models})
             header = (Path(directory) / 'models.hpp').read_text()
-            self.assertEqual(header.count(',StressScope::total'), 1)
+            self.assertEqual(header.count(',StressScope::total'), 2)
             self.assertEqual(header.count(',StressScope::effective'), 13)
 
     def test_original_methods_and_unmodified_gates_are_retained(self):

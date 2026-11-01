@@ -1,0 +1,27 @@
+# Independent live-upload verifier review
+
+Reviewer `/root/ramberg_review`,2026-11-02. Read `verify_live_upload.py` only; no network, build, compiled execution, model or canonical-record change.
+
+The selected-byte comparison fails closed: missing required upload files, HTTP failures, non200 responses and any differing SHA cause failure. Model c949, accepted review f0fa, and registry cross-reference are pinned. Root JS/MJS/CSS/Wasm plus database/model/dossier/evidence bytes are compared against the supplied upload. Each fetched path records expected/actual hash and status; complete supplied-upload manifest is retained. No obvious hash-comparison false pass.
+
+Three limits need explicit handling before calling the report verified current CI publication:
+
+1. The script trusts its supplied directory. It does not establish that directory came from the actual Pages artifact of run41348645083 / commit37d70660. A separate retained GitHub run/artifact identity and exact downloaded artifact/archive digest/extraction receipt must bind it; otherwise any old folder containing the same pinned model/review could be called current CI output.
+2. `models.json` currently checks only that the model ID exists. Pin/recompute the expected compiled catalogue identity (currently29c12dec5d2ec9ce1ea84b8991757e4f03af1122a92095689c5b6f81b64c342f) and verify its canonical entry equals the frozen approved definition, or retain equivalent independent package evidence. Model/review copy hashes alone do not prove the engine's embedded catalogue matches them.
+3. The scope says source identity, but the fetched set omits public source receipt/packet evidence files. Compare the actual exposed source-receipt/packet paths, preferably all public artifacts referenced by the accepted review, or narrow the claim to the named model/dossier/evidence/approval copies. Complete source *private originals* must remain private; this observation concerns public receipts only.
+
+These are release-verification provenance/coverage gaps, not a scientific-model rejection. The actual final browser run and terminal required CI/deployment success remain separate requirements; byte agreement cannot replace them. No network or scientific scope is inferred from this review.
+
+## Updated verifier closure
+
+Read revised verifier before receipt acquisition; no network performed. It now requires the exact intended run41348645083 and full head37d70660e3561c342bb114716c233a3d06651bcb, hashes the supplied artifact tar against its receipt, and independently recomputes the entire extracted-directory manifest digest against that receipt. It binds the expected compiled catalogue hash and exact full embedded Ramberg model object to the pinned public definition. Report scope is accurately narrowed to definition/primary-source links/review/approval and excludes private originals; it no longer claims that omitted public receipt bodies were all fetched.
+
+The three reported code/protocol gaps are closed for this bounded verifier provided the forthcoming receipt is actually derived from the authenticated GitHub artifact download and that archive's extraction. The script consumes that receipt as trusted acquisition evidence; it does not itself query GitHub or derive an extraction manifest from tar members. Preserve actual API/run/artifact metadata, downloaded archive digest and extraction receipt so that this trust boundary is auditable. This is a verification of the revised logic, not a claim of a completed artifact/live comparison while CI and acquisition remain pending. Final terminal CI/deployment success and actual browser qualification remain separate.
+
+## Actual upload provenance and database supplement
+
+Independently inspected saved GitHub artifact API response and receipt: the artifact object matches exactly, including run41348645083, head37d70660, github-pages artifact13100811616 and SHA256 ZIP digest94dcebf6. Rehashed actual local ZIP and tar and checked the sole ZIP member is exactly artifact.tar with the declared tar digest. Recomputed the1024-file extracted manifest digest. Additionally read every regular tar member without extraction and independently matched its bytes to all1024 extracted site files. This closes the archive-to-directory binding as actual evidence, not just a trusted assertion. No network request was made by this reviewer; authenticated API acquisition was performed by the coordinator and its response is retained.
+
+Read final verify_upload_database.py and reran it strictly against the uploaded SQLite in mode=ro, writing only a temporary independent result. The result equals upload-database-v3.json exactly. Confirmed preservation of45 prior public manifest objects and19 prior approval objects, exact Ramberg definition/review/approval/source,46 public catalogue identities and47 database model identities with the one explicit existing research addition. Status validation uses the definition as its authority, while manifest metadata and executable flags use their own authoritative fields. This correctly distinguishes those roles and the public/research populations. Failed v1/v2 diagnostic prototypes are retained; they do not weaken the independently correct v3 assertions. No database, canonical record, model or compiled artifact was altered/executed.
+
+No remaining provenance/database verifier blocker. Actual live hash comparison, final browser run and terminal CI/deployment success remain separate evidence to obtain.

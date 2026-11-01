@@ -1,0 +1,7 @@
+# Corrected release qualification v2
+
+Run41348645083 at37d70660 failed Linux Python after1493tests: current-generation identity still expected14models and exact request regeneration used host-dependent floating summation. Both Wasm jobs passed. Original log and exact test bytes are retained here; v1 artifact acquisition and database diagnostics remain in release-v1. No failed deployment is represented as live.
+
+The separate current-fifteen fixture retains every prior14model hash and adds exact Ramberg. Current coverage requires15models, two total/13effective. Historical fixtures/receipts remain unchanged. Request regeneration uses explicit math.fsum only inside the test's scoped patch and still demands whole-object exact equality to unchanged83case requests. Production oracle, solver, model, references, gates and canonical review are unchanged. Separate review accepts both corrections; nine focused tests pass under Python3.12 and3.14. Future --prepare invocations outside the test remain host-arithmetic dependent; the frozen corpus is authoritative.
+
+The next release must run the entire existing workflow, without skips or relaxed numerical gates, to terminal success. Artifact acquisition follows release-v1's independently reviewed protocol, with a new exact run/revision receipt. Live comparison uses the actual new tested upload, unchanged model/review/catalogue identity, and actual browser execution. E8 remains open.
