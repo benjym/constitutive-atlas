@@ -1,0 +1,55 @@
+======================================================================
+ERROR: test_web_package (unittest.loader._FailedTest.test_web_package)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_web_package
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/loader.py", line 141, in loadTestsFromName
+    module = __import__(module_name)
+ModuleNotFoundError: No module named 'tests.test_web_package'
+
+
+======================================================================
+FAIL: test_browser_contract (tests.test_web_effective_scope.EffectiveScopeBrowserTests.test_browser_contract)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/tests/test_web_effective_scope.py", line 9, in test_browser_contract
+    self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : ✖ all current effective models retain exact prior comparison results (0.590458ms)
+✔ missing, total, unknown and observable bindings cannot overlay rows or cached metadata (0.731ms)
+✔ actual browser match handler rejects total scope before any input mutation (1.178375ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.234083
+
+✖ failing tests:
+
+test at tests/test_effective_experiment_browser.mjs:14:1
+✖ all current effective models retain exact prior comparison results (0.590458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  10 !== 9
+  
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_effective_experiment_browser.mjs:15:9)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.start (node:internal/test_runner/test:1257:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 10,
+    expected: 9,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.266s
+
+FAILED (failures=1, errors=1, skipped=3)

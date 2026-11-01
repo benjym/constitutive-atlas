@@ -1,3 +1,4 @@
+import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';
 import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
 import {formulationSection} from './formulation-view.mjs';
 import {createLoading,normalizeLoading,verifyReturnedLoading} from './loading.mjs';
@@ -10,7 +11,7 @@ import {setupRecordedView} from './recorded-view.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
 const $ = id => document.getElementById(id);
-let compiledCatalogue=null;
+let compiledCatalogue=null, laboratoryExamples=null;
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
 const experimentCache=new Map();
@@ -132,6 +133,7 @@ function updateScopeLabels(){
   document.querySelector('[data-for="target"]')?.setAttribute('aria-label',$('target-label').textContent+' slider');
 }
 function populate({loadExample=true}={}){
+  laboratoryExamples?.refresh();
   const m=model(),example=loadExample?laboratoryExample(m):null;updateScopeLabels();
   if(example){$('confinement').value=example.confinement;$('stress-ratio').value=example.stressRatio;}
   $('model-description').textContent=m.description;$('model-family').textContent=m.family;$('model-status').textContent=m.status;
@@ -361,15 +363,17 @@ function setProtocol(){
   addSlider(input,$('target-label').textContent,stress?-500:-10,stress?500:10);syncSliders();
 }
 async function readFile(file){if(!file)return null;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');return JSON.parse(await file.text());}
-async function importRun(file){
-  try{if(!file)return;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');const imported=parseLaboratoryDocument(await file.text(),compiledCatalogue);
-    const s={...imported,integration_settings:normalizeSettings(imported.integration_settings)},m=validateSpec(s);$('loading-version').value=s.loading?'exact':'legacy';setNumericalValues(s.integration_settings);$('model').value=m.id;populate({loadExample:false});Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
+function applyRunSpecification(imported){
+    const s={...imported,integration_settings:normalizeSettings(imported.integration_settings)},m=validateSpec(s);cancel('');$('loading-version').value=s.loading?'exact':'legacy';setNumericalValues(s.integration_settings);$('model').value=m.id;populate({loadExample:false});Object.keys(m.parameters).forEach((n,i)=>{const input=$('param-'+n);input.value=s.parameters[i]/Number(input.dataset.factor);});
     $('confinement').value=s.initial[1]/1000;$('stress-ratio').value=s.initial[0]/s.initial[1];let offset=6;
     for(const f of m.state.slice(1)){const size=f.shape==='sym'?6:1;if(persistentState(f)){const input=$('state-'+f.name);input.value=size===6?s.initial.slice(offset,offset+6).join(','):s.initial[offset]/Number(input.dataset.factor);}offset+=size;}
     $('protocol').value=s.protocol;setProtocol();$('target').value=s.target/(s.protocol===3?1000:.01);$('steps').value=s.steps;
     if(![...$('cycles').options].some(o=>Number(o.value)===s.cycles))$('cycles').append(new Option(s.cycles+' sinusoidal cycles',s.cycles));$('cycles').value=s.cycles;
     refreshExperimentFilter();location.hash='laboratory';simulate(s);
-  }catch(e){toast(e.message);}
+}
+async function importRun(file){
+  try{if(!file)return;if(file.size>10*1024*1024)throw Error('File exceeds the 10 MB limit.');applyRunSpecification(parseLaboratoryDocument(await file.text(),compiledCatalogue));}
+  catch(e){toast(e.message);}
 }
 function describeExperiment(){
   $('match-experiment').disabled=!experiment||experiment.kind!=='experiment'||!supportsEffectiveExperiment(model());
@@ -502,5 +506,6 @@ try{
   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;
   models.forEach(m=>$('model').append(new Option(m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   setupRecordedView({catalogue:definitions,chart,sourceLinks,definitionLink});
+  laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:applyRunSpecification,onError:toast});
   populate();catalogueCards();route();simulate();loadExperimentCatalogue();loadPublicationReferences();loadEvidenceIndex();loadApplicability();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

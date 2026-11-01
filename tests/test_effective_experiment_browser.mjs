@@ -12,8 +12,12 @@ const mutate=change=>{const m=structuredClone(effective);change(m);return m;};
 const total=mutate(m=>m.formulation.stress.scope='total');
 const record={kind:'experiment',protocol:'drained-triaxial',initial:{effective_stress:[130000,100000,100000,0,0,0],void_ratio:.8},rows:[{axial_strain:0,q:0,p:100000,volumetric_strain:0,pore_pressure:0},{axial_strain:.01,q:30000,p:110000,volumetric_strain:.002,pore_pressure:1000}]};
 test('all current effective models retain exact prior comparison results',()=>{
- assert.equal(models.length,9);
- for(const model of models){
+ const effectiveModels=models.filter(m=>m.schema_version==='0.1'||m.formulation?.stress?.scope==='effective');
+ assert.ok(effectiveModels.length>=9,'retain every original effective model');
+ const totalModels=models.filter(m=>m.formulation?.stress?.scope==='total');
+ assert.ok(totalModels.some(m=>m.id==='tresca-associated-perfect-bk2022v1-be'));
+ for(const model of totalModels){assert.equal(supportsEffectiveExperiment(model),false,model.id);assert.deepEqual(comparisonSeries(record,true,'stress',1,0,model),[]);}
+ for(const model of effectiveModels){
   assert.equal(supportsEffectiveExperiment(model),true,model.id);
   for(const input of [record,{...record,protocol:'undrained-triaxial'},{...record,rows:[...record.rows,record.rows[0]]}])for(const protocol of [0,1,2,3,4])for(const cycles of [0,3])for(const plot of ['stress','path','volume','pore']){
    assert.deepEqual(comparisonSeries(input,true,plot,protocol,cycles,model),old.comparisonSeries(input,true,plot,protocol,cycles),model.id);
