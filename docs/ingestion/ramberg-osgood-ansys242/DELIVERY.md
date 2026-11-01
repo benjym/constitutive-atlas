@@ -26,15 +26,15 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 - [X] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
 - [X] **E6 — Atlas:** qualified model/approval/source/evidence integrated through normal generation; prior models preserved and public metadata/current database checked.
 - [X] **E7 — Packaged website:** real controls/plots, source/review scope, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
-- [ ] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works.
+- [X] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works.
 
 ## Current handoff
 
-- Current phase / overall state: E0–E7 verified; E8 first authorized release failed two Python checks; separate reviewed corrections and focused Python3.12/3.14 tests pass. Corrected full CI/live qualification pending.
-- Current owner: coordinating parent /root.
-- Blocker / missing evidence: awaiting terminal CI, actual upload, deployment and live comparison/browser verification.
-- Smallest next action / next owner: parent monitors run41348645083, retains tested upload and verifies live assets/browser before closing E8.
-- Resume when: work continues under explicit authorization; no additional human scientific approval required.
+- Current phase / overall state: E0–E8 verified complete. Exact delivered revision ecd1f3b12381dd8edec34fe6121b80a0bd5792aa; all six workflow jobs pass and Pages deployment succeeded.
+- Current owner: coordinating parent /root; delivery complete.
+- Blocker / missing evidence: none within the stated mechanical and browser scope.
+- Smallest next action / next owner: none required for this delivery; experimental calibration remains a separate study.
+- Resume when: a separately scoped extension is requested.
 - Known limitations / retained failures: original native/Wasm strict parity failure retained under execution-v1/original-v1; distinct prospective build policy qualified in v3. Source energy-printing issue retained and energy excluded. No measured comparison or broader host/kinematic validation.
 
 ## Evidence index
@@ -57,14 +57,16 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 ## Deployment receipt
 
-- Release commit: 37d70660e3561c342bb114716c233a3d06651bcb, pushed main under explicit authorization.
-- Actions run URL and terminal result: https://github.com/benjym/constitutive-atlas/actions/runs/41348645083 (Linux native Python failed; original log retained in release-v2).
-- Pages deployment revision/result:
-- Tested upload / live asset comparison:
-- Live model URL / actual browser run evidence:
-- Source/review link checks:
-- Remaining limitations:
+- Delivered revision: ecd1f3b12381dd8edec34fe6121b80a0bd5792aa. Original authorized push37d70660 and failed correction runs remain in release-v1/v2/v3/v4; the final revision includes reviewed concurrent integration and test-only repairs.
+- Actions run: https://github.com/benjym/constitutive-atlas/actions/runs/41357170257 — terminal success for both native, both Wasm, controlled-path and deploy jobs; release-v4/ci-terminal.json.
+- Pages deployment: succeeded for that exact revision. The subsequent documentation closeout commit is distinct from the deployed source revision.
+- Tested upload: authenticated artifact13103773962, ZIP SHA2563ff3890d82e3159492957a027a4f3d8b1805f207356f74627a32457d7dd5df6c; all1049 extracted files independently verified. release-v4/artifact-receipt.json and artifact-review.md.
+- Live assets: release-v4/live-assets-v1.json passes80 exact HTTP200/hash comparisons, including engine, catalogue, model, database, source/review/approval and retained numerical records. No mismatches.
+- Live model: https://benjym.github.io/constitutive-atlas/index.html#laboratory?model=ramberg-osgood-ansys242 . Actual browser initial run and explicit Reset recomputation succeeded,100increments, meaningful total-stress and volumetric plots, correct units and no console warnings/errors. release-v4/live-browser.txt, live-browser.png and live-console.json.
+- Source/review links: live-disclosure.txt and live-catalogue.txt show primary ANSYS2024R2 link, exact accepted review, registered approval and scope, current/failed numerical records and accurate applicability limitation. Public internal targets match the tested upload; copyrighted original sources remain private.
+- Database: all47 prior public manifest rows and24 approvals preserved;48 database identities,47 public entries. release-v4/upload-database.json.
+- Remaining limitations: illustrative parameters, no experimental calibration/validation, energy, plastic memory, pore-pressure coupling or finite-deformation qualification. Fractional exponents have bounded integration coverage; direct tangent coverage is default n=5.
 
 ## Completion statement
 
-Record separately: source complete; executable scope; independent numerical qualification; agent approval; atlas inclusion; packaged browser; live deployment; experimental validation. An absent experimental comparison can be an explicit limitation. Missing website support or unverified deployment cannot be called full delivery.
+Source complete; common native/Wasm executable scope independently numerically qualified; exact model independently agent approved; included in the general atlas and main laboratory; packaged controls/recovery/import/export verified; live deployment and example run verified. Experimental validation remains unassessed. All E0–E8 gates are complete for the named mechanical formulation. Previous failures and original frozen references are retained unchanged.

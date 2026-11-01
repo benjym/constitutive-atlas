@@ -1,0 +1,14 @@
+### Result
+{"model":"barodesy-sand","status":"✓ Response up to date","plots":3}
+### Ran Playwright code
+```js
+await (async(page)=>{
+ const base='/Users/bmar5496/code/constitutive-atlas/output/playwright/barodesy-sand-v3/';
+ await page.goto('http://127.0.0.1:56013/constitutive-atlas/#catalogue/barodesy-sand');await page.locator('#catalogue-detail-body .model-profile').waitFor();
+ await page.setViewportSize({width:390,height:844});await page.locator('#catalogue-detail-body').evaluate(x=>x.scrollTop=0);await page.locator('#catalogue-dialog').screenshot({path:base+'profile-mobile-closeup.png'});
+ await page.locator('.model-profile table').scrollIntoViewIfNeeded();await page.locator('#catalogue-dialog').screenshot({path:base+'profile-parameters-mobile.png'});
+ await page.setViewportSize({width:1280,height:900});await page.goto('http://127.0.0.1:56013/constitutive-atlas/#laboratory?model=barodesy-sand');await page.locator('#reset').click();await page.waitForFunction(()=>!document.querySelector('#export-run').disabled&&document.querySelector('#response-charts').getAttribute('aria-busy')==='false');await page.locator('#response-charts').screenshot({path:base+'default-response-closeup.png'});
+ return {model:await page.locator('#model').inputValue(),status:await page.locator('#run-state').innerText(),plots:await page.locator('#response-charts svg polyline').count()};
+}
+)(page);
+```

@@ -165,3 +165,5 @@ Full-delivery dispatch prompt:
 Independent interface review accepted both stages, receipt c20d35b39ac6102855106a6d88c65ffee822a4f3f89093d3979c665f5cc3cd43. See DELIVERY.md and delivery-v1/interface-review-v1/REVIEW.md for each item, exact package/SQLite/preservation receipts and actual Chrome default/allprotocol/edit/import/recovery/overlay evidence. E8 remains open pending new remote authorization.
 
 Current merged package E6/E7 independently accepted by interface-review-v2/receipt.json (8de6a21e),1000files/16actualbrowserdownloads/19fetchedhashes; unchanged packet-layout gate passes and exact duplicates preserved. See DELIVERY.md current merged checkpoint. E8 first scoped-local-commit item completed; all remote/live items remain open.
+
+Current public-profile and E6/E7 qualification: interface-review-v3/receipt.json accepts the exact current package (1,428files),16actual Chrome exports,24asset identities and all seven parameter explanations. Receipt186e74b613275c9a37366b3a5adf6e67d68a05dc66bfbe180e9c86b9e3f21691. E8 authorized; remote/live verification pending.

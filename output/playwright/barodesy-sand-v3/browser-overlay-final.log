@@ -1,0 +1,21 @@
+### Result
+{"on":{"text":"Stress–strain response\n112\n-1.74\n82.5\n5.33\n52.5\n12.4\n22.6\n19.5\n-7.36\n26.5\nAxial strain ε₁ (%)\nDeviator stress q (kPa)\nModel prediction\n● Experiment\nEffective stress path\n112\n97.5\n82.5\n108\n52.5\n118\n22.6\n128\n-7.36\n137\nMean effective stress p′ (kPa)\nDeviator stress q (kPa)\nModel prediction\n\nNo compatible measured channel pair for these axes.\n\nVolumetric response\n0.449\n-0.07\n0.329\n0.215\n0.21\n0.5\n0.0902\n0.785\n-0.0294\n1.07\nAxial strain ε₁ (%)\nVolumetric strain εᵥ (%)\nModel prediction\n\nNo compatible measured channel pair for these axes.\n\nPore-pressure change\n1\n0\n0.75\n0.25\n0.5\n0.5\n0.25\n0.75\n0\n1\nAxial strain ε₁ (%)\nPore-pressure change Δu (kPa)\nUnavailable for this mechanical protocol.\nModel prediction\n\nNo compatible measured channel pair for these axes.\n\nUnavailable for this mechanical protocol.","lines":[{"stroke":"#bc643e","points":101,"display":"inline"},{"stroke":"#bc643e","points":101,"display":"inline"},{"stroke":"#bc643e","points":101,"display":"inline"}]},"off":{"text":"Stress–strain response\n112\n-0.07\n82.5\n0.215\n52.5\n0.5\n22.6\n0.785\n-7.36\n1.07\nAxial strain ε₁ (%)\nDeviator stress q (kPa)\nModel prediction\n\nMeasurements hidden.\n\nEffective stress path\n112\n97.5\n82.5\n108\n52.5\n118\n22.6\n128\n-7.36\n137\nMean effective stress p′ (kPa)\nDeviator stress q (kPa)\nModel prediction\n\nMeasurements hidden.\n\nVolumetric response\n0.449\n-0.07\n0.329\n0.215\n0.21\n0.5\n0.0902\n0.785\n-0.0294\n1.07\nAxial strain ε₁ (%)\nVolumetric strain εᵥ (%)\nModel prediction\n\nMeasurements hidden.\n\nPore-pressure change\n1\n0\n0.75\n0.25\n0.5\n0.5\n0.25\n0.75\n0\n1\nAxial strain ε₁ (%)\nPore-pressure change Δu (kPa)\nUnavailable for this mechanical protocol.\nModel prediction\n\nMeasurements hidden.\n\nUnavailable for this mechanical protocol.","lines":[{"stroke":"#bc643e","points":101,"display":"inline"},{"stroke":"#bc643e","points":101,"display":"inline"},{"stroke":"#bc643e","points":101,"display":"inline"}]},"warning":"3600 rows · Overlay hidden. See data notes.","filter":"43 matching tests · Drained triaxial · monotonic"}
+### Ran Playwright code
+```js
+await (async(page)=>{
+ await page.goto('http://127.0.0.1:56013/constitutive-atlas/#laboratory?model=barodesy-sand');
+ const base='/Users/bmar5496/code/constitutive-atlas/output/playwright/barodesy-sand-v3/';
+ await page.waitForFunction(()=>!document.querySelector('#export-run').disabled);
+ if(!await page.locator('#experiment-select').isVisible())await page.locator('#measurements > summary').click();
+ await page.locator('#experiment-select').selectOption({index:1});
+ await page.waitForFunction(()=>!document.querySelector('#show-experiment').disabled&&document.querySelector('#experiment-status').textContent.includes(' rows'));
+ const inspect=()=>page.locator('#response-charts').evaluate(x=>({text:x.innerText,lines:[...x.querySelectorAll('polyline')].map(p=>({stroke:p.getAttribute('stroke'),points:p.getAttribute('points').split(' ').length,display:getComputedStyle(p).display}))}));
+ await page.locator('#show-experiment').check();const on=await inspect();await page.screenshot({path:base+'overlay-on.png',fullPage:true});
+ await page.locator('#show-experiment').uncheck();const off=await inspect();await page.screenshot({path:base+'overlay-off.png',fullPage:true});
+ return {on,off,warning:await page.locator('#experiment-status').innerText(),filter:await page.locator('#experiment-filter-note').innerText()};
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:56013/constitutive-atlas/#laboratory?model=barodesy-sand
+- Page Title: Model testing · Constitutive Atlas

@@ -1,0 +1,197 @@
+- complementary:
+  - link "Constitutive Atlas home":
+    - /url: "#laboratory"
+    - text: Constitutive
+    - text: Atlas
+  - navigation "Main navigation":
+    - link "◫ Model testing":
+      - /url: "#laboratory"
+      - text: ◫
+      - generic: Model testing
+    - link "≋ Ensemble explorer":
+      - /url: "#ensemble"
+      - text: ≋
+      - generic: Ensemble explorer
+    - link "⌕ Model catalogue 47":
+      - /url: "#catalogue"
+      - text: ⌕
+      - generic: Model catalogue
+      - generic: "47"
+    - link "≋ Methods & evidence":
+      - /url: "#methods"
+      - text: ≋
+      - generic: Methods & evidence
+  - paragraph:
+    - text: By
+    - link "Benjy Marks":
+      - /url: https://github.com/benjym
+    - link "François Guillard":
+      - /url: https://github.com/Franzzzzzzzz
+- main:
+  - heading "Explore material behaviour." [level=1]
+  - button "↑ Import run"
+  - generic: CONSTITUTIVE MODEL
+  - generic: Available in laboratory
+  - generic: Select a model
+  - combobox "Select a model":
+    - option "Barodesy clay 2017"
+    - option "Barodesy sand (2015)"
+    - option "Drucker–Prager, nonassociated perfect plasticity"
+    - option "Duncan–Chang (1970) · constant-Poisson formulation"
+    - option "Clay hypoplasticity — Mašín (2005)"
+    - option "Clay hypoplasticity with explicit asymptotic states — Mašín (2013)"
+    - option "Sand hypoplasticity with intergranular strain (1997)"
+    - option "Sand hypoplasticity · von Wolffersdorff (1996)"
+    - option "Linear isotropic elasticity"
+    - option "Modified Cam Clay"
+    - option "Mohr–Coulomb · nonassociated perfect plasticity"
+    - option "Original Cam Clay · logarithmic-recovery formulation"
+    - option "Ramberg–Osgood · reversible nonlinear elasticity" [selected]
+    - option "Sand hypoplasticity with generalized intergranular strain · selected pairing"
+    - option "Tresca · associated perfect plasticity"
+    - option "Hill · all-six strain increments"
+    - option "Burgers · physical-time creep / relaxation"
+    - option "Standard Linear Solid · physical-time relaxation / creep"
+    - option "Kelvin–Voigt · physical-time creep / loading / strain hold"
+    - option "Orthotropic elasticity · nine constants"
+    - option "NorSand 1993 · drained active axial law"
+    - option "Maxwell · physical-time relaxation / creep"
+    - option "Lade–Duncan 1975 · cohesionless soil"
+    - option "J2 · all-six strain increments"
+  - paragraph: A reversible nonlinear stress–strain law with a smoothly changing stiffness.
+  - link "About this model and its parameters →":
+    - /url: "#catalogue/ramberg-osgood-ansys242"
+  - generic "Sources & model definition"
+  - generic: nonlinear elasticity
+  - generic: 3D · small strain
+  - button "View equations ↗"
+  - navigation "Model testing sections":
+    - link "Test controls ↓":
+      - /url: "#controls"
+    - link "Response plots ↓":
+      - /url: "#response"
+    - link "Compare measurements ↓":
+      - /url: "#measurements"
+    - link "Equations & sources ↓":
+      - /url: "#equations"
+  - heading "Test controls" [level=2]
+  - button "Reset" [active]
+  - paragraph: Live updates as you adjust
+  - text: Loading protocol
+  - combobox "Loading protocol":
+    - option "Fixed radial total stress" [selected]
+    - option "Zero volumetric strain"
+    - option "One-dimensional strain"
+    - option "Isotropic strain"
+    - option "Signed q control · zero volumetric strain"
+  - generic: Axial strain (%)
+  - spinbutton "Axial strain (%)": "1"
+  - slider "Axial strain (%) slider": "550"
+  - text: Loading history
+  - combobox "Loading history":
+    - option "Monotonic ramp" [selected]
+    - option "1 sinusoidal cycle"
+    - option "3 sinusoidal cycles"
+    - option "10 sinusoidal cycles"
+  - generic: INITIAL STATE
+  - button "Load model example"
+  - paragraph: Selecting a model loads its example parameters and full initial state. These illustrative values do not establish specimen preparation or experimental calibration. Loading an example replaces parameter and state edits.
+  - generic: Radial total stress (kPa)
+  - spinbutton "Radial total stress (kPa)": "100"
+  - slider "Radial total stress (kPa) slider": "500"
+  - generic "Initial state details"
+  - generic "Material parameters Adjust model constants":
+    - text: Material parameters
+    - generic: Adjust model constants
+  - generic "Solver settings"
+  - option "Reproducible · current" [selected]
+  - option "Legacy · earlier saved runs"
+  - status: Live · changes update automatically.
+  - region "Compare with measurements":
+    - generic: EXPERIMENTAL COMPARISON
+    - heading "Compare with measurements" [level=2]
+    - paragraph: Tests are filtered by drainage protocol, loading path and verified plot axes. Assess model–material suitability, parameter calibration and specimen preparation separately. Stresses use kPa and strains use % on comparison plots; stored measurements use SI units.
+    - paragraph: Normalized overlays require an effective-stress model. Browse source records to view measurements.
+    - text: Find measurements
+    - searchbox "Find measurements"
+    - text: Experimental test
+    - combobox "Experimental test":
+      - option "No measurements selected" [selected]
+    - switch "Show measurements" [disabled]
+    - text: Show measurements
+    - button "Match available test inputs" [disabled]
+    - paragraph: Matching uses supplied stress and protocol, and void ratio only when this model provides that input. Other internal-state inputs keep their explicit values; specimen preparation remains unassessed.
+    - status: No measurement overlays match this protocol and loading path. You can browse source records or load your own measurements.
+    - checkbox "Browse all source records (includes tests without model overlays)"
+    - text: Browse all source records (includes tests without model overlays)
+    - generic "Compare your own measurements"
+  - status:
+    - generic: ✓ Response up to date
+    - generic: 100 increments · 23.9 ms · Fixed radial total stress · total stress
+  - generic "Simulation results":
+    - heading "Stress–strain response" [level=2]
+    - img "Total deviator stress versus axial strain":
+      - generic: "137"
+      - generic: "-0.07"
+      - generic: "101"
+      - generic: "0.215"
+      - generic: "64"
+      - generic: "0.5"
+      - generic: "27.5"
+      - generic: "0.785"
+      - generic: "-8.96"
+      - generic: "1.07"
+      - generic: Axial strain ε₁ (%)
+      - generic: Total deviator stress q (kPa)
+    - generic: Model prediction
+    - heading "Total stress path" [level=2]
+    - img "Deviator stress versus total mean stress":
+      - generic: "137"
+      - generic: "97"
+      - generic: "101"
+      - generic: "109"
+      - generic: "64"
+      - generic: "121"
+      - generic: "27.5"
+      - generic: "134"
+      - generic: "-8.96"
+      - generic: "146"
+      - generic: Mean total stress p (kPa)
+      - generic: Total deviator stress q (kPa)
+    - generic: Model prediction
+    - heading "Volumetric response" [level=2]
+    - img "Volumetric versus axial strain":
+      - generic: "0.228"
+      - generic: "-0.07"
+      - generic: "0.168"
+      - generic: "0.215"
+      - generic: "0.107"
+      - generic: "0.5"
+      - generic: "0.0459"
+      - generic: "0.785"
+      - generic: "-0.0149"
+      - generic: "1.07"
+      - generic: Axial strain ε₁ (%)
+      - generic: Volumetric strain εᵥ (%)
+    - generic: Model prediction
+    - heading "Pore-pressure change" [level=2]
+    - img "Pore-pressure change versus axial strain":
+      - generic: "1"
+      - generic: "0"
+      - generic: "0.75"
+      - generic: "0.25"
+      - generic: "0.5"
+      - generic: "0.5"
+      - generic: "0.25"
+      - generic: "0.75"
+      - generic: "0"
+      - generic: "1"
+      - generic: Axial strain ε₁ (%)
+      - generic: Pore-pressure change Δu (kPa)
+      - generic: "Unavailable: total stress has no pore-pressure law."
+    - generic: Model prediction
+    - paragraph: "Unavailable: total stress has no pore-pressure law."
+  - paragraph: Example parameters. No experimental calibration or predictive validity is implied.
+  - button "↓ Results CSV"
+  - button "↓ Reproducible run"
+  - generic "Equations & source provenance"

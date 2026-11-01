@@ -1,0 +1,5 @@
+# Descendant integration release v4
+
+Actual delivery candidate ecd1f3b12381dd8edec34fe6121b80a0bd5792aa / run41357170257 is a direct descendant of Ramberg strict-portability release339e6dc6. A concurrent coordinator repaired the independently discovered dynamic profile-link staticDOM contract, archived its original bytes and retained all Ramberg changes. That new release is reused rather than triggering a duplicate workflow.
+
+The failed concurrent e32macOS log is retained here. Profile links are intentionally created dynamically and optional lookups only remove them; the current test additionally verifies creation and safe optional removal, while static ID completeness and uniqueness remain required. Eleven focused tests pass. This change does not alter production application, model, oracle, references or numerical gates. Prior release attempts retain distinct identities in release-v1/v2/v3; full terminal CI, exact artifact, deployment and live browser proof remain mandatory for this revision.
