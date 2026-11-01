@@ -53,7 +53,7 @@ for(const id of ['modified-cam-clay','maxwell-itasca900-zero-spin-ode','sanisand
     const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,new Element('div'));return nodes.get(id);};
     $('catalogue-detail-body').scrollTop=200;$('catalogue-dialog').showModal=()=>{$('catalogue-dialog').open=true;};
     const context={$,document,modelProfile,modelProfileSection,catalogue:entries,j2View:null,timedView:null,
-      timedLaboratoryRoute:()=>null,refreshCatalogueStatus:()=>{},element:(tag,value,className)=>Object.assign(new Element(tag),{textContent:value??'',className}),
+      timedLaboratoryRoute:()=>null,refreshCatalogueStatus:()=>{},technicalReviewLinks:()=>new Element('p'),element:(tag,value,className)=>Object.assign(new Element(tag),{textContent:value??'',className}),
       recordedDescription:value=>value,formulationSection:()=>new Element('section'),evidenceSection:()=>new Element('section'),applicabilitySection:()=>new Element('section'),
       evidenceIndex:null,evidenceState:'loaded',applicabilityMatrix:null,applicabilityState:'loaded',definitionLink:()=>new Element('a'),catalogueModelHash:id=>'#catalogue/'+id,URL};
     vm.runInNewContext(hook+';showCatalogueModel(entry,spec);',{...context,entry:entries.find(entry=>entry.id===id)??{id,name:modelProfile(id).title,family:'Viscoelasticity'},spec:definitions.find(model=>model.id===id)});

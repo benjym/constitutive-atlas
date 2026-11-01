@@ -51,9 +51,10 @@ function fixture(open=true){
 test('delayed evidence updates open descriptions without replacing controls or scroll position',()=>{
   const f=fixture();vm.runInContext('refreshRecordedDescriptions()',f.context);assert.equal(f.note.textContent,original);
   f.context.evidenceIndex=index(accepted);vm.runInContext('refreshRecordedDescriptions()',f.context);
-  for(const node of [f.note,f.description,f.equation,f.nodes['model-description']])assert.equal(node.textContent,recordedDescription(original,'model',index(accepted)));
+  assert.equal(f.note.textContent,original,'The removed catalogue preamble is not refreshed.');
+  for(const node of [f.description,f.equation,f.nodes['model-description']])assert.equal(node.textContent,recordedDescription(original,'model',index(accepted)));
   assert.equal(f.control.value,'1.3831693930553504');assert.equal(f.body.scrollTop,137);
-  vm.runInContext('refreshRecordedDescriptions()',f.context);assert.equal(f.note.textContent,recordedDescription(original,'model',index(accepted)));
+  vm.runInContext('refreshRecordedDescriptions()',f.context);assert.equal(f.description.textContent,recordedDescription(original,'model',index(accepted)));assert.equal(f.note.textContent,original);
 });
 test('late historical evidence leaves text unchanged and a closed dialog is untouched',()=>{
   const f=fixture();f.context.evidenceIndex=index({...accepted,definition_current:false});vm.runInContext('refreshRecordedDescriptions()',f.context);assert.equal(f.note.textContent,original);

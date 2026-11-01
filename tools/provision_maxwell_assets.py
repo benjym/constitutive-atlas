@@ -11,10 +11,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from tools.build_maxwell_laboratory import bundle
 
-PACKET = ROOT / 'docs/ingestion/lade-duncan-1975/atlas-integration-v1/maxwell-rebind-v1'
+PACKET = ROOT / 'docs/ingestion/lade-duncan-1975/atlas-integration-v1/maxwell-unit-alias-v1'
 ARCHIVE_SHA256 = '2ae27721254cabed74b289c9692d0286fda71bd9eab92933d736d74904f4c9dd'
-QUALIFICATION_SHA256 = '6c4de6ef03b2f993b24ba153db9b5702334ae9e92df578418f3bfafe67695f26'
-REVIEW_SHA256 = '3f509c9e7d6cfa027a6ff25570c7af278433ca42eb5f38ba1a51bf19bca8adf8'
+QUALIFICATION_SHA256 = 'c0a84b48d0b26a1a9842f766d9be048fb781299cc3595225a4e299960da99839'
+REVIEW_SHA256 = '2eb92764552702fc0d8aacb490d78040295e3060268576abf769677734f5a7aa'
 MEMBERS = {
     'wasm/maxwell.js': ('maxwell.js', 'module_sha256'),
     'wasm/maxwell.wasm': ('maxwell.wasm', 'wasm_sha256'),

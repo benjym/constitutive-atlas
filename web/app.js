@@ -32,7 +32,7 @@ async function loadEvidenceIndex(){
   try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());refreshRecordedDescriptions();refreshModelSummary();}
   catch{}
   const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);
-  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;refreshCatalogueStatus(entry,models.find(m=>m.id===entry.id));body.scrollTop=scroll;}
+  if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;refreshCatalogueStatus(entry,models.find(m=>m.id===entry.id));body.querySelector('.technical-review-links')?.replaceWith(technicalReviewLinks(entry.id));body.scrollTop=scroll;}
 }
 function refreshRecordedDescriptions(){
   const selected=models.find(m=>m.id===$('model').value);
@@ -209,6 +209,11 @@ function updateControlSupport(){
   $('control-support').textContent=reason;$('control-support').hidden=!reason;
 }
 function registeredModelReview(id){return (evidenceIndex?.agent_reviews||[]).find(r=>r.catalogue_id===id&&r.status==='accepted'&&r.definition_current&&r.registered_approval_id!==null);}
+function technicalReviewLinks(id){
+  const links=element('p',undefined,'technical-review-links'),review=registeredModelReview(id);
+  if(review)for(const [label,path] of [['Independent scientific checklist',review.record_path],['Exact reviewed definition',review.definition_record_path],['Approval registry and scope','catalogue/approved-models.json']]){const link=element('a',label+' ↗');link.href='./evidence-records/'+path;link.target='_blank';link.rel='noopener';links.append(link,document.createTextNode(' · '));}
+  return links;
+}
 function refreshPublicModelSummary(id){
   const profile=modelProfile(id);if(!profile)return;
   $('model-description').textContent=profile.summary;$('model-status').textContent='Available in laboratory';
@@ -461,6 +466,7 @@ function showCatalogueModel(entry,spec){
     }
     body.append(section);
   }
+  body.append(technicalReviewLinks(entry.id));
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
   $('catalogue-detail-id').textContent=entry.id;
   $('catalogue-permalink').href=catalogueModelHash(entry.id);

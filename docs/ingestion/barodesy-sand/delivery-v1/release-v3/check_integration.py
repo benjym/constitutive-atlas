@@ -8,7 +8,8 @@ from atlas.evidence import checked_receipt
 def main(site):
  site=Path(site);parent=HERE.parent
  plan=json.loads((HERE/'prospective-plan.json').read_text())
- for p,pin in plan['source_inputs'].items():assert hashlib.sha256((ROOT/p).read_bytes()).hexdigest()==pin,p
+ final=json.loads((HERE/'final-source-freeze.json').read_text())['files']
+ for p,pin in {**plan['source_inputs'],**final}.items():assert hashlib.sha256((ROOT/p).read_bytes()).hexdigest()==pin,p
  pins=json.loads((parent/'prospective-freeze.json').read_text())['source_inputs']
  for p,pin in pins.items():
   if p!='atlas/measurement_units.py':assert hashlib.sha256((ROOT/p).read_bytes()).hexdigest()==pin,p
@@ -19,7 +20,7 @@ def main(site):
  remote_discovery=json.loads(subprocess.check_output(['git','show',plan['parents'][1]+':catalogue/manifest.json'],cwd=ROOT));discovery=json.loads((ROOT/'catalogue/manifest.json').read_text())
  assert [v for v in remote_discovery['models'] if v['id']!='barodesy-sand']==[v for v in discovery['models'] if v['id']!='barodesy-sand']
  count=0
- for name in ['preservation.json','merge-parent-preservation.json']:
+ for name in ['preservation.json','merge-parent-preservation.json','release-v3/parent-preservation.json','release-v3/layout-app-preservation.json','release-v3/workflow-preservation.json','release-v3/profile-fixture-preservation.json','release-v3/maxwell-provision-preservation.json']:
   for b in json.loads((parent/name).read_text())['old_bindings_verified']:checked_receipt(ROOT,b['document'],b['original_path'],b['sha256']);count+=1
  assert json.loads((site/'catalogue.json').read_text())==discovery
  definition=json.loads((ROOT/'models/barodesy-sand.json').read_text());models=json.loads((site/'models.json').read_text());assert next(m for m in models['models'] if m['id']=='barodesy-sand')==definition

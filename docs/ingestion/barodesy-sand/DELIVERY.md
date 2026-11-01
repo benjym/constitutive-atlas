@@ -14,7 +14,7 @@ Copy to `docs/ingestion/barodesy-sand/DELIVERY.md`. Follow `docs/MODEL_DELIVERY_
 - Implementation run ID(s): /root; numerical/source plans frozen before compiled observation.
 - Independent review run ID: /root/barodesy_sand_review; independent-review-v2 actual accepted record.
 - Build/execution owner and handoff: coordinator /root; native then Wasm explicit atlas_solver --parallel 1; serial slot released.
-- Remote authorization reference (or pending): pending new-model publication instruction; prepare through E7 first.
+- Remote authorization reference: user “yes” in the current session explicitly authorizes this model push, CI, Pages deployment and live verification; do not request it again.
 
 Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidence beside each phase and link the detailed check results. Keep MODEL-barodesy-sand open until E8 is verified; specialist task completion closes only that task.
 
@@ -89,3 +89,13 @@ The same browser/source-reference/parity gates pass16actual downloaded runs (ten
 Current evidence: delivery-v1/release-v2/{prospective-plan.json,integration-check.json,package-manifest.json,supported-package.json,browser-numerical-check.json,ci-regression.log}; output/playwright/barodesy-sand-v2/; separate interface-review-v2/receipt.json accepted all affected E6/E7 scope,101pins. Source-only packet check passes after eight redundant screenshot copies were removed while exact canonical output bytes remain; independent packet-layout-addendum accepts preservation. Original failures, policies, scientific approval and v1 receipts remain immutable.
 
 **Ready to publish.** E8 remote instruction/CI/Pages/live verification remains pending. No push, deploy, experimental validation or broader scientific scope is claimed.
+
+## Authorized current release qualification — 2 November 2026
+
+Publication authorized by the user’s “yes”. Prior E6/E7 receipts remain historical for their exact packages; current E6/E7 are reopened for the latest published profiles, ordinary15-model engine and interface. The approved model and scientific review bytes remain unchanged. Current artifact reuse is independently accepted:155/156 original source pins and176/177 published15-engine source pins match; the sole delta adds measurement-unit aliases outside the governing compiler/runtime dependency chain. Fresh generation matches both retained native/Wasm generated catalogues exactly. No fresh compile is claimed.
+
+Current672requests/backend pass unchanged numerical references and budgets, including partial-progress rollback/recovery. Independent saved-only reassessment confirms45817 physical comparisons exactly equal. The public profile is independently source accepted (profile-review-v1 receipt2207c6848e86b683c40b90aa8ff37f94e8cc048af7b4409637c5bf598baa8c37), covering all seven parameters, starting state, an actual example and limits.
+
+The first current package attempt site-v5 failed on an old NorSand qualification’s full source-closure pin after the non-governing unit-alias addition. Failure retained in release-v3/package-v5.log. A distinct independently accepted reuse qualification retains exact original artifacts/generated/governing sources and original58/58 observed gates; it claims no fresh compile or numerical execution. Both CI packaging calls use the new qualification directory. Original receipts remain unchanged. Two inherited disallowed PNG packet duplicates were archived exactly with all35literal receipt bindings preserved, then removed; unchanged23-test packet gate passes. Latest published simplified cards are preserved, with three plain scientific receipt links inside the closed technical disclosure. Two VM/DOM fixtures were independently approved and aligned with the actual published DOM; original5failure log retained, all25checks pass.
+
+Current evidence: delivery-v1/release-v3/; independent current numerical/source/preservation/fixture review under interface-review-v3/. Full standard package site-v6 is in progress; actual current Chrome, remote CI and live delivery remain pending. E8 remains open.

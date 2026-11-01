@@ -227,7 +227,7 @@ jobs:
           emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
           node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
-          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
+          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand-unit-alias-v1
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package
           node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
@@ -326,7 +326,7 @@ jobs:
           emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
           node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
-          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand
+          python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand-unit-alias-v1
           node --test tests/test_ensemble.mjs
           python -B -m unittest tests.test_ensemble_package
           node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
