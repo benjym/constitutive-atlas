@@ -1,0 +1,226 @@
+{
+  "schema_version": "0.3",
+  "id": "fixture-grid-nonfinite",
+  "name": "Grid nonfinite rejection fixture",
+  "family": "nonlinear-elasticity",
+  "status": "draft",
+  "description": "Analytical generic endpoint constraint regression; not a physical model",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas",
+      "locator": "Generic solver regression synthetic equations; no physical source claim",
+      "role": "Synthetic analytical fixture"
+    }
+  ],
+  "parameters": {
+    "p_ref": {
+      "default": 100000.0,
+      "unit": "Pa",
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "label": "Numerical residual scale"
+    },
+    "pa": {
+      "default": 101325.0,
+      "unit": "Pa",
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "label": "Atmospheric reference; explicit SI example"
+    },
+    "K": {
+      "default": 2000.0,
+      "unit": "1",
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "label": "Primary modulus number"
+    },
+    "Kur": {
+      "default": 2120.0,
+      "unit": "1",
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "label": "Unloading modulus number"
+    },
+    "n": {
+      "default": 0.54,
+      "unit": "1",
+      "min": -1.7976931348623157e+308,
+      "max": 1.7976931348623157e+308,
+      "label": "Stress exponent"
+    },
+    "Rf": {
+      "default": 0.91,
+      "unit": "1",
+      "min": 0.0,
+      "max": 1.0,
+      "label": "Failure ratio"
+    },
+    "c_cohesion": {
+      "default": 0.0,
+      "unit": "Pa",
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "label": "Cohesion"
+    },
+    "phi": {
+      "default": 0.6370451769779303,
+      "unit": "1",
+      "min": 0.0,
+      "max": 1.5707963267948966,
+      "label": "Friction angle in radians"
+    },
+    "nu": {
+      "default": 0.3,
+      "unit": "1",
+      "min": -1.0,
+      "max": 0.5,
+      "label": "Constant Poisson coefficient"
+    },
+    "E_failure": {
+      "default": 478.8025898033584,
+      "unit": "Pa",
+      "min": 0.0,
+      "max": 1.7976931348623157e+308,
+      "label": "Numerical postfailure modulus; arbitrary source-example coefficient"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      },
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "p_ref"
+    },
+    {
+      "name": "h",
+      "shape": "scalar",
+      "unit": "Pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "maximum_historical_principal_stress_difference",
+        "transformation": "scalar_invariant"
+      },
+      "initial": 0.0,
+      "scale": "p_ref"
+    }
+  ],
+  "derived": [
+    {
+      "name": "a",
+      "expr": "select(principal_range_le(sigma,0*p_ref),trace(sigma/3),select(principal_max_repeated(sigma),principal_upper_sum(sigma)/2,principal_max(sigma)))"
+    },
+    {
+      "name": "least",
+      "expr": "select(principal_range_le(sigma,0*p_ref),trace(sigma/3),select(principal_min_repeated(sigma),principal_lower_sum(sigma)/2,principal_min(sigma)))"
+    },
+    {
+      "name": "a_old",
+      "expr": "select(principal_range_le(sigma_n,0*p_ref),trace(sigma_n/3),select(principal_max_repeated(sigma_n),principal_upper_sum(sigma_n)/2,principal_max(sigma_n)))"
+    },
+    {
+      "name": "least_old",
+      "expr": "select(principal_range_le(sigma_n,0*p_ref),trace(sigma_n/3),select(principal_min_repeated(sigma_n),principal_lower_sum(sigma_n)/2,principal_min(sigma_n)))"
+    },
+    {
+      "name": "D",
+      "expr": "a-least"
+    },
+    {
+      "name": "D_old",
+      "expr": "a_old-least_old"
+    },
+    {
+      "name": "cbar",
+      "expr": "(least+least_old)/2"
+    },
+    {
+      "name": "Dbar",
+      "expr": "(D+D_old)/2"
+    },
+    {
+      "name": "F",
+      "expr": "2*(c_cohesion*cos(phi)+least*sin(phi))/(1-sin(phi))"
+    },
+    {
+      "name": "F_old",
+      "expr": "2*(c_cohesion*cos(phi)+least_old*sin(phi))/(1-sin(phi))"
+    },
+    {
+      "name": "Fbar",
+      "expr": "2*(c_cohesion*cos(phi)+cbar*sin(phi))/(1-sin(phi))"
+    },
+    {
+      "name": "Sbar",
+      "expr": "Dbar/Fbar"
+    },
+    {
+      "name": "modulus",
+      "expr": "select(D<h_n,Kur*pa*(cbar/pa)**n,select(Sbar<1,K*pa*(cbar/pa)**n*(1-Rf*Sbar)**2,E_failure))"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma-sigma_n",
+    "h": "h-h_n"
+  },
+  "domain": [
+    "p_ref>0*p_ref"
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "h"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "initial_checks": [
+    "h<=p_ref"
+  ],
+  "solution_constraints": [
+    "h>E_failure"
+  ]
+}

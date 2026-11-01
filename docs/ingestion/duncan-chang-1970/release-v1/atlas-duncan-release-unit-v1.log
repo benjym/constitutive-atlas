@@ -1,0 +1,32 @@
+.......................E.....E...
+======================================================================
+ERROR: test_directory_coverage_has_resolvable_provenance (tests.test_catalogue.CatalogueTests.test_directory_coverage_has_resolvable_provenance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-duncan-release-v1/tests/test_catalogue.py", line 38, in test_directory_coverage_has_resolvable_provenance
+    self.assertTrue(entry['capability_gap'])
+                    ~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'capability_gap'
+
+======================================================================
+ERROR: test_migration_preserves_all_current_definitions (tests.test_formulation.FormulationTests.test_migration_preserves_all_current_definitions) (path=PosixPath('/private/tmp/atlas-duncan-release-v1/models/research/norsand/norsand-jefferies-1993-active-axial.json'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-duncan-release-v1/tests/test_formulation.py", line 95, in test_migration_preserves_all_current_definitions
+    self.assertEqual(executable('old'), executable('new'))
+                     ~~~~~~~~~~^^^^^^^
+  File "/private/tmp/atlas-duncan-release-v1/tests/test_formulation.py", line 88, in executable
+    return [line for line in without_stress_scope_metadata((base/label/'models.hpp').read_text()).splitlines()
+                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/var/folders/ff/b6vctr0n2jjfkdtcm0dt7xdr0000gp/T/tmp2h5d5kdg/old/models.hpp'
+
+----------------------------------------------------------------------
+Ran 33 tests in 1.424s
+
+FAILED (errors=2)

@@ -1,0 +1,35 @@
+{
+  "configure": [
+    "cmake",
+    "-S",
+    "/private/tmp/atlas-duncan-portable-controls-v1/source",
+    "-B",
+    "/private/tmp/atlas-duncan-portable-controls-v1/native",
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DCMAKE_CXX_FLAGS=-ffp-contract=off",
+    "-DCMAKE_C_FLAGS=-ffp-contract=off",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+  ],
+  "build": [
+    "cmake",
+    "--build",
+    "/private/tmp/atlas-duncan-portable-controls-v1/native",
+    "--target",
+    "atlas_solver",
+    "--parallel",
+    "1"
+  ],
+  "prerequisite": [
+    "node",
+    "docs/ingestion/duncan-chang-1970/integration-v1/portable-controls-v1/check_probes.mjs"
+  ],
+  "control_prerequisite": [
+    "node",
+    "docs/ingestion/duncan-chang-1970/integration-v1/portable-controls-v1/check_controls.mjs"
+  ],
+  "audit": [
+    "python3",
+    "-B",
+    "docs/ingestion/duncan-chang-1970/integration-v1/portable-controls-v1/audit_build_v2.py"
+  ]
+}

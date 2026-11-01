@@ -31,7 +31,7 @@ class CatalogueTests(unittest.TestCase):
         for entry in entries.values():
             self.assertEqual(entry['executable'], entry['id'] in definitions)
             if not entry['executable']:
-                if entry.get('timed_laboratory') or entry.get('material_laboratory') or entry.get('path_laboratory'):
+                if entry.get('timed_laboratory') or entry.get('material_laboratory') or entry.get('path_laboratory') or entry.get('implicit_path_laboratory'):
                     self.assert_timed_provenance(entry)
                 else:
                     self.assertEqual(entry['status'], 'candidate')
@@ -39,7 +39,7 @@ class CatalogueTests(unittest.TestCase):
 
     def assert_timed_provenance(self, entry, approvals=None):
         self.assertIn(entry['status'], ('numerically-tested', 'reviewed'))
-        page = Path(entry.get('material_laboratory') or entry.get('path_laboratory') or entry['timed_laboratory'])
+        page = Path(entry.get('material_laboratory') or entry.get('path_laboratory') or entry.get('implicit_path_laboratory') or entry['timed_laboratory'])
         self.assertFalse(page.is_absolute())
         self.assertNotIn('..', page.parts)
         self.assertTrue((ROOT / 'web' / page).is_file())
@@ -54,7 +54,7 @@ class CatalogueTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), definition['sha256'])
             model = json.loads(path.read_text())
             self.assertEqual(model['id'], entry['id'])
-            self.assertEqual(model['formulation']['time_dependence'], 'strain_path' if entry.get('material_laboratory') or entry.get('path_laboratory') else 'physical_time')
+            self.assertEqual(model['formulation']['time_dependence'], 'strain_path' if entry.get('material_laboratory') or entry.get('path_laboratory') or entry.get('implicit_path_laboratory') else 'physical_time')
             if entry.get('material_laboratory'):
                 self.assertEqual(entry['material_laboratory'], 'index.html')
                 self.assertEqual(json.loads((ROOT / entry['approval_record']).read_text()), record)
@@ -64,6 +64,12 @@ class CatalogueTests(unittest.TestCase):
                 validate_review(ROOT / record['review']['path'], for_approval=True)
                 self.assertEqual(record, approval_entry(ROOT / record['review']['path']))
                 self.assertEqual(model['formulation']['equation_form'], 'path_ode')
+            if entry.get('implicit_path_laboratory'):
+                from atlas.agent_review import approval_entry, validate_review
+                self.assertEqual(entry['implicit_path_laboratory'], 'index.html')
+                validate_review(ROOT / record['review']['path'], for_approval=True)
+                self.assertEqual(record, approval_entry(ROOT / record['review']['path']))
+                self.assertEqual(model['formulation']['equation_form'], 'incremental_residual')
             self.assertTrue(record['supporting_files'])
             for evidence in record['supporting_files']:
                 if (record.get('review', {}).get('kind') == 'agent-model-review' and
@@ -107,6 +113,14 @@ class CatalogueTests(unittest.TestCase):
 
     def test_controlled_path_route_requires_exact_approval(self):
         entry = next(e for e in json.loads((ROOT / 'catalogue/manifest.json').read_text())['models'] if e.get('path_laboratory'))
+        records = [r for r in json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models'] if r['model_id'] == entry['id']]
+        self.assert_timed_provenance(entry, records)
+        for corrupted in ([], [{**records[0], 'status': 'candidate'}], [{**records[0], 'scope': {'use': 'forged broader scope'}}]):
+            with self.assertRaises(AssertionError):
+                self.assert_timed_provenance(entry, corrupted)
+
+    def test_implicit_path_route_requires_exact_approval(self):
+        entry = next(e for e in json.loads((ROOT / 'catalogue/manifest.json').read_text())['models'] if e.get('implicit_path_laboratory'))
         records = [r for r in json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models'] if r['model_id'] == entry['id']]
         self.assert_timed_provenance(entry, records)
         for corrupted in ([], [{**records[0], 'status': 'candidate'}], [{**records[0], 'scope': {'use': 'forged broader scope'}}]):

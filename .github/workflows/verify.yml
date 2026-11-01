@@ -26,6 +26,15 @@ jobs:
       - run: python -m atlas.cli validate
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       - run: python tools/build_ci_targets.py build
+      - name: Qualify common scalar functions against independent references
+        shell: bash
+        run: |
+          cmake --build build --target atlas_scalar_probe --parallel 1
+          case "$RUNNER_OS" in
+            Linux) scalar_extension=so ;;
+            macOS) scalar_extension=dylib ;;
+          esac
+          python -B tools/test_scalar_functions.py "build/libatlas_scalar_probe.$scalar_extension" --output-dir "$RUNNER_TEMP/scalar-native"
       - name: Build and qualify the approved SLS physical-time model
         run: |
           cmake -S cmake/sls -B build-sls -DCMAKE_BUILD_TYPE=Debug
@@ -98,6 +107,9 @@ jobs:
           python tools/build_ci_targets.py build
           emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
           python tools/build_ci_targets.py build-wasm --wasm
+          cmake --build build-wasm --target atlas_scalar_probe --parallel 1
+          node tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"
+          python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
           node tools/test_experiments.mjs
           node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
           node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
@@ -199,6 +211,9 @@ jobs:
           emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-wasm --target atlas_solver --parallel 1
           cmake --build build-wasm --target atlas_power_creep_solver --parallel 1
+          cmake --build build-wasm --target atlas_scalar_probe --parallel 1
+          node tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"
+          python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
           node tools/test_experiments.mjs
           node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
           node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver

@@ -1,0 +1,55 @@
+### Result
+[
+  {
+    "path": "catalogue.json",
+    "status": 200,
+    "bytes": 63422,
+    "sha256": "c37e40404ddab730b163975fbaefcbc8bbdb2dcc62343d67554b0eeab304644e"
+  },
+  {
+    "path": "atlas-database.json",
+    "status": 200,
+    "bytes": 6641,
+    "sha256": "0cb4d2071947f72fe62cbc8bbf9b3d9060530adc944ca3cf8cfb86383299f82b"
+  },
+  {
+    "path": "app.js",
+    "status": 200,
+    "bytes": 56323,
+    "sha256": "9612893e73052b905959d47affd535404f355986d27b2088c204857b53b55a4b"
+  },
+  {
+    "path": "index.html",
+    "status": 200,
+    "bytes": 25874,
+    "sha256": "ac3fa79236a0b8d0c4e6d3b1da5add608a0bbb743f0c701d3728dcf7d75d4975"
+  },
+  {
+    "path": "atlas.js",
+    "status": 200,
+    "bytes": 27569,
+    "sha256": "dc27946695d74a29ed8167dd55a9363945bf9af7b30f146dbd33f1805431c973"
+  },
+  {
+    "path": "atlas.wasm",
+    "status": 200,
+    "bytes": 1367538,
+    "sha256": "fd18646eca26a3034b531f244fe1f0d9c02eda736dd9ba620dc620784fff7cf0"
+  },
+  {
+    "path": "models.json",
+    "status": 200,
+    "bytes": 119161,
+    "sha256": "77e85070a62ada86d47af3890817f57d6ce0194e646a396dbf7ff75c75f9834a"
+  },
+  {
+    "path": "models/duncan-chang-1970-endpoint-average.json",
+    "status": 200,
+    "bytes": 6966,
+    "sha256": "452b49ef48668c0c5d8aba20dfca398235fa45431e853ee923be05a17c7c88a0"
+  }
+]
+### Ran Playwright code
+```js
+await page.evaluate('async()=>{const paths=[\'catalogue.json\',\'atlas-database.json\',\'app.js\',\'index.html\',\'atlas.js\',\'atlas.wasm\',\'models.json\',\'models/duncan-chang-1970-endpoint-average.json\'];return Promise.all(paths.map(async path=>{const r=await fetch(\'./\'+path,{cache:\'no-store\'}),b=await r.arrayBuffer();return {path,status:r.status,bytes:b.byteLength,sha256:Array.from(new Uint8Array(await crypto.subtle.digest(\'SHA-256\',b))).map(x=>x.toString(16).padStart(2,\'0\')).join(\'\')}}))}');
+```

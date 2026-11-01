@@ -1,0 +1,149 @@
+{
+  "identity": "duncan-chang-repeated-extremum-capability-v1",
+  "scope": "Python expression/validator diagnostic only; not model qualification",
+  "passed": true,
+  "cases": [
+    {
+      "name": "hydrostatic",
+      "stress_mandel_Pa": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "operations": {
+        "max_value": {
+          "value_Pa": 100000.0
+        },
+        "min_value": {
+          "value_Pa": 100000.0
+        },
+        "max": {
+          "expected_rejection": "selected_eigenvalue_unresolved"
+        },
+        "min": {
+          "expected_rejection": "selected_eigenvalue_unresolved"
+        },
+        "upper_sum": {
+          "expected_rejection": "selected_eigenvalue_unresolved"
+        },
+        "lower_sum": {
+          "expected_rejection": "selected_eigenvalue_unresolved"
+        }
+      }
+    },
+    {
+      "name": "triaxial_compression",
+      "stress_mandel_Pa": [
+        150000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "operations": {
+        "max_value": {
+          "value_Pa": 150000.0
+        },
+        "min_value": {
+          "value_Pa": 100000.0
+        },
+        "max": {
+          "value_Pa": 150000.0
+        },
+        "min": {
+          "expected_rejection": "selected_eigenvalue_unresolved"
+        },
+        "upper_sum": {
+          "expected_rejection": "selected_eigenvalue_unresolved"
+        },
+        "lower_sum": {
+          "value_Pa": 200000.0
+        }
+      }
+    },
+    {
+      "name": "triaxial_extension",
+      "stress_mandel_Pa": [
+        150000.0,
+        150000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "operations": {
+        "max_value": {
+          "value_Pa": 150000.0
+        },
+        "min_value": {
+          "value_Pa": 100000.0
+        },
+        "max": {
+          "expected_rejection": "selected_eigenvalue_unresolved"
+        },
+        "min": {
+          "value_Pa": 100000.0
+        },
+        "upper_sum": {
+          "value_Pa": 300000.0
+        },
+        "lower_sum": {
+          "expected_rejection": "selected_eigenvalue_unresolved"
+        }
+      }
+    },
+    {
+      "name": "distinct_control",
+      "stress_mandel_Pa": [
+        150000.0,
+        125000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "operations": {
+        "max_value": {
+          "value_Pa": 150000.0
+        },
+        "min_value": {
+          "value_Pa": 100000.0
+        },
+        "max": {
+          "value_Pa": 150000.0
+        },
+        "min": {
+          "value_Pa": 100000.0
+        },
+        "upper_sum": {
+          "value_Pa": 275000.0
+        },
+        "lower_sum": {
+          "value_Pa": 225000.0
+        }
+      }
+    }
+  ],
+  "value_only_numeric_sink_rejection": "sigma: equation shape or dimensions mismatch",
+  "numeric_sink_type": {
+    "shape": "sym",
+    "unit": "Pa",
+    "value_only": true
+  },
+  "exact_hydrostatic_one_sided_slopes": {
+    "H_diag_1_0_0": "1",
+    "minus_H": "0"
+  },
+  "input_sha256": {
+    "atlas/symmetric_spectral.py": "e3a693630333117de7f2bd1b461f40fc50c6c3a33031960e1add97dde9b883dc",
+    "atlas/dsl.py": "d227157685c6c3da2ece98d9956a31e4dfd762ba3e9024a53ac52270055aff59",
+    "atlas/model.py": "b88f4b83d59712f256769119cf2d4f7ca0447da11980b5dc0857185afc0790bc",
+    "models/tresca-associated-perfect-bk2022v1-be.json": "19acebed37d59120e49c5dff698e2b7d2a2693bbce9ec35c8bcbc65954819e18",
+    "docs/ingestion/duncan-chang-1970/finite-contract-v1/check_capability.py": "2104159de0fb805836c541108843cc22b65a9e6488d0c8094b97b9ef3df08eff"
+  },
+  "conclusion": "Existing direct differentiable numerical extrema cannot cover source triaxial/hydrostatic states; generic nonsmooth design required, no impossibility theorem for alternative formulations."
+}

@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/docs/ingestion/duncan-chang-1970/finite-contract-v1/check_capability.py", line 49, in run
+    validate(probe)
+    ~~~~~~~~^^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/atlas/model.py", line 259, in validate
+    if infer(parse(eqs[f['name']]),symbols)!=expected: raise ValidationError(f"{f['name']}: equation shape or dimensions mismatch")
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+atlas.dsl.ValidationError: sigma: equation shape or dimensions mismatch
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/docs/ingestion/duncan-chang-1970/finite-contract-v1/check_capability.py", line 78, in <module>
+    print(json.dumps(run(), indent=2) + "\n", end="")
+                     ~~~^^
+  File "/Users/bmar5496/code/constitutive-atlas/docs/ingestion/duncan-chang-1970/finite-contract-v1/check_capability.py", line 52, in run
+    assert "value-only" in rejection, rejection
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: sigma: equation shape or dimensions mismatch

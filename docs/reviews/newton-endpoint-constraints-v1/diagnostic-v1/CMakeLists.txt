@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.20)
+project(AtlasNewtonDiagnostic LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_executable(atlas_newton_diagnostic EXCLUDE_FROM_ALL driver.cpp)
+target_include_directories(atlas_newton_diagnostic PRIVATE ../frozen ../frozen/cpp/include ../frozen/generated)
+target_compile_options(atlas_newton_diagnostic PRIVATE -fno-fast-math -ffp-contract=off)

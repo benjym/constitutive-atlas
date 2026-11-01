@@ -1,0 +1,7 @@
+# Passing isolated arithmetic candidate — production integration pending
+
+Same455source/model base with only declared private changes: generic power implementation, generic legacy cyclic-control sine and C/CXX contraction disabled. Actual13targetcommands/objects verify exactsource/generated14catalogue, nofusedinstructions and bothlinkedscalarfunctions. Exactcandidate executable retained privately. All36power fullresponses and65cycliccontrols exactlymatch savedWasm.
+
+Complete original browser-wire PASS156pairs/312backendruns/130replays plusrecovery; unchangedlegacy PASS64positive/5rejections/1retainedfailure plusrollback/rate/IGS; unchangedscoped PASS36cases/43201physicalscalars. No gate/request/tolerance/failure-policy change. Separateindependent FINAL_REVIEW.md binds20files, coordinatorverified. Priorstandard/noFMA/power-only failures remain unchanged. These observations do not establish that power substitution was necessary or universal parity.
+
+Production runtime/CMake remainunchanged. New generic common-scalar-functions-v1 task stages identical scalar formulas/commonbuildpolicy, independently bounded accuracy/Jet/specialcases, consumerclosure and exact affected material/native qualification before any shared installation or E6/E7 acceptance. Mathematicalqualifications/sharedarchives/newstandardpackage andactualbrowserchecks remain required. Buildslot released; no remote action/commit/publish.
