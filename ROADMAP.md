@@ -21,12 +21,13 @@ Literature discovery has broad geomechanics scope. The first executable release 
 ## Delivery focus — 1 November 2026
 
 The [current status summary](docs/STATUS.md) separates executable definitions,
-source review, numerical evidence and deployment. Ten top-level models execute
-locally, including the draft associated Tresca BK2022v1/project BE; nineteen
+source review, numerical evidence and deployment. Eleven top-level models execute
+locally, including the draft associated Tresca BK2022v1/project BE; twenty
 formal reviews remain pending, with exact current-definition coverage of all
-ten. The [local Tresca integration](docs/reviews/tresca-draft-integration-v1/README.md)
+eleven. The [local Tresca integration](docs/reviews/tresca-draft-integration-v1/README.md)
 retains its bounded numerical and browser checks separately from admission. The [four added draft records](docs/reviews/additional-executable-source-coverage-v1/README.md)
 expose existing source/preparation/numerical questions; this is not scientific signoff.
+The exact [GIS2024 draft installation](docs/reviews/gis2024-draft-installation-v1/README.md) adds a separately labelled small run example, pending source review and unassessed applicability. Its ordinary global-default run still fails; actual B01–B12 browser acceptance remains open. No new build, fit or deployment is implied.
 These counts do not close scientific admission, the six-model proof or the
 twenty-formulation release target. Historical delivery notes are not new assignments.
 
