@@ -1,0 +1,220 @@
+{
+  "record_type": "ingestion-crosswalk",
+  "target_schema_version": "0.3",
+  "status": "proposed contract only; no migrated model or new qualification",
+  "source_doi": "10.1680/geot.13.P.065",
+  "source_url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_Geot14-pp.pdf",
+  "source_sha256": "2eb8598297e3ac9cf245161f56674d6cef622b35fc612adc89dc129568b55202",
+  "source_version": "author manuscript dated 26 November 2013; publisher equivalence unresolved",
+  "retained_model": {
+    "path": "models/research/clay2014/hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane.json",
+    "sha256": "9077e7d5d7cdb42a7cc5c2ab49c29c1643543c54310caad26c17b5f256236de5",
+    "schema_version": "0.1"
+  },
+  "proposed_formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "strain_path_rate",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  },
+  "persistent_state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        10000.0,
+        10000.0,
+        10000.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": "p_scale"
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.8,
+      "scale": "1"
+    }
+  ],
+  "parameter_inventory": {
+    "p_ref": {
+      "default": 1000,
+      "min": 1000,
+      "max": 1000,
+      "unit": "Pa",
+      "label": "Fixed source reference pressure; not a calibration parameter"
+    },
+    "p_scale": {
+      "default": 100000,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "Numerical stress error scale"
+    },
+    "phi_c": {
+      "default": 0.5235987755982988,
+      "min": 0.01,
+      "max": 1.4,
+      "unit": "1",
+      "label": "Critical friction angle, radians; illustrative"
+    },
+    "lambda_star": {
+      "default": 0.12,
+      "min": 0.0001,
+      "max": 1.0,
+      "unit": "1",
+      "label": "Logarithmic compression slope; illustrative"
+    },
+    "kappa_star": {
+      "default": 0.025,
+      "min": 1e-05,
+      "max": 1.0,
+      "unit": "1",
+      "label": "Logarithmic swelling slope; illustrative"
+    },
+    "N": {
+      "default": 1.1,
+      "min": -10.0,
+      "max": 10.0,
+      "unit": "1",
+      "label": "Logarithmic density intercept at 1000Pa; illustrative"
+    },
+    "nu_pp": {
+      "default": 0.1,
+      "min": -0.9,
+      "max": 0.49,
+      "unit": "1",
+      "label": "Illustrative inplane Poissonratio; notcalibration"
+    },
+    "alpha_G": {
+      "default": 2,
+      "min": 0.01,
+      "max": 100,
+      "unit": "1",
+      "label": "Explicit independent anisotropy ratio; illustrative"
+    },
+    "alpha_E": {
+      "default": 2.378414230005442,
+      "min": 0.01,
+      "max": 100,
+      "unit": "1",
+      "label": "Explicit independent anisotropy ratio; illustrative"
+    },
+    "alpha_nu": {
+      "default": 2,
+      "min": 0.01,
+      "max": 100,
+      "unit": "1",
+      "label": "Explicit independent anisotropy ratio; illustrative"
+    },
+    "n1": {
+      "default": 0,
+      "min": -1,
+      "max": 1,
+      "unit": "1",
+      "label": "Fixed actual unitaxis component; no normalization"
+    },
+    "n2": {
+      "default": 0,
+      "min": -1,
+      "max": 1,
+      "unit": "1",
+      "label": "Fixed actual unitaxis component; no normalization"
+    },
+    "n3": {
+      "default": 1,
+      "min": -1,
+      "max": 1,
+      "unit": "1",
+      "label": "Fixed actual unitaxis component; no normalization"
+    },
+    "source_a": {
+      "default": 0.3,
+      "min": 0.3,
+      "max": 0.3,
+      "unit": "1",
+      "label": "Fixed declared source/numerical policy"
+    },
+    "lode_roundoff_allowance": {
+      "default": 1.4210854715202004e-14,
+      "min": 1.4210854715202004e-14,
+      "max": 1.4210854715202004e-14,
+      "unit": "1",
+      "label": "Fixed declared source/numerical policy"
+    },
+    "orientation_allowance": {
+      "default": 1.4210854715202004e-14,
+      "min": 1.4210854715202004e-14,
+      "max": 1.4210854715202004e-14,
+      "unit": "1",
+      "label": "Fixed declared source/numerical policy"
+    },
+    "stress_interior_margin": {
+      "default": 1.4210854715202004e-14,
+      "min": 1.4210854715202004e-14,
+      "max": 1.4210854715202004e-14,
+      "unit": "1",
+      "label": "Fixed declared source/numerical policy"
+    }
+  },
+  "selection": {
+    "linear_tensor": "manuscript pp2-3 Eqs2-8",
+    "Am": "printed Eq14, not trace(L:I)",
+    "density_exponent": "proposed Eq49 in BOTH Eq36 and Eq38",
+    "source_a": 0.3,
+    "orientation": "fixed supplied n; P=n outer n; no hidden normalization or axis evolution",
+    "memory": "no AppendixB IGS; seven state scalars only",
+    "sign_conversion": "T=-sigma; D=-E; negate source stress RHS at zero spin",
+    "void_rate": "-(1+e)*trace(E), inherited incompressible-grain closure"
+  },
+  "temporal_contract": {
+    "coordinate": "dimensionless fraction of caller straight strain path; not seconds",
+    "input_mapping": "E=de over unit path fraction; re-audit legacy input symbol binding during separate migration",
+    "coupling": "evaluate sigma and e from same stage; fixed parameters and orientation",
+    "zero_loading": "zero stress and void rates in supported domain; no creep",
+    "hold": "no physical-time aging law established",
+    "history_events": "no source-backed increment reset or discrete reversal write",
+    "commit": "commit all seven channels together only on successful caller increment",
+    "rollback": "failed caller returns original parent; accepted trial substeps stay local",
+    "branches": "zero loading, exact hydrostatic direction, Lode/domain checks must retain declared policies",
+    "tangent": "rate homogeneity does not supply a unique zero-loading derivative or a qualified integrated tangent"
+  },
+  "qualification_transfer": false,
+  "open_gates": [
+    "final publisher/manuscript reconciliation",
+    "printed Am versus trace contraction decision",
+    "AppendixB factor4.5 discrepancy if IGS is requested",
+    "physical stress/density/axis preparation",
+    "finite-spin and axis transport outside selected scope",
+    "independent scientific admission",
+    "separately frozen v0.3 artifact/source/control qualification before executable installation"
+  ]
+}
