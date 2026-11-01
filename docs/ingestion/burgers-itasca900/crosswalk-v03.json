@@ -1,0 +1,117 @@
+{
+  "schema_version": "0.3",
+  "target": "continuous-draft-v03.json",
+  "source_algorithm": "centered physical-time discrete update; not implemented by this ODE",
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "ode",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "strain_rate": {
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite"
+        }
+      },
+      "advance": {
+        "start_time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "start",
+          "constraint": "finite"
+        },
+        "duration": {
+          "quantity": "duration",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "interval",
+          "constraint": "positive_finite"
+        }
+      }
+    },
+    "stress": {
+      "source": "observable",
+      "name": "stress",
+      "measure": "cauchy",
+      "scope": "total"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "ek"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "choices": [
+    {
+      "field": "time_dependence/equation_form",
+      "basis": "Burgers Eqs1-7 and Burgers-Mohr Eqs5-7/10 with plastic rates zero; eliminate Maxwell strain for continuous ODE"
+    },
+    {
+      "field": "kinematics/frame/objective_rate",
+      "basis": "Atlas restricted infinitesimal zero-spin specialization; inspected model pages do not settle full host finite-rotation transport"
+    },
+    {
+      "field": "tensor_representation/signs",
+      "basis": "Source Cartesian tensor shears converted by sqrt(2), flip both stress and strain signs from compression-negative Burgers-Mohr convention; linear law unchanged"
+    },
+    {
+      "field": "stress.scope",
+      "basis": "Atlas explicitly dry total-stress specialization; no pore fluid and total=effective. General coupled stress scope is unresolved, not inferred from vendor variable name."
+    },
+    {
+      "field": "state",
+      "basis": "sigma six Mandel Pa + ek six Mandel dimensionless; ek is trace-free. Maxwell dashpot strain not needed to predict subsequent stress from these histories. Absolute accumulated strain would require additional bookkeeping."
+    },
+    {
+      "field": "bounds/domain",
+      "basis": "Positive finite five material constants for this packet; examples/broad finite numerical bounds and absolute ek trace tolerance1e-12 are Atlas choices, not calibrated source ranges. dev(ek) in RHS preserves the supplied trace; tolerated trace is not made physical."
+    },
+    {
+      "field": "initialization",
+      "basis": "Explicit stress and full Kelvin history. Optional compatible ek=dev(sigma)/(2Gk) follows source initialization function; not automatically imposed or a no-creep equilibrium."
+    }
+  ],
+  "capability_gaps": [
+    {
+      "id": "BUR-CAP-01",
+      "requirement": "Exact vendor centered finite-step update needs physical-time residual/discrete-update profile with duration, old/new stress and Kelvin history. Existing v0.3 ODE integration approximates continuous law; cannot claim identical finite steps."
+    },
+    {
+      "id": "BUR-CAP-02",
+      "requirement": "Finite-rotation/objective host transport and Kelvin-history transport not established by inspected pages; no objective-rate convention guessed."
+    },
+    {
+      "id": "BUR-CAP-03",
+      "requirement": "Coupled pore-pressure input/stress binding not established; dry scope only."
+    }
+  ]
+}

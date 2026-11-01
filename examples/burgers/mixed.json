@@ -1,0 +1,86 @@
+{
+  "schema_version": "0.2",
+  "units": "SI",
+  "model": "burgers-itasca900-dry-zero-spin-ode",
+  "parameters": [
+    11000000,
+    6000000,
+    2000000,
+    3000000,
+    4000000
+  ],
+  "initial": [
+    140000,
+    80000,
+    80000,
+    12000,
+    -8000,
+    4000,
+    0.002,
+    -0.001,
+    -0.001,
+    0.0003,
+    -0.0002,
+    0.0001
+  ],
+  "initial_strain": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "initial_strain_rate": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "start_time": 4,
+  "segments": [
+    {
+      "id": "mixed",
+      "duration": 2,
+      "samples": 8,
+      "controls": [
+        {
+          "quantity": "strain",
+          "kind": "hold"
+        },
+        {
+          "quantity": "strain",
+          "kind": "hold"
+        },
+        {
+          "quantity": "strain",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        }
+      ]
+    }
+  ],
+  "solver": {
+    "method": "backward-euler-step-doubling",
+    "relative_tolerance": 2e-07,
+    "absolute_scale_fraction": 2e-10,
+    "minimum_step": 1e-12,
+    "maximum_step": 0.125,
+    "maximum_substeps": 200000,
+    "nonlinear_tolerance": 1e-11,
+    "maximum_iterations": 40
+  }
+}

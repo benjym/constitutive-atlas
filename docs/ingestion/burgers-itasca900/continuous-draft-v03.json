@@ -1,0 +1,214 @@
+{
+  "schema_version": "0.3",
+  "id": "burgers-itasca900-dry-zero-spin-ode",
+  "name": "Burgers continuum, Itasca9.0.184 equations; dry zero-spin ODE draft",
+  "family": "linear viscoelasticity",
+  "status": "draft",
+  "description": "Packet-only continuous-law specialization of Itasca9.0.184 continuum Burgers viscoelasticity. Positive finite parameters; dry total stress, infinitesimal fixed spatial frame and zero spin are explicit Atlas scope choices. Not the vendor centered finite-step algorithm, contact Burgers or Burgers-Mohr plasticity. Examples and numerical bounds are uncalibrated. No full-path, compiled, experimental or scientific admission.",
+  "sources": [
+    {
+      "url": "https://docs.itascasoftware.com/itasca900/common/models/burgers/doc/modelburgers.html",
+      "role": "Primary manual equations and identity",
+      "locator": "Eqs1-13; Kelvin-strain initialization function; properties and notes; SHA256 ce6d4f9642132f05ca08e7dc3cb62fff34789c07a8558322cc55cdd3325354a2"
+    },
+    {
+      "url": "https://docs.itascasoftware.com/itasca900/common/models/viscous/doc/modelviscous.html",
+      "role": "Primary manual equations and identity",
+      "locator": "Eqs1-6; properties and notes; SHA256 5abf3802b947ef8dbf75a4ce494f688398343905ec7d51da4318ed6d3ab8b031"
+    },
+    {
+      "url": "https://docs.itascasoftware.com/itasca900/common/models/cvisc/doc/modelcvisc.html",
+      "role": "Primary manual equations and identity",
+      "locator": "Eqs1-10,15-27, compression-negative note following Eq12; default-property paragraphs (comparison only); SHA256 111e424d178c539bf292bc072b875b2d4f3ad52f2d01b9955ed6fcdb96a83ba5"
+    }
+  ],
+  "parameters": {
+    "Kmod": {
+      "default": 11000000,
+      "min": 1e-12,
+      "max": 1e+30,
+      "unit": "Pa",
+      "label": "Elastic bulk modulus; Atlas illustrative value/bounds, not source calibration"
+    },
+    "Gm": {
+      "default": 6000000,
+      "min": 1e-12,
+      "max": 1e+30,
+      "unit": "Pa",
+      "label": "Maxwell shear modulus; Atlas illustrative value/bounds, not source calibration"
+    },
+    "Gk": {
+      "default": 2000000,
+      "min": 1e-12,
+      "max": 1e+30,
+      "unit": "Pa",
+      "label": "Kelvin shear modulus; Atlas illustrative value/bounds, not source calibration"
+    },
+    "etam": {
+      "default": 3000000,
+      "min": 1e-12,
+      "max": 1e+30,
+      "unit": {
+        "si": [
+          1,
+          -1,
+          -1,
+          0
+        ]
+      },
+      "label": "Maxwell dynamic viscosity Pa s; Atlas illustrative value/bounds, not source calibration"
+    },
+    "etak": {
+      "default": 4000000,
+      "min": 1e-12,
+      "max": 1e+30,
+      "unit": {
+        "si": [
+          1,
+          -1,
+          -1,
+          0
+        ]
+      },
+      "label": "Kelvin dynamic viscosity Pa s; Atlas illustrative value/bounds, not source calibration"
+    }
+  },
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "ode",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "strain_rate": {
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite"
+        }
+      },
+      "advance": {
+        "start_time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "start",
+          "constraint": "finite"
+        },
+        "duration": {
+          "quantity": "duration",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "interval",
+          "constraint": "positive_finite"
+        }
+      }
+    },
+    "stress": {
+      "source": "observable",
+      "name": "stress",
+      "measure": "cauchy",
+      "scope": "total"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "Kmod",
+      "initial": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0
+      ],
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "ek",
+      "shape": "sym",
+      "unit": "1",
+      "scale": "1",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "semantics": {
+        "role": "persistent",
+        "quantity": "kelvin_deviatoric_strain",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "kelvin_rate",
+      "expr": "(dev(sigma) - 2 * Gk * dev(ek)) / (2 * etak)"
+    }
+  ],
+  "equations": {
+    "sigma": "Kmod * trace(strain_rate) * I + 2 * Gm * (dev(strain_rate) - kelvin_rate - dev(sigma) / (2 * etam))",
+    "ek": "kelvin_rate"
+  },
+  "domain": [
+    "Kmod > 0 * Kmod",
+    "Gm > 0 * Gm",
+    "Gk > 0 * Gk",
+    "etam > 0 * etam",
+    "etak > 0 * etak",
+    "abs(trace(ek)) <= 1e-12"
+  ],
+  "initial_checks": [
+    "abs(trace(ek)) <= 1e-12"
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "ek"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "observables": [
+    {
+      "name": "stress",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "Kmod",
+      "expr": "sigma"
+    }
+  ]
+}

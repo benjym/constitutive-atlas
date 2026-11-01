@@ -1,0 +1,36 @@
+{
+  "identity": "burgers-timed-qualification-v1",
+  "prospective": true,
+  "scope": "exact pinned continuous dry-zero-spin draft; existing midpoint and BE schedule algorithms, not vendor centered update",
+  "schedule_budgets": {
+    "stress_abs_Pa": 20,
+    "kelvin_strain_abs": 2e-06,
+    "accumulated_strain_abs": 2e-06
+  },
+  "ode_budgets": {
+    "stress_abs_Pa": 0.01,
+    "kelvin_strain_abs": 1e-09
+  },
+  "parity": {
+    "stress_abs_Pa": 0.01,
+    "strain_abs": 1e-09
+  },
+  "refinement": "fine max absolute endpoint stress+Kelvin error must be smaller than coarse for relaxation; fine endpoint accumulated-strain error smaller than coarse for creep; both fine runs must meet independent budgets",
+  "restart": "split endpoints meet original source-reference budgets; compare uninterrupted/restarted endpoints within twice source budgets; not bit identity across different adaptive partitions",
+  "transactions": "ODE failures return exact initial state/time; budget-rollback must retain >=2 accepted internal steps before rollback; successful replay deterministic after excluding elapsed; schedule failures retain committed initial/transition point; no partial interval committed",
+  "catalogue_identity": "catalogue exactly one intended draft and matches expected canonical descriptor; all prior root model bytes preserved",
+  "native_before_wasm": true,
+  "build": "isolated source closure; one explicit atlas_burgers_solver target, --parallel 1; no other compile targets",
+  "not_claimed": [
+    "physical experiment validation",
+    "scientific signoff",
+    "full host finite rotations or coupled pore pressure",
+    "exact vendor discrete algorithm",
+    "browser laboratory timed controls"
+  ],
+  "coarse_diagnostic_budgets": {
+    "stress_abs_Pa": 2000,
+    "kelvin_strain_abs": 0.0002,
+    "accumulated_strain_abs": 0.0002
+  }
+}

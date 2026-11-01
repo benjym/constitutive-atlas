@@ -1,0 +1,72 @@
+{
+  "identity": "burgers-timed-integration-v1",
+  "date": "2026-11-01",
+  "source_archive_sha256": "34afac4ba2e593680cfd64bd712a92b487ab95cd9c06b10dbaaa5d15a2af3df4",
+  "freeze_sha256": "fee4267d5043b131c221061c69d4947202bf5d54cfca6703143c987f9496e64b",
+  "catalogue_sha256": "43b5e940e56860d9cd3875c165374fe239b29578caff36f9e98d7ce29abeb841",
+  "commands": [
+    [
+      "cmake",
+      "-S",
+      "/private/tmp/atlas-burgers-integration-v1/source",
+      "-B",
+      "/private/tmp/atlas-burgers-integration-v1/native",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    [
+      "cmake",
+      "--build",
+      "/private/tmp/atlas-burgers-integration-v1/native",
+      "--target",
+      "atlas_burgers_solver",
+      "--parallel",
+      "1"
+    ],
+    [
+      "emcmake",
+      "cmake",
+      "-S",
+      "/private/tmp/atlas-burgers-integration-v1/source",
+      "-B",
+      "/private/tmp/atlas-burgers-integration-v1/wasm",
+      "-DCMAKE_BUILD_TYPE=Debug"
+    ],
+    [
+      "cmake",
+      "--build",
+      "/private/tmp/atlas-burgers-integration-v1/wasm",
+      "--target",
+      "atlas_burgers_solver",
+      "--parallel",
+      "1"
+    ]
+  ],
+  "wasm_retry_environment": {
+    "EM_CACHE": "/private/tmp/atlas-burgers-integration-v1/emcache"
+  },
+  "wasm_first_link": "failed: unwritable installation cache; original log retained",
+  "artifacts": {
+    "native/atlas_burgers_solver": "d2b169f4f9a05f4a98634bf86edf279ddfe71768ea35e20a6711e09582d79c9f",
+    "native/burgers-generated/models.hpp": "c063a40d8b85c44fda2f591d21eb9b327f002b60783b5f1d644307caa616eaa1",
+    "native/burgers-generated/models.json": "cc619435a6df62cee61b7abb2a521b92b4a645d9efe11189c53056b07bc986fa",
+    "wasm/burgers.mjs": "08354700163c794b99e9334829c6fe5e311eb350f1cdf8f1a7028efed8190975",
+    "wasm/burgers.wasm": "9ca665b6cf6c87e346c35d5a7714bafaa66463d88c3934495ae7691fdcf660d7",
+    "wasm/burgers-generated/models.hpp": "c063a40d8b85c44fda2f591d21eb9b327f002b60783b5f1d644307caa616eaa1",
+    "wasm/burgers-generated/models.json": "cc619435a6df62cee61b7abb2a521b92b4a645d9efe11189c53056b07bc986fa"
+  },
+  "toolchain": {
+    "cmake": "cmake version 4.4.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).",
+    "native_compiler": "Apple clang version 21.0.0 (clang-2100.4.1.1)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "emscripten": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 6.0.8-git\nCopyright (C) 2026 the Emscripten authors (see AUTHORS.txt)\nThis is free and open source software under the MIT license.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "node": "v26.7.0",
+    "python": "Python 3.14.7"
+  },
+  "native_calls": 44,
+  "wasm_calls": 44,
+  "cli_calls": 2,
+  "prior_model_bytes_preserved": true,
+  "installed_model": "models/research/burgers/burgers-itasca900-dry-zero-spin-ode.json",
+  "installed_model_sha256": "1452a27d5d3b50989ca66df5beb7f08e22434596800133983339466d3571933c",
+  "scientific_status": "draft; pending independent scientific review; no experimental validation",
+  "public_strain_path_catalogue_changed": false
+}

@@ -1,0 +1,110 @@
+{
+  "id": "burgers-user-approval-v1",
+  "model_id": "burgers-itasca900-dry-zero-spin-ode",
+  "status": "approved",
+  "approved_on": "2026-11-01",
+  "approval_authority": {
+    "kind": "explicit-user-instruction",
+    "identity": "requesting user in this conversation",
+    "instruction": "Ok my approval granted, let's add it",
+    "basis": "Explicit user approval following separate-agent scientific review and native/Wasm qualification; no human scientific credentials inferred"
+  },
+  "definition": {
+    "path": "models/research/burgers/burgers-itasca900-dry-zero-spin-ode.json",
+    "sha256": "1452a27d5d3b50989ca66df5beb7f08e22434596800133983339466d3571933c",
+    "schema_version": "0.3",
+    "embedded_status": "draft",
+    "immutable_identity_policy": "Approval binds exact tested bytes. Historical draft and pre-integration descriptive metadata remain unchanged; this registry records current bounded project approval."
+  },
+  "scope": {
+    "law": "continuous Burgers deviatoric viscoelasticity with elastic volumetric response",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "stress_scope": "total",
+    "material_assumption": "dry uncoupled material point",
+    "use": "bounded material-point use supported by exact frozen qualification cases and settings",
+    "interfaces": [
+      "native physical-time CLI",
+      "Wasm physical-time ABI",
+      "ordered timed strain/stress schedules"
+    ],
+    "build_target": "atlas_burgers_solver",
+    "examples": [
+      "examples/burgers/creep.json",
+      "examples/burgers/relaxation.json",
+      "examples/burgers/mixed.json",
+      "examples/burgers/strain-reversal-hold.json"
+    ],
+    "qualification_requests": "docs/ingestion/burgers-itasca900/integration-v1/requests.json",
+    "qualification_policy": "docs/ingestion/burgers-itasca900/integration-v1/acceptance.json"
+  },
+  "review": {
+    "kind": "separate-agent automated scientific review",
+    "path": "docs/reviews/burgers-scientific-v1/README.md",
+    "verdict": "approve within stated scope",
+    "human_scientific_signature": false,
+    "bounded_source_and_saved_numerical_claims_supported": true
+  },
+  "retained_findings": [
+    {
+      "severity": "low",
+      "finding": "Original relaxation refinement assessor does not separately gate Kelvin-strain improvement; saved evidence improves in both channels",
+      "disposition": "Retained nonblocking; separately identified assessor correction remains follow-up"
+    },
+    {
+      "severity": "low",
+      "finding": "Hash-pinned definition contains stale pre-integration description",
+      "disposition": "Current approval and executable status documented in separate dossier; original exact tested bytes preserved"
+    }
+  ],
+  "limitations": [
+    "Only frozen cases/settings qualified; broad parameter ranges, arbitrary tolerances, long-time stiffness extremes and all control classes are not qualified.",
+    "Returned instantaneous rate accuracy is not independently qualified; backend rate parity does not supply it.",
+    "No unconditional discrete energy or full-host/FE/MPM guarantee.",
+    "No experimental calibration/prediction, finite rotations, pore-pressure coupling, plasticity or contact Burgers behavior.",
+    "No vendor centered-step parity or original-publication/book reconciliation.",
+    "Browser timed-control UI and release/deployment qualification remain separate."
+  ],
+  "experimental_validation": "not_assessed",
+  "deployment_authorized": false,
+  "dossier": "docs/models/burgers-itasca900-dry-zero-spin-ode.md",
+  "supporting_files": [
+    {
+      "path": "docs/reviews/burgers-scientific-v1/manifest.json",
+      "sha256": "40f3648a9aa3159e2b6889e0039ec4559f4c062f0032e92e43d5bf74d0a7acc0"
+    },
+    {
+      "path": "docs/reviews/burgers-scientific-v1/README.md",
+      "sha256": "6ad41af05a8e20d6aaf181a1e97d1702f04ad2e32a50a031ec55d1fc5d8713e2"
+    },
+    {
+      "path": "docs/reviews/burgers-scientific-v1/independent-results.json",
+      "sha256": "50521b6ebbbdf0611562cdbc32ff9841d340285a76b2dd541d192980b8f30488"
+    },
+    {
+      "path": "docs/ingestion/burgers-itasca900/manifest.json",
+      "sha256": "29ddea316ad0e5173e29ae1a35d4bf066d2f5b4130c6ebd451283335284ed280"
+    },
+    {
+      "path": "docs/ingestion/burgers-itasca900/integration-v1/manifest.json",
+      "sha256": "84ddc0e66e878b1aed6518639baa0b18cf406358b4776d23f55d8c3535df2af9"
+    },
+    {
+      "path": "docs/ingestion/burgers-itasca900/integration-v1/assessment.json",
+      "sha256": "6e006dba0b29d4158c3e4b6e6809e4c7b3c9f1de117da08dc96ac12fa66144ea"
+    },
+    {
+      "path": "docs/ingestion/burgers-itasca900/integration-v1/requests.json",
+      "sha256": "b23ce7e65b08d1887d31ba6927c71459df929bddfcd9900726d70aa7d1444524"
+    },
+    {
+      "path": "docs/ingestion/burgers-itasca900/integration-v1/acceptance.json",
+      "sha256": "d1c83e777fc9a675832b8ce822df7966d5e763d42c5bcbbaea38890215a85a54"
+    },
+    {
+      "path": "docs/admission/burgers-approved-v1/source-retention.json",
+      "sha256": "61680605e116e1eea617d763b2b7ba4a6883cb88194805ec25d715f70869f2e7"
+    }
+  ]
+}
