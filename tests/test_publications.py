@@ -17,7 +17,20 @@ class PublicationTests(unittest.TestCase):
         for node in graph['publications']:
             for evidence in node['evidence']:
                 obj = json.loads((ROOT / evidence['path']).read_text())
+                if evidence['path'] == 'docs/ingestion/norsand-1993/supplied-original-v2/source-receipt.json':
+                    self.assertEqual(node['doi'], obj['doi'])
+                    # Preserve the graph's original Crossref spelling and the supplied original title separately.
+                    self.assertEqual(node['title'], 'Nor-Sand: a simle critical state model for sand')
+                    self.assertEqual(obj['title'], 'Nor-Sand: a simple critical state model for sand')
+                    self.assertEqual(node['authors'], [obj['author']])
+                    self.assertEqual(obj['pdf_pages'], 13)
+                    self.assertEqual(obj['pages'], '91–103')
+                    self.assertFalse(obj['redistribution_authorized'])
+                    self.assertEqual(obj['sha256'], 'fee99108e493f34eb987c759eddf73cfc86e77102c73e42d099c00f1209851b9')
+                    self.assertTrue(evidence['locator'])
+                    continue
                 for part in evidence['locator'].strip('/').split('/'):
+
                     obj = obj[int(part)] if isinstance(obj, list) else obj[part]
                 self.assertEqual(node['doi'], obj['DOI'].strip().lower())
                 self.assertEqual(node['title'], obj['title'][0])

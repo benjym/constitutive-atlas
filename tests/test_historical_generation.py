@@ -42,11 +42,11 @@ class HistoricalGenerationTests(unittest.TestCase):
         # This is a release identity guard, separate from the historical nine.
         paths = [verified(item) for item in data['current_models']]
         self.assertEqual(len(paths), 12)  # Retained historical twelve-model context.
-        live = json.loads((ROOT / 'tests/fixtures/current-thirteen-occ-v1.json').read_text())
-        self.assertEqual(live['id'], 'current-thirteen-occ-v1')
+        live = json.loads((ROOT / 'tests/fixtures/current-fourteen-duncan-v1.json').read_text())
+        self.assertEqual(live['id'], 'current-fourteen-duncan-v1')
         current_paths = {ROOT / item['path'] for item in live['models']}
         self.assertEqual(current_paths, set((ROOT / 'models').glob('*.json')))
-        self.assertEqual(len(current_paths), 13)
+        self.assertEqual(len(current_paths), 14)
         self.assertTrue(set(paths) < current_paths)
         for item in live['models']:
             self.assertEqual(hashlib.sha256((ROOT / item['path']).read_bytes()).hexdigest(), item['sha256'])
@@ -64,7 +64,7 @@ class HistoricalGenerationTests(unittest.TestCase):
             self.assertEqual({m['id']: m for m in metadata['models']}, {m['id']: m for m in models})
             header = (Path(directory) / 'models.hpp').read_text()
             self.assertEqual(header.count(',StressScope::total'), 1)
-            self.assertEqual(header.count(',StressScope::effective'), 12)
+            self.assertEqual(header.count(',StressScope::effective'), 13)
 
     def test_original_methods_and_unmodified_gates_are_retained(self):
         failures = json.loads((P / 'original-failures.json').read_text())
