@@ -755,3 +755,8 @@ The exact approved J2 linear isotropic hardening law now has a qualified main-la
 ### J2 main-laboratory closeout — 2026-11-02
 
 The approved bounded J2 formulation is delivered in the main laboratory. Release 8e060a42 passes all required native/Wasm/package/Pages gates;20 assets match the tested upload and the actual live preset passes 32full-state checks. Independent review and all original failures are retained in [the delivery ledger](docs/ingestion/j2-linear-hardening/DELIVERY.md). No broader or experimental validation is claimed.
+
+
+### Orthotropic OGS main-laboratory qualification — 2026-11-02
+
+The complete nine-constant fixed-aligned-axis OGS law is independently source/numerically approved and works in the general atlas laboratory. Exact-source compliance references, all-six state histories and tangents, native/Wasm parity, immutable approval, standard packaging and actual browser replay/recovery/layout are qualified. It is counted separately from the twelve ordinary definitions at this release baseline. [Delivery ledger](docs/ingestion/orthotropic-ogs/DELIVERY.md) tracks remaining E8 CI/Pages/live verification; no standalone page or experimental qualification is claimed.

@@ -1,0 +1,7 @@
+### Result
+{"checks":[{"path":"recorded.mjs","status":200},{"path":"recorded-scope-execution.mjs","status":200},{"path":"recorded-document.mjs","status":200},{"path":"laboratory-scope.mjs","status":200},{"path":"numerics.mjs","status":200},{"path":"laboratory-document.mjs","status":200},{"path":"engine-sls/sls.mjs","status":200}]}
+### Ran Playwright code
+```js
+await (async(page)=>{const paths=['recorded.mjs','recorded-scope-execution.mjs','recorded-document.mjs','laboratory-scope.mjs','numerics.mjs','laboratory-document.mjs','engine-sls/sls.mjs'],checks=[];for(const path of paths){const r=await page.request.get(new URL(path,page.url()).href);checks.push({path,status:r.status()});}if(checks.some(x=>x.status!==200))throw Error('Superseded request asset unavailable');return {checks};}
+)(page);
+```
