@@ -1,13 +1,17 @@
 /** Read-only catalogue view of the packaged definition; no inferred mechanics. */
 import {stateRole} from './state-contract.mjs';
 const declared=value=>value===undefined?'Not declared':typeof value==='string'?value.replaceAll('_',' '):JSON.stringify(value);
-export function formulationSection(document,spec){
+export function recordedDescription(text,id,index){
+  const approved=(index?.agent_reviews||[]).some(r=>r.catalogue_id===id&&r.status==='accepted'&&r.definition_current===true&&typeof r.registered_approval_id==='string'&&r.registered_approval_id.length>0);
+  return approved&&text?'Recorded description. Review status in this text reflects when it was written; see the accepted review for its current scope. '+text:text;
+}
+export function formulationSection(document,spec,{evidenceIndex=null}={}){
   const el=(tag,text)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node;};
   const section=el('section');section.className='catalogue-formulation';
   section.append(el('h3','Definition, conventions & preparation'));
   if(!spec){section.append(el('p','No browser definition is packaged for this candidate. Consult its source and research evidence for formulation and preparation requirements.'));return section;}
   section.append(el('p','Definition status: '+declared(spec.status)+'. Browser availability does not establish scientific review or experimental validation. Consult retained evidence for review scope and decisions.'));
-  if(spec.description)section.append(el('p',spec.description));
+  if(spec.description){const description=el('p',recordedDescription(spec.description,spec.id,evidenceIndex));description.className='definition-description';section.append(description);}
   const formulation=spec.formulation;
   if(!formulation){section.append(el('p','This legacy definition has no explicit formulation contract. Time, kinematics, stress scope and tensor/sign conventions are not inferred here.'));}
   else{

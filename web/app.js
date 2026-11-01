@@ -1,7 +1,7 @@
 import {timedLaboratoryRoute} from './timed-route.mjs';
 import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';
 import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
-import {formulationSection} from './formulation-view.mjs';
+import {formulationSection,recordedDescription} from './formulation-view.mjs';
 import {createLoading,normalizeLoading,verifyReturnedLoading} from './loading.mjs';
 import {laboratoryStress,validateScopedLaboratory,verifyScopedLaboratory} from './laboratory-scope.mjs';
 import {laboratoryPresentation,laboratoryPoreView} from './laboratory-view.mjs';
@@ -24,10 +24,25 @@ async function loadApplicability(){
 }
 let evidenceIndex=null,evidenceState='loading';
 async function loadEvidenceIndex(){
-  try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());evidenceState='loaded';}
+  try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());evidenceState='loaded';refreshRecordedDescriptions();}
   catch{evidenceState='failed';}
   const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);
   if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;body.querySelector('.catalogue-evidence')?.replaceWith(evidenceSection(document,entry.id,evidenceIndex,evidenceState));body.scrollTop=scroll;}
+}
+function refreshRecordedDescriptions(){
+  const selected=models.find(m=>m.id===$('model').value);
+  if(selected){
+    $('model-description').textContent=recordedDescription(selected.description,selected.id,evidenceIndex);
+    const equationDescription=$('equation-content')?.querySelector('p');
+    if(equationDescription)equationDescription.textContent=recordedDescription(selected.description,selected.id,evidenceIndex);
+  }
+  const id=catalogueRoute(location.hash).modelId,entry=catalogue.find(e=>e.id===id);
+  if(!entry||!$('catalogue-dialog').open)return;
+  const spec=models.find(m=>m.id===id),body=$('catalogue-detail-body');
+  const note=body.querySelector('.catalogue-detail-note');
+  if(note)note.textContent=recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',id,evidenceIndex);
+  const description=body.querySelector('.definition-description');
+  if(description&&spec)description.textContent=recordedDescription(spec.description,id,evidenceIndex);
 }
 function restoreCatalogueFocus(){
   if(!$('catalogue').hidden&&!$('catalogue').contains(document.activeElement)){
@@ -125,7 +140,7 @@ function populate({loadExample=true}={}){
   laboratoryExamples?.refresh();
   const m=model(),example=loadExample?laboratoryExample(m):null;updateScopeLabels();
   if(example){$('confinement').value=example.confinement;$('stress-ratio').value=example.stressRatio;}
-  $('model-description').textContent=m.description;$('model-family').textContent=m.family;$('model-status').textContent=m.status;
+  $('model-description').textContent=recordedDescription(m.description,m.id,evidenceIndex);$('model-family').textContent=m.family;$('model-status').textContent=m.status;
   $('parameter-fields').replaceChildren();
   for(const [name,p] of Object.entries(m.parameters)){
     const angle=p.unit==='rad'||/\[rad\]/.test(p.label||''),factor=angle?Math.PI/180:1;
@@ -140,7 +155,7 @@ function populate({loadExample=true}={}){
       const lab=element('label',s.name+' · 6 Mandel components');const input=document.createElement('input');input.type='text';input.id='state-'+s.name;input.name=m.id+':'+input.id;input.autocomplete='off';input.value=s.initial.join(',');input.required=true;lab.append(input);$('state-fields').append(lab);
     }else field($('state-fields'),'state-'+s.name,s.name+(s.unit==='Pa'?' (kPa)':''),s.initial,undefined,undefined,s.unit==='Pa'?1000:1);
   }
-  const content=$('equation-content');content.replaceChildren(element('p',m.description));
+  const content=$('equation-content');content.replaceChildren(element('p',recordedDescription(m.description,m.id,evidenceIndex)));
   content.append(element('p','Equation form: '+(m.formulation?.equation_form??m.integration)+'. State equations are residuals for implicit models, or increments per unit path fraction for strain-path rate models.'));
   for(const d of m.derived)content.append(element('pre',d.name+' = '+d.expr));
   for(const [name,expression]of Object.entries(m.equations))content.append(element('pre',name+' : '+expression));
@@ -321,8 +336,8 @@ function showCatalogueModel(entry,spec){
   $('catalogue-detail-title').textContent=entry.name;$('catalogue-detail-family').textContent=entry.family;
   $('catalogue-detail-status').textContent=spec?'Available to test · '+spec.status:timedRoute?'Available to test · approved physical-time scope':'Research candidate';
   $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute?' available':'');
-  body.append(element('p',entry.note||spec?.description||'Bibliographic and formulation review pending.','catalogue-detail-note'));
-  body.append(formulationSection(document,spec));
+  body.append(element('p',recordedDescription(entry.note||spec?.description||'Bibliographic and formulation review pending.',entry.id,evidenceIndex),'catalogue-detail-note'));
+  body.append(formulationSection(document,spec,{evidenceIndex}));
   if(!spec&&!timedRoute){const next=element('section');next.append(element('h3','Development notes'),element('p',entry.capability_gap||'Source extraction, declarative transcription and numerical verification pending.'));body.append(next);}
   const sources=spec?[...spec.sources]:entry.discovery_url?[{url:entry.discovery_url,role:'Discovery reference',locator:'Bibliographic review pending'}]:[];
   sources.push(...entry.research_sources||[],...entry.catalogue_sources||[]);

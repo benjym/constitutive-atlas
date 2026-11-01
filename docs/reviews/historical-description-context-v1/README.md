@@ -1,0 +1,9 @@
+# Current review context for retained descriptions
+
+The public model and catalogue retain literal historical prose that predates the accepted exact-definition agent review. The generic view now prefixes that prose with context only when the validated evidence index contains accepted, current, registered approval for the selected model. It preserves model metadata, original text, source bytes and scientific scope. It does not infer experimental validation.
+
+All16 focused tests pass, covering historical/absent/unregistered decisions, literal text, nonmutation and asynchronous refresh. The actual browser opened the Barodesy modal before the local server released evidence.json, expanded preparation details, then observed both descriptions update while that disclosure remained open. Normal loading also showed the context and accepted exact review. No console warnings/errors were observed. See results.json, the three raw accessibility snapshots and context.png.
+
+The842asset candidate is a presentation overlay of the previously qualified NCL package, using the transformed committed app (not other owners' uncommitted app changes), current formulation view and the missing committed timed-route module. No native/Wasm build, numerical requalification, ordinary root example installation or deployment occurred. Engine/model/evidence identities remain byte-identical. This is bounded UI evidence, not full E7/E8 delivery. prepare.py, serve.py and transform_app.py retain the local reproduction recipe; paths identify the original local session.
+
+Historical source references resolve through exact-byte snapshots and additive archive-map entries; original study documents and gates are unchanged. The working app retains concurrent owners' features; only the equivalent scoped transform of committed app bytes is included in this commit.
