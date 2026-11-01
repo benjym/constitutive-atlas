@@ -56,6 +56,8 @@ def main():
     shutil.copyfile(generated/'models.json',dest/'models.json')
     subprocess.run(['node',str(ROOT/'tools/build_laboratory_examples.mjs'),str(ROOT),str(dest),str(generated/'models.json')],check=True)
     shutil.copyfile(ROOT/'catalogue/manifest.json',dest/'catalogue.json')
+    from build_database import bundle as bundle_database
+    bundle_database(dest)
     bundle_applicability(dest)
     bundle_evidence(dest)
     bundle_benchmark(dest)

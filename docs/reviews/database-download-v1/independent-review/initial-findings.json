@@ -1,0 +1,10 @@
+{
+  "review_id": "REVIEW-database-download-v1",
+  "candidate_sha256": "46e9d89a629336b4fd24958e522c7e5aebcfa7ba613e1c0ea63cacf0a15ce959",
+  "baseline_tests": {"count": 7, "passed_with_loopback_permission": true, "initial_sandbox_failure": "HTTP server bind denied with EPERM; six other tests passed"},
+  "findings": [
+    {"id": "F1", "severity": "blocking", "description": "Packaged catalogue changes after semantic comparison but before first hash capture are accepted.", "probe": "Wrap first _source_inputs call to pop one model in destination/catalogue.json, leaving repository inputs untouched.", "observed": {"accepted": true, "packaged_catalogue_models": 38, "canonical_catalogue_models": 39}},
+    {"id": "F2", "severity": "blocking", "description": "Manifest replacement failure leaves newly replaced database with prior manifest.", "probe": "Create old valid pair with SQLite trailing newline and updated checksum; inject OSError only on manifest Path.replace.", "observed": {"database_unchanged": false, "manifest_unchanged": true, "manifest_matches_database": false}}
+  ],
+  "scope": "Python database packaging interface only; no numerical/scientific review or deployment."
+}

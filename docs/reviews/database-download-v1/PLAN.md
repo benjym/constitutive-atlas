@@ -1,0 +1,7 @@
+# Download the source-linked atlas database
+
+The normal web builder currently packages models/evidence but no SQLite database. Add atlas.sqlite plus atlas-database.json and two catalogue download links. Reuse the ordinary canonical approval-validating exporter; no second database implementation or executable membership changes.
+
+Before publishing either artifact: require packaged models.json and catalogue.json match the current validated definitions/discovery records; export in scratch storage; check SQLite integrity/foreign keys, ordinary definition identity/membership, exact approval/review objects, source links and counts; verify all captured source/package input hashes remain unchanged. On a stale package, invalid approval or source drift, reject and retain any existing downloadable pair. Manifest identifies actual DB bytes and definition/source identity, not scientific admission or a clean source revision. No private arrays/PDFs/binaries are copied.
+
+Prospective tests: real export content/manifest hash and membership/source preservation; missing/duplicate/stale packaged models and altered catalogue reject; mid-export input drift preserves old downloads; repeat export remains valid; static public links and normal builder hook resolve. Preserve current shared-file bytes before additive changes; stage own deltas only. Separate independent interface review before local commit. Full current-site release/browser/CI/live ownership remains separate; no compiled calls/builds or deployment in this task.
