@@ -159,7 +159,7 @@ jobs:
           python -B -m unittest tests.test_ensemble_package
           node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
           node tools/test_experiments.mjs --built-assets web/dist/experiments
-          node --test tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+          node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
       - name: Configure GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
@@ -216,7 +216,7 @@ jobs:
           python -B -m unittest tests.test_ensemble_package
           node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
           node tools/test_experiments.mjs --built-assets web/dist/experiments
-          node --test tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+          node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'

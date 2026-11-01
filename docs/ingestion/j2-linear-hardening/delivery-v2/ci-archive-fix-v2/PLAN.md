@@ -1,0 +1,3 @@
+# Complete fixture receipt redirect repair
+
+The first CI fixture repair omitted non-manifest source-pins references. Original run41297711154/75d36e7a retains a failing historical Tresca source-hash gate; browser checks pass but this does not authorize a live claim. Complete committed-tree JSON inventory (excluding immutable snapshots) finds19references to the two repaired fixtures;8need redirects across6neighbors. Add only exact original fixture entries and unchanged original document pins. Preserve every prior map byte in canonical snapshots; no historical receipt/test/application/result is repinned or rewritten. Require19/19 exact receipts plus isolated saved Tresca and archive/fixture gates. All current workflow/Pages/live gates remain required on the new release.
