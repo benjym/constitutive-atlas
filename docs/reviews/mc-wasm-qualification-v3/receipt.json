@@ -1,0 +1,133 @@
+{
+  "role": "wasm",
+  "completed": true,
+  "freeze_sha256": "0f63e88873abe46b21eece17a23786c26c9b94ef1c7c122d346266f7796d9558",
+  "started_utc": "2026-11-01T05:53:01.443973+00:00",
+  "commands": [
+    {
+      "label": "generate",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "-m",
+        "atlas.compiler",
+        "/private/tmp/atlas-mc-execution-v3/wasm/generated",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-current-collector-freeze-v3/models"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-mc-execution-v3/wasm",
+        "-B",
+        "/private/tmp/atlas-mc-execution-v3/wasm/build",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "build",
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-mc-execution-v3/wasm/build",
+        "--target",
+        "atlas_solver",
+        "--parallel",
+        "1"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "observe",
+      "argv": [
+        "node",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-current-collector-freeze-v3/observe.mjs",
+        "wasm",
+        "/private/tmp/atlas-mc-execution-v3/wasm/build",
+        "/private/tmp/atlas-mc-execution-v3/wasm/observations"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "paths",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-current-collector-freeze-v3/assess_paths.py",
+        "/private/tmp/atlas-mc-execution-v3/wasm/observations/journal.json"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "replays",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-current-collector-freeze-v3/assess_replays.py",
+        "/private/tmp/atlas-mc-execution-v3/wasm/observations",
+        "wasm"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "parity",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-current-collector-freeze-v3/assess_parity.py",
+        "/private/tmp/atlas-mc-execution-v3/native/observations/journal.json",
+        "/private/tmp/atlas-mc-execution-v3/wasm/observations/journal.json"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "compatibility-collect",
+      "argv": [
+        "node",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-execution-driver-v3/compatibility.mjs",
+        "wasm",
+        "/private/tmp/atlas-mc-execution-v3/wasm/build",
+        "/Users/bmar5496/code/constitutive-atlas/catalogue/investigations/declared-loading-mixed-v1/requests.json",
+        "/private/tmp/atlas-mc-execution-v3/wasm/observations/compatibility.json"
+      ],
+      "status": 0,
+      "signal": null
+    },
+    {
+      "label": "compatibility-assess",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/bmar5496/code/constitutive-atlas/docs/reviews/mc-execution-driver-v3/assess_compatibility.py",
+        "/private/tmp/atlas-mc-execution-v3/wasm/observations/compatibility.json",
+        "wasm"
+      ],
+      "status": 0,
+      "signal": null
+    }
+  ],
+  "artifacts": {
+    "atlas.js": "6eaf46ce5ce2256701ef82ece036f6f9e9ac7b9a84655ea05b6f070f2021d03c",
+    "atlas.wasm": "2881afdf40be9e7bf7c424ecb9db2dbb0add09a13a04be6991f884eed4ddd2be"
+  },
+  "observations": {
+    "calls.json": "70974e27ae4968e99adc9c77e38c08469e42f69449942c4e53fdb1821d7baf7c",
+    "compatibility.json": "ec9decabad1480c314603d11c5951b8111409d84f741dad81f8c07eb317265b3",
+    "journal.json": "aaba65278114f5bf2d631572dbea4d8fb293839ddc1c3fdfe131214ff3bd3b8b",
+    "rejections.json": "1ab0e16a40785c0639d80ba30938158111f5eb0abd6959980abf7e43c1709cf2",
+    "replays.json": "3021ab6a32dda624a1257f2738a33c84b59ab113c252c768ad90a409917b3830"
+  },
+  "finished_utc": "2026-11-01T05:53:15.532054+00:00"
+}
