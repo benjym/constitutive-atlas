@@ -31,15 +31,27 @@ class CatalogueTests(unittest.TestCase):
         for entry in entries.values():
             self.assertEqual(entry['executable'], entry['id'] in definitions)
             if not entry['executable']:
-                if entry.get('timed_laboratory') or entry.get('material_laboratory') or entry.get('path_laboratory'):
+                if any(entry.get(k) for k in ('timed_laboratory', 'material_laboratory', 'path_laboratory', 'implicit_path_laboratory')):
                     self.assert_timed_provenance(entry)
                 else:
                     self.assertEqual(entry['status'], 'candidate')
-                    self.assertTrue(entry['capability_gap'])
+                    if entry['id'] in ('duncan-chang-1970', 'lade-duncan-1975'):
+                        realized = {'duncan-chang-1970': 'duncan-chang-1970-endpoint-average', 'lade-duncan-1975': 'lade-duncan-1975-midpoint-elastic-eq19-gap-v4'}[entry['id']]
+                        self.assertIn(realized, entries)
+                        approvals = json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models']
+                        records = [a for a in approvals if a['model_id'] == realized and a['status'] == 'approved']
+                        self.assertTrue(records)
+                        for record in records:
+                            path = ROOT / record['definition']['path']
+                            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), record['definition']['sha256'])
+                            self.assertEqual(json.loads(path.read_text())['id'], realized)
+                        self.assertIn(entry['discovery_url'].lower(), [s['url'].lower() for s in entries[realized].get('catalogue_sources', [])] + [entries[realized]['discovery_url'].lower()])
+                    else:
+                        self.assertTrue(entry['capability_gap'])
 
     def assert_timed_provenance(self, entry, approvals=None):
         self.assertIn(entry['status'], ('numerically-tested', 'reviewed'))
-        page = Path(entry.get('material_laboratory') or entry.get('path_laboratory') or entry['timed_laboratory'])
+        page = Path(entry.get('material_laboratory') or entry.get('path_laboratory') or entry.get('implicit_path_laboratory') or entry['timed_laboratory'])
         self.assertFalse(page.is_absolute())
         self.assertNotIn('..', page.parts)
         self.assertTrue((ROOT / 'web' / page).is_file())
@@ -54,16 +66,16 @@ class CatalogueTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), definition['sha256'])
             model = json.loads(path.read_text())
             self.assertEqual(model['id'], entry['id'])
-            self.assertEqual(model['formulation']['time_dependence'], 'strain_path' if entry.get('material_laboratory') or entry.get('path_laboratory') else 'physical_time')
+            self.assertEqual(model['formulation']['time_dependence'], 'strain_path' if entry.get('material_laboratory') or entry.get('path_laboratory') or entry.get('implicit_path_laboratory') else 'physical_time')
             if entry.get('material_laboratory'):
                 self.assertEqual(entry['material_laboratory'], 'index.html')
                 self.assertEqual(json.loads((ROOT / entry['approval_record']).read_text()), record)
-            if entry.get('path_laboratory'):
+            if entry.get('path_laboratory') or entry.get('implicit_path_laboratory'):
                 from atlas.agent_review import approval_entry, validate_review
-                self.assertEqual(entry['path_laboratory'], 'index.html')
+                self.assertEqual(entry.get('path_laboratory') or entry.get('implicit_path_laboratory'), 'index.html')
                 validate_review(ROOT / record['review']['path'], for_approval=True)
                 self.assertEqual(record, approval_entry(ROOT / record['review']['path']))
-                self.assertEqual(model['formulation']['equation_form'], 'path_ode')
+                self.assertEqual(model['formulation']['equation_form'], 'incremental_residual' if entry.get('implicit_path_laboratory') else 'path_ode')
             self.assertTrue(record['supporting_files'])
             for evidence in record['supporting_files']:
                 if (record.get('review', {}).get('kind') == 'agent-model-review' and
