@@ -2,16 +2,18 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {modelProfile} from '../web/model-profiles.mjs';
 import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
 const source=readFileSync(process.argv[2]||new URL('../web/app.js',import.meta.url),'utf8');
 function fn(name){let start=source.indexOf(`function ${name}(`);assert.ok(start>=0,name);if(source.slice(start-6,start)==='async ')start-=6;const lineEnd=source.indexOf('\n',start);if(source.slice(start,lineEnd).endsWith('}'))return source.slice(start,lineEnd);const next=source.indexOf('\n}',start);return source.slice(start,next+2);}
-class Node{constructor(){this.hidden=false;this.value='';this.children=[];}append(n){this.children.push(n);}replaceChildren(){this.children=[];}}
+class Node{constructor(){this.hidden=false;this.value='';this.children=[];}append(n){this.children.push(n);}replaceChildren(){this.children=[];}remove(){this.removed=true;}}
 const nodes=new Map(),node=id=>{if(!nodes.has(id))nodes.set(id,new Node());return nodes.get(id);};
-const context={document:{querySelector:node},$:node,element:()=>new Node(),trace:[]};
+const context={document:{querySelector:node},$:node,element:()=>new Node(),modelProfile,trace:[]};
 vm.createContext(context);
 vm.runInContext(`let experimentLoadSequence=0,sequence=1,compiledCatalogue={};const j2View={modelId:'j2',active:false,select(id){trace.push(['j2',id]);this.active=id===this.modelId;if(this.active)$('model').value=this.modelId;return this.active;}};const timedView={modelId:'burgers',active:false,supports(id){return id==='burgers'||id==='sls';},select(id){trace.push(['burgers',id]);this.active=this.supports(id);document.querySelector('#laboratory > .lab-layout').hidden=this.active;document.querySelector('#laboratory > .workspace-links').hidden=this.active;$('import-run').hidden=this.active;if(this.active){$('model').value=this.modelId;$('model-description').textContent='Burgers';}return this.active;}};
 ${fn('specialLaboratoryActive')}
+${fn('refreshPublicModelSummary')}
 ${fn('selectJ2')}
 ${fn('selectLaboratory')}
 globalThis.api={select:selectLaboratory,active:specialLaboratoryActive,views:()=>[j2View.active,timedView.active],revision:()=>experimentLoadSequence};`,context);
@@ -28,13 +30,13 @@ assert.equal(api.revision(),4);checks++;
 // The source keeps exact-ID lookup: a special ID cannot masquerade as VW96.
 assert.match(source,/function model\(\)\{return models\.find\(x=>x\.id===\$\('model'\)\.value\);\}/);checks++;
 for(const name of ['populate','simulate','renderCharts','describeExperiment','experimentOptions','scheduleUpdate','showExperiment','selectExperiment','matchExperiment','applyRunSpecification']){assert.ok(fn(name).includes('if(specialLaboratoryActive())return;'),name);checks++;}
-for(const marker of ["import {setupTimedLaboratory}","import {setupJ2Laboratory}","import {setupImplicitPathLaboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
+for(const marker of ["import {setupTimedLaboratory}","import {setupKelvinVoigtLaboratory}","import {setupJ2Laboratory}","import {setupImplicitPathLaboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
 // Extensible membership preserves every existing controller and its exact wiring.
 const registration=source.match(/timedView=createLaboratoryControllerRouter\(\[([^\n]+?)\]\)/)?.[1];
 assert.ok(registration,'Main controller router registration');checks++;
 const setups=[...registration.matchAll(/\b(setup[A-Za-z]+Laboratory)\(/g)].map(match=>match[1]);
 assert.equal(new Set(setups).size,setups.length,'Duplicate controller registration');checks++;
-for(const setup of ['setupTimedLaboratory','setupSlsLaboratory','setupPathLaboratory','setupMaxwellLaboratory','setupImplicitPathLaboratory']){
+for(const setup of ['setupTimedLaboratory','setupSlsLaboratory','setupKelvinVoigtLaboratory','setupPathLaboratory','setupMaxwellLaboratory','setupImplicitPathLaboratory']){
  assert.equal(setups.filter(name=>name===setup).length,1,setup);
  assert.ok(registration.includes(`${setup}({chart,cancelOrdinary:()=>cancel('')})`),setup+' exact existing hooks');checks+=2;
 }
@@ -57,9 +59,10 @@ api.select('linear-elastic');pending=context.importUnderTest(file());settle('{}'
 // app coordinator. Router deactivation deliberately restores ordinary visibility.
 const {createLaboratoryControllerRouter}=await import(process.argv[3]?pathToFileURL(resolve(process.argv[3])):new URL('../web/laboratory-controller-router.mjs',import.meta.url));
 const mixedNodes=new Map(),mixedNode=id=>{if(!mixedNodes.has(id))mixedNodes.set(id,new Node());return mixedNodes.get(id);};
-const mixed={document:{querySelector:mixedNode},$:mixedNode,element:()=>new Node(),trace:[],createLaboratoryControllerRouter};vm.createContext(mixed);
+const mixed={document:{querySelector:mixedNode},$:mixedNode,element:()=>new Node(),modelProfile,trace:[],createLaboratoryControllerRouter};vm.createContext(mixed);
 vm.runInContext(`let experimentLoadSequence=0;function profile(modelId){return {modelId,active:false,select(id){trace.push([modelId,id]);this.active=id===modelId;document.querySelector('#laboratory > .lab-layout').hidden=this.active;document.querySelector('#laboratory > .workspace-links').hidden=this.active;$('import-run').hidden=this.active;if(this.active){$('model').value=modelId;$('model-description').textContent=modelId;}return this.active;}};}const burgers=profile('burgers'),sls=profile('sls');const timedView=createLaboratoryControllerRouter([burgers,sls]);const j2View={modelId:'j2',active:false,select(id){trace.push(['j2',id]);this.active=id==='j2';if(this.active)$('model').value='j2';return this.active;}};
 ${fn('specialLaboratoryActive')}
+${fn('refreshPublicModelSummary')}
 ${fn('selectJ2')}
 ${fn('selectLaboratory')}
 globalThis.api={select:selectLaboratory,states:()=>[j2View.active,burgers.active,sls.active]};`,mixed);

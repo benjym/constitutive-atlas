@@ -1,0 +1,3 @@
+# Normal atlas package qualification v1
+
+Before any new package execution, freeze integrated current-origin hooks and the final v4 interface. Run the ordinary build_web.py entry point with qualified existing engines and the exact production Kelvin Release engine. Every mandatory existing package gate must pass; preserve failures and correct only demonstrated defects. Kelvin physical gates remain3e-8 strain and1Pa stress, all360 scalar comparisons/3publicmodes, fullhash/descriptor identity, exactreplay, invalid/recovery inonepersistentmodule. Independentbrowser-v2 covers actualmainroute andBlobmodule loading subsequently. No standalonepage. Priorordinary14definitions/enginebytes preserved; orthotropic independentlydelivered addition retained.

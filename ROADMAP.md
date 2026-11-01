@@ -768,3 +768,10 @@ The complete nine-constant fixed-aligned-axis OGS orthotropic law is delivered i
 ### Hill anisotropic perfect plasticity — 2026-11-02
 
 The exact Abaqus2025 fixed-axis, infinitesimal, dry-total-stress associative perfect-plastic Hill law with isotropic elasticity is independently agent-approved and integrated into the general atlas/main laboratory. This adds one bounded complete formulation:45discovery entries and14ordinary engine models, with dedicated common-generated material-point routing for Hill. Frozen31cases/41increments repeated twice/backend,74independent source checks, current-source native/Wasm requalification, full standard package and real desktop/mobile browser controls/replay/recovery pass. No hardening, evolving axes, FE-host or experimental validation is claimed. E0–E7 complete; CI/Pages/live E8 remains open in [the delivery ledger](docs/ingestion/hill-abaqus2025/DELIVERY.md).
+
+### Kelvin–Voigt COMSOL6.3
+
+- [X] Exact ordinary deviatoric law/elasticbulk source receipt and v0.3 formulation; independent references and native/Wasm43case qualification.
+- [X] Separate scientific/API approval bound to080fa946…; source and original failures retained.
+- [X] General atlas and main physical-time laboratory integration; complete standard package-v7, public profile with parameter/preparation guidance, source/approval/database identity, actual browser-v5 desktop/mobile and prior controls/protocols/replay/recovery checks, and reviewed y-axis correction. All current E0–E7 criteria independently accepted. No standalone model page.
+- [-] Authorized scoped publication, all required CI/Pages jobs, exact tested-upload/live assets and actual public main-laboratory run.

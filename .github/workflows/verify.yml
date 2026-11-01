@@ -35,6 +35,18 @@ jobs:
             macOS) scalar_extension=dylib ;;
           esac
           python -B tools/test_scalar_functions.py "build/libatlas_scalar_probe.$scalar_extension" --output-dir "$RUNNER_TEMP/scalar-native"
+      - name: Build and qualify the approved Kelvin–Voigt physical-time model
+        run: |
+          cmake -S cmake/kelvin-voigt -B build-kelvin-voigt -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-kelvin-voigt --target atlas_kelvin_voigt_solver --parallel 1
+          python tools/test_kelvin_voigt_native.py --solver build-kelvin-voigt/atlas_kelvin_voigt_solver --output "$RUNNER_TEMP/kelvin-voigt-native.json"
+          node --test tests/test_kelvin_voigt_contract.mjs tests/test_kelvin_voigt_routing.mjs tests/test_chart_axis.mjs
+      - name: Retain Kelvin–Voigt native qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kelvin-voigt-native-${{ matrix.os }}
+          path: ${{ runner.temp }}/kelvin-voigt-native.json
       - name: Build and qualify the approved SLS physical-time model
         run: |
           cmake -S cmake/sls -B build-sls -DCMAKE_BUILD_TYPE=Debug
@@ -190,6 +202,9 @@ jobs:
           node tools/test_clay2014_rates_wasm.mjs --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-wasm.json"
           python -m tools.clay2014_rate_assessment --wasm-report "$RUNNER_TEMP/clay2014-wasm.json" --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm-transport "$RUNNER_TEMP/clay2014-wasm.transport.json" --native-transport "$RUNNER_TEMP/clay2014-native.transport.json" --artifact build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-assessment.json"
           python tools/fetch_data.py --approved-only
+          emcmake cmake -S cmake/kelvin-voigt -B build-kelvin-voigt-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-kelvin-voigt-wasm --target atlas_kelvin_voigt_solver --parallel 1
+          python -B tools/test_kelvin_voigt_wasm.py --module build-kelvin-voigt-wasm/kv.mjs --output "$RUNNER_TEMP/kelvin-voigt-wasm"
           emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
           emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
@@ -220,6 +235,12 @@ jobs:
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+      - name: Retain Kelvin–Voigt Wasm qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kelvin-voigt-wasm-macos
+          path: ${{ runner.temp }}/kelvin-voigt-wasm/
       - name: Retain orthotropic Wasm qualification
         if: always()
         uses: actions/upload-artifact@v4
@@ -280,6 +301,9 @@ jobs:
           node tools/test_scoped_parity.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/scoped-parity.json" catalogue/laboratory-profile-policy.json
           node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
           python tools/fetch_data.py --approved-only
+          emcmake cmake -S cmake/kelvin-voigt -B build-kelvin-voigt-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-kelvin-voigt-wasm --target atlas_kelvin_voigt_solver --parallel 1
+          python -B tools/test_kelvin_voigt_wasm.py --module build-kelvin-voigt-wasm/kv.mjs --output "$RUNNER_TEMP/kelvin-voigt-wasm"
           emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
           cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
           emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
@@ -310,6 +334,12 @@ jobs:
           node tools/test_experiments.mjs --built-assets web/dist/experiments
           node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
           node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+      - name: Retain Kelvin–Voigt Linux Wasm qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kelvin-voigt-wasm-linux
+          path: ${{ runner.temp }}/kelvin-voigt-wasm/
       - name: Retain orthotropic Linux Wasm qualification
         if: always()
         uses: actions/upload-artifact@v4

@@ -17,7 +17,7 @@ vm.runInContext([
 "function profile(modelId){return {modelId,active:false,select(id){this.active=id===modelId;document.querySelector('#laboratory > .lab-layout').hidden=this.active;document.querySelector('#laboratory > .workspace-links').hidden=this.active;$('import-run').hidden=this.active;if(this.active)$('model').value=modelId;return this.active;}};}",
 "const timedView=createLaboratoryControllerRouter(['burgers','sls','maxwell','norsand'].map(profile)),j2View=profile('j2');",
 "function cancel(){++cancels;}function populate(){++populations;}function simulate(){++runs;}",
-"function toast(message){toasts.push(message);}function showCatalogueModel(){throw Error('Unexpected catalogue detail');}",
+"function refreshPublicModelSummary(){}function toast(message){toasts.push(message);}function showCatalogueModel(){throw Error('Unexpected catalogue detail');}",
 ...['specialLaboratoryActive','selectJ2','selectLaboratory','activateLaboratoryModel','route'].map(fn),
 "globalThis.api={route,activate:activateLaboratoryModel,metrics:()=>({runs,populations,cancels}),states:()=>[j2View.active,timedView.active]};"
 ].join('\n'),c);

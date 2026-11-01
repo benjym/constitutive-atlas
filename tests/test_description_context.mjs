@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {recordedDescription,formulationSection} from '../web/formulation-view.mjs';
+import {modelProfile} from '../web/model-profiles.mjs';
 
 const original='Not scientifically reviewed. <script>literal()</script>';
 const accepted={catalogue_id:'model',status:'accepted',definition_current:true,registered_approval_id:'approval'};
@@ -43,7 +44,7 @@ function fixture(open=true){
   const note={textContent:original},description={textContent:original},equation={textContent:original};
   const control={value:'1.3831693930553504'},body={scrollTop:137,querySelector:selector=>({'.catalogue-detail-note':note,'.definition-description':description}[selector])};
   const nodes={model:{value:'model'},'model-description':{textContent:original},'equation-content':{querySelector:()=>equation},'catalogue-dialog':{open},'catalogue-detail-body':body};
-  const context=vm.createContext({models:[{id:'model',description:original}],catalogue:[{id:'model',note:original}],location:{hash:'#catalogue/model'},catalogueRoute:()=>({modelId:'model'}),evidenceIndex:null,recordedDescription,$:id=>nodes[id]});
+  const context=vm.createContext({models:[{id:'model',description:original}],catalogue:[{id:'model',note:original}],location:{hash:'#catalogue/model'},catalogueRoute:()=>({modelId:'model'}),evidenceIndex:null,recordedDescription,modelProfile,$:id=>nodes[id]});
   vm.runInContext(refresh,context);
   return {context,nodes,note,description,equation,body,control};
 }
@@ -57,4 +58,11 @@ test('delayed evidence updates open descriptions without replacing controls or s
 test('late historical evidence leaves text unchanged and a closed dialog is untouched',()=>{
   const f=fixture();f.context.evidenceIndex=index({...accepted,definition_current:false});vm.runInContext('refreshRecordedDescriptions()',f.context);assert.equal(f.note.textContent,original);
   const closed=fixture(false);closed.context.evidenceIndex=index(accepted);vm.runInContext('refreshRecordedDescriptions()',closed.context);assert.equal(closed.note.textContent,original);assert.notEqual(closed.equation.textContent,original);
+});
+test('late evidence keeps the public MCC introduction while refreshing technical text',()=>{
+  const f=fixture();f.context.models=[{id:'modified-cam-clay',description:original}];f.nodes.model.value='modified-cam-clay';
+  f.context.evidenceIndex=index({...accepted,catalogue_id:'modified-cam-clay'});
+  vm.runInContext('refreshRecordedDescriptions()',f.context);
+  assert.equal(f.nodes['model-description'].textContent,modelProfile('modified-cam-clay').summary);
+  assert.match(f.equation.textContent,/see the accepted review/);
 });

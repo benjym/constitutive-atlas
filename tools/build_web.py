@@ -18,6 +18,8 @@ from build_power_creep_web import bundle as bundle_power_creep
 
 from build_orthotropic_laboratory import bundle as bundle_orthotropic
 
+from build_kelvin_voigt_laboratory import bundle as bundle_kelvin_voigt
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--orthotropic-wasm-dir',type=Path,default=ROOT/'build-orthotropic-wasm',help='Qualified orthotropic strain-increment engine for the main laboratory')
@@ -32,7 +34,9 @@ def main():
     parser.add_argument('--implicit-path-wasm-dir',type=Path,default=ROOT/'build-implicit-path-wasm',help='Exact independently qualified implicit strain-path engine')
     parser.add_argument('--hill-wasm-dir',type=Path,default=ROOT/'web/engines/hill',help='Exact reviewed Hill engine for main laboratory')
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
+    parser.add_argument('--kelvin-voigt-wasm-dir',type=Path,default=ROOT/'build-kelvin-voigt-wasm',help='Qualified ordinary Kelvin–Voigt physical-time engine')
     args=parser.parse_args()
+    subprocess.run(['node',str(ROOT/'tools/check_model_profiles.mjs'),str(ROOT)],check=True)
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
     generated=args.wasm_dir/'generated'
     # Do not package an engine alongside a stale generated model catalogue.
@@ -56,7 +60,7 @@ def main():
         shutil.copyfile(ROOT/'web'/name,dest/name)
     from build_ensemble_web import bundle as bundle_ensemble
     bundle_ensemble(dest)
-    for name in ['ensemble.mjs', 'ensemble-queue.mjs', 'ensemble-view.mjs', 'ensemble-worker.mjs', 'ensemble.css']:
+    for name in ['model-profiles.mjs', 'model-profile-data.mjs', 'ensemble.mjs', 'ensemble-queue.mjs', 'ensemble-view.mjs', 'ensemble-worker.mjs', 'ensemble.css']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     shutil.copyfile(ROOT/'docs/benchmarks/kfs-tmd2-research-range-v1/results/reproduction.png',dest/'tmd2-reproduction.png')
     for name in ['atlas.js','atlas.wasm']:
@@ -95,6 +99,8 @@ def main():
     from build_sls_laboratory import bundle as bundle_sls_laboratory
     bundle_sls_laboratory(dest,args.sls_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_sls_laboratory_package.mjs'),str(dest)],check=True)
+    bundle_kelvin_voigt(dest,args.kelvin_voigt_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_kelvin_voigt_package.mjs'),str(dest)],check=True)
     bundle_material_point(dest,args.j2_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)
     from build_controlled_path_web import bundle as bundle_controlled_path

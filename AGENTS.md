@@ -4,6 +4,8 @@
 
 For a full new-model assignment, follow [MODEL_DELIVERY_CHECKLIST.md](docs/MODEL_DELIVERY_CHECKLIST.md) from E0–E8 and maintain `docs/ingestion/<model-id>/DELIVERY.md` using [the delivery ledger](docs/ingestion/DELIVERY_TEMPLATE.md). The lead carries the model through source ingestion, implementation, independent agent approval, atlas integration, actual browser qualification and verified live delivery. A source packet is a specialist deliverable, not completion of the full model task.
 
+Every catalogue entry also needs a reader-facing profile under [PUBLIC_MODEL_PROFILES.md](docs/PUBLIC_MODEL_PROFILES.md). Explain behaviour, parameters, starting state, supported examples and meaningful limits; keep curation/check details behind the technical disclosure. Source-only workers supply the draft and provenance inside their owned packet; the coordinator integrates it into `web/model-profile-data.mjs` and verifies it at E6–E8. A runnable model without its public profile is not complete website delivery.
+
 Read [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) for the live model-ingestion board, [ROADMAP.md](ROADMAP.md) for research milestones, [docs/RESEARCH_CHARTER.md](docs/RESEARCH_CHARTER.md) for admission rules and [docs/STATUS.md](docs/STATUS.md) for existing evidence. Read the named model's dossiers, source audits and research packets before doing work. The historical JSON research queue is background evidence; do not edit it to track live ownership.
 
 The user authorizes parallel model ingestion. Work on different model packets concurrently. The coordinating parent agent is the integration owner; do not assign work to Benjy or François without their agreement.
@@ -37,6 +39,7 @@ Dependencies belong on the task row. Keep source acquisition, transcription, exe
 Copy [the packet template](docs/ingestion/TEMPLATE.md) to `docs/ingestion/<model-id>/README.md`. Deliver:
 
 - Exact formulation, publication/version identity and persistent hyperlinks (prefer DOI and author/institutional source). Distinguish model families, later revisions, implementations and numerical choices.
+- A source-backed public-profile draft following [the public content contract](docs/PUBLIC_MODEL_PROFILES.md), with local provenance, readable references and a supported example where the model is runnable. A literature-only profile must not promise laboratory availability or invent missing equations/parameters.
 - Source receipt: title/authors/year/version, URL, local private path if available, SHA-256, access date and equation/page/table locators. Check user-provided Downloads and existing source inventories first. Verify title/equations against readable source; do not infer equations from abstracts or search snippets.
 - Complete available equations and a source-to-schema crosswalk: parameter units/ranges, state layout, signs, tensor/shear conventions, loading inputs, constraints, initialization/preparation, branches/domain limits and history/reset events.
 - Explicit integration contract: rate versus incremental law; strain-path parameter versus physical time; required time/loading history; trial/commit/rollback semantics; ordering and lagged values; zero-load/hold behavior; discontinuities/events; tangent and solver requirements. Record unsupported or unspecified behavior.

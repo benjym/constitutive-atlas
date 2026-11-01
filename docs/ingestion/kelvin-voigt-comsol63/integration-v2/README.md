@@ -1,0 +1,11 @@
+# Isolated Kelvin interface v3 installation v2
+
+Source-only coordinator handoff in the isolated release tree. The current six interface-v3 source/test files and exact interface-v3 packet were copied after checking their freeze hashes. No root shared file/map, model, compiler, runtime, numerical reference, compiled artifact or acceptance gate was changed by this installation.
+
+The two replaced prior source files — web/kelvin-voigt-contract.mjs and tests/test_kelvin_voigt_contract.mjs — are preserved under their canonical hash-addressed source-snapshots paths, recovered from exact interface-v3/prior bytes. Both interface-v1 and interface-v2 original freeze documents now resolve their original source hashes using document-bound sidecars. Existing interface-v1 map entries/document pins remain intact.
+
+The exact pre-change interface-v1 source-archive-map.json was itself hash-pinned by integration-v1/archive-installation.json. That old map was archived before modification; a new integration-v1/source-archive-map.json redirects the old receipt to those exact prior bytes and registers the unchanged JSON sibling. Three canonical snapshots and three map changes preserve the five directly affected prior source/map pairs. All four recorded historical receipts remain byte-identical.
+
+original-bindings-check.json replays the complete original interface-v1 five-file freeze, interface-v2 six-file freeze and integration-v1 36-file archive receipt, plus both historical runtime-test relative source pairs: all49pairs pass. The runtime-test manifest's original absolute private/tmp app.js pin remains a separately disclosed historical portability limitation; it was not rewritten or claimed as fully portable. The complete pure tests.test_evidence_archives suite also passes; archive-tests.log retains exact results. No compiled calls or builds were run.
+
+installation.json records exact snapshots, maps, six current files, source-v3 freeze and prior unchanged receipt hashes. preserve_interface.py is create-only and refuses changed prior bytes or conflicting canonical snapshots. It records the already-installed isolated transition; rerunning it after installation intentionally refuses to overwrite the receipt. Future changes to these newly pinned maps need the same additive prior-byte preservation.
