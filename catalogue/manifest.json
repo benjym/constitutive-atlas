@@ -1015,6 +1015,59 @@
       "capability_gap": "Restricted active monotonic drained axial variant. Elasticity, unloading, cyclic response, general3D and experimental validation are unsupported."
     },
     {
+      "id": "orthotropic-linear-elastic-ogs",
+      "name": "Orthotropic linear elasticity \u2014 nine constants",
+      "family": "elasticity",
+      "status": "reviewed",
+      "executable": false,
+      "note": "Independently agent-approved complete nine-constant OGS law, all-six prescribed strain increments and persistent total stress in the main laboratory. Fixed aligned material axes, constant parameters, infinitesimal strain, compression-positive Mandel. Bounded synthetic native/Wasm evidence; illustrative parameters, no finite rotations, thermal/poro coupling or experimental validation. General conditioning envelope and mixed controls unqualified.",
+      "catalogue_sources": [
+        {
+          "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticOrthotropic.cpp",
+          "locator": "Lines60\u201373: Kelvin compliance and inverse; lines21\u201344: incremental stress; lines74\u201391: aligned Q=I branch",
+          "role": "Exact pinned complete 3D orthotropic constitutive implementation"
+        },
+        {
+          "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticOrthotropic.h",
+          "locator": "Lines21\u201387: engineering constants/reciprocity;104\u2013116: source parameter sampling;136\u2013146: energy",
+          "role": "Parameter identities, reciprocity and elastic energy"
+        },
+        {
+          "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MathLib/KelvinVector.cpp",
+          "locator": "Lines67\u201374 and119\u2013130: xx yy zz sqrt2xy sqrt2yz sqrt2xz",
+          "role": "Exact tensor ordering and shear normalization"
+        }
+      ],
+      "approval_record": "docs/admission/orthotropic-ogs-approved-v1/approval.json",
+      "material_laboratory": "index.html",
+      "dossier": "docs/models/orthotropic-linear-elastic-ogs.md"
+    },
+    {
+      "id": "hill-abaqus2025-perfect-be",
+      "name": "Hill anisotropic associative perfect plasticity",
+      "family": "elastoplasticity",
+      "status": "reviewed",
+      "definition": "models/research/hill/hill-abaqus2025-perfect-be.json",
+      "dossier": "docs/models/hill-abaqus2025.md",
+      "note": "Exact-definition agent approval governs this complete fixed-axis small-strain Hill perfect-plastic law with isotropic elasticity and Atlas backward Euler. Main laboratory supports all-six prescribed strain increments. Dry total stress, positive Hill coefficients; illustrative parameters, no finite rotation, hardening, viscosity or experimental validation.",
+      "executable": false,
+      "material_laboratory": "index.html",
+      "laboratory_kind": "strain_path",
+      "catalogue_sources": [
+        {
+          "url": "https://docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-anisoyield.htm",
+          "locator": "Anisotropic Yield, quadratic potential and associative flow",
+          "role": "primary formulation"
+        },
+        {
+          "url": "https://docs.software.vt.edu/abaqusv2025/English/SIMACAEMATRefMap/simamat-c-metalplastic.htm",
+          "locator": "Perfect Plasticity and required elasticity",
+          "role": "primary formulation"
+        }
+      ],
+      "approval_record": "docs/admission/hill-abaqus2025-approved-v1/approval.json"
+    },
+    {
       "id": "ramberg-osgood-ansys242",
       "name": "Ramberg\u2013Osgood nonlinear elasticity \u2014 ANSYS2024R2",
       "family": "nonlinear elasticity",

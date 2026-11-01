@@ -16,8 +16,11 @@ from build_applicability import bundle as bundle_applicability
 from build_j2_laboratory import bundle as bundle_material_point
 from build_power_creep_web import bundle as bundle_power_creep
 
+from build_orthotropic_laboratory import bundle as bundle_orthotropic
+
 def main():
     parser=argparse.ArgumentParser()
+    parser.add_argument('--orthotropic-wasm-dir',type=Path,default=ROOT/'build-orthotropic-wasm',help='Qualified orthotropic strain-increment engine for the main laboratory')
     parser.add_argument('--preview-experiments', action='store_true', help='Include pending datasets in web/preview for local review only')
     parser.add_argument('--wasm-dir',type=Path,default=ROOT/'build-wasm',help='Verified engine directory containing atlas.js, atlas.wasm and generated/models.json')
     parser.add_argument('--power-creep-wasm-dir',type=Path,help='Qualified dedicated physical-time power-creep engine; defaults to --wasm-dir')
@@ -27,6 +30,7 @@ def main():
     parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'docs/ingestion/norsand-1993/shared-integration-v1/wasm-v2',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
     parser.add_argument('--maxwell-wasm-dir',type=Path,default=ROOT/'build-maxwell-wasm',help='Dedicated Maxwell engine with exact accepted current-build qualification receipt')
     parser.add_argument('--implicit-path-wasm-dir',type=Path,default=ROOT/'build-implicit-path-wasm',help='Exact independently qualified implicit strain-path engine')
+    parser.add_argument('--hill-wasm-dir',type=Path,default=ROOT/'web/engines/hill',help='Exact reviewed Hill engine for main laboratory')
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
     args=parser.parse_args()
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
@@ -102,6 +106,11 @@ def main():
     check_root=dest/'implicit-path-package-checks';check_root.mkdir(exist_ok=True)
     check_report=Path(tempfile.mkdtemp(prefix='build-',dir=check_root))/'report.json'
     subprocess.run([sys.executable,str(ROOT/'tools/test_implicit_path_package.py'),str(dest),'--output',str(check_report)],check=True)
+    bundle_orthotropic(dest,args.orthotropic_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_orthotropic_package.mjs'),str(dest)],check=True)
+    from build_hill_laboratory import bundle as bundle_hill
+    bundle_hill(dest,args.hill_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_hill_package.mjs'),str(dest)],check=True)
     (dest/'.nojekyll').touch()
     print(f'Packaged {dest}')
 

@@ -1,0 +1,7 @@
+### Result
+{"statuses":[{"text":"Pinned OpenGeoSys constitutive implementation","href":"https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticOrthotropic.cpp","status":200},{"text":"Parameter definitions and reciprocity","href":"https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticOrthotropic.h","status":200},{"text":"Independent review & limitations","href":"http://127.0.0.1:18882/material-point-orthotropic/review.html","status":200},{"text":"Approval record","href":"http://127.0.0.1:18882/material-point-orthotropic/approval.json","status":200},{"text":"Review checklist","href":"http://127.0.0.1:18882/material-point-orthotropic/review.json","status":200},{"text":"Exact approved model","href":"http://127.0.0.1:18882/material-point-orthotropic/model.json","status":200}]}
+### Ran Playwright code
+```js
+await (async(page)=>{const h=page.locator('#orthotropic-material-laboratory'),links=await h.locator('footer a').evaluateAll(a=>a.filter(x=>!x.href.endsWith('#catalogue')).map(x=>({text:x.textContent,href:x.href}))),statuses=[];for(const link of links){const r=await page.request.get(link.href,{timeout:30000});statuses.push({...link,status:r.status(),body:r.status()!==200?(await r.text()).slice(0,300):undefined});}return {statuses};}
+)(page);
+```

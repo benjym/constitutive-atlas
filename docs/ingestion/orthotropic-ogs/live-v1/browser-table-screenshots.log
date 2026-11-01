@@ -1,0 +1,7 @@
+### Result
+{"checks":[{"viewport":1280,"rows":5,"columns":7,"headers":["row","σxx","σyy","σzz","√2σxy","√2σyz","√2σxz"],"scroll":566,"visible":566,"document":1280},{"viewport":390,"rows":5,"columns":7,"headers":["row","σxx","σyy","σzz","√2σxy","√2σyz","√2σxz"],"scroll":414,"visible":310,"document":390}]}
+### Ran Playwright code
+```js
+await (async(page)=>{const table=page.locator('#orthotropic-material-laboratory').locator('#stateTable'),checks=[];for(const width of [1280,390]){await page.setViewportSize({width,height:900});await table.scrollIntoViewIfNeeded();const state=await table.evaluate(el=>({rows:el.rows.length,columns:el.rows[0].cells.length,headers:[...el.rows[0].cells].map(x=>x.textContent),scroll:el.parentElement.scrollWidth,visible:el.parentElement.clientWidth,document:document.documentElement.scrollWidth}));if(state.rows!==5||state.columns!==7||state.document!==width)throw Error('State table width or completeness');checks.push({viewport:width,...state});await page.screenshot({path:`output/playwright/orthotropic-live-v1/${width}-state-table.png`});}return {checks};}
+)(page);
+```

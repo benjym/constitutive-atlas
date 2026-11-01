@@ -28,7 +28,22 @@ assert.equal(api.revision(),4);checks++;
 // The source keeps exact-ID lookup: a special ID cannot masquerade as VW96.
 assert.match(source,/function model\(\)\{return models\.find\(x=>x\.id===\$\('model'\)\.value\);\}/);checks++;
 for(const name of ['populate','simulate','renderCharts','describeExperiment','experimentOptions','scheduleUpdate','showExperiment','selectExperiment','matchExperiment','applyRunSpecification']){assert.ok(fn(name).includes('if(specialLaboratoryActive())return;'),name);checks++;}
-for(const marker of ["import {setupTimedLaboratory}","import {setupJ2Laboratory}","import {setupImplicitPathLaboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","timedView=createLaboratoryControllerRouter([setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})])","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
+for(const marker of ["import {setupTimedLaboratory}","import {setupJ2Laboratory}","import {setupImplicitPathLaboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
+// Extensible membership preserves every existing controller and its exact wiring.
+const registration=source.match(/timedView=createLaboratoryControllerRouter\(\[([^\n]+?)\]\)/)?.[1];
+assert.ok(registration,'Main controller router registration');checks++;
+const setups=[...registration.matchAll(/\b(setup[A-Za-z]+Laboratory)\(/g)].map(match=>match[1]);
+assert.equal(new Set(setups).size,setups.length,'Duplicate controller registration');checks++;
+for(const setup of ['setupTimedLaboratory','setupSlsLaboratory','setupPathLaboratory','setupMaxwellLaboratory','setupImplicitPathLaboratory']){
+ assert.equal(setups.filter(name=>name===setup).length,1,setup);
+ assert.ok(registration.includes(`${setup}({chart,cancelOrdinary:()=>cancel('')})`),setup+' exact existing hooks');checks+=2;
+}
+assert.equal(setups.filter(name=>name==='setupHillLaboratory').length,1);checks++;
+assert.ok(registration.includes("setupHillLaboratory({cancelOrdinary:()=>cancel('')})"));checks++;
+assert.ok(source.includes("import {setupHillLaboratory} from './hill-laboratory.mjs';"));checks++;
+assert.equal(setups.filter(name=>name==='setupOrthotropicLaboratory').length,1);checks++;
+assert.ok(registration.includes("setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')})"));checks++;
+assert.ok(source.includes("import {setupOrthotropicLaboratory} from './orthotropic-laboratory.mjs';"));checks++;
 // Execute the exact ordinary import function with delayed file text; profile changes and
 // newer ordinary revisions must suppress it before parsing/applying a stale request.
 const applied=[];context.applied=applied;context.parseLaboratoryDocument=text=>({text});context.applyRunSpecification=spec=>applied.push(spec);context.toast=()=>{throw Error('Unexpected ordinary toast.');};

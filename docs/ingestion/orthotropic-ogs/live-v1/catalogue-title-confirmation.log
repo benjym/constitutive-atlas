@@ -1,0 +1,7 @@
+### Result
+{"title":"Orthotropic linear elasticity — nine constants","actualCardAndExplore":true,"url":"https://benjym.github.io/constitutive-atlas/index.html#laboratory?model=orthotropic-linear-elastic-ogs","selected":"orthotropic-linear-elastic-ogs"}
+### Ran Playwright code
+```js
+await (async(page)=>{await page.getByRole('link',{name:/Model catalogue/}).click();await page.locator('a.catalogue-open[href*="orthotropic-linear-elastic-ogs"]').click();await page.locator('#catalogue-dialog').waitFor({state:'visible'});await page.waitForFunction(()=>document.getElementById('catalogue-detail-title').textContent.includes('Orthotropic'));const title=await page.locator('#catalogue-detail-title').textContent();await page.locator('#catalogue-explore').click();await page.waitForFunction(()=>location.hash==='#laboratory?model=orthotropic-linear-elastic-ogs');await page.locator('#orthotropic-material-laboratory').waitFor({state:'visible'});return {title,actualCardAndExplore:true,url:page.url(),selected:await page.locator('#model').inputValue()};}
+)(page);
+```
