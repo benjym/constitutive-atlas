@@ -1,0 +1,57 @@
+{
+  "identity": {
+    "model_path": "docs/reviews/gis2024-v03-research-freeze-v1/model.json",
+    "model_sha256": "439b785e1da3075209c6d5ca43a991a441463a915f31f2e9c77b5c6835e20dbc",
+    "model_id": "research-hp-extracted-asbs-gis-2024-v03",
+    "raw_candidate_unchanged": true,
+    "public_status": "draft",
+    "source_review_status": "pending_unsigned_unassigned"
+  },
+  "future_execution": {
+    "native_first": true,
+    "reuse_only_hash_verified_0719a5e_artifacts": true,
+    "new_builds": "Only if required after source changes; serial one explicit target --parallel 1. Never bypass Cortex.",
+    "freeze_driver_assessor_corruption_tests_before_observation": true,
+    "stop_on_failed_required_case": true
+  },
+  "laboratory_gate": {
+    "positive_requests_per_backend": 60,
+    "negative_requests_per_backend": 8,
+    "recovery_after_each_negative": true,
+    "all14_state": true,
+    "zero_state_equality": "exact full14 equality at every point",
+    "domain_check": "Independent Cartesian coupled_rates with zero de at every successful point; strict source/model domain, no clamp or widened shell.",
+    "volume_absolute": 1e-10,
+    "native_wasm_scaled_parity": 1e-07,
+    "scales": "sigma6=p_scale,e=1,h6=R,Omega=1; compare initial and returned state at every matching point",
+    "controller_checks": "p0 lateral strains zero; p1 radial effective stress difference from initial <= max(1,abs(initial radial))*1e-8 plus 2e-8 Pa rounding allowance; p2/p3 trace(strain) <= 1e-14; p3 per-increment signed q change minus prescribed control change under same stress budget; p4 all normal strains equal within 1e-14; zero shears within 1e-14 for these axisymmetric cases.",
+    "exact_loading": "use existing createLoading and exact bit echo; never compare legacy cyclic values as identical to versioned waveform",
+    "legacy_loading": "existing backend historical waveform; shape, own-state, controller/domain/volume/parity gates apply; no new equivalence claim",
+    "import_export": "matching catalogue hash, all14 finite initial/point state, parameters, exact loading bits and settings preserved; saved result checked; fresh replay, never resume hidden state",
+    "failure": "No negative case commits an initial point; valid zero recovery equals clean control exactly. Separate forced-update failure retains complete last committed prefix and recovers; do not confuse failed prefix with full success."
+  },
+  "origin_rate_gate": {
+    "states": [
+      "model-example-origin",
+      "axisymmetric-memory-example"
+    ],
+    "directions": "six positive Mandel basis increments scaled 1e-6, their negatives, and zero:26 cases",
+    "oracle": "tools/reference_gis2024_coupled.py, independent Cartesian supplied-host algebra; freeze literal expected14 rates and parameter/input/source hashes before compiled observations",
+    "component_absolute_plus_relative": {
+      "absolute": 1e-10,
+      "relative": 1e-10
+    },
+    "limitation": "Origin rate agreement does not qualify derivatives, saturation-boundary integration or complete-update tangents."
+  },
+  "browser_gate": "Actual project-prefix packaged browser, not Node alone; see numbered acceptance ledger in INTEGRATION_PLAN.md.",
+  "no_claims": [
+    "source-prepared specimen",
+    "author algorithm equivalence",
+    "scientific admission",
+    "experimental validation",
+    "wider GIS family",
+    "arbitrary rotation or physical-time response",
+    "universal boundary support",
+    "deployment"
+  ]
+}
