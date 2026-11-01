@@ -25,6 +25,7 @@ def main():
     parser.add_argument('--j2-wasm-dir',type=Path,default=ROOT/'build-j2-wasm',help='Qualified J2 material-point engine for the main laboratory')
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
     args=parser.parse_args()
+    subprocess.run(['node',str(ROOT/'tools/check_model_profiles.mjs'),str(ROOT)],check=True)
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
     generated=args.wasm_dir/'generated'
     # Do not package an engine alongside a stale generated model catalogue.
@@ -48,7 +49,7 @@ def main():
         shutil.copyfile(ROOT/'web'/name,dest/name)
     from build_ensemble_web import bundle as bundle_ensemble
     bundle_ensemble(dest)
-    for name in ['ensemble.mjs', 'ensemble-queue.mjs', 'ensemble-view.mjs', 'ensemble-worker.mjs', 'ensemble.css']:
+    for name in ['model-profiles.mjs', 'model-profile-data.mjs', 'ensemble.mjs', 'ensemble-queue.mjs', 'ensemble-view.mjs', 'ensemble-worker.mjs', 'ensemble.css']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     shutil.copyfile(ROOT/'docs/benchmarks/kfs-tmd2-research-range-v1/results/reproduction.png',dest/'tmd2-reproduction.png')
     for name in ['atlas.js','atlas.wasm']:
