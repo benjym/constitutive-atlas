@@ -1,0 +1,155 @@
+{
+  "schema_version": "0.3",
+  "kind": "formulation_fragment_not_installed_model",
+  "research_definition": "models/research/gis2024/hp-extracted-asbs-gis-2024-research.json",
+  "research_definition_sha256": "a63c69b0af6fdb1a1e40d7ea69b99a9b56ded3a032a717afee1d6f0f5081136d",
+  "selected_pairing": "HP with extracted ASBS + GIS2024; f=0; not S=Y, IGS97 or ISA",
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "strain_path_rate",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e",
+      "h",
+      "Omega"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "state_contract": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "h",
+      "shape": "sym",
+      "unit": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "intergranular_strain",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "Omega",
+      "shape": "scalar",
+      "unit": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cyclic_preloading_memory",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "parameter_contract": {
+    "material_parameters": [
+      "phi",
+      "hs",
+      "ei0",
+      "ec0",
+      "ed0",
+      "n",
+      "alpha",
+      "beta",
+      "R",
+      "m_R",
+      "m_T",
+      "beta_R",
+      "chi_R",
+      "gamma_chi",
+      "chi_0",
+      "chi_max",
+      "C_Omega",
+      "gamma_Omega"
+    ],
+    "numerical_parameters": [
+      "p_scale"
+    ],
+    "units": {
+      "p_scale": "Pa",
+      "phi": "1",
+      "hs": "Pa",
+      "ei0": "1",
+      "ec0": "1",
+      "ed0": "1",
+      "n": "1",
+      "alpha": "1",
+      "beta": "1",
+      "R": "1",
+      "m_R": "1",
+      "m_T": "1",
+      "beta_R": "1",
+      "chi_R": "1",
+      "gamma_chi": "1",
+      "chi_0": "1",
+      "chi_max": "1",
+      "C_Omega": "1",
+      "gamma_Omega": "1"
+    },
+    "rectangular_bounds": "project support limits; not source universal admissibility"
+  },
+  "source_bindings": {
+    "formulation": "Introduction objective rate restricted to zero spin; AppendixA signs; selected rate-independent host Eq7; p4Eq22",
+    "sigma": "Eqs8-12,26-32,39-42; AppendixB linear host action",
+    "e": "p4Eq22",
+    "h": "p5Eq33 and p6Eqs34-35",
+    "Omega": "p7Eq43",
+    "calibration": "p8Table1; published fixture, not universal defaults"
+  },
+  "unsupported": [
+    "finite rotation/spin transport",
+    "canonical author-code algorithm equivalence",
+    "general black-box host composition",
+    "arbitrary saturated-boundary finite integration",
+    "complete-update tangent",
+    "source-matched experimental validation"
+  ],
+  "public_installation": false,
+  "scientific_admission": false
+}
