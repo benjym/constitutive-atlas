@@ -1,0 +1,7 @@
+# Approval-origin952 preservation
+
+Coordinator authorized a registry-only preservation layer before integrating origin95210701c73718500ca41d0eb70a8281c585b1a3. Exact current registry SHA080f74d1ff6628f7877049084910ae37d2e48737f24d15e87c672b82763cb754 is now a canonical snapshot. New package-v4 and integration-v8/current37d-merge-v1 sidecars bind their original source receipts to those exact prior bytes. Both original receipt documents remain unchanged; every existing sibling JSON is registered.
+
+Under the explicit additional whitelist, only six missing docs/reviews/common-scalar-functions-v1/package-controls-{addendum-freeze-v1,freeze-v1,freeze-v2,freeze-v3,freeze-v4,freeze-v5}.json files were copied from the workspace into the identical isolated paths. All six source hashes match the already existing scalar sidecar document guards. The scalar sidecar was not changed. receipt.json lists exact paths, hashes and reason. No other workspace work was copied.
+
+Direct checks verify both historical registry bindings, installation files and all six original document guards. All14 pure archive tests pass. No registry, app, builder, workflow, model, runtime, policy, physical gate or compiled artifact was changed; no build or compiled call occurred. The current package-v4 remains its original historical identity and must not be silently rebound to the later registry. A distinct publication/package identity is the coordinator's next step.

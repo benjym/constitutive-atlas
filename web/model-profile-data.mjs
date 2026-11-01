@@ -2801,5 +2801,95 @@ export const modelProfiles = {
       "linear-elastic",
       "j2-linear-isotropic-hardening-be"
     ]
+  },
+  "kelvin-voigt-comsol63-deviatoric-zero-spin-ode": {
+    "title": "Kelvin–Voigt · COMSOL 6.3 deviatoric response",
+    "summary": "A spring and dashpot acting in parallel produce delayed shear creep, while volume changes remain elastic.",
+    "introduction": "The spring resists strain and the dashpot resists its rate of change. Under a held shear stress, strain gradually approaches a finite value as the spring takes more of the load. This simple model helps distinguish delayed deformation from the continuing creep of a Maxwell material.",
+    "behaviours": [
+      [
+        "Delayed creep",
+        "A held deviatoric stress produces a gradual approach to a finite strain. Deviatoric means the part that changes shape rather than volume; the approach has time scale τ."
+      ],
+      [
+        "Rate-dependent stress",
+        "At the same strain, faster shape change requires a larger viscous stress. A sudden change between finite strain rates changes stress immediately while strain remains continuous."
+      ],
+      [
+        "Strain hold and elastic volume",
+        "Stopping all strain rates immediately removes viscous stress. The remaining elastic stress stays constant during the hold. Volume change has no viscous contribution in this variant."
+      ]
+    ],
+    "explorationTitle": "Compare creep, loading and a strain hold",
+    "exploration": "Use Reset Kelvin–Voigt preset to load the complete example. Creep · hold all stresses starts from zero initial strain and the six incoming rates [0.001, −0.0005, −0.0005, 0.0004, −0.0002, 0.0003] per second. It holds the resulting initial stress for the displayed duration; look for a level stress curve and strain approaching a plateau. Select each Plot component to inspect all six responses. Choose Loading · constant strain rate to use the separate six loading-rate entries: strain grows linearly and viscous stress adds to the spring stress. Choose Strain hold · immediate viscous stress shedding to set all subsequent rates to zero. With the zero-strain preset, stress falls to zero at the initial event and stays there; a nonzero initial strain leaves a constant elastic stress. The full table shows both sides of the initial event.",
+    "comparison": "To compare creep time scales at the same incoming stress, double τ and halve every incoming initial-rate component, keeping the initial strain and elastic moduli fixed. The strain approaches the same plateau more slowly. Changing τ alone while keeping the incoming rate fixed also changes the stress being held, so it compares a different loading condition. Maxwell relaxes stress during a strain hold; this Kelvin–Voigt variant instead sheds its viscous stress immediately and retains elastic stress.",
+    "parameters": [
+      {
+        "name": "K",
+        "symbol": "K",
+        "meaning": "Bulk modulus",
+        "help": "Sets resistance to volume change. Pure volume change is elastic and does not depend on the dashpot.",
+        "unit": "Pa"
+      },
+      {
+        "name": "G",
+        "symbol": "G",
+        "meaning": "Shear modulus",
+        "help": "Sets the spring resistance to shape change. The dashpot viscosity is Gτ, so changing G with τ fixed changes both shear stiffness and viscosity.",
+        "unit": "Pa"
+      },
+      {
+        "name": "tau",
+        "symbol": "τ",
+        "meaning": "Retardation time",
+        "help": "Sets the time scale of delayed shear creep and, with G, the viscosity Gτ. It is not a stress-relaxation time during a strain hold.",
+        "unit": "s"
+      }
+    ],
+    "parameterNote": "K and G use pascals and τ uses seconds; all three are positive. The derived shear viscosity Gτ has units Pa·s. Use the complete illustrative coefficient set supplied by Reset, or a material-specific calibration. The displayed example is a model demonstration rather than a measured material fit.",
+    "stateLabels": {
+      "eps": "Initial total infinitesimal strain"
+    },
+    "preparation": "Supply all six initial total-strain components and all six incoming initial strain-rate components. Their combination determines the incoming total stress; there is no independent initial-stress offset or hidden branch state. The order is xx, yy, zz, √2xy, √2yz, √2xz, with compression positive. The shear entries use the Mandel scaling √2 rather than engineering shear strain. Loading mode also requires its separate six subsequent rates. Reset provides a zero-strain illustrative preparation; it does not reconstruct a specimen history.",
+    "scope": "The ordinary isotropic Kelvin–Voigt law in COMSOL 6.3 Eq. 3-36 is used with deviatoric viscosity and purely elastic bulk. The laboratory advances physical seconds with three-dimensional infinitesimal strain, fixed spatial axes and zero spin. Stress is dry total Cauchy stress, with compression-positive stress and strain.",
+    "limits": "This variant has no bulk viscosity, plasticity, permanent-strain mechanism, thermal or pore-fluid coupling, fractional derivatives or finite-rotation update. A prescribed ideal strain step would require an impulse of viscous stress and is outside the finite-rate controls. The laboratory offers constant rate, strain hold and stress hold; a hold does not produce exponential strain relaxation.",
+    "equationIntro": "For this small-strain variant, the dashpot contributes only to changes of shape.",
+    "equations": [
+      [
+        "Stored strain",
+        "ε̇ = D"
+      ],
+      [
+        "Total stress",
+        "σ = K tr(ε) I + 2G dev(ε) + 2Gτ dev(D)"
+      ],
+      [
+        "Shear viscosity",
+        "η = Gτ"
+      ]
+    ],
+    "equationNote": "D is the total strain-rate tensor, I is the identity tensor, tr gives the volume strain and dev removes the mean normal component. Stress and strain share the compression-positive convention. The six stored entries are total strain; there is no separate viscous internal-state tensor.",
+    "references": [
+      {
+        "label": "COMSOL 6.3 · Kelvin–Voigt theory, Eq. 3-36",
+        "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441080"
+      },
+      {
+        "label": "COMSOL 6.3 · Kelvin–Voigt settings and time/viscosity units",
+        "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_solid.07.016.html#4898977"
+      }
+    ],
+    "related": [
+      "maxwell-itasca900-zero-spin-ode",
+      "sls-comsol63-deviatoric-zero-spin-ode",
+      "burgers-itasca900-dry-zero-spin-ode"
+    ],
+    "contentSources": [
+      "models/research/kelvin-voigt/kelvin-voigt-comsol63-deviatoric-zero-spin-ode.json",
+      "docs/models/kelvin-voigt-comsol63.md",
+      "docs/ingestion/kelvin-voigt-comsol63/source-v1/README.md",
+      "web/kelvin-voigt-laboratory.mjs",
+      "web/kelvin-voigt-contract.mjs"
+    ]
   }
 };

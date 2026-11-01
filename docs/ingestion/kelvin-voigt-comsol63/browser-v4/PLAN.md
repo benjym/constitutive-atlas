@@ -1,0 +1,3 @@
+# Final normal-package actual browser check
+
+Prospective beforefinalV5browsernavigation. Exactnormalpackage-v5 with source952+KV; package-v4/browser-v3 retainactualcorrectedcatalogue/flatplot andHill/Rambergtransitionobservations. Priorbrowser-v2 actualallcontrols/protocols/export/import/tamper/recovery/lifecycle remainboundunchangedcomponentbytes. ConfirmfreshV5 mainroute/preset fullstate/meaningfulflatstress+creepstrain/provenance, responsivewidth, source/review/approvallinks andactualSQLdownloadhash. No newnumericalgates; original3e-8strain/1Pastress analyticaldefaultlimits. SubsequentlivecheckrequiresactualtestedCIuploadandpublicpath.

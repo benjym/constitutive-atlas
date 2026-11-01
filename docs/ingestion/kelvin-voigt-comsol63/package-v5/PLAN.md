@@ -1,0 +1,3 @@
+# Approval-data current-origin normal package v5
+
+Origin952changes3ordinaryagentreviewrecords/approvalregistry/supportingdocuments only. Completecurrent37dV4package and originalengine/runtime/policy/source evidence retained. Freshstandardbuilder/package-v5 reexportsdatabase/publicevidence and repeatsallmandatorymodelgates. Sourcefreeze precedesobservations; exactKelvinmodel/backend/approvedrecord andallUI/solver/policybytes unchanged. Final15ordinarysupportedgate andSQLidentity/source/approval integrity required. No waivedphysicalgate orsilentfiltering; no localbuild. Existingparentserialpackageclaim coversv5.

@@ -30,13 +30,13 @@ assert.equal(api.revision(),4);checks++;
 // The source keeps exact-ID lookup: a special ID cannot masquerade as VW96.
 assert.match(source,/function model\(\)\{return models\.find\(x=>x\.id===\$\('model'\)\.value\);\}/);checks++;
 for(const name of ['populate','simulate','renderCharts','describeExperiment','experimentOptions','scheduleUpdate','showExperiment','selectExperiment','matchExperiment','applyRunSpecification']){assert.ok(fn(name).includes('if(specialLaboratoryActive())return;'),name);checks++;}
-for(const marker of ["import {setupTimedLaboratory}","import {setupJ2Laboratory}","import {setupImplicitPathLaboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
+for(const marker of ["import {setupTimedLaboratory}","import {setupKelvinVoigtLaboratory}","import {setupJ2Laboratory}","import {setupImplicitPathLaboratory}","id!==j2View?.modelId&&!timedView?.supports(id)","activateLaboratoryModel(entry.id)","activateLaboratoryModel($('model').value)","j2View?.showEquations()||timedView?.showEquations()","requested!==sequence||specialLaboratoryActive()","id!==activeId||specialLaboratoryActive()","revision===experimentLoadSequence&&!specialLaboratoryActive()","finally{if(id===experimentLoadSequence&&!specialLaboratoryActive())$('experiment-file').value='';}","j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')})"]){assert.ok(source.includes(marker),marker);checks++;}
 // Extensible membership preserves every existing controller and its exact wiring.
 const registration=source.match(/timedView=createLaboratoryControllerRouter\(\[([^\n]+?)\]\)/)?.[1];
 assert.ok(registration,'Main controller router registration');checks++;
 const setups=[...registration.matchAll(/\b(setup[A-Za-z]+Laboratory)\(/g)].map(match=>match[1]);
 assert.equal(new Set(setups).size,setups.length,'Duplicate controller registration');checks++;
-for(const setup of ['setupTimedLaboratory','setupSlsLaboratory','setupPathLaboratory','setupMaxwellLaboratory','setupImplicitPathLaboratory']){
+for(const setup of ['setupTimedLaboratory','setupSlsLaboratory','setupKelvinVoigtLaboratory','setupPathLaboratory','setupMaxwellLaboratory','setupImplicitPathLaboratory']){
  assert.equal(setups.filter(name=>name===setup).length,1,setup);
  assert.ok(registration.includes(`${setup}({chart,cancelOrdinary:()=>cancel('')})`),setup+' exact existing hooks');checks+=2;
 }

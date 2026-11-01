@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from atlas.agent_review import approval_entry, validate_review
 from atlas.compiler import generate
+from atlas.evidence import checked_receipt
 
 MODEL = 'norsand-jefferies-1993-active-axial'
 COMPONENTS = ('path-engine.mjs', 'path-worker.mjs', 'path-laboratory.mjs',
@@ -19,6 +20,11 @@ COMPONENTS = ('path-engine.mjs', 'path-worker.mjs', 'path-laboratory.mjs',
 
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def validate_supporting_files(approval):
+    for pin in approval['supporting_files']:
+        checked_receipt(ROOT, approval['review']['path'], pin['path'], pin['sha256'])
 
 
 def bundle(destination, build):
@@ -35,9 +41,7 @@ def bundle(destination, build):
     definition = ROOT/approval['definition']['path']
     if sha(definition) != approval['definition']['sha256']:
         raise ValueError('Controlled-path approved definition changed')
-    for pin in approval['supporting_files']:
-        if sha(ROOT/pin['path']) != pin['sha256']:
-            raise ValueError('Controlled-path approval evidence changed: '+pin['path'])
+    validate_supporting_files(approval)
     example_path = ROOT/'catalogue/path-examples/norsand-1993-loose-constant-cell.json'
     example = json.loads(example_path.read_text())
     if example['model'] != MODEL or example['definition_sha256'] != sha(definition):

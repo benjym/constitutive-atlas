@@ -1,0 +1,1 @@
+The remote public-profile UI calls DOM remove() and refreshPublicModelSummary(). The retained source-only routing double lacked both. Add inert implementations, matching the existing deep-link fixture. All route, lifecycle and controller assertions remain unchanged. Actual profile rendering has separate tests and browser checks.
