@@ -4,7 +4,7 @@ This is the operating checklist for a **full model-delivery assignment**. The le
 
 Website delivery means adding the model to the **general atlas catalogue and main laboratory**. Integrate any required physical-time or other supported interface into that laboratory. A standalone model page is not required and does not satisfy atlas integration or browser delivery; do not create one to complete this checklist. Live verification uses the model’s route within the general atlas.
 
-Read [AGENTS.md](../AGENTS.md), the [live board](../IMPLEMENTATION_PLAN.md), [roadmap](../ROADMAP.md), [formulation contract](FORMULATION_CONTRACT.md) and [agent review policy](AGENT_REVIEW_POLICY.md). Use [the delivery ledger template](ingestion/DELIVERY_TEMPLATE.md) at `docs/ingestion/<model-id>/DELIVERY.md`; keep the scientific source packet in `README.md` using [its template](ingestion/TEMPLATE.md). Reuse existing work instead of starting another numerical or source-audit campaign without a demonstrated gap.
+Read [AGENTS.md](policy-v1/AGENTS.md), the [live board](../../../IMPLEMENTATION_PLAN.md), [roadmap](../../../ROADMAP.md), [formulation contract](../../FORMULATION_CONTRACT.md) and [agent review policy](../../AGENT_REVIEW_POLICY.md). Use [the delivery ledger template](policy-v1/DELIVERY_TEMPLATE.md) at `docs/ingestion/<model-id>/DELIVERY.md`; keep the scientific source packet in `README.md` using [its template](../TEMPLATE.md). Reuse existing work instead of starting another numerical or source-audit campaign without a demonstrated gap.
 
 ## Ownership, tracking and stopping rules
 
@@ -24,7 +24,7 @@ The coordinator is an agent integration role. The delivery lead may fill it for 
 - [X] Select the exact publication/version and complete formulation; distinguish family, variant, author implementation and Atlas numerical choices. Check for duplicate IDs or already-delivered work.
 - [X] Record the intended schema profile, material/use scope, native and browser interfaces, illustrative protocol(s), acceptance gates and exclusions. Track physical-time or nonstandard UI support as actual work, not an inferred capability.
 - [X] Claim the umbrella task and create `DELIVERY.md` with lead, owners, whitelist/worktree, dependencies and stage statuses. Confirm the independent reviewing role will use a separate run.
-- [X] Track task-owned temporary directories/worktrees and background processes in the ledger, with intended retention and cleanup ownership. Reuse suitable outputs and clean superseded disposable copies throughout the task under the [repository cleanup rules](../AGENTS.md#cleanup-and-storage-at-handoff).
+- [X] Track task-owned temporary directories/worktrees and background processes in the ledger, with intended retention and cleanup ownership. Reuse suitable outputs and clean superseded disposable copies throughout the task under the [repository cleanup rules](policy-v1/AGENTS.md#cleanup-and-storage-at-handoff).
 
 **Exit:** someone can identify the exact model being delivered, its destination, who owns each handoff and what proves completion.
 
@@ -37,7 +37,7 @@ Model-local evidence: Board MODEL-perzyna-comsol63/child claims; isolated worktr
 - [X] Retain readable originals durably in ignored private storage where permitted. Document source/code/data rights; link rather than publish copyrighted originals. Do not execute supplied author binaries or vendor code.
 - [X] Reconcile multiple versions and implementation differences. List missing sources, ambiguous branches and proposed interpretations explicitly; resolve in-scope gaps before claiming source completeness.
 - [X] Complete the source packet, prior-work links and an equation-to-source inventory. Distinguish source-complete from executable, approved and deployed.
-- [X] Draft the [public model profile](PUBLIC_MODEL_PROFILES.md) from the inspected source: readable overview, characteristic behaviours, material parameters, starting state, meaningful limits and references. Keep a specialist draft in its owned packet until coordinator integration.
+- [X] Draft the [public model profile](../../PUBLIC_MODEL_PROFILES.md) from the inspected source: readable overview, characteristic behaviours, material parameters, starting state, meaningful limits and references. Keep a specialist draft in its owned packet until coordinator integration.
 
 **Exit:** every required equation and convention has readable source support or an explicit unresolved blocker.
 
@@ -106,7 +106,7 @@ Model-local evidence: execution-v2/FREEZE.json7dcc4a01, independent plan ACCEPT3
 ## E5 — Independent agent review and approval
 
 - [X] Hand the exact candidate, readable source receipts, dossier, prospective gates and complete saved results to a separate agent run. Record actual implementation/reviewer run IDs and independence basis. Do not ask the implementation agent to certify its own transcription.
-- [X] The reviewer checks all nine items in [checklist v1](AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](AGENT_REVIEW_TEMPLATE.json).
+- [X] The reviewer checks all nine items in [checklist v1](../../AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](../../AGENT_REVIEW_TEMPLATE.json).
 - [X] Resolve blocking findings; rerun only affected qualification and regression checks when justified. Obtain a new or updated reviewer decision bound to the final model bytes and artifacts. Preserve superseded failures and decisions.
 - [X] Store the accepted record under `catalogue/agent-reviews/`, validate it and generate the approval entry. Coordinator integration requires no human scientific sign-off or further user approval.
 - [X] Confirm approval refers to the exact intended formulation and supported interfaces/parameter/protocol scope. Keep experimental validation separately assessed; no experimental match is required merely to illustrate an otherwise verified law.
@@ -160,14 +160,14 @@ Evidence: package-v2/RESULT.json (genuine standardbuilder exit0,374s/source unch
 
 ## E8 — Publish and verify the live website
 
-- [ ] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
-- [ ] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
-- [ ] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
-- [ ] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
-- [ ] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
+- [X] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
+- [X] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
+- [X] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
+- [X] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
+- [X] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
 - [ ] Verify the live public-profile data/rendering assets match the tested upload and the model's catalogue profile, related links and laboratory link display the intended explanation.
 - [ ] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
-- [ ] Complete task-owned cleanup under the [repository cleanup rules](../AGENTS.md#cleanup-and-storage-at-handoff): stop finished preview processes, remove verified disposable outputs and clean completed worktrees through Git after preserving required evidence durably. Verify retained hashes/archive recovery and receipt locations. Record removed paths, retained resources/owners/reasons, checks and disk space in the ledger; explicitly hand off any unsafe or blocked remainder.
+- [ ] Complete task-owned cleanup under the [repository cleanup rules](policy-v1/AGENTS.md#cleanup-and-storage-at-handoff): stop finished preview processes, remove verified disposable outputs and clean completed worktrees through Git after preserving required evidence durably. Verify retained hashes/archive recovery and receipt locations. Record removed paths, retained resources/owners/reasons, checks and disk space in the ledger; explicitly hand off any unsafe or blocked remainder.
 - [ ] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
 
 **Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its public profile and sources/approval/evidence; the packaged and live website explain the model and can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.

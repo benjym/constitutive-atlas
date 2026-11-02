@@ -1,0 +1,19 @@
+{
+  "kind": "CI receipt collector correction only",
+  "utc": "2026-11-02T10:18:12.290916+00:00",
+  "original_sha256": "d061dc0de67181a845ce8829ae9c030d32bc2463b9508a52e6273d670a49431a",
+  "corrected_sha256": "d2c437e25729f8681750b5a53560bd6b84b91dd86973f7931c907891e8091fe7",
+  "retained_failure": "ci-artifacts/perzyna-paired-macOS/RESULT.json",
+  "reason": "Frozen study assess action emits the Wasm assessment to stdout, retained as wasm-assessment.log; it does not create wasm-raw-report.json. Native report remains native-raw-report.json.",
+  "change": "Read exact existing stdout report and save into distinct ci-artifacts-v2 output. Original collector, freeze and failed result preserved. No acceptance value, source/model/compiled artifact or CI gate changed.",
+  "observed_actual_wasm_report": {
+    "passed": true,
+    "cases": 107,
+    "raw_calls": 214,
+    "numeric_comparisons": 6574
+  },
+  "observed_actual_parity": {
+    "physical_numeric_comparisons": 15667,
+    "worst_scaled_difference": 0.0
+  }
+}

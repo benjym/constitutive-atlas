@@ -1,0 +1,127 @@
+{
+  "passed": true,
+  "paired": false,
+  "operations": [
+    {
+      "name": "native-configure",
+      "argv": [
+        "cmake",
+        "-S",
+        "cmake/perzyna",
+        "-B",
+        "build-perzyna-ci-native",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.151310920715332,
+      "log_sha256": "6ee85bbcd134cd071c20bd5bf8d2f6097db5f7aefa619fd135c8bd5ee9caa534"
+    },
+    {
+      "name": "native-build",
+      "argv": [
+        "cmake",
+        "--build",
+        "build-perzyna-ci-native",
+        "--target",
+        "atlas_perzyna_solver",
+        "--parallel",
+        "1"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 4.7252631187438965,
+      "log_sha256": "4d7826c8ab28b90f36a01654d37ab4f2d2377e843810a4184775b3c4d2f4a733"
+    },
+    {
+      "name": "native-capture",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3",
+        "-B",
+        "tools/record_cmake_profile_build_v2.py",
+        "capture",
+        "--root",
+        "/Users/runner/work/constitutive-atlas/constitutive-atlas",
+        "--build",
+        "build-perzyna-ci-native",
+        "--target",
+        "atlas_perzyna_solver",
+        "--entrypoint",
+        "cpp/main.cpp",
+        "--models",
+        "models/research/perzyna",
+        "--recipe",
+        "cmake/perzyna/CMakeLists.txt",
+        "--schedule",
+        "required",
+        "--kind",
+        "native",
+        "--receipt",
+        "/Users/runner/work/_temp/perzyna-native/native-pre.json",
+        "--consumer-tool",
+        "python3",
+        "--consumer-tool",
+        "node",
+        "--artifact",
+        "atlas_perzyna_solver",
+        "--consumer-source",
+        "docs/ingestion/perzyna-comsol63/execution-v2/study.py",
+        "--consumer-source",
+        "docs/ingestion/perzyna-comsol63/execution-v2/oracle.py",
+        "--consumer-source",
+        "docs/ingestion/perzyna-comsol63/execution-v2/cases.json",
+        "--consumer-source",
+        "docs/ingestion/perzyna-comsol63/execution-v2/expected-catalogue.json",
+        "--consumer-source",
+        "docs/ingestion/perzyna-comsol63/execution-v2/reference-convergence.json",
+        "--consumer-source",
+        "docs/ingestion/perzyna-comsol63/execution-v2/collect_wasm.mjs",
+        "--consumer-source",
+        "docs/ingestion/perzyna-comsol63/execution-v2/parity.py",
+        "--consumer-source",
+        "docs/ingestion/perzyna-comsol63/execution-v2/FREEZE.json",
+        "--consumer-source",
+        "tools/check_perzyna_ci.py"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.28802490234375,
+      "log_sha256": "4b4f00a07b6d7391e77bac078ae8f29ac09d4d576735939b211243c03e62c591"
+    },
+    {
+      "name": "native-consumer",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3",
+        "-B",
+        "docs/ingestion/perzyna-comsol63/execution-v2/study.py",
+        "native",
+        "--solver",
+        "/Users/runner/work/constitutive-atlas/constitutive-atlas/build-perzyna-ci-native/atlas_perzyna_solver",
+        "--raw",
+        "/Users/runner/work/_temp/perzyna-native/native-raw.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 153.86855483055115,
+      "log_sha256": "bdba7c6a03c68c09bbb31d6ee2d878f84e31a3e4a394118c88a155fb01e43a3c"
+    },
+    {
+      "name": "native-verify",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3",
+        "-B",
+        "tools/record_cmake_profile_build_v2.py",
+        "verify",
+        "--receipt",
+        "/Users/runner/work/_temp/perzyna-native/native-pre.json",
+        "--receipt-sha256",
+        "0e42c0c0158feb13fdbef694f65cd61e5e55a002d18afc6f123d23105b7becf5",
+        "--output",
+        "/Users/runner/work/_temp/perzyna-native/native-post.json"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.8572108745574951,
+      "log_sha256": "7129871f4512ebd6ba0e2d21d49bf045afcb0095d6d6fdd272736eef96275463"
+    }
+  ],
+  "scope": "Frozen107case BE schedules; exact build identity checks; no experimental or browser claim"
+}
