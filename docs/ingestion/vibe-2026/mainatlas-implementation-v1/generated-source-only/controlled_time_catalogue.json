@@ -1,0 +1,406 @@
+{
+  "profile": "controlled-time-ode-v1",
+  "models": [
+    {
+      "id": "vibe-2026",
+      "model_sha256": "fdda17fced48f8f368a45ab620b1e4dcdd7666a8b2146ac983b03a298f9b302d",
+      "controls": [
+        {
+          "name": "strain",
+          "quantity": "strain",
+          "shape": "sym",
+          "unit": "1",
+          "constraint": "finite",
+          "measure": "infinitesimal_strain",
+          "configuration": "current",
+          "offset": 0,
+          "size": 6
+        },
+        {
+          "name": "suction",
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "constraint": "nonnegative_finite",
+          "offset": 6,
+          "size": 1
+        },
+        {
+          "name": "temperature",
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "constraint": "positive_finite",
+          "offset": 7,
+          "size": 1
+        }
+      ],
+      "state": [
+        {
+          "name": "sigma_net",
+          "offset": 0,
+          "size": 6,
+          "unit": "Pa",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "net_cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "e",
+          "offset": 6,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "global_void_ratio",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "a_scan",
+          "offset": 7,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "hydraulic_scanning_memory",
+            "transformation": "scalar_invariant"
+          }
+        }
+      ],
+      "observables": [
+        {
+          "name": "stress",
+          "offset": 0,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "micro_void_ratio",
+          "offset": 6,
+          "size": 1,
+          "unit": "1"
+        },
+        {
+          "name": "macro_void_ratio",
+          "offset": 7,
+          "size": 1,
+          "unit": "1"
+        },
+        {
+          "name": "macro_saturation",
+          "offset": 8,
+          "size": 1,
+          "unit": "1"
+        },
+        {
+          "name": "saturation",
+          "offset": 9,
+          "size": 1,
+          "unit": "1"
+        },
+        {
+          "name": "relative_density",
+          "offset": 10,
+          "size": 1,
+          "unit": "1"
+        },
+        {
+          "name": "overconsolidation",
+          "offset": 11,
+          "size": 1,
+          "unit": "1"
+        },
+        {
+          "name": "viscosity_factor",
+          "offset": 12,
+          "size": 1,
+          "unit": "1"
+        }
+      ],
+      "parameters": [
+        "phi",
+        "lambda_ref",
+        "kappa",
+        "Nref",
+        "nu",
+        "ns",
+        "ls",
+        "nT",
+        "lT",
+        "coupling_m",
+        "alpha_s",
+        "nm",
+        "hms",
+        "em_ref",
+        "Dr",
+        "se_ref",
+        "eM_ref",
+        "thermal_a",
+        "thermal_b",
+        "ae",
+        "lp",
+        "IvT",
+        "Tr",
+        "vf",
+        "pr",
+        "Oc",
+        "xi",
+        "frm",
+        "alpha_f",
+        "one_kelvin"
+      ],
+      "inputs": [
+        {
+          "name": "time",
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite",
+          "offset": 0,
+          "size": 1
+        },
+        {
+          "name": "strain_rate",
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "strain",
+            "derivative_order": 1
+          },
+          "offset": 1,
+          "size": 6
+        },
+        {
+          "name": "temperature",
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 0
+          },
+          "offset": 7,
+          "size": 1
+        },
+        {
+          "name": "temperature_rate",
+          "quantity": "temperature_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              1
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 1
+          },
+          "offset": 8,
+          "size": 1
+        },
+        {
+          "name": "suction",
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 0
+          },
+          "offset": 9,
+          "size": 1
+        },
+        {
+          "name": "suction_rate",
+          "quantity": "suction_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              1,
+              -1,
+              -3,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 1
+          },
+          "offset": 10,
+          "size": 1
+        }
+      ],
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "controlled_ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "observable",
+          "name": "stress",
+          "measure": "cauchy",
+          "scope": "net"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "strain",
+                "derivative_order": 1
+              }
+            },
+            "temperature": {
+              "quantity": "temperature",
+              "shape": "scalar",
+              "unit": "K",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "temperature",
+                "derivative_order": 0
+              }
+            },
+            "temperature_rate": {
+              "quantity": "temperature_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  1
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "temperature",
+                "derivative_order": 1
+              }
+            },
+            "suction": {
+              "quantity": "suction",
+              "shape": "scalar",
+              "unit": "Pa",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "suction",
+                "derivative_order": 0
+              }
+            },
+            "suction_rate": {
+              "quantity": "suction_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  1,
+                  -1,
+                  -3,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "suction",
+                "derivative_order": 1
+              }
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        },
+        "controls": {
+          "strain": {
+            "quantity": "strain",
+            "shape": "sym",
+            "unit": "1",
+            "constraint": "finite",
+            "measure": "infinitesimal_strain",
+            "configuration": "current"
+          },
+          "temperature": {
+            "quantity": "temperature",
+            "shape": "scalar",
+            "unit": "K",
+            "constraint": "positive_finite"
+          },
+          "suction": {
+            "quantity": "suction",
+            "shape": "scalar",
+            "unit": "Pa",
+            "constraint": "nonnegative_finite"
+          }
+        }
+      }
+    }
+  ],
+  "catalogue_sha256": "bacbeb656d0f44cc1e33520d0d293fe73f81cc72c04ee42a62b8cec1905f97a9"
+}

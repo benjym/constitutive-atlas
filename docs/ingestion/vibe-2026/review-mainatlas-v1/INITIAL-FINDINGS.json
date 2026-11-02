@@ -1,0 +1,74 @@
+{
+  "task": "REVIEW-vibe2026-mainatlas-stage-b-v1",
+  "reviewer": "/root/vibe_capability",
+  "independence": "Reviewer authored Stage A generic capability, none of the eight parent-authored Stage B files; separate source review only, not model scientific approval.",
+  "initial_manifest_sha256": "4340f4d86c598f11c1ffcf4131bf0ebd90b042b2a4102fe354b783ea7daf5337",
+  "source_checks": [
+    {
+      "path": "web/controlled-time-engine.mjs",
+      "expected": "6b5f58786d631844a0f9a340136702c43f48f975eea2f7ec6847f0ec79dee81a",
+      "actual": "6b5f58786d631844a0f9a340136702c43f48f975eea2f7ec6847f0ec79dee81a",
+      "matches": true
+    },
+    {
+      "path": "web/controlled-time-worker.mjs",
+      "expected": "02810b19514ea41bbc066ad4e33d61ff235a0166e6e95ed21134a23eae4a059e",
+      "actual": "02810b19514ea41bbc066ad4e33d61ff235a0166e6e95ed21134a23eae4a059e",
+      "matches": true
+    },
+    {
+      "path": "web/controlled-time-laboratory.mjs",
+      "expected": "8f2848967d854a07b916722f99dfe761bc3f685e3b7c632a1ca7508c78d9b430",
+      "actual": "8f2848967d854a07b916722f99dfe761bc3f685e3b7c632a1ca7508c78d9b430",
+      "matches": true
+    },
+    {
+      "path": "web/app.js",
+      "expected": "56cabd676dd51ad3a97d5284dc68f0f4310de3153d2bbeac9001a03fa38f81b3",
+      "actual": "56cabd676dd51ad3a97d5284dc68f0f4310de3153d2bbeac9001a03fa38f81b3",
+      "matches": true
+    },
+    {
+      "path": "tools/build_controlled_time_web.py",
+      "expected": "df634e9de5ecf4c1553d5b5f7e1f059298f62f8e08f2e66e2597109ca27f8d30",
+      "actual": "df634e9de5ecf4c1553d5b5f7e1f059298f62f8e08f2e66e2597109ca27f8d30",
+      "matches": true
+    },
+    {
+      "path": "tools/build_web.py",
+      "expected": "b0b45e2254d1b6a005fca5cb2a133e7f482015fdd02b4ae92d0a3a86f5f1e3ee",
+      "actual": "b0b45e2254d1b6a005fca5cb2a133e7f482015fdd02b4ae92d0a3a86f5f1e3ee",
+      "matches": true
+    },
+    {
+      "path": "tools/test_controlled_time_package.mjs",
+      "expected": "3341bc8f0db19da900d9e6f83518e358e3221034e2422c2d6d9d3d7dede6f131",
+      "actual": "3341bc8f0db19da900d9e6f83518e358e3221034e2422c2d6d9d3d7dede6f131",
+      "matches": true
+    },
+    {
+      "path": "tests/test_controlled_time_web.mjs",
+      "expected": "b4e6fab08315cd4f4a3fb09929d2d37de3de75a6a530ee453616eadf40a6331c",
+      "actual": "b4e6fab08315cd4f4a3fb09929d2d37de3de75a6a530ee453616eadf40a6331c",
+      "matches": true
+    }
+  ],
+  "blocking_findings": [
+    {
+      "id": "B1",
+      "status": "open",
+      "files": [
+        "web/controlled-time-engine.mjs",
+        "web/controlled-time-worker.mjs",
+        "tools/test_controlled_time_package.mjs"
+      ],
+      "finding": "No actual catalogue-byte comparison with embedded controlled_time_catalogue_file_hash. Stored semantic/catalogue model hash fields are trusted and may remain unchanged while external descriptor layout is edited. Shape checks do not detect same-shape field reorder.",
+      "smallest_fix": "Compare sha(actual catalogue bytes) to compiled file hash before constructing engine/material calls in worker and packaged gate; add pure fake-module edited-descriptor/stale-identity tests."
+    }
+  ],
+  "limitations": [
+    "No builds, native/Wasm/material/browser/package-gate execution.",
+    "No current actual public qualification receipt or E5 approval assumed; packager must continue failing closed until supplied and reviewed."
+  ],
+  "retained_parent_failures": "mainatlas-implementation-v1/pure-attempts.json records two incorrect pure-domain expectations; actual zero/negative suction refusal/recovery gates remain mandatory."
+}

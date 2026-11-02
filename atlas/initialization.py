@@ -22,6 +22,9 @@ def initialize_state(model, state, parameters, *, loading=None, time=None):
     Never substitute example values, project state, or infer a preparation history.
     Temporary solve fields are zero-filled for the complete engine layout.
     """
+    from .model import controlled_time
+    if controlled_time(model):
+        raise ValidationError('controlled-time initialization requires atlas.controlled_time.initialize and complete values/rates')
     validate(model)
     if model['schema_version'] != '0.3':
         raise ValidationError('explicit state initialization requires model v0.3')
@@ -87,6 +90,9 @@ def initialize_state(model, state, parameters, *, loading=None, time=None):
 
 def validate_recipe(recipe, model):
     check(recipe,json.loads((ROOT/'schemas/initialization-recipe.schema.json').read_text()))
+    from .model import controlled_time
+    if controlled_time(model):
+        raise ValidationError('controlled-time initialization requires atlas.controlled_time.initialize and complete values/rates')
     validate(model)
     if not physical_time(model) or recipe['model'] != model['id']:
         raise ValidationError('initialization recipe requires its matching physical-time model')

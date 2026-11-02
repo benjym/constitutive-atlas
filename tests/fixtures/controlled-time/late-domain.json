@@ -1,0 +1,304 @@
+{
+  "schema_version": "0.3",
+  "status": "draft",
+  "id": "test-controlled-time-late-domain",
+  "name": "Synthetic controlled-time late-domain rollback",
+  "family": "engine verification only",
+  "description": "Analytical generic transport fixture; not VIBE or a scientific model.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/TEMPORAL_INTEGRATION.md",
+      "role": "analytical verification specification",
+      "locator": "Maxwell deviatoric law; not Terracotta"
+    }
+  ],
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "controlled_ode",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "observable",
+      "name": "stress",
+      "measure": "cauchy",
+      "scope": "net"
+    },
+    "inputs": {
+      "equation": {
+        "time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "strain_rate": {
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "strain",
+            "derivative_order": 1
+          }
+        },
+        "temperature": {
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 0
+          }
+        },
+        "temperature_rate": {
+          "quantity": "temperature_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              1
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 1
+          }
+        },
+        "suction": {
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 0
+          }
+        },
+        "suction_rate": {
+          "quantity": "suction_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              1,
+              -1,
+              -3,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 1
+          }
+        }
+      },
+      "advance": {
+        "start_time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "start",
+          "constraint": "finite"
+        },
+        "duration": {
+          "quantity": "duration",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "interval",
+          "constraint": "positive_finite"
+        }
+      }
+    },
+    "controls": {
+      "strain": {
+        "quantity": "strain",
+        "shape": "sym",
+        "unit": "1",
+        "constraint": "finite",
+        "measure": "infinitesimal_strain",
+        "configuration": "current"
+      },
+      "temperature": {
+        "quantity": "temperature",
+        "shape": "scalar",
+        "unit": "K",
+        "constraint": "positive_finite"
+      },
+      "suction": {
+        "quantity": "suction",
+        "shape": "scalar",
+        "unit": "Pa",
+        "constraint": "nonnegative_finite"
+      }
+    }
+  },
+  "parameters": {
+    "E": {
+      "default": 2000000.0,
+      "min": 1000000.0,
+      "max": 4000000.0,
+      "unit": "Pa"
+    },
+    "A": {
+      "default": 0.3,
+      "min": 0.15,
+      "max": 0.6,
+      "unit": "1"
+    },
+    "B": {
+      "default": 100,
+      "min": 50.0,
+      "max": 200,
+      "unit": {
+        "si": [
+          1,
+          -1,
+          -2,
+          -1
+        ]
+      }
+    },
+    "C": {
+      "default": 7,
+      "min": 3.5,
+      "max": 14,
+      "unit": {
+        "si": [
+          1,
+          -1,
+          -3,
+          0
+        ]
+      }
+    },
+    "Tref": {
+      "default": 300,
+      "min": 150.0,
+      "max": 600,
+      "unit": "K"
+    },
+    "tau": {
+      "default": 2,
+      "min": 1.0,
+      "max": 4,
+      "unit": "s"
+    },
+    "one": {
+      "default": 1,
+      "min": 0.5,
+      "max": 2,
+      "unit": "1"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        10000,
+        20000,
+        30000,
+        4000,
+        -5000,
+        6000
+      ],
+      "scale": "E",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "synthetic_history",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "clock_memory",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": -3.5,
+      "scale": "one",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "synthetic_history",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.8,
+      "scale": "one",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "synthetic_history",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "memory",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 2,
+      "scale": "one",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "synthetic_history",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [],
+  "equations": {
+    "sigma": "E*strain_rate+I*(A*suction_rate+B*temperature_rate+C*temperature/Tref)",
+    "clock_memory": "time/tau**2",
+    "e": "-(1+e)*trace(strain_rate)",
+    "memory": "-memory/tau"
+  },
+  "domain": [
+    "e > -1",
+    "time < 14*tau/2"
+  ],
+  "observables": [
+    {
+      "name": "stress",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "E",
+      "expr": "sigma"
+    }
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "clock_memory",
+      "e",
+      "memory"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
+}

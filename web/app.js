@@ -2,6 +2,7 @@ import {setupInterface2016Laboratory} from './interface2016-laboratory.mjs';
 import {setupPerzynaLaboratory} from './perzyna-laboratory.mjs';
 import {setupBinghamLaboratory} from './bingham-laboratory.mjs';
 import {setupKelvinVoigtLaboratory} from './kelvin-voigt-laboratory.mjs';
+import {setupControlledTimeLaboratory} from './controlled-time-laboratory.mjs';
 import {setupHillLaboratory} from './hill-laboratory.mjs';
 import {setupOrthotropicLaboratory} from './orthotropic-laboratory.mjs';
 import {setupJ2Laboratory} from './j2-laboratory.mjs';
@@ -427,7 +428,7 @@ function renderCharts(){
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),profile=modelProfile(entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id+' '+(profile?.summary??'')).toLowerCase().includes(query))continue;
+  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),profile=modelProfile(entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'||entry.controlled_time_laboratory==='index.html'));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id+' '+(profile?.summary??'')).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Reading profile','catalogue-availability'+(executable?' available':'')));
     const heading=element('h2'),open=element('a',profile?.title??entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
@@ -473,7 +474,7 @@ function showCatalogueModel(entry,spec){
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
   $('catalogue-detail-id').textContent=entry.id;
   $('catalogue-permalink').href=catalogueModelHash(entry.id);
-  const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html');
+  const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'||entry.controlled_time_laboratory==='index.html');
   const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute&&!timed&&entry.id!==j2View?.modelId;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(activateLaboratoryModel(entry.id))location.hash='laboratory?model='+encodeURIComponent(entry.id);$('model').focus({preventScroll:true});};
   if(!dialog.open)dialog.showModal();$('catalogue-detail-body').scrollTop=0;
 }
@@ -638,5 +639,5 @@ try{
   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
   models.forEach(m=>$('model').append(new Option(modelProfile(m.id)?.title??m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
-  populate();timedView=createLaboratoryControllerRouter([setupInterface2016Laboratory({chart,cancelOrdinary:()=>cancel('')}),setupPerzynaLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupBinghamLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();
+  populate();timedView=createLaboratoryControllerRouter([setupControlledTimeLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupInterface2016Laboratory({chart,cancelOrdinary:()=>cancel('')}),setupPerzynaLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupBinghamLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

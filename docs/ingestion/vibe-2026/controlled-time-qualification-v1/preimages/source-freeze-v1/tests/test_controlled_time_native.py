@@ -1,0 +1,78 @@
+"""Compiled qualification: explicit coordinator-owned opt-in, never builds anything."""
+import os,unittest,json,math,ctypes as C,hashlib
+from dataclasses import asdict
+from pathlib import Path
+from tests.test_controlled_time import model,context,endpoint
+from atlas.controlled_time import Settings,advance,components
+from atlas.controlled_time_native import NativeEngine
+@unittest.skipUnless(os.environ.get('ATLAS_CONTROLLED_TIME_MODULE') and os.environ.get('ATLAS_CONTROLLED_TIME_CATALOGUE'),'explicit native handoff required')
+class NativeControlledTimeTests(unittest.TestCase):
+ def setUp(self):
+  if not os.environ.get('ATLAS_CONTROLLED_TIME_SOURCE_MANIFEST') or not os.environ.get('ATLAS_CONTROLLED_TIME_RAW_OUTPUT'):raise ValueError('compiled qualification requires source manifest and durable raw output path before execution')
+  source=Path(os.environ['ATLAS_CONTROLLED_TIME_SOURCE_MANIFEST']);corpus=Path(__file__).resolve().parents[1]/'docs/ingestion/vibe-2026/controlled-time-qualification-v1/reference-corpus-v1.json'
+  self.binding=dict(source_manifest_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),reference_corpus_sha256=hashlib.sha256(corpus.read_bytes()).hexdigest(),module_sha256=hashlib.sha256(Path(os.environ['ATLAS_CONTROLLED_TIME_MODULE']).read_bytes()).hexdigest(),catalogue_file_sha256=hashlib.sha256(Path(os.environ['ATLAS_CONTROLLED_TIME_CATALOGUE']).read_bytes()).hexdigest())
+  dest=Path(os.environ['ATLAS_CONTROLLED_TIME_RAW_OUTPUT']);dest.parent.mkdir(parents=True,exist_ok=True);self.raw_target=dest.with_name(dest.stem+'-'+self._testMethodName+'.json')
+  if self.raw_target.exists():raise FileExistsError('retain prior raw qualification output; choose new output identity')
+  self.raw_records=[];self.engines=[];self.addCleanup(self.write_raw);self.write_raw()
+  self.m=model();self.p=context(self.m);self.engine=NativeEngine(os.environ['ATLAS_CONTROLLED_TIME_MODULE'],os.environ['ATLAS_CONTROLLED_TIME_CATALOGUE'],self.m);self.engines.append(self.engine)
+ def write_raw(self):
+  self.raw_target.write_text(json.dumps(dict(test=self._testMethodName,**self.binding,raw_records=self.raw_records,engines=[dict(artifact_identity=e.artifact_identity,trace=e.trace) for e in self.engines]),indent=2,allow_nan=False)+'\n')
+ def test_analytical_transport_and_clock(self):
+  r=self.engine.advance(self.m,self.p,4,self.p.controls,endpoint(),Settings(relative_tolerance=1e-10));py=advance(self.m,self.p,4,self.p.controls,endpoint(),Settings(relative_tolerance=1e-10))
+  extra=.3*150000+100*30+7*4*630/600
+  for i,v in enumerate(r.context.state['sigma']):self.assertLess(abs(v-(self.p.state['sigma'][i]+2e6*endpoint()['strain'][i]+(extra if i<3 else 0))),1e-7+1e-12*abs(v))
+  self.assertLess(abs(r.context.state['clock_memory']-9.5),1.05e-11);self.assertLess(abs(r.context.state['memory']-2*math.exp(-2)),1e-8+2e-7*2*math.exp(-2))
+  self.assertEqual(r.context.time,15);self.assertEqual(r.context.controls,endpoint());self.assertEqual(r.context.control_rates,py.context.control_rates)
+  for a,b in zip(components(r.context.state,self.m['state']),components(py.context.state,self.m['state'])):self.assertLessEqual(abs(a-b),1e-7+1e-10*abs(b))
+  if os.environ.get('ATLAS_CONTROLLED_TIME_RAW_OUTPUT'):
+   Path(os.environ['ATLAS_CONTROLLED_TIME_RAW_OUTPUT']).write_text(json.dumps({'backend':'native','context':asdict(self.p),'result':asdict(r),'python_comparison':asdict(py)},indent=2,allow_nan=False)+'\n')
+ def test_independent_frozen_corpus_and_refinement(self):
+  from atlas.model import ROOT,load
+  from atlas.controlled_time import initialize,stage_controls
+  corpus=json.loads((ROOT/'docs/ingestion/vibe-2026/controlled-time-qualification-v1/reference-corpus-v1.json').read_text());records=[]
+  for case in corpus['cases']:
+   self.assertEqual(hashlib.sha256((ROOT/case['fixture']).read_bytes()).hexdigest(),case['definition_sha256'])
+   m=load(ROOT/case['fixture']);engine=NativeEngine(os.environ['ATLAS_CONTROLLED_TIME_MODULE'],os.environ['ATLAS_CONTROLLED_TIME_CATALOGUE'],m);self.engines.append(engine);p=initialize(m,case['state'],case['start_time'],case['controls'],case['incoming_rates'],case['parameters']);q=p
+   for i in range(1,case['partitions']+1):
+    end,_=stage_controls(m,p.controls,case['controls_end'],case['duration'],i/case['partitions']);result=engine.advance(m,q,case['duration']/case['partitions'],q.controls,end,Settings(**case['settings']));q=result.context
+   for name,expected in case['expected_state'].items():
+    actual=q.state[name];a=actual if isinstance(actual,list) else [actual];b=expected if isinstance(expected,list) else [expected]
+    for x,y in zip(a,b):
+     y=float(y);tol=1e-7+1e-12*abs(y) if name=='sigma' else 1e-12+1e-12*abs(y) if name=='clock_memory' else 1e-8+2e-7*abs(y);self.assertLessEqual(abs(x-y),tol,(case['id'],name,x,y))
+   self.assertEqual(q.time,case['start_time']+case['duration']);self.assertEqual(q.controls,case['controls_end']);records.append(dict(case=case['id'],context=asdict(q),observables=result.observables,diagnostics=result.diagnostics,settings=case['settings']))
+  errors=[]
+  for h in [1,.5,.25]:
+   q=self.engine.advance(self.m,self.p,4,self.p.controls,self.p.controls,Settings(absolute_scale_fraction=1e-6,relative_tolerance=1e-2,maximum_step_seconds=h)).context;errors.append(abs(q.state['memory']-2*math.exp(-2)))
+  self.assertGreater(errors[0],errors[1]);self.assertGreater(errors[1],errors[2]);self.assertTrue(3<errors[1]/errors[2]<5,errors)
+  if os.environ.get('ATLAS_CONTROLLED_TIME_RAW_OUTPUT'):
+   dest=Path(os.environ['ATLAS_CONTROLLED_TIME_RAW_OUTPUT']);dest.with_name(dest.stem+'-corpus.json').write_text(json.dumps(dict(records=records,refinement_errors=errors),indent=2,allow_nan=False)+'\n')
+ def test_inputs_aliases_lengths_and_output_sentinels(self):
+  e=self.engine;ns,np,nc,no,_,_=e.shapes;z=e.array(components(self.p.state,self.m['state']));p=e.array(list(self.p.parameters.values()));v=e.array(components(self.p.controls,e.fields));rate=e.array(components(self.p.control_rates,e.fields));rr=e.array([-1234567.]*ns);oo=e.array([-1234567.]*no);ss=e.array([-1234567.]*ns)
+  # Input/output exact alias, partial alias, output/output alias; no dereference before all checks.
+  args=[e.index,z,ns,p,np,11.,v,nc,rate,nc,0,rr,ns,oo,no,ss,ns]
+  for index,replacement in [(2,ns+1),(10,2),(11,z),(13,rr),(11,C.cast(C.byref(z,8),C.POINTER(C.c_double)))]:
+   trial=list(args);trial[index]=replacement;before=[list(x) for x in [z,p,v,rate,rr,oo,ss]];status=e.lib.controlled_time_evaluate(*trial);self.raw_records.append(dict(kind='invalid-evaluate',argument_index=index,status=status,before=before,after=[list(x) for x in [z,p,v,rate,rr,oo,ss]]));self.assertEqual(status,0);self.assertEqual([list(x) for x in [z,p,v,rate,rr,oo,ss]],before)
+  # Readonly inputs may alias: allzero rates may share a validcontrol array if values remain in domain.
+  status=e.lib.controlled_time_evaluate(*args);self.raw_records.append(dict(kind='valid-evaluate',status=status,rates=list(rr),observables=list(oo),scales=list(ss)));self.assertEqual(status,1)
+  readonly_alias=list(args);readonly_alias[8]=v
+  status=e.lib.controlled_time_evaluate(*readonly_alias);self.raw_records.append(dict(kind='readonly-input-alias',status=status,rates=list(rr),observables=list(oo),scales=list(ss)));self.assertEqual(status,1)
+  overflow=list(args);overflow[1]=C.cast(C.c_void_p((1<<(8*C.sizeof(C.c_void_p)))-4),C.POINTER(C.c_double))
+  before=[list(a) for a in [z,p,v,rate,rr,oo,ss]];status=e.lib.controlled_time_evaluate(*overflow);self.raw_records.append(dict(kind='uintptr-overflow',status=status,before=before,after=[list(a) for a in [z,p,v,rate,rr,oo,ss]]));self.assertEqual(status,0);self.assertEqual([list(a) for a in [z,p,v,rate,rr,oo,ss]],before)
+ def test_exact_boundary_native_state_controls_parameters_observables(self):
+  from atlas.model import load,ROOT
+  from atlas.controlled_time import initialize,control_fields
+  m=load(ROOT/'tests/fixtures/controlled-time/capacity-max.json');engine=NativeEngine(os.environ['ATLAS_CONTROLLED_TIME_MODULE'],os.environ['ATLAS_CONTROLLED_TIME_CATALOGUE'],m);self.engines.append(engine)
+  state={f['name']:f['initial'] for f in m['state']};params={n:f['default'] for n,f in m['parameters'].items()};values={f['name']:([0.]*6 if f['shape']=='sym' else 0.) for f in control_fields(m)};values.update(temperature=300.,suction=200000.);rates={f['name']:([0.]*6 if f['shape']=='sym' else 0.) for f in control_fields(m)}
+  p=initialize(m,state,11,values,rates,params);end={**values,'field23':.25};r=engine.advance(m,p,4,p.controls,end,Settings(relative_tolerance=1e-10))
+  self.assertEqual(engine.shapes,[32,256,32,144,6,4]);self.assertAlmostEqual(r.context.state['history22'],498.25,places=7)
+  for i,v in enumerate(r.observables['output22']):self.assertLess(abs(v-(r.context.state['sigma'][i]+(2e6*498.25 if i<3 else 0))),1e-6)
+ def test_recovery_restart_full_context(self):
+  from atlas.controlled_time import context_from_dict
+  e=self.engine;p=self.p;expected=e.advance(self.m,p,1,p.controls,p.controls)
+  for bad in [Settings(maximum_trials=1,maximum_step_seconds=.001),Settings(maximum_depth=1,maximum_step_seconds=.001)]:
+   before=asdict(p)
+   with self.assertRaises(ValueError):e.advance(self.m,p,4,p.controls,endpoint(),bad)
+   self.assertEqual(asdict(p),before);self.assertEqual(e.advance(self.m,p,1,p.controls,p.controls),expected)
+  mid=e.advance(self.m,p,2,p.controls,p.controls).context;rest=context_from_dict(self.m,asdict(mid));end=e.advance(self.m,rest,2,rest.controls,rest.controls).context
+  self.assertAlmostEqual(end.state['clock_memory'],9.5,places=10)
+if __name__=='__main__':unittest.main()

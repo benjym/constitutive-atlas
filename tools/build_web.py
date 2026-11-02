@@ -19,6 +19,7 @@ from build_power_creep_web import bundle as bundle_power_creep
 from build_orthotropic_laboratory import bundle as bundle_orthotropic
 
 from build_kelvin_voigt_laboratory import bundle as bundle_kelvin_voigt
+from build_controlled_time_web import bundle as bundle_controlled_time
 
 def main():
     parser=argparse.ArgumentParser()
@@ -38,6 +39,7 @@ def main():
     parser.add_argument('--bingham-wasm-dir',type=Path,default=ROOT/'build-bingham-public',help='Exact independently reviewed Bingham physical-time engine')
     parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'web/engines/interface2016',help='Exact reviewed source-reconciled HvWE controlled-path engine')
     parser.add_argument('--perzyna-wasm-dir',type=Path,default=ROOT/'build-perzyna-public',help='Exact independently reviewed Perzyna physical-time engine')
+    parser.add_argument('--controlled-time-wasm-dir',type=Path,default=ROOT/'build-controlled-time-wasm',help='Exact independently qualified imposed-field physical-time engine for the main laboratory')
     args=parser.parse_args()
     subprocess.run(['node',str(ROOT/'tools/check_model_profiles.mjs'),str(ROOT)],check=True)
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
@@ -134,6 +136,8 @@ def main():
     from build_hill_laboratory import bundle as bundle_hill
     bundle_hill(dest,args.hill_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_hill_package.mjs'),str(dest)],check=True)
+    bundle_controlled_time(dest,args.controlled_time_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_controlled_time_package.mjs'),str(dest)],check=True)
     (dest/'.nojekyll').touch()
     print(f'Packaged {dest}')
 

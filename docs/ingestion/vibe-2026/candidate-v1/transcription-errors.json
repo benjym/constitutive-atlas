@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "first structural/semantic candidate load",
+    "result": "unsupported function or arity: det",
+    "correction": "Use existing DSL determinant primitive; no model equation or gate changed"
+  },
+  {
+    "stage": "second semantic candidate load",
+    "result": "comparison requires equally dimensioned scalars",
+    "correction": "Explicit unitful zeros for thermal/pressure comparisons; no physics or gate change"
+  },
+  {
+    "stage": "third semantic candidate load",
+    "result": "fscan rate comparison needs pressure/time zero",
+    "correction": "Use0*pr*Dr to type both rate branches; samephysicalzero"
+  },
+  {
+    "stage": "fourth semantic candidate load",
+    "result": "DSL doesnot implement != comparison",
+    "correction": "Use abs(denominator)>0 for exactsame nonsingularity domain, withoutassuming positive"
+  }
+]

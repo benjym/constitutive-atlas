@@ -1,0 +1,3 @@
+# Revision4 metadata finalization before compiled observations
+
+Replace the time-dependent draft sentence in description with the time-independent supported OA>=1 interface and calibration limit. This prevents a later approved public package from displaying a stale draft statement. State/status stays draft pending actual approval registry; every equation, parameter, initial value, domain, branch, convention and interface byte is unchanged from independently accepted revision3. Preserve exact revision3 model/builder preimages and all reports. No compiled observation. New exact raw hash and structural-only-difference receipt are required; E4 plans bind new bytes, not an inferred prior approval.

@@ -1,0 +1,1 @@
+Reader review requested a plain IvT input label. Meaning is now “temperature sensitivity of viscosity”; the explanatory help retains baseline0.004 and IvT0 distinction. Exact original profile/manifest/code remain unchanged. No constitutive/interface/numerical claim changes. The coordinator integrates profile-data-v2.json only after actual E4/E5.

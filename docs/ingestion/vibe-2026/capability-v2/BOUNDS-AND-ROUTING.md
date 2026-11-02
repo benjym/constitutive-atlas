@@ -1,0 +1,26 @@
+# Concrete bounds, ABI overlap and routing addendum
+
+Prospective supplement to frozen v2 design; no implementation or execution observations. Initial manifest remains historical, and `manifest-addendum.json` binds this addendum separately. Parent specifies implementation must use a newly assigned isolated worktree based on current origin/main `31125e2e8`, **not** dirty root HEAD `feba`. Shared root `tools/build_web.py` and `web/app.js` belong to other coordinators; no root edits or implied ownership. MDv5 holds serial execution slot: no build or compiled call until a fresh explicit coordinator handoff.
+
+## Fixed new-profile bounds
+
+- State maximum32 flattened scalar components; one symmetric field consumes6.
+- Controls maximum32 flattened scalar components. Exactly one required symmetric mechanical strain control consumes6; remaining scalar fields consume1each. Bound equation inputs maximum65 flattened components =time plus bothorders of32controlcomponents; field/object count cannot evade flattened bounds.
+- Parameters maximum256 scalar entries for this new profile; no change to old schema limits. Observable maximum24 fields and144 flattened components. Every actual model exact count and layout is generated metadata, never inferred from a maximum.
+- Each input has one binding; a `(control,order)` pair cannot be duplicated or partlybound. A symmetric binding maps all6components together. Control descriptors include exactquantity/valueunit; input quantities distinguish each rate from itsvalue, with expected type dimension `baseunit-time` for order1. Initialization uses the exactsamevalidated binding table as stages.
+- Six settings in order `absolute_scale_fraction,relative_tolerance,minimum_step_seconds,maximum_step_seconds,maximum_depth,maximum_trials`. Firstfour finitepositive; min<=max. Depth integral1..60; trials integral1..1000000. Bounds checked before integer casts. Four diagnostics: trialcount, acceptedhalfstepcount, rejectedtrialcount, finalnormalizedlocalerror. Counts finite exactintegers within safe integer range; no runtimeconversion of NaN/overflow to int. A failure does not write diagnostics either. No method selected by settings.
+- Zero duration rejects. Negative starttime remains legal if source/model domain permits it; it is not silently clamped. Positive duration must give representably later finite endpoint and internal midpoint. Scalarfieldvalueconstraints are finite, positive_finite or nonnegative_finite; derivatives require finitevalues and do not inherit those inequalities.
+
+## ABI aliasing policy: reject writes overlapping anything
+
+Read-only input ranges may overlap one another, e.g. identical current/start controls, provided each has its expected length. Every output range must be disjoint from every input range and from all other output ranges. Validate complete address ranges with `uintptr_t` and checked byte-count/end arithmetic before any read or write. Null with count0 is valid only for truly zero-length parameters/observables; nonempty arrays require nonnull pointers. A malformed nonnull rawaddress cannot be made safe by C++ pointervalidation; native caller retains normal validallocation responsibility and browser bridge allocates buffers itself. The checkedABI promises shape/count/alias checks, not OS-memorysandboxing. All outputs remain untouched on alias rejection; constructor/vector allocations/exceptions also cannot commitpartialoutputs. Frozen tests cover exactalias, partialalias byonecomponent, adjacentnonoverlap, output-outputalias, input-inputallowedoverlap and addressrange arithmetic overflow withoutdereference.
+
+## Required explicit rejection tests
+
+For a syntactically/semantically valid controlled-time model, require actionable rejection by ordinary interpret/observe/evaluation_environment, legacy `initialize_state`/recipe functions, ordinary material compiler catalogue, oldphysicaltime/schedule route, dimensionless path route, legacy history transport and old browser timed/path engine. New dispatcher uses `controlled_time(model)` before generic `physical_time(model)` consumers. Common `compiler.generate` rejects mixed old/newprofile catalogues before writing partialoutputs. Dedicated generator rejects oldODE/pathODE/residual inputs. Newmodule exports only controlled_time API; no accidental path/time aliases.
+
+Old compatibility tests separately require oldphysicalODE and pathODE still compile/validate, existing path zero-progress identity passes unchanged, oldphysicalODE rejects newscalarfields, oldprofile netstress stillrejects, ordinary timed/path browser requests retain original layouts and model-count assumptions. This gating specifically catches a valid newmodel being accidentally accepted because its physical_time flag istrue.
+
+## Implementation handoff
+
+StageA whitelist in IMPLEMENTATION.md is the proposed coretask. StageB/C shared integration paths require their own explicit coordinator claim/grant; no implicit pathownership from this addendum. Source equations remain generic generated declarative expressions. Dedicatedworktree currentoriginbase plus independentreview before any build prevents accidentally packaging unrelated root work. No worker claims or consumes MDv5's buildslot.

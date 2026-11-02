@@ -1,0 +1,789 @@
+{
+  "schema_version": "0.3",
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "controlled_ode",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "observable",
+      "name": "stress",
+      "measure": "cauchy",
+      "scope": "net"
+    },
+    "inputs": {
+      "equation": {
+        "time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "strain_rate": {
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "strain",
+            "derivative_order": 1
+          }
+        },
+        "temperature": {
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 0
+          }
+        },
+        "temperature_rate": {
+          "quantity": "temperature_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              1
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 1
+          }
+        },
+        "suction": {
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 0
+          }
+        },
+        "suction_rate": {
+          "quantity": "suction_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              1,
+              -1,
+              -3,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 1
+          }
+        }
+      },
+      "advance": {
+        "start_time": {
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "start",
+          "constraint": "finite"
+        },
+        "duration": {
+          "quantity": "duration",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "interval",
+          "constraint": "positive_finite"
+        }
+      }
+    },
+    "controls": {
+      "strain": {
+        "quantity": "strain",
+        "shape": "sym",
+        "unit": "1",
+        "constraint": "finite",
+        "measure": "infinitesimal_strain",
+        "configuration": "current"
+      },
+      "temperature": {
+        "quantity": "temperature",
+        "shape": "scalar",
+        "unit": "K",
+        "constraint": "positive_finite"
+      },
+      "suction": {
+        "quantity": "suction",
+        "shape": "scalar",
+        "unit": "Pa",
+        "constraint": "nonnegative_finite"
+      }
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma_net",
+      "e",
+      "a_scan"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "id": "vibe-2026",
+  "name": "VIBE 2026 — published explicit Appendix A formulation",
+  "family": "thermo-hydro-mechanical viscohypoplasticity",
+  "status": "draft",
+  "description": "Complete published explicit Appendix A THM law in fixed-spatial, zero-spin small-strain material-point scope. Source A7/A9 tensor identities are completed uniquely using Eqs39/42. Appendix separate hydraulic/thermal absolute terms differ from Eq27 for opposing internal contributions; no equivalence is claimed. Strict positive-suction and nonsingular-state domain, no saturated endpoint, clipping or author-code endpoint reconstruction. Parameter guards are prospective Atlas study bounds, not universal material ranges. Not approved or executable delivery until independently qualified.",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1016/j.enggeo.2026.108827",
+      "locator": "VoR pp15–16 AppendixA1–35; pp4–5 Tables1–3; p13 Eqs39,42; p12 Eq27 discrepancy",
+      "role": "governing published explicit formulation; private PDF SHA25690b1c3bc56bacf1294e3e8ea60a217ffa1651981c86c63b0c0d9354534764912"
+    }
+  ],
+  "parameters": {
+    "phi": {
+      "default": 0.4363323129985824,
+      "min": 0.3490658503988659,
+      "max": 0.5235987755982988,
+      "unit": "1"
+    },
+    "lambda_ref": {
+      "default": 0.1,
+      "min": 0.08,
+      "max": 0.12,
+      "unit": "1"
+    },
+    "kappa": {
+      "default": 0.02,
+      "min": 0.016,
+      "max": 0.024,
+      "unit": "1"
+    },
+    "Nref": {
+      "default": 1.43,
+      "min": 1.3,
+      "max": 1.56,
+      "unit": "1"
+    },
+    "nu": {
+      "default": 0.24,
+      "min": 0.2,
+      "max": 0.28,
+      "unit": "1"
+    },
+    "ns": {
+      "default": 0,
+      "min": 0,
+      "max": 0.04,
+      "unit": "1"
+    },
+    "ls": {
+      "default": 0,
+      "min": 0,
+      "max": 0.01,
+      "unit": "1"
+    },
+    "nT": {
+      "default": 0.04,
+      "min": 0,
+      "max": 0.08,
+      "unit": "1"
+    },
+    "lT": {
+      "default": 0,
+      "min": 0,
+      "max": 0.01,
+      "unit": "1"
+    },
+    "coupling_m": {
+      "default": 5,
+      "min": 4,
+      "max": 6,
+      "unit": "1"
+    },
+    "alpha_s": {
+      "default": 0.00025,
+      "min": 0.0002,
+      "max": 0.0003,
+      "unit": {
+        "si": [
+          0,
+          0,
+          0,
+          -1
+        ]
+      }
+    },
+    "nm": {
+      "default": 0.9,
+      "min": 0.8,
+      "max": 1,
+      "unit": "1"
+    },
+    "hms": {
+      "default": 150000000.0,
+      "min": 100000000.0,
+      "max": 200000000.0,
+      "unit": "Pa"
+    },
+    "em_ref": {
+      "default": 0.55,
+      "min": 0.5,
+      "max": 0.6,
+      "unit": "1"
+    },
+    "Dr": {
+      "default": 5e-07,
+      "min": 2.5e-07,
+      "max": 7.5e-07,
+      "unit": {
+        "si": [
+          0,
+          0,
+          -1,
+          0
+        ]
+      }
+    },
+    "se_ref": {
+      "default": 2000000.0,
+      "min": 1000000.0,
+      "max": 3000000.0,
+      "unit": "Pa"
+    },
+    "eM_ref": {
+      "default": 0.2,
+      "min": 0.15,
+      "max": 0.25,
+      "unit": "1"
+    },
+    "thermal_a": {
+      "default": 0.118,
+      "min": 0.11,
+      "max": 0.13,
+      "unit": "1"
+    },
+    "thermal_b": {
+      "default": -0.0001,
+      "min": -0.00012,
+      "max": -8e-05,
+      "unit": {
+        "si": [
+          0,
+          0,
+          0,
+          -1
+        ]
+      }
+    },
+    "ae": {
+      "default": 0.9,
+      "min": 0.8,
+      "max": 0.95,
+      "unit": "1"
+    },
+    "lp": {
+      "default": 1.1,
+      "min": 1,
+      "max": 1.2,
+      "unit": "1"
+    },
+    "IvT": {
+      "default": 5,
+      "min": 2,
+      "max": 8,
+      "unit": "1"
+    },
+    "Tr": {
+      "default": 294,
+      "min": 294,
+      "max": 294,
+      "unit": "K"
+    },
+    "vf": {
+      "default": 0.1,
+      "min": 0.1,
+      "max": 0.1,
+      "unit": "1"
+    },
+    "pr": {
+      "default": 1000,
+      "min": 1000,
+      "max": 1000,
+      "unit": "Pa"
+    },
+    "Oc": {
+      "default": 1.4,
+      "min": 1.4,
+      "max": 1.4,
+      "unit": "1"
+    },
+    "xi": {
+      "default": 0.2,
+      "min": 0.2,
+      "max": 0.2,
+      "unit": "1"
+    },
+    "frm": {
+      "default": 0.5,
+      "min": 0.5,
+      "max": 0.5,
+      "unit": "1"
+    },
+    "alpha_f": {
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "unit": "1"
+    },
+    "one_kelvin": {
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "unit": "K"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma_net",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        5185790.988798023,
+        5185790.988798023,
+        5185790.988798023,
+        0,
+        0,
+        0
+      ],
+      "scale": "pr",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "net_cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0.725,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "global_void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "a_scan",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "hydraulic_scanning_memory",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "source_sigma",
+      "expr": "-sigma_net"
+    },
+    {
+      "name": "source_rate",
+      "expr": "-strain_rate"
+    },
+    {
+      "name": "thermal_factor",
+      "expr": "(thermal_a+thermal_b*temperature)/(thermal_a+thermal_b*Tr)"
+    },
+    {
+      "name": "pm",
+      "expr": "-trace(source_sigma)/3+suction"
+    },
+    {
+      "name": "em",
+      "expr": "em_ref*exp(-(pm/hms)**nm)*thermal_factor"
+    },
+    {
+      "name": "eM",
+      "expr": "(e-em)/(1+em)"
+    },
+    {
+      "name": "sen",
+      "expr": "se_ref*eM_ref/eM*thermal_factor"
+    },
+    {
+      "name": "se",
+      "expr": "sen*(ae+a_scan-ae*a_scan)"
+    },
+    {
+      "name": "retention_power",
+      "expr": "(se/suction)**lp"
+    },
+    {
+      "name": "SM",
+      "expr": "1-exp(-retention_power)"
+    },
+    {
+      "name": "sigmaM",
+      "expr": "source_sigma-SM*suction*I"
+    },
+    {
+      "name": "pM",
+      "expr": "-trace(sigmaM)/3"
+    },
+    {
+      "name": "macro_dev",
+      "expr": "dev(sigmaM)"
+    },
+    {
+      "name": "macro_dev_sq",
+      "expr": "dot(macro_dev,macro_dev)"
+    },
+    {
+      "name": "macro_dev_det",
+      "expr": "determinant(macro_dev)"
+    },
+    {
+      "name": "invariant_denominator",
+      "expr": "8*pM**3-pM*macro_dev_sq+macro_dev_det"
+    },
+    {
+      "name": "Fm",
+      "expr": "(3*pM*macro_dev_sq+9*macro_dev_det)/invariant_denominator"
+    },
+    {
+      "name": "shat",
+      "expr": "sigmaM/trace(sigmaM)-I/3"
+    },
+    {
+      "name": "shat_sq",
+      "expr": "dot(shat,shat)"
+    },
+    {
+      "name": "cos3theta",
+      "expr": "select(shat_sq>0,-sqrt(6)*cube_trace(shat)/shat_sq**1.5,0)"
+    },
+    {
+      "name": "omega",
+      "expr": "-log(cos(phi)**2)/log(Oc)+0.3*(Fm-sin(phi)**2)"
+    },
+    {
+      "name": "Nst",
+      "expr": "Nref-ns/lp*log(SM)+nT*log(temperature/Tr)"
+    },
+    {
+      "name": "lam",
+      "expr": "lambda_ref-ls/lp*log(SM)+lT*log(temperature/Tr)"
+    },
+    {
+      "name": "pe",
+      "expr": "pr*exp((Nst-log(1+e))/lam)"
+    },
+    {
+      "name": "OI",
+      "expr": "pe/pM"
+    },
+    {
+      "name": "OA",
+      "expr": "OI*(1-Fm)**(1/omega)"
+    },
+    {
+      "name": "eA",
+      "expr": "exp(log(1+e)+lam*log(OA))-1"
+    },
+    {
+      "name": "re",
+      "expr": "(e-em)/(eA-em)"
+    },
+    {
+      "name": "fm",
+      "expr": "1-re**coupling_m"
+    },
+    {
+      "name": "fscan",
+      "expr": "select(suction_rate>0*pr*Dr,a_scan,select(suction_rate<0*pr*Dr,1-a_scan,0))"
+    },
+    {
+      "name": "rlambda",
+      "expr": "0.1+0.9*fscan**3"
+    },
+    {
+      "name": "DsS",
+      "expr": "rlambda/suction*(1-SM)*lp*log(1-SM)"
+    },
+    {
+      "name": "DseS",
+      "expr": "-(1-SM)*lp*log(1-SM)/se"
+    },
+    {
+      "name": "DeMse",
+      "expr": "-se/eM"
+    },
+    {
+      "name": "DTse",
+      "expr": "se*thermal_b/(thermal_a+thermal_b*temperature)"
+    },
+    {
+      "name": "Dp",
+      "expr": "-em*nm/pm*(pm/hms)**nm"
+    },
+    {
+      "name": "DTm",
+      "expr": "em*thermal_b/(thermal_a+thermal_b*temperature)"
+    },
+    {
+      "name": "Aact",
+      "expr": "DseS*se/(lp*SM)*(ns-ls*log(pM/pr))"
+    },
+    {
+      "name": "lact_denominator",
+      "expr": "eM*(1+em)-Aact*(1+e)"
+    },
+    {
+      "name": "lact",
+      "expr": "(eM*(1+em)*lam+Aact*Dp*pM*(1+eM))/lact_denominator"
+    },
+    {
+      "name": "fs",
+      "expr": "3*pM/2*(lact+kappa)/(lact*kappa)*(1-2*nu)/(1+nu)"
+    },
+    {
+      "name": "ci_denominator",
+      "expr": "(lact+kappa)*(OI**alpha_f-OA**alpha_f)+2*kappa*OA**alpha_f"
+    },
+    {
+      "name": "ci",
+      "expr": "((lact+kappa)*(OI**alpha_f-1)+2*kappa)/ci_denominator"
+    },
+    {
+      "name": "fu",
+      "expr": "OA**(-coupling_m)"
+    },
+    {
+      "name": "DsP",
+      "expr": "-pe*DsS/(lp*SM*lam)*(ns-ls*log(pe/pr))"
+    },
+    {
+      "name": "DTP",
+      "expr": "pe/(temperature*lam)*(nT-lT*log(pe/pr))"
+    },
+    {
+      "name": "sign_Ds",
+      "expr": "select(DsP<0,1,select(DsP>0,-1,0))"
+    },
+    {
+      "name": "sign_DT",
+      "expr": "select(DTP<0*pr/Tr,1,select(DTP>0*pr/Tr,-1,0))"
+    },
+    {
+      "name": "Hs_prime",
+      "expr": "ci*sigmaM*DsP/pe*sign_Ds*select(-DsP*suction_rate>=0*pr*Dr,1,0)"
+    },
+    {
+      "name": "HT_prime",
+      "expr": "ci*sigmaM*DTP/pe*sign_DT*select(-DTP*temperature_rate>=0*pr*Dr,1,0)"
+    },
+    {
+      "name": "dB",
+      "expr": "nu/(1-2*nu)"
+    },
+    {
+      "name": "bB",
+      "expr": "-DseS*DeMse*suction*(1+eM)*Dp/(3*(1+em))"
+    },
+    {
+      "name": "cB",
+      "expr": "-fs*fm*Dp/(9*(1+em))"
+    },
+    {
+      "name": "qB",
+      "expr": "bB+cB+3*cB*dB"
+    },
+    {
+      "name": "B_denominator",
+      "expr": "1+3*qB"
+    },
+    {
+      "name": "d_raw",
+      "expr": "-shat+I*(2/3-(cos3theta+1)/4*Fm**0.25)*(Fm**(xi/2)-sin(phi)**xi)/(1-sin(phi)**xi)"
+    },
+    {
+      "name": "d_direction",
+      "expr": "d_raw/norm(d_raw)"
+    },
+    {
+      "name": "Ad",
+      "expr": "fs*(d_direction+dB*trace(d_direction)*I)+sigmaM*trace(d_direction)/lact"
+    },
+    {
+      "name": "Iv",
+      "expr": "0.004+IvT*((temperature-Tr)/one_kelvin)**3*0.00000001"
+    },
+    {
+      "name": "NE",
+      "expr": "(vf-1)*OA**(-alpha_f)*Ad"
+    },
+    {
+      "name": "NVE",
+      "expr": "-vf*OA**(-1/Iv)*Ad"
+    },
+    {
+      "name": "HLsE",
+      "expr": "-Dp*fs*fm/(3*(1+em))*(1+3*dB)*I+(DsS*suction+SM-Dp*DseS*DeMse*suction*(1+eM)/(1+em))*I"
+    },
+    {
+      "name": "HNsE",
+      "expr": "fu*Hs_prime-sqrt(3)*frm*fm/3*NE*abs(Dp)/(1+em)"
+    },
+    {
+      "name": "HLTE",
+      "expr": "-alpha_s*fs*fm/3*(1+3*dB)*I+DseS*suction*(DTse-DeMse*DTm*(1+eM)/(1+em))*I"
+    },
+    {
+      "name": "HNTE",
+      "expr": "fu*HT_prime-sqrt(3)*frm*fm/3*NE*abs(alpha_s)"
+    },
+    {
+      "name": "LE_rate",
+      "expr": "fs*(source_rate+dB*trace(source_rate)*I)+DseS*DeMse*suction*(1+eM)*trace(source_rate)*I"
+    },
+    {
+      "name": "source_rhs",
+      "expr": "LE_rate+NE*norm(source_rate)+NVE*Dr+HLsE*suction_rate+HNsE*abs(suction_rate)+HLTE*temperature_rate+HNTE*abs(temperature_rate)"
+    },
+    {
+      "name": "source_stress_rate",
+      "expr": "source_rhs-qB/B_denominator*trace(source_rhs)*I"
+    },
+    {
+      "name": "Sr_value",
+      "expr": "SM+em/e*(1-SM)"
+    }
+  ],
+  "equations": {
+    "sigma_net": "-source_stress_rate",
+    "e": "-(1+e)*trace(strain_rate)",
+    "a_scan": "(se/sen)*(1-rlambda)/(suction*(1-ae))*suction_rate"
+  },
+  "domain": [
+    "suction>0*pr",
+    "temperature>0*Tr",
+    "thermal_factor>0",
+    "pm>0*pr",
+    "e>0",
+    "em>0",
+    "eM>0",
+    "a_scan>=0",
+    "a_scan<=1",
+    "SM>0",
+    "SM<1",
+    "pM>0*pr",
+    "abs(invariant_denominator)>0*pr**3",
+    "Fm>=0",
+    "Fm<1",
+    "omega>0",
+    "lam>0",
+    "pe>0*pr",
+    "OI>0",
+    "OA>0",
+    "eA>em",
+    "re>0",
+    "abs(lact_denominator)>0",
+    "lact>0",
+    "abs(ci_denominator)>0",
+    "abs(B_denominator)>0",
+    "Iv>0",
+    "norm(d_raw)>0",
+    "Sr_value>=0",
+    "Sr_value<=1"
+  ],
+  "observables": [
+    {
+      "name": "stress",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "pr",
+      "expr": "sigma_net"
+    },
+    {
+      "name": "micro_void_ratio",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "em"
+    },
+    {
+      "name": "macro_void_ratio",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "eM"
+    },
+    {
+      "name": "macro_saturation",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "SM"
+    },
+    {
+      "name": "saturation",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "Sr_value"
+    },
+    {
+      "name": "relative_density",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "re"
+    },
+    {
+      "name": "overconsolidation",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "OA"
+    },
+    {
+      "name": "viscosity_factor",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "Iv"
+    }
+  ]
+}

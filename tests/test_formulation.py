@@ -80,6 +80,16 @@ class FormulationTests(unittest.TestCase):
                 # explicit scope metadata can differ from unscoped legacy timed output.
                 with tempfile.TemporaryDirectory() as directory:
                     base = Path(directory)
+                    if integration_kind(old)=='controlled_ode':
+                        from atlas.controlled_time_compiler import generate as generate_controlled
+                        for label, model in [('old', old), ('new', new)]:
+                            definition=base/(label+'.json');definition.write_text(json.dumps(model))
+                            with self.assertRaisesRegex(ValueError,'controlled-time'):
+                                generate(base/('unsupported-'+label),[definition])
+                            generate_controlled(base/label,[definition])
+                        for filename in ['controlled_time_models.hpp','controlled_time_api.cpp','controlled_time_catalogue.json']:
+                            self.assertEqual((base/'old'/filename).read_bytes(),(base/'new'/filename).read_bytes())
+                        continue
                     for label, model in [('old', old), ('new', new)]:
                         definition = base/(label+'.json')
                         definition.write_text(json.dumps(model))

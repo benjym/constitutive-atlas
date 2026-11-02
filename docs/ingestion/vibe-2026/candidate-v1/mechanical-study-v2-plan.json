@@ -1,0 +1,30 @@
+{
+  "identity": "VIBE candidate revision3 Python full-state trajectory study-v1",
+  "model_sha256": "29d104bf55ec3225030e8710ee342f96b6518bd8a4434e784e455da300d08778",
+  "reference_manifest_sha256": "bf526d6149fd3e1082ba477c01d455caa8873c850fbbb83594c1b4010c988139",
+  "cases": [
+    "mixed_mechanical_100",
+    "mechanical_reversal_100",
+    "coupled_mechanical_THM_100"
+  ],
+  "settings": {
+    "absolute_scale_fraction": 1e-12,
+    "relative_tolerance": 1e-11,
+    "minimum_step_seconds": 1e-12,
+    "maximum_step_seconds": 10.0,
+    "maximum_depth": 40,
+    "maximum_trials": 100000
+  },
+  "time_origin_seconds": 11.0,
+  "acceptance": {
+    "stress_absolute": 0.01,
+    "stress_relative": 1e-07,
+    "scalar_absolute": 1e-09,
+    "scalar_relative": 1e-07,
+    "observable_absolute": 1e-08,
+    "observable_relative": 1e-07
+  },
+  "comparison": "abs(a-b)<=abs_tol+rel_tol*max(abs(a),abs(b)), all components pass",
+  "method": "Production adaptive midpoint versus independent Decimal RK4; exact reversal split50s. Context serialization roundtrip checked. No native/Wasm observation.",
+  "script_sha256": "080a1e67cad82bf33da44b74f2808d299c9d36b5c71e37eedbfad0d80ff488d5"
+}

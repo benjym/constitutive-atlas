@@ -1,0 +1,3609 @@
+{
+  "profile": "controlled-time-ode-v1",
+  "models": [
+    {
+      "id": "test-controlled-time-branch",
+      "model_sha256": "673e1a435938b389ac0a5a7525c5632163d2319388ab9fd8d91acbf5ed9c5a63",
+      "controls": [
+        {
+          "name": "strain",
+          "quantity": "strain",
+          "shape": "sym",
+          "unit": "1",
+          "constraint": "finite",
+          "measure": "infinitesimal_strain",
+          "configuration": "current",
+          "offset": 0,
+          "size": 6
+        },
+        {
+          "name": "suction",
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "constraint": "nonnegative_finite",
+          "offset": 6,
+          "size": 1
+        },
+        {
+          "name": "temperature",
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "constraint": "positive_finite",
+          "offset": 7,
+          "size": 1
+        }
+      ],
+      "state": [
+        {
+          "name": "sigma",
+          "offset": 0,
+          "size": 6,
+          "unit": "Pa",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "clock_memory",
+          "offset": 6,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "e",
+          "offset": 7,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "memory",
+          "offset": 8,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "scalar_invariant"
+          }
+        }
+      ],
+      "observables": [
+        {
+          "name": "stress",
+          "offset": 0,
+          "size": 6,
+          "unit": "Pa"
+        }
+      ],
+      "parameters": [
+        "E",
+        "A",
+        "B",
+        "C",
+        "Tref",
+        "tau",
+        "one"
+      ],
+      "inputs": [
+        {
+          "name": "time",
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite",
+          "offset": 0,
+          "size": 1
+        },
+        {
+          "name": "strain_rate",
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "strain",
+            "derivative_order": 1
+          },
+          "offset": 1,
+          "size": 6
+        },
+        {
+          "name": "temperature",
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 0
+          },
+          "offset": 7,
+          "size": 1
+        },
+        {
+          "name": "temperature_rate",
+          "quantity": "temperature_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              1
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 1
+          },
+          "offset": 8,
+          "size": 1
+        },
+        {
+          "name": "suction",
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 0
+          },
+          "offset": 9,
+          "size": 1
+        },
+        {
+          "name": "suction_rate",
+          "quantity": "suction_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              1,
+              -1,
+              -3,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 1
+          },
+          "offset": 10,
+          "size": 1
+        }
+      ],
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "controlled_ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "observable",
+          "name": "stress",
+          "measure": "cauchy",
+          "scope": "net"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "strain",
+                "derivative_order": 1
+              }
+            },
+            "temperature": {
+              "quantity": "temperature",
+              "shape": "scalar",
+              "unit": "K",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "temperature",
+                "derivative_order": 0
+              }
+            },
+            "temperature_rate": {
+              "quantity": "temperature_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  1
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "temperature",
+                "derivative_order": 1
+              }
+            },
+            "suction": {
+              "quantity": "suction",
+              "shape": "scalar",
+              "unit": "Pa",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "suction",
+                "derivative_order": 0
+              }
+            },
+            "suction_rate": {
+              "quantity": "suction_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  1,
+                  -1,
+                  -3,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "suction",
+                "derivative_order": 1
+              }
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        },
+        "controls": {
+          "strain": {
+            "quantity": "strain",
+            "shape": "sym",
+            "unit": "1",
+            "constraint": "finite",
+            "measure": "infinitesimal_strain",
+            "configuration": "current"
+          },
+          "temperature": {
+            "quantity": "temperature",
+            "shape": "scalar",
+            "unit": "K",
+            "constraint": "positive_finite"
+          },
+          "suction": {
+            "quantity": "suction",
+            "shape": "scalar",
+            "unit": "Pa",
+            "constraint": "nonnegative_finite"
+          }
+        }
+      }
+    },
+    {
+      "id": "test-controlled-time-capacity",
+      "model_sha256": "d6850c904c431137e65dc20f6c6057bfbb54d9196738b6527b39937dee24567b",
+      "controls": [
+        {
+          "name": "field0",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 0,
+          "size": 1
+        },
+        {
+          "name": "field1",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 1,
+          "size": 1
+        },
+        {
+          "name": "field10",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 2,
+          "size": 1
+        },
+        {
+          "name": "field11",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 3,
+          "size": 1
+        },
+        {
+          "name": "field12",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 4,
+          "size": 1
+        },
+        {
+          "name": "field13",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 5,
+          "size": 1
+        },
+        {
+          "name": "field14",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 6,
+          "size": 1
+        },
+        {
+          "name": "field15",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 7,
+          "size": 1
+        },
+        {
+          "name": "field16",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 8,
+          "size": 1
+        },
+        {
+          "name": "field17",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 9,
+          "size": 1
+        },
+        {
+          "name": "field18",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 10,
+          "size": 1
+        },
+        {
+          "name": "field19",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 11,
+          "size": 1
+        },
+        {
+          "name": "field2",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 12,
+          "size": 1
+        },
+        {
+          "name": "field20",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 13,
+          "size": 1
+        },
+        {
+          "name": "field21",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 14,
+          "size": 1
+        },
+        {
+          "name": "field22",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 15,
+          "size": 1
+        },
+        {
+          "name": "field23",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 16,
+          "size": 1
+        },
+        {
+          "name": "field3",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 17,
+          "size": 1
+        },
+        {
+          "name": "field4",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 18,
+          "size": 1
+        },
+        {
+          "name": "field5",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 19,
+          "size": 1
+        },
+        {
+          "name": "field6",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 20,
+          "size": 1
+        },
+        {
+          "name": "field7",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 21,
+          "size": 1
+        },
+        {
+          "name": "field8",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 22,
+          "size": 1
+        },
+        {
+          "name": "field9",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "constraint": "finite",
+          "offset": 23,
+          "size": 1
+        },
+        {
+          "name": "strain",
+          "quantity": "strain",
+          "shape": "sym",
+          "unit": "1",
+          "constraint": "finite",
+          "measure": "infinitesimal_strain",
+          "configuration": "current",
+          "offset": 24,
+          "size": 6
+        },
+        {
+          "name": "suction",
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "constraint": "nonnegative_finite",
+          "offset": 30,
+          "size": 1
+        },
+        {
+          "name": "temperature",
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "constraint": "positive_finite",
+          "offset": 31,
+          "size": 1
+        }
+      ],
+      "state": [
+        {
+          "name": "sigma",
+          "offset": 0,
+          "size": 6,
+          "unit": "Pa",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "clock_memory",
+          "offset": 6,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "e",
+          "offset": 7,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "memory",
+          "offset": 8,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history0",
+          "offset": 9,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history1",
+          "offset": 10,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history2",
+          "offset": 11,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history3",
+          "offset": 12,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history4",
+          "offset": 13,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history5",
+          "offset": 14,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history6",
+          "offset": 15,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history7",
+          "offset": 16,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history8",
+          "offset": 17,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history9",
+          "offset": 18,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history10",
+          "offset": 19,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history11",
+          "offset": 20,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history12",
+          "offset": 21,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history13",
+          "offset": 22,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history14",
+          "offset": 23,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history15",
+          "offset": 24,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history16",
+          "offset": 25,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history17",
+          "offset": 26,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history18",
+          "offset": 27,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history19",
+          "offset": 28,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history20",
+          "offset": 29,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history21",
+          "offset": 30,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "history22",
+          "offset": 31,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic",
+            "transformation": "scalar_invariant"
+          }
+        }
+      ],
+      "observables": [
+        {
+          "name": "stress",
+          "offset": 0,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output0",
+          "offset": 6,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output1",
+          "offset": 12,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output2",
+          "offset": 18,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output3",
+          "offset": 24,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output4",
+          "offset": 30,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output5",
+          "offset": 36,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output6",
+          "offset": 42,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output7",
+          "offset": 48,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output8",
+          "offset": 54,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output9",
+          "offset": 60,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output10",
+          "offset": 66,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output11",
+          "offset": 72,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output12",
+          "offset": 78,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output13",
+          "offset": 84,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output14",
+          "offset": 90,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output15",
+          "offset": 96,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output16",
+          "offset": 102,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output17",
+          "offset": 108,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output18",
+          "offset": 114,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output19",
+          "offset": 120,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output20",
+          "offset": 126,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output21",
+          "offset": 132,
+          "size": 6,
+          "unit": "Pa"
+        },
+        {
+          "name": "output22",
+          "offset": 138,
+          "size": 6,
+          "unit": "Pa"
+        }
+      ],
+      "parameters": [
+        "E",
+        "A",
+        "B",
+        "C",
+        "Tref",
+        "tau",
+        "one",
+        "parameter0",
+        "parameter1",
+        "parameter2",
+        "parameter3",
+        "parameter4",
+        "parameter5",
+        "parameter6",
+        "parameter7",
+        "parameter8",
+        "parameter9",
+        "parameter10",
+        "parameter11",
+        "parameter12",
+        "parameter13",
+        "parameter14",
+        "parameter15",
+        "parameter16",
+        "parameter17",
+        "parameter18",
+        "parameter19",
+        "parameter20",
+        "parameter21",
+        "parameter22",
+        "parameter23",
+        "parameter24",
+        "parameter25",
+        "parameter26",
+        "parameter27",
+        "parameter28",
+        "parameter29",
+        "parameter30",
+        "parameter31",
+        "parameter32",
+        "parameter33",
+        "parameter34",
+        "parameter35",
+        "parameter36",
+        "parameter37",
+        "parameter38",
+        "parameter39",
+        "parameter40",
+        "parameter41",
+        "parameter42",
+        "parameter43",
+        "parameter44",
+        "parameter45",
+        "parameter46",
+        "parameter47",
+        "parameter48",
+        "parameter49",
+        "parameter50",
+        "parameter51",
+        "parameter52",
+        "parameter53",
+        "parameter54",
+        "parameter55",
+        "parameter56",
+        "parameter57",
+        "parameter58",
+        "parameter59",
+        "parameter60",
+        "parameter61",
+        "parameter62",
+        "parameter63",
+        "parameter64",
+        "parameter65",
+        "parameter66",
+        "parameter67",
+        "parameter68",
+        "parameter69",
+        "parameter70",
+        "parameter71",
+        "parameter72",
+        "parameter73",
+        "parameter74",
+        "parameter75",
+        "parameter76",
+        "parameter77",
+        "parameter78",
+        "parameter79",
+        "parameter80",
+        "parameter81",
+        "parameter82",
+        "parameter83",
+        "parameter84",
+        "parameter85",
+        "parameter86",
+        "parameter87",
+        "parameter88",
+        "parameter89",
+        "parameter90",
+        "parameter91",
+        "parameter92",
+        "parameter93",
+        "parameter94",
+        "parameter95",
+        "parameter96",
+        "parameter97",
+        "parameter98",
+        "parameter99",
+        "parameter100",
+        "parameter101",
+        "parameter102",
+        "parameter103",
+        "parameter104",
+        "parameter105",
+        "parameter106",
+        "parameter107",
+        "parameter108",
+        "parameter109",
+        "parameter110",
+        "parameter111",
+        "parameter112",
+        "parameter113",
+        "parameter114",
+        "parameter115",
+        "parameter116",
+        "parameter117",
+        "parameter118",
+        "parameter119",
+        "parameter120",
+        "parameter121",
+        "parameter122",
+        "parameter123",
+        "parameter124",
+        "parameter125",
+        "parameter126",
+        "parameter127",
+        "parameter128",
+        "parameter129",
+        "parameter130",
+        "parameter131",
+        "parameter132",
+        "parameter133",
+        "parameter134",
+        "parameter135",
+        "parameter136",
+        "parameter137",
+        "parameter138",
+        "parameter139",
+        "parameter140",
+        "parameter141",
+        "parameter142",
+        "parameter143",
+        "parameter144",
+        "parameter145",
+        "parameter146",
+        "parameter147",
+        "parameter148",
+        "parameter149",
+        "parameter150",
+        "parameter151",
+        "parameter152",
+        "parameter153",
+        "parameter154",
+        "parameter155",
+        "parameter156",
+        "parameter157",
+        "parameter158",
+        "parameter159",
+        "parameter160",
+        "parameter161",
+        "parameter162",
+        "parameter163",
+        "parameter164",
+        "parameter165",
+        "parameter166",
+        "parameter167",
+        "parameter168",
+        "parameter169",
+        "parameter170",
+        "parameter171",
+        "parameter172",
+        "parameter173",
+        "parameter174",
+        "parameter175",
+        "parameter176",
+        "parameter177",
+        "parameter178",
+        "parameter179",
+        "parameter180",
+        "parameter181",
+        "parameter182",
+        "parameter183",
+        "parameter184",
+        "parameter185",
+        "parameter186",
+        "parameter187",
+        "parameter188",
+        "parameter189",
+        "parameter190",
+        "parameter191",
+        "parameter192",
+        "parameter193",
+        "parameter194",
+        "parameter195",
+        "parameter196",
+        "parameter197",
+        "parameter198",
+        "parameter199",
+        "parameter200",
+        "parameter201",
+        "parameter202",
+        "parameter203",
+        "parameter204",
+        "parameter205",
+        "parameter206",
+        "parameter207",
+        "parameter208",
+        "parameter209",
+        "parameter210",
+        "parameter211",
+        "parameter212",
+        "parameter213",
+        "parameter214",
+        "parameter215",
+        "parameter216",
+        "parameter217",
+        "parameter218",
+        "parameter219",
+        "parameter220",
+        "parameter221",
+        "parameter222",
+        "parameter223",
+        "parameter224",
+        "parameter225",
+        "parameter226",
+        "parameter227",
+        "parameter228",
+        "parameter229",
+        "parameter230",
+        "parameter231",
+        "parameter232",
+        "parameter233",
+        "parameter234",
+        "parameter235",
+        "parameter236",
+        "parameter237",
+        "parameter238",
+        "parameter239",
+        "parameter240",
+        "parameter241",
+        "parameter242",
+        "parameter243",
+        "parameter244",
+        "parameter245",
+        "parameter246",
+        "parameter247",
+        "parameter248"
+      ],
+      "inputs": [
+        {
+          "name": "time",
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite",
+          "offset": 0,
+          "size": 1
+        },
+        {
+          "name": "strain_rate",
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "strain",
+            "derivative_order": 1
+          },
+          "offset": 1,
+          "size": 6
+        },
+        {
+          "name": "temperature",
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 0
+          },
+          "offset": 7,
+          "size": 1
+        },
+        {
+          "name": "temperature_rate",
+          "quantity": "temperature_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              1
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 1
+          },
+          "offset": 8,
+          "size": 1
+        },
+        {
+          "name": "suction",
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 0
+          },
+          "offset": 9,
+          "size": 1
+        },
+        {
+          "name": "suction_rate",
+          "quantity": "suction_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              1,
+              -1,
+              -3,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 1
+          },
+          "offset": 10,
+          "size": 1
+        },
+        {
+          "name": "field0",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field0",
+            "derivative_order": 0
+          },
+          "offset": 11,
+          "size": 1
+        },
+        {
+          "name": "field0_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field0",
+            "derivative_order": 1
+          },
+          "offset": 12,
+          "size": 1
+        },
+        {
+          "name": "field1",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field1",
+            "derivative_order": 0
+          },
+          "offset": 13,
+          "size": 1
+        },
+        {
+          "name": "field1_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field1",
+            "derivative_order": 1
+          },
+          "offset": 14,
+          "size": 1
+        },
+        {
+          "name": "field2",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field2",
+            "derivative_order": 0
+          },
+          "offset": 15,
+          "size": 1
+        },
+        {
+          "name": "field2_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field2",
+            "derivative_order": 1
+          },
+          "offset": 16,
+          "size": 1
+        },
+        {
+          "name": "field3",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field3",
+            "derivative_order": 0
+          },
+          "offset": 17,
+          "size": 1
+        },
+        {
+          "name": "field3_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field3",
+            "derivative_order": 1
+          },
+          "offset": 18,
+          "size": 1
+        },
+        {
+          "name": "field4",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field4",
+            "derivative_order": 0
+          },
+          "offset": 19,
+          "size": 1
+        },
+        {
+          "name": "field4_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field4",
+            "derivative_order": 1
+          },
+          "offset": 20,
+          "size": 1
+        },
+        {
+          "name": "field5",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field5",
+            "derivative_order": 0
+          },
+          "offset": 21,
+          "size": 1
+        },
+        {
+          "name": "field5_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field5",
+            "derivative_order": 1
+          },
+          "offset": 22,
+          "size": 1
+        },
+        {
+          "name": "field6",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field6",
+            "derivative_order": 0
+          },
+          "offset": 23,
+          "size": 1
+        },
+        {
+          "name": "field6_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field6",
+            "derivative_order": 1
+          },
+          "offset": 24,
+          "size": 1
+        },
+        {
+          "name": "field7",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field7",
+            "derivative_order": 0
+          },
+          "offset": 25,
+          "size": 1
+        },
+        {
+          "name": "field7_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field7",
+            "derivative_order": 1
+          },
+          "offset": 26,
+          "size": 1
+        },
+        {
+          "name": "field8",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field8",
+            "derivative_order": 0
+          },
+          "offset": 27,
+          "size": 1
+        },
+        {
+          "name": "field8_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field8",
+            "derivative_order": 1
+          },
+          "offset": 28,
+          "size": 1
+        },
+        {
+          "name": "field9",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field9",
+            "derivative_order": 0
+          },
+          "offset": 29,
+          "size": 1
+        },
+        {
+          "name": "field9_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field9",
+            "derivative_order": 1
+          },
+          "offset": 30,
+          "size": 1
+        },
+        {
+          "name": "field10",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field10",
+            "derivative_order": 0
+          },
+          "offset": 31,
+          "size": 1
+        },
+        {
+          "name": "field10_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field10",
+            "derivative_order": 1
+          },
+          "offset": 32,
+          "size": 1
+        },
+        {
+          "name": "field11",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field11",
+            "derivative_order": 0
+          },
+          "offset": 33,
+          "size": 1
+        },
+        {
+          "name": "field11_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field11",
+            "derivative_order": 1
+          },
+          "offset": 34,
+          "size": 1
+        },
+        {
+          "name": "field12",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field12",
+            "derivative_order": 0
+          },
+          "offset": 35,
+          "size": 1
+        },
+        {
+          "name": "field12_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field12",
+            "derivative_order": 1
+          },
+          "offset": 36,
+          "size": 1
+        },
+        {
+          "name": "field13",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field13",
+            "derivative_order": 0
+          },
+          "offset": 37,
+          "size": 1
+        },
+        {
+          "name": "field13_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field13",
+            "derivative_order": 1
+          },
+          "offset": 38,
+          "size": 1
+        },
+        {
+          "name": "field14",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field14",
+            "derivative_order": 0
+          },
+          "offset": 39,
+          "size": 1
+        },
+        {
+          "name": "field14_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field14",
+            "derivative_order": 1
+          },
+          "offset": 40,
+          "size": 1
+        },
+        {
+          "name": "field15",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field15",
+            "derivative_order": 0
+          },
+          "offset": 41,
+          "size": 1
+        },
+        {
+          "name": "field15_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field15",
+            "derivative_order": 1
+          },
+          "offset": 42,
+          "size": 1
+        },
+        {
+          "name": "field16",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field16",
+            "derivative_order": 0
+          },
+          "offset": 43,
+          "size": 1
+        },
+        {
+          "name": "field16_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field16",
+            "derivative_order": 1
+          },
+          "offset": 44,
+          "size": 1
+        },
+        {
+          "name": "field17",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field17",
+            "derivative_order": 0
+          },
+          "offset": 45,
+          "size": 1
+        },
+        {
+          "name": "field17_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field17",
+            "derivative_order": 1
+          },
+          "offset": 46,
+          "size": 1
+        },
+        {
+          "name": "field18",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field18",
+            "derivative_order": 0
+          },
+          "offset": 47,
+          "size": 1
+        },
+        {
+          "name": "field18_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field18",
+            "derivative_order": 1
+          },
+          "offset": 48,
+          "size": 1
+        },
+        {
+          "name": "field19",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field19",
+            "derivative_order": 0
+          },
+          "offset": 49,
+          "size": 1
+        },
+        {
+          "name": "field19_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field19",
+            "derivative_order": 1
+          },
+          "offset": 50,
+          "size": 1
+        },
+        {
+          "name": "field20",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field20",
+            "derivative_order": 0
+          },
+          "offset": 51,
+          "size": 1
+        },
+        {
+          "name": "field20_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field20",
+            "derivative_order": 1
+          },
+          "offset": 52,
+          "size": 1
+        },
+        {
+          "name": "field21",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field21",
+            "derivative_order": 0
+          },
+          "offset": 53,
+          "size": 1
+        },
+        {
+          "name": "field21_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field21",
+            "derivative_order": 1
+          },
+          "offset": 54,
+          "size": 1
+        },
+        {
+          "name": "field22",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field22",
+            "derivative_order": 0
+          },
+          "offset": 55,
+          "size": 1
+        },
+        {
+          "name": "field22_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field22",
+            "derivative_order": 1
+          },
+          "offset": 56,
+          "size": 1
+        },
+        {
+          "name": "field23",
+          "quantity": "field",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field23",
+            "derivative_order": 0
+          },
+          "offset": 57,
+          "size": 1
+        },
+        {
+          "name": "field23_rate",
+          "quantity": "field_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "field23",
+            "derivative_order": 1
+          },
+          "offset": 58,
+          "size": 1
+        },
+        {
+          "name": "strain",
+          "quantity": "strain",
+          "shape": "sym",
+          "unit": "1",
+          "measure": "infinitesimal_strain",
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "strain",
+            "derivative_order": 0
+          },
+          "offset": 59,
+          "size": 6
+        }
+      ],
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "controlled_ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "observable",
+          "name": "stress",
+          "measure": "cauchy",
+          "scope": "net"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "strain",
+                "derivative_order": 1
+              }
+            },
+            "temperature": {
+              "quantity": "temperature",
+              "shape": "scalar",
+              "unit": "K",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "temperature",
+                "derivative_order": 0
+              }
+            },
+            "temperature_rate": {
+              "quantity": "temperature_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  1
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "temperature",
+                "derivative_order": 1
+              }
+            },
+            "suction": {
+              "quantity": "suction",
+              "shape": "scalar",
+              "unit": "Pa",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "suction",
+                "derivative_order": 0
+              }
+            },
+            "suction_rate": {
+              "quantity": "suction_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  1,
+                  -1,
+                  -3,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "suction",
+                "derivative_order": 1
+              }
+            },
+            "field0": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field0",
+                "derivative_order": 0
+              }
+            },
+            "field0_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field0",
+                "derivative_order": 1
+              }
+            },
+            "field1": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field1",
+                "derivative_order": 0
+              }
+            },
+            "field1_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field1",
+                "derivative_order": 1
+              }
+            },
+            "field2": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field2",
+                "derivative_order": 0
+              }
+            },
+            "field2_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field2",
+                "derivative_order": 1
+              }
+            },
+            "field3": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field3",
+                "derivative_order": 0
+              }
+            },
+            "field3_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field3",
+                "derivative_order": 1
+              }
+            },
+            "field4": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field4",
+                "derivative_order": 0
+              }
+            },
+            "field4_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field4",
+                "derivative_order": 1
+              }
+            },
+            "field5": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field5",
+                "derivative_order": 0
+              }
+            },
+            "field5_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field5",
+                "derivative_order": 1
+              }
+            },
+            "field6": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field6",
+                "derivative_order": 0
+              }
+            },
+            "field6_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field6",
+                "derivative_order": 1
+              }
+            },
+            "field7": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field7",
+                "derivative_order": 0
+              }
+            },
+            "field7_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field7",
+                "derivative_order": 1
+              }
+            },
+            "field8": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field8",
+                "derivative_order": 0
+              }
+            },
+            "field8_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field8",
+                "derivative_order": 1
+              }
+            },
+            "field9": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field9",
+                "derivative_order": 0
+              }
+            },
+            "field9_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field9",
+                "derivative_order": 1
+              }
+            },
+            "field10": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field10",
+                "derivative_order": 0
+              }
+            },
+            "field10_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field10",
+                "derivative_order": 1
+              }
+            },
+            "field11": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field11",
+                "derivative_order": 0
+              }
+            },
+            "field11_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field11",
+                "derivative_order": 1
+              }
+            },
+            "field12": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field12",
+                "derivative_order": 0
+              }
+            },
+            "field12_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field12",
+                "derivative_order": 1
+              }
+            },
+            "field13": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field13",
+                "derivative_order": 0
+              }
+            },
+            "field13_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field13",
+                "derivative_order": 1
+              }
+            },
+            "field14": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field14",
+                "derivative_order": 0
+              }
+            },
+            "field14_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field14",
+                "derivative_order": 1
+              }
+            },
+            "field15": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field15",
+                "derivative_order": 0
+              }
+            },
+            "field15_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field15",
+                "derivative_order": 1
+              }
+            },
+            "field16": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field16",
+                "derivative_order": 0
+              }
+            },
+            "field16_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field16",
+                "derivative_order": 1
+              }
+            },
+            "field17": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field17",
+                "derivative_order": 0
+              }
+            },
+            "field17_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field17",
+                "derivative_order": 1
+              }
+            },
+            "field18": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field18",
+                "derivative_order": 0
+              }
+            },
+            "field18_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field18",
+                "derivative_order": 1
+              }
+            },
+            "field19": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field19",
+                "derivative_order": 0
+              }
+            },
+            "field19_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field19",
+                "derivative_order": 1
+              }
+            },
+            "field20": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field20",
+                "derivative_order": 0
+              }
+            },
+            "field20_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field20",
+                "derivative_order": 1
+              }
+            },
+            "field21": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field21",
+                "derivative_order": 0
+              }
+            },
+            "field21_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field21",
+                "derivative_order": 1
+              }
+            },
+            "field22": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field22",
+                "derivative_order": 0
+              }
+            },
+            "field22_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field22",
+                "derivative_order": 1
+              }
+            },
+            "field23": {
+              "quantity": "field",
+              "shape": "scalar",
+              "unit": "1",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field23",
+                "derivative_order": 0
+              }
+            },
+            "field23_rate": {
+              "quantity": "field_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "field23",
+                "derivative_order": 1
+              }
+            },
+            "strain": {
+              "quantity": "strain",
+              "shape": "sym",
+              "unit": "1",
+              "measure": "infinitesimal_strain",
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "strain",
+                "derivative_order": 0
+              }
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        },
+        "controls": {
+          "strain": {
+            "quantity": "strain",
+            "shape": "sym",
+            "unit": "1",
+            "constraint": "finite",
+            "measure": "infinitesimal_strain",
+            "configuration": "current"
+          },
+          "temperature": {
+            "quantity": "temperature",
+            "shape": "scalar",
+            "unit": "K",
+            "constraint": "positive_finite"
+          },
+          "suction": {
+            "quantity": "suction",
+            "shape": "scalar",
+            "unit": "Pa",
+            "constraint": "nonnegative_finite"
+          },
+          "field0": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field1": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field2": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field3": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field4": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field5": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field6": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field7": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field8": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field9": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field10": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field11": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field12": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field13": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field14": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field15": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field16": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field17": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field18": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field19": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field20": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field21": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field22": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          },
+          "field23": {
+            "quantity": "field",
+            "shape": "scalar",
+            "unit": "1",
+            "constraint": "finite"
+          }
+        }
+      }
+    },
+    {
+      "id": "test-controlled-time-thm",
+      "model_sha256": "2ac817f537a7bd03d317bb09f66d24f94705634e716409bddb5409f2e60ccece",
+      "controls": [
+        {
+          "name": "strain",
+          "quantity": "strain",
+          "shape": "sym",
+          "unit": "1",
+          "constraint": "finite",
+          "measure": "infinitesimal_strain",
+          "configuration": "current",
+          "offset": 0,
+          "size": 6
+        },
+        {
+          "name": "suction",
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "constraint": "nonnegative_finite",
+          "offset": 6,
+          "size": 1
+        },
+        {
+          "name": "temperature",
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "constraint": "positive_finite",
+          "offset": 7,
+          "size": 1
+        }
+      ],
+      "state": [
+        {
+          "name": "sigma",
+          "offset": 0,
+          "size": 6,
+          "unit": "Pa",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        },
+        {
+          "name": "clock_memory",
+          "offset": 6,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "e",
+          "offset": 7,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "scalar_invariant"
+          }
+        },
+        {
+          "name": "memory",
+          "offset": 8,
+          "size": 1,
+          "unit": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "synthetic_history",
+            "transformation": "scalar_invariant"
+          }
+        }
+      ],
+      "observables": [
+        {
+          "name": "stress",
+          "offset": 0,
+          "size": 6,
+          "unit": "Pa"
+        }
+      ],
+      "parameters": [
+        "E",
+        "A",
+        "B",
+        "C",
+        "Tref",
+        "tau",
+        "one"
+      ],
+      "inputs": [
+        {
+          "name": "time",
+          "quantity": "time",
+          "shape": "scalar",
+          "unit": "s",
+          "sampling": "stage",
+          "constraint": "finite",
+          "offset": 0,
+          "size": 1
+        },
+        {
+          "name": "strain_rate",
+          "quantity": "strain_rate",
+          "measure": "infinitesimal_strain_rate",
+          "shape": "sym",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "configuration": "current",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "strain",
+            "derivative_order": 1
+          },
+          "offset": 1,
+          "size": 6
+        },
+        {
+          "name": "temperature",
+          "quantity": "temperature",
+          "shape": "scalar",
+          "unit": "K",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 0
+          },
+          "offset": 7,
+          "size": 1
+        },
+        {
+          "name": "temperature_rate",
+          "quantity": "temperature_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              1
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "temperature",
+            "derivative_order": 1
+          },
+          "offset": 8,
+          "size": 1
+        },
+        {
+          "name": "suction",
+          "quantity": "suction",
+          "shape": "scalar",
+          "unit": "Pa",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 0
+          },
+          "offset": 9,
+          "size": 1
+        },
+        {
+          "name": "suction_rate",
+          "quantity": "suction_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              1,
+              -1,
+              -3,
+              0
+            ]
+          },
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "suction",
+            "derivative_order": 1
+          },
+          "offset": 10,
+          "size": 1
+        }
+      ],
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "controlled_ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "stress": {
+          "source": "observable",
+          "name": "stress",
+          "measure": "cauchy",
+          "scope": "net"
+        },
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "strain",
+                "derivative_order": 1
+              }
+            },
+            "temperature": {
+              "quantity": "temperature",
+              "shape": "scalar",
+              "unit": "K",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "temperature",
+                "derivative_order": 0
+              }
+            },
+            "temperature_rate": {
+              "quantity": "temperature_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  1
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "temperature",
+                "derivative_order": 1
+              }
+            },
+            "suction": {
+              "quantity": "suction",
+              "shape": "scalar",
+              "unit": "Pa",
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "suction",
+                "derivative_order": 0
+              }
+            },
+            "suction_rate": {
+              "quantity": "suction_rate",
+              "shape": "scalar",
+              "unit": {
+                "si": [
+                  1,
+                  -1,
+                  -3,
+                  0
+                ]
+              },
+              "sampling": "stage",
+              "constraint": "finite",
+              "binding": {
+                "control": "suction",
+                "derivative_order": 1
+              }
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        },
+        "controls": {
+          "strain": {
+            "quantity": "strain",
+            "shape": "sym",
+            "unit": "1",
+            "constraint": "finite",
+            "measure": "infinitesimal_strain",
+            "configuration": "current"
+          },
+          "temperature": {
+            "quantity": "temperature",
+            "shape": "scalar",
+            "unit": "K",
+            "constraint": "positive_finite"
+          },
+          "suction": {
+            "quantity": "suction",
+            "shape": "scalar",
+            "unit": "Pa",
+            "constraint": "nonnegative_finite"
+          }
+        }
+      }
+    }
+  ],
+  "catalogue_sha256": "4ef1ef1f96e87ba1872d0a3a3155b94f870c1f2a6d403725dea568d044c98a01"
+}

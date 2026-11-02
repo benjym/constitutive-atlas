@@ -1,0 +1,215 @@
+{
+  "title": "Viscohypoplastic bentonite (VIBE, Mašín2026)",
+  "summary": "VIBE combines swelling within clay aggregates, deformation between aggregates and elapsed time to describe the coupled stress and water-retention response of bentonite.",
+  "introduction": "The model treats the fine pores within clay aggregates and the larger pores between aggregates separately. Swelling of the fine structure can compress the larger pores even when the specimen volume is fixed. Temperature and suction influence both structures, while a viscous stress contribution allows relaxation during a hold.",
+  "behaviours": [
+    {
+      "title": "Stress relaxation during a hold",
+      "explanation": "With viscosity enabled, stress can change while total strain, suction and temperature are held fixed. The temperature coefficient controls how this time effect grows as the specimen heats."
+    },
+    {
+      "title": "Wetting and drying follow different branches",
+      "explanation": "The hydraulic memory records whether the material follows a main wetting branch, a main drying branch or an intermediate scanning path. The water stored in the fine and larger pores combines into the total saturation."
+    },
+    {
+      "title": "Internal swelling differs from external loading",
+      "explanation": "The model reduces irreversible deformation caused internally by swelling and shrinking of aggregates, while preserving a nonlinear response to an externally imposed load."
+    }
+  ],
+  "parameters": [
+    {
+      "name": "phi",
+      "symbol": "φc",
+      "meaning": "critical friction angle",
+      "help": "Changes the critical stress ratio and asymptotic deformation direction.",
+      "unit": "degree"
+    },
+    {
+      "name": "lambda",
+      "symbol": "λ*",
+      "meaning": "isotropic NCL log slope",
+      "help": "Larger values allow more density change for a logarithmic pressure change.",
+      "unit": "1"
+    },
+    {
+      "name": "kappa",
+      "symbol": "κ*",
+      "meaning": "isotropic unloading log slope",
+      "help": "Sets the stiffer unloading/reloading volumetric response.",
+      "unit": "1"
+    },
+    {
+      "name": "N",
+      "symbol": "N",
+      "meaning": "NCL log intercept at pr",
+      "help": "Locates the normal compression line relative to the explicit reference pressure.",
+      "unit": "1"
+    },
+    {
+      "name": "nu",
+      "symbol": "ν",
+      "meaning": "shear stiffness parameter",
+      "help": "Controls the balance of shear and volumetric stiffness.",
+      "unit": "1"
+    },
+    {
+      "name": "ns",
+      "symbol": "ns",
+      "meaning": "suction dependence of NCL intercept",
+      "help": "Suction dependence of ncl intercept. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1"
+    },
+    {
+      "name": "ls",
+      "symbol": "ls",
+      "meaning": "suction dependence of NCL slope",
+      "help": "Suction dependence of ncl slope. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1"
+    },
+    {
+      "name": "nT",
+      "symbol": "nT",
+      "meaning": "log temperature dependence of NCL intercept",
+      "help": "Log temperature dependence of ncl intercept. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1"
+    },
+    {
+      "name": "lT",
+      "symbol": "lT",
+      "meaning": "log temperature dependence of NCL slope",
+      "help": "Log temperature dependence of ncl slope. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1"
+    },
+    {
+      "name": "m",
+      "symbol": "m",
+      "meaning": "double-structure and collapse exponent",
+      "help": "Double-structure and collapse exponent. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1"
+    },
+    {
+      "name": "alpha_s",
+      "symbol": "αs",
+      "meaning": "microstructural thermal volumetric expansion",
+      "help": "Controls microstructural thermal strain; it is separate from temperature dependence of microvoid ratio.",
+      "unit": "1/K"
+    },
+    {
+      "name": "nm",
+      "symbol": "nm",
+      "meaning": "microvoid pressure curvature",
+      "help": "Changes how quickly the microstructural void ratio falls as pressure increases.",
+      "unit": "1"
+    },
+    {
+      "name": "hms",
+      "symbol": "hms",
+      "meaning": "microvoid pressure scale",
+      "help": "Sets the pressure scale of microstructural compression.",
+      "unit": "Pa"
+    },
+    {
+      "name": "em0",
+      "symbol": "em0",
+      "meaning": "microvoid reference",
+      "help": "Microvoid reference. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1"
+    },
+    {
+      "name": "Dr",
+      "symbol": "Dr",
+      "meaning": "reference loading rate",
+      "help": "Sets the physical loading-rate reference used by the viscous stress contribution.",
+      "unit": "1/s"
+    },
+    {
+      "name": "se0",
+      "symbol": "se0",
+      "meaning": "macro air-entry pressure at eM0",
+      "help": "Macro air-entry pressure at em0. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "Pa"
+    },
+    {
+      "name": "eM0",
+      "symbol": "eM0",
+      "meaning": "macrovoid reference",
+      "help": "Macrovoid reference. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1"
+    },
+    {
+      "name": "a",
+      "symbol": "a",
+      "meaning": "thermal multiplier intercept",
+      "help": "Thermal multiplier intercept. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1"
+    },
+    {
+      "name": "b",
+      "symbol": "b",
+      "meaning": "thermal multiplier slope",
+      "help": "Thermal multiplier slope. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1/K (dimensional reconstruction; source table prints dash)"
+    },
+    {
+      "name": "ae",
+      "symbol": "ae",
+      "meaning": "wetting/drying air-entry ratio",
+      "help": "Separates wetting and drying water-retention branches.",
+      "unit": "1"
+    },
+    {
+      "name": "lp",
+      "symbol": "λp",
+      "meaning": "macro retention slope",
+      "help": "Macro retention slope. Calibrate together with the related compression, retention or thermal parameters.",
+      "unit": "1"
+    },
+    {
+      "name": "IvT",
+      "symbol": "IvT",
+      "meaning": "viscosity-temperature coefficient; equationA35 uses numerical kelvin difference, i.e. normalize DeltaT by1K before cube",
+      "help": "Changes how the rate effect grows with temperature; it does not replace the separate viscous fraction.",
+      "unit": "1"
+    }
+  ],
+  "parameterNote": "The source parameter set describes BCV bentonite. Pressures use pascals, temperature uses kelvins and loading rate uses inverse seconds. Compression and unloading slopes refer to logarithmic pressure and void-ratio relations. Reference pressure and the listed hidden constants are part of the formulation; changing the reference pressure without changing the intercept changes the material.",
+  "stateLabels": {
+    "e": "Total void ratio",
+    "a_scan": "Hydraulic branch memory"
+  },
+  "preparation": "Supply initial net stress, void ratio, hydraulic branch, suction and absolute temperature. Void ratio can be calculated from solid density divided by dry density minus one. A branch value of zero represents powder-compacted material on the wetting branch; one represents the drying branch. Microvoid ratio, macrovoid ratio and both saturations are calculated from that current context. A software starting example does not reproduce the specimen preparation history.",
+  "scope": "This profile describes the published explicit Appendix A formulation of Mašín2026. The intended implementation uses physical time, prescribed thermal and hydraulic histories, and net stress: total stress with the pore-air contribution removed. Availability of an interactive laboratory is determined by the installed model route.",
+  "limits": "The first proposed executable domain has strictly positive suction and compressive effective pressures. A saturated start is excluded because the published hydraulic-memory equation has an unresolved zero-suction boundary. The proposed host uses a fixed frame and small strains; it supplies no finite-rotation update or field solution for heat transfer and water flow. Very long time predictions extrapolate beyond the duration of the cited experiments.",
+  "equationIntro": "The explicit formulation evolves net stress and two internal memories; other pore-structure quantities are calculated from the current state.",
+  "equations": [
+    {
+      "label": "Global void ratio",
+      "equation": "e_dot=(1+e) tr(strain_rate), in the source compression-negative convention."
+    },
+    {
+      "label": "Combined saturation",
+      "equation": "Sr=SrM+(em/e)(1-SrM)."
+    }
+  ],
+  "equationNote": "The selected explicit Appendix A law contains separate absolute hydraulic and thermal contributions. The paper body also presents a combined absolute-value form; these differ for opposing simultaneous contributions and are not claimed equivalent. Tensor-rank omissions in the Appendix are resolved by its body derivation.",
+  "references": [
+    {
+      "label": "Mašín2026, Viscohypoplastic bentonite (VIBE) model, Engineering Geology370,108827",
+      "url": "https://doi.org/10.1016/j.enggeo.2026.108827"
+    },
+    {
+      "label": "Author overview and implementation dataset",
+      "url": "https://soilmodels.com/vibe/"
+    }
+  ],
+  "contentSources": [
+    "docs/ingestion/vibe-2026/source-v2/README.md",
+    "docs/ingestion/vibe-2026/source-v2/equations.json",
+    "docs/ingestion/vibe-2026/source-v2/parameters.json"
+  ],
+  "draftMetadata": {
+    "installation": "Coordinator must map parameter/state names to actual approved definition and real controls before installation; no shared web edit by source worker.",
+    "proposedExploration": "Use the explicit unsaturated BCV-table starting context, compare timed holds at two temperatures, then inspect net stress against elapsed seconds and derived saturation during a positive-suction wetting/drying reversal. Add these instructions only after those controls/preset actually exist and pass qualification.",
+    "sourceLocators": "Tables1–3 pp4–5; AppendixA1–35 pp15–16; physical interpretation sections4–6 pp4–14."
+  }
+}

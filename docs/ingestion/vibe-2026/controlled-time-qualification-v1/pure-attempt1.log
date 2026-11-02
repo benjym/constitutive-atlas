@@ -1,0 +1,73 @@
+test_bounds (tests.test_controlled_time.ControlledTimeTests.test_bounds) ... ok
+test_complete_run_and_tamper (tests.test_controlled_time.ControlledTimeTests.test_complete_run_and_tamper) ... ok
+test_each_component_and_fields (tests.test_controlled_time.ControlledTimeTests.test_each_component_and_fields) ... ok
+test_exact_transport_clock_and_fullstate (tests.test_controlled_time.ControlledTimeTests.test_exact_transport_clock_and_fullstate) ... FAIL
+test_generated_layout_and_old_bytes (tests.test_controlled_time.ControlledTimeTests.test_generated_layout_and_old_bytes) ... ok
+test_hold_and_stage_time (tests.test_controlled_time.ControlledTimeTests.test_hold_and_stage_time) ... ok
+test_nonlinear_refinement (tests.test_controlled_time.ControlledTimeTests.test_nonlinear_refinement) ... ok
+test_old_routes_reject (tests.test_controlled_time.ControlledTimeTests.test_old_routes_reject) ... ERROR
+test_rate_jump_and_initial_checks_only_once (tests.test_controlled_time.ControlledTimeTests.test_rate_jump_and_initial_checks_only_once) ... ok
+test_reject_mutated_contracts (tests.test_controlled_time.ControlledTimeTests.test_reject_mutated_contracts) ... ok
+test_transaction_recovery_restart_rates (tests.test_controlled_time.ControlledTimeTests.test_transaction_recovery_restart_rates) ... ok
+
+======================================================================
+ERROR: test_old_routes_reject (tests.test_controlled_time.ControlledTimeTests.test_old_routes_reject)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/tests/test_controlled_time.py", line 85, in test_old_routes_reject
+    with self.assertRaisesRegex(ValueError,'controlled-time'):interpret(m,p.state,None,[0]*6,p.parameters,time=11)
+                                                              ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/model.py", line 409, in interpret
+    return {k:evaluate(parse(expr),env) for k,expr in model['equations'].items()}
+              ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 366, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 378, in _evaluate_node
+    a, b = evaluate(node.left, symbols), evaluate(node.right, symbols)
+                                         ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 366, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 378, in _evaluate_node
+    a, b = evaluate(node.left, symbols), evaluate(node.right, symbols)
+                                         ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 366, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 378, in _evaluate_node
+    a, b = evaluate(node.left, symbols), evaluate(node.right, symbols)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 366, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 378, in _evaluate_node
+    a, b = evaluate(node.left, symbols), evaluate(node.right, symbols)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 366, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 378, in _evaluate_node
+    a, b = evaluate(node.left, symbols), evaluate(node.right, symbols)
+                                         ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 366, in evaluate
+    return _finite_expression_value(_evaluate_node(node, symbols))
+                                    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/atlas/dsl.py", line 373, in _evaluate_node
+    return symbols[node.id]
+           ~~~~~~~^^^^^^^^^
+KeyError: 'suction_rate'
+
+======================================================================
+FAIL: test_exact_transport_clock_and_fullstate (tests.test_controlled_time.ControlledTimeTests.test_exact_transport_clock_and_fullstate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/tests/test_controlled_time.py", line 19, in test_exact_transport_clock_and_fullstate
+    self.assertAlmostEqual(s['clock_memory'],9.5,places=10);self.assertLess(abs(s['memory']-2*math.exp(-2)),1e-8+2e-7*2*math.exp(-2))
+                                                            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3.446802001594307e-07 not less than 6.413411329464508e-08
+
+----------------------------------------------------------------------
+Ran 11 tests in 12.919s
+
+FAILED (failures=1, errors=1)

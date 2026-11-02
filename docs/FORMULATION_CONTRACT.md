@@ -6,7 +6,7 @@ extends the v0.2 physical-time declaration. The authoritative structural schema 
 [model-v0.3.schema.json](../schemas/model-v0.3.schema.json); `atlas.model.validate`
 additionally checks dimensions, symbols, state rules and stress bindings.
 
-This contract defines four executable profiles. It makes the declared
+This contract defines five executable profiles. It makes the declared
 mathematics explicit; it does not add finite-deformation or objective updates.
 
 ```json
@@ -56,6 +56,7 @@ in v0.3. The top-level `integration` field is forbidden.
 | `strain_path` | `incremental_residual` | Symmetric strain increment `de` | Residual equal to zero, with the corresponding state's units; current and committed `_n` state are available. |
 | `strain_path` | `strain_path_rate` | Symmetric strain increment `de` | Derivative with respect to dimensionless path fraction, with the corresponding state's units; the fraction runs from zero to one over the supplied increment. This is not a derivative per second. |
 | `physical_time` | `ode` | Physical stage `time` in seconds and symmetric `strain_rate` in 1/s | Derivative per second of the corresponding persistent state. Previous-state symbols, `de`, `dt`, transient solve variables and incremental resets are unavailable. |
+| `physical_time` | `controlled_ode` | Physical stage time, symmetric mechanical strain control and named scalar external-field values/rates | Derivative per second with a complete typed control context, through the dedicated controlled-time API. |
 | `strain_path` | `path_ode` | Dimensionless stage `path_coordinate` and explicitly bound scalar controls | Derivative per unit of the increasing declared path coordinate. Controls and their first derivatives are sampled at stages; no strain tensor or physical clock is inferred. |
 
 Only these pairings are allowed. There is one equation per state. The legacy
@@ -97,7 +98,7 @@ with an empty `advance` object. `sampling: increment` means the supplied increme
 for that equation evaluation; internal substepping supplies the corresponding
 subincrement. No physical duration, strain-rate history or clock is implied.
 
-Physical-time profiles instead require:
+The existing physical-time `ode` profile instead requires:
 
 ```json
 "inputs": {
@@ -126,7 +127,7 @@ Physical-time profiles instead require:
 ```
 
 `time` and `strain_rate` are evaluated at matching integration stages; they are
-the only externally supplied equation symbols. `start_time` and `duration` are
+the only externally supplied equation symbols for this `ode` profile. `start_time` and `duration` are
 update-call arguments, not expression symbols, and cannot be redeclared as
 parameters/state/derived values. Evaluation alone needs no advancement interval.
 Advancement requires a finite, representably later endpoint
@@ -425,3 +426,16 @@ The bounded [NorSand capability study](ingestion/norsand-1993/e2-v3/README.md)
 retains the prospective gates, independent source references, native/Wasm
 comparisons, independent review and original failures. Capability qualification
 is separate from model approval, atlas installation and browser delivery.
+
+## Controlled physical-time external fields
+
+The additive fifth profile `physical_time` / `controlled_ode` declares typed
+symmetric mechanical strain controls and scalar external-field value/rate
+bindings. Its state equations have units per second. It uses a separate generated
+catalogue, Python API and native/Wasm ABI; the existing `ode`, `path_ode` and
+ordinary laboratory transports do not acquire support implicitly. Its stress
+observable additionally permits explicitly labelled net stress, without inferred
+air-pressure/effective-stress conversion. See [the controlled-time API](CONTROLLED_TIME_API.md)
+for exact controls, units, context, transitions, bounds and transactional semantics.
+The profile's implementation/qualification is distinct from scientific model
+approval and actual atlas/browser/live delivery.

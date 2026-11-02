@@ -82,6 +82,8 @@ def stage_inputs(model, coordinate, start, end, fraction, progress):
 
 
 def evaluate_stage(model,state,params,inputs,*,initial=False):
+    from .model import controlled_time
+    if controlled_time(model):raise ValidationError('controlled-time profile requires atlas.controlled_time; physical seconds are not a dimensionless path')
     check_parameters(model,params); components(state,model['state'])
     checked_mapping(inputs,model['formulation']['inputs']['equation'],'stage input')
     env={'I':I,**params,**inputs}
@@ -126,6 +128,8 @@ class Context:
 
 
 def initialize(model,state,coordinate,controls,parameters):
+    from .model import controlled_time
+    if controlled_time(model):raise ValidationError('controlled-time profile requires atlas.controlled_time; physical seconds are not a dimensionless path')
     validate(model)
     if not finite(coordinate): raise ValueError('nonfinite path coordinate')
     checked_mapping(controls,control_names(model),'control'); check_parameters(model,parameters)

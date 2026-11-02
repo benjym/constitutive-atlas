@@ -1,0 +1,1 @@
+Plan prepared by coordinator after attempted specialist dispatch hit active-agent concurrency limit. Specialist did not execute this plan task. Source plan only; no StageB production whitelist granted yet.

@@ -1,0 +1,35 @@
+{
+  "title": "Viscohypoplastic bentonite (VIBE, Mašín2026)",
+  "summary": "VIBE describes how swelling-clay microstructure, larger pores, temperature and elapsed time combine to change stress and water retention.",
+  "introduction": "The double-structure description separates swelling within clay aggregates from deformation of the pores between them. Its updated implementation adds a time-dependent contribution to stress response and allows thermal and hydraulic changes to affect the two structures differently.",
+  "behaviours": [
+    {
+      "title": "Relaxation during a hold",
+      "explanation": "With viscosity enabled, holding total strain, suction and temperature fixed can still change stress because elapsed physical time remains part of the law."
+    },
+    {
+      "title": "Hydraulic and thermal coupling",
+      "explanation": "Changing suction alters water held in the larger pores and the swelling of the finer structure. Temperature affects retention and the microstructural response; the 2026 formulation must be distinguished from its earlier rate-independent predecessors."
+    }
+  ],
+  "parameters": [],
+  "parameterNote": "Material parameters govern compression, unloading, swelling, water retention and time-dependent stress response. No laboratory parameter editor or calibrated example is provided for this reading profile.",
+  "preparation": "A prepared state requires initial stress, void ratio, suction, absolute temperature and the hydraulic branch. Empty placeholder internal variables in the author driver are filled by its separate initialization routine; they are not a physically prepared specimen.",
+  "scope": "This is a reading profile for the exact2026 VIBE publication. A public laboratory run is unavailable. The inspected implementation evolves net stress with physical time and thermal/hydraulic controls.",
+  "limits": "The formulation couples prescribed thermal and hydraulic histories to local material response; it does not by itself solve heat transfer, water flow or repository-scale boundary-value problems. Parameters and preparation must match the selected bentonite and experimental protocol.",
+  "references": [
+    {
+      "label": "Mašín (2026), Viscohypoplastic bentonite (VIBE) model, Engineering Geology370,108827",
+      "url": "https://doi.org/10.1016/j.enggeo.2026.108827"
+    },
+    {
+      "label": "Author-hosted VIBE overview and dataset",
+      "url": "https://soilmodels.com/vibe/"
+    }
+  ],
+  "contentSources": [
+    "docs/ingestion/vibe-2026/source-v1/README.md",
+    "docs/ingestion/vibe-2026/source-v1/acquisition.json"
+  ],
+  "provenanceNote": "Draft only. No runnable instructions, fabricated parameter bounds or admission claim. Behaviour text supported by inspected updated generalmod.cc171–246,574–707,808–813,1422–1458 and author dataset association. Exact2026 source completeness remains blocked."
+}

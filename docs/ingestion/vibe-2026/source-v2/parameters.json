@@ -1,0 +1,49 @@
+{
+ "source":"VoR p4 Tables1–2; calibrated BCV values, not universal material bounds",
+ "material_parameters":{
+  "phi":{"value":25,"unit":"degree","meaning":"critical friction angle"},
+  "lambda":{"value":0.10,"unit":"1","meaning":"isotropic NCL log slope"},
+  "kappa":{"value":0.02,"unit":"1","meaning":"isotropic unloading log slope"},
+  "N":{"value":1.43,"unit":"1","meaning":"NCL log intercept at pr"},
+  "nu":{"value":0.24,"unit":"1","meaning":"shear stiffness parameter"},
+  "ns":{"value":0,"unit":"1","meaning":"suction dependence of NCL intercept"},
+  "ls":{"value":0,"unit":"1","meaning":"suction dependence of NCL slope"},
+  "nT":{"value":0.04,"unit":"1","meaning":"log temperature dependence of NCL intercept"},
+  "lT":{"value":0,"unit":"1","meaning":"log temperature dependence of NCL slope"},
+  "m":{"value":5,"unit":"1","meaning":"double-structure and collapse exponent"},
+  "alpha_s":{"value":0.00025,"unit":"1/K","meaning":"microstructural thermal volumetric expansion"},
+  "nm":{"value":0.9,"unit":"1","meaning":"microvoid pressure curvature"},
+  "hms":{"value":150000000,"unit":"Pa","source_value":"150000kPa","meaning":"microvoid pressure scale"},
+  "em0":{"value":0.55,"unit":"1","meaning":"microvoid reference"},
+  "Dr":{"value":0.0000005,"unit":"1/s","source_value":"0.5 times10^-6/s","meaning":"reference loading rate"},
+  "se0":{"value":2000000,"unit":"Pa","source_value":"2000kPa","meaning":"macro air-entry pressure at eM0"},
+  "eM0":{"value":0.2,"unit":"1","meaning":"macrovoid reference"},
+  "a":{"value":0.118,"unit":"1","meaning":"thermal multiplier intercept"},
+  "b":{"value":-0.0001,"unit":"1/K (dimensional reconstruction; source table prints dash)","meaning":"thermal multiplier slope"},
+  "ae":{"value":0.9,"unit":"1","meaning":"wetting/drying air-entry ratio"},
+  "lp":{"value":1.1,"unit":"1","meaning":"macro retention slope"},
+  "IvT":{"value":5,"unit":"1","meaning":"viscosity-temperature coefficient; equationA35 uses numerical kelvin difference, i.e. normalize DeltaT by1K before cube"}
+ },
+ "hidden_parameters":{
+  "Tr":{"value":294,"unit":"K"},
+  "vf":{"value":0.1,"unit":"1","alternative":"0 is separate rate-independent special case; set vf explicitly, do not infer from IvT"},
+  "pr":{"value":1000,"unit":"Pa","source_value":"1kPa"},
+  "Oc":{"value":1.4,"unit":"1"},
+  "xi":{"value":0.2,"unit":"1"},
+  "frm":{"value":0.5,"unit":"1"},
+  "alpha_f":{"value":1,"unit":"1"}
+ },
+ "proposed_explicit_example":{
+  "identity":"Atlas illustrative unsaturated hydrostatic BCV-table context; not a digitised experiment or paper-figure reproduction",
+  "time_s":0,
+  "stress_sign":"compression_positive Atlas mapping",
+  "net_stress_Pa":[1000,1000,1000,0,0,0],
+  "e":0.725,
+  "a_scan":0,
+  "suction_Pa":100000000,
+  "temperature_K":294,
+  "strain_rate_per_s":[0,0,0,0,0,0],
+  "preparation":"e=2760/1600-1 from paper rho_s and selected rho_d; a_scan0 represents powder-compacted wetting branch. Stress and hydraulic/thermal controls explicitly chosen; no physical consolidation replay claimed. Other variables reconstructed CURRENT context viaA16–A35.",
+  "next_experiments":["finite timed hold at fixed strain/s/T: evolvingstress,exacte/scanconstant", "slow mechanical increment and reverse with full6components", "prescribed mixed suction/temperature ramps including opposing internalcontributions; compare selectedA1 against independentoracle, retain Eq27witness asdifferentlaw", "wetting/drying reversal strictly at positive suction", "hydrostatic initialization tests analytically extendedLodelimit before numericalqualification"]
+ }
+}
