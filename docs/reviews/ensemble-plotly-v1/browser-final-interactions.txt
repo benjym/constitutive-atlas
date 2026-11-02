@@ -1,0 +1,57 @@
+### Result
+{"hover":"Linear isotropic elasticity · E = 24000000Axial strain: 8.930%q: 2140.975 kPa","selected":"linear-elastic:E:4176e36000000000","initial":[0,15.989999999999998],"zoom":[2.3985,11.9925],"afterSelection":[2.3985,11.9925],"afterVisibility":[2.3985,11.9925],"beforePan":[2.3985,11.9925],"afterPan":[1.4390999999999998,11.0331],"afterReset":[0,15.989999999999998],"download":"opara-txcd100-stress.png","shareButtons":0}
+### Ran Playwright code
+```js
+await (async page => {
+ let stage='initialization';try{
+ await page.waitForFunction(()=>document.querySelector('#ensemble-status')?.textContent==='19 completed · 6 stopped'&&document.querySelector('#ensemble-stress')?.data?.length>=1);
+ await page.locator('.ensemble-legend').getByRole('checkbox',{name:'Linear isotropic elasticity',exact:true}).check();
+ await page.waitForFunction(()=>document.querySelector('#ensemble-stress').data.some(t=>t.name.includes('E = 24000000')));
+ await page.locator('#ensemble-stress [data-title="Reset axes"]').click();
+ await page.locator('#ensemble-stress [data-title="Zoom"]').click();
+ await page.locator('#ensemble-stress').scrollIntoViewIfNeeded();
+ stage='hover';
+ const target=await page.evaluate(()=>{
+  const g=document.querySelector('#ensemble-stress'),i=g.data.findIndex(t=>t.name.includes('E = 24000000')),t=g.data[i],n=800,b=g.getBoundingClientRect(),l=g._fullLayout;
+  return {id:t.meta.jobId,x:b.left+l.margin.l+l.xaxis.l2p(t.x[n]),y:b.top+l.margin.t+l.yaxis.l2p(t.y[n])};
+ });
+ await page.mouse.move(target.x,target.y);
+ await page.waitForFunction(()=>document.querySelector('#ensemble-stress .hoverlayer')?.textContent.includes('kPa'));
+ const hover=await page.locator('#ensemble-stress .hoverlayer').textContent();
+ await page.screenshot({path:'output/playwright/ensemble-plotly-v1-hover.png'});
+ stage='curve selection';
+ await page.mouse.click(target.x,target.y);
+ await page.waitForFunction(id=>document.querySelector('#ensemble-selected').textContent.includes(id.split(':')[1])&&document.querySelector('#ensemble-stress').data.at(-1).meta.jobId===id,target.id);
+ stage='zoom';
+ const plot=await page.evaluate(()=>{const g=document.querySelector('#ensemble-stress'),b=g.getBoundingClientRect(),l=g._fullLayout;return {x:b.left+l.margin.l,y:b.top+l.margin.t,w:l.xaxis._length,h:l.yaxis._length,range:l.xaxis.range};});
+ await page.mouse.move(plot.x+plot.w*.15,plot.y+plot.h*.15);await page.mouse.down();await page.mouse.move(plot.x+plot.w*.75,plot.y+plot.h*.8,{steps:12});await page.mouse.up();
+ await page.waitForFunction(range=>{const r=document.querySelector('#ensemble-stress')._fullLayout.xaxis.range;return r[1]-r[0]<(range[1]-range[0])*.8;},plot.range);
+ const zoom=await page.evaluate(()=>document.querySelector('#ensemble-stress')._fullLayout.xaxis.range);
+ stage='selection with zoom';
+ await page.locator('#ensemble-runs button').filter({hasText:'Drucker–Prager'}).first().click();
+ await page.waitForFunction(()=>document.querySelector('#ensemble-stress').data.at(-1).meta.jobId==='drucker-prager:baseline');
+ const afterSelection=await page.evaluate(()=>document.querySelector('#ensemble-stress')._fullLayout.xaxis.range);
+ stage='visibility with zoom';
+ await page.locator('.ensemble-legend').getByRole('checkbox',{name:'Linear isotropic elasticity',exact:true}).uncheck();
+ await page.waitForFunction(()=>document.querySelector('#ensemble-stress').data.every(t=>!t.meta.jobId?.startsWith('linear-elastic:')));
+ const afterVisibility=await page.evaluate(()=>document.querySelector('#ensemble-stress')._fullLayout.xaxis.range);
+ stage='pan';
+ await page.locator('#ensemble-stress [data-title="Pan"]').click();
+ await page.locator('#ensemble-stress').scrollIntoViewIfNeeded();
+ const beforePan=await page.evaluate(()=>document.querySelector('#ensemble-stress')._fullLayout.xaxis.range);
+ const box=await page.locator('#ensemble-stress').boundingBox();
+ await page.mouse.move(box.x+plot.w*.6,box.y+180);await page.mouse.down();await page.mouse.move(box.x+plot.w*.7,box.y+180,{steps:8});await page.mouse.up();
+ await page.waitForFunction(before=>document.querySelector('#ensemble-stress')._fullLayout.xaxis.range[0]!==before[0],beforePan);
+ const afterPan=await page.evaluate(()=>document.querySelector('#ensemble-stress')._fullLayout.xaxis.range);
+ await page.locator('#ensemble-stress [data-title="Reset axes"]').click();
+ await page.waitForFunction(()=>document.querySelector('#ensemble-stress')._fullLayout.xaxis.autorange===true);
+ const afterReset=await page.evaluate(()=>document.querySelector('#ensemble-stress')._fullLayout.xaxis.range);
+ stage='PNG download';
+ const downloading=page.waitForEvent('download');await page.locator('#ensemble-stress [data-title="Download plot as a PNG"]').click();const download=await downloading;await download.saveAs('/Users/bmar5496/code/constitutive-atlas/output/playwright/ensemble-plotly-v1-export.png');
+ return {hover,selected:target.id,initial:plot.range,zoom,afterSelection,afterVisibility,beforePan,afterPan,afterReset,download:download.suggestedFilename(),shareButtons:await page.locator('#ensemble-stress [data-title="Share chart..."]').count()};
+ }catch(error){throw Error('Stage '+stage+': '+error.message);}
+})(page);
+```
+### Events
+- Downloading file opara-txcd100-stress.png ...
+- Downloaded file opara-txcd100-stress.png to ".playwright-cli/opara-txcd100-stress.png"

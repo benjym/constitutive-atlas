@@ -3,6 +3,7 @@ import gzip
 import hashlib
 import json
 from pathlib import Path
+import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENT = 'OPARA-TXCD-100'
@@ -35,6 +36,16 @@ def bundle(destination, root=ROOT):
     manifest = dict(version='atlas-ensemble-asset-0.1', path='ensemble-experiment.json',
                     sha256=hashlib.sha256(content).hexdigest(), size_bytes=len(content))
     (destination/'ensemble-index.json').write_text(json.dumps(manifest, indent=2)+'\n')
+    # Keep the pinned library and MIT attribution local to the packaged site.
+    vendor = destination/'vendor'
+    vendor.mkdir(exist_ok=True)
+    notice = json.loads((root/'web/vendor/plotly-NOTICE.json').read_text())
+    for name, receipt in notice['files'].items():
+        content = (root/'web/vendor'/name).read_bytes()
+        if hashlib.sha256(content).hexdigest() != receipt['sha256'] or len(content) != receipt['size_bytes']:
+            raise ValueError('Plotly dependency differs from its pinned receipt')
+        (vendor/name).write_bytes(content)
+    shutil.copyfile(root/'web/vendor/plotly-NOTICE.json',vendor/'plotly-NOTICE.json')
     return manifest
 
 if __name__ == '__main__':

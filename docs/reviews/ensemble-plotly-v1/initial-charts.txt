@@ -1,0 +1,23 @@
+### Result
+{
+  "version": "4.1.1",
+  "charts": [
+    {
+      "id": "ensemble-stress",
+      "ready": "true",
+      "traces": 13,
+      "width": 722
+    },
+    {
+      "id": "ensemble-volume",
+      "ready": "true",
+      "traces": 13,
+      "width": 722
+    }
+  ],
+  "status": "Running · up to 2 workers · 12 completed · 2 running · 11 queued"
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({version:window.Plotly?.version,charts:[...document.querySelectorAll(\'.ensemble-plot\')].map(e=>({id:e.id,ready:e.dataset.ready,traces:e.data?.length,width:e._fullLayout?.width})),status:document.querySelector(\'#ensemble-status\').textContent})');
+```

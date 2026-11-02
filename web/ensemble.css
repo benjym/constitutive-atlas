@@ -10,12 +10,21 @@
 #ensemble .ensemble-actions{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
 #ensemble .ensemble-actions button,#ensemble-single-export{padding:9px 12px;border:1px solid var(--line);border-radius:5px;background:var(--paper,#fff);color:var(--ink);cursor:pointer}
 #ensemble button:disabled{opacity:.5;cursor:default}
-#ensemble .ensemble-legend{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
+#ensemble .ensemble-legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:3px 10px;align-items:start;margin-bottom:4px}
+#ensemble .ensemble-legend .ensemble-check{margin:0;padding:3px 0;gap:6px;font-size:11px;line-height:1.3;min-width:0;align-items:flex-start}
+#ensemble .ensemble-legend .ensemble-check input{width:13px;min-width:13px;height:13px;margin-top:1px}
+#ensemble .ensemble-measurements{padding:3px 0;font-size:11px;line-height:1.3}
+@media(max-width:520px){#ensemble .ensemble-legend{grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 8px}}
 #ensemble .ensemble-run-row{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;border:1px solid var(--line);border-left:4px solid;border-radius:4px;background:transparent;padding:10px 12px;margin:6px 0;font:inherit;font-size:12px;color:var(--ink);cursor:pointer}
 #ensemble .ensemble-run-row[aria-pressed=true]{background:#e9eee3;outline:1px solid var(--green)}
 #ensemble .ensemble-run-row[data-status=error],#ensemble .ensemble-run-row[data-status=stopped],#ensemble .ensemble-run-row[data-status=rejected],#ensemble .ensemble-run-row[data-status=timeout]{background:#fff1e9}
 #ensemble pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:450px;overflow:auto;font-size:11px}
-#ensemble .chart-panel svg{display:block;width:100%;height:auto;font:11px var(--font,system-ui)}
+#ensemble .chart-panel>h2{margin:0;font-size:14px;font-weight:600}
+#ensemble .ensemble-plot{width:100%;min-width:0;height:360px}
+#ensemble .ensemble-plot svg.main-svg{display:block;width:100%;height:100%;max-height:none;overflow:hidden}
+#ensemble .ensemble-plot .modebar svg{display:inline;width:1em;height:1em;max-height:none;overflow:visible}
+#ensemble .ensemble-plot .modebar{z-index:1}
+#ensemble .ensemble-plot .modebar-btn{padding:4px}
 #ensemble details p{font-size:13px;line-height:1.6}
 #ensemble-status{font-size:13px;line-height:1.6}
 @media(max-width:900px){#ensemble .ensemble-layout{grid-template-columns:1fr}#ensemble .ensemble-controls{width:auto}}

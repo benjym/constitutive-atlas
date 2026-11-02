@@ -68,7 +68,7 @@ def main():
         shutil.copyfile(ROOT/'web/assets'/name,dest/'assets'/name)
     from build_ensemble_web import bundle as bundle_ensemble
     bundle_ensemble(dest)
-    for name in ['model-profiles.mjs', 'model-profile-data.mjs', 'ensemble.mjs', 'ensemble-queue.mjs', 'ensemble-view.mjs', 'ensemble-worker.mjs', 'ensemble.css']:
+    for name in ['model-profiles.mjs', 'model-profile-data.mjs', 'ensemble.mjs', 'ensemble-plots.mjs', 'ensemble-queue.mjs', 'ensemble-view.mjs', 'ensemble-worker.mjs', 'ensemble.css']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     shutil.copyfile(ROOT/'docs/benchmarks/kfs-tmd2-research-range-v1/results/reproduction.png',dest/'tmd2-reproduction.png')
     for name in ['atlas.js','atlas.wasm']:
