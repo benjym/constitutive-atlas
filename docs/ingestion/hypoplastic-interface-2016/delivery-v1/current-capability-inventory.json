@@ -1,0 +1,73 @@
+{
+  "identity": "interface2016-current-capability-inventory-v1",
+  "scope": "representation feasibility only; no governing-rate transcription or claimed source closure",
+  "source_files": {
+    "schemas/model-v0.3.schema.json": "4bde28fab1b2d3defa98d11e94aeef1506d7e50f6e0e980686afb46069b29549",
+    "docs/FORMULATION_CONTRACT.md": "5f3ee154c00ed61c9faf5f9d9cfd3ab52c4c9c206add88150316e579c3f24eab",
+    "atlas/dsl.py": "ce414da9f3892987ec47c323021ccb9c57da7b5b7e4dbebf88ed63dfc9d50a64",
+    "atlas/path.py": "8e30173a072c1a3fa593cac3f4754923701b73650b48f59eb2d491db23f847dc",
+    "tools/generate_controlled_path.py": "11d842fec37f072a6e98c308c9c71e2f928d2c82cf565bcceb64b3c4540eb2f4",
+    "web/path-laboratory.mjs": "f6c14af40da9ac4f9d7fb41a8944c6e5c196a25e4a2fe4f8a1f7a5d1758780d6",
+    "web/model-profile-data.mjs": "1bc4477c803278898d122517fb40cd6a52f86e12034323f829552187781787ac",
+    "docs/ingestion/hypoplastic-interface-2016/README.md": "9bf6b5a7297bb25e9007aa00d8284a43c8105ef85f602214d5ddfe09bd90c4a8",
+    "docs/ingestion/hypoplastic-interface-2016/integration-contract.json": "02b37d0c58d2c53cabfdeeb96e3eff360000e39fe7238578456b25ebbbb4d2cd"
+  },
+  "verified_existing_capabilities": {
+    "length_units": {
+      "declaration": {
+        "si": [
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "mass_length_time_temperature_exponents": [
+        "0",
+        "1",
+        "0",
+        "0"
+      ]
+    },
+    "source_reduced_stress_display": {
+      "expr": "sym(sn,sp,sp,sqrt(2)*tx,0*sn,sqrt(2)*tz)",
+      "typecheck": "sym Pa",
+      "does_not_replace_source_reduced_operators": true
+    },
+    "controlled_path": "persistent scalar/sym state, scalar value+derivative controls; explicit complete context and rollback; symmetric stress observable",
+    "kinematic_declarations": [
+      "small_strain_3d",
+      "axisymmetric_x"
+    ],
+    "no_new_capability_implemented": true
+  },
+  "pending_source_decisions": [
+    "exact original fully rough HvWE complete rate and constitutive factors",
+    "in-plane stress evolution versus constant wording",
+    "original tensor and norm/action semantics",
+    "finite slip/angular relation versus source stretching",
+    "density/preparation/contact/domain/frame conventions"
+  ],
+  "future_interface_work": "Existing path-laboratory.mjs contains NorSand-specific labels/protocol/plots and cannot establish an interface laboratory by model metadata alone. Actual controls, traction/density/slip plots, reset/replay, reader profile and package/live qualification require explicit coordinated UI task after source/contract closure.",
+  "prohibited_inferences": [
+    "bulk3D host action as reduced interface law",
+    "unsupported local/finite frame transport",
+    "length-unit capability gap merely because shorthand m is absent",
+    "compiled or scientific admission from representation typecheck"
+  ],
+  "historical_check_replay": {
+    "commands": [
+      "python3 -B checks.py --check check-results.json",
+      "python3 -B -m unittest -v test_checks.py"
+    ],
+    "cwd": "docs/ingestion/hypoplastic-interface-2016",
+    "algebra_assertions": 100,
+    "unittests": 3,
+    "exit_codes": [
+      0,
+      0
+    ],
+    "compiled_calls": 0,
+    "original_results_unchanged": true
+  }
+}

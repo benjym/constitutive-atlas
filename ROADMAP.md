@@ -802,3 +802,8 @@ Kelvin–Voigt live delivery — 2 November 2026: exact COMSOL6.3 ordinary devia
 ### Bingham scientific checkpoint — 2 November 2026
 
 The exact COMSOL6.3 perfect von Mises Bingham elastoviscoplastic solid is independently agent-approved for its bounded physical-time backward-Euler schedule scope:136histories/272calls/7771accuracy comparisons per backend and19617native/Wasm physical parity values. [Canonical nine-item review](catalogue/agent-reviews/bingham-comsol63-agent-v1.json) and [delivery ledger](docs/ingestion/bingham-comsol63/DELIVERY.md) retain the complete scope, source capsule and earlier failures. The atlas addition brings current totals to49model records/26approvals/22agent reviews/205sources and48reader profiles, preserving all15ordinary definitions. Package/browser and authorized live delivery remain separately tracked; no experimental or general parameter qualification is inferred.
+
+
+## HvWE2016 fixed-local delivery checkpoint · 2 November 2026
+
+The new `hvwe2016-reconciled-fixed-local` source-reconciled fully rough interface has passed independent scientific review and source integration review. Its full five-state law, native/Wasm reference checks, normal strain/two shear-angle laboratory and reader profile are integrated in the isolated release. Database export preserves all prior rows and adds the exact model/approval/source identities. Standard website packaging and actual browser qualification remain pending; this checkpoint makes no live publication claim. Exact source corrections and journal visual-copy gap remain disclosed in the delivery ledger.

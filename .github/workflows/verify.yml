@@ -508,6 +508,21 @@ jobs:
           cmake --build build-path-wasm --target atlas_path_capability --parallel 1
           node docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs build-path-wasm/atlas_path_capability.mjs build-path-wasm/atlas_path_capability.wasm docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/wasm.json
           python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json path-results/wasm.json
+      - name: Qualify the fully rough hypoplastic interface on native and Wasm
+        shell: bash
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          model="$PWD/models/research/interface2016/hvwe2016-reconciled-fixed-local.json"
+          cmake -S cmake/controlled-path -B build-interface2016-native -DCMAKE_BUILD_TYPE=Release "-DATLAS_PATH_MODELS=$model"
+          cmake --build build-interface2016-native --target atlas_path_capability --parallel 1
+          mkdir -p path-results/interface2016
+          python -B docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py build-interface2016-native/libatlas_path_capability.so docs/ingestion/hypoplastic-interface-2016/implementation-v1/backend-requests.json path-results/interface2016/native.json
+          python -B docs/ingestion/hypoplastic-interface-2016/implementation-v1/check_backend_results_v2.py path-results/interface2016/native.json --output path-results/interface2016/native-check.json
+          emcmake cmake -S cmake/controlled-path -B build-interface2016-wasm -DCMAKE_BUILD_TYPE=Release "-DATLAS_PATH_MODELS=$model"
+          cmake --build build-interface2016-wasm --target atlas_path_capability --parallel 1
+          node docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs build-interface2016-wasm/atlas_path_capability.mjs build-interface2016-wasm/atlas_path_capability.wasm docs/ingestion/hypoplastic-interface-2016/implementation-v1/backend-requests.json path-results/interface2016/wasm.json
+          python -B docs/ingestion/hypoplastic-interface-2016/implementation-v1/check_backend_results_v2.py path-results/interface2016/wasm.json --output path-results/interface2016/wasm-check.json
+          python -B docs/ingestion/hypoplastic-interface-2016/execution-v1/check_parity_v2.py path-results/interface2016/native.json path-results/interface2016/wasm.json path-results/interface2016/parity.json
       - name: Retain numerical outputs and generated model metadata
         if: always()
         uses: actions/upload-artifact@v4
@@ -519,6 +534,10 @@ jobs:
             build-path-wasm/generated/
             build-path-native/CMakeCache.txt
             build-path-wasm/CMakeCache.txt
+            build-interface2016-native/generated/
+            build-interface2016-wasm/generated/
+            build-interface2016-native/CMakeCache.txt
+            build-interface2016-wasm/CMakeCache.txt
             build-path-native/libatlas_path_capability.so
             build-path-wasm/atlas_path_capability.mjs
             build-path-wasm/atlas_path_capability.wasm

@@ -36,6 +36,7 @@ def main():
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
     parser.add_argument('--kelvin-voigt-wasm-dir',type=Path,default=ROOT/'build-kelvin-voigt-wasm',help='Qualified ordinary Kelvin–Voigt physical-time engine')
     parser.add_argument('--bingham-wasm-dir',type=Path,default=ROOT/'build-bingham-public',help='Exact independently reviewed Bingham physical-time engine')
+    parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'web/engines/interface2016',help='Exact reviewed source-reconciled HvWE controlled-path engine')
     args=parser.parse_args()
     subprocess.run(['node',str(ROOT/'tools/check_model_profiles.mjs'),str(ROOT)],check=True)
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
@@ -114,6 +115,9 @@ def main():
     subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)
     from build_controlled_path_web import bundle as bundle_controlled_path
     bundle_controlled_path(dest,args.controlled_path_wasm_dir)
+    from build_interface2016_web import bundle as bundle_interface2016
+    bundle_interface2016(dest,args.interface2016_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_interface2016_package.mjs'),str(dest)],check=True)
     from build_maxwell_laboratory import bundle as bundle_maxwell
     bundle_maxwell(dest,args.maxwell_wasm_dir)
     from build_implicit_path_laboratory import bundle as bundle_implicit_path
