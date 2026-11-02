@@ -1,0 +1,49 @@
+---
+name: Set up cached Atlas toolchain
+description: Pinned SDK and compiler-object caches; every caller still generates and
+  checks its outputs.
+inputs:
+  wasm:
+    description: Install Emscripten 6.0.8
+    default: 'false'
+runs:
+  using: composite
+  steps:
+  - name: Install compiler cache
+    shell: bash
+    run: |-
+      sudo apt-get update -qq
+      sudo apt-get install -y -qq ccache
+      mkdir -p "$HOME/.cache/atlas-ccache"
+      echo "CCACHE_DIR=$HOME/.cache/atlas-ccache" >> "$GITHUB_ENV"
+      echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+      echo "CCACHE_COMPILERCHECK=content" >> "$GITHUB_ENV"
+      echo "CCACHE_MAXSIZE=500M" >> "$GITHUB_ENV"
+      echo "CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
+  - name: Cache compiler objects
+    uses: actions/cache@v4
+    with:
+      path: "~/.cache/atlas-ccache"
+      key: ccache-v1-${{ runner.os }}-${{ runner.arch }}-${{ github.workflow }}-${{
+        hashFiles('cpp/**', 'atlas/**', 'schemas/**', 'models/**', '**/CMakeLists.txt',
+        'cmake/**/*.cmake') }}
+      restore-keys: ccache-v1-${{ runner.os }}-${{ runner.arch }}-${{ github.workflow
+        }}-
+  - name: Cache pinned Emscripten SDK
+    if: inputs.wasm == 'true'
+    id: emsdk
+    uses: actions/cache@v4
+    with:
+      path: "${{ runner.temp }}/emsdk"
+      key: emsdk-${{ runner.os }}-${{ runner.arch }}-6.0.8-v1
+  - name: Install pinned Emscripten SDK
+    if: inputs.wasm == 'true' && steps.emsdk.outputs.cache-hit != 'true'
+    shell: bash
+    run: |-
+      git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+      "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+      "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+  - name: Expose pinned SDK to subsequent steps
+    if: inputs.wasm == 'true'
+    shell: bash
+    run: echo "BASH_ENV=$RUNNER_TEMP/emsdk/emsdk_env.sh" >> "$GITHUB_ENV"

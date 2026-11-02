@@ -37,18 +37,35 @@ class ProfileTests(unittest.TestCase):
         # Full canonical discovery is untouched and exercises the exact test.
         calls.clear();make().run(unittest.TestResult());self.assertCountEqual(calls,['current','exact'])
 
-    def test_both_platforms_and_archival_checks_gate_deployment(self):
-        workflow=(ROOT/'.github/workflows/verify.yml').read_text()
-        self.assertIn('os: ubuntu-latest',workflow)
-        self.assertIn('os: macos-26',workflow)
-        self.assertIn("python: '3.14'",workflow)
-        self.assertIn("if: runner.os == 'macOS'\n        run: |\n          ctest --test-dir build --output-on-failure -E \"^atlas_recorded$\"",workflow)
-        self.assertIn('ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-v5 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"',workflow)
-        self.assertIn('ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-v5',workflow)
-        self.assertIn('needs: [native, wasm, wasm-linux]',workflow)
-        self.assertIn('PYTHONDONTWRITEBYTECODE: "1"',workflow)
+    def test_full_qualification_retains_both_platforms_and_archival_gates(self):
+        workflow=(ROOT/'.github/workflows/qualification.yml').read_text()
+        for value in ['ubuntu-latest', 'macos-26', "3.14", 'atlas_recorded',
+                      'explicit-gis20-occ-restart-duncan-v5', 'run_ci_tests.py --portable',
+                      'test_bingham_schedule.py', 'check_perzyna_ci.py --paired',
+                      'run_historical_barodesy.py', 'schedule:', 'workflow_dispatch:']:
+            self.assertIn(value,workflow)
+        self.assertNotIn('needs: [native, wasm, wasm-linux]',workflow)
+        self.assertNotIn('actions/deploy-pages',workflow)
+        self.assertFalse((ROOT/'.github/workflows/controlled-path.yml').exists())
         policy=json.loads((ROOT/'tools/ci_exact_replays.json').read_text())
         self.assertEqual(len(policy['exact_test_ids']),len(set(policy['exact_test_ids'])))
+
+    def test_fast_checks_and_exact_artifact_publication_are_separate(self):
+        fast=(ROOT/'.github/workflows/verify.yml').read_text()
+        pages=' '.join((ROOT/'.github/workflows/pages.yml').read_text().split())
+        self.assertIn('cancel-in-progress: true',fast)
+        self.assertIn('ci_smoke.mjs',fast)
+        self.assertNotIn('study.py',fast)
+        self.assertNotIn('build_ci_targets.py',fast)
+        self.assertIn('workflow_run:',pages)
+        self.assertIn("github.event.workflow_run.event == 'push'",pages)
+        self.assertIn("github.event.workflow_run.conclusion == 'success'",pages)
+        self.assertIn('github.event.workflow_run.head_sha',pages)
+        self.assertIn('ATLAS_PUBLICATION_REVISION',pages)
+        self.assertIn('actions/upload-pages-artifact',pages)
+        self.assertIn('needs: package',pages)
+        self.assertNotIn('needs: qualification',pages)
+        self.assertIn('test_supported_package.mjs',pages)
 
 
 if __name__=='__main__':unittest.main()
