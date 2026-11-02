@@ -25,16 +25,16 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 - [X] **E3 — Transcription:** exact candidate validates/generates; independent equation/reference checks pass.
 - [X] **E4 — Native/Wasm:** correct profile/interfaces, complete frozen numerical gates, rollback/recovery/restarts, useful preset, parity and regressions pass.
 - [X] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
-- [-] **E6 — Atlas:** qualified model/approval/source/evidence and source-backed public profile integrated through normal generation; profile-coverage check passes, prior models preserved and public metadata/current database checked.
-- [ ] **E7 — Packaged website:** public profile/card, parameter units, example guidance, related/laboratory links and narrow-screen layout inspected; real controls/plots, technical source/review disclosure, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
+- [X] **E6 — Atlas:** qualified model/approval/source/evidence and source-backed public profile integrated through normal generation; profile-coverage check passes, prior models preserved and public metadata/current database checked.
+- [X] **E7 — Packaged website:** public profile/card, parameter units, example guidance, related/laboratory links and narrow-screen layout inspected; real controls/plots, technical source/review disclosure, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
 - [ ] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works; task-owned cleanup verified and any retained resources handed off explicitly.
 
 ## Current handoff
 
-- Current phase / overall state: E0–E5 verified; accepted exact scientific/native/Wasm scope. E6 atlas/profile/database preservation passed; standard package and actual browser/live gates remain.
+- Current phase / overall state: E0–E7 verified; exact scientific/native/Wasm, normal atlas/profile/database, fullstandardpackage and actualbrowser scope pass. E8 public CI/Pages/live/cleanup remains.
 - Current owner: /root coordinator
-- Blocker / missing evidence: shared execution slot held by EXEC-interface2016-standard-package-browser-v1; Perzyna queued. Standard full package, actual browser, CI and live delivery remain. No in-scope numerical failure.
-- Smallest next action / next owner: after genuine Interface2016 terminal release, verify process inventory and claim Perzyna serial package/browser slot; run normal builder with qualified engines.
+- Blocker / missing evidence: No in-scope numerical or browser failure remains. E8 scoped main push, current CI/Pages and live verification remain. Package-v1 missing local evidence failure and browser output-root denial are retained.
+- Smallest next action / next owner: Commit exact E6/E7 evidence, recheck remote main and scope, push authorized release, monitor all fresh CI/deployment gates and verify actual upload/live assets/browser.
 - Resume when:
 - Known limitations / retained failures:
 
@@ -90,3 +90,5 @@ E5 transaction clarification: accepted schedule scope preserves completed sample
 CI orchestration source checks: ci-driver-check-v1/RESULT.json passes five manufactured scenarios with zero compiled calls. Native/paired serial ordering, consumer-failure post-verification, capture failure and stale metadata rejection checked. The original mock classifier failure is retained in ATTEMPT1.txt; these checks do not substitute for actual CI.
 
 E7 package-v1: genuine normal builder exit1,416s; source inventories unchanged (exact gzip recovery retained). New Perzyna all3modes/342comparisons/replay/recovery passed. Existing implicit-path guard stopped on absent ignored local numerical evidence, restored exactee7e4ad4 from qualified prior tree and retained locally in package-v1/restored-evidence/. All remaining implicit/orthotropic/Hill pure packaging guards now pass, without compiled calls. Serial slot released; v2 full retry queued after md1997 local CI. No browser/live claim yet.
+
+E6/E7 completion: standard package-v2 genuine exit0 in374s, all tracked sourcepre/post exact;1466file manifest. Existing supported ordinary/named gate exit0; all prior scientific package gates pass. Actual browser profile/laboratory/default3modes and342independent scalar comparisons PASS; edited coefficients/full13history, all6stress/3plots, cancelled/latest requests, exact real-file import/rerun, stale import rejection, invalid and true backend error/recovery,23fetched identities,375px localtable scroll/no pageoverflow, relatedBingham route and4technical links HTTP200,0console/networkerrors. See immutable package-v2/ and browser-v1/ manifests. Server54116 stopped exit0; browserabout:blank. Session58655 readonly board monitor ended exit0 at actual MD release.

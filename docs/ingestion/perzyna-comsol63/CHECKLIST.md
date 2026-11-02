@@ -122,27 +122,27 @@ Evidence: scientific-review-v1/REVIEW.md and canonical catalogue/agent-reviews/p
 
 ## E6 — Integrate into the atlas
 
-- [ ] Coordinator installs the exact qualified model bytes and reviewed approval entry, dossier, examples and relevant evidence. Use `models/` only for profiles supported by the normal public engine; otherwise implement/qualify the required generic engine and browser routing. A separate research executable is not public atlas delivery.
-- [ ] Update the discovery/catalogue entry and lineage/source links, approval registry, evidence/publication mappings and protocol/example registries as required by their actual consumers. Do not manufacture a legacy human-review acceptance to make an exporter happy.
-- [ ] Integrate the public profile in `web/model-profile-data.mjs` under the exact catalogue ID. Explain the implemented variant and a supported example, link related family/variant entries, and retain local content provenance. Run `node tools/check_model_profiles.mjs`; missing public content blocks website delivery.
-- [ ] Preserve approval/evidence hashes. If integration changes model metadata, IDs, equations, numerical settings or dependencies covered by the review, rebind the review and rerun affected gates before using the old approval claim.
-- [ ] Regenerate the full public catalogue and verify engine metadata equals the definitions packaged with it. Ensure all prior models remain present and retain their qualified behavior.
-- [ ] Extend complete-coverage/default/profile policies deliberately for the new model and freeze expected outcomes before observing the new release gate. Keep prior policy/evidence identities and declared failures; do not skip the new model to obtain a green package.
-- [ ] Update current status/roadmap counts and model summaries from actual records. Count full formulations and restricted variants accurately. Export the database when part of the release; verify the exact model/source/approval identity survives export.
+- [X] Coordinator installs the exact qualified model bytes and reviewed approval entry, dossier, examples and relevant evidence. Use `models/` only for profiles supported by the normal public engine; otherwise implement/qualify the required generic engine and browser routing. A separate research executable is not public atlas delivery.
+- [X] Update the discovery/catalogue entry and lineage/source links, approval registry, evidence/publication mappings and protocol/example registries as required by their actual consumers. Do not manufacture a legacy human-review acceptance to make an exporter happy.
+- [X] Integrate the public profile in `web/model-profile-data.mjs` under the exact catalogue ID. Explain the implemented variant and a supported example, link related family/variant entries, and retain local content provenance. Run `node tools/check_model_profiles.mjs`; missing public content blocks website delivery.
+- [X] Preserve approval/evidence hashes. If integration changes model metadata, IDs, equations, numerical settings or dependencies covered by the review, rebind the review and rerun affected gates before using the old approval claim.
+- [X] Regenerate the full public catalogue and verify engine metadata equals the definitions packaged with it. Ensure all prior models remain present and retain their qualified behavior.
+- [X] Extend complete-coverage/default/profile policies deliberately for the new model and freeze expected outcomes before observing the new release gate. Keep prior policy/evidence identities and declared failures; do not skip the new model to obtain a green package.
+- [X] Update current status/roadmap counts and model summaries from actual records. Count full formulations and restricted variants accurately. Export the database when part of the release; verify the exact model/source/approval identity survives export.
 
 **Exit:** the ordinary atlas generation path includes the model, its public profile and its actual approval/evidence. No private adapter or hand-edited generated catalogue is required.
 
 ## E7 — Make the packaged website work
 
-- [ ] Use fresh matching Wasm/generated metadata and the standard web builder. Packaging must reject stale model/engine combinations. Include only permitted public assets; keep private sources and unapproved original measurement arrays out.
-- [ ] Ensure the model is selectable and reachable by its shareable URL; source/DOI links, equations, assumptions, author/variant attribution, initialization, parameter units and limitations are visible.
-- [ ] Keep the public profile prominent and the accepted agent review, exact approved scope and retained checks accessible inside closed technical details. If the current exporter/UI only understands older review records, add and qualify generic support for agent-review/approval data; a registry entry alone does not make the website expose it accurately.
-- [ ] In the actual packaged browser, inspect the catalogue summary, full public profile and laboratory/profile links. Confirm readable parameter meanings and units, correct initial-state guidance, a supported example and related-model links; check long names/tables on a narrow screen. Do not lead with agent/curation notes or imply that a literature-only entry is runnable.
-- [ ] Provide the actual controls required by this model. Physical-time laws need honest time/rate/hold controls and labels; unsupported controls must be unavailable with a useful explanation. A static catalogue card or timed CLI alone is not the requested interactive delivery.
-- [ ] In an actual browser, run the public default/named preset; inspect meaningful plots, units, all required state and absence of worker/console/network failures. Exercise parameter/initial-state changes, supported protocols, reset and latest-request behavior.
-- [ ] Test export/import/replay and invalid input followed by recovery through the real exposed interface. Record fetched engine/catalogue identities so a stale browser cache cannot supply the evidence.
-- [ ] Exercise compatible measurement overlays and their toggle when data rights and model applicability permit. Otherwise show why comparison is unavailable; do not imply calibration, density matching or experimental validation from a plotted overlay.
-- [ ] Run relevant package, scope/parity, examples and browser checks. Save exact package manifest, requests/responses and UI evidence. Include at least one successful end-to-end request for this model; no silent unsupported-model filtering.
+- [X] Use fresh matching Wasm/generated metadata and the standard web builder. Packaging must reject stale model/engine combinations. Include only permitted public assets; keep private sources and unapproved original measurement arrays out.
+- [X] Ensure the model is selectable and reachable by its shareable URL; source/DOI links, equations, assumptions, author/variant attribution, initialization, parameter units and limitations are visible.
+- [X] Keep the public profile prominent and the accepted agent review, exact approved scope and retained checks accessible inside closed technical details. If the current exporter/UI only understands older review records, add and qualify generic support for agent-review/approval data; a registry entry alone does not make the website expose it accurately.
+- [X] In the actual packaged browser, inspect the catalogue summary, full public profile and laboratory/profile links. Confirm readable parameter meanings and units, correct initial-state guidance, a supported example and related-model links; check long names/tables on a narrow screen. Do not lead with agent/curation notes or imply that a literature-only entry is runnable.
+- [X] Provide the actual controls required by this model. Physical-time laws need honest time/rate/hold controls and labels; unsupported controls must be unavailable with a useful explanation. A static catalogue card or timed CLI alone is not the requested interactive delivery.
+- [X] In an actual browser, run the public default/named preset; inspect meaningful plots, units, all required state and absence of worker/console/network failures. Exercise parameter/initial-state changes, supported protocols, reset and latest-request behavior.
+- [X] Test export/import/replay and invalid input followed by recovery through the real exposed interface. Record fetched engine/catalogue identities so a stale browser cache cannot supply the evidence.
+- [X] Exercise compatible measurement overlays and their toggle when data rights and model applicability permit. Otherwise show why comparison is unavailable; do not imply calibration, density matching or experimental validation from a plotted overlay.
+- [X] Run relevant package, scope/parity, examples and browser checks. Save exact package manifest, requests/responses and UI evidence. Include at least one successful end-to-end request for this model; no silent unsupported-model filtering.
 
 Existing web build and package entry points:
 
@@ -155,6 +155,8 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory .local/delivery-site
 Use the current workflow's other parity/profile/browser commands for the actual package. `test_web_package.mjs` is the strict all-default gate; any known unsupported defaults must stay visible, with separately identified supported-input qualification rather than an unexplained waiver. A Python HTTP server is a preview, not proof of deployment.
 
 **Exit:** the exact packaged public application explains the model through its public profile and demonstrates it interactively, with accurate source/review/applicability disclosures and passing interface checks.
+
+Evidence: package-v2/RESULT.json (genuine standardbuilder exit0,374s/source unchanged), SUPPORTED.json, full1466file PACKAGE-MANIFEST.json; browser-v1/CHECKS.json, ACTUAL-TOOL-RESULTS.json, EXPORT-CHECKS.json and saved real UI exports/snapshots/screenshots. All3modes/342physical reference values, replay, edits, invalid/backenderror recovery, cancel/latest,23fetchedasset hashes,0console/networkerrors and375px nooverflow pass.
 
 ## E8 — Publish and verify the live website
 

@@ -1,0 +1,106 @@
+{
+  "profile": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"title\":\"COMSOL 6.3 Perzyna elastoviscoplastic solid · associative von Mises\",\"technicalInitiallyClosed\":true,\"parameterRows\":[\"K · Elastic bulk modulus\\tControls reversible resistance to volume change; permanent flow is volume preserving.\\tPa\",\"G · Elastic shear modulus\\tControls reversible resistance to shape change and helps set the relaxation time.\\tPa\",\"σy · Equivalent yield stress\\tSets the onset of flow and the normalization of overstress. Changing it affects both the threshold and the flow rate.\\tPa\",\"A · Viscoplastic rate coefficient\\tMultiplies the flow rate at every fixed relative overstress. Its unit is inverse seconds.\\ts⁻¹\",\"n · Overstress exponent\\tSets the nonlinear dependence on stress above yield. At a stress twice the yield stress, relative overstress is one and the equivalent permanent-strain rate equals A for every exponent.\\tdimensionless\"],\"related\":[\"#catalogue/bingham-comsol63-mises-perfect-zero-spin-ode\",\"#catalogue/power-creep-itasca900-both-active-ode\"],\"sourceLinks\":[\"https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.039.html\",\"https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_solid.07.024.html\",\"https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html\"]}\n### Ran Playwright code\n```js\nawait (async (page) => { return await page.evaluate(() => { const d=document.querySelector('#catalogue-dialog'), p=d.querySelector('.model-profile'),t=d.querySelector('.model-profile-technical'); if(!d.open||!p||t.open||p.compareDocumentPosition(t)!==4) throw Error('Profile prominence/closed technical disclosure'); const rows=[...p.querySelectorAll('table tbody tr')].map(r=>r.innerText); if(rows.length!==5)throw Error('Five parameter guides'); const related=[...p.querySelectorAll('a[href^=\"#catalogue/\"]')].map(a=>a.getAttribute('href')); if(related.length!==2)throw Error('Related links'); return {title:d.querySelector('h2').textContent,technicalInitiallyClosed:!t.open,parameterRows:rows,related,sourceLinks:[...p.querySelectorAll('a[href^=\"https:\"]')].map(a=>a.href)}; }); })(page);\n```"
+      }
+    ]
+  },
+  "default": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"download\":\"perzyna-atlas-relaxation.json\",\"saved\":\"/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e7-v1/relaxation.json\",\"plots\":3,\"tableRows\":7,\"status\":\"Completed 2 physical seconds · 4 output intervals · relaxation.\"}\n### Ran Playwright code\n```js\nawait (async (page) => { const [download]=await Promise.all([page.waitForEvent('download'),page.locator('#perzyna-export').click()]); const path='/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e7-v1/relaxation.json'; await download.saveAs(path); return {download:download.suggestedFilename(),saved:path,plots:await page.locator('#perzyna-laboratory svg').count(),tableRows:await page.locator('#perzyna-state tr').count(),status:await page.locator('#perzyna-status').textContent()}; })(page);\n```\n### Events\n- Downloading file perzyna-atlas-relaxation.json ...\n- Downloaded file perzyna-atlas-relaxation.json to \".playwright-mcp/perzyna-atlas-relaxation.json\""
+      }
+    ]
+  },
+  "creep": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"mode\":\"creep\",\"status\":\"Completed 2 physical seconds · 4 output intervals · creep.\",\"headers\":\"t(s)ε xxε yyε zzε √2xyε √2yzε √2xzεvp xxεvp yyεvp zzεvp √2xyεvp √2yzεvp √2xzασ xxσ yyσ zzσ √2xyσ √2yzσ √2xz\",\"rows\":7,\"summary\":\"creep: 2 physical seconds; final σxx=200000.0Pa, εxx=0.02767371.\"}\n### Ran Playwright code\n```js\nawait (async (page) => { const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#perzyna-export').click()]); await d.saveAs('/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e7-v1/creep.json'); const data=await page.locator('#perzyna-state tr').allTextContents(); if(data.length!==7)throw Error('Complete output table'); return {mode:'creep',status:await page.locator('#perzyna-status').textContent(),headers:data[0],rows:data.length,summary:await page.locator('#perzyna-summary').textContent()}; })(page);\n```\n### Events\n- Downloading file perzyna-atlas-creep.json ...\n- Downloaded file perzyna-atlas-creep.json to \".playwright-mcp/perzyna-atlas-creep.json\""
+      }
+    ]
+  },
+  "rate": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"mode\":\"rate\",\"status\":\"Completed 2 physical seconds · 4 output intervals · rate.\",\"summary\":\"rate: 2 physical seconds; final σxx=153897.0Pa, εxx=0.01200000.\",\"plots\":3}\n### Ran Playwright code\n```js\nawait (async (page) => { const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#perzyna-export').click()]); await d.saveAs('/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e7-v1/rate.json'); return {mode:'rate',status:await page.locator('#perzyna-status').textContent(),summary:await page.locator('#perzyna-summary').textContent(),plots:await page.locator('#perzyna-laboratory svg polyline').count()}; })(page);\n```\n### Events\n- Downloading file perzyna-atlas-rate.json ...\n- Downloaded file perzyna-atlas-rate.json to \".playwright-mcp/perzyna-atlas-rate.json\""
+      }
+    ]
+  },
+  "edited": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"status\":\"Completed 2 physical seconds · 4 output intervals · rate.\",\"component\":\"√2xy\",\"plots\":3,\"parameters\":\"[24000000,11000000,110000,0.003,3]\",\"initial\":\"[0.008,-0.003,-0.005,0.001,-0.001,0.002,0,0,0,0,0,0,0]\"}\n### Ran Playwright code\n```js\nawait (async (page) => { const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#perzyna-export').click()]); await d.saveAs('/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e7-v1/edited.json'); return {status:await page.locator('#perzyna-status').textContent(),component:await page.locator('#perzyna-component').inputValue(),plots:await page.locator('#perzyna-laboratory svg polyline').count(),parameters:await page.locator('#perzyna-parameters').inputValue(),initial:await page.locator('#perzyna-initial').inputValue()}; })(page);\n```\n### Events\n- Downloading file perzyna-atlas-rate.json ...\n- Downloaded file perzyna-atlas-rate.json to \".playwright-mcp/perzyna-atlas-rate.json\""
+      }
+    ]
+  },
+  "invalid": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"status\":\"Invalid input: Initial accumulated equivalent viscoplastic strain must be nonnegative.\",\"exportDisabled\":true,\"staleResultsCleared\":true}\n### Ran Playwright code\n```js\nawait (async (page) => { const status=await page.locator('#perzyna-status').textContent(); if(!status.startsWith('Invalid input:'))throw Error(status); if(!await page.locator('#perzyna-export').isDisabled())throw Error('Stale export retained'); if(await page.locator('#perzyna-state tr').count())throw Error('Stale result table'); return {status,exportDisabled:true,staleResultsCleared:true}; })(page);\n```"
+      }
+    ]
+  },
+  "latest-cancel": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"cancelled\":\"History cancelled. Run or reset to start a new history.\",\"latest\":\"Completed 0.5 physical seconds · 4 output intervals · relaxation.\",\"duration\":\"0.5\",\"parameters\":\"[20000000,10000000,100000,0.002,2]\",\"initial\":\"[0.01,-0.004,-0.006,0.002,-0.001,0.003,0,0,0,0,0,0,0]\"}\n### Ran Playwright code\n```js\nawait (async (page) => { await page.locator('#perzyna-run').click(); await page.locator('#perzyna-cancel').click(); await page.waitForTimeout(1200); const cancelled=await page.locator('#perzyna-status').textContent(); if(!cancelled.startsWith('History cancelled.')||!await page.locator('#perzyna-export').isDisabled())throw Error('Cancellation/stale completion'); await page.locator('#perzyna-run').click(); await page.locator('#perzyna-duration').fill('0.5'); await page.locator('#perzyna-run').click(); await page.waitForFunction(()=>document.querySelector('#perzyna-status').textContent.startsWith('Completed 0.5 physical seconds')); const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#perzyna-export').click()]); await d.saveAs('/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e7-v1/latest.json'); return {cancelled,latest:await page.locator('#perzyna-status').textContent(),duration:await page.locator('#perzyna-duration').inputValue(),parameters:await page.locator('#perzyna-parameters').inputValue(),initial:await page.locator('#perzyna-initial').inputValue()}; })(page);\n```\n### Events\n- Downloading file perzyna-atlas-relaxation.json ...\n- Downloaded file perzyna-atlas-relaxation.json to \".playwright-mcp/perzyna-atlas-relaxation.json\""
+      }
+    ]
+  },
+  "import": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"importReplay\":\"Completed 2 physical seconds · 4 output intervals · relaxation.\",\"duration\":\"2\"}\n### Ran Playwright code\n```js\nawait (async (page) => { const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#perzyna-export').click()]); await d.saveAs('/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e7-v1/replayed.json'); return {importReplay:await page.locator('#perzyna-status').textContent(),duration:await page.locator('#perzyna-duration').inputValue()}; })(page);\n```\n### Events\n- Downloading file perzyna-atlas-relaxation.json ...\n- Downloaded file perzyna-atlas-relaxation.json to \".playwright-mcp/perzyna-atlas-relaxation.json\""
+      }
+    ]
+  },
+  "stale-import": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"status\":\"Import rejected: Imported wasm_sha256 differs from this exact package.\",\"exportDisabled\":true}\n### Ran Playwright code\n```js\nawait (async (page) => { const status=await page.locator('#perzyna-status').textContent(); if(!status.includes('Imported wasm_sha256 differs')||!await page.locator('#perzyna-export').isDisabled())throw Error('Stale provenance acceptance'); return {status,exportDisabled:true}; })(page);\n```"
+      }
+    ]
+  },
+  "runtime-failure": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"status\":\"Run failed: inadmissible initial state or outputs\",\"exportDisabled\":true,\"staleResultsCleared\":true}\n### Ran Playwright code\n```js\nawait (async (page) => { const status=await page.locator('#perzyna-status').textContent(); if(!status.startsWith('Run failed:')||!await page.locator('#perzyna-export').isDisabled()||await page.locator('#perzyna-state tr').count())throw Error('Numerical failure did not clear stale results'); return {status,exportDisabled:true,staleResultsCleared:true}; })(page);\n```"
+      }
+    ]
+  },
+  "mobile-lab": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"width\":375,\"pageWidth\":375,\"tableViewport\":301,\"tableScroll\":1020,\"tableRows\":7,\"columns\":20,\"plots\":[\"86.0701754385965,39.956140350877206 86.0701754385965,39.956140350877206 172.03508771929825,140.7486461955724 258,184.69441875239966 343.96491228070175,209.30688712945278 429.92982456140345,225.04385964912282\",\"86.0701754385965,132.5 86.0701754385965,132.5 172.03508771929825,132.5 258,132.5 343.96491228070175,132.5 429.92982456140345,132.5\",\"86.0701754385965,225.0438596491228 86.0701754385965,225.0438596491228 172.03508771929825,124.25135380442744 258,80.30558124760148 343.96491228070175,55.69311287054603 429.92982456140345,39.95614035087718\"],\"measurement\":true}\n### Ran Playwright code\n```js\nawait (async (page) => { return await page.evaluate(() => { const wrap=document.querySelector('#perzyna-state').parentElement; const result={width:innerWidth,pageWidth:document.documentElement.scrollWidth,tableViewport:wrap.clientWidth,tableScroll:wrap.scrollWidth,tableRows:document.querySelectorAll('#perzyna-state tr').length,columns:document.querySelectorAll('#perzyna-state tr:first-child th').length,plots:[...document.querySelectorAll('#perzyna-laboratory svg polyline')].map(p=>p.getAttribute('points')),measurement:document.querySelector('#perzyna-laboratory').textContent.includes('Measurement comparison is unavailable')}; if(result.pageWidth>result.width||result.tableScroll<=result.tableViewport||result.columns!==20||result.tableRows!==7||result.plots.length!==3||result.plots.some(p=>/NaN|Infinity/.test(p)))throw Error(JSON.stringify(result)); return result; }); })(page);\n```"
+      }
+    ]
+  },
+  "fetched-assets": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n[{\"path\":\"index.html\",\"status\":200,\"bytes\":27773,\"sha256\":\"368f968b38c84892383bfd477c4e825b81578807efd3ae4c0450a2ecb335fcc0\"},{\"path\":\"app.js\",\"status\":200,\"bytes\":62552,\"sha256\":\"ffb3f8801c50acda94f1eee14e7828e20b1b5f77d9ad0d1e25c14c1c1bca4d2f\"},{\"path\":\"catalogue.json\",\"status\":200,\"bytes\":71140,\"sha256\":\"b4350eb201272708d31671aff347348729017ff4f510af9702e03510948f7ba7\"},{\"path\":\"models.json\",\"status\":200,\"bytes\":124313,\"sha256\":\"e07f3a21927b28aad8865085216f17d7152dc6f6a67c3663cabbe97c78b606ee\"},{\"path\":\"model-profile-data.mjs\",\"status\":200,\"bytes\":150905,\"sha256\":\"45d41dbbdb816cf00bff33753c72bd78bb20d3145bc59a28d642f92a7294143e\"},{\"path\":\"model-profiles.mjs\",\"status\":200,\"bytes\":5992,\"sha256\":\"647a453ea0299b6724d83c25cafd789c51f68e6701bc75f2847ce7d92acc39bf\"},{\"path\":\"evidence.json\",\"status\":200,\"bytes\":311591,\"sha256\":\"f46647ae54e51809fb8417e86a5d13fb196242ec159a02ea0ebefbd436bd861b\"},{\"path\":\"atlas-database.json\",\"status\":200,\"bytes\":8785,\"sha256\":\"96d2c3f9f85db79f628e8030c32e8b6b2a1db7d02d857b668d6e28d517527932\"},{\"path\":\"engine-perzyna/package-manifest.json\",\"status\":200,\"bytes\":1556,\"sha256\":\"c571542b47f484812cf22515b586736ae654a3ed355c0b75e9a676795ddbe789\"},{\"path\":\"engine-perzyna/approval.json\",\"status\":200,\"bytes\":46437,\"sha256\":\"3f0e174428e178c3f267bf7c89fcdc8b44edb83ca0b9e53876c0aedfbc9de812\"},{\"path\":\"engine-perzyna/build-receipt.json\",\"status\":200,\"bytes\":2937,\"sha256\":\"4088731de94ff642d811697fe420612777b373aff7ec90a1ba7477a5afa741eb\"},{\"path\":\"engine-perzyna/identity.json\",\"status\":200,\"bytes\":5437,\"sha256\":\"0bdb88beb13663620965919fe3ef316c96bc185b772ffab5eea65f4be6616cbb\"},{\"path\":\"engine-perzyna/models.json\",\"status\":200,\"bytes\":7196,\"sha256\":\"dc65a68912251b2986a49481a0a0b7eeb4ede258a9a332eeae577a759b0b8d6a\"},{\"path\":\"engine-perzyna/perzyna-comsol63-mises-perfect-zero-spin-ode.json\",\"status\":200,\"bytes\":6110,\"sha256\":\"7bfc33578593fab8c806dd1cd6473f54b9e2cd5cbf07ecacaffd328118e103ac\"},{\"path\":\"engine-perzyna/perzyna.mjs\",\"status\":200,\"bytes\":27124,\"sha256\":\"722a6314c05361b3c737fc1e93ad45047b89c7a3a36b0e638b36e3e41a7a3d78\"},{\"path\":\"engine-perzyna/perzyna.wasm\",\"status\":200,\"bytes\":425481,\"sha256\":\"9ac88126bc0759c9bafb10e7f8fa1f0cee3c3c118e3a550f8910fc81de1bbaea\"},{\"path\":\"engine-perzyna/review.html\",\"status\":200,\"bytes\":63439,\"sha256\":\"9d77a2f03f142a3d33f690ba19b74cd7db3a9e7612382b914cd97aa077faef12\"},{\"path\":\"engine-perzyna/review.json\",\"status\":200,\"bytes\":51300,\"sha256\":\"7cfcd2381a1ced8cf97a98b7b3e9d197b883582f8c2365efe607e0ae2dd5cbb7\"},{\"path\":\"engine-perzyna/source-receipts.json\",\"status\":200,\"bytes\":10856,\"sha256\":\"19dfcbb0f8746b37ec7e7a2031cce6c0f76a0178ceeec84c379acd31872b8a40\"},{\"path\":\"laboratory-controller-router.mjs\",\"status\":200,\"bytes\":1061,\"sha256\":\"e6f5f85ba95b909608015e974cbb0c919e97b9fd68d5d9d6202482e4a46eb934\"},{\"path\":\"perzyna-atlas-contract.mjs\",\"status\":200,\"bytes\":9951,\"sha256\":\"b22d4f13b87e86bdec09c26131d4dba61337d91b00ef2e74a116852dce230ac8\"},{\"path\":\"perzyna-atlas-worker.mjs\",\"status\":200,\"bytes\":3141,\"sha256\":\"edbda57c6a1271717d6ee24872bc9c86026af1758af053d1020339fb35cac535\"},{\"path\":\"perzyna-laboratory.mjs\",\"status\":200,\"bytes\":12852,\"sha256\":\"cdf0727b2f928e72774d64d8c60b397fa40f317a422807428c3330609e26f602\"}]\n### Ran Playwright code\n```js\nawait (async (page) => { return await page.evaluate(async()=>{ const manifest=await(await fetch('./engine-perzyna/package-manifest.json',{cache:'no-store'})).json();const names=[...new Set(['index.html','app.js','catalogue.json','models.json','model-profile-data.mjs','model-profiles.mjs','evidence.json','atlas-database.json','engine-perzyna/package-manifest.json',...Object.keys(manifest.files)])];return await Promise.all(names.map(async name=>{const response=await fetch('./'+name,{cache:'no-store'});const bytes=await response.arrayBuffer();const sha256=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(x=>x.toString(16).padStart(2,'0')).join('');if(!response.ok||(manifest.files[name]&&manifest.files[name]!==sha256))throw Error('Fetched identity '+name);return {path:name,status:response.status,bytes:bytes.byteLength,sha256};}));}); })(page);\n```"
+      }
+    ]
+  },
+  "mobile-profile": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"width\":375,\"pageWidth\":375,\"dialogWidth\":343,\"bodyWidth\":341,\"bodyScroll\":341,\"technicalClosed\":true,\"parameters\":5}\n### Ran Playwright code\n```js\nawait (async (page) => { return await page.evaluate(()=>{const d=document.querySelector('#catalogue-dialog'),body=document.querySelector('#catalogue-detail-body');const r={width:innerWidth,pageWidth:document.documentElement.scrollWidth,dialogWidth:d.getBoundingClientRect().width,bodyWidth:body.clientWidth,bodyScroll:body.scrollWidth,technicalClosed:!d.querySelector('.model-profile-technical').open,parameters:d.querySelectorAll('.model-profile table tbody tr').length};if(r.pageWidth>r.width||r.dialogWidth>r.width||r.bodyScroll>r.bodyWidth||!r.technicalClosed||r.parameters!==5)throw Error(JSON.stringify(r));return r;}); })(page);\n```"
+      }
+    ]
+  }
+}
