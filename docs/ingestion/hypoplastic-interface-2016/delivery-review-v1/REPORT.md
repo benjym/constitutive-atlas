@@ -1,0 +1,29 @@
+# Independent saved local delivery review
+
+Reviewer `/root/hill_scientific_review`: **accept E7 for the exact local standard site-v2 at source revision dcc645785faa3c83d791fdad92e7f3a20cab9721**, within the already approved fixed-local source-reconciled formulation. E8 publication, remote CI and live verification remain open. Scientific E5 approval is unchanged. This is an independent saved-byte/source review of coordinator browser observations; the reviewer did not operate a browser or execute a material/module/build.
+
+## Exact standard package
+
+The genuine retained package-v2 command finished in331.324671 seconds with exit0, empty stderr, hashed closed logs and all216 source pins unchanged. Read-only review rehashes every one of the1471 site-manifest files and checks file sizes, source revision, wrapper/plan hashes and source pins. The exact accepted candidate8ab12775, scientific review13aa0f26, build review62580007, qualification and reviewed Wasm5bce9562/module9ca63606 bytes appear in the packaged identity. All package identity files and displayed browser identity match. Previous package-v1 failure remains separate and retained.
+
+The normal full-builder log includes actual guarded interface package qualification and peer gates. The separately retained supported-package result passes15 ordinary inputs and one explicitly registered named example; it does not claim all model defaults universally succeed. The packaged database preservation report passes all nine old table rowbags, with model/approval/source additions. These reports are evidence for this exact local package, not remote CI results.
+
+## Actual browser evidence assessment
+
+The coordinator reports actual CUA in-app-browser operation at the Pages project prefix. Saved DOM snapshots, downloads, screenshots, identities, console and HTTP records support those observations. All44 browser-manifest files were independently rehashed/sized. The26 served asset/link hashes match site bytes;22 have prior browser GET records, while four are additional read-only HTTP checks. Saved console is empty and no original browser HTTP errors are recorded. This review distinguishes those artifacts from independently rerunning or authenticating a live browser session.
+
+Saved DOM and screenshots show the prominent readable profile and meaningful scope/preparation/parameter content, correct dedicated main laboratory header, normal/source-angle controls, completed40-interval default, five state plots and complete state/stress table. Desktop and375px profile/laboratory screenshots are readable. Width records show no page overflow and the941px state table scrolls inside301px rather than widening the page. Profile related-host navigation and technical/source links are retained. The source-reconciled identity and no finite-slip/contact, zero-spin and no-experimental-validation restrictions remain explicit.
+
+Snapshots retain changed second angle/hardness/initial density and changed finite response, obsolete-export clearing, qualified reset/recovery, invalid e=-1 material rejection, stale-identity import rejection, successful file-chooser import/replay, final expected latest reset and model-switch away/back. The recorded final states plus the already reviewed generation/worker guards support the bounded latest-request behavior; they are not a general concurrency proof. Browser cleanup is a coordinator observation recorded in qualification.json, not a new process inspection by reviewer.
+
+## Independent offline download checks
+
+The offline checker imports no engine/browser code, rejects duplicate/nonfinite JSON, verifies package/reference hashes and exact identity/request/settings, requires all41 finite full-context points, checks initial/endpoint references at unchanged0.2Pa/2e-6 bounds, and requires exact default/reset/replay equality. The reviewer reran it against the actual retained downloads into a new reviewer report:66 full initial/endpoint state/stress comparisons pass. Default/reset/replay are also byte-identical, beyond equal parsed values.
+
+Independently strengthened review checks every one of123 retained points across these exports: exact five-state to all-six-stress/pressure/void binding, prescribed linear controls and coordinates, plus analytic density `(1+e0)*exp(-delta_normal)-1`. Maximum density discrepancy is8.881784197001252e-16. The largest frozen stress endpoint discrepancy is about0.00202Pa, below0.2Pa. Intermediate shear/normal stresses are checked finite and consistently bound, not claimed independently reference-qualified at every point. Changed custom parameter response demonstrates interaction, not calibrated accuracy outside the frozen study.
+
+## Boundaries and reproduction
+
+No source equations, thresholds, review record or approval scope changed. This acceptance covers the exact tested local standard package and saved browser protocol; it does not establish experimental validation, arbitrary histories/material ranges, finite rotation, contact, finite-slip conversion, CNL/CNS control or live deployment. The exact2016 article visual-copy gap remains disclosed under the accepted reconciled identity.
+
+Reproduce saved assessment with `python3 -B docs/ingestion/hypoplastic-interface-2016/delivery-review-v1/check_saved_delivery.py` while the exact isolated source/site context is retained. This performs only reads, hashes and the standalone offline export checker. It preserves an existing identical reviewer reassessment rather than overwriting it. Later mutable-ledger changes require archived receipt recovery or reproducing from the frozen source revision; do not silently repin this evidence. All browser/package artifacts used are bound in decision.json. No new scratch, Git mutation, compiled/material/module/browser/remote call, build or shared edit by reviewer.

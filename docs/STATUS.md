@@ -787,6 +787,11 @@ The printed yield-normalized associative von Mises Perzyna elastoviscoplastic so
 
 The additive atlas integration preserves all15ordinary definitions, all48prior reader profiles and all prior catalogue/approval records. Current export contains50model records,208sources,27approvals and23agent reviews; the catalogue has49source-backed profiles. Standard package, actual browser and live delivery remain separately tracked in the [delivery ledger](ingestion/perzyna-comsol63/DELIVERY.md). Earlier source-harness and prospective-plan failures are retained. A failed schedule returns its last committed prefix; whole-schedule atomic reset is not claimed.
 
+
+## HvWE2016 fixed-local delivery checkpoint · 2 November 2026
+
+The new `hvwe2016-reconciled-fixed-local` source-reconciled fully rough interface has passed independent scientific review and source integration review. Its full five-state law, native/Wasm reference checks, normal strain/two shear-angle laboratory and reader profile are integrated in the isolated release. Database export preserves all prior rows and adds the exact model/approval/source identities. Standard website packaging and actual browser qualification remain pending; this checkpoint makes no live publication claim. Exact source corrections and journal visual-copy gap remain disclosed in the delivery ledger.
+
 ## Perzyna verified live delivery — 2 November 2026
 
 The exact printed COMSOL 6.3 yield-normalized associative Mises Perzyna solid is complete through E0–E8 within its independently approved physical-time backward-Euler scope. The general laboratory exposes strain-hold relaxation, stress-hold creep and six-component constant strain rate with complete 13-state/6-stress history. All 15 ordinary definitions and 48 prior public profiles remain preserved; the catalogue now has 49 source-backed profiles. The current export has 50 model identities, 208 sources, 60 publications, 27 approvals and 23 agent reviews, preserving all prior rows across nine tables.

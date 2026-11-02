@@ -1,0 +1,78 @@
+{
+  "status": "passed-source-fixtures-fake-child-only",
+  "count": 22,
+  "checks": [
+    "B1 sha string equals Path",
+    "B1 sha __file__ string succeeds",
+    "B2 exact target-tree baseline",
+    "B2 added untracked model rejected at freeze",
+    "B2 added model detected by pre/post guard",
+    "B2 extra member rejected before launch",
+    "B2 no Popen on rejected preflight",
+    "B2 removed schema rejected",
+    "B2 changed schema rejected",
+    "B2 Git executable-mode mismatch rejected",
+    "B2 empty extra directory rejected",
+    "B2 symlink rejected",
+    "B2 baseline recovery exact",
+    "B2 recursive asset member addition detected",
+    "B3 already-terminal starts dedicated session",
+    "B3 terminal whole group reaped without unnecessary signals",
+    "B3 surviving-descendant starts dedicated session",
+    "B3 surviving descendant triggers verified TERM KILL then reap",
+    "B3 ownership-mismatch starts dedicated session",
+    "B3 foreign session never signalled and blocks resumption",
+    "v3 immutable reviewed manifest",
+    "v3 all pinned files intact"
+  ],
+  "fake_lifecycle_results": [
+    {
+      "scenario": "already-terminal",
+      "events": [
+        "reap"
+      ],
+      "receipt": {
+        "status": "whole-owned-group-terminal-and-leader-reaped",
+        "events": [
+          "reap-leader"
+        ],
+        "returncode": -15
+      }
+    },
+    {
+      "scenario": "surviving-descendant",
+      "events": [
+        "SIGTERM",
+        "SIGKILL",
+        "reap"
+      ],
+      "receipt": {
+        "status": "whole-owned-group-terminal-and-leader-reaped",
+        "events": [
+          "SIGTERM-own-group",
+          "SIGKILL-own-group",
+          "reap-leader"
+        ],
+        "returncode": -15
+      }
+    },
+    {
+      "scenario": "ownership-mismatch",
+      "events": [
+        "reap"
+      ],
+      "receipt": {
+        "status": "cleanup-incomplete-block-resumption",
+        "error": "AssertionError()",
+        "pid": 424242,
+        "ownership": {
+          "pid": 424242,
+          "pgid": 424242,
+          "sid": 424251
+        },
+        "leader_returncode": -15
+      }
+    }
+  ],
+  "real_child_signal_ps_freeze_provision_package_material_browser_gitwrite_calls": 0
+}

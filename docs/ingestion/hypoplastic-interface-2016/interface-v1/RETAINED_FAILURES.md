@@ -1,0 +1,3 @@
+# Pure interface contract test correction
+
+The first local pure test run failed with `AssertionError: Missing expected exception` in its replay-negative test. The synthetic saved document reused one JavaScript object for both the input request and result request. `structuredClone` preserved that alias, so changing the supposed result-only echo changed both requests together. An actual JSON export/import has independent objects at those locations. The test fixture now gives the result an independent cloned request, matching JSON structure. No production validation gate was weakened. The corrected run passes; no compiled or browser calls were involved.

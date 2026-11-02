@@ -1,0 +1,15 @@
+{
+  "status": "failed-retained",
+  "test": "test_manufactured.py original inert-child fixture",
+  "exception": "PermissionError: [Errno 1] Operation not permitted",
+  "operation": "os.killpg(pgid, signal.SIGKILL) after successful own-group SIGTERM grace",
+  "actual_package_or_engine": false,
+  "original_pid_group_not_durably_retained": true,
+  "original_command": [
+    "Python",
+    "-c",
+    "import signal,time;signal.signal(signal.SIGTERM,signal.SIG_IGN);time.sleep(60)"
+  ],
+  "coordinator_independent_terminal_check": "docs/ingestion/hypoplastic-interface-2016/publication-source-v3/inert-fixture-process-check.json",
+  "followup": "No further real signal-ignore child launched. Revised sequencing uses fake Popen/group snapshots only; no actual kill or ps."
+}

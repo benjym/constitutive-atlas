@@ -1,0 +1,339 @@
+{
+  "identity": "interface2016-independent-matrix-policy-v1",
+  "frozen_before_candidate_observation": true,
+  "parameters": {
+    "p_ref": 100000.0,
+    "phi_c": 0.5759586531581288,
+    "hs": 1000000000.0,
+    "n": 0.25,
+    "ed0": 0.55,
+    "ec0": 0.95,
+    "ei0": 1.05,
+    "alpha": 0.25,
+    "beta": 1.5
+  },
+  "state_order": [
+    "sigma_n",
+    "sigma_p",
+    "tau_x",
+    "tau_z",
+    "e"
+  ],
+  "stress_order": [
+    "xx",
+    "yy",
+    "zz",
+    "sqrt2xy",
+    "sqrt2yz",
+    "sqrt2xz"
+  ],
+  "cases": [
+    {
+      "name": "hold",
+      "initial": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0,
+            "gamma_z": 0,
+            "normal_strain": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "normal_compression",
+      "initial": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0,
+            "gamma_z": 0,
+            "normal_strain": 0.002
+          }
+        }
+      ]
+    },
+    {
+      "name": "normal_extension",
+      "initial": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0,
+            "gamma_z": 0,
+            "normal_strain": -0.001
+          }
+        }
+      ]
+    },
+    {
+      "name": "x_shear",
+      "initial": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0.004,
+            "gamma_z": 0,
+            "normal_strain": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "z_shear",
+      "initial": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0,
+            "gamma_z": 0.004,
+            "normal_strain": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "multishear",
+      "initial": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0.003,
+            "gamma_z": -0.002,
+            "normal_strain": 0.0005
+          }
+        }
+      ]
+    },
+    {
+      "name": "reversal",
+      "initial": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0.004,
+            "gamma_z": 0.001,
+            "normal_strain": 0
+          }
+        },
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": -0.002,
+            "gamma_z": -0.002,
+            "normal_strain": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "unequal_with_existing_shear",
+      "initial": [
+        120000.0,
+        75000.0,
+        10000.0,
+        -6000.0,
+        0.69
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0.002,
+            "gamma_z": 0.003,
+            "normal_strain": 0.0007
+          }
+        }
+      ]
+    },
+    {
+      "name": "exact_isotropy",
+      "initial": [
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0,
+            "gamma_z": 0,
+            "normal_strain": 0.001
+          }
+        }
+      ]
+    },
+    {
+      "name": "near_isotropy",
+      "initial": [
+        100000.00001,
+        100000.0,
+        1e-06,
+        -2e-06,
+        0.67
+      ],
+      "start_controls": {
+        "gamma_x": 0.0,
+        "gamma_z": 0.0,
+        "normal_strain": 0.0
+      },
+      "segments": [
+        {
+          "progress": 1.0,
+          "end_controls": {
+            "gamma_x": 0.001,
+            "gamma_z": -0.001,
+            "normal_strain": 0.0001
+          }
+        }
+      ]
+    }
+  ],
+  "reference": {
+    "algorithm": "classical RK4 ordinary Cartesian 3x3 matrix action; no Atlas import",
+    "steps_per_segment": [
+      128,
+      256,
+      512
+    ],
+    "convergence_scaled_absolute": 2e-08,
+    "scale": [
+      100000,
+      100000,
+      100000,
+      100000,
+      1
+    ],
+    "reference_endpoint": "512steps retained only if 256-to512 discrepancy <= frozen convergence bound"
+  },
+  "qualification": {
+    "python_settings": {
+      "absolute": 1e-11,
+      "relative": 1e-09,
+      "min_step": 1e-12,
+      "max_step": 0.05,
+      "max_depth": 40,
+      "max_trials": 100000
+    },
+    "endpoint_scaled_absolute": 2e-06,
+    "all_five_states": true,
+    "all_six_mandel_stresses": true,
+    "exact_repeat": true,
+    "exact_hold": true,
+    "restart": "split after first segment or at half progress; compare all context data and endpoint within same frozen endpoint bound",
+    "rollback": "max_trials=1,max_step=.01 on nonzero unit-progress path must reject entire parent then valid recovery equal baseline"
+  },
+  "negative_cases": [
+    "nonpositive normal stress",
+    "nonpositive inplane stress",
+    "nonpositive Schur determinant",
+    "e below dense limit",
+    "e above loose limit",
+    "unordered limiting void ratios",
+    "negative hs",
+    "missing control",
+    "nonfinite control",
+    "mismatched committed start controls",
+    "zero progress with changed control",
+    "negative progress"
+  ],
+  "limits": "These bounded cases verify disclosed source-reconciled mathematical behavior; no experimental validation or blanket domain proof."
+}

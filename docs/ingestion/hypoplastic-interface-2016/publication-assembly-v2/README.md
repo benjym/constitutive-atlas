@@ -1,0 +1,5 @@
+# Current-main publication assembly v2
+
+Prospective scoped local commit only. Parent main31ba67e preserves Perzyna’s100-file metadata closeout; second parent4e60096 is the qualified composed application. Preserve every scientific, executable, web and CI blob from4e60096. Only historical delivery metadata and new Interface evidence are added. Three shared documents append the exact remote-only suffix to the qualified version, retaining both model histories. All current checkout shared edits are excluded. Existing same-path evidence is never overwritten from local dirty bytes.
+
+The standard full package and actual browser qualification belong to4e60096, not to this future commit. This metadata/evidence-only successor requires independent byte/scope review and current CI/upload/live identity verification after authorized publication; no new local qualification is asserted. No push or deployment is performed by the assembly script. It preserves shared HEAD and real index and writes only a unique local ref through a disposable alternate index. Require fresh remote equality before any no-force push.

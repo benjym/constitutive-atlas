@@ -1,0 +1,99 @@
+- complementary:
+  - link "Constitutive Atlas home":
+    - /url: "#home"
+    - generic: Constitutive Atlas
+  - navigation "Main navigation":
+    - link "Home":
+      - /url: "#home"
+      - generic: Home
+    - link "Model testing":
+      - /url: "#laboratory"
+      - generic: Model testing
+    - link "Ensemble explorer":
+      - /url: "#ensemble"
+      - generic: Ensemble explorer
+    - link "Model catalogue 50":
+      - /url: "#catalogue"
+      - generic: Model catalogue
+      - generic: "50"
+    - link "Methods & evidence":
+      - /url: "#methods"
+      - generic: Methods & evidence
+- main:
+  - heading "Explore material behaviour." [level=1]
+  - generic: CONSTITUTIVE MODEL
+  - generic: Verification pending
+  - generic: Select a model
+  - combobox "Select a model":
+    - option "Barodesy clay 2017"
+    - option "Barodesy sand (2015)"
+    - option "Drucker–Prager, nonassociated perfect plasticity"
+    - option "Duncan–Chang (1970) · constant-Poisson formulation"
+    - option "Clay hypoplasticity — Mašín (2005)"
+    - option "Clay hypoplasticity with explicit asymptotic states — Mašín (2013)"
+    - option "Sand hypoplasticity with intergranular strain (1997)"
+    - option "Sand hypoplasticity · von Wolffersdorff (1996)"
+    - option "Linear isotropic elasticity"
+    - option "Modified Cam Clay"
+    - option "Mohr–Coulomb · nonassociated perfect plasticity"
+    - option "Original Cam Clay · logarithmic-recovery formulation"
+    - option "Ramberg–Osgood · reversible nonlinear elasticity"
+    - option "Sand hypoplasticity with generalized intergranular strain · selected pairing"
+    - option "Tresca · associated perfect plasticity"
+    - option "Fully rough granular interface · normal strain and shear angles"
+    - option "Perzyna viscoplasticity · physical-time relaxation / creep" [selected]
+    - option "Bingham viscoplasticity · physical-time relaxation / creep"
+    - option "Hill · all-six strain increments"
+    - option "Burgers · physical-time creep / relaxation"
+    - option "Standard Linear Solid · physical-time relaxation / creep"
+    - option "Kelvin–Voigt · physical-time creep / loading / strain hold"
+    - option "Orthotropic elasticity · nine constants"
+    - option "NorSand 1993 · drained active axial law"
+    - option "Maxwell · physical-time relaxation / creep"
+    - option "Lade–Duncan 1975 · cohesionless soil"
+    - option "J2 · all-six strain increments"
+  - paragraph: An elastic solid whose permanent shear deformation accelerates nonlinearly as stress rises above a fixed yield threshold.
+  - link "About this model and its parameters →":
+    - /url: "#catalogue/perzyna-comsol63-mises-perfect-zero-spin-ode"
+  - generic "Sources & model definition"
+  - generic: Viscoplasticity
+  - generic: 3D · small strain
+  - button "View equations ↗"
+  - heading "Perzyna viscoplasticity" [level=2]
+  - paragraph: COMSOL6.3 yield-normalized associative Mises Perzyna · isotropic linear elasticity · dry total stress · infinitesimal strain · fixed spatial frame, zero spin.
+  - text: Physical-time experiment
+  - combobox "Physical-time experiment":
+    - option "Relaxation · hold all strains" [selected]
+    - option "Creep · hold all stresses"
+    - option "Loading · constant strain rate"
+  - text: Duration (s)
+  - spinbutton "Duration (s)": "2"
+  - text: Output intervals
+  - spinbutton "Output intervals": "4"
+  - text: Start time (s)
+  - spinbutton "Start time (s)": "0"
+  - generic "Coefficients & complete initial history"
+  - paragraph: Illustrative tested preset; no calibration or experimental validation. Holds advance physical seconds. Fixed qualified solver settings; custom values/time/history are exploratory, without a broad accuracy guarantee.
+  - button "Run physical-time history"
+  - button "Cancel history" [disabled]
+  - button "Reset Perzyna preset"
+  - button "Import & replay Perzyna" [active]
+  - button "Export complete Perzyna run" [disabled]
+  - status: "Import rejected: Imported release_revision differs from this exact package."
+  - heading "Physical-time response" [level=2]
+  - paragraph: No current result.
+  - text: Plot component · Mandel
+  - combobox "Plot component · Mandel":
+    - option "xx" [selected]
+    - option "yy"
+    - option "zz"
+    - option "√2xy"
+    - option "√2yz"
+    - option "√2xz"
+  - img "Selected total stress against physical time"
+  - img "Selected strain against physical time"
+  - img "Accumulated equivalent viscoplastic strain against physical time"
+  - generic "All13state and6stress components at every output"
+  - generic "Fetched model, source, review and engine identities"
+  - paragraph: "Measurement comparison is unavailable: no compatible source experiment or calibrated material is supplied. Curves are model responses; no experimental validation is implied."
+  - generic "Equations, sources & approved scope"

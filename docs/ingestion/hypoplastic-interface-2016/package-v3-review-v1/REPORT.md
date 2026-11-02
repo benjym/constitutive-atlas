@@ -1,0 +1,25 @@
+# Prospective package-v3 review: corrections required
+
+The exact prospective manifest `239bb2307146255172061a74e434ec4ec286a6a557126640fb32c9d580796ef1` is **not accepted for freeze or package execution**. Three defects require a separately identified successor. Preserve v3 unchanged.
+
+This reviewer authored the earlier publication assembly plan, but did not author this package wrapper, freeze helper or plan. This review addresses their prospective execution safeguards independently; it does not re-approve the assembly, scientific model, E5, package output, browser or publication. No actual source freeze, package, material, compiler, browser, remote operation or Git mutation occurred. The reproducer executes extracted pure hash/guard functions and the exact exception block against temporary synthetic files and an inert fake child; it never launches a process.
+
+## Blocking findings
+
+**B1 — deterministic filename type failure.** `freeze_inputs.sha` calls `p.open('rb')`. Both helper report creation and wrapper startup/verification pass the string `__file__`. The exact extracted function raises `AttributeError: 'str' object has no attribute 'open'`. Thus even a fully prepared source projection cannot produce the intended freeze or preflight. Normalize accepted filename arguments to `Path` consistently and test actual string/Path inputs in a distinct revision.
+
+**B2 — copied source membership escapes the freeze.** Selection begins with tracked names; verification checks only listed files and deleted branch-delta names. The accepted composed builder recursively copies *all* physical `models/` and `schemas/` entries (`publication-composition-v1/proposed/tools/build_web.py`, lines98–99). A new untracked model/schema file is neither frozen nor refused. Exact extracted `verify()` still passes after a synthetic model file is added; `copytree` includes that unreviewed file. The fixture uses a Path-valued filename only to isolate this independently from B1. Require physical membership, regular-file/symlink and relevant mode/hash consistency with the selected commit for copied trees before freeze and before/after package; reject unexpected entries. Audit other recursively consumed asset roots for the same membership issue. Hash checks for listed files alone do not close this gap.
+
+**B3 — interrupted package can outlive its failed receipt.** The exact outer try/except/finally marks failed-retained and hashes closed logs when `child.wait()` raises, but never terminates or reaps the child. An inert fake child reproduces a live child after a synthetic KeyboardInterrupt while the receipt says failed-retained. A real package may continue writing output/logs and occupying the shared slot. A successor must own, stop and reap its own child/process group on exceptional exit, retain cleanup evidence and final logs after cleanup, and never target unrelated processes. Preserve ordinary nonzero-child and post-guard failure retention.
+
+## Checks that passed and their bounds
+
+All five manifest members match their exact hashes; both Python sources parse. The plan is exactly v2's full argv after release-v2/site-v2 relocation plus the single Perzyna asset argument. It requires the correct ordered two parents (published Perzyna `106a9cf8c327c9c262a97eb86aa04dae3f6cadb8`, Interface closeout `136636f14ce12b0dd83e65a8c37d3af9a5cc1381`). The revision guard is an ordered-parent check; the coordinator's separate assembly/tree acceptance must still bind the actual selected commit.
+
+Static inspection confirms union-of-both-parent changed paths, runtime/public source prefixes, tracked JSON receipt-reference traversal, actual selected Git-blob comparison, deleted-path absence, selected source pre/post SHA checks, dataset grant/curated identities, exact ignored-witness hash, specified asset hashing, output/log reuse refusal and retained nonzero/post-guard failure status. The 750MiB selection ceiling explicitly refuses excess rather than trimming references. These are sensible intended gates, but no real closure size, supplied dataset/asset bytes or receipt completeness was observed. Recursive references add tracked paths but do not themselves adjudicate every receipt's semantic validity; unchanged normal builder gates and later actual freeze review remain necessary. Existing v2 successes do not qualify this composition.
+
+## Reproduction and next action
+
+Run `python3 -B docs/ingestion/hypoplastic-interface-2016/package-v3-review-v1/check_sources.py`. It checks exact input identity and reproduces all three faults without executing the wrapper/helper main or a child process. `check-results.json` retains the observations. Temporary synthetic fixtures are removed after their results are retained.
+
+Smallest next action: author and independently review a distinct minimal successor covering B1–B3, then separately validate an actual freeze against the accepted merged commit/projection and exact provisioned inputs. A passing prospective review will not substitute for full normal packaging, supported/database checks, actual composed browser qualification or E8 delivery.

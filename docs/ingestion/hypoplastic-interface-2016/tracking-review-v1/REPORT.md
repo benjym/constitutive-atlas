@@ -1,0 +1,11 @@
+# Tracking preservation source review
+
+Reviewer `/root/hill_scientific_review`; source-only additive review. **Accept the tracking preservation and current source/numerical checkpoint.** No scientific, package, browser or live result is inferred beyond its actual evidence. Commit inventory was not yet available at this decision and requires a distinct follow-up.
+
+Independently resolved all eight changed receipt pairs through the isolated release's `checked_receipt` resolver; exact old map archives and applicable canonical source snapshots pass their hashes. Original STATUS, ROADMAP and board preimages remain identified by their original SHA-256. The appended checkpoints distinguish accepted E0–E5 and source integration from pending normal packaging, browser qualification and publication. Existing source-completeness limitations and the exact2016 article visual gap remain disclosed. The historical blocked journal-acquisition row remains visibly blocked; its working checkbox does not claim source acquisition closed.
+
+The current DELIVERY/CHECKLIST E0–E5 completion is backed by exact accepted scientific/numerical evidence. E6 source integration is accepted while actual standard package remains unclaimed, E7 is working and E8 remains open. One ambiguous historical sentence was flagged to the parent: “No build/material-browser execution performed by parent” contradicted completed E4. Parent corrected it to “At the source handoff, no build/material-browser execution had yet been performed by parent.” Root and isolated DELIVERY are byte-identical after correction. This was a tracking clarification, with no scientific or acceptance-bound change.
+
+`check_tracking.py` verifies the unchanged11 integration freeze files,119 qualified source files and E5 record hash13aa0f26. Source/profile/reviewer scope remains the same accepted source-reconciled fully rough HvWE/VW96 fixed-local realization; no finite-slip/contact, experimental, arbitrary-frame or verbatim-journal claim is added. Reproduce with `python3 -B docs/ingestion/hypoplastic-interface-2016/tracking-review-v1/check_tracking.py`.
+
+No builds, compiler/module/material/browser/remote calls, shared edits or commits by reviewer. The receipt and tracking documents are pinned in decision.json. New commit inventory review will use a separate addendum rather than rewriting this decision.

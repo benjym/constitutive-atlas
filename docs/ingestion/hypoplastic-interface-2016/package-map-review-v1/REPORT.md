@@ -1,0 +1,11 @@
+# Independent package sidecar correction review
+
+Reviewer `/root/hill_scientific_review`: **accept the exact source-only sidecar correction**. No scientific, numerical or execution gate changes are required. Actual package rerun and E7/browser remain outstanding.
+
+The retained standard package-v1 run genuinely exited1, with closed hashed logs and all209 source pins unchanged. Its traceback reaches the normal interface bundle's supporting-file check and fails with `original evidence document changed after archival`. The cause is the existing directory-wide catalogue/agent-reviews sidecar, which requires an exact document pin even when supporting files remain live and unchanged; it did not yet register the new E5 record. This is a packaging evidence-resolution defect, not a material-law failure. No interface material/module call is established by that failed run.
+
+Independently rehashed old map `13cf65684c64fb3dd15d7043fdd26a6f87abbd5f196a99a15c6da25e11284aad` at its exact canonical source snapshot. The new map `8f80339c5f89f39c18f228a013300477ed4c9536ef2795e6760bc85727d5ede0` differs semantically only by adding documents[catalogue/agent-reviews/hvwe2016-reconciled-fixed-local-agent-v1.json]=13aa0f267736a9a5ad246e34461ead944fea5aa052ee74d2cec0ab3426a8ee0b. All23 old document pins and18 archive entries remain identical. Source script archives before atomic replacement; no original review/source/evidence bytes were repinned.
+
+The reviewer independently ran normal validate_review --for-approval logic and generated approval-entry comparison, then all97 normal supporting_files through the actual isolated checked_receipt resolver. Every receipt passes after the correction. All11 accepted integration files,119 qualified source files, exact E5 record and existing registry entry remain unchanged. The actual failure/logs remain retained; no gate was weakened or failure reclassified as a success.
+
+Reproduce `python3 -B docs/ingestion/hypoplastic-interface-2016/package-map-review-v1/check_fix.py`. This check reads/hash-checks sources and saved JSON only. No builds, compiler/module/material/browser/remote calls, shared edits, Git mutations or scratch directories by reviewer. Coordinator may commit this exact minimal map correction plus its archived preimage and evidence, then rerun the full normal package under the serial slot protocol.
