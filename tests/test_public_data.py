@@ -179,7 +179,10 @@ class PublicAssetTests(unittest.TestCase):
         perth = [r for r in records if r['id'].startswith('GEOLAB-PERTH-SIMPLES-CYC-CD-')]
         self.assertEqual(len(perth),3)
         self.assertTrue(all(r['columns'][1]['unit']=='(-)' for r in perth))
-        self.assertEqual(len([r for r in records if r['protocol']=='grain-size-distribution']),12)
+        grain = [r for r in records if r['protocol']=='grain-size-distribution']
+        self.assertEqual(len([r for r in grain if r['provenance']['source_id']=='geolab-v2']),12)
+        self.assertEqual({r['id'] for r in grain if r['provenance']['source_id']!='geolab-v2'},
+                         {'ESTEFANIA-PSD-8','ESTEFANIA-PSD-18','ESTEFANIA-PSD-21'})
         direct = [r for r in records if r['id'].startswith('GEOLAB-LOCE-DIRECTS-CU-') and r['kind']=='measurement-series']
         self.assertEqual(len(direct),6)
         self.assertTrue(all(len(r['columns'])==3 for r in direct))
