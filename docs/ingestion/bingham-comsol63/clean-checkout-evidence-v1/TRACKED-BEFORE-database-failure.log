@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/atlas/evidence.py", line 107, in checked_receipt
+    actual = _sha(selected)
+  File "/private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/atlas/evidence.py", line 49, in _sha
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+                          ~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/catalogue/source-snapshots/2853c59d497f979e9e97c7c0ea21d27b56d51f13c4527da20286c05684ec43a7/docs/ingestion/kelvin-voigt-comsol63/build-v1/source-freeze.json'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/atlas/agent_review.py", line 68, in validate_review
+    artifacts[name] = checked_receipt(root, archived_context, name, item['sha256'])
+                      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/atlas/evidence.py", line 109, in checked_receipt
+    raise ValueError('missing evidence source: ' + str(selected)) from exc
+ValueError: missing evidence source: /private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/catalogue/source-snapshots/2853c59d497f979e9e97c7c0ea21d27b56d51f13c4527da20286c05684ec43a7/docs/ingestion/kelvin-voigt-comsol63/build-v1/source-freeze.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/private/tmp/atlas-bingham-release-v3/docs/ingestion/bingham-comsol63/clean-checkout-evidence-v1/check_exports.py", line 25, in <module>
+    v=fn();results[name]={'passed':True,'result':(str(v) if isinstance(v,Path) else v) if name!='evidence_export' else {'records':len(v['records']),'source_reviews':len(v['reviews']),'agent_reviews':len(v['agent_reviews'])}}
+  File "/private/tmp/atlas-bingham-release-v3/docs/ingestion/bingham-comsol63/clean-checkout-evidence-v1/check_exports.py", line 23, in <lambda>
+    for name,fn in [('validate',lambda:len(all_models())),('database',lambda:export_database(out/'atlas.sqlite')),('evidence_export',lambda:bundle(out/'site',root=root))]:
+                                                                             ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/atlas/research.py", line 229, in export_database
+    expected = approval_entry(file, root=ROOT)
+  File "/private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/atlas/agent_review.py", line 101, in approval_entry
+    record = validate_review(path, root, for_approval=True)
+  File "/private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/atlas/agent_review.py", line 70, in validate_review
+    raise ValidationError('Review artifact missing or changed: ' + name) from exc
+atlas.dsl.ValidationError: Review artifact missing or changed: docs/ingestion/kelvin-voigt-comsol63/build-v1/source-freeze.json

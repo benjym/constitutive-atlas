@@ -1,0 +1,23 @@
+# Independent clean-checkout evidence review
+
+Decision: **accepted**, for the exact ten additive canonical snapshot files in `clean-checkout-evidence-v1/INSTALLATION.json` (SHA-256 `e46724a1c24cac29a738c6beac28d6d9fca5fb521c55eb150b7e779da332ee5c`). Author manifest `99ff61d8e370dafe75b0066bf5065e36559c39ebc90d17ed516584e8c642494b` has all50 members independently verified. Task `REVIEW-bingham-clean-checkout-evidence-v1`; independent reviewer run `/root/bingham_review`; 2026-11-02. This accepts source/evidence tracking correction, without a new scientific, runtime, browser or remote CI decision.
+
+The actual missing Kelvin historical source-freeze is reproducible from an exact tracked-only baseline28d4af2b1d4d6b9c1a58038a8ef9a99ec3279d8c. Independent materialization verified38,899 Git file/link identities; only the locally mutable DELIVERY ledger required exact index bytes. Original tracked-only checks fail Kelvin approval, database export and evidence export at the unchanged missing archive pin; failures are retained. `.gitignore` line1 `build*/` also ignores nested historical build directories. No ignore-rule change is proposed.
+
+Seven exact existing Kelvin snapshots repair observed active export/review input omissions. Three additional Bingham snapshots are required by the already selected historical execution-v1 build-receipt map, despite being outside active exports. All three occur in the prior accepted final106 installation list. Their original `checked_receipt` calls pass locally, fail in the tracked-only context, and pass after these additions. Each equals its member in the tracked E5-bound qualified-assets ZIP byte for byte. Reading these files did not load or instantiate any module. This is preservation of an existing receipt obligation, not a requirement to duplicate every public provisioned engine asset.
+
+Independent private overlay contains only the ten approved additions beyond the original tracked source. Every candidate equals its existing canonical file and content-addressed SHA; no map, expected hash, approval, definition, runtime, compiler, policy or numerical gate changes. All38,899 baseline file/link identities remain unchanged. Candidate payloads use flat nonignored paths; coordinator must explicitly force-stage the ten canonical historical paths. Normal staging alone would repeat this defect.
+
+Independent source-only checks pass:
+
+- All25 checks:49 model records,22 active accepted agent-review envelopes, full database export and evidence-site export. All observed required file reads belong to the baseline or ten additions; no subprocess/material/network calls occurred. Failed cache-open attempts are not input files; no Python cache file is needed in the tracked context.
+- All26 approvals and1,043 definition/review/dossier/supporting path checks, using original archived receipt contexts.
+- All57 tests across catalogue, approval/export, screening/research evidence and archive suites, with subprocess calls blocked.
+- Every logical database table row and all121 evidence-site files equal the successful local context.
+- Three historical Bingham receipt fail→pass witnesses and exact qualified ZIP equality.
+
+Reproduction scripts and results are included beside this report. `audit_clean.py <tracked-root> <fresh-label>` runs the independent process-blocked pure entrypoints; `check_ten.py` demonstrates pre-addition failures and applies only new private-context files; `check_closure.py` checks final identities and export equivalence. Author `audit_registry.py` and `run_pure_tests.py` were inspected then run with output paths exclusively in this review directory. Author integrity scripts that write into their own packet were not rerun.
+
+Retained diagnostics: initial materialization stopped on the mutable delivery ledger before replacing that file with index bytes; the first independent closure checker mistakenly followed a tracked dangling fixture symlink and stopped. `check_closure_attempt1.py` preserves that checker; corrected checker hashes Git symlink text. These are review-harness failures, not material observations. Author before-failure/export-only records, initial integrity/serialization diagnostics and first failed CI logs remain unchanged. The earlier seven-file-only stage is insufficient for the selected historical Bingham receipts and is not the accepted installation scope.
+
+No blocker remains for the exact ten-file additive correction. Next action is coordinator verification/explicit tracking of all ten canonical members and this evidence packet, followed by fresh authorized full CI. This review makes no claim that remote CI has passed and does not reopen or replace the accepted scientific E5 evidence.

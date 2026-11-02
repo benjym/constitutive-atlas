@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-bingham-release-v3/docs/ingestion/bingham-comsol63/clean-checkout-evidence-v1/check_integrity.py", line 5, in <module>
+    for n,v in tracked.items():assert sha(C/n)==v['sha256'],n
+                                      ~~~^^^^^
+  File "/private/tmp/atlas-bingham-release-v3/docs/ingestion/bingham-comsol63/clean-checkout-evidence-v1/check_integrity.py", line 4, in <lambda>
+    H=Path(__file__).resolve().parent;S=Path('/private/tmp/atlas-bingham-clean-checkout-evidence-v1');C=S/'tracked-context';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();tracked=json.loads(gzip.decompress((H/'TRACKED-INPUTS.json.gz').read_bytes()));missing=json.loads((H/'OBSERVED-MISSING.json').read_text())
+                                                                                                                                                        ~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/atlas-bingham-clean-checkout-evidence-v1/tracked-context/docs/ingestion/bingham-comsol63/ci-dependency-alias-review-v1/parent-traversal-fixture/links/dir'

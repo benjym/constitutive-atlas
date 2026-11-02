@@ -1,0 +1,135 @@
+{
+  "schema_version": "0.1",
+  "kind": "numerical-evidence",
+  "id": "modified-cam-clay-scalar-v2",
+  "created_at": "2026-10-30T07:31:55.166493+00:00",
+  "source_commit": "b00f79b616121ea8a1200d0972247cc59e8d6007",
+  "model": {
+    "id": "modified-cam-clay",
+    "definition_sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14"
+  },
+  "executor": {
+    "name": "Constitutive Atlas automated scalar MCC checker",
+    "automated": true,
+    "method": "analytical-and-scalar-reduction",
+    "independent_review": false
+  },
+  "scope": "57 native cases: independent scalar reduction on actual accepted partitions, wet/dry plastic tensor increments, noncoaxial loading, isotropic/critical special cases, rollback and two isotropic continuum refinement studies. Raw unpartitioned comparisons and applicability remain in each report case.",
+  "limitations": [
+    "Project-authored mathematical reference; no independent human review, experimental validation or executed external-code benchmark.",
+    "Partition replay verifies constitutive solutions on a recorded discretization, not the quality of the adaptive partition selection.",
+    "The scalar reference assumes a positive finite elastic trial pressure per replayed increment and does not prove global branch uniqueness.",
+    "Endpoint stiffness, exponential volume and exponential log-pc updates are project numerical choices, distinct from the linked source algorithms.",
+    "Binary hash and embedded definition are recorded; this is not a clean-build attestation."
+  ],
+  "outcome": "passed",
+  "artifacts": [
+    {
+      "path": "catalogue/evidence/reports/modified-cam-clay-scalar-v2.json",
+      "sha256": "20e91b6f1f288657c8d764bc35aad8b20a6a07a145cf2e59898b09a0d047495b"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "b380e26203b8b7558c6da2385e1e698dbf00b7a831e4fd9c22bb435e55d78e92"
+    },
+    {
+      "path": "atlas/__init__.py",
+      "sha256": "a8fc14bd14c81b692d4875ecea57087edebd75c544f1c26a295731c28bd4a922"
+    },
+    {
+      "path": "atlas/compiler.py",
+      "sha256": "5cfbba5e7be53c4947f97a21d6b63d7009557e4b4002607de236e1cca6944b77"
+    },
+    {
+      "path": "atlas/dsl.py",
+      "sha256": "0bae6986f26cfd638a87587f1e3e086a3623a73f2024db7738e93a6d6b3aaaeb"
+    },
+    {
+      "path": "atlas/evidence.py",
+      "sha256": "18804fd49c7ee2cfcb9875e566d21e9b3b922209ab70f2ac945ff9082b43850d"
+    },
+    {
+      "path": "atlas/model.py",
+      "sha256": "a5f8639ae22ec8e7e9322955325a9ad7a6f970daa4d67263048130ce538dd08f"
+    },
+    {
+      "path": "atlas/structure.py",
+      "sha256": "30b1ef624c642b217e19e0a58e6988c2a2f802f0bfc5f892c6d7a38def1bcd47"
+    },
+    {
+      "path": "cpp/include/atlas/schedule.hpp",
+      "sha256": "5c90e6cede9f24f124286cf10e2254a47a991e5d62f9bc7b3899ed62e6deb7e9"
+    },
+    {
+      "path": "cpp/include/atlas/solver.hpp",
+      "sha256": "417b7a669ef11c9669d14a37e4d65c1b104048b473dfbb3655605aaac84ce21f"
+    },
+    {
+      "path": "cpp/include/atlas/tensor.hpp",
+      "sha256": "a7a8f82f60746f7a6530e9ee3aee4ebb3ae4df4a0f348e0a1523efede875283d"
+    },
+    {
+      "path": "cpp/include/atlas/time.hpp",
+      "sha256": "7b9942fbb1eae296201ad12db210c0c767fb3cc53c1f37de37de3e517f13f4d1"
+    },
+    {
+      "path": "cpp/main.cpp",
+      "sha256": "90004d576107275db76e2fd68239b0c09e5fca33e581736b92c04788e1315c0a"
+    },
+    {
+      "path": "docs/models/modified-cam-clay.md",
+      "sha256": "ad054620d1936c3c177e2051c9f9e1208dad467cd575471ac730bcdb735568d4"
+    },
+    {
+      "path": "models/drucker-prager.json",
+      "sha256": "d40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d"
+    },
+    {
+      "path": "models/hypoplastic-sand-igs97.json",
+      "sha256": "3780d1ffe547e6bed6fa0fd62cfc9cde71f2a28fb2c0fd15d5049ffccbb038de"
+    },
+    {
+      "path": "models/hypoplastic-sand-vw96.json",
+      "sha256": "b9e0217451e1d9de8e685a2e576964b4b0472bd256f9693aaa7956280b291c31"
+    },
+    {
+      "path": "models/linear-elastic.json",
+      "sha256": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041"
+    },
+    {
+      "path": "models/modified-cam-clay.json",
+      "sha256": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14"
+    },
+    {
+      "path": "schemas/evidence.schema.json",
+      "sha256": "21f5865aed605bccf4f7483375efdb80e5b38fa24dec141dc248c1f8fcaae4ae"
+    },
+    {
+      "path": "schemas/model-v0.2.schema.json",
+      "sha256": "538b081ddcf0843a53d6f75ae2931fd28edc438e199cfeac4f86a512529b0c40"
+    },
+    {
+      "path": "schemas/model.schema.json",
+      "sha256": "e361176002db121e95ce688f98f7f1ca691700abceb2df4bb188dc9d9c77c34d"
+    },
+    {
+      "path": "schemas/review.schema.json",
+      "sha256": "fa53511a11050863b6c3a538410739bf1d4db16926cd492eadb3353778cf347d"
+    },
+    {
+      "path": "tests/test_plasticity_oracles.py",
+      "sha256": "c3168c2582ed98908f71de899eee143467c6214ee92eef96145c31c6c2dc526b"
+    },
+    {
+      "path": "tools/test_wasm.mjs",
+      "sha256": "23cd4c057ab364c65b0bc3ecf3ee842570d4768d490c75084da9b6dbb019f025"
+    },
+    {
+      "path": "tools/verify_plasticity.py",
+      "sha256": "973546461f1951e2871a969314a8f54e317d4598a365db25911392d288c7a9ed"
+    }
+  ],
+  "reproduction_command": "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --parallel 2 && python3 tools/verify_plasticity.py --model modified-cam-clay --output catalogue/evidence/reports/modified-cam-clay-scalar-v2.json"
+}

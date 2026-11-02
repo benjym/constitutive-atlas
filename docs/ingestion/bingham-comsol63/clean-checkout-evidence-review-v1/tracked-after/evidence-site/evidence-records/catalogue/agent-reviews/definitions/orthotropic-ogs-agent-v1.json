@@ -1,0 +1,230 @@
+{
+  "schema_version": "0.3",
+  "id": "orthotropic-linear-elastic-ogs",
+  "name": "Orthotropic linear elasticity (OGS, aligned fixed axes)",
+  "family": "elasticity",
+  "description": "Complete nine-constant 3D infinitesimal orthotropic linear elasticity at pinned OGS source; constant parameters, aligned fixed material/Cartesian axes, dry total Cauchy stress. Illustrative parameters; no finite rotations, thermal/poro coupling or experimental validation.",
+  "status": "transcribed",
+  "sources": [
+    {
+      "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticOrthotropic.cpp",
+      "locator": "Lines60\u201373: Kelvin compliance and inverse; lines21\u201344: incremental stress; lines74\u201391: aligned Q=I branch",
+      "role": "Exact pinned complete 3D orthotropic constitutive implementation"
+    },
+    {
+      "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticOrthotropic.h",
+      "locator": "Lines21\u201387: engineering constants/reciprocity;104\u2013116: source parameter sampling;136\u2013146: energy",
+      "role": "Parameter identities, reciprocity and elastic energy"
+    },
+    {
+      "url": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MathLib/KelvinVector.cpp",
+      "locator": "Lines67\u201374 and119\u2013130: xx yy zz sqrt2xy sqrt2yz sqrt2xz",
+      "role": "Exact tensor ordering and shear normalization"
+    }
+  ],
+  "parameters": {
+    "E1": {
+      "default": 30000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "E1 (illustrative, Pa)"
+    },
+    "E2": {
+      "default": 45000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "E2 (illustrative, Pa)"
+    },
+    "E3": {
+      "default": 60000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "E3 (illustrative, Pa)"
+    },
+    "G12": {
+      "default": 12000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "G12 (illustrative, Pa)"
+    },
+    "G23": {
+      "default": 18000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "G23 (illustrative, Pa)"
+    },
+    "G13": {
+      "default": 15000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "G13 (illustrative, Pa)"
+    },
+    "nu12": {
+      "default": 0.2,
+      "min": -10,
+      "max": 10,
+      "unit": "1",
+      "label": "nu12 = minus transverse j strain / axial i strain under i uniaxial stress"
+    },
+    "nu23": {
+      "default": 0.25,
+      "min": -10,
+      "max": 10,
+      "unit": "1",
+      "label": "nu23 = minus transverse j strain / axial i strain under i uniaxial stress"
+    },
+    "nu13": {
+      "default": 0.15,
+      "min": -10,
+      "max": 10,
+      "unit": "1",
+      "label": "nu13 = minus transverse j strain / axial i strain under i uniaxial stress"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "scale": "E1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "r21",
+      "expr": "E2 / E1"
+    },
+    {
+      "name": "r31",
+      "expr": "E3 / E1"
+    },
+    {
+      "name": "r32",
+      "expr": "E3 / E2"
+    },
+    {
+      "name": "Delta",
+      "expr": "1 - nu12**2 * r21 - nu13**2 * r31 - nu23**2 * r32 - 2 * nu12 * nu23 * nu13 * r31"
+    },
+    {
+      "name": "C11",
+      "expr": "E1 * (1 - nu23**2 * r32) / Delta"
+    },
+    {
+      "name": "C22",
+      "expr": "E2 * (1 - nu13**2 * r31) / Delta"
+    },
+    {
+      "name": "C33",
+      "expr": "E3 * (1 - nu12**2 * r21) / Delta"
+    },
+    {
+      "name": "C12",
+      "expr": "E2 * (nu12 + nu13 * nu23 * r32) / Delta"
+    },
+    {
+      "name": "C13",
+      "expr": "E3 * (nu13 + nu12 * nu23) / Delta"
+    },
+    {
+      "name": "C23",
+      "expr": "E3 * (nu23 + nu12 * nu13 * r21) / Delta"
+    },
+    {
+      "name": "dx",
+      "expr": "dot(de, sym(1, 0, 0, 0, 0, 0))"
+    },
+    {
+      "name": "dy",
+      "expr": "dot(de, sym(0, 1, 0, 0, 0, 0))"
+    },
+    {
+      "name": "dz",
+      "expr": "dot(de, sym(0, 0, 1, 0, 0, 0))"
+    },
+    {
+      "name": "dxy",
+      "expr": "dot(de, sym(0, 0, 0, 1, 0, 0))"
+    },
+    {
+      "name": "dyz",
+      "expr": "dot(de, sym(0, 0, 0, 0, 1, 0))"
+    },
+    {
+      "name": "dxz",
+      "expr": "dot(de, sym(0, 0, 0, 0, 0, 1))"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma - sigma_n - sym(C11 * dx + C12 * dy + C13 * dz, C12 * dx + C22 * dy + C23 * dz, C13 * dx + C23 * dy + C33 * dz, 2 * G12 * dxy, 2 * G23 * dyz, 2 * G13 * dxz)"
+  },
+  "domain": [
+    "E1 > 0 * E1",
+    "E2 > 0 * E2",
+    "E3 > 0 * E3",
+    "G12 > 0 * G12",
+    "G23 > 0 * G23",
+    "G13 > 0 * G13",
+    "1 - nu12**2 * r21 > 0",
+    "1 - nu13**2 * r31 > 0",
+    "1 - nu23**2 * r32 > 0",
+    "Delta > 0"
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "total"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
+}
