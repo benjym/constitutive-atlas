@@ -1,0 +1,60 @@
+- dialog [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - banner [ref=f2e3]:
+      - generic [ref=f2e4]:
+        - generic [ref=f2e5]: elastoviscoplasticity
+        - generic [ref=f2e6]: Available in laboratory
+      - button "Close model details" [active] [ref=f2e7] [cursor=pointer]: ×
+      - heading "COMSOL 6.3 Perzyna elastoviscoplastic solid · associative von Mises" [level=2] [ref=f2e8]
+    - generic [ref=f2e9]:
+      - generic [ref=f2e166]:
+        - paragraph [ref=f2e167]: An elastic solid whose permanent shear deformation accelerates nonlinearly as stress rises above a fixed yield threshold.
+        - paragraph [ref=f2e168]: The Perzyna solid combines reversible elastic deformation with time-dependent permanent deformation. Below its yield stress it responds elastically. Above yield, the excess stress relative to the yield stress controls the flow rate through a power law. This separates the onset of permanent deformation from the speed at which it develops.
+        - generic [ref=f2e169]:
+          - heading "What it describes" [level=3] [ref=f2e170]
+          - generic [ref=f2e171]:
+            - term [ref=f2e172]: A threshold followed by nonlinear flow
+            - definition [ref=f2e173]: The von Mises equivalent stress measures the combined intensity of stress that changes shape. Flow begins above the yield stress. The exponent controls how sharply its rate increases with relative overstress; mean stress alone produces no permanent flow.
+            - term [ref=f2e174]: Relaxation toward the yield stress
+            - definition [ref=f2e175]: During a strain hold, an initially overstressed solid develops permanent strain and loses deviatoric stress. Its stress approaches the yield threshold while mean stress remains constant. For an exponent greater than one, relaxation slows particularly strongly near yield.
+            - term [ref=f2e176]: Steady creep under a stress hold
+            - definition [ref=f2e177]: Holding an above-yield stress fixed produces continuing strain at a constant rate. Increasing the rate coefficient speeds this response. A larger exponent reduces flow when relative overstress is below one and increases it when relative overstress is above one.
+            - term [ref=f2e178]: Permanent deformation without strengthening
+            - definition [ref=f2e179]: The yield threshold remains fixed as permanent strain accumulates. On reversal, stress can cross an elastic interval before opposite flow develops. Accumulated equivalent permanent strain continues to grow even when tensor components reverse.
+        - generic [ref=f2e180]:
+          - heading "Compare a strain hold with a stress hold" [level=3] [ref=f2e181]
+          - paragraph [ref=f2e182]: In the laboratory, use Reset Perzyna preset to load the complete example. Choose Relaxation · hold all strains under Physical-time experiment, then Run physical-time history. Inspect total stress and accumulated equivalent viscoplastic strain against physical time. Use Plot component · Mandel to inspect normal and shear components; the yield threshold applies to their combined equivalent stress.
+          - paragraph [ref=f2e183]: "Reset the Perzyna preset and choose Creep · hold all stresses. Stress now stays fixed while strain grows. Increase A while keeping the other coefficients and complete starting state fixed to obtain faster creep and relaxation. Compare n at the same initial state: the effect depends on whether relative overstress is smaller or larger than one. Loading · constant strain rate applies all six rates together for the selected duration."
+        - generic [ref=f2e184]:
+          - heading "Material parameters" [level=3] [ref=f2e185]
+          - paragraph [ref=f2e186]: Use a consistent stress unit for both moduli and yield stress, and seconds for physical time. The example coefficients are illustrative and require identification for a particular material and temperature. The implemented regular-exponent interval is one through eight; numerical accuracy is qualified only for the disclosed studies and examples.
+          - table [ref=f2e187]:
+            - rowgroup [ref=f2e188]
+            - rowgroup [ref=f2e193]
+        - generic [ref=f2e214]:
+          - heading "Starting state" [level=3] [ref=f2e215]
+          - paragraph [ref=f2e216]: Supply six total-strain components, six viscoplastic-strain components and accumulated equivalent viscoplastic strain α, plus all five parameters and physical start time. Stress follows from total strain minus permanent strain. Tensor entries use [xx, yy, zz, √2xy, √2yz, √2xz]. Permanent strain is traceless, α is nonnegative, and accumulated strain must be consistent with the supplied permanent strain. A preset is an illustrative starting context rather than a specimen preparation procedure. Restart retains all thirteen components.
+        - generic [ref=f2e217]:
+          - heading "Scope and limitations" [level=3] [ref=f2e218]
+          - paragraph [ref=f2e219]: The printed COMSOL 6.3 Perzyna mathematical law with isotropic linear elasticity, associated von Mises flow, constant yield stress and no hardening. Three-dimensional infinitesimal strain, fixed spatial axes, compression-positive stress and strain, dry total Cauchy stress and physical time are used. The exponent is restricted to the regular range n≥1.
+          - paragraph [ref=f2e220]: There is no evolving strength, back stress, damage, temperature dependence, pore-fluid response or permanent volume change. Finite strains and rotation transport are excluded. The selected law normalizes overstress by the yield stress; an independent reference-stress normalization is a different realization. Custom histories and coefficients need their own accuracy checks.
+        - group [ref=f2e221]:
+          - generic "The core equations" [ref=f2e222] [cursor=pointer]
+        - generic [ref=f2e223]:
+          - heading "Read more" [level=3] [ref=f2e224]
+          - list [ref=f2e225]:
+            - listitem [ref=f2e226]
+            - listitem [ref=f2e228]
+            - listitem [ref=f2e230]
+        - generic [ref=f2e232]:
+          - heading "Related models and formulations" [level=3] [ref=f2e233]
+          - list [ref=f2e234]:
+            - listitem [ref=f2e235]
+            - listitem [ref=f2e237]
+      - group [ref=f2e239]:
+        - generic "Technical details, implementation and checks" [ref=f2e240] [cursor=pointer]
+    - contentinfo [ref=f2e85]:
+      - generic [ref=f2e86]: perzyna-comsol63-mises-perfect-zero-spin-ode
+      - link "Link to this model" [ref=f2e87] [cursor=pointer]:
+        - /url: "#catalogue/perzyna-comsol63-mises-perfect-zero-spin-ode"
+      - button "Test this model →" [ref=f2e88] [cursor=pointer]

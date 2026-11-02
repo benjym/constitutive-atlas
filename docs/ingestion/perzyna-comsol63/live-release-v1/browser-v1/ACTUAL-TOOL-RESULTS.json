@@ -1,0 +1,102 @@
+{
+  "nav-blank": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Ran Playwright code\n```js\nawait page.goto('about:blank');\n```\n### Page\n- Page URL: about:blank\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-11-02T11-01-41-463Z.yml)"
+      }
+    ]
+  },
+  "setup": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"cacheDisabled\":true,\"originalViewport\":{\"width\":1280,\"height\":900}}\n### Ran Playwright code\n```js\nawait (async (page) => { page.__perzLiveViewport = page.viewportSize(); page.__perzLiveCDP = await page.context().newCDPSession(page); await page.__perzLiveCDP.send('Network.enable'); await page.__perzLiveCDP.send('Network.setCacheDisabled', {cacheDisabled:true}); page.__perzLiveErrors=[]; page.__perzLiveFailures=[]; page.__perzLiveConsoleHandler=m=>{if(m.type()==='error'||m.type()==='warning')page.__perzLiveErrors.push({type:m.type(),text:m.text()});}; page.__perzLiveFailureHandler=r=>page.__perzLiveFailures.push({url:r.url(),failure:r.failure()}); page.on('console',page.__perzLiveConsoleHandler); page.on('requestfailed',page.__perzLiveFailureHandler); await page.setViewportSize({width:1280,height:900}); return {cacheDisabled:true,originalViewport:page.__perzLiveViewport}; })(page);\n```"
+      }
+    ]
+  },
+  "profile-nav": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Ran Playwright code\n```js\nawait page.goto('https://benjym.github.io/constitutive-atlas/index.html?release=106a9cf8c327c9c262a97eb86aa04dae3f6cadb8#catalogue/perzyna-comsol63-mises-perfect-zero-spin-ode');\n```\n### Page\n- Page URL: https://benjym.github.io/constitutive-atlas/index.html?release=106a9cf8c327c9c262a97eb86aa04dae3f6cadb8#catalogue/perzyna-comsol63-mises-perfect-zero-spin-ode\n- Page Title: Model catalogue · Constitutive Atlas\n### Snapshot\n- [Snapshot](.playwright-mcp/page-2026-11-02T11-02-07-090Z.yml)"
+      }
+    ]
+  },
+  "profile": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"title\":\"COMSOL 6.3 Perzyna elastoviscoplastic solid · associative von Mises\",\"technicalInitiallyClosed\":true,\"parameterRows\":[\"K · Elastic bulk modulus\\tControls reversible resistance to volume change; permanent flow is volume preserving.\\tPa\",\"G · Elastic shear modulus\\tControls reversible resistance to shape change and helps set the relaxation time.\\tPa\",\"σy · Equivalent yield stress\\tSets the onset of flow and the normalization of overstress. Changing it affects both the threshold and the flow rate.\\tPa\",\"A · Viscoplastic rate coefficient\\tMultiplies the flow rate at every fixed relative overstress. Its unit is inverse seconds.\\ts⁻¹\",\"n · Overstress exponent\\tSets the nonlinear dependence on stress above yield. At a stress twice the yield stress, relative overstress is one and the equivalent permanent-strain rate equals A for every exponent.\\tdimensionless\"],\"related\":[\"#catalogue/bingham-comsol63-mises-perfect-zero-spin-ode\",\"#catalogue/power-creep-itasca900-both-active-ode\"],\"sourceLinks\":[\"https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.039.html\",\"https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_solid.07.024.html\",\"https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html\"],\"technicalLinks\":[{\"text\":\"Source, numerics and limitations dossier ↗\",\"url\":\"https://benjym.github.io/constitutive-atlas/docs/models/perzyna-comsol63.md.html\",\"status\":200},{\"text\":\"Independent scientific checklist ↗\",\"url\":\"https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/perzyna-comsol63-agent-v1.json\",\"status\":200},{\"text\":\"Exact reviewed definition ↗\",\"url\":\"https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/perzyna-comsol63-agent-v1.json\",\"status\":200},{\"text\":\"Approval registry and scope ↗\",\"url\":\"https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json\",\"status\":200}]}\n### Ran Playwright code\n```js\nawait (async (page) => { const profile=await page.evaluate(()=>{const d=document.querySelector('#catalogue-dialog'),p=d.querySelector('.model-profile'),t=d.querySelector('.model-profile-technical'); const rows=[...p.querySelectorAll('tbody tr')].map(x=>x.innerText),related=[...p.querySelectorAll('a[href^=\"#catalogue/\"]')].map(a=>a.getAttribute('href')); if(!d.open||t.open||rows.length!==5||!(p.compareDocumentPosition(t)&Node.DOCUMENT_POSITION_FOLLOWING)||!related.includes('#catalogue/bingham-comsol63-mises-perfect-zero-spin-ode')||!related.includes('#catalogue/power-creep-itasca900-both-active-ode'))throw Error('Profile contract failed');return{title:d.querySelector('h2').innerText,technicalInitiallyClosed:!t.open,parameterRows:rows,related,sourceLinks:[...p.querySelectorAll('a[href^=\"https://doc.comsol.com/\"]')].map(a=>a.href)};}); await page.locator('.model-profile-technical > summary').click(); const links=await page.locator('.model-profile-technical a').evaluateAll(nodes=>nodes.map(a=>({text:a.innerText,url:a.href}))); const checked=await page.evaluate(async links=>{const rows=[];for(const link of links){const r=await fetch(link.url,{cache:'no-store'});rows.push({...link,status:r.status});if(r.status!==200)throw Error('Technical link failed '+link.url);}return rows;},links); return{...profile,technicalLinks:checked}; })(page);\n```"
+      }
+    ]
+  },
+  "lab-nav": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"url\":\"https://benjym.github.io/constitutive-atlas/index.html?release=106a9cf8c327c9c262a97eb86aa04dae3f6cadb8#laboratory?model=perzyna-comsol63-mises-perfect-zero-spin-ode\",\"status\":\"Completed 2 physical seconds · 4 output intervals · relaxation.\"}\n### Ran Playwright code\n```js\nawait (async (page) => { await page.getByRole('button',{name:'Test this model →',exact:true}).click(); await page.waitForFunction(()=>document.querySelector('#perzyna-status')?.textContent?.includes('Completed 2 physical seconds'),null,{timeout:60000}); return{url:page.url(),status:await page.locator('#perzyna-status').innerText()}; })(page);\n```\n### Page\n- Page URL: https://benjym.github.io/constitutive-atlas/index.html?release=106a9cf8c327c9c262a97eb86aa04dae3f6cadb8#laboratory?model=perzyna-comsol63-mises-perfect-zero-spin-ode\n- Page Title: Model testing · Constitutive Atlas"
+      }
+    ]
+  },
+  "relaxation": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"download\":\"perzyna-atlas-relaxation.json\",\"saved\":\"relaxation.json\",\"plots\":3,\"tableRows\":7,\"status\":\"Completed 2 physical seconds · 4 output intervals · relaxation.\",\"summary\":\"relaxation: 2 physical seconds; final σxx=101461.2Pa, εxx=0.01000000.\",\"measurementUnavailable\":true}\n### Ran Playwright code\n```js\nawait (async (page) => { const [d]=await Promise.all([page.waitForEvent('download'),page.locator('#perzyna-export').click()]); await d.saveAs('/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e8-v1/relaxation.json'); const ui=await page.evaluate(()=>{const ps=[...document.querySelectorAll('#perzyna-laboratory svg polyline')];if(ps.length!==3||ps.some(p=>/NaN|Infinity/.test(p.getAttribute('points'))))throw Error('Invalid plots');return{plots:ps.length,tableRows:document.querySelectorAll('#perzyna-state tr').length,status:document.querySelector('#perzyna-status').textContent,summary:document.querySelector('#perzyna-summary').textContent,measurementUnavailable:document.querySelector('#perzyna-laboratory').textContent.includes('Measurement comparison is unavailable')};}); if(ui.tableRows!==7||!ui.measurementUnavailable)throw Error('Incomplete live output');return{download:d.suggestedFilename(),saved:'relaxation.json',...ui}; })(page);\n```\n### Events\n- Downloading file perzyna-atlas-relaxation.json ...\n- Downloaded file perzyna-atlas-relaxation.json to \".playwright-mcp/perzyna-atlas-relaxation.json\""
+      }
+    ]
+  },
+  "creep": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"status\":\"Completed 2 physical seconds · 4 output intervals · creep.\",\"summary\":\"creep: 2 physical seconds; final σxx=200000.0Pa, εxx=0.02767371.\",\"download\":\"perzyna-atlas-creep.json\",\"plots\":3}\n### Ran Playwright code\n```js\nawait (async (page) => { await page.locator('#perzyna-mode').selectOption('creep'); await page.locator('#perzyna-run').click(); await page.waitForFunction(()=>document.querySelector('#perzyna-status')?.textContent?.endsWith('· creep.'),null,{timeout:60000}); const[d]=await Promise.all([page.waitForEvent('download'),page.locator('#perzyna-export').click()]); await d.saveAs('/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e8-v1/creep.json'); return{status:await page.locator('#perzyna-status').innerText(),summary:await page.locator('#perzyna-summary').innerText(),download:d.suggestedFilename(),plots:await page.locator('#perzyna-laboratory svg polyline').count()}; })(page);\n```\n### Events\n- Downloading file perzyna-atlas-creep.json ...\n- Downloaded file perzyna-atlas-creep.json to \".playwright-mcp/perzyna-atlas-creep.json\""
+      }
+    ]
+  },
+  "rate": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"status\":\"Completed 2 physical seconds · 4 output intervals · rate.\",\"summary\":\"rate: 2 physical seconds; final σxx=153897.0Pa, εxx=0.01200000.\",\"download\":\"perzyna-atlas-rate.json\",\"plots\":3}\n### Ran Playwright code\n```js\nawait (async (page) => { await page.locator('#perzyna-mode').selectOption('rate'); await page.locator('#perzyna-run').click(); await page.waitForFunction(()=>document.querySelector('#perzyna-status')?.textContent?.endsWith('· rate.'),null,{timeout:60000}); const[d]=await Promise.all([page.waitForEvent('download'),page.locator('#perzyna-export').click()]); await d.saveAs('/Users/bmar5496/code/constitutive-atlas/output/playwright/perzyna-comsol63-e8-v1/rate.json'); return{status:await page.locator('#perzyna-status').innerText(),summary:await page.locator('#perzyna-summary').innerText(),download:d.suggestedFilename(),plots:await page.locator('#perzyna-laboratory svg polyline').count()}; })(page);\n```\n### Events\n- Downloading file perzyna-atlas-rate.json ...\n- Downloaded file perzyna-atlas-rate.json to \".playwright-mcp/perzyna-atlas-rate.json\""
+      }
+    ]
+  },
+  "fetched-assets": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n[{\"path\":\"index.html\",\"status\":200,\"bytes\":27773,\"sha256\":\"368f968b38c84892383bfd477c4e825b81578807efd3ae4c0450a2ecb335fcc0\"},{\"path\":\"app.js\",\"status\":200,\"bytes\":62552,\"sha256\":\"ffb3f8801c50acda94f1eee14e7828e20b1b5f77d9ad0d1e25c14c1c1bca4d2f\"},{\"path\":\"model-profile-data.mjs\",\"status\":200,\"bytes\":150905,\"sha256\":\"45d41dbbdb816cf00bff33753c72bd78bb20d3145bc59a28d642f92a7294143e\"},{\"path\":\"model-profiles.mjs\",\"status\":200,\"bytes\":5992,\"sha256\":\"647a453ea0299b6724d83c25cafd789c51f68e6701bc75f2847ce7d92acc39bf\"},{\"path\":\"catalogue.json\",\"status\":200,\"bytes\":71140,\"sha256\":\"b4350eb201272708d31671aff347348729017ff4f510af9702e03510948f7ba7\"},{\"path\":\"models.json\",\"status\":200,\"bytes\":124313,\"sha256\":\"e07f3a21927b28aad8865085216f17d7152dc6f6a67c3663cabbe97c78b606ee\"},{\"path\":\"evidence.json\",\"status\":200,\"bytes\":311591,\"sha256\":\"f46647ae54e51809fb8417e86a5d13fb196242ec159a02ea0ebefbd436bd861b\"},{\"path\":\"perzyna-atlas-contract.mjs\",\"status\":200,\"bytes\":9951,\"sha256\":\"b22d4f13b87e86bdec09c26131d4dba61337d91b00ef2e74a116852dce230ac8\"},{\"path\":\"perzyna-atlas-worker.mjs\",\"status\":200,\"bytes\":3141,\"sha256\":\"edbda57c6a1271717d6ee24872bc9c86026af1758af053d1020339fb35cac535\"},{\"path\":\"perzyna-laboratory.mjs\",\"status\":200,\"bytes\":12852,\"sha256\":\"cdf0727b2f928e72774d64d8c60b397fa40f317a422807428c3330609e26f602\"},{\"path\":\"laboratory-controller-router.mjs\",\"status\":200,\"bytes\":1061,\"sha256\":\"e6f5f85ba95b909608015e974cbb0c919e97b9fd68d5d9d6202482e4a46eb934\"},{\"path\":\"engine-perzyna/approval.json\",\"status\":200,\"bytes\":46437,\"sha256\":\"3f0e174428e178c3f267bf7c89fcdc8b44edb83ca0b9e53876c0aedfbc9de812\"},{\"path\":\"engine-perzyna/build-receipt.json\",\"status\":200,\"bytes\":2937,\"sha256\":\"4088731de94ff642d811697fe420612777b373aff7ec90a1ba7477a5afa741eb\"},{\"path\":\"engine-perzyna/models.json\",\"status\":200,\"bytes\":7196,\"sha256\":\"dc65a68912251b2986a49481a0a0b7eeb4ede258a9a332eeae577a759b0b8d6a\"},{\"path\":\"engine-perzyna/perzyna-comsol63-mises-perfect-zero-spin-ode.json\",\"status\":200,\"bytes\":6110,\"sha256\":\"7bfc33578593fab8c806dd1cd6473f54b9e2cd5cbf07ecacaffd328118e103ac\"},{\"path\":\"engine-perzyna/perzyna.mjs\",\"status\":200,\"bytes\":27124,\"sha256\":\"722a6314c05361b3c737fc1e93ad45047b89c7a3a36b0e638b36e3e41a7a3d78\"},{\"path\":\"engine-perzyna/perzyna.wasm\",\"status\":200,\"bytes\":425481,\"sha256\":\"9ac88126bc0759c9bafb10e7f8fa1f0cee3c3c118e3a550f8910fc81de1bbaea\"},{\"path\":\"engine-perzyna/review.html\",\"status\":200,\"bytes\":63439,\"sha256\":\"9d77a2f03f142a3d33f690ba19b74cd7db3a9e7612382b914cd97aa077faef12\"},{\"path\":\"engine-perzyna/review.json\",\"status\":200,\"bytes\":51300,\"sha256\":\"7cfcd2381a1ced8cf97a98b7b3e9d197b883582f8c2365efe607e0ae2dd5cbb7\"},{\"path\":\"engine-perzyna/source-receipts.json\",\"status\":200,\"bytes\":10856,\"sha256\":\"19dfcbb0f8746b37ec7e7a2031cce6c0f76a0178ceeec84c379acd31872b8a40\"},{\"path\":\"engine-perzyna/identity.json\",\"status\":200,\"bytes\":5437,\"sha256\":\"e5cde3b9fe4386f3e795263988a484f13f663d9ea4ff439b70d0c63f4cdb1a8f\"},{\"path\":\"docs/models/perzyna-comsol63.md.html\",\"status\":200,\"bytes\":5257,\"sha256\":\"61ad0f2043cb0cb751b28e931ccb0232ae3bacf74be068e3896a44a0db2b5795\"},{\"path\":\"evidence-records/catalogue/agent-reviews/perzyna-comsol63-agent-v1.json\",\"status\":200,\"bytes\":51300,\"sha256\":\"7cfcd2381a1ced8cf97a98b7b3e9d197b883582f8c2365efe607e0ae2dd5cbb7\"},{\"path\":\"evidence-records/catalogue/agent-reviews/definitions/perzyna-comsol63-agent-v1.json\",\"status\":200,\"bytes\":6110,\"sha256\":\"7bfc33578593fab8c806dd1cd6473f54b9e2cd5cbf07ecacaffd328118e103ac\"},{\"path\":\"evidence-records/catalogue/approved-models.json\",\"status\":200,\"bytes\":329516,\"sha256\":\"da6166034579fe169f8528a118656cd3490e855981dcf9ed58f3818b4cb500f0\"}]\n### Ran Playwright code\n```js\nawait (async (page) => { const paths=[\"index.html\",\"app.js\",\"model-profile-data.mjs\",\"model-profiles.mjs\",\"catalogue.json\",\"models.json\",\"evidence.json\",\"perzyna-atlas-contract.mjs\",\"perzyna-atlas-worker.mjs\",\"perzyna-laboratory.mjs\",\"laboratory-controller-router.mjs\",\"engine-perzyna/approval.json\",\"engine-perzyna/build-receipt.json\",\"engine-perzyna/models.json\",\"engine-perzyna/perzyna-comsol63-mises-perfect-zero-spin-ode.json\",\"engine-perzyna/perzyna.mjs\",\"engine-perzyna/perzyna.wasm\",\"engine-perzyna/review.html\",\"engine-perzyna/review.json\",\"engine-perzyna/source-receipts.json\",\"engine-perzyna/identity.json\",\"docs/models/perzyna-comsol63.md.html\",\"evidence-records/catalogue/agent-reviews/perzyna-comsol63-agent-v1.json\",\"evidence-records/catalogue/agent-reviews/definitions/perzyna-comsol63-agent-v1.json\",\"evidence-records/catalogue/approved-models.json\"]; return await page.evaluate(async paths=>{const out=[];for(const path of paths){const r=await fetch(new URL(path,document.baseURI),{cache:'no-store'});if(r.status!==200)throw Error('Asset HTTP '+path+' '+r.status);const bytes=await r.arrayBuffer(),hash=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(x=>x.toString(16).padStart(2,'0')).join('');out.push({path,status:r.status,bytes:bytes.byteLength,sha256:hash});}return out;},paths); })(page);\n```"
+      }
+    ]
+  },
+  "mobile-profile": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"viewport\":375,\"pageWidth\":375,\"dialogWidth\":343,\"profileWidth\":301,\"profileScrollWidth\":301,\"parameterRows\":5,\"technicalClosed\":true,\"title\":\"COMSOL 6.3 Perzyna elastoviscoplastic solid · associative von Mises\"}\n### Ran Playwright code\n```js\nawait (async (page) => { await page.locator('#model-profile-link').click(); await page.waitForFunction(()=>document.querySelector('#catalogue-dialog')?.open); await page.setViewportSize({width:375,height:900}); await page.locator('.model-profile table').scrollIntoViewIfNeeded(); return await page.evaluate(()=>{const d=document.querySelector('#catalogue-dialog'),p=d.querySelector('.model-profile'),t=d.querySelector('.model-profile-technical');const out={viewport:innerWidth,pageWidth:document.body.scrollWidth,dialogWidth:d.getBoundingClientRect().width,profileWidth:p.clientWidth,profileScrollWidth:p.scrollWidth,parameterRows:p.querySelectorAll('tbody tr').length,technicalClosed:!t.open,title:d.querySelector('h2').textContent};if(out.pageWidth>out.viewport||out.profileScrollWidth>out.profileWidth+1||out.parameterRows!==5||!out.technicalClosed)throw Error('Mobile profile layout failed');return out;}); })(page);\n```\n### Page\n- Page URL: https://benjym.github.io/constitutive-atlas/index.html?release=106a9cf8c327c9c262a97eb86aa04dae3f6cadb8#catalogue/perzyna-comsol63-mises-perfect-zero-spin-ode\n- Page Title: Model catalogue · Constitutive Atlas"
+      }
+    ]
+  },
+  "teardown": {
+    "content": [
+      {
+        "type": "text",
+        "text": "### Result\n{\"console\":[],\"requestFailures\":[],\"cacheRestored\":true,\"viewport\":{\"width\":1280,\"height\":900},\"finalURL\":\"about:blank\"}\n### Ran Playwright code\n```js\nawait (async (page) => { const diagnostics={console:page.__perzLiveErrors,requestFailures:page.__perzLiveFailures};if(diagnostics.console.length||diagnostics.requestFailures.length)throw Error(JSON.stringify(diagnostics));await page.__perzLiveCDP.send('Network.setCacheDisabled',{cacheDisabled:false});await page.__perzLiveCDP.detach();await page.setViewportSize(page.__perzLiveViewport);page.off('console',page.__perzLiveConsoleHandler);page.off('requestfailed',page.__perzLiveFailureHandler);await page.goto('about:blank');return{...diagnostics,cacheRestored:true,viewport:page.viewportSize(),finalURL:page.url()}; })(page);\n```\n### Page\n- Page URL: about:blank"
+      }
+    ]
+  },
+  "laboratory-screenshot": [
+    {
+      "type": "text",
+      "text": "### Result\n- [Screenshot of full page](output/playwright/perzyna-comsol63-e8-v1/laboratory.png)\n### Ran Playwright code\n```js\n// Screenshot full page and save it as output/playwright/perzyna-comsol63-e8-v1/laboratory.png\nawait page.screenshot({\n  fullPage: true,\n  path: 'output/playwright/perzyna-comsol63-e8-v1/laboratory.png',\n  scale: 'css',\n  type: 'png'\n});\n```"
+    }
+  ],
+  "profile-screenshot": [
+    {
+      "type": "text",
+      "text": "### Result\n- [Screenshot of viewport](output/playwright/perzyna-comsol63-e8-v1/profile-mobile.png)\n### Ran Playwright code\n```js\n// Screenshot viewport and save it as output/playwright/perzyna-comsol63-e8-v1/profile-mobile.png\nawait page.screenshot({\n  path: 'output/playwright/perzyna-comsol63-e8-v1/profile-mobile.png',\n  scale: 'css',\n  type: 'png'\n});\n```"
+    }
+  ]
+}

@@ -1,110 +1,87 @@
-# perzyna-comsol63 — end-to-end delivery ledger
+# Perzyna COMSOL 6.3 — delivery ledger
 
-Follow `docs/MODEL_DELIVERY_CHECKLIST.md` from the repository root; this ledger tracks its E0–E8 gates without creating a second assignment registry.
+This ledger follows [the E0–E8 checklist](../../MODEL_DELIVERY_CHECKLIST.md) and the [model-local checklist](CHECKLIST.md). Exact assignment policies remain in [policy-v1](policy-v1/).
 
-- Umbrella task: MODEL-perzyna-comsol63
-- Lead / date: /root coordinator,2026-11-02
-- Exact formulation and publication/version: COMSOL6.3 Perzyna, isotropic linear elasticity, associative von Mises, constant positive yield/no hardening; printed equation073: A·max(q/sigma_y−1,0)^n, n≥1; source UI discrepancy SC-PERZ-01 explicitly retained.
-- Intended native/browser scope and exclusions: BE schedule only; three uniform public strain-hold/stress-hold/six-rate modes. No direct midpoint, finite strain/rotation, hardening, thermal/pore or experimental-validation claim.
-- Source packet / dossier: source-v1/README.md and docs/models/perzyna-comsol63.md.
-- Public profile / content provenance: `web/model-profile-data.mjs` entry, packet draft and [content contract](../../PUBLIC_MODEL_PROFILES.md)
-- Detailed model-local checklist: [CHECKLIST.md](CHECKLIST.md) (copy every E0–E8 check and exit condition; retain evidence per item)
-- Canonical checklist at assignment: current root docs/MODEL_DELIVERY_CHECKLIST.md SHA256 3b7448281ec0429a1425f71d53a1d9f048900442dca0ab8c30735b800f499efb,2026-11-02; exact policy copies in policy-v1/.
-- Candidate definition path / SHA-256: `models/research/perzyna/perzyna-comsol63-mises-perfect-zero-spin-ode.json`,7bfc33578593fab8c806dd1cd6473f54b9e2cd5cbf07ecacaffd328118e103ac.
-- Worktree / authorized path whitelist: /private/tmp/atlas-perzyna-delivery-v1 on codex/perzyna-comsol63-delivery-v1, baseline54f409b37deaed0ab82a85cdac9f489bc65e1309. Coordinator owns new Perzyna packet/model/generic-profile build wiring/CI/tooling/web/catalogue integration only after scoped proposals and preservation review; no existing model migration or root shared Git operation.
-- Implementation run ID(s): /root
-- Independent review run ID: /root/perzyna_source_review, bounded E1–E3 ACCEPT; source-contract-review-v1/MANIFEST.json98fa6f52 verified88inputs/3outputs;1041checks. Actual E5 ACCEPT: /root/perzyna_scientific_e5, scientific-review-v1/MANIFEST.json979bc009, canonical record7cfcd238; all nine items pass.
-- Build/execution owner and handoff: /root coordinator; explicit serial E4 and E7 board handoffs with terminal releases.
-- Remote authorization reference (or pending): session prior push/main/CI/Pages authorization followed by new model end-to-end instruction; carry through concrete E7 release before remote action.
+- **Umbrella / lead:** MODEL-perzyna-comsol63; /root coordinator, 2 November 2026.
+- **Exact formulation:** the printed COMSOL 6.3 yield-normalized Perzyna law, isotropic linear elasticity, associative von Mises flow, constant positive yield stress and no hardening. Flow rate is `A max(q/sigma_y - 1, 0)^n`.
+- **Definition:** `models/research/perzyna/perzyna-comsol63-mises-perfect-zero-spin-ode.json`; SHA-256 `7bfc33578593fab8c806dd1cd6473f54b9e2cd5cbf07ecacaffd328118e103ac`.
+- **Contract:** explicit schema 0.3; physical-time, infinitesimal 3D, fixed spatial axes/zero spin, compression-positive Mandel tensors and dry total Cauchy stress. Complete state is six total strains, six viscoplastic strains and accumulated equivalent viscoplastic strain.
+- **Supported execution:** backward-Euler schedules; public strain-hold relaxation, stress-hold creep and six-component constant strain rate. The frozen study samples `n = 1, 1.5, 2, 3` and the disclosed custom tuple; it does not establish accuracy over the entire editable parameter envelope.
+- **Source / profile:** [source and contract](source-v1/README.md), [scientific dossier](../../models/perzyna-comsol63.md), and the exact entry in `web/model-profile-data.mjs`.
+- **Independent runs:** /root/perzyna_source_review for source/contract; /root/perzyna_scientific_e5 for actual scientific approval. Implementation and integration belong to /root.
+- **Assignment:** isolated `/private/tmp/atlas-perzyna-delivery-v1`, branch `codex/perzyna-comsol63-delivery-v1`, baseline `54f409b37deaed0ab82a85cdac9f489bc65e1309`. Ownership covers only Perzyna and its explicitly scoped additive integration. Shared root staging and unrelated files remain untouched.
+- **Remote authority:** the session's main/CI/Pages instruction followed by the next-model end-to-end assignment; no additional human scientific signature is required.
 
-Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidence beside each phase and link the detailed check results. Keep MODEL-perzyna-comsol63 open until E8 is verified; specialist task completion closes only that task.
+## Stage status
 
-- [X] **E0 — Claim/scope:** exact variant, prior-work inventory, owner/whitelist, dependencies and destination agreed.
-- [X] **E1 — Sources:** readable complete law, durable private receipts, source locators, version reconciliation and rights.
-- [X] **E2 — Contract:** complete v0.3 crosswalk, preparation/time/transaction/control contract and prospectively frozen references/gates; capabilities resolved.
-- [X] **E3 — Transcription:** exact candidate validates/generates; independent equation/reference checks pass.
-- [X] **E4 — Native/Wasm:** correct profile/interfaces, complete frozen numerical gates, rollback/recovery/restarts, useful preset, parity and regressions pass.
-- [X] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
-- [X] **E6 — Atlas:** qualified model/approval/source/evidence and source-backed public profile integrated through normal generation; profile-coverage check passes, prior models preserved and public metadata/current database checked.
-- [X] **E7 — Packaged website:** public profile/card, parameter units, example guidance, related/laboratory links and narrow-screen layout inspected; real controls/plots, technical source/review disclosure, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
-- [-] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works; task-owned cleanup verified and any retained resources handed off explicitly.
+- [X] **E0 — Claim and scope:** exact variant, source inventory, ownership, dependencies and delivery policy recorded.
+- [X] **E1 — Sources:** readable equations and version reconciliation; 20 original private source files retained with exact receipts.
+- [X] **E2 — Contract:** complete formulation/state/units/time/control/transaction contract and prospectively frozen references and gates.
+- [X] **E3 — Transcription:** normal validation/generation and independent source-derived checks pass.
+- [X] **E4 — Native/Wasm:** the frozen numerical study, solved creep rates, restart, retained-prefix failure/recovery and backend parity pass.
+- [X] **E5 — Agent approval:** separate actual nine-item review accepts the exact bytes and bounded numerical scope.
+- [X] **E6 — Atlas:** normal catalogue, approval, sources, public profile and database export integrated; prior entries and profiles preserved.
+- [X] **E7 — Packaged website:** full standard package and actual desktop/mobile browser controls, plots, replay/recovery and source/review disclosure pass.
+- [-] **E8 — Live delivery:** application, all CI jobs, Pages, actual upload/live assets and live browser pass. Pending final clean worktree removal.
 
 ## Current handoff
 
-- Current phase / overall state: E0–E7 verified; exact scientific/native/Wasm, normal atlas/profile/database, fullstandardpackage and actualbrowser scope pass. E8 CI/Pages and exact upload/liveHTTP verified; actual live browser and final cleanup remain.
-- Current owner: /root coordinator
-- Blocker / missing evidence: No in-scope numerical or browser failure remains. Release106a9cf8 is pushed; all six CI jobs and Pages7489622279 pass. All469selectedliveassets match the authenticated1465file upload,20critical E7inputs unchanged and all9priorSQLite rowbags preserved. Actual live browser and final cleanup remain. Package-v1 missing local evidence failure and browser output-root denial are retained.
-- Smallest next action / next owner: Complete brief queued actual live browser after MD1997 boundedpreflight terminal handoff, then final owned cleanup and evidence closeout.
-- Resume when:
-- Known limitations / retained failures:
+- **State:** live delivery verified; final clean worktree removal remains.
+- **Owner / next action:** /root will commit the final browser/cleanup evidence, retain and verify the branch bundle, remove the clean completed worktree through Git, and publish the evidence-only closeout.
+- **Scientific blockers:** none within the approved scope.
+- **Limitations:** no experimental calibration/validation, vendor-software equivalence, finite deformation/rotation, hardening, thermal or pore-fluid response, FE-host tangent or broad custom-input accuracy claim. The source theory/settings discrepancy SC-PERZ-01 is disclosed rather than silently reconciled.
 
 ## Evidence index
 
-| Phase / claim | Exact inputs or revision | Command / checker | Result and evidence path | Owner / date |
-| --- | --- | --- | --- | --- |
-| E1–E3 source and transcription | Candidate7bfc3357, source-v1 sealbe6cf9f2 | source-v1/check_source_v2.py; separate source-contract-review-v1 |180cases/1106checks; reviewer1041checks ACCEPT | /root and separate reviewer,2026-11-02 |
-| E4 numerical qualification | execution-v2 freeze7dcc4a01, E4seal2ae273fb | execution-v2/study.py, collect_wasm.mjs, parity.py |107cases/214calls/backend,6574comparisons/backend,15,667exact parity values | /root,2026-11-02 |
-| E5 independent approval | Review7cfcd238;194direct bindings | atlas.agent_review --for-approval | All nine items ACCEPT; scientific-review-v1 | /root/perzyna_scientific_e5,2026-11-02 |
-| E6 preservation | atlas-integration-v1 | PRESERVATION.json, DATABASE.json | All prior records/profiles preserved,49/49profile coverage | /root,2026-11-02 |
-| E7 standard package and actual browser | package-v2, browser-v1 | Genuine standard builder; actual connected Playwright; check_exports.py |1466files;3modes/342reference values, replay/recovery, desktop/mobile PASS | /root,2026-11-02 |
-| E8 published revision |106a9cf8c327c9c262a97eb86aa04dae3f6cadb8 | Current Actions41415383260 | SUCCESS all6jobs, Pages7489622279 SUCCESS; separate controlled41415383105 SUCCESS | /root,2026-11-02 |
+| Stage | Reproducible check / exact evidence | Verified result |
+| --- | --- | --- |
+| E1–E3 | [source packet](source-v1/), source seal `be6cf9f2…`, [source review](source-contract-review-v1/) | 180 cases / 1,106 author checks; 1,041 independent review checks; exact candidate validates/generates. |
+| E4 | [execution-v2](execution-v2/), freeze `7dcc4a01…`, E4 seal `2ae273fb…`; `study.py`, `collect_wasm.mjs`, `parity.py` | 107 cases / 214 calls / 6,574 state-stress comparisons per backend, 264 solved-rate checks; 15,667 physical numbers agree exactly. |
+| E5 | [scientific review](scientific-review-v1/), [canonical record](../../../catalogue/agent-reviews/perzyna-comsol63-agent-v1.json); `python3 -B -m atlas.agent_review … --for-approval` | All nine items accepted; 194 direct artifact bindings. Final normal validator still accepts unchanged bytes. |
+| E6 | [integration preservation](atlas-integration-v1/PRESERVATION.json), [database](atlas-integration-v1/DATABASE.json) | All 15 ordinary definitions, 48 prior public profiles and prior catalogue/approval records preserved; 49/49 profiles covered. |
+| E7 | [package-v2](package-v2/), [actual local browser](browser-v1/) | Genuine standard builder exit 0; all existing supported gates; three modes / 342 independent scalar comparisons, complete history, replay/recovery and narrow-screen checks. |
+| E8 CI | [terminal release receipt](live-release-v1/release-receipt-v1/RESULT.json), [four actual CI uploads](live-release-v1/ci-artifacts-v2/) | All six required jobs pass. Both OS pairs independently pass the original study and 15,667 exact physical-value comparisons. |
+| E8 upload/live | [upload/live result](live-release-v1/upload-live-v1/RESULT.json), [scope](live-release-v1/UPLOAD-SCOPE.json) | 1,465 authenticated upload files; 20 critical tested inputs unchanged; 469 selected live assets exact. All nine prior SQLite row bags preserved, integrity and foreign-key checks pass. |
+| E8 browser | [live checks](live-release-v1/browser-v1/CHECKS.json), [numerical checks](live-release-v1/browser-v1/EXPORT-CHECKS.json), [raw observations](live-release-v1/browser-v1/ACTUAL-TOOL-RESULTS.json) | Three real UI runs / 342 reference comparisons; complete results exactly match E7; 25 browser-fetched identities; four technical links HTTP 200; five parameter rows, 375 px no overflow, zero console warnings/errors or request failures. |
 
-## Review and integration identity
+## Approval and transaction identity
 
-- Accepted agent-review record / hash: catalogue/agent-reviews/perzyna-comsol63-agent-v1.json7cfcd2381a1ced8cf97a98b7b3e9d197b883582f8c2365efe607e0ae2dd5cbb7, actual separate /root/perzyna_scientific_e5; all9pass194directartifacts.
-- Approved model path / hash / scope: exact candidate7bfc33578593fab8c806dd1cd6473f54b9e2cd5cbf07ecacaffd328118e103ac; accepted107case BE schedules/three presets, no broad exploratory/experimental claim.
-- Registry entry: perzyna-comsol63-agent-v1-approval; exact generated atlas-integration-v1/approval-entry.json integrated into catalogue/approved-models.json.
-- Native / Wasm toolchain and artifact receipts: execution-v2/actual-v1/, E4-EVIDENCE.json2ae273fb; original native then Wasm complete actualargv/exits/tool/source/artifactprepost,185pinned members.
-- Packaged engine / catalogue hash: module722a6314c05361b3c737fc1e93ad45047b89c7a3a36b0e638b36e3e41a7a3d78; Wasm9ac88126bc0759c9bafb10e7f8fa1f0cee3c3c118e3a550f8910fc81de1bbaea; generatedmetadatadc65a68912251b2986a49481a0a0b7eeb4ede258a9a332eeae577a759b0b8d6a.
-- Public-profile coverage check / packaged browser inspection:49/49profiles pass; browser-v1/MANIFEST.json/CHECKS.json/EXPORT-CHECKS.json and actualsaved UI artifacts.
-- Changed bytes after review (none, or new review/qualification): no model or194acceptedartifact changes. Additive atlas/profile/browser/CI integration separately qualified at E6/E7; all prior scientific records and48profiles preserved.
+- **Accepted record:** `perzyna-comsol63-agent-v1.json`, SHA-256 `7cfcd2381a1ced8cf97a98b7b3e9d197b883582f8c2365efe607e0ae2dd5cbb7`.
+- **Registry entry:** `perzyna-comsol63-agent-v1-approval`, generated through the normal approval exporter.
+- **Public engine:** module SHA-256 `722a6314c05361b3c737fc1e93ad45047b89c7a3a36b0e638b36e3e41a7a3d78`; Wasm `9ac88126bc0759c9bafb10e7f8fa1f0cee3c3c118e3a550f8910fc81de1bbaea`; metadata `dc65a68912251b2986a49481a0a0b7eeb4ede258a9a332eeae577a759b0b8d6a`.
+- No candidate or accepted scientific artifact changed after E5. Additive web/CI integration was separately qualified at E6–E8.
+- A failed schedule preserves completed samples and returns its last committed prefix; it does **not** atomically reset the entire schedule. The original prospective wording is retained and explicitly reconciled by the independent review.
 
 ## Deployment receipt
 
-- Release commit:106a9cf8c327c9c262a97eb86aa04dae3f6cadb8, main.
-- Actions run URL and terminal result: https://github.com/benjym/constitutive-atlas/actions/runs/41415383260 SUCCESS all6jobs; separate controlled-path https://github.com/benjym/constitutive-atlas/actions/runs/41415383105 SUCCESS.
-- Pages deployment revision/result:106a9cf8c327c9c262a97eb86aa04dae3f6cadb8,7489622279 SUCCESS; exact run-bound status in live-release-v1/release-receipt-v1/.
-- Tested upload / live asset comparison: artifact13131654461,ZIPde43be9ba3e3465a0b573d5d8866829fcde15cda16a5928922497bdffb71a6bb/240242482bytes;1465uploadfiles,20critical tested E7inputs exact,469selectedpublic HTTP200/SHA/size exact; all9priorSQLite rowbags preserved. live-release-v1/upload-live-v1/RESULT.json and full manifests.
-- Live model URL / actual browser run evidence:
-- Source/review link checks:
-- Public profile / related links / profile asset identity checks:
-- Remaining limitations:
+- **Application revision:** `106a9cf8c327c9c262a97eb86aa04dae3f6cadb8`, published to main.
+- **CI:** [Verify and publish 41415383260](https://github.com/benjym/constitutive-atlas/actions/runs/41415383260), all six jobs SUCCESS; [separate controlled-path run 41415383105](https://github.com/benjym/constitutive-atlas/actions/runs/41415383105), SUCCESS.
+- **Pages deployment:** `7489622279`, exact application revision and run, SUCCESS.
+- **Authenticated upload:** artifact `13131654461`, 240,242,482-byte ZIP, SHA-256 `de43be9ba3e3465a0b573d5d8866829fcde15cda16a5928922497bdffb71a6bb`.
+- **Live model:** [Perzyna in the general laboratory](https://benjym.github.io/constitutive-atlas/index.html#laboratory?model=perzyna-comsol63-mises-perfect-zero-spin-ode). [Public profile](https://benjym.github.io/constitutive-atlas/index.html#catalogue/perzyna-comsol63-mises-perfect-zero-spin-ode).
+- **Live export:** 50 model identities, 208 sources, 60 publications, 27 approvals and 23 agent reviews. All prior rows remain, with multiplicity, across nine tables.
+- HTTP verification covers every selected served application/document asset. The full authenticated manifest also retains 995 unrelated raw experiment payloads and the ephemeral implicit-path guard report; those 996 files were excluded by the prospectively frozen HTTP selector. Local `.nojekyll` and random temporary guard-report names are documented separately.
+- Final evidence-only `[skip ci]` commits record these results; they do not change the tested application, scientific scope or deployed engine.
 
 ## Cleanup and retained resources
 
-Update throughout the task and at every final/blocked/ready-to-publish handoff. Follow [the repository cleanup rules](policy-v1/AGENTS.md#cleanup-and-storage-at-handoff); preserve required evidence and resumption inputs before deleting temporary copies.
+| Resource | Disposition / durable evidence |
+| --- | --- |
+| All 11 task-owned ignored build/cache/site/private-copy roots | Removed after fresh source hashes and lossless archive recovery. [First cleanup](live-release-v1/IGNORED-CLEANUP-1.json): 3,411 files / 1,151,149,126 bytes. [Second cleanup](live-release-v1/IGNORED-CLEANUP-2.json): 1,489 files / 1,102,505,310 bytes. |
+| Exact ignored originals | Retained privately in root `.local/perzyna-retained-v1/task-ignored-resources-v1.tar.gz`, 498,199,596 bytes; SHA-256 `7c9f2968bdd0df6bb4b2d43ee7ac1160b9c6ea5da266ec6c5693787f54fbe11e`. All 4,900 members recovered and verified. [Receipt](live-release-v1/PRIVATE-CACHE-RETENTION.json). |
+| Original copyrighted source files | All 20 durable private copies reverified before removing worktree duplicates. [Original retention receipt](PRIVATE-SOURCE-RETENTION.json), [final check](live-release-v1/FINAL-PRIVATE-SOURCE-CHECK.json). No originals published. |
+| Actual browser evidence and temporary Python caches | Exact public browser copies retained in the packet; owned root duplicates/automatic files and dedicated-worktree caches archived and removed. [Final small-resource cleanup](live-release-v1/FINAL-SMALL-RESOURCE-CLEANUP.json), plus retained E7 cleanup receipts. |
+| Raw CI and Pages uploads | Retain authenticated original ZIPs privately under root `.local/perzyna-retained-v1/`; public digests/manifests and genuine reports are committed. |
+| Owned processes and browser | E7 preview 54116, board monitor 58655, CI watch 95361, download 29807, HTTP check 17098 and cleanup 99079 ended. Browser returned to `about:blank`; cache and 1280 × 900 viewport restored; no live preview was started. [Slot release](live-release-v1/browser-v1/SLOT-RELEASE.json). |
+| Completed isolated worktree | Pending final clean worktree removal. The retained commit and verified branch bundle must precede `git worktree remove`; no forced removal or shared root index operation. |
+| Other owners' resources | Borrowed Bingham assets, other worktrees, shared SDKs/caches and root `paper/` are untouched. |
 
-| Task-owned path or process | Purpose / owner | Disposition (remove, stop, retain or hand off) | Retention reason / durable location | Verification / date |
-| --- | --- | --- | --- | --- |
-| Worktree ignored roots,11explicit paths | Own builds, cache, both site attempts and private sources | Retained until live consumers finish; then remove exact verified duplicates | Private task-ignored-resources-v1.tar.gz in shared .local/perzyna-retained-v1 |4900file lossless recovery, receipt live-release-v1/PRIVATE-CACHE-RETENTION.json |
-| Root output/playwright/perzyna-comsol63-e7-v1 | Actual E7 browser artifacts | Removed16exact duplicate files | Original files in committed browser-v1/artifacts at106a9cf8 | live-release-v1/E7-DUPLICATE-CLEANUP.json,2026-11-02 |
-| Preview54116; board monitor58655 | Finished local E7 consumers | Stopped/finished exit0 | Actual E7 records retained | browserabout:blank, no owned preview active |
-| Root .local/perzyna-retained-v1 | Authenticated CI uploads and recovery archive | Retain private | Reproducible original upload and cleanup evidence | /root owns; digests verified before use |
+The two large cleanups remove 2,253,654,436 duplicate regular-file bytes. Free space after the second cleanup was 20,294,062,080 bytes; concurrent owners may change global free space. Required archives, private originals and raw authenticated uploads remain deliberately retained by /root.
 
-- Removed paths / stopped process identities:
-- Evidence retained: exact hashes, archive recovery checks and usable receipt locations:
-- Worktree removal: clean status, retained commit and preserved required ignored outputs:
-- Cleanup remaining / blocker / next owner: active task worktree and private source originals retained by /root for final live delivery; full local package/browser finished, preview stopped. Borrowed Bingham assets remain read-only and outside task cleanup ownership.
-- Space reclaimed / free space after substantial cleanup:
+## Retained failures and corrections
+
+The original source harness failure, rejected unexecuted execution-v1 plan, independent-review harness corrections, CI mock failure, package-v1 missing local witness and browser CLI/output-root failures remain in their separately identified packets. No numerical gate was relaxed. E8 also retains the [collector stdout-location correction](live-release-v1/CI-COLLECTOR-CORRECTION-V2.json), [automatic-download cleanup mismatch](live-release-v1/E7-AUTO-CLEANUP-ATTEMPT1.json) and [checkpoint audit correction](live-release-v1/CHECKPOINT-AUDIT-CORRECTION.json). These extraction/housekeeping failures are distinguished from the genuine successful model/CI/live results.
 
 ## Completion statement
 
-Record separately: source complete; executable scope; independent numerical qualification; agent approval; atlas inclusion and public profile; packaged browser; live deployment; experimental validation. An absent experimental comparison can be an explicit limitation. A missing public profile, missing website support or unverified deployment cannot be called full delivery.
-
-Active resource inventory: isolated worktree /private/tmp/atlas-perzyna-delivery-v1 and its ignored private originals/cache retained for E4–E8 by /root; durable original copies verified under shared ignored .local/private-sources/perzyna-comsol63/source-v1; qualified native/Wasm artifacts and approved public assets retained for E8; completed preview stopped.
-
-E5 transaction clarification: accepted schedule scope preserves completed samples and returns the last committed prefix on failure; it does not roll the whole schedule back to its initial state. Source-v1 prospective wording is retained; independent scientific-review-v1 explicitly reconciles this boundary against actual late-budget evidence.
-
-CI orchestration source checks: ci-driver-check-v1/RESULT.json passes five manufactured scenarios with zero compiled calls. Native/paired serial ordering, consumer-failure post-verification, capture failure and stale metadata rejection checked. The original mock classifier failure is retained in ATTEMPT1.txt; these checks do not substitute for actual CI.
-
-E7 package-v1: genuine normal builder exit1,416s; source inventories unchanged (exact gzip recovery retained). New Perzyna all3modes/342comparisons/replay/recovery passed. Existing implicit-path guard stopped on absent ignored local numerical evidence, restored exactee7e4ad4 from qualified prior tree and retained locally in package-v1/restored-evidence/. All remaining implicit/orthotropic/Hill pure packaging guards now pass, without compiled calls. Serial slot released; v2 full retry queued after md1997 local CI. No browser/live claim yet.
-
-E6/E7 completion: standard package-v2 genuine exit0 in374s, all tracked sourcepre/post exact;1466file manifest. Existing supported ordinary/named gate exit0; all prior scientific package gates pass. Actual browser profile/laboratory/default3modes and342independent scalar comparisons PASS; edited coefficients/full13history, all6stress/3plots, cancelled/latest requests, exact real-file import/rerun, stale import rejection, invalid and true backend error/recovery,23fetched identities,375px localtable scroll/no pageoverflow, relatedBingham route and4technical links HTTP200,0console/networkerrors. See immutable package-v2/ and browser-v1/ manifests. Server54116 stopped exit0; browserabout:blank. Session58655 readonly board monitor ended exit0 at actual MD release.
-
-E8 retention checkpoint: all4900task-owned ignored resource files (2,253,654,436bytes) preserved in private .local/perzyna-retained-v1/task-ignored-resources-v1.tar.gz, SHA7c9f2968bdd0df6bb4b2d43ee7ac1160b9c6ea5da266ec6c5693787f54fbe11e,498199596bytes. Every archive member recovered and hash/size checked. Includes both local site attempts, exact local caches/builds and private source copies; borrowed coownerBinghamresources excluded. Retention receipt and script in live-release-v1/. Deletion waits until fresh CI/live verification.
-
-E8 actual native CI receipts: both macos26 and Ubuntu107cases/214calls/6574comparisons PASS, all5actualoperations exit0, source/buildrecords unchanged; authenticatedZIPdigests verified. Separate CIstillrequires bothpairedWasm/fullpackage and remainingnative/controlled/deploy jobs. See live-release-v1/ci-artifacts/.
-
-E8 cleanup checkpoint1: live-release-v1/IGNORED-CLEANUP-1.json records3411ownfiles/1,151,149,126duplicatebytes removed from9explicitroots after fresh source and losslessarchive verification. Currentqualifiedsite and privateoriginal copies remain until liveconsumersfinish; all originalbytes remain in private498MBarchive. E7rootbrowserduplicate16files also removed after exactGitblob comparison. No coownerasset or paper path touched.
-
-E8 actual CI complete: allsix41415383260 jobsSUCCESS at106a9cf8; controlled41415383105 SUCCESS and Pages7489622279 SUCCESS. All4authenticated PerzCIuploads pass original107/214/6574gates; bothpairedOS15,667physicalvalues exactly equal. CIcollectorv1 expected nonexistent Wasm reportfile; frozen study emitsassessment stdout instead. Originalfailedcollector/RESULT retained, distinct extraction-onlyv2 readsactualstdout withunchangedgates and all4PASS. See CI-COLLECTOR-CORRECTION-V2.json/ci-artifacts-v2/. No CI/scientific gatefailure inferredfromcollectorpathassumption.
+Source complete; declarative executable scope qualified; independent numerical references and separate agent approval accepted; normal atlas/public profile and packaged browser complete; CI, exact Pages delivery, live bytes/database and actual live browser verified. Experimental validation is not claimed. Final clean worktree removal remains before E8 is closed.
