@@ -1,4 +1,7 @@
-# Deliver a constitutive model from source to the live atlas
+# Barodesy sand — completed E0–E8 checklist
+
+Exact bounded formulation and stage evidence: [DELIVERY.md](DELIVERY.md). Every applicable check below is complete for the declared fixed-frame, zero-spin interior law, independently accepted scientific record, current public profile and exact live release `e2e13af86c93fbc2666c6dd6b2299892f8f37e0f`. Earlier checklist bytes are retained by `delivery-v1/live-release-v3/closeout-preservation-v1/receipt.json`.
+
 
 This is the operating checklist for a **full model-delivery assignment**. The lead agent carries one exact formulation from source acquisition through a working, independently agent-reviewed implementation to the atlas and a verified live website. A source packet, a successful solver run, approval or a local preview alone does not finish that assignment.
 
@@ -25,7 +28,7 @@ The coordinator is an agent integration role. The delivery lead may fill it for 
 - [X] Record the intended schema profile, material/use scope, native and browser interfaces, illustrative protocol(s), acceptance gates and exclusions. Track physical-time or nonstandard UI support as actual work, not an inferred capability.
 - [X] Claim the umbrella task and create `DELIVERY.md` with lead, owners, whitelist/worktree, dependencies and stage statuses. Confirm the independent reviewing role will use a separate run.
 
-**Exit:** someone can identify the exact model being delivered, its destination, who owns each handoff and what proves completion. Evidence: Board MODEL-barodesy-sand and INT/NUM child scopes; existing definition/source/rate/preview inventory retained.
+**Exit:** someone can identify the exact model being delivered, its destination, who owns each handoff and what proves completion.
 
 ## E1 — Acquire and understand the sources
 
@@ -34,8 +37,9 @@ The coordinator is an agent integration role. The delivery lead may fill it for 
 - [X] Retain readable originals durably in ignored private storage where permitted. Document source/code/data rights; link rather than publish copyrighted originals. Do not execute supplied author binaries or vendor code.
 - [X] Reconcile multiple versions and implementation differences. List missing sources, ambiguous branches and proposed interpretations explicitly; resolve in-scope gaps before claiming source completeness.
 - [X] Complete the source packet, prior-work links and an equation-to-source inventory. Distinguish source-complete from executable, approved and deployed.
+- [X] Draft the [public model profile](PUBLIC_MODEL_PROFILES.md) from the inspected source: readable overview, characteristic behaviours, material parameters, starting state, meaningful limits and references. Keep a specialist draft in its owned packet until coordinator integration.
 
-**Exit:** every required equation and convention has readable source support or an explicit unresolved blocker. Evidence: delivery-v1/source-retention.json; original source packet and independent-review-v2/MODEL_REVIEW.md.
+**Exit:** every required equation and convention has readable source support or an explicit unresolved blocker.
 
 ## E2 — Define the schema and integration contract
 
@@ -46,7 +50,7 @@ The coordinator is an agent integration role. The delivery lead may fill it for 
 - [X] Compare actual requirements against the current DSL, state capacity, controls, Python/native/Wasm APIs and browser UI. Create a small source-derived capability example for each genuine gap; implement it generically under separate ownership before depending on it.
 - [X] Freeze the verification plan before compiled observations: independent reference provenance, cases and parameter/state range, expected successes/rejections, comparisons/tolerances, refinement and rollback/recovery criteria. Include tests of the proposed public default or named preset and unaffected-model regressions.
 
-**Exit:** the complete requested law fits an explicit supported contract, or the exact blocking capability is assigned. The reference and acceptance plan are recorded before qualification. Evidence: Exact v0.3 definition and delivery-v1/policy.json/prospective-freeze.json; discrete endpoint-control and fixed-frame exclusions explicit.
+**Exit:** the complete requested law fits an explicit supported contract, or the exact blocking capability is assigned. The reference and acceptance plan are recorded before qualification.
 
 ## E3 — Transcribe and establish independent checks
 
@@ -66,7 +70,7 @@ python3 -B -m atlas.cli generate /tmp/atlas-delivery-catalogue
 
 Replace the example definition path with the actual candidate. The latter two commands cover the top-level public catalogue; use `atlas.compiler.generate(destination, [candidate_path])` for an isolated research candidate.
 
-**Exit:** the exact candidate validates/generates and independently checks the source law within the frozen scope. Compilation alone is insufficient. Evidence: delivery-v1/transcription-check.json and independent Cartesian/diagonal references; model bytes unchanged.
+**Exit:** the exact candidate validates/generates and independently checks the source law within the frozen scope. Compilation alone is insufficient.
 
 ## E4 — Qualify native, Wasm and the exposed controls
 
@@ -89,7 +93,7 @@ cmake --build .local/delivery-wasm --target atlas_solver --parallel 1
 
 These are the ordinary strain-path target examples, not a claim that every timed/research target is covered. Do not run an unrestricted all-target build or copy older `--parallel 2` instructions. Follow the current workflow and model-specific target contract for broader regression/research builds.
 
-**Exit:** source-derived numerical gates and the claimed native/Wasm interfaces pass with exact candidate identity and retained limitations/failures. Evidence: delivery-v1/native-build-receipt.json, wasm-build-receipt.json, both raw-result directories, transaction-supplement-v1/assessment.json and parity.json:672calls/backend and45817exactphysical comparisons.
+**Exit:** source-derived numerical gates and the claimed native/Wasm interfaces pass with exact candidate identity and retained limitations/failures.
 
 ## E5 — Independent agent review and approval
 
@@ -104,24 +108,26 @@ python3 -B -m atlas.agent_review catalogue/agent-reviews/MODEL-agent-v1.json --f
 python3 -B -m atlas.agent_review catalogue/agent-reviews/MODEL-agent-v1.json --approval-output /tmp/MODEL-approval.json
 ```
 
-**Exit:** an accepted independent agent checklist supports a current, exact-definition approval entry, with no unresolved in-scope blockers. Evidence: Separate /root/barodesy_sand_review all9accepted; exact record df0e95028f38e4af94665ea8689d58b37a92d8c84b33f6aec4c503cbbd84efc6 installed in isolated release; canonical validator passes.
+**Exit:** an accepted independent agent checklist supports a current, exact-definition approval entry, with no unresolved in-scope blockers.
 
 ## E6 — Integrate into the atlas
 
 - [X] Coordinator installs the exact qualified model bytes and reviewed approval entry, dossier, examples and relevant evidence. Use `models/` only for profiles supported by the normal public engine; otherwise implement/qualify the required generic engine and browser routing. A separate research executable is not public atlas delivery.
 - [X] Update the discovery/catalogue entry and lineage/source links, approval registry, evidence/publication mappings and protocol/example registries as required by their actual consumers. Do not manufacture a legacy human-review acceptance to make an exporter happy.
+- [X] Integrate the public profile in `web/model-profile-data.mjs` under the exact catalogue ID. Explain the implemented variant and a supported example, link related family/variant entries, and retain local content provenance. Run `node tools/check_model_profiles.mjs`; missing public content blocks website delivery.
 - [X] Preserve approval/evidence hashes. If integration changes model metadata, IDs, equations, numerical settings or dependencies covered by the review, rebind the review and rerun affected gates before using the old approval claim.
 - [X] Regenerate the full public catalogue and verify engine metadata equals the definitions packaged with it. Ensure all prior models remain present and retain their qualified behavior.
 - [X] Extend complete-coverage/default/profile policies deliberately for the new model and freeze expected outcomes before observing the new release gate. Keep prior policy/evidence identities and declared failures; do not skip the new model to obtain a green package.
 - [X] Update current status/roadmap counts and model summaries from actual records. Count full formulations and restricted variants accurately. Export the database when part of the release; verify the exact model/source/approval identity survives export.
 
-**Exit:** the ordinary atlas generation path includes the model and its actual approval/evidence. No private adapter or hand-edited generated catalogue is required.
+**Exit:** the ordinary atlas generation path includes the model, its public profile and its actual approval/evidence. No private adapter or hand-edited generated catalogue is required.
 
 ## E7 — Make the packaged website work
 
 - [X] Use fresh matching Wasm/generated metadata and the standard web builder. Packaging must reject stale model/engine combinations. Include only permitted public assets; keep private sources and unapproved original measurement arrays out.
 - [X] Ensure the model is selectable and reachable by its shareable URL; source/DOI links, equations, assumptions, author/variant attribution, initialization, parameter units and limitations are visible.
-- [X] Display the accepted agent review and exact approved scope accurately. If the current exporter/UI only understands older review records, add and qualify generic support for agent-review/approval data; a registry entry alone does not make the website show it.
+- [X] Keep the public profile prominent and the accepted agent review, exact approved scope and retained checks accessible inside closed technical details. If the current exporter/UI only understands older review records, add and qualify generic support for agent-review/approval data; a registry entry alone does not make the website expose it accurately.
+- [X] In the actual packaged browser, inspect the catalogue summary, full public profile and laboratory/profile links. Confirm readable parameter meanings and units, correct initial-state guidance, a supported example and related-model links; check long names/tables on a narrow screen. Do not lead with agent/curation notes or imply that a literature-only entry is runnable.
 - [X] Provide the actual controls required by this model. Physical-time laws need honest time/rate/hold controls and labels; unsupported controls must be unavailable with a useful explanation. A static catalogue card or timed CLI alone is not the requested interactive delivery.
 - [X] In an actual browser, run the public default/named preset; inspect meaningful plots, units, all required state and absence of worker/console/network failures. Exercise parameter/initial-state changes, supported protocols, reset and latest-request behavior.
 - [X] Test export/import/replay and invalid input followed by recovery through the real exposed interface. Record fetched engine/catalogue identities so a stale browser cache cannot supply the evidence.
@@ -138,19 +144,20 @@ python3 -m http.server 8765 --bind 127.0.0.1 --directory .local/delivery-site
 
 Use the current workflow's other parity/profile/browser commands for the actual package. `test_web_package.mjs` is the strict all-default gate; any known unsupported defaults must stay visible, with separately identified supported-input qualification rather than an unexplained waiver. A Python HTTP server is a preview, not proof of deployment.
 
-**Exit:** the exact packaged public application demonstrates the approved model interactively, with accurate source/review/applicability disclosures and passing interface checks.
+**Exit:** the exact packaged public application explains the model through its public profile and demonstrates it interactively, with accurate source/review/applicability disclosures and passing interface checks.
 
 ## E8 — Publish and verify the live website
 
 - [X] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
-- [ ] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
-- [ ] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
-- [ ] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
-- [ ] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
-- [ ] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
-- [ ] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
+- [X] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
+- [X] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
+- [X] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
+- [X] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
+- [X] Verify the live public-profile data/rendering assets match the tested upload and the model's catalogue profile, related links and laboratory link display the intended explanation.
+- [X] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
+- [X] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
 
-**Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its sources/approval/evidence; the packaged and live website can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.
+**Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its public profile and sources/approval/evidence; the packaged and live website explain the model and can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.
 
 ## Handoff and resumption
 
@@ -160,10 +167,6 @@ Full-delivery dispatch prompt:
 
 > Read AGENTS.md and docs/MODEL_DELIVERY_CHECKLIST.md. Lead MODEL-<id> from existing source work through E0–E8 for the exact assigned variant and website scope. Maintain docs/ingestion/<id>/DELIVERY.md and the coordinator-owned board. Use the assigned worktree/whitelist; arrange specialist capability and separate-agent review handoffs, serial native/Wasm qualification and actual browser checks. Continue after packet handoff to atlas integration and verified live delivery when remote authorization exists. Preserve failures, sources and other workers' files. Report exact evidence and honest blocked/ready/live state; do not equate a packet or approval with delivery.
 
-## E6/E7 verification — 2 November2026
+## Final evidence
 
-Independent interface review accepted both stages, receipt c20d35b39ac6102855106a6d88c65ffee822a4f3f89093d3979c665f5cc3cd43. See DELIVERY.md and delivery-v1/interface-review-v1/REVIEW.md for each item, exact package/SQLite/preservation receipts and actual Chrome default/allprotocol/edit/import/recovery/overlay evidence. E8 remains open pending new remote authorization.
-
-Current merged package E6/E7 independently accepted by interface-review-v2/receipt.json (8de6a21e),1000files/16actualbrowserdownloads/19fetchedhashes; unchanged packet-layout gate passes and exact duplicates preserved. See DELIVERY.md current merged checkpoint. E8 first scoped-local-commit item completed; all remote/live items remain open.
-
-Current public-profile and E6/E7 qualification: interface-review-v3/receipt.json accepts the exact current package (1,428files),16actual Chrome exports,24asset identities and all seven parameter explanations. Receipt186e74b613275c9a37366b3a5adf6e67d68a05dc66bfbe180e9c86b9e3f21691. E8 authorized; remote/live verification pending.
+Scientific review: `catalogue/agent-reviews/barodesy-sand-agent-v1.json`. Current E6/E7: `delivery-v1/interface-review-v3/receipt.json`. Final E8: `delivery-v1/interface-review-v3/live-e8-v3/receipt.json` / `0f5dbbaa15ddac97e3c7be2ae83b8d9639056376f773f77da46d968b7a15e3d9`. Complete CI41368237082, Pages7482034845,80exact live assets, actual101-point Chrome/native/reference comparison and readable mobile profile all pass. See the ledger for scope, source receipts, retained failures and exclusions.
