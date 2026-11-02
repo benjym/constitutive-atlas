@@ -150,8 +150,8 @@ Use the current workflow's other parity/profile/browser commands for the actual 
 ## E8 — Publish and verify the live website
 
 - [X]Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
-- [ ]Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
-- [ ]Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
+- [X]Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
+- [-]Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
 - [ ]Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
 - [ ]Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
 - [ ]Verify the live public-profile data/rendering assets match the tested upload and the model's catalogue profile, related links and laboratory link display the intended explanation.
@@ -174,3 +174,6 @@ E4 v5 actual Wasm/reference/parity evidence2026-11-02:136histories/two repeats/2
 
 
 2026-11-02 E7 closure: exact disclosure fixd17aa533/f7b09ec2 independently reviewed1a5b1511; full actual package-v4 builder/database/supportedgates pass, actual browser-v4/CHECKS.json disclosure/profile-to-lab/default full physical equality/current assethashes/revision/narrowlayout pass. Retained diagnosticrelease.json404 belongs to assistantprobe, not application flow. Local source commits7f145f2d/d17aa533 and final evidence commit prepared; private site/source originals excluded. E0–E7 complete; E8 ready to publish, pending explicit remote authorization, current CI and live verification.
+
+
+2026-11-02 E8 authorized: useryes, main40b607ba fastforwardpushed, currentCI41381203577 (macOSprovenancerecorderfailures retained; remainingLinuxstillrunning), separateControlledpath41381203557passed. Deployment/livepending. Newversionedrecorder sourcecorrection55mockchecks awaitsindependentreview; no numericalgatechange.

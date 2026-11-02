@@ -1,0 +1,27 @@
+# Versioned CMake dependency alias recorder
+
+Task `FIX-bingham-ci-dependency-alias-v1`. This packet proposes three source files for separate review: new `tools/record_cmake_profile_build_v2.py`, portable fake-file `tests/test_cmake_profile_build_v2.py`, and a minimal `.github/workflows/verify.yml` update. No installation, Git/remote action, compiler/tool execution, material call, build or browser call occurred.
+
+The actual macOS native CI41381203577 failed in the v1 recorder with `Duplicate dependency member` before the first numerical consumer. The coordinator also retained the matching macOS Wasm-job failure. Saved local depfiles independently reproduce v1's failure: distinct SDK `usr/include/sched.h` and `usr/include/pthread/sched.h` tokens resolve through a symlink to one canonical file. This corroborates a generic provenance limitation. The exact failed CI depfiles were not acquired; this packet does not assert their precise alias pair or claim a successful CI run.
+
+V1 remains byte-exact and accepts only its old receipt kind. V2 keeps all existing safeguards outside the dependency interpretation and declares distinct pre/post/failed-v2 receipt kinds. Each depfile's raw SHA is retained alongside its ordered original tokens, absolute lexical paths, canonical paths, canonical byte hashes, traversed symlink paths/raw targets/absolute targets and alias groups by member index. Only the final canonical file collection deduplicates aliases. Repeated lexical paths still fail. Every canonical collision requires a recorded symlink explanation. Raw depfiles remain among copied build records, and complete snapshots must match across capture and verification. Post receipts bind the pre-receipt and canonical dependency-identity digest; header-byte changes, missing paths and alias retargets therefore fail even when the new target has equal bytes.
+
+The supported alias capability is deliberately bounded: **any `..` component in a dependency token or symlink target is rejected before normalization**. This avoids inventing a general filesystem traversal resolver. Missing/empty/nonregular files, malformed targets, duplicate lexical members, dangling links, cycles/depth beyond40, unsafe control/expansion tokens and changed identities fail closed. Existing local-source/build/response-file symlink prohibitions remain intact; only fully recorded compiler-header alias identities are admitted. This is an integrity receipt, not binary attestation, reproducibility, numerical approval or general SDK support.
+
+The first unsealed draft collapsed parent components before symlink traversal. Independent review identified that it could describe the wrong header for ambiguous parent paths. Its bytes, initial52-test log and saved proof are retained under `superseded-attempt1/` and `attempt1-*`; `PRESEAL-FINDINGS.json` records the correction. Passing those initial fixtures did not establish the unsupported case. A preparation-recipe rerun also temporarily omitted the workflow mock hooks; the source guard rejected that intermediate state (`authoring-attempt2-source-guard.log`). The final recipe restores all three hooks and passes the inverse-byte check. No scientific gate or earlier failure was rewritten.
+
+The final portable suite has55 unittest methods: all40 original methods preserved AST-exact, plus15 alias/identity/parent-bound negatives and positives. All subprocess/tool/material execution is blocked during these tests. The earlier aggregate46-check acceptance is not reinterpreted as46 unittest methods. `SOURCE-GUARDS.json` records exact old40-source provenance through `INPUTS.json`,149/121 old source closures,187 actual qualified v5 source bindings and88 E5 artifacts. None of the three candidate paths intersects those scientific closures. Original model/runtime/solver/gates/studies remain unchanged.
+
+The workflow changes only v1→v2 recorder call paths and adds `python -B tests/test_cmake_profile_build_v2.py` immediately before each of its three existing Bingham qualification blocks. Removing those additions exactly recovers every original workflow byte; no prior step or numerical command is removed.
+
+`PROOF.json.gz` and `MENTION-CLASSIFICATION.json` record the narrow current-workflow-hash consumer audit. All historical mentions are immutable candidate/private-context pins, copied preparation namespaces or transition records; there is no recognized active root-relative current-workflow consumer. Thus no affected sibling map or recursive reverse edge is seeded, and no map/archive changes are proposed. Existing historical receipt outcomes and immutable preparations stay untouched. The old workflow/tool bytes are preserved under `before/`.
+
+Reproduce source/mock checks using a minimal private context with the proposed helper/test and the exact existing versioned schedule header:
+
+```
+python3 -B /private/tmp/atlas-bingham-ci-alias-v1/tests/test_cmake_profile_build_v2.py -v
+python3 -B docs/ingestion/bingham-comsol63/ci-dependency-alias-v1/check_saved_depfiles.py
+python3 -B docs/ingestion/bingham-comsol63/ci-dependency-alias-v1/check_source_guards.py
+```
+
+`INSTALLATION.json` is the exact three-file proposal with baseline hashes, not permission or a claim that installation occurred. `MANIFEST.json` seals candidate and retained evidence bytes. Next action: independent review, coordinator baseline checks/install, then a fresh full CI run. Numerical success and Pages delivery remain unclaimed by this source-only fix.
