@@ -22,12 +22,12 @@ This ledger follows [the E0–E8 checklist](../../MODEL_DELIVERY_CHECKLIST.md) a
 - [X] **E5 — Agent approval:** separate actual nine-item review accepts the exact bytes and bounded numerical scope.
 - [X] **E6 — Atlas:** normal catalogue, approval, sources, public profile and database export integrated; prior entries and profiles preserved.
 - [X] **E7 — Packaged website:** full standard package and actual desktop/mobile browser controls, plots, replay/recovery and source/review disclosure pass.
-- [-] **E8 — Live delivery:** application, all CI jobs, Pages, actual upload/live assets and live browser pass. Pending final clean worktree removal.
+- [X] **E8 — Live delivery:** authorized main publication, all CI jobs, exact Pages/upload/live assets, actual live browser and verified task-owned cleanup are complete.
 
 ## Current handoff
 
-- **State:** live delivery verified; final clean worktree removal remains.
-- **Owner / next action:** /root will commit the final browser/cleanup evidence, retain and verify the branch bundle, remove the clean completed worktree through Git, and publish the evidence-only closeout.
+- **State:** E0–E8 complete within the exact independently approved scope; all required delivery and cleanup gates verified.
+- **Owner / next action:** /root; no required delivery work remains. The evidence-only closeout records the verified application release and actual cleanup.
 - **Scientific blockers:** none within the approved scope.
 - **Limitations:** no experimental calibration/validation, vendor-software equivalence, finite deformation/rotation, hardening, thermal or pore-fluid response, FE-host tangent or broad custom-input accuracy claim. The source theory/settings discrepancy SC-PERZ-01 is disclosed rather than silently reconciled.
 
@@ -43,6 +43,8 @@ This ledger follows [the E0–E8 checklist](../../MODEL_DELIVERY_CHECKLIST.md) a
 | E8 CI | [terminal release receipt](live-release-v1/release-receipt-v1/RESULT.json), [four actual CI uploads](live-release-v1/ci-artifacts-v2/) | All six required jobs pass. Both OS pairs independently pass the original study and 15,667 exact physical-value comparisons. |
 | E8 upload/live | [upload/live result](live-release-v1/upload-live-v1/RESULT.json), [scope](live-release-v1/UPLOAD-SCOPE.json) | 1,465 authenticated upload files; 20 critical tested inputs unchanged; 469 selected live assets exact. All nine prior SQLite row bags preserved, integrity and foreign-key checks pass. |
 | E8 browser | [live checks](live-release-v1/browser-v1/CHECKS.json), [numerical checks](live-release-v1/browser-v1/EXPORT-CHECKS.json), [raw observations](live-release-v1/browser-v1/ACTUAL-TOOL-RESULTS.json) | Three real UI runs / 342 reference comparisons; complete results exactly match E7; 25 browser-fetched identities; four technical links HTTP 200; five parameter rows, 375 px no overflow, zero console warnings/errors or request failures. |
+
+| E8 cleanup | [actual worktree removal](live-release-v1/WORKTREE-CLEANUP.json), [final closeout](live-release-v1/DONE.json) | All owned copies/caches removed after lossless retention; clean completed worktree removed without force; shared root index unchanged. |
 
 ## Approval and transaction identity
 
@@ -73,7 +75,7 @@ This ledger follows [the E0–E8 checklist](../../MODEL_DELIVERY_CHECKLIST.md) a
 | Actual browser evidence and temporary Python caches | Exact public browser copies retained in the packet; owned root duplicates/automatic files and dedicated-worktree caches archived and removed. [Final small-resource cleanup](live-release-v1/FINAL-SMALL-RESOURCE-CLEANUP.json), plus retained E7 cleanup receipts. |
 | Raw CI and Pages uploads | Retain authenticated original ZIPs privately under root `.local/perzyna-retained-v1/`; public digests/manifests and genuine reports are committed. |
 | Owned processes and browser | E7 preview 54116, board monitor 58655, CI watch 95361, download 29807, HTTP check 17098 and cleanup 99079 ended. Browser returned to `about:blank`; cache and 1280 × 900 viewport restored; no live preview was started. [Slot release](live-release-v1/browser-v1/SLOT-RELEASE.json). |
-| Completed isolated worktree | Pending final clean worktree removal. The retained commit and verified branch bundle must precede `git worktree remove`; no forced removal or shared root index operation. |
+| Completed isolated worktree | Removed cleanly through `git worktree remove`, after retaining commit `1c50ebe663d070b8e3c11a2cdd724313763c08dc` and verifying its recovery bundle. [Actual removal receipt](live-release-v1/WORKTREE-CLEANUP.json); shared root index unchanged. |
 | Other owners' resources | Borrowed Bingham assets, other worktrees, shared SDKs/caches and root `paper/` are untouched. |
 
 The two large cleanups remove 2,253,654,436 duplicate regular-file bytes. Free space after the second cleanup was 20,294,062,080 bytes; concurrent owners may change global free space. Required archives, private originals and raw authenticated uploads remain deliberately retained by /root.
@@ -84,4 +86,6 @@ The original source harness failure, rejected unexecuted execution-v1 plan, inde
 
 ## Completion statement
 
-Source complete; declarative executable scope qualified; independent numerical references and separate agent approval accepted; normal atlas/public profile and packaged browser complete; CI, exact Pages delivery, live bytes/database and actual live browser verified. Experimental validation is not claimed. Final clean worktree removal remains before E8 is closed.
+Source complete; declarative executable scope qualified; independent numerical references and separate agent approval accepted; normal atlas/public profile and packaged browser complete; CI, exact Pages delivery, live bytes/database and actual live browser verified. Experimental validation is not claimed. E0–E8 are complete; the accepted scientific scope and limitations remain unchanged.
+
+Final worktree removal was verified after clean status, no ignored/untracked files, an empty active-consumer inventory and successful bundle verification. The retained bundle is 5,386,300 bytes, SHA-256 `143ebface8465a3144bfef63e66bc97ba5ec0ef88051cf1502193b4a115ce339`. Free space immediately afterward was 23,919,579,136 bytes. Final tracking commits preserve the tested application revision `106a9cf8c327c9c262a97eb86aa04dae3f6cadb8`.
