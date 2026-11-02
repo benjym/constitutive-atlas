@@ -13,7 +13,7 @@ Copy to `docs/ingestion/perzyna-comsol63/DELIVERY.md`. Follow `docs/MODEL_DELIVE
 - Candidate definition path / SHA-256: `models/research/perzyna/perzyna-comsol63-mises-perfect-zero-spin-ode.json`,7bfc33578593fab8c806dd1cd6473f54b9e2cd5cbf07ecacaffd328118e103ac.
 - Worktree / authorized path whitelist: /private/tmp/atlas-perzyna-delivery-v1 on codex/perzyna-comsol63-delivery-v1, baseline54f409b37deaed0ab82a85cdac9f489bc65e1309. Coordinator owns new Perzyna packet/model/generic-profile build wiring/CI/tooling/web/catalogue integration only after scoped proposals and preservation review; no existing model migration or root shared Git operation.
 - Implementation run ID(s):
-- Independent review run ID: /root/perzyna_source_review, bounded E1–E3 ACCEPT; source-contract-review-v1/MANIFEST.json98fa6f52 verified88inputs/3outputs;1041checks. Actual E5 pending.
+- Independent review run ID: /root/perzyna_source_review, bounded E1–E3 ACCEPT; source-contract-review-v1/MANIFEST.json98fa6f52 verified88inputs/3outputs;1041checks. Actual E5 ACCEPT: /root/perzyna_scientific_e5, scientific-review-v1/MANIFEST.json979bc009, canonical record7cfcd238; all nine items pass.
 - Build/execution owner and handoff:
 - Remote authorization reference (or pending): session prior push/main/CI/Pages authorization followed by new model end-to-end instruction; carry through concrete E7 release before remote action.
 
@@ -33,8 +33,8 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 - Current phase / overall state: E0–E5 verified; accepted exact scientific/native/Wasm scope. E6 atlas/profile/database preservation passed; standard package and actual browser/live gates remain.
 - Current owner: /root coordinator
-- Blocker / missing evidence: actual independent nine-item E5 review, atlas integration, packaged/live browser and CI delivery remain. No in-scope numerical failure.
-- Smallest next action / next owner: seal exact E0–E4 commit; dispatch independent scientific reviewer against E4-EVIDENCE.json2ae273fb.
+- Blocker / missing evidence: shared execution slot held by EXEC-interface2016-standard-package-browser-v1; Perzyna queued. Standard full package, actual browser, CI and live delivery remain. No in-scope numerical failure.
+- Smallest next action / next owner: after genuine Interface2016 terminal release, verify process inventory and claim Perzyna serial package/browser slot; run normal builder with qualified engines.
 - Resume when:
 - Known limitations / retained failures:
 
@@ -76,13 +76,15 @@ Update throughout the task and at every final/blocked/ready-to-publish handoff. 
 - Removed paths / stopped process identities:
 - Evidence retained: exact hashes, archive recovery checks and usable receipt locations:
 - Worktree removal: clean status, retained commit and preserved required ignored outputs:
-- Cleanup remaining / blocker / next owner: active task worktree and private source originals retained by /root for full delivery; no build/package/server yet.
+- Cleanup remaining / blocker / next owner: active task worktree and private source originals retained by /root for full delivery; native/Wasm qualification and exact approved asset restoration complete; no preview server yet. Borrowed Bingham assets remain read-only and outside task cleanup ownership.
 - Space reclaimed / free space after substantial cleanup:
 
 ## Completion statement
 
 Record separately: source complete; executable scope; independent numerical qualification; agent approval; atlas inclusion and public profile; packaged browser; live deployment; experimental validation. An absent experimental comparison can be an explicit limitation. A missing public profile, missing website support or unverified deployment cannot be called full delivery.
 
-Active resource inventory: isolated worktree /private/tmp/atlas-perzyna-delivery-v1 and its ignored private originals/cache retained for E4–E8 by /root; durable original copies verified under shared ignored .local/private-sources/perzyna-comsol63/source-v1; no preview process or compiled artifact yet.
+Active resource inventory: isolated worktree /private/tmp/atlas-perzyna-delivery-v1 and its ignored private originals/cache retained for E4–E8 by /root; durable original copies verified under shared ignored .local/private-sources/perzyna-comsol63/source-v1; qualified native/Wasm artifacts and approved public assets retained for E7; no preview process yet.
 
 E5 transaction clarification: accepted schedule scope preserves completed samples and returns the last committed prefix on failure; it does not roll the whole schedule back to its initial state. Source-v1 prospective wording is retained; independent scientific-review-v1 explicitly reconciles this boundary against actual late-budget evidence.
+
+CI orchestration source checks: ci-driver-check-v1/RESULT.json passes five manufactured scenarios with zero compiled calls. Native/paired serial ordering, consumer-failure post-verification, capture failure and stale metadata rejection checked. The original mock classifier failure is retained in ATTEMPT1.txt; these checks do not substitute for actual CI.

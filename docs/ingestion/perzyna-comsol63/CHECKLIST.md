@@ -105,11 +105,11 @@ Model-local evidence: execution-v2/FREEZE.json7dcc4a01, independent plan ACCEPT3
 
 ## E5 — Independent agent review and approval
 
-- [ ] Hand the exact candidate, readable source receipts, dossier, prospective gates and complete saved results to a separate agent run. Record actual implementation/reviewer run IDs and independence basis. Do not ask the implementation agent to certify its own transcription.
-- [ ] The reviewer checks all nine items in [checklist v1](AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](AGENT_REVIEW_TEMPLATE.json).
-- [ ] Resolve blocking findings; rerun only affected qualification and regression checks when justified. Obtain a new or updated reviewer decision bound to the final model bytes and artifacts. Preserve superseded failures and decisions.
-- [ ] Store the accepted record under `catalogue/agent-reviews/`, validate it and generate the approval entry. Coordinator integration requires no human scientific sign-off or further user approval.
-- [ ] Confirm approval refers to the exact intended formulation and supported interfaces/parameter/protocol scope. Keep experimental validation separately assessed; no experimental match is required merely to illustrate an otherwise verified law.
+- [X] Hand the exact candidate, readable source receipts, dossier, prospective gates and complete saved results to a separate agent run. Record actual implementation/reviewer run IDs and independence basis. Do not ask the implementation agent to certify its own transcription.
+- [X] The reviewer checks all nine items in [checklist v1](AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](AGENT_REVIEW_TEMPLATE.json).
+- [X] Resolve blocking findings; rerun only affected qualification and regression checks when justified. Obtain a new or updated reviewer decision bound to the final model bytes and artifacts. Preserve superseded failures and decisions.
+- [X] Store the accepted record under `catalogue/agent-reviews/`, validate it and generate the approval entry. Coordinator integration requires no human scientific sign-off or further user approval.
+- [X] Confirm approval refers to the exact intended formulation and supported interfaces/parameter/protocol scope. Keep experimental validation separately assessed; no experimental match is required merely to illustrate an otherwise verified law.
 
 ```sh
 python3 -B -m atlas.agent_review catalogue/agent-reviews/MODEL-agent-v1.json --for-approval
@@ -117,6 +117,8 @@ python3 -B -m atlas.agent_review catalogue/agent-reviews/MODEL-agent-v1.json --a
 ```
 
 **Exit:** an accepted independent agent checklist supports a current, exact-definition approval entry, with no unresolved in-scope blockers.
+
+Evidence: scientific-review-v1/REVIEW.md and canonical catalogue/agent-reviews/perzyna-comsol63-agent-v1.json; normal --for-approval validator and generated atlas-integration-v1/approval-entry.json pass. Exact model and all accepted scope preserved.
 
 ## E6 — Integrate into the atlas
 
