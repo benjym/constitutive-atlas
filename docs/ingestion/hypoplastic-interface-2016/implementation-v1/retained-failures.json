@@ -1,0 +1,20 @@
+[
+  {
+    "stage": "structural validation before model execution",
+    "sha256": "7f63412c0378c8ec5647ff7e08b97a003e50087b0fd56d8aff8f11dc3fde8f68",
+    "error": "invalid, duplicate or reserved identifier: sigma_n",
+    "resolution": "Rename sigma_n=>sigma_normal and sigma_p=>sigma_plane. Policy source labels unchanged; no equations/tolerances altered."
+  },
+  {
+    "stage": "structural validation before model execution",
+    "sha256": "50f8f89e43d1f1a2d7ab149f8efbba81b1ff9c18291052790d9a02c2c1f0a1f2",
+    "error": "invalid, duplicate or reserved identifier: zn",
+    "resolution": "Rename zn=>dev_normal; no equation or policy change."
+  },
+  {
+    "stage": "Independent prospective backend assessor review, before compiled observations",
+    "sha256": "e5555ab6dd61e68473b6e88e139151d172c0f8256efbdf8a68abb1fd7465243a",
+    "error": "V1 max aggregation could ignore later NaN components and accept malformed result rows. V1 retained unchanged.",
+    "resolution": "Distinct check_backend_results_v2.py requires full shapes/types/finite scalars/exact IDs, component bounds and observable bindings; 50 fault injections rejected. Original candidate, source references and acceptance thresholds unchanged."
+  }
+]

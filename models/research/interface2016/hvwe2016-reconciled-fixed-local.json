@@ -1,0 +1,449 @@
+{
+  "schema_version": "0.3",
+  "id": "hvwe2016-reconciled-fixed-local",
+  "name": "Fully rough hypoplastic interface — Stutz–Mašín–Wuttke (2016), reconciled fixed local",
+  "family": "hypoplastic granular interface",
+  "status": "draft",
+  "description": "Complete fully rough HvWE reduced interface with original VW96 host explicitly inherited/reconciled: fs/fd counted once and compression pressure sign repaired. Fixed local zero spin; compression-positive effective stress; three prescribed normal strain/source shear angle controls. No finite-slip/thickness adapter, general bulk 3D, CNL/CNS, opening/contact, roughness degradation or experimental validation. Original1996 Hochstetten host parameters and numerical illustrative state; study domain restrictions are not source-universal ranges. Exact2016 article visual receipt remains a disclosed gap; source-reconciled identity accepted by separate source gate, not E5 approval.",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1007/s11440-016-0440-1",
+      "locator": "2016 Eqs26,30–33 and Section4.1; fully rough HvWE original-host inheritance. Exact article visual receipt unavailable; source-v2 and source-review-v1 disclose reconciliation.",
+      "role": "Interface formulation identity and reduction"
+    },
+    {
+      "url": "https://www.geotechnics.ifg.uni-kiel.de/en/publications/2016-hanshenningstutz.pdf",
+      "locator": "Author2016 thesis printed70/75/76, PDF102/107/108; raw SHA52e1eb5b510844f1d4a230935dffc03f77df149189cd8e166c9039fa3bd977ed; host/reduction visually read.",
+      "role": "Readable author formulation"
+    },
+    {
+      "url": "https://doi.org/10.1002/(SICI)1099-1484(199607)1:3%3C251::AID-CFM13%3E3.0.CO;2-3",
+      "locator": "Original1996 Eqs2,40–46,TableI and AppendixC; visually verified primary PDF SHA70eb1297cd25e67daf8b35b8f8c22f42c3a7fae2c0a62ae9e0079e3b03e64100.",
+      "role": "Explicit inherited host closure and illustrative material parameters"
+    }
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "path_ode",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "path_coordinate": {
+          "quantity": "path_coordinate",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite"
+        },
+        "normal_value": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "normal_strain",
+            "derivative_order": 0
+          }
+        },
+        "normal_rate": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "normal_strain",
+            "derivative_order": 1
+          }
+        },
+        "gamma_x_value": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "gamma_x",
+            "derivative_order": 0
+          }
+        },
+        "gamma_x_rate": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "gamma_x",
+            "derivative_order": 1
+          }
+        },
+        "gamma_z_value": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "gamma_z",
+            "derivative_order": 0
+          }
+        },
+        "gamma_z_rate": {
+          "quantity": "control",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "stage",
+          "constraint": "finite",
+          "binding": {
+            "control": "gamma_z",
+            "derivative_order": 1
+          }
+        }
+      },
+      "advance": {
+        "start_coordinate": {
+          "quantity": "path_coordinate",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "start",
+          "constraint": "finite"
+        },
+        "progress": {
+          "quantity": "path_progress",
+          "shape": "scalar",
+          "unit": "1",
+          "sampling": "interval",
+          "constraint": "nonnegative_finite"
+        }
+      }
+    },
+    "stress": {
+      "source": "observable",
+      "name": "stress",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma_normal",
+      "sigma_plane",
+      "tau_x",
+      "tau_z",
+      "e"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "parameters": {
+    "p_ref": {
+      "default": 100000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "Numerical stress scale; not a material parameter"
+    },
+    "phi_c": {
+      "default": 0.5759586531581288,
+      "min": 0.01,
+      "max": 1.4,
+      "unit": "1",
+      "label": "Critical friction angle (rad)"
+    },
+    "hs": {
+      "default": 1000000000.0,
+      "min": 1,
+      "max": 10000000000000.0,
+      "unit": "Pa",
+      "label": "Granular hardness"
+    },
+    "n": {
+      "default": 0.25,
+      "min": 0.01,
+      "max": 0.99,
+      "unit": "1",
+      "label": "Pressure exponent"
+    },
+    "ed0": {
+      "default": 0.55,
+      "min": 0.01,
+      "max": 3,
+      "unit": "1",
+      "label": "Dense-limit zero-pressure void ratio"
+    },
+    "ec0": {
+      "default": 0.95,
+      "min": 0.02,
+      "max": 4,
+      "unit": "1",
+      "label": "Critical zero-pressure void ratio"
+    },
+    "ei0": {
+      "default": 1.05,
+      "min": 0.03,
+      "max": 5,
+      "unit": "1",
+      "label": "Loose-limit zero-pressure void ratio"
+    },
+    "alpha": {
+      "default": 0.25,
+      "min": 0.01,
+      "max": 2,
+      "unit": "1",
+      "label": "Density peak-strength exponent"
+    },
+    "beta": {
+      "default": 1.5,
+      "min": 0,
+      "max": 5,
+      "unit": "1",
+      "label": "Density stiffness exponent"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma_normal",
+      "shape": "scalar",
+      "unit": "Pa",
+      "scale": "p_ref",
+      "initial": 100000.0,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "local_effective_stress_component",
+        "transformation": "fixed_components"
+      }
+    },
+    {
+      "name": "sigma_plane",
+      "shape": "scalar",
+      "unit": "Pa",
+      "scale": "p_ref",
+      "initial": 80000.0,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "local_effective_stress_component",
+        "transformation": "fixed_components"
+      }
+    },
+    {
+      "name": "tau_x",
+      "shape": "scalar",
+      "unit": "Pa",
+      "scale": "p_ref",
+      "initial": 0.0,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "local_effective_stress_component",
+        "transformation": "fixed_components"
+      }
+    },
+    {
+      "name": "tau_z",
+      "shape": "scalar",
+      "unit": "Pa",
+      "scale": "p_ref",
+      "initial": 0.0,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "local_effective_stress_component",
+        "transformation": "fixed_components"
+      }
+    },
+    {
+      "name": "e",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0.67,
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "trsig",
+      "expr": "sigma_normal + 2*sigma_plane"
+    },
+    {
+      "name": "hn",
+      "expr": "sigma_normal/trsig"
+    },
+    {
+      "name": "hp",
+      "expr": "sigma_plane/trsig"
+    },
+    {
+      "name": "hx",
+      "expr": "tau_x/trsig"
+    },
+    {
+      "name": "hz",
+      "expr": "tau_z/trsig"
+    },
+    {
+      "name": "dev_normal",
+      "expr": "hn-1/3"
+    },
+    {
+      "name": "zp",
+      "expr": "hp-1/3"
+    },
+    {
+      "name": "Z",
+      "expr": "sym(dev_normal,zp,zp,sqrt(2)*hx,0,sqrt(2)*hz)"
+    },
+    {
+      "name": "jdev",
+      "expr": "dot(Z,Z)"
+    },
+    {
+      "name": "cubic",
+      "expr": "cube_trace(Z)"
+    },
+    {
+      "name": "lode_product",
+      "expr": "select(jdev > 0, -sqrt(18)*cubic/jdev, 0)"
+    },
+    {
+      "name": "shape_denom",
+      "expr": "2+sqrt(2)*lode_product"
+    },
+    {
+      "name": "shape_radicand",
+      "expr": "3*jdev/8+(2-3*jdev)/shape_denom"
+    },
+    {
+      "name": "shapeF",
+      "expr": "select(jdev > 0, sqrt(shape_radicand)-sqrt(3*jdev)/(2*sqrt(2)), 1)"
+    },
+    {
+      "name": "a",
+      "expr": "sqrt(3)*(3-sin(phi_c))/(2*sqrt(2)*sin(phi_c))"
+    },
+    {
+      "name": "rho",
+      "expr": "exp(-(trsig/hs)**n)"
+    },
+    {
+      "name": "ed",
+      "expr": "ed0*rho"
+    },
+    {
+      "name": "ec",
+      "expr": "ec0*rho"
+    },
+    {
+      "name": "ei",
+      "expr": "ei0*rho"
+    },
+    {
+      "name": "fd",
+      "expr": "((e-ed)/(ec-ed))**alpha"
+    },
+    {
+      "name": "fe",
+      "expr": "(ec/e)**beta"
+    },
+    {
+      "name": "baro_denom",
+      "expr": "3+a**2-sqrt(3)*a*((ei0-ed0)/(ec0-ed0))**alpha"
+    },
+    {
+      "name": "fb",
+      "expr": "hs/n*(1+ei)/ei*(ei0/ec0)**beta*(trsig/hs)**(1-n)/baro_denom"
+    },
+    {
+      "name": "h2",
+      "expr": "hn**2+2*hp**2+2*hx**2+2*hz**2"
+    },
+    {
+      "name": "factor",
+      "expr": "fb*fe/h2"
+    },
+    {
+      "name": "hd",
+      "expr": "hn*normal_rate+hx*gamma_x_rate+hz*gamma_z_rate"
+    },
+    {
+      "name": "dnorm",
+      "expr": "sqrt(normal_rate**2+(gamma_x_rate**2+gamma_z_rate**2)/2)"
+    },
+    {
+      "name": "nonlin",
+      "expr": "fd*a*shapeF*dnorm"
+    },
+    {
+      "name": "snbar",
+      "expr": "sigma_normal/p_ref"
+    },
+    {
+      "name": "spbar",
+      "expr": "sigma_plane/p_ref"
+    },
+    {
+      "name": "txbar",
+      "expr": "tau_x/p_ref"
+    },
+    {
+      "name": "tzbar",
+      "expr": "tau_z/p_ref"
+    }
+  ],
+  "domain": [
+    "sigma_normal > 0*p_ref",
+    "sigma_plane > 0*p_ref",
+    "snbar*spbar > txbar**2+tzbar**2",
+    "trsig > p_ref*1e-8",
+    "ed0 < ec0",
+    "ec0 < ei0",
+    "e > ed",
+    "e < ei",
+    "shape_denom > 0",
+    "shape_radicand > 0",
+    "shapeF > 0",
+    "baro_denom > 0",
+    "fb > 0*p_ref"
+  ],
+  "initial_checks": [],
+  "equations": {
+    "sigma_normal": "factor*(shapeF**2*normal_rate+a**2*hd*hn-nonlin*(hn+dev_normal))",
+    "sigma_plane": "factor*(a**2*hd*hp-nonlin*(hp+zp))",
+    "tau_x": "factor*(shapeF**2*gamma_x_rate/2+a**2*hd*hx-nonlin*(2*hx))",
+    "tau_z": "factor*(shapeF**2*gamma_z_rate/2+a**2*hd*hz-nonlin*(2*hz))",
+    "e": "-(1+e)*normal_rate"
+  },
+  "observables": [
+    {
+      "name": "stress",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "p_ref",
+      "expr": "sym(sigma_normal,sigma_plane,sigma_plane,sqrt(2)*tau_x,0*p_ref,sqrt(2)*tau_z)"
+    },
+    {
+      "name": "pressure",
+      "shape": "scalar",
+      "unit": "Pa",
+      "scale": "p_ref",
+      "expr": "trsig/3"
+    },
+    {
+      "name": "void_ratio",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "expr": "e"
+    }
+  ]
+}

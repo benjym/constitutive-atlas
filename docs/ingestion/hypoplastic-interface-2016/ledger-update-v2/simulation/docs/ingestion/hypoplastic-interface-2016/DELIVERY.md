@@ -1,0 +1,37 @@
+# Hypoplastic interface 2016 — delivery ledger
+
+Successor draft prepared 2 November 2026; not installed. E0–E7 evidence is complete subject to final independent delivery review. E8 remains pending; the local revision has not been pushed and this is not a live-delivery claim.
+
+Umbrella: MODEL-hypoplastic-interface-2016. Executable identity: `hvwe2016-reconciled-fixed-local`, candidate SHA-256 `8ab12775390be5f5aa8f7db7a37da0990d444a343d037bd35fa36e3b5bdbc7ce`. This is the independently accepted source-reconciled fully rough HvWE2016 interface law with VW96 host closure, supported by readable author2016 thesis and original1996 host sources. The exact2016 journal visual-copy gap remains disclosed; no byte-exact journal transcription is claimed.
+
+The formulation uses compression-positive local effective Cauchy stress, fixed local axes and zero spin. Five states are normal stress, shared in-plane normal stress, two shear tractions and void ratio. Controls are normal compression strain and two dimensionless source shear angles, with shear stretching equal to half the angle derivative. There is no physical clock, pore-pressure law, finite-slip/thickness adapter, CNL/CNS controller, contact opening/recontact or finite-rotation transport. No interface calibration or experimental validation is claimed.
+
+## Stage evidence
+
+- [X] E0: Coordinator claim, exact bounded scope, separate child ownership and delivery plan recorded.
+- [X] E1: Source-v2 manifest9637c885 and separate source review accept the disclosed source-reconciled realization. Readable originals are retained privately; the exact-journal visual gap remains explicit.
+- [X] E2: Complete v0.3 path contract, source-angle conventions, initialization/transactions and prospective policybd8ee5fc accepted before observations. Source clarification explains the p_ref pressure margin.
+- [X] E3: Candidate validates/generates. Independent Cartesian reference convergence, eleven Python increments, all five states/six stress components and history/rejection/restart/rollback/recovery checks accepted. Earlier identifier/checker failures remain preserved.
+- [X] E4: Native59/Wasm59 requests, frozen independent references, repeat/restart/rollback/recovery/parity accepted;119 source inputs and six artifacts checked independently. Python regression25 passes with three optional compiled skips disclosed.
+- [X] E5: Separate all-nine accepted review13aa0f26 binds97 artifacts and generated approval entry. This is numerical/scientific admission for the declared scope, not experimental validation.
+- [X] E6: Standard catalogue/profile/main-laboratory router/controller, guarded builder/CI hooks and five qualified public engine/generated assets integrated. Independent source/tracking reviews accepted. Packaged database preserves all nine prior table rowbags and adds the exact model/review.
+- [X] E7: Actual standard package-v2 passed in331.325 seconds at local sourcecommit dcc6457, with all216 source pins unchanged and1,471 package files sealed. Actual CUA browser qualification at the Pages project prefix passed default40 intervals, five plots/full state and stress, parameter/start-state/second-shear edits, export invalidation, reset, real file import/fresh replay, stale-identity rejection, invalid material recovery, latest-request/model-switch behavior, related/profile links and375x812 layout. Three real downloaded exports are exactly equal and pass66 frozen initial/endpoint comparisons at0.2Pa/2e-6.26 served assets/links match, with zero console warnings/errors and zero HTTP4xx/5xx. Final independent delivery review remains a required closeout gate.
+- [ ] E8: Final scoped release/evidence integration, authorized remote publication/CI and live asset/route/model verification remain pending. Local dcc6457 has not been pushed. The umbrella remains open.
+
+## Retained failures and exact release identity
+
+Initial local sourcecommit `e6f734d5988d941776995bd48900c1a9b230fec2`; map-only successor/tested revision `dcc645785faa3c83d791fdad92e7f3a20cab9721`. Package-v1 failed after337.373 seconds because the immutable accepted E5 document was absent from the common map's document pins. Its original run/logs remain unchanged. The additive fix archived the old map first, added only the new review pin, retained23 old document pins/18 entries and resolved all97 supporting receipts. Package-v2 is a distinct successful run, not a rewrite of v1. Pure five-bundler source guards and216-blob preflight are retained separately.
+
+Evidence: source-v2/, source-review-v1/, implementation-v1/, execution-v1/, approval-v1/, interface-v1/, integration-v1/, integration-review-v1/, tracking-review-v1/, package-v1/, package-map-fix-v1/, package-map-review-v1/, package-v2/ and browser-v1/. Browser manifest binds44 files; qualification.json records actual checks, tooling observations and preview shutdown. The task-owned preview server exited143 after SIGTERM, tab closed and viewport reset. The coordinator released the execution slot. This is bounded local qualification; no claim is made about other tasks' consumers.
+
+## Resource retention and remaining cleanup
+
+Obsolete provisional release/ was already removed by unlink-only cleanup after actual elevated process/lsof checks were empty for that exact directory. The observed free-space increase was411,381,760 bytes; this is not an exact directory-size measurement or final cleanup completion. Keep cleanup-v1 original audit and later consumer/removal receipts.
+
+Retain current release-v2/, successful site-v2/, failed site-v1/ and source-guard-checks-v1/ pending final evidence/release retention. Retain source/native/wasm at their literal saved-review paths, em-cache for repeat builds, original private sources and durable qualified artifacts. Other-task Bingham inputs are read-only and never cleanup targets. Cleanup-v2 inventories the failed site (1,387 files/1,098,592,308 logical bytes) and guard copies (84 files/2,814,275 bytes, all pins verified). Its compressed archive/recovery/consumer-check plan has not been executed; do not discard failed outputs from regeneration assumptions.
+
+## Ledger preservation and next action
+
+Before installing this successor, preserve exact predecessor DELIVERY/CHECKLIST bytes at canonical SHA-addressed snapshots and install the current additive archive maps. Ledger-update-v2 scans current actual consumers including package-v2/run.json; all existing sibling JSON receipts must remain registered. Keep tracking decisions, frozen candidate, E5/source/qualified artifacts, both package runs and browser downloads unchanged. Historical direct-hash inventory scripts remain bound to their original commit contexts.
+
+Obtain final independent exact-evidence review, install reviewed archive-first ledger successors, then prepare the final scoped release/evidence commit and continue authorized E8 work. Verify current authorization before any remote action. Close the board/umbrella only after evidence-backed live delivery or an honest bounded publication status.

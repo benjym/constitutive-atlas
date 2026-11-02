@@ -807,3 +807,8 @@ The exact COMSOL6.3 perfect von Mises Bingham elastoviscoplastic solid is indepe
 ### Perzyna scientific checkpoint — 2 November2026
 
 Exact printed COMSOL6.3 yield-normalized Perzyna law is separately agent approved for107bounded BE-schedule cases per backend, including nonlinear overstress, full13state history, analytical creep rates, restart and retained-prefix failure/recovery. [Review](catalogue/agent-reviews/perzyna-comsol63-agent-v1.json) and [delivery ledger](docs/ingestion/perzyna-comsol63/DELIVERY.md) distinguish source, numerical, public-profile/package/browser and live stages. Source-backed profiles now49; current database50models/208sources/27approvals/23agent reviews, with all15ordinary definitions preserved. Package/browser/live gates remain open; no experimental validation is inferred.
+
+
+## HvWE2016 fixed-local delivery checkpoint · 2 November 2026
+
+The new `hvwe2016-reconciled-fixed-local` source-reconciled fully rough interface has passed independent scientific review and source integration review. Its full five-state law, native/Wasm reference checks, normal strain/two shear-angle laboratory and reader profile are integrated in the isolated release. Database export preserves all prior rows and adds the exact model/approval/source identities. Standard website packaging and actual browser qualification remain pending; this checkpoint makes no live publication claim. Exact source corrections and journal visual-copy gap remain disclosed in the delivery ledger.

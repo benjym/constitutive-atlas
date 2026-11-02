@@ -2116,37 +2116,44 @@ export const modelProfiles = {
     "title": "Extended Mohr–Coulomb (EMC) — Doherty & Muir Wood (2013)"
   },
   "hypoplastic-interface-2016": {
-    "summary": "A hypoplastic description of granular soil sliding and volume change at a structure interface.",
-    "introduction": "The Stutz–Mašín–Wuttke interface formulation adapts granular hypoplasticity to a thin shear zone next to a structure. Interface slip, normal deformation and shear-zone thickness replace a general bulk loading path.",
+    "title": "Hypoplastic interface — Stutz, Mašín & Wuttke (2016)",
+    "summary": "A hypoplastic description of granular soil sliding and volume change beside a structure.",
+    "introduction": "The model represents a thin shear zone beside a structure using local normal stress, shear traction, density and thickness. Its fully rough formulation adapts granular hypoplasticity so that normal deformation and two directions of sliding interact.",
     "behaviours": [
       [
-        "Interface shear",
-        "Traction changes with relative sliding at the contact."
+        "Confinement and sliding",
+        "Normal confinement influences the shear traction developed during sliding."
       ],
       [
         "Normal coupling",
-        "Normal compression and dilation interact with the shear response."
+        "Dense granular material can dilate during shear; restricting normal movement changes the normal stress response."
       ]
     ],
-    "scope": "This entry describes the selected 2016 granular interface formulation; there is no public interface laboratory.",
-    "limits": "An interface law uses local directions and interface thickness. It is not a general bulk-soil stress update, and different roughness branches require their own definitions.",
-    "preparation": "Specify local stress, density, shear-zone thickness, normal deformation and the two slip directions, together with the selected roughness branch.",
+    "scope": "This reading profile describes the 2016 granular interface family. The related fully rough HvWE realization has a separate laboratory with prescribed normal strain and two source shear angles.",
+    "limits": "Local interface directions and shear-zone thickness must be defined. Other roughness branches and opening or recontact need their own definitions; this entry does not supply a general bulk-soil stress update.",
+    "preparation": "A specified specimen needs local normal and in-plane stresses, both shear tractions, density, shear-zone thickness and a loading history. The in-plane stress is a separate initial quantity and can evolve during shear.",
     "parameters": [],
     "stateLabels": {},
+    "parameterNote": "Host parameters describe friction, pressure-dependent stiffness and limiting densities. A material-specific calibration and consistent stress and length units are required; no numerical defaults are supplied here.",
     "references": [
       {
         "label": "Stutz, Mašín and Wuttke (2016) — granular soil–structure interface behaviour",
         "url": "https://doi.org/10.1007/s11440-016-0440-1"
+      },
+      {
+        "label": "Stutz (2016) — Hypoplastic Models for Soil-Structure Interfaces",
+        "url": "https://www.geotechnics.ifg.uni-kiel.de/en/publications/2016-hanshenningstutz.pdf"
       }
     ],
     "related": [
-      "hypoplastic-sand-vw96"
+      "hypoplastic-sand-vw96",
+      "hvwe2016-reconciled-fixed-local"
     ],
     "contentSources": [
-      "docs/ingestion/hypoplastic-interface-2016/README.md"
-    ],
-    "parameterNote": "Use consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.",
-    "title": "Hypoplastic interface — Stutz, Mašín & Wuttke (2016)"
+      "docs/ingestion/hypoplastic-interface-2016/source-v2/README.md",
+      "docs/ingestion/hypoplastic-interface-2016/source-v2/RECONCILIATION.md",
+      "docs/ingestion/hypoplastic-interface-2016/source-v2/receipts.json"
+    ]
   },
   "multilaminate-schadlich-schweiger": {
     "summary": "A soil modelling approach that combines responses on many oriented material planes.",
@@ -3113,5 +3120,112 @@ export const modelProfiles = {
     ]
   ],
   "equationNote": "Flow is zero at and below yield. This realization selects printed COMSOL 6.3 theory equation073, which uses yield-stress normalization and exponent n. The settings page instead lists a reference stress and omits n; no claim of equivalence to vendor software is made. At n=1 the equivalent Bingham viscosity is σy/A."
-}
+},
+  "hvwe2016-reconciled-fixed-local": {
+    "title": "Hypoplastic granular interface · fully rough HvWE",
+    "summary": "Pressure and density govern coupled normal stress and shear traction beside a fully rough structure.",
+    "introduction": "This interface law describes a thin granular shear zone using normal stress, lateral stress, two shear tractions and void ratio. Its nonlinear stress rate couples shearing with changes in confinement and density. The fully rough realization inherits the original von Wolffersdorff sand law.",
+    "behaviours": [
+      [
+        "Confinement and sliding",
+        "Normal confinement influences the shear traction developed during sliding."
+      ],
+      [
+        "Normal coupling",
+        "Dense granular material can dilate during shear; restricting normal movement changes the normal stress response."
+      ]
+    ],
+    "scope": "The laboratory prescribes normal compression strain and two shear angles along a dimensionless path. Effective Cauchy stress uses compression-positive signs in a fixed local frame with zero spin. Both shear directions and the evolving lateral stress are retained.",
+    "limits": "The realization reconciles the 2016 interface equations with their original 1996 host; the technical dossier identifies the source corrections. It supplies no contact opening, roughness degradation, finite rotation or stress-controlled apparatus. Shear angles are prescribed directly; displacement divided by layer thickness is not substituted for the angle. No experimental calibration is supplied.",
+    "preparation": "Supply all four local stresses and the void ratio, together with the starting path coordinate and all three controls. The example begins in compression with zero shear traction. Lateral stress is an independent state and evolves during loading; it is not reset at reversal. Example material constants and density illustrate the equations rather than a prepared interface specimen.",
+    "parameters": [
+      {
+        "name": "phi_c",
+        "symbol": "φc",
+        "meaning": "Critical-state friction angle",
+        "help": "Sets the frictional stress ratio approached during sustained shearing.",
+        "unit": "rad"
+      },
+      {
+        "name": "hs",
+        "symbol": "hₛ",
+        "meaning": "Granular hardness",
+        "help": "Sets the pressure scale for stiffness and the pressure dependence of limiting void ratios.",
+        "unit": "Pa"
+      },
+      {
+        "name": "n",
+        "symbol": "n",
+        "meaning": "Pressure exponent",
+        "help": "Controls how the limiting densities vary with confinement.",
+        "unit": "1"
+      },
+      {
+        "name": "ed0",
+        "symbol": "eᵈ₀",
+        "meaning": "Dense limiting void ratio",
+        "help": "Locates the dense packing reference at vanishing pressure.",
+        "unit": "1"
+      },
+      {
+        "name": "ec0",
+        "symbol": "eᶜ₀",
+        "meaning": "Critical void ratio",
+        "help": "Locates the critical-state density reference at vanishing pressure.",
+        "unit": "1"
+      },
+      {
+        "name": "ei0",
+        "symbol": "eⁱ₀",
+        "meaning": "Loose limiting void ratio",
+        "help": "Locates the loose packing reference at vanishing pressure.",
+        "unit": "1"
+      },
+      {
+        "name": "alpha",
+        "symbol": "α",
+        "meaning": "Density sensitivity",
+        "help": "Controls the influence of density relative to the dense and critical references.",
+        "unit": "1"
+      },
+      {
+        "name": "beta",
+        "symbol": "β",
+        "meaning": "Stiffness density factor",
+        "help": "Controls the influence of the current void ratio on stiffness.",
+        "unit": "1"
+      }
+    ],
+    "stateLabels": {
+      "tau_x": "First local shear traction (Pa)",
+      "tau_z": "Second local shear traction (Pa)",
+      "e": "Void ratio",
+      "sigma_normal": "Local normal effective stress (Pa)",
+      "sigma_plane": "Local lateral effective stress (Pa)"
+    },
+    "parameterNote": "Use a material-specific calibration of the eight inherited sand constants. Stress inputs and hₛ use pascals, and the friction angle uses radians. The supplied constants come from an original host-soil example; they are not an interface calibration.",
+    "references": [
+      {
+        "label": "Stutz, Mašín and Wuttke (2016) — granular soil–structure interface behaviour",
+        "url": "https://doi.org/10.1007/s11440-016-0440-1"
+      },
+      {
+        "label": "Stutz (2016) — Hypoplastic Models for Soil-Structure Interfaces",
+        "url": "https://www.geotechnics.ifg.uni-kiel.de/en/publications/2016-hanshenningstutz.pdf"
+      }
+    ],
+    "related": [
+      "hypoplastic-sand-vw96"
+    ],
+    "contentSources": [
+      "docs/ingestion/hypoplastic-interface-2016/source-v2/README.md",
+      "docs/ingestion/hypoplastic-interface-2016/source-v2/RECONCILIATION.md",
+      "docs/ingestion/hypoplastic-interface-2016/source-v2/receipts.json",
+      "docs/ingestion/hypoplastic-interface-2016/implementation-v1/CONTRACT.md",
+      "models/research/interface2016/hvwe2016-reconciled-fixed-local.json",
+      "docs/ingestion/hypoplastic-interface-2016/implementation-v1/CONTRACT_CLARIFICATION.md"
+    ],
+    "explorationTitle": "Explore restrained dilation and changing shear direction",
+    "exploration": "Run the supplied combined shear-and-compression example, then set the normal strain change to zero. Inspect shear traction and normal stress together, and change the direction using the second shear angle. Keep the complete starting state when comparing runs; changing the starting density changes the material response."
+  }
 };

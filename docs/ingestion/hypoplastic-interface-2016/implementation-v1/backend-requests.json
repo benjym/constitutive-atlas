@@ -1,0 +1,3100 @@
+{
+  "identity": "interface2016-flat-ABI-requests-v1",
+  "model": "hvwe2016-reconciled-fixed-local",
+  "definition_sha256": "8ab12775390be5f5aa8f7db7a37da0990d444a343d037bd35fa36e3b5bdbc7ce",
+  "policy_sha256": "bd8ee5fc47aff6dfd064ccd04b6be9fb1bf838afd3f695e5b0b74eec0d167928",
+  "metadata": {
+    "id": "hvwe2016-reconciled-fixed-local",
+    "controls": [
+      "gamma_x",
+      "gamma_z",
+      "normal_strain"
+    ],
+    "state": [
+      {
+        "name": "sigma_normal",
+        "offset": 0,
+        "size": 1
+      },
+      {
+        "name": "sigma_plane",
+        "offset": 1,
+        "size": 1
+      },
+      {
+        "name": "tau_x",
+        "offset": 2,
+        "size": 1
+      },
+      {
+        "name": "tau_z",
+        "offset": 3,
+        "size": 1
+      },
+      {
+        "name": "e",
+        "offset": 4,
+        "size": 1
+      }
+    ],
+    "observables": [
+      {
+        "name": "stress",
+        "offset": 0,
+        "size": 6
+      },
+      {
+        "name": "pressure",
+        "offset": 6,
+        "size": 1
+      },
+      {
+        "name": "void_ratio",
+        "offset": 7,
+        "size": 1
+      }
+    ],
+    "parameters": [
+      "p_ref",
+      "phi_c",
+      "hs",
+      "n",
+      "ed0",
+      "ec0",
+      "ei0",
+      "alpha",
+      "beta"
+    ],
+    "inputs": {
+      "path_coordinate": {
+        "quantity": "path_coordinate",
+        "shape": "scalar",
+        "unit": "1",
+        "sampling": "stage",
+        "constraint": "finite"
+      },
+      "normal_value": {
+        "quantity": "control",
+        "shape": "scalar",
+        "unit": "1",
+        "sampling": "stage",
+        "constraint": "finite",
+        "binding": {
+          "control": "normal_strain",
+          "derivative_order": 0
+        }
+      },
+      "normal_rate": {
+        "quantity": "control",
+        "shape": "scalar",
+        "unit": "1",
+        "sampling": "stage",
+        "constraint": "finite",
+        "binding": {
+          "control": "normal_strain",
+          "derivative_order": 1
+        }
+      },
+      "gamma_x_value": {
+        "quantity": "control",
+        "shape": "scalar",
+        "unit": "1",
+        "sampling": "stage",
+        "constraint": "finite",
+        "binding": {
+          "control": "gamma_x",
+          "derivative_order": 0
+        }
+      },
+      "gamma_x_rate": {
+        "quantity": "control",
+        "shape": "scalar",
+        "unit": "1",
+        "sampling": "stage",
+        "constraint": "finite",
+        "binding": {
+          "control": "gamma_x",
+          "derivative_order": 1
+        }
+      },
+      "gamma_z_value": {
+        "quantity": "control",
+        "shape": "scalar",
+        "unit": "1",
+        "sampling": "stage",
+        "constraint": "finite",
+        "binding": {
+          "control": "gamma_z",
+          "derivative_order": 0
+        }
+      },
+      "gamma_z_rate": {
+        "quantity": "control",
+        "shape": "scalar",
+        "unit": "1",
+        "sampling": "stage",
+        "constraint": "finite",
+        "binding": {
+          "control": "gamma_z",
+          "derivative_order": 1
+        }
+      }
+    },
+    "formulation": {
+      "time_dependence": "strain_path",
+      "equation_form": "path_ode",
+      "kinematics": "small_strain_3d",
+      "frame": "fixed_spatial",
+      "objective_rate": "none",
+      "tensor_representation": "mandel",
+      "stress_sign": "compression_positive",
+      "strain_sign": "compression_positive",
+      "inputs": {
+        "equation": {
+          "path_coordinate": {
+            "quantity": "path_coordinate",
+            "shape": "scalar",
+            "unit": "1",
+            "sampling": "stage",
+            "constraint": "finite"
+          },
+          "normal_value": {
+            "quantity": "control",
+            "shape": "scalar",
+            "unit": "1",
+            "sampling": "stage",
+            "constraint": "finite",
+            "binding": {
+              "control": "normal_strain",
+              "derivative_order": 0
+            }
+          },
+          "normal_rate": {
+            "quantity": "control",
+            "shape": "scalar",
+            "unit": "1",
+            "sampling": "stage",
+            "constraint": "finite",
+            "binding": {
+              "control": "normal_strain",
+              "derivative_order": 1
+            }
+          },
+          "gamma_x_value": {
+            "quantity": "control",
+            "shape": "scalar",
+            "unit": "1",
+            "sampling": "stage",
+            "constraint": "finite",
+            "binding": {
+              "control": "gamma_x",
+              "derivative_order": 0
+            }
+          },
+          "gamma_x_rate": {
+            "quantity": "control",
+            "shape": "scalar",
+            "unit": "1",
+            "sampling": "stage",
+            "constraint": "finite",
+            "binding": {
+              "control": "gamma_x",
+              "derivative_order": 1
+            }
+          },
+          "gamma_z_value": {
+            "quantity": "control",
+            "shape": "scalar",
+            "unit": "1",
+            "sampling": "stage",
+            "constraint": "finite",
+            "binding": {
+              "control": "gamma_z",
+              "derivative_order": 0
+            }
+          },
+          "gamma_z_rate": {
+            "quantity": "control",
+            "shape": "scalar",
+            "unit": "1",
+            "sampling": "stage",
+            "constraint": "finite",
+            "binding": {
+              "control": "gamma_z",
+              "derivative_order": 1
+            }
+          }
+        },
+        "advance": {
+          "start_coordinate": {
+            "quantity": "path_coordinate",
+            "shape": "scalar",
+            "unit": "1",
+            "sampling": "start",
+            "constraint": "finite"
+          },
+          "progress": {
+            "quantity": "path_progress",
+            "shape": "scalar",
+            "unit": "1",
+            "sampling": "interval",
+            "constraint": "nonnegative_finite"
+          }
+        }
+      },
+      "stress": {
+        "source": "observable",
+        "name": "stress",
+        "measure": "cauchy",
+        "scope": "effective"
+      }
+    },
+    "model_sha256": "9bb69b0eef96f13844769d5bd4214ca058186847c4f667c6ed6a344eb7dbbcf9"
+  },
+  "requests": [
+    {
+      "id": "hold-segment1-repeat1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "hold-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "hold-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0,
+        0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "hold-segment1-repeat1-restart1"
+    },
+    {
+      "id": "hold-segment1-repeat2",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "normal_compression-segment1-repeat1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0,
+        0.002
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "normal_compression-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.001
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "normal_compression-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        116949.22129713919,
+        84242.19456455173,
+        0.0,
+        0.0,
+        0.6683308347217364
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.001
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.001
+      ],
+      "end_controls": [
+        0,
+        0,
+        0.002
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "normal_compression-segment1-repeat1-restart1"
+    },
+    {
+      "id": "normal_compression-segment1-repeat2",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0,
+        0.002
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "normal_extension-segment1-repeat1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0,
+        -0.001
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "normal_extension-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        -0.0005
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "normal_extension-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        78913.00401196443,
+        69062.56747705411,
+        0.0,
+        0.0,
+        0.6708352087847963
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        -0.0005
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        -0.0005
+      ],
+      "end_controls": [
+        0,
+        0,
+        -0.001
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "normal_extension-segment1-repeat1-restart1"
+    },
+    {
+      "id": "normal_extension-segment1-repeat2",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0,
+        -0.001
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "x_shear-segment1-repeat1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "x_shear-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.002,
+        0.0,
+        0.0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "x_shear-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        82635.82689995927,
+        68659.65541313271,
+        11484.939314424502,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.002,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.002,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0,
+        0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "x_shear-segment1-repeat1-restart1"
+    },
+    {
+      "id": "x_shear-segment1-repeat2",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "z_shear-segment1-repeat1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0.004,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "z_shear-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.002,
+        0.0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "z_shear-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        82635.82689995927,
+        68659.65541313271,
+        0.0,
+        11484.939314424502,
+        0.67
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.002,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.002,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0.004,
+        0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "z_shear-segment1-repeat1-restart1"
+    },
+    {
+      "id": "z_shear-segment1-repeat2",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0.004,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "multishear-segment1-repeat1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.003,
+        -0.002,
+        0.0005
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "multishear-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0015,
+        -0.001,
+        0.00025
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "multishear-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        90541.05202128385,
+        72479.3184949321,
+        9173.93407515254,
+        -6115.95605010169,
+        0.6695825521831518
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0015,
+        -0.001,
+        0.00025
+      ],
+      "start_controls": [
+        0.0015,
+        -0.001,
+        0.00025
+      ],
+      "end_controls": [
+        0.003,
+        -0.002,
+        0.0005
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "multishear-segment1-repeat1-restart1"
+    },
+    {
+      "id": "multishear-segment1-repeat2",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.003,
+        -0.002,
+        0.0005
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "reversal-segment1-repeat1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0.001,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "reversal-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.002,
+        0.0005,
+        0.0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "reversal-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        82216.49418808191,
+        68383.64972447653,
+        11398.344509922643,
+        2849.5861274806607,
+        0.67
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.002,
+        0.0005,
+        0.0
+      ],
+      "start_controls": [
+        0.002,
+        0.0005,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0.001,
+        0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "reversal-segment1-repeat1-restart1"
+    },
+    {
+      "id": "reversal-segment2-repeat1",
+      "model": 0,
+      "state": [
+        71264.24522037207,
+        61178.84701356681,
+        17909.56164704356,
+        4477.39041176089,
+        0.67
+      ],
+      "coordinate": 1.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.004,
+        0.001,
+        0
+      ],
+      "start_controls": [
+        0.004,
+        0.001,
+        0
+      ],
+      "end_controls": [
+        -0.002,
+        -0.002,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "reversal-segment1-repeat1"
+    },
+    {
+      "id": "reversal-segment2-repeat1-restart1",
+      "model": 0,
+      "state": [
+        71264.24522037207,
+        61178.84701356681,
+        17909.56164704356,
+        4477.39041176089,
+        0.67
+      ],
+      "coordinate": 1.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.004,
+        0.001,
+        0
+      ],
+      "start_controls": [
+        0.004,
+        0.001,
+        0
+      ],
+      "end_controls": [
+        0.001,
+        -0.0005,
+        0.0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "reversal-segment2-repeat1-restart2",
+      "model": 0,
+      "state": [
+        46241.16150785128,
+        41498.32600419202,
+        -1829.9730258573418,
+        -3020.5579314487436,
+        0.67
+      ],
+      "coordinate": 1.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.001,
+        -0.0005,
+        0.0
+      ],
+      "start_controls": [
+        0.001,
+        -0.0005,
+        0.0
+      ],
+      "end_controls": [
+        -0.002,
+        -0.002,
+        0
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "reversal-segment2-repeat1-restart1"
+    },
+    {
+      "id": "reversal-segment1-repeat2",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0.001,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "reversal-segment2-repeat2",
+      "model": 0,
+      "state": [
+        71264.24522037207,
+        61178.84701356681,
+        17909.56164704356,
+        4477.39041176089,
+        0.67
+      ],
+      "coordinate": 1.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.004,
+        0.001,
+        0
+      ],
+      "start_controls": [
+        0.004,
+        0.001,
+        0
+      ],
+      "end_controls": [
+        -0.002,
+        -0.002,
+        0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "reversal-segment1-repeat2"
+    },
+    {
+      "id": "unequal_with_existing_shear-segment1-repeat1",
+      "model": 0,
+      "state": [
+        120000.0,
+        75000.0,
+        10000.0,
+        -6000.0,
+        0.69
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.002,
+        0.003,
+        0.0007
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "unequal_with_existing_shear-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        120000.0,
+        75000.0,
+        10000.0,
+        -6000.0,
+        0.69
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.001,
+        0.0015,
+        0.00035
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "unequal_with_existing_shear-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        110142.5603554527,
+        70974.45273159244,
+        13693.592950931403,
+        4192.11459159768,
+        0.6894086035004238
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.001,
+        0.0015,
+        0.00035
+      ],
+      "start_controls": [
+        0.001,
+        0.0015,
+        0.00035
+      ],
+      "end_controls": [
+        0.002,
+        0.003,
+        0.0007
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "unequal_with_existing_shear-segment1-repeat1-restart1"
+    },
+    {
+      "id": "unequal_with_existing_shear-segment1-repeat2",
+      "model": 0,
+      "state": [
+        120000.0,
+        75000.0,
+        10000.0,
+        -6000.0,
+        0.69
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.002,
+        0.003,
+        0.0007
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "exact_isotropy-segment1-repeat1",
+      "model": 0,
+      "state": [
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0,
+        0.001
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "exact_isotropy-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0005
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "exact_isotropy-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        108893.01465021126,
+        100765.88974388145,
+        0.0,
+        0.0,
+        0.669165208715213
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0005
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0005
+      ],
+      "end_controls": [
+        0,
+        0,
+        0.001
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "exact_isotropy-segment1-repeat1-restart1"
+    },
+    {
+      "id": "exact_isotropy-segment1-repeat2",
+      "model": 0,
+      "state": [
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0,
+        0,
+        0.001
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "near_isotropy-segment1-repeat1",
+      "model": 0,
+      "state": [
+        100000.00001,
+        100000.0,
+        1e-06,
+        -2e-06,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.001,
+        -0.001,
+        0.0001
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "near_isotropy-segment1-repeat1-restart1",
+      "model": 0,
+      "state": [
+        100000.00001,
+        100000.0,
+        1e-06,
+        -2e-06,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0005,
+        -0.0005,
+        5e-05
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "near_isotropy-segment1-repeat1-restart2",
+      "model": 0,
+      "state": [
+        95375.25134764591,
+        94623.89197635787,
+        3756.7968130059926,
+        -3756.7968138923925,
+        0.6699165020874654
+      ],
+      "coordinate": 0.5,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0005,
+        -0.0005,
+        5e-05
+      ],
+      "start_controls": [
+        0.0005,
+        -0.0005,
+        5e-05
+      ],
+      "end_controls": [
+        0.001,
+        -0.001,
+        0.0001
+      ],
+      "progress": 0.5,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8,
+      "state_from": "near_isotropy-segment1-repeat1-restart1"
+    },
+    {
+      "id": "near_isotropy-segment1-repeat2",
+      "model": 0,
+      "state": [
+        100000.00001,
+        100000.0,
+        1e-06,
+        -2e-06,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.001,
+        -0.001,
+        0.0001
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-normal_zero",
+      "model": 0,
+      "state": [
+        0.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-plane_zero",
+      "model": 0,
+      "state": [
+        100000.0,
+        0.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-schur_negative",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        100000.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-density_below",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.1
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-density_above",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-unordered_limits",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        1.0,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-negative_hardness",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        -1.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-missing_control",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-nonfinite_control",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        "nan",
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-mismatched_start",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.001,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-zero_progress_changed",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0.0,
+        0.0
+      ],
+      "progress": 0.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-negative_progress",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0.0,
+        0.0
+      ],
+      "progress": -1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "invalid-trial_budget",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.01,
+        40,
+        1
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "recovery-after-trial-budget",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.004,
+        0.0,
+        0.0
+      ],
+      "progress": 1.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    },
+    {
+      "id": "zero-progress-identity",
+      "model": 0,
+      "state": [
+        100000.0,
+        80000.0,
+        0.0,
+        0.0,
+        0.67
+      ],
+      "coordinate": 0.0,
+      "parameters": [
+        100000.0,
+        0.5759586531581288,
+        1000000000.0,
+        0.25,
+        0.55,
+        0.95,
+        1.05,
+        0.25,
+        1.5
+      ],
+      "current_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "start_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_controls": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "progress": 0.0,
+      "settings": [
+        1e-11,
+        1e-09,
+        1e-12,
+        0.05,
+        40,
+        100000
+      ],
+      "observable_count": 8
+    }
+  ]
+}

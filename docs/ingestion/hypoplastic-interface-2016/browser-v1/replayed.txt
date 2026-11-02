@@ -1,0 +1,190 @@
+- complementary:
+  - link "Constitutive Atlas home":
+    - /url: "#home"
+    - generic: Constitutive Atlas
+  - navigation "Main navigation":
+    - link "Home":
+      - /url: "#home"
+      - generic: Home
+    - link "Model testing":
+      - /url: "#laboratory"
+      - generic: Model testing
+    - link "Ensemble explorer":
+      - /url: "#ensemble"
+      - generic: Ensemble explorer
+    - link "Model catalogue 49":
+      - /url: "#catalogue"
+      - generic: Model catalogue
+      - generic: "49"
+    - link "Methods & evidence":
+      - /url: "#methods"
+      - generic: Methods & evidence
+- main:
+  - heading "Explore material behaviour." [level=1]
+  - generic: CONSTITUTIVE MODEL
+  - generic: Available in laboratory
+  - generic: Select a model
+  - combobox "Select a model":
+    - option "Barodesy clay 2017"
+    - option "Barodesy sand (2015)"
+    - option "Drucker–Prager, nonassociated perfect plasticity"
+    - option "Duncan–Chang (1970) · constant-Poisson formulation"
+    - option "Clay hypoplasticity — Mašín (2005)"
+    - option "Clay hypoplasticity with explicit asymptotic states — Mašín (2013)"
+    - option "Sand hypoplasticity with intergranular strain (1997)"
+    - option "Sand hypoplasticity · von Wolffersdorff (1996)"
+    - option "Linear isotropic elasticity"
+    - option "Modified Cam Clay"
+    - option "Mohr–Coulomb · nonassociated perfect plasticity"
+    - option "Original Cam Clay · logarithmic-recovery formulation"
+    - option "Ramberg–Osgood · reversible nonlinear elasticity"
+    - option "Sand hypoplasticity with generalized intergranular strain · selected pairing"
+    - option "Tresca · associated perfect plasticity"
+    - option "Fully rough granular interface · normal strain and shear angles" [selected]
+    - option "Bingham viscoplasticity · physical-time relaxation / creep"
+    - option "Hill · all-six strain increments"
+    - option "Burgers · physical-time creep / relaxation"
+    - option "Standard Linear Solid · physical-time relaxation / creep"
+    - option "Kelvin–Voigt · physical-time creep / loading / strain hold"
+    - option "Orthotropic elasticity · nine constants"
+    - option "NorSand 1993 · drained active axial law"
+    - option "Maxwell · physical-time relaxation / creep"
+    - option "Lade–Duncan 1975 · cohesionless soil"
+    - option "J2 · all-six strain increments"
+  - paragraph: Pressure and density govern coupled normal stress and shear traction beside a fully rough structure.
+  - link "About this model and its parameters →":
+    - /url: "#catalogue/hvwe2016-reconciled-fixed-local"
+  - generic "Sources & model definition"
+  - generic: Hypoplastic soil–structure interface
+  - generic: Fixed local frame · normal strain and source shear angles
+  - button "View equations ↗"
+  - heading "Fully rough granular interface · normal strain and shear angles" [level=2]
+  - paragraph: Local effective Cauchy stress · compression positive · fixed local axes and zero spin. No pore-pressure law. Fully rough source-reconciled HvWE2016 law with VW96 host closure.
+  - paragraph: Prescribe normal compression strain and two source shear angles. These dimensionless controls change linearly along the path. A shear angle derivative gives half the engineering shear stretching component; it is not finite slip divided by thickness.
+  - text: Dimensionless path progress
+  - spinbutton "Dimensionless path progress": "1"
+  - text: Output intervals
+  - spinbutton "Output intervals": "40"
+  - text: Start path coordinate
+  - spinbutton "Start path coordinate": "0"
+  - generic "Normal strain and source shear angles · start and end"
+  - text: Initial source shear angle γx (1)
+  - spinbutton "Initial source shear angle γx (1)": "0"
+  - text: End source shear angle γx (1)
+  - spinbutton "End source shear angle γx (1)": "0.003"
+  - text: Initial source shear angle γz (1)
+  - spinbutton "Initial source shear angle γz (1)": "0"
+  - text: End source shear angle γz (1)
+  - spinbutton "End source shear angle γz (1)": "-0.002"
+  - text: Initial normal compression strain (1)
+  - spinbutton "Initial normal compression strain (1)": "0"
+  - text: End normal compression strain (1)
+  - spinbutton "End normal compression strain (1)": "0.0005"
+  - generic "Complete initial history and parameters"
+  - paragraph: Specify normal stress, shared in-plane normal stress, two shear tractions and void ratio. These are independent starting quantities; the in-plane stress evolves. Coordinate offset and all state values are retained on replay. Custom histories and parameters are exploratory.
+  - text: Initial sigma_normal (Pa)
+  - spinbutton "Initial sigma_normal (Pa)": "100000"
+  - text: Initial sigma_plane (Pa)
+  - spinbutton "Initial sigma_plane (Pa)": "80000"
+  - text: Initial tau_x (Pa)
+  - spinbutton "Initial tau_x (Pa)": "0"
+  - text: Initial tau_z (Pa)
+  - spinbutton "Initial tau_z (Pa)": "0"
+  - text: Initial e (1)
+  - spinbutton "Initial e (1)": "0.67"
+  - text: p_ref (Pa)
+  - spinbutton "p_ref (Pa)": "100000"
+  - text: phi_c (1)
+  - spinbutton "phi_c (1)": "0.5759586531581288"
+  - text: hs (Pa)
+  - spinbutton "hs (Pa)": "1000000000"
+  - text: n (1)
+  - spinbutton "n (1)": "0.25"
+  - text: ed0 (1)
+  - spinbutton "ed0 (1)": "0.55"
+  - text: ec0 (1)
+  - spinbutton "ec0 (1)": "0.95"
+  - text: ei0 (1)
+  - spinbutton "ei0 (1)": "1.05"
+  - text: alpha (1)
+  - spinbutton "alpha (1)": "0.25"
+  - text: beta (1)
+  - spinbutton "beta (1)": "1.5"
+  - paragraph: Illustrative starting state and material parameters, not a prepared or calibrated specimen. No experimental validation. Fixed qualified solver settings. A changed input starts a new history.
+  - button "Run prescribed interface path"
+  - button "Reset qualified example"
+  - button "Import and replay" [active]
+  - button "Export complete path run"
+  - status: Completed prescribed interface path. Numerical response; no experimental validation.
+  - heading "Normal and shear response" [level=2]
+  - paragraph: 40 intervals; final σn=84.97842 kPa, e=0.6691652.
+  - img "Local normal stresses against path coordinate":
+    - generic: "101"
+    - generic: "-0.07"
+    - generic: "96.8"
+    - generic: "0.215"
+    - generic: "92.5"
+    - generic: "0.5"
+    - generic: "88.2"
+    - generic: "0.785"
+    - generic: "83.9"
+    - generic: "1.07"
+    - generic: Path coordinate
+    - generic: Normal stress σn (kPa)
+  - img "Local shear tractions against path coordinate":
+    - generic: "16.6"
+    - generic: "-0.07"
+    - generic: "12.2"
+    - generic: "0.215"
+    - generic: "7.74"
+    - generic: "0.5"
+    - generic: "3.33"
+    - generic: "0.785"
+    - generic: "-1.08"
+    - generic: "1.07"
+    - generic: Path coordinate
+    - generic: Shear traction τx (kPa)
+  - img "Second local shear traction against coordinate":
+    - generic: "0.722"
+    - generic: "-0.07"
+    - generic: "-2.22"
+    - generic: "0.215"
+    - generic: "-5.16"
+    - generic: "0.5"
+    - generic: "-8.1"
+    - generic: "0.785"
+    - generic: "-11"
+    - generic: "1.07"
+    - generic: Path coordinate
+    - generic: Shear traction τz (kPa)
+  - img "In-plane normal stress against coordinate":
+    - generic: "80.8"
+    - generic: "-0.07"
+    - generic: "77.4"
+    - generic: "0.215"
+    - generic: "74"
+    - generic: "0.5"
+    - generic: "70.7"
+    - generic: "0.785"
+    - generic: "67.3"
+    - generic: "1.07"
+    - generic: Path coordinate
+    - generic: In-plane normal stress σp (kPa)
+  - img "Void ratio against path coordinate":
+    - generic: "0.67"
+    - generic: "-0.07"
+    - generic: "0.67"
+    - generic: "0.215"
+    - generic: "0.67"
+    - generic: "0.5"
+    - generic: "0.669"
+    - generic: "0.785"
+    - generic: "0.669"
+    - generic: "1.07"
+    - generic: Path coordinate
+    - generic: Void ratio e
+  - generic "Complete state and observables at each output"
+  - generic "Fetched model, engine and review identities"
+  - generic: "{ \"profile\": \"controlled-path-ode-v1\", \"model\": \"hvwe2016-reconciled-fixed-local\", \"definition_sha256\": \"8ab12775390be5f5aa8f7db7a37da0990d444a343d037bd35fa36e3b5bdbc7ce\", \"files\": { \"approval.json\": \"383f6dc8d885635422d8cb8f326cfca25f454acb0ce593c76368f163e0ddd31c\", \"build-receipt.json\": \"9b7b7effaa9276a3ab2bc214eb94af58eeb89b285862a7956f4332ec20c9c65c\", \"build-review.json\": \"62580007175d3038eb4e8c046716d0d4ae889cbb2249fc8f0a85231f8f1851ef\", \"catalogue.json\": \"b4129faa033e79049cbd5cfde12ae804bc452c71ea7fe9c0de1da3521a3646d2\", \"engine.mjs\": \"9ca636064c52882538724f1a50bf765bc0409dec28bdc8e23ae5368d5e1414ee\", \"engine.wasm\": \"5bce95626e63474a1122d060e7f11262397d71fcab8cf87e82812b8166df41cb\", \"example.json\": \"e2aa1b780f1f481257c4a88a1116737e43a64cde610e9db12d9a78af718b5173\", \"model.json\": \"8ab12775390be5f5aa8f7db7a37da0990d444a343d037bd35fa36e3b5bdbc7ce\", \"package-cases.json\": \"05e81820c7ecdaf37b314f5a629bab2fa8cc8f5eb6214473cb73688405f23013\", \"qualification.json\": \"6d6c55fb421eec18a3037b52f7ed8c269bad2f55ceb657bf7dfc1c77168014dc\", \"review.html\": \"8a357d4fc872f6044f2a52d5ba280fc107019143154416f6298290f351e9d112\", \"review.json\": \"13aa0f267736a9a5ad246e34461ead944fea5aa052ee74d2cec0ab3426a8ee0b\", \"source-receipt.json\": \"96d619fd15a091db50cfd50c87cfedbb80df73d0db39d1c2e612629ff3ed60c6\" }, \"components\": { \"path-engine.mjs\": \"14619fb45afc324afe872ced1e340c0bf6602e34026b71d06753e6ec43dc250b\", \"path-worker.mjs\": \"a837133f18e272459d6e077a273e13af51432bc701194732bb1cdaa5a8971b3c\", \"interface2016-laboratory.mjs\": \"9dab13484975eb64ca33bb5d8bc603793572bc1dedde19877664d8ded0e0278b\" }, \"qualification_scope\": \"Exact source-reconciled fixed-local interface law and independently accepted native/Wasm scope; actual browser delivery is separately qualified.\" }"
+  - paragraph: "Measurement comparison is unavailable: no compatible licensed source dataset or calibrated material is supplied. These curves are model responses."
+  - generic "Equations, source and approved scope"

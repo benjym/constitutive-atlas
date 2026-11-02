@@ -1,0 +1,40 @@
+{
+  "stage": "wasm-build",
+  "commands": [
+    {
+      "argv": [
+        "emcmake",
+        "cmake",
+        "-S",
+        "/private/tmp/atlas-interface2016-delivery-v1/source/cmake/controlled-path",
+        "-B",
+        "/private/tmp/atlas-interface2016-delivery-v1/wasm",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DATLAS_PATH_MODELS=/private/tmp/atlas-interface2016-delivery-v1/source/models/research/interface2016/hvwe2016-reconciled-fixed-local.json",
+        "-DPython3_EXECUTABLE=/opt/homebrew/opt/python@3.14/bin/python3.14"
+      ],
+      "exit": 0,
+      "seconds": 0.7739510536193848,
+      "log": "docs/ingestion/hypoplastic-interface-2016/execution-v1/wasm-build/1.log",
+      "log_sha256": "d76e0b60712c82c2c09bb62ac315127e1593093a24ee42221022490d08f2b7f7"
+    },
+    {
+      "argv": [
+        "cmake",
+        "--build",
+        "/private/tmp/atlas-interface2016-delivery-v1/wasm",
+        "--target",
+        "atlas_path_capability",
+        "--parallel",
+        "1",
+        "--verbose"
+      ],
+      "exit": 0,
+      "seconds": 4.2760231494903564,
+      "log": "docs/ingestion/hypoplastic-interface-2016/execution-v1/wasm-build/2.log",
+      "log_sha256": "9d8ca99a68cb3181393278ba0181bb743e89150eb044edf58da97afd10b637a0"
+    }
+  ],
+  "source_freeze_sha256": "caf09ad1a7ae03be396edb3def1e4393462ff2a0c2ddbc67e0d6d5e3121595d5",
+  "status": "passed"
+}

@@ -1,0 +1,54 @@
+{
+  "contract": "interface2016-qualified-build-v1",
+  "model": "hvwe2016-reconciled-fixed-local",
+  "receipt_path": "docs/ingestion/hypoplastic-interface-2016/execution-v1/build-receipt.json",
+  "receipt_required": {
+    "schema_version": "interface2016-qualified-build-v1",
+    "status": "passed",
+    "model": "hvwe2016-reconciled-fixed-local",
+    "definition_sha256": "exact candidate digest",
+    "artifacts": "absolute artifact path to SHA256; exactly one .mjs, exactly one .wasm; include generated/path_catalogue.json and other generated file identities",
+    "source_closure": "repository-relative path to SHA256; complete actual compiler/schema/C++/generator/CMake/model dependencies",
+    "qualification": {"path": "docs/ingestion/hypoplastic-interface-2016/execution-v1/qualification.json", "sha256": "exact qualification digest"},
+    "independent_review": {"path": "docs/ingestion/hypoplastic-interface-2016/execution-v1/build-review.json", "sha256": "exact independent build-review digest"},
+    "commands": "actual serial explicit-target commands",
+    "toolchain": "actual compiler and build identities"
+  },
+  "qualification_required": {
+    "status": "passed",
+    "implementation_run": "actual implementation agent run ID",
+    "binding": {
+      "model_sha256": "exact candidate digest",
+      "artifacts": "identical artifact map to receipt",
+      "source_closure": "identical source map to receipt",
+      "cases": "nonempty repository-relative frozen case/reference/policy map to SHA256",
+      "results": "nonempty repository-relative saved results map to SHA256"
+    }
+  },
+  "independent_build_review_required": {
+    "status": "accepted",
+    "reviewer_run": "actual separate reviewer run, different from qualification implementation_run",
+    "binding": "exact qualification.binding object"
+  },
+  "independent_scientific_review_artifacts_required": [
+    "docs/ingestion/hypoplastic-interface-2016/implementation-v1/example.json",
+    "docs/ingestion/hypoplastic-interface-2016/execution-v1/build-receipt.json",
+    "docs/ingestion/hypoplastic-interface-2016/execution-v1/qualification.json",
+    "docs/ingestion/hypoplastic-interface-2016/execution-v1/build-review.json",
+    "docs/ingestion/hypoplastic-interface-2016/execution-v1/package-cases.json"
+  ],
+  "package_cases": {
+    "model": "hvwe2016-reconciled-fixed-local",
+    "definition_sha256": "exact candidate digest",
+    "cases": "each has id, complete standard path request and expected array matching engine points including initial; expected points include context.state all five entries and observables.stress all six Mandel entries",
+    "tolerances": {"stress_Pa": 0.2, "void_ratio": 0.000002},
+    "source": "reuse independently frozen Cartesian matrix references; no new reference campaign"
+  },
+  "package_namespace": "material-point-interface2016/",
+  "notes": [
+    "No material execution is performed by the builder.",
+    "Builder regenerates path_catalogue.json, path_models.hpp and path_api.cpp and requires exact equality to provided build generated files.",
+    "All source_closure and qualification case/result digests are checked against current coherent source tree before packaging.",
+    "Actual runtime package and browser qualification remain coordinator-owned."
+  ]
+}
