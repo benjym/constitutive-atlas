@@ -151,12 +151,12 @@ Use the current workflow's other parity/profile/browser commands for the actual 
 
 - [X]Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
 - [X]Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
-- [-]Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
-- [ ]Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
-- [ ]Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
-- [ ]Verify the live public-profile data/rendering assets match the tested upload and the model's catalogue profile, related links and laboratory link display the intended explanation.
-- [ ]Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
-- [ ]Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
+- [X]Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
+- [X]Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
+- [X]Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
+- [X]Verify the live public-profile data/rendering assets match the tested upload and the model's catalogue profile, related links and laboratory link display the intended explanation.
+- [X]Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
+- [X]Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
 
 **Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its public profile and sources/approval/evidence; the packaged and live website explain the model and can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.
 
@@ -177,3 +177,6 @@ E4 v5 actual Wasm/reference/parity evidence2026-11-02:136histories/two repeats/2
 
 
 2026-11-02 E8 authorized: useryes, main40b607ba fastforwardpushed, currentCI41381203577 (macOSprovenancerecorderfailures retained; remainingLinuxstillrunning), separateControlledpath41381203557passed. Deployment/livepending. Newversionedrecorder sourcecorrection55mockchecks awaitsindependentreview; no numericalgatechange.
+
+
+2026-11-02 E8 VERIFIED COMPLETE: application43ea5c45, all6current fullCI41388826742jobs and separatecontrolled41388826735SUCCESS; exactPagesdeployment7485425155SUCCESS. live-release-v3/CLOSEOUT-CHECKS.json passes all10aggregategates including authenticated1446fileupload,451publicHTTP200/hash/bytecomparisons, unchangedqualifiedengine/model/review/profile, completeoldDB/ordinary15preservation, bothplatformpairedoriginalassessments and actual20checklivebrowser/defaultexport equality. Exact actualexport d670fc67 differs inprovenance onlyexpectedrelease_revision. Source/review/approval/dossierlinks resolve onpublicprojectpath;375px andscreenshots verified;0consoleerrors,111HTTP200responses. Originalfailures/limitations retained;browserabout:blank/slotRELEASED. Evidence-only closeoutcommit uses [skip ci]; publicapplication remains43ea5c45.
