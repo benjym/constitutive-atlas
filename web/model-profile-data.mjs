@@ -3001,5 +3001,117 @@ export const modelProfiles = {
       "web/bingham-atlas-contract.mjs",
       "web/bingham-laboratory.mjs"
     ]
-  }
+  },
+  "perzyna-comsol63-mises-perfect-zero-spin-ode": {
+  "title": "COMSOL 6.3 Perzyna elastoviscoplastic solid · associative von Mises",
+  "summary": "An elastic solid whose permanent shear deformation accelerates nonlinearly as stress rises above a fixed yield threshold.",
+  "introduction": "The Perzyna solid combines reversible elastic deformation with time-dependent permanent deformation. Below its yield stress it responds elastically. Above yield, the excess stress relative to the yield stress controls the flow rate through a power law. This separates the onset of permanent deformation from the speed at which it develops.",
+  "behaviours": [
+    [
+      "A threshold followed by nonlinear flow",
+      "The von Mises equivalent stress measures the combined intensity of stress that changes shape. Flow begins above the yield stress. The exponent controls how sharply its rate increases with relative overstress; mean stress alone produces no permanent flow."
+    ],
+    [
+      "Relaxation toward the yield stress",
+      "During a strain hold, an initially overstressed solid develops permanent strain and loses deviatoric stress. Its stress approaches the yield threshold while mean stress remains constant. For an exponent greater than one, relaxation slows particularly strongly near yield."
+    ],
+    [
+      "Steady creep under a stress hold",
+      "Holding an above-yield stress fixed produces continuing strain at a constant rate. Increasing the rate coefficient speeds this response. A larger exponent reduces flow when relative overstress is below one and increases it when relative overstress is above one."
+    ],
+    [
+      "Permanent deformation without strengthening",
+      "The yield threshold remains fixed as permanent strain accumulates. On reversal, stress can cross an elastic interval before opposite flow develops. Accumulated equivalent permanent strain continues to grow even when tensor components reverse."
+    ]
+  ],
+  "explorationTitle": "Compare a strain hold with a stress hold",
+  "exploration": "In the laboratory, use Reset Perzyna preset to load the complete example. Choose Relaxation · hold all strains under Physical-time experiment, then Run physical-time history. Inspect total stress and accumulated equivalent viscoplastic strain against physical time. Use Plot component · Mandel to inspect normal and shear components; the yield threshold applies to their combined equivalent stress.",
+  "parameters": [
+    {
+      "name": "K",
+      "symbol": "K",
+      "meaning": "Elastic bulk modulus",
+      "help": "Controls reversible resistance to volume change; permanent flow is volume preserving.",
+      "unit": "Pa"
+    },
+    {
+      "name": "G",
+      "symbol": "G",
+      "meaning": "Elastic shear modulus",
+      "help": "Controls reversible resistance to shape change and helps set the relaxation time.",
+      "unit": "Pa"
+    },
+    {
+      "name": "sigma_y",
+      "symbol": "σy",
+      "meaning": "Equivalent yield stress",
+      "help": "Sets the onset of flow and the normalization of overstress. Changing it affects both the threshold and the flow rate.",
+      "unit": "Pa"
+    },
+    {
+      "name": "A",
+      "symbol": "A",
+      "meaning": "Viscoplastic rate coefficient",
+      "help": "Multiplies the flow rate at every fixed relative overstress. Its unit is inverse seconds.",
+      "unit": "s⁻¹"
+    },
+    {
+      "name": "n",
+      "symbol": "n",
+      "meaning": "Overstress exponent",
+      "help": "Sets the nonlinear dependence on stress above yield. At a stress twice the yield stress, relative overstress is one and the equivalent permanent-strain rate equals A for every exponent.",
+      "unit": "1"
+    }
+  ],
+  "parameterNote": "Use a consistent stress unit for both moduli and yield stress, and seconds for physical time. The example coefficients are illustrative and require identification for a particular material and temperature. The implemented regular-exponent interval is one through eight; numerical accuracy is qualified only for the disclosed studies and examples.",
+  "preparation": "Supply six total-strain components, six viscoplastic-strain components and accumulated equivalent viscoplastic strain α, plus all five parameters and physical start time. Stress follows from total strain minus permanent strain. Tensor entries use [xx, yy, zz, √2xy, √2yz, √2xz]. Permanent strain is traceless, α is nonnegative, and accumulated strain must be consistent with the supplied permanent strain. A preset is an illustrative starting context rather than a specimen preparation procedure. Restart retains all thirteen components.",
+  "scope": "The printed COMSOL 6.3 Perzyna mathematical law with isotropic linear elasticity, associated von Mises flow, constant yield stress and no hardening. Three-dimensional infinitesimal strain, fixed spatial axes, compression-positive stress and strain, dry total Cauchy stress and physical time are used. The exponent is restricted to the regular range n≥1.",
+  "limits": "There is no evolving strength, back stress, damage, temperature dependence, pore-fluid response or permanent volume change. Finite strains and rotation transport are excluded. The selected law normalizes overstress by the yield stress; an independent reference-stress normalization is a different realization. Custom histories and coefficients need their own accuracy checks.",
+  "references": [
+    {
+      "label": "COMSOL 6.3 — Perzyna model and viscoplastic flow equations",
+      "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.039.html"
+    },
+    {
+      "label": "COMSOL 6.3 — Viscoplasticity and perfect-plasticity settings",
+      "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_solid.07.024.html"
+    },
+    {
+      "label": "COMSOL 6.3 — Elastic strain and isotropic stress relations",
+      "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html"
+    }
+  ],
+  "related": [
+    "bingham-comsol63-mises-perfect-zero-spin-ode",
+    "power-creep-itasca900-both-active-ode"
+  ],
+  "contentSources": [
+    "docs/ingestion/perzyna-comsol63/source-v1/README.md",
+    "docs/ingestion/perzyna-comsol63/source-v1/candidate.json",
+    "web/perzyna-atlas-contract.mjs",
+    "web/perzyna-laboratory.mjs"
+  ],
+  "comparison": "Reset the Perzyna preset and choose Creep · hold all stresses. Stress now stays fixed while strain grows. Increase A while keeping the other coefficients and complete starting state fixed to obtain faster creep and relaxation. Compare n at the same initial state: the effect depends on whether relative overstress is smaller or larger than one. Loading · constant strain rate applies all six rates together for the selected duration.",
+  "stateLabels": {
+    "eps": "Total infinitesimal strain ε",
+    "eps_vp": "Viscoplastic strain εvp",
+    "alpha": "Accumulated equivalent viscoplastic strain α"
+  },
+  "equationIntro": "A dot denotes a rate per physical second. The relative overstress q/σy−1 is dimensionless; its positive part drives permanent flow.",
+  "equations": [
+    [
+      "Elastic stress",
+      "σ = K tr(ε − εvp) I + 2G dev(ε − εvp)"
+    ],
+    [
+      "Equivalent stress and flow rate",
+      "q = √(3s:s/2); λ = A max(q/σy − 1, 0)^n"
+    ],
+    [
+      "Viscoplastic memory",
+      "ε̇vp = (3λ/2q)s for q > 0, otherwise zero; α̇ = λ"
+    ]
+  ],
+  "equationNote": "Flow is zero at and below yield. This realization selects printed COMSOL 6.3 theory equation073, which uses yield-stress normalization and exponent n. The settings page instead lists a reference stress and omits n; no claim of equivalence to vendor software is made. At n=1 the equivalent Bingham viscosity is σy/A."
+}
 };

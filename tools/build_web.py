@@ -36,6 +36,7 @@ def main():
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
     parser.add_argument('--kelvin-voigt-wasm-dir',type=Path,default=ROOT/'build-kelvin-voigt-wasm',help='Qualified ordinary Kelvin–Voigt physical-time engine')
     parser.add_argument('--bingham-wasm-dir',type=Path,default=ROOT/'build-bingham-public',help='Exact independently reviewed Bingham physical-time engine')
+    parser.add_argument('--perzyna-wasm-dir',type=Path,default=ROOT/'build-perzyna-public',help='Exact independently reviewed Perzyna physical-time engine')
     args=parser.parse_args()
     subprocess.run(['node',str(ROOT/'tools/check_model_profiles.mjs'),str(ROOT)],check=True)
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
@@ -97,6 +98,9 @@ def main():
     shutil.copytree(ROOT/'models',dest/'models',dirs_exist_ok=True)
     experiment_manifest=bundle(dest/'experiments', preview=args.preview_experiments)
     print(f"Prepared {len(experiment_manifest['experiments'])} built-in experiments ({experiment_manifest['release']})")
+    from build_perzyna_laboratory import bundle as bundle_perzyna
+    bundle_perzyna(dest,args.perzyna_wasm_dir)
+    subprocess.run(['node',str(ROOT/'tools/test_perzyna_package.mjs'),str(dest)],check=True)
     from build_bingham_laboratory import bundle as bundle_bingham
     bundle_bingham(dest,args.bingham_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_bingham_package.mjs'),str(dest)],check=True)

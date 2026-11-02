@@ -24,14 +24,14 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 - [X] **E2 — Contract:** complete v0.3 crosswalk, preparation/time/transaction/control contract and prospectively frozen references/gates; capabilities resolved.
 - [X] **E3 — Transcription:** exact candidate validates/generates; independent equation/reference checks pass.
 - [X] **E4 — Native/Wasm:** correct profile/interfaces, complete frozen numerical gates, rollback/recovery/restarts, useful preset, parity and regressions pass.
-- [-] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
-- [ ] **E6 — Atlas:** qualified model/approval/source/evidence and source-backed public profile integrated through normal generation; profile-coverage check passes, prior models preserved and public metadata/current database checked.
+- [X] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
+- [-] **E6 — Atlas:** qualified model/approval/source/evidence and source-backed public profile integrated through normal generation; profile-coverage check passes, prior models preserved and public metadata/current database checked.
 - [ ] **E7 — Packaged website:** public profile/card, parameter units, example guidance, related/laboratory links and narrow-screen layout inspected; real controls/plots, technical source/review disclosure, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
 - [ ] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works; task-owned cleanup verified and any retained resources handed off explicitly.
 
 ## Current handoff
 
-- Current phase / overall state: E0–E4 verified; actual107cases/backend pass and exact physical parity. E5 independent nine-item scientific review next.
+- Current phase / overall state: E0–E5 verified; accepted exact scientific/native/Wasm scope. E6 atlas/profile/database preservation passed; standard package and actual browser/live gates remain.
 - Current owner: /root coordinator
 - Blocker / missing evidence: actual independent nine-item E5 review, atlas integration, packaged/live browser and CI delivery remain. No in-scope numerical failure.
 - Smallest next action / next owner: seal exact E0–E4 commit; dispatch independent scientific reviewer against E4-EVIDENCE.json2ae273fb.
@@ -46,7 +46,7 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 ## Review and integration identity
 
-- Accepted agent-review record / hash:
+- Accepted agent-review record / hash: catalogue/agent-reviews/perzyna-comsol63-agent-v1.json7cfcd2381a1ced8cf97a98b7b3e9d197b883582f8c2365efe607e0ae2dd5cbb7, actual separate /root/perzyna_scientific_e5; all9pass194directartifacts.
 - Approved model path / hash / scope:
 - Registry entry:
 - Native / Wasm toolchain and artifact receipts:
@@ -84,3 +84,5 @@ Update throughout the task and at every final/blocked/ready-to-publish handoff. 
 Record separately: source complete; executable scope; independent numerical qualification; agent approval; atlas inclusion and public profile; packaged browser; live deployment; experimental validation. An absent experimental comparison can be an explicit limitation. A missing public profile, missing website support or unverified deployment cannot be called full delivery.
 
 Active resource inventory: isolated worktree /private/tmp/atlas-perzyna-delivery-v1 and its ignored private originals/cache retained for E4–E8 by /root; durable original copies verified under shared ignored .local/private-sources/perzyna-comsol63/source-v1; no preview process or compiled artifact yet.
+
+E5 transaction clarification: accepted schedule scope preserves completed samples and returns the last committed prefix on failure; it does not roll the whole schedule back to its initial state. Source-v1 prospective wording is retained; independent scientific-review-v1 explicitly reconciles this boundary against actual late-budget evidence.
