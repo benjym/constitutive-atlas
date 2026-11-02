@@ -1,0 +1,46 @@
+--- v6/compose.py
++++ v7/compose.py
+@@ -75,7 +75,9 @@
+   for role in [backend+'_build',backend+'_linked']:
+    demand(len(data[role]['files'])==ANCHORS['expected_inventory_counts'][role],'Incomplete build/linked inventory: '+role)
+   subset(pre,expected)
+-  subset(pre,{str((root/n) if not pathlib.Path(n).is_absolute() else pathlib.Path(n)):value(v) for n,v in build['files'].items()})
++  # Native preflight binds the complete target inventory by its exact receipt hash.
++  # Wasm additionally records a flat inventory, which remains required unchanged.
++  if backend=='wasm':subset(pre,{str((root/n) if not pathlib.Path(n).is_absolute() else pathlib.Path(n)):value(v) for n,v in build['files'].items()})
+   buildhash=pre.get('native_build_inventory_sha256') if backend=='native' else pre.get('build_inventory_sha256')
+   demand(buildhash==pins[backend+'_build']['sha256'],'Preflight build receipt differs')
+   if backend=='wasm':
+@@ -103,8 +105,8 @@
+  demand(pins['native_header']['sha256']==pins['wasm_header']['sha256']==pins['normal_header']['sha256'],'Backend normal header differs')
+ 
+ def compose(spec,study_root,release_root,destination):
+- study_root=pathlib.Path(study_root).resolve();release_root=pathlib.Path(release_root).resolve();dest=pathlib.Path(destination)
+- demand(not dest.exists() and not dest.is_symlink(),'Refusing existing staging destination')
++ study_root=pathlib.Path(study_root).resolve();release_root=pathlib.Path(release_root).resolve();dest=None if destination is None else pathlib.Path(destination)
++ if dest is not None:demand(not dest.exists() and not dest.is_symlink(),'Refusing existing staging destination')
+  demand(set(spec)=={'inputs'} and set(spec['inputs'])==ROLES,'Exact required input roles needed')
+  paths={};pins={};data={};roots={};review_paths={}
+  for role,item in spec['inputs'].items():
+@@ -188,6 +190,7 @@
+  index={'model':MODEL,'status':'passed','files':{k:sha(v) for k,v in members.items()},'archive':{'path':ARCHIVE,'sha256':sha(archive)}}
+  receipt={'kind':'bingham-qualified-engine-build-v1','model':{'id':MODEL,'sha256':pins['definition']['sha256']},'artifacts':{'module':{'path':spec['inputs']['module_mjs']['path'],'sha256':sha(mjs)},'wasm':{'path':spec['inputs']['wasm']['path'],'sha256':sha(wasm)},'metadata':{'path':spec['inputs']['wasm_metadata']['path'],'sha256':sha(metadata)}},'study':'execution-v5/versioned-physical-time-v2','evidence':pins,'approval_state':'candidate-awaiting-independent-E5','runtime_source_capsule':data['study_sources'],'normal_release_generation':pins['normal_generation'],'asset_index':INDEX,'asset_archive':ARCHIVE}
+  # All qualification/identity checks precede any staged output. No canonical install here.
++ if dest is None:return {'validated':True,'input_roles':len(paths),'files_written':0,'native':{k:data['native_report'][k] for k in ['passed','cases','raw_calls','numeric_comparisons']},'wasm':{k:data['wasm_report'][k] for k in ['passed','cases','raw_calls','numeric_comparisons']},'parity_passed':data['parity_report']['passed'],'E5_acceptance_claimed':False}
+  dest.mkdir(parents=True)
+  for name,value in [(RECEIPT,(json.dumps(receipt,indent=2)+'\n').encode()),(INDEX,(json.dumps(index,indent=2)+'\n').encode()),(ARCHIVE,archive)]:
+   p=dest/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(value)
+@@ -215,5 +218,11 @@
+  for role,name in [('module','bingham.mjs'),('wasm','bingham.wasm'),('metadata','generated/models.json')]:demand(receipt['artifacts'][role]['sha256']==index['files'][name],'Receipt/archive asset mismatch')
+  return {'accepted_E5_and_registry_exact':True,'provisioning_not_performed':True}
+ if __name__=='__main__':
+- p=argparse.ArgumentParser();sub=p.add_subparsers(dest='action',required=True);c=sub.add_parser('compose');c.add_argument('--spec',type=pathlib.Path,required=True);c.add_argument('--study-root',type=pathlib.Path,required=True);c.add_argument('--release-root',type=pathlib.Path,required=True);c.add_argument('--output',type=pathlib.Path,required=True);v=sub.add_parser('verify-approved');v.add_argument('--release-root',type=pathlib.Path,required=True);v.add_argument('--review-path',required=True);a=p.parse_args()
+- print(json.dumps(compose(json.loads(a.spec.read_text()),a.study_root,a.release_root,a.output) if a.action=='compose' else verify_approved(a.release_root,a.review_path),indent=2))
++ p=argparse.ArgumentParser();sub=p.add_subparsers(dest='action',required=True)
++ for action in ['compose','validate']:
++  c=sub.add_parser(action);c.add_argument('--spec',type=pathlib.Path,required=True);c.add_argument('--study-root',type=pathlib.Path,required=True);c.add_argument('--release-root',type=pathlib.Path,required=True)
++  if action=='compose':c.add_argument('--output',type=pathlib.Path,required=True)
++ v=sub.add_parser('verify-approved');v.add_argument('--release-root',type=pathlib.Path,required=True);v.add_argument('--review-path',required=True);a=p.parse_args()
++ if a.action=='verify-approved':result=verify_approved(a.release_root,a.review_path)
++ else:result=compose(json.loads(a.spec.read_text()),a.study_root,a.release_root,a.output if a.action=='compose' else None)
++ print(json.dumps(result,indent=2))

@@ -1,0 +1,7 @@
+# Standalone generic profile regression consumer
+
+The product release keeps root CMake byte-exact; development root-CMake profile tests remain retained evidence. This standalone consumer selects the same model generator,23time fixtures, CPP main/test sources, full generic runtime/scalar library and versioned include-first header. No constitutive equations, domain, solver residual/settings/acceptance or tests change.
+
+After independent prospective source review and fresh serial handoff: cmake -S cmake/physical-time-v2 -B build-time-v2 -DCMAKE_BUILD_TYPE=Release; build separately atlas_schedule_predictor_tests, atlas_time_tests, atlas_time_solver --parallel 1. Pin all target/scalar/compiler/cache/generated/flags/dependencies/binaries before observations, with actual versioned schedule required/common excluded for predictor and main. Run both compiled tests and ATLAS_TIME_SOLVER=absolute python3 -B -m unittest tests.test_time tests.test_schedule. All18Python/newCPP/originaltime assertions mandatory, no skips or gate changes. Preserve any failure.
+
+These standalone targets become mandatory native CI steps before the full Bingham136case qualification. The current running Bingham v5 uses only its unchanged cmake/bingham target and exact prior freeze; adding this unselected independent consumer does not alter that study. A fresh fixed public engine remains tied to its actual source capsule/artifact, not an assertion of a new live source rebuild. No E5/Wasm/fullmodel approval inferred.

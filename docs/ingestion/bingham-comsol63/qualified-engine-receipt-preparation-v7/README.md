@@ -1,0 +1,20 @@
+# Qualified engine receipt preparation v7
+
+Task FIX-bingham-qualified-engine-receipt-preparation-v7. Own only this new directory. V6 remains unchanged, including its retained failed actual validation and independent changes-requested review. `LINEAGE.json` verifies every v6 manifest member and pins the exact reviewer witness, report, bindings and completed actual53-role spec048001ad. No actual native/Wasm evidence was rewritten, flattened, repinned or supplemented by this task.
+
+The correction is narrowly scoped to the native preflight schema. The real native preflight binds its complete15-member target inventory through `native_build_inventory_sha256` and its executable through a dedicated `binary` field. It does not duplicate target files inside `files`. V7 accepts that exact indirect edge and still requires the anchored build receipt hash, complete target inventory and current bytes, postflight inventory binding, and pre/build/post/collector executable identity. The Wasm flat preflight subset remains unchanged. All scientific helpers, anchors, cases, settings, references and acceptance gates are identical to v6. `SOURCE-DELTA.patch` records the source change.
+
+The new `validate` CLI uses the same `compose` function and all its production checks. It computes prospective receipt/ZIP/index bytes in memory, then returns before the sole output-writing block. There is no alternative weaker validator, fabricated preflight or injected numerical function. Exact anchors are checked before dynamic qualification imports as before. `compose` with an actual output path retains its existing behavior; this task did not invoke that writing operation.
+
+The exact completed actual spec passed `validate` with zero candidate files written. Both unchanged frozen pure assessors reproduced actual native and Wasm reports:136 cases,272 calls,7771 comparisons each; the original pure parity check also passed. This is saved-evidence transport/readiness validation, not engine execution, experimental validation, E5 acceptance, registry integration or approval. Read exact stdout/status in `actual-validate-attempt1.log` and `actual-validate-attempt1-status.json`.
+
+All42 prior test names/checks remain. Four new checks cover honest native indirection plus no-write validation, changed indirect receipt digest, omitted digest and omitted native inventory member. The shared mock fixture now models the actual native shape from its initial construction, before its downstream mock receipts are generated.46 tests pass in `mock-tests-attempt2.log`; attempt1 is preserved: its new test changed an already cross-bound mock postreceipt without updating the SDK downstream pin and was correctly rejected. The fixture setup was corrected; production policies and evidence did not change to make it pass. Subprocess APIs remain blocked in mocks; temporary fake assets are removed.
+
+Reproduce from `/private/tmp/atlas-time-profile-v2`:
+
+```sh
+PYTHONPATH=. python3 -B docs/ingestion/bingham-comsol63/qualified-engine-receipt-preparation-v7/test_composer.py -v
+PYTHONPATH=. python3 -B docs/ingestion/bingham-comsol63/qualified-engine-receipt-preparation-v7/compose.py validate --spec docs/ingestion/bingham-comsol63/execution-v5/qualified-engine-input-spec-v1.json --study-root /private/tmp/atlas-time-profile-v2 --release-root /private/tmp/atlas-bingham-release-v2
+```
+
+Smallest next action: independent review of this exact v7 packet and actual no-write evidence. After that source review, the coordinator can stage immutable candidates in a new directory using `compose --spec … --study-root … --release-root … --output /ABS/NEW-STAGING`, retaining the same53-role actual spec. Independent scientific E5 must bind the actual candidates and evidence before canonical installation/provision/registry integration. V6's honest supplement timings, source-capsule versus current-release generator distinction and packaging contract remain applicable. No build, compiled/material call, actual candidate creation, shared installation, approval or Git mutation occurred here.

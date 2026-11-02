@@ -1,0 +1,12 @@
+--- tests/test_j2_main_routing.mjs
++++ candidate/tests/test_j2_main_routing.mjs
+@@ -46,6 +46,9 @@
+ assert.equal(setups.filter(name=>name==='setupOrthotropicLaboratory').length,1);checks++;
+ assert.ok(registration.includes("setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')})"));checks++;
+ assert.ok(source.includes("import {setupOrthotropicLaboratory} from './orthotropic-laboratory.mjs';"));checks++;
++assert.equal(setups.filter(name=>name==='setupBinghamLaboratory').length,1);checks++;
++assert.ok(registration.includes("setupBinghamLaboratory({chart,cancelOrdinary:()=>cancel('')})"));checks++;
++assert.ok(source.includes("import {setupBinghamLaboratory} from './bingham-laboratory.mjs';"));checks++;
+ // Execute the exact ordinary import function with delayed file text; profile changes and
+ // newer ordinary revisions must suppress it before parsing/applying a stale request.
+ const applied=[];context.applied=applied;context.parseLaboratoryDocument=text=>({text});context.applyRunSpecification=spec=>applied.push(spec);context.toast=()=>{throw Error('Unexpected ordinary toast.');};

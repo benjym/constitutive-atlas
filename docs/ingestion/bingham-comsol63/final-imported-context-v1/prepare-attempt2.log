@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-bingham-release-v3/docs/ingestion/bingham-comsol63/final-imported-context-v1/prepare.py", line 86, in <module>
+    for path,h in found:edges.append({'document':n,'original_path':path,'sha256':h,'before':outcome(ROOT,n,path,h)})
+                                                                                            ~~~~~~~^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-bingham-release-v3/docs/ingestion/bingham-comsol63/final-imported-context-v1/prepare.py", line 60, in outcome
+    p=checked_receipt(root,d,n,h);return {'ok':True,'resolved':p.relative_to(root).as_posix(),'sha256':sha(p)}
+  File "/private/tmp/atlas-bingham-release-v3/atlas/evidence.py", line 83, in checked_receipt
+    if not contains_receipt(json.loads(doc.read_text())):
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-bingham-release-v3/atlas/evidence.py", line 81, in contains_receipt
+    return any(contains_receipt(value) for value in node.values())
+           ^^^
+  File "/private/tmp/atlas-bingham-release-v3/atlas/evidence.py", line 81, in <genexpr>
+    return any(contains_receipt(value) for value in node.values())
+               ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/private/tmp/atlas-bingham-release-v3/atlas/evidence.py", line 82, in contains_receipt
+    return isinstance(node, list) and any(contains_receipt(value) for value in node)
+                                      ^^^
+  File "/private/tmp/atlas-bingham-release-v3/atlas/evidence.py", line 82, in <genexpr>
+    return isinstance(node, list) and any(contains_receipt(value) for value in node)
+                                          ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/private/tmp/atlas-bingham-release-v3/atlas/evidence.py", line 81, in contains_receipt
+    return any(contains_receipt(value) for value in node.values())
+           ^^^
+  File "/private/tmp/atlas-bingham-release-v3/atlas/evidence.py", line 81, in <genexpr>
+    return any(contains_receipt(value) for value in node.values())
+               ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/private/tmp/atlas-bingham-release-v3/atlas/evidence.py", line 75, in contains_receipt
+    def contains_receipt(node):
+    
+KeyboardInterrupt

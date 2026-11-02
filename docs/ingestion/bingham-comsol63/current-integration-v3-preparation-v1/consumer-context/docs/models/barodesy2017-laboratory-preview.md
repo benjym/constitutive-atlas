@@ -1,0 +1,23 @@
+# Barodesy clay2017 draft laboratory preview
+
+The local runnable catalogue now includes [barodesy-clay-2017.json](../../models/barodesy-clay-2017.json), labelled **draft**. It is the Medicus–Fellin2017 **body Eqs1–10, zero-spin** selection, not a claim that all printed variants or the author UMAT agree. The [source review](../reviews/barodesy2017-independent-review.md) supports that explicitly named selection and records body2p versus Appendix6p critical density and ambiguous spin typography. The [original publication](https://doi.org/10.1007/s11440-016-0458-4), source receipt, formula locators and numerical limitations remain linked. No copyrighted PDF or author binary is bundled or executed.
+
+The existing [research model](../../models/research/barodesy2017/body-zero-spin.json) and historical evidence remain unchanged. The public preview has a new ID/version/hash; it is not a second literature family. Equations, parameters and domain match the research selection exactly. The current preview status is draft, not numerically-tested/reviewed scientific admission. Existing research references cover only their recorded definitions/scopes and do not automatically become current-definition evidence.
+
+## Contract and use
+
+Schema v0.3 declares dimensionless strain-path rates, infinitesimal3D Mandel components, fixed spatial frame, zero objective rate, compression-positive effective Cauchy stress, six persistent stress components and scalar invariant void ratio. Stress is bound to state sigma. Initial stress/e must be explicit; literals are examples. Default parameters reproduce the research Table2 fixture, not a source-matched experimental preparation or a universal clay calibration. The UI shows editable examples and sends explicit arrays.
+
+Conservative normalized positive-stress minors and a bounded symmetric exponential restrict numerical support. Ill-conditioned positive-definite tensors may reject; no stress floor/projection is added. Exact zero/hydrostatic continuations are explicit numerical choices. Finite rotation, full author-code equivalence, near-hydrostatic/zero-loading update tangents, physical preparation and experiments remain open. Laboratory runs can reject outside supported stress/parameter/loading regimes; the retained small-amplitude matrix is not a universal convergence guarantee.
+
+## Current preview verification
+
+The [frozen study](../../catalogue/investigations/barodesy2017-preview-v1/README.md) builds the actual production cpp/main.cpp with a generated single-model catalogue, all required headers and schema/compiler snapshots. All five lab protocols run monotonically and cyclically,32 increments each, in native C++ and one persistent Wasm module. Each of the330 returned caller points/backend passes independent incompressible-grain void closure and its prescribed controls. Zero-update preserves all state bits. An indefinite stress and omitted explicit state reject. Thirteen requests/backend plus embedded descriptor were retained before assessment; complete requested status/identity checks pass.
+
+The [combined six-model follow-up](../../catalogue/investigations/barodesy2017-preview-v2/RESULTS.md) repeats the same requests and gates with all five previous public definitions unchanged. Both complete catalogue descriptors and the new positional parameter order pass. A separate frozen follow-up also passes the browser default request of 1% drained loading over 100 increments in both backends; this checks the request through the engine, not rendered-browser QA. The current-worktree catalogue/schema/solver/browser suite passes 51 tests (three optional native state-contract tests skipped).
+
+Maximum void closure error is5.564770866328672e-12 against the predeclared1e-6 absolute limit. Maximum scaled backend channel difference is3.086927381168996e-11 against1e-10. These are software integration checks; no experimental fit or integrated tangent is claimed. Prior [independent finite-path comparisons](../reviews/barodesy2017-wider-integration-results.md) remain separately scoped historical support.
+
+This local addition increases runnable definitions from five to six while the literature catalogue stays at32 entries. Deployment is separate; the hosted site remains at five until an authorized deployment includes this change. No scientific release or model review is implied by software availability.
+
+The [local integration report](../reviews/v03-laboratory-integration/RESULTS.md) also records a rendered-browser check: six model choices, draft label, successful default response plots, export controls and primary/definition hyperlinks. This local browser check does not authorize or imply hosted deployment.

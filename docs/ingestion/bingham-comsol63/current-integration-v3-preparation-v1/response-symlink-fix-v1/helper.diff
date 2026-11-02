@@ -1,0 +1,17 @@
+--- 51ca/record_cmake_profile_build.py
++++ v3-response-fix/record_cmake_profile_build.py
+@@ -75,9 +75,11 @@
+     for token in tokens:
+         require(not re.search(r'[;$`|&<>\n\r]',token), 'Unsafe shell/expansion syntax in response arguments')
+         if token.startswith('@'):
+-            path = (build/token[1:]).resolve()
+-            require(path.is_relative_to(build), 'Response file escapes build')
+-            local(build,path.relative_to(build));records.add(path); digest(path)
++            unresolved = Path(token[1:])
++            if not unresolved.is_absolute(): unresolved = build/unresolved
++            require(unresolved.is_relative_to(build), 'Response file escapes build')
++            local(build,unresolved.relative_to(build))
++            path = unresolved.resolve();records.add(path);digest(path)
+             output.extend(expand_responses(shlex.split(path.read_text()), build, records, depth+1))
+         else: output.append(token)
+     return output

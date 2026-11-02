@@ -1,0 +1,80 @@
+{
+  "identity": "bingham-source-only-step-bound-analysis-v1",
+  "parameters": {
+    "G_Pa": 10000000.0,
+    "Y_Pa": 100000.0,
+    "eta_Pa_s": 20000000.0,
+    "duration_s": 2.0
+  },
+  "tau_s": 0.6666666666666666,
+  "max_initial_abs_scalar_stress_rate_Pa_per_s": 390000.0,
+  "max_abs_elastic_scalar_loading_rate_Pa_per_s": 240000.0,
+  "exact_BE_global": {
+    "H_from_alpha_floor_s": 3.846153846153846e-06,
+    "host_M_from_alpha_floor_s": 7.692307692307692e-06,
+    "note": "exact solves only, no roundoff or nonlinear residual allocation"
+  },
+  "event_local_proposed_formula": {
+    "M_s": 0.0004069010416666667,
+    "H_s": 0.00020345052083333334,
+    "H_over_tau": 0.00030517578125000005,
+    "missed_exit_alpha_upper": 2.4835268656412765e-10,
+    "immediate_scalar_stress_error_upper_Pa": 0.00745058059692383,
+    "immediate_vp_component_upper": 3.041686791657381e-10,
+    "later_alpha_error_upper_over_T": 9.934107462565106e-10,
+    "conservative_using_entire_M_as_step_alpha_upper": 9.934107462565106e-10,
+    "dyadic_halfsteps_for_two_seconds_from_cap_alone": 16384,
+    "note": "one active-exit omission only; not total integration error"
+  },
+  "source_hashes": {
+    "docs/ingestion/bingham-comsol63/source-v1/candidate.json": "6c5ee29c5c8cfbe18eaac09808a86ed7b656c8716511409bb23ecd0d3ad89850",
+    "docs/ingestion/bingham-comsol63/source-v1/analytical-references.json": "16331eb4676dc6eb32ae0d4e2a42ada86e8740bf9fdec112f46f1f8b55aef37d",
+    "docs/ingestion/bingham-comsol63/execution-v2/cases.json": "f4dac1ee61818ea88199821d69f4be8c208c1bb01879b075f7434e15b2b19374",
+    "docs/ingestion/bingham-comsol63/execution-v2/freeze-v1.json": "2aa8e5e4b3ed4dce7fc74fd290cbf5adf2fef96a6afc344fbf7e13da598b9f0a",
+    "cpp/include/atlas/schedule.hpp": "5c90e6cede9f24f124286cf10e2254a47a991e5d62f9bc7b3899ed62e6deb7e9"
+  },
+  "pure_algebra_checks": [
+    {
+      "aH": 1e-06,
+      "exit_integral_dimensionless": 4.99999666600458e-13,
+      "quadratic_upper": 5e-13,
+      "pass": true
+    },
+    {
+      "aH": 0.0001,
+      "exit_integral_dimensionless": 4.999666691665305e-09,
+      "quadratic_upper": 5e-09,
+      "pass": true
+    },
+    {
+      "aH": 0.001,
+      "exit_integral_dimensionless": 4.996669164668722e-07,
+      "quadratic_upper": 5e-07,
+      "pass": true
+    },
+    {
+      "aH": 0.01,
+      "exit_integral_dimensionless": 4.9669146831916866e-05,
+      "quadratic_upper": 5e-05,
+      "pass": true
+    },
+    {
+      "aH": 0.1,
+      "exit_integral_dimensionless": 0.00468982019567514,
+      "quadratic_upper": 0.005000000000000001,
+      "pass": true
+    },
+    {
+      "aH": 1,
+      "exit_integral_dimensionless": 0.3068528194400547,
+      "quadratic_upper": 0.5,
+      "pass": true
+    },
+    {
+      "aH": 10,
+      "exit_integral_dimensionless": 7.602104727201629,
+      "quadratic_upper": 50.0,
+      "pass": true
+    }
+  ]
+}

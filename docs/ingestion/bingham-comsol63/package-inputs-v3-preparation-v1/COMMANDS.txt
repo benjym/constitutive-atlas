@@ -1,0 +1,51 @@
+PROSPECTIVE COORDINATOR COMMANDS ONLY. NONE EXECUTED BY THIS PACKET.
+Working directory: /private/tmp/atlas-bingham-release-v3
+
+Preconditions:
+- Actual accepted canonical E5 review and exact registry entry installed by coordinator.
+- Independently accepted 28-file current composition installed, including unchanged public cap/checker.
+- Final complete imported-tree preservation replay succeeds; current prior database rows preserved.
+- Copy ONLY the 24 regular files in ASSET-COPY-ALLOWLIST.json to its exact .local/e7-qualified-assets destinations after source SHA/size checks. Refuse pre-existing destinations and symlink path components; verify destination bytes after copying. This packet does not perform the copy or introduce a new provisioner.
+- build-bingham-public, build-maxwell-wasm, build-controlled-path-public and build-implicit-path-wasm must be absent; retain prior attempts separately, never overwrite them.
+- Record actual deployment revision and current source identities in package logs. Set GITHUB_SHA to that actual full revision (not the baseline e6f06114 unless it is truly the package revision).
+
+python3 -B tools/provision_bingham_assets.py --output build-bingham-public
+python3 -B tools/provision_bingham_dependency_assets.py --maxwell-output build-maxwell-wasm --controlled-path-output build-controlled-path-public
+python3 -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+python3 -B tools/provision_implicit_path_assets.py --output build-implicit-path-wasm
+
+Normal builder; executes compiled package checks and writes web/dist:
+python3 -B tools/build_web.py \
+  --wasm-dir .local/e7-qualified-assets/wasm-dir \
+  --burgers-wasm-dir .local/e7-qualified-assets/burgers-wasm-dir \
+  --hill-wasm-dir .local/e7-qualified-assets/hill-wasm-dir \
+  --j2-wasm-dir .local/e7-qualified-assets/j2-wasm-dir \
+  --kelvin-voigt-wasm-dir .local/e7-qualified-assets/kelvin-voigt-wasm-dir \
+  --orthotropic-wasm-dir .local/e7-qualified-assets/orthotropic-wasm-dir \
+  --power-creep-wasm-dir .local/e7-qualified-assets/power-creep-wasm-dir \
+  --sls-wasm-dir .local/e7-qualified-assets/sls-wasm-dir \
+  --maxwell-wasm-dir build-maxwell-wasm \
+  --implicit-path-wasm-dir build-implicit-path-wasm \
+  --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/qualified-norsand-unit-alias-v1 \
+  --bingham-wasm-dir build-bingham-public \
+  --output web/dist
+
+Keep normal package/CI checks (each potentially executes material modules):
+node tools/test_bingham_package.mjs web/dist
+node --test tests/test_ensemble.mjs
+python3 -B -m unittest tests.test_ensemble_package
+node tools/test_ensemble_wasm.mjs --wasm .local/e7-qualified-assets/wasm-dir/atlas.js --experiment web/dist/ensemble-experiment.json --output .local/e7-ensemble-wasm.json
+node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path .local/e7-lade-public-presets.json web/dist/engine-implicit-path/identity.json
+node tools/test_experiments.mjs --built-assets web/dist/experiments
+node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+node tools/test_supported_package.mjs --directory web/dist --output .local/e7-packaged-laboratory.json
+
+Preserve the prospective source/database policy and current prior rows:
+python3 -B docs/ingestion/bingham-comsol63/current-integration-v3-preparation-v1/check_preservation.py --database web/dist/atlas.sqlite --catalogue web/dist/models.json --review catalogue/agent-reviews/bingham-comsol63-agent-v1.json
+
+Actual browser owner, after all package checks pass:
+python3 -m http.server 8765 --bind 127.0.0.1 --directory web/dist
+Open http://127.0.0.1:8765/index.html#laboratory?model=bingham-comsol63-mises-perfect-zero-spin-ode
+Complete E7 browser matrix and retain artifacts. This does not authorize or perform remote CI, push or deployment.
+
+CI is a distinct fresh-build path: use the exact selected verify.yml, its pre-consumer build receipts and post-consumer verification, all generic/native/Wasm checks and always-upload logs. Do not replace its builds with the retained asset-copy option or remove checks. The current workflow still selects the current-main controlled-path unit-alias directory explicitly.

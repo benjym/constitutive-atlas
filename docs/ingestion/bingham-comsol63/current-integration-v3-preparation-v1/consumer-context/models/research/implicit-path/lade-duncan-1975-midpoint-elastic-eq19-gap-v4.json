@@ -1,0 +1,294 @@
+{
+  "schema_version": "0.3",
+  "id": "lade-duncan-1975-midpoint-elastic-eq19-gap-v4",
+  "name": "Lade\u2013Duncan1975 \u2014 midpoint-elastic local Eq19 gap-history candidate v4",
+  "family": "elastoplasticity",
+  "description": "Source differential law with declared midpoint elastic/endpoint plastic split, previous least-pressure residual preconditioning and opt-in generic adaptive implicit path control. Preserves failed v1/v2/v3 evidence; no pressure floor or postfailure extension; mechanical zero-pore-pressure fixed-frame embedding.",
+  "status": "draft",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1061/AJGEB6.0000204",
+      "locator": "pp1039\u20131048 Eqs1\u201319, Table1; pp1042/1050 unloading and constant-f behavior",
+      "role": "Original1975 source; see private exact-byte source receipt and candidate POLICY.json for numerical/embedding choices"
+    }
+  ],
+  "parameters": {
+    "pa": {
+      "default": 101325,
+      "min": 101325,
+      "max": 101325,
+      "unit": "Pa"
+    },
+    "k1": {
+      "default": 103,
+      "min": 58,
+      "max": 103,
+      "unit": "1"
+    },
+    "ft": {
+      "default": 40,
+      "min": 33,
+      "max": 40,
+      "unit": "1"
+    },
+    "A": {
+      "default": 0.44,
+      "min": 0.39,
+      "max": 0.44,
+      "unit": "1"
+    },
+    "rf": {
+      "default": 0.957,
+      "min": 0.957,
+      "max": 0.97,
+      "unit": "1"
+    },
+    "M": {
+      "default": 0.000255,
+      "min": 0.000255,
+      "max": 0.00068,
+      "unit": "1"
+    },
+    "l": {
+      "default": 1.32,
+      "min": 1.17,
+      "max": 1.32,
+      "unit": "1"
+    },
+    "Kur": {
+      "default": 2300,
+      "min": 1600,
+      "max": 2300,
+      "unit": "1"
+    },
+    "n": {
+      "default": 0.8,
+      "min": 0.8,
+      "max": 0.86,
+      "unit": "1"
+    },
+    "nu_i": {
+      "default": 0,
+      "min": 0,
+      "max": 0,
+      "unit": "1"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        100000,
+        100000,
+        100000,
+        0,
+        0,
+        0
+      ],
+      "scale": "pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "q",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 13,
+      "scale": "ft",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "signed_history_gap_encoding",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "wp",
+      "shape": "scalar",
+      "unit": "Pa",
+      "initial": 0,
+      "scale": "pa",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "plastic_work_density",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "s",
+      "expr": "sigma / pa"
+    },
+    {
+      "name": "smin",
+      "expr": "select(principal_min_repeated(s), select(principal_max_repeated(s), trace(s)/3, (trace(s)-principal_max(s))/2), principal_min(s))"
+    },
+    {
+      "name": "i1",
+      "expr": "trace(s)"
+    },
+    {
+      "name": "i2",
+      "expr": "(i1**2-dot(s,s))/2"
+    },
+    {
+      "name": "i3",
+      "expr": "determinant(s)"
+    },
+    {
+      "name": "f",
+      "expr": "i1**3/i3"
+    },
+    {
+      "name": "fprev",
+      "expr": "trace(sigma_n/pa)**3 / determinant(sigma_n/pa)"
+    },
+    {
+      "name": "hprev",
+      "expr": "max(ft,fprev+max(q_n,0))"
+    },
+    {
+      "name": "H",
+      "expr": "max(ft,f+max(q,0))"
+    },
+    {
+      "name": "k2",
+      "expr": "A*f+27*(1-A)"
+    },
+    {
+      "name": "gbar",
+      "expr": "i1**3-k2*i3"
+    },
+    {
+      "name": "cof",
+      "expr": "tensor_square(s)-i1*s+i2*I"
+    },
+    {
+      "name": "flow",
+      "expr": "3*i1**2*I-k2*cof"
+    },
+    {
+      "name": "sn",
+      "expr": "sigma_n / pa"
+    },
+    {
+      "name": "sminprev",
+      "expr": "select(principal_min_repeated(sn),select(principal_max_repeated(sn),trace(sn)/3,(trace(sn)-principal_max(sn))/2),principal_min(sn))"
+    },
+    {
+      "name": "smid",
+      "expr": "(s+sn)/2"
+    },
+    {
+      "name": "sminmid",
+      "expr": "select(principal_min_repeated(smid),select(principal_max_repeated(smid),trace(smid)/3,(trace(smid)-principal_max(smid))/2),principal_min(smid))"
+    },
+    {
+      "name": "E",
+      "expr": "Kur*pa*sminmid**n"
+    },
+    {
+      "name": "bulk",
+      "expr": "E/(3*(1-2*nu_i))"
+    },
+    {
+      "name": "shear",
+      "expr": "E/(2*(1+nu_i))"
+    },
+    {
+      "name": "a",
+      "expr": "M*pa*smin**l"
+    },
+    {
+      "name": "den",
+      "expr": "1-rf*(f-ft)/(k1-ft)"
+    },
+    {
+      "name": "dfnew",
+      "expr": "max(f-hprev,0)"
+    },
+    {
+      "name": "dwp",
+      "expr": "a*dfnew/(den**2)"
+    },
+    {
+      "name": "gamma",
+      "expr": "select(dfnew>0,(dwp/pa)/(3*gbar),0)"
+    },
+    {
+      "name": "dep",
+      "expr": "gamma*flow"
+    },
+    {
+      "name": "dee",
+      "expr": "de-dep"
+    }
+  ],
+  "equations": {
+    "sigma": "(sigma-sigma_n-bulk*trace(dee)*I-2*shear*dev(dee))/sminprev",
+    "wp": "wp-wp_n-dwp",
+    "q": "q-select(dot(de,de)>0,max(hprev-f,0),q_n)"
+  },
+  "domain": [
+    "smin>0",
+    "k1>ft",
+    "ft>27",
+    "A>0",
+    "A<1",
+    "rf>0",
+    "rf<1",
+    "H>=ft",
+    "H<=k1",
+    "wp>=0*pa",
+    "f<=k1",
+    "den>0",
+    "sminprev>0",
+    "sminmid>0"
+  ],
+  "initial_checks": [],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "total"
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "q",
+      "wp"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "id": "norsand-1993-loose-constant-cell",
+  "profile": "controlled-path-ode-v1",
+  "model": "norsand-jefferies-1993-active-axial",
+  "definition_sha256": "67ff78f8cd56fd8812ba42f4456105b6e7ae217090dbcf40d8f8d5f839995d2c",
+  "title": "NorSand 1993: loose normally consolidated sand at constant cell pressure",
+  "status": "qualified bounded example; model admission pending",
+  "source": "https://doi.org/10.1680/geot.1993.43.1.91",
+  "context": {
+    "state": {
+      "eta": 0.0,
+      "e": 0.8292882849188496,
+      "ev": 0.0,
+      "eq": 0.0
+    },
+    "coordinate": 7.0,
+    "controls": {
+      "pressure_control": 130000.0,
+      "stress_ratio_control": 0.3333333333333333
+    },
+    "parameters": {
+      "M": 1.2,
+      "N": 0.2,
+      "h": 280,
+      "lam": 0.0135,
+      "Gamma": 0.82,
+      "pref": 1000
+    }
+  },
+  "advance": {
+    "progress": 0.16,
+    "controls_end": {
+      "pressure_control": 130000.0,
+      "stress_ratio_control": 0.3333333333333333
+    }
+  },
+  "execution": {
+    "absolute": 1e-10,
+    "relative": 1e-08,
+    "min_step": 1e-12,
+    "max_step": 0.001,
+    "max_depth": 40,
+    "max_trials": 100000
+  },
+  "qualification": {
+    "request": "N0.2-psi0.075-constant_cell",
+    "packet": "docs/ingestion/norsand-1993/e2-v3/README.md",
+    "reference": "docs/ingestion/norsand-1993/e2-v3/references-v2.json",
+    "endpoint": {
+      "state": [
+        1.1261162923255257,
+        0.7741969247960759,
+        0.030579092431985307,
+        0.15999999999999698
+      ],
+      "observables": [
+        364371.7233936531,
+        130000.0,
+        130000.0,
+        0.0,
+        0.0,
+        0.0,
+        208123.90779788437,
+        234371.7233936531,
+        195788.09057456724,
+        0.025436868997458548,
+        0.09235463459309284,
+        0.17019303081065876,
+        -0.06980696918933672
+      ]
+    }
+  },
+  "interpretation": "Original active monotonic drained rigid-plastic axial law; source-reference numerical example, not digitized experimental data. Coordinate offset is retained. Volumetric strain uses current-volume increments and incompressible grains."
+}

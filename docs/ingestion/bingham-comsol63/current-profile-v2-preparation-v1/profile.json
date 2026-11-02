@@ -1,0 +1,105 @@
+{
+  "title": "Bingham elastoviscoplastic solid · associative von Mises",
+  "summary": "An elastic solid that develops permanent, time-dependent shear deformation only when its equivalent stress exceeds a fixed yield stress.",
+  "introduction": "The Bingham solid combines reversible elastic deformation with a viscous resistance to permanent deformation. Below its yield stress, it responds elastically. Above that threshold, the excess stress drives viscoplastic flow: a larger excess produces a faster rate. This model is useful for separating the effects of a yield threshold from the effects of loading time.",
+  "behaviours": [
+    [
+      "An elastic interval followed by viscous flow",
+      "The von Mises equivalent stress measures the intensity of the stress that changes shape. Flow is zero below and exactly at the yield stress. Above it, permanent strain accumulates at a rate proportional to the excess stress. Mean stress alone does not cause this flow."
+    ],
+    [
+      "Relaxation stops at a yield threshold",
+      "Holding all strains fixed lets an initially overstressed material reduce its deviatoric stress toward the yield stress. The stress does not have to decay to zero. The mean stress stays constant, because volume change is entirely elastic."
+    ],
+    [
+      "Continuing creep above yield",
+      "Holding an above-yield stress fixed produces continuing permanent deformation. A stress below or at the threshold produces no creep. A larger viscosity slows the creep rate and makes stress relaxation take longer."
+    ],
+    [
+      "Permanent strain without hardening",
+      "The yield stress stays fixed as deformation accumulates. On reversal, the stress can traverse an elastic interval before flow develops in the opposite direction. The accumulated equivalent viscoplastic strain keeps increasing even when some tensor strain components reverse."
+    ]
+  ],
+  "explorationTitle": "Compare a strain hold with a stress hold",
+  "exploration": "In the laboratory, use Reset Bingham preset to load the complete example. Under Physical-time experiment, choose Relaxation · hold all strains and select Run physical-time history. Inspect Selected total stress against physical time and the accumulated equivalent viscoplastic strain. The preset starts above yield, so permanent strain grows while the deviatoric stress relaxes. Use Plot component · Mandel to inspect the normal and shear components; the yield stress applies to their combined equivalent stress, not to each component separately.",
+  "comparison": "Start again from Reset Bingham preset, choose Creep · hold all stresses, and run the history. Stress now stays fixed while strain grows. Increase η in Parameters, keeping K, G, σy and the complete initial state unchanged, then repeat either experiment to see a slower response. Loading · constant strain rate supplies a third comparison: all six entries in Strain rate act together for the selected Duration. To compare rates, start each run from the same complete initial state.",
+  "parameters": [
+    {
+      "name": "K",
+      "symbol": "K",
+      "meaning": "Elastic bulk modulus",
+      "help": "Controls the reversible resistance to a change in volume. The viscoplastic flow does not change volume.",
+      "unit": "Pa"
+    },
+    {
+      "name": "G",
+      "symbol": "G",
+      "meaning": "Elastic shear modulus",
+      "help": "Controls the reversible resistance to a change in shape. Together with η, it sets how quickly an overstressed state relaxes during a strain hold.",
+      "unit": "Pa"
+    },
+    {
+      "name": "sigma_y",
+      "symbol": "σy",
+      "meaning": "Equivalent yield stress",
+      "help": "Sets the fixed threshold for viscoplastic flow. This threshold applies to the von Mises equivalent stress and does not increase with accumulated strain.",
+      "unit": "Pa"
+    },
+    {
+      "name": "eta",
+      "symbol": "η",
+      "meaning": "Viscoplastic viscosity",
+      "help": "Converts excess equivalent stress into a rate of permanent deformation. At the same stress, increasing η reduces that rate.",
+      "unit": "Pa·s"
+    }
+  ],
+  "parameterNote": "All four coefficients are positive. Stress and moduli use pascals, viscosity uses pascal seconds, strain is dimensionless and physical time uses seconds. The displayed values are illustrative; identify the coefficients for the material, temperature and loading range of interest. The preset is an illustrative example; changes to coefficients, the complete starting state or elapsed time need their own numerical accuracy checks.",
+  "stateLabels": {
+    "eps": "Total infinitesimal strain ε",
+    "eps_vp": "Viscoplastic strain εvp",
+    "alpha": "Accumulated equivalent viscoplastic strain α"
+  },
+  "preparation": "Supply the six total-strain components, six viscoplastic-strain components and accumulated equivalent viscoplastic strain α, together with the parameters and start time. Stress follows from the elastic strain ε − εvp; it is not an additional independent initial input. Viscoplastic strain has zero trace, and α is nonnegative. All tensor entries use [xx, yy, zz, √2xy, √2yz, √2xz], so shear entries include the √2 factor. Reset Bingham preset supplies this complete starting context, with zero initial viscoplastic memory and a nonzero elastic strain. It represents an illustrative starting state; it does not describe how a specimen was brought to that state. A restarted history must retain all 13 state components, including α, which cannot be recovered from the current viscoplastic-strain tensor after reversals.",
+  "scope": "This is the COMSOL 6.3 Bingham law with isotropic linear elasticity, associative von Mises flow, a constant yield stress and no hardening. It uses three-dimensional infinitesimal strain, fixed spatial axes and compression-positive stress and strain. Stress is dry total Cauchy stress. The response depends on physical time; relaxation, creep and constant-rate loading describe different mechanical constraints.",
+  "limits": "There is no volumetric viscoplasticity, evolving yield strength, back stress, damage, temperature dependence or pore-fluid response. The formulation does not include finite strains or transport under finite rotations. Accumulated strain records deformation but does not strengthen the material. The laboratory’s single strain hold, stress hold or constant-rate segment does not prescribe a general cyclic loading history.",
+  "equationIntro": "ε is total strain, εvp is viscoplastic strain, s is the deviatoric stress, q is its von Mises equivalent value and α records accumulated equivalent viscoplastic strain. A dot denotes a rate per physical second. max(q − σy,0) is the positive part of the excess stress.",
+  "equations": [
+    [
+      "Elastic stress",
+      "σ = K tr(ε − εvp) I + 2G dev(ε − εvp)"
+    ],
+    [
+      "Equivalent stress and flow rate",
+      "q = √(3s:s/2); λ = max(q − σy, 0)/η"
+    ],
+    [
+      "Viscoplastic memory",
+      "ε̇vp = (3λ/2q)s for q > 0, otherwise zero; α̇ = λ"
+    ]
+  ],
+  "equationNote": "Flow is zero throughout q ≤ σy. For a strain hold starting above yield, q approaches σy with time scale η/(3G), while mean stress remains fixed.",
+  "references": [
+    {
+      "label": "COMSOL 6.3 — Bingham model, viscoplastic flow and physical-time equations",
+      "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.039.html"
+    },
+    {
+      "label": "COMSOL 6.3 — Viscoplasticity settings: Bingham viscosity and perfect plasticity",
+      "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_solid.07.024.html"
+    },
+    {
+      "label": "COMSOL 6.3 — Isotropic elastic stress and elastic-strain decomposition",
+      "url": "https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html"
+    }
+  ],
+  "related": [
+    "sls-comsol63-deviatoric-zero-spin-ode",
+    "burgers-itasca900-dry-zero-spin-ode"
+  ],
+  "contentSources": [
+    "docs/ingestion/bingham-comsol63/source-v1/README.md",
+    "docs/ingestion/bingham-comsol63/source-v1/candidate.json",
+    "web/bingham-atlas-contract.mjs",
+    "web/bingham-laboratory.mjs"
+  ]
+}

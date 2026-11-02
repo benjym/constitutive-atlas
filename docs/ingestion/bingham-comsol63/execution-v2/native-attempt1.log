@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-bingham-delivery-v1/docs/ingestion/bingham-comsol63/execution-v2/study.py", line 145, in <module>
+    elif a.action=='native':print(json.dumps(collect(a.solver,a.raw),indent=2))
+                                             ~~~~~~~^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-bingham-delivery-v1/docs/ingestion/bingham-comsol63/execution-v2/study.py", line 141, in collect
+    report=assess(cases,rows);output.with_name(output.stem+'-report.json').write_text(json.dumps(report,indent=2)+'\n');return report
+  File "/private/tmp/atlas-bingham-delivery-v1/docs/ingestion/bingham-comsol63/execution-v2/study.py", line 123, in assess
+    ee=max(ee,compare(point['state'],ref['state'],'state',coarse));pe=max(pe,compare(point['observables'],ref['stress'],'stress',coarse));count+=19;previous=point
+              ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-bingham-delivery-v1/docs/ingestion/bingham-comsol63/execution-v2/study.py", line 56, in compare
+    assert err<=bound,(kind,err,bound,x,y);worst=max(worst,err)
+           ^^^^^^^^^^
+AssertionError: ('state', 9.593627617714325e-06, 3e-07, -0.002182301137521574, -0.00217270750990386)

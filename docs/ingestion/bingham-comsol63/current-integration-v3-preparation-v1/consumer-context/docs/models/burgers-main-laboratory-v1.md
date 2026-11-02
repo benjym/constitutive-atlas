@@ -1,0 +1,24 @@
+# Burgers continuum — bounded main-laboratory delivery
+
+Exact definition: `burgers-itasca900-dry-zero-spin-ode`, SHA-256 `1452a27d5d3b50989ca66df5beb7f08e22434596800133983339466d3571933c`. The underlying model retains its historical draft/pre-integration metadata to preserve its independently reviewed identity; current availability and approval are described here.
+
+The main model-testing laboratory provides physical-time relaxation (all six strains held) and creep (all six stresses held), with complete explicit stress/Kelvin state, material coefficients, initial accumulated strain/rate and physical duration. The shareable route is `index.html#laboratory?model=burgers-itasca900-dry-zero-spin-ode`. The common physical-time engine implements the law; no handwritten browser constitutive kernel or standalone model page is used.
+
+The source is the Itasca9.0.184 continuum Burgers manual, not the contact model, Burgers-Mohr plasticity or an asserted reproduction of the vendor centered numerical update. Governing source: https://docs.itascasoftware.com/itasca900/common/models/burgers/doc/modelburgers.html . Three readable original manual sources are privately retained with version, equation locators and SHA256 in `docs/ingestion/burgers-itasca900/source-receipts.json`. Raw copyrighted sources are not publicly redistributed.
+
+The selected law has elastic volume and Burgers deviatoric viscoelasticity:
+
+- sigma_dot = K tr(D) I + 2 Gm [dev(D) − Kelvin_dot − dev(sigma)/(2 eta_m)].
+- Kelvin_dot = [dev(sigma) − 2 Gk dev(Kelvin)]/(2 eta_k).
+
+Conventions: dry uncoupled total Cauchy stress; small strain, fixed spatial coordinates, zero spin; compression positive. Mandel order xx, yy, zz, sqrt(2)xy, sqrt(2)yz, sqrt(2)xz. Parameters K/Gm/Gk are in Pa; eta_m/eta_k in Pa s. State has six stress components followed by six Kelvin strain components. All coefficients must be positive/finite. Kelvin normal components sum to zero within1e-12. The explicit initial state is illustrative preparation, not measured equilibrium or automatic stress initialization. Returned strain is accumulated from its supplied initial value; initial stress need not equal an elastic modulus times that accumulated strain.
+
+A stress hold creeps; a strain hold relaxes. The solver uses backward Euler with step doubling for schedules; direct ODE calls use a distinct midpoint scheme. Zero loading does not freeze viscous history. Initial left/right control-event samples share time and continuous state; rates are unresolved/null on the right of an initial stress hold until an interval is solved. Those events remain in exported results. The browser exposes only the two hold protocols and fixed example solver settings, with full export/import followed by actual re-execution. Edits invalidate prior results; a new run or model change terminates the old worker. Failed work is not displayed as a successful current result. Full engine transaction/restart behavior is qualified separately by the saved reference campaign.
+
+The accepted independent nine-item record is `catalogue/agent-reviews/burgers-agent-v2.json`; its generated approval and the historical explicit-user approval both bind the exact unchanged definition. Scientific approval covers the frozen native/Wasm cases/settings and source conventions, not arbitrary parameter values, instantaneous rate accuracy, unconditional discrete energy stability, host finite rotations, coupling or FE convergence. Main-laboratory interface qualification is separately recorded in `docs/ingestion/burgers-itasca900/delivery-v1/` and `docs/reviews/burgers-browser-v1/`.
+
+Original and fresh qualification use44calls/88analytical schedule points per backend, independent closed-form and separate matrix-exponential references, restart/rollback/recovery and native/Wasm parity. Fine schedule bounds are20Pa stress and2e-6 strain/history; those budgets apply to named frozen cases only. Separate stress and Kelvin refinement assertions and a corrupted-Kelvin witness supplement the preserved original assessor. Broad parameter and long-time stiffness envelopes remain unqualified. Original build/check failures remain retained.
+
+No calibrated material or compatible approved measurement dataset is claimed. Experimental comparison is unavailable for these illustrative parameters; scientific software approval is distinct from experimental validation. Scope excludes vendor-step equivalence, plasticity, pore pressure, finite rotation, contact laws and general host applications.
+
+Historical source/contract dossier: `docs/models/burgers-itasca900-dry-zero-spin-ode.md`; historical build guide: `docs/BURGERS_TIMED.md`. Their statements about absent browser delivery describe their original pre-browser checkpoint. The current ledger at `docs/ingestion/burgers-itasca900/DELIVERY.md` controls overall completion; local browser success alone does not establish a live deployment.

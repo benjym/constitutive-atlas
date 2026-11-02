@@ -1,0 +1,74 @@
+{
+  "schema_version": "0.2",
+  "units": "SI",
+  "model": "maxwell-itasca900-zero-spin-ode",
+  "parameters": [
+    20000000.0,
+    12000000.0,
+    24000000.0
+  ],
+  "initial": [
+    140000,
+    80000,
+    80000,
+    3000,
+    -2000,
+    1000
+  ],
+  "initial_strain": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "initial_strain_rate": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "start_time": 0,
+  "segments": [
+    {
+      "id": "creep",
+      "duration": 4,
+      "samples": 8,
+      "controls": [
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        },
+        {
+          "quantity": "stress",
+          "kind": "hold"
+        }
+      ]
+    }
+  ],
+  "solver": {
+    "method": "backward-euler-step-doubling",
+    "relative_tolerance": 1e-08,
+    "absolute_scale_fraction": 1e-11,
+    "maximum_substeps": 100000
+  }
+}
