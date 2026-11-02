@@ -1,0 +1,90 @@
+- dialog [ref=e748]:
+  - generic [ref=e749]:
+    - banner [ref=e750]:
+      - generic [ref=e751]:
+        - generic [ref=e752]: elastoviscoplasticity
+        - generic [ref=e753]: Available in laboratory
+      - button "Close model details" [active] [ref=e754] [cursor=pointer]: ×
+      - heading "Bingham elastoviscoplastic solid · associative von Mises" [level=2] [ref=e755]
+    - generic [ref=e756]:
+      - generic [ref=e757]:
+        - paragraph [ref=e758]: An elastic solid that develops permanent, time-dependent shear deformation only when its equivalent stress exceeds a fixed yield stress.
+        - paragraph [ref=e759]: "The Bingham solid combines reversible elastic deformation with a viscous resistance to permanent deformation. Below its yield stress, it responds elastically. Above that threshold, the excess stress drives viscoplastic flow: a larger excess produces a faster rate. This model is useful for separating the effects of a yield threshold from the effects of loading time."
+        - generic [ref=e760]:
+          - heading "What it describes" [level=3] [ref=e761]
+          - generic [ref=e762]:
+            - term [ref=e763]: An elastic interval followed by viscous flow
+            - definition [ref=e764]: The von Mises equivalent stress measures the intensity of the stress that changes shape. Flow is zero below and exactly at the yield stress. Above it, permanent strain accumulates at a rate proportional to the excess stress. Mean stress alone does not cause this flow.
+            - term [ref=e765]: Relaxation stops at a yield threshold
+            - definition [ref=e766]: Holding all strains fixed lets an initially overstressed material reduce its deviatoric stress toward the yield stress. The stress does not have to decay to zero. The mean stress stays constant, because volume change is entirely elastic.
+            - term [ref=e767]: Continuing creep above yield
+            - definition [ref=e768]: Holding an above-yield stress fixed produces continuing permanent deformation. A stress below or at the threshold produces no creep. A larger viscosity slows the creep rate and makes stress relaxation take longer.
+            - term [ref=e769]: Permanent strain without hardening
+            - definition [ref=e770]: The yield stress stays fixed as deformation accumulates. On reversal, the stress can traverse an elastic interval before flow develops in the opposite direction. The accumulated equivalent viscoplastic strain keeps increasing even when some tensor strain components reverse.
+        - generic [ref=e771]:
+          - heading "Compare a strain hold with a stress hold" [level=3] [ref=e772]
+          - paragraph [ref=e773]: In the laboratory, use Reset Bingham preset to load the complete example. Under Physical-time experiment, choose Relaxation · hold all strains and select Run physical-time history. Inspect Selected total stress against physical time and the accumulated equivalent viscoplastic strain. The preset starts above yield, so permanent strain grows while the deviatoric stress relaxes. Use Plot component · Mandel to inspect the normal and shear components; the yield stress applies to their combined equivalent stress, not to each component separately.
+          - paragraph [ref=e774]: "Start again from Reset Bingham preset, choose Creep · hold all stresses, and run the history. Stress now stays fixed while strain grows. Increase η in Parameters, keeping K, G, σy and the complete initial state unchanged, then repeat either experiment to see a slower response. Loading · constant strain rate supplies a third comparison: all six entries in Strain rate act together for the selected Duration. To compare rates, start each run from the same complete initial state."
+        - generic [ref=e775]:
+          - heading "Material parameters" [level=3] [ref=e776]
+          - paragraph [ref=e777]: All four coefficients are positive. Stress and moduli use pascals, viscosity uses pascal seconds, strain is dimensionless and physical time uses seconds. The displayed values are illustrative; identify the coefficients for the material, temperature and loading range of interest. The preset is an illustrative example; changes to coefficients, the complete starting state or elapsed time need their own numerical accuracy checks.
+          - table [ref=e778]:
+            - rowgroup [ref=e779]:
+              - row [ref=e780]:
+                - columnheader "Parameter" [ref=e781]
+                - columnheader "Meaning" [ref=e782]
+                - columnheader "Units" [ref=e783]
+            - rowgroup [ref=e784]:
+              - row [ref=e785]:
+                - rowheader "K · Elastic bulk modulus" [ref=e786]
+                - cell "Controls the reversible resistance to a change in volume. The viscoplastic flow does not change volume." [ref=e787]
+                - cell "Pa" [ref=e788]
+              - row [ref=e789]:
+                - rowheader "G · Elastic shear modulus" [ref=e790]
+                - cell "Controls the reversible resistance to a change in shape. Together with η, it sets how quickly an overstressed state relaxes during a strain hold." [ref=e791]
+                - cell "Pa" [ref=e792]
+              - row [ref=e793]:
+                - rowheader "σy · Equivalent yield stress" [ref=e794]
+                - cell "Sets the fixed threshold for viscoplastic flow. This threshold applies to the von Mises equivalent stress and does not increase with accumulated strain." [ref=e795]
+                - cell "Pa" [ref=e796]
+              - row [ref=e797]:
+                - rowheader "η · Viscoplastic viscosity" [ref=e798]
+                - cell "Converts excess equivalent stress into a rate of permanent deformation. At the same stress, increasing η reduces that rate." [ref=e799]
+                - cell "Pa·s" [ref=e800]
+        - generic [ref=e801]:
+          - heading "Starting state" [level=3] [ref=e802]
+          - paragraph [ref=e803]: Supply the six total-strain components, six viscoplastic-strain components and accumulated equivalent viscoplastic strain α, together with the parameters and start time. Stress follows from the elastic strain ε − εvp; it is not an additional independent initial input. Viscoplastic strain has zero trace, and α is nonnegative. All tensor entries use [xx, yy, zz, √2xy, √2yz, √2xz], so shear entries include the √2 factor. Reset Bingham preset supplies this complete starting context, with zero initial viscoplastic memory and a nonzero elastic strain. It represents an illustrative starting state; it does not describe how a specimen was brought to that state. A restarted history must retain all 13 state components, including α, which cannot be recovered from the current viscoplastic-strain tensor after reversals.
+        - generic [ref=e804]:
+          - heading "Scope and limitations" [level=3] [ref=e805]
+          - paragraph [ref=e806]: This is the COMSOL 6.3 Bingham law with isotropic linear elasticity, associative von Mises flow, a constant yield stress and no hardening. It uses three-dimensional infinitesimal strain, fixed spatial axes and compression-positive stress and strain. Stress is dry total Cauchy stress. The response depends on physical time; relaxation, creep and constant-rate loading describe different mechanical constraints.
+          - paragraph [ref=e807]: There is no volumetric viscoplasticity, evolving yield strength, back stress, damage, temperature dependence or pore-fluid response. The formulation does not include finite strains or transport under finite rotations. Accumulated strain records deformation but does not strengthen the material. The laboratory’s single strain hold, stress hold or constant-rate segment does not prescribe a general cyclic loading history.
+        - group [ref=e808]:
+          - generic "The core equations" [ref=e809] [cursor=pointer]
+        - generic [ref=e810]:
+          - heading "Read more" [level=3] [ref=e811]
+          - list [ref=e812]:
+            - listitem [ref=e813]:
+              - link "COMSOL 6.3 — Bingham model, viscoplastic flow and physical-time equations ↗" [ref=e814] [cursor=pointer]:
+                - /url: https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.039.html
+            - listitem [ref=e815]:
+              - 'link "COMSOL 6.3 — Viscoplasticity settings: Bingham viscosity and perfect plasticity ↗" [ref=e816] [cursor=pointer]':
+                - /url: https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_solid.07.024.html
+            - listitem [ref=e817]:
+              - link "COMSOL 6.3 — Isotropic elastic stress and elastic-strain decomposition ↗" [ref=e818] [cursor=pointer]:
+                - /url: https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html
+        - generic [ref=e819]:
+          - heading "Related models and formulations" [level=3] [ref=e820]
+          - list [ref=e821]:
+            - listitem [ref=e822]:
+              - link "Standard Linear Solid (Zener) · deviatoric response" [ref=e823] [cursor=pointer]:
+                - /url: "#catalogue/sls-comsol63-deviatoric-zero-spin-ode"
+            - listitem [ref=e824]:
+              - link "Burgers viscoelasticity" [ref=e825] [cursor=pointer]:
+                - /url: "#catalogue/burgers-itasca900-dry-zero-spin-ode"
+      - group [ref=e826]:
+        - generic "Technical details, implementation and checks" [ref=e827] [cursor=pointer]
+    - contentinfo [ref=e828]:
+      - generic [ref=e829]: bingham-comsol63-mises-perfect-zero-spin-ode
+      - link "Link to this model" [ref=e830] [cursor=pointer]:
+        - /url: "#catalogue/bingham-comsol63-mises-perfect-zero-spin-ode"
+      - button "Test this model →" [ref=e831] [cursor=pointer]

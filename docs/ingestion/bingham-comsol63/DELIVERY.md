@@ -22,15 +22,15 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 - [X] **E1 — Sources:** readable complete law, durable private receipts, source locators, version reconciliation and rights.
 - [X] **E2 — Contract:** complete v0.3 crosswalk, preparation/time/transaction/control contract and prospectively frozen references/gates; capabilities resolved.
 - [X] **E3 — Transcription:** exact candidate validates/generates; independent equation/reference checks pass.
-- [-] **E4 — Native/Wasm:** correct profile/interfaces, complete frozen numerical gates, rollback/recovery/restarts, useful preset, parity and regressions pass.
+- [X] **E4 — Native/Wasm:** correct profile/interfaces, complete frozen numerical gates, rollback/recovery/restarts, useful preset, parity and regressions pass.
 - [X] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
-- [ ] **E6 — Atlas:** qualified model/approval/source/evidence integrated through normal generation; prior models preserved and public metadata/current database checked.
-- [ ] **E7 — Packaged website:** real controls/plots, source/review scope, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
+- [X] **E6 — Atlas:** qualified model/approval/source/evidence integrated through normal generation; prior models preserved and public metadata/current database checked.
+- [-] **E7 — Packaged website:** real controls/plots, source/review scope, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
 - [ ] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works.
 
 ## Current handoff
 
-- Current phase: E6 integration. E5 accepted canonical review61022026 by separate /root/bingham_scientific_e5; all88artifactpins verified and --for-approval passes. Actual approval/manifest/profile candidates generated under actual-integration-v3-candidates-v1. Accepted28sourcecandidate draft and complete imported-tree preservation preparation precede coordinator installation and E7 package/browser checks.
+- Current phase: E7 browser disclosure correction. E4/E5/E6 complete within stated scope. Source7f145f2d installed and localcommitted; standardbuilder/all7packageoperations and actualdatabasepreservation pass. Actualbrowser all3presets/fullstates/replay/recovery/cancel/latest/model-switch/narrowlayout pass, but technicaldisclosure falsely claims no definition packaged. Minimal sourcefix plus separate review pending; E7 remains open. No remote authorization.
 - Exact source: candidate6c5ee29c unchanged; execution-v5 freeze d1df44cc in /private/tmp/atlas-time-profile-v2 selects generic physical-time-v2 header fd05b08d while retaining common legacy header bytes. All136 histories, references, maximum-step contract and original numerical gates remain unchanged.
 - Actual native result:136histories/two repeats,272calls,7771comparisons PASS. Raw95ca533e8c41f17440eebcadca4510a97a2a2ff19b3a53eb20bd89c246d49e6a; report51d368278958e86244adb2ec075186cd0652d1eb4de83ef55a4a7404c97c118f; post8a0078faa983b7ba5c3757cd41cb758730a02e8af5ce142f019653473e7ad555. Binary18ed54a1; actual main dependency selects versioned header and excludes common schedule. All237source/review pins and15preobservation artifact pins unchanged;37linked scalar/compiler pins were captured during collection, explicitly not before observation.
 - Generic evidence: separate accepted versioned-profile native regression run passes7operations and18existing Python tests, with new predictor tests. The separate standalone consumer preserves release rootCMake and prior engine source closures; actual seven-operation run and18Python tests pass, independently accepted cb50b5e4/367pins.
@@ -141,3 +141,9 @@ Before sealing the final imported-context proof, the independent reviewer found 
 
 
 2026-11-02 E6 installation milestone: exact106-path proposal f2883c68 installed after independent accepted final-context review0e8c93b1/744bindings; allbaselineandcandidate bytes reverified. Canonical E5/registry and53qualified-engine roles pass; publicprofiles48/48 and ordinary generation pass. Initial directcomposer invocation lacked PYTHONPATH and failed import before work; unchanged invocation with PYTHONPATH=. passes, retained in installation-v3/CHECKS.json. Complete database/package/browser gates remain pending. No remote action authorized or performed.
+
+
+2026-11-02 actual E7 attempt1: package-v3 and browser-v3 preserve passing numerical/interface/layout evidence and blocking false technical-disclosure message. Fullsite retained privately in .local/bingham-site-v3-before-disclosure-fix.zip with SITE-MANIFEST.json. Browserabout:blank/preview52494 stopped; serialslot RELEASED. Sourceauthor/reviewer fixing only Bingham appbranch with oldbytes retained; no numerical/model/runtime/policy changes. E8 remains pending new explicit Bingham publication authorization.
+
+
+2026-11-02 disclosure fix installed: exact browser-disclosure-fix-v1/manifest6478fed5 and appf7b09ec2 after independent1a5b1511/51pins; all188other-model rendercomparisons unchanged, all181mainrouting assertions/27transitions pass with0compiledcalls. Only Bingham technicalscope text changes. Source/model/runtime/profile/numericalpolicy bytes unchanged. Actualnewpackage/disclosure recheck remains queued behind current sharedslot owner; no E7completion or publication claim.
