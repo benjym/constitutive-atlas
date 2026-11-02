@@ -1,0 +1,98 @@
+{
+  "reviewer_run": "/root/barodesy_sand_interface_review",
+  "decision": "scientific_composition_helpers_accepted_preservation_blocked",
+  "from_revision": "a1f9bac74e1cf13b4934b13873e92b5e875ee422",
+  "to_revision": "e6f06114cc1d415daf95e4e334a43b822b85ded7",
+  "production_diff": "EMPTY web/atlas/cpp/models/schemas/tools/workflows/CMake",
+  "shared_test_sha256": "2b9f633064efd08ae13abad335510ec8d721d274778752ed9680bfa0f2df33d4",
+  "checks": [
+    "Class cache loads/validates full pinned corpus once; tests read records without mutation; bundles receive same validated corpus. Original row/channel/unit/provenance assertions retained.",
+    "Exact file set and every file byte compared between on-disk builds. Second destination begins empty; current bundle always deletes/recreates destination, preserving current exact-output determinism behavior.",
+    "12-grain assertion scoped to original GEOLAB source; exact three Estefania IDs independently verified from checksum-pinned protocol/source records.",
+    "Superseded own variant retained exactly; new reviewer-owned source-archive-map preserves own immutable review literal pins. Own interrupted test group is not a pass.",
+    "Helpers syntax parsed only; ordinary qualifier identical; other changes revision/run/evidence paths only."
+  ],
+  "grain_records": [
+    [
+      "ESTEFANIA-PSD-18",
+      "estefania"
+    ],
+    [
+      "ESTEFANIA-PSD-21",
+      "estefania"
+    ],
+    [
+      "ESTEFANIA-PSD-8",
+      "estefania"
+    ],
+    [
+      "GEOLAB-BASKARP-GSD-1",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-DARMSTADT-GSD-1",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-DARMSTADT-GSD-2",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-DARMSTADT-GSD-3",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-DARMSTADT-GSD-4",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-FONTAINEBLEAU-GSD-1",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-GEBA-GSD-1",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-HOSTUN-GSD-1",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-HOSTUN-GSD-2",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-LOCE-GSD-1",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-PERTH-GSD-1",
+      "geolab-v2"
+    ],
+    [
+      "GEOLAB-PERTH-GSD-2",
+      "geolab-v2"
+    ]
+  ],
+  "variant_archive": "catalogue/source-snapshots/9f3d99f0ec2028dc78020e3524d688414f6f82aa687820b5df64a66d19f915bf/tests/test_public_data.py",
+  "reviewer_archive_map_sha256": "7bde95392c02f20c59c6d49cbbea02ef39a2861537da121666bc8c1387b7d188",
+  "helpers": {
+    "qualify_uploaded_engine.py": "6ab19e41dc326b6e6a635214836b107875984a002e7d187bb18004808c39ebeb",
+    "check_live_browser.py": "a9633fa53e6334085663ff8e6c5b1ed7ba3da634c962f76fab69a4ab424aa869",
+    "verify_live_upload.py": "df50f3491fbfbc355a06798ad90aa0b34c227992159bd31739a34e99e4a9c1ea",
+    "verify_upload_database.py": "6ea149455418a78ea0582f2a45590dfccd962979e97482eb94403fb168cb3136",
+    "acquire_artifact.py": "47fa8a0e6ed455841161bc6e141cb996cb136caf1bcce43c67c40fef472434ff"
+  },
+  "helper_diffs": {
+    "qualify_uploaded_engine.py": "",
+    "check_live_browser.py": "--- /private/tmp/atlas-barodesysand-delivery-v1/docs/ingestion/barodesy-sand/delivery-v1/live-release-v1/check_live_browser.py\t2026-11-02 10:43:57\n+++ /private/tmp/atlas-barodesysand-live-v2/docs/ingestion/barodesy-sand/delivery-v1/live-release-v2/check_live_browser.py\t2026-11-02 11:22:42\n@@ -12,7 +12,7 @@\n    for v in x:finite(v)\n  finite(value);return value\n HERE=Path(__file__).resolve().parent;PARENT=HERE.parent\n-B=Path('/Users/bmar5496/code/constitutive-atlas/output/playwright/barodesy-sand-live-v1')\n+B=Path('/Users/bmar5496/code/constitutive-atlas/output/playwright/barodesy-sand-live-v2')\n p=loads((B/'default.json').read_text());accepted=loads((Path('/Users/bmar5496/code/constitutive-atlas/output/playwright/barodesy-sand-v3/default.json')).read_text());assert p['schema_version']=='atlas-laboratory-export-0.2' and p['result']['ok'];s=p['specification'];assert s==accepted['specification']\n controls=B/'default-controls.txt';controls.write_text(','.join(s['loading']['controls_bits']));settings=s['integration_settings'];cmd=['/private/tmp/atlas-ramberg-osgood-delivery-v1/build-ramberg-native/atlas_solver','--mode','run-controls','--model',s['model'],'--parameters',','.join(map(str,s['parameters'])),'--initial',','.join(map(str,s['initial'])),'--protocol',str(s['protocol']),'--integration-settings',','.join(str(settings[k]) for k in ['residual_tolerance','rate_tolerance','max_iterations','max_depth','max_substeps','max_backtracks']),'--laboratory-controls-file',str(controls),'--response-contract','stress-scope-0.1'];r=subprocess.run(cmd,capture_output=True,text=True);(B/'default-native.txt').write_text(r.stdout);assert r.returncode==0;native=loads(r.stdout);assert native['ok']\n def scaled(a,b):\n",
+    "verify_live_upload.py": "--- /private/tmp/atlas-barodesysand-delivery-v1/docs/ingestion/barodesy-sand/delivery-v1/live-release-v1/verify_live_upload.py\t2026-11-02 10:28:54\n+++ /private/tmp/atlas-barodesysand-live-v2/docs/ingestion/barodesy-sand/delivery-v1/live-release-v2/verify_live_upload.py\t2026-11-02 11:25:56\n@@ -9,7 +9,7 @@\n def sha(b):return hashlib.sha256(b).hexdigest()\n def main():\n  p=argparse.ArgumentParser();p.add_argument('site',type=Path);p.add_argument('output',type=Path);p.add_argument('--artifact-receipt',type=Path,required=True);p.add_argument('--artifact-tar',type=Path,required=True);a=p.parse_args();site=a.site.resolve()\n- receipt=json.loads(a.artifact_receipt.read_text());assert receipt['run_id']==41362197554 and receipt['head_sha']=='a1f9bac74e1cf13b4934b13873e92b5e875ee422';assert sha(a.artifact_tar.read_bytes())==receipt['tar_sha256']\n+ receipt=json.loads(a.artifact_receipt.read_text());assert receipt['run_id']==41365126545 and receipt['head_sha']=='e6f06114cc1d415daf95e4e334a43b822b85ded7';assert sha(a.artifact_tar.read_bytes())==receipt['tar_sha256']\n  manifest={str(p.relative_to(site)):sha(p.read_bytes()) for p in sorted(site.rglob('*')) if p.is_file()}\n  assert manifest['models/'+MID+'.json']==MODEL\n  rp='evidence-records/catalogue/agent-reviews/barodesy-sand-agent-v1.json';assert manifest[rp]==REVIEW\n",
+    "verify_upload_database.py": "",
+    "acquire_artifact.py": "--- /private/tmp/atlas-barodesysand-delivery-v1/docs/ingestion/barodesy-sand/delivery-v1/live-release-v1/acquire_artifact.py\t2026-11-02 10:28:08\n+++ /private/tmp/atlas-barodesysand-live-v2/docs/ingestion/barodesy-sand/delivery-v1/live-release-v2/acquire_artifact.py\t2026-11-02 11:25:56\n@@ -1,9 +1,9 @@\n import subprocess,json,hashlib,zipfile,tarfile\n from pathlib import Path\n-root=Path('/private/tmp/barodesy-pages-ci-41362197554');root.mkdir(exist_ok=True)\n+root=Path('/private/tmp/barodesy-pages-ci-41365126545');root.mkdir(exist_ok=True)\n evidence=Path(__file__).resolve().parent\n-raw=subprocess.check_output(['gh','api','repos/benjym/constitutive-atlas/actions/runs/41362197554/artifacts']);data=json.loads(raw)\n-a=next(x for x in data['artifacts'] if x['name']=='github-pages');assert a['workflow_run']['id']==41362197554 and a['workflow_run']['head_sha']=='a1f9bac74e1cf13b4934b13873e92b5e875ee422' and not a['expired']\n+raw=subprocess.check_output(['gh','api','repos/benjym/constitutive-atlas/actions/runs/41365126545/artifacts']);data=json.loads(raw)\n+a=next(x for x in data['artifacts'] if x['name']=='github-pages');assert a['workflow_run']['id']==41365126545 and a['workflow_run']['head_sha']=='e6f06114cc1d415daf95e4e334a43b822b85ded7' and not a['expired']\n (evidence/'github-artifact-api.json').write_bytes(raw)\n z=root/'github-pages.zip'\n with z.open('wb') as f:subprocess.run(['gh','api',f\"repos/benjym/constitutive-atlas/actions/artifacts/{a['id']}/zip\"],stdout=f,check=True)\n@@ -14,5 +14,5 @@\n t=root/'artifact.tar';site=root/'site';site.mkdir(exist_ok=True)\n with tarfile.open(t) as f:f.extractall(site,filter='data')\n manifest={str(p.relative_to(site)):sha(p) for p in sorted(site.rglob('*')) if p.is_file()}\n-r={'run_id':41362197554,'head_sha':a['workflow_run']['head_sha'],'artifact':a,'zip_sha256':sha(z),'tar_sha256':sha(t),'extracted_manifest_sha256':hashlib.sha256(json.dumps(manifest,sort_keys=True).encode()).hexdigest(),'files':len(manifest),'acquisition':'Authenticated gh api exact run artifacts; downloaded archive digest verified against API; sole artifact.tar extracted with tarfile data filter.','local_archive':str(z),'local_tar':str(t),'local_site':str(site)}\n+r={'run_id':41365126545,'head_sha':a['workflow_run']['head_sha'],'artifact':a,'zip_sha256':sha(z),'tar_sha256':sha(t),'extracted_manifest_sha256':hashlib.sha256(json.dumps(manifest,sort_keys=True).encode()).hexdigest(),'files':len(manifest),'acquisition':'Authenticated gh api exact run artifacts; downloaded archive digest verified against API; sole artifact.tar extracted with tarfile data filter.','local_archive':str(z),'local_tar':str(t),'local_site':str(site)}\n (evidence/'artifact-receipt.json').write_text(json.dumps(r,indent=2)+'\\n');print(json.dumps(r))\n"
+  },
+  "blocker": "42 of181 original test/board receipt bindings fail checked_receipt in new clone; initial-binding-failures.json preserves exact findings. Additive exact archive mapping required.",
+  "limitations": [
+    "No governing scientific changes or compiled execution/build by reviewer.",
+    "E8 requires full exact revision CI, actual tested artifact/deployment and live evidence."
+  ]
+}

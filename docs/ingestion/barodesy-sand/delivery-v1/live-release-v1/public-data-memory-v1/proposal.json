@@ -1,0 +1,16 @@
+{
+  "status": "prospective",
+  "observed": "First Linux native runner shutdown while test_committed_records_and_public_projection_are_consistent active; cause unspecified; Mac fullsuite remains active",
+  "source_issue": "Test holds load_curated all-record list across bundle() loading another full list; second bundle also retains all first-output bytes. Current corpus includes hundreds of added large files vs preceding green release.",
+  "proposed_scope": [
+    "tests/test_public_data.py only",
+    "release reference values/assertions kept",
+    "First production load_curated validates entire corpus once; retain only minimal source path/id inventory and small Opara subset before bundle",
+    "Read and verify each checksum-pinned source record on demand for original per-row/per-channel/provenance comparisons",
+    "Retain first output on disk, rebuild same destination, compare exact filename sets and exact bytes with bounded chunks; no hash-only determinism substitute",
+    "No production model/compiler/runtime/builder/source/reference/tolerance or acceptance gate change"
+  ],
+  "before_sha256": "90ec02fe59e0f411a9d5d4a53104363bf031da5749e15a7b6b733dc75af3dc75",
+  "canonical_archive": "catalogue/source-snapshots/90ec02fe59e0f411a9d5d4a53104363bf031da5749e15a7b6b733dc75af3dc75/tests/test_public_data.py",
+  "release_revision": "a1f9bac74e1cf13b4934b13873e92b5e875ee422"
+}
