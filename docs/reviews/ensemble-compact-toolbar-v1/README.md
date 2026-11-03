@@ -1,0 +1,9 @@
+# Compact ensemble test toolbar
+
+Replaced the large introduction and two test cards with one desktop toolbar. Search, type, availability, test choice, import and a labelled question-mark button share one row. The native modal dialog retains test identity, source link, observations, preparation, assumptions, model exclusions and optional loading/source-axis controls. Escape, Close and backdrop dismissal restore focus through native dialog behaviour. Narrow screens wrap controls.
+
+Validation: Node syntax and owned-file whitespace checks passed. All 25 existing Node ensemble tests and 4 package tests passed. Chromium at 1440 × 1000 confirmed all six toolbar controls share the same y position, toolbar height 78.30 px, no viewport overflow. At 390 × 844 the controls wrap to three rows (194.89 px); search width 226 px; no viewport or dialog overflow. Search and selection of ROCKFILL-01 updated modal identity, source-only gap and hidden model controls. Native modal focus started on Close; Escape restored focus to question mark. Final browser console: 0 errors and 0 warnings.
+
+Preview used task-owned replay/vendor assets from tools/build_ensemble_web.py over the existing read-only .local/lade-main-atlas-v2/site package (628 source records and 12 replay tests). No native/Wasm build, live deployment or new scientific qualification is claimed. Screenshots: output/playwright/ensemble-compact-desktop.png, ensemble-compact-mobile.png and ensemble-compact-info-mobile.png. These are local browser evidence. Pre-existing workspace edits were preserved; only the two web files were edited for this change.
+
+Preliminary browser checks caught a narrow-screen grid sizing issue and dialog source-select overflow; both were corrected and rechecked. One attempted test ID was absent from the preview catalogue; selection was rechecked with its available ROCKFILL-01 entry. Stale automation references were refreshed.

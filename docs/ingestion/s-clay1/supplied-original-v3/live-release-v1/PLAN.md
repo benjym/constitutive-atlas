@@ -1,0 +1,7 @@
+# S-CLAY1 current-main publication integration
+
+User authorization: “Push please”, 4 November 2026, extends the prepared model publication request. Exact prepared commit b31f18ed8a82e1de5392b2e921bca38fbba64f87 pushed to codex/s-clay1-delivery-v3. Current main 8262d44043e19c7f5f4465e22e2701f7e3a8d469 advanced by 41 commits; never force-push or replace those changes.
+
+Coordinator /root owns isolated /private/tmp/atlas-s-clay1-publish-v1 and branch codex/s-clay1-publish-v1. Scope: merge the prepared exact model/review/profile, retain current CI and new model integrations, preserve historical identities, requalify affected contracts/package, then publish and verify exact live assets and illustrative run. No new scientific scope or model changes. No local compiled execution/build slot claimed. Remote CI is authorized by the push request.
+
+Conflicting archive maps combine exact document pins and unique original-path/hash entries, with both prior map bytes archived canonically. Current CI architecture is retained because tools/ci_fast.py already runs model profiles. Required checks before main publication: canonical database approval verification, definition validation, profile/control/applicability tests, current generation expectations, complete current workflow qualification and unchanged standard package guards. Retain failures; never loosen a gate to obtain a pass. E8 stays open until live verification.

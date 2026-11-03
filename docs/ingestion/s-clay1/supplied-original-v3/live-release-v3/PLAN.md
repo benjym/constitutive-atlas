@@ -1,0 +1,9 @@
+# CI transport and explicit existing support scope
+
+Before revised compiled observations, preserve original scripts and failures. Existing public support policy laboratory-control-support.json (prepared before this release) excludes S-CLAY1 protocols0/3/4 and cycles. The generic legacy cross-backend smoke currently assumes success for every effective model/protocol, exceeding this model’s approved scope. Retain every compiled call and full backend/prefix parity for unsupported combinations, label them outside public qualification, and assert success for all supported requests. Existing declared failure signatures remain strict; no original model’s positive test changes because OCC is the only earlier support row and its protocol3 declaration remains checked first. All five protocols per model remain counted; no model filtering. Browser loading keeps every pair and same-instance import replay even for unqualified prefixes. Source/profile/physical thresholds unchanged.
+
+Fast CI fetch-depth0 fetches complete large history and reaches its five-minute timeout during checkout. Change only fetch-depth to2. Existing ci_changes.py fails closed to numerical checks when required history is absent. Keep timeouts, numerical checks and all publication guards unchanged.
+
+Coordinator owned: tools/test_wasm.mjs, tools/test_browser_loading.mjs, .github/workflows/verify.yml plus exact archive bindings and this packet. No local compiled execution/build slot claimed. User authorization remains “Push please”.
+
+Scope addendum before compiled execution: new tools/laboratory_control_scope.mjs and tests/test_laboratory_control_scope.mjs validate exact definition hashes and existing support reasons. The fast workflow runs these pure tests. Each unsupported request still executes both backends; success/failure flags, messages, full committed history and import/replay are compared without claiming numerical/source qualification for that control.

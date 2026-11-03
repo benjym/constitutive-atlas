@@ -1,0 +1,64 @@
+{
+  "kind": "independent-software-scope-review",
+  "reviewer": "/root/sclay1_publication_harness_review",
+  "decision": "accepted",
+  "blocking_findings": [],
+  "reviewed_at_utc": "2026-11-03T17:08:27.761972+00:00",
+  "base_head": "5d5f62dc4020238896dd6905627b1eae708bfabd",
+  "scope": "Static software/scope review and pure Node/Python tests only. No compiled artifacts executed or built; no new scientific review or scientific validation. Remote CI and live delivery remain coordinator gates.",
+  "proposed_files": {
+    "tools/test_wasm.mjs": "0e6112c10d62eb6e17eadf261ed321ce91228e5662bbedc9545454d40a6e22b3",
+    "tools/test_browser_loading.mjs": "dfd64d356fe0341f8ce6885ebd830cc4a667a9d0ae019c625ebbf8447e4a88fd",
+    "tools/test_ensemble_wasm.mjs": "83074881ba6f24f910708937909e8b8473e681f1ab98b6624b035b4239484f64",
+    "tests/test_ensemble.mjs": "66270dd4ac3f12c6ae5578e456dce15c91958080f0d225c821cf31592626f60b",
+    "tools/laboratory_control_scope.mjs": "e14b414ac005f84a827ad017acf58cee9dde6db6bddcdc7cb1c56ba1f6a63160",
+    "tests/test_laboratory_control_scope.mjs": "d1257ab9d28bc7f5804778fc6af3efacd4df737a78d5f6f598a19efed69d1ab8",
+    ".github/workflows/verify.yml": "10c739868cf0f4db4440197bccea453979efd6a51146c0ad572111e5de20d34c"
+  },
+  "unchanged_context_files": {
+    "models/s-clay1.json": "2d1518c1aee44d9adec35229adc83b32a9f39d9175f307c8ddfd90cdfbd1caec",
+    "catalogue/laboratory-control-support.json": "12fdeb8f32cb409f58453a3b9ee81e7ad3f94c999dcacfb58f166b1b59a8d9b0",
+    "catalogue/agent-reviews/s-clay1-agent-v1.json": "a144221194a97861bb91900108471c668c5e9fe98ee6bf5bd2a2e2a1c80f0a48",
+    "catalogue/approved-models.json": "76b77885c57277df9e17128eec7c32299eaa2d2efdc578d621855f91ef57d810",
+    "tools/ci_changes.py": "31d20cfeeb13baae5bf077d5906d1e3b280f34c3558e83d90b07fe62d42afe10",
+    "tools/laboratory_profile_policy.mjs": "f084f9e9ae3e88c7c4048191ca801a716109da1fac071e3586cd89b5dda470c6"
+  },
+  "checks": [
+    {
+      "command": [
+        "node",
+        "--test",
+        "tests/test_laboratory_control_scope.mjs",
+        "tests/test_ensemble.mjs"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "6c69b863f7e824c1af234e37c50a3a289712461026d7324dbbb553b4e9a3d589",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_ci_changes.py"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "33060fd73862c5e1af97335504d5b45211fce6d229657f556d8deceeadc52ce4"
+    }
+  ],
+  "findings": [
+    "All existing physical tolerances are unchanged (legacy 1e-7; current browser 1e-10; ensemble analytical stress .05 + 1e-7*|stress| and volume 1e-9 + 1e-7*|volume|).",
+    "Only pre-existing exact-definition-bound S-CLAY1 support exclusions alter success qualification. Every model/protocol still executes native and Wasm, compares full committed state/strain prefixes, and participates in unchanged cardinality. Browser checks retain full recursive physical result comparison and same-instance import replay even for out-of-scope prefixes.",
+    "Exact retained legacy rejection and OCC cyclic-failure checks run before public-support classification; their messages, points, initial state and parameters remain strict. All earlier supported model success checks remain strict.",
+    "Unsupported legacy parity additionally compares native/Wasm success and message, native status-to-result consistency, no error/signal/stderr; it does not assert source or numerical qualification of those controls.",
+    "Ensemble roundtrip cardinality now equals the actual exported study size instead of stale 15; queued/null assertions, linear-elastic completion and independent analytical checks remain unchanged. Historical three-model 15-job tests remain. Current full-catalogue 14 configurations/26 jobs includes explicit S-CLAY1 baseline assertion and full exact import equality.",
+    "Fetch-depth changes only fast checkout history depth to 2. ci_changes is unchanged: failed git diff returns None and main treats missing history as numerical=true; unknown/manual/new-branch events also require numerical checks. Numerical job and aggregate guards are unchanged.",
+    "Source support declarations, S-CLAY1 definition and accepted agent review, approval registry and profile-allocation logic are byte-identical to HEAD. New scope validator checks exact support-row definition SHA and existing schema/reasons against the loaded catalogue."
+  ]
+}

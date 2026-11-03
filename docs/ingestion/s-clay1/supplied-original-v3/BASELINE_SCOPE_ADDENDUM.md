@@ -1,0 +1,3 @@
+# Baseline replay scope clarification
+
+wasm-baseline-v1/results.json retains an inherited generic `scope` sentence from the main1494-request driver. Its actual six requests are ONLY the five unchanged existing fixture tests recorded in baseline-fixture-results.json: four elastic closed forms and MCC isotropic yield/hardening/unload (two calls). The raw rows and2696comparisons establish that bounded scope; the extra replay did not rerun50interpretercases or the source-reference matrix. Those are already retained separately in wasm-v1/results.json. Preserve original output bytes; do not infer more cases from the inherited label.

@@ -48,19 +48,21 @@ test('public parameter examples use packaged values and physical units',()=>{
 // inside a closed disclosure, while related-profile navigation resets scroll.
 const app=readFileSync(new URL('web/app.js',root),'utf8');
 const hook=app.slice(app.indexOf('function showCatalogueModel('),app.indexOf('function download('));
-for(const id of ['modified-cam-clay','maxwell-itasca900-zero-spin-ode','sanisand-2004','original-cam-clay']){
+for(const id of ['modified-cam-clay','maxwell-itasca900-zero-spin-ode','sanisand-2004','original-cam-clay','s-clay1']){
   test('actual dialog presents the profile first with technical records closed: '+id,()=>{
     const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,new Element('div'));return nodes.get(id);};
     $('catalogue-detail-body').scrollTop=200;$('catalogue-dialog').showModal=()=>{$('catalogue-dialog').open=true;};
     const context={$,document,modelProfile,modelProfileSection,catalogue:entries,j2View:null,timedView:null,
       timedLaboratoryRoute:()=>null,refreshCatalogueStatus:()=>{},technicalReviewLinks:()=>new Element('p'),element:(tag,value,className)=>Object.assign(new Element(tag),{textContent:value??'',className}),
-      recordedDescription:value=>value,formulationSection:()=>new Element('section'),evidenceSection:()=>new Element('section'),applicabilitySection:()=>new Element('section'),
+      recordedDescription:value=>value,formulationSection:()=>new Element('section'),evidenceSection:(_document,id)=>Object.assign(new Element('section'),{className:'catalogue-evidence',textContent:'evidence:'+id}),applicabilitySection:(_document,id)=>Object.assign(new Element('section'),{className:'catalogue-applicability',textContent:'applicability:'+id}),
       evidenceIndex:null,evidenceState:'loaded',applicabilityMatrix:null,applicabilityState:'loaded',definitionLink:()=>new Element('a'),catalogueModelHash:id=>'#catalogue/'+id,URL};
     vm.runInNewContext(hook+';showCatalogueModel(entry,spec);',{...context,entry:entries.find(entry=>entry.id===id)??{id,name:modelProfile(id).title,family:'Viscoelasticity'},spec:definitions.find(model=>model.id===id)});
     const body=$('catalogue-detail-body');assert.equal(body.children[0].className,'model-profile');
     assert.equal(body.children[1].tagName,'DETAILS');assert.equal(body.children[1].open,false);assert.equal(body.scrollTop,0);
     assert.ok(text(body.children[1]).includes('Technical details, implementation and checks'));
     assert.ok(text(body.children[0]).includes(modelProfile(id).summary));
+    assert.ok(flatten(body.children[1]).some(node=>node.className==='catalogue-evidence'&&node.textContent==='evidence:'+id));
+    assert.ok(flatten(body.children[1]).some(node=>node.className==='catalogue-applicability'&&node.textContent==='applicability:'+id));
     if(id==='sanisand-2004'||id==='original-cam-clay')assert.equal($('catalogue-explore').hidden,true);
   });
 }

@@ -1,0 +1,90 @@
+✔ 15 independent deterministic requests preserve direct radial source order and fixed preparation (260.847625ms)
+✔ variations are OAT, deduplicated, explicit and never mutate baseline (54.190291ms)
+✔ invalid inputs retain per-run rejections rather than silently replacing state (58.434083ms)
+✔ nonfinite baseline/history fail before snapshots can silently serialize null (32.744ms)
+✔ source conventions, window, ordering and model scope fail closed (11.740625ms)
+✔ queued export roundtrip validates catalogue, source, definitions and exact requests (1435.945792ms)
+✔ historical prefix exports retain their exact replay while new studies use the full test (134.876334ms)
+✔ missing model is visibly excluded and cannot be silently substituted (55.507542ms)
+✔ queue is serial, keeps stopped prefixes, skips rejected jobs and continues after errors (4.737792ms)
+✔ cancel aborts active work, cancels pending and suppresses late responses (0.271125ms)
+✔ timeout aborts executor and proceeds to next request (4.893208ms)
+✔ constant confinement preserves every axial observation and roundtrips as a distinct loading choice (937.370833ms)
+✔ all compatible compiled models receive baseline requests with complete state and exact replay (970.373209ms)
+✔ tensor history edits and variations work without p_ref; unsupported scope and time fail closed (146.180708ms)
+✔ bounded parallel runs finish out of order while preserving job identity and export order (3.167875ms)
+✔ parallel cancellation aborts every active request and suppresses all late responses (0.267792ms)
+✔ parallel timeout or failure does not abort a neighbouring run (21.524792ms)
+✔ physical channels, all observations and run identity survive Plotly mapping (1.126416ms)
+✔ stable trace IDs and view revision preserve interaction identity through selection changes (0.269458ms)
+✔ async rendering coalesces updates, never overlaps Plotly calls and purges after disposal (1.758125ms)
+✔ all twelve explicit-state triaxial tests preserve initial state, every source row and exact study identity (8469.551667ms)
+✔ undrained replay controls volume and axisymmetry; measured effective radial stress and pore pressure are not imposed (389.628458ms)
+✖ acquisition order, repeated strains and reversals survive; missing state/scope and source identities fail closed (395.250417ms)
+✖ pore-pressure inference and effective-stress plot use physical channels; absent measurements retain plot gaps (2.817292ms)
+✔ catalogue filters keep source-only records and loader rejects corrupted replay bytes (5.019875ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 23
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9327.6025
+
+✖ failing tests:
+
+test at tests/test_ensemble_tests.mjs:35:1
+✖ acquisition order, repeated strains and reversals survive; missing state/scope and source identities fail closed (395.250417ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /identity/. Input:
+  
+  'Error: Unsupported experiment window.'
+  
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_ensemble_tests.mjs:38:45)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Unsupported experiment window.
+        at require (file:///Users/bmar5496/code/constitutive-atlas/web/ensemble.mjs:17:35)
+        at makeStudy (file:///Users/bmar5496/code/constitutive-atlas/web/ensemble.mjs:76:2)
+        at exportStudy (file:///Users/bmar5496/code/constitutive-atlas/web/ensemble.mjs:125:17)
+        at importStudy (file:///Users/bmar5496/code/constitutive-atlas/web/ensemble.mjs:140:2)
+        at file:///Users/bmar5496/code/constitutive-atlas/tests/test_ensemble_tests.mjs:38:56
+        at getActual (node:assert:580:5)
+        at strict.throws (node:assert:728:24)
+        at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_ensemble_tests.mjs:38:45)
+        at Test.runInAsyncScope (node:async_hooks:226:14)
+        at Test.run (node:internal/test_runner/test:1397:25),
+    expected: /identity/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at tests/test_ensemble_tests.mjs:43:1
+✖ pore-pressure inference and effective-stress plot use physical channels; absent measurements retain plot gaps (2.817292ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 4.656000000000006
+  - 4.656000000000005
+                    ^
+  
+      at TestContext.<anonymous> (file:///Users/bmar5496/code/constitutive-atlas/tests/test_ensemble_tests.mjs:48:65)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 4.656000000000006,
+    expected: 4.656000000000005,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

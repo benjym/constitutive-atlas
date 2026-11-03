@@ -1,0 +1,5 @@
+# Preserve ensemble contracts after catalogue growth
+
+Prospective change, before executing the revised compiled harness: tools/test_ensemble_wasm.mjs must compare imported job count with the actual exported study job count, rather than fixed 15. Existing recorded reference parameters, full history, analytical stress/volume tolerances, success checks for linear-elastic and queued/null import requirements remain unchanged. The earlier main failure 41663133892 predates S-CLAY1: checks passed but 25 dynamic requests failed the stale 15-job import cardinality. This is a software roundtrip harness correction, not relaxation of physical acceptance.
+
+The explicit current-catalogue test updates 13/25 to 14/26 and asserts S-CLAY1 has a baseline. All original historical three-model 15-job checks remain unchanged. Source/model/approval bytes remain exact. Preserve prior source and bindings before changes; retain original failed workflow results. Coordinator-owned scope: these two tests, this new evidence directory, exact historical source archive/maps. Remote CI is authorized by user “Push please”. No local compiled execution/build slot claimed.

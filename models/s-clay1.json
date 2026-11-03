@@ -1,0 +1,252 @@
+{
+  "schema_version": "0.3",
+  "id": "s-clay1",
+  "name": "S-CLAY1 — Wheeler et al. (2003)",
+  "family": "anisotropic critical-state plasticity",
+  "status": "transcribed",
+  "description": "Original constant-M full 3D S-CLAY1 with associated flow, isotropic pressure-dependent elasticity and volumetric/shear rotational hardening. Atlas endpoint implicit elasticity/fabric and exponential volume/size discretization. Fixed-frame infinitesimal strain; illustrative Otaniemi parameters, no bonding, creep or finite-rotation transport.",
+  "sources": [
+    {
+      "url": "https://doi.org/10.1139/T02-119",
+      "locator": "Wheeler et al.2003 CGJ40 pp403–418: Eq1 elasticity; Eqs2–5,7–9 yield/flow/hardening; AppendixA1–A14 tensor generalization. ConstantM option p404/407/413. Atlas finite-step choices: source packet supplied-original-v3/README.md.",
+      "role": "original governing formulation"
+    }
+  ],
+  "parameters": {
+    "p_ref": {
+      "default": 20000,
+      "min": 1,
+      "max": 1000000000.0,
+      "unit": "Pa",
+      "label": "Numerical stress scale"
+    },
+    "M": {
+      "default": 1.1,
+      "min": 0.1,
+      "max": 3,
+      "unit": "1",
+      "label": "Critical-state stress ratio"
+    },
+    "lambda_c": {
+      "default": 0.44,
+      "min": 0.001,
+      "max": 2,
+      "unit": "1",
+      "label": "Virgin compression slope"
+    },
+    "kappa": {
+      "default": 0.04,
+      "min": 0.0001,
+      "max": 1,
+      "unit": "1",
+      "label": "Elastic swelling slope"
+    },
+    "nu": {
+      "default": 0.2,
+      "min": -0.9,
+      "max": 0.49,
+      "unit": "1",
+      "label": "Elastic Poisson ratio"
+    },
+    "beta": {
+      "default": 0.67,
+      "min": 0,
+      "max": 10,
+      "unit": "1",
+      "label": "Relative shear contribution to fabric rotation"
+    },
+    "mu": {
+      "default": 20,
+      "min": 0,
+      "max": 1000,
+      "unit": "1",
+      "label": "Fabric rotation rate"
+    }
+  },
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    },
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        20000,
+        12500,
+        12500,
+        0,
+        0,
+        0
+      ],
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "fabric",
+      "shape": "sym",
+      "unit": "1",
+      "initial": [
+        0.28,
+        -0.14,
+        -0.14,
+        0,
+        0,
+        0
+      ],
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "deviatoric_fabric_tensor",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "v",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 3.46,
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "specific_volume",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "pm",
+      "shape": "scalar",
+      "unit": "Pa",
+      "initial": 17600,
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "yield_surface_size",
+        "transformation": "scalar_invariant"
+      }
+    },
+    {
+      "name": "gamma",
+      "shape": "scalar",
+      "unit": "1",
+      "initial": 0,
+      "scale": "1",
+      "semantics": {
+        "role": "plastic_multiplier",
+        "quantity": "scaled_incremental_plastic_multiplier",
+        "transformation": "scalar_invariant"
+      }
+    }
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "fabric",
+      "v",
+      "pm"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "derived": [
+    {
+      "name": "mean",
+      "expr": "trace(sigma) / 3"
+    },
+    {
+      "name": "sdev",
+      "expr": "dev(sigma)"
+    },
+    {
+      "name": "a2",
+      "expr": "1.5 * dot(fabric,fabric)"
+    },
+    {
+      "name": "shift",
+      "expr": "sdev - mean * fabric"
+    },
+    {
+      "name": "yield_dim",
+      "expr": "1.5 * dot(shift,shift) - (M**2 - a2) * (pm - mean) * mean"
+    },
+    {
+      "name": "yield_scaled",
+      "expr": "yield_dim / p_ref**2"
+    },
+    {
+      "name": "flow_volume",
+      "expr": "2 * M**2 * mean - 3 * dot(sdev,fabric) - (M**2 - a2) * pm"
+    },
+    {
+      "name": "flow_dev",
+      "expr": "3 * shift"
+    },
+    {
+      "name": "plastic_volume",
+      "expr": "gamma * flow_volume / p_ref"
+    },
+    {
+      "name": "plastic_shear",
+      "expr": "gamma * sqrt(2.0 / 3.0) * norm(flow_dev) / p_ref"
+    },
+    {
+      "name": "K",
+      "expr": "v * mean / kappa"
+    },
+    {
+      "name": "G",
+      "expr": "3 * K * (1 - 2 * nu) / (2 * (1 + nu))"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma - sigma_n - K * (trace(de) - plastic_volume) * I - 2 * G * (dev(de) - gamma * flow_dev / p_ref)",
+    "fabric": "fabric - fabric_n - mu * ((3 * sdev / (4 * mean) - fabric) * max(plastic_volume, 0) + beta * (sdev / (3 * mean) - fabric) * plastic_shear)",
+    "v": "v - v_n * exp(-trace(de))",
+    "pm": "pm - pm_n * exp(v * plastic_volume / (lambda_c - kappa))",
+    "gamma": "sqrt(gamma**2 + yield_scaled**2) - gamma + yield_scaled"
+  },
+  "domain": [
+    "lambda_c > kappa",
+    "mean > 0 * p_ref",
+    "pm > 0 * p_ref",
+    "v > 1",
+    "M**2 > a2",
+    "abs(trace(fabric)) < 1e-9",
+    "gamma > -1e-9"
+  ],
+  "initial_checks": [
+    "yield_scaled <= 1e-8"
+  ]
+}

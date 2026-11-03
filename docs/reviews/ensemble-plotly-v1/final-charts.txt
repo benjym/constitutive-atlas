@@ -1,0 +1,105 @@
+### Result
+{
+  "status": "19 completed · 6 stopped",
+  "traces": [
+    {
+      "id": "measurements",
+      "points": 1438
+    },
+    {
+      "id": "linear-elastic:E:4176e36000000000",
+      "points": 1438
+    },
+    {
+      "id": "linear-elastic:E:41812a8800000000",
+      "points": 1438
+    },
+    {
+      "id": "linear-elastic:nu:3fc999999999999a",
+      "points": 1438
+    },
+    {
+      "id": "linear-elastic:nu:3fd3333333333333",
+      "points": 1438
+    },
+    {
+      "id": "drucker-prager:baseline",
+      "points": 1438
+    },
+    {
+      "id": "drucker-prager:M:3feeb851eb851eb8",
+      "points": 1438
+    },
+    {
+      "id": "drucker-prager:M:3ff70a3d70a3d70a",
+      "points": 1438
+    },
+    {
+      "id": "drucker-prager:Md:3fc47ae147ae147b",
+      "points": 1438
+    },
+    {
+      "id": "drucker-prager:Md:3fceb851eb851eb8",
+      "points": 1438
+    },
+    {
+      "id": "modified-cam-clay:baseline",
+      "points": 1438
+    },
+    {
+      "id": "modified-cam-clay:M:3feeb851eb851eb8",
+      "points": 1438
+    },
+    {
+      "id": "modified-cam-clay:M:3ff70a3d70a3d70a",
+      "points": 1438
+    },
+    {
+      "id": "modified-cam-clay:kappa:3fa0624dd2f1a9fc",
+      "points": 1438
+    },
+    {
+      "id": "modified-cam-clay:kappa:3fa89374bc6a7efa",
+      "points": 1438
+    },
+    {
+      "id": "barodesy-clay-2017:baseline",
+      "points": 1438
+    },
+    {
+      "id": "barodesy-sand:baseline",
+      "points": 1438
+    },
+    {
+      "id": "duncan-chang-1970-endpoint-average:baseline",
+      "points": 121
+    },
+    {
+      "id": "hypoplastic-clay-2005:baseline",
+      "points": 1438
+    },
+    {
+      "id": "hypoplastic-clay-2013:baseline",
+      "points": 1438
+    },
+    {
+      "id": "mohr-coulomb:baseline",
+      "points": 81
+    },
+    {
+      "id": "original-cam-clay-sw-electronic-log-recovery-v1:baseline",
+      "points": 1
+    },
+    {
+      "id": "linear-elastic:baseline",
+      "points": 1438
+    }
+  ],
+  "runtimeAssets": [
+    "http://127.0.0.1:58747/vendor/plotly-basic-4.1.1.min.js"
+  ]
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => {document.querySelector(\'#ensemble-stress\').scrollIntoView({block:\'center\'});return {status:document.querySelector(\'#ensemble-status\').textContent,traces:document.querySelector(\'#ensemble-stress\').data?.map(t=>({id:t.uid,points:t.x.length})),runtimeAssets:performance.getEntriesByType(\'resource\').filter(e=>e.name.includes(\'plotly-basic\')).map(e=>e.name)}}');
+```

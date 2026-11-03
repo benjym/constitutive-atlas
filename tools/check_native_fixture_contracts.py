@@ -17,6 +17,8 @@ DUNCAN='duncan-chang-1970-endpoint-average'
 DUNCAN_HASH='452b49ef48668c0c5d8aba20dfca398235fa45431e853ee923be05a17c7c88a0'
 RAMBERG='ramberg-osgood-ansys242'
 RAMBERG_HASH='c949cb14269846ec46a7e8f25718e17e8c8eab394b6ee09204f029e1ca15a3e2'
+SCLAY='s-clay1'
+SCLAY_HASH='2d1518c1aee44d9adec35229adc83b32a9f39d9175f307c8ddfd90cdfbd1caec'
 # Exact prior13 mapping from preserved package policy84fe14c4..., not mutable live policy.
 PRIOR_THIRTEEN={
     "barodesy-clay-2017": "0bf4fd2789274f1271b438ffea57168866f7ebea55cfcf8ef786532903ab3477",
@@ -39,7 +41,9 @@ def check_recorded_failure(message, definitions, *, root=ROOT):
     if OCC not in definitions:
         assert message==GIS_FAILURE
         return 'historical-twelve GIS first failure'
-    if RAMBERG in definitions:
+    if SCLAY in definitions:
+        assert definitions=={**PRIOR_THIRTEEN,DUNCAN:DUNCAN_HASH,RAMBERG:RAMBERG_HASH,SCLAY:SCLAY_HASH}, 'unqualified strict sixteen-model catalogue'
+    elif RAMBERG in definitions:
         assert definitions=={**PRIOR_THIRTEEN,DUNCAN:DUNCAN_HASH,RAMBERG:RAMBERG_HASH}, 'unqualified strict fifteen-model catalogue'
     elif DUNCAN in definitions:
         assert definitions=={**PRIOR_THIRTEEN,DUNCAN:DUNCAN_HASH}, 'unqualified strict fourteen-model catalogue'
@@ -57,7 +61,7 @@ def check_recorded_failure(message, definitions, *, root=ROOT):
     pressure=params['pref']*math.exp((params['Gamma']+params['lambda_c']-params['kappa']-volume)/params['lambda_c'])
     expected=abs(pressure-100000)/100000
     assert abs(residual-expected)<=2e-10*max(1,abs(expected)), 'strict OCC cone residual changed'
-    return ('current-fifteen Ramberg/Duncan/OCC' if RAMBERG in definitions else 'current-fourteen Duncan/OCC' if DUNCAN in definitions else 'current-thirteen OCC')+' first failure; original rollback asserted by explicit positive suite'
+    return ('current-sixteen SCLAY1/Ramberg/Duncan/OCC' if SCLAY in definitions else 'current-fifteen Ramberg/Duncan/OCC' if RAMBERG in definitions else 'current-fourteen Duncan/OCC' if DUNCAN in definitions else 'current-thirteen OCC')+' first failure; original rollback asserted by explicit positive suite'
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)

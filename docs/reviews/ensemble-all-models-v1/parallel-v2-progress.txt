@@ -1,0 +1,96 @@
+### Result
+{
+  "audit": {
+    "live": 2,
+    "maxLive": 2,
+    "active": 2,
+    "maxActive": 2,
+    "requests": 7,
+    "duplicateRequests": 0,
+    "created": 2,
+    "events": [
+      {
+        "event": "create",
+        "worker": 1,
+        "time": 314.09999990463257
+      },
+      {
+        "event": "request",
+        "worker": 1,
+        "model": "linear-elastic",
+        "time": 314.09999990463257
+      },
+      {
+        "event": "create",
+        "worker": 2,
+        "time": 316.2999999523163
+      },
+      {
+        "event": "request",
+        "worker": 2,
+        "model": "linear-elastic",
+        "time": 316.2999999523163
+      },
+      {
+        "event": "response",
+        "worker": 1,
+        "time": 465.6999999284744
+      },
+      {
+        "event": "request",
+        "worker": 1,
+        "model": "linear-elastic",
+        "time": 483.7999999523163
+      },
+      {
+        "event": "response",
+        "worker": 2,
+        "time": 486
+      },
+      {
+        "event": "request",
+        "worker": 2,
+        "model": "linear-elastic",
+        "time": 503.39999997615814
+      },
+      {
+        "event": "response",
+        "worker": 1,
+        "time": 582.0999999046326
+      },
+      {
+        "event": "request",
+        "worker": 1,
+        "model": "linear-elastic",
+        "time": 601.6999999284744
+      },
+      {
+        "event": "response",
+        "worker": 2,
+        "time": 603.5999999046326
+      },
+      {
+        "event": "request",
+        "worker": 2,
+        "model": "drucker-prager",
+        "time": 623.1999999284744
+      },
+      {
+        "event": "response",
+        "worker": 1,
+        "time": 699.5
+      },
+      {
+        "event": "request",
+        "worker": 1,
+        "model": "drucker-prager",
+        "time": 720.2999999523163
+      }
+    ]
+  },
+  "status": "Running · up to 2 workers · 5 completed · 2 running · 18 queued"
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({audit:window.ensembleWorkerAudit,status:document.querySelector(\'#ensemble-status\').textContent})');
+```

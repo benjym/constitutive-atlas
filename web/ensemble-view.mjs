@@ -1,67 +1,62 @@
-import {defaultConfigurations,makeStudy,exportStudy,importStudy,resultSeries,modelIds,sweepParameters,validateExperiment} from './ensemble.mjs';
+import {defaultConfigurations,makeStudy,exportStudy,importStudy,availableModels,modelExclusion,variedParameters,historyFields,validateExperiment} from './ensemble.mjs';
+import {loadEnsembleCatalogue,fetchEnsembleTest,filterTests,replayGap} from './ensemble-experiments.mjs';
+import {createEnsemblePlot} from './ensemble-plots.mjs';
 import {EnsembleQueue} from './ensemble-queue.mjs';
 import {createRecordedDocument} from './recorded-document.mjs';
 const root=document.getElementById('ensemble');
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el;};
-const colors=['#256d64','#a55635','#6258a4'];
-const names={'linear-elastic':'Linear elasticity','drucker-prager':'Drucker–Prager','modified-cam-clay':'Modified Cam Clay'};
+const palette=['#256d64','#a55635','#6258a4','#ac7822','#286fa8','#a23f72','#62752a','#795c40','#447b85','#72517b','#b04b47','#6d6f38','#375595'];
+const compactNames={'linear-elastic':'Linear elasticity','drucker-prager':'Drucker–Prager','modified-cam-clay':'Modified Cam Clay','barodesy-clay-2017':'Barodesy clay (2017)','barodesy-sand':'Barodesy sand (2015)','duncan-chang-1970-endpoint-average':'Duncan–Chang (1970)','hypoplastic-clay-2005':'Hypoplastic clay (2005)','hypoplastic-clay-2013':'Hypoplastic clay (2013)','hypoplastic-sand-igs97':'Hypoplastic sand + IGS (1997)','hypoplastic-sand-vw96':'Hypoplastic sand (1996)','mohr-coulomb':'Mohr–Coulomb','original-cam-clay-sw-electronic-log-recovery-v1':'Original Cam Clay','research-hp-extracted-asbs-gis-2024-v03':'ASBS + GIS (2024)'};
+let modelIds=[],names={},colors=[];
 const $=id=>document.getElementById(id);
 function download(name,value){const a=node('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)+'\n'],{type:'application/json'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
-async function loadExperiment(){
- const manifestResponse=await fetch('./ensemble-index.json');if(!manifestResponse.ok)throw Error('Ensemble experiment manifest is unavailable.');
- const manifest=await manifestResponse.json();
- if(manifest.version!=='atlas-ensemble-asset-0.1'||manifest.path!=='ensemble-experiment.json'||!Number.isSafeInteger(manifest.size_bytes)||manifest.size_bytes<1||manifest.size_bytes>2*1024*1024||!/^[a-f0-9]{64}$/.test(manifest.sha256))throw Error('Invalid ensemble experiment manifest.');
- const response=await fetch('./'+manifest.path);if(!response.ok)throw Error('Ensemble experiment is unavailable.');
- const bytes=await response.arrayBuffer(),digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');
- if(bytes.byteLength!==manifest.size_bytes||digest!==manifest.sha256)throw Error('Ensemble experiment checksum differs. Reload a consistent package.');
- return validateExperiment(JSON.parse(new TextDecoder().decode(bytes)));
-}
 function workerExecutor(catalogue){
- let worker=null,nextId=0;
- const close=()=>{worker?.terminate();worker=null;};
+ const slots=new Set();let nextId=0;
+ const remove=slot=>{slot.worker.terminate();slots.delete(slot);};
+ const close=()=>{for(const slot of slots)remove(slot);};
  const execute=(job,signal)=>new Promise((resolve,reject)=>{
   if(signal.aborted){reject(Error('Cancelled.'));return;}
-  const id=++nextId;worker??=new Worker(new URL('./ensemble-worker.mjs',import.meta.url),{type:'module'});
-  const abort=()=>{close();reject(Error('Cancelled.'));};signal.addEventListener('abort',abort,{once:true});
-  const finish=(error,result)=>{signal.removeEventListener('abort',abort);if(error){close();reject(error);}else resolve(result);};
+  let slot=[...slots].find(s=>!s.busy);
+  if(!slot){slot={worker:new Worker(new URL('./ensemble-worker.mjs',import.meta.url),{type:'module'}),busy:false};slots.add(slot);}
+  slot.busy=true;const {worker}=slot,id=++nextId;let settled=false;
+  const finish=(error,result)=>{
+   if(settled)return;settled=true;signal.removeEventListener('abort',abort);worker.onmessage=worker.onerror=null;
+   if(error){remove(slot);reject(error);}else{slot.busy=false;resolve(result);}
+  };
+  const abort=()=>finish(Error('Cancelled.'));signal.addEventListener('abort',abort,{once:true});
   worker.onmessage=({data})=>{if(data.id!==id)return;try{if(data.error)throw Error(data.error);createRecordedDocument(job.specification,data.result,catalogue);finish(null,data.result);}catch(e){finish(e);}};
   worker.onerror=event=>finish(Error(event.message||'Worker failed.'));
-  worker.postMessage({id,specification:job.specification,catalogue});
+  try{worker.postMessage({id,specification:job.specification,catalogue});}catch(error){finish(error);}
  });
  return {execute,close};
 }
-function plot(svg,record,jobs,channel,selected){
- svg.replaceChildren();const ns='http://www.w3.org/2000/svg';
- const add=(tag,attrs,text)=>{const el=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))el.setAttribute(k,v);if(text!==undefined)el.textContent=text;svg.append(el);return el;};
- const measured=record.rows.map(r=>[r.axial_strain*100,channel==='stress'?r.q/1000:r.volumetric_strain*100]);
- const series=jobs.map(job=>({job,points:resultSeries(job,channel)}));
- const all=[...measured,...series.flatMap(s=>s.points)],xs=all.map(p=>p[0]),ys=all.map(p=>p[1]);
- let lo=Math.min(...ys),hi=Math.max(...ys);const pad=Math.max((hi-lo)*.08,.01);lo-=pad;hi+=pad;
- const maxX=Math.max(...xs,.01),x=v=>62+v/maxX*460,y=v=>260-(v-lo)/(hi-lo)*220;
- add('title',{},(channel==='stress'?'Deviator stress':'Volumetric strain')+' versus axial strain');
- for(let i=0;i<=4;i++){
-  const yy=40+i*55;add('line',{x1:62,y1:yy,x2:522,y2:yy,stroke:'#e2e6dc'});add('text',{x:53,y:yy+4,'text-anchor':'end'},Number((hi-(hi-lo)*i/4).toPrecision(3)));
-  add('text',{x:62+i*115,y:281,'text-anchor':'middle'},Number((maxX*i/4).toPrecision(3)));
- }
- add('text',{x:62,y:22},channel==='stress'?'Deviator stress q (kPa)':'Volumetric strain (%) · compression positive');
- add('text',{x:292,y:310,'text-anchor':'middle'},'Axial strain (%)');
- add('polyline',{points:measured.map(([a,b])=>x(a)+','+y(b)).join(' '),fill:'none',stroke:'#59605c','stroke-width':2,'stroke-dasharray':'3 3'});
- series.sort((a,b)=>Number(a.job.id===selected)-Number(b.job.id===selected));
- for(const {job,points} of series){if(!points.length)continue;const active=job.id===selected;
-  add('polyline',{points:points.map(([a,b])=>x(a)+','+y(b)).join(' '),fill:'none',stroke:colors[modelIds.indexOf(job.model)],'stroke-width':active?3:job.change?1.3:2,opacity:active?1:job.change?.45:.8,'stroke-dasharray':job.change?'5 2':'none'});
- }
-}
 async function setup(){
- const [record,catalogue]=await Promise.all([loadExperiment(),fetch('./models.json').then(r=>{if(!r.ok)throw Error('Model catalogue unavailable.');return r.json();})]);
+ const [entries,catalogue]=await Promise.all([loadEnsembleCatalogue(),fetch('./models.json').then(r=>{if(!r.ok)throw Error('Model catalogue unavailable.');return r.json();})]);
+ let entry=entries.find(e=>e.id==='OPARA-TXCD-100')||entries[0];
+ if(!entry)throw Error('No tests available.');
+ let record=await fetchEnsembleTest(entry),testGap='',loading=false,testSequence=0,importSequence=0;
+ if(entry.replay)validateExperiment(record);else testGap=replayGap(record)||'No verified replay loading asset is available for this record.';
+ modelIds=availableModels(catalogue).map(m=>m.id);names=Object.fromEntries(catalogue.models.map(m=>[m.id,m.name]));colors=modelIds.map((_,i)=>palette[i%palette.length]);
+ const styles=Object.fromEntries(modelIds.map((id,i)=>[id,{name:names[id],color:colors[i]}]));
+ let viewRevision=0;
  let study=null,selected=null,stale=false,revision=0,pendingRun=null,activeRun=null;
  const hidden=new Set(),editors=new Map();
  root.replaceChildren();
- const intro=node('div',undefined,'intro');intro.append(node('div'));intro.firstChild.append(node('span','ONE EXPERIMENT · MULTIPLE MODELS','eyebrow'),node('h1','Explore models together.'));root.append(intro);
- const experiment=node('section',undefined,'model-card');experiment.append(node('span','FIXED EXPERIMENT','eyebrow'),node('h2','OPARA · drained triaxial · 100 kPa'),node('p','Clayey-silty sand · measured starting effective stress 103.72 kPa · e₀ = 0.416. Replay: all 1,438 acquired observations, ending at 15.99% axial strain.'));
- const source=node('a','Ullmann et al. · source experiment ↗');source.href='https://doi.org/10.25532/OPARA-1072';source.target='_blank';source.rel='noopener noreferrer';experiment.append(source);
- const disclosure=node('details');disclosure.append(node('summary','Loading, preparation and comparison assumptions'),node('p','Axial strain and author membrane-corrected radial effective stress are imposed at acquired endpoints. The membrane correction uses measured volume change: these are conditional comparisons. Recorded order is preserved; elapsed time and consolidation history are not simulated.'));
- disclosure.append(node('p','All baselines are illustrative and uncalibrated for this specimen. Passing software checks does not establish model–material suitability. Modified Cam Clay uses an explicit assumed preconsolidation pressure, initially 200 kPa (OCR ≈ 1.93). Numerical scale and solver settings stay fixed.'));
- for(const warning of record.warnings)disclosure.append(node('p',warning));disclosure.append(node('p',record.provenance.attribution));experiment.append(disclosure);root.append(experiment);
+ const title=node('h1','Ensemble explorer','ensemble-sr-only');root.append(title);
+ const testControls=node('section',undefined,'model-card ensemble-test-controls');
+ const searchLabel=node('label','Find a test'),search=node('input');search.type='search';search.id='ensemble-test-search';search.placeholder='Material or test ID';searchLabel.append(search);
+ const protocolLabel=node('label','Test type'),protocol=node('select');protocol.id='ensemble-test-protocol';protocol.append(new Option('All test types',''));for(const value of [...new Set(entries.map(e=>e.protocol))].sort())protocol.append(new Option(value.replaceAll('-',' '),value));protocolLabel.append(protocol);
+ const availabilityLabel=node('label','Availability'),availability=node('select');availability.id='ensemble-test-availability';for(const [text,value]of [['All records',''],['Ensemble replay','replay'],['Measurements only','source']])availability.append(new Option(text,value));availabilityLabel.append(availability);
+ const testLabel=node('label','Experimental test'),testSelect=node('select');testSelect.id='ensemble-test';testLabel.append(testSelect);const testCount=node('p',undefined,'control-hint');testCount.id='ensemble-test-count';testControls.append(searchLabel,protocolLabel,availabilityLabel,testLabel);root.append(testControls);
+ const help=node('button','?','ensemble-help');help.type='button';help.id='ensemble-test-help';help.setAttribute('aria-label','Test information and assumptions');help.setAttribute('aria-haspopup','dialog');help.setAttribute('aria-controls','ensemble-test-info');
+ const info=node('dialog',undefined,'ensemble-test-info');info.id='ensemble-test-info';info.setAttribute('aria-labelledby','ensemble-test-info-title');const infoTitle=node('h2','Test information');infoTitle.id='ensemble-test-info-title';const closeInfo=node('button','Close','ensemble-info-close');closeInfo.type='button';const infoHeader=node('div',undefined,'ensemble-info-header');infoHeader.append(infoTitle,closeInfo);info.append(infoHeader,testCount);root.append(info);help.onclick=()=>info.showModal();closeInfo.onclick=()=>info.close();info.addEventListener('click',event=>{if(event.target===info){const box=info.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)info.close();}});
+ function filterOptions(){const filtered=filterTests(entries,{search:search.value,protocol:protocol.value,availability:availability.value});testSelect.replaceChildren();if(!filtered.some(e=>e.id===entry.id))testSelect.append(new Option('Current: '+entry.id,entry.id));for(const e of filtered)testSelect.append(new Option(e.id+' · '+e.material+' · '+(e.replay?'ensemble':'measurements'),e.id));testSelect.value=entry.id;testCount.textContent=filtered.length+' matching / '+entries.length+' records · '+entries.filter(e=>e.replay).length+' ready for ensemble replay';}
+ search.oninput=protocol.onchange=availability.onchange=filterOptions;
+ const experiment=node('section'),testHeading=node('h2'),testDescription=node('p'),source=node('a','Source experiment ↗'),gapNote=node('p',undefined,'ensemble-gap');gapNote.id='ensemble-test-gap';gapNote.setAttribute('role','status');source.target='_blank';source.rel='noopener noreferrer';experiment.append(testHeading,testDescription,source,gapNote);
+ const loadingNote=node('p'),warnings=node('div');
+ const disclosure=node('details');disclosure.append(node('summary','Loading, preparation and comparison assumptions'),loadingNote,node('p','All baselines are illustrative and uncalibrated for the selected specimen. Measured effective stress and void ratio initialize replay; other history uses the displayed unmeasured model assumptions. No consolidation history or physical-time evolution is inferred. Unsupported source channels are available for inspection without inventing a loading contract.'),warnings);experiment.append(disclosure);info.append(experiment);
+ const sourceControls=node('div',undefined,'ensemble-source-controls'),sourceX=node('select'),sourceY=node('select');sourceX.id='ensemble-source-x';sourceY.id='ensemble-source-y';for(const [text,input]of [['X channel',sourceX],['Y channel',sourceY]]){const label=node('label',text);label.append(input);sourceControls.append(label);}experiment.append(sourceControls);
+ const exclusions=node('details');exclusions.append(node('summary','Model availability for this test'));exclusions.append(node('p',modelIds.length+' compiled models support effective-stress strain-path replay. Other dedicated timed, total-stress and restricted-path engines require different loading or execution contracts.'));for(const model of catalogue.models){const reason=modelExclusion(model);if(reason)exclusions.append(node('p',model.name+': '+reason));}experiment.append(exclusions);
  const layout=node('div',undefined,'ensemble-layout'),controls=node('form',undefined,'controls ensemble-controls'),results=node('div',undefined,'results-column');controls.id='ensemble-controls';controls.append(node('h2','Models & parameter variations'),node('p','SI units throughout. Each model runs its baseline, then changes one parameter at a time. Blank variation lists run only the baseline for that parameter.','control-hint'));
  const fields=node('div');controls.append(fields);
  function numeric(label,value,readonly=false){const wrapper=node('label',label),input=node('input');input.type='number';input.step='any';input.required=true;input.value=value;input.readOnly=readonly;wrapper.append(input);return {wrapper,input};}
@@ -75,30 +70,52 @@ async function setup(){
    if(model){
     const grid=node('div',undefined,'ensemble-fields');
     for(const [key,f]of Object.entries(model.parameters)){const item=numeric(key+' ('+f.unit+')',config.parameters[key],key==='p_ref');item.input.min=f.min;item.input.max=f.max;item.input.dataset.parameter=key;parameters[key]=item.input;grid.append(item.wrapper);}box.append(grid);
-    if(config.model==='modified-cam-clay'){const item=numeric('Assumed initial pc (Pa) · not measured',config.history.pc);history.pc=item.input;box.append(item.wrapper);}
-    for(const key of sweepParameters[config.model]){const label=node('label',key+' variation values · comma separated'),input=node('input');input.type='text';input.value=config.variations[key].join(', ');input.dataset.variation=key;variations[key]=input;label.append(input);box.append(label);}
+    for(const field of historyFields(model)){const item=numeric('Assumed initial '+field.key+' ('+field.unit+') · not measured',config.history[field.key]);history[field.key]=item.input;box.append(item.wrapper);}
+    for(const key of variedParameters(model)){const label=node('label',key+' variation values · comma separated'),input=node('input');input.type='text';input.value=config.variations[key].join(', ');input.dataset.variation=key;variations[key]=input;label.append(input);box.append(label);}
     const definition=node('a','Exact model definition ↗');definition.href='./models/'+config.model+'.json';definition.target='_blank';definition.rel='noopener';box.append(definition);
    }
    fields.append(box);editors.set(config.model,{enabled,parameters,variations,history,original:config});
   }
  }
- const count=node('p','15 runs · three illustrative models');count.id='ensemble-count';const actions=node('div',undefined,'ensemble-actions'),cancel=node('button','Cancel'),save=node('button','Export ensemble'),importButton=node('button','Import & replay'),file=node('input');
- cancel.type=save.type=importButton.type='button';cancel.hidden=true;cancel.id='ensemble-cancel';save.disabled=true;save.id='ensemble-export';file.type='file';file.accept='.json,application/json';file.hidden=true;file.id='ensemble-file';importButton.id='ensemble-import';actions.append(cancel,save,importButton,file);
- const status=node('p','Parameters update the ensemble automatically.');status.id='ensemble-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');controls.append(count,actions,status);controls.insertBefore(count,fields);controls.insertBefore(actions,fields);controls.insertBefore(status,fields);
- const legend=node('div',undefined,'ensemble-legend');legend.append(node('span','··· Measurements'));
- for(const id of modelIds){const label=node('label',undefined,'ensemble-check'),input=node('input');input.type='checkbox';input.checked=true;label.style.color=colors[modelIds.indexOf(id)];label.append(input,node('span',names[id]));input.onchange=()=>{input.checked?hidden.delete(id):hidden.add(id);render();};legend.append(label);}
- results.append(legend,node('p','Solid: baseline · dashed: parameter variation · thicker: selected run.','control-hint'));
- const charts={};for(const channel of ['stress','volume']){const panel=node('section',undefined,'chart-panel'),svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.id='ensemble-'+channel;svg.setAttribute('viewBox','0 0 560 330');svg.setAttribute('role','img');svg.setAttribute('aria-label',channel==='stress'?'Ensemble deviator stress versus axial strain':'Ensemble volumetric strain versus axial strain');panel.append(svg);charts[channel]=svg;results.append(panel);}
+ const count=node('p','');count.id='ensemble-count';const actions=node('div',undefined,'ensemble-actions'),cancel=node('button','Cancel'),save=node('button','Export ensemble'),importButton=node('button','Import & replay'),file=node('input');
+ cancel.type=save.type=importButton.type='button';cancel.hidden=true;cancel.id='ensemble-cancel';save.disabled=true;save.id='ensemble-export';file.type='file';file.accept='.json,application/json';file.hidden=true;file.id='ensemble-file';importButton.id='ensemble-import';const reset=node('button','Reset all models');reset.type='button';reset.id='ensemble-reset';actions.append(cancel,save,importButton,reset,file);
+ const loadSaved=node('button','Import');loadSaved.type='button';loadSaved.id='ensemble-load-saved';loadSaved.onclick=()=>file.click();loadSaved.title='Import saved ensemble';testControls.append(loadSaved,help);
+ const status=node('p','Parameters update automatically · up to two parallel workers.');status.id='ensemble-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');controls.append(count,actions,status);controls.insertBefore(count,fields);controls.insertBefore(actions,fields);controls.insertBefore(status,fields);
+ const legend=node('div',undefined,'ensemble-legend');legend.setAttribute('role','group');legend.setAttribute('aria-label','Visible model curves');legend.append(node('span','··· Measurements','ensemble-measurements'));
+ for(const id of modelIds){const label=node('label',undefined,'ensemble-check'),input=node('input');input.type='checkbox';input.checked=true;label.style.color=colors[modelIds.indexOf(id)];input.setAttribute('aria-label',names[id]);label.title=names[id];label.append(input,node('span',compactNames[id]||names[id].split(' — ')[0]));input.onchange=()=>{input.checked?hidden.delete(id):hidden.add(id);render();};legend.append(label);}
+ const plotHelp=node('p',undefined,'control-hint');results.append(legend,plotHelp);
+ const charts={},panels={};for(const channel of ['stress','volume','path','pore','source']){
+  const panel=node('section',undefined,'chart-panel'),heading=node('h2',({stress:'Deviator stress',volume:'Volumetric strain · compression positive',path:'Effective stress path',pore:'Pore-pressure change',source:'Source measurements'})[channel]),chart=node('div',undefined,'ensemble-plot'),error=node('p',undefined,'control-hint');
+  heading.id='ensemble-'+channel+'-title';chart.id='ensemble-'+channel;chart.setAttribute('role','region');chart.setAttribute('aria-labelledby',heading.id);error.setAttribute('role','status');
+  panel.append(heading,chart,error);results.append(panel);panels[channel]=panel;
+  charts[channel]=createEnsemblePlot(chart,{channel,onSelect:id=>{selected=id;render();},onError:failure=>{error.textContent=failure.message;}});
+ }
  const outcomes=node('section',undefined,'experiment-card');outcomes.append(node('h2','Runs & outcomes'));const list=node('div');list.id='ensemble-runs';outcomes.append(list);const detail=node('section',undefined,'experiment-card');detail.append(node('h2','Selected run'));const detailText=node('p','Select a run to inspect its inputs.'),raw=node('pre'),rawDetails=node('details');raw.id='ensemble-selected';rawDetails.append(node('summary','Exact request, outcome and retained response'),raw);const single=node('button','Export selected recorded replay');single.type='button';single.disabled=true;single.id='ensemble-single-export';detail.append(detailText,single,rawDetails);results.append(outcomes,detail);layout.append(controls,results);root.append(layout);
- const executor=workerExecutor(catalogue),queue=new EnsembleQueue(executor.execute,()=>render());
- function read(){return modelIds.map(id=>{const e=editors.get(id);if(!e.parameters.p_ref||!e.enabled.checked)return {...e.original,enabled:false};return {model:id,enabled:e.enabled.checked,parameters:Object.fromEntries(Object.entries(e.parameters).map(([k,v])=>[k,v.value.trim()===''?NaN:Number(v.value)])),history:Object.fromEntries(Object.entries(e.history).map(([k,v])=>[k,v.value.trim()===''?NaN:Number(v.value)])),variations:Object.fromEntries(Object.entries(e.variations).map(([k,v])=>[k,v.value.trim()===''?[]:v.value.split(',').map(x=>x.trim()===''?NaN:Number(x.trim()))]))};});}
- function refreshCount(){for(const e of editors.values())for(const input of [...Object.values(e.parameters),...Object.values(e.history),...Object.values(e.variations)])input.disabled=!e.enabled.checked;try{const preview=makeStudy(record,catalogue,read());count.textContent=preview.jobs.length+' runs · '+preview.jobs.filter(j=>j.status==='rejected').length+' rejected by input checks';}catch(e){count.textContent=e.message;}}
+ const executor=workerExecutor(catalogue),queue=new EnsembleQueue(executor.execute,()=>render(),30000,2);
+ function read(){return [...editors].map(([id,e])=>{if(!e.enabled.checked)return {...e.original,enabled:false};return {model:id,enabled:e.enabled.checked,parameters:Object.fromEntries(Object.entries(e.parameters).map(([k,v])=>[k,v.value.trim()===''?NaN:Number(v.value)])),history:Object.fromEntries(Object.entries(e.history).map(([k,v])=>[k,v.value.trim()===''?NaN:Number(v.value)])),variations:Object.fromEntries(Object.entries(e.variations).map(([k,v])=>[k,v.value.trim()===''?[]:v.value.split(',').map(x=>x.trim()===''?NaN:Number(x.trim()))]))};});}
+ function updateTestInfo(){
+  disclosure.hidden=false;testHeading.textContent=entry.id+' · '+entry.protocol.replaceAll('-',' ');
+  testDescription.textContent=record.material+' · '+record.rows.length.toLocaleString()+' observations'+(record.initial?.effective_stress?' · initial radial effective stress '+(record.initial.effective_stress[1]/1000).toFixed(2)+' kPa · e₀ = '+record.initial.void_ratio:'');
+  source.href=record.provenance?.source_url||record.provenance?.license_url||'#';source.hidden=!record.provenance?.source_url;
+  gapNote.textContent=testGap?'Measurements only. '+testGap:'Ensemble replay · all observations retained in acquisition order.';
+  warnings.replaceChildren(...(record.warnings||[]).map(w=>node('p',w)),node('p',record.provenance?.attribution||''));
+  const native=record.kind&&record.kind!=='experiment';sourceControls.hidden=!native;
+  if(native)for(const [input,key]of [[sourceX,'x'],[sourceY,'y']]){input.replaceChildren();for(const c of record.columns)input.append(new Option(c.name+' ('+c.unit+')',c.key));input.value=record.source_plot[key];}
+  plotHelp.textContent=testGap?'Hover for source values. Use the toolbar to zoom, pan, reset axes or download an image.':'Solid: baseline · dashed: parameter variation · thicker: selected run. Hover for values or click a model curve to select its run. Use the toolbar to zoom, pan, reset axes or download an image.';
+  exclusions.hidden=!!testGap;controls.hidden=!!testGap;legend.hidden=!!testGap;outcomes.hidden=detail.hidden=!!testGap;
+  for(const [channel,panel]of Object.entries(panels))panel.hidden=native?channel!=='source':channel==='source'||channel==='pore'&&record.protocol!=='undrained-triaxial'||channel==='path'&&!record.rows.some(r=>Number.isFinite(r.p)||Number.isFinite(r.radial_effective_stress))||channel==='volume'&&!record.rows.some(r=>Number.isFinite(r.volumetric_strain));
+ }
+ function describeLoading(){loadingNote.textContent=testGap?testGap:record.protocol==='undrained-triaxial'?'Idealized undrained replay: impose acquired axial strain, zero volumetric strain and equal lateral effective stresses. Measured effective radial stress is an output comparison, not imposed loading. Pore-pressure change is inferred from measured cell-pressure change minus predicted lateral effective-stress change; saturated incompressible response is assumed.':'Acquired axial strain and measured membrane-corrected radial effective stress are imposed. This is a conditional comparison: the membrane correction uses measured specimen volume.';}
+ function refreshCount(){if(loading||testGap)return;for(const e of editors.values())for(const input of [...Object.values(e.parameters),...Object.values(e.history),...Object.values(e.variations)])input.disabled=!e.enabled.checked;try{const preview=makeStudy(record,catalogue,read());count.textContent=preview.model_definitions.length+' models · '+preview.jobs.length+' runs · '+preview.jobs.filter(j=>j.status==='rejected').length+' rejected by input checks';}catch(e){count.textContent=e.message;}}
  function render(){
+  if(loading)return;
+  describeLoading();
   cancel.hidden=!queue.running&&pendingRun===null;save.disabled=!study||stale||queue.running;importButton.disabled=queue.running;
+  if(!study)status.textContent=testGap?'Measurements only · no simulation requested.':'Ready to run the selected test.';
   const jobs=study?.jobs||[];
-  for(const channel of ['stress','volume'])plot(charts[channel],record,jobs.filter(j=>!hidden.has(j.model)),channel,selected);
+  if(location.hash==='#ensemble')for(const [channel,chart]of Object.entries(charts))if(!panels[channel].hidden)chart.update(record,jobs.filter(j=>!hidden.has(j.model)),selected,styles,viewRevision);
   if(study){const counts={};for(const job of jobs)counts[job.status]=(counts[job.status]||0)+1;
-   status.textContent=(pendingRun!==null?'Updating after parameter changes · ':stale?'Inputs changed · displayed results are stale. ':'')+(queue.running?'Running · ':'')+Object.entries(counts).map(([k,v])=>v+' '+k).join(' · ');
+   status.textContent=(pendingRun!==null?'Updating after parameter changes · ':stale?'Inputs changed · displayed results are stale. ':'')+(queue.running?'Running · up to 2 workers · ':'')+Object.entries(counts).map(([k,v])=>v+' '+k).join(' · ');
   }
   list.replaceChildren();for(const job of jobs){const row=node('button',undefined,'ensemble-run-row');row.type='button';row.dataset.status=job.status;row.setAttribute('aria-pressed',String(job.id===selected));row.style.borderLeftColor=colors[modelIds.indexOf(job.model)];row.append(node('span',names[job.model]+' · '+job.label),node('span',job.status));row.onclick=()=>{selected=job.id;render();};list.append(row);}
   const job=jobs.find(j=>j.id===selected);single.disabled=!job?.result||stale||queue.running;
@@ -106,6 +123,7 @@ async function setup(){
  }
  function clearPending(){clearTimeout(pendingRun);pendingRun=null;}
  async function start(prepared){
+  if(loading||testGap)return;
   const id=++revision;
   clearPending();
   if(queue.running)queue.cancel();
@@ -114,12 +132,13 @@ async function setup(){
   let failure=null;
   try{
    const next=prepared||makeStudy(record,catalogue,read());
-   study=next;stale=false;selected=study.jobs.some(job=>job.id===selected)?selected:study.jobs[0].id;
+   ++viewRevision;study=next;stale=false;selected=study.jobs.some(job=>job.id===selected)?selected:study.jobs[0].id;
    activeRun=queue.run(study);await activeRun;
   }catch(e){failure='Cannot update: '+e.message;}
   finally{activeRun=null;executor.close();render();if(failure&&id===revision)status.textContent=failure;}
  }
  function schedule(delay=350){
+  if(loading||testGap)return;
   ++revision;clearPending();stale=!!study;
   if(queue.running)queue.cancel();
   pendingRun=setTimeout(()=>{pendingRun=null;void start();},delay);
@@ -127,13 +146,33 @@ async function setup(){
  }
  controls.onsubmit=event=>{event.preventDefault();schedule(0);};
  controls.addEventListener('input',event=>{if(event.target!==file)schedule();});
+ reset.onclick=()=>{populate(defaultConfigurations(catalogue));schedule(0);};
  cancel.onclick=()=>{++revision;clearPending();queue.cancel();render();};
- save.onclick=()=>{try{download('opara-txcd100-ensemble.json',exportStudy(study,catalogue,record));}catch(e){status.textContent=e.message;}};
- single.onclick=()=>{const job=study.jobs.find(j=>j.id===selected);try{download(job.model+'-opara-recorded.json',createRecordedDocument(job.specification,job.result,catalogue));}catch(e){status.textContent=e.message;}};
- importButton.onclick=()=>file.click();file.onchange=async()=>{clearPending();const id=++revision;try{const item=file.files[0];if(!item)return;if(item.size>100*1024*1024)throw Error('Import exceeds 100 MB.');const text=await item.text();if(id!==revision)return;const prepared=importStudy(text,catalogue,record);populate(prepared.configurations);refreshCount();await start(prepared);}catch(e){status.textContent='Import rejected: '+e.message;}finally{file.value='';}};
- window.addEventListener('pagehide',()=>{++revision;clearPending();queue.cancel();executor.close();});
- populate(defaultConfigurations(catalogue));refreshCount();render();root.dataset.ready='true';
- const initialRun=()=>{if(location.hash==='#ensemble'&&!study&&pendingRun===null&&!activeRun)schedule(0);};
+ save.onclick=()=>{try{download(record.id+'-ensemble.json',exportStudy(study,catalogue,record));}catch(e){status.textContent=e.message;}};
+ single.onclick=()=>{const job=study.jobs.find(j=>j.id===selected);try{download(job.model+'-'+record.id+'-recorded.json',createRecordedDocument(job.specification,job.result,catalogue));}catch(e){status.textContent=e.message;}};
+ async function selectTest(id,{run=true}={}){
+  const requested=++testSequence;const next=entries.find(e=>e.id===id);if(!next)throw Error('Test is absent from this catalogue.');
+  ++revision;clearPending();queue.cancel();loading=true;study=null;selected=null;stale=false;save.disabled=true;single.disabled=true;list.replaceChildren();raw.textContent='';detailText.textContent='Select a run to inspect its inputs.';testHeading.textContent=id;testDescription.textContent='';source.hidden=true;disclosure.hidden=true;gapNote.textContent='Loading '+id+'…';controls.hidden=true;outcomes.hidden=detail.hidden=legend.hidden=true;sourceControls.hidden=true;for(const panel of Object.values(panels))panel.hidden=true;
+  try{
+   const loaded=await fetchEnsembleTest(next);if(requested!==testSequence)return false;
+   if(next.replay)validateExperiment(loaded);
+   await activeRun;if(requested!==testSequence)return false;
+   entry=next;record=loaded;testGap=entry.replay?'':replayGap(record)||'No verified replay loading asset is available for this record.';loading=false;++viewRevision;
+   filterOptions();updateTestInfo();refreshCount();render();if(run&&!testGap)schedule(0);return true;
+  }catch(error){if(requested===testSequence){loading=true;gapNote.textContent='Unable to load '+id+': '+error.message;testSelect.value=id;}return false;}
+ }
+ testSelect.onchange=()=>{void selectTest(testSelect.value);};
+ sourceX.onchange=sourceY.onchange=()=>{record={...record,source_plot:{x:sourceX.value,y:sourceY.value}};++viewRevision;render();};
+ importButton.onclick=()=>file.click();file.onchange=async()=>{const importId=++importSequence;try{
+  const item=file.files[0];if(!item)return;if(item.size>100*1024*1024)throw Error('Import exceeds 100 MB.');
+  const readingSelection=testSequence,text=await item.text();if(importId!==importSequence||readingSelection!==testSequence)return;const doc=JSON.parse(text),id=doc.study?.experiment?.id;
+  const selectedTest=await selectTest(id,{run:false});if(!selectedTest)return;const selection=testSequence;
+  const prepared=importStudy(text,catalogue,record);if(selection!==testSequence)return;
+  populate(prepared.configurations);refreshCount();await start(prepared);
+ }catch(error){status.textContent='Import rejected: '+error.message;}finally{file.value='';}};
+ window.addEventListener('pagehide',()=>{++revision;clearPending();queue.cancel();executor.close();for(const chart of Object.values(charts))chart.dispose();});
+ populate(defaultConfigurations(catalogue));filterOptions();updateTestInfo();refreshCount();render();root.dataset.ready='true';
+ const initialRun=()=>{if(location.hash==='#ensemble'){render();if(!loading&&!testGap&&!study&&pendingRun===null&&!activeRun)schedule(0);}};
  window.addEventListener('hashchange',initialRun);initialRun();
 }
 // Keep this independent of other laboratories' loading/engine qualification.
