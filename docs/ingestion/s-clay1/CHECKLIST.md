@@ -1,6 +1,6 @@
 # S-CLAY1 — all59canonical checks
 
-Canonical captured in delivery-v2/checklist-source.json. Every item/exit condition retained; fulfilled items checked, partial items marked[-], dependent work unchecked. Current: original source complete, E0–E5 passed; E6/E7 integration/package/browser ongoing, E8 open. Historical source blockers remain recorded in the ledger.
+Canonical captured in delivery-v2/checklist-source.json. Every item/exit condition retained; fulfilled items checked, partial items marked[-], dependent work unchecked. Current: E0–E7 complete; authorized release ac22788 pushed to main; Fast CI and Pages passed; 17 live assets equal tested upload; full qualification pending; live browser queued behind held VIBE slot. E8 open. Historical source blockers remain recorded in the ledger.
 
 # Deliver a constitutive model from source to the live atlas
 
@@ -162,15 +162,15 @@ Use the current workflow's other parity/profile/browser commands for the actual 
 
 ## E8 — Publish and verify the live website
 
-- [ ] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
+- [X] Prepare a scoped commit containing only reviewed model/integration/delivery changes. Check the staged diff, current source/approval hashes and absence of private or unrelated files. Record source revision and remaining limitations.
 - [X] Confirm push/deployment authorization from the current session. If present, proceed; do not ask again. Otherwise leave the concrete tested release ready and request only the remaining authorization. Do not mark the live-delivery stage complete while it is pending.
-- [ ] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
+- [-] Push the intended branch and record the exact commit and GitHub Actions run URL. Monitor that run to terminal results; do not substitute an older green run or restart because observation timed out.
 - [ ] Require every native, Python, Wasm, package and deployment gate in the current workflow to pass. Investigate failures with retained evidence and requalify changed inputs. A passing browser job does not override a failed native job.
-- [ ] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
-- [ ] Verify the live public-profile data/rendering assets match the tested upload and the model's catalogue profile, related links and laboratory link display the intended explanation.
+- [X] Verify the Pages deployment succeeded for that exact revision. Compare live entry/browser/engine/catalogue/model assets with the actual tested upload and check source/review/approval links resolve on the project-path URL.
+- [-] Verify the live public-profile data/rendering assets match the tested upload and the model's catalogue profile, related links and laboratory link display the intended explanation.
 - [ ] Open the live model page and execute its illustrative run; confirm the expected model, current fetched identities, meaningful plots and accurate scope. A successful Actions run or a local browser alone does not establish live availability.
-- [ ] Complete task-owned cleanup under the [repository cleanup rules](../../../AGENTS.md#cleanup-and-storage-at-handoff): stop finished preview processes, remove verified disposable outputs and clean completed worktrees through Git after preserving required evidence durably. Verify retained hashes/archive recovery and receipt locations. Record removed paths, retained resources/owners/reasons, checks and disk space in the ledger; explicitly hand off any unsafe or blocked remainder.
-- [ ] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
+- [X] Complete task-owned cleanup under the [repository cleanup rules](../../../AGENTS.md#cleanup-and-storage-at-handoff): stop finished preview processes, remove verified disposable outputs and clean completed worktrees through Git after preserving required evidence durably. Verify retained hashes/archive recovery and receipt locations. Record removed paths, retained resources/owners/reasons, checks and disk space in the ledger; explicitly hand off any unsafe or blocked remainder.
+- [-] Fill the delivery ledger with live URL, deployment revision, checks and limitations; update the umbrella task only after the following definition of done is met.
 
 **Definition of done:** the complete named formulation is source-mapped, declarative and numerically qualified for its stated scope; a separate agent has accepted the exact bytes; the atlas includes its public profile and sources/approval/evidence; the packaged and live website explain the model and can actually exercise it; required CI and deployment gates pass for the delivered revision. No human scientific signature is required. Experimental validation and broader unsupported host/kinematic claims remain distinct.
 
@@ -186,3 +186,5 @@ Full-delivery dispatch prompt:
 Current3November2026 evidence: supplied-original-v3/README.md and policy/native-completion/interpreter-native results. E0–E3 source/contract/candidate criteria complete; E4 stillopen for Wasm; E5separate scientificreview inprogress; E6–E8unstarted. Original failed Wasm cache-lock build retained. See current DELIVERY.md; old missingoriginal statements below any earlier annotations are historical.
 
 4 November 2026: user “Push please” authorizes the prepared release and publication. Prepared b31f18ed8 pushed to codex/s-clay1-delivery-v3; current-main integration is tracked in supplied-original-v3/live-release-v1. E8 remains open pending exact integrated CI and live verification.
+
+4 November 2026 live checkpoint: main ac22788; FastCI41682430907 and Pages41684006526 succeeded; actual tested upload and17HTTP200 live asset hashes match. Fullqualification41682430918 is still running and observed by a bounded read-only monitor. Actual live profile/render/run verification remains queued behind HELD VIBE slot; asset equality does not close those interface checks. Owned source/tracker history archived before updating; no model/approval/physical gate changed. MODEL-s-clay1 stays open.

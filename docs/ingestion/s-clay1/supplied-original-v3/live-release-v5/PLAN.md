@@ -1,0 +1,7 @@
+# Exact reviewed revision CI, Pages and live qualification
+
+Application revision ac22788b918a47c837e61ddd76bde5894b35cc5e. User “Push please” authorizes normal main push and deployment. Original prepared b31f18ed8 and integration5d5f62dc4 remain historical; preserve all failed/cancelled runs and logs. Revised source includes accepted exact harness and native-fixture reviews before compiled execution. No model/source/approval or numerical tolerance changes.
+
+Require Fast CI41682430907 and Full qualification41682430918 terminal success for this exact source, plus exact Pages workflow package/deploy. Do not substitute an older green run. Compare required live entry, app/profile/rendering, engine/metadata, definition, support, review/approval, evidence/applicability, dossier and database identity with the actual Pages upload; verify actual browser catalogue profile, source/related links, laboratory default plots/units, full-state export and narrow layout. Do not imply experimental validation or qualified cycling.
+
+Owned live browser session sclay1-live-v1 (initial PID1950); no preview server or local compiled/build slot. Retain CLI commands/stdout/stderr/screenshots/snapshots and network/console records. Actual Pages artifact retained privately under /Users/bmar5496/code/constitutive-atlas/.local/release-artifacts/s-clay1-live-v1/. Own worktree /private/tmp/atlas-s-clay1-publish-v1 may be removed only after retained commit and durable evidence check. Preserve root unrelated dirty checkout and other worktrees/processes.
