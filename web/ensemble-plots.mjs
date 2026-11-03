@@ -14,18 +14,27 @@ function loadPlotly(){
 }
 const escape=value=>String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 export function ensembleFigure(record,jobs,channel,selected,styles,viewRevision){
- if(!['stress','volume'].includes(channel))throw Error('Unknown ensemble plot channel.');
- const stress=channel==='stress',value=stress?'q: %{y:.3f} kPa':'Volumetric strain: %{y:.3f}%',hovertemplate='Axial strain: %{x:.3f}%<br>'+value+'<extra>%{fullData.name}</extra>';
- const measured=record.rows.map(r=>[r.axial_strain*100,stress?r.q/1000:r.volumetric_strain*100]);
- const trace=(points,attributes)=>({type:'scatter',mode:'lines',x:points.map(p=>p[0]),y:points.map(p=>p[1]),hovertemplate,connectgaps:false,...attributes});
+ const axes={stress:{x:'axial_strain',y:'q',xs:100,ys:.001,xLabel:'Axial strain (%)',yLabel:'Deviator stress q (kPa)'},volume:{x:'axial_strain',y:'volumetric_strain',xs:100,ys:100,xLabel:'Axial strain (%)',yLabel:'Volumetric strain (%)'},path:{x:'p',y:'q',xs:.001,ys:.001,xLabel:'Mean effective stress p′ (kPa)',yLabel:'Deviator stress q (kPa)'},pore:{x:'axial_strain',y:'pore_pressure',xs:100,ys:.001,xLabel:'Axial strain (%)',yLabel:'Pore-pressure change Δu (kPa)'}};
+ if(channel==='source'){
+  const x=record.columns?.find(c=>c.key===record.source_plot?.x),y=record.columns?.find(c=>c.key===record.source_plot?.y);
+  if(!x||!y)throw Error('Unknown source plot channels.');
+  axes.source={x:x.key,y:y.key,xs:1,ys:1,xLabel:escape(x.name+' ('+x.unit+')'),yLabel:escape(y.name+' ('+y.unit+')')};
+ }
+ const axis=axes[channel];if(!axis)throw Error('Unknown ensemble plot channel.');
+ const hovertemplate=axis.xLabel+': %{x:.3f}<br>'+axis.yLabel+': %{y:.3f}<extra>%{fullData.name}</extra>';
+ const measured=record.rows.map(r=>{
+  const x=channel==='path'&&!Number.isFinite(r.p)&&Number.isFinite(r.radial_effective_stress)?r.radial_effective_stress+r.q/3:r[axis.x];
+  return Number.isFinite(x)&&Number.isFinite(r[axis.y])?[x*axis.xs,r[axis.y]*axis.ys]:[null,null];
+ });
+ const trace=(points,attributes)=>({type:'scatter',mode:channel==='source'&&record.kind==='test-summary'?'markers':'lines',x:points.map(p=>p[0]),y:points.map(p=>p[1]),hovertemplate,connectgaps:false,...attributes});
  const data=[trace(measured,{uid:'measurements',name:'Measurements',meta:{jobId:null},line:{color:'#59605c',width:2,dash:'dot',simplify:false}})];
  // Draw the selected curve last, retaining stable trace IDs as runs arrive.
  for(const job of [...jobs].sort((a,b)=>Number(a.id===selected)-Number(b.id===selected))){
-  const points=resultSeries(job,channel);if(!points.length)continue;
+  const points=resultSeries(job,channel,record);if(!points.length)continue;
   const active=job.id===selected,style=styles[job.model];
   data.push(trace(points,{uid:'run-'+Array.from(new TextEncoder().encode(job.id),b=>b.toString(16).padStart(2,'0')).join(''),name:escape((style?.name||job.model)+' · '+job.label),meta:{jobId:job.id},line:{color:style?.color||'#375595',width:active?3:job.change?1.3:2,dash:job.change?'dash':'solid',simplify:false},opacity:active?1:job.change?.45:.8}));
  }
- return {data,layout:{autosize:true,height:360,margin:{l:66,r:16,t:40,b:58},paper_bgcolor:'transparent',plot_bgcolor:'transparent',font:{family:'Arial, sans-serif',size:12,color:'#59605c'},showlegend:false,hovermode:'closest',dragmode:'zoom',clickmode:'event',uirevision:viewRevision,xaxis:{title:{text:'Axial strain (%)',standoff:12},autorange:true,zeroline:false,gridcolor:'#e2e6dc',automargin:true},yaxis:{title:{text:stress?'Deviator stress q (kPa)':'Volumetric strain (%)',standoff:10},autorange:true,zerolinecolor:'#c6cec1',gridcolor:'#e2e6dc',automargin:true}},config:{displaylogo:false,displayModeBar:true,responsive:false,scrollZoom:false,modeBarButtonsToRemove:['select2d','lasso2d','sendChartToCloud'],toImageButtonOptions:{format:'png',filename:'opara-txcd100-'+channel,scale:2}}};
+ return {data,layout:{autosize:true,height:360,margin:{l:66,r:16,t:40,b:58},paper_bgcolor:'transparent',plot_bgcolor:'transparent',font:{family:'Arial, sans-serif',size:12,color:'#59605c'},showlegend:false,hovermode:'closest',dragmode:'zoom',clickmode:'event',uirevision:viewRevision,xaxis:{title:{text:axis.xLabel,standoff:12},autorange:true,zeroline:false,gridcolor:'#e2e6dc',automargin:true},yaxis:{title:{text:axis.yLabel,standoff:10},autorange:true,zerolinecolor:'#c6cec1',gridcolor:'#e2e6dc',automargin:true}},config:{displaylogo:false,displayModeBar:true,responsive:false,scrollZoom:false,modeBarButtonsToRemove:['select2d','lasso2d','sendChartToCloud'],toImageButtonOptions:{format:'png',filename:(record.id||'ensemble')+'-'+channel,scale:2}}};
 }
 
 // Coalesce fast queue notifications and serialize Plotly updates. An old render

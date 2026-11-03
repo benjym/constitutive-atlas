@@ -15,7 +15,7 @@ test('physical channels, all observations and run identity survive Plotly mappin
  assert.equal(stress.data.find(t=>t.meta.jobId==='variation').line.dash,'dash');assert.equal(stress.data[0].line.dash,'dot');assert.equal(stress.data[0].meta.jobId,null);
  assert.equal(stress.layout.uirevision,3);assert.equal(stress.config.scrollZoom,false);assert.equal(stress.config.displaylogo,false);assert.equal(stress.layout.showlegend,false);
  assert.match(stress.data[0].hovertemplate,/kPa/);assert.match(volume.data[0].hovertemplate,/Volumetric/);
- assert.equal(JSON.stringify({record,jobs,styles}),before);assert.throws(()=>ensembleFigure(record,jobs,'pore',null,styles,1),/channel/);
+ assert.equal(JSON.stringify({record,jobs,styles}),before);assert.throws(()=>ensembleFigure(record,jobs,'unknown',null,styles,1),/channel/);
  assert.equal(plotlyVersion,'4.1.1');assert.equal(plotlyAsset,'vendor/plotly-basic-4.1.1.min.js');
 });
 test('stable trace IDs and view revision preserve interaction identity through selection changes',()=>{

@@ -1,0 +1,5 @@
+# Prospective all-tests qualification
+
+Use the public, hash-checked experiment catalogue; keep source-only histories and summaries visible with explicit replay gaps. Require every compatible curated drained and undrained record to package deterministically with all source observations and pinned provenance. Preserve the legacy default experiment and replay identity. Drained loading uses measured effective radial stress; undrained loading imposes zero total strain trace and equal lateral effective stresses, never measured effective radial stress as input. Retain acquisition order, including reversals. Missing history/stress scope is not inferred.
+
+Require pure tests for protocol controls, changing initial stress, source tampering, exact cross-test export/import and per-test eligibility. Verify real browser selector/filter changes, cancellation/latest-selection behavior, real drained and undrained Wasm outcomes, all measurement plots, source-only views, mobile chart widths and clean console. Preserve failed checks. Reuse the qualified shared engine read-only; no compilation, scientific admission or release. Clean task resources after retaining evidence.

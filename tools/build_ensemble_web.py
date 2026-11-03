@@ -1,4 +1,4 @@
-"""Package one pinned experiment for conditional replay, preserving radial controls."""
+"""Package compatible curated replay tests without changing public-data admission."""
 import gzip
 import hashlib
 import json
@@ -36,6 +36,43 @@ def bundle(destination, root=ROOT):
     manifest = dict(version='atlas-ensemble-asset-0.1', path='ensemble-experiment.json',
                     sha256=hashlib.sha256(content).hexdigest(), size_bytes=len(content))
     (destination/'ensemble-index.json').write_text(json.dumps(manifest, indent=2)+'\n')
+    # The normal public experiment catalogue remains the selector authority.
+    # Only records with explicit effective-stress initialization and complete
+    # triaxial channels receive replay assets. Source-only records stay browsable.
+    tests = [dict(id=EXPERIMENT, **{k: manifest[k] for k in ('path', 'sha256', 'size_bytes')})]
+    test_dir = destination/'ensemble-tests'
+    test_dir.mkdir(exist_ok=True)
+    index = json.loads((root/'data/curated/index.json').read_text())
+    for item in index['records']:
+        if item['kind'] != 'experiment' or item['id'] == EXPERIMENT:
+            continue
+        compressed = (root/'data/curated'/item['path']).read_bytes()
+        if hashlib.sha256(compressed).hexdigest() != item['sha256']:
+            raise ValueError('Curated replay source hash mismatch')
+        candidate = json.loads(gzip.decompress(compressed))
+        initial = candidate.get('initial', {})
+        if (candidate.get('protocol') not in ('drained-triaxial', 'undrained-triaxial')
+                or len(initial.get('effective_stress', [])) != 6
+                or not isinstance(initial.get('void_ratio'), (float, int))
+                or not 2 <= len(candidate['rows']) <= 5001):
+            continue
+        required = ['axial_strain', 'radial_effective_stress', 'q', 'volumetric_strain']
+        if candidate['protocol'] == 'undrained-triaxial':
+            required += ['cell_pressure', 'pore_pressure', 'p']
+        if not all(all(key in row for key in required) for row in candidate['rows']):
+            continue
+        if candidate['provenance'].get('license') != 'CC-BY-4.0':
+            raise ValueError('Replay asset requires established public redistribution rights')
+        channels = required + ['elapsed_time']
+        replay = dict(version='atlas-ensemble-experiment-0.2',
+                      **{k: candidate[k] for k in ('id', 'material', 'protocol', 'conventions', 'initial', 'provenance', 'warnings')},
+                      source_asset_sha256=item['sha256'],
+                      rows=[{k: row[k] for k in channels if k in row} for row in candidate['rows']])
+        encoded = (json.dumps(replay, separators=(',', ':'), ensure_ascii=False, allow_nan=False)+'\n').encode()
+        relative = 'ensemble-tests/'+item['id']+'.json'
+        (destination/relative).write_bytes(encoded)
+        tests.append(dict(id=item['id'], path=relative, sha256=hashlib.sha256(encoded).hexdigest(), size_bytes=len(encoded)))
+    (destination/'ensemble-tests.json').write_text(json.dumps(dict(version='atlas-ensemble-tests-0.1', tests=tests), indent=2)+'\n')
     # Keep the pinned library and MIT attribution local to the packaged site.
     vendor = destination/'vendor'
     vendor.mkdir(exist_ok=True)

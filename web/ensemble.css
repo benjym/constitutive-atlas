@@ -29,3 +29,17 @@
 #ensemble-status{font-size:13px;line-height:1.6}
 @media(max-width:900px){#ensemble .ensemble-layout{grid-template-columns:1fr}#ensemble .ensemble-controls{width:auto}}
 @media(max-width:900px){#ensemble .ensemble-controls,#ensemble .results-column{grid-column:auto;grid-row:auto;width:100%;box-sizing:border-box}}
+
+#ensemble .ensemble-test-controls{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px 14px}
+#ensemble .ensemble-test-controls label{min-width:0;margin:0}
+#ensemble .ensemble-test-controls select,#ensemble .ensemble-test-controls input{width:100%;box-sizing:border-box;min-width:0}
+#ensemble .ensemble-test-controls label:has(#ensemble-test),#ensemble-test-count{grid-column:1/-1}
+#ensemble .ensemble-gap{font-size:13px;line-height:1.5}
+#ensemble .ensemble-source-controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#ensemble [hidden]{display:none!important}
+@media(max-width:520px){#ensemble .ensemble-test-controls{grid-template-columns:1fr 1fr}#ensemble .ensemble-test-controls label:has(#ensemble-test-search){grid-column:1/-1}}
+
+#ensemble .ensemble-layout:has(.ensemble-controls[hidden]){grid-template-columns:minmax(0,1fr)}
+
+#ensemble .ensemble-layout:has(.ensemble-controls[hidden]) .results-column{grid-column:1;grid-row:auto;width:100%}
+#ensemble-load-saved{justify-self:start;padding:7px 12px;border:1px solid var(--line);border-radius:4px;font:inherit;font-size:12px;color:var(--ink);background:var(--paper,#fff);cursor:pointer}
