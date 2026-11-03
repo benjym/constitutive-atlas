@@ -1,0 +1,122 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - link "Constitutive Atlas home" [ref=e3] [cursor=pointer]:
+      - /url: "#home"
+      - generic [ref=e4]: Constitutive Atlas
+    - navigation "Main navigation" [ref=e5]:
+      - link "Home" [ref=e6] [cursor=pointer]:
+        - /url: "#home"
+      - link "Model testing" [ref=e8] [cursor=pointer]:
+        - /url: "#laboratory"
+      - link "Ensemble explorer" [ref=e10] [cursor=pointer]:
+        - /url: "#ensemble"
+      - link "Model catalogue 32" [ref=e12] [cursor=pointer]:
+        - /url: "#catalogue"
+        - generic [ref=e13]: Model catalogue
+        - generic [ref=e14]: "32"
+      - link "Methods & evidence" [ref=e15] [cursor=pointer]:
+        - /url: "#methods"
+  - main [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - heading "Explore material behaviour." [level=1] [ref=e21]
+        - button "↑ Import run" [ref=e22] [cursor=pointer]
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - generic [ref=e25]: CONSTITUTIVE MODEL
+          - generic [ref=e26]: Loading
+        - generic [ref=e27]: Select a model
+        - combobox "Select a model" [ref=e28]
+        - paragraph
+        - group [ref=e29]:
+          - generic "Sources & model definition" [ref=e30] [cursor=pointer]
+        - generic [ref=e31]:
+          - generic [ref=e32]: 3D · small strain
+          - button "View equations ↗" [ref=e33] [cursor=pointer]
+      - navigation "Model testing sections" [ref=e34]:
+        - link "Test controls ↓" [ref=e35] [cursor=pointer]:
+          - /url: "#controls"
+        - link "Response plots ↓" [ref=e36] [cursor=pointer]:
+          - /url: "#response"
+        - link "Compare measurements ↓" [ref=e37] [cursor=pointer]:
+          - /url: "#measurements"
+        - link "Equations & sources ↓" [ref=e38] [cursor=pointer]:
+          - /url: "#equations"
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - heading "Test controls" [level=2] [ref=e42]
+            - button "Reset" [ref=e43] [cursor=pointer]
+          - paragraph [ref=e44]: Live updates as you adjust
+          - generic [ref=e46]:
+            - text: Loading protocol
+            - combobox "Loading protocol" [ref=e47]:
+              - option "Drained triaxial" [selected]
+              - option "Undrained triaxial"
+              - option "Oedometer"
+              - option "Isotropic compression"
+              - option "Undrained · stress control"
+          - generic [ref=e48]:
+            - generic [ref=e49]: Axial strain (%)
+            - spinbutton "Axial strain (%)" [ref=e50]: "1"
+          - slider "Axial strain (%) slider" [ref=e51] [cursor=pointer]: "550"
+          - generic [ref=e52]:
+            - text: Loading history
+            - combobox "Loading history" [ref=e53]:
+              - option "Monotonic ramp" [selected]
+              - option "1 sinusoidal cycle"
+              - option "3 sinusoidal cycles"
+              - option "10 sinusoidal cycles"
+          - generic [ref=e55]: INITIAL STATE
+          - button "Load model example" [ref=e56] [cursor=pointer]
+          - paragraph [ref=e57]: Selecting a model loads its example parameters and full initial state. These illustrative values do not establish specimen preparation or experimental calibration. Loading an example replaces parameter and state edits.
+          - generic [ref=e58]:
+            - generic [ref=e59]: Radial effective stress (kPa)
+            - spinbutton "Radial effective stress (kPa)" [ref=e60]: "100"
+          - slider "Radial effective stress (kPa) slider" [ref=e61] [cursor=pointer]: "500"
+          - group [ref=e62]:
+            - generic "Initial state details" [ref=e63] [cursor=pointer]
+          - group [ref=e64]:
+            - generic "Material parameters Adjust model constants" [ref=e65] [cursor=pointer]:
+              - text: Material parameters
+              - generic [ref=e66]: Adjust model constants
+          - group [ref=e67]:
+            - generic "Solver settings" [ref=e68] [cursor=pointer]
+            - option "Reproducible · current" [selected]
+            - option "Legacy · earlier saved runs"
+          - status [ref=e70]: Changes update the plots automatically.
+        - generic [ref=e71]:
+          - status [ref=e72]:
+            - generic [ref=e73]: Unable to initialize
+            - generic [ref=e74]: Double precision · compression positive
+          - generic "Simulation results" [ref=e75]:
+            - generic [ref=e76]:
+              - heading "Stress–strain response" [level=2] [ref=e78]
+              - img "Deviator stress versus axial strain" [ref=e79]
+              - generic [ref=e80]:
+                - text: Model prediction
+                - generic [ref=e82]: ● Experiment
+            - generic [ref=e83]:
+              - heading "Effective stress path" [level=2] [ref=e85]
+              - img "Deviator stress versus effective mean stress" [ref=e86]
+              - generic [ref=e87]: Model prediction
+            - generic [ref=e89]:
+              - heading "Volumetric response" [level=2] [ref=e91]
+              - img "Volumetric versus axial strain" [ref=e92]
+              - generic [ref=e93]: Model prediction
+            - generic [ref=e95]:
+              - heading "Pore-pressure change" [level=2] [ref=e97]
+              - img "Pore-pressure change versus axial strain" [ref=e98]
+              - generic [ref=e99]: Model prediction
+              - paragraph [ref=e101]: Reconstructed only for undrained protocols
+          - generic [ref=e102]:
+            - paragraph [ref=e103]: Parameters are examples. Numerical verification does not establish experimental validity.
+            - generic [ref=e104]:
+              - button "↓ Results CSV" [disabled] [ref=e105]
+              - button "↓ Reproducible run" [disabled] [ref=e106]
+          - group [ref=e107]:
+            - generic "Compare measurements" [ref=e108] [cursor=pointer]
+            - option "Loading available tests…" [selected]
+          - group [ref=e109]:
+            - generic "Equations & source provenance" [ref=e110] [cursor=pointer]
+  - status [ref=e111]: "Initialization failed: Invalid unsupported control declaration."

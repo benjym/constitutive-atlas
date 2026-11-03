@@ -1876,27 +1876,84 @@ export const modelProfiles = {
     "title": "Matsuoka–Nakai plasticity"
   },
   "s-clay1": {
-    "summary": "An anisotropic elastoplastic model for soft clay.",
-    "introduction": "S-CLAY1 represents directional differences in clay response through an anisotropic plasticity framework. It is intended to distinguish a material with a preferred direction from an isotropic clay idealization.",
+    "title": "S-CLAY1 — Wheeler et al. (2003)",
+    "summary": "A soft-clay plasticity model that represents directional yielding and changes in fabric during permanent deformation.",
+    "introduction": "Soft clay can retain a preferred direction from its deposition and loading history. S-CLAY1 describes this plastic anisotropy with an inclined yield surface: the boundary between elastic response and further permanent deformation changes with the material’s internal fabric.",
     "behaviours": [
       [
         "Directional yielding",
-        "The response depends on stress direction relative to the material’s anisotropy."
+        "The stress needed to reach yielding depends on the loading direction relative to the clay’s fabric. A tilted yield surface distinguishes this response from an isotropic clay idealization."
       ],
       [
-        "Soft-clay plasticity",
-        "Elastic and permanent deformation are represented within one constitutive formulation."
+        "Fabric evolution",
+        "Plastic volumetric and shear deformation change the fabric and therefore the inclination of the yield surface. The hardening law assigns different target directions to these two contributions."
+      ],
+      [
+        "Yield-surface size",
+        "Plastic volumetric deformation also changes the size of the yield surface. This size change is distinct from its rotation."
       ]
     ],
-    "scope": "This profile identifies Wheeler, Näätänen, Karstunen and Lojander’s 2003 publication. There is no public laboratory run.",
-    "limits": "S-CLAY1 and later structured-clay extensions need their own equations and calibration. This entry supplies no interchangeable Modified Cam Clay parameter set.",
-    "preparation": "A setup needs the initial anisotropy as well as stress and density. Use the original formulation for its exact state and parameter conventions.",
-    "parameters": [],
-    "stateLabels": {},
+    "parameters": [
+      {
+        "name": "lambda_c",
+        "symbol": "λ",
+        "meaning": "Virgin compression slope",
+        "help": "Specific-volume change against natural logarithm of pressure after yielding.",
+        "unit": "1"
+      },
+      {
+        "name": "kappa",
+        "symbol": "κ",
+        "meaning": "Elastic swelling slope",
+        "help": "Controls recoverable volume change and pressure-dependent stiffness.",
+        "unit": "1"
+      },
+      {
+        "name": "M",
+        "symbol": "M",
+        "meaning": "Critical-state stress ratio",
+        "help": "Sets the shear-to-mean-stress ratio at critical state, with one value for all directions here.",
+        "unit": "1"
+      },
+      {
+        "name": "nu",
+        "symbol": "ν′",
+        "meaning": "Elastic Poisson ratio",
+        "help": "Relates elastic shear and bulk stiffness.",
+        "unit": "1"
+      },
+      {
+        "name": "beta",
+        "symbol": "β",
+        "meaning": "Shear contribution to fabric rotation",
+        "help": "Balances the fabric changes caused by plastic shear and plastic compression.",
+        "unit": "1"
+      },
+      {
+        "name": "mu",
+        "symbol": "μ",
+        "meaning": "Fabric rotation rate",
+        "help": "Controls how quickly plastic straining changes the preferred yielding direction.",
+        "unit": "1"
+      }
+    ],
+    "parameterNote": "Compression indices use specific volume against natural logarithm of pressure. Material constants and initial fabric require calibration together; the original Otaniemi values illustrate one clay and do not supply universal defaults.",
+    "stateLabels": {
+      "fabric": "Deviatoric fabric tensor",
+      "v": "Specific volume",
+      "pm": "Yield-surface size"
+    },
+    "preparation": "Supply effective stress, specific volume v=1+e, positive yield-surface size and a traceless fabric tensor in the same axes. The starting stress must lie inside or on the inclined yield surface. The source estimates initial fabric from normally consolidated lateral stress only when one-dimensional preparation and predominantly plastic straining are appropriate. The candidate combines published Otaniemi constants with an illustrative stress state; it is not a prepared specimen.",
+    "scope": "Original constant-M full tensor S-CLAY1 at infinitesimal strain, compression-positive effective stress and fixed spatial axes. Main-laboratory qualification covers monotonic drained and undrained triaxial paths at 1% axial strain and 100 increments, plus the named bounded parameter edits in the technical evidence. It is rate independent.",
+    "limits": "Intended for normally or lightly overconsolidated soft clay. Simple elastic unloading does not capture small-strain nonlinearity or realistic cyclic stiffness. Bonding, destructuration and creep are absent; the paper reports substantial post-yield volume discrepancies for sensitive natural clay. Predictions dominated by dry-side plastic dilation are unreliable. S-CLAY1S adds bonding and its degradation and is a different formulation.",
     "references": [
       {
-        "label": "Wheeler et al. (2003) — An anisotropic elastoplastic model for soft clays",
+        "label": "Wheeler, Näätänen, Karstunen and Lojander (2003), An anisotropic elastoplastic model for soft clays",
         "url": "https://doi.org/10.1139/t02-119"
+      },
+      {
+        "label": "Karstunen (2003), Modelling plastic anisotropy and destructuration: S-CLAY1 and S-CLAY1S models",
+        "url": "https://www.mycrisp.com/cugm2003/m-karstunen.pdf"
       }
     ],
     "related": [
@@ -1904,10 +1961,12 @@ export const modelProfiles = {
       "hypoplastic-clay-2014"
     ],
     "contentSources": [
-      "docs/ingestion/s-clay1/README.md"
+      "docs/models/s-clay1.md",
+      "docs/ingestion/s-clay1/supplied-original-v3/README.md"
     ],
-    "parameterNote": "Use consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.",
-    "title": "S-CLAY1 — Wheeler et al. (2003)"
+    "explorationTitle": "Explore fabric evolution",
+    "exploration": "Choose Drained triaxial, Monotonic ramp, 1% axial strain and 100 increments. Keep the illustrative initial stress, fabric, specific volume and yield-surface size. The material constants follow the original Otaniemi example; the stress state is an Atlas interior starting point, not a reconstructed specimen.",
+    "comparison": "Repeat with fabric rotation rate μ = 10 or 50, keeping all other inputs unchanged. Compare the stress and volume response. Undrained triaxial at the same 1% and 100 increments is also supported. These monotonic examples explore the law; they do not reproduce measured curves."
   },
   "hypoplastic-isa": {
     "summary": "A hypoplastic sand extension for loading-direction memory and cyclic mobility.",

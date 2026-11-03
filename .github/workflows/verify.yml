@@ -24,6 +24,8 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - run: python -m atlas.cli validate
+      - name: Verify public profiles and technical disclosures
+        run: node --test tests/test_model_profiles.mjs tests/test_catalogue_browser.mjs tests/test_applicability_view.mjs tests/test_laboratory_support.mjs
       - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       - run: python tools/build_ci_targets.py build
       - name: Qualify common scalar functions against independent references

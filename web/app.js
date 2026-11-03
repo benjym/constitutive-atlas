@@ -13,12 +13,13 @@ import {timedLaboratoryRoute} from './timed-route.mjs';
 import {setupLaboratoryExamples} from './laboratory-examples-view.mjs';
 import {formulationSection,recordedDescription} from './formulation-view.mjs';
 import {modelProfile,modelProfileSection} from './model-profiles.mjs';
+import {validateApplicability,applicabilitySection} from './applicability-view.mjs';
 import {createLoading,normalizeLoading,verifyReturnedLoading} from './loading.mjs';
 import {laboratoryStress,validateScopedLaboratory,verifyScopedLaboratory} from './laboratory-scope.mjs';
 import {laboratoryPresentation,laboratoryPoreView} from './laboratory-view.mjs';
 import {createLaboratoryDocument,parseLaboratoryDocument,laboratoryDocumentCSV} from './laboratory-document.mjs';
 import {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';
-import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex} from './catalogue.mjs';
+import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
 const $ = id => document.getElementById(id);
@@ -27,10 +28,24 @@ let compiledCatalogue=null, laboratoryExamples=null, controlSupport=null;
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
 const experimentCache=new Map();
-let evidenceIndex=null;
+let evidenceIndex=null,evidenceState='loading',applicabilityMatrix=null,applicabilityState='loading';
+function refreshCatalogueRecords(){
+  const dialog=$('catalogue-dialog'),id=catalogueRoute(location.hash).modelId;
+  if(!dialog.open||!id)return;
+  const body=$('catalogue-detail-body'),scroll=body.scrollTop;
+  body.querySelector('.catalogue-evidence')?.replaceWith(evidenceSection(document,id,evidenceIndex,evidenceState));
+  body.querySelector('.catalogue-applicability')?.replaceWith(applicabilitySection(document,id,applicabilityMatrix,applicabilityState));
+  body.scrollTop=scroll;
+}
+async function loadApplicability(){
+  try{const response=await fetch('./applicability.json');if(!response.ok)throw Error('Applicability unavailable');applicabilityMatrix=validateApplicability(await response.json());applicabilityState='loaded';}
+  catch{applicabilityState='failed';}
+  refreshCatalogueRecords();
+}
 async function loadEvidenceIndex(){
-  try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());refreshRecordedDescriptions();refreshModelSummary();}
-  catch{}
+  try{const response=await fetch('./evidence.json');if(!response.ok)throw Error('Evidence unavailable');evidenceIndex=validateEvidenceIndex(await response.json());evidenceState='loaded';refreshRecordedDescriptions();refreshModelSummary();}
+  catch{evidenceState='failed';}
+  refreshCatalogueRecords();
   const selected=catalogueRoute(location.hash).modelId,entry=catalogue.find(x=>x.id===selected);
   if(entry&&$('catalogue-dialog').open){const body=$('catalogue-detail-body'),scroll=body.scrollTop;refreshCatalogueStatus(entry,models.find(m=>m.id===entry.id));body.scrollTop=scroll;}
 }
@@ -462,6 +477,7 @@ function showCatalogueModel(entry,spec){
     body.append(section);
   }
   if(spec){const definition=element('p',undefined,'catalogue-definition');definition.append(definitionLink(entry.id));body.append(definition);}
+  body.append(evidenceSection(document,entry.id,evidenceIndex,evidenceState),applicabilitySection(document,entry.id,applicabilityMatrix,applicabilityState));
   $('catalogue-detail-id').textContent=entry.id;
   $('catalogue-permalink').href=catalogueModelHash(entry.id);
   const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html');
@@ -629,5 +645,5 @@ try{
   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
   models.forEach(m=>$('model').append(new Option(modelProfile(m.id)?.title??m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
-  populate();timedView=createLaboratoryControllerRouter([setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();
+  populate();timedView=createLaboratoryControllerRouter([setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}

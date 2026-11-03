@@ -1,0 +1,4 @@
+"""Retain actual Playwright CLI commands and outputs; no synthetic browser evidence."""
+from pathlib import Path
+import sys,subprocess,json,hashlib,time
+R=Path(__file__).resolve().parents[5];O=Path(__file__).parent;D=O/'commands';D.mkdir(exist_ok=True);n=len(list(D.iterdir()))+1;d=D/f'{n:03d}';d.mkdir();tool=Path('/Users/bmar5496/.npm/_npx/31e32ef8478fbf80/node_modules/.bin/playwright-cli');a=[str(tool),'-s=sclay1-delivery-v3']+sys.argv[1:];(d/'command.json').write_text(json.dumps(a,indent=2)+'\n');p=subprocess.run(a,cwd=R,capture_output=True,text=True,timeout=90);(d/'stdout.log').write_text(p.stdout);(d/'stderr.log').write_text(p.stderr);(d/'receipt.json').write_text(json.dumps({'returncode':p.returncode,'tool_sha256':hashlib.sha256(tool.resolve().read_bytes()).hexdigest(),'time_unix':time.time()},indent=2)+'\n');print(p.stdout);print(p.stderr,file=sys.stderr);sys.exit(p.returncode)

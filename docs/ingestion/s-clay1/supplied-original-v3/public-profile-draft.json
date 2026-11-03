@@ -1,0 +1,98 @@
+{
+  "catalogue_id": "s-clay1",
+  "availability": "Complete-source candidate draft; runnable example pending actual qualification",
+  "profile": {
+    "title": "S-CLAY1 — Wheeler et al. (2003)",
+    "summary": "A soft-clay plasticity model that represents directional yielding and changes in fabric during permanent deformation.",
+    "introduction": "Soft clay can retain a preferred direction from its deposition and loading history. S-CLAY1 describes this plastic anisotropy with an inclined yield surface: the boundary between elastic response and further permanent deformation changes with the material’s internal fabric.",
+    "behaviours": [
+      [
+        "Directional yielding",
+        "The stress needed to reach yielding depends on the loading direction relative to the clay’s fabric. A tilted yield surface distinguishes this response from an isotropic clay idealization."
+      ],
+      [
+        "Fabric evolution",
+        "Plastic volumetric and shear deformation change the fabric and therefore the inclination of the yield surface. The hardening law assigns different target directions to these two contributions."
+      ],
+      [
+        "Yield-surface size",
+        "Plastic volumetric deformation also changes the size of the yield surface. This size change is distinct from its rotation."
+      ]
+    ],
+    "parameters": [
+      {
+        "name": "lambda_c",
+        "symbol": "λ",
+        "meaning": "Virgin compression slope",
+        "help": "Specific-volume change against natural logarithm of pressure after yielding.",
+        "unit": "1"
+      },
+      {
+        "name": "kappa",
+        "symbol": "κ",
+        "meaning": "Elastic swelling slope",
+        "help": "Controls recoverable volume change and pressure-dependent stiffness.",
+        "unit": "1"
+      },
+      {
+        "name": "M",
+        "symbol": "M",
+        "meaning": "Critical-state stress ratio",
+        "help": "Sets the shear-to-mean-stress ratio at critical state, with one value for all directions here.",
+        "unit": "1"
+      },
+      {
+        "name": "nu",
+        "symbol": "ν′",
+        "meaning": "Elastic Poisson ratio",
+        "help": "Relates elastic shear and bulk stiffness.",
+        "unit": "1"
+      },
+      {
+        "name": "beta",
+        "symbol": "β",
+        "meaning": "Shear contribution to fabric rotation",
+        "help": "Balances the fabric changes caused by plastic shear and plastic compression.",
+        "unit": "1"
+      },
+      {
+        "name": "mu",
+        "symbol": "μ",
+        "meaning": "Fabric rotation rate",
+        "help": "Controls how quickly plastic straining changes the preferred yielding direction.",
+        "unit": "1"
+      }
+    ],
+    "parameterNote": "Compression indices use specific volume against natural logarithm of pressure. Material constants and initial fabric require calibration together; the original Otaniemi values illustrate one clay and do not supply universal defaults.",
+    "stateLabels": {
+      "fabric": "Deviatoric fabric tensor",
+      "v": "Specific volume",
+      "pm": "Yield-surface size"
+    },
+    "preparation": "Supply effective stress, specific volume v=1+e, positive yield-surface size and a traceless fabric tensor in the same axes. The starting stress must lie inside or on the inclined yield surface. The source estimates initial fabric from normally consolidated lateral stress only when one-dimensional preparation and predominantly plastic straining are appropriate. The candidate combines published Otaniemi constants with an illustrative stress state; it is not a prepared specimen.",
+    "scope": "Original2003 constant-M three-dimensional S-CLAY1, with isotropic elastic stiffness and associated plastic flow in effective stress. Fixed Cartesian infinitesimal strain and rate-independent loading; the candidate does not yet have a qualified public laboratory route.",
+    "limits": "Intended for normally or lightly overconsolidated soft clay. Simple elastic unloading does not capture small-strain nonlinearity or realistic cyclic stiffness. Bonding, destructuration and creep are absent; the paper reports substantial post-yield volume discrepancies for sensitive natural clay. Predictions dominated by dry-side plastic dilation are unreliable. S-CLAY1S adds bonding and its degradation and is a different formulation.",
+    "references": [
+      {
+        "label": "Wheeler, Näätänen, Karstunen and Lojander (2003), An anisotropic elastoplastic model for soft clays",
+        "url": "https://doi.org/10.1139/t02-119"
+      },
+      {
+        "label": "Karstunen (2003), Modelling plastic anisotropy and destructuration: S-CLAY1 and S-CLAY1S models",
+        "url": "https://www.mycrisp.com/cugm2003/m-karstunen.pdf"
+      }
+    ],
+    "related": [
+      "modified-cam-clay",
+      "hypoplastic-clay-2014"
+    ],
+    "contentSources": [
+      "docs/ingestion/s-clay1/supplied-original-v3/README.md",
+      "docs/ingestion/s-clay1/supplied-original-v3/candidate/s-clay1.json"
+    ]
+  },
+  "provenance": {
+    "original": "pp404–405/A1–A14 mechanisms and tensor law; pp409–414 parameter/preparation; pp414–416 limitations",
+    "example": "Candidate unqualified; no executable instructions yet"
+  }
+}
