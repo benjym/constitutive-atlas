@@ -1,9 +1,56 @@
 // Test the completed Pages artifact, including its own Wasm and browser settings module.
 import assert from 'node:assert/strict';
 import {validateDatabasePackage} from './validate_database_package.mjs';
-import {readFileSync,writeFileSync,existsSync} from 'node:fs';
+import {readFileSync,writeFileSync,existsSync,readdirSync} from 'node:fs';
 import {resolve,dirname,join} from 'node:path';
 import {pathToFileURL,fileURLToPath} from 'node:url';
+
+import {createHash} from 'node:crypto';
+import {strictJSON} from '../web/controlled-time-engine.mjs';
+
+const repository=resolve(dirname(fileURLToPath(import.meta.url)),'..');
+const componentNames=['controlled-time-engine.mjs','controlled-time-worker.mjs','controlled-time-laboratory.mjs'];
+const engineNames=['approval.json','catalogue.json','engine.mjs','engine.wasm','examples.json','expected-results.json','model.json','qualification.json','review.json'];
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+function exactKeys(object,names,label){assert.ok(object&&typeof object==='object'&&!Array.isArray(object),label);assert.deepEqual(Object.keys(object).sort(),[...names].sort(),label);}
+export function validateControlledTimeMembership(directory,entries,ordinaryIds){
+ const claims=entries.filter(e=>Object.hasOwn(e,'controlled_time_laboratory'));
+ if(!claims.length){assert.ok(!existsSync(join(directory,'engine-controlled-time')),'Unclaimed controlled-time package');return [];}
+ assert.equal(claims.length,1,'One sealed controlled-time interface required');
+ const entry=claims[0];assert.equal(entry.controlled_time_laboratory,'index.html','Unknown controlled-time route');
+ assert.equal(entry.executable,true,'Controlled-time entry must be executable');assert.match(entry.id,/^[a-z0-9][a-z0-9-]*$/,'Unsafe controlled-time model ID');
+ assert.ok(!ordinaryIds.includes(entry.id),'Controlled-time/ordinary overlap');
+ const base=join(directory,'engine-controlled-time'),bytes=name=>readFileSync(join(base,name)),read=name=>strictJSON(bytes(name).toString());
+ assert.deepEqual(readdirSync(base).sort(),[...engineNames,'identity.json','package-manifest.json'].sort(),'Controlled-time asset set');
+ const identity=read('identity.json'),seal=read('package-manifest.json');
+ exactKeys(identity,['profile','model','model_sha256','definition_file_sha256','catalogue_sha256','files','components'],'Controlled-time identity fields');
+ assert.equal(identity.profile,'controlled-time-ode-v1','Stale controlled-time profile');assert.equal(identity.model,entry.id,'Controlled-time model identity');
+ exactKeys(identity.files,engineNames,'Controlled-time identity file set');exactKeys(identity.components,componentNames,'Controlled-time component set');
+ exactKeys(seal,['kind','files'],'Controlled-time seal fields');assert.equal(seal.kind,'controlled-time-mainatlas-package-v1');
+ exactKeys(seal.files,[...componentNames,...[...engineNames,'identity.json'].map(n=>'engine-controlled-time/'+n)],'Controlled-time seal file set');
+ for(const [name,expected] of Object.entries(identity.files))assert.equal(hash(bytes(name)),expected,'Controlled-time identity file: '+name);
+ for(const [name,expected] of Object.entries(identity.components))assert.equal(hash(readFileSync(join(directory,name))),expected,'Controlled-time component: '+name);
+ for(const [name,expected] of Object.entries(seal.files))assert.equal(hash(readFileSync(join(directory,name))),expected,'Controlled-time sealed file: '+name);
+ const definition=read('model.json'),catalogue=read('catalogue.json'),approval=read('approval.json'),review=read('review.json'),qualification=read('qualification.json');
+ const registry=strictJSON(readFileSync(join(repository,'catalogue/approved-models.json'),'utf8'));
+ const accepted=registry.models.filter(a=>a.model_id===entry.id&&a.status==='approved'&&a.definition.sha256===hash(bytes('model.json')));
+ assert.equal(accepted.length,1,'Exact approved controlled-time model missing/ambiguous');assert.deepEqual(approval,accepted[0],'Untrusted controlled-time approval');
+ const pin=(name,p)=>{assert.ok(p&&typeof p.path==='string'&&!p.path.startsWith('/')&&!p.path.split('/').includes('..'),'Unsafe approved source pin');assert.equal(hash(bytes(name)),p.sha256,'Controlled-time approved pin: '+name);};
+ pin('model.json',approval.definition);pin('review.json',approval.review);
+ assert.equal(definition.id,entry.id);assert.equal(identity.definition_file_sha256,approval.definition.sha256);
+ assert.equal(definition.formulation.equation_form,'controlled_ode');assert.equal(definition.formulation.time_dependence,'physical_time');
+ assert.equal(review.kind,'agent-model-review');assert.equal(review.status,'accepted');assert.equal(review.reviewer.kind,'agent');assert.deepEqual(review.blocking_findings,[]);
+ assert.deepEqual(review.model,{id:entry.id,...approval.definition},'Controlled-time review/model mismatch');
+ assert.equal(qualification.kind,'controlled-time-public-engine-qualification-v1');assert.equal(qualification.status,'accepted');assert.equal(qualification.model_id,entry.id);assert.equal(qualification.definition_sha256,approval.definition.sha256);
+ const support=p=>{assert.ok(approval.supporting_files.some(q=>q.path===p.path&&q.sha256===p.sha256),'Qualification not bound by approval');return p;};
+ pin('qualification.json',support({path:qualification.root_receipt_path,sha256:hash(bytes('qualification.json'))}));
+ pin('examples.json',support(qualification.examples));pin('expected-results.json',support(qualification.public_results));
+ assert.equal(hash(bytes('engine.mjs')),qualification.artifacts['atlas_controlled_time_capability.mjs']);assert.equal(hash(bytes('engine.wasm')),qualification.artifacts['atlas_controlled_time_capability.wasm']);
+ for(const name of componentNames){const pins=qualification.source_files.filter(p=>p.path==='web/'+name);assert.equal(pins.length,1);assert.equal(identity.components[name],pins[0].sha256,'Unqualified controlled-time component');}
+ assert.equal(catalogue.profile,identity.profile);assert.equal(catalogue.catalogue_sha256,identity.catalogue_sha256);assert.equal(catalogue.models.length,1);assert.equal(catalogue.models[0].id,entry.id);assert.equal(catalogue.models[0].model_sha256,identity.model_sha256);assert.deepEqual(catalogue.models[0].formulation,definition.formulation);
+ assert.deepEqual(bytes('catalogue.json'),readFileSync(join(repository,'web/engines/controlled-time/generated/controlled_time_catalogue.json')),'Stale controlled-time generated catalogue');
+ return [entry.id];
+}
 
 export function validatePackage(directory){
  const read=name=>JSON.parse(readFileSync(join(directory,name),'utf8'));
@@ -13,7 +60,8 @@ export function validatePackage(directory){
  const ids=models.map(m=>m.id);
  assert.equal(new Set(ids).size,ids.length,'Duplicate runtime model ID');
  assert.equal(new Set(catalogue.models.map(m=>m.id)).size,catalogue.models.length,'Duplicate catalogue ID');
- assert.deepEqual(catalogue.models.filter(m=>m.executable).map(m=>m.id).sort(),[...ids].sort(),'Executable catalogue differs from runtime');
+ const separate=validateControlledTimeMembership(directory,catalogue.models,ids);
+ assert.deepEqual(catalogue.models.filter(m=>m.executable&&!separate.includes(m.id)).map(m=>m.id).sort(),[...ids].sort(),'Executable catalogue differs from runtime');
  for(const model of models){
   assert.match(model.id,/^[a-z0-9][a-z0-9-]*$/,'Unsafe model ID');
   assert.deepEqual(read('models/'+model.id+'.json'),model,'Stale packaged definition: '+model.id);

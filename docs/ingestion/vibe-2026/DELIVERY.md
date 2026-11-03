@@ -31,7 +31,7 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 ## Current handoff
 
-- Current phase / overall state: E0–E7 complete. Exact accepted model/approval, general-atlas profile/main laboratory, normal package-v5 and actual browser-v4 pass. E8 ready to publish; no remote action or live delivery.
+- Current phase / overall state: E0–E7 complete. E8 authorized and in progress on34c49281d; CI/deployment/live checks pending. See live-release-v1/ for original failure, reviewed test-only correction and exact run identities.
 - Current owner: coordinator /root; separate scientific acceptance and separately reviewed dependency/presentation integration are retained.
 - Blocker / missing evidence: new explicit remote authorization under current AGENTS.md, then actual CI/deployment/live checks. No scientific, numerical, atlas or local browser blocker.
 - Smallest next action: finish cleanup and scoped local release commit, then request only push/deployment authorization for that concrete tested release.
@@ -177,6 +177,12 @@ Local release commit **408e1933a1454d4e3ed6b43273716893aa54682f** retained on **
 
 User explicitly answered Yes to push/deploy commit408e1933a. Remote main freshly verified ac22788b, exact qualified ancestor; fast-forward push succeeded (live-release-v1/push.json). Current FastCI41715636339, Fullqualification41715636398 and Controlledphysicaltime41715636619 are being observed to terminal. E8 is in progress; no live-success claim. No worktree/build resource was needed for the exact push, and no local browser slot has yet been claimed. Prospective live gates/resource scope: live-release-v1/plan.json.
 
-### Live CI test-harness correction
+Reviewed test-only CI correction pushed **34c49281d445b94902f474b708addb22aead70bc**, parent408e1933a. Separate review0a71923f verifies original assertions exact, independently reproduces originalmissinghelper and14fixedpasses; full local FastCI passes. Current runs FastCI41716671573 / Full41716671358 / Controlledtime41716671444; original runs remain retained/observed. No production/scientific change, E8 still in progress.
 
-Original FastCI41715636339 failed ReferenceError formatTickLabels because the existing chart-test sandbox omitted the shared helpers. Pages41716157047 correctly skipped. Only tests/test_chart_axis.mjs gains the real helper import and VM bindings; all four original tests/assertions remain exact. Separate reviewer reproduced original failure and accepted exact two additions (live-test-fix-review-v1/decision.json SHA0a71923fd6eca64a45d121dbdb9455564e020e7038a481060cc499df9af99926). Fixed14chart/plot groups and full local tools/ci_fast.py pass, retained live-ci-fast-v1.log. Production model/runtime/profile and scientific pin bytes unchanged. Isolated correction worktree /private/tmp/atlas-vibe2026-live-fix-v1 is owned for release/evidence only; no material slot claimed.
+Pages41718441846: full standard builder PASS; later test_supported_package→validatePackage fails Executable catalogue differs from runtime because VIBE controlled-time interface is counted with ordinary16. Failure retained live-release-v1/pages-package-failed.log. Generic explicit sealed-interface membership correction assigned source-only; all ordinary and controlled-time numerical gates remain mandatory. No deployment occurred; E8 still in progress.
+
+Current resources: isolatedfixworktree /private/tmp/atlas-vibe2026-live-fix-v1; readonly16member package-shape-v1 and full1534member package-check-v1 recovered exactly from retainedarchivecc1ef7 (receipts live-release-v1/). Localserialslot claimed only for one supportedpackage retained-Wasm execution AFTERindependentreview; no builds. Knownforeigndocumentation35640/35649 verified and untouched, serial-process-guard.json. Remove recoveredcopies after consumers; retainoriginalarchive.
+
+### Final package verifier correction qualified
+
+Reviewed sourcefreeze c037c57c accepted independently e2273996/7bfba747. All original validator assertions and11tests preserved;35puregroups pass. Exact formerly failing supported-package command nowpasses16ordinaryrequests+1registerednamedexample in0.951s onfull1534sealedE7package; original strictdefaultpolicy andactualcontrolled-time8history/2refusalrecovery gates unchanged. tools/ci_fast.py passes. All281VIBE/250controlledpath/171Maxwellpins and30publishedapprovals preserved. Recoveredcopies rehashedunchanged thenremoved afterconsumers; archivecc1ef7 retained. Localserialslot RELEASED. No model/runtime/profile changes; E8 remainsinprogresspendingnewCI/Pages/live.
