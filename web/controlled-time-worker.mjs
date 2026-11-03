@@ -8,7 +8,7 @@ async function load(){
  const names=['model.json','catalogue.json','engine.mjs','engine.wasm'],bytes=await Promise.all(names.map(asset)),decode=i=>strictJSON(new TextDecoder().decode(bytes[i]));
  const definition=decode(0),catalogue=decode(1);if(definition.id!==identity.model||catalogue.models.length!==1||catalogue.models[0].id!==identity.model||catalogue.models[0].model_sha256!==identity.model_sha256||catalogue.catalogue_sha256!==identity.catalogue_sha256)throw Error('Package model/catalogue mismatch.');
  const url=URL.createObjectURL(new Blob([bytes[2]],{type:'text/javascript'}));
- try{const {default:create}=await import(url),module=await create({wasmBinary:new Uint8Array(bytes[3]),print:()=>{},printErr:()=>{}});loaded={engine:await ControlledTimeEngine.create(module,bytes[1],definition),identity};return loaded;}finally{URL.revokeObjectURL(url);}
+ try{const {default:create}=await import(url),module=await create({wasmBinary:new Uint8Array(bytes[3]),locateFile:name=>new URL(name,base).href,print:()=>{},printErr:()=>{}});loaded={engine:await ControlledTimeEngine.create(module,bytes[1],definition),identity};return loaded;}finally{URL.revokeObjectURL(url);}
 }
 self.onmessage=async({data})=>{
  try{const {engine,identity}=await load();if(data.model!==identity.model)throw Error('Wrong model request.');if(data.identity&&canonical(data.identity)!==canonical(identity))throw Error('Page/worker package mismatch.');const result=engine.run(data.request);self.postMessage({id:data.id,result,identity});}

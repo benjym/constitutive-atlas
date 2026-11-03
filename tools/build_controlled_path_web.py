@@ -58,8 +58,17 @@ def bundle(destination, build):
                 raise ValueError('Controlled-path generated source is stale: '+name)
     accepted_review_bytes = None
     qualified_artifact_bytes = None
+    from qualify_controlled_path_refresh import validate_refresh
+    refresh = validate_refresh(build, MODEL)
     current_receipt = build/'controlled-path-qualification.json'
-    if current_receipt.is_file():
+    if refresh is not None:
+        qualification_path = build/'refresh-qualification.json'
+        qualification_bytes = refresh['qualification_bytes']
+        qualification = refresh['qualification']
+        sources = qualification['binding']['source_closure']
+        accepted_review_bytes = refresh['review_bytes']
+        qualified_artifact_bytes = refresh['artifacts']
+    elif current_receipt.is_file():
         qualification_path = current_receipt
         qualification_bytes = current_receipt.read_bytes()
         qualification = json.loads(qualification_bytes)

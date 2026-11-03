@@ -1,0 +1,27 @@
+### Ran Playwright code
+```js
+await (async(page)=>{
+ const out=[];
+ async function upload(file){const chooser=page.waitForEvent('filechooser');await page.getByRole('button',{name:'Import and replay',exact:true}).click();await(await chooser).setFiles(file);await page.waitForFunction(()=>/^(History completed|Import rejected|Run failed|Replay or)/.test(document.querySelector('#ct-status').textContent),{},{timeout:120000});return await page.locator('#ct-status').textContent();}
+ const replay=await upload('output/playwright/vibe-browser-v1/example-7.json');if(!replay.startsWith('History completed'))throw Error(replay);out.push({check:'exact import replay',status:replay});
+ const bad=await upload('output/playwright/vibe-browser-v1/tampered-identity.json');if(!bad.startsWith('Import rejected'))throw Error(bad);out.push({check:'identity tamper rejected',status:bad,exportDisabled:await page.getByRole('button',{name:'Export complete run',exact:true}).isDisabled()});
+ const recovered=await upload('output/playwright/vibe-browser-v1/example-7.json');if(!recovered.startsWith('History completed'))throw Error(recovered);out.push({check:'valid replay after invalid import',status:recovered});
+ await page.getByText('Complete starting state, imposed fields and incoming rates',{exact:true}).click();
+ for(const value of ['0','-1']){
+  await page.getByRole('spinbutton',{name:'Suction (Pa)',exact:true}).fill(value);
+  if(!await page.getByRole('button',{name:'Export complete run',exact:true}).isDisabled())throw Error('Stale export after edit');
+  await page.getByRole('button',{name:'Run history',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('Run failed'),{},{timeout:120000});
+  out.push({check:'suction '+value+' refused',status:await page.locator('#ct-status').textContent()});
+  await page.getByRole('button',{name:'Reset starting example',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('History completed'),{},{timeout:120000});
+  out.push({check:'reset recovery after suction '+value,status:await page.locator('#ct-status').textContent()});
+ }
+ return out;
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:8766/index.html#laboratory?model=vibe-2026
+### Modal state
+- [File chooser]: can be handled by upload

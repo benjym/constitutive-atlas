@@ -1,0 +1,104 @@
+---
+name: Controlled physical time qualification
+'on':
+  push:
+    branches: [main]
+    paths: ['atlas/**', 'cpp/**', 'cmake/**', 'schemas/**', 'models/research/vibe/**', 'tests/test_controlled_time*', 'tests/fixtures/controlled-time/**', 'tools/qualify_vibe2026.*', 'tools/generate_controlled_time.py', 'tools/check_controlled_time_ci.py', 'web/controlled-time-engine.mjs', 'docs/ingestion/vibe-2026/**', '.github/workflows/controlled-time.yml', '.github/actions/setup-atlas/**', '.nvmrc']
+  pull_request:
+    paths: ['atlas/**', 'cpp/**', 'cmake/**', 'schemas/**', 'models/research/vibe/**', 'tests/test_controlled_time*', 'tests/fixtures/controlled-time/**', 'tools/qualify_vibe2026.*', 'tools/generate_controlled_time.py', 'tools/check_controlled_time_ci.py', 'web/controlled-time-engine.mjs', 'docs/ingestion/vibe-2026/**', '.github/workflows/controlled-time.yml', '.github/actions/setup-atlas/**', '.nvmrc']
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: controlled-time-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+defaults:
+  run:
+    shell: bash
+jobs:
+  native-then-wasm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: '.nvmrc'
+    - name: Verify exact reviewed inputs and portable plan before builds
+      run: |-
+        set -euo pipefail
+        mkdir -p "$RUNNER_TEMP/controlled-time-ci/native-generic"
+        python3 -B tools/check_controlled_time_ci.py verify --report "$RUNNER_TEMP/controlled-time-ci/input-check.json" 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/input-check.log"
+    - uses: './.github/actions/setup-atlas'
+      with:
+        wasm: 'true'
+    - name: Record actual compiler and SDK versions
+      run: |-
+        set -euo pipefail
+        { cmake --version; g++ --version; emcc --version; node --version; python3 --version; } 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/toolchain.log"
+    - name: Build synthetic native target serially
+      run: |-
+        set -euo pipefail
+        cmake -S cmake/controlled-time -B build-controlled-time-native-generic -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/native-generic-configure.log"
+        cmake --build build-controlled-time-native-generic --target atlas_controlled_time_capability --parallel 1 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/native-generic-build.log"
+    - name: Qualify all six synthetic native groups with corrected corpus
+      run: |-
+        set -euo pipefail
+        export ATLAS_CONTROLLED_TIME_MODULE="$PWD/build-controlled-time-native-generic/libatlas_controlled_time_capability.so"
+        export ATLAS_CONTROLLED_TIME_CATALOGUE="$PWD/build-controlled-time-native-generic/generated/controlled_time_catalogue.json"
+        export ATLAS_CONTROLLED_TIME_SOURCE_MANIFEST="$PWD/docs/ingestion/vibe-2026/controlled-time-ci-v1/source-manifest-v1.json"
+        export ATLAS_CONTROLLED_TIME_RAW_OUTPUT="$RUNNER_TEMP/controlled-time-ci/native-generic/results.json"
+        python3 -B docs/ingestion/vibe-2026/controlled-time-oracle-correction-v1/run_native_v2.py --execute -v 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/native-generic-tests.log"
+    - name: Build exact VIBE native target serially
+      run: |-
+        set -euo pipefail
+        cmake -S cmake/controlled-time -B build-controlled-time-native-model -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON "-DATLAS_CONTROLLED_TIME_MODELS:STRING=$PWD/models/research/vibe/vibe-2026-explicit-appendix-a.json" 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/native-model-configure.log"
+        cmake --build build-controlled-time-native-model --target atlas_controlled_time_capability --parallel 1 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/native-model-build.log"
+    - name: Qualify native 32 rates and eight full sampled histories first
+      run: |-
+        set -euo pipefail
+        python3 -B tools/qualify_vibe2026.py --module "$PWD/build-controlled-time-native-model/libatlas_controlled_time_capability.so" --catalogue build-controlled-time-native-model/generated/controlled_time_catalogue.json --model models/research/vibe/vibe-2026-explicit-appendix-a.json --plan docs/ingestion/vibe-2026/controlled-time-ci-v1/plan-v3.json --source-manifest docs/ingestion/vibe-2026/numerical-qualification-v1/source-manifest-v2.json --output "$RUNNER_TEMP/controlled-time-ci/native-model" 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/native-model-tests.log"
+    - name: Build matching synthetic Wasm target serially
+      run: |-
+        set -euo pipefail
+        emcmake cmake -S cmake/controlled-time -B build-controlled-time-wasm-generic -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/wasm-generic-configure.log"
+        cmake --build build-controlled-time-wasm-generic --target atlas_controlled_time_capability --parallel 1 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/wasm-generic-build.log"
+    - name: Qualify matching synthetic Wasm corpus and transactional gates
+      run: |-
+        set -euo pipefail
+        node --experimental-vm-modules docs/ingestion/vibe-2026/controlled-time-oracle-correction-v1/run_wasm_v2.mjs --execute "$PWD/build-controlled-time-wasm-generic/atlas_controlled_time_capability.mjs" "$PWD/build-controlled-time-wasm-generic/generated/controlled_time_catalogue.json" "$RUNNER_TEMP/controlled-time-ci/wasm-generic.json" "$PWD/docs/ingestion/vibe-2026/controlled-time-ci-v1/source-manifest-v1.json" 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/wasm-generic-tests.log"
+    - name: Build exact VIBE Wasm target serially
+      run: |-
+        set -euo pipefail
+        emcmake cmake -S cmake/controlled-time -B build-controlled-time-wasm-model -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON "-DATLAS_CONTROLLED_TIME_MODELS:STRING=$PWD/models/research/vibe/vibe-2026-explicit-appendix-a.json" 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/wasm-model-configure.log"
+        cmake --build build-controlled-time-wasm-model --target atlas_controlled_time_capability --parallel 1 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/wasm-model-build.log"
+    - name: Qualify Wasm model against independent references and exact native peer
+      run: |-
+        set -euo pipefail
+        node tools/qualify_vibe2026.mjs "$PWD/build-controlled-time-wasm-model/atlas_controlled_time_capability.mjs" build-controlled-time-wasm-model/generated/controlled_time_catalogue.json models/research/vibe/vibe-2026-explicit-appendix-a.json docs/ingestion/vibe-2026/controlled-time-ci-v1/plan-v3.json docs/ingestion/vibe-2026/numerical-qualification-v1/source-manifest-v2.json "$RUNNER_TEMP/controlled-time-ci/wasm-model" "$RUNNER_TEMP/controlled-time-ci/native-model" 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/wasm-model-tests.log"
+    - name: Retain exact executed source, generated and artifact byte identities even after failure
+      if: always()
+      run: |-
+        set -euo pipefail
+        mkdir -p "$RUNNER_TEMP/controlled-time-ci"
+        python3 -B tools/check_controlled_time_ci.py capture --output "$RUNNER_TEMP/controlled-time-ci/artifact-receipt.json" atlas cpp schemas cmake/controlled-time cmake/AtlasScalarFunctions.cmake models/research/vibe tests/fixtures/controlled-time tools/generate_controlled_time.py tools/qualify_vibe2026.py tools/qualify_vibe2026.mjs tools/check_controlled_time_ci.py web/controlled-time-engine.mjs .github/workflows/controlled-time.yml .github/actions/setup-atlas/action.yml .nvmrc docs/ingestion/vibe-2026/controlled-time-ci-v1 build-controlled-time-native-generic build-controlled-time-native-model build-controlled-time-wasm-generic build-controlled-time-wasm-model 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/artifact-capture.log"
+    - name: Upload all failure logs, raw buffers, source pins and actual engines
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: controlled-time-${{ github.run_id }}-${{ github.run_attempt }}
+        if-no-files-found: warn
+        retention-days: 30
+        path: |-
+          ${{ runner.temp }}/controlled-time-ci/
+          build-controlled-time-*/generated/
+          build-controlled-time-*/CMakeCache.txt
+          build-controlled-time-*/compile_commands.json
+          build-controlled-time-*/libatlas_controlled_time_capability.so
+          build-controlled-time-*/atlas_controlled_time_capability.mjs
+          build-controlled-time-*/atlas_controlled_time_capability.wasm

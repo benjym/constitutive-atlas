@@ -1,0 +1,13 @@
+# Independent source review of controlled-time CI
+
+Reviewer `/root/vibe_oracle_review` authored neither the CI helper/workflow nor either portable-plan generator. Owned paths are this new directory only. This is future CI source eligibility, with no new compiled/material/remote execution.
+
+The original plan is reproduced exactly by restoring its identity and nine workstation source-pin prefixes. All 32 rate points, eight histories, seven invalid contexts, inputs, source SHA values, settings, refinement caps and acceptance bounds remain exact. The retained absolute `reference_path` fields are historical provenance, not file-open inputs; unchanged collectors read embedded expected results and verify the portable `source_files` before module loading.
+
+A single job runs generic native six groups, native model qualification, generic Wasm and matching model Wasm in order. Four builds each name one target and `--parallel 1`. Corrected oracle wrappers and exact collectors retain their original gates. Wasm requires the actual native peer with identical portable-plan hash. All 11 run blocks use pipefail and durable logs; always-run capture/upload preserve failures, actual engines, generated sources and build metadata. No failure bypass or parallel matrix exists. Repository permissions are read-only.
+
+The CI helper verifies accepted Stage A, corrected-oracle and collector closures. From the historical Stage B-v3 closure it verifies only the executed engine; inactive UI/packager changes are outside backend CI. I requested correction of a preliminary v2 full-closure pin before the author freeze; the final bytes explicitly select the current engine. The actual remote SDK/compiler and generated artifact identities must still be collected by a genuine CI run. This acceptance is not a passing CI result, E4/E5 model approval or browser/release qualification.
+
+Reproduce the independent source audits using `audit_plan.py PLAN_V3` and `audit_workflow.py`. The helper command recorded in `helper.log` performs source hash verification only. Independent checks: 56 portable-plan assertions and 23 workflow wiring assertions, plus the full helper closure verification. The first workflow audit guessed the wrong number of run blocks; its failed audit source and explanation are retained. The corrected audit checks pipefail against the actual number of run blocks, without changing workflow policy.
+
+Cleanup: no processes, servers, build trees, temporary downloads, worktrees or compiled modules were created or owned. This directory remains durable review evidence. No author/shared files, commits or remote state were modified.

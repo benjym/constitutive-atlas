@@ -1,0 +1,20 @@
+test_analytical_transport_and_clock (tests.test_controlled_time_native.NativeControlledTimeTests.test_analytical_transport_and_clock) ... ok
+test_exact_boundary_native_state_controls_parameters_observables (tests.test_controlled_time_native.NativeControlledTimeTests.test_exact_boundary_native_state_controls_parameters_observables) ... ok
+test_independent_frozen_corpus_and_refinement (tests.test_controlled_time_native.NativeControlledTimeTests.test_independent_frozen_corpus_and_refinement) ... FAIL
+test_inputs_aliases_lengths_and_output_sentinels (tests.test_controlled_time_native.NativeControlledTimeTests.test_inputs_aliases_lengths_and_output_sentinels) ... ok
+test_late_domain_rollback_and_recovery (tests.test_controlled_time_native.NativeControlledTimeTests.test_late_domain_rollback_and_recovery) ... ok
+test_recovery_restart_full_context (tests.test_controlled_time_native.NativeControlledTimeTests.test_recovery_restart_full_context) ... ok
+
+======================================================================
+FAIL: test_independent_frozen_corpus_and_refinement (tests.test_controlled_time_native.NativeControlledTimeTests.test_independent_frozen_corpus_and_refinement)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-controlled-time-v1/tests/test_controlled_time_native.py", line 41, in test_independent_frozen_corpus_and_refinement
+    y=float(y);tol=1e-7+1e-12*abs(y) if name=='sigma' else 1e-12+1e-12*abs(y) if name=='clock_memory' else 1e-8+2e-7*abs(y);self.assertLessEqual(abs(x-y),tol,(case['id'],name,x,y))
+                                                                                                                            ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0.0008989656042586169 not less than or equal to 1.6949635263541762e-07 : ('transport-mixed-partition1', 'e', 0.7983807287813467, 0.7974817631770881)
+
+----------------------------------------------------------------------
+Ran 6 tests in 4.927s
+
+FAILED (failures=1)

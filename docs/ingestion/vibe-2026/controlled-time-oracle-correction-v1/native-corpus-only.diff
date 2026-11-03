@@ -1,0 +1,20 @@
+--- tests/test_controlled_time_native.py
++++ native-runner-v2.source.txt
+@@ -9,7 +9,7 @@
+ class NativeControlledTimeTests(unittest.TestCase):
+  def setUp(self):
+   if not os.environ.get('ATLAS_CONTROLLED_TIME_SOURCE_MANIFEST') or not os.environ.get('ATLAS_CONTROLLED_TIME_RAW_OUTPUT'):raise ValueError('compiled qualification requires source manifest and durable raw output path before execution')
+-  source=Path(os.environ['ATLAS_CONTROLLED_TIME_SOURCE_MANIFEST']);corpus=Path(__file__).resolve().parents[1]/'docs/ingestion/vibe-2026/controlled-time-qualification-v1/reference-corpus-v1.json'
++  source=Path(os.environ['ATLAS_CONTROLLED_TIME_SOURCE_MANIFEST']);corpus=Path(__file__).resolve().parents[1]/'docs/ingestion/vibe-2026/controlled-time-oracle-correction-v1/reference-corpus-v2.json'
+   self.binding=dict(source_manifest_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),reference_corpus_sha256=hashlib.sha256(corpus.read_bytes()).hexdigest(),module_sha256=hashlib.sha256(Path(os.environ['ATLAS_CONTROLLED_TIME_MODULE']).read_bytes()).hexdigest(),catalogue_file_sha256=hashlib.sha256(Path(os.environ['ATLAS_CONTROLLED_TIME_CATALOGUE']).read_bytes()).hexdigest())
+   dest=Path(os.environ['ATLAS_CONTROLLED_TIME_RAW_OUTPUT']);dest.parent.mkdir(parents=True,exist_ok=True);self.raw_target=dest.with_name(dest.stem+'-'+self._testMethodName+'.json')
+   if self.raw_target.exists():raise FileExistsError('retain prior raw qualification output; choose new output identity')
+@@ -29,7 +29,7 @@
+  def test_independent_frozen_corpus_and_refinement(self):
+   from atlas.model import ROOT,load
+   from atlas.controlled_time import initialize,stage_controls
+-  corpus=json.loads((ROOT/'docs/ingestion/vibe-2026/controlled-time-qualification-v1/reference-corpus-v1.json').read_text());records=[]
++  corpus=json.loads((ROOT/'docs/ingestion/vibe-2026/controlled-time-oracle-correction-v1/reference-corpus-v2.json').read_text());records=[]
+   for case in corpus['cases']:
+    self.assertEqual(hashlib.sha256((ROOT/case['fixture']).read_bytes()).hexdigest(),case['definition_sha256'])
+    m=load(ROOT/case['fixture']);engine=NativeEngine(os.environ['ATLAS_CONTROLLED_TIME_MODULE'],os.environ['ATLAS_CONTROLLED_TIME_CATALOGUE'],m);self.engines.append(engine);p=initialize(m,case['state'],case['start_time'],case['controls'],case['incoming_rates'],case['parameters']);q=p

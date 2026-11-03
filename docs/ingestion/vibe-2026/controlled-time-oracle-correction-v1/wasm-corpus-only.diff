@@ -1,0 +1,11 @@
+--- tools/test_controlled_time_wasm.mjs
++++ wasm-runner-v2.source.txt
+@@ -4,7 +4,7 @@
+ if(!modulePath||!cataloguePath||!outputPath||!sourceManifestPath)throw Error('usage: node tools/test_controlled_time_wasm.mjs MODULE CATALOGUE OUTPUT SOURCE_MANIFEST');
+ if(fs.existsSync(outputPath))throw Error('retain prior raw qualification output; choose a new output identity');
+ const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),records=[],allCalls=[];
+-const corpusPath=new URL('../docs/ingestion/vibe-2026/controlled-time-qualification-v1/reference-corpus-v1.json',import.meta.url);
++const corpusPath=new URL('../docs/ingestion/vibe-2026/controlled-time-oracle-correction-v1/reference-corpus-v2.json',import.meta.url);
+ const receipt={profile:'controlled-time-ode-v1',status:'started',artifact_identity:{module_sha256:hash(fs.readFileSync(modulePath)),wasm_sha256:hash(fs.readFileSync(modulePath.replace(/\.mjs$/,'.wasm'))),catalogue_file_sha256:hash(fs.readFileSync(cataloguePath)),source_manifest_sha256:hash(fs.readFileSync(sourceManifestPath)),reference_corpus_sha256:hash(fs.readFileSync(corpusPath))},records,allCalls};
+ const checkpoint=()=>fs.writeFileSync(outputPath,JSON.stringify(receipt,null,2)+'\n');checkpoint();
+ try {

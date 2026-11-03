@@ -1,0 +1,43 @@
+{
+  "identity": "independent-controlled-time-oracle-correction-review-v1",
+  "reviewer": "/root/vibe_oracle_review",
+  "independence": "Separate run, authored neither original/corrected oracle, backend runners nor production fixture/runtime.",
+  "decision": "accepted-for-new-coordinator-rerun-only",
+  "author_manifest_sha256": "5eb8953d084061633b09160a6708d71907efb39482bf5857657a7f10c05d4d01",
+  "corpus_sha256": "ddcb23369d1f786ac9484dcceb04c8cd44df09e759eb6cd241f2d3381e509c81",
+  "checks": 156,
+  "blocking_findings": [],
+  "findings": [
+    {
+      "id": "O1",
+      "status": "resolved",
+      "reason": "Original sum(all six Mandel components) violates tensor trace. Independent integration and all six basis probes establish trace(first three). Only six e expectations and corpus identity change."
+    },
+    {
+      "id": "O2",
+      "status": "pass",
+      "reason": "All 18 cases, every input, parameter, partition, acceptance bound, execution setting and every non-e expectation retained. Original 67-file source manifest still verifies; runtime/compiler/fixtures unchanged."
+    },
+    {
+      "id": "O3",
+      "status": "pass",
+      "reason": "Native two and Wasm one path replacements are exact and reverse to original bytes. Opt-in wrappers preserve original __file__/import.meta URL and reject inspect+execute; inspect performs zero target evaluation."
+    },
+    {
+      "id": "O4",
+      "status": "retained-failure",
+      "reason": "Original actual native run remains failed. Its exact four pinned execution artifacts are preserved. Prior review-v3 reproduced generator bytes without independently proving trace correctness."
+    }
+  ],
+  "limitations": [
+    "Source eligibility only; corrected native/Wasm runs still required under fresh output identities.",
+    "No compiled execution or model E4/E5 scientific approval, browser qualification, experimental validation or publication granted.",
+    "New references are an explicitly reviewed correction after failure, not a prospective pre-observation oracle; original failed study is not reclassified."
+  ],
+  "cleanup": {
+    "created_resources": "Only this durable review directory",
+    "removed_resources": [],
+    "remaining_resources": "Review evidence retained; no temporary files, processes, servers, builds or worktrees owned."
+  },
+  "compiled_calls": 0
+}

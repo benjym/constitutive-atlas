@@ -1,0 +1,105 @@
+// Explicit coordinator-owned compiled capability gate; never builds a module.
+import {createHash} from 'node:crypto';import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';
+const [modulePath,cataloguePath,outputPath,sourceManifestPath]=process.argv.slice(2);
+if(!modulePath||!cataloguePath||!outputPath||!sourceManifestPath)throw Error('usage: node tools/test_controlled_time_wasm.mjs MODULE CATALOGUE OUTPUT SOURCE_MANIFEST');
+if(fs.existsSync(outputPath))throw Error('retain prior raw qualification output; choose a new output identity');
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex'),records=[],allCalls=[];
+const corpusPath=new URL('../docs/ingestion/vibe-2026/controlled-time-oracle-correction-v1/reference-corpus-v2.json',import.meta.url);
+const receipt={profile:'controlled-time-ode-v1',status:'started',artifact_identity:{module_sha256:hash(fs.readFileSync(modulePath)),wasm_sha256:hash(fs.readFileSync(modulePath.replace(/\.mjs$/,'.wasm'))),catalogue_file_sha256:hash(fs.readFileSync(cataloguePath)),source_manifest_sha256:hash(fs.readFileSync(sourceManifestPath)),reference_corpus_sha256:hash(fs.readFileSync(corpusPath))},records,allCalls};
+const checkpoint=()=>fs.writeFileSync(outputPath,JSON.stringify(receipt,null,2)+'\n');checkpoint();
+try {
+const catalogueBytes=fs.readFileSync(cataloguePath),catalogue=JSON.parse(catalogueBytes);
+if(catalogue.profile!=='controlled-time-ode-v1')throw Error('wrong catalogue profile');
+const index=catalogue.models.findIndex(m=>m.id==='test-controlled-time-thm');if(index<0)throw Error('analytical synthetic transport fixture missing');
+const d=catalogue.models[index],factory=(await import(pathToFileURL(path.resolve(modulePath)).href)).default;
+const module=await factory({wasmBinary:fs.readFileSync(modulePath.replace(/\.mjs$/,'.wasm'))});
+function checkCatalogue(bytes){if(module.UTF8ToString(module._controlled_time_catalogue_file_hash())!==hash(bytes))throw Error('compiled catalogue bytes mismatch');}
+checkCatalogue(catalogueBytes);
+const tampered=structuredClone(catalogue);tampered.models[index].id+='-edited';let tamperRejected=false;try{checkCatalogue(Buffer.from(JSON.stringify(tampered)));}catch{tamperRejected=true;}
+if(!tamperRejected)throw Error('edited external descriptor accepted');records.push({case:'catalogue-metadata-tamper',rejected:true});checkpoint();
+if(module.UTF8ToString(module._controlled_time_model_hash(index))!==d.model_sha256||module.UTF8ToString(module._controlled_time_catalogue_hash())!==catalogue.catalogue_sha256)throw Error('compiled model/catalogue identity mismatch');
+const shapes=Array.from({length:6},(_,i)=>module._controlled_time_size(index,i));
+const [ns,np,nc,no]=shapes;if(ns!==9||nc!==8||no!==6||np!==7)throw Error('fixture ABI shape mismatch: '+shapes);
+const allocations=[];function alloc(a){const p=module._malloc(Math.max(8,8*a.length));if(!p)throw Error('allocation failure');allocations.push(p);module.HEAPF64.set(a,p/8);return p;}
+const read=(p,n)=>Array.from(module.HEAPF64.subarray(p/8,p/8+n));
+const eq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const initial=[10000,20000,30000,4000,-5000,6000,-3.5,.8,2],params=[2e6,.3,100,7,300,2,1],start=[0,0,0,0,0,0,200000,300],rates=[.0001,-.0002,.0003,.0004,-.0005,.0006,-300,2],finish=[.001,-.0003,.0002,.0004,-.0005,.0006,350000,330],settings=[1e-11,1e-10,1e-12,1,40,100000];
+function call(state,time,current,incoming,duration,end,execution=settings,mutate=null,selectedIndex=index){
+ const before=allocations.length;
+ try{
+  const values=[state,params,current,incoming,current,end,execution],p=values.map(alloc),output=[ns,1,nc,nc,no,4].map(n=>alloc(Array(n).fill(-1234567)));
+  const [z,pa,v,cr,a,b,s]=p,[o,t,ov,or,oo,diag]=output;
+  const args=[selectedIndex,z,ns,pa,np,time,duration,v,nc,cr,nc,a,nc,b,nc,s,6,o,ns,t,1,ov,nc,or,nc,oo,no,diag,4];if(mutate)mutate(args,p,output);
+  const snapshots=p.map((a,i)=>read(a,values[i].length));const result=module._controlled_time_advance(...args);
+  const after=p.map((a,i)=>read(a,values[i].length)),data=output.map((p,i)=>read(p,[ns,1,nc,nc,no,4][i]));
+  allCalls.push({kind:'advance',model_index:selectedIndex,time:Number.isFinite(time)?time:String(time),duration:Number.isFinite(duration)?duration:String(duration),settings:execution,inputs_before:snapshots,inputs_after:after,status:result,outputs:data});checkpoint();
+  if(!eq(after,snapshots))throw Error('input mutation');
+  if(result!==1){if(data.some(a=>a.some(v=>v!==-1234567)))throw Error('failed call changed output');return {ok:false,status:result,outputs:data};}
+  if(data.flat().some(v=>!Number.isFinite(v)))throw Error('nonfinite success');
+  return {ok:true,state:data[0],time:data[1][0],controls:data[2],rates:data[3],observables:data[4],diagnostics:data[5]};
+ }finally{for(const p of allocations.splice(before))module._free(p);}
+}
+const close=(a,b,tol,label)=>{if(Math.abs(a-b)>tol)throw Error(label+': '+a+' vs '+b);};
+function assess(r,duration,end,label){if(!r.ok)throw Error(label+' rejected');
+ const extra=.3*(end[6]-start[6])+100*(end[7]-start[7])+7*duration*(start[7]+end[7])/600;
+ for(let j=0;j<6;j++){const expected=initial[j]+2e6*(end[j]-start[j])+(j<3?extra:0);close(r.state[j],expected,1e-7+1e-12*Math.abs(expected),label+' stress'+j);}
+ const clock=-3.5+((11+duration)**2-121)/8;close(r.state[6],clock,1e-12+1e-12*Math.abs(clock),label+' clock');
+ close(r.state[8],2*Math.exp(-duration/2),1e-8+2e-7*2*Math.exp(-duration/2),label+' memory');
+ close(r.state[7],1.8*Math.exp(-(end[0]+end[1]+end[2]))-1,1e-8,label+' void');
+ if(r.time!==11+duration||!eq(r.controls,end))throw Error(label+' endpoint/context');
+}
+const mixed=call(initial,11,start,rates,4,finish);assess(mixed,4,finish,'mixed');records.push({case:'mixed',result:mixed});
+for(const [label,end]of [['hold',start],...Array.from({length:6},(_,j)=>{const a=[...start];a[j]=.0007;return ['basis'+j,a];}),['suction',[...start.slice(0,6),100000,300]],['temperature',[...start.slice(0,6),200000,270]],['opposing-thm',[...start.slice(0,6),100000,330]]]){const r=call(initial,11,start,rates,4,end);assess(r,4,end,label);records.push({case:label,result:r});}
+for(const [label,mutate]of [['wrong-length',a=>a[2]++],['input-output-alias',(a,p)=>a[17]=p[0]],['output-output-alias',(a,p,o)=>a[25]=o[0]],['fractional-budget',(a,p)=>module.HEAPF64[p[6]/8+5]=1.5]]){const r=call(initial,11,start,rates,4,finish,settings,mutate);if(r.ok)throw Error('accepted '+label);records.push({case:label,result:r});const recovery=call(initial,11,start,rates,4,finish);assess(recovery,4,finish,label+' recovery');}
+// Prospective C4 rejection/sentinel/recovery corpus, before any observations.
+for(const [label,time,duration,end,execution] of [
+ ['trial-exhaustion',11,4,finish,[1e-11,1e-10,1e-12,.001,40,1]],
+ ['depth-exhaustion',11,4,finish,[1e-11,1e-10,1e-12,.001,1,100000]],
+ ['zero-duration',11,0,finish,settings],['negative-duration',11,-1,finish,settings],
+ ['invalid-time',Infinity,4,finish,settings],
+ ['invalid-temperature',11,4,[...finish.slice(0,7),0],settings],
+ ['invalid-suction',11,4,[...finish.slice(0,6),-1,finish[7]],settings]
+]){const r=call(initial,time,start,rates,duration,end,execution);if(r.ok)throw Error('accepted '+label);records.push({case:label,result:r});const recovery=call(initial,11,start,rates,4,finish);assess(recovery,4,finish,label+' recovery');checkpoint();}
+const lateBytes=fs.readFileSync(new URL('../tests/fixtures/controlled-time/late-domain.json',import.meta.url)),lateDefinition=JSON.parse(lateBytes),lateIndex=catalogue.models.findIndex(m=>m.id===lateDefinition.id);
+if(lateIndex<0||module.UTF8ToString(module._controlled_time_model_hash(lateIndex))!==catalogue.models[lateIndex].model_sha256)throw Error('late-domain fixture identity');
+const lateFailure=call(initial,11,start,rates,4,start,[1e-6,1e-2,1e-12,1,8,100000],null,lateIndex);if(lateFailure.ok)throw Error('late domain accepted');records.push({case:'late-domain-rollback',fixture_sha256:hash(lateBytes),result:lateFailure});
+const lateRecovery=call(initial,11,start,rates,2,start,settings,null,lateIndex);assess(lateRecovery,2,start,'late-domain recovery');records.push({case:'late-domain-recovery',result:lateRecovery});checkpoint();
+for(const n of [2,4]){let state=initial,time=11,current=start,incoming=rates;for(let i=1;i<=n;i++){const end=start.map((x,j)=>i===n?finish[j]:x+(finish[j]-x)*i/n);const r=call(state,time,current,incoming,4/n,end);if(!r.ok)throw Error('partition');({state,time,controls:current,rates:incoming}=r);}assess({ok:true,state,time,controls:current},4,finish,'partition'+n);records.push({case:'partition'+n,result:{state,time,controls:current,rates:incoming}});}
+function corpusCall(caseData,overrideSettings=null){
+ const definitionBytes=fs.readFileSync(new URL('../'+caseData.fixture,import.meta.url));if(createHash('sha256').update(definitionBytes).digest('hex')!==caseData.definition_sha256)throw Error('frozen corpus definition bytes mismatch');
+ const idx=catalogue.models.findIndex(m=>m.id===JSON.parse(definitionBytes).id);
+ if(idx<0)throw Error('corpus model missing '+caseData.id);const descriptor=catalogue.models[idx];
+ if(module.UTF8ToString(module._controlled_time_model_hash(idx))!==descriptor.model_sha256)throw Error('corpus identity');
+ const shape=Array.from({length:6},(_,i)=>module._controlled_time_size(idx,i)),[ns,np,nc,no]=shape;
+ const flatten=(mapping,fields)=>fields.flatMap(f=>f.size===6?mapping[f.name]:[mapping[f.name]]);
+ let state=flatten(caseData.state,descriptor.state),time=caseData.start_time,current=flatten(caseData.controls,descriptor.controls),incoming=flatten(caseData.incoming_rates,descriptor.controls);
+ const original=[...current],target=flatten(caseData.controls_end,descriptor.controls),params=descriptor.parameters.map(n=>caseData.parameters[n]),execution=overrideSettings??Object.values(caseData.settings);
+ const raw=[];
+ for(let part=1;part<=caseData.partitions;part++){
+  const before=allocations.length;
+  try{
+   const end=original.map((x,j)=>part===caseData.partitions?target[j]:x+(target[j]-x)*part/caseData.partitions),values=[state,params,current,incoming,current,end,execution],p=values.map(alloc),outs=[ns,1,nc,nc,no,4].map(n=>alloc(Array(n).fill(-1234567)));
+   const [z,pa,v,cr,start,endp,set]=p,[o,t,ov,or,oo,diag]=outs,duration=caseData.duration/caseData.partitions;
+   const status=module._controlled_time_advance(idx,z,ns,pa,np,time,duration,v,nc,cr,nc,start,nc,endp,nc,set,6,o,ns,t,1,ov,nc,or,nc,oo,no,diag,4);
+   allCalls.push({kind:'corpus-advance',case:caseData.id,model_index:idx,time,duration,part,settings:execution,inputs_before:values,inputs_after:p.map((ptr,i)=>read(ptr,values[i].length)),status,outputs:outs.map((ptr,i)=>read(ptr,[ns,1,nc,nc,no,4][i]))});checkpoint();
+   if(status!==1)throw Error('corpus advance rejected '+caseData.id);
+   for(let i=0;i<p.length;i++)if(!eq(read(p[i],values[i].length),values[i]))throw Error('corpus input mutation');
+   state=read(o,ns);time=read(t,1)[0];current=read(ov,nc);incoming=read(or,nc);raw.push({state,time,controls:current,rates:incoming,observables:read(oo,no),diagnostics:read(diag,4)});
+  }finally{for(const p of allocations.splice(before))module._free(p);}
+ }
+ return {descriptor,state,time,controls:current,rates:incoming,raw};
+}
+const corpus=JSON.parse(fs.readFileSync(corpusPath,'utf8'));
+for(const c of corpus.cases){const r=corpusCall(c);
+ for(const f of r.descriptor.state){const expected=Array.isArray(c.expected_state[f.name])?c.expected_state[f.name]:[c.expected_state[f.name]];expected.forEach((v,j)=>{const y=Number(v),tol=f.name==='sigma'?1e-7+1e-12*Math.abs(y):f.name==='clock_memory'?1e-12+1e-12*Math.abs(y):1e-8+2e-7*Math.abs(y);close(r.state[f.offset+j],y,tol,c.id+' '+f.name+j);});}
+ if(c.fixture.endsWith('/capacity-max.json')){const last=r.descriptor.observables.find(f=>f.name==='output22'),history=r.descriptor.state.find(f=>f.name==='history22'),sigma=r.descriptor.state.find(f=>f.name==='sigma');if(!last||last.offset!==138||last.size!==6)throw Error('highest observable layout');const output=r.raw.at(-1).observables;for(let j=0;j<6;j++){const expected=r.state[sigma.offset+j]+(j<3?c.parameters.E*r.state[history.offset]:0);close(output[last.offset+j],expected,1e-6,'highest observable output22 component '+j);}}
+ if(r.time!==c.start_time+c.duration)throw Error('corpus clock context');records.push({case:c.id,result:r.raw});
+}
+const refinementCase=corpus.cases.find(c=>c.id==='transport-hold'),errors=[];
+for(const h of [1,.5,.25]){const r=corpusCall(refinementCase,[1e-6,1e-2,1e-12,h,40,100000]);errors.push(Math.abs(r.state[8]-2*Math.exp(-2)));records.push({case:'refinement-'+h,result:r.raw});}
+if(!(errors[0]>errors[1]&&errors[1]>errors[2]&&errors[1]/errors[2]>3&&errors[1]/errors[2]<5))throw Error('refinement failed '+errors);
+
+receipt.status='passed';receipt.model=d.id;receipt.model_sha256=d.model_sha256;receipt.settings=settings;checkpoint();
+console.log('Controlled-time Wasm analytical and transactional cases passed: '+records.length);
+
+} catch(error) {receipt.status='failed';receipt.error={name:error.name,message:error.message,stack:error.stack};checkpoint();throw error;}

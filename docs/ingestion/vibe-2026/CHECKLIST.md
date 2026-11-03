@@ -72,13 +72,13 @@ Replace the example definition path with the actual candidate. The latter two co
 
 ## E4 — Qualify native, Wasm and the exposed controls
 
-- [ ] Obtain the coordinator's execution handoff; pin source/model/compiler/toolchain identities and build in isolated directories. Use the actual target for this profile; a timed or history model may need a different common-engine entry point from `atlas_solver`.
-- [ ] Build native first, serially, and verify embedded metadata against the exact candidate bytes. Save build commands, toolchain, stdout/stderr and executable identity.
-- [ ] Run the frozen independent-reference cases, admissible/domain-boundary and invalid-input tests, derivative/covariance checks where applicable, and useful finite paths. Include loading/unloading/reversal, holds and time changes when required by the source.
-- [ ] Check failed-increment rollback, subsequent recovery and restart/replay against the stated contract. Preserve parent state on failure; compare all physical state, not only a plotted stress channel. Distinguish exact replay from tolerance-based continuation.
-- [ ] Build Wasm only after the native stage is understood. Run the same relevant requests, references and native/Wasm comparisons through the intended API. Check failure/recovery and units/scopes as well as successful values.
-- [ ] Verify public defaults or registered named examples are useful and successful within disclosed support. Preserve genuine unsupported-default failures as limitations; do not silently turn an unexpected failure into an approved exception.
-- [ ] Run appropriate existing-model regressions using the current explicit fixture/profile policies. Add durable model regression coverage to CI. Changes to generic runtime capabilities need their own regression checks.
+- [X] Obtain the coordinator's execution handoff; pin source/model/compiler/toolchain identities and build in isolated directories. Use the actual target for this profile; a timed or history model may need a different common-engine entry point from `atlas_solver`.
+- [X] Build native first, serially, and verify embedded metadata against the exact candidate bytes. Save build commands, toolchain, stdout/stderr and executable identity.
+- [X] Run the frozen independent-reference cases, admissible/domain-boundary and invalid-input tests, derivative/covariance checks where applicable, and useful finite paths. Include loading/unloading/reversal, holds and time changes when required by the source.
+- [X] Check failed-increment rollback, subsequent recovery and restart/replay against the stated contract. Preserve parent state on failure; compare all physical state, not only a plotted stress channel. Distinguish exact replay from tolerance-based continuation.
+- [X] Build Wasm only after the native stage is understood. Run the same relevant requests, references and native/Wasm comparisons through the intended API. Check failure/recovery and units/scopes as well as successful values.
+- [X] Verify public defaults or registered named examples are useful and successful within disclosed support. Preserve genuine unsupported-default failures as limitations; do not silently turn an unexpected failure into an approved exception.
+- [X] Run appropriate existing-model regressions using the current explicit fixture/profile policies. Add durable model regression coverage to CI. Changes to generic runtime capabilities need their own regression checks.
 
 Serial build pattern (choose an isolated directory and the correct assigned target):
 
@@ -95,11 +95,11 @@ These are the ordinary strain-path target examples, not a claim that every timed
 
 ## E5 — Independent agent review and approval
 
-- [ ] Hand the exact candidate, readable source receipts, dossier, prospective gates and complete saved results to a separate agent run. Record actual implementation/reviewer run IDs and independence basis. Do not ask the implementation agent to certify its own transcription.
-- [ ] The reviewer checks all nine items in [checklist v1](AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](AGENT_REVIEW_TEMPLATE.json).
-- [ ] Resolve blocking findings; rerun only affected qualification and regression checks when justified. Obtain a new or updated reviewer decision bound to the final model bytes and artifacts. Preserve superseded failures and decisions.
-- [ ] Store the accepted record under `catalogue/agent-reviews/`, validate it and generate the approval entry. Coordinator integration requires no human scientific sign-off or further user approval.
-- [ ] Confirm approval refers to the exact intended formulation and supported interfaces/parameter/protocol scope. Keep experimental validation separately assessed; no experimental match is required merely to illustrate an otherwise verified law.
+- [X] Hand the exact candidate, readable source receipts, dossier, prospective gates and complete saved results to a separate agent run. Record actual implementation/reviewer run IDs and independence basis. Do not ask the implementation agent to certify its own transcription.
+- [X] The reviewer checks all nine items in [checklist v1](AGENT_REVIEW_POLICY.md) and supplies reasons, hashed evidence, scope, limitations and blocking findings using [the review template](AGENT_REVIEW_TEMPLATE.json).
+- [X] Resolve blocking findings; rerun only affected qualification and regression checks when justified. Obtain a new or updated reviewer decision bound to the final model bytes and artifacts. Preserve superseded failures and decisions.
+- [X] Store the accepted record under `catalogue/agent-reviews/`, validate it and generate the approval entry. Coordinator integration requires no human scientific sign-off or further user approval.
+- [X] Confirm approval refers to the exact intended formulation and supported interfaces/parameter/protocol scope. Keep experimental validation separately assessed; no experimental match is required merely to illustrate an otherwise verified law.
 
 ```sh
 python3 -B -m atlas.agent_review catalogue/agent-reviews/MODEL-agent-v1.json --for-approval
@@ -179,3 +179,7 @@ Historical2Novemberblock remains recorded above; user supplied finalPDF. AllE0/E
 ## Source-stage closure — 2026-11-03
 
 E2/E3 source-stage evidence: source-v2 complete crosswalk; capability-v2 and controlled-time-qualification-v1 source design/implementation; candidate-v1 dossier and preserved revision identities; reference-v1/v2 and independent review-numerical-v1/v2; review-v4 exact source/prospective-plan acceptance (manifest 925efc46579dd73ff5f16a22dac72f6d6c473042edf9ba62102a5dc7dfc657a2). Thirty-two rate comparisons and eight full-state Python histories pass original bounds. Generic and model generators have source-only checks. E4–E8 remain unchecked: no compiled execution, E5 approval or browser/live qualification.
+
+## Current qualification status — 4 November 2026
+
+E4/E5 complete; see execution-v1 and scientific-review-v1. Exact nine-item agent record and 270 supporting bindings validate. Full normal package and actual browser qualification remain unfinished; no live delivery is claimed. Historical status paragraphs above retain their original phase context.

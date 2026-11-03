@@ -1,0 +1,32 @@
+{
+  "identity": "controlled-path-refresh-release-hook-source-review-v1",
+  "reviewer": "/root/vibe_oracle_review",
+  "decision": "accepted-source-hooks-conditional-on-separate-actual-build-acceptance",
+  "checks": [
+    {
+      "path": "tools/build_web.py",
+      "only_exact_engine_path_changes": true,
+      "before_sha256": "dc93e8a2e4c67cf524f2d11a0c4dc00baab31458b61c717505229a67dd9e2415",
+      "after_sha256": "757e6f9c9b6e0916b0b789be2f1b63b5efa069c10f37ac2ba0cf54157c52fa58"
+    },
+    {
+      "path": ".github/workflows/pages.yml",
+      "only_exact_engine_path_changes": true,
+      "before_sha256": "cd3e91277f4abae8afa500119793bb5e63f3a522e3129120541e56fbbef7a87a",
+      "after_sha256": "4fd5db8890bbac8e1e0e1eb9ad74b61d24c5a1a4f3d703f7c9dea1bde32939d9"
+    },
+    {
+      "path": ".github/workflows/qualification.yml",
+      "only_exact_engine_path_changes": true,
+      "before_sha256": "d13fee8836f4a37639770f238e12d813a7a3b9690e9b048be3704d97f6b91eba",
+      "after_sha256": "d955e0f3580e96203faef2dc6655965fd440a9b7521743de6e3f2707d5bcb149"
+    }
+  ],
+  "blocking_findings": [],
+  "scope": "Two bundler defaults and three explicit workflow build arguments only. Every command, gate, flag and remaining byte exact.",
+  "limitations": [
+    "No remote CI or build executed by this review.",
+    "New default paths remain ineligible until actual pending qualifications receive genuine separate per-engine acceptance and finalize."
+  ],
+  "compiled_calls": 0
+}

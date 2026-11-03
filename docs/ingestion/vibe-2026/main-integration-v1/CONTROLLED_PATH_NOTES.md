@@ -1,0 +1,21 @@
+# Prospective post-merge controlled-path qualification
+
+Design notes only, written while the full-package-v2 operation consumes the frozen live helper. No live helper, plan, package input, model, workflow, native/Wasm artifact or build was modified or executed. The actual merged checkout does not yet exist; this packet cannot authorize execution.
+
+Read-only comparison of base `31125e2e809dad1af8dd30805af7b8c2937197d4` with retained upstream commit `ac22788b918a47c837e61ddd76bde5894b35cc5e` finds exactly two additions intersecting the 248-pin controlled-path closure: `models/s-clay1.json` and `tests/fixtures/current-sixteen-sclay1-v1.json`. There are no upstream changes under `atlas/`, `schemas/`, `cpp/` or `cmake/`, nor to the original controlled-path generator or its five bound contract-test Python sources. Existing scientific model approvals, original request files, numerical settings and thresholds remain unchanged.
+
+The narrow continuation after the coordinator's explicit terminal-package/merge handoff is:
+
+1. Preserve the exact current helper, plan-v4, source-v3 manifest, source review and execution-v1 engines/receipts/build reviews. Verify archived hashes and recoverability before editing. Do not rewrite any historical packet or approval.
+2. Change four literal families only: plan-v4 to plan-v5 (one path and one identity), `PACKET/'execution-v1'` to `PACKET/'execution-v2'` (six occurrences), and `.local/controlled-path-refresh-v1/` to `.local/controlled-path-refresh-v2/` (three occurrences).
+3. Keep `INTERFACE+'execution-v1/check_parity_v2.py'` and `INTERFACE+'execution-v1/source-freeze-v2.json'` unchanged: these identify original numerical gates. A global replacement of `execution-v1` would incorrectly retarget historical evidence.
+4. Recompute the real closure from the actual merged checkout. The anticipated change is two new source pins plus the literal-only helper hash; all other old pins should be identical. The expected count is 250, subject to checking the actual merge. Stop and explain any other difference before freezing.
+5. Freeze a new source/plan identity and exact reversal proof before observing compiled output. Keep original commands, cases, gate dictionaries, model definitions, reference sources and settings. Permit only new output/build path literals in the command corpus.
+6. Obtain independent prospective source acceptance. The coordinator then repeats the existing native-first, explicit-target `--parallel 1` build/qualification sequence using exclusive execution-v2 directories. A prior success is not evidence for the newly merged closure.
+7. Obtain separate exact actual build acceptance for both fresh engines, then finalize the new receipts. Only afterward may the integration owner update build/package defaults and workflow engine locations to durable execution-v2 repository paths. Existing historical model/source receipt resolution remains required.
+
+`controlled-path-projection-v1.json` records a read-only hypothetical projection and independently reversible plan transformation. It is not a new executable plan and contains no qualification decision. `prepare_controlled_path_notes.py` generates only that design receipt, uses exclusive output creation, and never writes the production helper. Its reverse check proves identical old plan structure after removing the two added pins, restoring the helper hash and reversing the identity/output literals. All original numerical inputs/settings/gates and other old source hashes are preserved.
+
+No simpler continuation preserves the existing full-closure gate and the accepted command corpus. Reusing execution-v1 under a silently narrower source set would change the frozen policy; adding dynamic helper parameters or artifact-reuse policy would require a broader reviewed implementation. The small explicit version projection is the lower-risk continuation. Four small serial builds may produce byte-identical artifacts, but only fresh actual receipts and independent acceptance establish that outcome.
+
+Resource status: no temporary build tree, process or compiled artifact was created. Only this new design packet was written. Existing package inputs remain untouched and belong to the active coordinator operation. Future execution-v2 builds/cleanup remain coordinator-owned after explicit handoff.

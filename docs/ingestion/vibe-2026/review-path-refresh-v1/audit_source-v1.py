@@ -1,0 +1,50 @@
+"""Independent prospective source audit; no build/model/module calls."""
+from pathlib import Path
+import hashlib,json,sys,importlib.util,subprocess,textwrap,ast
+W=Path('/private/tmp/atlas-vibe2026-controlled-time-v1');O=Path(__file__).resolve().parent;P=W/'docs/ingestion/vibe-2026/controlled-path-refresh-v1';BASE='31125e2e809dad1af8dd30805af7b8c2937197d4'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def load(p):return json.loads(p.read_text())
+checks=[]
+def check(x,label):
+ if not x:raise AssertionError(label)
+ checks.append(label)
+m=P/'source-manifest-v1.json';check(sha(m)=='3e7fdacf7d6ea3da294f2f48ca008330b6d8caf4774c3c868f4b83d013c5c4a9','exact prospective author freeze')
+for f in load(m)['files']:check(sha(W/f['path'])==f['sha256'] and (W/f['path']).stat().st_size==f['bytes'],'frozen author file '+f['path'])
+plan=load(P/'plan-v2.json');check(sha(P/'plan-v2.json')=='6a87f1751d573ec63a27c8750ababeef153b0d67b738ee4677033879ca48b0cc','exact prospective plan')
+for n,h in plan['source_closure'].items():check(sha(W/n)==h,'current full source pin '+n)
+check(len(plan['source_closure'])==144,'all144 current source dependencies')
+spec=importlib.util.spec_from_file_location('reviewed_refresh_helper',W/'tools/qualify_controlled_path_refresh.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
+check(helper.load_plan()==plan,'pure helper validates exact full closure and command corpus')
+rows=plan['commands'];builds=[r for r in rows if r['id'].endswith('-build')]
+check(len(builds)==4,'four builds only')
+for r in builds:check(r['argv'][-4:]==['--target','atlas_path_capability','--parallel','1'],'single explicit serial target '+r['id'])
+check(max(i for i,r in enumerate(rows) if '-native-' in r['id'])<min(i for i,r in enumerate(rows) if '-wasm-' in r['id']),'both native model groups before any Wasm')
+check(next(i for i,r in enumerate(rows) if r['id']=='contracts')<next(i for i,r in enumerate(rows) if r['id'].endswith('-configure')),'contracts before native configure')
+originals=[n for n in plan['source_closure'] if n.startswith('docs/ingestion/norsand-1993/e2-v3/') or n.startswith('docs/ingestion/hypoplastic-interface-2016/') or n.startswith('models/research/norsand/') or n.startswith('models/research/interface2016/') or n.startswith('tests/fixtures/controlled-path/')]
+for n in originals:check((W/n).read_bytes()==subprocess.check_output(['git','show',BASE+':'+n],cwd=W),'original unchanged source/case/checker/definition '+n)
+old=(P/'preimages/tools/build_controlled_path_web.py').read_text();new=(W/'tools/build_controlled_path_web.py').read_text();a=old.index('        qualification_path = current_receipt');b=old.index("    engine = destination/'engine-path'",a)
+check(old[a:b] in new,'entire historical NorSand current/fallback guard block exact')
+old=(P/'preimages/tools/build_interface2016_web.py').read_text();new=(W/'tools/build_interface2016_web.py').read_text();a=old.index('    receipt = json.loads((ROOT/BUILD_RECEIPT).read_text())');b=old.index('    with tempfile.TemporaryDirectory()',a);c=new.index('        receipt = json.loads((ROOT/BUILD_RECEIPT).read_text())');d=new.index('    with tempfile.TemporaryDirectory()',c)
+check(textwrap.dedent(old[a:b])==textwrap.dedent(new[c:d]),'historical interface source closure and exact original qualification/review guards retained')
+old=(P/'preimages/tools/test_interface2016_package.mjs').read_text();new=(W/'tools/test_interface2016_package.mjs').read_text();a=old.index('const pins=new Map(review.artifacts');b=old.index('for(const [extension,name]',a)
+check(old[a:b] in new,'historical interface package guard exact')
+check(new[new.index('for(const [extension,name]'):]==old[b:],'original package compiled tests and all numerical tolerances unchanged')
+source=(W/'tools/qualify_controlled_path_refresh.py').read_text()
+check("if not path.is_file():\n        return None" in source,'only absent refresh receipt dispatches to historical guard')
+check(source.count("accepted.get('qualification_pending_sha256') != sha(build/'qualification-pending.json')")==2,'finalize and packaging bind exact pending qualification bytes')
+check("accepted['reviewer_run'] == data['implementation_run']" in source and "accepted['reviewer_run'] == pending['implementation_run']" in source,'finalize and packaging reject self-review')
+check("accepted.get('blocking_findings') != []" in source,'unresolved blocking findings reject')
+check("if set(binding['commands'])" in source and "if set(binding['results'])" in source and "if set(binding['build_metadata'])" in source,'exact command/result/compiler metadata keysets required')
+check("check_backend_identity(key, binding['artifacts'], binding['results'])" in source,'actual backend reports bind exact qualified artifacts and original requests')
+check("load_plan()\n        argv" in source and "    load_plan()\n    return collect()" in source,'full current source closure checked before each command and after run')
+check("if result.returncode:" in source and "raise RuntimeError('Frozen command failed" in source,'failed command stops admission with existing raw log/receipt retained')
+# Profile metadata only: source-backed lineage links, no scientific changes.
+a=load(W/'docs/ingestion/vibe-2026/profile-v1/profile-data-v2.json');b=load(W/'docs/ingestion/vibe-2026/profile-v3/profile-data.json');originalprofile=dict(b);related=b.pop('related')
+check(a==b,'reader profile-v3 only adds related links')
+check(related==['hypoplastic-clay-2013','hypoplastic-thermal-ma-2017'],'two precise clay/thermal lineage links')
+check('Earlier 2013/2017 author manuscripts remain useful lineage' in (W/'docs/ingestion/vibe-2026/source-v2/README.md').read_text(),'lineage explicitly source-backed; earlier equations distinct')
+s=(W/'web/model-profile-data.mjs').read_text();profiles=json.loads(s[s.index('=')+1:].strip().removesuffix(';'))
+check(profiles['vibe-2026']==originalprofile,'installed VIBE reader profile exact v3')
+for n in related:check(n in profiles,'related target exists '+n)
+(O/'source-results.json').write_text(json.dumps(dict(scope='prospective source-only eligibility; no actual build/model results',checks=checks,count=len(checks),author_manifest_sha256=sha(m),plan_sha256=sha(P/'plan-v2.json'),compiled_calls=0),indent=2)+'\n')
+print('Independent prospective source checks:',len(checks))

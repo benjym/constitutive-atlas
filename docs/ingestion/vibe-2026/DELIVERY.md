@@ -10,12 +10,12 @@ Follow `docs/MODEL_DELIVERY_CHECKLIST.md` from the repository root; this ledger 
 - Public profile / content provenance: `web/model-profile-data.mjs` entry, packet draft and [content contract](../../PUBLIC_MODEL_PROFILES.md)
 - Detailed model-local checklist: [CHECKLIST.md](CHECKLIST.md) (copy every E0–E8 check and exit condition; retain evidence per item)
 - Canonical checklist at assignment: docs/MODEL_DELIVERY_CHECKLIST.md SHA256 3b7448281ec0429a1425f71d53a1d9f048900442dca0ab8c30735b800f499efb, 2026-11-02.
-- Candidate definition path / SHA-256: isolated models/research/vibe/vibe-2026-explicit-appendix-a.json, revision4 SHA256 a7d3f0f61ff6654f1dc924178a3551a740ca39212a99813c2b9ce5c15b16c987. Draft not E5 approved.
+- Candidate definition path / SHA-256: isolated models/research/vibe/vibe-2026-explicit-appendix-a.json, revision4 SHA256 a7d3f0f61ff6654f1dc924178a3551a740ca39212a99813c2b9ce5c15b16c987. E5 accepted; exact review record below.
 - Worktree / authorized path whitelist: docs/ingestion/vibe-2026/ and ignored private sources; active isolated /private/tmp/atlas-vibe2026-controlled-time-v1 on codex/vibe2026-controlled-time-v1. Separately claimed generic runtime and StageB interface paths are recorded on the board. Historical delivery-v1 worktree was removed after its retained local checkpoint.
 - Implementation run ID(s): /root (orthotropic successor); source specialist /root/vibe_source
-- Independent review run ID: /root/vibe_gap_review, accepted bounded handoff; manifest0a7c29bc8547c1ebfa3cd366dbc07c06e748bc56142e651f45791299518f3280 (source/capability gap review only). E5 remains unstarted; the research candidate and prospective qualification source now exist. Additional independent reviews are indexed below.
-- Build/execution owner and handoff: coordinator /root; no slot claimed, no native/Wasm/vendor/model execution or build attempted.
-- Remote authorization reference (or pending): current user next-model checklist end-to-end instruction continues accepted same commit/push/live loop.
+- Independent review run ID: /root/vibe_gap_review, accepted bounded handoff; manifest0a7c29bc8547c1ebfa3cd366dbc07c06e748bc56142e651f45791299518f3280 (source/capability gap review only). Historical source-only review; the separate E5 run is /root/vibe_scientific_review. Additional independent reviews are indexed below.
+- Build/execution owner and handoff: coordinator /root; EXEC-vibe2026-controlled-time-v1 claimed after the user released the slot; native and Wasm qualification passed serially.
+- Remote authorization reference (or pending): Pending a new explicit remote instruction under the current AGENTS.md local-commit-only rule; complete E7 and prepare the exact local release first.
 
 Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidence beside each phase and link the detailed check results. Keep MODEL-vibe-2026 open until E8 is verified; specialist task completion closes only that task.
 
@@ -23,18 +23,18 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 - [X] **E1 — Sources:** readable complete law, durable private receipts, source locators, version reconciliation and rights.
 - [X] **E2 — Contract:** complete v0.3 crosswalk, preparation/time/transaction/control contract and prospectively frozen references/gates; capabilities resolved.
 - [X] **E3 — Transcription:** exact candidate validates/generates; independent equation/reference checks pass.
-- [ ] **E4 — Native/Wasm:** correct profile/interfaces, complete frozen numerical gates, rollback/recovery/restarts, useful preset, parity and regressions pass.
-- [ ] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
+- [X] **E4 — Native/Wasm:** correct profile/interfaces, complete frozen numerical gates, rollback/recovery/restarts, useful preset, parity and regressions pass.
+- [X] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
 - [ ] **E6 — Atlas:** qualified model/approval/source/evidence and source-backed public profile integrated through normal generation; profile-coverage check passes, prior models preserved and public metadata/current database checked.
 - [ ] **E7 — Packaged website:** public profile/card, parameter units, example guidance, related/laboratory links and narrow-screen layout inspected; real controls/plots, technical source/review disclosure, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
 - [ ] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works; task-owned cleanup verified and any retained resources handed off explicitly.
 
 ## Current handoff
 
-- Current phase / overall state: E0–E3 source stages complete. Exact revision4 candidate, generic runtime, main-laboratory interface source, eight public requests and reader-profile draft independently reviewed. Full MODEL remains open at E4.
-- Current owner: coordinator /root; independent source review-v4 by /root/vibe_gap_review, numerical reviews by /root/vibe_numerical_review. Specialist source/reference and collector handoffs accepted.
-- Blocker / missing evidence: MDv6 coordinator retains the shared serial execution slot (latest preflight2 passed; configure/serial builds still owned there). VIBE has no compiled artifacts/results, E5 approval, public installation, actual browser check or live release.
-- Smallest next action: obtain genuine release and fresh named execution handoff, pin source/toolchain closure, build and qualify generic native capability first, then VIBE native; matching Wasm follows understood native results. Original numerical gates remain unchanged.
+- Current phase / overall state: E0–E5 complete. E6 registry, manifest, profile and exact qualified engine installed in isolated worktree; full normal atlas package running. E7 actual browser qualification remains pending, E8 not live.
+- Current owner: coordinator /root; independent scientific approval by /root/vibe_scientific_review, with separate source reviews of the oracle correction, CI and historical preservation.
+- Blocker / missing evidence: no backend scientific blocker. Full package and actual browser gates are unfinished; no remote action has been taken.
+- Smallest next action: finish the normal package, qualify the main atlas in a real browser, preserve evidence and clean task-owned resources, then prepare the scoped local release commit.
 - Review-v4 manifest: 925efc46579dd73ff5f16a22dac72f6d6c473042edf9ba62102a5dc7dfc657a2; coordinator verified all57 inputs and8 outputs. Accepts source eligibility only, not E4/E5/browser/live status.
 - Retained failures: original acquisition failures, transcription revisions, generic default C3 failure and separately identified stricter study, and reviewer test corrections are preserved with exact preimages. No gate was weakened to obtain acceptance.
 
@@ -48,13 +48,13 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 ## Review and integration identity
 
-- Accepted agent-review record / hash:
+- Accepted agent-review record / hash: catalogue/agent-reviews/vibe-2026-appendix-a-agent-v1.json; SHA25617ba51ff302dd69c5f3bf651a64b47dcc7bbe2425461eb2a9d985f1fd63bfffe; all nine items pass, 270 supporting artifacts.
 - Approved model path / hash / scope:
-- Registry entry:
-- Native / Wasm toolchain and artifact receipts:
+- Registry entry: exact generated VIBE approval appended in isolated catalogue/approved-models.json; other entries preserved.
+- Native / Wasm toolchain and artifact receipts: execution-v1/{native-generic-artifacts,native-vibe-artifacts,wasm-generic-artifacts,wasm-model-artifacts}.json and scientific-review-v1/backend-freeze-v1.json.
 - Packaged engine / catalogue hash:
 - Public-profile coverage check / packaged browser inspection:
-- Changed bytes after review (none, or new review/qualification):
+- Changed bytes after review (none, or new review/qualification): model and runtime unchanged. Stage C installs approval/profile/assets and changes the package default to the exact qualified asset directory. Five historical source bytes are archived through additive redirects, independently accepted in review-preservation-v1; CI source accepted in review-ci-v1.
 
 ## Deployment receipt
 
@@ -128,3 +128,17 @@ StageB mainatlas parentauthored source has37puretransportchecks passing, zeroABI
 Final collector source manifest bd73a00ace2f559f4396a4c8866c6d46bce43a4e275b7455255a9b90c7eef22b and plan b70950d1981602d9bc053f708214fde7c93efda1dde97420b10295c015d890da freeze32 rate references, eight complete public histories, seven invalid contexts, original tolerances, raw refusal/rollback/recovery, restart/replay and native/Wasm parity. Profile-data-v2 is the intended reader draft; StageB source-v3 uses reader parameter guidance. Neither is installed publicly.
 
 The active controlled-time worktree is retained for E4 resumption and a local source checkpoint; root packet bytes are copied there with exact-hash verification. Private original paper and unique numerical/review evidence are retained. No task preview process, native/Wasm build cache or compiled artifact exists to clean. No push/deploy/remote CI occurred. Historical handoffs below/above retain their original phase context; this current handoff supersedes their status.
+
+## Execution resumed — 4 November 2026
+
+User explicitly handed the idle serial slot to VIBE. The former temporary checkout had disappeared; restored exactly from retained commit aa5259dbbc17d545f4c60d98139357143c27afa8, then verified84 StageA/model-collector source pins. Fresh complete process inventory found no competing compiler/material run. Slot HELD by /root; execution-v1/claim.json records scope. Native generic configure and one atlas_controlled_time_capability --parallel1 build passed.
+
+First native six-group qualification: five groups pass (transport/clock, capacity, invalid/alias/sentinels, late-domain rollback/recovery, restart/budget/depth); independent corpus group fails on synthetic e. Original reference generator sums all six strain components instead of the first three normal components required by trace. Failure and raw buffers retained in execution-v1/. A new corrected independent corpus study and independent review are in progress; no source runtime/model or tolerance change is proposed. VIBE material execution and Wasm remain unattempted.
+
+## Backend approval and integration — 4 November 2026
+
+E4 passed the corrected generic native six-group corpus, 48 generic Wasm cases, 32 VIBE rate points and eight full-state histories through both native and Wasm, exact replay/restart, invalid input rollback/recovery and native/Wasm parity. Original corpus failure was an independently accepted trace-oracle correction; original bytes and failure retained. Emscripten's initial cache-permission failure, rejected incomplete smoke/preflight invocations and all prior failures remain in execution-v1. No numerical bound was relaxed. Ordinary native/Wasm smoke and the portable CI preflight pass; no remote CI ran.
+
+E5 accepted by separate /root/vibe_scientific_review. Scientific manifest285d3fc37ed16a166b0dff3c79e581857d401876a3ea3388fa3f6fb814e123e3; backend freeze9006182edb80fde1c2563ecfa8f35616d814fad20dd5c6ee787c998196216c26. Scope remains fixed-spatial zero-spin, positive suction, OA>=1; numerical qualification is not experimental validation. Public qualification receiptb5977050d04a91dba0370a818ebc1a17991d8243d3a5aa03eb1d670fdcc413c3 binds actual eight public results, refusal/recovery, 94 production sources and exact engine assets.
+
+Active task-owned resources: isolated worktree and six native/Wasm build directories, .local/vibe-site-v1 package/build/engine inputs, task-owned Playwright session vibe2026 (pid10029). Retain while package/browser checks consume them; preserve required artifacts and verify archive recovery before disposing caches. Other browser sessions/processes are outside this task.

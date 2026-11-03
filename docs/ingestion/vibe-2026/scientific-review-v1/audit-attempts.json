@@ -1,0 +1,24 @@
+[
+  {
+    "script": "audit_backend.py",
+    "backend": "native",
+    "status": "pass"
+  },
+  {
+    "script": "audit_backend.py",
+    "backend": "wasm",
+    "status": "failed-before-numerical-check",
+    "error": "FileNotFoundError: Wasm stores point results in hashed events.jsonl rather than points.json. Reviewer file-layout assumption; no backend failure or acceptance-bound change."
+  },
+  {
+    "operation": "prepare v2 reviewer script and attempt ledger",
+    "status": "script-written-ledger-write-failed",
+    "error": "NameError json not imported in one-off file-preparation snippet; no scientific execution affected. Corrected by importing json in separate receipt writer."
+  },
+  {
+    "script": "audit_backend_v2.py",
+    "backend": "wasm",
+    "status": "pass",
+    "change": "Use Wasm journal point-pass records and raw-domain-case labels; original numerical gates and ABI call-pair checks unchanged."
+  }
+]

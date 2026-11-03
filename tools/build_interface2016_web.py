@@ -54,41 +54,52 @@ def bundle(destination, build):
     example = json.loads((ROOT/EXAMPLE).read_text())
     if example['model'] != MODEL or example['definition_sha256'] != sha(definition):
         raise ValueError('Interface example definition differs')
-    receipt = json.loads((ROOT/BUILD_RECEIPT).read_text())
-    if receipt.get('schema_version') != 'interface2016-qualified-build-v1' or receipt.get('status') != 'passed' or receipt.get('model') != MODEL or receipt.get('definition_sha256') != sha(definition) or not receipt.get('commands') or not receipt.get('toolchain'):
-        raise ValueError('Incomplete interface qualified build receipt')
-    closure = receipt.get('source_closure', {})
-    required = {p.relative_to(ROOT).as_posix() for p in (ROOT/'atlas').rglob('*.py') if '__pycache__' not in p.parts}
-    required.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'schemas').rglob('*.json'))
-    required.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'cpp/include/atlas').rglob('*.hpp'))
-    required.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'cpp/scalar-functions').rglob('*') if p.is_file())
-    required.update(['cmake/controlled-path/CMakeLists.txt', 'cmake/AtlasScalarFunctions.cmake', 'tools/generate_controlled_path.py', approval['definition']['path']])
-    if not required.issubset(closure):
-        raise ValueError('Interface qualified source closure omits current dependencies')
-    for name,digest in closure.items():
-        path = Path(name)
-        if path.is_absolute() or '..' in path.parts or sha(ROOT/path) != digest:
-            raise ValueError('Interface qualified source closure changed: '+name)
-    evidence = {}
-    for key,filename in [('qualification','qualification.json'),('independent_review','build-review.json')]:
-        pin = receipt.get(key,{})
-        expected_path = PACKET+'execution-v1/'+filename
-        if pin.get('path') != expected_path or pin.get('sha256') != sha(ROOT/expected_path):
-            raise ValueError('Interface build evidence pin changed: '+key)
-        evidence[key] = json.loads((ROOT/expected_path).read_text())
-    qualification, accepted = evidence['qualification'], evidence['independent_review']
-    binding = qualification.get('binding', {})
-    if qualification.get('status') != 'passed' or binding.get('model_sha256') != sha(definition) or binding.get('artifacts') != receipt['artifacts'] or binding.get('source_closure') != closure or not isinstance(qualification.get('implementation_run'), str) or not qualification['implementation_run'].strip():
-        raise ValueError('Interface qualification binding incomplete')
-    if accepted.get('status') != 'accepted' or accepted.get('binding') != binding or not isinstance(accepted.get('reviewer_run'), str) or not accepted['reviewer_run'].strip() or accepted['reviewer_run'] == qualification['implementation_run']:
-        raise ValueError('Interface independent build review missing or changed')
-    for group in ['cases','results']:
-        if not binding.get(group):
-            raise ValueError('Interface qualification must bind concrete '+group)
-        for name,digest in binding[group].items():
+    from qualify_controlled_path_refresh import validate_refresh
+    refresh = validate_refresh(build, MODEL)
+    if refresh is not None:
+        qualification = refresh['qualification']
+        closure = qualification['binding']['source_closure']
+        receipt = dict(status='passed', definition_sha256=sha(definition),
+                       artifacts={name:digest for name,digest in qualification['binding']['artifacts'].items()
+                                  if name.endswith(('.mjs', '.wasm'))},
+                       source_closure=closure, refresh_qualification_sha256=sha(build/'refresh-qualification.json'))
+        receipt['artifacts']['generated/path_catalogue.json'] = qualification['binding']['generated']['path_catalogue.json']
+    else:
+        receipt = json.loads((ROOT/BUILD_RECEIPT).read_text())
+        if receipt.get('schema_version') != 'interface2016-qualified-build-v1' or receipt.get('status') != 'passed' or receipt.get('model') != MODEL or receipt.get('definition_sha256') != sha(definition) or not receipt.get('commands') or not receipt.get('toolchain'):
+            raise ValueError('Incomplete interface qualified build receipt')
+        closure = receipt.get('source_closure', {})
+        required = {p.relative_to(ROOT).as_posix() for p in (ROOT/'atlas').rglob('*.py') if '__pycache__' not in p.parts}
+        required.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'schemas').rglob('*.json'))
+        required.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'cpp/include/atlas').rglob('*.hpp'))
+        required.update(p.relative_to(ROOT).as_posix() for p in (ROOT/'cpp/scalar-functions').rglob('*') if p.is_file())
+        required.update(['cmake/controlled-path/CMakeLists.txt', 'cmake/AtlasScalarFunctions.cmake', 'tools/generate_controlled_path.py', approval['definition']['path']])
+        if not required.issubset(closure):
+            raise ValueError('Interface qualified source closure omits current dependencies')
+        for name,digest in closure.items():
             path = Path(name)
             if path.is_absolute() or '..' in path.parts or sha(ROOT/path) != digest:
-                raise ValueError('Interface qualification '+group+' changed: '+name)
+                raise ValueError('Interface qualified source closure changed: '+name)
+        evidence = {}
+        for key,filename in [('qualification','qualification.json'),('independent_review','build-review.json')]:
+            pin = receipt.get(key,{})
+            expected_path = PACKET+'execution-v1/'+filename
+            if pin.get('path') != expected_path or pin.get('sha256') != sha(ROOT/expected_path):
+                raise ValueError('Interface build evidence pin changed: '+key)
+            evidence[key] = json.loads((ROOT/expected_path).read_text())
+        qualification, accepted = evidence['qualification'], evidence['independent_review']
+        binding = qualification.get('binding', {})
+        if qualification.get('status') != 'passed' or binding.get('model_sha256') != sha(definition) or binding.get('artifacts') != receipt['artifacts'] or binding.get('source_closure') != closure or not isinstance(qualification.get('implementation_run'), str) or not qualification['implementation_run'].strip():
+            raise ValueError('Interface qualification binding incomplete')
+        if accepted.get('status') != 'accepted' or accepted.get('binding') != binding or not isinstance(accepted.get('reviewer_run'), str) or not accepted['reviewer_run'].strip() or accepted['reviewer_run'] == qualification['implementation_run']:
+            raise ValueError('Interface independent build review missing or changed')
+        for group in ['cases','results']:
+            if not binding.get(group):
+                raise ValueError('Interface qualification must bind concrete '+group)
+            for name,digest in binding[group].items():
+                path = Path(name)
+                if path.is_absolute() or '..' in path.parts or sha(ROOT/path) != digest:
+                    raise ValueError('Interface qualification '+group+' changed: '+name)
     with tempfile.TemporaryDirectory() as temporary:
         generate(temporary, [definition])
         expected = (Path(temporary)/'path_catalogue.json').read_bytes()
@@ -103,7 +114,8 @@ def bundle(destination, build):
         if hashlib.sha256(data).hexdigest() != expected_digest:
             raise ValueError('Interface engine differs from reviewed executable: '+str(source))
         sources[name] = data
-    generated_pins = [digest for name,digest in receipt['artifacts'].items() if name.endswith('/generated/path_catalogue.json')]
+    generated_pins = ([qualification['binding']['generated']['path_catalogue.json']] if refresh is not None else
+                      [digest for name,digest in receipt['artifacts'].items() if name.endswith('/generated/path_catalogue.json')])
     if generated_pins != [hashlib.sha256(expected).hexdigest()]:
         raise ValueError('Interface generated catalogue is not pinned by build receipt')
     namespace = destination/NAMESPACE
@@ -118,10 +130,17 @@ def bundle(destination, build):
     shutil.copyfile(ROOT/EXAMPLE, engine/'example.json')
     shutil.copyfile(review_path, engine/'review.json')
     (engine/'approval.json').write_text(json.dumps(approval, indent=2)+'\n')
-    shutil.copyfile(ROOT/BUILD_RECEIPT, engine/'build-receipt.json')
+    if refresh is None:
+        shutil.copyfile(ROOT/BUILD_RECEIPT, engine/'build-receipt.json')
+    else:
+        (engine/'build-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
     shutil.copyfile(ROOT/PACKAGE_CASES, engine/'package-cases.json')
-    shutil.copyfile(ROOT/(PACKET+'execution-v1/qualification.json'), engine/'qualification.json')
-    shutil.copyfile(ROOT/(PACKET+'execution-v1/build-review.json'), engine/'build-review.json')
+    if refresh is None:
+        shutil.copyfile(ROOT/(PACKET+'execution-v1/qualification.json'), engine/'qualification.json')
+        shutil.copyfile(ROOT/(PACKET+'execution-v1/build-review.json'), engine/'build-review.json')
+    else:
+        (engine/'qualification.json').write_bytes(refresh['qualification_bytes'])
+        (engine/'build-review.json').write_bytes(refresh['review_bytes'])
     shutil.copyfile(ROOT/(PACKET+'source-v2/receipts.json'), engine/'source-receipt.json')
     model = json.loads(definition.read_text())
     report = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Fully rough interface sources and scope</title><style>body{max-width:85ch;margin:2rem auto;padding:1rem;font:16px/1.6 system-ui}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}</style><h1>Fully rough granular interface</h1><p><a href="../../index.html#laboratory?model='+MODEL+'">Main atlas laboratory</a> · <a href="model.json">Exact definition</a> · <a href="review.json">Independent checklist</a> · <a href="approval.json">Approval</a> · <a href="example.json">Complete starting example</a> · <a href="source-receipt.json">Source provenance</a></p><p>Source-reconciled fully rough HvWE2016 law with VW96 host closure; local effective Cauchy stress, fixed local axes and zero spin; no pore-pressure law. Prescribed normal compression strain and two source shear angles are dimensionless. A shear-angle rate gives half the engineering shear stretching. There is no finite-slip/thickness adapter, CNL/CNS controller, contact opening/recontact or finite-rotation transport.</p><p>The complete state is local normal stress, shared in-plane normal stress, two shear tractions and void ratio. Complete state and recovered Mandel stress are exported at every output. No experimental calibration or validation is claimed. Raw copyrighted papers and vendor code are not redistributed or executed.</p>'
