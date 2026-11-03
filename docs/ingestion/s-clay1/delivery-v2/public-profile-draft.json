@@ -1,0 +1,55 @@
+{
+  "catalogue_id": "s-clay1",
+  "availability": "reading-only draft, not integrated",
+  "profile": {
+    "title": "S-CLAY1 — Wheeler et al. (2003)",
+    "summary": "A soft-clay plasticity model that represents directional yielding and changes in fabric during permanent deformation.",
+    "introduction": "Soft clay can retain a preferred direction from its deposition and loading history. S-CLAY1 describes this plastic anisotropy with an inclined yield surface: the boundary between elastic response and further permanent deformation changes with the material’s internal fabric.",
+    "behaviours": [
+      [
+        "Directional yielding",
+        "The stress needed to reach yielding depends on the loading direction relative to the clay’s fabric. A tilted yield surface distinguishes this response from an isotropic clay idealization."
+      ],
+      [
+        "Fabric evolution",
+        "Plastic volumetric and shear deformation change the fabric and therefore the inclination of the yield surface. The hardening law assigns different target directions to these two contributions."
+      ],
+      [
+        "Yield-surface size",
+        "Plastic volumetric deformation also changes the size of the yield surface. This size change is distinct from its rotation."
+      ]
+    ],
+    "parameters": [],
+    "parameterNote": "The original paper is needed for a complete, consistent material parameter set and its calibration conventions. No laboratory preset is supplied for this entry.",
+    "stateLabels": {},
+    "preparation": "Stress, volume, yield-surface size and initial fabric must describe the same prepared material. The presentation illustrates an initially cross-anisotropic fabric aligned with the vertical axis; it does not supply a complete general starting-state procedure.",
+    "scope": "This reading profile identifies the original2003 S-CLAY1 formulation for soft clay using effective stress. A public laboratory run is unavailable for this entry.",
+    "limits": "The original S-CLAY1 formulation and S-CLAY1S are different: S-CLAY1S adds bonding and its degradation. Creep extensions and altered yield surfaces also require their own definitions. A Modified Cam Clay parameter set cannot supply missing fabric parameters or initial conditions.",
+    "references": [
+      {
+        "label": "Wheeler, Näätänen, Karstunen and Lojander (2003), An anisotropic elastoplastic model for soft clays",
+        "url": "https://doi.org/10.1139/t02-119"
+      },
+      {
+        "label": "Karstunen (2003), Modelling plastic anisotropy and destructuration: S-CLAY1 and S-CLAY1S models",
+        "url": "https://www.mycrisp.com/cugm2003/m-karstunen.pdf"
+      }
+    ],
+    "related": [
+      "modified-cam-clay",
+      "hypoplastic-clay-2014"
+    ],
+    "contentSources": [
+      "docs/ingestion/s-clay1/README.md",
+      "docs/ingestion/s-clay1/delivery-v2/README.md"
+    ]
+  },
+  "provenance": {
+    "identity": "Prior source-receipts.json; fresh institutional responses acquisition-v2.json",
+    "directional_yielding": "Karstunen presentation PDF2 lower/PDF5 lower",
+    "fabric_evolution_and_size": "PDF3 lower",
+    "initial_fabric": "PDF9 upper; complete initialization remains missing",
+    "variant_separation": "PDF6–7 and source abstract, original versus S-CLAY1S",
+    "parameters_empty": "No executable definition and complete original parameter/calibration source unavailable"
+  }
+}

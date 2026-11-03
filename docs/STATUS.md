@@ -1,5 +1,7 @@
 # Current project status — 2 November 2026
 
+Current S-CLAY1 integration — 3 November 2026: original Wheeler et al. (2003) constant-M full tensor law is independently agent-approved at exact definition 2d1518c1. The ordinary generation now includes 16 definitions (14 effective-stress, 2 total-stress); all prior definitions are unchanged. Full native/Wasm source-corpus replay and strict 43-case/16-model parity pass. Public profile and monotonic 1%/100-step drained/undrained examples are integrated in the isolated delivery checkout. Package/browser/live delivery remain open; no experimental validation is claimed. See docs/ingestion/s-clay1/DELIVERY.md.
+
 Current NorSand delivery —2November2026: the exact Jefferies1993 active monotonic drained axial law is source-mapped and independently approved. Verified application3873a48b passes all six required CI/Pages jobs and fresh58native+58Wasm requests. Actual23live assets match the tested1016file upload; the41point/threeplot live run, controls/history/reset/latest/recovery, real export/import/replay, three tamper negatives and desktop/mobile pass with zero browser/network failures. This restricted controlled-path formulation is separate from ordinary strain-path counts; no elasticity, cyclic/general3D or experimental validation is claimed. [Delivery ledger](ingestion/norsand-1993/DELIVERY.md) retains failures and final concurrent-release-preserving closeout receipts.
 
 ## Current clay2013 delivery checkpoint — 2 November 2026
