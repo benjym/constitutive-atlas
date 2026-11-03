@@ -8,8 +8,9 @@ void require(bool value,const char*message){if(!value)throw std::runtime_error(m
 int main(){
     try{
         const char* profile=std::getenv("ATLAS_NATIVE_FIXTURES");
-        require(!profile||(std::string(profile)=="explicit-gis20-v2"||std::string(profile)=="explicit-gis20-occ-v3"||(std::string(profile)=="explicit-gis20-occ-restart-v4"||std::string(profile)=="explicit-gis20-occ-restart-duncan-v5")),"unknown native fixture profile");
+        require(!profile||(std::string(profile)=="explicit-gis20-v2"||std::string(profile)=="explicit-gis20-occ-v3"||(std::string(profile)=="explicit-gis20-occ-restart-v4"||(std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"||std::string(profile)=="explicit-gis20-occ-restart-duncan-sclay1-v6"))),"unknown native fixture profile");
         const bool explicit_fixtures=profile!=nullptr;
+        const bool sclay_fixture=profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-sclay1-v6";
         std::cout<<(explicit_fixtures?"Explicit valid-domain/GIS-depth20 fixtures":"Strict original default fixtures")<<"; models="<<atlas::models().size()<<'\n';
         // Independently finite-difference each generated residual/rate Jacobian.
         // This checks the AD implementation rather than merely matching its code.
@@ -27,15 +28,24 @@ int main(){
                 }
                 require(found,"GIS derivative fixture requires declared Omega state");
             }
-            if(profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"&&atlas::models()[model].id=="duncan-chang-1970-endpoint-average")z[6]=50000.;
+            if(profile&&(std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"||std::string(profile)=="explicit-gis20-occ-restart-duncan-sclay1-v6")&&atlas::models()[model].id=="duncan-chang-1970-endpoint-average")z[6]=50000.;
+            int fabric_offset=-1;
+            if(sclay_fixture&&atlas::models()[model].id=="s-clay1"){
+                for(const auto& f:atlas::models()[model].fields)if(f.name=="fabric"&&f.size==6)fabric_offset=f.offset;
+                require(fabric_offset>=0,"S-CLAY1 fabric field absent");
+                auto invalid=z;invalid[fabric_offset]+=1e-6;atlas::State values;atlas::Sym<double> probe;
+                require(!atlas::evaluate_model(int(model),invalid,zn,probe,p,values),"nondeviatoric fabric probe accepted");
+            }
             const int n=int(z.size());std::vector<atlas::Jet>x(n),xn(n),r;atlas::Sym<double>de;de.v={.00001,-.000005,-.000005,.000003,0,0};atlas::Sym<atlas::Jet>d;
             for(int i=0;i<n;++i){x[i]=atlas::Jet(z[i]);x[i].d[i]=scales[i];xn[i]=atlas::Jet(zn[i]);}
             for(int i=0;i<6;++i)d.v[i]=atlas::Jet(de.v[i]);
             require(atlas::evaluate_model(int(model),x,xn,d,p,r),"AD test state outside domain");
             for(int j=0;j<n;++j){
                 double h=1e-6;auto plus=z,minus=z;plus[j]+=h*scales[j];minus[j]-=h*scales[j];atlas::State rp,rm;
+                const bool fabric_normal=fabric_offset>=0&&j>=fabric_offset&&j<fabric_offset+3;
+                if(fabric_normal)for(int k=0;k<3;++k){plus[fabric_offset+k]-=h*scales[j]/3;minus[fabric_offset+k]+=h*scales[j]/3;}
                 require(atlas::evaluate_model(int(model),plus,zn,de,p,rp)&&atlas::evaluate_model(int(model),minus,zn,de,p,rm),"FD test outside domain");
-                for(int i=0;i<n;++i){double fd=(rp[i]-rm[i])/(2*h),ad=r[i].d[j];require(std::isfinite(ad)&&std::abs(fd-ad)<3e-5*std::max({1.,std::abs(fd),std::abs(ad)}),"AD/finite-difference residual Jacobian mismatch");}
+                for(int i=0;i<n;++i){double fd=(rp[i]-rm[i])/(2*h),ad=r[i].d[j];if(fabric_normal)for(int k=0;k<3;++k)ad-=scales[j]*r[i].d[fabric_offset+k]/(3*scales[fabric_offset+k]);require(std::isfinite(ad)&&std::abs(fd-ad)<3e-5*std::max({1.,std::abs(fd),std::abs(ad)}),"AD/finite-difference residual Jacobian mismatch");}
             }
         }
         // A fixed 90-degree frame rotation permutes xx/yy and changes shear
@@ -44,9 +54,9 @@ int main(){
         for(size_t m=0;m<atlas::models().size();++m){
             auto p=atlas::default_parameters(int(m)),z=atlas::initial_state(int(m));z[0]=105000;z[1]=95000;z[3]=1000;
             // OCC source admissibility: overconsolidated packing for this anisotropic prestress.
-            if(profile&&(std::string(profile)=="explicit-gis20-occ-v3"||(std::string(profile)=="explicit-gis20-occ-restart-v4"||std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"))&&atlas::models()[m].id=="original-cam-clay-sw-electronic-log-recovery-v1")
+            if(profile&&(std::string(profile)=="explicit-gis20-occ-v3"||(std::string(profile)=="explicit-gis20-occ-restart-v4"||(std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"||std::string(profile)=="explicit-gis20-occ-restart-duncan-sclay1-v6")))&&atlas::models()[m].id=="original-cam-clay-sw-electronic-log-recovery-v1")
                 z[6]=2.5+.16*(1-std::log(150000./1000.))-.04*std::log(100000./1000.);
-            const bool duncan_fixture=profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"&&atlas::models()[m].id=="duncan-chang-1970-endpoint-average";
+            const bool duncan_fixture=profile&&(std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"||std::string(profile)=="explicit-gis20-occ-restart-duncan-sclay1-v6")&&atlas::models()[m].id=="duncan-chang-1970-endpoint-average";
             if(duncan_fixture)z[6]=50000.;
             atlas::Sym<double>de;de.v={.0001,-.00002,.00001,.00003,.00001,-.00001};auto zr=z;
             if(atlas::models()[m].id=="ramberg-osgood-ansys242"){
@@ -55,12 +65,25 @@ int main(){
                 for(int j=0;j<6;++j)z[6+j]=eps[j];
                 zr=z;atlas::put_tensor(zr,6,rotate(atlas::tensor_from(z,6)));
             }
+            int rotated_fabric=-1;
+            if(sclay_fixture&&atlas::models()[m].id=="s-clay1"){
+                z=atlas::initial_state(int(m));zr=z;
+                for(const auto& f:atlas::models()[m].fields)if(f.name=="fabric"&&f.size==6)rotated_fabric=f.offset;
+                require(rotated_fabric>=0,"S-CLAY1 rotation fabric absent");
+                atlas::put_tensor(zr,rotated_fabric,rotate(atlas::tensor_from(z,rotated_fabric)));
+            }
             atlas::put_tensor(zr,0,rotate(atlas::tensor_from(z,0)));
             atlas::IntegrationSettings fixture_settings;
             if(explicit_fixtures&&atlas::models()[m].id=="research-hp-extracted-asbs-gis-2024-v03")fixture_settings.max_depth=20;
             auto a=atlas::integrate(int(m),z,de,p,fixture_settings),b=atlas::integrate(int(m),zr,rotate(de),p,fixture_settings);require(a.ok&&b.ok,"rotation integration failed");
             if(duncan_fixture)require(a.state.size()==7&&b.state.size()==7&&a.state[6]==50000.&&b.state[6]==50000.,"scalar maxhistory rotation fixture changed");
             auto want=rotate(atlas::tensor_from(a.state,0));for(int i=0;i<6;++i)require(std::abs(want.v[i]-b.state[i])<.01,"fixed-frame rotation covariance failed");
+            if(rotated_fabric>=0){
+                const auto fabric_want=rotate(atlas::tensor_from(a.state,rotated_fabric));
+                for(int i=0;i<6;++i)require(std::abs(fabric_want.v[i]-b.state[rotated_fabric+i])<1e-9,"fabric rotation covariance failed");
+                for(const auto& f:atlas::models()[m].fields)if(f.size==1&&!f.transient)require(std::abs(a.state[f.offset]-b.state[f.offset])<=2e-8*std::max(1.,std::abs(a.state[f.offset])),"scalar history rotation covariance failed");
+            }
+
         }
         // Hidden zero-history crossing: both midpoint estimates sample unloading
         // and agree exactly, yet the true endpoint is on the loading branch.

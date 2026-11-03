@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {loadControlScope,unsupportedReason} from './laboratory_control_scope.mjs';
 import {loadProfileAllocation,assertDeclaredOrdinaryFailure,declaredControlFailure,assertDeclaredControlFailure}from './laboratory_profile_policy.mjs';
 import {readFileSync,writeFileSync,mkdtempSync,existsSync} from 'node:fs';
 import {resolve,join} from 'node:path';
@@ -13,6 +14,7 @@ const rawJournal=[];
 function raw(role,name,args,output){rawJournal.push({role,name,args,raw:output});writeFileSync(outfile+'.raw.json',JSON.stringify(rawJournal)+'\n');return output;}
 const metadata=JSON.parse(readFileSync(resolve(wasmdir,'generated/models.json'),'utf8'));assert.ok(metadata.models.length>=1);
 const allocation=allocationFile?loadProfileAllocation(resolve(allocationFile),metadata):null;
+const controlScope=allocation?loadControlScope(metadata):null;
 let lastNativeStatus=null;
 const module=await(await import(pathToFileURL(resolve(wasmdir,'atlas.js')))).default();
 const wasm={ccall:(name,type,types,args)=>raw('wasm',name,args,module.ccall(name,type,types,args))};
@@ -52,7 +54,7 @@ for(const m of metadata.models){
    const s=mode==='current'?{...base,loading:createLoading(base)}:base;
    const rejection=allocation?.policy.legacy_contract_rejections.find(e=>e.model===m.id);if(rejection){checkRejected(mode+'/'+m.id+'/'+protocol,s,rejection);continue;}
    const row=check(mode+'/'+m.id+'/'+protocol,s,mode==='current'?1e-10:1e-7);
-   if(declaredControlFailure(allocation,s)){assertDeclaredControlFailure(allocation,s,row.native);assertDeclaredControlFailure(allocation,s,row.wasm);row.retained_unsupported_control=true;}else assert.equal(row.native.ok,true,row.native.message);
+   if(declaredControlFailure(allocation,s)){assertDeclaredControlFailure(allocation,s,row.native);assertDeclaredControlFailure(allocation,s,row.wasm);row.retained_unsupported_control=true;}else if(unsupportedReason(controlScope,s)){row.outside_public_qualification=unsupportedReason(controlScope,s);}else assert.equal(row.native.ok,true,row.native.message);
    if(mode==='legacy'){
     const types=['string','string','string','number','number','number','number','string'];
     const args=[s.model,s.parameters.join(','),s.initial.join(','),s.protocol,s.target,s.steps,s.cycles,settingsCsv(s.integration_settings)];
@@ -78,5 +80,5 @@ const s={...base,loading:createLoading(base)},limited={...s,integration_settings
 const failed=check('limited-prefix',limited,1e-10);assert.equal(failed.native.ok,false);assert.equal(failed.native.points.length,1);
 const recovered=check('recovery',s,1e-10);assert.equal(recovered.native.ok,true);
 const before=report.pairs.find(r=>r.name==='current/linear-elastic/1');assert.deepEqual(physical(recovered.wasm),physical(before.wasm));
-assert.equal(report.pairs.length,11*metadata.models.length+2);report.status='passed';report.backend_runs=2*report.pairs.length;report.same_instance_wasm_export_import_replays=report.pairs.filter(r=>r.roundtrip_replayed).length;assert.equal(report.same_instance_wasm_export_import_replays,10*(metadata.models.length-(allocation?.policy.legacy_contract_rejections.length||0)));
+assert.equal(report.pairs.length,11*metadata.models.length+2);report.status='passed';report.outside_public_qualification_pairs=report.pairs.filter(r=>r.outside_public_qualification).length;report.backend_runs=2*report.pairs.length;report.same_instance_wasm_export_import_replays=report.pairs.filter(r=>r.roundtrip_replayed).length;assert.equal(report.same_instance_wasm_export_import_replays,10*(metadata.models.length-(allocation?.policy.legacy_contract_rejections.length||0)));
 writeFileSync(outfile,JSON.stringify(report)+'\n');console.log(`${report.pairs.length} native/Wasm pairs, ${report.same_instance_wasm_export_import_replays} same-instance import/export replays and failed-prefix recovery passed.`);

@@ -66,7 +66,8 @@ test('timeout aborts executor and proceeds to next request',async()=>{
 const fullCatalogue={...catalogue,models:readdirSync(new URL('../models/',import.meta.url)).filter(f=>f.endsWith('.json')).map(f=>JSON.parse(readFileSync(new URL('../models/'+f,import.meta.url))))};
 test('all compatible compiled models receive baseline requests with complete state and exact replay',()=>{
  const configs=defaultConfigurations(fullCatalogue),study=makeStudy(record,fullCatalogue,configs);
- assert.equal(configs.length,13);assert.equal(study.jobs.length,25);
+ assert.equal(configs.length,14);assert.equal(study.jobs.length,26);
+ assert.ok(study.jobs.some(job=>job.model==='s-clay1'&&!job.change),'S-CLAY1 participates in the current catalogue study');
  for(const model of availableModels(fullCatalogue)){
   const job=study.jobs.find(j=>j.model===model.id&&!j.change);assert.equal(job.status,'queued',model.id+': '+job.message);
   let offset=0;for(const field of model.state){const width=field.shape==='sym'?6:1,actual=job.specification.initial.slice(offset,offset+width);offset+=width;

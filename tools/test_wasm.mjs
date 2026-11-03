@@ -1,5 +1,6 @@
 // End-to-end native/Wasm parity: the exact same generated models and protocols.
 import assert from 'node:assert/strict';
+import {loadControlScope,unsupportedReason} from './laboratory_control_scope.mjs';
 import {loadProfileAllocation,declaredControlFailure,assertDeclaredControlFailure}from './laboratory_profile_policy.mjs';
 import {readFileSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
@@ -13,7 +14,8 @@ const createAtlas=(await import(pathToFileURL(resolve(wasmDir,'atlas.js')))).def
 const wasm=await createAtlas();
 const catalogue=JSON.parse(readFileSync(resolve(wasmDir,'generated/models.json'),'utf8'));
 const allocation=options['--profile-policy']?loadProfileAllocation(resolve(options['--profile-policy']),catalogue):null;
-let runs=0,rejectedContracts=0,retainedControlFailures=0;
+const controlScope=allocation?loadControlScope(catalogue):null;
+let runs=0,rejectedContracts=0,retainedControlFailures=0;const outsideQualification=[];
 for(const model of catalogue.models){
   // Examples are explicit test fixtures; v0.3 never substitutes them in the engine.
   const initial=model.state.flatMap(field=>field.shape==='sym'?field.initial:[field.initial]).join(',');
@@ -27,18 +29,21 @@ for(const model of catalogue.models){
       assert.deepEqual(expected,{ok:false,message:rejection.message});assert.deepEqual(actual,expected);rejectedContracts++;continue;
     }
     const specification={model:model.id,protocol,target,steps,cycles};const controlFailure=declaredControlFailure(allocation,specification);
-    assert.equal(native.status,controlFailure?1:0,model.id+': '+native.stdout+native.stderr);
-    const expected=JSON.parse(native.stdout);
+    const outside=controlFailure?'':unsupportedReason(controlScope,specification);
+    assert.equal(native.error,undefined);assert.equal(native.signal,null);assert.equal(native.stderr,'');
+    if(!outside)assert.equal(native.status,controlFailure?1:0,model.id+': '+native.stdout+native.stderr);
+    const expected=JSON.parse(native.stdout);assert.equal(native.status,expected.ok?0:1);
     const actual=JSON.parse(wasm.ccall('atlas_run','string',['string','string','string','number','number','number','number'],[model.id,'',initial,protocol,target,steps,cycles]));
-    if(controlFailure){assertDeclaredControlFailure(allocation,specification,expected);assertDeclaredControlFailure(allocation,specification,actual);retainedControlFailures++;}else assert.equal(actual.ok,true,model.id+': '+actual.message);assert.equal(actual.catalogue_hash,expected.catalogue_hash);assert.equal(actual.points.length,expected.points.length);
+    if(controlFailure){assertDeclaredControlFailure(allocation,specification,expected);assertDeclaredControlFailure(allocation,specification,actual);retainedControlFailures++;}else if(outside){assert.equal(actual.ok,expected.ok);assert.equal(actual.message,expected.message);outsideQualification.push({...specification,reason:outside,ok:actual.ok,points:actual.points.length});}else assert.equal(actual.ok,true,model.id+': '+actual.message);assert.equal(actual.catalogue_hash,expected.catalogue_hash);assert.equal(actual.points.length,expected.points.length);
     for(let i=0;i<actual.points.length;i++)for(const key of ['state','strain'])actual.points[i][key].forEach((v,j)=>{
       const wanted=expected.points[i][key][j];assert.ok(Math.abs(v-wanted)<=1e-7*Math.max(1,Math.abs(wanted)),`${model.id} protocol ${protocol} step ${i} ${key}[${j}]: ${v} != ${wanted}`);
     });
-    if(!controlFailure)runs++;
+    if(!controlFailure&&!outside)runs++;
   }
 }
-assert.equal(runs+rejectedContracts+retainedControlFailures,5*catalogue.models.length);
-console.log(`Native/WebAssembly parity passed for ${runs} positive model/protocol combinations and ${rejectedContracts} explicit legacy-contract rejections and ${retainedControlFailures} retained unsupported control failures.`);
+assert.equal(runs+rejectedContracts+retainedControlFailures+outsideQualification.length,5*catalogue.models.length);
+console.log(JSON.stringify({outside_public_qualification:outsideQualification}));
+console.log(`Native/WebAssembly parity passed for ${runs} positive model/protocol combinations and ${rejectedContracts} explicit legacy-contract rejections and ${retainedControlFailures} retained unsupported control failures; ${outsideQualification.length} additional full-prefix backend comparisons outside public qualification.`);
 
 // Increment diagnostics are public in native and Wasm, including failed transactions.
 for (const [id,initial,strain] of [

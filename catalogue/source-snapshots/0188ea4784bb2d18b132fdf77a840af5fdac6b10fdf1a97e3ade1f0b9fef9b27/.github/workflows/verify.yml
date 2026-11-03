@@ -1,0 +1,75 @@
+---
+name: Fast CI
+'on':
+  push: {}
+  pull_request: {}
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: fast-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      numerical: "${{ steps.scope.outputs.numerical }}"
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: ".nvmrc"
+    - name: Select numerical checks
+      id: scope
+      run: python3 -B tools/ci_changes.py
+    - name: Validate definitions, approval bindings and fast contracts
+      run: python3 -B tools/ci_fast.py
+  engine-smoke:
+    needs: contracts
+    if: needs.contracts.outputs.numerical == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: ".nvmrc"
+    - uses: "./.github/actions/setup-atlas"
+      with:
+        wasm: 'true'
+    - name: Build only the ordinary native solver
+      run: |-
+        cmake -S . -B build-ci-native -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-ci-native --target atlas_solver --parallel 1
+    - name: Build only the ordinary Wasm solver
+      run: |-
+        emcmake cmake -S . -B build-ci-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-ci-wasm --target atlas_solver --parallel 1
+    - name: Independent elastic reference, native/Wasm ABI and rejection smoke
+      run: node tools/ci_smoke.mjs --native build-ci-native/atlas_solver --wasm build-ci-wasm/atlas.js
+  checks:
+    if: always()
+    needs:
+    - contracts
+    - engine-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+    - env:
+        CONTRACTS: "${{ needs.contracts.result }}"
+        SMOKE: "${{ needs.engine-smoke.result }}"
+        NUMERICAL: "${{ needs.contracts.outputs.numerical }}"
+      run: |-
+        test "$CONTRACTS" = success
+        if [ "$NUMERICAL" = true ]; then test "$SMOKE" = success; else test "$SMOKE" = skipped; fi

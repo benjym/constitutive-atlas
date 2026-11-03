@@ -32,7 +32,7 @@ for(const job of study.jobs){
   }catch(error){passed=false;checks.push({id:job.id,status:'failed',error:String(error)});}
  }
 }
-let roundtrip;try{const document=exportStudy(study,catalogue,record),replay=importStudy(JSON.stringify(document),catalogue,record);assert.equal(replay.jobs.length,15);assert.ok(replay.jobs.every(j=>j.status==='queued'&&j.result===null));roundtrip='passed';}catch(error){passed=false;roundtrip=String(error);}
+let roundtrip;try{const document=exportStudy(study,catalogue,record),replay=importStudy(JSON.stringify(document),catalogue,record);assert.equal(replay.jobs.length,study.jobs.length);assert.ok(replay.jobs.every(j=>j.status==='queued'&&j.result===null));roundtrip='passed';}catch(error){passed=false;roundtrip=String(error);}
 const hash=path=>createHash('sha256').update(readFileSync(path)).digest('hex');
 writeFileSync(options['--output'],JSON.stringify({status:passed?'passed':'failed',module_sha256:hash(wasm),wasm_sha256:hash(wasm.replace(/\.js$/,'.wasm')),experiment_sha256:hash(options['--experiment']),checks,roundtrip,study},null,2)+'\n');
 console.log(JSON.stringify({status:passed?'passed':'failed',checks,outcomes:study.jobs.map(j=>({id:j.id,status:j.status,message:j.message}))},null,2));if(!passed)process.exitCode=1;
