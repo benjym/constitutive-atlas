@@ -186,3 +186,5 @@ Current resources: isolatedfixworktree /private/tmp/atlas-vibe2026-live-fix-v1; 
 ### Final package verifier correction qualified
 
 Reviewed sourcefreeze c037c57c accepted independently e2273996/7bfba747. All original validator assertions and11tests preserved;35puregroups pass. Exact formerly failing supported-package command nowpasses16ordinaryrequests+1registerednamedexample in0.951s onfull1534sealedE7package; original strictdefaultpolicy andactualcontrolled-time8history/2refusalrecovery gates unchanged. tools/ci_fast.py passes. All281VIBE/250controlledpath/171Maxwellpins and30publishedapprovals preserved. Recoveredcopies rehashedunchanged thenremoved afterconsumers; archivecc1ef7 retained. Localserialslot RELEASED. No model/runtime/profile changes; E8 remainsinprogresspendingnewCI/Pages/live.
+
+2026-11-04 E8 inherited packet-layout correction: independent review accepted sclay-browser-retention-v1 source manifest5380d8ac; five PNGs relocated losslessly, unchanged packet guard now passes. Original source/scientific receipts and other553 S-CLAY1 files unchanged. No runtime changes; current release CI will be rerun on exact scoped correction. E8 remains open.
