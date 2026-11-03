@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async(page)=>{\n await page.getByRole('combobox',{name:'Starting example',exact:true}).selectOption('2');\n if(await page.locator('#ct-state').locator('..').getAttribute('open')===null)await page.getByText('Complete starting state, imposed fields and incoming rates',{exact:true}).click();\n if(await page.locator('#ct-parameters').locator('..').getAttribute('open')===null)await page.getByText('Material parameters',{exact:true}).click();\n await page.getByRole('spinbutton',{name:'Hydraulic scanning memory (1)',exact:true}).fill('0.4');\n await page.getByRole('spinbutton',{name:'vf \u00b7 viscous contribution fraction (1)',exact:true}).fill('0');\n await page.getByRole('spinbutton',{name:'Start time (s)',exact:true}).fill('12');\n await page.getByRole('spinbutton',{name:'Duration (s)',exact:true}).fill('200');\n await page.getByRole('spinbutton',{name:'Output intervals',exact:true}).fill('10');\n await page.getByRole('button',{name:'Run history',exact:true}).click();\n await page.waitForFunction(()=>/^(History completed|Run failed)/.test(document.querySelector('#ct-status').textContent),{},{timeout:120000});\n const status=await page.locator('#ct-status').textContent();if(!status.startsWith('History completed'))throw Error(status);\n const dl=page.waitForEvent('download');await page.getByRole('button',{name:'Export complete run',exact:true}).click();await(await dl).saveAs('output/playwright/vibe-browser-v4/edited-run.json');\n return {status,summary:await page.locator('#ct-summary').textContent(),fixedConstants:await page.locator('#ct-parameters input[readonly]').count(),stateInputs:await page.locator('#ct-state input').count(),startInputs:await page.locator('#ct-start input').count(),incomingInputs:await page.locator('#ct-incoming input').count(),plots:await page.locator('#ct-stress polyline,#ct-void polyline,#ct-saturation polyline').count(),tableRows:await page.locator('#ct-table tr').count(),tableHeaders:await page.locator('#ct-table th').allTextContents()};\n}\n"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793732649.710377,
+  "elapsed_seconds": 1.3965160846710205,
+  "log_sha256": "a34c9d66a5969883cef9c0975619aad6abe6de8493d46760a276c98026b1c8d4"
+}

@@ -1,0 +1,6 @@
+### Result
+{"status":"Import rejected: Imported model/engine/review identity differs.","exportDisabled":true}
+### Ran Playwright code
+```js
+await (async(page)=>{const status=await page.locator('#ct-status').textContent();if(!status.startsWith('Import rejected: Imported model/engine/review identity differs.'))throw Error(status);if(!await page.locator('#ct-export').isDisabled())throw Error('Stale export');return {status,exportDisabled:true};})(page);
+```

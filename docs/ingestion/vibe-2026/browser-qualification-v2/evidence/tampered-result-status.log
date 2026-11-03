@@ -1,0 +1,6 @@
+### Result
+{"status":"Replay or package identity differs.","exportDisabled":true}
+### Ran Playwright code
+```js
+await (async(page)=>{await page.waitForFunction(()=>document.querySelector('#ct-status').textContent==='Replay or package identity differs.',{},{timeout:120000});if(!await page.locator('#ct-export').isDisabled())throw Error('Stale export');return {status:await page.locator('#ct-status').textContent(),exportDisabled:true};})(page);
+```

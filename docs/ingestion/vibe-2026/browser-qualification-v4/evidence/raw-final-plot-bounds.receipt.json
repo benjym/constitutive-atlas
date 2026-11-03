@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async page=>{return await page.locator(\"#ct-stress,#ct-void,#ct-saturation\").evaluateAll(ss=>ss.map(s=>({id:s.id,text:[...s.querySelectorAll(\"text\")].filter(t=>t.textContent.trim()).map(t=>{const b=t.getBBox();return {text:t.textContent,x:b.x,y:b.y,width:b.width,height:b.height,baseline:Number(t.getAttribute(\"y\")),anchor:t.getAttribute(\"text-anchor\")};})})));}"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793732539.295456,
+  "elapsed_seconds": 0.6668171882629395,
+  "log_sha256": "bab93c76d6902f2c8f064a5d87d063a098dfece3a2da92208b3181fed5f79052"
+}

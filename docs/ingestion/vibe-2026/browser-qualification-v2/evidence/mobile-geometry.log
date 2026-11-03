@@ -1,0 +1,6 @@
+### Result
+{"width":390,"pageWidth":390,"plots":[{"width":315.9921875,"label":"Mean net stress against time","polylines":1},{"width":315.9921875,"label":"Void ratio against time","polylines":1},{"width":315.9921875,"label":"Saturation against time","polylines":1}],"tableRows":23}
+### Ran Playwright code
+```js
+await (async(page)=>{const d=await page.evaluate(()=>({width:innerWidth,pageWidth:document.documentElement.scrollWidth,plots:[...document.querySelectorAll('#ct-stress,#ct-void,#ct-saturation')].map(x=>({width:x.getBoundingClientRect().width,label:x.getAttribute('aria-label'),polylines:x.querySelectorAll('polyline').length})),tableRows:document.querySelectorAll('#ct-table tr').length}));if(d.pageWidth>d.width||d.plots.length!==3||d.plots.some(x=>x.polylines!==1))throw Error(JSON.stringify(d));return d;})(page);
+```

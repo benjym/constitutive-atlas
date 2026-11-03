@@ -442,10 +442,10 @@ jobs:
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
         python -B -m unittest tests.test_provision_maxwell_assets
-        python -B tools/provision_bingham_dependency_assets.py
+        python -B tools/check_current_dependency_assets.py --output "$RUNNER_TEMP/current-dependency-guards"
         python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python -B tools/provision_implicit_path_assets.py
-        python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+        python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
     - name: 'Build and compare native and Wasm / 22: emcmake cmake -S cmake/orthotropic
         -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release'
       shell: bash
@@ -475,7 +475,7 @@ jobs:
       shell: bash
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
-        python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v1/norsand/engine
+        python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
         node --test tests/test_ensemble.mjs
         python -B -m unittest tests.test_ensemble_package
         node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
@@ -513,6 +513,14 @@ jobs:
       with:
         name: bingham-paired-${{ runner.os }}
         path: "${{ runner.temp }}/bingham-*"
+    - name: Retain current dependency guards and Maxwell regression
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: current-dependency-guards-${{ runner.os }}
+        path: |-
+          ${{ runner.temp }}/current-dependency-guards/
+          ${{ runner.temp }}/maxwell-ci-regression/
     timeout-minutes: 180
   wasm-linux:
     runs-on: ubuntu-latest
@@ -651,10 +659,10 @@ jobs:
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
         python -B -m unittest tests.test_provision_maxwell_assets
-        python -B tools/provision_bingham_dependency_assets.py
+        python -B tools/check_current_dependency_assets.py --output "$RUNNER_TEMP/current-dependency-guards"
         python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python -B tools/provision_implicit_path_assets.py
-        python -B tools/check_maxwell_ci.py --output "$RUNNER_TEMP/maxwell-ci-regression"
+        python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
     - name: 'Verify Linux browser engine and packaged website / 10: emcmake cmake
         -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release'
       shell: bash
@@ -684,7 +692,7 @@ jobs:
       shell: bash
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
-        python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v1/norsand/engine
+        python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
         node --test tests/test_ensemble.mjs
         python -B -m unittest tests.test_ensemble_package
         node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
@@ -722,6 +730,14 @@ jobs:
       with:
         name: bingham-paired-${{ runner.os }}
         path: "${{ runner.temp }}/bingham-*"
+    - name: Retain current dependency guards and Maxwell regression
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: current-dependency-guards-${{ runner.os }}
+        path: |-
+          ${{ runner.temp }}/current-dependency-guards/
+          ${{ runner.temp }}/maxwell-ci-regression/
     timeout-minutes: 180
   controlled-path:
     runs-on: ubuntu-latest

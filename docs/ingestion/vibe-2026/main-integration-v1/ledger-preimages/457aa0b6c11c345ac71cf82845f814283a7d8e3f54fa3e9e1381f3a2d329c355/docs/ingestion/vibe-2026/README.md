@@ -1,0 +1,9 @@
+# VIBE 2026 — full model delivery
+
+The downloaded final paper has been ingested: Mašín (2026), *Viscohypoplastic bentonite (VIBE) model*, DOI [10.1016/j.enggeo.2026.108827](https://doi.org/10.1016/j.enggeo.2026.108827). The exact candidate implements the published explicit Appendix A formulation, with its documented differences from the main-text and author-code forms. See the [source packet](source-v2/README.md), [delivery ledger](DELIVERY.md) and [checklist](CHECKLIST.md).
+
+Source acquisition, the explicit v0.3 contract and transcription checks are complete. Independent Decimal references and Python comparisons cover 32 rate points and eight full-state histories, including holds, reversals and coupled mechanical/thermal/hydraulic paths. The [independent prequalification review](review-v4/README.md) accepts the exact candidate, generic interface source, reader-profile draft and prospective backend qualification plan for execution. This is source eligibility, not E5 model approval.
+
+Native and Wasm qualification now pass the frozen rate/history, rollback/recovery, restart/replay and parity gates. The separate [scientific review](scientific-review-v1/) accepts all nine approval items for the exact candidate. The qualified engine, eight public examples and reader profile are installed in the isolated atlas worktree. Full normal package and actual browser qualification are in progress; no live release or experimental validation is claimed. See the delivery ledger for retained failures and exact evidence identities.
+
+The original acquisition failures, source-v1 packet and superseded studies remain retained unchanged. Raw source PDFs and author code stay private; supplied author binaries/code have not been executed. Delivery targets the general atlas and main laboratory; no standalone page is required.

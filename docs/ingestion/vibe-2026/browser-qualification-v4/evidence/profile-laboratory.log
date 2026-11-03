@@ -1,0 +1,9 @@
+### Result
+{"url":"http://127.0.0.1:8767/site-v5/index.html#laboratory?model=vibe-2026","model":"vibe-2026","status":"History completed. Numerical response; no experimental validation."}
+### Ran Playwright code
+```js
+await (async page=>{await page.getByRole('button',{name:'Test this model →',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('History completed'),{},{timeout:120000});return {url:page.url(),model:await page.locator('#model').inputValue(),status:await page.locator('#ct-status').textContent()};})(page);
+```
+### Page
+- Page URL: http://127.0.0.1:8767/site-v5/index.html#laboratory?model=vibe-2026
+- Page Title: Model testing · Constitutive Atlas

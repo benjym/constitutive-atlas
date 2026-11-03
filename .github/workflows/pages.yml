@@ -70,12 +70,12 @@ jobs:
       run: |-
         python3 -B tools/provision_bingham_assets.py
         python3 -B tools/provision_perzyna_assets.py
-        python3 -B tools/provision_bingham_dependency_assets.py
+        python3 -B tools/check_current_dependency_assets.py --output "$RUNNER_TEMP/current-dependency-guards"
         python3 -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python3 -B tools/provision_implicit_path_assets.py
         python3 -B tools/fetch_data.py --approved-only
     - name: Build one website with unchanged package guards
-      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v1/norsand/engine
+      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
     - name: Verify the exact publication package
       run: |-
         node tools/ci_smoke.mjs --wasm web/dist/atlas.js
@@ -87,7 +87,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pages-package-checks
-        path: "${{ runner.temp }}/packaged-laboratory.json"
+        path: |-
+          ${{ runner.temp }}/packaged-laboratory.json
+          ${{ runner.temp }}/current-dependency-guards/
         if-no-files-found: ignore
     - uses: actions/configure-pages@v6
     - name: Upload the tested website

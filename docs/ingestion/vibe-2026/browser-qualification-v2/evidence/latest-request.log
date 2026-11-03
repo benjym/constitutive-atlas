@@ -1,0 +1,34 @@
+### Result
+[{"check":"editing while actual worker exists terminates it and keeps stale result unavailable","status":"Inputs changed. Run to update results."},{"check":"reset recovers after cancelled worker","status":"History completed. Numerical response; no experimental validation."},{"check":"switching to ordinary model terminates physical-time worker","selected":"linear-elastic"}]
+### Ran Playwright code
+```js
+await (async(page)=>{
+ const out=[];
+ await page.getByRole('combobox',{name:'Starting example',exact:true}).selectOption('2');
+ if(await page.locator('#ct-parameters').locator('..').getAttribute('open')===null)await page.getByText('Material parameters',{exact:true}).click();
+ await page.getByRole('spinbutton',{name:'vf · viscous contribution fraction (1)',exact:true}).fill('0');
+ await page.locator('#ct-duration-0').fill('200000');
+ await page.locator('#ct-samples-0').fill('200');
+ let created=page.waitForEvent('worker');await page.getByRole('button',{name:'Run history',exact:true}).click();
+ let worker=await created;let closed=new Promise(resolve=>worker.on('close',()=>resolve(true)));
+ await page.getByRole('spinbutton',{name:'Start time (s)',exact:true}).fill('11');
+ await closed;await page.waitForTimeout(300);
+ let status=await page.locator('#ct-status').textContent();
+ if(status!=='Inputs changed. Run to update results.'||!await page.locator('#ct-export').isDisabled())throw Error('Stale result after in-flight edit: '+status);
+ out.push({check:'editing while actual worker exists terminates it and keeps stale result unavailable',status});
+ await page.getByRole('button',{name:'Reset starting example',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('History completed'),{},{timeout:120000});
+ out.push({check:'reset recovers after cancelled worker',status:await page.locator('#ct-status').textContent()});
+ await page.getByRole('spinbutton',{name:'vf · viscous contribution fraction (1)',exact:true}).fill('0');
+ await page.locator('#ct-duration-0').fill('200000');await page.locator('#ct-samples-0').fill('200');
+ created=page.waitForEvent('worker');await page.getByRole('button',{name:'Run history',exact:true}).click();worker=await created;closed=new Promise(resolve=>worker.on('close',()=>resolve(true)));
+ await page.locator('#model').selectOption('linear-elastic');await closed;await page.waitForTimeout(300);
+ if(await page.locator('#controlled-time-laboratory').isVisible())throw Error('Timed panel remained visible after route switch');
+ out.push({check:'switching to ordinary model terminates physical-time worker',selected:await page.locator('#model').inputValue()});
+ return out;
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:8767/site-v3/index.html#laboratory?model=linear-elastic
+- Page Title: Model testing · Constitutive Atlas

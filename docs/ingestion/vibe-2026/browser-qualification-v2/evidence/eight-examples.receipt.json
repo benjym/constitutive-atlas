@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async (page) => {\n const results=[];\n for(let i=0;i<8;i++){\n  await page.getByRole('combobox',{name:'Starting example',exact:true}).selectOption(String(i));\n  await page.getByRole('button',{name:'Run history',exact:true}).click();\n  await page.waitForFunction(()=>/^(History completed|Run failed)/.test(document.querySelector('#ct-status').textContent),{},{timeout:120000});\n  const status=await page.locator('#ct-status').textContent();\n  if(!status.startsWith('History completed'))throw Error('Example '+i+': '+status);\n  const event=page.waitForEvent('download');\n  await page.getByRole('button',{name:'Export complete run',exact:true}).click();\n  const download=await event;await download.saveAs('output/playwright/vibe-browser-v2/example-'+i+'.json');\n  results.push({example:i,status,summary:await page.locator('#ct-summary').textContent(),plots:await page.locator('#ct-stress polyline,#ct-void polyline,#ct-saturation polyline').count(),file:'example-'+i+'.json'});\n }\n return results;\n}\n"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793730083.598507,
+  "elapsed_seconds": 4.839344024658203,
+  "log_sha256": "f1c38b1852e78fa21e321da43f9b0fa6dd94521a25e162fd4e819a177f267d01"
+}

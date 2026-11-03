@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async page=>{await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('Import rejected:'));const status=await page.locator('#ct-status').textContent();if(!status.includes('identity differs')||!await page.locator('#ct-export').isDisabled())throw Error(status);return status;}"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793731867.839423,
+  "elapsed_seconds": 0.6673321723937988,
+  "log_sha256": "12ad4d644f32b246535bf586bd49ad2c81955796423b9d028668655f1e0638a4"
+}

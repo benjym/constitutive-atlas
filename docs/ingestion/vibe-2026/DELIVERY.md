@@ -25,16 +25,16 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 - [X] **E3 — Transcription:** exact candidate validates/generates; independent equation/reference checks pass.
 - [X] **E4 — Native/Wasm:** correct profile/interfaces, complete frozen numerical gates, rollback/recovery/restarts, useful preset, parity and regressions pass.
 - [X] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
-- [ ] **E6 — Atlas:** qualified model/approval/source/evidence and source-backed public profile integrated through normal generation; profile-coverage check passes, prior models preserved and public metadata/current database checked.
-- [ ] **E7 — Packaged website:** public profile/card, parameter units, example guidance, related/laboratory links and narrow-screen layout inspected; real controls/plots, technical source/review disclosure, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
+- [X] **E6 — Atlas:** qualified model/approval/source/evidence and source-backed public profile integrated through normal generation; profile-coverage check passes, prior models preserved and public metadata/current database checked.
+- [X] **E7 — Packaged website:** public profile/card, parameter units, example guidance, related/laboratory links and narrow-screen layout inspected; real controls/plots, technical source/review disclosure, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
 - [ ] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works; task-owned cleanup verified and any retained resources handed off explicitly.
 
 ## Current handoff
 
-- Current phase / overall state: E0–E5 complete. E6 registry, manifest, profile and exact qualified engine installed in isolated worktree; full normal atlas package running. E7 actual browser qualification remains pending, E8 not live.
-- Current owner: coordinator /root; independent scientific approval by /root/vibe_scientific_review, with separate source reviews of the oracle correction, CI and historical preservation.
-- Blocker / missing evidence: no backend scientific blocker. Full package and actual browser gates are unfinished; no remote action has been taken.
-- Smallest next action: finish the normal package, qualify the main atlas in a real browser, preserve evidence and clean task-owned resources, then prepare the scoped local release commit.
+- Current phase / overall state: E0–E7 complete. Exact accepted model/approval, general-atlas profile/main laboratory, normal package-v5 and actual browser-v4 pass. E8 ready to publish; no remote action or live delivery.
+- Current owner: coordinator /root; separate scientific acceptance and separately reviewed dependency/presentation integration are retained.
+- Blocker / missing evidence: new explicit remote authorization under current AGENTS.md, then actual CI/deployment/live checks. No scientific, numerical, atlas or local browser blocker.
+- Smallest next action: finish cleanup and scoped local release commit, then request only push/deployment authorization for that concrete tested release.
 - Review-v4 manifest: 925efc46579dd73ff5f16a22dac72f6d6c473042edf9ba62102a5dc7dfc657a2; coordinator verified all57 inputs and8 outputs. Accepts source eligibility only, not E4/E5/browser/live status.
 - Retained failures: original acquisition failures, transcription revisions, generic default C3 failure and separately identified stricter study, and reviewer test corrections are preserved with exact preimages. No gate was weakened to obtain acceptance.
 
@@ -48,17 +48,17 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 ## Review and integration identity
 
-- Accepted agent-review record / hash: catalogue/agent-reviews/vibe-2026-appendix-a-agent-v1.json; SHA25617ba51ff302dd69c5f3bf651a64b47dcc7bbe2425461eb2a9d985f1fd63bfffe; all nine items pass, 270 supporting artifacts.
-- Approved model path / hash / scope:
+- Accepted agent-review record / hash: catalogue/agent-reviews/vibe-2026-appendix-a-agent-v2.json; SHA2568e36c1984af615ece3ef4a05546871defbe05a64f6a483d295f9056f29f3ae99; all nine items pass, 281 supporting artifacts. V1 remains unchanged historical evidence.
+- Approved model path / hash / scope: models/research/vibe/vibe-2026-explicit-appendix-a.json SHA a7d3f0f61ff6654f1dc924178a3551a740ca39212a99813c2b9ce5c15b16c987; positive suction, OA>=1, infinitesimal compression-positive Mandel net stress, fixed-spatial zero-spin physical-time THM material point.
 - Registry entry: exact generated VIBE approval appended in isolated catalogue/approved-models.json; other entries preserved.
 - Native / Wasm toolchain and artifact receipts: execution-v1/{native-generic-artifacts,native-vibe-artifacts,wasm-generic-artifacts,wasm-model-artifacts}.json and scientific-review-v1/backend-freeze-v1.json.
-- Packaged engine / catalogue hash:
-- Public-profile coverage check / packaged browser inspection:
+- Packaged engine / catalogue hash: browser-qualification-v4/package-manifest.json seals1534 files; engine/model/catalogue/approval identities HTTP-fetched and exact.
+- Public-profile coverage check / packaged browser inspection:50/50 profiles and994 public experiments; browser-qualification-v4/result.json passes all local E7 gates with30 parameter rows, both related links, main-lab routing and390px/1440px layouts.
 - Changed bytes after review (none, or new review/qualification): model and runtime unchanged. Stage C installs approval/profile/assets and changes the package default to the exact qualified asset directory. Five historical source bytes are archived through additive redirects, independently accepted in review-preservation-v1; CI source accepted in review-ci-v1.
 
 ## Deployment receipt
 
-- Release commit: none; local source-blocked checkpoint ca3a6d5c42b7348b46f89b0f7fd11760ff4a2336 is retained, not pushed or released.
+- Release commit: the scoped local release commit containing this ledger on codex/vibe2026-controlled-time-v1; exact hash is recorded in the workspace post-commit handoff. Earlier checkpoints remain retained. No push or release.
 - Actions run URL and terminal result:
 - Pages deployment revision/result:
 - Tested upload / live asset comparison:
@@ -142,3 +142,29 @@ E4 passed the corrected generic native six-group corpus, 48 generic Wasm cases, 
 E5 accepted by separate /root/vibe_scientific_review. Scientific manifest285d3fc37ed16a166b0dff3c79e581857d401876a3ea3388fa3f6fb814e123e3; backend freeze9006182edb80fde1c2563ecfa8f35616d814fad20dd5c6ee787c998196216c26. Scope remains fixed-spatial zero-spin, positive suction, OA>=1; numerical qualification is not experimental validation. Public qualification receiptb5977050d04a91dba0370a818ebc1a17991d8243d3a5aa03eb1d670fdcc413c3 binds actual eight public results, refusal/recovery, 94 production sources and exact engine assets.
 
 Active task-owned resources: isolated worktree and six native/Wasm build directories, .local/vibe-site-v1 package/build/engine inputs, task-owned Playwright session vibe2026 (pid10029). Retain while package/browser checks consume them; preserve required artifacts and verify archive recovery before disposing caches. Other browser sessions/processes are outside this task.
+
+## Current-main integration — 4 November 2026
+
+Local checkpoint5081b088f retains E4/E5, loader correction, bounded browser evidence and original full-package failures. Merge8543a0dbe integrates committed mainac22788b, retaining all29 upstream approvals plus exact VIBE approval and both controlled-time setup and applicability loading. No remote action occurred. Full-package-v1 stopped on changed controlled-path source closure; refreshed native/Wasm results independently accepted. Full-package-v2 stopped on the analogous retained Maxwell source guard. These failures are preserved. Prospective current-main controlled-path and Maxwell qualification studies retain all original numerical gates and require fresh serial builds with separate actual-build review. Current16 ordinary catalogue gets new native/Wasm build receipts.
+
+Browser-qualification-v1 is explicitly bounded preview evidence: all8 actual examples, complete exports, zero/negative suction refusals with recovery, edited state/time inputs, plots/table and mobile profile passed. Original loader failure led to the separately reviewed locateFile option correction and E5v2. Full normal package, explicit file import/tamper/replay browser sequence and live verification remain unfinished. Bounded preview HTTP pid11061 was identified and stopped; Playwright sessionvibe2026 remains idle for final qualification.
+
+Current-main regression receipts now pass: controlled-path execution-v2 actual source/binding/build reviewfe544d37 accepts both engines, all22commands and original234cases across backends with parity0; parent finalized both receipts. Maxwell fresh native/Wasm actual reviewd7a79d27 accepts all5original gates, all24reference+14transaction cases twice/backend,4presets/replays and5962parity comparisons; original Wasm/module bytes unchanged under new exact source closureb950175c. Durable engine copy accepted by unchanged packager. Standard Emscripten build permission review initially timed out before execution, approved retry succeeded; no protection bypass.
+
+Cleanup milestone: bounded preview browser sessionvibe2026 closed. Both terminal-failed site outputs archived at root.local/release-artifacts/vibe2026-v1/failed-sites-v1.tar.gz SHA10b2b30e69da698c725aaef162679d68a22aa3822c4450de3448176c08df467a. All2825member hashes verified without extraction before removing only those two disposable trees; original2,201,710,079bytes compressed551,580,570bytes. Free space increased1,658,675,200bytes. Exact paths/index/ownership/receipt in cleanup-v1/failed-sites-retention.json. Required failures and bounded preview evidence retained. Final site-v3 and current builds remain coordinator-owned pending package/browser consumers.
+
+## Full-package and presentation checkpoint — 4 November 2026
+
+Normal package-v3 passed all original gates, 50 public profiles and 994 public experiments (execution-v1/main-atlas-package-v3.json). Current16 native fixtures pass92 recorded cases/2774 checks and original strict/unknown-profile refusal gates. Independently accepted current-source controlled-path and Maxwell refreshes retain all historical cases and bounds; workflow hook changes are source-reviewed and real bundler guards pass. SQLite export preserves31 exact definitions,30 approvals and16 ordinary engine memberships. Actual eight browser UI exports equal frozen complete reference requests/results; identity/result tamper, domain refusal/recovery, edited controls and worker cancellation pass. Browser visual inspection failed duplicate rounded axis labels; plot-presentation-v1 and its independent review preserve failures before correction. E7 is deliberately open until the new normal package and final browser evidence pass. New VIBE v1/v2 immutable review document hashes were added to the existing source sidecar, independently accepted; all281 v2 supports pass resolver and direct hashes. No original review or numerical evidence was changed.
+
+## Final E6/E7 local qualification — 4 November 2026
+
+Normal package-v5 passed all unchanged builder gates in354.447s (execution-v1/main-atlas-package-v5.json; logSHA fe7f473413b87965e3c8e79313a354a80c89ebb60b1f876ba864e66624a0e880). Public database SHA34d1265ba2eb3b6ea20d917104b17675f9670bc62bd848fe6b7164b967f604b4 remains identical to fully audited export. Browser-v4 actual eight complete requests/results exactly match frozen references; file chooser valid replay, identity/result tampering refusal and both recoveries, zero/negative suction/reset, edited full state/parameters/time/sampling, actual worker cancellation and ordinary fallback pass. Final mobile/desktop font bounds and all pairwise nonoverlap pass; screenshots visually inspected. Reader profile30 parameters, related clay2013/thermal2017 and laboratory links pass. All23 critical fetched assets and nine technical links match the seal; console0errors/0warnings.166 local resource timings report200; HTTP logs contain276 successful200 and170 normal304 revalidations, no HTTP failure. Opaque external-font timing entries are retained without inferring a status. No measurement overlay is promised: no calibrated experimental dataset is supplied.
+
+Original duplicate ticks, source-review endpoint clipping, actual-font title clearance and harness axis-title misclassification remain preserved under distinct identities. Final source/presentation review c68899bb accepts82 source pins, exact full-file reversal and281 unchanged scientific supports. Harness correction independently accepted77ab7ec0 changes only source-derived tick identification; strict bounds/nonoverlap gates remain. No numerical bounds, model/runtime, public reference results or original approval bytes changed. E8 remains open; this is local qualification, not live delivery or experimental validation.
+
+## Final resource handoff —4November2026
+
+Task browser vibe2026 closed and HTTP session14907 exited0; full logs and final1534-file package seal retained in browser-qualification-v4. All16 explicit owned build/site/browser paths were archived at /Users/bmar5496/code/constitutive-atlas/.local/release-artifacts/vibe2026-v1/local-build-browser-retention-v1.tar.gz SHAcc1ef7f2c39d0988462cf2e443903c071da780d542581d26017c8c5c1872bce6. Lossless recovery verified all7532 files/3392262769 bytes before removal; archive735017398bytes, free space increased2645131264 bytes. Earlier failed sites remain in their separate exact archive. Tracked other-model Playwright evidence was preserved by the cleanup guard; corrected scope lists only VIBE paths. Initial obsolete cleanup receipt guard and tracked-parent refusal caused no deletion and remain recorded. Twenty disposable pyc files and two owned package launcher files removed.28 exact ignored build metadata/artifact files are retained and explicitly force-tracked because qualification receipts require them; private primary PDF remains exact and private. No task preview, worker, package or compiler process remains.
+
+The isolated worktree remains only until the scoped local commit is retained, then will be removed using Git without force after confirming a clean index/worktree and durable ignored evidence. The post-commit/removal receipt is retained in the coordinator workspace because a commit cannot contain its own hash/removal result. No uncertain/shared resource is deleted. No push/deploy/remoteCI occurred; current AGENTS.md requires a new explicit instruction.

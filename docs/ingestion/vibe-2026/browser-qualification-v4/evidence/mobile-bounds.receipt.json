@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async(page)=>{\n const rows=await page.locator('#ct-stress,#ct-void,#ct-saturation').evaluateAll(svgs=>svgs.map(svg=>{\n  const texts=[...svg.querySelectorAll('text')].filter(el=>el.textContent.trim()).map(el=>{const b=el.getBBox();return {text:el.textContent,x:b.x,y:b.y,width:b.width,height:b.height,anchor:el.getAttribute('text-anchor')};});\n  const yTicks=texts.filter(el=>el.anchor==='end'&&el.y<230);\n  const xTicks=texts.filter(el=>el.y>240&&el.y<270);\n  return {id:svg.id,width:svg.getBoundingClientRect().width,texts,yTicks,xTicks,polyline:svg.querySelector('polyline')?.getAttribute('points')};\n }));\n for(const row of rows){if(new Set(row.yTicks.map(t=>t.text)).size!==row.yTicks.length)throw Error('Repeated y ticks '+row.id);for(const t of row.texts){if(t.x<0||t.x+t.width>480||t.y<0||t.y+t.height>300)throw Error('Text outside SVG '+row.id+' '+JSON.stringify(t));}for(let i=1;i<row.xTicks.length;i++)if(row.xTicks[i-1].x+row.xTicks[i-1].width>row.xTicks[i].x)throw Error('Overlapping x ticks '+row.id);for(let a=0;a<row.texts.length;a++)for(let b=a+1;b<row.texts.length;b++){const u=row.texts[a],v=row.texts[b];if(u.x<v.x+v.width&&u.x+u.width>v.x&&u.y<v.y+v.height&&u.y+u.height>v.y)throw Error('Overlapping chart text '+row.id+' '+u.text+' / '+v.text);}if(!row.polyline)throw Error('Missing curve');}\n const viewport=await page.evaluate(()=>({width:innerWidth,pageWidth:document.documentElement.scrollWidth}));if(viewport.width!==viewport.pageWidth)throw Error('Page overflow');return {viewport,rows};\n}\n"
+  ],
+  "returncode": 1,
+  "cli_error": true,
+  "started_unix": 1793732518.7596018,
+  "elapsed_seconds": 0.15835809707641602,
+  "log_sha256": "9a3a8c07dc56755898806c0ba5c273514cc996f34a3274d3f597cd0271d5afd2"
+}

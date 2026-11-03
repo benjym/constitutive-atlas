@@ -1,0 +1,9 @@
+# Horizontal layout amendment
+
+Independent source review of v1 found that long horizontal labels could extend outside the SVG and overlap adjacent labels. The reviewer retained the witness and changes-requested finding separately. Every one of v1's 14 manifest members is retained byte-for-byte under `source-freeze-v1/`, with original-to-retained mapping in `v1-recovery.json`. The original manifest, tests, failures and baseline remain unchanged.
+
+The new pure horizontal layout helper anchors the first label at its start and the last label at its end. It retains a deterministic nonoverlapping subset of labels, prioritizing endpoints then interior labels. Bounds are 12–468 in the existing 480-unit viewBox with an eight-unit gap and the same conservative seven-unit character estimate. Hidden labels have empty text; all five grid lines, original tick positions and all data coordinates remain unchanged. Finite tick formatting still uniquely represents all distinct numeric ticks before display selection.
+
+`pure-tests-v4.log` passes ten groups, adding endpoint clipping and internal-overlap checks at ordinary and long labels, narrow and wide left margins, and adjacent-representable/subnormal cases. These are source-level geometric checks; actual font layout and browser rendering remain coordinator gates.
+
+Reproduce with `node --test tests/test_plot_labels.mjs`, `node --check web/app.js` and `PYTHONPATH=. python3 docs/ingestion/vibe-2026/plot-presentation-v1/check_projection_v2.py`. The v2 projection reverses all presentation additions and compares complete app/builder bytes to original preimages. Both reversals pass, previous hooks are retained, and all 281 scientific supports again pass canonical receipts plus direct hashes. No scientific gate, original test or tolerance changed. No build, compiled, browser or remote call occurred.

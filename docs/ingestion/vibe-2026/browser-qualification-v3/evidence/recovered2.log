@@ -1,0 +1,6 @@
+### Result
+"History completed. Numerical response; no experimental validation."
+### Ran Playwright code
+```js
+await (async page=>{await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('History completed'),{},{timeout:120000});if(!await page.locator('#ct-export').isEnabled())throw Error('Recovery export unavailable');return await page.locator('#ct-status').textContent();})(page);
+```

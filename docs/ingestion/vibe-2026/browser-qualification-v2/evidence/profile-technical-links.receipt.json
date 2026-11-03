@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async page => { const links=await page.locator(\".model-profile-technical a\").evaluateAll(xs=>xs.map(a=>({text:a.textContent,href:a.href}))); const checks=[];for(const link of links){if(new URL(link.href).origin===new URL(page.url()).origin){const r=await page.request.get(link.href);checks.push({...link,status:r.status()});}}return {open:await page.locator(\".model-profile-technical\").evaluate(d=>d.open),links,checks}; }"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793730919.863677,
+  "elapsed_seconds": 0.7130858898162842,
+  "log_sha256": "0e710eeb2cfe700fd13c066e0212927165f138637b2eab53639d7c7884d58591"
+}

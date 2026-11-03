@@ -1,0 +1,6 @@
+### Result
+{"open":false,"summary":"Technical details, implementation and checks"}
+### Ran Playwright code
+```js
+await (async page => { await page.locator(".model-profile").evaluate(el => { for(let p=el;p;p=p.parentElement)p.scrollTop=0; window.scrollTo(0,0); }); return await page.locator(".model-profile-technical").evaluate(d=>({open:d.open,summary:d.querySelector("summary").textContent})); })(page);
+```

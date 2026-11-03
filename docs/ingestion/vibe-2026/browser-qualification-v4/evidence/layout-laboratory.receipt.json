@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async(page)=>{\n const fallback=await page.locator('#run-state').textContent();if(fallback!=='\u2713 Response up to date')throw Error('Ordinary fallback: '+fallback);\n await page.locator('#model').selectOption('vibe-2026');await page.getByRole('combobox',{name:'Starting example',exact:true}).selectOption('7');await page.getByRole('button',{name:'Run history',exact:true}).click();\n await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('History completed'),{},{timeout:120000});\n for(const id of ['ct-state','ct-parameters'])if(await page.locator('#'+id).locator('..').getAttribute('open')!==null)await page.locator('#'+id).locator('..').locator('summary').first().click();\n const table=page.locator('#ct-table').locator('..').locator('..');if(await table.getAttribute('open')===null)await page.getByText('All state components and observables',{exact:true}).click();\n return {ordinaryFallback:fallback,status:await page.locator('#ct-status').textContent(),plots:await page.locator('#ct-stress polyline,#ct-void polyline,#ct-saturation polyline').count(),rows:await page.locator('#ct-table tr').count(),technicalClosed:await page.locator('#ct-equations').getAttribute('open')===null,measurementStatement:await page.getByText('These are model responses. Measurement comparison is unavailable: no calibrated experimental dataset is supplied.',{exact:true}).isVisible()};\n}\n"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793732661.724837,
+  "elapsed_seconds": 1.355186939239502,
+  "log_sha256": "8fd93796a8c49d62214bae1f4e2c53f0a3523c353fa202971e1d00635bbd39d1"
+}

@@ -1,0 +1,9 @@
+# Real-font vertical clearance amendment
+
+The coordinator's actual browser-v3 gate found all three shared y-axis titles slightly outside the SVG: title top −0.190249, height21.26635. The full retained bounds also show horizontal overlap with the highest y tick, whose top is15.80975. Simply moving the title down would worsen their overlap. That unqualified intermediate source attempt is retained as `title-only-source-attempt-app.js`; it was never built or browser-tested.
+
+The final amendment changes plot top27→40 and height211→198, retaining its bottom238, and title baseline15→17. Axis ranges, tick values, data, model, engine and formatter are unchanged. `check_vertical_clearance_v3.py` reads a byte-exact retained copy of the real browser bounds and translates the existing measured font boxes by these source geometry deltas. For all three charts, title top becomes1.809751 and bottom23.076101; highest tick top becomes28.809750, giving5.733649units clearance. This is a source-level calculation using existing measurements; it does not claim a new actual browser pass.
+
+All 35 v2 freeze members are retained byte-exact in `source-freeze-v2`, mapped by `v2-recovery.json`. The original browser failure remains coordinator-owned; this packet retains the full raw bounds used by the calculation. The final unchanged ten formatter/layout groups pass in `pure-tests-v6.log`; v5 records the intermediate attempt. `check_projection_v3.py` proves exact full app/builder reversal against original preimages, and all281 scientific supporting files still pass canonical receipt and direct hash checks. No original gate was relaxed and no scientific file changed.
+
+The coordinator must repackage and rerun actual desktop/mobile strict bounds, overlaps and chart behavior. No build, module, material, browser or remote calls were made by this worker.

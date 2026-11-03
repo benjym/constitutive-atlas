@@ -30,14 +30,14 @@ def main():
     parser.add_argument('--sls-wasm-dir',type=Path,default=ROOT/'build-sls-wasm',help=argparse.SUPPRESS)
     parser.add_argument('--burgers-wasm-dir',type=Path,default=ROOT/'build-burgers-wasm',help='Dedicated common physical-time Burgers engine')
     parser.add_argument('--j2-wasm-dir',type=Path,default=ROOT/'build-j2-wasm',help='Qualified J2 material-point engine for the main laboratory')
-    parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v1/norsand/engine',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
-    parser.add_argument('--maxwell-wasm-dir',type=Path,default=ROOT/'build-maxwell-wasm',help='Dedicated Maxwell engine with exact accepted current-build qualification receipt')
+    parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
+    parser.add_argument('--maxwell-wasm-dir',type=Path,default=ROOT/'docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine',help='Dedicated Maxwell engine with exact accepted current-build qualification receipt')
     parser.add_argument('--implicit-path-wasm-dir',type=Path,default=ROOT/'build-implicit-path-wasm',help='Exact independently qualified implicit strain-path engine')
     parser.add_argument('--hill-wasm-dir',type=Path,default=ROOT/'web/engines/hill',help='Exact reviewed Hill engine for main laboratory')
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
     parser.add_argument('--kelvin-voigt-wasm-dir',type=Path,default=ROOT/'build-kelvin-voigt-wasm',help='Qualified ordinary Kelvin–Voigt physical-time engine')
     parser.add_argument('--bingham-wasm-dir',type=Path,default=ROOT/'build-bingham-public',help='Exact independently reviewed Bingham physical-time engine')
-    parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v1/interface2016/engine',help='Exact reviewed source-reconciled HvWE controlled-path engine')
+    parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine',help='Exact reviewed source-reconciled HvWE controlled-path engine')
     parser.add_argument('--perzyna-wasm-dir',type=Path,default=ROOT/'build-perzyna-public',help='Exact independently reviewed Perzyna physical-time engine')
     parser.add_argument('--controlled-time-wasm-dir',type=Path,default=ROOT/'web/engines/controlled-time',help='Exact independently qualified imposed-field physical-time engine for the main laboratory')
     args=parser.parse_args()
@@ -61,7 +61,7 @@ def main():
     for name in ['engine-j2', 'engine-sls', 'engine']:
         if (dest/name).is_dir():
             shutil.rmtree(dest/name)
-    for name in ['timed-route.mjs','index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','laboratory-scope.mjs','laboratory-document.mjs','laboratory-view.mjs','laboratory-worker.mjs','recorded.mjs','recorded-scope.mjs','recorded-scope-execution.mjs','recorded-document.mjs','recorded-worker.mjs','catalogue.mjs','state-contract.mjs','laboratory-examples.mjs','laboratory-examples-view.mjs','laboratory-support.mjs','formulation-view.mjs','applicability-view.mjs']:
+    for name in ['plot-labels.mjs','timed-route.mjs','index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','laboratory-scope.mjs','laboratory-document.mjs','laboratory-view.mjs','laboratory-worker.mjs','recorded.mjs','recorded-scope.mjs','recorded-scope-execution.mjs','recorded-document.mjs','recorded-worker.mjs','catalogue.mjs','state-contract.mjs','laboratory-examples.mjs','laboratory-examples-view.mjs','laboratory-support.mjs','formulation-view.mjs','applicability-view.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     for name in ['atlas-theme.css', 'navigation.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)

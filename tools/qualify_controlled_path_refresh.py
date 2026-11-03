@@ -16,7 +16,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKET = Path('docs/ingestion/vibe-2026/controlled-path-refresh-v1')
-PLAN = PACKET/'plan-v4.json'
+PLAN = PACKET/'plan-v5.json'
 MODEL_PATHS = {
     'norsand': ['models/research/norsand/norsand-jefferies-1993-active-axial.json',
                 'tests/fixtures/controlled-path/synthetic-curved.json',
@@ -101,8 +101,8 @@ def commands(library):
                      'tests.test_formulation', 'tests.test_state_contract', '-q'])
     for backend in ('native', 'wasm'):
         for key in MODEL_PATHS:
-            build = '.local/controlled-path-refresh-v1/'+key+'-'+backend
-            out = str(PACKET/'execution-v1'/key)
+            build = '.local/controlled-path-refresh-v2/'+key+'-'+backend
+            out = str(PACKET/'execution-v2'/key)
             # Source paths use $ROOT substitution resolved by run, rather than
             # freezing local-only checkout paths into durable evidence.
             model_list = ';'.join('$ROOT/'+p for p in MODEL_PATHS[key])
@@ -135,7 +135,7 @@ def commands(library):
 
 def prepare():
     library = 'libatlas_path_capability.dylib' if sys.platform == 'darwin' else 'libatlas_path_capability.so'
-    data = dict(identity='controlled-path-refresh-plan-v4', schema_version=1,
+    data = dict(identity='controlled-path-refresh-plan-v5', schema_version=1,
                 source_closure=closure(), models=MODELS, definitions=MODEL_PATHS,
                 gates=GATES, native_library=library, commands=commands(library),
                 policy='Original cases/checkers/bounds unchanged; actual native and Wasm gates plus separate exact build review required.')
@@ -156,7 +156,7 @@ def run(implementation_run):
     if not implementation_run.strip():
         raise ValueError('Implementation run identity required')
     plan = load_plan()
-    base = relative(PACKET/'execution-v1')
+    base = relative(PACKET/'execution-v2')
     base.mkdir(parents=True, exist_ok=False)
     for key in MODEL_PATHS:
         (base/key).mkdir()
@@ -198,7 +198,7 @@ def check_backend_identity(key, artifacts, results):
 
 def collect():
     plan = load_plan()
-    base = relative(PACKET/'execution-v1')
+    base = relative(PACKET/'execution-v2')
     run_info = json.loads((base/'run.json').read_text())
     if run_info['plan_sha256'] != sha(relative(PLAN)):
         raise ValueError('Run plan changed')
@@ -215,8 +215,8 @@ def collect():
     for key in MODEL_PATHS:
         output = base/key/'engine'
         output.mkdir(exist_ok=False)
-        native = relative('.local/controlled-path-refresh-v1/'+key+'-native')
-        wasm = relative('.local/controlled-path-refresh-v1/'+key+'-wasm')
+        native = relative('.local/controlled-path-refresh-v2/'+key+'-native')
+        wasm = relative('.local/controlled-path-refresh-v2/'+key+'-wasm')
         artifacts = {}
         for name, original in [('native/'+plan['native_library'], native/plan['native_library']),
                                ('atlas_path_capability.mjs', wasm/'atlas_path_capability.mjs'),
@@ -300,16 +300,16 @@ def validate_refresh(build, model):
             target = relative(name) if directory == ROOT else directory/Path(name)
             if Path(name).is_absolute() or '..' in Path(name).parts or sha(target) != digest:
                 raise ValueError('Fresh qualification evidence changed: '+name)
-    if set(binding['commands']) != {str(PACKET/'execution-v1'/(r['id']+ext)) for r in plan['commands'] for ext in ('.receipt.json', '.log')}:
+    if set(binding['commands']) != {str(PACKET/'execution-v2'/(r['id']+ext)) for r in plan['commands'] for ext in ('.receipt.json', '.log')}:
         raise ValueError('Fresh qualification omits exact commands/logs')
     for row in plan['commands']:
-        receipt = json.loads(relative(str(PACKET/'execution-v1'/(row['id']+'.receipt.json'))).read_text())
+        receipt = json.loads(relative(str(PACKET/'execution-v2'/(row['id']+'.receipt.json'))).read_text())
         if (receipt.get('returncode') != 0 or receipt.get('plan_sha256') != sha(relative(PLAN))
                 or not Path(receipt.get('repository_root', '')).is_absolute()
                 or receipt.get('argv') != [arg.replace('$ROOT', receipt['repository_root']) for arg in row['argv']]):
             raise ValueError('Fresh command receipt differs: '+row['id'])
     result_names = ('native.json', 'wasm.json') if key == 'norsand' else ('native.json','wasm.json','native-check.json','wasm-check.json','parity.json')
-    if set(binding['results']) != {str(PACKET/'execution-v1'/key/name) for name in result_names}:
+    if set(binding['results']) != {str(PACKET/'execution-v2'/key/name) for name in result_names}:
         raise ValueError('Fresh qualification omits original backend results')
     check_backend_identity(key, binding['artifacts'], binding['results'])
     if set(binding['build_metadata']) != {'build-metadata/'+backend+'/'+name for backend in ('native','wasm') for name in ('CMakeCache.txt','compile_commands.json')}:

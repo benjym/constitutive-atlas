@@ -1,0 +1,17 @@
+### Result
+{"ordinaryFallback":"✓ Response up to date","status":"History completed. Numerical response; no experimental validation.","plots":3,"rows":23,"technicalClosed":true,"measurementStatement":true}
+### Ran Playwright code
+```js
+await (async(page)=>{
+ const fallback=await page.locator('#run-state').textContent();if(fallback!=='✓ Response up to date')throw Error('Ordinary fallback: '+fallback);
+ await page.locator('#model').selectOption('vibe-2026');await page.getByRole('combobox',{name:'Starting example',exact:true}).selectOption('7');await page.getByRole('button',{name:'Run history',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('History completed'),{},{timeout:120000});
+ for(const id of ['ct-state','ct-parameters'])if(await page.locator('#'+id).locator('..').getAttribute('open')!==null)await page.locator('#'+id).locator('..').locator('summary').first().click();
+ const table=page.locator('#ct-table').locator('..').locator('..');if(await table.getAttribute('open')===null)await page.getByText('All state components and observables',{exact:true}).click();
+ return {ordinaryFallback:fallback,status:await page.locator('#ct-status').textContent(),plots:await page.locator('#ct-stress polyline,#ct-void polyline,#ct-saturation polyline').count(),rows:await page.locator('#ct-table tr').count(),technicalClosed:await page.locator('#ct-equations').getAttribute('open')===null,measurementStatement:await page.getByText('These are model responses. Measurement comparison is unavailable: no calibrated experimental dataset is supplied.',{exact:true}).isVisible()};
+}
+)(page);
+```
+### Page
+- Page URL: http://127.0.0.1:8767/site-v3/index.html#laboratory?model=vibe-2026
+- Page Title: Model testing · Constitutive Atlas

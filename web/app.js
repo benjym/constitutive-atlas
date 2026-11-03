@@ -1,3 +1,4 @@
+import {formatTickLabels,tickLeftMargin,layoutHorizontalTickLabels} from './plot-labels.mjs';
 import {setupInterface2016Laboratory} from './interface2016-laboratory.mjs';
 import {setupPerzynaLaboratory} from './perzyna-laboratory.mjs';
 import {setupBinghamLaboratory} from './bingham-laboratory.mjs';
@@ -389,14 +390,17 @@ function numberLabel(v){if(Math.abs(v)<1e-10)return '0';return Number(v.toPrecis
 function svgNode(name,attributes,text){const n=document.createElementNS('http://www.w3.org/2000/svg',name);for(const[k,v]of Object.entries(attributes))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n;}
 function chart(id,xLabel,yLabel,predicted,measured=[],emptyMessage){
   const svg=$(id);svg.replaceChildren();svg.append(svgNode('title',{},yLabel+' versus '+xLabel));
-  const left=62,top=27,w=392,h=211,all=[...predicted,...measured].filter(a=>a.every(Number.isFinite));
+  const top=40,h=198,all=[...predicted,...measured].filter(a=>a.every(Number.isFinite));
   const [xmin,xmax]=axisRange(all.map(p=>p[0])),[ymin,ymax]=axisRange(all.map(p=>p[1]),true);
+  const yTicks=Array.from({length:5},(_,i)=>ymax-i*(ymax-ymin)/4),xTicks=Array.from({length:5},(_,i)=>xmin+i*(xmax-xmin)/4);
+  const yTickLabels=formatTickLabels(yTicks),xTickLabels=formatTickLabels(xTicks),left=tickLeftMargin(yTickLabels),w=454-left;
+  const xLabelLayout=layoutHorizontalTickLabels(xTickLabels,Array.from({length:5},(_,i)=>left+i*w/4));
   const x=v=>left+(v-xmin)/(xmax-xmin)*w,y=v=>top+h-(v-ymin)/(ymax-ymin)*h;
   for(let i=0;i<=4;i++){
     const yy=top+i*h/4,xx=left+i*w/4;
-    svg.append(svgNode('line',{x1:left,y1:yy,x2:left+w,y2:yy,stroke:'#e6e9df','stroke-dasharray':'3 4'}),svgNode('text',{x:left-10,y:yy+4,'text-anchor':'end'},numberLabel(ymax-i*(ymax-ymin)/4)),svgNode('text',{x:xx,y:top+h+19,'text-anchor':'middle'},numberLabel(xmin+i*(xmax-xmin)/4)));
+    svg.append(svgNode('line',{x1:left,y1:yy,x2:left+w,y2:yy,stroke:'#e6e9df','stroke-dasharray':'3 4'}),svgNode('text',{x:left-10,y:yy+4,'text-anchor':'end'},yTickLabels[i]),svgNode('text',{x:xx,y:top+h+19,'text-anchor':xLabelLayout[i].anchor},xLabelLayout[i].text));
   }
-  svg.append(svgNode('text',{x:left+w/2,y:282,'text-anchor':'middle',class:'axis-label'},xLabel.length>56?xLabel.slice(0,53)+'…':xLabel),svgNode('text',{x:12,y:top-12,class:'axis-label'},yLabel.length>60?yLabel.slice(0,57)+'…':yLabel));
+  svg.append(svgNode('text',{x:left+w/2,y:282,'text-anchor':'middle',class:'axis-label'},xLabel.length>56?xLabel.slice(0,53)+'…':xLabel),svgNode('text',{x:12,y:17,class:'axis-label'},yLabel.length>60?yLabel.slice(0,57)+'…':yLabel));
   if(!all.length)svg.append(svgNode('text',{x:left+w/2,y:top+h/2,'text-anchor':'middle'},(emptyMessage||(id==='source-chart'?'No paired observations for these channels':'Preparing response…'))));
   if(predicted.length)svg.append(svgNode('polyline',{points:predicted.map(([a,b])=>`${x(a)},${y(b)}`).join(' '),fill:'none',stroke:'#bc643e','stroke-width':2,'stroke-linejoin':'round'}));
   const stride=Math.max(1,Math.ceil(measured.length/350));measured.filter((_,i)=>i%stride===0).forEach(([a,b])=>svg.append(svgNode('circle',{cx:x(a),cy:y(b),r:2,fill:'#547a95',opacity:.6,class:'experiment-point'})));

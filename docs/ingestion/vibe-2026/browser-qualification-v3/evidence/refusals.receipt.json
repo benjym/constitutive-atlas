@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async(page)=>{\n const out=[];\n const details=page.locator('#ct-state').locator('..');\n if(await details.getAttribute('open')===null) await page.getByText('Complete starting state, imposed fields and incoming rates',{exact:true}).click();\n for(const value of ['0','-1']){\n  await page.getByRole('spinbutton',{name:'Suction (Pa)',exact:true}).fill(value);\n  const staleExportDisabled=await page.getByRole('button',{name:'Export complete run',exact:true}).isDisabled();if(!staleExportDisabled)throw Error('Stale export');\n  await page.getByRole('button',{name:'Run history',exact:true}).click();\n  await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('Run failed'),{},{timeout:120000});out.push({value,status:await page.locator('#ct-status').textContent(),staleExportDisabled});\n  await page.getByRole('button',{name:'Reset starting example',exact:true}).click();\n  await page.waitForFunction(()=>document.querySelector('#ct-status').textContent.startsWith('History completed'),{},{timeout:120000});out.push({recoveryAfter:value,status:await page.locator('#ct-status').textContent()});\n }\n return out;\n}\n"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793731909.996104,
+  "elapsed_seconds": 1.460712194442749,
+  "log_sha256": "a4ab8543da00f5aa05d397021b24ed9c8f91804af760f7ba6f0fcfb5750a5320"
+}

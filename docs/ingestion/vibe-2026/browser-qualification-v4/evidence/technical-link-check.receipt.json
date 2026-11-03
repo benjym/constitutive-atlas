@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async page=>{const links=await page.locator('.model-profile-technical a').evaluateAll(xs=>xs.map(a=>({text:a.textContent,href:a.href})));return await page.evaluate(async links=>{const rows=[];for(const a of links){if(new URL(a.href).origin!==location.origin)continue;const r=await fetch(a.href),b=await r.arrayBuffer(),h=await crypto.subtle.digest('SHA-256',b);rows.push({...a,status:r.status,sha256:Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('')});}return rows;},links);}"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793732808.016957,
+  "elapsed_seconds": 1.180459976196289,
+  "log_sha256": "2362ebf9cb8a20f669a2c989f17765c52d42112f828df0ce50ba30b431af86c4"
+}

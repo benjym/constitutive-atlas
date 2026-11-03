@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async page => { return await page.locator(\".model-profile\").evaluate(el => ({tag:el.tagName, classes:el.className, tables:[...el.querySelectorAll(\"table\")].map(t=>({rows:t.rows.length,headers:[...t.querySelectorAll(\"th\")].map(x=>x.textContent)})), details:[...el.querySelectorAll(\"details\")].map(d=>({text:d.querySelector(\"summary\").textContent,open:d.open})),links:[...el.querySelectorAll(\"a\")].map(a=>({text:a.textContent,href:a.getAttribute(\"href\")})),width:el.getBoundingClientRect().width,pageWidth:document.documentElement.scrollWidth,viewport:innerWidth})); }"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793730881.7170749,
+  "elapsed_seconds": 0.7059271335601807,
+  "log_sha256": "5a74e138a6b3753792a938979346186251da3dfbd4ac7a9e29f8833fed23e3a2"
+}

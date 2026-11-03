@@ -1,0 +1,48 @@
+✔ small stress changes at a large offset remain distinct (0.84175ms)
+✔ small void-ratio changes retain enough decimals (0.617417ms)
+✖ seconds, signs and ordinary scales remain readable (0.7035ms)
+✔ small absolute quantities do not collapse to zero (0.088833ms)
+✔ roundoff at a zero tick is range relative (0.065667ms)
+✔ scientific notation keeps extreme scale labels compact (0.117125ms)
+✔ adjacent representable large-offset values round trip distinctly (0.144167ms)
+✔ empty, constant, duplicate and signed-zero ticks are deterministic (0.062041ms)
+✔ invalid and sparse inputs fail explicitly (0.237917ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46.739541
+
+✖ failing tests:
+
+test at tests/test_plot_labels.mjs:32:1
+✖ seconds, signs and ordinary scales remain readable (0.7035ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      '0',
+      '250',
+      '500',
+      '750',
+  +   '1e3'
+  -   '1000'
+    ]
+  
+      at TestContext.<anonymous> (file:///private/tmp/atlas-vibe2026-controlled-time-v1/tests/test_plot_labels.mjs:33:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '0', '250', '500', '750', '1e3' ],
+    expected: [ '0', '250', '500', '750', '1000' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
