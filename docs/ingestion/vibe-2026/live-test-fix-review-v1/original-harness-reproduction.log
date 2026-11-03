@@ -1,0 +1,32 @@
+✔ chart axes retain empty zero ±constant and normal-span domains (0.841042ms)
+✔ near-constant roundoff uses stable padding only with explicit y opt-in (0.109959ms)
+✔ representable short physical-time spans at positive and negative large origins retain original x scale (0.091541ms)
+✖ actual shared chart opts only y into stable padding and keeps original input data (0.719167ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4.7925
+
+✖ failing tests:
+
+test at [eval1]:19:1
+✖ actual shared chart opts only y into stable padding and keeps original input data (0.719167ms)
+  evalmachine.<anonymous>:6
+    const yTickLabels=formatTickLabels(yTicks),xTickLabels=formatTickLabels(xTicks),left=tickLeftMargin(yTickLabels),w=454-left;
+                      ^
+  
+  ReferenceError: formatTickLabels is not defined
+      at chart (evalmachine.<anonymous>:6:21)
+      at evalmachine.<anonymous>:22:3
+      at Script.runInContext (node:vm:150:12)
+      at Object.runInContext (node:vm:302:6)
+      at TestContext.<anonymous> (file:///private/tmp/atlas-vibe2026-live-fix-v1/[eval1]:24:196)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)

@@ -1,0 +1,156 @@
+contracts	Validate definitions, approval bindings and fast contracts	﻿2026-11-03T20:49:33.1618809Z ##[group]Run python3 -B tools/ci_fast.py
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1619194Z ^[[36;1mpython3 -B tools/ci_fast.py^[[0m
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1639420Z shell: /usr/bin/bash -e {0}
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1639690Z env:
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1639901Z   PYTHONDONTWRITEBYTECODE: 1
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1640227Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1640677Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1641122Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1641509Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1641895Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1642329Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.1642668Z ##[endgroup]
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:33.2052666Z + /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3 -B -m atlas.cli database /tmp/atlas-ci-integrity-1_fo8e4b/atlas.sqlite
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:34.8539363Z /tmp/atlas-ci-integrity-1_fo8e4b/atlas.sqlite
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:34.8670909Z Completed in 1.7s
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:34.8681169Z + /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3 -B -m atlas.cli validate
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:35.0335402Z 16 declarative models passed structural and semantic validation
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:35.0411132Z Completed in 0.2s
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:35.0413322Z + /opt/hostedtoolcache/Python/3.12.15/x64/bin/python3 -B -m unittest tests.test_atlas.LanguageTests tests.test_agent_review tests.test_database_approval_integrity tests.test_state_contract.StateContractTests tests.test_ci_profiles tests.test_ci_changes -q
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.3308550Z ----------------------------------------------------------------------
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.3309302Z Ran 41 tests in 0.968s
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.3309533Z 
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.3309675Z OK
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.3472619Z Completed in 1.3s
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.3473483Z + node tools/check_model_profiles.mjs
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.3929961Z Public model profiles: 50/50 catalogue entries, 0 additional top-level definitions; parameter names, local provenance and related links checked.
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.3980762Z Completed in 0.1s
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.3983306Z + node --test tests/test_chart_axis.mjs tests/test_model_profiles.mjs tests/test_laboratory_controller_router.mjs tests/test_state_contract_browser.mjs tests/test_kelvin_voigt_contract.mjs tests/test_sls_laboratory_contract.mjs tests/test_j2_contract.mjs tests/test_burgers_web_contract.mjs tests/test_orthotropic_contract.mjs tests/test_hill_contract.mjs tests/test_bingham_laboratory_contract.mjs tests/test_laboratory_profile_policy.mjs
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5401531Z ✔ three mode transports preserve13state/all-six physical controls (9.473641ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5436643Z ✔ invalid controls and traces reject before transport; caller/defaults preserved (1.252462ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5438643Z ✔ JSON rejects ambiguous numerical/document identities (15.262922ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5445878Z ✔ full-result replay rejects finite later state/stress tampering (2.705849ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5447477Z ✔ approved scope requires exact separate-agent accepted nine-item bundle (0.992568ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5449903Z ✔ controller cancels stale workers, rejects invalid edits and recovers by reset (3.697245ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5451414Z ✔ engine receipt rejects unreviewed or substituted artifact bytes (0.886952ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5552326Z ✔ preserves initial left/right events including unresolved stress-hold rate (2.75456ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5554103Z ✔ rejects missing/corrupted event state and wrong history length (0.825477ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5559808Z ✔ requires explicit admissible Kelvin history and positive viscosities (2.356258ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5561636Z ✔ imports only exact engine-bound canonical request and rejects duplicate keys (3.322777ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5563346Z ✔ chart axes retain empty zero ±constant and normal-span domains (2.102004ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5564891Z ✔ near-constant roundoff uses stable padding only with explicit y opt-in (0.355401ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5567300Z ✔ representable short physical-time spans at positive and negative large origins retain original x scale (0.323272ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5569652Z ✖ actual shared chart opts only y into stable padding and keeps original input data (1.903525ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5799717Z {
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5807295Z   "passed": true,
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5823547Z   "assertions": 102,
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5824044Z   "compiledCalls": 0,
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5825408Z   "scope": "Pure Hill request/identity/replay/transaction contract, including immutable inputs, failure prefix and recovery."
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5826420Z }
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5866855Z ✔ tests/test_hill_contract.mjs (59.86746ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5867703Z {
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5868967Z   "passed": true,
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5869626Z   "assertions": 51,
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5870303Z   "compiledCalls": 0,
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5871643Z   "scope": "Pure J2 request/identity/replay/transaction contract, including immutable inputs, failure prefix and recovery."
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5872956Z }
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.5873798Z ✔ tests/test_j2_contract.mjs (52.306227ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.6394121Z ✔ all-six initial rates and mode masks survive exact wire/import (11.308086ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.6419548Z ✔ strict controls reject invalid inputs and preserve caller (0.954427ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.6433533Z ✔ strict JSON rejects duplicates overflow and inexact integers (1.619703ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.6440470Z ✔ import/result guards cover identity full state incoming rate event and solver (11.498372ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.6449875Z ✔ full numerical replay rejects finite tampering (1.902603ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.6451897Z ✔ independent strain accumulation admits transport roundoff but rejects physical corruption; exact replay stays exact (0.992498ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.6553458Z ✔ switching clears all interfaces before activating only the target (2.930897ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.6555184Z ✔ ambiguous model identities fail instead of selecting the wrong engine (0.66578ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8388699Z ✔ complete current model allocation validates with every successful scope (57.010808ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8409295Z ✔ missing total rejection (8.556092ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8429325Z ✔ effective model rejection (7.06739ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8449322Z ✔ relaxed tolerance (0.468743ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8459554Z ✔ unsafe path (7.924777ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8460301Z ✔ unknown field (0.566866ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8461075Z ✔ wrong count (4.942784ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8461766Z ✔ duplicate case (9.772327ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8462678Z ✔ missing model (18.850151ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8463682Z ✔ wrong scope (9.796272ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8464618Z ✔ unreviewed negative (7.301126ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8465575Z ✔ wrong success length (6.9386ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8466516Z ✔ no successful GIS (18.685625ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8467491Z ✔ stale definition rejected (0.499981ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8468802Z ✔ stale evidence rejected (1.370352ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8500775Z ✔ ordinary failure requires exact request and preserved initial (11.763786ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8580904Z ✔ all catalogue entries have source-backed profiles and valid related identities (10.209081ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8583010Z ✔ every profile renders its own mechanics without altering definitions or promising candidate runs (16.573361ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8585006Z ✔ public parameter examples use packaged values and physical units (0.743745ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8586991Z ✔ actual dialog presents the profile first with technical records closed: modified-cam-clay (6.783923ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8589445Z ✔ actual dialog presents the profile first with technical records closed: maxwell-itasca900-zero-spin-ode (4.81204ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8591574Z ✔ actual dialog presents the profile first with technical records closed: sanisand-2004 (1.246141ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8593604Z ✔ actual dialog presents the profile first with technical records closed: original-cam-clay (1.281747ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8595929Z ✔ actual dialog presents the profile first with technical records closed: s-clay1 (1.199995ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8597743Z ✔ full nine-constant request, coupled admissibility and six-state contract (4.536277ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8599843Z ✔ strict JSON rejects nested duplicate/escaped keys, nonfinite and lossy integers (0.877013ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8601610Z ✔ immutable request, committed prefix, failure rollback and recovery (3.444854ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8603678Z ✔ malformed responses never commit and failures must return complete incoming state (3.279897ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8605699Z ✔ fresh full-document replay rejects finite state, record, request and metadata tampering (4.115874ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8607545Z ✔ rate/hold wire controls retain physical time and full12state (9.929771ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8609396Z ✔ invalid controls rejected without mutating caller/defaults (1.001304ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8611099Z ✔ strict JSON rejects duplicate keys, nonfinite overflow and unsafe integers (0.432165ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8612993Z ✔ import rejects wrong model/engine/component identity, wire and result mutations (11.780397ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8614748Z ✔ exact numerical replay rejects finite later branch/stress tampering (2.292049ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8616300Z ✔ legacy and explicit roles select the same editable persistent state (2.00274ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8617941Z ✔ temporary state flattens complete tensor slots and preserves legacy examples (1.426977ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8619879Z ✔ a v0.3 plastic state supplies temporary slots without editable inputs (0.402119ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8621469Z ✔ shipped examples retain declared full state and parameter defaults (5.399645ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8623411Z ✔ a separately declared 10kPa example replaces the universal stress and copies tensor history (0.927988ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8625294Z ✔ unsupported example stresses reject without projection or lost components (1.403534ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8627122Z ✔ invalid persistent fields and parameter defaults cannot become executable examples (1.662265ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8666372Z ℹ tests 66
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8666871Z ℹ suites 0
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8667345Z ℹ pass 65
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8667578Z ℹ fail 1
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8667801Z ℹ cancelled 0
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8668034Z ℹ skipped 0
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8668575Z ℹ todo 0
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8668835Z ℹ duration_ms 435.144632
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8675570Z 
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8675953Z ✖ failing tests:
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8676212Z 
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8676528Z test at tests/test_chart_axis.mjs:19:1
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8677759Z ✖ actual shared chart opts only y into stable padding and keeps original input data (1.903525ms)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8678953Z   evalmachine.<anonymous>:6
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8680143Z     const yTickLabels=formatTickLabels(yTicks),xTickLabels=formatTickLabels(xTicks),left=tickLeftMargin(yTickLabels),w=454-left;
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8681252Z                       ^
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8681683Z   
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8682177Z   ReferenceError: formatTickLabels is not defined
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8682857Z       at chart (evalmachine.<anonymous>:6:21)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8683813Z       at evalmachine.<anonymous>:22:3
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8684677Z       at Script.runInContext (node:vm:149:12)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8685507Z       at Object.runInContext (node:vm:301:6)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8686963Z       at TestContext.<anonymous> (file:///home/runner/work/constitutive-atlas/constitutive-atlas/tests/test_chart_axis.mjs:24:196)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8688666Z       at Test.runInAsyncScope (node:async_hooks:227:14)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8689568Z       at Test.run (node:internal/test_runner/test:1402:25)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8690558Z       at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8691626Z       at Test.postRun (node:internal/test_runner/test:1542:19)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8692576Z       at Test.run (node:internal/test_runner/test:1467:12)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8745041Z Traceback (most recent call last):
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8746026Z   File "/home/runner/work/constitutive-atlas/constitutive-atlas/tools/ci_fast.py", line 39, in <module>
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8747734Z     main()
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8749210Z   File "/home/runner/work/constitutive-atlas/constitutive-atlas/tools/ci_fast.py", line 30, in main
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8749950Z     run('node', '--test', 'tests/test_chart_axis.mjs', 'tests/test_model_profiles.mjs',
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8750692Z   File "/home/runner/work/constitutive-atlas/constitutive-atlas/tools/ci_fast.py", line 16, in run
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8751251Z     subprocess.run(args, cwd=ROOT, check=True)
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8751816Z   File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/subprocess.py", line 571, in run
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8801077Z     raise CalledProcessError(retcode, process.args,
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8803917Z subprocess.CalledProcessError: Command '('node', '--test', 'tests/test_chart_axis.mjs', 'tests/test_model_profiles.mjs', 'tests/test_laboratory_controller_router.mjs', 'tests/test_state_contract_browser.mjs', 'tests/test_kelvin_voigt_contract.mjs', 'tests/test_sls_laboratory_contract.mjs', 'tests/test_j2_contract.mjs', 'tests/test_burgers_web_contract.mjs', 'tests/test_orthotropic_contract.mjs', 'tests/test_hill_contract.mjs', 'tests/test_bingham_laboratory_contract.mjs', 'tests/test_laboratory_profile_policy.mjs')' returned non-zero exit status 1.
+contracts	Validate definitions, approval bindings and fast contracts	2026-11-03T20:49:36.8877000Z ##[error]Process completed with exit code 1.
+checks	Run test "$CONTRACTS" = success	﻿2026-11-03T20:49:42.5049947Z ##[group]Run test "$CONTRACTS" = success
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5050892Z ^[[36;1mtest "$CONTRACTS" = success^[[0m
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5051906Z ^[[36;1mif [ "$NUMERICAL" = true ]; then test "$SMOKE" = success; else test "$SMOKE" = skipped; fi^[[0m
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5288584Z shell: /usr/bin/bash -e {0}
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5289754Z env:
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5290459Z   PYTHONDONTWRITEBYTECODE: 1
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5291135Z   CONTRACTS: failure
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5291810Z   SMOKE: skipped
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5292388Z   NUMERICAL: true
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5293029Z ##[endgroup]
+checks	Run test "$CONTRACTS" = success	2026-11-03T20:49:42.5482243Z ##[error]Process completed with exit code 1.
