@@ -1,0 +1,25 @@
+test_all_original_saved_gates_without_material_execution (tests.test_tresca_certified_corners.TrescaCertifiedCornerTests.test_all_original_saved_gates_without_material_execution) ... ok
+test_complete_saved_gate_without_build_or_material_execution (tests.test_tresca_mixed_catalogue.MixedCatalogueTests.test_complete_saved_gate_without_build_or_material_execution) ... ERROR
+test_complete_saved_gates_and_generic_failure_checks (tests.test_tresca_solution_constraints.TrescaSolutionConstraintTests.test_complete_saved_gates_and_generic_failure_checks) ... ok
+test_database_keeps_candidate_and_executable_sources (tests.test_catalogue.CatalogueTests.test_database_keeps_candidate_and_executable_sources) ... ok
+test_directory_coverage_has_resolvable_provenance (tests.test_catalogue.CatalogueTests.test_directory_coverage_has_resolvable_provenance) ... ok
+test_generated_layout_and_old_bytes (tests.test_controlled_time.ControlledTimeTests.test_generated_layout_and_old_bytes) ... ok
+
+======================================================================
+ERROR: test_complete_saved_gate_without_build_or_material_execution (tests.test_tresca_mixed_catalogue.MixedCatalogueTests.test_complete_saved_gate_without_build_or_material_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tests/test_tresca_mixed_catalogue.py", line 10, in test_complete_saved_gate_without_build_or_material_execution
+    with patch('subprocess.run',side_effect=AssertionError('no execution')):self.assertTrue(module('mixed_saved',P/'verify.py').verify()['overall_pass'])
+                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/catalogue/investigations/tresca-mixed-catalogue-v1/verify.py", line 17, in verify
+    if isinstance(h,str)and len(h)==64:checked_receipt(ROOT,(P/name).relative_to(ROOT),path,h)
+                                       ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/atlas/evidence.py", line 111, in checked_receipt
+    raise ValueError('evidence source hash mismatch: ' + str(selected))
+ValueError: evidence source hash mismatch: /private/tmp/atlas-vibe2026-live-fix-v1/atlas/stress.py
+
+----------------------------------------------------------------------
+Ran 6 tests in 5.592s
+
+FAILED (errors=1)

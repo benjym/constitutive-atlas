@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async(page)=>{return await page.evaluate(()=>{const rows=performance.getEntriesByType(\"resource\").map(r=>({name:r.name,status:r.responseStatus,transfer:r.transferSize,duration:r.duration}));const bad=rows.filter(r=>r.status>=400);if(bad.length)throw Error(JSON.stringify(bad));return {rows,bad};});}"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793745207.318541,
+  "elapsed_seconds": 0.6784319877624512,
+  "log_sha256": "e9fd64e00142f994aef536b63c75e6aa3d655c0e69adb451aef93b72fb93e712"
+}

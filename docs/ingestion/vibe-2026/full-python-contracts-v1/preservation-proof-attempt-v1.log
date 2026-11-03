@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/docs/ingestion/vibe-2026/full-python-contracts-v1/check_preservation.py", line 43, in <module>
+    out=check();(P/'preservation-proof-v3.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({k:v for k,v in out.items() if k not in ['agent_reviews','vibe_supporting_files']}))
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/docs/ingestion/vibe-2026/full-python-contracts-v1/check_preservation.py", line 20, in check
+    put(source,blob);put(archive,blob);receipt={'files':{source:h}};put(document,(json.dumps(receipt)+'\n').encode());mapping={'version':'immutable-source-archive-map-0.1','documents':{document:sha(root/document)},'entries':[{'original_path':source,'sha256':h,'archived_path':archive}]};put('receipt/source-archive-map.json',(json.dumps(mapping)+'\n').encode());assert checked_receipt(root,document,source,h)==root/archive
+                                                                                                                                                                                                                                                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

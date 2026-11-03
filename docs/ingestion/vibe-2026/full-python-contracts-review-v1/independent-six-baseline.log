@@ -1,0 +1,88 @@
+test_all_original_saved_gates_without_material_execution (tests.test_tresca_certified_corners.TrescaCertifiedCornerTests.test_all_original_saved_gates_without_material_execution) ... ERROR
+test_complete_saved_gate_without_build_or_material_execution (tests.test_tresca_mixed_catalogue.MixedCatalogueTests.test_complete_saved_gate_without_build_or_material_execution) ... ERROR
+test_complete_saved_gates_and_generic_failure_checks (tests.test_tresca_solution_constraints.TrescaSolutionConstraintTests.test_complete_saved_gates_and_generic_failure_checks) ... ERROR
+test_database_keeps_candidate_and_executable_sources (tests.test_catalogue.CatalogueTests.test_database_keeps_candidate_and_executable_sources) ... FAIL
+test_directory_coverage_has_resolvable_provenance (tests.test_catalogue.CatalogueTests.test_directory_coverage_has_resolvable_provenance) ... FAIL
+test_generated_layout_and_old_bytes (tests.test_controlled_time.ControlledTimeTests.test_generated_layout_and_old_bytes) ... FAIL
+
+======================================================================
+ERROR: test_all_original_saved_gates_without_material_execution (tests.test_tresca_certified_corners.TrescaCertifiedCornerTests.test_all_original_saved_gates_without_material_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tests/test_tresca_certified_corners.py", line 13, in test_all_original_saved_gates_without_material_execution
+    with patch('subprocess.run',side_effect=AssertionError('material calls forbidden')):a=module('v5_verify',P/'verify.py').verify()
+                                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/catalogue/investigations/tresca-certified-corners-v5/verify.py", line 10, in verify
+    for n,h in json.loads((P/'source-pins.json').read_text()).items():checked_receipt(ROOT,str((P/'source-pins.json').relative_to(ROOT)),n,h)
+                                                                      ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/atlas/evidence.py", line 111, in checked_receipt
+    raise ValueError('evidence source hash mismatch: ' + str(selected))
+ValueError: evidence source hash mismatch: /private/tmp/atlas-vibe2026-live-fix-v1/atlas/initialization.py
+
+======================================================================
+ERROR: test_complete_saved_gate_without_build_or_material_execution (tests.test_tresca_mixed_catalogue.MixedCatalogueTests.test_complete_saved_gate_without_build_or_material_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tests/test_tresca_mixed_catalogue.py", line 10, in test_complete_saved_gate_without_build_or_material_execution
+    with patch('subprocess.run',side_effect=AssertionError('no execution')):self.assertTrue(module('mixed_saved',P/'verify.py').verify()['overall_pass'])
+                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/catalogue/investigations/tresca-mixed-catalogue-v1/verify.py", line 17, in verify
+    if isinstance(h,str)and len(h)==64:checked_receipt(ROOT,(P/name).relative_to(ROOT),path,h)
+                                       ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/atlas/evidence.py", line 111, in checked_receipt
+    raise ValueError('evidence source hash mismatch: ' + str(selected))
+ValueError: evidence source hash mismatch: /private/tmp/atlas-vibe2026-live-fix-v1/atlas/cli.py
+
+======================================================================
+ERROR: test_complete_saved_gates_and_generic_failure_checks (tests.test_tresca_solution_constraints.TrescaSolutionConstraintTests.test_complete_saved_gates_and_generic_failure_checks)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tests/test_tresca_solution_constraints.py", line 12, in test_complete_saved_gates_and_generic_failure_checks
+    a=module('v4_verify',P/'verify.py').verify();self.assertTrue(a['overall_pass'])
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/catalogue/investigations/tresca-solution-constraints-v4/verify.py", line 14, in verify
+    checked_receipt(ROOT,str((P/'source-pins.json').relative_to(ROOT)),name,h)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/atlas/evidence.py", line 111, in checked_receipt
+    raise ValueError('evidence source hash mismatch: ' + str(selected))
+ValueError: evidence source hash mismatch: /private/tmp/atlas-vibe2026-live-fix-v1/atlas/initialization.py
+
+======================================================================
+FAIL: test_database_keeps_candidate_and_executable_sources (tests.test_catalogue.CatalogueTests.test_database_keeps_candidate_and_executable_sources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tests/test_catalogue.py", line 153, in test_database_keeps_candidate_and_executable_sources
+    self.assertEqual(row, (0, None))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (0, '{"schema_version": "0.3", "formulation":[12243 chars]}]}') != (0, None)
+
+First differing element 1:
+'{"schema_version": "0.3", "formulation":[12242 chars]"}]}'
+None
+
+Diff is 13373 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_directory_coverage_has_resolvable_provenance (tests.test_catalogue.CatalogueTests.test_directory_coverage_has_resolvable_provenance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tests/test_catalogue.py", line 32, in test_directory_coverage_has_resolvable_provenance
+    self.assertEqual(entry['executable'], entry['id'] in definitions)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True != False
+
+======================================================================
+FAIL: test_generated_layout_and_old_bytes (tests.test_controlled_time.ControlledTimeTests.test_generated_layout_and_old_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tests/test_controlled_time.py", line 133, in test_generated_layout_and_old_bytes
+    for r in json.loads((baseline/'manifest.json').read_text()):self.assertEqual(hashlib.sha256((Path(d)/Path(r['path']).name).read_bytes()).hexdigest(),r['sha256'])
+                                                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '11ace9249a0fd407d05fe7c6a54e5eab0ebf7d405a16039db07518aceac9098e' != '3aa61db5bc802b1099a2c738f3431d1dfe7a5f942b4c710058b397b6326c0e96'
+- 11ace9249a0fd407d05fe7c6a54e5eab0ebf7d405a16039db07518aceac9098e
++ 3aa61db5bc802b1099a2c738f3431d1dfe7a5f942b4c710058b397b6326c0e96
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.208s
+
+FAILED (failures=3, errors=3)

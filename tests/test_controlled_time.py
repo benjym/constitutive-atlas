@@ -128,9 +128,21 @@ class ControlledTimeTests(unittest.TestCase):
    code=(Path(d)/'controlled_time_api.cpp').read_text();self.assertIn('controlled_time_advance',code);self.assertIn('disjoint',code);self.assertNotIn('extern "C" int path_advance',code)
    with self.assertRaises(ValueError):generate(d,[ROOT/'models/linear-elastic.json'])
   baseline=ROOT/'docs/ingestion/vibe-2026/controlled-time-qualification-v1/baseline'
+  import importlib.util
+  helper_path=ROOT/'docs/ingestion/vibe-2026/full-python-contracts-v1/historical_baseline.py'
+  spec=importlib.util.spec_from_file_location('controlled_time_historical_baseline',helper_path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
   with tempfile.TemporaryDirectory() as d:
-   ordinary(d)
+   helper.generate(d)
    for r in json.loads((baseline/'manifest.json').read_text()):self.assertEqual(hashlib.sha256((Path(d)/Path(r['path']).name).read_bytes()).hexdigest(),r['sha256'])
+  # Current ordinary coverage is a distinct strict release check, not the old15.
+  live=json.loads((ROOT/'tests/fixtures/current-sixteen-sclay1-v1.json').read_text());paths={ROOT/row['path'] for row in live['models']}
+  self.assertEqual(len(paths),16);self.assertEqual(paths,set((ROOT/'models').glob('*.json')))
+  for row in live['models']:self.assertEqual(hashlib.sha256((ROOT/row['path']).read_bytes()).hexdigest(),row['sha256'])
+  self.assertEqual(hashlib.sha256((ROOT/live['catalogue']['path']).read_bytes()).hexdigest(),live['catalogue']['sha256'])
+  with tempfile.TemporaryDirectory() as d:
+   emitted=ordinary(d);metadata=json.loads((Path(d)/'models.json').read_text())
+   self.assertEqual({m['id']:m for m in emitted},{load(path)['id']:load(path) for path in paths})
+   self.assertEqual({m['id']:m for m in metadata['models']},{m['id']:m for m in emitted})
  def test_native_loader_rejects_stale_same_shape_identity(self):
   from unittest.mock import patch
   from atlas.controlled_time_compiler import generate
@@ -150,4 +162,33 @@ class ControlledTimeTests(unittest.TestCase):
   bad=deepcopy(spec);bad['segments'].append(dict(id='latefail',duration=1,samples=1,controls_end={**endpoint(),'temperature':-10}))
   with self.assertRaises(ValueError):run(m,bad)
   self.assertEqual(spec,before)
+
+ def test_historical_baseline_context_fails_closed(self):
+  import importlib.util,shutil
+  from unittest.mock import patch
+  source=ROOT/'docs/ingestion/vibe-2026/full-python-contracts-v1/historical_baseline.py'
+  spec=importlib.util.spec_from_file_location('controlled_time_historical_rejection',source);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper);data=helper.context()
+  with tempfile.TemporaryDirectory() as directory:
+   root=Path(directory);context_path=root/helper.PACKET/'historical-context-v1.json';context_path.parent.mkdir(parents=True)
+   needed=[helper.PACKET/'historical-context-v1.json',Path(data['baseline_manifest']['path']),*[Path(row['path']) for row in data['expected_outputs']],Path(data['emitter']['archived_path']),*[Path(row['archived_path']) for row in data['models']]]
+   for relative in needed:
+    target=root/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/relative,target)
+   with patch.object(helper,'ROOT',root):
+    helper.context()
+    original=context_path.read_bytes()
+    for mutation in [None,b'{"version":"unknown"}',original+b' ']:
+     if mutation is None:context_path.unlink()
+     else:context_path.write_bytes(mutation)
+     with self.assertRaises(ValueError):helper.generate(root/'output')
+     context_path.write_bytes(original)
+    for row in [data['emitter'],data['models'][0]]:
+     target=root/row['archived_path'];raw=target.read_bytes()
+     for mutation in [None,raw+b'corrupt']:
+      if mutation is None:target.unlink()
+      else:target.write_bytes(mutation)
+      with self.assertRaises(ValueError):helper.generate(root/'output')
+      target.write_bytes(raw)
+   for mutation in [dict(data['models'][0],path='../escape.json'),dict(data['models'][0],archived_path='models/linear-elastic.json')]:
+    with self.assertRaises(ValueError):helper.verified(mutation)
+
 if __name__=='__main__':unittest.main()

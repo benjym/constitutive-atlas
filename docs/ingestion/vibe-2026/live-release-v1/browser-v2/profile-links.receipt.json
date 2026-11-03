@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async(page)=>{\n const links=await page.locator('.model-profile-technical a').evaluateAll(xs=>xs.map(a=>({text:a.textContent,href:a.href})).filter(a=>a.href.startsWith(location.origin)));\n if(!links.length)throw Error('Missing technical links');\n return await page.evaluate(async links=>{const rows=[];for(const a of links){const r=await fetch(a.href),bytes=await r.arrayBuffer(),digest=await crypto.subtle.digest('SHA-256',bytes);if(r.status!==200)throw Error(a.href+':'+r.status);rows.push({...a,status:r.status,sha256:Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,'0')).join('')});}return rows;},links);\n}\n"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793745055.563076,
+  "elapsed_seconds": 2.333270788192749,
+  "log_sha256": "a99d03de2f1181afdd8a652dcbf0c26f67a20275d538915ef65d2aa4e8654acb"
+}

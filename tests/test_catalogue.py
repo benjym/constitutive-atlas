@@ -29,6 +29,11 @@ class CatalogueTests(unittest.TestCase):
         # Discovery must not advertise candidates as executable definitions.
         definitions = {m['id'] for m in all_models()}
         for entry in entries.values():
+            if 'controlled_time_laboratory' in entry:
+                self.assert_controlled_time_provenance(entry)
+                self.assertNotIn(entry['id'], definitions)
+                self.assertTrue(entry['executable'])
+                continue
             self.assertEqual(entry['executable'], entry['id'] in definitions)
             if not entry['executable']:
                 if any(entry.get(k) for k in ('timed_laboratory', 'material_laboratory', 'path_laboratory', 'implicit_path_laboratory')):
@@ -48,6 +53,37 @@ class CatalogueTests(unittest.TestCase):
                         self.assertIn(entry['discovery_url'].lower(), [s['url'].lower() for s in entries[realized].get('catalogue_sources', [])] + [entries[realized]['discovery_url'].lower()])
                     else:
                         self.assertTrue(entry['capability_gap'])
+
+    def assert_controlled_time_provenance(self, entry, approvals=None):
+        from atlas.agent_review import approval_entry, validate_review
+        from atlas.model import load
+        self.assertEqual(entry.get('controlled_time_laboratory'), 'index.html')
+        self.assertIs(entry.get('executable'), True)
+        self.assertTrue((ROOT / 'web/index.html').is_file())
+        self.assertFalse(any(entry.get(key) for key in ('timed_laboratory', 'material_laboratory', 'path_laboratory', 'implicit_path_laboratory')))
+        self.assertNotIn(entry['id'], {m['id'] for m in all_models()})
+        if approvals is None:
+            approvals = json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models']
+        records = [record for record in approvals if record['model_id'] == entry['id'] and record['status'] == 'approved']
+        self.assertEqual(len(records), 1)
+        record = records[0]
+        path = ROOT / record['definition']['path']
+        self.assertTrue(path.resolve().is_relative_to(ROOT / 'models'))
+        self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), record['definition']['sha256'])
+        model = load(path)
+        self.assertEqual(model['id'], entry['id'])
+        self.assertEqual(model['schema_version'], '0.3')
+        self.assertEqual(model['formulation']['equation_form'], 'controlled_ode')
+        self.assertEqual(model['formulation']['time_dependence'], 'physical_time')
+        self.assertEqual(record['review']['kind'], 'agent-model-review')
+        validate_review(ROOT / record['review']['path'], for_approval=True)
+        self.assertEqual(record, approval_entry(ROOT / record['review']['path']))
+        definitions, _ = approved_definitions()
+        self.assertEqual(model, definitions[entry['id']])
+        self.assertTrue(record['supporting_files'])
+        for pin in record['supporting_files']:
+            resolved = checked_receipt(ROOT, record['review']['path'], pin['path'], pin['sha256'])
+            self.assertEqual(hashlib.sha256(resolved.read_bytes()).hexdigest(), pin['sha256'])
 
     def assert_timed_provenance(self, entry, approvals=None):
         self.assertIn(entry['status'], ('numerically-tested', 'reviewed'))
@@ -149,8 +185,25 @@ class CatalogueTests(unittest.TestCase):
                         if entry.get('discovery_url'):
                             expected.append(entry['discovery_url'])
                         self.assertTrue(set(expected) <= urls, entry['id'])
-                    row = db.execute('SELECT executable,definition_json FROM models WHERE id=?', ('vibe-2026',)).fetchone()
-                    self.assertEqual(row, (0, None))
+                    ordinary = {model['id'] for model in all_models()}
+                    approved, approvals = approved_definitions()
+                    candidates = {entry['id'] for entry in manifest['models']} - ordinary - set(approved)
+                    self.assertTrue(candidates, 'True candidate rows must be tested')
+                    for entry in manifest['models']:
+                        row = db.execute('SELECT executable,definition_json FROM models WHERE id=?', (entry['id'],)).fetchone()
+                        self.assertEqual(row[0], int(entry['id'] in ordinary))
+                        if entry['id'] not in ordinary and entry['id'] not in approved:
+                            self.assertEqual(row, (0, None), entry['id'])
+                        if entry.get('controlled_time_laboratory'):
+                            self.assert_controlled_time_provenance(entry, approvals)
+                            self.assertEqual(json.loads(row[1]), approved[entry['id']])
+                            records = [a for a in approvals if a['model_id'] == entry['id']]
+                            self.assertEqual(len(records), 1)
+                            approval = records[0]
+                            stored = db.execute('SELECT record_json FROM model_approvals WHERE id=?', (approval['id'],)).fetchone()
+                            self.assertEqual(json.loads(stored[0]), approval)
+                            stored = db.execute('SELECT record_json FROM agent_reviews WHERE id=?', (json.loads((ROOT / approval['review']['path']).read_text())['id'],)).fetchone()
+                            self.assertEqual(json.loads(stored[0]), json.loads((ROOT / approval['review']['path']).read_text()))
                     elastic = next(m for m in all_models() if m['id'] == 'linear-elastic')
                     urls = {r[0] for r in db.execute('SELECT url FROM sources WHERE model_id=?', ('linear-elastic',))}
                     self.assertTrue({s['url'] for s in elastic['sources']} <= urls)
@@ -158,3 +211,14 @@ class CatalogueTests(unittest.TestCase):
                     if _:
                         self.assertEqual(count, prior_count)
                     prior_count = count
+
+    def test_controlled_time_route_requires_exact_approved_profile(self):
+        entry = next(e for e in json.loads((ROOT / 'catalogue/manifest.json').read_text())['models'] if e.get('controlled_time_laboratory'))
+        records = [r for r in json.loads((ROOT / 'catalogue/approved-models.json').read_text())['models'] if r['model_id'] == entry['id']]
+        self.assert_controlled_time_provenance(entry, records)
+        for corrupted in ([], [{**records[0], 'status': 'candidate'}], [{**records[0], 'scope': {'use': 'forged'}}], [{**records[0], 'definition': {**records[0]['definition'], 'sha256': '0' * 64}}], [{**records[0], 'review': {**records[0]['review'], 'sha256': '0' * 64}}]):
+            with self.subTest(approval=corrupted), self.assertRaises((AssertionError, ValueError)):
+                self.assert_controlled_time_provenance(entry, corrupted)
+        for change in ({'controlled_time_laboratory': 'other.html'}, {'controlled_time_laboratory': None}, {'executable': False}, {'id': 'unknown'}, {'id': 'linear-elastic'}, {'path_laboratory': 'index.html'}):
+            with self.subTest(change=change), self.assertRaises((AssertionError, ValueError)):
+                self.assert_controlled_time_provenance({**entry, **change}, records)

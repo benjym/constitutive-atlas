@@ -193,3 +193,10 @@ Local cleanup evidence: cleanup-v1/local-output-retention-v1.json verified7532 f
 ## Authorized release in progress —4November2026
 
 New user Yes authorizes push/deploy;408e1933a pushed, original FastCI failure preserved. Test-only sandbox fix independently accepted and pushed34c49281d; production/scientific bytes unchanged. Current FastCI41716671573, Full41716671358, Controlledtime41716671444 are being observed. Cleanup reopened for new owned correction worktree and upcoming artifact/browser resources. No live-delivery claim; E8 depends on all terminal gates and tested-upload/live/actual-browser checks.
+
+E8 live checks2026-11-04: application89047fc6a, Pages41728841056 and deployment7532325589 SUCCESS; actual1533file tested uploadSHA7d253b2b retained. live-upload-comparison-v2.json passes all32selected liveasset/link matches, exact exportedengineidentity, complete frozen default request/result, profile30parameters/relatedlinks/labbutton, desktop/mobile plots/bounds,0consoleerrors/warnings/HTTPfailures. Own browser closed and slot RELEASED; duplicates verified then removed. Fullqualification41728007969 remains pending, so E8 and umbrella stay open; worktree cleanup/finalledger pending.
+
+
+E8 correction2026-11-04: Fullqualification41728007969 native macOS/Linux each returned the same six failures; the earlier pending statement is superseded. Live89047fc6a checks remain retained as an exact historical deployment result. FIX-vibe2026-full-python-contracts-v1 is independently reviewed source/test-context work in progress; original failures and rejected preservation-plan attempt are retained. No current E8 completion claim. A new pushed repair revision requires all original CI jobs and new exact-revision Pages/upload/live qualification.
+
+E8 accepted successor correction: sourcefreeze75d282ac and independent decisionb17632d5 preserve all original frozen outputs/scientific identities. Three live subchecks reopened for the successor revision;89047fc6a historical actual-browser/upload checks remain retained. All original successor workflow jobs, exact deployment/upload/live assets/profile/run and final cleanup remain mandatory.
