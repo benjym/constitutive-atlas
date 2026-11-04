@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';import{fileURLToPath}from'node:url';import{dirname,join}from'node:path';
+import{collect,parity}from'../nine-example-refresh-plan-v1/collector-core.mjs';
+const R=dirname(fileURLToPath(import.meta.url)),P=join(R,'../nine-example-refresh-plan-v1'),O=join(R,'../nine-example-observations-v1'),read=p=>JSON.parse(fs.readFileSync(p,'utf8')),rows=read(join(P,'requests.json')),binding=read(join(O,'actual-binding.json')),catalogue=read(binding.metadata.path),policy=read(join(P,'policy.json'));let checks=0;const reports=[];
+for(const backend of ['native','wasm']){
+ const journal=fs.readFileSync(join(O,backend,'transport.ndjson'),'utf8').trim().split('\n').map(JSON.parse);assert.deepEqual(journal.at(-1),{phase:'collector-final',status:'passed'});checks++;
+ assert.ok(journal.every(x=>!x.phase.includes('exception')&&!x.phase.includes('failure')));checks++;
+ const before=journal.filter(x=>x.phase==='ccall-before'),returned=journal.filter(x=>x.phase==='ccall-returned');assert.equal(before.length,36);assert.equal(returned.length,36);let i=0;
+ const engine={ccall(...args){assert.deepEqual(args,before[i].arguments);assert.equal(before[i].id,i);assert.equal(returned[i].id,i);return returned[i++].raw;}};
+ const saved=[];const report=collect(rows,catalogue,engine,{readOld:r=>read(r.old_document.path),saveDocument:(id,kind,doc)=>saved.push({id,kind,doc})});
+ assert.equal(i,36);assert.deepEqual(report,read(join(O,backend,'report.json')));assert.equal(saved.length,54);checks++;
+ for(const item of saved){assert.deepEqual(item.doc,read(join(O,backend,item.id+'-'+item.kind+'.json')));checks++;}
+ assert.ok(report.rows.every(x=>x.passed&&x.exact_replay&&x.negatives.length===5&&x.negatives.every(n=>n.rejected)&&x.historical_comparison_gate==='diagnostic-only-no-budget'));checks++;
+ if(backend==='native'){
+  const commands=journal.filter(x=>x.phase==='native-process-before'),results=journal.filter(x=>x.phase==='native-process-returned');assert.equal(commands.length,36);assert.equal(results.length,36);
+  let serial=0;for(let n=0;n<36;n++){const [name,type,types,args]=before[n].arguments;let expected=['--describe'];if(name!=='atlas_describe'){expected=['--response-contract','stress-scope-0.1','--mode',name.includes('controls')?'run-controls':'run','--model',args[0],'--parameters',args[1],'--initial',args[2],'--protocol',String(args[3])];if(name.includes('controls')){const wire=join(O,backend,'controls',String(serial++)+'.csv');assert.equal(fs.readFileSync(wire,'utf8'),args[4]);expected.push('--laboratory-controls-file',wire,'--integration-settings',args[5]);}else expected.push('--target',String(args[4]),'--steps',String(args[5]),'--cycles',String(args[6]),'--integration-settings',args[7]);}assert.deepEqual(commands[n].argv,[binding.artifacts.native.path,...expected]);assert.equal(commands[n].argv[0],binding.artifacts.native.path);assert.equal(commands[n].cwd,binding.repo);assert.deepEqual(results[n].argv,commands[n].argv);assert.equal(results[n].status,0);assert.equal(results[n].signal,null);assert.equal(results[n].error,null);assert.equal(results[n].stderr,'');assert.equal(results[n].stdout,returned[n].raw);checks++;}
+ }else{assert.deepEqual(journal[0].module,binding.artifacts.module);assert.deepEqual(journal[0].wasm,binding.artifacts.wasm);assert.equal(journal[1].phase,'module-initialization-returned');checks++;}
+ reports.push(report);
+}
+const pairs=reports[0].rows.map((a,i)=>{const b=reports[1].rows[i];assert.equal(a.id,b.id);assert.deepEqual(a.specification,b.specification);return{id:a.id,...parity(a.result,b.result,policy)};});assert.deepEqual(pairs,read(join(O,'compare/report.json')).pairs);checks++;
+console.log(JSON.stringify({status:'PASS',saved_replay_checks:checks,backend_calls_replayed:36,material_calls_replayed_per_backend:18,negative_parser_checks_per_backend:45,native_wasm_pairs:9,maximum_budget_fraction:Math.max(...pairs.map(x=>x.maximum_budget_fraction)),actual_compiled_module_material_calls:0}));

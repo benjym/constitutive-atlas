@@ -1,0 +1,50 @@
+--- frozen-v2/launcher.py
++++ proposed-v3/launcher.py
+@@ -2,9 +2,9 @@
+ from pathlib import Path
+ import argparse,hashlib,json,os,sys,time,traceback,importlib.util
+ sys.dont_write_bytecode=True
+-P=Path(__file__).resolve().parent;B=P.parent;ROOT=P.parents[3]
++P=Path(__file__).resolve().parent;B=P.parents[1]/'unheld-finalisation-20261102-v1';ROOT=P.parents[3]
+ POLICY=json.loads((P/'POLICY.json').read_text())
+-POLICY_SHA='0448a4db691254f2ff81acb67eb0ffca08ccc2b74c44917a6b2c9a30ebdf0df9'
++POLICY_SHA='5d31c92507dd330493b59777225be02ec56d4113809cdaf09c4dd7c0e4398151'
+ ADDENDUM_SHA='cdcfbbc9d82abac9efa6f8b9c0474bc914afdcee30cc8638422c5dc68bcaf1c1'
+ ACTUAL_DIR=B/'baseline-five-export-source-successor-actual-review-v1'
+ ACTUAL_SHA='c7e6c3dae53b5096fea876194d0c3c64d7661b77e2a1d3dc0edb95d2c9fb2a1c'
+@@ -44,10 +44,12 @@
+ 
+ def handoff_guard(claim,process,handoff,resource,now):
+  require(claim.get('identity')=='baseline-publication-local-package-serial-claim-v1'and claim.get('owner')=='/root'and claim.get('state')=='claimed-before-launch'and claim.get('source_revision')==POLICY['revision'],'coordinator serial claim required')
+- require(handoff.get('prior_owner')=='Interface'and handoff.get('state')=='released-after-mandatory-reap'and handoff.get('all_children_reaped')is True,'explicit Interface prior-owner release required')
++ authority=POLICY['prior_owner_authority']
++ require(handoff.get('identity')=='baseline-package-prior-owner-fresh-verification-v3'and handoff.get('verified_by')=='/root'and handoff.get('prior_owner')==authority['owner']and handoff.get('state')=='released-after-mandatory-reap'and handoff.get('all_children_reaped')is True and handoff.get('no_newer_active_owner')is True,'fresh verified actual prior-owner release required')
++ require(handoff.get('terminal_sha256')==authority['terminal']['sha256']and handoff.get('reap_sha256')==authority['reap']['sha256']and handoff.get('historical_child_ended_ns')==authority['historical_child_ended_ns'],'wrong immutable terminal/reap authority')
+  require(process.get('identity')=='baseline-publication-local-package-process-guard-v1'and process.get('full_ps_argv')==['ps','-axo','pid,ppid,pgid,stat,etime,args']and process.get('active_model_build_package_browser_processes')==[],'fresh complete process guard required')
+- times=[handoff['released_epoch'],process['captured_epoch'],resource['captured_epoch'],claim['claimed_epoch']]
+- require(all(isinstance(t,(int,float))and 0<=now-t<=300 for t in times)and times[0]<=times[1]<=times[3]and times[2]<=times[3],'fresh ordered release/process/resource/claim required')
++ times=[handoff['verified_epoch'],process['captured_epoch'],resource['captured_epoch'],claim['claimed_epoch']]
++ require(all(isinstance(t,(int,float))and 0<=now-t<=300 for t in times)and times[0]<=times[1]<=times[3]and times[2]<=times[3],'fresh ordered verification/process/resource/claim required')
+  require(resource['source_revision']==POLICY['revision']and resource['committed_logical_bytes']==POLICY['source_logical_bytes'],'exact saved source size required')
+  required=2*resource['committed_logical_bytes']+7*1024**3
+  require(resource['available_bytes']>=required,'fresh disk budget insufficient; no source export authorized')
+@@ -66,7 +68,11 @@
+  require(receipt['committed']is True and receipt['four_bundle_recovery']is True and receipt['package_executed']is False,'genuine completed source-only successor required')
+  process=pin(auth['process_guard']);handoff=pin(auth['prior_owner_handoff']);claim=pin(auth['serial_claim']);resource=pin(auth['resource_assessment'])
+  ps=process['full_ps_raw'];require(sha(ps['path'])==ps['sha256']and Path(ps['path']).stat().st_size==ps['bytes'],'full ps snapshot not retained')
++ authority=POLICY['prior_owner_authority'];terminal_release=pin(authority['terminal']);reap=pin(authority['reap'])
++ require(terminal_release.get('serial_slot')=='RELEASED'and terminal_release.get('owned_group_absent')is True and isinstance(terminal_release.get('completion',{}).get('exit_code'),int),'genuine explicit terminal/release required')
++ require(reap.get('child_completed')is True and reap.get('owned_group_absent_after_reap')is True and reap.get('ended_ns')==authority['historical_child_ended_ns']and reap.get('child_pid')==terminal_release.get('child_pid'),'genuine same-child completed/reap authority required')
+  required=handoff_guard(claim,process,handoff,resource,now)
++ require(claim['prior_owner_verification_sha256']==auth['prior_owner_handoff']['sha256'],'claim must bind exact fresh verification')
+  require(claim['plan_manifest_sha256']==manifest_sha and claim['actual_source_review_sha256']==ACTUAL_SHA,'claim must bind exact authorities')
+  output_guard(POLICY['source'],POLICY['runner_temp'],ROOT/POLICY['durable_execution_directory'])
+  return {'required_available_bytes':required,'claim':claim}
+@@ -132,6 +138,7 @@
+  return result
+ 
+ def execute(auth_path,manifest_sha):
++ require(POLICY.get('execution_permitted')is True,'execution blocked: '+POLICY['execution_blocker'])
+  auth=json.loads(raw(auth_path));authorization_guard(auth,manifest_sha,time.time())
+  source=Path(POLICY['source']);temp=Path(POLICY['runner_temp']);out=ROOT/POLICY['durable_execution_directory']
+  guard=source_guard();guard()

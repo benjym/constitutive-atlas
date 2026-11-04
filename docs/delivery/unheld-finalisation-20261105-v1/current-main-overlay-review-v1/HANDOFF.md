@@ -1,0 +1,13 @@
+# Current-main five-model overlay review
+
+REVIEW-baseline-five-current-main-overlay-v1; independent /root/publication_operations_review, author /root/baseline_migration. ACCEPTED only final-active-v1 manifest447eaf19/table4e7c6d54 against currentmain6b957. Never install parent35draft/research.py alternative.
+
+Exact64paths/8,410,740B:12 replacements+52additions => effective43,909members from43,857. Five exact acceptedv03 models/E5records and62directpin closure verified. Active30 retains25objects/order and replaces only5positions; exactoriginal30registry andoldfive review/definition/approvalbytes remain history. All33 publicreviews/67originalJSON retained; oldfive accepted/noncurrent/unregistered. Normalmetadata export51models217sources30approvals26registeredreviews. No core/CI/web/profile/app/control/ordinary16/current15role source changes.
+
+Reproduce `python3 -B check_overlay.py --manifest-sha256 447eaf19090e688ce6870f4ed33b5fe9183882772d5927a09842f5f1506deaf4`:36,270checks; `python3 -B check_supersession.py`:14 tiny integrity witnesses; strict frozen author replay487 equality passed with98 disposable contexts redirected here and removed. Genuine tool575f60/ba7e42/d87be8 exits0. Source/helperpins and exactretained162-member parentmanifest verified. All rawfailedreviewer checks preserved: wrongsupporting-file context, initial314unchanged assumption and schema-key editing mistakes; correctedactualconsumercontext/schema, no production gate relaxed. Initial inspection KeyError retained. Unused generic historical checker was neverexecuted and is only a draft.
+
+Resolved VW96 oldexperimental claim explicitly historical to1df95; newv03/current16 experimental equivalence excluded. Minor README314unchanged wording is309unchanged+5initialmodelpreimages; frozen code correctly checksbeforemutation.
+
+No temporary resources/processes remain; no author/shared/source writes/Git/build/module/material/browser/remote execution. Exact newsource installation remains coordinator-owned and requires fresh preimages, nofollow regularmodes and archive-first/fullresult verification.
+
+Next: separately review current16 runner, fresh serial current16 native/Wasm and two controlled-path qualifier refreshes (NorSand/Interface). Maxwell source unchanged, normalguard stillmandatory. Current4 example envelopes bind oldwholecatalogue; require freshsame-request4 +5baseline =9 newactual envelopes; old15 baseline evidence historical. Complete package/profile/archive/approval guards and actualbrowser/live E6-E8. This decision grants no package/numerical/live claim or modelscientific scope expansion.

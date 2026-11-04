@@ -1,0 +1,32 @@
+--- frozen-v2/check.py
++++ proposed-v3/check.py
+@@ -18,7 +18,7 @@
+  check('runtime source exact',cmd['cwd']==L.POLICY['source'])
+  env=L.closed_environment(L.POLICY['runner_temp']);check('closed env no inherited injection',set(env)=={'PATH','HOME','XDG_CONFIG_HOME','TMPDIR','LC_ALL','TZ','PYTHONDONTWRITEBYTECODE','PYTHONNOUSERSITE','PYTHONHASHSEED','GIT_CONFIG_NOSYSTEM','GIT_CONFIG_SYSTEM','GIT_CONFIG_GLOBAL','GIT_CONFIG_COUNT','GIT_ATTR_NOSYSTEM','GIT_NO_REPLACE_OBJECTS','GIT_OPTIONAL_LOCKS','GIT_TERMINAL_PROMPT','GITHUB_SHA','RUNNER_TEMP'})
+  check('runtime fixed revision/temp',env['GITHUB_SHA']==L.POLICY['revision']and env['RUNNER_TEMP']==L.POLICY['runner_temp'])
+- now=1000;handoff={'prior_owner':'Interface','state':'released-after-mandatory-reap','all_children_reaped':True,'released_epoch':900};process={'identity':'baseline-publication-local-package-process-guard-v1','full_ps_argv':['ps','-axo','pid,ppid,pgid,stat,etime,args'],'active_model_build_package_browser_processes':[],'captured_epoch':920};resource={'source_revision':L.POLICY['revision'],'committed_logical_bytes':L.POLICY['source_logical_bytes'],'available_bytes':22000000000,'captured_epoch':930};claim={'identity':'baseline-publication-local-package-serial-claim-v1','owner':'/root','state':'claimed-before-launch','source_revision':L.POLICY['revision'],'claimed_epoch':940}
++ now=1000;handoff={'identity':'baseline-package-prior-owner-fresh-verification-v3','verified_by':'/root','prior_owner':L.POLICY['prior_owner_authority']['owner'],'state':'released-after-mandatory-reap','all_children_reaped':True,'no_newer_active_owner':True,'verified_epoch':900,'terminal_sha256':L.POLICY['prior_owner_authority']['terminal']['sha256'],'reap_sha256':L.POLICY['prior_owner_authority']['reap']['sha256'],'historical_child_ended_ns':L.POLICY['prior_owner_authority']['historical_child_ended_ns']};process={'identity':'baseline-publication-local-package-process-guard-v1','full_ps_argv':['ps','-axo','pid,ppid,pgid,stat,etime,args'],'active_model_build_package_browser_processes':[],'captured_epoch':920};resource={'source_revision':L.POLICY['revision'],'committed_logical_bytes':L.POLICY['source_logical_bytes'],'available_bytes':22000000000,'captured_epoch':930};claim={'identity':'baseline-publication-local-package-serial-claim-v1','owner':'/root','state':'claimed-before-launch','source_revision':L.POLICY['revision'],'claimed_epoch':940}
+  required=L.handoff_guard(claim,process,handoff,resource,now);check('exact tar/export+7GiBbudget',required==2*L.POLICY['source_logical_bytes']+7*1024**3)
+  for kind in['owner','claimstate','revision','handoff','reap','ps','active','stale','future','order','disk','size']:
+   c=copy.deepcopy(claim);p=copy.deepcopy(process);h=copy.deepcopy(handoff);r=copy.deepcopy(resource)
+@@ -29,9 +29,9 @@
+   elif kind=='reap':h['all_children_reaped']=False
+   elif kind=='ps':p['full_ps_argv']=['ps']
+   elif kind=='active':p['active_model_build_package_browser_processes']=['busy']
+-  elif kind=='stale':h['released_epoch']=600
++  elif kind=='stale':h['verified_epoch']=600
+   elif kind=='future':p['captured_epoch']=1001
+-  elif kind=='order':h['released_epoch']=950
++  elif kind=='order':h['verified_epoch']=950
+   elif kind=='disk':r['available_bytes']=required-1
+   else:r['committed_logical_bytes']=1
+   reject('handoff rejects '+kind,lambda c=c,p=p,h=h,r=r:L.handoff_guard(c,p,h,r,now))
+@@ -107,5 +107,8 @@
+  check('original72 assertions preserved before exporter extension',len(checks)==72)
+  from export_regression import run as exporter_checks
+  exporter_checks(L,check)
++ check('all original80 assertions before v3 extension',len(checks)==80)
++ from handoff_regression import run as handoff_checks
++ handoff_checks(L,check,reject,handoff,process,resource,claim,now)
+  return {'identity':'baseline-publication-local-package-plan-source-checks-v1','status':'PASS','count':len(checks),'actual_operations':False,'candidate_source_git_tool_sdk_process_calls':0,'checks':checks}
+ if __name__=='__main__':print(json.dumps(run(),indent=2))

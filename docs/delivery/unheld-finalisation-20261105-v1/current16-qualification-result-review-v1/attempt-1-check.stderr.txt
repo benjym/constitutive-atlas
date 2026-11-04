@@ -1,0 +1,43 @@
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261105-v1/current16-qualification-result-review-v1/check.py", line 25, in <module>
+    try:m.assess_pair(types.SimpleNamespace(native=P/'native-v1',wasm=P/'wasm-v1',output=R/'pair-replay.json'))
+        ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261102-v1/baseline-qualification-plan-v5/collector.py", line 308, in assess_pair
+    result=module.execute(solver,model) if model else module.execute(solver);replay.exhausted()
+                                                      ~~~~~~~~~~~~~~^^^^^^^^
+  File "/private/tmp/atlas-baseline-delivery-20261105/source/tools/verify_elasticity.py", line 98, in execute
+    runtime=dict(python=platform.python_version(),platform=platform.platform(),solver_sha256=sha256(solver)),
+                                                           ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/platform.py", line 1354, in platform
+    system, node, release, version, machine, processor = uname()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/platform.py", line 959, in __iter__
+    (self.processor,)
+     ^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/functools.py", line 1126, in __get__
+    val = self.func(instance)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/platform.py", line 954, in processor
+    return _unknown_as_blank(_Processor.get())
+                             ~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/platform.py", line 886, in get
+    return func() or ''
+           ~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/platform.py", line 922, in from_subprocess
+    return subprocess.check_output(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        ['uname', '-p'],
+        ^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        encoding="utf8",
+        ^^^^^^^^^^^^^^^^
+    ).strip()
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 473, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261105-v1/current16-qualification-result-review-v1/check.py", line 20, in saved_only
+    assert len(argv)==6 and argv[1].endswith('/run_study.py') and argv[2]=='--replay' and argv[4]=='--output',argv
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ['uname', '-p']

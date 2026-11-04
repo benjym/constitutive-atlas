@@ -1,0 +1,32 @@
+{
+  "identity": "baseline-nine-named-prospective-policy-v1",
+  "parity_relative_tolerance": 1e-10,
+  "physical_point_fields": [
+    "state",
+    "strain",
+    "p",
+    "q",
+    "q_signed",
+    "u",
+    "error"
+  ],
+  "all_other_channels": "exact",
+  "replay": "per-backend deep semantic equality; omit elapsed_ms only",
+  "negative_envelopes": [
+    "stale-catalogue",
+    "model",
+    "settings",
+    "loading",
+    "state"
+  ],
+  "success_required": true,
+  "expected_points": "specification.steps+1",
+  "native_transport_timeout_ms": 30000,
+  "native_transport_max_buffer": 16777216,
+  "backend_order": [
+    "native",
+    "wasm",
+    "compare"
+  ],
+  "no_old_envelope_numeric_budget": "Old documents are historical identity/stale observations only. No numeric comparison or tolerance is inferred."
+}

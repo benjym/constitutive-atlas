@@ -1,0 +1,36 @@
+--- docs/delivery/unheld-finalisation-20261102-v1/baseline-qualification-execution-v5/build.py
++++ docs/delivery/unheld-finalisation-20261105-v1/current16-qualification-plan-v1/build.py
+@@ -1,9 +1,15 @@
+ """Coordinator serial build provenance; invoke only after explicit slot handoff."""
+ from pathlib import Path
+-import argparse,hashlib,importlib.util,json,os,subprocess,sys,time
++import argparse,hashlib,importlib.util,json,os,re,subprocess,sys,time
+ HERE=Path(__file__).resolve().parent
+-PLAN=HERE.parent/'baseline-qualification-plan-v5'
++PLAN=Path('/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261102-v1/baseline-qualification-plan-v5')
+ spec=importlib.util.spec_from_file_location('prospective_plan',PLAN/'collector.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
++
++def compiler(path,language):
++ expression=re.compile(r'set\(CMAKE_'+language+r'_COMPILER "([^"\n]+)"\)')
++ rows=[match[1] for line in path.read_text().splitlines() if (match:=expression.fullmatch(line))]
++ assert len(rows)==1,'exact unique literal compiler declaration required'
++ return Path(rows[0]).resolve()
+ 
+ def main():
+  a=argparse.ArgumentParser();a.add_argument('--source-freeze',type=Path,required=True);a.add_argument('--work',type=Path,required=True);a.add_argument('--slot-handoff',required=True);args=a.parse_args()
+@@ -47,10 +53,11 @@
+    cache=(directory/'CMakeCache.txt').read_text();(out/(backend+'-CMakeCache.txt')).write_text(cache)
+    receipt.setdefault('cmake_caches',[]).append(m.pin(out/(backend+'-CMakeCache.txt')))
+    for language in ['CXX','C']:
+-    line=next(x for x in cache.splitlines() if x.startswith('CMAKE_'+language+'_COMPILER:FILEPATH=') or x.startswith('CMAKE_'+language+'_COMPILER:STRING='));compiler=Path(line.split('=',1)[1]).resolve()
+-    receipt.setdefault('all_resolved_compilers',{})[backend+'_'+language]=m.pin(compiler)
+-    if language=='CXX':receipt['resolved_compilers'][backend]=m.pin(compiler)
+-    receipt['compiler_version_logs'].append(run([str(compiler),'--version'],backend+'-'+language+'-compiler-version'))
++    metadata=sorted((directory/'CMakeFiles').glob('*/CMake'+language+'Compiler.cmake'));assert len(metadata)==1,'exact unique generated compiler metadata required'
++    metadata_pin=m.pin(metadata[0]);receipt.setdefault('compiler_metadata',{})[backend+'_'+language]=metadata_pin;resolved=compiler(metadata[0],language)
++    receipt.setdefault('all_resolved_compilers',{})[backend+'_'+language]=m.pin(resolved)
++    if language=='CXX':receipt['resolved_compilers'][backend]=m.pin(resolved)
++    receipt['compiler_version_logs'].append(run([str(resolved),'--version'],backend+'-'+language+'-compiler-version'));m.verify(metadata_pin)
+    receipt['generated_files'] += [m.pin(directory/'generated'/name) for name in ['models.hpp','models.json']];save()
+   receipt['artifacts']={key:m.sha(path) for key,path in [('native',native/'atlas_solver'),('module',wasm/'atlas.js'),('wasm',wasm/'atlas.wasm')]}
+   receipt['artifact_pins']={key:m.pin(path) for key,path in [('native',native/'atlas_solver'),('module',wasm/'atlas.js'),('wasm',wasm/'atlas.wasm')]}

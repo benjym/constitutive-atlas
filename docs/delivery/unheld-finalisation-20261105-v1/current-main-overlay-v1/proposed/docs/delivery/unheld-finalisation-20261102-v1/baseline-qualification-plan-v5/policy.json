@@ -1,0 +1,66 @@
+{
+  "identity": "baseline-five-qualification-policy-v5",
+  "status": "prospective; independent review required before execution",
+  "candidate_sha256": {
+    "modified-cam-clay": "96b33fadf285f555ef98c35d98cd562533c5ee3ae233aee8515e7e1c85f58777",
+    "linear-elastic": "67a7203bc13486fcc431b2f2dd421b4d80300fadc45faacf6db5a4a89e499b5b",
+    "drucker-prager": "bdb66fb0a6b2b734830470f9407780deaae0e4610a823b9639ddbc1a5f324a2b",
+    "hypoplastic-sand-igs97": "64453d282cf2c0f5e4e2b0923394e289702a9a2440f9ff7cc2d90a0c134a8108",
+    "hypoplastic-sand-vw96": "c028cdcd46b79d23c2798ff5309b8e8af8fb68ebf94ff08632dbf9af86ca4595"
+  },
+  "unchanged_gate_sha256": {
+    "tools/verify_elasticity.py": "1f0debba785e905d4b1642cd66f536fcfbcd4441303a0abcd72bd7008cb08b9e",
+    "tools/verify_hypoplasticity.py": "8aadab8cfae1d25b454bff0da1efc6020306c3c2a3539a9dc8725bc2067b23f7",
+    "tools/verify_igs.py": "42d3fc38a83378fb61ece773048a6c76554b4aa37db6fcf7e84fdeb198fc3414",
+    "tools/verify_plasticity.py": "973546461f1951e2871a969314a8f54e317d4598a365db25911392d288c7a9ed",
+    "catalogue/investigations/dp-dilatancy-domain-v1/cases.json": "6cf5eb0485912af8931fc58059578acd4ad4f3b9d4cc3736ebe5e75d8db0ef42",
+    "catalogue/investigations/dp-dilatancy-domain-v1/run_study.py": "e067291ec2db3d0bf2fbfaa3fe11c3fd6cc46ebf92926136afc5fbed0fa308e1",
+    "catalogue/investigations/dp-dilatancy-domain-v1/prospective-freeze.json": "1b4fe0aa4dfe0e3c1727df57bb0183415dd154af645ea0b6f775ee80fc25193d"
+  },
+  "expected_case_counts": {
+    "elasticity": 29,
+    "vw96": 229,
+    "igs97": 303,
+    "mcc": 57,
+    "dp83": 83
+  },
+  "references": {
+    "elasticity": "unchanged Cartesian Lame closed form; 1e-4 Pa stress,1e-10 void,1e-10 relative",
+    "vw96": "unchanged source Cartesian rate and independently refined RK4; constants in pinned script",
+    "igs97": "unchanged host decomposition/IGS factor/cap/reversal/RK4; TOLERANCES in pinned script",
+    "mcc": "unchanged scalar elimination on actual accepted partition, analytical/continuum convergence and negatives; constants in pinned script",
+    "dp83": "exact 83 frozen cases/expected arrays/tolerances/acceptance and unchanged saved replay assessor; old model label retained as historical gate identity"
+  },
+  "negative_policy": "Reuse every original expected failure, exact rollback, failed unpartitioned-reference diagnostic and convergence failure; no deletion or reinterpretation to obtain pass. Add parser rejection separately: missing/empty/short/nonfinite state and missing/short/nonfinite/malformed loading must return nonzero and ok=false; parser rejection need not fabricate a state. Every rejection followed by exact full same-backend valid zero-load result.",
+  "gamma_policy": "DP/MCC full public solve-vector still requires gamma slot; do not silently shorten vector. Its v0.3 role is plastic_multiplier, not persistent. Change incoming gamma only to0.125 and require exact zero-load result equality; solver.reset_transients is the source. No claim that API rejects any finite gamma history.",
+  "backend_policy": "Each backend independently passes every original oracle gate. Retain complete raw requests/stdout/stderr/results/state, not selected stress components. Do not use parity as independent science. One persistent Wasm engine instance handles all calls including failure/retry; native CLI retries are separate processes and do not qualify in-process host recovery.",
+  "freeze_policy": "Acyclic source-freeze BEFORE build: exact current source/reference/tool/model/collector identities and explicit toolchain executable hashes. Parent serial actual configure/build receipt binds that prefreeze and complete generated/log/artifact hashes. Postbuild freeze extends unchanged source-freeze with actual artifact identities BEFORE qualification calls. All output identities are new, never overwritten.",
+  "build_receipt_required": {
+    "source_sha256": "exact source_files() inventory filtered atlas/cpp/models/schemas/cmake/tools plus root CMakeLists.txt",
+    "artifacts": {
+      "native": "sha256",
+      "module": "sha256",
+      "wasm": "sha256"
+    },
+    "serial_builds_parallel_1": true,
+    "additional_required_human_reviewed_provenance": "retain actual configure/build argv/status/source pre/post/generated-header inventory and toolchain hashes; source hash declaration alone does not prove compiler execution",
+    "source_freeze": "pin(path,bytes,sha256) of genuine prebuild source-freeze",
+    "build_tools": "exact prefreeze four-role tool pin mapping",
+    "build_argv": "two actual cmake --build ... --target atlas_solver --parallel 1 argv arrays, ordered native then Wasm",
+    "all_processes_success": true,
+    "logs": "at least4 exact log pins for native/Wasm configure/build; retain failures under distinct attempts",
+    "generated_files": "at least4 exact file pins for native/Wasm generated/models.hpp and generated/models.json",
+    "resolved_compilers": "native/wasm mapping to exact resolved compiler executable pins from genuine CMakeCache/toolchain, beyond /usr/bin launch stubs",
+    "compiler_version_logs": "at least2 exact pins retaining actual compiler version output; not proof of full installed toolchain closure"
+  },
+  "scope_exclusions": [
+    "No actual native/Wasm pass yet",
+    "No new scientific approval or transfer of full historical package",
+    "Strict15 catalogue/package gate handled by separate baseline-integration-v2 collector",
+    "No browser/live/FE/finite-spin qualification"
+  ],
+  "source_inventory_policy": "All regular files below atlas/cpp/models/schemas/cmake/tools, excluding only __pycache__ and .DS_Store, plus root CMakeLists and unchanged DP reference closure. Changed, added and removed C/header/build-helper inputs are guarded.",
+  "pair_evidence_policy": "Require complete exact output membership and real5candidate freeze, artifact/source pins, all5 reference corpora and42interface rows. Replay every saved raw call through unchanged reference assessors and interface assertions; reject missing/truncated/reordered/corrupt evidence. Require exact contiguous global stage order describe,elasticity,vw96,igs97,mcc,dp83,explicit-interface; stage-block reordering or splitting rejects.",
+  "numeric_adapter_policy": "Native-style finite decimal and exact binary64 round-to-nearest-even C hexadecimal numbers; reject overflow/underflow, empty/whitespace-only/trailingjunk/JS alternate literals; native integral bounds abs<=1000000. Scope excludes untested arbitrary locale/rounding-mode changes.",
+  "acyclic_provenance_policy": "execution freeze explicitly pins source-freeze and actual-build receipt; collector pre/post and pair require complete exact generator closure, unchanged original policy gate hashes, source/model/tool/artifact/log/generated/compiler bindings and successful explicit serial build argv. Actual execution authenticity additionally reviewed against original command logs."
+}

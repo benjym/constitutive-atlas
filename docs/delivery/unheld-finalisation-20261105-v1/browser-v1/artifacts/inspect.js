@@ -1,0 +1,1 @@
+return await page.locator('input,select,button,summary').evaluateAll(es=>es.map(e=>({tag:e.tagName,id:e.id,text:e.textContent.slice(0,90),value:e.value})));

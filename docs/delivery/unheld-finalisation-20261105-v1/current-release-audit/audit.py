@@ -1,0 +1,22 @@
+"""Static saved-vector/local-Git audit. No checkout/build/module/artifact execution."""
+from pathlib import Path
+import hashlib,json,os,subprocess
+R=Path(__file__).resolve().parents[4];P=Path(__file__).resolve().parent;B=R/'docs/delivery/unheld-finalisation-20261102-v1';ENV={**os.environ,'GIT_OPTIONAL_LOCKS':'0'}
+def git(*args):return subprocess.check_output(['git',*args],cwd=R,env=ENV)
+def parse(raw):
+ out={}
+ for row in raw.rstrip(b'\0').split(b'\0'):
+  header,name=row.split(b'\t',1);mode,kind,oid=header.decode().split();out[os.fsdecode(name)]={'mode':mode,'oid':oid}
+ return out
+saved=B/'baseline-five-export-source-successor-actual-review-v1/read-only-child-006/stdout.raw';raw=saved.read_bytes();assert hashlib.sha256(raw).hexdigest()=='300344900baf222e8159b2380bc2175cf0a11e80a167af99eb9879c6869a8a5d';old=parse(raw)
+selectors=['models','atlas','cpp','cmake','schemas','tools','web','.github','CMakeLists.txt','catalogue/manifest.json','catalogue/approved-models.json','catalogue/laboratory-examples.json','catalogue/agent-reviews'];current=parse(git('ls-tree','-r','-z','origin/main','--',*selectors))
+selected=lambda n:n.split('/')[0]in selectors or n in selectors or n.startswith('catalogue/agent-reviews/')
+changed=[{'path':n,'old':old.get(n),'origin_main':v}for n,v in current.items()if old.get(n)!=v];removed=[{'path':n,**v}for n,v in old.items()if selected(n)and n not in current]
+get=lambda n:json.loads(git('show','origin/main:'+n))
+registry=get('catalogue/approved-models.json')['models'];accepted=json.loads((B/'baseline-five-publication-additive-source-v1/proposed/catalogue/approved-models.json').read_text())['models'];records=[r for r in accepted if '-v03-'in r['id']];models=[]
+for row in records:
+ name=row['definition']['path'];original=(R/name).read_bytes();proposal=B/'baseline-migration/proposals'/Path(name).name;data=proposal.read_bytes();assert hashlib.sha256(data).hexdigest()==row['definition']['sha256'];review=B/'baseline-five-v03-scientific-review-v1/actual-phase-v1/proposed'/row['review']['path'];assert hashlib.sha256(review.read_bytes()).hexdigest()==row['review']['sha256']
+ models.append({'id':row['model_id'],'legacy_sha256':hashlib.sha256(original).hexdigest(),'root_schema':json.loads(original)['schema_version'],'origin_schema':get(name)['schema_version'],'proposal':str(proposal.relative_to(R)),'approved_sha256':row['definition']['sha256'],'review_payload':str(review.relative_to(R)),'review_sha256':row['review']['sha256'],'approval_id':row['id'],'old_git_blob':old[name],'current_git_blob':current[name]})
+idx=json.loads((B/'baseline-five-host-context-dispatch-v2/assets/INDEX.json').read_text());archive=B/'baseline-five-host-context-dispatch-v2/assets/qualified-twelve-roles.zip';live=R.parent/'none';livepath=Path('/private/tmp/atlas-baseline-current-live-catalogue-20261105.json');live_raw=livepath.read_bytes()
+facts={'identity':'baseline-five-current-release-audit-v1','scope':'static/saved/local-Git only','origin_main':git('rev-parse','origin/main').decode().strip(),'root_head':git('rev-parse','HEAD').decode().strip(),'old_revision':'78b9ed9d7727d158cd0a2bf742453849066e710b','old_tree_members':len(old),'old_git_store_present':Path('/private/tmp/atlas-unheld-baseline-publication-source-v1/source/.git').exists(),'selected_changed':changed,'selected_removed':removed,'models':models,'main_approval_count':len(registry),'append_five_count':len(registry)+len(records),'current_approval_ids':list(r['id']for r in registry),'old_approval_missing_current':[r['id']for r in accepted if r['id']not in {x['id']for x in registry}],'current_approval_new_since_old':[r['id']for r in registry if r['id']not in{x['id']for x in accepted}],'live_catalogue_pin':{'path':str(livepath),'sha256':hashlib.sha256(live_raw).hexdigest(),'bytes':len(live_raw)},'retained_twelve_assets':{'archive':str(archive.relative_to(R)),'present':archive.is_file(),'bytes':archive.stat().st_size,'recorded_sha256':idx['archive_sha256'],'index':str((archive.parent/'INDEX.json').relative_to(R)),'members':len(idx['files']),'roles':sorted({r['member'].split('/')[0]for r in idx['files']})},'actual_build_module_browser_remote_calls':0,'cleanup':'Only tiny durable audit sources/reports; no temporary resources or processes created'}
+(P/'facts.json').write_text(json.dumps(facts,indent=2)+'\n');print(json.dumps({'changed':len(changed),'removed':len(removed),'models':len(models),'current_approvals':len(registry),'smallest_append':len(registry)+5,'status':'static-audit-complete'},indent=2))

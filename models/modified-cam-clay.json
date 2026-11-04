@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1",
+  "schema_version": "0.3",
   "status": "transcribed",
   "parameters": {
     "p_ref": {
@@ -51,21 +51,36 @@
         0
       ],
       "shape": "sym",
-      "scale": "p_ref"
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
     },
     {
       "name": "e",
       "unit": "1",
       "initial": 0.7,
       "shape": "scalar",
-      "scale": "1"
+      "scale": "1",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "void_ratio",
+        "transformation": "scalar_invariant"
+      }
     },
     {
       "name": "pc",
       "unit": "Pa",
       "initial": 200000,
       "shape": "scalar",
-      "scale": "p_ref"
+      "scale": "p_ref",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "preconsolidation_pressure",
+        "transformation": "scalar_invariant"
+      }
     },
     {
       "name": "gamma",
@@ -73,8 +88,11 @@
       "initial": 0,
       "shape": "scalar",
       "scale": "1",
-      "transient": true,
-      "multiplier": true
+      "semantics": {
+        "role": "plastic_multiplier",
+        "quantity": "normalized_plastic_multiplier",
+        "transformation": "scalar_invariant"
+      }
     }
   ],
   "derived": [
@@ -110,7 +128,6 @@
     "pc > p_ref * 1e-8",
     "gamma > -1e-9"
   ],
-  "integration": "residual",
   "id": "modified-cam-clay",
   "name": "Modified Cam Clay",
   "family": "critical-state plasticity",
@@ -135,5 +152,45 @@
   },
   "initial_checks": [
     "yield_scaled <= 1e-8"
-  ]
+  ],
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "effective"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  },
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "e",
+      "pc"
+    ],
+    "validation": "domain_and_initial_checks"
+  }
 }

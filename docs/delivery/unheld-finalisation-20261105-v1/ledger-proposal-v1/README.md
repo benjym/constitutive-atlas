@@ -1,0 +1,9 @@
+# Proposed five delivery-ledger snapshots
+
+All five exact model-local ledger paths exist in the coordinator's isolated source. Ten proposed operations retain the five original ledger byte streams in intrinsic archives and prepend five current E0–E6 snapshots. No canonical/shared ledger was installed or rewritten. Source-delta preimages bind the actual isolated ledger bytes; fresh consumer/reference preservation checks remain coordinator-owned before archive-first integration.
+
+Each current snapshot binds actual current-sixteen native/Wasm review, nine observed examples, fresh controlled-path dependency review and accepted full-package review. Current E7 is explicitly in progress/pending independent actual browser acceptance; E8 remains pending release/live identity. No new scientific review, experimental finding, deployment authorization or live success is inferred. Original legacy ledgers remain verbatim as history and are clearly superseded only for current status.
+
+`evidence-pins.json` records exact saved review decisions/manifests and installation/package/resource receipts. `resource-snapshot.json` retains the timestamped parent resource inventory; it is not a fresh liveness/cleanup observation. Each ledger lists the source archive/export, actual build/private cache, controlled builds, package and browser-evidence resources with owner/retention reason. No process was started or stopped, directory removed or space reclaimed during this task. All remaining resources belong to the coordinator; removal requires completed consumers and durable verified retention.
+
+Run `python3 -B .../ledger-proposal-v1/check.py` to recheck every source preimage/payload, exact original suffix, current gate states and evidence pin. Only source text/JSON/hash checks are performed. After final actual browser/live acceptance, append a distinct reviewed tracking successor rather than silently modifying these frozen proposals or rewriting old receipts.

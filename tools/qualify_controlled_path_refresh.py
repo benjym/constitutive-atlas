@@ -17,6 +17,8 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 PACKET = Path('docs/ingestion/vibe-2026/controlled-path-refresh-v1')
 PLAN = PACKET/'plan-v5.json'
+CURRENT_PACKET = Path('docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1')
+CURRENT_PLAN = CURRENT_PACKET/'plan-v1.json'
 MODEL_PATHS = {
     'norsand': ['models/research/norsand/norsand-jefferies-1993-active-axial.json',
                 'tests/fixtures/controlled-path/synthetic-curved.json',
@@ -50,6 +52,22 @@ def relative(name):
     if not resolved.is_relative_to(ROOT.resolve()):
         raise ValueError('Path escapes repository: '+str(name))
     return resolved
+
+
+def plan_layout(plan_path=PLAN):
+    plan_path = Path(plan_path)
+    if plan_path == PLAN:
+        return PACKET, '.local/controlled-path-refresh-v2'
+    if plan_path != CURRENT_PLAN:
+        raise ValueError('Unknown controlled-path plan selection')
+    # Fixed allowlist plus lexical and no-symlink validation, before reading.
+    relative(plan_path)
+    current = ROOT
+    for part in plan_path.parts:
+        current = current/part
+        if current.is_symlink():
+            raise ValueError('Symlink controlled-path plan selection')
+    return CURRENT_PACKET, '.local/controlled-path-refresh-20261105-v1'
 
 
 def write_new(path, data):
@@ -89,8 +107,9 @@ def closure():
     return {name: sha(relative(name)) for name in sorted(names)}
 
 
-def commands(library):
+def commands(library, plan_path=PLAN):
     """Exact original CI gates, sequential explicit-target builds and durable logs."""
+    packet, build_prefix = plan_layout(plan_path)
     rows = []
     def add(identity, argv):
         rows.append(dict(id=identity, argv=argv))
@@ -101,8 +120,8 @@ def commands(library):
                      'tests.test_formulation', 'tests.test_state_contract', '-q'])
     for backend in ('native', 'wasm'):
         for key in MODEL_PATHS:
-            build = '.local/controlled-path-refresh-v2/'+key+'-'+backend
-            out = str(PACKET/'execution-v2'/key)
+            build = build_prefix+'/'+key+'-'+backend
+            out = str(packet/'execution-v2'/key)
             # Source paths use $ROOT substitution resolved by run, rather than
             # freezing local-only checkout paths into durable evidence.
             model_list = ';'.join('$ROOT/'+p for p in MODEL_PATHS[key])
@@ -133,37 +152,46 @@ def commands(library):
     return rows
 
 
-def prepare():
+def prepare(plan_path=PLAN):
     library = 'libatlas_path_capability.dylib' if sys.platform == 'darwin' else 'libatlas_path_capability.so'
-    data = dict(identity='controlled-path-refresh-plan-v5', schema_version=1,
+    plan_layout(plan_path)
+    data = dict(identity=('controlled-path-refresh-plan-v5' if Path(plan_path) == PLAN else 'controlled-path-refresh-plan-20261105-v1'), schema_version=1,
                 source_closure=closure(), models=MODELS, definitions=MODEL_PATHS,
-                gates=GATES, native_library=library, commands=commands(library),
+                gates=GATES, native_library=library, commands=commands(library, plan_path),
                 policy='Original cases/checkers/bounds unchanged; actual native and Wasm gates plus separate exact build review required.')
-    write_new(relative(PLAN), data)
+    write_new(relative(plan_path), data)
     return data
 
 
-def load_plan():
-    plan = json.loads(relative(PLAN).read_text())
+def load_plan(plan_path=PLAN, expected_sha256=None):
+    plan_layout(plan_path)
+    if Path(plan_path) != PLAN and (not isinstance(expected_sha256, str) or len(expected_sha256) != 64 or any(c not in '0123456789abcdef' for c in expected_sha256)):
+        raise ValueError('Explicit selected plan SHA256 required')
+    if expected_sha256 is not None and sha(relative(plan_path)) != expected_sha256:
+        raise ValueError('Selected controlled-path plan hash changed')
+    plan = json.loads(relative(plan_path).read_text())
+    if Path(plan_path) != PLAN and plan.get('identity') != 'controlled-path-refresh-plan-20261105-v1':
+        raise ValueError('Wrong selected controlled-path plan identity')
     if plan['source_closure'] != closure() or plan['gates'] != GATES or plan['models'] != MODELS or plan['definitions'] != MODEL_PATHS:
         raise ValueError('Current controlled-path source closure/contract changed')
-    if plan['commands'] != commands(plan['native_library']):
+    if plan['commands'] != commands(plan['native_library'], plan_path):
         raise ValueError('Frozen controlled-path command corpus changed')
     return plan
 
 
-def run(implementation_run):
+def run(implementation_run, plan_path=PLAN, expected_sha256=None):
     if not implementation_run.strip():
         raise ValueError('Implementation run identity required')
-    plan = load_plan()
-    base = relative(PACKET/'execution-v2')
+    plan = load_plan(plan_path, expected_sha256)
+    packet, build_prefix = plan_layout(plan_path)
+    base = relative(packet/'execution-v2')
     base.mkdir(parents=True, exist_ok=False)
     for key in MODEL_PATHS:
         (base/key).mkdir()
-    write_new(base/'run.json', dict(implementation_run=implementation_run, plan_sha256=sha(relative(PLAN)),
+    write_new(base/'run.json', dict(implementation_run=implementation_run, plan_sha256=sha(relative(plan_path)),
                                   platform=platform.platform(), python=sys.version))
     for row in plan['commands']:
-        load_plan()
+        load_plan(plan_path, expected_sha256)
         argv = [arg.replace('$ROOT', str(ROOT)) for arg in row['argv']]
         logfile = base/(row['id']+'.log')
         started = time.time()
@@ -174,12 +202,12 @@ def run(implementation_run):
         receipt = dict(id=row['id'], argv=argv, cwd='repository-root', repository_root=str(ROOT),
                        started_unix=started, finished_unix=time.time(), returncode=result.returncode,
                        log=dict(path=logfile.relative_to(ROOT).as_posix(), sha256=sha(logfile)),
-                       plan_sha256=sha(relative(PLAN)))
+                       plan_sha256=sha(relative(plan_path)))
         write_new(base/(row['id']+'.receipt.json'), receipt)
         if result.returncode:
             raise RuntimeError('Frozen command failed; evidence retained: '+row['id'])
-    load_plan()
-    return collect()
+    load_plan(plan_path, expected_sha256)
+    return collect(plan_path, expected_sha256)
 
 
 def check_backend_identity(key, artifacts, results):
@@ -196,17 +224,18 @@ def check_backend_identity(key, artifacts, results):
         raise ValueError('Backend report does not bind actual qualified artifacts/requests')
 
 
-def collect():
-    plan = load_plan()
-    base = relative(PACKET/'execution-v2')
+def collect(plan_path=PLAN, expected_sha256=None):
+    plan = load_plan(plan_path, expected_sha256)
+    packet, build_prefix = plan_layout(plan_path)
+    base = relative(packet/'execution-v2')
     run_info = json.loads((base/'run.json').read_text())
-    if run_info['plan_sha256'] != sha(relative(PLAN)):
+    if run_info['plan_sha256'] != sha(relative(plan_path)):
         raise ValueError('Run plan changed')
     receipts = {}
     for row in plan['commands']:
         path = base/(row['id']+'.receipt.json')
         receipt = json.loads(path.read_text())
-        if receipt['returncode'] != 0 or receipt['plan_sha256'] != sha(relative(PLAN)) or receipt['argv'] != [a.replace('$ROOT', str(ROOT)) for a in row['argv']]:
+        if receipt['returncode'] != 0 or receipt['plan_sha256'] != sha(relative(plan_path)) or receipt['argv'] != [a.replace('$ROOT', str(ROOT)) for a in row['argv']]:
             raise ValueError('Missing/failed exact command: '+row['id'])
         if sha(relative(receipt['log']['path'])) != receipt['log']['sha256']:
             raise ValueError('Command log changed')
@@ -215,8 +244,8 @@ def collect():
     for key in MODEL_PATHS:
         output = base/key/'engine'
         output.mkdir(exist_ok=False)
-        native = relative('.local/controlled-path-refresh-v2/'+key+'-native')
-        wasm = relative('.local/controlled-path-refresh-v2/'+key+'-wasm')
+        native = relative(build_prefix+'/'+key+'-native')
+        wasm = relative(build_prefix+'/'+key+'-wasm')
         artifacts = {}
         for name, original in [('native/'+plan['native_library'], native/plan['native_library']),
                                ('atlas_path_capability.mjs', wasm/'atlas_path_capability.mjs'),
@@ -245,7 +274,7 @@ def collect():
                 metadata[target.relative_to(output).as_posix()] = sha(target)
         check_backend_identity(key, artifacts, results)
         binding = dict(model=MODELS[key], model_sha256=sha(relative(MODEL_PATHS[key][0])),
-                       plan=dict(path=PLAN.as_posix(), sha256=sha(relative(PLAN))),
+                       plan=dict(path=Path(plan_path).as_posix(), sha256=sha(relative(plan_path))),
                        source_closure=plan['source_closure'], artifacts=artifacts,
                        generated=generated, native_generated=native_generated,
                        commands=receipts, results=results, build_metadata=metadata)
@@ -277,16 +306,19 @@ def validate_refresh(build, model):
     path = build/'refresh-qualification.json'
     if not path.is_file():
         return None
-    plan = load_plan()
-    key = next(k for k, value in MODELS.items() if value == model)
     data = json.loads(path.read_text())
     binding = data.get('binding', {})
+    plan_pin = binding.get('plan', {})
+    plan_path = Path(plan_pin.get('path', ''))
+    plan = load_plan(plan_path, plan_pin.get('sha256'))
+    packet, _ = plan_layout(plan_path)
+    key = next(k for k, value in MODELS.items() if value == model)
     if (data.get('schema_version') != 'controlled-path-refresh-1' or data.get('status') != 'passed'
             or data.get('model') != model or data.get('gates') != GATES[key]
             or not data.get('implementation_run', '').strip()
             or binding.get('model') != model or binding.get('model_sha256') != sha(relative(MODEL_PATHS[key][0]))
             or binding.get('source_closure') != plan['source_closure']
-            or binding.get('plan') != dict(path=PLAN.as_posix(), sha256=sha(relative(PLAN)))):
+            or binding.get('plan') != dict(path=Path(plan_path).as_posix(), sha256=sha(relative(plan_path)))):
         raise ValueError('Fresh controlled-path qualification is stale/incomplete')
     if binding.get('generated') != {name:sha(build/'generated'/name) for name in GENERATED} or binding.get('native_generated') != binding['generated']:
         raise ValueError('Fresh generated source changed')
@@ -300,16 +332,16 @@ def validate_refresh(build, model):
             target = relative(name) if directory == ROOT else directory/Path(name)
             if Path(name).is_absolute() or '..' in Path(name).parts or sha(target) != digest:
                 raise ValueError('Fresh qualification evidence changed: '+name)
-    if set(binding['commands']) != {str(PACKET/'execution-v2'/(r['id']+ext)) for r in plan['commands'] for ext in ('.receipt.json', '.log')}:
+    if set(binding['commands']) != {str(packet/'execution-v2'/(r['id']+ext)) for r in plan['commands'] for ext in ('.receipt.json', '.log')}:
         raise ValueError('Fresh qualification omits exact commands/logs')
     for row in plan['commands']:
-        receipt = json.loads(relative(str(PACKET/'execution-v2'/(row['id']+'.receipt.json'))).read_text())
-        if (receipt.get('returncode') != 0 or receipt.get('plan_sha256') != sha(relative(PLAN))
+        receipt = json.loads(relative(str(packet/'execution-v2'/(row['id']+'.receipt.json'))).read_text())
+        if (receipt.get('returncode') != 0 or receipt.get('plan_sha256') != sha(relative(plan_path))
                 or not Path(receipt.get('repository_root', '')).is_absolute()
                 or receipt.get('argv') != [arg.replace('$ROOT', receipt['repository_root']) for arg in row['argv']]):
             raise ValueError('Fresh command receipt differs: '+row['id'])
     result_names = ('native.json', 'wasm.json') if key == 'norsand' else ('native.json','wasm.json','native-check.json','wasm-check.json','parity.json')
-    if set(binding['results']) != {str(PACKET/'execution-v2'/key/name) for name in result_names}:
+    if set(binding['results']) != {str(packet/'execution-v2'/key/name) for name in result_names}:
         raise ValueError('Fresh qualification omits original backend results')
     check_backend_identity(key, binding['artifacts'], binding['results'])
     if set(binding['build_metadata']) != {'build-metadata/'+backend+'/'+name for backend in ('native','wasm') for name in ('CMakeCache.txt','compile_commands.json')}:
@@ -335,6 +367,8 @@ def validate_refresh(build, model):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--plan', type=Path, default=PLAN)
+    parser.add_argument('--plan-sha256')
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('prepare')
     sub.add_parser('verify')
@@ -345,13 +379,13 @@ def main():
     final.add_argument('build', type=Path)
     args = parser.parse_args()
     if args.command == 'prepare':
-        result = prepare()
+        result = prepare(args.plan)
     elif args.command == 'verify':
-        result = dict(status='source-plan-verified-no-execution', files=len(load_plan()['source_closure']))
+        result = dict(status='source-plan-verified-no-execution', files=len(load_plan(args.plan, args.plan_sha256)['source_closure']))
     elif args.command == 'run':
-        result = run(args.implementation_run)
+        result = run(args.implementation_run, args.plan, args.plan_sha256)
     elif args.command == 'collect':
-        result = collect()
+        result = collect(args.plan, args.plan_sha256)
     else:
         result = finalize(args.build)
     print(json.dumps(result, indent=2))

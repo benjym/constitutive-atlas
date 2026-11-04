@@ -1,0 +1,450 @@
+[
+  {
+    "id": "linear-elastic",
+    "proposal_path": "docs/delivery/unheld-finalisation-20261102-v1/baseline-migration/proposals/linear-elastic.json",
+    "canonical_path": "models/linear-elastic.json",
+    "sha256": "67a7203bc13486fcc431b2f2dd421b4d80300fadc45faacf6db5a4a89e499b5b",
+    "isolated_candidate_path": "/private/tmp/atlas-unheld-finalisation-v1/models/linear-elastic.json",
+    "parameters": [
+      "p_ref",
+      "E",
+      "nu"
+    ],
+    "persistent_state": [
+      "sigma",
+      "e"
+    ],
+    "temporary_state": [],
+    "derived_quantities": [
+      "K",
+      "G"
+    ],
+    "equation_states": [
+      "sigma",
+      "e"
+    ],
+    "domain": [
+      "e > 0"
+    ],
+    "initial_checks": [],
+    "formulation": {
+      "time_dependence": "strain_path",
+      "equation_form": "incremental_residual",
+      "kinematics": "small_strain_3d",
+      "frame": "fixed_spatial",
+      "objective_rate": "none",
+      "tensor_representation": "mandel",
+      "stress_sign": "compression_positive",
+      "strain_sign": "compression_positive",
+      "stress": {
+        "source": "state",
+        "name": "sigma",
+        "measure": "cauchy",
+        "scope": "effective"
+      },
+      "inputs": {
+        "equation": {
+          "de": {
+            "quantity": "strain_increment",
+            "measure": "infinitesimal_strain",
+            "shape": "sym",
+            "unit": "1",
+            "configuration": "current",
+            "sampling": "increment",
+            "constraint": "finite"
+          }
+        },
+        "advance": {}
+      }
+    },
+    "initialization": {
+      "method": "explicit_state",
+      "default_policy": "examples_only",
+      "required_state": [
+        "sigma",
+        "e"
+      ],
+      "validation": "domain_and_initial_checks"
+    }
+  },
+  {
+    "id": "drucker-prager",
+    "proposal_path": "docs/delivery/unheld-finalisation-20261102-v1/baseline-migration/proposals/drucker-prager.json",
+    "canonical_path": "models/drucker-prager.json",
+    "sha256": "bdb66fb0a6b2b734830470f9407780deaae0e4610a823b9639ddbc1a5f324a2b",
+    "isolated_candidate_path": "/private/tmp/atlas-unheld-finalisation-v1/models/drucker-prager.json",
+    "parameters": [
+      "p_ref",
+      "E",
+      "nu",
+      "M",
+      "Md",
+      "c"
+    ],
+    "persistent_state": [
+      "sigma",
+      "e"
+    ],
+    "temporary_state": [
+      "gamma"
+    ],
+    "derived_quantities": [
+      "K",
+      "G",
+      "mean",
+      "q",
+      "yield_scaled",
+      "trial_s",
+      "trial_q",
+      "trial_q_safe"
+    ],
+    "equation_states": [
+      "sigma",
+      "e",
+      "gamma"
+    ],
+    "domain": [
+      "e > 0",
+      "gamma > -1e-9",
+      "Md <= M"
+    ],
+    "initial_checks": [
+      "yield_scaled <= 1e-8"
+    ],
+    "formulation": {
+      "time_dependence": "strain_path",
+      "equation_form": "incremental_residual",
+      "kinematics": "small_strain_3d",
+      "frame": "fixed_spatial",
+      "objective_rate": "none",
+      "tensor_representation": "mandel",
+      "stress_sign": "compression_positive",
+      "strain_sign": "compression_positive",
+      "stress": {
+        "source": "state",
+        "name": "sigma",
+        "measure": "cauchy",
+        "scope": "effective"
+      },
+      "inputs": {
+        "equation": {
+          "de": {
+            "quantity": "strain_increment",
+            "measure": "infinitesimal_strain",
+            "shape": "sym",
+            "unit": "1",
+            "configuration": "current",
+            "sampling": "increment",
+            "constraint": "finite"
+          }
+        },
+        "advance": {}
+      }
+    },
+    "initialization": {
+      "method": "explicit_state",
+      "default_policy": "examples_only",
+      "required_state": [
+        "sigma",
+        "e"
+      ],
+      "validation": "domain_and_initial_checks"
+    }
+  },
+  {
+    "id": "modified-cam-clay",
+    "proposal_path": "docs/delivery/unheld-finalisation-20261102-v1/baseline-migration/proposals/modified-cam-clay.json",
+    "canonical_path": "models/modified-cam-clay.json",
+    "sha256": "96b33fadf285f555ef98c35d98cd562533c5ee3ae233aee8515e7e1c85f58777",
+    "isolated_candidate_path": "/private/tmp/atlas-unheld-finalisation-v1/models/modified-cam-clay.json",
+    "parameters": [
+      "p_ref",
+      "M",
+      "lambda_c",
+      "kappa",
+      "nu"
+    ],
+    "persistent_state": [
+      "sigma",
+      "e",
+      "pc"
+    ],
+    "temporary_state": [
+      "gamma"
+    ],
+    "derived_quantities": [
+      "mean",
+      "q2",
+      "K",
+      "G",
+      "yield_scaled",
+      "plastic_volume"
+    ],
+    "equation_states": [
+      "sigma",
+      "e",
+      "pc",
+      "gamma"
+    ],
+    "domain": [
+      "e > 0",
+      "lambda_c > kappa",
+      "mean > p_ref * 1e-8",
+      "pc > p_ref * 1e-8",
+      "gamma > -1e-9"
+    ],
+    "initial_checks": [
+      "yield_scaled <= 1e-8"
+    ],
+    "formulation": {
+      "time_dependence": "strain_path",
+      "equation_form": "incremental_residual",
+      "kinematics": "small_strain_3d",
+      "frame": "fixed_spatial",
+      "objective_rate": "none",
+      "tensor_representation": "mandel",
+      "stress_sign": "compression_positive",
+      "strain_sign": "compression_positive",
+      "stress": {
+        "source": "state",
+        "name": "sigma",
+        "measure": "cauchy",
+        "scope": "effective"
+      },
+      "inputs": {
+        "equation": {
+          "de": {
+            "quantity": "strain_increment",
+            "measure": "infinitesimal_strain",
+            "shape": "sym",
+            "unit": "1",
+            "configuration": "current",
+            "sampling": "increment",
+            "constraint": "finite"
+          }
+        },
+        "advance": {}
+      }
+    },
+    "initialization": {
+      "method": "explicit_state",
+      "default_policy": "examples_only",
+      "required_state": [
+        "sigma",
+        "e",
+        "pc"
+      ],
+      "validation": "domain_and_initial_checks"
+    }
+  },
+  {
+    "id": "hypoplastic-sand-vw96",
+    "proposal_path": "docs/delivery/unheld-finalisation-20261102-v1/baseline-migration/proposals/hypoplastic-sand-vw96.json",
+    "canonical_path": "models/hypoplastic-sand-vw96.json",
+    "sha256": "c028cdcd46b79d23c2798ff5309b8e8af8fb68ebf94ff08632dbf9af86ca4595",
+    "isolated_candidate_path": "/private/tmp/atlas-unheld-finalisation-v1/models/hypoplastic-sand-vw96.json",
+    "parameters": [
+      "p_ref",
+      "phi",
+      "hs",
+      "n",
+      "ed0",
+      "ec0",
+      "ei0",
+      "alpha",
+      "beta"
+    ],
+    "persistent_state": [
+      "sigma",
+      "e"
+    ],
+    "temporary_state": [],
+    "derived_quantities": [
+      "mean",
+      "hat",
+      "hsdev",
+      "j2",
+      "tanpsi",
+      "lode",
+      "F",
+      "a",
+      "compression",
+      "ed",
+      "ec",
+      "ei",
+      "fd",
+      "fe",
+      "fb",
+      "factor",
+      "linear",
+      "nonlinear"
+    ],
+    "equation_states": [
+      "sigma",
+      "e"
+    ],
+    "domain": [
+      "e > 0",
+      "mean > p_ref * 1e-8",
+      "ed0 < ec0",
+      "ec0 < ei0",
+      "e > ed",
+      "e < ei",
+      "F > 0",
+      "fb > 0 * p_ref"
+    ],
+    "initial_checks": [],
+    "formulation": {
+      "time_dependence": "strain_path",
+      "equation_form": "strain_path_rate",
+      "kinematics": "small_strain_3d",
+      "frame": "fixed_spatial",
+      "objective_rate": "none",
+      "tensor_representation": "mandel",
+      "stress_sign": "compression_positive",
+      "strain_sign": "compression_positive",
+      "stress": {
+        "source": "state",
+        "name": "sigma",
+        "measure": "cauchy",
+        "scope": "effective"
+      },
+      "inputs": {
+        "equation": {
+          "de": {
+            "quantity": "strain_increment",
+            "measure": "infinitesimal_strain",
+            "shape": "sym",
+            "unit": "1",
+            "configuration": "current",
+            "sampling": "increment",
+            "constraint": "finite"
+          }
+        },
+        "advance": {}
+      }
+    },
+    "initialization": {
+      "method": "explicit_state",
+      "default_policy": "examples_only",
+      "required_state": [
+        "sigma",
+        "e"
+      ],
+      "validation": "domain_and_initial_checks"
+    }
+  },
+  {
+    "id": "hypoplastic-sand-igs97",
+    "proposal_path": "docs/delivery/unheld-finalisation-20261102-v1/baseline-migration/proposals/hypoplastic-sand-igs97.json",
+    "canonical_path": "models/hypoplastic-sand-igs97.json",
+    "sha256": "64453d282cf2c0f5e4e2b0923394e289702a9a2440f9ff7cc2d90a0c134a8108",
+    "isolated_candidate_path": "/private/tmp/atlas-unheld-finalisation-v1/models/hypoplastic-sand-igs97.json",
+    "parameters": [
+      "p_ref",
+      "phi",
+      "hs",
+      "n",
+      "ed0",
+      "ec0",
+      "ei0",
+      "alpha",
+      "beta",
+      "R",
+      "mR",
+      "mT",
+      "beta_r",
+      "chi"
+    ],
+    "persistent_state": [
+      "sigma",
+      "e",
+      "h"
+    ],
+    "temporary_state": [],
+    "derived_quantities": [
+      "mean",
+      "hat",
+      "hsdev",
+      "j2",
+      "tanpsi",
+      "lode",
+      "F",
+      "a",
+      "compression",
+      "ed",
+      "ec",
+      "ei",
+      "fd",
+      "fe",
+      "fb",
+      "factor",
+      "linear",
+      "nonlinear",
+      "hn",
+      "eta",
+      "rho",
+      "projection",
+      "linear_eta",
+      "overlay"
+    ],
+    "equation_states": [
+      "sigma",
+      "e",
+      "h"
+    ],
+    "domain": [
+      "e > 0",
+      "mean > p_ref * 1e-8",
+      "ed0 < ec0",
+      "ec0 < ei0",
+      "e > ed",
+      "e < ei",
+      "F > 0",
+      "fb > 0 * p_ref",
+      "hn < R * 1.01",
+      "mR >= mT"
+    ],
+    "initial_checks": [],
+    "formulation": {
+      "time_dependence": "strain_path",
+      "equation_form": "strain_path_rate",
+      "kinematics": "small_strain_3d",
+      "frame": "fixed_spatial",
+      "objective_rate": "none",
+      "tensor_representation": "mandel",
+      "stress_sign": "compression_positive",
+      "strain_sign": "compression_positive",
+      "stress": {
+        "source": "state",
+        "name": "sigma",
+        "measure": "cauchy",
+        "scope": "effective"
+      },
+      "inputs": {
+        "equation": {
+          "de": {
+            "quantity": "strain_increment",
+            "measure": "infinitesimal_strain",
+            "shape": "sym",
+            "unit": "1",
+            "configuration": "current",
+            "sampling": "increment",
+            "constraint": "finite"
+          }
+        },
+        "advance": {}
+      }
+    },
+    "initialization": {
+      "method": "explicit_state",
+      "default_policy": "examples_only",
+      "required_state": [
+        "sigma",
+        "e",
+        "h"
+      ],
+      "validation": "domain_and_initial_checks"
+    }
+  }
+]

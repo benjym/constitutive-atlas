@@ -20,7 +20,10 @@ def persistent_examples(model):
 
 class StateContractTests(unittest.TestCase):
     def test_migration_records_roles_without_guessing_history_meaning(self):
-        model=migrated('modified-cam-clay')
+        from tests.historical_generation import public_models
+        legacy={model['id']:model for model in public_models()}
+        self.assertEqual(legacy['modified-cam-clay']['schema_version'],'0.1')
+        model=migrate_formulation(legacy['modified-cam-clay'])
         fields={f['name']:f for f in model['state']}
         self.assertEqual(fields['gamma']['semantics']['role'],'plastic_multiplier')
         self.assertEqual(fields['pc']['semantics']['quantity'],'unspecified')
@@ -31,8 +34,15 @@ class StateContractTests(unittest.TestCase):
         layout=state_layout(model,list(defaults(model).values()))
         self.assertTrue(layout[-1]['transient'])
         self.assertFalse(layout[0]['transient'])
-        h=next(f for f in migrated('hypoplastic-sand-igs97')['state'] if f['name']=='h')
+        h=next(f for f in migrate_formulation(legacy['hypoplastic-sand-igs97'])['state'] if f['name']=='h')
         self.assertEqual(h['semantics']['transformation'],'fixed_components')
+
+    def test_migration_preserves_declared_current_state_semantics(self):
+        model=load(ROOT/'models/modified-cam-clay.json')
+        self.assertEqual(model['schema_version'],'0.3')
+        self.assertEqual(next(f for f in model['state'] if f['name']=='pc')['semantics']['quantity'],
+                         'preconsolidation_pressure')
+        self.assertEqual(migrate_formulation(model),model)
 
     def test_state_semantics_must_match_shape_and_lifecycle(self):
         for mutate in [

@@ -1,0 +1,9 @@
+# Controlled-path explicit refresh source proposal
+
+PREP-baseline-five-controlled-path-refresh-v1; owned only this new directory. Two proposed tool paths in changes.json, exact preimage/successor hashes and complete diffs. No builder change is needed: receipt-selected validate_refresh handles the exact allowlisted plan path/hash automatically. Maxwell stays unchanged. COMMANDS.md provides prepare/verify/run/finalize/dependency and precise pending Pages routing instructions.
+
+Source checks PASS37: exact original default commands on Darwin/Linux, unchanged models/gates and six critical functions, only output/build path differences, new strict path/hash/identity/closure checks, unsafe/symlink/stale/wrong-receipt negatives and unchanged Maxwell/default engine selection. All numerical commands/checkers are unchanged. Fixtures are isolated and explicitly substitute only a tiny closure; production source/old receipts are never monkeypatched or repinned. Reproduce with python3 -B docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-plan-v1/check.py.
+
+No actual install, source generation, SDK/tool/build, compiled/module/material, browser, Git or remote action occurred. All own tiny temporary fixtures removed. Current pristine helper source was read only; private source data and artifacts were not copied. Existing old VIBE output/default behavior remains, and its stale broad closure is not falsely accepted.
+
+Smallest next action: independent exact source review, then coordinator guarded install both helpers BEFORE ordinary current16 sourcefreeze. Prepare a genuinely new current-source plan, freeze/review actual plan hash/commands, use a fresh serial slot for original native/Wasm corpus, obtain separate build acceptance/finalization, then update only Pages guard selection/two engine paths with actual accepted plan SHA. No current compiled/package/browser/live qualification or execution authority is claimed.
