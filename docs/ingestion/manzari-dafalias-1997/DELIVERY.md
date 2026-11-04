@@ -1,3 +1,7 @@
+## Shared-app overlap reconciled — 2026-11-05
+
+Adopt upstream70251ec7 compression byte-exact and preserve its native16 fixture fixes/evidence. A single transport implementation remains; local757a57b0 alternative is historical only. Reused existing upstream assets read-only:994 decoded datasets and all logical metadata exact. Independent seven-file merge approval7a0785e9; actual strict17 native/fast/dependency guards pass. [Reconciliation evidence](delivery-v1/upstream-70251-reconciliation-v1/README.md). No scientific/model/compiled-source change. Final merged-revision hosted and live checks remain open; user authorization persists.
+
 ## Publication size correction — 2026-11-05
 
 E8 remains active. Current PR https://github.com/benjym/constitutive-atlas/pull/1. Exact lossless compression fixes the concrete1.11GB Pages size violation; all994 decoded assets and metadata match exactly, projected site265MB. Independent review and actual browser decoding pass. Evidence: [publication-size-fix-v1](delivery-v1/publication-size-fix-v1/README.md). No scientific/model/engine/gate changes. New final hosted qualification and deployment are required after this correction. User authorization persists. Temporary publish worktree is a separate file checkout sharing Git history; coordinator removes it after preserving unique evidence and retaining its release commit.

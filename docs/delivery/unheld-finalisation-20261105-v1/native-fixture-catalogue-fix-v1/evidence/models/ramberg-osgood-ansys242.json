@@ -1,0 +1,160 @@
+{
+  "schema_version": "0.3",
+  "id": "ramberg-osgood-ansys242",
+  "name": "Ramberg\u2013Osgood nonlinear elasticity \u2014 ANSYS2024R2",
+  "family": "nonlinear elasticity",
+  "status": "draft",
+  "description": "Full three-dimensional reversible isotropic small-strain Ramberg\u2013Osgood deformation law, ANSYS2024R2 constant-parameter mechanical formulation. Unloading retraces loading; no yield surface, permanent plastic strain or hysteresis. Dry total Cauchy stress, compression-positive Mandel components, fixed spatial axes/zero spin. Project implicit endpoint compliance residual and explicit full stress/strain initialization. Illustrative parameters, no experimental or finite-deformation/host qualification. Source postprocessing energy inconsistency is excluded; no energy output claimed.",
+  "sources": [
+    {
+      "url": "https://ansyshelp.ansys.com/public/Views/Secured/corp/v242/en/ans_mat/ramberg-osgood.html",
+      "locator": "Sec4.17.1 full3D equation, volumetric/deviatoric split and equivalent scalar relation; Sec4.17.2 constants table. Exact2024R2 mechanical law, not proprietary integration algorithm or energy output.",
+      "role": "Primary equation and parameter domain"
+    }
+  ],
+  "parameters": {
+    "E": {
+      "default": 30000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "Young modulus"
+    },
+    "nu": {
+      "default": 0.25,
+      "min": -0.999,
+      "max": 0.499,
+      "unit": "1",
+      "label": "Poisson ratio"
+    },
+    "sigma0": {
+      "default": 100000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "Reference yield strength (no yield surface)"
+    },
+    "alpha": {
+      "default": 0.5,
+      "min": 0,
+      "max": 10000.0,
+      "unit": "1",
+      "label": "Nonlinearity coefficient; offset alpha sigma0/E"
+    },
+    "n": {
+      "default": 5,
+      "min": 1,
+      "max": 20,
+      "unit": "1",
+      "label": "Hardening exponent; strictly greater than one"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0
+      ],
+      "scale": "sigma0",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "cauchy_stress",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    },
+    {
+      "name": "epsilon",
+      "shape": "sym",
+      "unit": "1",
+      "initial": [
+        0.0016666666666666668,
+        0.0016666666666666668,
+        0.0016666666666666668,
+        0,
+        0,
+        0
+      ],
+      "scale": "sigma0/E",
+      "semantics": {
+        "role": "persistent",
+        "quantity": "infinitesimal_strain",
+        "transformation": "symmetric_spatial_tensor"
+      }
+    }
+  ],
+  "derived": [
+    {
+      "name": "q2",
+      "expr": "1.5 * dot(dev(sigma), dev(sigma)) / (sigma0 * sigma0)"
+    },
+    {
+      "name": "nonlinear_factor",
+      "expr": "select(q2 > 0, q2 ** ((n - 1) / 2), 0)"
+    },
+    {
+      "name": "compliance_stress",
+      "expr": "(1 + nu + 1.5 * alpha * nonlinear_factor) * dev(sigma) + (1 - 2 * nu) * trace(sigma) / 3 * I"
+    }
+  ],
+  "equations": {
+    "sigma": "compliance_stress - E * epsilon",
+    "epsilon": "epsilon - epsilon_n - de"
+  },
+  "domain": [
+    "E > 0 * sigma0",
+    "nu > -1",
+    "nu < 0.5",
+    "sigma0 > 0 * E",
+    "alpha > 0",
+    "n > 1"
+  ],
+  "initial_checks": [
+    "norm(compliance_stress - E * epsilon) < 0.00000001 * sigma0"
+  ],
+  "initialization": {
+    "method": "explicit_state",
+    "default_policy": "examples_only",
+    "required_state": [
+      "sigma",
+      "epsilon"
+    ],
+    "validation": "domain_and_initial_checks"
+  },
+  "formulation": {
+    "time_dependence": "strain_path",
+    "equation_form": "incremental_residual",
+    "kinematics": "small_strain_3d",
+    "frame": "fixed_spatial",
+    "objective_rate": "none",
+    "tensor_representation": "mandel",
+    "stress_sign": "compression_positive",
+    "strain_sign": "compression_positive",
+    "stress": {
+      "source": "state",
+      "name": "sigma",
+      "measure": "cauchy",
+      "scope": "total"
+    },
+    "inputs": {
+      "equation": {
+        "de": {
+          "quantity": "strain_increment",
+          "measure": "infinitesimal_strain",
+          "shape": "sym",
+          "unit": "1",
+          "configuration": "current",
+          "sampling": "increment",
+          "constraint": "finite"
+        }
+      },
+      "advance": {}
+    }
+  }
+}

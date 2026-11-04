@@ -1,0 +1,13 @@
+# Exact current16 native fixture catalogue alternative
+
+Source-only one-file successor for tools/check_native_fixture_contracts.py. Add a literal five-entry BASELINE_FIVE_V03 map and admit its exact current16 combination alongside the unchanged legacy16 combination. No existing map or scientific gate is rewritten. There is no MD17 support or unrelated harness change.
+
+The five current hashes are frozen from the current laboratory-package-policy and verified against all16 exact source definitions retained in evidence/. All other11 identities remain exact historical/current values. Original native failure log line4124+ is pinned in failure-reference.json; its actual failure remains unchanged.
+
+Reproduce `python3 -B docs/delivery/unheld-finalisation-20261105-v1/native-fixture-catalogue-fix-v1/check.py`. Exact reverse substitution recovers the original harness bytes. The entire main function AST is unchanged; check_recorded_failure AST differs only at the sixteen-model catalogue expression. Tests cover all historical12/13/14/15/16 branches, exact current16, all32 combinations of five old/new hashes (only complete old and complete current pass), altered/missing/extra catalogue identities, and unchanged OCC residual2e-10/axial/trials/signature/nonfinite gates. The original harness rejects current16, reproducing the source-level cause. Four manufactured subprocess results exercise the unchanged default/unknown-profile main paths, process return/stdout/stderr and output evidence checks. No executable, compiled module, material, browser or network is invoked.
+
+First manufactured-main attempt failed because the fixture policy was stored one directory above unchanged main's expected catalogue/ path. Original checker/stdout/stderr and attempt-1-failure.json remain. Adding identical fixture policy bytes at the expected path fixed the test; no candidate, assertion or policy changed.
+
+Candidate path and exact preimage are in source-delta.json. Independent exact source review is required before coordinator installation. Actual native/CI replay remains mandatory; source checks do not convert the retained remote failure into a pass. This test-only source delta changes the ordinary source-freeze membership: preserve original qualification receipts and bind the successor explicitly. No model/compiler/runtime/public data or numerical tolerance changes.
+
+Cleanup: the task-owned TemporaryDirectory fixture is gone; no process/build/cache/site was created. Only bounded source definitions, candidate, checks, raw failures and receipts remain. Other agent and coordinator resources were untouched.

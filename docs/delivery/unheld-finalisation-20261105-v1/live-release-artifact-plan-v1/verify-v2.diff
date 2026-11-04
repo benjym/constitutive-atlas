@@ -1,0 +1,54 @@
+--- verify.py frozenv1
++++ verify-v2.py
+@@ -32,6 +32,31 @@
+  assert set(capture_names)<=set(captured),'Required semantic JSON absent'
+  return observed,captured
+ 
++def verify_http(base_url,members,names,output,report):
++ """Retain request start, response headers, complete/partial hashes and failure before raising."""
++ def save():
++  (output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
++ report['status']='running-production-http';report['http']=[];save()
++ for name in sorted(names):
++  url=base_url.rstrip('/')+'/'+name
++  row={'path':name,'requested_url':url,'url':url,'status':None,'sha256':hashlib.sha256(b'').hexdigest(),'bytes':0,'headers':{},'observation_status':'request-started'}
++  report['http'].append(row);save();h=hashlib.sha256()
++  try:
++   request=urllib.request.Request(url,headers={'Cache-Control':'no-cache','Accept-Encoding':'identity','User-Agent':'Constitutive-Atlas-release-audit'})
++   with urllib.request.urlopen(request,timeout=120)as response:
++    row.update(url=response.url,status=response.status,headers=dict(response.headers.items()),observation_status='headers-returned');save()
++    while chunk:=response.read(1024*1024):h.update(chunk);row['bytes']+=len(chunk)
++   row.update(sha256=h.hexdigest(),observation_status='body-returned');save()
++   assert row['status']==200 and row['sha256']==members[name]['sha256']and row['bytes']==members[name]['bytes'],name
++   row['observation_status']='matched';save()
++  except BaseException as error:
++   row.update(sha256=h.hexdigest(),observation_status='failed',error={'type':type(error).__name__,'message':str(error)})
++   if getattr(error,'headers',None)is not None:row['headers']=dict(error.headers.items())
++   if getattr(error,'code',None)is not None:row['status']=error.code
++   report['status']='failed-production-http';save();raise
++ report['status']='passed-artifact-and-selected-production-http';save()
++ return report['http']
++
+ def main():
+  a=argparse.ArgumentParser();a.add_argument('--revision',required=True);a.add_argument('--pages-run',type=Path,required=True);a.add_argument('--artifact-metadata',type=Path,required=True);a.add_argument('--deployment',type=Path,required=True);a.add_argument('--deployment-status',type=Path,required=True);a.add_argument('--zip',type=Path,required=True);a.add_argument('--base-url',required=True);a.add_argument('--output',type=Path,required=True);args=a.parse_args()
+  assert len(args.revision)==40 and all(c in'0123456789abcdef'for c in args.revision)
+@@ -61,15 +86,8 @@
+   if value is not None:assert value==args.revision,(name,value);stamps[name]=value
+  assert stamps,'No actual production revision stamp found'
+  assert not args.output.exists();args.output.mkdir(parents=True)
+- # Compare selected real production bytes to this exact tested artifact, streaming only.
+- http=[]
+- for name in sorted(set(contract['http_paths'])|set(stamps)):
+-  url=args.base_url.rstrip('/')+'/'+name
+-  request=urllib.request.Request(url,headers={'Cache-Control':'no-cache','Accept-Encoding':'identity','User-Agent':'Constitutive-Atlas-release-audit'})
+-  with urllib.request.urlopen(request,timeout=120)as response:
+-   h,size=digest(response);row={'path':name,'url':response.url,'status':response.status,'sha256':h,'bytes':size,'headers':dict(response.headers.items())}
+-  assert row['status']==200 and h==members[name]['sha256']and size==members[name]['bytes'],name
+-  http.append(row)
+- report={'status':'passed-artifact-and-selected-production-http','revision':args.revision,'pages_run_id':run['id'],'artifact_id':artifact['id'],'api_artifact_digest':artifact['digest'],'download_zip_sha256':zipsha,'download_zip_bytes':zipsize,'deployment_id':deployment['id'],'members':len(members),'tar_bytes':sum(x['bytes']for x in members.values()),'revision_stamps':stamps,'http':http,'scope':'No browser or compiled execution; all source/CI evidence review remains separate.'}
+- (args.output/'members.json').write_text(json.dumps(members,indent=2)+'\n');(args.output/'report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
++ report={'status':'artifact-verified-http-pending','revision':args.revision,'pages_run_id':run['id'],'artifact_id':artifact['id'],'api_artifact_digest':artifact['digest'],'download_zip_sha256':zipsha,'download_zip_bytes':zipsize,'deployment_id':deployment['id'],'members':len(members),'tar_bytes':sum(x['bytes']for x in members.values()),'revision_stamps':stamps,'http':[],'scope':'No browser or compiled execution; all source/CI evidence review remains separate.'}
++ (args.output/'members.json').write_text(json.dumps(members,indent=2)+'\n')
++ verify_http(args.base_url,members,set(contract['http_paths'])|set(stamps),args.output,report)
++ print(json.dumps(report,indent=2))
+ if __name__=='__main__':main()

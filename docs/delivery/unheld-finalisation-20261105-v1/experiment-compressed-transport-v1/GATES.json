@@ -1,0 +1,23 @@
+{
+  "task": "CAP-public-experiment-compressed-transport-v1",
+  "author_run": "/root/publication_operations_review",
+  "scope": "source and pure synthetic fixtures only; no corpus build or compiled/browser/network execution",
+  "schema": "0.1 unchanged; logical path, sha256 and size_bytes identify original exact JSON; optional content_encoding=gzip and transport={path,sha256,size_bytes} identify transferred bytes",
+  "gates": [
+    "deterministic gzip mtime=0 with empty filename",
+    "unchanged encode, source provenance, rights, row order and original byte identity",
+    "legacy plain JSON branch unchanged",
+    "strict complete transport metadata, path=id.json.gz, lowercase SHA256 and safe positive sizes <=32MiB",
+    "stream compressed and decompressed reads with cumulative and declared-size bounds before combined allocation; cancellation on failure",
+    "compressed hash before decompression; original SHA,size,decode,id,rows gates remain",
+    "all existing tests/assertions preserved; update only asset transport reads; synthetic gzip integrity/format/size/truncation/stream tests",
+    "parent separately verifies all994 exact decoded assets and actual browser/package before publication"
+  ],
+  "preimages": {
+    "tools/build_experiments.py": "40ceb64c9dd9ba7e7ce0ce64a0729877e496c40ba4fc15778567b5b3391eb2b0",
+    "web/experiments.mjs": "12ce6a9d9f27f20064586293467a97de256c5d332fc229d5d4f901cab48feef5",
+    "tools/test_experiments.mjs": "07eb106b95627bd49a82b0306d9695b9c511bc650d785c8dcddc1499ad68083c",
+    "tests/test_web_experiments.py": "f4566672c334eb7f0bcf3c991e3da9d8e2bb0fefac424c0f4e21886c337e2898",
+    "tests/test_public_data.py": "2b9f633064efd08ae13abad335510ec8d721d274778752ed9680bfa0f2df33d4"
+  }
+}

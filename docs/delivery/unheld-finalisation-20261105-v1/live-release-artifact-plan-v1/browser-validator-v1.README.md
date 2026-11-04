@@ -1,0 +1,11 @@
+Prospective source-only productiondownloadvalidator; nofinalE8acceptance. Policyfrozenbeforeobservations, all7productionPlaywrightscripts exactacceptedlocalwithONLYhttpsorigin/outputlivepathsubstitutions.
+
+Run afteractualproductionUIdownloads:
+
+```sh
+node browser-validator-v1.validate.mjs /absolute/live/downloads /absolute/source /absolute/new-owned-report.json
+```
+
+Sourcearg contains accepted catalogue/laboratory-examples.json +9protocols. Requires frozen5default/parameter/fullinitial/latestrequests,30finite101pointdownloads/currentcatalogue,exactJSONreplay/mobileexceptelapsed_ms,5CSV101rowsstressPa/blankunavailableporepressure. All9namedrequests exact, sameinstanceJSONreplayexactexceptelapsed_ms, actualCIresultvsretainedlocalreference usesUNCHANGEDaccepted1e-10relative selectedphysicalpointfields,allotherchannels exact. No historicalnumericgate/newtolerance. SavedlocalE7test533206exit0; noactualnetwork/browser/module/material. 574checksPASS retainedstdout/stderr (countinsidereportauthoritative). RuntimeonlysavedJSONcomparison; actualrevisionstamp/CIartifact/HTTP/console/negatives/visualE8stillrequired.
+
+Standalone sibling-prefixedfiles avoidediting previouslyfrozenartifact-planmanifest. Its6members remainimmutable; thisdistinctmanifest bindsnewvalidator/policy/test. Localtestreportalso retainedunder live-release-review-v1/validator-local-replay.json. No temporaryresourcesremain.
