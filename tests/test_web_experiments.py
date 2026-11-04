@@ -1,4 +1,5 @@
 """Synthetic tests for reproducible experiment assets and release isolation."""
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -53,7 +54,12 @@ class BrowserBundleTests(unittest.TestCase):
         public = bundle(self.output, root=self.root)
         self.assertEqual(public['release'], 'public')
         for entry in public['experiments']:
-            content = (self.output/entry['path']).read_bytes()
+            transport = (self.output/entry['transport']['path']).read_bytes()
+            self.assertEqual(entry['content_encoding'], 'gzip')
+            self.assertEqual(len(transport), entry['transport']['size_bytes'])
+            self.assertEqual(hashlib.sha256(transport).hexdigest(), entry['transport']['sha256'])
+            self.assertEqual(transport[4:8], bytes(4))
+            content = gzip.decompress(transport)
             self.assertEqual(len(content), entry['size_bytes'])
             self.assertEqual(hashlib.sha256(content).hexdigest(), entry['sha256'])
             data = json.loads(content)

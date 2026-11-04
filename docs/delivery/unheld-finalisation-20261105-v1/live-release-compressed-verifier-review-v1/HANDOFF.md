@@ -1,0 +1,9 @@
+# Independent compressed verifier source review
+
+ACCEPTED_SOURCE_ONLY for author manifest515985a2dc1affb2aab32dd4ca6efef2f8c873b0793fc101357fb2ff6e805a44. Exact machine-readable scope, conclusions and limitations are in decision.json. Reviewer `/root/publication_operations_review` is independent of verifier author `/root/baseline_migration`; this decision does not independently approve the compression implementation authored by this reviewer.
+
+Reproduce `python3 -B docs/delivery/unheld-finalisation-20261105-v1/live-release-compressed-verifier-review-v1/check.py`:56 independent source/manufactured checks and exact47 author checks pass, including complete994-member synthetic callback and every106 original package report gate. Source comparison preserves the entire v2 semantic/API/HTTP implementation except the contract selector; contract checks preserve model/review/current16/approval30/nine-example/role/production stamps. Last-entry metadata/type/order corruption, missing transport, altered same-decoded gzip header, duplicate/missing member, one-byte expansion and unexpected/hidden namespace fixtures reject. No actual new ZIP, corpus, network, browser or compiled/module execution occurred.
+
+Retained first reviewer harness failure36a95c was an assertion that mistakenly included the explicitly versioned contract identity in unchanged semantic keys. Diagnostic615d74 isolated it; correction checks the exact new identity separately. No author code or policy changed. Final raw stdout/stderr and true exit are retained in check.*; all tiny temporary fixtures were removed, and author13members reverified unchanged after replay. No coordinator resource was deleted or modified.
+
+Smallest next action is parent-only exact accepted verifier execution on genuine final artifact/metadata and production HTTP, plus separate actual browser and E8 review. These actual results are not predicted or authorized by source acceptance alone.

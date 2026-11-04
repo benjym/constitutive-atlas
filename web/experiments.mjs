@@ -55,14 +55,42 @@ export function decodeExperiment(data){
   return validateExperiment({...data.metadata,rows});
 }
 
+async function boundedExperimentBytes(stream, expected, label){
+  if(!stream||typeof stream.getReader!=='function')throw Error('Experiment '+label+' stream is unavailable.');
+  const reader=stream.getReader(),chunks=[];let length=0;
+  try{
+    while(true){
+      const {done,value}=await reader.read();if(done)break;
+      if(!(value instanceof Uint8Array))throw Error('Invalid experiment '+label+' stream.');
+      length+=value.byteLength;
+      if(length>32*1024*1024||length>expected)throw Error('Experiment '+label+' size exceeds the catalogue.');
+      chunks.push(value);
+    }
+    if(length!==expected)throw Error('Experiment '+label+' size does not match the catalogue.');
+    const bytes=new Uint8Array(length);let offset=0;
+    for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}
+    return bytes;
+  }catch(error){try{await reader.cancel(error);}catch{}throw error;}
+  finally{reader.releaseLock();}
+}
+
 export async function fetchExperiment(entry,fetcher=fetch){
   // Full-resolution, 24-channel torsion histories exceed 10 MiB. Keep a
   // bounded payload while retaining every measured channel and observation.
   const maxBytes=32*1024*1024;
   if(!/^[A-Za-z0-9][A-Za-z0-9_-]{0,119}$/.test(entry.id)||entry.path!==entry.id+'.json'||!/^[a-f0-9]{64}$/.test(entry.sha256)||!Number.isSafeInteger(entry.size_bytes)||entry.size_bytes<=0||entry.size_bytes>maxBytes)throw Error('Invalid experiment catalogue entry.');
-  const response=await fetcher('./experiments/'+entry.path);
+  const compressed=entry.content_encoding!==undefined||entry.transport!==undefined;
+  const transport=entry.transport;
+  if(compressed&&(entry.content_encoding!=='gzip'||!transport||typeof transport!=='object'||Array.isArray(transport)||Object.keys(transport).sort().join(',')!=='path,sha256,size_bytes'||transport.path!==entry.id+'.json.gz'||!/^[a-f0-9]{64}$/.test(transport.sha256)||!Number.isSafeInteger(transport.size_bytes)||transport.size_bytes<=0||transport.size_bytes>maxBytes))throw Error('Invalid experiment transport catalogue entry.');
+  const response=await fetcher('./experiments/'+(compressed?transport.path:entry.path));
   if(!response.ok)throw Error('Measurements could not be loaded. Please try selecting the test again.');
-  const bytes=await response.arrayBuffer();
+  let bytes;
+  if(compressed){
+    const transferred=await boundedExperimentBytes(response.body,transport.size_bytes,'transport');
+    const transportDigest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',transferred)),x=>x.toString(16).padStart(2,'0')).join('');
+    if(transportDigest!==transport.sha256)throw Error('Experiment transport checksum differs from the catalogue. Reload the page.');
+    bytes=await boundedExperimentBytes(new Blob([transferred]).stream().pipeThrough(new DecompressionStream('gzip')),entry.size_bytes,'decompressed');
+  }else bytes=await response.arrayBuffer();
   if(bytes.byteLength>maxBytes||bytes.byteLength!==entry.size_bytes)throw Error('Experiment file size does not match the catalogue.');
   const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');
   if(digest!==entry.sha256)throw Error('Experiment checksum differs from the catalogue. Reload the page.');

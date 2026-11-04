@@ -35,6 +35,14 @@ PRIOR_THIRTEEN={
     "tresca-associated-perfect-bk2022v1-be": "19acebed37d59120e49c5dff698e2b7d2a2693bbce9ec35c8bcbc65954819e18",
     "original-cam-clay-sw-electronic-log-recovery-v1": "637ba72335c3464fec427c773d214d21d06e9e26bc737d15307aae2f67111b34"
 }
+# Exact current baseline v0.3 definition alternatives; all other current16 entries remain historical.
+BASELINE_FIVE_V03={
+    "linear-elastic": "67a7203bc13486fcc431b2f2dd421b4d80300fadc45faacf6db5a4a89e499b5b",
+    "drucker-prager": "bdb66fb0a6b2b734830470f9407780deaae0e4610a823b9639ddbc1a5f324a2b",
+    "modified-cam-clay": "96b33fadf285f555ef98c35d98cd562533c5ee3ae233aee8515e7e1c85f58777",
+    "hypoplastic-sand-vw96": "c028cdcd46b79d23c2798ff5309b8e8af8fb68ebf94ff08632dbf9af86ca4595",
+    "hypoplastic-sand-igs97": "64453d282cf2c0f5e4e2b0923394e289702a9a2440f9ff7cc2d90a0c134a8108"
+}
 GIS_FAILURE='nonlinear recorded replay failed: research-hp-extracted-asbs-gis-2024-v03 material update failed or trial budget exhausted; last committed knot retained\n'
 
 def check_recorded_failure(message, definitions, *, root=ROOT):
@@ -42,7 +50,7 @@ def check_recorded_failure(message, definitions, *, root=ROOT):
         assert message==GIS_FAILURE
         return 'historical-twelve GIS first failure'
     if SCLAY in definitions:
-        assert definitions=={**PRIOR_THIRTEEN,DUNCAN:DUNCAN_HASH,RAMBERG:RAMBERG_HASH,SCLAY:SCLAY_HASH}, 'unqualified strict sixteen-model catalogue'
+        assert definitions in ({**PRIOR_THIRTEEN,DUNCAN:DUNCAN_HASH,RAMBERG:RAMBERG_HASH,SCLAY:SCLAY_HASH},{**PRIOR_THIRTEEN,**BASELINE_FIVE_V03,DUNCAN:DUNCAN_HASH,RAMBERG:RAMBERG_HASH,SCLAY:SCLAY_HASH}), 'unqualified strict sixteen-model catalogue'
     elif RAMBERG in definitions:
         assert definitions=={**PRIOR_THIRTEEN,DUNCAN:DUNCAN_HASH,RAMBERG:RAMBERG_HASH}, 'unqualified strict fifteen-model catalogue'
     elif DUNCAN in definitions:

@@ -1,0 +1,1 @@
+Source review requires two bounded corrections R1/R2. Reproduce `python3 -B docs/delivery/unheld-finalisation-20261105-v1/live-verifiers-review-v1/check.py`. All local fixtures are removed. Original proposal manifests and reviewed evidence remain immutable. Actual final deployment, selected HTTP and production browser qualification remain pending.

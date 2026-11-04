@@ -1,5 +1,6 @@
 """Scientific channel semantics and public-asset integrity, without HDF5 deps."""
 import copy
+import gzip
 import hashlib
 import io
 import zipfile
@@ -125,7 +126,12 @@ class PublicAssetTests(unittest.TestCase):
             by_id = {r['id']: r for r in records}
             self.assertEqual(set(by_id), {r['id'] for r in index['experiments']})
             for entry in index['experiments']:
-                content = (dest / entry['path']).read_bytes()
+                transport = (dest / entry['transport']['path']).read_bytes()
+                self.assertEqual(entry['content_encoding'], 'gzip')
+                self.assertEqual(len(transport), entry['transport']['size_bytes'])
+                self.assertEqual(hashlib.sha256(transport).hexdigest(), entry['transport']['sha256'])
+                self.assertEqual(transport[4:8], bytes(4))
+                content = gzip.decompress(transport)
                 self.assertEqual(hashlib.sha256(content).hexdigest(), entry['sha256'])
                 packed = json.loads(content)
                 source = by_id[entry['id']]

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {gzipSync} from 'node:zlib';
 import {readFile,readdir} from 'node:fs/promises';
 import {normalizeWichtmann,validateExperiment,measuredSeries,decodeExperiment,fetchExperiment,comparisonMetadata,compatibleExperiment as scopedCompatibleExperiment,comparisonSeries as scopedComparisonSeries} from '../web/experiments.mjs';
 
@@ -77,6 +78,44 @@ await assert.rejects(fetchExperiment(entry,async()=>new Response('not found',{st
 await assert.rejects(fetchExperiment({...entry,sha256:'0'.repeat(64)},async()=>new Response(bytes)),/checksum/);
 await assert.rejects(fetchExperiment({...entry,rows:3},async()=>new Response(bytes)),/selected test/);
 console.log('Hosted experiment decoding, integrity, channel semantics and request validation passed.');
+// Optional gzip transport retains the original JSON identity and all decoder gates.
+const digest=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',value)),x=>x.toString(16).padStart(2,'0')).join('');
+const zipped=gzipSync(bytes,{mtime:0});
+const gzipEntry={...entry,content_encoding:'gzip',transport:{path:entry.path+'.gz',size_bytes:zipped.byteLength,sha256:await digest(zipped)}};
+assert.deepEqual(await fetchExperiment(gzipEntry,async path=>{assert.equal(path,'./experiments/'+entry.path+'.gz');return new Response(zipped);}),decoded);
+for(const change of [
+  {content_encoding:'br'},{content_encoding:null},{content_encoding:undefined},
+  {transport:null},{transport:undefined},{transport:[]},
+  ...['../x.json.gz',entry.path,entry.path+'.gz?x','other.json.gz'].map(path=>({transport:{...gzipEntry.transport,path}})),
+  ...[0,-1,1.5,33*1024*1024,'100'].map(size_bytes=>({transport:{...gzipEntry.transport,size_bytes}})),
+  ...['x'.repeat(64),'A'.repeat(64),'abc'].map(sha256=>({transport:{...gzipEntry.transport,sha256}})),
+  {transport:{...gzipEntry.transport,extra:true}},
+]){
+  let requested=false;
+  await assert.rejects(fetchExperiment({...gzipEntry,...change},async()=>{requested=true;return new Response(zipped);}),/catalogue entry/);
+  assert.equal(requested,false);
+}
+await assert.rejects(fetchExperiment({...entry,transport:gzipEntry.transport},async()=>new Response(zipped)),/catalogue entry/);
+await assert.rejects(fetchExperiment({...entry,content_encoding:'gzip'},async()=>new Response(zipped)),/catalogue entry/);
+await assert.rejects(fetchExperiment({...gzipEntry,transport:{...gzipEntry.transport,sha256:'0'.repeat(64)}},async()=>new Response(zipped)),/transport checksum/);
+await assert.rejects(fetchExperiment({...gzipEntry,sha256:'0'.repeat(64)},async()=>new Response(zipped)),/checksum/);
+await assert.rejects(fetchExperiment({...gzipEntry,rows:3},async()=>new Response(zipped)),/selected test/);
+for(const broken of [zipped.subarray(0,zipped.length-3),new TextEncoder().encode('not gzip')]){
+  const bad={...gzipEntry,transport:{...gzipEntry.transport,size_bytes:broken.length,sha256:await digest(broken)}};
+  await assert.rejects(fetchExperiment(bad,async()=>new Response(broken)));
+}
+for(const size_bytes of [zipped.length-1,zipped.length+1])await assert.rejects(fetchExperiment({...gzipEntry,transport:{...gzipEntry.transport,size_bytes}},async()=>new Response(zipped)),/transport size/);
+for(const size_bytes of [bytes.length-1,bytes.length+1])await assert.rejects(fetchExperiment({...gzipEntry,size_bytes},async()=>new Response(zipped)),/decompressed size/);
+let cancelled=false;
+const overStream=new ReadableStream({pull(controller){controller.enqueue(zipped);},cancel(){cancelled=true;}});
+await assert.rejects(fetchExperiment({...gzipEntry,transport:{...gzipEntry.transport,size_bytes:1}},async()=>new Response(overStream)),/transport size/);
+assert.equal(cancelled,true);
+// A highly compressed expansion is rejected against the declared JSON size while streaming.
+const bomb=gzipSync(new Uint8Array(1024*1024));
+await assert.rejects(fetchExperiment({...gzipEntry,transport:{...gzipEntry.transport,size_bytes:bomb.length,sha256:await digest(bomb)}},async()=>new Response(bomb)),/decompressed size/);
+await assert.rejects(fetchExperiment(gzipEntry,async()=>({ok:true,body:null})),/stream is unavailable/);
+console.log('Gzip experiment transport metadata, checksums, streaming limits, cancellation and legacy compatibility passed.');
+
 
 if(process.argv[2]==='--built-assets'){
   const directory=process.argv[3];
@@ -85,7 +124,7 @@ if(process.argv[2]==='--built-assets'){
   const registry=JSON.parse(await readFile(new URL('../data/public_sources.json',import.meta.url),'utf8'));
   const approvedSources=new Map(registry.sources.filter(source=>source.public_hosting===true).map(source=>[source.id,source]));
   for(const entry of manifest.experiments){
-    const content=await readFile(directory+'/'+entry.path);
+    const content=await readFile(directory+'/'+(entry.transport?.path??entry.path));
     const actual=await fetchExperiment(entry,async()=>new Response(content));
     assert.equal(actual.rows.length,entry.rows);
     assert.deepEqual(entry.comparison,comparisonMetadata(actual));

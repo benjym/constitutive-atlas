@@ -1,0 +1,211 @@
+--- a/tools/build_experiments.py
++++ b/tools/build_experiments.py
+@@ -1,5 +1,7 @@
+ """Deterministic, lossless browser datasets from checksum-pinned source archives."""
+ from __future__ import annotations
++import gzip
++import io
+ import hashlib
+ import json
+ from pathlib import Path
+@@ -34,6 +36,22 @@
+ 
+ def json_bytes(value):
+     return (json.dumps(value, separators=(',', ':'), ensure_ascii=False, allow_nan=False)+'\n').encode()
++
++
++
++def write_transport(destination, filename, data):
++    """Gzip only the transport; retain the exact original JSON identity."""
++    if not 0 < len(data) <= 32 * 1024 * 1024:
++        raise ValueError('Experiment JSON exceeds browser size limit')
++    buffer = io.BytesIO()
++    with gzip.GzipFile(filename='', mode='wb', fileobj=buffer, mtime=0) as stream:
++        stream.write(data)
++    compressed = buffer.getvalue()
++    if not 0 < len(compressed) <= 32 * 1024 * 1024:
++        raise ValueError('Experiment transport exceeds browser size limit')
++    path = filename + '.gz'
++    (destination/path).write_bytes(compressed)
++    return dict(path=path, sha256=hashlib.sha256(compressed).hexdigest(), size_bytes=len(compressed))
+ 
+ 
+ def bundle(destination, *, preview=False, root=ROOT):
+@@ -73,19 +91,19 @@
+                 record['provenance']['attribution'] = grant['attribution'] if grant else ATTRIBUTION
+                 data = json_bytes(encode(record))
+                 filename = record['id']+'.json'
+-                (destination/filename).write_bytes(data)
++                transport = write_transport(destination, filename, data)
+                 entry = dict(id=record['id'], kind=record['kind'], comparison=comparison_metadata(record), protocol=record['protocol'], material=record['material'],
+                              initial=record['initial'], rows=len(record['rows']), path=filename,
+-                             sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data))
++                             sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data), content_encoding='gzip', transport=transport)
+                 source_entries.append(entry)
+         entries.extend(sorted(source_entries, key=lambda e: int(re.search(r'\d+$', e['id'])[0])))
+     for record in load_curated(root):
+         data = json_bytes(encode(record))
+         filename = record['id'] + '.json'
+-        (destination/filename).write_bytes(data)
++        transport = write_transport(destination, filename, data)
+         entries.append(dict(id=record['id'], kind=record['kind'], comparison=comparison_metadata(record), protocol=record['protocol'], material=record['material'],
+                             initial=record['initial'], rows=len(record['rows']), path=filename,
+-                            sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data)))
++                            sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data), content_encoding='gzip', transport=transport))
+     if len({entry['id'] for entry in entries}) != len(entries):
+         raise ValueError('Duplicate experiment IDs')
+     manifest = dict(schema_version='0.1', release='local-preview' if preview else 'public',
+--- a/web/experiments.mjs
++++ b/web/experiments.mjs
+@@ -55,14 +55,42 @@
+   return validateExperiment({...data.metadata,rows});
+ }
+ 
++async function boundedExperimentBytes(stream, expected, label){
++  if(!stream||typeof stream.getReader!=='function')throw Error('Experiment '+label+' stream is unavailable.');
++  const reader=stream.getReader(),chunks=[];let length=0;
++  try{
++    while(true){
++      const {done,value}=await reader.read();if(done)break;
++      if(!(value instanceof Uint8Array))throw Error('Invalid experiment '+label+' stream.');
++      length+=value.byteLength;
++      if(length>32*1024*1024||length>expected)throw Error('Experiment '+label+' size exceeds the catalogue.');
++      chunks.push(value);
++    }
++    if(length!==expected)throw Error('Experiment '+label+' size does not match the catalogue.');
++    const bytes=new Uint8Array(length);let offset=0;
++    for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.byteLength;}
++    return bytes;
++  }catch(error){try{await reader.cancel(error);}catch{}throw error;}
++  finally{reader.releaseLock();}
++}
++
+ export async function fetchExperiment(entry,fetcher=fetch){
+   // Full-resolution, 24-channel torsion histories exceed 10 MiB. Keep a
+   // bounded payload while retaining every measured channel and observation.
+   const maxBytes=32*1024*1024;
+   if(!/^[A-Za-z0-9][A-Za-z0-9_-]{0,119}$/.test(entry.id)||entry.path!==entry.id+'.json'||!/^[a-f0-9]{64}$/.test(entry.sha256)||!Number.isSafeInteger(entry.size_bytes)||entry.size_bytes<=0||entry.size_bytes>maxBytes)throw Error('Invalid experiment catalogue entry.');
+-  const response=await fetcher('./experiments/'+entry.path);
++  const compressed=entry.content_encoding!==undefined||entry.transport!==undefined;
++  const transport=entry.transport;
++  if(compressed&&(entry.content_encoding!=='gzip'||!transport||typeof transport!=='object'||Array.isArray(transport)||Object.keys(transport).sort().join(',')!=='path,sha256,size_bytes'||transport.path!==entry.id+'.json.gz'||!/^[a-f0-9]{64}$/.test(transport.sha256)||!Number.isSafeInteger(transport.size_bytes)||transport.size_bytes<=0||transport.size_bytes>maxBytes))throw Error('Invalid experiment transport catalogue entry.');
++  const response=await fetcher('./experiments/'+(compressed?transport.path:entry.path));
+   if(!response.ok)throw Error('Measurements could not be loaded. Please try selecting the test again.');
+-  const bytes=await response.arrayBuffer();
++  let bytes;
++  if(compressed){
++    const transferred=await boundedExperimentBytes(response.body,transport.size_bytes,'transport');
++    const transportDigest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',transferred)),x=>x.toString(16).padStart(2,'0')).join('');
++    if(transportDigest!==transport.sha256)throw Error('Experiment transport checksum differs from the catalogue. Reload the page.');
++    bytes=await boundedExperimentBytes(new Blob([transferred]).stream().pipeThrough(new DecompressionStream('gzip')),entry.size_bytes,'decompressed');
++  }else bytes=await response.arrayBuffer();
+   if(bytes.byteLength>maxBytes||bytes.byteLength!==entry.size_bytes)throw Error('Experiment file size does not match the catalogue.');
+   const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');
+   if(digest!==entry.sha256)throw Error('Experiment checksum differs from the catalogue. Reload the page.');
+--- a/tools/test_experiments.mjs
++++ b/tools/test_experiments.mjs
+@@ -1,4 +1,5 @@
+ import assert from 'node:assert/strict';
++import {gzipSync} from 'node:zlib';
+ import {readFile,readdir} from 'node:fs/promises';
+ import {normalizeWichtmann,validateExperiment,measuredSeries,decodeExperiment,fetchExperiment,comparisonMetadata,compatibleExperiment as scopedCompatibleExperiment,comparisonSeries as scopedComparisonSeries} from '../web/experiments.mjs';
+ 
+@@ -77,6 +78,44 @@
+ await assert.rejects(fetchExperiment({...entry,sha256:'0'.repeat(64)},async()=>new Response(bytes)),/checksum/);
+ await assert.rejects(fetchExperiment({...entry,rows:3},async()=>new Response(bytes)),/selected test/);
+ console.log('Hosted experiment decoding, integrity, channel semantics and request validation passed.');
++// Optional gzip transport retains the original JSON identity and all decoder gates.
++const digest=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',value)),x=>x.toString(16).padStart(2,'0')).join('');
++const zipped=gzipSync(bytes,{mtime:0});
++const gzipEntry={...entry,content_encoding:'gzip',transport:{path:entry.path+'.gz',size_bytes:zipped.byteLength,sha256:await digest(zipped)}};
++assert.deepEqual(await fetchExperiment(gzipEntry,async path=>{assert.equal(path,'./experiments/'+entry.path+'.gz');return new Response(zipped);}),decoded);
++for(const change of [
++  {content_encoding:'br'},{content_encoding:null},{content_encoding:undefined},
++  {transport:null},{transport:undefined},{transport:[]},
++  ...['../x.json.gz',entry.path,entry.path+'.gz?x','other.json.gz'].map(path=>({transport:{...gzipEntry.transport,path}})),
++  ...[0,-1,1.5,33*1024*1024,'100'].map(size_bytes=>({transport:{...gzipEntry.transport,size_bytes}})),
++  ...['x'.repeat(64),'A'.repeat(64),'abc'].map(sha256=>({transport:{...gzipEntry.transport,sha256}})),
++  {transport:{...gzipEntry.transport,extra:true}},
++]){
++  let requested=false;
++  await assert.rejects(fetchExperiment({...gzipEntry,...change},async()=>{requested=true;return new Response(zipped);}),/catalogue entry/);
++  assert.equal(requested,false);
++}
++await assert.rejects(fetchExperiment({...entry,transport:gzipEntry.transport},async()=>new Response(zipped)),/catalogue entry/);
++await assert.rejects(fetchExperiment({...entry,content_encoding:'gzip'},async()=>new Response(zipped)),/catalogue entry/);
++await assert.rejects(fetchExperiment({...gzipEntry,transport:{...gzipEntry.transport,sha256:'0'.repeat(64)}},async()=>new Response(zipped)),/transport checksum/);
++await assert.rejects(fetchExperiment({...gzipEntry,sha256:'0'.repeat(64)},async()=>new Response(zipped)),/checksum/);
++await assert.rejects(fetchExperiment({...gzipEntry,rows:3},async()=>new Response(zipped)),/selected test/);
++for(const broken of [zipped.subarray(0,zipped.length-3),new TextEncoder().encode('not gzip')]){
++  const bad={...gzipEntry,transport:{...gzipEntry.transport,size_bytes:broken.length,sha256:await digest(broken)}};
++  await assert.rejects(fetchExperiment(bad,async()=>new Response(broken)));
++}
++for(const size_bytes of [zipped.length-1,zipped.length+1])await assert.rejects(fetchExperiment({...gzipEntry,transport:{...gzipEntry.transport,size_bytes}},async()=>new Response(zipped)),/transport size/);
++for(const size_bytes of [bytes.length-1,bytes.length+1])await assert.rejects(fetchExperiment({...gzipEntry,size_bytes},async()=>new Response(zipped)),/decompressed size/);
++let cancelled=false;
++const overStream=new ReadableStream({pull(controller){controller.enqueue(zipped);},cancel(){cancelled=true;}});
++await assert.rejects(fetchExperiment({...gzipEntry,transport:{...gzipEntry.transport,size_bytes:1}},async()=>new Response(overStream)),/transport size/);
++assert.equal(cancelled,true);
++// A highly compressed expansion is rejected against the declared JSON size while streaming.
++const bomb=gzipSync(new Uint8Array(1024*1024));
++await assert.rejects(fetchExperiment({...gzipEntry,transport:{...gzipEntry.transport,size_bytes:bomb.length,sha256:await digest(bomb)}},async()=>new Response(bomb)),/decompressed size/);
++await assert.rejects(fetchExperiment(gzipEntry,async()=>({ok:true,body:null})),/stream is unavailable/);
++console.log('Gzip experiment transport metadata, checksums, streaming limits, cancellation and legacy compatibility passed.');
++
+ 
+ if(process.argv[2]==='--built-assets'){
+   const directory=process.argv[3];
+@@ -85,7 +124,7 @@
+   const registry=JSON.parse(await readFile(new URL('../data/public_sources.json',import.meta.url),'utf8'));
+   const approvedSources=new Map(registry.sources.filter(source=>source.public_hosting===true).map(source=>[source.id,source]));
+   for(const entry of manifest.experiments){
+-    const content=await readFile(directory+'/'+entry.path);
++    const content=await readFile(directory+'/'+(entry.transport?.path??entry.path));
+     const actual=await fetchExperiment(entry,async()=>new Response(content));
+     assert.equal(actual.rows.length,entry.rows);
+     assert.deepEqual(entry.comparison,comparisonMetadata(actual));
+--- a/tests/test_web_experiments.py
++++ b/tests/test_web_experiments.py
+@@ -1,4 +1,5 @@
+ """Synthetic tests for reproducible experiment assets and release isolation."""
++import gzip
+ import hashlib
+ import json
+ from pathlib import Path
+@@ -53,7 +54,12 @@
+         public = bundle(self.output, root=self.root)
+         self.assertEqual(public['release'], 'public')
+         for entry in public['experiments']:
+-            content = (self.output/entry['path']).read_bytes()
++            transport = (self.output/entry['transport']['path']).read_bytes()
++            self.assertEqual(entry['content_encoding'], 'gzip')
++            self.assertEqual(len(transport), entry['transport']['size_bytes'])
++            self.assertEqual(hashlib.sha256(transport).hexdigest(), entry['transport']['sha256'])
++            self.assertEqual(transport[4:8], bytes(4))
++            content = gzip.decompress(transport)
+             self.assertEqual(len(content), entry['size_bytes'])
+             self.assertEqual(hashlib.sha256(content).hexdigest(), entry['sha256'])
+             data = json.loads(content)
+--- a/tests/test_public_data.py
++++ b/tests/test_public_data.py
+@@ -1,5 +1,6 @@
+ """Scientific channel semantics and public-asset integrity, without HDF5 deps."""
+ import copy
++import gzip
+ import hashlib
+ import io
+ import zipfile
+@@ -125,7 +126,12 @@
+             by_id = {r['id']: r for r in records}
+             self.assertEqual(set(by_id), {r['id'] for r in index['experiments']})
+             for entry in index['experiments']:
+-                content = (dest / entry['path']).read_bytes()
++                transport = (dest / entry['transport']['path']).read_bytes()
++                self.assertEqual(entry['content_encoding'], 'gzip')
++                self.assertEqual(len(transport), entry['transport']['size_bytes'])
++                self.assertEqual(hashlib.sha256(transport).hexdigest(), entry['transport']['sha256'])
++                self.assertEqual(transport[4:8], bytes(4))
++                content = gzip.decompress(transport)
+                 self.assertEqual(hashlib.sha256(content).hexdigest(), entry['sha256'])
+                 packed = json.loads(content)
+                 source = by_id[entry['id']]

@@ -1,5 +1,7 @@
 """Deterministic, lossless browser datasets from checksum-pinned source archives."""
 from __future__ import annotations
+import gzip
+import io
 import hashlib
 import json
 from pathlib import Path
@@ -34,6 +36,22 @@ def encode(record):
 
 def json_bytes(value):
     return (json.dumps(value, separators=(',', ':'), ensure_ascii=False, allow_nan=False)+'\n').encode()
+
+
+
+def write_transport(destination, filename, data):
+    """Gzip only the transport; retain the exact original JSON identity."""
+    if not 0 < len(data) <= 32 * 1024 * 1024:
+        raise ValueError('Experiment JSON exceeds browser size limit')
+    buffer = io.BytesIO()
+    with gzip.GzipFile(filename='', mode='wb', fileobj=buffer, mtime=0) as stream:
+        stream.write(data)
+    compressed = buffer.getvalue()
+    if not 0 < len(compressed) <= 32 * 1024 * 1024:
+        raise ValueError('Experiment transport exceeds browser size limit')
+    path = filename + '.gz'
+    (destination/path).write_bytes(compressed)
+    return dict(path=path, sha256=hashlib.sha256(compressed).hexdigest(), size_bytes=len(compressed))
 
 
 def bundle(destination, *, preview=False, root=ROOT):
@@ -73,19 +91,19 @@ def bundle(destination, *, preview=False, root=ROOT):
                 record['provenance']['attribution'] = grant['attribution'] if grant else ATTRIBUTION
                 data = json_bytes(encode(record))
                 filename = record['id']+'.json'
-                (destination/filename).write_bytes(data)
+                transport = write_transport(destination, filename, data)
                 entry = dict(id=record['id'], kind=record['kind'], comparison=comparison_metadata(record), protocol=record['protocol'], material=record['material'],
                              initial=record['initial'], rows=len(record['rows']), path=filename,
-                             sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data))
+                             sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data), content_encoding='gzip', transport=transport)
                 source_entries.append(entry)
         entries.extend(sorted(source_entries, key=lambda e: int(re.search(r'\d+$', e['id'])[0])))
     for record in load_curated(root):
         data = json_bytes(encode(record))
         filename = record['id'] + '.json'
-        (destination/filename).write_bytes(data)
+        transport = write_transport(destination, filename, data)
         entries.append(dict(id=record['id'], kind=record['kind'], comparison=comparison_metadata(record), protocol=record['protocol'], material=record['material'],
                             initial=record['initial'], rows=len(record['rows']), path=filename,
-                            sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data)))
+                            sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data), content_encoding='gzip', transport=transport))
     if len({entry['id'] for entry in entries}) != len(entries):
         raise ValueError('Duplicate experiment IDs')
     manifest = dict(schema_version='0.1', release='local-preview' if preview else 'public',
