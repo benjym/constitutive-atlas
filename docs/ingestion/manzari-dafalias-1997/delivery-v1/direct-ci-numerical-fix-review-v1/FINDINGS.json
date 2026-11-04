@@ -1,0 +1,26 @@
+{
+  "identity": "independent-direct-ci-numerical-fix-findings-v1",
+  "blocking": [
+    {
+      "id": "B1",
+      "location": "tools/check_md1997_numerical_ci.py:source_inventory",
+      "finding": "Inventory omits cpp/scalar-functions C/headers although cmake/AtlasScalarFunctions.cmake links their static target into atlas_numerical_tests. Changing a linked scalar source leaves before/after numerical source inventory identical.",
+      "witness": "Owned inert pow.c content mutation, independent check27 assertions",
+      "minimal_successor": "Add exact bounded scalar source/header closure to inventory and test mutation rejection; preserve executable and all existing pins."
+    },
+    {
+      "id": "B2",
+      "location": "new runner + qualification.yml + strict helper",
+      "finding": "New mandatory path runs only Decimal positive (or legacy16); broad CTest excludes atlas_numerical. Strict helper invokes only None/unknown native profile. No current mandatory path asserts exact17 source-admissible-current17-v1 binary64 AD/FD required failure. Original C++ mode bytes still exist, but its expected-failure gate is not exercised.",
+      "minimal_successor": "Add bounded exact binary64 current17 negative invocation with nativev6, absent Decimal binding, expected nonzero/message and retained raw/process; preserve default/unknown/strict original and external588 positive."
+    }
+  ],
+  "positive": [
+    "Exact15packet and3candidate paths verified",
+    "Frozen unchanged assessor five pins, true actual588+process/raw/binding linkage required",
+    "Exact16/17 IDs/MDhash and complete source catalogue equality",
+    "Post source/generated/executable guards and newrunner ambient selector scrubbing",
+    "OtherCTest paths/recorded/portable remain outside numerical replacement; authorized web flags separate path-only diff"
+  ],
+  "scope": "Source-only; earlier accepted24807/588 remains valid, no new CI observations"
+}

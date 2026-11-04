@@ -55,10 +55,12 @@ def bundle(destination, build):
     if example['model'] != MODEL or example['definition_sha256'] != sha(definition):
         raise ValueError('Interface example definition differs')
     from qualify_controlled_path_refresh import validate_refresh
-    refresh = validate_refresh(build, MODEL)
+    from profile_source_compatibility import validate as compatible_source, copy_evidence
+    compatibility = compatible_source(ROOT, build, 'interface2016')
+    refresh = dict(qualification=compatibility['qualification'], qualification_bytes=compatibility['qualification_bytes'], review_bytes=compatibility['review_bytes']) if compatibility is not None else validate_refresh(build, MODEL)
     if refresh is not None:
         qualification = refresh['qualification']
-        closure = qualification['binding']['source_closure']
+        closure = compatibility['sources'] if compatibility is not None else qualification['binding']['source_closure']
         receipt = dict(status='passed', definition_sha256=sha(definition),
                        artifacts={name:digest for name,digest in qualification['binding']['artifacts'].items()
                                   if name.endswith(('.mjs', '.wasm'))},
@@ -157,6 +159,7 @@ def bundle(destination, build):
         shutil.copyfile(ROOT/'web'/name, path)
     if any(sha(ROOT/name) != digest for name,digest in closure.items()):
         raise ValueError('Interface qualified source changed during packaging')
+    copy_evidence(compatibility, engine)
     identity = dict(profile='controlled-path-ode-v1', model=MODEL, definition_sha256=sha(definition),
                     files={p.name:sha(p) for p in sorted(engine.iterdir()) if p.is_file()},
                     components={name:sha(namespace/name) for name in COMPONENTS},

@@ -1,0 +1,111 @@
+---
+name: Publish Pages
+'on':
+  workflow_run:
+    workflows:
+    - Fast CI
+    types:
+    - completed
+    branches:
+    - main
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  ATLAS_PUBLICATION_REVISION: "${{ github.event.workflow_run.head_sha || github.sha }}"
+jobs:
+  package:
+    if: "(github.event_name == 'workflow_run' && github.event.workflow_run.conclusion
+      == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch
+      == 'main') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        ref: "${{ github.event.workflow_run.head_sha || github.sha }}"
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: ".nvmrc"
+    - uses: "./.github/actions/setup-atlas"
+      with:
+        wasm: 'true'
+    - name: Verify publication checkout
+      run: test "$(git rev-parse HEAD)" = "$ATLAS_PUBLICATION_REVISION"
+    - name: Fast contracts for the exact publication revision
+      run: python3 -B tools/ci_fast.py
+    - name: Build ordinary and power-creep Wasm engines
+      run: |-
+        emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-wasm --target atlas_solver --parallel 1
+        cmake --build build-wasm --target atlas_power_creep_solver --parallel 1
+    - name: Build kelvin-voigt Wasm engine
+      run: |-
+        emcmake cmake -S cmake/kelvin-voigt -B build-kelvin-voigt-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-kelvin-voigt-wasm --target atlas_kelvin_voigt_solver --parallel 1
+    - name: Build sls Wasm engine
+      run: |-
+        emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
+        cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+    - name: Build j2 Wasm engine
+      run: |-
+        emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
+    - name: Build burgers Wasm engine
+      run: |-
+        emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+    - name: Build orthotropic Wasm engine
+      run: |-
+        emcmake cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
+    - name: Restore exact reviewed assets and approved data
+      run: |-
+        python3 -B tools/provision_bingham_assets.py
+        python3 -B tools/provision_perzyna_assets.py
+        python3 -B tools/check_current_dependency_assets.py --output "$RUNNER_TEMP/current-dependency-guards"
+        python3 -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+        python3 -B tools/provision_implicit_path_assets.py
+        python3 -B tools/fetch_data.py --approved-only
+    - name: Build one website with unchanged package guards
+      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
+    - name: Verify the exact publication package
+      run: |-
+        node tools/ci_smoke.mjs --wasm web/dist/atlas.js
+        node tools/test_experiments.mjs --built-assets web/dist/experiments
+        node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+        node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+    - name: Retain publication checks
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: pages-package-checks
+        path: |-
+          ${{ runner.temp }}/packaged-laboratory.json
+          ${{ runner.temp }}/current-dependency-guards/
+        if-no-files-found: ignore
+    - uses: actions/configure-pages@v6
+    - name: Upload the tested website
+      uses: actions/upload-pages-artifact@v5
+      with:
+        path: web/dist
+  deploy:
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: "${{ steps.deployment.outputs.page_url }}"
+    steps:
+    - name: Deploy the tested artifact
+      id: deployment
+      uses: actions/deploy-pages@v5

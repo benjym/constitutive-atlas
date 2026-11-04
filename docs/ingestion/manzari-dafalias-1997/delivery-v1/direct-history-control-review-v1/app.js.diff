@@ -1,0 +1,15 @@
+--- before/web/app.js
++++ candidate/web/app.js
+@@ -222,10 +222,11 @@
+   document.querySelector('[data-for="target"]')?.setAttribute('aria-label',$('target-label').textContent+' slider');
+ }
+ function updateControlSupport(){
++  const selected=$('cycles').value||'0';
+   const chosen={model:model()?.id,protocol:Number($('protocol').value),cycles:1};
+   const reason=unsupportedReason(controlSupport,chosen);
+   for(const option of $('cycles').options)option.disabled=!!unsupportedReason(controlSupport,{...chosen,cycles:Number(option.value)});
+-  if($('cycles').selectedOptions[0]?.disabled)$('cycles').value='0';
++  $('cycles').value=[...$('cycles').options].find(option=>option.value===selected)?.disabled?'0':selected;
+   $('control-support').textContent=reason;$('control-support').hidden=!reason;
+ }
+ function registeredModelReview(id){return (evidenceIndex?.agent_reviews||[]).find(r=>r.catalogue_id===id&&r.status==='accepted'&&r.definition_current&&r.registered_approval_id!==null);}

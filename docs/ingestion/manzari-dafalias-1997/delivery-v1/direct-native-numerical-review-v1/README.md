@@ -1,0 +1,7 @@
+Accepted the exact local current17 Mac direct native numerical outcome. The unchanged accepted saved assessor reproduces the retained report exactly: 588 comparisons pass. A separate Decimal120 recomputation reproduces all588 errors and unchanged budgets. All512 source-input hashes still match the pre-call freeze; model28ea, fixture5df, cataloguef9bb and executable304782 match independently reviewed binding24807. Four process corruptions reject.
+
+CMake points at the candidate source; saved dependency records reference its fixture and actual generated models.hpp, with fixture/object/executable timestamps ordered. These are bounded ordinary local build checks, not fullCI/compiler authority. The old binary64 AD/FD failure and all earlier evidence remain unchanged. The historical transport-schema.json remains old16/v1 documentation; accepted current17 assessor and fixture enforce17/new identities.
+
+Reproduce without compiled calls: python3 -I -B docs/ingestion/manzari-dafalias-1997/delivery-v1/direct-native-numerical-review-v1/check_actual.py
+
+No build or compiled artifact was executed by this reviewer. The script only reads named source/saved files and runs the unchanged pure saved-data assessor, writing its own checks.json. No temporary resource was created; external source/build/raw evidence remains coordinator-owned and retained. Remaining work is coordinator package/browser/live verification and any separate fullCI/Linux qualification; this review grants none of those.

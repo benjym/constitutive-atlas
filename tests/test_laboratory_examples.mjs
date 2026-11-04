@@ -29,6 +29,26 @@ test('missing or corrupt memory, saved state and settings reject even with an up
  for(const poison of[d=>d.specification.initial.pop(),d=>d.result.points[0].state.pop(),d=>d.specification.integration_settings.max_depth=14,d=>d.result.points[1].control=.5]){const f=fixture(),doc=JSON.parse(docText);poison(doc);const text=JSON.stringify(doc);f.assets.set(f.e.document_url,text);f.e.document_sha256=sha(text);await assert.rejects(prepare(f));}
 });
 test('missing asset and unregistered example reject',async()=>{const f=fixture();f.assets.delete(f.e.document_url);await assert.rejects(prepare(f),/loaded/);const g=fixture();await assert.rejects(prepareExample({...g.e,label:'not registered'},g.index,catalogue),/not in this index/);});
+function inputFixture(){
+ const f=fixture(),doc={schema_version:'atlas-laboratory-example-input-0.1',definition_sha256:f.e.definition_sha256,specification:JSON.parse(docText).specification};
+ const text=JSON.stringify(doc);f.assets.set(f.e.document_url,text);f.e.document_sha256=sha(text);return {f,doc};
+}
+test('definition-bound inputs survive an additive catalogue revision and retain complete inputs',async()=>{
+ const {f,doc}=inputFixture(),next=structuredClone(catalogue);next.sha256='a'.repeat(64);f.index.catalogue_hash=next.sha256;
+ next.models.push({...structuredClone(next.models[0]),id:'additional-test-model'});
+ const result=await prepareExample(f.e,f.index,next,{crypto:webcrypto,fetcher:async u=>({ok:f.assets.has(u),text:async()=>f.assets.get(u)})});
+ assert.deepEqual(result.specification,doc.specification);result.specification.initial[0]=0;assert.notEqual(doc.specification.initial[0],0);
+});
+test('definition-bound inputs reject wrong definitions, extra results and invalid state or loading',async()=>{
+ for(const poison of[d=>d.definition_sha256='a'.repeat(64),d=>d.result={},d=>d.catalogue_hash=catalogue.sha256,d=>d.specification.initial.pop(),d=>d.specification.parameters.pop(),d=>d.specification.protocol=99,d=>delete d.specification.integration_settings]){
+  const {f,doc}=inputFixture();poison(doc);const text=JSON.stringify(doc);f.assets.set(f.e.document_url,text);f.e.document_sha256=sha(text);await assert.rejects(prepare(f));
+ }
+});
+test('definition-bound input JSON rejects duplicate keys and unknown versions',async()=>{
+ for(const mutate of[text=>text.replace('"schema_version":','"schema_version":"duplicate","schema_version":'),text=>text.replace('atlas-laboratory-example-input-0.1','atlas-laboratory-example-input-9')]){
+  const {f}=inputFixture(),text=mutate(f.assets.get(f.e.document_url));f.assets.set(f.e.document_url,text);f.e.document_sha256=sha(text);await assert.rejects(prepare(f));
+ }
+});
 test('packaging validates all inputs before writing and keeps safe relative URLs',async()=>{
  const root=await mkdtemp(join(tmpdir(),'atlas-examples-'));try{
   await mkdir(join(root,'catalogue'));await mkdir(join(root,'models'));await mkdir(join(root,'protocols'));const f=fixture(),entry={...f.e,document_path:'protocols/memory-example.json'};delete entry.document_url;delete entry.definition_url;

@@ -1,0 +1,11 @@
+--- before/.github/workflows/pages.yml
++++ after/.github/workflows/pages.yml
+@@ -75,7 +75,7 @@
+         python3 -B tools/provision_implicit_path_assets.py
+         python3 -B tools/fetch_data.py --approved-only
+     - name: Build one website with unchanged package guards
+-      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
++      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
+     - name: Verify the exact publication package
+       run: |-
+         node tools/ci_smoke.mjs --wasm web/dist/atlas.js

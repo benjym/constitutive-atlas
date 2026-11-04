@@ -1,0 +1,31 @@
+--- before/build_controlled_path_web.py
++++ after/build_controlled_path_web.py
+@@ -59,9 +59,18 @@
+     accepted_review_bytes = None
+     qualified_artifact_bytes = None
+     from qualify_controlled_path_refresh import validate_refresh
+-    refresh = validate_refresh(build, MODEL)
++    from profile_source_compatibility import validate as compatible_source, copy_evidence
++    compatibility = compatible_source(ROOT, build, 'norsand')
++    refresh = None if compatibility is not None else validate_refresh(build, MODEL)
+     current_receipt = build/'controlled-path-qualification.json'
+-    if refresh is not None:
++    if compatibility is not None:
++        qualification_path = build/'controlled-path-qualification.json'
++        qualification = compatibility['qualification']
++        qualification_bytes = compatibility['qualification_bytes']
++        sources = compatibility['sources']
++        accepted_review_bytes = compatibility['review_bytes']
++        qualified_artifact_bytes = {name:(build/name).read_bytes() for name in ('atlas_path_capability.mjs', 'atlas_path_capability.wasm')}
++    elif refresh is not None:
+         qualification_path = build/'refresh-qualification.json'
+         qualification_bytes = refresh['qualification_bytes']
+         qualification = refresh['qualification']
+@@ -144,6 +153,7 @@
+     (engine/'review.html').write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>NorSand independent review</title><style>body{max-width:85ch;margin:2rem auto;padding:1rem;font:16px/1.6 system-ui}pre{white-space:pre-wrap;font:inherit}</style><h1>NorSand 1993 independent scientific review</h1><p><a href="../index.html#laboratory?model='+MODEL+'">Main atlas laboratory</a> · <a href="review.json">Checklist</a> · <a href="approval.json">Approval and limitations</a></p><pre>'+html.escape(report)+'</pre></html>')
+     for name in COMPONENTS:
+         shutil.copyfile(ROOT/'web'/name, destination/name)
++    copy_evidence(compatibility, engine)
+     identity = {'profile':'controlled-path-ode-v1', 'model':MODEL,
+                 'definition_sha256':sha(definition),
+                 'files':{p.name:sha(p) for p in sorted(engine.iterdir()) if p.name not in ('identity.json','package-manifest.json') and p.is_file()},

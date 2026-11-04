@@ -1,0 +1,23 @@
+import fs from 'node:fs';import path from 'node:path';import vm from 'node:vm';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+const Q=path.dirname(new URL(import.meta.url).pathname),P=path.join(Q,'../direct-controlled-time-membership-v1'),S='/private/tmp/atlas-md1997-current-main-integration-v1/source',D='/private/tmp/atlas-md1997-direct-app-v1/site-v3',base=path.join(D,'engine-controlled-time'),packet='docs/ingestion/manzari-dafalias-1997/delivery-v1/';
+const hash=b=>createHash('sha256').update(b).digest('hex'),read=p=>JSON.parse(fs.readFileSync(p));let count=0;const ck=(x,n)=>{assert.ok(x,n);count++;};
+const m=read(path.join(P,'manifest.json'));ck(hash(fs.readFileSync(path.join(P,'manifest.json')))==='d0596380d42d52db09baf5350f0a77e93cdff2e050e434ea41a16f7791d485e1','subject');for(const[n,h]of Object.entries(m.files))ck(hash(fs.readFileSync(path.join(P,n)))===h,n);
+const old=fs.readFileSync(path.join(P,'before.mjs'),'utf8'),source=fs.readFileSync(path.join(P,'proposed.mjs'),'utf8');ck(source===fs.readFileSync(path.join(S,'tools/test_web_package.mjs'),'utf8'),'candidate exact');
+const start=source.indexOf(" const compatibilityNames="),end=source.indexOf(" const identity=read('identity.json')",start);let reverse=source.slice(0,start)+" assert.deepEqual(readdirSync(base).sort(),[...engineNames,'identity.json','package-manifest.json'].sort(),'Controlled-time asset set');\n"+source.slice(end);reverse=reverse.replaceAll('qualifiedNames','engineNames');ck(reverse===old,'all old checks byteexact');
+const util=fs.readFileSync(path.join(S,'web/controlled-time-engine.mjs'),'utf8');const strict=util.slice(util.indexOf('export function strictJSON'),util.indexOf('const finite=')).replace('export ','');
+const body=source.slice(source.indexOf('const componentNames='),source.indexOf('export function validatePackage')).replace('export function','function');ck(!body.includes('WebAssembly')&&!body.includes('import('),'no engine loading');
+const entries=read(path.join(D,'catalogue.json')).models;let overrides=new Map(),absent=new Set(),extra=false,oldMode=false;
+function run(){const ctx={assert,createHash,join:path.join,repository:S,entriesJSON:JSON.stringify(entries),directory:D,readFileSync(p,...args){const k=String(p);if(absent.has(k))throw Error('manufactured missing metadata');const b=overrides.has(k)?overrides.get(k):fs.readFileSync(p);return args[0]?b.toString():b;},existsSync(p){return !absent.has(String(p))&&fs.existsSync(p);},listing(p){let a=fs.readdirSync(p).filter(n=>!absent.has(path.join(String(p),n)));if(extra&&String(p)===base)a.push('extra.json');return JSON.stringify(a);}};vm.runInNewContext('const readdirSync=p=>JSON.parse(listing(p));\n'+strict+body+'\n result=validateControlledTimeMembership(directory,JSON.parse(entriesJSON),[]);',ctx,{timeout:5000});assert.deepEqual(Array.from(ctx.result),['vibe-2026']);}
+run();count++;
+let refusals=0;function refuse(){assert.throws(run);count++;refusals++;}
+for(const name of ['source-compatibility.json','source-compatibility-review.json']){
+ const p=path.join(base,name);absent.add(p);refuse();absent.clear();overrides.set(p,Buffer.from('{}'));refuse();overrides.clear();
+}
+extra=true;refuse();extra=false;
+for(const p of [path.join(S,packet+'direct-controlled-time-compatibility-v1/proof.json'),path.join(S,packet+'direct-controlled-time-compatibility-review-v1/decision.json'),path.join(S,'tools/build_controlled_time_web.py'),path.join(base,'qualification.json'),path.join(base,'model.json'),path.join(base,'engine.wasm')]){overrides.set(p,Buffer.from('{}'));refuse();overrides.clear();}
+// Old format has exactly original metadata/identity/seal membership, with no compatibility dependency.
+for(const n of ['source-compatibility.json','source-compatibility-review.json'])absent.add(path.join(base,n));
+const identity=read(path.join(base,'identity.json'));delete identity.files['source-compatibility.json'];delete identity.files['source-compatibility-review.json'];const ib=Buffer.from(JSON.stringify(identity));
+const seal=read(path.join(base,'package-manifest.json'));delete seal.files['engine-controlled-time/source-compatibility.json'];delete seal.files['engine-controlled-time/source-compatibility-review.json'];seal.files['engine-controlled-time/identity.json']=hash(ib);overrides.set(path.join(base,'identity.json'),ib);overrides.set(path.join(base,'package-manifest.json'),Buffer.from(JSON.stringify(seal)));
+run();count++; // Same inherited qualification/model/payload/approval validations still execute.
+console.log(JSON.stringify({passed:true,checks:count,refusals,realPackagedMetadataPositive:true,oldFormatPositive:true,allOriginalChecksByteexact:true,engineOrCompiledCalls:0},null,2));

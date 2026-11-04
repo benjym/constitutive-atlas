@@ -59,6 +59,8 @@ def local_file(root, relative):
 def bundle(destination, build):
     destination, build = Path(destination), Path(build)
     before = source_manifest()
+    from profile_source_compatibility import validate as compatible_source
+    compatibility = compatible_source(ROOT, build, 'maxwell')
     approval_bytes = (ROOT/APPROVAL).read_bytes()
     approval = json.loads(approval_bytes)
     registry = json.loads((ROOT/'catalogue/approved-models.json').read_bytes())
@@ -89,12 +91,13 @@ def bundle(destination, build):
     binding = {'model_sha256': digest(definition), 'catalogue_file_sha256': digest(catalogue),
                'module_sha256': digest(module), 'wasm_sha256': digest(wasm),
                'source_manifest_sha256': before['sha256'], 'reference_policy_sha256': digest((ROOT/REFERENCE).read_bytes())}
-    if qualification.get('schema_version') != 'maxwell-qualified-build-1' or qualification.get('model') != MODEL or qualification.get('status') != 'passed' or qualification.get('binding') != binding or not passed_gates(qualification.get('gates')) or not isinstance(qualification.get('implementation_run'), str) or not qualification['implementation_run'].strip():
+    expected_binding = dict(binding, source_manifest_sha256=qualification['binding']['source_manifest_sha256']) if compatibility is not None else binding
+    if qualification.get('schema_version') != 'maxwell-qualified-build-1' or qualification.get('model') != MODEL or qualification.get('status') != 'passed' or qualification.get('binding') != expected_binding or not passed_gates(qualification.get('gates')) or not isinstance(qualification.get('implementation_run'), str) or not qualification['implementation_run'].strip():
         raise ValueError('Missing, stale or failed Maxwell build qualification')
     reviewer = qualification.get('independent_review', {})
     accepted_bytes = local_file(build, reviewer.get('path', '')).read_bytes()
     accepted = json.loads(accepted_bytes)
-    if digest(accepted_bytes) != reviewer.get('sha256') or accepted.get('status') != 'accepted' or accepted.get('binding') != binding or not passed_gates(accepted.get('gates')) or not isinstance(accepted.get('reviewer_run'), str) or not accepted['reviewer_run'].strip() or accepted['reviewer_run'] == qualification['implementation_run']:
+    if digest(accepted_bytes) != reviewer.get('sha256') or accepted.get('status') != 'accepted' or accepted.get('binding') != expected_binding or not passed_gates(accepted.get('gates')) or not isinstance(accepted.get('reviewer_run'), str) or not accepted['reviewer_run'].strip() or accepted['reviewer_run'] == qualification['implementation_run']:
         raise ValueError('Independent Maxwell build review missing or changed')
     components = {name: (ROOT/'web'/name).read_bytes() for name in COMPONENTS}
     interface_review_bytes = (ROOT/INTERFACE_REVIEW).read_bytes()
@@ -118,6 +121,9 @@ def bundle(destination, build):
         MODEL+'.json': definition, 'approval.json': approval_bytes, 'review.json': review_bytes,
         'review.html': review_html, 'qualification.json': qualification_bytes,
         'build-review.json': accepted_bytes, 'interface-review.json': interface_review_bytes, 'source-manifest.json': encoded(before), 'identity.json': encoded(identity)}.items()}
+    if compatibility is not None:
+        files['engine-maxwell/source-compatibility.json'] = compatibility['compatibility_bytes']
+        files['engine-maxwell/source-compatibility-review.json'] = compatibility['decision_bytes']
     files.update(components)
     # Keep inputs captured above: hashes refer to the exact copied bytes, not a second read.
     if source_manifest() != before or (ROOT/DEFINITION).read_bytes() != definition:

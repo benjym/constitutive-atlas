@@ -1,0 +1,11 @@
+--- qualified/atlas/compiler.py
++++ current/atlas/compiler.py
+@@ -25,6 +25,8 @@
+ 
+ def generate(destination, model_paths=None):
+     models=all_models() if model_paths is None else [load(p) for p in sorted(model_paths)]; dest=Path(destination); dest.mkdir(parents=True,exist_ok=True)
++    if any(m.get('formulation',{}).get('equation_form')=='controlled_ode' for m in models):
++        raise ValueError('controlled-time profile requires dedicated generate_controlled_time; mixed catalogues unsupported')
+     if any(m.get('formulation',{}).get('equation_form')=='path_ode' for m in models):
+         if not all(m.get('formulation',{}).get('equation_form')=='path_ode' for m in models):
+             raise ValueError('path ODE requires a separate explicit catalogue partition')

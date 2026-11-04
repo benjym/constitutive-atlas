@@ -178,18 +178,26 @@ jobs:
       with:
         name: hill-native-${{ matrix.os }}
         path: "${{ runner.temp }}/hill-native/"
+    - name: Native numerical checks with frozen MD1997 Decimal assessment
+      run: python -B tools/check_md1997_numerical_ci.py --build build --output "$RUNNER_TEMP/md1997-numerical"
+    - name: Retain native numerical assessment and raw output
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: numerical-native-${{ matrix.os }}
+        path: "${{ runner.temp }}/md1997-numerical/"
     # v6 inherits explicit-gis20-occ-restart-duncan-v5 and adds constrained S-CLAY1 fixtures.
     - name: Native checks and full exact archival replay
       if: runner.os == 'macOS'
       run: |
-        ctest --test-dir build --output-on-failure -E "^atlas_recorded$"
+        ctest --test-dir build --output-on-failure -E "^(atlas_numerical|atlas_recorded)$"
         ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-sclay1-v6 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
       env:
         ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-sclay1-v6
     - name: Linux native checks
       if: runner.os == 'Linux'
       run: |
-        ctest --test-dir build --output-on-failure -E "^(atlas_python|atlas_recorded)$"
+        ctest --test-dir build --output-on-failure -E "^(atlas_numerical|atlas_python|atlas_recorded)$"
         ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-sclay1-v6 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
       env:
         ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-sclay1-v6
@@ -475,7 +483,7 @@ jobs:
       shell: bash
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
-        python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
+        python tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
         node --test tests/test_ensemble.mjs
         python -B -m unittest tests.test_ensemble_package
         node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
@@ -692,7 +700,7 @@ jobs:
       shell: bash
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
-        python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
+        python tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
         node --test tests/test_ensemble.mjs
         python -B -m unittest tests.test_ensemble_package
         node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"

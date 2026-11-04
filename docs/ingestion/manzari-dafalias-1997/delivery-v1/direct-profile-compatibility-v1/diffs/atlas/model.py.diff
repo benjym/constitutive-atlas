@@ -1,0 +1,63 @@
+--- qualified/atlas/model.py
++++ current/atlas/model.py
+@@ -44,6 +44,10 @@
+         raise ValidationError('checked expm/log1p are unsupported in state/observable scale expressions; use an explicit positive reference scale')
+ 
+ 
++def controlled_time(model):
++    return model.get("schema_version")=="0.3" and model.get("formulation",{}).get("equation_form")=="controlled_ode"
++
++
+ def physical_time(model):
+     return (model.get('formulation', {}).get('time_dependence') == 'physical_time'
+             if model.get('schema_version') == '0.3' else model.get('schema_version') == '0.2')
+@@ -53,7 +57,7 @@
+     """Engine dispatch; equation meaning is explicit in v0.3 documents."""
+     if model.get('schema_version') == '0.3':
+         return {'incremental_residual': 'residual', 'strain_path_rate': 'rate',
+-                'ode': 'rate', 'path_ode': 'path_ode'}[model['formulation']['equation_form']]
++                'ode': 'rate', 'path_ode': 'path_ode', 'controlled_ode': 'controlled_ode'}[model['formulation']['equation_form']]
+     return 'rate' if physical_time(model) else model['integration']
+ 
+ 
+@@ -160,6 +164,10 @@
+     schema=f'model-v{version}.schema.json' if version != '0.1' else 'model.schema.json'
+     check(model,json.loads((ROOT/'schemas'/schema).read_text()))
+     physical=physical_time(model)
++    controlled=controlled_time(model)
++    if controlled:
++        from .controlled_time import validate_inputs, PATH_RESERVED
++        validate_inputs(model)
+     path=model.get('formulation',{}).get('equation_form')=='path_ode'
+     ode_state=physical or path
+     if path:
+@@ -178,9 +186,9 @@
+         raise ValidationError('source URL, locator and role are required')
+     symbols = {'I':Type('sym'), **equation_input_types(model)}
+     advance_inputs = set(model['formulation']['inputs']['advance']) if version == '0.3' else set()
+-    names = set(equation_input_types(model)) if path else set()
++    names = set(equation_input_types(model)) if path or controlled else set()
+     def declare(name, typ):
+-        if not IDENT.fullmatch(name) or name in RESERVED or name in advance_inputs or name.endswith('_n') or name in names or (path and name in PATH_RESERVED):
++        if not IDENT.fullmatch(name) or name in RESERVED or name in advance_inputs or name.endswith('_n') or name in names or ((path or controlled) and name in PATH_RESERVED):
+             raise ValidationError(f'invalid, duplicate or reserved identifier: {name}')
+         names.add(name)
+         symbols[name]=typ
+@@ -303,7 +311,7 @@
+                     raise ValidationError('stress observable must be bound by the formulation')
+             elif stress['name'] != 'stress' or stress['name'] not in outputs or field_type(outputs[stress['name']]) != Type('sym', DIMS['Pa']):
+                 raise ValidationError('physical-time stress must bind the symmetric Pa observable stress')
+-    if path and any(k in model for k in ('increment_reset','solution_constraints')):
++    if (path or controlled) and any(k in model for k in ('increment_reset','solution_constraints')):
+         raise ValidationError('path ODE does not support incremental resets/constraints')
+     return model
+ 
+@@ -319,6 +327,8 @@
+ 
+ 
+ def evaluation_environment(model, state, previous, increment, parameters=None, *, time=None, _check_domain=True):
++    if controlled_time(model):
++        raise ValidationError('controlled-time evaluation requires atlas.controlled_time with complete fields and rates')
+     if integration_kind(model) == 'path_ode':
+         raise ValidationError('controlled-path evaluation requires atlas.path and explicit coordinate/controls')
+     if model.get('schema_version') == '0.3' and (len(increment) != 6 or any(

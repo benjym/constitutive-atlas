@@ -1,0 +1,57 @@
+{
+  "identity": "independent-history-selection-source-checks-v1",
+  "passed": true,
+  "before_sha256": "fe15718c2e25145c5ac733b5218f26b3ff817bcec5c4afe5574b0f820224915e",
+  "after_sha256": "75c22b406423a1338b8613922bb903652960c292a7affa5cfcea01a5f29a50d7",
+  "inverse_exact": true,
+  "changed_function_only": "updateControlSupport",
+  "manufactured_branch_cases": [
+    {
+      "prior": "",
+      "disabled": [],
+      "expected": "0"
+    },
+    {
+      "prior": "0",
+      "disabled": [],
+      "expected": "0"
+    },
+    {
+      "prior": "1",
+      "disabled": [],
+      "expected": "1"
+    },
+    {
+      "prior": "3",
+      "disabled": [
+        "1"
+      ],
+      "expected": "3"
+    },
+    {
+      "prior": "1",
+      "disabled": [
+        "1"
+      ],
+      "expected": "0"
+    },
+    {
+      "prior": "0",
+      "disabled": [
+        "0",
+        "1",
+        "3",
+        "10"
+      ],
+      "expected": "0"
+    }
+  ],
+  "unchanged": [
+    "unsupportedReason eligibility inputs and option disable predicate",
+    "status reason/hidden updates",
+    "numerical request construction/model/kernel/state/parameters/solver",
+    "existing monotonic fallback literal0"
+  ],
+  "gate_clarification": "Initial review wording first enabled fallback was overbroad: implementation deliberately retains existing fallback0, including all-disabled unsupported protocol. Reason remains visible and run eligibility remains separately guarded. No first-enabled policy introduced.",
+  "browser_verified_by_reviewer": false
+}

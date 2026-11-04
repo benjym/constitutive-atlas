@@ -1,0 +1,26 @@
+--- v1/tools/check_md1997_numerical_ci.py
++++ v2/tools/check_md1997_numerical_ci.py
+@@ -36,6 +36,9 @@
+    for n in files:
+     path=Path(base)/n
+     if path.suffix in suffixes:names.add(path.relative_to(ROOT).as_posix())
++ for base,dirs,files in os.walk(ROOT/'cpp/scalar-functions',followlinks=False):
++  require(all(not(Path(base)/n).is_symlink()for n in dirs),'scalar source directory alias')
++  for n in files:names.add((Path(base)/n).relative_to(ROOT).as_posix())
+  names.update(p.relative_to(ROOT).as_posix()for p in(ROOT/'models').glob('*.json'))
+  names.update('tools/md1997_decimal_reference_current17_v1/'+n for n in REFERENCE_FILES)
+  return {n:record(ROOT/n)for n in sorted(names)}
+@@ -61,6 +64,13 @@
+    for name,want in REFERENCE_FILES.items():require(record(ROOT/'tools/md1997_decimal_reference_current17_v1'/name)['sha256']==want,'frozen Decimal input: '+name)
+    binding={'identity':'md1997-decimal-native-build-binding-current17-v1','purpose':'actual','source_freeze_sha256':digest(canonical(before)),'fixture_sha256':before['tests/test_solver.cpp']['sha256'],'generated_catalogue_sha256':compiled['generated/models.json']['sha256'],'executable_sha256':compiled['atlas_numerical_tests']['sha256'],'executable_path':executable,'working_directory':str(build),'model_sha256':MD_SHA}
+    write(output/'build-binding.json',binding);binding_hash=digest((output/'build-binding.json').read_bytes());env.update(ATLAS_NUMERICAL_FIXTURES=DECIMAL,ATLAS_MD1997_DECIMAL_BUILD_BINDING_SHA256=binding_hash)
++  if md:
++   negative_env=dict(env);negative_env.pop('ATLAS_MD1997_DECIMAL_BUILD_BINDING_SHA256',None);negative_env['ATLAS_NUMERICAL_FIXTURES']='md1997-source-admissible-current17-v1'
++   negative_code=run_process(argv,str(build),negative_env,output/'binary64.stdout',output/'binary64.stderr',600)
++   negative={'identity':'md1997-current17-binary64-required-failure','argv':argv,'cwd':str(build),'returncode':negative_code,'stdout':{'path':str(output/'binary64.stdout'),**record(output/'binary64.stdout')},'stderr':{'path':str(output/'binary64.stderr'),**record(output/'binary64.stderr')},'selectors':{'ATLAS_NATIVE_FIXTURES':NATIVE,'ATLAS_NUMERICAL_FIXTURES':'md1997-source-admissible-current17-v1'}};write(output/'binary64-process.json',negative)
++   require(type(negative_code)is int and negative_code==1,'documented binary64 failure must return exactly1')
++   require((output/'binary64.stdout').read_bytes()==b'Source-admissible MD1997 current17 numerical fixtures; inherited explicit-gis20-occ-restart-duncan-sclay1-v6; models=17\n'and(output/'binary64.stderr').read_bytes()==b'MD AD/FD residual Jacobian mismatch\n','documented binary64 failure exact stdout/stderr')
++   report['binary64_required_failure']=True
+   code=run_process(argv,str(build),env,output/'native.stdout',output/'native.stderr',600)
+   report.update(model_count=len(catalog['models']),numerical_returncode=code,decimal_assessment_required=md)
+   if md:

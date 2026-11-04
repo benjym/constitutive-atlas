@@ -69,11 +69,11 @@ endif()
 # generated catalogue. They are never packaged as public atlas models.
 file(GLOB TIME_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/tests/fixtures/time/*.json")
 add_custom_command(
-  OUTPUT "${CMAKE_BINARY_DIR}/time-generated/models.hpp"
+  OUTPUT "${CMAKE_BINARY_DIR}/time-generated/models.hpp" "${CMAKE_BINARY_DIR}/time-generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/time-generated" "${CMAKE_SOURCE_DIR}/tests/fixtures/time"
   DEPENDS ${TIME_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-add_custom_target(atlas_time_models DEPENDS "${CMAKE_BINARY_DIR}/time-generated/models.hpp")
+add_custom_target(atlas_time_models DEPENDS "${CMAKE_BINARY_DIR}/time-generated/models.hpp" "${CMAKE_BINARY_DIR}/time-generated/models.json")
 add_executable(atlas_time_solver cpp/main.cpp)
 add_dependencies(atlas_time_solver atlas_time_models)
 target_include_directories(atlas_time_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/time-generated")
@@ -101,11 +101,11 @@ endif()
 # and synthetic verification fixtures. They use exactly the same compiler/engine.
 file(GLOB RESEARCH_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research/*.json")
 add_custom_command(
-  OUTPUT "${CMAKE_BINARY_DIR}/research-generated/models.hpp"
+  OUTPUT "${CMAKE_BINARY_DIR}/research-generated/models.hpp" "${CMAKE_BINARY_DIR}/research-generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/research-generated" "${CMAKE_SOURCE_DIR}/models/research"
   DEPENDS ${RESEARCH_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model-v0.2.schema.json schemas/model-v0.3.schema.json schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-add_custom_target(atlas_research_models DEPENDS "${CMAKE_BINARY_DIR}/research-generated/models.hpp")
+add_custom_target(atlas_research_models DEPENDS "${CMAKE_BINARY_DIR}/research-generated/models.hpp" "${CMAKE_BINARY_DIR}/research-generated/models.json")
 add_executable(atlas_research_solver cpp/main.cpp)
 add_dependencies(atlas_research_solver atlas_research_models)
 target_include_directories(atlas_research_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/research-generated")
@@ -138,11 +138,11 @@ endif()
 # Isolated clay research catalogue preserves prior research evidence hashes.
 file(GLOB CLAY2013_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research/clay2013/*.json")
 add_custom_command(
-  OUTPUT "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp"
+  OUTPUT "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp" "${CMAKE_BINARY_DIR}/clay2013-generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/clay2013-generated" "${CMAKE_SOURCE_DIR}/models/research/clay2013"
   DEPENDS ${CLAY2013_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-add_custom_target(atlas_clay2013_models DEPENDS "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp")
+add_custom_target(atlas_clay2013_models DEPENDS "${CMAKE_BINARY_DIR}/clay2013-generated/models.hpp" "${CMAKE_BINARY_DIR}/clay2013-generated/models.json")
 add_executable(atlas_clay2013_solver cpp/main.cpp)
 add_dependencies(atlas_clay2013_solver atlas_clay2013_models)
 target_include_directories(atlas_clay2013_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/clay2013-generated")
@@ -157,11 +157,11 @@ endif()
 # Selected HP/extracted-ASBS+GIS has its own research catalogue and source identity.
 file(GLOB GIS2024_MODEL_FILES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/models/research/gis2024/*.json")
 add_custom_command(
-  OUTPUT "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp"
+  OUTPUT "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp" "${CMAKE_BINARY_DIR}/gis2024-generated/models.json"
   COMMAND "${Python3_EXECUTABLE}" -m atlas.compiler "${CMAKE_BINARY_DIR}/gis2024-generated" "${CMAKE_SOURCE_DIR}/models/research/gis2024"
   DEPENDS ${GIS2024_MODEL_FILES} atlas/dsl.py atlas/symmetric_expm.py atlas/scalar_math.py atlas/model.py atlas/compiler.py atlas/stress.py atlas/structure.py schemas/model.schema.json
   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-add_custom_target(atlas_gis2024_models DEPENDS "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp")
+add_custom_target(atlas_gis2024_models DEPENDS "${CMAKE_BINARY_DIR}/gis2024-generated/models.hpp" "${CMAKE_BINARY_DIR}/gis2024-generated/models.json")
 add_executable(atlas_gis2024_solver cpp/main.cpp)
 add_dependencies(atlas_gis2024_solver atlas_gis2024_models)
 target_include_directories(atlas_gis2024_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/gis2024-generated")

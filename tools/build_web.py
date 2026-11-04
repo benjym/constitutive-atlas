@@ -30,14 +30,14 @@ def main():
     parser.add_argument('--sls-wasm-dir',type=Path,default=ROOT/'build-sls-wasm',help=argparse.SUPPRESS)
     parser.add_argument('--burgers-wasm-dir',type=Path,default=ROOT/'build-burgers-wasm',help='Dedicated common physical-time Burgers engine')
     parser.add_argument('--j2-wasm-dir',type=Path,default=ROOT/'build-j2-wasm',help='Qualified J2 material-point engine for the main laboratory')
-    parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
-    parser.add_argument('--maxwell-wasm-dir',type=Path,default=ROOT/'docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine',help='Dedicated Maxwell engine with exact accepted current-build qualification receipt')
+    parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'web/engines/current17-compatible/norsand',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
+    parser.add_argument('--maxwell-wasm-dir',type=Path,default=ROOT/'web/engines/current17-compatible/maxwell',help='Dedicated Maxwell engine with exact accepted current-build qualification receipt')
     parser.add_argument('--implicit-path-wasm-dir',type=Path,default=ROOT/'build-implicit-path-wasm',help='Exact independently qualified implicit strain-path engine')
     parser.add_argument('--hill-wasm-dir',type=Path,default=ROOT/'web/engines/hill',help='Exact reviewed Hill engine for main laboratory')
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
     parser.add_argument('--kelvin-voigt-wasm-dir',type=Path,default=ROOT/'build-kelvin-voigt-wasm',help='Qualified ordinary Kelvin–Voigt physical-time engine')
     parser.add_argument('--bingham-wasm-dir',type=Path,default=ROOT/'build-bingham-public',help='Exact independently reviewed Bingham physical-time engine')
-    parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine',help='Exact reviewed source-reconciled HvWE controlled-path engine')
+    parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'web/engines/current17-compatible/interface2016',help='Exact reviewed source-reconciled HvWE controlled-path engine')
     parser.add_argument('--perzyna-wasm-dir',type=Path,default=ROOT/'build-perzyna-public',help='Exact independently reviewed Perzyna physical-time engine')
     parser.add_argument('--controlled-time-wasm-dir',type=Path,default=ROOT/'web/engines/controlled-time',help='Exact independently qualified imposed-field physical-time engine for the main laboratory')
     args=parser.parse_args()
@@ -123,7 +123,8 @@ def main():
     bundle_controlled_path(dest,args.controlled_path_wasm_dir)
     from build_interface2016_web import bundle as bundle_interface2016
     bundle_interface2016(dest,args.interface2016_wasm_dir)
-    subprocess.run(['node',str(ROOT/'tools/test_interface2016_package.mjs'),str(dest)],check=True)
+    interface_checker = 'test_interface2016_compatible_package.mjs' if (dest/'material-point-interface2016/engine-path/source-compatibility.json').is_file() else 'test_interface2016_package.mjs'
+    subprocess.run(['node',str(ROOT/'tools'/interface_checker),str(dest)],check=True)
     from build_maxwell_laboratory import bundle as bundle_maxwell
     bundle_maxwell(dest,args.maxwell_wasm_dir)
     from build_implicit_path_laboratory import bundle as bundle_implicit_path

@@ -21,13 +21,26 @@ export function validateControlledTimeMembership(directory,entries,ordinaryIds){
  assert.equal(entry.executable,true,'Controlled-time entry must be executable');assert.match(entry.id,/^[a-z0-9][a-z0-9-]*$/,'Unsafe controlled-time model ID');
  assert.ok(!ordinaryIds.includes(entry.id),'Controlled-time/ordinary overlap');
  const base=join(directory,'engine-controlled-time'),bytes=name=>readFileSync(join(base,name)),read=name=>strictJSON(bytes(name).toString());
- assert.deepEqual(readdirSync(base).sort(),[...engineNames,'identity.json','package-manifest.json'].sort(),'Controlled-time asset set');
+ const compatibilityNames=['source-compatibility.json','source-compatibility-review.json'];
+ const compatible=compatibilityNames.some(n=>existsSync(join(base,n)));
+ const qualifiedNames=[...engineNames,...(compatible?compatibilityNames:[])];
+ if(compatible){
+  const proofBytes=bytes(compatibilityNames[0]),decisionBytes=bytes(compatibilityNames[1]);
+  assert.equal(hash(proofBytes),'6ad300df7eb18b299d4b1a23858a0a2f5d31f744d3828a8039a84e3fc583df59','Untrusted controlled-time compatibility proof');
+  assert.equal(hash(decisionBytes),'15d47643c5c60c5f0b6d570e0c244fcc946d5812f11c322f625d68aec74e80ec','Untrusted controlled-time compatibility review');
+  const packet='docs/ingestion/manzari-dafalias-1997/delivery-v1/';
+  assert.deepEqual(proofBytes,readFileSync(join(repository,packet+'direct-controlled-time-compatibility-v1/proof.json')));
+  assert.deepEqual(decisionBytes,readFileSync(join(repository,packet+'direct-controlled-time-compatibility-review-v1/decision.json')));
+  const decision=strictJSON(decisionBytes.toString());
+  assert.equal(hash(readFileSync(join(repository,'tools/build_controlled_time_web.py'))),decision.source_sha256,'Changed accepted controlled-time packager');
+ }
+ assert.deepEqual(readdirSync(base).sort(),[...qualifiedNames,'identity.json','package-manifest.json'].sort(),'Controlled-time asset set');
  const identity=read('identity.json'),seal=read('package-manifest.json');
  exactKeys(identity,['profile','model','model_sha256','definition_file_sha256','catalogue_sha256','files','components'],'Controlled-time identity fields');
  assert.equal(identity.profile,'controlled-time-ode-v1','Stale controlled-time profile');assert.equal(identity.model,entry.id,'Controlled-time model identity');
- exactKeys(identity.files,engineNames,'Controlled-time identity file set');exactKeys(identity.components,componentNames,'Controlled-time component set');
+ exactKeys(identity.files,qualifiedNames,'Controlled-time identity file set');exactKeys(identity.components,componentNames,'Controlled-time component set');
  exactKeys(seal,['kind','files'],'Controlled-time seal fields');assert.equal(seal.kind,'controlled-time-mainatlas-package-v1');
- exactKeys(seal.files,[...componentNames,...[...engineNames,'identity.json'].map(n=>'engine-controlled-time/'+n)],'Controlled-time seal file set');
+ exactKeys(seal.files,[...componentNames,...[...qualifiedNames,'identity.json'].map(n=>'engine-controlled-time/'+n)],'Controlled-time seal file set');
  for(const [name,expected] of Object.entries(identity.files))assert.equal(hash(bytes(name)),expected,'Controlled-time identity file: '+name);
  for(const [name,expected] of Object.entries(identity.components))assert.equal(hash(readFileSync(join(directory,name))),expected,'Controlled-time component: '+name);
  for(const [name,expected] of Object.entries(seal.files))assert.equal(hash(readFileSync(join(directory,name))),expected,'Controlled-time sealed file: '+name);

@@ -1,0 +1,11 @@
+# Exact one-check successor
+
+Original implementation3e983 and rejection521106/ee27ed remain unchanged. This successor adds exactly one executable line to the helper: hash the actual genuine source-only decision file and require exact f14c5480 before reading implementation acceptance. The original claim that this was enforced was incorrect. reverse-proof.json proves deleting only that line recovers the frozen old helper exactly.
+
+All three builders, v1 bindings.json, source-compatibility markers and restored payloads remain unchanged. The helper still uses the unoccupied direct-profile-compatibility-implementation-review-v1/decision.json, with the same exact six-field decision schema and identity; existing rejection files are preserved. Separate reviewer must bind the new helper hash and unchanged other three hashes in implementation-files.json. No decision is authored here.
+
+`python3 -I -B .../direct-profile-compatibility-implementation-v2/check.py`:27 source/manufactured checks PASS, including new missing and changed source-only decision refusals. This only imports pure helper code and inspects data; it executes no compiled artifact. The v1 in-memory manufactured acceptance fixture remains explicitly test-only. No new failures or background/temp resources were created.
+
+ROOT data installation prerequisites remain: original proof manifest, genuine source-only decision, v1 bindings.json, then genuine implementation acceptance. Root may then run ordinary build_web with the three compatible directories. No historical qualification/review is changed and no new runtime success is claimed.
+
+Minimum repository release proposal after local package passes: add the exact small three restored directories as web/engines/current17-compatible/{norsand,maxwell,interface2016}/, preserving their original qualification and source-compatibility JSON, and point build_web defaults plus any explicit workflow arguments there. The public source must also retain the fixed v1 bindings/proof and genuine decisions read by the helper. This requires a separate coordinator whitelist/review; no payload release/default/workflow changes are made here. Do not attach compatibility records to different default binaries. The separately changed web/app.js is not in these source inventories.
