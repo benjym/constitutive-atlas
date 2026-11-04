@@ -1,0 +1,56 @@
+{
+  "identity": "controlled-time-current-source-amendment-plan-v1",
+  "base_commit": "d4a17aa2cf5e6d71a6db094baa2c43c401c50b66",
+  "exceptions": [
+    {
+      "document": "docs/ingestion/vibe-2026/controlled-time-qualification-v1/source-manifest-v3.json",
+      "path": "tests/test_controlled_time.py",
+      "original_sha256": "eb22e40d5483950600132761efe0d37fa5f80a56af00f82321314908d9e95908",
+      "current_sha256": "bf327e9d1b56ce415a74f1e7abaa98787b291aaf086d42a4fd7570f3451270c5",
+      "accepted_source_manifest": {
+        "path": "docs/ingestion/vibe-2026/full-python-contracts-v1/source-manifest-v3.json",
+        "sha256": "75d282ac6a07523c7815f97bf97f748b924f47ae971f7e09e5f3f0b86aeaa9b5"
+      },
+      "accepted_decision": {
+        "path": "docs/ingestion/vibe-2026/full-python-contracts-review-v1/decision.json",
+        "sha256": "b17632d5961b3c9c278cf4a0b454567b597391fbae78b156b7d905afa4af37c8"
+      }
+    },
+    {
+      "document": "docs/ingestion/vibe-2026/controlled-time-ci-v1/source-manifest-v1.json",
+      "path": "tools/check_controlled_time_ci.py",
+      "original_sha256": "9c599a0594035a3e77bd1fdbb22538041320847b58149a1427ce5b0e7ec28b05",
+      "current_sha256": "to be frozen by new exact amendment manifest and independently accepted decision before source verifier may pass"
+    }
+  ],
+  "algorithm": "For only exact (document,path,originalSHA) allowlist triples require production checked_receipt oldcanonical bytes, then direct live SHA from new manifest; current test additionally pinned to prior exact accepted source and decision. Every other pin at every original verify loop stays direct-live SHA. New fixed-path independent decision must accept exact amendment source manifest including live collector and test; reject unknown/extra exemption. No archives can qualify current runtime/compiler/model/schema/kernel inputs. Preserve original INPUTS, manifest bytes, portable plan reversal, numeric gates, workflow, capture function and all their assertions.",
+  "preservation": {
+    "new_sidecar": "docs/ingestion/vibe-2026/controlled-time-ci-v1/source-archive-map.json",
+    "oldcollector_archive": "catalogue/source-snapshots/9c599a0594035a3e77bd1fdbb22538041320847b58149a1427ce5b0e7ec28b05/tools/check_controlled_time_ci.py",
+    "oldtest": "already exact canonical archive and StageA docbinding from accepted full-python preservation",
+    "reverse_consumers": {
+      "oldcollector_sha_hits": 3,
+      "genuine_repository_relative_path_hash_consumers": [
+        "docs/ingestion/vibe-2026/controlled-time-ci-v1/source-manifest-v1.json"
+      ],
+      "other_hits": [
+        "review-ci manifest uses absolute oldworktree path (not accepted repo-relative consumer)",
+        "review-ci workflow-results helper_sha256 is scalar provenance only; no invented binding"
+      ],
+      "new_sidecar_before": "absent; no old sidecar bytes or reverse consumers to rewrite"
+    }
+  },
+  "mandatory_negative_checks": [
+    "old archive corrupt",
+    "old archive missing",
+    "old archive unbound",
+    "currenttest changed",
+    "currentcollector changed",
+    "currentruntime changed even with exact original archive available",
+    "unknown amendment",
+    "missing amendment approval",
+    "stale approval source manifest",
+    "tampered portable plan"
+  ],
+  "calls": "source-only, no builds/module/material/browser/remote/commit"
+}

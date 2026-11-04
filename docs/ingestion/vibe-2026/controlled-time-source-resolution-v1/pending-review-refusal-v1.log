@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tools/check_controlled_time_ci.py", line 120, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tools/check_controlled_time_ci.py", line 119, in main
+    print(json.dumps(verify(a.report) if a.mode=='verify' else capture(a.output,a.paths),indent=2))
+                     ~~~~~~^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tools/check_controlled_time_ci.py", line 98, in verify
+    accepted_decision(AMENDMENT_REVIEW,AMENDMENT,sha(safe_relative(AMENDMENT)))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tools/check_controlled_time_ci.py", line 37, in accepted_decision
+    data=json.loads(safe_relative(path).read_text())
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 787, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/atlas-vibe2026-live-fix-v1/docs/ingestion/vibe-2026/controlled-time-source-resolution-review-v1/decision.json'

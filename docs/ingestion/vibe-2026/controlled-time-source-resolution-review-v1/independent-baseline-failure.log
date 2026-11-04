@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tools/check_controlled_time_ci.py", line 64, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tools/check_controlled_time_ci.py", line 63, in main
+    print(json.dumps(verify(a.report) if a.mode=='verify' else capture(a.output,a.paths),indent=2))
+                     ~~~~~~^^^^^^^^^^
+  File "/private/tmp/atlas-vibe2026-live-fix-v1/tools/check_controlled_time_ci.py", line 27, in verify
+    for pin in pins:assert sha(safe_relative(pin['path']))==pin['sha256'],pin['path']
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: tests/test_controlled_time.py

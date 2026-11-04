@@ -1,0 +1,26 @@
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	﻿2026-11-03T23:54:10.6686207Z ##[group]Run set -euo pipefail
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6686633Z ^[[36;1mset -euo pipefail^[[0m
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6687013Z ^[[36;1mmkdir -p "$RUNNER_TEMP/controlled-time-ci/native-generic"^[[0m
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6687864Z ^[[36;1mpython3 -B tools/check_controlled_time_ci.py verify --report "$RUNNER_TEMP/controlled-time-ci/input-check.json" 2>&1 | tee "$RUNNER_TEMP/controlled-time-ci/input-check.log"^[[0m
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6762362Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6762750Z env:
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6762965Z   PYTHONDONTWRITEBYTECODE: 1
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6763286Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6763724Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6764159Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6764573Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6764970Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6765396Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.6765716Z ##[endgroup]
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7784863Z Traceback (most recent call last):
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7786275Z   File "/home/runner/work/constitutive-atlas/constitutive-atlas/tools/check_controlled_time_ci.py", line 64, in <module>
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7787327Z     if __name__=='__main__':main()
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7787805Z                             ^^^^^^
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7788852Z   File "/home/runner/work/constitutive-atlas/constitutive-atlas/tools/check_controlled_time_ci.py", line 63, in main
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7790259Z     print(json.dumps(verify(a.report) if a.mode=='verify' else capture(a.output,a.paths),indent=2))
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7791084Z                      ^^^^^^^^^^^^^^^^
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7792377Z   File "/home/runner/work/constitutive-atlas/constitutive-atlas/tools/check_controlled_time_ci.py", line 27, in verify
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7793810Z     for pin in pins:assert sha(safe_relative(pin['path']))==pin['sha256'],pin['path']
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7794704Z                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7795461Z AssertionError: tests/test_controlled_time.py
+native-then-wasm	Verify exact reviewed inputs and portable plan before builds	2026-11-03T23:54:10.7853343Z ##[error]Process completed with exit code 1.
