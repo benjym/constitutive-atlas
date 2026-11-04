@@ -1,0 +1,832 @@
+---
+name: Full qualification
+'on':
+  push:
+    branches:
+    - main
+    paths:
+    - atlas/**
+    - cpp/**
+    - cmake/**
+    - CMakeLists.txt
+    - models/**
+    - schemas/**
+    - tests/**
+    - tools/**
+    - catalogue/**
+    - data/**
+    - ".github/**"
+    - docs/**/*.py
+    - docs/**/*.mjs
+    - docs/**/*.json
+    - docs/**/*.zip
+    - docs/**/*.gz
+  pull_request:
+    paths:
+    - atlas/**
+    - cpp/**
+    - cmake/**
+    - CMakeLists.txt
+    - models/**
+    - schemas/**
+    - tests/**
+    - tools/**
+    - catalogue/**
+    - data/**
+    - ".github/**"
+    - docs/**/*.py
+    - docs/**/*.mjs
+    - docs/**/*.json
+    - docs/**/*.zip
+    - docs/**/*.gz
+  schedule:
+  - cron: 17 15 * * *
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: qualification-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: ubuntu-latest
+          python: '3.12'
+        - os: macos-26
+          python: '3.14'
+    runs-on: "${{ matrix.os }}"
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-python@v6
+      with:
+        python-version: "${{ matrix.python }}"
+    - run: python -m atlas.cli validate
+    - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+    - run: python tools/build_ci_targets.py build
+    - name: Qualify common scalar functions against independent references
+      shell: bash
+      run: |
+        cmake --build build --target atlas_scalar_probe --parallel 1
+        case "$RUNNER_OS" in
+          Linux) scalar_extension=so ;;
+          macOS) scalar_extension=dylib ;;
+        esac
+        python -B tools/test_scalar_functions.py "build/libatlas_scalar_probe.$scalar_extension" --output-dir "$RUNNER_TEMP/scalar-native"
+    - name: Qualify Bingham through its approved BE schedule interface
+      run: |
+        set -euo pipefail
+        python -B tests/test_cmake_profile_build_v2.py
+        mkdir -p "$RUNNER_TEMP/bingham-build-receipts/time-predictor" "$RUNNER_TEMP/bingham-build-receipts/time-tests" "$RUNNER_TEMP/bingham-build-receipts/time-solver" "$RUNNER_TEMP/bingham-build-receipts/bingham-native"
+        cmake -S cmake/physical-time-v2 -B build-time-v2 -G "Unix Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-configure.log"
+        cmake --build build-time-v2 --target atlas_schedule_predictor_tests --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/atlas_schedule_predictor_tests-build.log"
+        cmake --build build-time-v2 --target atlas_time_tests --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/atlas_time_tests-build.log"
+        cmake --build build-time-v2 --target atlas_time_solver --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/atlas_time_solver-build.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-time-v2 --target atlas_schedule_predictor_tests --entrypoint tests/test_schedule_predictor.cpp --models tests/fixtures/time --recipe cmake/physical-time-v2/CMakeLists.txt --schedule required --kind native --artifact atlas_schedule_predictor_tests --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tests/test_time.py --consumer-source tests/test_schedule.py --receipt "$RUNNER_TEMP/bingham-build-receipts/time-predictor/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-predictor/capture.log"
+        time_predictor_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/time-predictor/pre.json".sha256)"
+        build-time-v2/atlas_schedule_predictor_tests 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-predictor/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/time-predictor/pre.json" --receipt-sha256 "$time_predictor_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/time-predictor/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-predictor/verify.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-time-v2 --target atlas_time_tests --entrypoint tests/test_time.cpp --models tests/fixtures/time --recipe cmake/physical-time-v2/CMakeLists.txt --schedule absent --kind native --artifact atlas_time_tests --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tests/test_time.py --consumer-source tests/test_schedule.py --receipt "$RUNNER_TEMP/bingham-build-receipts/time-tests/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-tests/capture.log"
+        time_tests_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/time-tests/pre.json".sha256)"
+        build-time-v2/atlas_time_tests 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-tests/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/time-tests/pre.json" --receipt-sha256 "$time_tests_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/time-tests/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-tests/verify.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-time-v2 --target atlas_time_solver --entrypoint cpp/main.cpp --models tests/fixtures/time --recipe cmake/physical-time-v2/CMakeLists.txt --schedule required --kind native --artifact atlas_time_solver --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tests/test_time.py --consumer-source tests/test_schedule.py --receipt "$RUNNER_TEMP/bingham-build-receipts/time-solver/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-solver/capture.log"
+        time_solver_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/time-solver/pre.json".sha256)"
+        ATLAS_TIME_SOLVER="$PWD/build-time-v2/atlas_time_solver" python3 -B -m unittest tests.test_time tests.test_schedule 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-solver/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/time-solver/pre.json" --receipt-sha256 "$time_solver_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/time-solver/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-solver/verify.log"
+        cmake -S cmake/bingham -B build-bingham -G "Unix Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native-configure.log"
+        cmake --build build-bingham --target atlas_bingham_solver --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native-build.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-bingham --target atlas_bingham_solver --entrypoint cpp/main.cpp --models models/research/bingham --recipe cmake/bingham/CMakeLists.txt --schedule required --kind native --artifact atlas_bingham_solver --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tools/test_bingham_schedule.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/study.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/collect_wasm.mjs --consumer-source docs/ingestion/bingham-comsol63/execution-v5/parity.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/oracle.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/synthetic_checks.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/expected-catalogue.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/reference-convergence.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/cases.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/freeze-v1.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/source-bindings.json --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-native/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native/capture.log"
+        bingham_native_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/bingham-native/pre.json".sha256)"
+        python -B tools/test_bingham_schedule.py --solver build-bingham/atlas_bingham_solver --output "$RUNNER_TEMP/bingham-native.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-native/pre.json" --receipt-sha256 "$bingham_native_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/bingham-native/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native/verify.log"
+        node --test tests/test_bingham_laboratory_contract.mjs
+    - name: Retain Bingham native qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: bingham-native-${{ matrix.os }}
+        path: "${{ runner.temp }}/bingham-*"
+    - name: Qualify Perzyna through its reviewed BE schedule interface
+      run: python3 -B tools/check_perzyna_ci.py --output "${{ runner.temp }}/perzyna-native"
+    - name: Retain Perzyna native qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: perzyna-native-${{ matrix.os }}
+        path: "${{ runner.temp }}/perzyna-native/"
+    - name: Build and qualify the approved Kelvin–Voigt physical-time model
+      run: |
+        cmake -S cmake/kelvin-voigt -B build-kelvin-voigt -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-kelvin-voigt --target atlas_kelvin_voigt_solver --parallel 1
+        python tools/test_kelvin_voigt_native.py --solver build-kelvin-voigt/atlas_kelvin_voigt_solver --output "$RUNNER_TEMP/kelvin-voigt-native.json"
+        node --test tests/test_kelvin_voigt_contract.mjs tests/test_kelvin_voigt_routing.mjs tests/test_chart_axis.mjs
+    - name: Retain Kelvin–Voigt native qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: kelvin-voigt-native-${{ matrix.os }}
+        path: "${{ runner.temp }}/kelvin-voigt-native.json"
+    - name: Build and qualify the approved SLS physical-time model
+      run: |
+        cmake -S cmake/sls -B build-sls -DCMAKE_BUILD_TYPE=Debug
+        cmake --build build-sls --target atlas_sls_solver --parallel 1
+        python tools/test_sls_native.py --solver build-sls/atlas_sls_solver --output "$RUNNER_TEMP/sls-native.json"
+        node --test tests/test_sls_laboratory_contract.mjs tests/test_laboratory_controller_router.mjs
+    - name: Build and qualify the approved orthotropic strain-increment model
+      run: |
+        cmake -S cmake/orthotropic -B build-orthotropic -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-orthotropic --target atlas_orthotropic_solver --parallel 1
+        python tools/test_orthotropic_native.py --solver build-orthotropic/atlas_orthotropic_solver --output "$RUNNER_TEMP/orthotropic-native"
+        node --test tests/test_orthotropic_contract.mjs
+    - name: Retain orthotropic native qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: orthotropic-native-${{ matrix.os }}
+        path: "${{ runner.temp }}/orthotropic-native/"
+    - name: Build and qualify the approved J2 strain-increment model
+      run: |
+        cmake -S cmake/j2 -B build-j2 -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-j2 --target atlas_j2_solver --parallel 1
+        python tools/test_j2_native.py --solver build-j2/atlas_j2_solver --output "$RUNNER_TEMP/j2-native"
+        node --test tests/test_j2_contract.mjs tests/test_j2_main_routing.mjs
+    - name: Build and qualify Burgers physical-time schedules
+      run: |
+        cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+        python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+        node --test tests/test_burgers_web_contract.mjs
+    - name: Qualify Ramberg–Osgood against independent scalar references
+      run: |
+        cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+        cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+        python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+    - name: Build and qualify Hill anisotropic plasticity
+      run: |
+        cmake -S cmake/hill -B build-hill -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-hill --target atlas_hill_solver --parallel 1
+        python tools/test_hill_native.py --solver build-hill/atlas_hill_solver --output "$RUNNER_TEMP/hill-native"
+        node --test tests/test_hill_contract.mjs
+    - name: Retain Hill native qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: hill-native-${{ matrix.os }}
+        path: "${{ runner.temp }}/hill-native/"
+    # v6 inherits explicit-gis20-occ-restart-duncan-v5 and adds constrained S-CLAY1 fixtures.
+    - name: Native checks and full exact archival replay
+      if: runner.os == 'macOS'
+      run: |
+        ctest --test-dir build --output-on-failure -E "^atlas_recorded$"
+        ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-sclay1-v6 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+      env:
+        ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-sclay1-v6
+    - name: Linux native checks
+      if: runner.os == 'Linux'
+      run: |
+        ctest --test-dir build --output-on-failure -E "^(atlas_python|atlas_recorded)$"
+        ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-sclay1-v6 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+      env:
+        ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-sclay1-v6
+    - name: Retain strict original native failures and reject unknown fixtures
+      run: python tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
+    - name: Linux portable Python suite
+      if: runner.os == 'Linux'
+      env:
+        ATLAS_SOLVER: "${{ github.workspace }}/build/atlas_solver"
+        ATLAS_TIME_SOLVER: "${{ github.workspace }}/build/atlas_time_solver"
+        ATLAS_RESEARCH_SOLVER: "${{ github.workspace }}/build/atlas_research_solver"
+        ATLAS_HISTORY_SOLVER: "${{ github.workspace }}/build/atlas_history_solver"
+        ATLAS_CLAY2013_SOLVER: "${{ github.workspace }}/build/atlas_clay2013_solver"
+        ATLAS_GIS2024_SOLVER: "${{ github.workspace }}/build/atlas_gis2024_solver"
+      run: python -B tools/run_ci_tests.py --portable
+    - name: Verify recorded-path JSON replay
+      env:
+        ATLAS_RECORDED_SOLVER: "${{ github.workspace }}/build/atlas_solver"
+      run: python -m unittest tests.test_experiment_replay tests.test_recorded_api
+        tests.test_recorded_path tests.test_web_recorded tests.test_refinement tests.test_isotropic_reference
+        tests.test_resolution_diagnosis tests.test_recorded_restarts -v
+    timeout-minutes: 180
+  wasm:
+    runs-on: macos-26
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.14'
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: ".nvmrc"
+    - name: Cache pinned Emscripten SDK
+      id: emsdk-cache
+      uses: actions/cache@v4
+      with:
+        path: "${{ runner.temp }}/emsdk"
+        key: emsdk-${{ runner.os }}-${{ runner.arch }}-6.0.8-v1
+    - name: Install the official pinned Emscripten SDK
+      run: |
+        git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+        "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+        "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+      if: steps.emsdk-cache.outputs.cache-hit != 'true'
+    - name: 'Build and compare native and Wasm / 1: source "$RUNNER_TEMP/emsdk/emsdk_env.sh"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        python tools/build_ci_targets.py build
+        emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+        python tools/build_ci_targets.py build-wasm --wasm
+        cmake --build build-wasm --target atlas_scalar_probe --parallel 1
+        node tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"
+        python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
+        node tools/test_experiments.mjs
+        node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
+    - name: 'Build and compare native and Wasm / 2: cmake -S . -B build-ramberg-qualified
+        -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+        cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+        python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+        node tools/check_ramberg_osgood_wasm.mjs build-wasm "$RUNNER_TEMP/ramberg-wasm.json" "$RUNNER_TEMP/ramberg-native.json"
+        python -B tools/check_ramberg_osgood.py --responses "$RUNNER_TEMP/ramberg-wasm.json" --output "$RUNNER_TEMP/ramberg-wasm-checks.json"
+        node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+        node tools/test_loading.mjs
+        node tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json
+        node tools/test_scoped_parity.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/scoped-parity.json" catalogue/laboratory-profile-policy.json
+        node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+    - name: 'Build and compare native and Wasm / 3: history_cases --output "$RUNNER_TEMP/history-cases.json"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.history_cases --output "$RUNNER_TEMP/history-cases.json"
+        node tools/test_history_wasm.mjs --cases "$RUNNER_TEMP/history-cases.json"
+        node tools/test_time_wasm.mjs
+        node tools/test_schedule_wasm.mjs
+        node tools/test_terracotta_wasm.mjs
+        node tools/test_terracotta_creep_wasm.mjs --output "$RUNNER_TEMP/terracotta-creep-parity.json"
+        python -m tools.verify_terracotta_creep_wasm "$RUNNER_TEMP/terracotta-creep-parity.json"
+    - name: 'Build and compare native and Wasm / 4: clay2013_integration_study --output
+        "$RUNNER_TEMP/clay2013-native.json"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.clay2013_integration_study --output "$RUNNER_TEMP/clay2013-native.json"
+        node tools/test_clay2013_wasm.mjs --native-report "$RUNNER_TEMP/clay2013-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/clay2013-wasm.json"
+        python -m tools.verify_clay2013_wasm "$RUNNER_TEMP/clay2013-wasm.json"
+    - name: 'Build and compare native and Wasm / 5: clay2013_nonisotropic_study --output
+        "$RUNNER_TEMP/clay2013-path-native.json"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.clay2013_nonisotropic_study --output "$RUNNER_TEMP/clay2013-path-native.json"
+        node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/clay2013-path-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/clay2013-path-wasm.json"
+        python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/clay2013-path-wasm.json"
+    - name: 'Build and compare native and Wasm / 6: gis2024_rate_study --output "$RUNNER_TEMP/gis2024-native.json"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.gis2024_rate_study --output "$RUNNER_TEMP/gis2024-native.json"
+        node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/gis2024-native.json" --wasm build-wasm/gis2024.js --output "$RUNNER_TEMP/gis2024-wasm.json"
+        python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/gis2024-wasm.json"
+    - name: 'Build and compare native and Wasm / 7: gis2024_integration_study --output
+        "$RUNNER_TEMP/gis2024-path-native.json"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.gis2024_integration_study --output "$RUNNER_TEMP/gis2024-path-native.json"
+        node tools/test_gis2024_paths_wasm.mjs --native-report "$RUNNER_TEMP/gis2024-path-native.json" --wasm build-wasm/gis2024.js --output "$RUNNER_TEMP/gis2024-path-wasm.json"
+        python -m tools.verify_gis2024_paths "$RUNNER_TEMP/gis2024-path-wasm.json"
+    - name: 'Build and compare native and Wasm / 8: python tools/expm_study.py --binary
+        build/atlas_expm_probe --output "$RUNNER_TEMP/expm-native.json"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python tools/expm_study.py --binary build/atlas_expm_probe --output "$RUNNER_TEMP/expm-native.json"
+        node tools/test_expm_wasm.mjs --native-report "$RUNNER_TEMP/expm-native.json" --wasm build-wasm/expm-fixtures.js --output "$RUNNER_TEMP/expm-wasm.json"
+        python tools/expm_study.py --verify "$RUNNER_TEMP/expm-wasm.json" --native-report "$RUNNER_TEMP/expm-native.json"
+    - name: 'Build and compare native and Wasm / 9: log1p_study --binary build/atlas_log1p_probe
+        --output "$RUNNER_TEMP/log1p-native.json"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.log1p_study --binary build/atlas_log1p_probe --output "$RUNNER_TEMP/log1p-native.json"
+        node tools/test_log1p_wasm.mjs --native-report "$RUNNER_TEMP/log1p-native.json" --wasm build-wasm/log1p-fixtures.js --output "$RUNNER_TEMP/log1p-wasm.json"
+        python -m tools.log1p_study --report "$RUNNER_TEMP/log1p-wasm.json" --native-report "$RUNNER_TEMP/log1p-native.json" --output "$RUNNER_TEMP/log1p-assessed.json"
+    - name: 'Build and compare native and Wasm / 10: barodesy2017_rate_study --native
+        build/atlas_barodesy_rate_probe --output "$RUNNER_TEMP/barodesy-nat'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.barodesy2017_rate_study --native build/atlas_barodesy_rate_probe --output "$RUNNER_TEMP/barodesy-native.json"
+        node tools/test_barodesy2017_rates_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-native.json" --wasm build-wasm/barodesy-rates.js --output "$RUNNER_TEMP/barodesy-wasm.json"
+        python -m tools.barodesy2017_rate_study --verify "$RUNNER_TEMP/barodesy-wasm.json" --native-report "$RUNNER_TEMP/barodesy-native.json"
+    - name: 'Build and compare native and Wasm / 11: barodesy2017_material_ad --native
+        build/atlas_barodesy_material_ad_probe --output "$RUNNER_TEMP/baro'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.barodesy2017_material_ad --native build/atlas_barodesy_material_ad_probe --output "$RUNNER_TEMP/barodesy-ad-native.json"
+        node tools/test_barodesy2017_material_ad_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-ad-native.json" --wasm build-wasm/barodesy-material-ad.js --output "$RUNNER_TEMP/barodesy-ad-wasm.json"
+        python -m tools.barodesy2017_material_ad --verify "$RUNNER_TEMP/barodesy-ad-wasm.json" --native-report-path "$RUNNER_TEMP/barodesy-ad-native.json"
+    - name: 'Build and compare native and Wasm / 12: python tools/run_historical_barodesy.py
+        --directory "$RUNNER_TEMP/historical-barodesy"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python tools/run_historical_barodesy.py --directory "$RUNNER_TEMP/historical-barodesy"
+    - name: 'Build and compare native and Wasm / 13: barodesy2017_hydro_ad --native
+        build/atlas_barodesy_hydro_ad_probe --output "$RUNNER_TEMP/barodesy-h'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.barodesy2017_hydro_ad --native build/atlas_barodesy_hydro_ad_probe --output "$RUNNER_TEMP/barodesy-hydro-native.json"
+        node tools/test_barodesy2017_hydro_ad_wasm.mjs --native-report "$RUNNER_TEMP/barodesy-hydro-native.json" --wasm build-wasm/barodesy-hydro-ad.js --output "$RUNNER_TEMP/barodesy-hydro-wasm.json"
+        python -m tools.barodesy2017_hydro_ad --verify "$RUNNER_TEMP/barodesy-hydro-wasm.json" --native-report-path "$RUNNER_TEMP/barodesy-hydro-native.json"
+    - name: 'Build and compare native and Wasm / 14: clay2014_rate_study --native
+        build/atlas_clay2014_rate_probe --output "$RUNNER_TEMP/clay2014-native.'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -m tools.clay2014_rate_study --native build/atlas_clay2014_rate_probe --output "$RUNNER_TEMP/clay2014-native.json"
+        node tools/test_clay2014_rates_wasm.mjs --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-wasm.json"
+        python -m tools.clay2014_rate_assessment --wasm-report "$RUNNER_TEMP/clay2014-wasm.json" --native-report "$RUNNER_TEMP/clay2014-native.json" --wasm-transport "$RUNNER_TEMP/clay2014-wasm.transport.json" --native-transport "$RUNNER_TEMP/clay2014-native.transport.json" --artifact build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/clay2014-assessment.json"
+    - name: 'Build and compare native and Wasm / 15: python tools/fetch_data.py --approved-only'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python tools/fetch_data.py --approved-only
+        set -euo pipefail
+        python -B tests/test_cmake_profile_build_v2.py
+    - name: 'Build and compare native and Wasm / 16: mkdir -p "$RUNNER_TEMP/bingham-build-receipts/time-predictor"
+        "$RUNNER_TEMP/bingham-build-receipts/t'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        mkdir -p "$RUNNER_TEMP/bingham-build-receipts/time-predictor" "$RUNNER_TEMP/bingham-build-receipts/time-tests" "$RUNNER_TEMP/bingham-build-receipts/time-solver" "$RUNNER_TEMP/bingham-build-receipts/bingham-native"
+        cmake -S cmake/physical-time-v2 -B build-time-v2 -G "Unix Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-configure.log"
+        cmake --build build-time-v2 --target atlas_schedule_predictor_tests --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/atlas_schedule_predictor_tests-build.log"
+        cmake --build build-time-v2 --target atlas_time_tests --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/atlas_time_tests-build.log"
+        cmake --build build-time-v2 --target atlas_time_solver --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/atlas_time_solver-build.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-time-v2 --target atlas_schedule_predictor_tests --entrypoint tests/test_schedule_predictor.cpp --models tests/fixtures/time --recipe cmake/physical-time-v2/CMakeLists.txt --schedule required --kind native --artifact atlas_schedule_predictor_tests --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tests/test_time.py --consumer-source tests/test_schedule.py --receipt "$RUNNER_TEMP/bingham-build-receipts/time-predictor/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-predictor/capture.log"
+        time_predictor_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/time-predictor/pre.json".sha256)"
+        build-time-v2/atlas_schedule_predictor_tests 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-predictor/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/time-predictor/pre.json" --receipt-sha256 "$time_predictor_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/time-predictor/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-predictor/verify.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-time-v2 --target atlas_time_tests --entrypoint tests/test_time.cpp --models tests/fixtures/time --recipe cmake/physical-time-v2/CMakeLists.txt --schedule absent --kind native --artifact atlas_time_tests --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tests/test_time.py --consumer-source tests/test_schedule.py --receipt "$RUNNER_TEMP/bingham-build-receipts/time-tests/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-tests/capture.log"
+        time_tests_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/time-tests/pre.json".sha256)"
+        build-time-v2/atlas_time_tests 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-tests/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/time-tests/pre.json" --receipt-sha256 "$time_tests_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/time-tests/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-tests/verify.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-time-v2 --target atlas_time_solver --entrypoint cpp/main.cpp --models tests/fixtures/time --recipe cmake/physical-time-v2/CMakeLists.txt --schedule required --kind native --artifact atlas_time_solver --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tests/test_time.py --consumer-source tests/test_schedule.py --receipt "$RUNNER_TEMP/bingham-build-receipts/time-solver/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-solver/capture.log"
+        time_solver_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/time-solver/pre.json".sha256)"
+        ATLAS_TIME_SOLVER="$PWD/build-time-v2/atlas_time_solver" python3 -B -m unittest tests.test_time tests.test_schedule 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-solver/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/time-solver/pre.json" --receipt-sha256 "$time_solver_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/time-solver/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-solver/verify.log"
+        cmake -S cmake/bingham -B build-bingham -G "Unix Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native-configure.log"
+        cmake --build build-bingham --target atlas_bingham_solver --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native-build.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-bingham --target atlas_bingham_solver --entrypoint cpp/main.cpp --models models/research/bingham --recipe cmake/bingham/CMakeLists.txt --schedule required --kind native --artifact atlas_bingham_solver --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tools/test_bingham_schedule.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/study.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/collect_wasm.mjs --consumer-source docs/ingestion/bingham-comsol63/execution-v5/parity.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/oracle.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/synthetic_checks.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/expected-catalogue.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/reference-convergence.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/cases.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/freeze-v1.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/source-bindings.json --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-native/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native/capture.log"
+        bingham_native_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/bingham-native/pre.json".sha256)"
+        python -B tools/test_bingham_schedule.py --solver build-bingham/atlas_bingham_solver --output "$RUNNER_TEMP/bingham-native.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-native/pre.json" --receipt-sha256 "$bingham_native_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/bingham-native/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native/verify.log"
+        mkdir -p "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm"
+        emcmake cmake -S cmake/bingham -B build-bingham-wasm -G "Unix Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm-configure.log"
+        cmake --build build-bingham-wasm --target atlas_bingham_solver --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm-build.log"
+        cp build-bingham-wasm/bingham.js build-bingham-wasm/bingham.mjs
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-bingham-wasm --target atlas_bingham_solver --entrypoint cpp/main.cpp --models models/research/bingham --recipe cmake/bingham/CMakeLists.txt --schedule required --kind wasm --artifact bingham.js --artifact bingham.mjs --artifact bingham.wasm --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tools/test_bingham_schedule.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/study.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/collect_wasm.mjs --consumer-source docs/ingestion/bingham-comsol63/execution-v5/parity.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/oracle.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/synthetic_checks.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/expected-catalogue.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/reference-convergence.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/cases.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/freeze-v1.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/source-bindings.json --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/capture.log"
+        bingham_wasm_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/pre.json".sha256)"
+        node docs/ingestion/bingham-comsol63/execution-v5/collect_wasm.mjs build-bingham-wasm/bingham.mjs docs/ingestion/bingham-comsol63/execution-v5/cases.json "$RUNNER_TEMP/bingham-wasm.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/pre.json" --receipt-sha256 "$bingham_wasm_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/verify.log"
+        python -B docs/ingestion/bingham-comsol63/execution-v5/study.py assess --raw "$RUNNER_TEMP/bingham-wasm.json"
+        python -B docs/ingestion/bingham-comsol63/execution-v5/parity.py "$RUNNER_TEMP/bingham-native.json" "$RUNNER_TEMP/bingham-wasm.json"
+        python -B tools/provision_bingham_assets.py
+    - name: 'Build and compare native and Wasm / 17: emcmake cmake -S cmake/kelvin-voigt
+        -B build-kelvin-voigt-wasm -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/kelvin-voigt -B build-kelvin-voigt-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-kelvin-voigt-wasm --target atlas_kelvin_voigt_solver --parallel 1
+        python -B tools/test_kelvin_voigt_wasm.py --module build-kelvin-voigt-wasm/kv.mjs --output "$RUNNER_TEMP/kelvin-voigt-wasm"
+    - name: 'Build and compare native and Wasm / 18: emcmake cmake -S cmake/sls -B
+        build-sls-wasm -DCMAKE_BUILD_TYPE=Debug'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
+        cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+    - name: 'Build and compare native and Wasm / 19: emcmake cmake -S cmake/j2 -B
+        build-j2-wasm -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
+    - name: 'Build and compare native and Wasm / 20: cmake -S cmake/burgers -B build-burgers
+        -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+        python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+        emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+        python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+    - name: 'Build and compare native and Wasm / 21: python -B -m unittest tests.test_provision_maxwell_assets'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -B -m unittest tests.test_provision_maxwell_assets
+        python -B tools/check_current_dependency_assets.py --controlled-plan docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/plan-v1.json --controlled-plan-sha256 ed7839d19ec5c5b3615f5bf54d2e6273b8ec19fbe811f12a0336938c42581361 --output "$RUNNER_TEMP/current-dependency-guards"
+        python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+        python -B tools/provision_implicit_path_assets.py
+        python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
+    - name: 'Build and compare native and Wasm / 22: emcmake cmake -S cmake/orthotropic
+        -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
+        node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
+        python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
+    - name: 'Build and compare native and Wasm / 23: emcmake cmake -S cmake/hill -B
+        build-hill-wasm -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
+        node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
+    - name: 'Build and compare native and Wasm / 24: python3 -B tools/check_perzyna_ci.py
+        --paired --output "$RUNNER_TEMP/perzyna-paired"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python3 -B tools/check_perzyna_ci.py --paired --output "$RUNNER_TEMP/perzyna-paired"
+        python3 -B tools/provision_perzyna_assets.py
+    - name: 'Build and compare native and Wasm / 25: python tools/build_web.py --controlled-path-wasm-dir
+        docs/ingestion/lade-duncan-1975/atlas-integrati'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python tools/build_web.py --controlled-path-wasm-dir docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
+        node --test tests/test_ensemble.mjs
+        python -B -m unittest tests.test_ensemble_package
+        node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
+        node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
+        node tools/test_experiments.mjs --built-assets web/dist/experiments
+        node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+        node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+    - name: Retain Kelvin–Voigt Wasm qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: kelvin-voigt-wasm-macos
+        path: "${{ runner.temp }}/kelvin-voigt-wasm/"
+    - name: Retain orthotropic Wasm qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: orthotropic-wasm-macos
+        path: "${{ runner.temp }}/orthotropic-wasm-raw.json"
+    - name: Retain Hill macos Wasm qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: hill-wasm-macos
+        path: "${{ runner.temp }}/hill-wasm/"
+    - name: Retain Perzyna paired qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: perzyna-paired-${{ runner.os }}
+        path: "${{ runner.temp }}/perzyna-paired/"
+    - name: Retain Bingham paired qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: bingham-paired-${{ runner.os }}
+        path: "${{ runner.temp }}/bingham-*"
+    - name: Retain current dependency guards and Maxwell regression
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: current-dependency-guards-${{ runner.os }}
+        path: |-
+          ${{ runner.temp }}/current-dependency-guards/
+          ${{ runner.temp }}/maxwell-ci-regression/
+    timeout-minutes: 180
+  wasm-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: ".nvmrc"
+    - name: Cache pinned Emscripten SDK
+      id: emsdk-cache
+      uses: actions/cache@v4
+      with:
+        path: "${{ runner.temp }}/emsdk"
+        key: emsdk-${{ runner.os }}-${{ runner.arch }}-6.0.8-v1
+    - name: Install the official pinned Emscripten SDK
+      run: |
+        git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+        "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+        "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+      if: steps.emsdk-cache.outputs.cache-hit != 'true'
+    - name: 'Verify Linux browser engine and packaged website / 1: source "$RUNNER_TEMP/emsdk/emsdk_env.sh"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --target atlas_solver --parallel 1
+        emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-wasm --target atlas_solver --parallel 1
+        cmake --build build-wasm --target atlas_power_creep_solver --parallel 1
+        cmake --build build-wasm --target atlas_scalar_probe --parallel 1
+        node tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"
+        python -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"
+        node tools/test_experiments.mjs
+        node tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json
+    - name: 'Verify Linux browser engine and packaged website / 2: cmake -S . -B build-ramberg-qualified
+        -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        cmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
+        cmake --build build-ramberg-qualified --target atlas_solver --parallel 1
+        python -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"
+        node tools/check_ramberg_osgood_wasm.mjs build-wasm "$RUNNER_TEMP/ramberg-wasm.json" "$RUNNER_TEMP/ramberg-native.json"
+        python -B tools/check_ramberg_osgood.py --responses "$RUNNER_TEMP/ramberg-wasm.json" --output "$RUNNER_TEMP/ramberg-wasm-checks.json"
+        node tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+        node tools/test_loading.mjs
+        node tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json
+        node tools/test_scoped_parity.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/scoped-parity.json" catalogue/laboratory-profile-policy.json
+        node tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver
+    - name: 'Verify Linux browser engine and packaged website / 3: python tools/fetch_data.py
+        --approved-only'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python tools/fetch_data.py --approved-only
+        set -euo pipefail
+        python -B tests/test_cmake_profile_build_v2.py
+    - name: 'Verify Linux browser engine and packaged website / 4: mkdir -p "$RUNNER_TEMP/bingham-build-receipts/time-predictor"
+        "$RUNNER_TEMP/bingham-build-receipts/t'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        mkdir -p "$RUNNER_TEMP/bingham-build-receipts/time-predictor" "$RUNNER_TEMP/bingham-build-receipts/time-tests" "$RUNNER_TEMP/bingham-build-receipts/time-solver" "$RUNNER_TEMP/bingham-build-receipts/bingham-native"
+        cmake -S cmake/physical-time-v2 -B build-time-v2 -G "Unix Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-configure.log"
+        cmake --build build-time-v2 --target atlas_schedule_predictor_tests --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/atlas_schedule_predictor_tests-build.log"
+        cmake --build build-time-v2 --target atlas_time_tests --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/atlas_time_tests-build.log"
+        cmake --build build-time-v2 --target atlas_time_solver --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/atlas_time_solver-build.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-time-v2 --target atlas_schedule_predictor_tests --entrypoint tests/test_schedule_predictor.cpp --models tests/fixtures/time --recipe cmake/physical-time-v2/CMakeLists.txt --schedule required --kind native --artifact atlas_schedule_predictor_tests --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tests/test_time.py --consumer-source tests/test_schedule.py --receipt "$RUNNER_TEMP/bingham-build-receipts/time-predictor/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-predictor/capture.log"
+        time_predictor_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/time-predictor/pre.json".sha256)"
+        build-time-v2/atlas_schedule_predictor_tests 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-predictor/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/time-predictor/pre.json" --receipt-sha256 "$time_predictor_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/time-predictor/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-predictor/verify.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-time-v2 --target atlas_time_tests --entrypoint tests/test_time.cpp --models tests/fixtures/time --recipe cmake/physical-time-v2/CMakeLists.txt --schedule absent --kind native --artifact atlas_time_tests --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tests/test_time.py --consumer-source tests/test_schedule.py --receipt "$RUNNER_TEMP/bingham-build-receipts/time-tests/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-tests/capture.log"
+        time_tests_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/time-tests/pre.json".sha256)"
+        build-time-v2/atlas_time_tests 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-tests/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/time-tests/pre.json" --receipt-sha256 "$time_tests_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/time-tests/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-tests/verify.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-time-v2 --target atlas_time_solver --entrypoint cpp/main.cpp --models tests/fixtures/time --recipe cmake/physical-time-v2/CMakeLists.txt --schedule required --kind native --artifact atlas_time_solver --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tests/test_time.py --consumer-source tests/test_schedule.py --receipt "$RUNNER_TEMP/bingham-build-receipts/time-solver/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-solver/capture.log"
+        time_solver_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/time-solver/pre.json".sha256)"
+        ATLAS_TIME_SOLVER="$PWD/build-time-v2/atlas_time_solver" python3 -B -m unittest tests.test_time tests.test_schedule 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-solver/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/time-solver/pre.json" --receipt-sha256 "$time_solver_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/time-solver/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/time-solver/verify.log"
+        cmake -S cmake/bingham -B build-bingham -G "Unix Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native-configure.log"
+        cmake --build build-bingham --target atlas_bingham_solver --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native-build.log"
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-bingham --target atlas_bingham_solver --entrypoint cpp/main.cpp --models models/research/bingham --recipe cmake/bingham/CMakeLists.txt --schedule required --kind native --artifact atlas_bingham_solver --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tools/test_bingham_schedule.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/study.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/collect_wasm.mjs --consumer-source docs/ingestion/bingham-comsol63/execution-v5/parity.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/oracle.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/synthetic_checks.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/expected-catalogue.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/reference-convergence.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/cases.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/freeze-v1.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/source-bindings.json --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-native/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native/capture.log"
+        bingham_native_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/bingham-native/pre.json".sha256)"
+        python -B tools/test_bingham_schedule.py --solver build-bingham/atlas_bingham_solver --output "$RUNNER_TEMP/bingham-native.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-native/pre.json" --receipt-sha256 "$bingham_native_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/bingham-native/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-native/verify.log"
+        mkdir -p "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm"
+        emcmake cmake -S cmake/bingham -B build-bingham-wasm -G "Unix Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm-configure.log"
+        cmake --build build-bingham-wasm --target atlas_bingham_solver --parallel 1 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm-build.log"
+        cp build-bingham-wasm/bingham.js build-bingham-wasm/bingham.mjs
+        python3 -B tools/record_cmake_profile_build_v2.py capture --root "$PWD" --build build-bingham-wasm --target atlas_bingham_solver --entrypoint cpp/main.cpp --models models/research/bingham --recipe cmake/bingham/CMakeLists.txt --schedule required --kind wasm --artifact bingham.js --artifact bingham.mjs --artifact bingham.wasm --consumer-tool python3 --consumer-tool python --consumer-tool node --consumer-source tools/test_bingham_schedule.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/study.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/collect_wasm.mjs --consumer-source docs/ingestion/bingham-comsol63/execution-v5/parity.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/oracle.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/synthetic_checks.py --consumer-source docs/ingestion/bingham-comsol63/execution-v5/expected-catalogue.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/reference-convergence.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/cases.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/freeze-v1.json --consumer-source docs/ingestion/bingham-comsol63/execution-v5/source-bindings.json --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/pre.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/capture.log"
+        bingham_wasm_pre_sha="$(cat "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/pre.json".sha256)"
+        node docs/ingestion/bingham-comsol63/execution-v5/collect_wasm.mjs build-bingham-wasm/bingham.mjs docs/ingestion/bingham-comsol63/execution-v5/cases.json "$RUNNER_TEMP/bingham-wasm.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/consumer.log"
+        python3 -B tools/record_cmake_profile_build_v2.py verify --receipt "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/pre.json" --receipt-sha256 "$bingham_wasm_pre_sha" --output "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/post.json" 2>&1 | tee "$RUNNER_TEMP/bingham-build-receipts/bingham-wasm/verify.log"
+        python -B docs/ingestion/bingham-comsol63/execution-v5/study.py assess --raw "$RUNNER_TEMP/bingham-wasm.json"
+        python -B docs/ingestion/bingham-comsol63/execution-v5/parity.py "$RUNNER_TEMP/bingham-native.json" "$RUNNER_TEMP/bingham-wasm.json"
+        python -B tools/provision_bingham_assets.py
+    - name: 'Verify Linux browser engine and packaged website / 5: emcmake cmake -S
+        cmake/kelvin-voigt -B build-kelvin-voigt-wasm -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/kelvin-voigt -B build-kelvin-voigt-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-kelvin-voigt-wasm --target atlas_kelvin_voigt_solver --parallel 1
+        python -B tools/test_kelvin_voigt_wasm.py --module build-kelvin-voigt-wasm/kv.mjs --output "$RUNNER_TEMP/kelvin-voigt-wasm"
+    - name: 'Verify Linux browser engine and packaged website / 6: emcmake cmake -S
+        cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/sls -B build-sls-wasm -DCMAKE_BUILD_TYPE=Debug
+        cmake --build build-sls-wasm --target atlas_sls_solver --parallel 1
+    - name: 'Verify Linux browser engine and packaged website / 7: emcmake cmake -S
+        cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/j2 -B build-j2-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-j2-wasm --target atlas_j2_solver --parallel 1
+    - name: 'Verify Linux browser engine and packaged website / 8: cmake -S cmake/burgers
+        -B build-burgers -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        cmake -S cmake/burgers -B build-burgers -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-burgers --target atlas_burgers_solver --parallel 1
+        python tools/test_burgers_native.py build-burgers/atlas_burgers_solver "$RUNNER_TEMP/burgers-native"
+        emcmake cmake -S cmake/burgers -B build-burgers-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-burgers-wasm --target atlas_burgers_solver --parallel 1
+        python tools/test_burgers_native.py build-burgers-wasm/burgers.mjs "$RUNNER_TEMP/burgers-wasm" --wasm
+    - name: 'Verify Linux browser engine and packaged website / 9: python -B -m unittest
+        tests.test_provision_maxwell_assets'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -B -m unittest tests.test_provision_maxwell_assets
+        python -B tools/check_current_dependency_assets.py --controlled-plan docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/plan-v1.json --controlled-plan-sha256 ed7839d19ec5c5b3615f5bf54d2e6273b8ec19fbe811f12a0336938c42581361 --output "$RUNNER_TEMP/current-dependency-guards"
+        python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
+        python -B tools/provision_implicit_path_assets.py
+        python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
+    - name: 'Verify Linux browser engine and packaged website / 10: emcmake cmake
+        -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
+        node tools/test_orthotropic_wasm.mjs build-orthotropic-wasm docs/ingestion/orthotropic-ogs/execution-v1/references.json "$RUNNER_TEMP/orthotropic-wasm-raw.json"
+        python -c 'import json; from tools.orthotropic_reference import assess; print(assess(json.load(open("docs/ingestion/orthotropic-ogs/execution-v1/references.json"))["cases"], json.load(open(__import__("os").environ["RUNNER_TEMP"]+"/orthotropic-wasm-raw.json"))))'
+    - name: 'Verify Linux browser engine and packaged website / 11: emcmake cmake
+        -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        emcmake cmake -S cmake/hill -B build-hill-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-hill-wasm --target atlas_hill_solver --parallel 1
+        node tools/test_hill_wasm.mjs --module build-hill-wasm/hill.js --output "$RUNNER_TEMP/hill-wasm"
+    - name: 'Verify Linux browser engine and packaged website / 12: python3 -B tools/check_perzyna_ci.py
+        --paired --output "$RUNNER_TEMP/perzyna-paired"'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python3 -B tools/check_perzyna_ci.py --paired --output "$RUNNER_TEMP/perzyna-paired"
+        python3 -B tools/provision_perzyna_assets.py
+    - name: 'Verify Linux browser engine and packaged website / 13: python tools/build_web.py
+        --controlled-path-wasm-dir docs/ingestion/lade-duncan-1975/atlas-integrati'
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python tools/build_web.py --controlled-path-wasm-dir docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
+        node --test tests/test_ensemble.mjs
+        python -B -m unittest tests.test_ensemble_package
+        node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
+        node tools/test_implicit_path_public_presets.mjs web/dist/engine-implicit-path "$RUNNER_TEMP/lade-public-presets.json" web/dist/engine-implicit-path/identity.json
+        node tools/test_experiments.mjs --built-assets web/dist/experiments
+        node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
+        node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+    - name: Retain Kelvin–Voigt Linux Wasm qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: kelvin-voigt-wasm-linux
+        path: "${{ runner.temp }}/kelvin-voigt-wasm/"
+    - name: Retain orthotropic Linux Wasm qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: orthotropic-wasm-linux
+        path: "${{ runner.temp }}/orthotropic-wasm-raw.json"
+    - name: Retain Hill linux Wasm qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: hill-wasm-linux
+        path: "${{ runner.temp }}/hill-wasm/"
+    - name: Retain Perzyna paired qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: perzyna-paired-${{ runner.os }}
+        path: "${{ runner.temp }}/perzyna-paired/"
+    - name: Retain Bingham paired qualification
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: bingham-paired-${{ runner.os }}
+        path: "${{ runner.temp }}/bingham-*"
+    - name: Retain current dependency guards and Maxwell regression
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: current-dependency-guards-${{ runner.os }}
+        path: |-
+          ${{ runner.temp }}/current-dependency-guards/
+          ${{ runner.temp }}/maxwell-ci-regression/
+    timeout-minutes: 180
+  controlled-path:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: ".nvmrc"
+    - name: Check controlled-path contracts and existing formulation semantics
+      run: python -B -m unittest tests.test_controlled_path tests.test_formulation
+        tests.test_state_contract -q
+    - name: Build and qualify native controlled paths
+      shell: bash
+      run: |
+        path_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"
+        cmake -S cmake/controlled-path -B build-path-native -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"
+        cmake --build build-path-native --target atlas_path_capability --parallel 1
+        mkdir -p path-results
+        python -B docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py build-path-native/libatlas_path_capability.so docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json
+        python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json
+    - name: Cache pinned Emscripten SDK
+      id: emsdk-cache
+      uses: actions/cache@v4
+      with:
+        path: "${{ runner.temp }}/emsdk"
+        key: emsdk-${{ runner.os }}-${{ runner.arch }}-6.0.8-v1
+    - name: Install the pinned Emscripten SDK
+      shell: bash
+      run: |
+        git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+        "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+        "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+      if: steps.emsdk-cache.outputs.cache-hit != 'true'
+    - name: Build Wasm and require both backends to pass the same frozen gates
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        path_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"
+        emcmake cmake -S cmake/controlled-path -B build-path-wasm -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"
+        cmake --build build-path-wasm --target atlas_path_capability --parallel 1
+        node docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs build-path-wasm/atlas_path_capability.mjs build-path-wasm/atlas_path_capability.wasm docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/wasm.json
+        python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json path-results/native.json path-results/wasm.json
+    - name: Qualify the fully rough hypoplastic interface on native and Wasm
+      shell: bash
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        model="$PWD/models/research/interface2016/hvwe2016-reconciled-fixed-local.json"
+        cmake -S cmake/controlled-path -B build-interface2016-native -DCMAKE_BUILD_TYPE=Release "-DATLAS_PATH_MODELS=$model"
+        cmake --build build-interface2016-native --target atlas_path_capability --parallel 1
+        mkdir -p path-results/interface2016
+        python -B docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py build-interface2016-native/libatlas_path_capability.so docs/ingestion/hypoplastic-interface-2016/implementation-v1/backend-requests.json path-results/interface2016/native.json
+        python -B docs/ingestion/hypoplastic-interface-2016/implementation-v1/check_backend_results_v2.py path-results/interface2016/native.json --output path-results/interface2016/native-check.json
+        emcmake cmake -S cmake/controlled-path -B build-interface2016-wasm -DCMAKE_BUILD_TYPE=Release "-DATLAS_PATH_MODELS=$model"
+        cmake --build build-interface2016-wasm --target atlas_path_capability --parallel 1
+        node docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs build-interface2016-wasm/atlas_path_capability.mjs build-interface2016-wasm/atlas_path_capability.wasm docs/ingestion/hypoplastic-interface-2016/implementation-v1/backend-requests.json path-results/interface2016/wasm.json
+        python -B docs/ingestion/hypoplastic-interface-2016/implementation-v1/check_backend_results_v2.py path-results/interface2016/wasm.json --output path-results/interface2016/wasm-check.json
+        python -B docs/ingestion/hypoplastic-interface-2016/execution-v1/check_parity_v2.py path-results/interface2016/native.json path-results/interface2016/wasm.json path-results/interface2016/parity.json
+    - name: Retain numerical outputs and generated model metadata
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: controlled-path-qualification
+        path: |
+          path-results/
+          build-path-native/generated/
+          build-path-wasm/generated/
+          build-path-native/CMakeCache.txt
+          build-path-wasm/CMakeCache.txt
+          build-interface2016-native/generated/
+          build-interface2016-wasm/generated/
+          build-interface2016-native/CMakeCache.txt
+          build-interface2016-wasm/CMakeCache.txt
+          build-path-native/libatlas_path_capability.so
+          build-path-wasm/atlas_path_capability.mjs
+          build-path-wasm/atlas_path_capability.wasm
+    timeout-minutes: 180
+  result:
+    if: always()
+    needs:
+    - native
+    - wasm
+    - wasm-linux
+    - controlled-path
+    runs-on: ubuntu-latest
+    steps:
+    - env:
+        RESULTS: "${{ toJSON(needs) }}"
+      run: python3 -c 'import json,os; assert all(j["result"] == "success" for j in
+        json.loads(os.environ["RESULTS"]).values())'
