@@ -50,7 +50,10 @@ if(options['--wasm']||options['--native']){
  }
  const dir=mkdtempSync(join(tmpdir(),'atlas-recorded-parity-'));
  try{
-  for(const {request:s} of [...retained,...restartRetained,{request:example}]){
+  // Preserve the retained legacy requests; make their formerly implicit fixture states explicit.
+  const retainedInitialExamples={"linear-elastic":[100000.0,100000.0,100000.0,0,0,0,0.7],"drucker-prager":[100000.0,100000.0,100000.0,0,0,0,0.7,0],"modified-cam-clay":[100000.0,100000.0,100000.0,0,0,0,0.7,200000,0],"hypoplastic-sand-vw96":[100000.0,100000.0,100000.0,0,0,0,0.7],"hypoplastic-sand-igs97":[100000.0,100000.0,100000.0,0,0,0,0.7,0,0,0,0,0,0]};
+  for(const {request:retainedRequest} of [...retained,...restartRetained,{request:example}]){
+   const s=retainedRequest.initial?retainedRequest:{...retainedRequest,initial:[...retainedInitialExamples[retainedRequest.model]]};
    const {controls,knots}=recordedWire(s),settings=recordedSettings(s),c=join(dir,'controls.csv'),k=join(dir,'knots.csv');writeFileSync(c,controls.join(','));writeFileSync(k,knots.join(','));
    const args=['--mode','recorded','--model',s.model,'--initial-strain',s.path.initial_strain.join(','),'--recorded-controls-file',c,'--recorded-knots-file',k,'--integration-settings',settingsCsv(settings.material),'--recorded-settings',Object.values(settings.control).join(',')];
    if(settings.restarts)args.push('--recorded-restarts',Object.values(settings.restarts).join(','));

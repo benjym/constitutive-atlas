@@ -442,7 +442,7 @@ jobs:
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
         python -B -m unittest tests.test_provision_maxwell_assets
-        python -B tools/check_current_dependency_assets.py --output "$RUNNER_TEMP/current-dependency-guards"
+        python -B tools/check_current_dependency_assets.py --controlled-plan docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/plan-v1.json --controlled-plan-sha256 ed7839d19ec5c5b3615f5bf54d2e6273b8ec19fbe811f12a0336938c42581361 --output "$RUNNER_TEMP/current-dependency-guards"
         python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python -B tools/provision_implicit_path_assets.py
         python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
@@ -475,7 +475,7 @@ jobs:
       shell: bash
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
-        python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
+        python tools/build_web.py --controlled-path-wasm-dir docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
         node --test tests/test_ensemble.mjs
         python -B -m unittest tests.test_ensemble_package
         node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
@@ -659,7 +659,7 @@ jobs:
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
         python -B -m unittest tests.test_provision_maxwell_assets
-        python -B tools/check_current_dependency_assets.py --output "$RUNNER_TEMP/current-dependency-guards"
+        python -B tools/check_current_dependency_assets.py --controlled-plan docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/plan-v1.json --controlled-plan-sha256 ed7839d19ec5c5b3615f5bf54d2e6273b8ec19fbe811f12a0336938c42581361 --output "$RUNNER_TEMP/current-dependency-guards"
         python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python -B tools/provision_implicit_path_assets.py
         python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
@@ -692,7 +692,7 @@ jobs:
       shell: bash
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
-        python tools/build_web.py --controlled-path-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/ingestion/vibe-2026/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
+        python tools/build_web.py --controlled-path-wasm-dir docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/execution-v2/norsand/engine --interface2016-wasm-dir docs/delivery/unheld-finalisation-20261105-v1/controlled-path-refresh-v1/execution-v2/interface2016/engine --maxwell-wasm-dir docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine
         node --test tests/test_ensemble.mjs
         python -B -m unittest tests.test_ensemble_package
         node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
