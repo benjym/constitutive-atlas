@@ -42,6 +42,31 @@ def accepted_decision(path,manifest,expected_hash):
  assert data['source_freeze']['path']==manifest and data['source_freeze']['sha256']==expected_hash,path
  return data
 
+CURRENT_SOURCE_AMENDMENT='docs/ingestion/manzari-dafalias-1997/delivery-v1/final-ci-review-v1/controlled-time-current-sources.json'
+CURRENT_SOURCE_REVIEW='docs/ingestion/manzari-dafalias-1997/delivery-v1/final-ci-review-v1/controlled-time-current-sources-decision.json'
+def reviewed_current_sources(original):
+ amendment=json.loads(safe_relative(CURRENT_SOURCE_AMENDMENT).read_text())
+ assert amendment['identity']=='md1997-controlled-time-current-sources-v1'
+ assert amendment['base_amendment_sha256']==sha(safe_relative(AMENDMENT))
+ assert amendment['original_current_sources']==original
+ current=amendment['current_sources']
+ assert set(current)==set(original)=={'tests/test_controlled_time.py','tools/check_controlled_time_ci.py'}
+ for name,expected in current.items():assert sha(safe_relative(name))==expected,name
+ test_review=amendment['test_review']
+ assert test_review['path']=='docs/ingestion/manzari-dafalias-1997/delivery-v1/final-ci-review-v1/integration-decision.json'
+ assert sha(safe_relative(test_review['path']))==test_review['sha256']
+ accepted=json.loads(safe_relative(test_review['path']).read_text())
+ assert accepted['status']=='accepted' and accepted['blocking_findings']==[]
+ assert accepted['source_bindings']['tests/test_controlled_time.py']==current['tests/test_controlled_time.py']
+ decision=json.loads(safe_relative(CURRENT_SOURCE_REVIEW).read_text())
+ assert decision['identity']=='md1997-controlled-time-current-source-review-v1'
+ assert decision['status']=='accepted' and decision['blocking_findings']==[]
+ assert decision['author_run']==amendment['author_run'] and decision['reviewer_run']!=amendment['author_run']
+ assert isinstance(decision['reviewer_run'],str) and decision['reviewer_run'].strip()
+ assert decision['amendment_sha256']==sha(safe_relative(CURRENT_SOURCE_AMENDMENT))
+ assert decision['current_sources']==current
+ return current
+
 def amendment_sources():
  data=json.loads(safe_relative(AMENDMENT).read_text())
  assert data['identity']=='controlled-time-current-source-amendment-v1'
@@ -49,15 +74,21 @@ def amendment_sources():
  current=data['current_sources']
  assert set(current)=={'tests/test_controlled_time.py','tools/check_controlled_time_ci.py'}
  assert current['tests/test_controlled_time.py']==TEST_ACCEPTANCE['test_sha256']
- for name,expected in current.items():assert sha(safe_relative(name))==expected,name
- for pin in data['files']:assert sha(safe_relative(pin['path']))==pin['sha256'],pin['path']
+ replacement=reviewed_current_sources(current)
+ for name,expected in current.items():assert sha(safe_relative(name))==replacement[name],name
+ for pin in data['files']:
+  expected=pin['sha256']
+  if pin['path'] in current:
+   assert expected==current[pin['path']],pin['path']
+   expected=replacement[pin['path']]
+  assert sha(safe_relative(pin['path']))==expected,pin['path']
  prior=TEST_ACCEPTANCE
  assert sha(safe_relative(prior['manifest']))==prior['manifest_sha256']
  assert sha(safe_relative(prior['decision']))==prior['decision_sha256']
  accepted_decision(prior['decision'],prior['manifest'],prior['manifest_sha256'])
  accepted=json.loads(safe_relative(prior['manifest']).read_text())
  assert [x['sha256'] for x in accepted['files'] if x['path']=='tests/test_controlled_time.py']==[prior['test_sha256']]
- return data
+ return dict(data,current_sources=replacement)
 
 def verify_pin(document,pin,current):
  triple=(document,pin['path'],pin['sha256'])
