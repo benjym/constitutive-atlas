@@ -135,8 +135,8 @@ class ControlledTimeTests(unittest.TestCase):
    helper.generate(d)
    for r in json.loads((baseline/'manifest.json').read_text()):self.assertEqual(hashlib.sha256((Path(d)/Path(r['path']).name).read_bytes()).hexdigest(),r['sha256'])
   # Current ordinary coverage is a distinct strict release check, not the old15.
-  live=json.loads((ROOT/'tests/fixtures/current-sixteen-sclay1-v1.json').read_text());paths={ROOT/row['path'] for row in live['models']}
-  self.assertEqual(len(paths),16);self.assertEqual(paths,set((ROOT/'models').glob('*.json')))
+  live=json.loads((ROOT/'tests/contexts/current-seventeen-md1997-baseline-v1.json').read_text());paths={ROOT/row['path'] for row in live['models']}
+  self.assertEqual(len(paths),17);self.assertEqual(paths,set((ROOT/'models').glob('*.json')))
   for row in live['models']:self.assertEqual(hashlib.sha256((ROOT/row['path']).read_bytes()).hexdigest(),row['sha256'])
   self.assertEqual(hashlib.sha256((ROOT/live['catalogue']['path']).read_bytes()).hexdigest(),live['catalogue']['sha256'])
   with tempfile.TemporaryDirectory() as d:

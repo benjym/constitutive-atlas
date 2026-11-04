@@ -61,7 +61,8 @@ def run(build, output):
     (output/'identity.json').write_text(json.dumps(identity,indent=2)+'\n')
     command(['node','--test','tests/test_maxwell_atlas_contract.mjs',
              'tests/test_maxwell_atlas_runtime.mjs'],'public contract/lifecycle')
-    command(['node','tools/test_maxwell_wasm.mjs',str(build/'maxwell.js'),
+    module = build/('maxwell.mjs' if (build/'maxwell.mjs').is_file() else 'maxwell.js')
+    command(['node','tools/test_maxwell_wasm.mjs',str(module),
              str(REFERENCE),str(output/'raw.json')],'frozen analytical corpus')
     errors=assess_rows(cases,json.loads((output/'raw.json').read_text()))
     command(['node','tools/test_maxwell_public_presets.mjs',str(build),

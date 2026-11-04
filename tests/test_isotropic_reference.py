@@ -5,7 +5,7 @@ import math
 from pathlib import Path
 import unittest
 from atlas.isotropic_reference import cam_clay_isotropic
-from tools.analyze_mcc_continuous import analyze,analyze_followups
+from tests.historical_mcc_reference import analyze,analyze_followups
 ROOT=Path(__file__).resolve().parents[1]
 
 class IsotropicReferenceTests(unittest.TestCase):

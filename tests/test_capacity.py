@@ -10,6 +10,7 @@ from atlas.dsl import ValidationError
 from atlas.model import ROOT, MAX_STATE_COMPONENTS, load, validate
 from atlas.schedule import validate_schedule
 from atlas.compiler import generate
+from tests.historical_generation import public_models
 
 class CapacityTests(unittest.TestCase):
     def test_generated_catalogue_rejects_inadequate_ad_storage(self):
@@ -46,7 +47,7 @@ class CapacityTests(unittest.TestCase):
         with self.assertRaises(ValidationError):validate_schedule(spec)
 
     def test_legacy_26_component_multiplier_layout(self):
-        model=load(ROOT/'models/linear-elastic.json')
+        model=next(m for m in public_models() if m['id']=='linear-elastic')
         model.update(integration='residual',derived=[],domain=[])
         model['state']=model['state'][:1]
         for name in ('alpha','fabric','alpha_in'):

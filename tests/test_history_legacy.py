@@ -7,6 +7,7 @@ from atlas.dsl import ValidationError
 from atlas.history import MAX_COUNTER
 from atlas.history_legacy import advance_legacy, make_legacy_snapshot
 from atlas.model import ROOT, defaults, load, prepare_increment
+from tests.historical_generation import public_models, public_paths
 
 FIXTURES = ROOT/'tests/fixtures/time'
 
@@ -138,7 +139,8 @@ class LegacyHistoryTests(unittest.TestCase):
 
     def test_all_five_public_layouts_roundtrip_without_reinterpretation(self):
         baseline=['drucker-prager','hypoplastic-sand-igs97','hypoplastic-sand-vw96','linear-elastic','modified-cam-clay']
-        paths=[ROOT/'models'/(name+'.json') for name in baseline]
+        legacy_paths={path.name:path for path in public_paths()}
+        paths=[legacy_paths[name+'.json'] for name in baseline]
         self.assertTrue(all(path.is_file() for path in paths))
         for path in paths:
             model=load(path)
@@ -158,7 +160,7 @@ class LegacyHistoryTests(unittest.TestCase):
             make_legacy_snapshot(model,state,defaults(model),[0.]*6)
 
     def test_transient_transport_is_not_reclassified_as_physical_history(self):
-        model=load(ROOT/'models/drucker-prager.json')
+        model=next(m for m in public_models() if m['id']=='drucker-prager')
         state={f['name']:copy.deepcopy(f['initial']) for f in model['state']}
         parent=make_legacy_snapshot(model,state,defaults(model),[0.]*6)
         self.assertEqual(len(parent['binding']['layout']),len(model['state']))

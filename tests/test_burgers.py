@@ -10,7 +10,7 @@ R=ROOT/'docs/ingestion/burgers-itasca900/integration-v1'
 
 class BurgersIntegrationTests(unittest.TestCase):
     def test_saved_source_accuracy_restart_and_native_wasm_parity(self):
-        p=subprocess.run([sys.executable,'-B',str(R/'verify.py')],capture_output=True,text=True,timeout=30)
+        p=subprocess.run([sys.executable,'-B',str(ROOT/'tests/historical_burgers.py')],capture_output=True,text=True,timeout=30)
         self.assertEqual(p.returncode,0,p.stderr)
         result=json.loads(p.stdout)
         self.assertTrue(result['native']['ok'])

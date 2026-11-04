@@ -14,8 +14,13 @@ from atlas.compiler import generate
 SOLVER = Path(os.environ.get('ATLAS_SOLVER',ROOT/'build/atlas_solver'))
 
 
+# Fixed original test examples, now explicit for the migrated five definitions.
+BASELINE_INITIAL_EXAMPLES={'linear-elastic': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7), 'drucker-prager': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7, 0), 'modified-cam-clay': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7, 200000, 0), 'hypoplastic-sand-vw96': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7), 'hypoplastic-sand-igs97': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7, 0, 0, 0, 0, 0, 0)}
+
 def csv(values): return ','.join(format(v,'.17g') for v in values)
 def run(model, **kwargs):
+    if 'initial' not in kwargs and model in BASELINE_INITIAL_EXAMPLES:
+        kwargs={**kwargs,'initial':csv(BASELINE_INITIAL_EXAMPLES[model])}
     args=[str(SOLVER),'--model',model]
     args += [s for key,value in kwargs.items() for s in ('--'+key.replace('_','-'),str(value))]
     result=subprocess.run(args,text=True,capture_output=True,timeout=30)

@@ -25,7 +25,7 @@ class SandLabPreview(unittest.TestCase):
  def test_catalogue_selection_preserves_six_existing_definitions(self):
   folder=ROOT/'catalogue/investigations/barodesy2015-preview-v1'
   for p in(folder/'models').glob('*.json'):
-   self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name),p.name)
+   self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name,hashlib.sha256(p.read_bytes()).hexdigest()),p.name)
   catalogue=historical_catalogue('sand')['models']
   self.assertEqual(len(catalogue),32);entry=next(m for m in catalogue if m['id']=='barodesy-sand')
   self.assertIs(entry['executable'],True);self.assertEqual(entry['status'],'draft')

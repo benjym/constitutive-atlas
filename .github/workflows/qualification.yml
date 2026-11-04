@@ -453,7 +453,7 @@ jobs:
         python -B tools/check_current_dependency_assets.py --current17-baseline --output "$RUNNER_TEMP/current-dependency-guards"
         python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python -B tools/provision_implicit_path_assets.py
-        python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
+        python -B tools/check_maxwell_ci.py --build web/engines/current17-compatible/maxwell --output "$RUNNER_TEMP/maxwell-ci-regression"
     - name: 'Build and compare native and Wasm / 22: emcmake cmake -S cmake/orthotropic
         -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release'
       shell: bash
@@ -670,7 +670,7 @@ jobs:
         python -B tools/check_current_dependency_assets.py --current17-baseline --output "$RUNNER_TEMP/current-dependency-guards"
         python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python -B tools/provision_implicit_path_assets.py
-        python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
+        python -B tools/check_maxwell_ci.py --build web/engines/current17-compatible/maxwell --output "$RUNNER_TEMP/maxwell-ci-regression"
     - name: 'Verify Linux browser engine and packaged website / 10: emcmake cmake
         -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release'
       shell: bash

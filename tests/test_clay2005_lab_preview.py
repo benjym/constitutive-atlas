@@ -23,7 +23,7 @@ class Clay2005LabPreview(unittest.TestCase):
  def test_catalogue_and_prior_models_preserved(self):
   prior=json.loads((I/'prior-models.json').read_text())
   import hashlib
-  for name,pin in prior.items():self.assertEqual(hashlib.sha256(preserved_model(ROOT,Path(name).name)).hexdigest(),pin)
+  for name,pin in prior.items():self.assertEqual(hashlib.sha256(preserved_model(ROOT,Path(name).name,pin)).hexdigest(),pin)
   before=json.loads((I/'prior-catalogue.json').read_text())['models'];after=historical_catalogue('clay2005')['models'];self.assertEqual(len(after),32)
   for old,new in zip(before,after):
    if old['id']!='hypoplastic-clay-2005':self.assertEqual(old,new)

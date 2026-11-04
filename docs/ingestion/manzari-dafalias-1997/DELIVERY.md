@@ -1,3 +1,7 @@
+## Final CI correction — 2026-11-05
+
+Reused independently accepted shared explicit-state/historical-context fixes; exact MD17 membership, three screenshot moves and Maxwell current-engine routing independently accepted. All117 focused tests, fast17-model/51-profile contracts, three retained-engine guards, Maxwell24 references/four public presets pass. No equations, numerical gates or tolerances changed. One final main-branch CI and Pages release is planned under the user instruction to avoid duplicated work; E8 remains open until terminal hosted success and actual live app verification. See delivery-v1/final-ci-review-v1/.
+
 ## Shared-app overlap reconciled — 2026-11-05
 
 Adopt upstream70251ec7 compression byte-exact and preserve its native16 fixture fixes/evidence. A single transport implementation remains; local757a57b0 alternative is historical only. Reused existing upstream assets read-only:994 decoded datasets and all logical metadata exact. Independent seven-file merge approval7a0785e9; actual strict17 native/fast/dependency guards pass. [Reconciliation evidence](delivery-v1/upstream-70251-reconciliation-v1/README.md). No scientific/model/compiled-source change. Final merged-revision hosted and live checks remain open; user authorization persists.

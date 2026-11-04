@@ -11,7 +11,7 @@ from atlas.evidence import checked_receipt
 from atlas.compiler import generate
 from atlas.model import ROOT, all_models
 from atlas.stress import stress_scope
-from tests.historical_generation import contexts, public_models, public_paths, verified
+from tests.historical_generation_v03 import contexts, public_models, public_paths, verified
 
 P = ROOT / 'docs/reviews/historical-test-context-v1'
 
@@ -42,12 +42,13 @@ class HistoricalGenerationTests(unittest.TestCase):
         # This is a release identity guard, separate from the historical nine.
         paths = [verified(item) for item in data['current_models']]
         self.assertEqual(len(paths), 12)  # Retained historical twelve-model context.
-        live = json.loads((ROOT / 'tests/fixtures/current-sixteen-sclay1-v1.json').read_text())
-        self.assertEqual(live['id'], 'current-sixteen-sclay1-v1')
+        live = json.loads((ROOT / 'tests/contexts/current-seventeen-md1997-baseline-v1.json').read_text())
+        self.assertEqual(live['id'], 'current-seventeen-md1997-baseline-v1')
         current_paths = {ROOT / item['path'] for item in live['models']}
         self.assertEqual(current_paths, set((ROOT / 'models').glob('*.json')))
-        self.assertEqual(len(current_paths), 16)
-        self.assertTrue(set(paths) < current_paths)
+        self.assertEqual(len(current_paths), 17)
+        historical_names = {ROOT / item['path'] for item in data['current_models']}
+        self.assertTrue(historical_names < current_paths)
         for item in live['models']:
             self.assertEqual(hashlib.sha256((ROOT / item['path']).read_bytes()).hexdigest(), item['sha256'])
         self.assertEqual(hashlib.sha256((ROOT / live['catalogue']['path']).read_bytes()).hexdigest(), live['catalogue']['sha256'])
@@ -64,7 +65,7 @@ class HistoricalGenerationTests(unittest.TestCase):
             self.assertEqual({m['id']: m for m in metadata['models']}, {m['id']: m for m in models})
             header = (Path(directory) / 'models.hpp').read_text()
             self.assertEqual(header.count(',StressScope::total'), 2)
-            self.assertEqual(header.count(',StressScope::effective'), 14)
+            self.assertEqual(header.count(',StressScope::effective'), 15)
 
     def test_original_methods_and_unmodified_gates_are_retained(self):
         failures = json.loads((P / 'original-failures.json').read_text())
