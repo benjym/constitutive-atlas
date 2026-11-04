@@ -1,0 +1,37 @@
+inline bool logged_controlled_step(int model,const State&zn,const State&p,int protocol,double axial,double reference,double current_axial,Sym<double>&de,Advance&result,const IntegrationSettings&settings={}){
+    de={};de.v[0]=axial;
+    if(protocol==0||protocol==4){de.v[1]=de.v[2]=protocol==4?axial:0.;result=integrate(model,zn,de,p,settings);return result.ok;}
+    if(protocol==2){de.v[1]=de.v[2]=-.5*axial;result=integrate(model,zn,de,p,settings);return result.ok;}
+    if(protocol==1){
+        double lateral=-.2*axial;
+        for(int it=0;it<30;++it){de.v[1]=de.v[2]=lateral;auto trial=integrate(model,zn,de,p,settings);/*TRACE_BEGIN*/trace_advance("outer",it,lateral,trial);/*TRACE_END*/if(!trial.ok)return false;
+            double residual=.5*(trial.state[1]+trial.state[2])-reference;/*TRACE_BEGIN*/trace_residual(it,residual);/*TRACE_END*/
+            if(std::abs(residual)<std::max(1.,std::abs(reference))*1e-8){result=trial;return true;}
+            const double h=std::max(1e-9,std::abs(axial)*1e-3);Sym<double> direction;direction.v[1]=direction.v[2]=1.;
+            const auto slope=consistent_control_derivative(trial,de,direction,h,
+                [&](const Sym<double>&increment){return integrate(model,zn,increment,p,settings);},
+                [](const State&state){return .5*(state[1]+state[2]);});/*TRACE_BEGIN*/trace_derivative(it,slope,trial);/*TRACE_END*/
+            if(!slope.ok)return false;const double derivative=slope.value;
+            if(!std::isfinite(derivative)||std::abs(derivative)<1e-6)return false;
+            double correction=-residual/derivative;bool accepted=false;
+            for(double a=1;a>=1./1024;a*=.5){auto testde=de;testde.v[1]=testde.v[2]=lateral+a*correction;auto test=integrate(model,zn,testde,p,settings);/*TRACE_BEGIN*/trace_line_search(it,a,test);/*TRACE_END*/
+                if(test.ok&&std::abs(.5*(test.state[1]+test.state[2])-reference)<std::abs(residual)){lateral+=a*correction;accepted=true;break;}}
+            if(!accepted)return false;
+        }return false;
+    }
+    // protocol 3: prescribed deviator stress change and zero volume change.
+    if(protocol==3){
+        double da=0;double q0=zn[0]-.5*(zn[1]+zn[2]);
+        for(int it=0;it<30;++it){de.v[0]=da;de.v[1]=de.v[2]=-.5*da;auto trial=integrate(model,zn,de,p,settings);if(!trial.ok)return false;
+            double q=trial.state[0]-.5*(trial.state[1]+trial.state[2]);double residual=q-q0-axial;
+            if(std::abs(residual)<std::max(1.,std::abs(reference))*1e-8){result=trial;return true;}
+            auto dd=de;dd.v[0]+=1e-8;dd.v[1]-=5e-9;dd.v[2]-=5e-9;auto pert=integrate(model,zn,dd,p,settings);if(!pert.ok)return false;
+            double tangent=(pert.state[0]-.5*(pert.state[1]+pert.state[2])-q)/1e-8;if(std::abs(tangent)<1e-4)return false;
+            double correction=-residual/tangent;bool accepted=false;
+            for(double a=1;a>=1./1024;a*=.5){auto testde=de;testde.v[0]=da+a*correction;testde.v[1]=testde.v[2]=-.5*testde.v[0];auto test=integrate(model,zn,testde,p,settings);
+                if(test.ok&&std::abs(test.state[0]-.5*(test.state[1]+test.state[2])-q0-axial)<std::abs(residual)){da+=a*correction;accepted=true;break;}}
+            if(!accepted)return false;
+        }
+    }
+    (void)current_axial;return false;
+}

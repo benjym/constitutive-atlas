@@ -1,0 +1,1449 @@
+--- before/catalogue/source-snapshots/0974a053ba144eb7d2e8a33525667bfcff9deae5bb67828b47dc7e9a1e043ef5/tests/test_clay2005_lab_preview.py
++++ after/catalogue/source-snapshots/0974a053ba144eb7d2e8a33525667bfcff9deae5bb67828b47dc7e9a1e043ef5/tests/test_clay2005_lab_preview.py
+@@ -0,0 +1,39 @@
++"""Ninth draft identity, explicit inputs, preserved catalogue and frozen preview gates."""
++from tests.historical_generation import catalogue as historical_catalogue
++from tests.historical_sources import preserved_model
++import importlib.util,json,unittest
++from pathlib import Path
++from atlas.model import ROOT,load,defaults
++from atlas.initialization import initialize_state
++from atlas.dsl import ValidationError
++from atlas.evidence import checked_receipt
++S=ROOT/'catalogue/investigations/clay2005-preview-v1';I=ROOT/'docs/reviews/nine-model-lab-integration'
++class Clay2005LabPreview(unittest.TestCase):
++ def test_exact_frozen_candidate_and_source_math(self):
++  path=ROOT/'models/hypoplastic-clay-2005.json';self.assertEqual(path.read_bytes(),(S/'models'/path.name).read_bytes())
++  model=load(path);research=load(ROOT/'catalogue/investigations/clay2005-homogeneous-rates-v1/model.json')
++  for key in research:
++   if key not in ('id','name','description','sources'):self.assertEqual(model[key],research[key],key)
++  self.assertEqual(model['status'],'draft');self.assertEqual(model['schema_version'],'0.3');self.assertIn('https://doi.org/10.1002/nag.416',{s['url']for s in model['sources']})
++ def test_explicit_initialization_and_domain_rejection(self):
++  m=load(ROOT/'models/hypoplastic-clay-2005.json');p=defaults(m);sigma=[100000]*3+[0]*3
++  self.assertEqual(initialize_state(m,{'sigma':sigma,'e':.8},p)['initial'],sigma+[.8])
++  for state in ({'sigma':sigma},{'sigma':[0]*6,'e':.8},{'sigma':sigma,'e':-.1}):
++   with self.assertRaises(ValidationError):initialize_state(m,state,p)
++ def test_catalogue_and_prior_models_preserved(self):
++  prior=json.loads((I/'prior-models.json').read_text())
++  import hashlib
++  for name,pin in prior.items():self.assertEqual(hashlib.sha256(preserved_model(ROOT,Path(name).name)).hexdigest(),pin)
++  before=json.loads((I/'prior-catalogue.json').read_text())['models'];after=historical_catalogue('clay2005')['models'];self.assertEqual(len(after),32)
++  for old,new in zip(before,after):
++   if old['id']!='hypoplastic-clay-2005':self.assertEqual(old,new)
++   else:self.assertIs(new['executable'],True);self.assertEqual(new['status'],'draft')
++  receipt=json.loads((I/'historical-catalogue-archive.json').read_text());snapshot=checked_receipt(ROOT,str((I/'historical-catalogue-archive.json').relative_to(ROOT)),'catalogue/manifest.json',receipt['sha256']);self.assertEqual(snapshot.read_bytes(),(I/'prior-catalogue.json').read_bytes())
++ def test_retained_finite_and_browser_gates(self):
++  import sys
++  sys.path.insert(0,str(S))
++  try:
++   spec=importlib.util.spec_from_file_location('clay2005_preview',S/'assess.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);result=m.assess()
++  finally:sys.path.remove(str(S))
++  self.assertTrue(result['pass'],result['errors']);self.assertEqual(result,json.loads((S/'assessment.json').read_text()));self.assertEqual(result['requests_per_backend'],27);self.assertFalse(result['scientific_admission']);self.assertTrue(json.loads((S/'browser/comparison.json').read_text())['pass'])
++if __name__=='__main__':unittest.main()
+--- before/catalogue/source-snapshots/25d0a04cc2ffac696e11ab27aeabbe0cbe14912ce96a15ced54330eb5a85ab14/tests/test_clay2013_lab_preview.py
++++ after/catalogue/source-snapshots/25d0a04cc2ffac696e11ab27aeabbe0cbe14912ce96a15ced54330eb5a85ab14/tests/test_clay2013_lab_preview.py
+@@ -0,0 +1,43 @@
++"""Verify limited clay draft identity, preserved failures and frozen acceptance."""
++from tests.historical_generation import catalogue as historical_catalogue
++from tests.historical_sources import preserved_model
++import unittest,json,importlib.util,hashlib,shutil,tempfile
++from pathlib import Path
++from atlas.model import ROOT,load,defaults
++from atlas.initialization import initialize_state
++from atlas.dsl import ValidationError
++S=ROOT/'catalogue/investigations/clay2013-preview-v2'
++def assessor():
++ spec=importlib.util.spec_from_file_location('clay2013_preview_v2',S/'assess.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
++class Clay2013LaboratoryPreview(unittest.TestCase):
++ def test_draft_preserves_tested_math_and_source_identity(self):
++  p=ROOT/'models/hypoplastic-clay-2013.json';self.assertEqual(p.read_bytes(),(S/'models/hypoplastic-clay-2013.json').read_bytes())
++  m=load(p);old=load(ROOT/'models/research/clay2013/hypoplastic-clay-2013-research.json')
++  for k in ['equations','derived','domain','parameters']:self.assertEqual(m[k],old[k])
++  self.assertEqual(m['schema_version'],'0.3');self.assertEqual(m['status'],'draft')
++  self.assertIn('https://doi.org/10.1007/s11440-012-0199-y',{x['url']for x in m['sources']})
++  self.assertEqual(m['initialization']['default_policy'],'examples_only')
++  self.assertEqual(initialize_state(m,{'sigma':[10000]*3+[0]*3,'e':.8},defaults(m))['initial'],[10000]*3+[0]*3+[.8])
++  for state in [{'sigma':[10000]*3+[0]*3},{'sigma':[-10000,10000,10000,0,0,0],'e':.8}]:
++   with self.assertRaises(ValidationError):initialize_state(m,state,defaults(m))
++ def test_frozen_v2_pass_and_v1_failure_remain_distinct(self):
++  m=assessor();actual=m.assess();self.assertTrue(actual['pass'],actual['errors']);self.assertEqual(actual,json.loads((S/'assessment.json').read_text()))
++  self.assertEqual(actual['requests_per_backend'],20);self.assertFalse(actual['scientific_admission'])
++  old=json.loads((S.parent/'clay2013-preview-v1/assessment.json').read_text());self.assertFalse(old['pass']);self.assertEqual(len(old['errors']),4)
++  requests=json.loads((S/'requests.json').read_text());default=next(x for x in requests if x['id']=='actual-consumer-default');legacy=next(x for x in requests if x['id']=='legacy-100kPa-drained-incompatible')
++  self.assertTrue(default['initial'].startswith('10000,10000,10000,'));self.assertTrue(legacy['initial'].startswith('100000,100000,100000,'));self.assertIs(legacy['expected_ok'],False)
++ def test_existing_definitions_and_catalogue_entries_are_preserved(self):
++  for p in(S/'models').glob('*.json'):self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name))
++  rows=historical_catalogue('clay2013')['models'];self.assertEqual(len(rows),32)
++  entry=next(x for x in rows if x['id']=='hypoplastic-clay-2013');self.assertIs(entry['executable'],True);self.assertEqual(entry['status'],'draft')
++ def test_assessor_rejects_corrupt_success_and_failed_transaction_after_rebinding(self):
++  m=assessor()
++  for change in ['volume','parity','lost_failed_state','false_failed_status']:
++   with self.subTest(change=change),tempfile.TemporaryDirectory() as temp:
++    target=Path(temp)/'study';shutil.copytree(S,target);p=target/'wasm/journal.json';rows=json.loads(p.read_text());case='legacy-100kPa-drained-incompatible'if change.startswith(('lost','false'))else'actual-consumer-default';row=next(x for x in rows if x['id']==case);doc=json.loads(row['raw'])
++    if change=='volume':doc['points'][1]['state'][6]+=.01
++    if change=='parity':doc['points'][1]['state'][3]+=.001
++    if change=='lost_failed_state':doc['points'][0]['state'][0]+=1
++    if change=='false_failed_status':doc['ok']=True
++    row['raw']=json.dumps(doc);p.write_text(json.dumps(rows)+'\n');receipt=target/'wasm/receipt.json';d=json.loads(receipt.read_text());d['journal_sha256']=hashlib.sha256(p.read_bytes()).hexdigest();receipt.write_text(json.dumps(d)+'\n')
++    self.assertFalse(m.assess(target)['pass'])
+--- before/catalogue/source-snapshots/31a0fd86e8e8b7a79a82135065f6fa29203769c1d6e3983302b5b8a38aa22dfd/tests/test_atlas.py
++++ after/catalogue/source-snapshots/31a0fd86e8e8b7a79a82135065f6fa29203769c1d6e3983302b5b8a38aa22dfd/tests/test_atlas.py
+@@ -0,0 +1,156 @@
++import copy
++import json
++import math
++import os
++from pathlib import Path
++import subprocess
++import tempfile
++import unittest
++
++from atlas.dsl import I, Sym, Type, ValidationError, cube_trace, dev, dot, infer, parse
++from atlas.model import ROOT, all_models, defaults, interpret, load, validate
++from atlas.compiler import generate
++
++SOLVER = Path(os.environ.get('ATLAS_SOLVER',ROOT/'build/atlas_solver'))
++
++
++def csv(values): return ','.join(format(v,'.17g') for v in values)
++def run(model, **kwargs):
++    args=[str(SOLVER),'--model',model]
++    args += [s for key,value in kwargs.items() for s in ('--'+key.replace('_','-'),str(value))]
++    result=subprocess.run(args,text=True,capture_output=True,timeout=30)
++    data=json.loads(result.stdout)
++    if data['ok'] != (result.returncode==0): raise AssertionError(result.stderr)
++    return data
++
++
++class LanguageTests(unittest.TestCase):
++    def test_all_models_validate(self):
++        self.assertGreaterEqual(len(all_models()),5)
++    def test_sources_require_clickable_urls(self):
++        for sources in [[],[{'url':'javascript:alert(1)','locator':'Equation 1','role':'original'}],[{'locator':'Equation 1','role':'original'}]]:
++            m=load(ROOT/'models/linear-elastic.json');m['sources']=sources
++            with self.subTest(sources=sources),self.assertRaises(ValidationError):validate(m)
++    def test_injection_and_unsupported_syntax(self):
++        for expression in ["__import__('os').system('true')",'sigma[0]','(lambda: 1)()', 'x.__class__','[1,2]', 'sum(x for x in y)']:
++            with self.subTest(expression=expression),self.assertRaises(ValidationError): infer(parse(expression),{'x':Type()})
++    def test_dimension_mismatch(self):
++        for expression in ['p + e','exp(p)','p ** e', 'dot(p, p)']:
++            with self.subTest(expression=expression),self.assertRaises(ValidationError):
++                infer(parse(expression),{'p':Type(dim=(1,-1,-2)),'e':Type()})
++    def test_undefined_symbol(self):
++        with self.assertRaises(ValidationError): infer(parse('missing + 1'),{})
++    def test_dimensioned_sqrt(self):
++        self.assertEqual(infer(parse('sqrt(p*p)'),{'p':Type(dim=(1,-1,-2))}),Type(dim=(1,-1,-2)))
++    def test_missing_equation_and_bad_scale(self):
++        m=load(ROOT/'models/linear-elastic.json');del m['equations']['e']
++        with self.assertRaises(ValidationError):validate(m)
++        m=load(ROOT/'models/linear-elastic.json');m['state'][0]['scale']='e'
++        with self.assertRaises(ValidationError):validate(m)
++    def test_reserved_name(self):
++        m=load(ROOT/'models/linear-elastic.json');m['parameters']['double']=m['parameters'].pop('E')
++        with self.assertRaises(ValidationError):validate(m)
++    def test_duplicate_keys(self):
++        with tempfile.TemporaryDirectory() as d:
++            p=Path(d)/'m.json';p.write_text('{"id":"x","id":"y"}')
++            with self.assertRaises(ValidationError):load(p)
++    def test_deterministic_codegen(self):
++        with tempfile.TemporaryDirectory() as a,tempfile.TemporaryDirectory() as b:
++            generate(a);generate(b)
++            self.assertEqual((Path(a)/'models.hpp').read_bytes(),(Path(b)/'models.hpp').read_bytes())
++    def test_mandel_contraction(self):
++        # A physical xy shear of 2 maps to sqrt(2)*2; its Frobenius square is 8.
++        a=Sym((0,0,0,2*math.sqrt(2),0,0));self.assertAlmostEqual(dot(a,a),8)
++        self.assertAlmostEqual(dot(dev(I),dev(I)),0)
++    def test_cube_trace(self):
++        a=Sym((1,2,3,math.sqrt(2)*.5,math.sqrt(2)*.25,math.sqrt(2)*.75))
++        matrix=[[1,.5,.75],[.5,2,.25],[.75,.25,3]]
++        expected=sum(matrix[i][j]*matrix[j][k]*matrix[k][i] for i in range(3) for j in range(3) for k in range(3))
++        self.assertAlmostEqual(cube_trace(a),expected)
++
++
++@unittest.skipUnless(SOLVER.exists(),'native solver has not been built')
++class NumericalTests(unittest.TestCase):
++    def require(self,data):
++        self.assertTrue(data['ok'],data.get('message'));return data
++    def test_elastic_drained_closed_form(self):
++        r=self.require(run('linear-elastic',protocol=1,target=.001,steps=20));last=r['points'][-1]
++        self.assertAlmostEqual(last['q_signed'],30e6*.001,places=3)
++        self.assertAlmostEqual(last['strain'][1],-.25*.001,places=10)
++        self.assertAlmostEqual(last['state'][1],1e5,places=3)
++    def test_elastic_undrained_closed_form(self):
++        r=self.require(run('linear-elastic',protocol=2,target=.001,steps=10));last=r['points'][-1]
++        self.assertAlmostEqual(last['q_signed'],3*12e6*.001,places=4)
++        self.assertAlmostEqual(last['p'],1e5,places=5)
++        self.assertAlmostEqual(sum(last['strain'][:3]),0,places=12)
++        self.assertAlmostEqual(last['u'],12e6*.001,places=4)
++    def test_elastic_isotropic_closed_form(self):
++        r=self.require(run('linear-elastic',protocol=4,target=.001,steps=10))
++        self.assertAlmostEqual(r['points'][-1]['p'],160000,places=4)
++        self.assertAlmostEqual(r['points'][-1]['q'],0,places=5)
++    def test_elastic_oedometer_closed_form(self):
++        r=self.require(run('linear-elastic',protocol=0,target=.001,steps=10))
++        self.assertAlmostEqual(r['points'][-1]['state'][0],136000,places=4)
++        self.assertAlmostEqual(r['points'][-1]['state'][1],112000,places=4)
++    def test_stress_control_closed_form(self):
++        r=self.require(run('linear-elastic',protocol=3,target=10000,steps=64,cycles=2))
++        for pt in r['points']:
++            self.assertAlmostEqual(pt['q_signed'],pt['control'],places=3)
++            self.assertAlmostEqual(pt['strain'][0],pt['control']/36e6,places=10)
++    def test_cycle_returns_elastic_state(self):
++        r=self.require(run('linear-elastic',protocol=2,target=.001,steps=100,cycles=2))
++        for a,b in zip(r['initial'],r['points'][-1]['state']):self.assertAlmostEqual(a,b,places=5)
++    def test_drucker_prager_yield_and_complementarity(self):
++        r=self.require(run('drucker-prager',protocol=2,target=.02,steps=120))
++        for pt in r['points']:
++            gamma=pt['state'][7];f=pt['q']-1.2*pt['p']-10000
++            self.assertLessEqual(f,.001);self.assertGreaterEqual(gamma,-1e-9)
++            self.assertLess(abs(gamma*f),.001)
++        self.assertGreater(r['points'][-1]['state'][7],0)
++    def test_mcc_yield_hardening_and_unloading(self):
++        r=self.require(run('modified-cam-clay',protocol=4,target=.025,steps=160))
++        last=r['points'][-1];self.assertGreater(last['state'][7],200000)
++        for pt in r['points']:
++            f=pt['q']**2+1.2**2*pt['p']*(pt['p']-pt['state'][7])
++            self.assertLessEqual(f/1e10,1e-7)
++        unloaded=self.require(run('modified-cam-clay',mode='integrate',initial=csv(last['state']),strain=csv([-.0001]*3+[0]*3)))
++        self.assertAlmostEqual(unloaded['state'][7],last['state'][7],delta=.01)
++    def test_small_step_convergence(self):
++        for name in ['hypoplastic-sand-vw96','modified-cam-clay']:
++            results=[self.require(run(name,protocol=2,target=.005,steps=n))['points'][-1]['q'] for n in (20,40,80)]
++            self.assertLess(abs(results[2]-results[1]),max(abs(results[1]-results[0])*.8,.1))
++    def test_igs_small_strain_stiffness(self):
++        h=self.require(run('hypoplastic-sand-igs97',protocol=2,target=1e-8,steps=1))
++        b=self.require(run('hypoplastic-sand-vw96',protocol=2,target=1e-8,steps=1))
++        self.assertAlmostEqual(h['points'][-1]['q']/b['points'][-1]['q'],5,delta=.002)
++    def test_rate_zero_increment(self):
++        for name in ['hypoplastic-sand-vw96','hypoplastic-sand-igs97']:
++            r=self.require(run(name,mode='integrate',strain='0,0,0,0,0,0'))
++            self.assertEqual(r['state'][:3],[100000]*3)
++    def test_invalid_state_rollback(self):
++        z=[-100000]*3+[0,0,0,.7,200000,0]
++        r=run('modified-cam-clay',mode='integrate',initial=csv(z),strain='0.001,0,0,0,0,0')
++        self.assertFalse(r['ok']);self.assertEqual(z,r['state'])
++    def test_invalid_inputs(self):
++        for kwargs in [dict(steps=0),dict(steps=1.5),dict(target='nan'),dict(protocol=9),dict(parameters='1'),dict(initial='1'),dict(target=.5),dict(nonsense=1)]:
++            self.assertFalse(run('linear-elastic',**kwargs)['ok'])
++    def test_initial_yield_admissibility(self):
++        z=[300000,300000,300000,0,0,0,.7,200000,0]
++        r=run('modified-cam-clay',mode='integrate',initial=csv(z),strain='0,0,0,0,0,0')
++        self.assertFalse(r['ok']);self.assertEqual(r['state'],z)
++    def test_native_description_matches_model_source(self):
++        data=json.loads(subprocess.check_output([str(SOLVER),'--describe'],text=True))
++        self.assertEqual(data['models'],all_models())
++    def test_interpreter_generated_equations_agree(self):
++        for m in all_models():
++            previous={f['name']:f['initial'] for f in m['state']};current=copy.deepcopy(previous)
++            current['sigma']=[110000,95000,100000,100,50,25]
++            de=[.00002,-.00001,-.00001,.000003,0,0]
++            expected=interpret(m,current,previous,de)
++            flat=lambda s:[x for f in m['state'] for x in (s[f['name']] if f.get('shape')=='sym' else [s[f['name']]])]
++            result=self.require(run(m['id'],mode='evaluate',current=csv(flat(current)),initial=csv(flat(previous)),strain=csv(de)))
++            wanted=[x for f in m['state'] for x in (expected[f['name']].v if isinstance(expected[f['name']],Sym) else [expected[f['name']]])]
++            for a,b in zip(wanted,result['values']):self.assertAlmostEqual(a,b,delta=1e-9*max(1,abs(a)))
++
++
++if __name__=='__main__': unittest.main()
+--- before/catalogue/source-snapshots/4788c1f30fce3747c256108199787cf820f45324fdae9d01ad21b996ddd4d739/tests/test_state_contract.py
++++ after/catalogue/source-snapshots/4788c1f30fce3747c256108199787cf820f45324fdae9d01ad21b996ddd4d739/tests/test_state_contract.py
+@@ -0,0 +1,175 @@
++"""State lifecycle and explicit initialization, independent of preparation recipes."""
++import copy
++import json
++import os
++import subprocess
++import unittest
++
++from atlas.dsl import ValidationError
++from atlas.initialization import canonical_hash, initialize, initialize_state
++from atlas.model import ROOT, defaults, load, migrate_formulation, state_role, validate
++
++
++def migrated(name='linear-elastic'):
++    return migrate_formulation(load(ROOT/'models'/f'{name}.json'))
++
++
++def persistent_examples(model):
++    return {f['name']:copy.deepcopy(f['initial']) for f in model['state'] if state_role(f)=='persistent'}
++
++
++class StateContractTests(unittest.TestCase):
++    def test_migration_records_roles_without_guessing_history_meaning(self):
++        model=migrated('modified-cam-clay')
++        fields={f['name']:f for f in model['state']}
++        self.assertEqual(fields['gamma']['semantics']['role'],'plastic_multiplier')
++        self.assertEqual(fields['pc']['semantics']['quantity'],'unspecified')
++        self.assertEqual(fields['sigma']['semantics']['transformation'],'symmetric_spatial_tensor')
++        self.assertEqual(model['initialization']['required_state'],['sigma','e','pc'])
++        self.assertTrue(all('transient' not in f and 'multiplier' not in f for f in fields.values()))
++        from atlas.refinement import state_layout
++        layout=state_layout(model,list(defaults(model).values()))
++        self.assertTrue(layout[-1]['transient'])
++        self.assertFalse(layout[0]['transient'])
++        h=next(f for f in migrated('hypoplastic-sand-igs97')['state'] if f['name']=='h')
++        self.assertEqual(h['semantics']['transformation'],'fixed_components')
++
++    def test_state_semantics_must_match_shape_and_lifecycle(self):
++        for mutate in [
++            lambda m:m['state'][0].pop('semantics'),
++            lambda m:m['state'][0]['semantics'].update(transformation='scalar_invariant'),
++            lambda m:m['state'][1]['semantics'].update(transformation='symmetric_spatial_tensor'),
++            lambda m:m['state'][1]['semantics'].update(quantity='  '),
++            lambda m:m['state'][0]['semantics'].update(quantity='unspecified'),
++            lambda m:m['state'][-1].update(initial=1),
++            lambda m:m['state'][-1].update(transient=True),
++            lambda m:m['equations'].update(gamma='gamma_n'),
++        ]:
++            bad=migrated('modified-cam-clay');mutate(bad)
++            with self.subTest(model=bad),self.assertRaises(ValidationError):validate(bad)
++        rate=migrated('hypoplastic-sand-vw96')
++        rate['state'][1]['semantics']['role']='increment_unknown'
++        rate['state'][1]['initial']=0
++        rate['initialization']['required_state']=['sigma']
++        with self.assertRaises(ValidationError):validate(rate)
++        tensor=migrated('hypoplastic-sand-igs97')
++        tensor['state'][-1]['semantics'].update(quantity='intergranular_strain',transformation='symmetric_spatial_tensor')
++        validate(tensor)
++
++    def test_initialization_contract_is_complete_and_closed(self):
++        for mutate in [
++            lambda m:m.pop('initialization'),
++            lambda m:m['initialization'].update(required_state=['sigma']),
++            lambda m:m['initialization'].update(required_state=['sigma','e','gamma']),
++            lambda m:m['initialization'].update(required_state=['e','sigma']),
++            lambda m:m['initialization'].update(default_policy='use_literals'),
++            lambda m:m['initialization'].update(method='project_to_yield_surface'),
++            lambda m:m['initialization'].update(validation='none'),
++        ]:
++            bad=migrated('drucker-prager');mutate(bad)
++            with self.subTest(model=bad),self.assertRaises(ValidationError):validate(bad)
++
++    def test_explicit_state_fills_only_temporary_slots_and_does_not_mutate(self):
++        model=migrated('modified-cam-clay');state=persistent_examples(model);parameters=defaults(model)
++        before=copy.deepcopy((model,state,parameters))
++        result=initialize_state(model,state,parameters)
++        self.assertEqual((model,state,parameters),before)
++        self.assertEqual(result['named_state']['gamma'],0)
++        self.assertEqual(len(result['initial']),9)
++        self.assertEqual(result['provenance']['model_sha256'],canonical_hash(model))
++        result['named_state']['sigma'][0]=0
++        self.assertEqual(state['sigma'][0],100000)
++
++    def test_initialization_rejects_missing_state_and_invalid_values(self):
++        model=migrated('drucker-prager');state=persistent_examples(model);parameters=defaults(model)
++        for mutate in [lambda s,p:s.pop('e'), lambda s,p:s.update(gamma=0),
++                       lambda s,p:s.update(e=-1), lambda s,p:s.update(e=float('nan')),
++                       lambda s,p:s.update(sigma=[0]*5), lambda s,p:s.update(e=True),
++                       lambda s,p:p.pop('nu'),lambda s,p:p.update(E=-1),
++                       lambda s,p:p.update(E=float('inf'))]:
++            s,p=copy.deepcopy((state,parameters));mutate(s,p)
++            with self.subTest(state=s,parameters=p),self.assertRaises(ValidationError):initialize_state(model,s,p)
++        with self.assertRaises(ValidationError):initialize_state(model,state,parameters,time=0)
++        with self.assertRaises(ValidationError):initialize_state(model,state,parameters,loading=[0]*6)
++
++    def test_declared_consistency_and_custom_parameter_scales_are_checked(self):
++        model=migrated('modified-cam-clay');state=persistent_examples(model)
++        state['pc']=1000
++        with self.assertRaises(ValidationError):initialize_state(model,state,defaults(model))
++        model=migrated();model['initial_checks']=['e > 0.8']
++        with self.assertRaises(ValidationError):initialize_state(model,persistent_examples(model),defaults(model))
++        model=migrated();model['parameters']['factor']={'default':1,'min':-1,'max':1,'unit':'1'}
++        model['state'][0]['scale']='p_ref * factor'
++        parameters=defaults(model);parameters['factor']=-1
++        with self.assertRaises(ValidationError):initialize_state(model,persistent_examples(model),parameters)
++
++    def test_physical_initialization_requires_actual_time_and_rate(self):
++        model=migrate_formulation(load(ROOT/'tests/fixtures/time/clock.json'))
++        state=persistent_examples(model);parameters=defaults(model)
++        for kwargs in [{},{'time':3},{'loading':[0]*6},{'time':float('nan'),'loading':[0]*6},
++                       {'time':3,'loading':[0]*5}]:
++            with self.subTest(kwargs=kwargs),self.assertRaises(ValidationError):initialize_state(model,state,parameters,**kwargs)
++        model['initial_checks']=['time > 0 * tau']
++        result=initialize_state(model,state,parameters,time=3,loading=[0]*6)
++        self.assertEqual(result['initial_time'],3)
++        with self.assertRaises(ValidationError):initialize_state(model,state,parameters,time=-3,loading=[0]*6)
++        model=migrate_formulation(load(ROOT/'tests/fixtures/time/maxwell-axisymmetric.json'),stress_scope='effective')
++        with self.assertRaises(ValidationError):initialize_state(model,persistent_examples(model),defaults(model),time=0,loading=[1,0,1,0,0,0])
++
++    def test_existing_recipe_can_target_reconciled_v03_model(self):
++        import json
++        old=load(ROOT/'models/research/terracotta-2024-fig1.json')
++        recipe=json.loads((ROOT/'initialization/terracotta-2024-fig1-total-stress.json').read_text())
++        configuration=json.loads((ROOT/'initialization/terracotta-2024-kaolin-initialization.json').read_text())
++        expected=initialize(recipe,configuration,old)
++        model=migrate_formulation(old,stress_scope='total')
++        recipe['model_sha256']=canonical_hash(model)  # Explicit reconciliation of this unchanged test recipe.
++        result=initialize(recipe,configuration,model)
++        self.assertEqual(result['named_state'],expected['named_state'])
++        self.assertEqual(result['observables_at_time_zero'],expected['observables_at_time_zero'])
++        self.assertEqual(result['run_fields'],expected['run_fields'])
++
++
++@unittest.skipUnless(os.environ.get('ATLAS_STATE_CONTRACT_SOLVER'), 'dedicated native contract solver not supplied')
++class NativeStateContractTests(unittest.TestCase):
++    def invoke(self, *args):
++        process=subprocess.run([os.environ['ATLAS_STATE_CONTRACT_SOLVER'],*args],
++                               capture_output=True,text=True,timeout=20)
++        result=json.loads(process.stdout)
++        self.assertEqual(result['ok'],process.returncode==0,process.stderr)
++        return result
++
++    def test_examples_are_not_silent_initial_state(self):
++        legacy=self.invoke('--model','linear-elastic','--mode','integrate','--strain','0,0,0,0,0,0')
++        self.assertTrue(legacy['ok'])
++        current=self.invoke('--model','linear-elastic-v03','--mode','integrate','--strain','0,0,0,0,0,0')
++        self.assertFalse(current['ok'])
++        self.assertIn('explicit state',current['message'])
++
++    def test_material_updates_match_with_explicit_initialization(self):
++        for name in ['linear-elastic','drucker-prager']:
++            model=migrated(name)
++            initial=initialize_state(model,persistent_examples(model),defaults(model))['initial']
++            arguments=['--mode','integrate','--initial',','.join(map(str,initial)),
++                       '--strain','0.00001,-0.000005,-0.000005,0,0,0']
++            old=self.invoke('--model',name,*arguments)
++            new=self.invoke('--model',name+'-v03',*arguments)
++            self.assertTrue(new['ok'],new.get('message'))
++            self.assertEqual(new['state'],old['state'])
++
++    def test_timed_explicit_state_and_rollback(self):
++        args=['--mode','integrate-time','--strain-rate','0,0,0,0,0,0',
++              '--start-time','3','--duration','2']
++        missing=self.invoke('--model','test-clock-v03',*args)
++        self.assertFalse(missing['ok'])
++        current=self.invoke('--model','test-clock-v03','--initial','0',*args)
++        legacy=self.invoke('--model','test-clock',*args)
++        self.assertTrue(current['ok'],current.get('message'))
++        self.assertEqual(current['state'],legacy['state'])
++        self.assertEqual(current['time'],5)
++        failure=self.invoke('--model','test-clock-v03','--initial','0',
++                            '--mode','integrate-time','--strain-rate','0,0,0,0,0,0',
++                            '--start-time','3','--duration','-1')
++        self.assertFalse(failure['ok'])
++        self.assertEqual(failure['state'],[0])
++        self.assertEqual(failure['time'],3)
+--- before/catalogue/source-snapshots/855d72a093c419a8cc573b5739772ef732dcc1caf40643fa6d3f62d0b86eac57/tests/test_history_legacy.py
++++ after/catalogue/source-snapshots/855d72a093c419a8cc573b5739772ef732dcc1caf40643fa6d3f62d0b86eac57/tests/test_history_legacy.py
+@@ -0,0 +1,170 @@
++"""Full-state transport oracles, including an unchanged legacy preparation call."""
++import copy
++import json
++import unittest
++
++from atlas.dsl import ValidationError
++from atlas.history import MAX_COUNTER
++from atlas.history_legacy import advance_legacy, make_legacy_snapshot
++from atlas.model import ROOT, defaults, load, prepare_increment
++
++FIXTURES = ROOT/'tests/fixtures/time'
++
++
++def fixture(suffix='reset', generation=0):
++    model = load(FIXTURES/('parent-'+suffix+'.json'))
++    state = {f['name']: copy.deepcopy(f['initial']) for f in model['state']}
++    parent = make_legacy_snapshot(model, state, defaults(model), [0.]*6, generation=generation)
++    return model, state, parent
++
++
++def named(snapshot):
++    return {f['name']: snapshot['history']['values'][f['slot']] for f in snapshot['binding']['layout']}
++
++
++def identity(model, state, increment, parameters):
++    return {'ok': True, 'state': state, 'diagnostics': {'calls': 1}}
++
++
++class LegacyHistoryTests(unittest.TestCase):
++    def test_complete_identity_transport_and_copy_isolation(self):
++        model, state, parent = fixture(); original = copy.deepcopy(parent); before_model = copy.deepcopy(model)
++        increment = [-.5,0,0,0,0,0]
++        def mutate(m, s, de, p):
++            self.assertEqual(s, state); self.assertEqual(de, increment)
++            self.assertEqual(p, defaults(model)); self.assertEqual(m, model)
++            m['description'] = 'callback local edit'; de[0] = 77; p['p_ref'] = 77
++            s['anchor'] = 9
++            return {'ok':True,'state':s,'diagnostics':{'note':['finite',None,True]}}
++        result = advance_legacy(model, parent, increment, mutate)
++        self.assertTrue(result['ok']); self.assertEqual(named(result['snapshot'])['anchor'], 9)
++        self.assertEqual(result['snapshot']['strain'], increment)
++        self.assertEqual(result['snapshot']['history']['generation'],1)
++        self.assertEqual(result['snapshot']['history']['preparation_epoch'],0)
++        self.assertEqual(result['events'],[])
++        self.assertEqual(parent,original); self.assertEqual(model,before_model)
++        self.assertEqual(increment,[-.5,0,0,0,0,0])
++        result['snapshot']['history']['values']['f0'][0] = -999
++        self.assertEqual(parent,original)
++
++    def test_original_parent_and_existing_reset_selection_once(self):
++        for suffix in ('reset','residual','tensor','simultaneous','derived'):
++            with self.subTest(suffix=suffix):
++                model, state, parent = fixture(suffix); calls=[]; de=[-.5,0,0,0,0,0]
++                def full(m,s,d,p):
++                    calls.append(copy.deepcopy(s)); self.assertEqual(s,state)
++                    return {'ok':True,'state':prepare_increment(m,s,d,p),'diagnostics':{}}
++                result=advance_legacy(model,parent,de,full)
++                self.assertTrue(result['ok']); self.assertEqual(calls,[state])
++                self.assertEqual(named(result['snapshot']),prepare_increment(model,state,de,defaults(model)))
++
++    def test_failure_exception_and_malformed_response_exact_rollback(self):
++        model, state, parent=fixture(); before=copy.deepcopy(parent)
++        failures=[lambda *args: (_ for _ in ()).throw(RuntimeError('backend failure')),
++                  lambda *args: {'ok':False,'state':dict(state,anchor=99),'diagnostics':{'substeps':2}},
++                  lambda *args: {'ok':1,'state':state,'diagnostics':{}},
++                  lambda *args: {'ok':True,'state':dict(state,anchor=float('nan')),'diagnostics':{}},
++                  lambda *args: {'ok':True,'state':state,'diagnostics':{'bad':float('inf')}},
++                  lambda *args: {'ok':True,'state':{},'diagnostics':{}},
++                  lambda *args: {'ok':True,'state':state,'diagnostics':{} ,'message':12},
++                  lambda *args: {'ok':True,'state':state,'diagnostics':{'bad':object()}},
++                  lambda *args: None]
++        for callback in failures:
++            with self.subTest(callback=callback):
++                result=advance_legacy(model,parent,[-.5,0,0,0,0,0],callback)
++                self.assertFalse(result['ok']);self.assertIs(result['snapshot'],parent)
++                self.assertEqual(parent,before);self.assertEqual(result['events'],[])
++
++    def test_eager_derived_and_inactive_reset_preserve_legacy_semantics(self):
++        for suffix in ('nonfinite-derived','prepared-derived'):
++            model,state,parent=fixture(suffix)
++            def full(m,s,d,p):return {'ok':True,'state':prepare_increment(m,s,d,p),'diagnostics':{}}
++            result=advance_legacy(model,parent,[-.5,0,0,0,0,0],full)
++            self.assertFalse(result['ok']);self.assertIs(result['snapshot'],parent)
++        model,state,parent=fixture()
++        model['increment_reset']['updates'][0].update(guard='1',value='sqrt(-1)')
++        parent=make_legacy_snapshot(model,state,defaults(model),[0.]*6)
++        def full(m,s,d,p):return {'ok':True,'state':prepare_increment(m,s,d,p),'diagnostics':{}}
++        self.assertTrue(advance_legacy(model,parent,[0.]*6,full)['ok'])
++
++    def test_outer_trials_and_restart_are_pure(self):
++        model,state,parent=fixture(); inc=[-.5,0,0,0,0,0]
++        first=advance_legacy(model,parent,inc,identity)
++        advance_legacy(model,parent,[.7,0,0,0,0,0],identity)
++        self.assertEqual(advance_legacy(model,parent,inc,identity),first)
++        restored=json.loads(json.dumps(first['snapshot'],allow_nan=False))
++        self.assertEqual(advance_legacy(model,restored,inc,identity),advance_legacy(model,first['snapshot'],inc,identity))
++
++    def test_binding_and_snapshot_tampering_rejected_before_callback(self):
++        model,state,parent=fixture(); calls=[]
++        def call(*args):calls.append(1);return identity(*args)
++        mutations=[lambda p:p['binding'].update(model_sha256='0'*64),
++                   lambda p:p['binding']['parameters'].update(p_ref=1001),
++                   lambda p:p['binding']['layout'][0].update(offset=1),
++                   lambda p:p['binding']['layout'][0].update(transient=0),
++                   lambda p:p['history'].update(program_sha256='0'*64),
++                   lambda p:p['history'].update(generation=True),
++                   lambda p:p['history'].update(preparation_epoch=1),
++                   lambda p:p['strain'].__setitem__(0,1),
++                   lambda p:p['history']['values'].pop('f0')]
++        for change in mutations:
++            bad=copy.deepcopy(parent);change(bad)
++            with self.assertRaises(ValidationError):advance_legacy(model,bad,[0.]*6,call)
++        self.assertEqual(calls,[])
++
++    def test_parameter_order_is_part_of_wire_identity(self):
++        model,state,parent=fixture(); reordered=copy.deepcopy(model)
++        reordered['parameters']=dict(reversed(list(reordered['parameters'].items())))
++        self.assertNotEqual(list(reordered['parameters']),list(model['parameters']))
++        with self.assertRaises(ValidationError):advance_legacy(reordered,parent,[0.]*6,identity)
++
++    def test_counter_overflow_and_strain_overflow_rollback(self):
++        model,state,parent=fixture(generation=MAX_COUNTER);calls=[]
++        def call(*args):calls.append(1);return identity(*args)
++        result=advance_legacy(model,parent,[0.]*6,call)
++        self.assertFalse(result['ok']);self.assertIs(result['snapshot'],parent);self.assertEqual(calls,[])
++        model,state,_=fixture();parent=make_legacy_snapshot(model,state,defaults(model),[1e308]*6)
++        result=advance_legacy(model,parent,[1e308]*6,identity)
++        self.assertFalse(result['ok']);self.assertIs(result['snapshot'],parent)
++
++    def test_invalid_inputs_reject_without_material_evaluation(self):
++        model,state,parent=fixture()
++        for de in ([0]*5,[False]*6,[float('nan')]*6,[10**1000]*6):
++            with self.assertRaises(ValidationError):advance_legacy(model,parent,de,identity)
++        with self.assertRaises(ValidationError):make_legacy_snapshot(model,state,{},[0.]*6)
++        with self.assertRaises(ValidationError):make_legacy_snapshot(model,state,defaults(model),[0.]*5)
++        timed=load(FIXTURES/'maxwell.json')
++        with self.assertRaises(ValidationError):make_legacy_snapshot(timed,{}, {},[0.]*6)
++
++    def test_all_five_public_layouts_roundtrip_without_reinterpretation(self):
++        baseline=['drucker-prager','hypoplastic-sand-igs97','hypoplastic-sand-vw96','linear-elastic','modified-cam-clay']
++        paths=[ROOT/'models'/(name+'.json') for name in baseline]
++        self.assertTrue(all(path.is_file() for path in paths))
++        for path in paths:
++            model=load(path)
++            with self.subTest(model=model['id']):
++                state={f['name']:copy.deepcopy(f['initial']) for f in model['state']}
++                parent=make_legacy_snapshot(model,state,defaults(model),[0.]*6)
++                restored=json.loads(json.dumps(parent,allow_nan=False,sort_keys=True))
++                result=advance_legacy(model,restored,[0.]*6,identity)
++                self.assertTrue(result['ok']);self.assertEqual(named(result['snapshot']),state)
++                self.assertEqual(result['snapshot']['binding']['parameter_order'],list(model['parameters']))
++
++    def test_explicit_v03_draft_is_rejected_by_legacy_transport(self):
++        model=load(ROOT/'models/barodesy-clay-2017.json')
++        self.assertEqual(model['schema_version'],'0.3')
++        state={f['name']:copy.deepcopy(f['initial']) for f in model['state']}
++        with self.assertRaisesRegex(ValidationError,'model schema 0.1'):
++            make_legacy_snapshot(model,state,defaults(model),[0.]*6)
++
++    def test_transient_transport_is_not_reclassified_as_physical_history(self):
++        model=load(ROOT/'models/drucker-prager.json')
++        state={f['name']:copy.deepcopy(f['initial']) for f in model['state']}
++        parent=make_legacy_snapshot(model,state,defaults(model),[0.]*6)
++        self.assertEqual(len(parent['binding']['layout']),len(model['state']))
++        transient=[f for f in parent['binding']['layout'] if f['transient']]
++        self.assertTrue(transient)
++        self.assertTrue(advance_legacy(model,parent,[0.]*6,identity)['ok'])
++
++
++if __name__=='__main__':unittest.main()
+--- before/catalogue/source-snapshots/8e6adcb8c6b6aa82ef7c05b36a822b3b219fb6f1e7384d4618f590b827f29f5e/tests/test_historical_generation.py
++++ after/catalogue/source-snapshots/8e6adcb8c6b6aa82ef7c05b36a822b3b219fb6f1e7384d4618f590b827f29f5e/tests/test_historical_generation.py
+@@ -0,0 +1,89 @@
++"""Historical byte gates stay complete; current generation covers all 16 models."""
++import ast
++import copy
++import hashlib
++import json
++from pathlib import Path
++import tempfile
++import unittest
++
++from atlas.evidence import checked_receipt
++from atlas.compiler import generate
++from atlas.model import ROOT, all_models
++from atlas.stress import stress_scope
++from tests.historical_generation import contexts, public_models, public_paths, verified
++
++P = ROOT / 'docs/reviews/historical-test-context-v1'
++
++
++class HistoricalGenerationTests(unittest.TestCase):
++    def test_all_pinned_inputs_and_original_expected_artifacts_are_intact(self):
++        data = contexts()
++        for item in (data['models'] + list(data['compilers'].values()) +
++                     list(data['catalogues'].values()) + data['expected_artifacts']):
++            verified(item)
++        self.assertEqual(len(public_paths()), 9)
++        self.assertEqual(len({m['id'] for m in public_models()}), 9)
++        self.assertTrue(all(stress_scope(m) == 'effective' for m in public_models()))
++
++    def test_corrupt_or_unbound_context_is_rejected(self):
++        item = copy.deepcopy(contexts()['models'][0])
++        for mutation in ('source', 'receipt', 'binding', 'escape'):
++            bad = copy.deepcopy(item)
++            if mutation == 'source':bad['sha256'] = '0' * 64
++            elif mutation == 'receipt':bad['receipt']['sha256'] = '0' * 64
++            elif mutation == 'binding':bad['receipt_key'] = 'absent-model.json'
++            else:bad['path'] = '../outside.json'
++            with self.subTest(mutation=mutation), self.assertRaises((ValueError, KeyError)):
++                verified(bad)
++
++    def test_current_generation_contains_every_live_definition_and_scope(self):
++        data = contexts()
++        # This is a release identity guard, separate from the historical nine.
++        paths = [verified(item) for item in data['current_models']]
++        self.assertEqual(len(paths), 12)  # Retained historical twelve-model context.
++        live = json.loads((ROOT / 'tests/fixtures/current-sixteen-sclay1-v1.json').read_text())
++        self.assertEqual(live['id'], 'current-sixteen-sclay1-v1')
++        current_paths = {ROOT / item['path'] for item in live['models']}
++        self.assertEqual(current_paths, set((ROOT / 'models').glob('*.json')))
++        self.assertEqual(len(current_paths), 16)
++        self.assertTrue(set(paths) < current_paths)
++        for item in live['models']:
++            self.assertEqual(hashlib.sha256((ROOT / item['path']).read_bytes()).hexdigest(), item['sha256'])
++        self.assertEqual(hashlib.sha256((ROOT / live['catalogue']['path']).read_bytes()).hexdigest(), live['catalogue']['sha256'])
++        catalogue = data['current_catalogue']
++        checked_receipt(ROOT, Path('tests/fixtures/historical-test-contexts.json'),
++                        catalogue['path'], catalogue['sha256'])
++        models = all_models()
++        self.assertEqual({m['id'] for m in models if stress_scope(m) == 'total'},
++                         {'tresca-associated-perfect-bk2022v1-be', 'ramberg-osgood-ansys242'})
++        with tempfile.TemporaryDirectory() as directory:
++            emitted = generate(directory)
++            metadata = json.loads((Path(directory) / 'models.json').read_text())
++            self.assertEqual({m['id'] for m in emitted}, {m['id'] for m in models})
++            self.assertEqual({m['id']: m for m in metadata['models']}, {m['id']: m for m in models})
++            header = (Path(directory) / 'models.hpp').read_text()
++            self.assertEqual(header.count(',StressScope::total'), 2)
++            self.assertEqual(header.count(',StressScope::effective'), 14)
++
++    def test_original_methods_and_unmodified_gates_are_retained(self):
++        failures = json.loads((P / 'original-failures.json').read_text())
++        archive = json.loads((P / 'archive-result.json').read_text())
++        allowed = {(row['file'], row['class'], row['method']) for row in failures['tests']}
++        self.assertEqual(len(allowed), 20)
++        sources = {Path(path).name: ROOT / path for path in archive['created_snapshots']
++                   if '/tests/test_' in path}
++        def methods(text):
++            return {(cls.name, method.name): ast.dump(method, include_attributes=False)
++                    for cls in ast.parse(text).body if isinstance(cls, ast.ClassDef)
++                    for method in cls.body if isinstance(method, ast.FunctionDef)}
++        for file in failures['original_test_files']:
++            old = methods(sources[Path(file).name].read_text())
++            new = methods((ROOT / file).read_text())
++            self.assertEqual(set(old), set(new), file)
++            for (cls, method), tree in old.items():
++                if (file, cls, method) not in allowed:
++                    self.assertEqual(tree, new[(cls, method)], (file, cls, method))
++
++
++if __name__ == '__main__':unittest.main()
+--- before/catalogue/source-snapshots/9462f3110efa8cc8feaf1877a261f61d600cd315bc520af5fef65924bec66647/tests/test_sand_lab_preview.py
++++ after/catalogue/source-snapshots/9462f3110efa8cc8feaf1877a261f61d600cd315bc520af5fef65924bec66647/tests/test_sand_lab_preview.py
+@@ -0,0 +1,55 @@
++"""Source identity, explicit initialization and frozen sand-preview integration."""
++from tests.historical_generation import catalogue as historical_catalogue
++from tests.historical_sources import preserved_model
++import hashlib,json,unittest
++from pathlib import Path
++from atlas.model import ROOT,load,defaults
++from atlas.initialization import initialize_state
++from atlas.dsl import ValidationError
++
++class SandLabPreview(unittest.TestCase):
++ def test_root_draft_matches_frozen_tested_definition(self):
++  model=ROOT/'models/barodesy-sand.json';study=ROOT/'catalogue/investigations/barodesy2015-preview-v1'
++  self.assertEqual(model.read_bytes(),(study/'models/barodesy-sand.json').read_bytes())
++  current=load(model);rate=load(ROOT/'catalogue/investigations/barodesy2015-rates-v2/model.json')
++  for key in ('equations','derived','domain','parameters','state','formulation','initialization'):
++   self.assertEqual(current[key],rate[key],key)
++  self.assertEqual(current['status'],'draft');self.assertEqual(current['schema_version'],'0.3')
++  urls={s['url']for s in current['sources']}
++  self.assertTrue({'https://doi.org/10.1680/geot.14.P.151','https://doi.org/10.1002/nag.2984'}<=urls)
++ def test_explicit_state_and_restricted_domain(self):
++  model=load(ROOT/'models/barodesy-sand.json');p=defaults(model);sigma=[100000,100000,100000,0,0,0]
++  self.assertEqual(initialize_state(model,{'sigma':sigma,'e':.75},p)['initial'],sigma+[.75])
++  for state in ({'sigma':sigma},{'sigma':[0]*6,'e':.75},{'sigma':sigma,'e':.35}):
++   with self.assertRaises(ValidationError):initialize_state(model,state,p)
++ def test_catalogue_selection_preserves_six_existing_definitions(self):
++  folder=ROOT/'catalogue/investigations/barodesy2015-preview-v1'
++  for p in(folder/'models').glob('*.json'):
++   self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name),p.name)
++  catalogue=historical_catalogue('sand')['models']
++  self.assertEqual(len(catalogue),32);entry=next(m for m in catalogue if m['id']=='barodesy-sand')
++  self.assertIs(entry['executable'],True);self.assertEqual(entry['status'],'draft')
++  self.assertEqual(len(list((folder/'models').glob('*.json'))),7)
++ def test_frozen_assessor_rejects_corrupt_outputs_after_raw_rebinding(self):
++  import importlib.util,shutil,tempfile
++  study=ROOT/'catalogue/investigations/barodesy2015-preview-v1'
++  spec=importlib.util.spec_from_file_location('sand_preview_assessor',study/'assess.py')
++  module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
++  self.assertTrue(module.assess()['pass'])
++  for change in ('status','volume','parity','missing','duplicate'):
++   with self.subTest(change=change),tempfile.TemporaryDirectory() as temp:
++    copied=Path(temp)/'study';shutil.copytree(study,copied)
++    path=copied/'wasm/journal.json';rows=json.loads(path.read_text())
++    if change=='missing':rows.pop()
++    else:
++     response=json.loads(rows[1]['raw'])
++     if change=='status':response.update(ok=False,message='synthetic failure')
++     if change=='volume':response['points'][1]['state'][6]+=.01
++     if change=='parity':response['points'][1]['state'][3]+=.001
++     rows[1]['raw']=json.dumps(response)
++     if change=='duplicate':rows[1]['raw']='{"ok":false,'+rows[1]['raw'][1:]
++    path.write_text(json.dumps(rows)+'\n')
++    receipt=copied/'wasm/receipt.json';doc=json.loads(receipt.read_text());doc['journal_sha256']=hashlib.sha256(path.read_bytes()).hexdigest();receipt.write_text(json.dumps(doc)+'\n')
++    if change=='duplicate':
++     with self.assertRaisesRegex(ValueError,'duplicate'):module.assess(copied)
++    else:self.assertFalse(module.assess(copied)['pass'])
+--- before/catalogue/source-snapshots/9fbef334feac5cbddf87f0d3cd75f2776e70a6b8ef72a85312653aea0f072a92/tests/historical_generation.py
++++ after/catalogue/source-snapshots/9fbef334feac5cbddf87f0d3cd75f2776e70a6b8ef72a85312653aea0f072a92/tests/historical_generation.py
+@@ -0,0 +1,84 @@
++"""Exact historical inputs for byte-preservation tests, separate from live coverage.
++
++The ledger identifies original receipt bytes and their source/model hashes. It is
++never derived from the current glob during a test. Expected outputs stay frozen.
++Only the historical emitter is loaded here; current DSL/validation dependencies
++remain exercised, as do the current-generation tests in each feature module.
++"""
++import hashlib
++import importlib.util
++import json
++import os
++from pathlib import Path
++import shutil
++import subprocess
++import sys
++
++from atlas.model import ROOT, load
++
++LEDGER = ROOT / 'tests/fixtures/historical-test-contexts.json'
++
++
++def contexts():
++    data = json.loads(LEDGER.read_text())
++    if data['version'] != 'historical-test-contexts-1':
++        raise ValueError('unknown historical test context version')
++    return data
++
++
++def verified(item):
++    path = (ROOT / item['path']).resolve()
++    if not path.is_relative_to(ROOT) or hashlib.sha256(path.read_bytes()).hexdigest() != item['sha256']:
++        raise ValueError('historical context hash mismatch: ' + item['path'])
++    if 'receipt' in item:
++        document = json.loads(verified(item['receipt']).read_text())
++        for key in item.get('receipt_keys', [item.get('receipt_key')]):
++            document = document[key]
++        if document != item['sha256']:
++            raise ValueError('historical source is not bound by its original receipt')
++    return path
++
++
++def public_paths():
++    return [verified(item) for item in contexts()['models']]
++
++
++def public_models():
++    return [load(path) for path in public_paths()]
++
++
++def catalogue(name):
++    return json.loads(verified(contexts()['catalogues'][name]).read_text())
++
++
++def generate(destination, paths, context):
++    path = verified(contexts()['compilers'][context])
++    spec = importlib.util.spec_from_file_location('atlas._historical_' + context.replace('-', '_'), path)
++    module = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(module)
++    return module.generate(destination, paths)
++
++
++def compare_public_generation(test, directory, packet, context, previous_files):
++    """Keep the original pre/post byte comparison on its original nine inputs."""
++    directory = Path(directory)
++    shutil.copytree(ROOT / 'atlas', directory / 'atlas', ignore=shutil.ignore_patterns('__pycache__'))
++    (directory / 'models').mkdir()
++    for path in public_paths():
++        shutil.copyfile(path, directory / 'models' / path.name)
++    (directory / 'schemas').symlink_to(ROOT / 'schemas', target_is_directory=True)
++    previous = json.loads((packet / 'previous-sources.json').read_text())
++    for name in previous_files:
++        item = previous[name]
++        source = verified({'path': item['archived_path'], 'sha256': item['sha256']})
++        shutil.copyfile(source, directory / name)
++    result = subprocess.run([sys.executable, '-B', '-c',
++                             "from atlas.compiler import generate;generate('old-generated')"],
++                            cwd=directory, env=dict(os.environ, PYTHONPATH=str(directory)),
++                            capture_output=True, text=True, timeout=30)
++    test.assertEqual(result.returncode, 0, result.stderr)
++    models = generate(directory / 'new-generated', public_paths(), context)
++    test.assertEqual(len(models), 9)
++    for name in ('models.hpp', 'models.json'):
++        test.assertEqual((directory / 'old-generated' / name).read_bytes(),
++                         (directory / 'new-generated' / name).read_bytes(), name)
+--- before/catalogue/source-snapshots/be8d9cef0428c3b277114e31dd920d178d9afe14a8ef6675c521c91d4a38b744/tests/test_isotropic_reference.py
++++ after/catalogue/source-snapshots/be8d9cef0428c3b277114e31dd920d178d9afe14a8ef6675c521c91d4a38b744/tests/test_isotropic_reference.py
+@@ -0,0 +1,87 @@
++import copy
++import gzip
++import json
++import math
++from pathlib import Path
++import unittest
++from atlas.isotropic_reference import cam_clay_isotropic
++from tools.analyze_mcc_continuous import analyze,analyze_followups
++ROOT=Path(__file__).resolve().parents[1]
++
++class IsotropicReferenceTests(unittest.TestCase):
++    def test_elastic_closed_form_and_reversible_cycle(self):
++        strains=[0,.001,-.001,0]
++        points=cam_clay_isotropic(1e5,2e5,.7,.04,.2,strains)
++        for strain,point in zip(strains,points):
++            self.assertAlmostEqual(point['p'],1e5*math.exp(1.7*(1-math.exp(-strain))/.04),places=8)
++            self.assertEqual(point['pc'],2e5)
++        self.assertAlmostEqual(points[-1]['p'],1e5,places=8)
++
++    def test_yield_crossing_split_and_duplicate(self):
++        vy=1.7-.04*math.log(2);yield_strain=math.log(1.7/vy)
++        unsplit=cam_clay_isotropic(1e5,2e5,.7,.04,.2,[0,.045,.015,.015,.06,0])
++        split=cam_clay_isotropic(1e5,2e5,.7,.04,.2,[0,yield_strain,.045,.015,.015,.06,0])
++        self.assertAlmostEqual(split[1]['p'],2e5,places=8)
++        self.assertAlmostEqual(unsplit[1]['p'],2e5*math.exp((vy-1.7*math.exp(-.045))/.2),places=8)
++        self.assertEqual(unsplit[2],unsplit[3])
++        for a,b in zip(unsplit[1:],split[2:]):
++            for key in ('p','pc','e'):self.assertAlmostEqual(a[key],b[key],places=8)
++        self.assertEqual(unsplit[-1]['pc'],unsplit[-2]['pc'])
++        self.assertGreater(unsplit[-1]['pc'],2e5)
++
++    def test_units_and_segment_composition(self):
++        targets=[0,.045,.015,.06,0]
++        base=cam_clay_isotropic(1e5,2e5,.7,.04,.2,targets)
++        scaled=cam_clay_isotropic(100,200,.7,.04,.2,targets)
++        for a,b in zip(base,scaled):
++            self.assertAlmostEqual(a['p']/1000,b['p'],places=10)
++            self.assertAlmostEqual(a['pc']/1000,b['pc'],places=10)
++        middle=base[1]
++        restarted=cam_clay_isotropic(middle['p'],middle['pc'],middle['e'],.04,.2,[0]+[x-targets[1] for x in targets[2:]])
++        for a,b in zip(base[1:],restarted):
++            for key in ('p','pc','e'):self.assertAlmostEqual(a[key],b[key],places=8)
++
++    def test_domain(self):
++        for p,pc,e,k,l,path in [(2e5,1e5,.7,.04,.2,[0]),(1e5,2e5,.7,.2,.04,[0]),
++                               (1e5,2e5,.7,.04,.2,[.01]),(1e5,2e5,.7,.04,.2,[0,1]),
++                               (1e5,2e5,.7,.04,.2,[0,float('nan')])]:
++            with self.assertRaises(ValueError):cam_clay_isotropic(p,pc,e,k,l,path)
++
++class RetainedReferenceTests(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):
++        with gzip.open(ROOT/'catalogue/investigations/recorded-refinement-v1/plastic-report.json.gz','rt') as f:cls.report=json.load(f)
++
++    def test_continuous_errors_and_order(self):
++        result=analyze(self.report)
++        self.assertAlmostEqual(result['reference'][4]['p'],285627.75153069664,places=6)
++        self.assertAlmostEqual(result['levels'][-1]['max_pressure_pc_error_Pa'],4496.984914977278,places=6)
++        for row in result['orders'][-3:]:self.assertGreater(row['order'],.95);self.assertLess(row['order'],1.05)
++        self.assertLess(max(abs(row['e_error']) for level in result['levels'] for row in level['errors']),1e-13)
++
++    def test_corrupted_evidence_rejected(self):
++        report=copy.deepcopy(self.report)
++        level=report['cases'][1]['levels'][-1]
++        level['response']['points'][level['original_indices'][1]]['state'][0]+=100
++        with self.assertRaises(ValueError):analyze(report)
++
++    def test_native_followups(self):
++        with gzip.open(ROOT/'catalogue/investigations/recorded-resolution-diagnosis-v1/mcc-native-followup.json.gz','rt') as f:followup=json.load(f)
++        result=analyze_followups(self.report,followup)
++        fine,tight=result['followups']
++        self.assertEqual(fine['factor'],64)
++        self.assertGreater(result['levels'][-1]['max_pressure_pc_error_Pa']/fine['max_pressure_pc_error_Pa'],1.9)
++        self.assertLess(result['levels'][-1]['max_pressure_pc_error_Pa']/fine['max_pressure_pc_error_Pa'],2.1)
++        self.assertLess(tight['max_difference_from_default_factor32_Pa'],.01)
++        followup['runs'][0]['response']['integration_settings']['residual_tolerance']=.1
++        with self.assertRaises(ValueError):analyze_followups(self.report,followup)
++
++    def test_model_identity_and_nonfinite_interior_observation(self):
++        changed=copy.deepcopy(self.report);changed['cases'][1]['model_sha256']='0'*64
++        with self.assertRaises(ValueError):analyze(changed)
++        for key,value in [('state',[0]*8),('state',[float('nan')]+[0]*8),('strain',[0]*5)]:
++            with gzip.open(ROOT/'catalogue/investigations/recorded-resolution-diagnosis-v1/mcc-native-followup.json.gz','rt') as f:followup=json.load(f)
++            followup['runs'][0]['response']['points'][1][key]=value
++            with self.assertRaises(ValueError):analyze_followups(self.report,followup)
++
++if __name__=='__main__':unittest.main()
+--- before/catalogue/source-snapshots/bf327e9d1b56ce415a74f1e7abaa98787b291aaf086d42a4fd7570f3451270c5/tests/test_controlled_time.py
++++ after/catalogue/source-snapshots/bf327e9d1b56ce415a74f1e7abaa98787b291aaf086d42a4fd7570f3451270c5/tests/test_controlled_time.py
+@@ -0,0 +1,194 @@
++import unittest,json,math,tempfile,hashlib
++from copy import deepcopy
++from dataclasses import asdict,replace
++from fractions import Fraction as F
++from pathlib import Path
++from atlas.model import ROOT,load,validate,interpret
++from atlas.dsl import ValidationError
++from atlas.controlled_time import *
++FIXTURE=ROOT/'tests/fixtures/controlled-time/transport.json'
++def model():return load(FIXTURE)
++def controls():return dict(strain=[0.]*6,temperature=300.,suction=200000.)
++def context(m):return initialize(m,dict(sigma=[10000,20000,30000,4000,-5000,6000],clock_memory=-3.5,e=.8,memory=2.),11.,controls(),dict(strain=[.0001,-.0002,.0003,.0004,-.0005,.0006],temperature=2.,suction=-300.),{n:f['default'] for n,f in m['parameters'].items()})
++def endpoint():return dict(strain=[.001,-.0003,.0002,.0004,-.0005,.0006],temperature=330.,suction=350000.)
++class ControlledTimeTests(unittest.TestCase):
++ def test_exact_transport_clock_and_fullstate(self):
++  m=model();p=context(m);before=deepcopy(asdict(p));r=advance(m,p,4,p.controls,endpoint(),Settings(relative_tolerance=1e-10));s=r.context.state
++  extra=F(3,10)*150000+100*30+F(7)*4*F(630,600)
++  for i,(a,de) in enumerate(zip(p.state['sigma'],endpoint()['strain'])):self.assertLessEqual(abs(s['sigma'][i]-float(F(a)+2000000*F(str(de))+(extra if i<3 else 0))),1e-7+1e-12*abs(s['sigma'][i]))
++  self.assertAlmostEqual(s['clock_memory'],9.5,places=10);self.assertLess(abs(s['memory']-2*math.exp(-2)),1e-8+2e-7*2*math.exp(-2))
++  self.assertLess(abs(s['e']-(1.8*math.exp(-.0009)-1)),1e-8)
++  self.assertEqual(r.context.time,15);self.assertEqual(r.context.controls,endpoint());self.assertEqual(asdict(p),before)
++  for partitions in [2,4]:
++   q=p
++   for i in range(1,partitions+1):v,_=stage_controls(m,p.controls,endpoint(),4,i/partitions);q=advance(m,q,4/partitions,q.controls,v).context
++   self.assertAlmostEqual(q.state['clock_memory'],9.5,places=10)
++   for a,b in zip(q.state['sigma'],s['sigma']):self.assertLess(abs(a-b),1e-6)
++   self.assertEqual(context_from_dict(m,asdict(q)),q)
++ def test_hold_and_stage_time(self):
++  m=model();p=context(m);r=advance(m,p,4,p.controls,p.controls)
++  self.assertEqual(r.context.control_rates,dict(strain=[0.]*6,suction=0.,temperature=0.))
++  for i,v in enumerate(r.context.state['sigma']):self.assertAlmostEqual(v,p.state['sigma'][i]+(28 if i<3 else 0),places=8)
++  for dt,expected in [(0,11/4),(2,13/4),(4,15/4)]:self.assertEqual(evaluate_stage(m,p.state,p.parameters,11+dt,p.controls,p.control_rates)[0]['clock_memory'],expected)
++  mid=advance(m,p,2,p.controls,p.controls).context;self.assertAlmostEqual(mid.state['clock_memory'],2.5,places=10)
++  self.assertAlmostEqual(advance(m,mid,2,mid.controls,mid.controls).context.state['clock_memory'],9.5,places=10)
++ def test_each_component_and_fields(self):
++  m=model();p=context(m)
++  for i in range(6):
++   end=controls();end['strain'][i]=.0007;r=advance(m,p,1,p.controls,end)
++   for j,v in enumerate(r.context.state['sigma']):self.assertAlmostEqual(v-p.state['sigma'][j],(1400 if i==j else 0)+(7 if j<3 else 0),places=7)
++  for key,val in [('suction',100000.),('temperature',270.)]:
++   end=controls();end[key]=val;r=advance(m,p,2,p.controls,end)
++   extra=.3*(val-200000) if key=='suction' else 100*(val-300)
++   extra+=7*2*((300+val)/600 if key=='temperature' else 1)
++   for j,v in enumerate(r.context.state['sigma']):self.assertAlmostEqual(v-p.state['sigma'][j],extra if j<3 else 0,places=7)
++ def test_reject_mutated_contracts(self):
++  mutators=[lambda m:m['formulation']['inputs']['equation']['suction_rate'].update(unit='Pa'),lambda m:m['formulation']['controls']['strain'].update(shape='scalar'),lambda m:m['formulation']['inputs']['equation']['suction_rate']['binding'].update(derivative_order=0),lambda m:m['formulation']['inputs']['equation']['suction_rate']['binding'].update(control='missing'),lambda m:m['formulation'].update(equation_form='path_ode'),lambda m:m['equations'].update(clock_memory='time/tau'),lambda m:m['equations'].update(clock_memory='clock_memory_n/tau'),lambda m:m['state'][1]['semantics'].update(role='increment_unknown')]
++  for mutate in mutators:
++   with self.subTest(mutation=mutate):
++    m=model();mutate(m)
++    with self.assertRaises(ValueError):validate(m)
++ def test_bounds(self):
++  m=model()
++  for i in range(24):m['formulation']['controls']['field'+str(i)]={'quantity':'field','shape':'scalar','unit':'1','constraint':'finite'}
++  validate(m) # 6+2+24=32; controls can be required even when no equation input uses them.
++  m['formulation']['controls']['over']={'quantity':'field','shape':'scalar','unit':'1','constraint':'finite'}
++  with self.assertRaisesRegex(ValueError,'32 control'):validate(m)
++  m=model()
++  for i in range(23):m['state'].append(dict(name='history'+str(i),shape='scalar',unit='1',initial=0,scale='one',semantics=dict(role='persistent',quantity='synthetic',transformation='scalar_invariant')));m['equations']['history'+str(i)]='one/tau';m['initialization']['required_state'].append('history'+str(i))
++  validate(m)
++  m['state'].append(deepcopy(m['state'][-1]));m['state'][-1]['name']='overflow';m['equations']['overflow']='one/tau';m['initialization']['required_state'].append('overflow')
++  with self.assertRaisesRegex(ValueError,'32 state'):validate(m)
++ def test_exact_all_capacity_bounds(self):
++  m=load(ROOT/'tests/fixtures/controlled-time/capacity-max.json')
++  self.assertEqual((len(m['parameters']),sum(size(f) for f in m['formulation']['controls'].values()),sum(size(f) for f in m['formulation']['inputs']['equation'].values()),sum(size(f) for f in m['state']),len(m['observables']),sum(size(f) for f in m['observables'])),(256,32,65,32,24,144))
++  params={n:f['default'] for n,f in m['parameters'].items()};state={f['name']:f['initial'] for f in m['state']};values={f['name']:([0.]*6 if f['shape']=='sym' else 0.) for f in control_fields(m)};values.update(temperature=300.,suction=200000.);rates={f['name']:([0.]*6 if f['shape']=='sym' else 0.) for f in control_fields(m)};rates['field23']=.0625
++  rr,oo,_=evaluate_stage(m,state,params,11,values,rates);self.assertEqual(rr['history22'],124.5625);self.assertEqual(len(oo),24)
++  for key,mutate in [('parameters',lambda x:x['parameters'].update(overflow=dict(default=1,min=0,max=2,unit='1'))),('inputs',lambda x:x['formulation']['inputs']['equation'].update(overflow=dict(quantity='field',shape='scalar',unit='1',sampling='stage',constraint='finite',binding=dict(control='field0',derivative_order=0)))),('observables',lambda x:x['observables'].append(dict(name='overflow',shape='sym',unit='Pa',scale='E',expr='sigma')))]:
++   bad=deepcopy(m);mutate(bad)
++   with self.subTest(bound=key),self.assertRaises(ValueError):validate(bad)
++  from atlas.controlled_time_compiler import generate
++  with tempfile.TemporaryDirectory() as d:
++   generate(d,[ROOT/'tests/fixtures/controlled-time/capacity-max.json']);row=json.loads((Path(d)/'controlled_time_catalogue.json').read_text())['models'][0];self.assertEqual(row['state'][-1]['offset'],31);self.assertEqual(row['observables'][-1]['offset'],138)
++ def test_transaction_recovery_restart_rates(self):
++  m=model();p=context(m);before=asdict(p);expected=advance(m,p,1,p.controls,p.controls)
++  bads=[(0,p.controls,Settings()),(-1,p.controls,Settings()),(float('nan'),p.controls,Settings()),(1,{**p.controls,'temperature':0},Settings()),(1,{**p.controls,'suction':-1},Settings()),(4,endpoint(),Settings(maximum_trials=1)),(4,endpoint(),Settings(maximum_depth=1,maximum_step_seconds=.001))]
++  for duration,end,setting in bads:
++   with self.subTest(duration=duration,end=end):
++    with self.assertRaises(ValueError):advance(m,p,duration,p.controls,end,setting)
++    self.assertEqual(asdict(p),before);self.assertEqual(advance(m,p,1,p.controls,p.controls),expected)
++  with self.assertRaises(ValueError):advance(m,p,1,{**p.controls,'suction':1},p.controls)
++  bad=asdict(p);bad.pop('control_rates')
++  with self.assertRaises(ValueError):context_from_dict(m,bad)
++  bad=asdict(p);bad['model_sha256']='0'*64
++  with self.assertRaises(ValueError):context_from_dict(m,bad)
++ def test_rate_jump_and_initial_checks_only_once(self):
++  m=model();m['observables'][0]['expr']='sigma+E*tau*strain_rate';m['initial_checks']=['time < 12*tau'];p=context(m)
++  r=advance(m,p,4,p.controls,endpoint());self.assertNotEqual(r.left_observables,r.right_observables);self.assertEqual(p.state,context(m).state)
++  m['initial_checks']=['time < 6*tau'];p=context(m);q=advance(m,p,4,p.controls,p.controls).context
++  # Restart/continuation after preparation-only time criterion ceased to hold.
++  self.assertEqual(context_from_dict(m,asdict(q)),q);advance(m,q,1,q.controls,q.controls)
++ def test_old_routes_reject(self):
++  from atlas.initialization import initialize_state,validate_recipe
++  from atlas.path import initialize as path_initialize
++  from atlas.compiler import generate
++  m=model();p=context(m)
++  with self.assertRaisesRegex(ValueError,'controlled-time'):interpret(m,p.state,None,[0]*6,p.parameters,time=11)
++  with self.assertRaisesRegex(ValueError,'controlled-time'):initialize_state(m,p.state,p.parameters,loading=[0]*6,time=11)
++  with self.assertRaisesRegex(ValueError,'controlled-time'):path_initialize(m,p.state,0,p.controls,p.parameters)
++  with tempfile.TemporaryDirectory() as d:
++   with self.assertRaisesRegex(ValueError,'controlled-time'):generate(d,[FIXTURE,ROOT/'models/linear-elastic.json'])
++  old=load(ROOT/'tests/fixtures/time/maxwell.json');from atlas.model import migrate_formulation
++  old=migrate_formulation(old,stress_scope='total');old['formulation']['stress']['scope']='net'
++  with self.assertRaises(ValueError):validate(old)
++  from atlas.stress import stress_binding
++  with self.assertRaises(ValueError):stress_binding(old)
++  self.assertEqual(stress_binding(m)['scope'],'net')
++ def test_nonlinear_refinement(self):
++  m=model();p=context(m);errors=[]
++  for h in [1,.5,.25]:
++   r=advance(m,p,4,p.controls,p.controls,Settings(absolute_scale_fraction=1e-6,relative_tolerance=1e-2,maximum_step_seconds=h));errors.append(abs(r.context.state['memory']-2*math.exp(-2)))
++  self.assertGreater(errors[0],errors[1]);self.assertGreater(errors[1],errors[2]);self.assertTrue(3<errors[1]/errors[2]<5,errors)
++ def test_directional_branch_and_late_domain_rollback(self):
++  m=model();m['equations']['clock_memory']='select(suction_rate > 0*C, 2/tau, select(suction_rate < 0*C, -4/tau, 0/tau))'
++  # C has pressure/time units, so 0*C is the correctly dimensioned zero pressure rate.
++  p=context(m)
++  for end,expected in [(350000,.5),(100000,-11.5),(200000,-3.5)]:
++   q=advance(m,p,4,p.controls,{**p.controls,'suction':end}).context;self.assertAlmostEqual(q.state['clock_memory'],expected,places=10)
++  m=model();m['domain'].append('time < 14*tau/2');p=context(m);before=asdict(p)
++  with self.assertRaises(ValueError):advance(m,p,4,p.controls,p.controls,Settings(maximum_depth=8))
++  self.assertEqual(asdict(p),before)
++  q=advance(m,p,2,p.controls,p.controls).context;self.assertEqual(q.time,13)
++ def test_generated_layout_and_old_bytes(self):
++  from atlas.controlled_time_compiler import generate
++  from atlas.compiler import generate as ordinary
++  with tempfile.TemporaryDirectory() as d:
++   generate(d,[FIXTURE]);c=json.loads((Path(d)/'controlled_time_catalogue.json').read_text());row=c['models'][0]
++   self.assertEqual(c['profile'],PROFILE);self.assertEqual([(f['name'],f['offset'],f['size']) for f in row['controls']],[('strain',0,6),('suction',6,1),('temperature',7,1)])
++   code=(Path(d)/'controlled_time_api.cpp').read_text();self.assertIn('controlled_time_advance',code);self.assertIn('disjoint',code);self.assertNotIn('extern "C" int path_advance',code)
++   with self.assertRaises(ValueError):generate(d,[ROOT/'models/linear-elastic.json'])
++  baseline=ROOT/'docs/ingestion/vibe-2026/controlled-time-qualification-v1/baseline'
++  import importlib.util
++  helper_path=ROOT/'docs/ingestion/vibe-2026/full-python-contracts-v1/historical_baseline.py'
++  spec=importlib.util.spec_from_file_location('controlled_time_historical_baseline',helper_path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
++  with tempfile.TemporaryDirectory() as d:
++   helper.generate(d)
++   for r in json.loads((baseline/'manifest.json').read_text()):self.assertEqual(hashlib.sha256((Path(d)/Path(r['path']).name).read_bytes()).hexdigest(),r['sha256'])
++  # Current ordinary coverage is a distinct strict release check, not the old15.
++  live=json.loads((ROOT/'tests/fixtures/current-sixteen-sclay1-v1.json').read_text());paths={ROOT/row['path'] for row in live['models']}
++  self.assertEqual(len(paths),16);self.assertEqual(paths,set((ROOT/'models').glob('*.json')))
++  for row in live['models']:self.assertEqual(hashlib.sha256((ROOT/row['path']).read_bytes()).hexdigest(),row['sha256'])
++  self.assertEqual(hashlib.sha256((ROOT/live['catalogue']['path']).read_bytes()).hexdigest(),live['catalogue']['sha256'])
++  with tempfile.TemporaryDirectory() as d:
++   emitted=ordinary(d);metadata=json.loads((Path(d)/'models.json').read_text())
++   self.assertEqual({m['id']:m for m in emitted},{load(path)['id']:load(path) for path in paths})
++   self.assertEqual({m['id']:m for m in metadata['models']},{m['id']:m for m in emitted})
++ def test_native_loader_rejects_stale_same_shape_identity(self):
++  from unittest.mock import patch
++  from atlas.controlled_time_compiler import generate
++  from atlas.controlled_time_native import NativeEngine
++  class Fake:
++   pass
++  with tempfile.TemporaryDirectory() as d:
++   generate(d,[FIXTURE]);catalogue=json.loads((Path(d)/'controlled_time_catalogue.json').read_text());fake=Fake();fake.controlled_time_model_hash=lambda index:b'0'*64;fake.controlled_time_catalogue_hash=lambda:catalogue['catalogue_sha256'].encode();fake.controlled_time_catalogue_file_hash=lambda:hashlib.sha256((Path(d)/'controlled_time_catalogue.json').read_bytes()).hexdigest().encode()
++   with patch('atlas.controlled_time_native.C.CDLL',return_value=fake):
++    with self.assertRaisesRegex(ValueError,'compiled model/catalogue identity'):NativeEngine(FIXTURE,Path(d)/'controlled_time_catalogue.json',model())
++ def test_complete_run_and_tamper(self):
++  m=model();p=context(m);spec=dict(profile=PROFILE,model=m['id'],context=asdict(p),settings=asdict(Settings()),segments=[dict(id='mixed',duration=4,samples=2,controls_end=endpoint())])
++  before=deepcopy(spec);r=run(m,spec);self.assertEqual(spec,before);self.assertEqual(run(m,json.loads(json.dumps(spec))),r)
++  self.assertEqual(r['points'][0]['side'],'left');self.assertEqual(r['points'][1]['side'],'right');self.assertEqual(r['context']['time'],15)
++  bad=deepcopy(spec);bad['segments'][0]['samples']=1.5
++  with self.assertRaises(ValueError):run(m,bad)
++  bad=deepcopy(spec);bad['segments'].append(dict(id='latefail',duration=1,samples=1,controls_end={**endpoint(),'temperature':-10}))
++  with self.assertRaises(ValueError):run(m,bad)
++  self.assertEqual(spec,before)
++
++ def test_historical_baseline_context_fails_closed(self):
++  import importlib.util,shutil
++  from unittest.mock import patch
++  source=ROOT/'docs/ingestion/vibe-2026/full-python-contracts-v1/historical_baseline.py'
++  spec=importlib.util.spec_from_file_location('controlled_time_historical_rejection',source);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper);data=helper.context()
++  with tempfile.TemporaryDirectory() as directory:
++   root=Path(directory);context_path=root/helper.PACKET/'historical-context-v1.json';context_path.parent.mkdir(parents=True)
++   needed=[helper.PACKET/'historical-context-v1.json',Path(data['baseline_manifest']['path']),*[Path(row['path']) for row in data['expected_outputs']],Path(data['emitter']['archived_path']),*[Path(row['archived_path']) for row in data['models']]]
++   for relative in needed:
++    target=root/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/relative,target)
++   with patch.object(helper,'ROOT',root):
++    helper.context()
++    original=context_path.read_bytes()
++    for mutation in [None,b'{"version":"unknown"}',original+b' ']:
++     if mutation is None:context_path.unlink()
++     else:context_path.write_bytes(mutation)
++     with self.assertRaises(ValueError):helper.generate(root/'output')
++     context_path.write_bytes(original)
++    for row in [data['emitter'],data['models'][0]]:
++     target=root/row['archived_path'];raw=target.read_bytes()
++     for mutation in [None,raw+b'corrupt']:
++      if mutation is None:target.unlink()
++      else:target.write_bytes(mutation)
++      with self.assertRaises(ValueError):helper.generate(root/'output')
++      target.write_bytes(raw)
++   for mutation in [dict(data['models'][0],path='../escape.json'),dict(data['models'][0],archived_path='models/linear-elastic.json')]:
++    with self.assertRaises(ValueError):helper.verified(mutation)
++
++if __name__=='__main__':unittest.main()
+--- before/catalogue/source-snapshots/c5929ca25806582820599686e0a64d09065abeee2444fcd1bbd4cae793bc980c/tests/historical_sources.py
++++ after/catalogue/source-snapshots/c5929ca25806582820599686e0a64d09065abeee2444fcd1bbd4cae793bc980c/tests/historical_sources.py
+@@ -0,0 +1,32 @@
++"""Exact historical-byte checks, separate from approved current model revisions."""
++import hashlib
++from pathlib import Path
++from atlas.evidence import checked_receipt
++
++
++def pinned_source(root, name, expected):
++    """Select exact bytes named by a caller's original immutable receipt."""
++    root = Path(root)
++    path = root / name
++    if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
++        path = root / 'catalogue/source-snapshots' / expected / name
++    if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
++        raise ValueError('historical source bytes differ: ' + name)
++    return path
++
++
++def preserved_model(root, name):
++    """Only the documented DP domain revision supersedes a preview's old model."""
++    root = Path(root)
++    current = root / 'models' / name
++    if name != 'drucker-prager.json':
++        return current.read_bytes()
++    packet = 'catalogue/investigations/dp-dilatancy-domain-v1'
++    document = packet + '/manifest.json'
++    previous_hash = 'd40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d'
++    candidate_hash = 'b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877'
++    before = checked_receipt(root, document, packet + '/previous-definition.json', previous_hash)
++    after = checked_receipt(root, document, packet + '/candidate-definition.json', candidate_hash)
++    if current.read_bytes() != after.read_bytes():
++        raise ValueError('current DP definition differs from its approved domain revision')
++    return before.read_bytes()
+--- before/catalogue/source-snapshots/f4566672c334eb7f0bcf3c991e3da9d8e2bb0fefac424c0f4e21886c337e2898/tests/test_web_experiments.py
++++ after/catalogue/source-snapshots/f4566672c334eb7f0bcf3c991e3da9d8e2bb0fefac424c0f4e21886c337e2898/tests/test_web_experiments.py
+@@ -0,0 +1,81 @@
++"""Synthetic tests for reproducible experiment assets and release isolation."""
++import hashlib
++import json
++from pathlib import Path
++import tempfile
++import unittest
++import zipfile
++
++from tools.build_experiments import bundle, encode
++from test_data import TMD, TMU
++from atlas.data import normalize_member
++
++
++class BrowserBundleTests(unittest.TestCase):
++    def setUp(self):
++        self.temp = tempfile.TemporaryDirectory()
++        self.addCleanup(self.temp.cleanup)
++        self.root = Path(self.temp.name)
++        (self.root/'data/raw').mkdir(parents=True)
++        self.archive = self.root/'data/raw/synthetic.zip'
++        with zipfile.ZipFile(self.archive, 'w') as archive:
++            archive.writestr('TMD1.dat', TMD)
++            archive.writestr('TMU1.dat', TMU)
++        self.digest = hashlib.sha256(self.archive.read_bytes()).hexdigest()
++        self.write('sources.json', dict(sources=[dict(filename='synthetic.zip', sha256=self.digest)]))
++        self.write('experiment_releases.json', dict(schema_version='0.1', grants=[]))
++        self.output = self.root/'site/experiments'
++
++    def write(self, name, data):
++        (self.root/'data'/name).write_text(json.dumps(data))
++
++    def grant(self, **changes):
++        grant = dict(archive_sha256=self.digest, public_hosting=True, evidence='Synthetic test fixture created in this test',
++                     recorded_at='2026-10-30', scope='Public hosting of synthetic test fixture', attribution='Synthetic data')
++        grant.update(changes)
++        self.write('experiment_releases.json', dict(schema_version='0.1', grants=[grant]))
++
++    def test_public_build_excludes_pending_measurements_even_when_cached(self):
++        bundle(self.output, preview=True, root=self.root)
++        self.archive.unlink()  # Clean public builds do not need unapproved source archives.
++        manifest = bundle(self.output, root=self.root)
++        self.assertEqual(manifest['experiments'], [])
++        self.assertEqual(list(self.output.iterdir()), [self.output/'index.json'])
++
++    def test_preview_and_approved_public_builds_are_deterministic(self):
++        preview = bundle(self.output, preview=True, root=self.root)
++        before = {p.name: p.read_bytes() for p in self.output.iterdir()}
++        bundle(self.output, preview=True, root=self.root)
++        self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
++        self.assertEqual(preview['release'], 'local-preview')
++        self.assertEqual(len(preview['experiments']), 2)
++        self.grant()
++        public = bundle(self.output, root=self.root)
++        self.assertEqual(public['release'], 'public')
++        for entry in public['experiments']:
++            content = (self.output/entry['path']).read_bytes()
++            self.assertEqual(len(content), entry['size_bytes'])
++            self.assertEqual(hashlib.sha256(content).hexdigest(), entry['sha256'])
++            data = json.loads(content)
++            self.assertNotIn('normalized_at', data['metadata']['provenance'])
++            self.assertEqual(data['metadata']['provenance']['attribution'], 'Synthetic data')
++
++    def test_incomplete_grant_and_changed_archive_rejected(self):
++        self.grant(evidence='')
++        with self.assertRaisesRegex(ValueError, 'evidence'):
++            bundle(self.output, root=self.root)
++        self.grant()
++        self.archive.write_bytes(b'changed source')
++        with self.assertRaisesRegex(ValueError, 'pinned source'):
++            bundle(self.output, root=self.root)
++
++    def test_plotted_channels_preserve_every_value_and_order(self):
++        for raw, name in [(TMD, 'TMD1.dat'), (TMU, 'TMU1.dat')]:
++            record = normalize_member(raw, name, 'a'*64, 'b'*64)
++            packed = encode(record)
++            self.assertEqual(len(packed['values']), len(record['rows']))
++            for original, values in zip(record['rows'], packed['values']):
++                self.assertEqual(values, [original[c] for c in packed['columns']])
++            if name.startswith('TMU'):
++                self.assertNotIn('volumetric_strain', packed['columns'])
++                self.assertNotIn('void_ratio', packed['metadata']['initial'])
+--- before/tests/historical_burgers.py
++++ after/tests/historical_burgers.py
+@@ -0,0 +1,25 @@
++"""Original saved Burgers verification plus every original installed assertion."""
++from pathlib import Path
++import hashlib, importlib.util, json, sys
++ROOT=Path(__file__).resolve().parents[1]
++sys.path.insert(0,str(ROOT))
++from atlas.evidence import checked_receipt
++R=ROOT/'docs/ingestion/burgers-itasca900/integration-v1'
++def verify():
++    context=json.loads((ROOT/'docs/delivery/unheld-finalisation-20261105-v1/python-historical-routing-v2/historical-routing-v1.json').read_text())
++    for name,digest in context['pins'].items():
++        assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==digest,name
++    sys.path.insert(0,str(R))
++    spec=importlib.util.spec_from_file_location('_original_burgers_verify',R/'verify.py')
++    original=importlib.util.module_from_spec(spec);spec.loader.exec_module(original)
++    result=original.verify(installed=False)
++    manifest=json.loads((R/'manifest.json').read_text())
++    freeze=json.loads((R/'freeze.json').read_text())
++    for name,digest in manifest['installed_files'].items():
++        checked_receipt(ROOT,(R/'manifest.json').relative_to(ROOT),name,digest)
++    assert (ROOT/'models/research/burgers/burgers-itasca900-dry-zero-spin-ode.json').read_bytes()==(R/'model.json').read_bytes()
++    assert (R/'target.cmake').read_text() in (ROOT/'CMakeLists.txt').read_text()
++    for name,digest in freeze['prior_models'].items():
++        checked_receipt(ROOT,(R/'freeze.json').relative_to(ROOT),name,digest)
++    return result
++if __name__=='__main__':print(json.dumps(verify(),indent=2))
+--- before/tests/historical_generation_v03.py
++++ after/tests/historical_generation_v03.py
+@@ -0,0 +1,23 @@
++"""Archive-aware current-context verification; original historical helper unchanged."""
++import hashlib,json
++from pathlib import Path
++from atlas.model import ROOT
++from atlas.evidence import checked_receipt
++from tests.historical_generation import contexts, public_models, public_paths, catalogue, generate
++LEDGER=ROOT/'docs/delivery/unheld-finalisation-20261105-v1/python-historical-routing-v2/historical-test-contexts.json'
++LEDGER_SHA='910758a62e5e77f02c96f7a615ac14b6497ea3198e0c9a4e372656a03572d6db'
++
++def verified(item):
++    if hashlib.sha256(LEDGER.read_bytes()).hexdigest()!=LEDGER_SHA:
++        raise ValueError('original historical ledger changed')
++    path=(ROOT/item['path']).resolve()
++    if not path.is_relative_to(ROOT):
++        raise ValueError('historical context path escapes root')
++    if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest()!=item['sha256']:
++        path=checked_receipt(ROOT,LEDGER.relative_to(ROOT),item['path'],item['sha256'])
++    if 'receipt' in item:
++        document=json.loads(verified(item['receipt']).read_text())
++        for key in item.get('receipt_keys',[item.get('receipt_key')]):document=document[key]
++        if document!=item['sha256']:
++            raise ValueError('historical source is not bound by its original receipt')
++    return path
+--- before/tests/historical_mcc_reference.py
++++ after/tests/historical_mcc_reference.py
+@@ -0,0 +1,18 @@
++"""Delegate unchanged continuous-reference analysis to its exact historical MCC."""
++import hashlib, importlib.util, json
++from pathlib import Path
++from atlas.evidence import checked_receipt
++ROOT=Path(__file__).resolve().parents[1]
++def _original(report):
++    context=json.loads((ROOT/'docs/delivery/unheld-finalisation-20261105-v1/python-historical-routing-v2/historical-routing-v1.json').read_text())
++    name='tools/analyze_mcc_continuous.py'
++    assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==context['pins'][name],name
++    case=next(c for c in report['cases'] if c['id']=='mcc-plastic-isotropic-strain')
++    model=checked_receipt(ROOT,'catalogue/investigations/recorded-refinement-v1/manifest.json',
++                          'models/modified-cam-clay.json',case['model_sha256'])
++    spec=importlib.util.spec_from_file_location('_original_mcc_continuous',ROOT/name)
++    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
++    module.ROOT=model.parents[1]
++    return module
++def analyze(report):return _original(report).analyze(report)
++def analyze_followups(report,followup):return _original(report).analyze_followups(report,followup)
+--- before/tests/historical_sources.py
++++ after/tests/historical_sources.py
+@@ -15,18 +15,21 @@
+     return path
+ 
+ 
+-def preserved_model(root, name):
+-    """Only the documented DP domain revision supersedes a preview's old model."""
+-    root = Path(root)
+-    current = root / 'models' / name
+-    if name != 'drucker-prager.json':
+-        return current.read_bytes()
+-    packet = 'catalogue/investigations/dp-dilatancy-domain-v1'
+-    document = packet + '/manifest.json'
+-    previous_hash = 'd40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d'
+-    candidate_hash = 'b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877'
+-    before = checked_receipt(root, document, packet + '/previous-definition.json', previous_hash)
+-    after = checked_receipt(root, document, packet + '/candidate-definition.json', candidate_hash)
+-    if current.read_bytes() != after.read_bytes():
+-        raise ValueError('current DP definition differs from its approved domain revision')
+-    return before.read_bytes()
++def preserved_model(root, name, expected):
++    """Verify the exact model hash supplied by the original preview receipt."""
++    if Path(name).name != name:
++        raise ValueError('model name must be a basename')
++    if len(expected) != 64 or any(c not in '0123456789abcdef' for c in expected):
++        raise ValueError('invalid historical model hash')
++    if name == 'drucker-prager.json':
++        packet = 'catalogue/investigations/dp-dilatancy-domain-v1'
++        document = packet + '/manifest.json'
++        previous_hash = 'd40db28d8de98b7eb8597c90787d16d1f76bac0d145cabb9a5853e86d811650d'
++        candidate_hash = 'b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877'
++        before = checked_receipt(root, document, packet + '/previous-definition.json', previous_hash)
++        after = checked_receipt(root, document, packet + '/candidate-definition.json', candidate_hash)
++        if pinned_source(root, 'models/' + name, candidate_hash).read_bytes() != after.read_bytes():
++            raise ValueError('historical DP differs from its approved domain revision')
++        if expected == previous_hash:
++            return before.read_bytes()
++    return pinned_source(root, 'models/' + name, expected).read_bytes()
+--- before/tests/test_burgers.py
++++ after/tests/test_burgers.py
+@@ -10,7 +10,7 @@
+ 
+ class BurgersIntegrationTests(unittest.TestCase):
+     def test_saved_source_accuracy_restart_and_native_wasm_parity(self):
+-        p=subprocess.run([sys.executable,'-B',str(R/'verify.py')],capture_output=True,text=True,timeout=30)
++        p=subprocess.run([sys.executable,'-B',str(ROOT/'tests/historical_burgers.py')],capture_output=True,text=True,timeout=30)
+         self.assertEqual(p.returncode,0,p.stderr)
+         result=json.loads(p.stdout)
+         self.assertTrue(result['native']['ok'])
+--- before/tests/test_clay2005_lab_preview.py
++++ after/tests/test_clay2005_lab_preview.py
+@@ -23,7 +23,7 @@
+  def test_catalogue_and_prior_models_preserved(self):
+   prior=json.loads((I/'prior-models.json').read_text())
+   import hashlib
+-  for name,pin in prior.items():self.assertEqual(hashlib.sha256(preserved_model(ROOT,Path(name).name)).hexdigest(),pin)
++  for name,pin in prior.items():self.assertEqual(hashlib.sha256(preserved_model(ROOT,Path(name).name,pin)).hexdigest(),pin)
+   before=json.loads((I/'prior-catalogue.json').read_text())['models'];after=historical_catalogue('clay2005')['models'];self.assertEqual(len(after),32)
+   for old,new in zip(before,after):
+    if old['id']!='hypoplastic-clay-2005':self.assertEqual(old,new)
+--- before/tests/test_clay2013_lab_preview.py
++++ after/tests/test_clay2013_lab_preview.py
+@@ -27,7 +27,7 @@
+   requests=json.loads((S/'requests.json').read_text());default=next(x for x in requests if x['id']=='actual-consumer-default');legacy=next(x for x in requests if x['id']=='legacy-100kPa-drained-incompatible')
+   self.assertTrue(default['initial'].startswith('10000,10000,10000,'));self.assertTrue(legacy['initial'].startswith('100000,100000,100000,'));self.assertIs(legacy['expected_ok'],False)
+  def test_existing_definitions_and_catalogue_entries_are_preserved(self):
+-  for p in(S/'models').glob('*.json'):self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name))
++  for p in(S/'models').glob('*.json'):self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name,hashlib.sha256(p.read_bytes()).hexdigest()))
+   rows=historical_catalogue('clay2013')['models'];self.assertEqual(len(rows),32)
+   entry=next(x for x in rows if x['id']=='hypoplastic-clay-2013');self.assertIs(entry['executable'],True);self.assertEqual(entry['status'],'draft')
+  def test_assessor_rejects_corrupt_success_and_failed_transaction_after_rebinding(self):
+--- before/tests/test_controlled_time.py
++++ after/tests/test_controlled_time.py
+@@ -135,7 +135,7 @@
+    helper.generate(d)
+    for r in json.loads((baseline/'manifest.json').read_text()):self.assertEqual(hashlib.sha256((Path(d)/Path(r['path']).name).read_bytes()).hexdigest(),r['sha256'])
+   # Current ordinary coverage is a distinct strict release check, not the old15.
+-  live=json.loads((ROOT/'tests/fixtures/current-sixteen-sclay1-v1.json').read_text());paths={ROOT/row['path'] for row in live['models']}
++  live=json.loads((ROOT/'docs/delivery/unheld-finalisation-20261105-v1/python-historical-routing-v2/current-sixteen-baseline-v03-v1.json').read_text());paths={ROOT/row['path'] for row in live['models']}
+   self.assertEqual(len(paths),16);self.assertEqual(paths,set((ROOT/'models').glob('*.json')))
+   for row in live['models']:self.assertEqual(hashlib.sha256((ROOT/row['path']).read_bytes()).hexdigest(),row['sha256'])
+   self.assertEqual(hashlib.sha256((ROOT/live['catalogue']['path']).read_bytes()).hexdigest(),live['catalogue']['sha256'])
+--- before/tests/test_historical_generation.py
++++ after/tests/test_historical_generation.py
+@@ -11,7 +11,7 @@
+ from atlas.compiler import generate
+ from atlas.model import ROOT, all_models
+ from atlas.stress import stress_scope
+-from tests.historical_generation import contexts, public_models, public_paths, verified
++from tests.historical_generation_v03 import contexts, public_models, public_paths, verified
+ 
+ P = ROOT / 'docs/reviews/historical-test-context-v1'
+ 
+@@ -42,12 +42,13 @@
+         # This is a release identity guard, separate from the historical nine.
+         paths = [verified(item) for item in data['current_models']]
+         self.assertEqual(len(paths), 12)  # Retained historical twelve-model context.
+-        live = json.loads((ROOT / 'tests/fixtures/current-sixteen-sclay1-v1.json').read_text())
+-        self.assertEqual(live['id'], 'current-sixteen-sclay1-v1')
++        live = json.loads((ROOT / 'docs/delivery/unheld-finalisation-20261105-v1/python-historical-routing-v2/current-sixteen-baseline-v03-v1.json').read_text())
++        self.assertEqual(live['id'], 'current-sixteen-baseline-v03-v1')
+         current_paths = {ROOT / item['path'] for item in live['models']}
+         self.assertEqual(current_paths, set((ROOT / 'models').glob('*.json')))
+         self.assertEqual(len(current_paths), 16)
+-        self.assertTrue(set(paths) < current_paths)
++        historical_names = {ROOT / item['path'] for item in data['current_models']}
++        self.assertTrue(historical_names < current_paths)
+         for item in live['models']:
+             self.assertEqual(hashlib.sha256((ROOT / item['path']).read_bytes()).hexdigest(), item['sha256'])
+         self.assertEqual(hashlib.sha256((ROOT / live['catalogue']['path']).read_bytes()).hexdigest(), live['catalogue']['sha256'])
+--- before/tests/test_isotropic_reference.py
++++ after/tests/test_isotropic_reference.py
+@@ -5,7 +5,7 @@
+ from pathlib import Path
+ import unittest
+ from atlas.isotropic_reference import cam_clay_isotropic
+-from tools.analyze_mcc_continuous import analyze,analyze_followups
++from tests.historical_mcc_reference import analyze,analyze_followups
+ ROOT=Path(__file__).resolve().parents[1]
+ 
+ class IsotropicReferenceTests(unittest.TestCase):
+--- before/tests/test_sand_lab_preview.py
++++ after/tests/test_sand_lab_preview.py
+@@ -25,7 +25,7 @@
+  def test_catalogue_selection_preserves_six_existing_definitions(self):
+   folder=ROOT/'catalogue/investigations/barodesy2015-preview-v1'
+   for p in(folder/'models').glob('*.json'):
+-   self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name),p.name)
++   self.assertEqual(p.read_bytes(),preserved_model(ROOT,p.name,hashlib.sha256(p.read_bytes()).hexdigest()),p.name)
+   catalogue=historical_catalogue('sand')['models']
+   self.assertEqual(len(catalogue),32);entry=next(m for m in catalogue if m['id']=='barodesy-sand')
+   self.assertIs(entry['executable'],True);self.assertEqual(entry['status'],'draft')

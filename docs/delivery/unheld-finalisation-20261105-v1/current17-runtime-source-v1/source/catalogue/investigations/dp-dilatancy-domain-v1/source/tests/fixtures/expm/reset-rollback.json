@@ -1,0 +1,75 @@
+{
+  "schema_version": "0.1",
+  "id": "test-expm-reset-rollback",
+  "name": "Synthetic expm reset-rollback",
+  "status": "draft",
+  "family": "engine verification only",
+  "description": "Synthetic expression context fixture; not a constitutive model.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas",
+      "role": "synthetic algebra verification specification",
+      "locator": "Checked symmetric matrix exponential conformance, not literature model"
+    }
+  ],
+  "parameters": {
+    "K": {
+      "default": 1,
+      "min": 1,
+      "max": 1,
+      "unit": "Pa"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "K",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "A",
+      "shape": "sym",
+      "unit": "1",
+      "scale": "1",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "derived": [],
+  "domain": [],
+  "integration": "rate",
+  "equations": {
+    "sigma": "0 * K * I",
+    "A": "de"
+  },
+  "increment_reset": {
+    "scope": "parent_increment",
+    "updates": [
+      {
+        "target": "sigma",
+        "guard": "-1",
+        "value": "K * I"
+      },
+      {
+        "target": "A",
+        "guard": "-1",
+        "value": "expm(A)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "schema_version": "0.2",
+  "status": "draft",
+  "id": "test-capacity-32",
+  "name": "Synthetic 32-state and six-control capacity fixture",
+  "family": "engine verification only",
+  "description": "Engine capacity verification only; independent linear analytical solution, not a constitutive model.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/STATE_CAPACITY.md",
+      "role": "Analytical engine verification specification",
+      "locator": "32 state components and six simultaneous stress controls"
+    }
+  ],
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "ode"
+  },
+  "parameters": {
+    "Emod": {
+      "default": 1000,
+      "min": 0.001,
+      "max": 1000000000.0,
+      "unit": "Pa"
+    },
+    "forcing": {
+      "default": 10,
+      "min": 0.001,
+      "max": 1000000000.0,
+      "unit": "Pa"
+    },
+    "tau": {
+      "default": 2,
+      "min": 0.001,
+      "max": 1000000000.0,
+      "unit": "s"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "Emod",
+      "initial": [
+        100,
+        200,
+        300,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "name": "history1",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history2",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history3",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history4",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history5",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history6",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history7",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history8",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history9",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history10",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history11",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history12",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history13",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history14",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history15",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history16",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history17",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history18",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history19",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history20",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history21",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history22",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history23",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history24",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "history25",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    },
+    {
+      "name": "memory",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 1
+    }
+  ],
+  "derived": [],
+  "equations": {
+    "sigma": "Emod * strain_rate + forcing * memory * sym(1,2,3,4,5,6) / tau",
+    "history1": "1 / tau",
+    "history2": "2 / tau",
+    "history3": "3 / tau",
+    "history4": "4 / tau",
+    "history5": "5 / tau",
+    "history6": "6 / tau",
+    "history7": "7 / tau",
+    "history8": "8 / tau",
+    "history9": "9 / tau",
+    "history10": "10 / tau",
+    "history11": "11 / tau",
+    "history12": "12 / tau",
+    "history13": "13 / tau",
+    "history14": "14 / tau",
+    "history15": "15 / tau",
+    "history16": "16 / tau",
+    "history17": "17 / tau",
+    "history18": "18 / tau",
+    "history19": "19 / tau",
+    "history20": "20 / tau",
+    "history21": "21 / tau",
+    "history22": "22 / tau",
+    "history23": "23 / tau",
+    "history24": "24 / tau",
+    "history25": "25 / tau",
+    "memory": "(1 - memory) / tau"
+  },
+  "domain": [],
+  "observables": [
+    {
+      "name": "stress",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "Emod",
+      "expr": "sigma"
+    }
+  ]
+}

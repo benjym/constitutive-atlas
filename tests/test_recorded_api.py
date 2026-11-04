@@ -17,6 +17,7 @@ from unittest.mock import patch
 from atlas.dsl import ValidationError
 from atlas.model import ROOT, all_models
 from atlas.stress import stress_scope
+from tests.recorded_native_fixtures import explicit_recorded_fixture
 from atlas.recorded_scope_execution import execute_scoped_recorded
 from atlas.recorded import (CONTROL_DEFAULTS, MATERIAL_DEFAULTS, execute_recorded,
                             recorded_wire, validate_recorded_run)
@@ -24,7 +25,7 @@ from atlas.recorded import (CONTROL_DEFAULTS, MATERIAL_DEFAULTS, execute_recorde
 
 def specimen():
     path=json.loads((ROOT/'protocols/recorded-drained-reversal.json').read_text())
-    return dict(version='experimental-recorded-run-0.1', model='linear-elastic', path=path)
+    return explicit_recorded_fixture(dict(version='experimental-recorded-run-0.1', model='linear-elastic', path=path))
 
 
 class RecordedRunContractTests(unittest.TestCase):
@@ -190,7 +191,7 @@ class RecordedNativeAPITests(unittest.TestCase):
         c,k=recorded_wire(specimen())
         with tempfile.TemporaryDirectory() as tmp:
             cf,kf=Path(tmp)/'c.csv',Path(tmp)/'k.csv'
-            base=[os.environ['ATLAS_RECORDED_SOLVER'],'--mode','recorded','--model','linear-elastic','--initial-strain','0,0,0,0,0,0','--recorded-controls-file',str(cf),'--recorded-knots-file',str(kf)]
+            base=[os.environ['ATLAS_RECORDED_SOLVER'],'--mode','recorded','--model','linear-elastic','--initial',','.join(map(str,specimen()['initial'])),'--initial-strain','0,0,0,0,0,0','--recorded-controls-file',str(cf),'--recorded-knots-file',str(kf)]
             for changed,wire in [('tag',[2]+c[1:]),('length',c[:-1]),('nan',[float('nan')]+c[1:])]:
                 cf.write_text(','.join(map(str,wire)));kf.write_text(','.join(map(str,k)))
                 result=subprocess.run(base,capture_output=True,text=True);self.assertEqual(result.returncode,1);self.assertFalse(json.loads(result.stdout)['ok'])

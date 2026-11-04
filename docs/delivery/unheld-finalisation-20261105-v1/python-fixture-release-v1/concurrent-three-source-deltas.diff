@@ -1,0 +1,53 @@
+--- reviewed-B2/tests/test_controlled_time.py
++++ current17/tests/test_controlled_time.py
+@@ -135,8 +135,8 @@
+    helper.generate(d)
+    for r in json.loads((baseline/'manifest.json').read_text()):self.assertEqual(hashlib.sha256((Path(d)/Path(r['path']).name).read_bytes()).hexdigest(),r['sha256'])
+   # Current ordinary coverage is a distinct strict release check, not the old15.
+-  live=json.loads((ROOT/'docs/delivery/unheld-finalisation-20261105-v1/python-historical-routing-v2/current-sixteen-baseline-v03-v1.json').read_text());paths={ROOT/row['path'] for row in live['models']}
+-  self.assertEqual(len(paths),16);self.assertEqual(paths,set((ROOT/'models').glob('*.json')))
++  live=json.loads((ROOT/'tests/contexts/current-seventeen-md1997-baseline-v1.json').read_text());paths={ROOT/row['path'] for row in live['models']}
++  self.assertEqual(len(paths),17);self.assertEqual(paths,set((ROOT/'models').glob('*.json')))
+   for row in live['models']:self.assertEqual(hashlib.sha256((ROOT/row['path']).read_bytes()).hexdigest(),row['sha256'])
+   self.assertEqual(hashlib.sha256((ROOT/live['catalogue']['path']).read_bytes()).hexdigest(),live['catalogue']['sha256'])
+   with tempfile.TemporaryDirectory() as d:
+--- reviewed-B2/tests/test_historical_generation.py
++++ current17/tests/test_historical_generation.py
+@@ -42,11 +42,11 @@
+         # This is a release identity guard, separate from the historical nine.
+         paths = [verified(item) for item in data['current_models']]
+         self.assertEqual(len(paths), 12)  # Retained historical twelve-model context.
+-        live = json.loads((ROOT / 'docs/delivery/unheld-finalisation-20261105-v1/python-historical-routing-v2/current-sixteen-baseline-v03-v1.json').read_text())
+-        self.assertEqual(live['id'], 'current-sixteen-baseline-v03-v1')
++        live = json.loads((ROOT / 'tests/contexts/current-seventeen-md1997-baseline-v1.json').read_text())
++        self.assertEqual(live['id'], 'current-seventeen-md1997-baseline-v1')
+         current_paths = {ROOT / item['path'] for item in live['models']}
+         self.assertEqual(current_paths, set((ROOT / 'models').glob('*.json')))
+-        self.assertEqual(len(current_paths), 16)
++        self.assertEqual(len(current_paths), 17)
+         historical_names = {ROOT / item['path'] for item in data['current_models']}
+         self.assertTrue(historical_names < current_paths)
+         for item in live['models']:
+@@ -65,7 +65,7 @@
+             self.assertEqual({m['id']: m for m in metadata['models']}, {m['id']: m for m in models})
+             header = (Path(directory) / 'models.hpp').read_text()
+             self.assertEqual(header.count(',StressScope::total'), 2)
+-            self.assertEqual(header.count(',StressScope::effective'), 14)
++            self.assertEqual(header.count(',StressScope::effective'), 15)
+ 
+     def test_original_methods_and_unmodified_gates_are_retained(self):
+         failures = json.loads((P / 'original-failures.json').read_text())
+--- reviewed-B2/catalogue/agent-reviews/source-archive-map.json
++++ current17/catalogue/agent-reviews/source-archive-map.json
+@@ -152,6 +152,11 @@
+       "archived_path": "catalogue/source-snapshots/4bde28fab1b2d3defa98d11e94aeef1506d7e50f6e0e980686afb46069b29549/schemas/model-v0.3.schema.json"
+     },
+     {
++      "original_path": "cpp/include/atlas/solver.hpp",
++      "sha256": "b094c0f08d1f9ca71af5279c7946259e222c491b0bd97c3c70dbda392bbbe46e",
++      "archived_path": "catalogue/source-snapshots/b094c0f08d1f9ca71af5279c7946259e222c491b0bd97c3c70dbda392bbbe46e/cpp/include/atlas/solver.hpp"
++    },
++    {
+       "original_path": "models/drucker-prager.json",
+       "sha256": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+       "archived_path": "catalogue/source-snapshots/b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877/models/drucker-prager.json"

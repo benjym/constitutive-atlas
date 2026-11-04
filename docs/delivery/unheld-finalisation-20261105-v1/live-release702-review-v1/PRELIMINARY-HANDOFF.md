@@ -1,0 +1,9 @@
+# Preliminary actual702 review — E8 pending
+
+Exact revision70251ec7ab4d18029d9a5e6ad30114acd31a662f. No final acceptance decision exists. This saved read/hash audit passes1040 checks: Pages41900677802, Fast41900165577, deployment7556581310 and artifact13358887724 identities; private ZIP217252232B independently SHA256 ed215bc438e97151120be79c0e0b2fcb57d42f24f0939559ba2c87d2c3765f41;1548members/260275679B, exact frozen model/E5review/example and new loader pins, original all994 JSON SHA/sizes in decoded proofs, compressed second-pass pins,106 original package gates,41 HTTP200 exactmatches and8 production revision stamps. Specialized14role inventory plus ordinary atlas.wasm preserves15 roles. No concrete evidence inconsistency found.
+
+Required before final decision: genuine FullCI41900165308 success with engine identity closure; complete frozen live browser packet including numericalvalidator, downloads, screenshots, negative/mobile/compression/console; finalcleanup/retention receipt. observations-02 still records nativeMac/nativeLinux/Wasm/WasmLinux inprogress. Do not infer CI success or live E8 acceptance from Pages success alone.
+
+Reproduce `python3 -B docs/delivery/unheld-finalisation-20261105-v1/live-release702-review-v1/preliminary-check.py`. Raw receipt exit0 and saved input pins retained. Initial reviewer failure0d4a59 mistakenly counted only the14 specialized roles as the full15; corrected to require the separately listed atlas.wasm too. Exact failed receipt/stdout/stderr and explanation retained. No scientific/physical gate changed.
+
+Reviewer created only this small saved audit packet. No extraction, browser/module/compiled/network/Git/source writes or persistent process; retained ZIP read only. Mutable final browser outputs were not copied/frozen by reviewer. Smallest next action is parent handoff of completed exact final CI/browser/cleanup packet; then follow-up final review in this same owned review directory.

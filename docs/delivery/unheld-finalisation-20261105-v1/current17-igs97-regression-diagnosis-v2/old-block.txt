@@ -1,0 +1,5 @@
+            const double h=std::max(1e-9,std::abs(axial)*1e-3);Sym<double> direction;direction.v[1]=direction.v[2]=1.;
+            const auto slope=consistent_control_derivative(trial,de,direction,h,
+                [&](const Sym<double>&increment){return integrate(model,zn,increment,p,settings);},
+                [](const State&state){return .5*(state[1]+state[2]);});
+            if(!slope.ok)return false;const double derivative=slope.value;

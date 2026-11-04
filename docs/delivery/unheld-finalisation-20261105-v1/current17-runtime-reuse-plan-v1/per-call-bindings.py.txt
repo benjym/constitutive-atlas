@@ -1,0 +1,16 @@
+OriginalTransport=Transport
+class Transport(OriginalTransport):
+ """Preserve original transport and add actual artifact checks around every call."""
+ def run(self,command,**kwargs):
+  def bound():
+   for item in [*self.freeze['artifacts'].values(),self.freeze['python']]:verify(item)
+  bound();primary=None
+  try:return super().run(command,**kwargs)
+  except BaseException as error:primary=error;raise
+  finally:
+   try:bound()
+   except BaseException as error:
+    if self.calls:self.calls[-1]['post_artifact_binding_error']=repr(error)
+    write(self.out/'raw-calls.json',self.calls)
+    if primary is None:raise
+    primary.artifact_post_errors=[*getattr(primary,'artifact_post_errors',[]),repr(error)]

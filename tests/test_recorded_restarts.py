@@ -16,6 +16,7 @@ from atlas.refinement import validate_study
 from atlas.recorded import execute_recorded,validate_recorded_run,recorded_wire,RESTART_DEFAULTS
 from tools.diagnose_dp_recorded_apex import scalar_return
 from tests.test_recorded_api import specimen
+from tests.recorded_native_fixtures import explicit_recorded_fixture,historical_recorded_context
 
 
 def source_levels():
@@ -90,6 +91,7 @@ class RestartNativeTests(unittest.TestCase):
             Path(path).write_bytes(gzip.compress(json.dumps(cls.records,allow_nan=False).encode(),mtime=0))
 
     def run_spec(self,s):
+        s=explicit_recorded_fixture(s)
         r=execute_recorded(s,os.environ['ATLAS_RECORDED_SOLVER'])
         self.records.append(dict(request=copy.deepcopy(s),response=copy.deepcopy(r)))
         return r
@@ -122,15 +124,16 @@ class RestartNativeTests(unittest.TestCase):
         compare(a,b)
 
     def test_disabled_legacy_responses_exact(self):
-        with gzip.open(ROOT/'catalogue/investigations/recorded-replay-api-v1/responses.json.gz','rt') as f:retained=json.load(f)
-        for row in retained:self.assert_legacy(self.run_spec(row['request']),row['response'])
-        for level in source_levels()[:3]:
-            old=level['response'];s=copy.deepcopy(old['specification'])
-            r=self.run_spec(s);self.assert_legacy(r,old)
-            s['restart_settings']={'max_restarts':0};disabled=self.run_spec(s)
-            self.assertFalse(disabled['ok']);self.assertEqual(disabled['state'],r['state'])
-            self.assertEqual(disabled['material_trials'],r['material_trials'])
-            self.assertEqual(disabled['restart_diagnostics'],dict(searches=0,material_trials=0,accepted=0))
+        with historical_recorded_context(self,globals()):
+            with gzip.open(ROOT/'catalogue/investigations/recorded-replay-api-v1/responses.json.gz','rt') as f:retained=json.load(f)
+            for row in retained:self.assert_legacy(self.run_spec(row['request']),row['response'])
+            for level in source_levels()[:3]:
+                old=level['response'];s=copy.deepcopy(old['specification'])
+                r=self.run_spec(s);self.assert_legacy(r,old)
+                s['restart_settings']={'max_restarts':0};disabled=self.run_spec(s)
+                self.assertFalse(disabled['ok']);self.assertEqual(disabled['state'],r['state'])
+                self.assertEqual(disabled['material_trials'],r['material_trials'])
+                self.assertEqual(disabled['restart_diagnostics'],dict(searches=0,material_trials=0,accepted=0))
 
     def test_three_coarse_paths_and_independent_scalar_return(self):
         for level in source_levels()[:3]:
@@ -162,13 +165,13 @@ class RestartNativeTests(unittest.TestCase):
 
     def test_invalid_wire_and_mode(self):
         solver=os.environ['ATLAS_RECORDED_SOLVER']
-        for args in [['--mode','integrate','--model','linear-elastic','--strain','0,0,0,0,0,0','--recorded-restarts','1,.001,8']]:
+        for args in [['--mode','integrate','--model','linear-elastic','--initial',','.join(map(str,specimen()['initial'])),'--strain','0,0,0,0,0,0','--recorded-restarts','1,.001,8']]:
             p=subprocess.run([solver,*args],capture_output=True,text=True,timeout=10)
             self.assertEqual(p.returncode,1);self.assertFalse(json.loads(p.stdout)['ok'])
         with tempfile.TemporaryDirectory() as directory:
             controls,knots=recorded_wire(specimen());c=Path(directory)/'controls';k=Path(directory)/'knots'
             c.write_text(','.join(map(str,controls)));k.write_text(','.join(map(str,knots)))
-            base=[solver,'--mode','recorded','--model','linear-elastic','--initial-strain','0,0,0,0,0,0','--recorded-controls-file',str(c),'--recorded-knots-file',str(k)]
+            base=[solver,'--mode','recorded','--model','linear-elastic','--initial',','.join(map(str,specimen()['initial'])),'--initial-strain','0,0,0,0,0,0','--recorded-controls-file',str(c),'--recorded-knots-file',str(k)]
             for wire in ['', '1', '1,0,8', '1,.001,1.5', '17,.001,8', '1,nan,8']:
                 proc=subprocess.run([*base,'--recorded-restarts',wire],capture_output=True,text=True,timeout=10)
                 self.assertEqual(proc.returncode,1);self.assertFalse(json.loads(proc.stdout)['ok'])

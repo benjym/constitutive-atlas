@@ -273,15 +273,26 @@ inline bool controlled_step(int model,const State&zn,const State&p,int protocol,
     if(protocol==0||protocol==4){de.v[1]=de.v[2]=protocol==4?axial:0.;result=integrate(model,zn,de,p,settings);return result.ok;}
     if(protocol==2){de.v[1]=de.v[2]=-.5*axial;result=integrate(model,zn,de,p,settings);return result.ok;}
     if(protocol==1){
+        // Declared incremental multiplier/predictor residuals keep the audited
+        // control derivative. Other profiles retain the original controller;
+        // absence of a multiplier is not a general smoothness/plasticity claim.
+        bool multiplier_control=false;for(const auto&field:models().at(model).fields)multiplier_control=multiplier_control||field.multiplier;
+        if(multiplier_control&&(models().at(model).rate||models().at(model).physical_time))return false;
         double lateral=-.2*axial;
         for(int it=0;it<30;++it){de.v[1]=de.v[2]=lateral;auto trial=integrate(model,zn,de,p,settings);if(!trial.ok)return false;
             double residual=.5*(trial.state[1]+trial.state[2])-reference;
             if(std::abs(residual)<std::max(1.,std::abs(reference))*1e-8){result=trial;return true;}
-            const double h=std::max(1e-9,std::abs(axial)*1e-3);Sym<double> direction;direction.v[1]=direction.v[2]=1.;
-            const auto slope=consistent_control_derivative(trial,de,direction,h,
-                [&](const Sym<double>&increment){return integrate(model,zn,increment,p,settings);},
-                [](const State&state){return .5*(state[1]+state[2]);});
-            if(!slope.ok)return false;const double derivative=slope.value;
+            double derivative=0;
+            if(!multiplier_control){
+                double h=std::max(1e-9,std::abs(axial)*1e-3);auto dd=de;dd.v[1]=dd.v[2]=lateral+h;auto pert=integrate(model,zn,dd,p,settings);
+                if(!pert.ok)return false;derivative=(.5*(pert.state[1]+pert.state[2])-.5*(trial.state[1]+trial.state[2]))/h;
+            }else{
+                const double h=std::max(1e-9,std::abs(axial)*1e-3);Sym<double> direction;direction.v[1]=direction.v[2]=1.;
+                const auto slope=consistent_control_derivative(trial,de,direction,h,
+                    [&](const Sym<double>&increment){return integrate(model,zn,increment,p,settings);},
+                    [](const State&state){return .5*(state[1]+state[2]);});
+                if(!slope.ok)return false;derivative=slope.value;
+            }
             if(!std::isfinite(derivative)||std::abs(derivative)<1e-6)return false;
             double correction=-residual/derivative;bool accepted=false;
             for(double a=1;a>=1./1024;a*=.5){auto testde=de;testde.v[1]=testde.v[2]=lateral+a*correction;auto test=integrate(model,zn,testde,p,settings);

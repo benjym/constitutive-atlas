@@ -1,0 +1,29 @@
+diff --git a/web/laboratory-examples.mjs b/web/laboratory-examples.mjs
+index 9c9399b63..9c35ecc83 100644
+--- a/web/laboratory-examples.mjs
++++ b/web/laboratory-examples.mjs
+@@ -1,5 +1,7 @@
+ // Named examples are inputs, not model defaults or specimen preparation.
+ import {parseLaboratoryDocument}from './laboratory-document.mjs';
++import {parseRecordedJSON}from './recorded.mjs';
++import {validateScopedLaboratory}from './laboratory-scope.mjs';
+ const require=(ok,message)=>{if(!ok)throw Error(message);};
+ const hash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
+ const id=value=>typeof value==='string'&&/^[a-z0-9][a-z0-9-]*$/.test(value);
+@@ -21,7 +23,15 @@ export async function prepareExample(entry,index,catalogue,{fetcher=fetch,crypto
+  validateExampleIndex(index,catalogue);require(index.examples.some(e=>stable(e)===stable(entry)),'Example is not in this index.');
+  const get=async(url,expected)=>{const r=await fetcher(url);require(r.ok,'Example asset could not be loaded.');const body=await r.text();require(new TextEncoder().encode(body).length<=10*1024*1024,'Example exceeds the 10 MB limit.');require(await digest(body,crypto)===expected,'Example asset hash mismatch.');return body;};
+  const definition=JSON.parse(await get(entry.definition_url,entry.definition_sha256));require(stable(definition)===stable(catalogue.models.find(m=>m.id===entry.model)),'Example definition differs from compiled model.');
+- const document=await get(entry.document_url,entry.document_sha256),specification=parseLaboratoryDocument(document,catalogue);require(specification.model===entry.model,'Example document model mismatch.');
++ const document=await get(entry.document_url,entry.document_sha256),parsed=parseRecordedJSON(document);
++ let specification;
++ if(parsed?.schema_version==='atlas-laboratory-example-input-0.1'){
++  require(Object.keys(parsed).sort().join(',')==='definition_sha256,schema_version,specification'&&parsed.definition_sha256===entry.definition_sha256,'Example input definition or fields mismatch.');
++  require(parsed.specification&&Object.hasOwn(parsed.specification,'integration_settings'),'Example inputs require explicit solver settings.');
++  validateScopedLaboratory(parsed.specification,catalogue);
++  specification=structuredClone(parsed.specification);
++ }else specification=parseLaboratoryDocument(document,catalogue);
++ require(specification.model===entry.model,'Example document model mismatch.');
+  const target=specification.protocol===3?specification.target/1000:specification.target*100,unit=specification.protocol===3?'kPa deviator stress':'% axial strain';
+  const summary=entry.label+' · '+target+' '+unit+' · '+specification.steps+' increments · '+specification.cycles+' cycles. '+specification.initial.length+' initial-state components, '+specification.parameters.length+' parameters. Solver settings: '+JSON.stringify(specification.integration_settings)+'. '+entry.description+' Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.';
+  return {specification:structuredClone(specification),summary,document};

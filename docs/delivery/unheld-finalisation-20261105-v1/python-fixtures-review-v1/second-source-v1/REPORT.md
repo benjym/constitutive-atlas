@@ -1,0 +1,11 @@
+Independent source review B: accepted.
+
+The exact frozen 75-member proposal and delta bind 36 changes and 12 retained inputs. All source replacements retain their exact preimages; all six source-archive maps preserve every existing document pin and entry, add strict hash-addressed archives, and preserve active SCLAY/Tresca transitive pins. The original ledger, numerical analyzers, numerical reports, definitions and compiler/runtime remain unchanged. The three accepted A fixture successors are still byte exact.
+
+Whole original test ASTs differ only by the declared historical/current context, helper expected-hash arguments, wrapper script/import locators and canonical-name subset check. All original numerical assertions, tolerances, counters and negative cases remain. The current-sixteen fixture is an exact literal source catalogue, with the unchanged canonical digest and independently accepted qualification authority. Historical twelve identities remain separately verified.
+
+MCC delegates both functions to the unchanged pinned analyzer with only its model ROOT selected through the original receipt. Burgers delegates every original saved check and replays all four installed assertion families: installed files, research model equality, CMake inclusion and prior models. These are preserved historical assertions; the unchanged current-sixteen context separately guards current models. The DP helper retains both genuine original domain-revision receipts and the exact approved archived candidate, and rejects corrupt/missing original inputs.
+
+Checks: 729 independently authored source/data/AST/archive checks, 322 reproduced manufactured checks with fake transports/modules only, and 8 independently authored genuine DP receipt-chain/corruption checks. No compiler, generation, scientific replay, native/Wasm module, browser, network, Git or source installation occurred. Required next validation remains coordinator-owned actual focused modules, original full portable suite and genuine native CI; this decision does not close E8 or claim new runtime/scientific approval.
+
+Cleanup: temporary manufactured trees removed automatically. No process, worktree, extracted source or build cache was created. Reviewer scripts and evidence are retained in this directory.

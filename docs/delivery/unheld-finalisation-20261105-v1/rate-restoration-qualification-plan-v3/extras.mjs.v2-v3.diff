@@ -1,0 +1,11 @@
+--- frozen-v2/extras.mjs
++++ v3/extras.mjs
+@@ -9,7 +9,7 @@
+ guard(true);assert.equal(read(join(actual,'native/receipt.json')).passed,true);assert.equal(read(join(actual,'wasm/receipt.json')).passed,true);assert.equal(read(join(actual,'pair.json')).passed,true);
+ const catalogue=read(join(plan.work,'native/generated/models.json'));assert.equal(catalogue.models.length,17);assert.equal(catalogue.sha256,'4e31188499b5d19e52439451a709775f00e08a1f4d94570e40f43d825cd0e0a1');
+ const out=join(actual,'extra-'+backend);assert.ok(!fs.existsSync(out),'never overwrite supplemental observation');fs.mkdirSync(out);const journal=join(out,'transport.ndjson'),emit=r=>fs.appendFileSync(journal,JSON.stringify(r)+'\n');
+-const report={identity:'control-restoration-C-twelve-public-supplement-v2',backend,status:'running',rows:[],catalogue_hash:catalogue.sha256,manifest_sha256:manifestSHA};const save=()=>fs.writeFileSync(join(out,'report.json'),JSON.stringify(report,null,2)+'\n');save();let primary=null;
++const report={identity:'control-restoration-C-twelve-public-supplement-v3',backend,status:'running',rows:[],catalogue_hash:catalogue.sha256,manifest_sha256:manifestSHA};const save=()=>fs.writeFileSync(join(out,'report.json'),JSON.stringify(report,null,2)+'\n');save();let primary=null;
+ function normalized702(reference){assert.equal(reference.catalogue_hash,'beb2f2b422c77502cc41c91b1c68921fd9db89f1b7dbc2e4f0368526d627e575');const d=structuredClone(reference);d.catalogue_hash=catalogue.sha256;return d;}
+ try{
+  if(backend==='pair'){

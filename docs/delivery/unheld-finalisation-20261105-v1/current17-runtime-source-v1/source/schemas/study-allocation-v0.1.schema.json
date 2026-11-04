@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://benjym.github.io/constitutive-atlas/schemas/study-allocation-v0.1.schema.json",
+  "title": "Whole-test development study allocation",
+  "description": "Structural metadata contract. atlas.study_allocation additionally enforces cross-package calibration/evaluation separation and exact reservation-policy identity/roles. This version does not release reserved data or certify a prospective final evaluation.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "kind",
+    "id",
+    "phase",
+    "grouping_unit",
+    "evaluation_claim",
+    "calibration_packages",
+    "evaluation_ids",
+    "reservation_policy",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1"
+    },
+    "kind": {
+      "const": "whole-test-study-allocation"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "phase": {
+      "const": "development"
+    },
+    "grouping_unit": {
+      "const": "whole_test"
+    },
+    "evaluation_claim": {
+      "const": "previously_exposed_development"
+    },
+    "calibration_packages": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_-]*$"
+      },
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evaluation_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "reservation_policy": {
+      "type": "object",
+      "required": [
+        "id",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}

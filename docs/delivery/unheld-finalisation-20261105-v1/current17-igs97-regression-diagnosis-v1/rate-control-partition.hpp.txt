@@ -1,0 +1,42 @@
+// Re-evaluate a rate-control probe on the base's actual accepted midpoint leaves.
+// Every leaf retains the original full/two-half/endpoint-defect rate acceptance.
+// Probe failures stay failures; the derivative's existing h refinement may retry.
+inline Advance integrate_rate_control_partition(int model,const State&zn,const Sym<double>&total,const Sym<double>&base_total,const Advance&base,const State&p,const IntegrationSettings&settings){
+    Advance result;result.state=zn;result.settings=settings;
+    if(!base.ok||!valid_settings(settings)||model<0||model>=int(models().size())||!models()[model].rate||models()[model].physical_time)return result;
+    if(zn.size()!=initial_state(model).size()||!valid_parameters(model,p)||!domain(model,zn,p,true)||!std::isfinite(norm(total)))return result;
+    const auto scales=model_scales(model,p);for(double s:scales)if(!std::isfinite(s)||s<=0)return result;
+    const auto&partition=base.diagnostics;const size_t count=partition.increment_fractions.size();
+    if(!count||count%2||partition.accepted_increments.size()!=count||partition.partition_retries!=0||count>size_t(settings.max_substeps))return result;
+    State current;
+    if(!prepare_model_increment(model,zn,total,p,current)||!domain(model,current,p))return result;
+    for(size_t i=0;i<count;i+=2){
+        const double f=partition.increment_fractions[i];
+        if(!std::isfinite(f)||f<=0||f!=partition.increment_fractions[i+1]||partition.accepted_increments[i].size()!=6||partition.accepted_increments[i+1].size()!=6)return result;
+        Sym<double> halfde,de;
+        for(int j=0;j<6;++j){
+            const double u=partition.accepted_increments[i][j];
+            if(!std::isfinite(u)||u!=partition.accepted_increments[i+1][j]||!std::isfinite(base_total.v[j])||!std::isfinite(total.v[j]))return result;
+            halfde.v[j]=u+f*(total.v[j]-base_total.v[j]);de.v[j]=2*halfde.v[j];
+            if(!std::isfinite(halfde.v[j])||!std::isfinite(de.v[j])||.5*de.v[j]!=halfde.v[j])return result;
+        }
+        State full,half,two,half_defect,two_defect;
+        if(!midpoint(model,current,de,p,full)||!midpoint(model,current,halfde,p,half,&half_defect)||!midpoint(model,half,halfde,p,two,&two_defect))return result;
+        double error=0;
+        for(size_t j=0;j<zn.size();++j){
+            error=std::max(error,std::abs(full[j]-two[j])/scales[j]);
+            error=std::max(error,std::abs(half_defect[j])/scales[j]);
+            error=std::max(error,std::abs(two_defect[j])/scales[j]);
+        }
+        if(!(error<settings.rate_tolerance))return result;
+        current=std::move(two);result.diagnostics.error=error;
+        result.diagnostics.substeps+=2;
+        result.diagnostics.increment_fractions.push_back(f);result.diagnostics.increment_fractions.push_back(f);
+        result.diagnostics.accepted_increments.emplace_back(halfde.v.begin(),halfde.v.end());result.diagnostics.accepted_increments.emplace_back(halfde.v.begin(),halfde.v.end());
+    }
+    result.ok=solution_admissible(model,current,p);
+    if(result.ok)result.state=std::move(current);
+    result.diagnostics.attempted_substeps=result.diagnostics.first_attempt_substeps=result.diagnostics.substeps;
+    if(!result.ok)result.diagnostics.discarded_substeps=result.diagnostics.substeps;
+    return result;
+}

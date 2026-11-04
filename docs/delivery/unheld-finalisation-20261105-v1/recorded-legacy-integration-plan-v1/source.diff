@@ -1,0 +1,142 @@
+--- original/CMakeLists.txt
++++ proposed/CMakeLists.txt
+@@ -351,3 +351,26 @@
+   add_test(NAME atlas_scalar_functions COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tools/test_scalar_functions.py" "$<TARGET_FILE:atlas_scalar_probe>")
+ endif()
+ target_include_directories(atlas_scalar_probe PRIVATE cpp/include)
++
++# Proposed native-only addition; coordinator integrates after independent review.
++# Uses current reviewed generic runtime/compiler and immutable historical records.
++if(NOT EMSCRIPTEN)
++  file(GLOB RECORDED_LEGACY_COMPILER CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/atlas/*.py")
++  add_custom_command(
++    OUTPUT "${CMAKE_BINARY_DIR}/recorded-legacy-generated/models.hpp" "${CMAKE_BINARY_DIR}/recorded-legacy-generated/models.json"
++    COMMAND "${Python3_EXECUTABLE}" -B tools/generate_recorded_legacy_models.py "${CMAKE_BINARY_DIR}/recorded-legacy-generated"
++    DEPENDS tools/generate_recorded_legacy_models.py tests/recorded_native_fixtures.py
++      ${RECORDED_LEGACY_COMPILER} schemas/model.schema.json
++      "${CMAKE_SOURCE_DIR}/catalogue/investigations/clay2005-preview-v1/models/drucker-prager.json"
++      "${CMAKE_SOURCE_DIR}/catalogue/investigations/clay2005-preview-v1/models/hypoplastic-sand-igs97.json"
++      "${CMAKE_SOURCE_DIR}/catalogue/investigations/clay2005-preview-v1/models/hypoplastic-sand-vw96.json"
++      "${CMAKE_SOURCE_DIR}/catalogue/investigations/clay2005-preview-v1/models/linear-elastic.json"
++      "${CMAKE_SOURCE_DIR}/catalogue/investigations/clay2005-preview-v1/models/modified-cam-clay.json"
++    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
++  add_custom_target(atlas_recorded_legacy_models DEPENDS "${CMAKE_BINARY_DIR}/recorded-legacy-generated/models.hpp" "${CMAKE_BINARY_DIR}/recorded-legacy-generated/models.json")
++  add_executable(atlas_recorded_legacy_solver EXCLUDE_FROM_ALL cpp/main.cpp)
++  add_dependencies(atlas_recorded_legacy_solver atlas_recorded_legacy_models)
++  target_include_directories(atlas_recorded_legacy_solver PRIVATE cpp/include "${CMAKE_BINARY_DIR}/recorded-legacy-generated")
++  target_compile_options(atlas_recorded_legacy_solver PRIVATE -Wall -Wextra -Wno-unused-variable -ffp-contract=off)
++  target_link_libraries(atlas_recorded_legacy_solver PRIVATE atlas_scalar_functions)
++endif()
+--- original/.github/workflows/qualification.yml
++++ proposed/.github/workflows/qualification.yml
+@@ -213,12 +213,24 @@
+         ATLAS_CLAY2013_SOLVER: "${{ github.workspace }}/build/atlas_clay2013_solver"
+         ATLAS_GIS2024_SOLVER: "${{ github.workspace }}/build/atlas_gis2024_solver"
+       run: python -B tools/run_ci_tests.py --portable
++    - name: Build separately bound historical recorded catalogue
++      id: recorded_legacy_build
++      shell: bash
++      run: python -B tools/build_recorded_legacy_ci.py --build build --output "$RUNNER_TEMP/recorded-legacy-build" --github-output "$GITHUB_OUTPUT"
+     - name: Verify recorded-path JSON replay
+       env:
+         ATLAS_RECORDED_SOLVER: "${{ github.workspace }}/build/atlas_solver"
++        ATLAS_RECORDED_LEGACY_SOLVER: "${{ github.workspace }}/build/atlas_recorded_legacy_solver"
++        ATLAS_RECORDED_LEGACY_SHA256: "${{ steps.recorded_legacy_build.outputs.solver_sha256 }}"
+       run: python -m unittest tests.test_experiment_replay tests.test_recorded_api
+         tests.test_recorded_path tests.test_web_recorded tests.test_refinement tests.test_isotropic_reference
+         tests.test_resolution_diagnosis tests.test_recorded_restarts -v
++    - name: Retain historical recorded build receipts
++      if: always()
++      uses: actions/upload-artifact@v4
++      with:
++        name: recorded-legacy-native-${{ matrix.os }}
++        path: "${{ runner.temp }}/recorded-legacy-build/"
+     timeout-minutes: 180
+   wasm:
+     runs-on: macos-26
+--- original/tools/build_recorded_legacy_ci.py
++++ proposed/tools/build_recorded_legacy_ci.py
+@@ -0,0 +1,83 @@
++"""One serial historical-catalogue target with genuine bounded CI build receipts."""
++from pathlib import Path
++import argparse,hashlib,json,os,re,shutil,subprocess,sys,time
++ROOT=Path(__file__).resolve().parents[1]
++LEGACY='1cac1ed6b2a284b561ed6fed00dd751e384748ea5e5f9d14467e410dc18a218c'
++def pin(path):
++ p=Path(path).resolve(strict=True)
++ if not p.is_file():raise ValueError('regular file required: '+str(p))
++ data=p.read_bytes();return {'path':str(p),'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)}
++def inventory():
++ paths={ROOT/'CMakeLists.txt',ROOT/'.github/workflows/qualification.yml',ROOT/'cpp/main.cpp',ROOT/'tests/recorded_native_fixtures.py',Path(__file__).resolve()}
++ for directory,suffixes in [('atlas',{'.py'}),('cpp/include',{'.h','.hpp'}),('schemas',{'.json'}),('cmake',{'.cmake','.txt'})]:
++  for base,dirs,files in os.walk(ROOT/directory,followlinks=False):
++   if any((Path(base)/n).is_symlink()for n in dirs):raise ValueError('source directory alias')
++   dirs[:]=[n for n in dirs if n!='__pycache__']
++   paths.update(Path(base)/n for n in files if Path(n).suffix in suffixes)
++ for base,dirs,files in os.walk(ROOT/'cpp/scalar-functions',followlinks=False):
++  if any((Path(base)/n).is_symlink()for n in dirs):raise ValueError('scalar directory alias')
++  paths.update(Path(base)/n for n in files)
++ paths.update([ROOT/'tools/generate_recorded_legacy_models.py',*sorted((ROOT/'catalogue/investigations/clay2005-preview-v1/models').glob('*.json'))])
++ if any(p.is_symlink()or p.resolve()!=p for p in paths):raise ValueError('physical source files required')
++ return {str(p.relative_to(ROOT)):pin(p)for p in sorted(paths)}
++def metadata(build):
++ cache=build/'CMakeCache.txt';data=cache.read_text();home=re.findall(r'^CMAKE_HOME_DIRECTORY:INTERNAL=(.*)$',data,re.M)
++ if home!=[str(ROOT)]:raise ValueError('configured build source mismatch')
++ rows=sorted((build/'CMakeFiles').glob('*/CMakeCXXCompiler.cmake'))
++ if len(rows)!=1:raise ValueError('unique configured CXX metadata required')
++ text=rows[0].read_text();drivers=re.findall(r'^set\(CMAKE_CXX_COMPILER "([^"\n]+)"\)$',text,re.M)
++ if len(drivers)!=1:raise ValueError('unique configured CXX driver required')
++ files=[cache,*rows]
++ for p in sorted((build/'CMakeFiles/atlas_recorded_legacy_solver.dir').rglob('*')):
++  if p.is_file()and(p.suffix in {'.make','.txt','.d'}):files.append(p)
++ return {'purpose':'measured at this build step, not an original configure receipt','files':[pin(p)for p in files],'resolved_cxx':pin(Path(drivers[0]))}
++def run(build,output,github_output=None):
++ build=Path(build).resolve();output=Path(output).resolve();output.mkdir(parents=True,exist_ok=False)
++ receipt={'identity':'recorded-legacy-actual-CI-build-v1','status':'running','historical_catalogue':LEGACY,'prior_configure_process':None,'observations_are_current_build_step':True}
++ def save():
++  (output/'receipt.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
++ save();primary=None;before=None;tools=None
++ try:
++  before=inventory();receipt['source_before']=before;receipt['configured_before']=metadata(build)
++  cmake=shutil.which('cmake')
++  if not cmake:raise ValueError('qualified cmake command unavailable')
++  tools={'cmake':pin(cmake),'python':pin(sys.executable),'cxx':receipt['configured_before']['resolved_cxx']};receipt['tools']=tools
++  argv=[tools['cmake']['path'],'--build',str(build),'--target','atlas_recorded_legacy_solver','--parallel','1']
++  receipt.update(argv=argv,cwd=str(ROOT),started_epoch=time.time(),process_status='not_started');save()
++  try:
++   with (output/'build.stdout').open('w')as stdout,(output/'build.stderr').open('w')as stderr:
++    process=subprocess.run(argv,cwd=ROOT,stdin=subprocess.DEVNULL,stdout=stdout,stderr=stderr,check=False)
++   receipt.update(returncode=process.returncode,process_status='returned')
++  except BaseException as error:receipt.update(process_status='raised',process_error=repr(error));raise
++  finally:
++   receipt['finished_epoch']=time.time();receipt['logs']=[pin(p)for p in [output/'build.stdout',output/'build.stderr']if p.exists()];save()
++  if process.returncode!=0:raise RuntimeError('historical target build failed')
++  sys.path.insert(0,str(ROOT))
++  from tests.recorded_native_fixtures import legacy_paths
++  expected=[json.loads(p.read_text())for p in legacy_paths()]
++  generated=build/'recorded-legacy-generated';catalogue=json.loads((generated/'models.json').read_text())
++  if catalogue['sha256']!=LEGACY or catalogue['models']!=expected or len(expected)!=5:raise ValueError('generated historical catalogue mismatch')
++  if hashlib.sha256(json.dumps(catalogue['models'],sort_keys=True,separators=(',',':')).encode()).hexdigest()!=LEGACY:raise ValueError('historical catalogue canonical hash mismatch')
++  receipt['generated']=[pin(generated/n)for n in ['models.json','models.hpp']];receipt['artifact']=pin(build/'atlas_recorded_legacy_solver');receipt['configured_after']=metadata(build)
++  if receipt['configured_after']['resolved_cxx']!=tools['cxx']:raise ValueError('configured compiler changed during build')
++  receipt['status']='passed'
++ except BaseException as error:primary=error;receipt.update(status='failed',error=repr(error));raise
++ finally:
++  try:
++   after=inventory();receipt['source_after']=after
++   if before is not None and after!=before:raise ValueError('source mutated during historical build')
++   if tools is not None:
++    for row in tools.values():
++     if pin(row['path'])!=row:raise ValueError('build tool mutated')
++   receipt['post_bindings_unchanged']=True
++  except BaseException as error:
++   receipt.update(status='failed',post_binding_error=repr(error));save()
++   if primary is None:raise
++  finally:save()
++ if github_output:
++  try:
++   with Path(github_output).open('a')as stream:stream.write('solver_sha256='+receipt['artifact']['sha256']+'\n')
++  except BaseException as error:receipt.update(status='failed',github_output_error=repr(error));save();raise
++ return receipt
++if __name__=='__main__':
++ p=argparse.ArgumentParser();p.add_argument('--build',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--github-output',type=Path);a=p.parse_args();r=run(a.build,a.output,a.github_output);print(json.dumps({'status':r['status'],'solver_sha256':r['artifact']['sha256']}))

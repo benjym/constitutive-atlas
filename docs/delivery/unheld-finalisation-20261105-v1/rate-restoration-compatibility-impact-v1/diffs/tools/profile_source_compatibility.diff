@@ -1,0 +1,12 @@
+--- current640/tools/profile_source_compatibility.py
++++ proposal/tools/profile_source_compatibility.py
+@@ -23,7 +23,8 @@
+ def regular(root,name):
+  p=Path(name);require(not p.is_absolute() and '..' not in p.parts,'Unsafe compatibility path')
+  f=root/p;require(not f.is_symlink() and f.is_file() and f.resolve().is_relative_to(root.resolve()),'Missing/unsafe compatibility file '+name)
+- return f.read_bytes()
++ from tools.rate_restoration_source_view_v1 import historical_bytes
++ return historical_bytes(root,name,f.read_bytes())
+ def namespace(root):
+  names=set()
+  for directory,suffixes in [('atlas',{'.py'}),('cpp',{'.cpp','.hpp'}),('schemas',{'.json'})]:

@@ -1,0 +1,38 @@
+{
+  "identity": "rate-public-IGS-regression-test-independent-source-review-v1",
+  "decision": "accepted",
+  "author_run": "/root",
+  "reviewer_run": "/root/controlled_refresh_review",
+  "scope": "Prospective exact regression test source only; no compiled success or independent constitutive equation verification.",
+  "proposal_files": {
+    "GATES.json": {
+      "sha256": "7bb334bbafdbdd58cf2ef8e853e7ec1c2b01f2c822651b5826af23487df1e80e",
+      "bytes": 664
+    },
+    "proposed/tests/test_solver.cpp": {
+      "sha256": "da2b0ed473cdb186fafac04033350b17ff25d287a804abb1c63cb46addd88b90",
+      "bytes": 29631
+    },
+    "test.diff": {
+      "sha256": "72fba8a90698c0436c84dc6c49755183c572c146cd43b68fe4645b717a22ef80",
+      "bytes": 1991
+    }
+  },
+  "source_path": "tests/test_solver.cpp",
+  "preimage_sha256": "5df371dd65eced3befa16f7790cabe0eec7150c1910106e8d7496b5055a7fa00",
+  "accepted_sha256": "da2b0ed473cdb186fafac04033350b17ff25d287a804abb1c63cb46addd88b90",
+  "checks": 22,
+  "blocking_findings": [],
+  "findings": [
+    "Exactly one18-line insertion; removing it restores entire previous test file byteexact, including every previous assertion/tolerance and scope.",
+    "New fixture exactly matches the frozen public edited IGS97 parameters14, initial13, protocol1/target.01/100steps/0cycles. All six default IntegrationSettings fields equal frozen settings; no override or budget relaxation.",
+    "All101 generated .01*double(i)/100 controls match every original binary64 control bit.",
+    "Requires successful101-point path, unchanged initial state, full13 finite state per point, exact controls and110000Pa mean lateral stress within the existing1e-8 controller bound. New test adds a previously uncovered public request; existing701 gates are unchanged.",
+    "This is behavioral regression coverage for the observed failure, not an independent physical oracle or proof of the proposed derivative cause."
+  ],
+  "pending": [
+    "Coordinator source installation and hash-bound serial test_solver build/run under original observer. No syntax/compiled result observed here.",
+    "Full original native/Wasm/MD/control/browser/live gates remain required; passing this one test cannot replace them."
+  ],
+  "cleanup": "No processes, compiled outputs, temporary directories or installations created; owned source/data review files retained."
+}

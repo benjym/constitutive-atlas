@@ -1,0 +1,50 @@
+{
+  "schema_version": "0.2",
+  "status": "draft",
+  "id": "test-tensor-square",
+  "name": "Synthetic symmetric tensor-square verification fixture",
+  "family": "engine verification only",
+  "description": "Engine algebra verification: A_dot = A*A/tau. Not a constitutive model.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/TENSOR_SQUARE.md",
+      "role": "Analytical algebra verification specification",
+      "locator": "Cartesian matrix square and Mandel convention; engine fixture only"
+    }
+  ],
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "ode"
+  },
+  "parameters": {
+    "tau": {
+      "default": 2,
+      "min": 1e-06,
+      "max": 1000000.0,
+      "unit": "s"
+    }
+  },
+  "state": [
+    {
+      "name": "A",
+      "shape": "sym",
+      "unit": "1",
+      "scale": "1",
+      "initial": [
+        1,
+        2,
+        3,
+        0.4,
+        0.5,
+        0.6
+      ]
+    }
+  ],
+  "derived": [],
+  "equations": {
+    "A": "tensor_square(A) / tau"
+  },
+  "domain": [
+    "norm(A) < 100"
+  ]
+}

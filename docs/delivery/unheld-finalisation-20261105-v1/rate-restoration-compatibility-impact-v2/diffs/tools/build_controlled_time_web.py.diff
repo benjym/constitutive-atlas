@@ -1,0 +1,16 @@
+--- current640/tools/build_controlled_time_web.py
++++ candidateC-compat/tools/build_controlled_time_web.py
+@@ -6,7 +6,12 @@
+ from atlas.controlled_time_compiler import generate
+ from atlas.agent_review import validate_review
+ COMPONENTS=('controlled-time-engine.mjs','controlled-time-worker.mjs','controlled-time-laboratory.mjs')
+-def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
++def sha(p):
++    p=Path(p);raw=p.read_bytes()
++    if p.resolve().is_relative_to(ROOT.resolve()):
++        from tools.rate_restoration_source_view_v2 import historical_bytes
++        raw=historical_bytes(ROOT,p.resolve().relative_to(ROOT.resolve()).as_posix(),raw)
++    return hashlib.sha256(raw).hexdigest()
+ def source_pin(pin):
+     p=Path(pin['path'])
+     if p.is_absolute() or '..' in p.parts:raise ValueError('Unsafe source binding')

@@ -1,0 +1,7 @@
+# Bounded C runtime evidence accepted
+
+Independent saved-data/source audit accepts complete actual manifest99be54a7, preserving v3 failure and v4 continuation separately. Original701/interface42/87/DP83/1041calls per backend and MD known-negative/588 are intact; unchanged original pair assessor reproduces exact report. All12 supplemental requests pass on both backends, including original9 named gates and editedIGS101 at unchanged physical1e-10/exactother; MD matches saved640Wasm exactly exceptelapsed. Historical catalogue1cac target and original74 tests pass with zero skips. Exact source/generated/tool/build/artifact closure and serial genuine observers remain bound.
+
+638 final source/pin/saved-receipt checks,269 saved-supplement comparison checks, and70 earlier completed checks passed. Complete153-file manifest and all120 predecessor pins rehashed. Legacy build added only expected main.cpp.o.d to its target configuration observation; all prior configure/link/flags/compiler pins and all source bytes remain identical.
+
+Reviewer authored lifecyclev3/harnessv4, which baseline separately reviewed. Reviewer did not author C kernel/original scientific oracles; C source161f and original scientificE5 retain their identities. No compiled/material/browser/network/Git execution. Decision is runtime-only; hostedCI/package/browser/live/E8 remain mandatory separately. Original failures and reviewer checker attempts are retained explicitly. No temporary processes/resources remain.

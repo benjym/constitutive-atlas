@@ -1,0 +1,25 @@
+def closure():
+    names = set()
+    for directory, pattern in [('atlas', '*.py'), ('schemas', '*.json'),
+                               ('cpp/include/atlas', '*.hpp'), ('cpp/scalar-functions', '*'),
+                               ('models', '*.json'), ('tests/fixtures', '*.json'),
+                               ('initialization', '*.json'), ('catalogue/path-examples', '*.json')]:
+        names.update(p.relative_to(ROOT).as_posix() for p in (ROOT/directory).rglob(pattern)
+                     if p.is_file() and '__pycache__' not in p.parts)
+    names.update(['cmake/controlled-path/CMakeLists.txt', 'cmake/AtlasScalarFunctions.cmake',
+                  'tools/generate_controlled_path.py', 'tools/qualify_controlled_path_refresh.py',
+                  'tools/build_controlled_path_web.py', 'tools/build_interface2016_web.py',
+                  'tools/test_interface2016_package.mjs',
+                  'tests/test_controlled_path.py', 'tests/test_formulation.py', 'tests/test_state_contract.py',
+                  'tests/test_stress_scope.py', 'tests/historical_generation.py',
+                  NORSAND+'run_native_requests_v2.py', NORSAND+'run_wasm_requests_v2.mjs',
+                  NORSAND+'backend-requests-v2.json', NORSAND+'check_backend_results_v3.py',
+                  INTERFACE+'implementation-v1/check_backend_results_v2.py',
+                  INTERFACE+'implementation-v1/backend-requests.json',
+                  INTERFACE+'implementation-v1/backend-expectations.json',
+                  INTERFACE+'implementation-v1/references.json',
+                  INTERFACE+'execution-v1/check_parity_v2.py',
+                  INTERFACE+'execution-v1/source-freeze-v2.json'])
+    for paths in MODEL_PATHS.values():
+        names.update(paths)
+    return {name: sha(relative(name)) for name in sorted(names)}

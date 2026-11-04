@@ -1,0 +1,45 @@
+{
+  "identity": "control-restoration-C-qualification-plan-independent-review-v2",
+  "decision": "changes_required",
+  "accepted": false,
+  "author_run": "/root/publication_operations_review",
+  "reviewer_run": "/root/baseline_migration",
+  "proposal_manifest_sha256": "b2dcc31f42dc87bc1cefaa0ab952608bff74bf362f0092495dd6237bccdebe08",
+  "scope": "Prospective C qualification plan only; no C implementation self-review and no actual qualification acceptance",
+  "unresolved_blockers": [
+    "R1",
+    "R2"
+  ],
+  "findings": [
+    {
+      "id": "R1",
+      "severity": "blocking",
+      "location": "collector.py:verify_launch",
+      "issue": "Plan and both installation review identities are only compared for inequality. Empty, null and non-string distinct values pass as independent identities.",
+      "required_change": "Require nonempty string author_run and reviewer_run (including whitespace-only rejection), distinct normalized identities, before accepting plan or installation reviews. Preserve exact reviewed proposal/installation closure coordinator binding. Add malformed identity rejection witnesses for both review roles."
+    },
+    {
+      "id": "R2",
+      "severity": "blocking",
+      "location": "collector.py:main source-freeze and commands.py:first-phase observation",
+      "issue": "A source-freeze exception bypasses the final verify_plan/assert_source. Later phases have an outer finally bound guard, but source_freeze_argv is launched directly through the original observer without an equivalent input/launch/source/tool finally guard. A fixture failure after mutation runs zero postguards.",
+      "required_change": "Add a bounded first-phase pre/finally binding route, capturing source/reference/tool/node/Python and launch authority identities before the phase and checking them after success or failure. Retain primary exception plus all postguard errors and raw observer receipts, including when plan-binding.json was never produced. Keep source-freeze policy/oracles unchanged."
+    }
+  ],
+  "preserved_scope": [
+    "Original v5 source_files/scientific collector/policy/CLI and 701/42/87/DP83/pair delegates unchanged",
+    "All12 supplements: editedIGS, twoMD and nine exact original named requests with original1e-10 physical/exact-other comparison, elapsed-only replay, crossbackend comparison",
+    "Fresh native/Wasm serial explicit solver builds and generated17 metadata/header proof",
+    "Separate MD numerical target and original known-negative/588 helper",
+    "Exact coordinator verification of reviewed installation proposal/receipt/source closure remains a mandatory launch prerequisite; generic accepted JSON is not that verification"
+  ],
+  "checks": 137,
+  "author_saved_checks": 187,
+  "author_check_reexecuted": false,
+  "actual_execution": false,
+  "cleanup": {
+    "owned_tiny_fixtures_removed": true,
+    "background_processes_created": false,
+    "builds_or_cache_created": false
+  }
+}

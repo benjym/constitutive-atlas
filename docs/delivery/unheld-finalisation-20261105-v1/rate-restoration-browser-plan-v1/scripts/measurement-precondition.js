@@ -1,0 +1,12 @@
+const root='https://benjym.github.io/constitutive-atlas/';
+await page.goto(root+'#laboratory?model=hypoplastic-sand-igs97');
+await page.locator('#reset').waitFor({state:'visible'});
+await page.locator('#reset').click();
+await page.waitForFunction(()=>document.querySelector('#model')?.value==='hypoplastic-sand-igs97'&&!document.querySelector('#export-run')?.disabled,null,{timeout:30000});
+const compare=page.locator('#measurements');
+if(await compare.getAttribute('open')===null)await page.locator('#measurements > summary').click();
+const picker=page.getByRole('combobox',{name:'Experimental test',exact:true});
+await picker.waitFor({state:'visible'});
+await page.waitForFunction(()=>!document.querySelector('#experiment-select')?.disabled,null,{timeout:30000});
+if(await page.locator('#model').inputValue()!=='hypoplastic-sand-igs97'||await page.locator('#export-run').isDisabled()||await compare.getAttribute('open')===null)throw Error('measurement precondition failed');
+return {status:'measurement-precondition-ready',model:await page.locator('#model').inputValue(),reset:true,compareOpen:true,experimentalPickerEnabled:await picker.isEnabled()};

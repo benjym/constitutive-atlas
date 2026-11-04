@@ -1,0 +1,7 @@
+    if(protocol==1){
+        // Declared incremental multiplier/predictor residuals keep the audited
+        // control derivative. Other profiles retain the original controller;
+        // absence of a multiplier is not a general smoothness/plasticity claim.
+        bool multiplier_control=false;for(const auto&field:models().at(model).fields)multiplier_control=multiplier_control||field.multiplier;
+        if(multiplier_control&&(models().at(model).rate||models().at(model).physical_time))return false;
+        double lateral=-.2*axial;

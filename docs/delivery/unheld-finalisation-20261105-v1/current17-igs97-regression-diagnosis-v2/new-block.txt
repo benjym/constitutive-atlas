@@ -1,0 +1,11 @@
+            double derivative=0;
+            if(!multiplier_control){
+                double h=std::max(1e-9,std::abs(axial)*1e-3);auto dd=de;dd.v[1]=dd.v[2]=lateral+h;auto pert=integrate(model,zn,dd,p,settings);
+                if(!pert.ok)return false;derivative=(.5*(pert.state[1]+pert.state[2])-.5*(trial.state[1]+trial.state[2]))/h;
+            }else{
+                const double h=std::max(1e-9,std::abs(axial)*1e-3);Sym<double> direction;direction.v[1]=direction.v[2]=1.;
+                const auto slope=consistent_control_derivative(trial,de,direction,h,
+                    [&](const Sym<double>&increment){return integrate(model,zn,increment,p,settings);},
+                    [](const State&state){return .5*(state[1]+state[2]);});
+                if(!slope.ok)return false;derivative=slope.value;
+            }

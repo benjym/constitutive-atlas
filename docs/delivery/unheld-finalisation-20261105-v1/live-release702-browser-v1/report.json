@@ -1,0 +1,364 @@
+{
+  "status": "PASSED_ACTUAL_PRODUCTION_BROWSER_AND_SAVED_DOWNLOADS",
+  "revision": "70251ec7ab4d18029d9a5e6ad30114acd31a662f",
+  "base_url": "https://benjym.github.io/constitutive-atlas/",
+  "observed_at": "2026-11-04T20:15:32.712955+00:00",
+  "browser_session": "baseline-five-20261105",
+  "models": 5,
+  "named_examples": 9,
+  "download_validation_checks": 579,
+  "console_errors": 0,
+  "console_warnings": 0,
+  "recorded_http_requests": 929,
+  "all_recorded_http_status": 200,
+  "screenshots": 18,
+  "measurement_rows": [
+    3600,
+    200000
+  ],
+  "compression_browser_assets_match_actual_uploaded_artifact": 4,
+  "results": {
+    "compression-live-v1.js.result.txt": {
+      "status": "passed-normalized-and-largest-native-compressed-UI",
+      "normalizedRows": 3600,
+      "nativeRows": 200000,
+      "nativeOption": [
+        {
+          "label": "CHANG-CREEP-RAW-28-01",
+          "value": "builtin:CHANG-CREEP-RAW-28-01"
+        }
+      ],
+      "normalizedStatus": null,
+      "nativeStatus": "200000 rows \u00b7 Source chart shown. No model overlay. See data notes.",
+      "assets": [
+        {
+          "path": "experiments.mjs",
+          "url": "https://benjym.github.io/constitutive-atlas/experiments.mjs",
+          "status": 200,
+          "bytes": 12225,
+          "sha256": "d3615cb2041be9ef969de636a7cc6f1b0ba8b0c3b9d8b91b6efb4d682b207dbf"
+        },
+        {
+          "path": "experiments/index.json",
+          "url": "https://benjym.github.io/constitutive-atlas/experiments/index.json",
+          "status": 200,
+          "bytes": 540988,
+          "sha256": "beb573d848ebaa8b167aefc4d181eeb9034a52abd48f6b6083c27f5098cc88f3"
+        },
+        {
+          "path": "experiments/GEOLAB-BASKARP-TRIAX-CD-1.json.gz",
+          "url": "https://benjym.github.io/constitutive-atlas/experiments/GEOLAB-BASKARP-TRIAX-CD-1.json.gz",
+          "status": 200,
+          "bytes": 31758,
+          "sha256": "e0d1e86df3cf95700d88c6e35008871a422c4a750d6556a1ec5ea8a68a129628"
+        },
+        {
+          "path": "experiments/CHANG-CREEP-RAW-28-01.json.gz",
+          "url": "https://benjym.github.io/constitutive-atlas/experiments/CHANG-CREEP-RAW-28-01.json.gz",
+          "status": 200,
+          "bytes": 5428798,
+          "sha256": "7232b3d0f0c51ea585ce0c47d3573b98632fbaf58208209e1f2498c616d0722f"
+        }
+      ]
+    },
+    "model-drucker-prager.js.result.txt": {
+      "model": "drucker-prager",
+      "checks": [
+        "profile-to-laboratory/default/exports",
+        "invalid-controls-disable",
+        "parameter/state/latest/reset/import-replay"
+      ],
+      "profile": "Elastoplasticity\nAvailable in laboratory\n\u00d7\nDrucker\u2013Prager, nonassociated perfect plasticity\n\nPressure-dependent yielding with separate controls for frictional strength and plastic volume change.\n\nDrucker\u2013Prager uses a smooth conical yield surface. More compressive mean stress raises the shear stress needed to yield; a separate dilation parameter controls the accompanying plastic volume change.\n\nWhat it describes\nFrictional strength\nThe shear yield stress depends on confinement.\nNonassociated plastic flow\nStrength and dilatancy can be adjusted independently.\nPerfect plasticity\nThe yield surface does not expand with accumulated plastic strain.\nExplore the response\n\nChoose Drained triaxial. Compare the response at two confining stresses, starting each run from an admissible initial state. Look for the change in shear stress at yielding.\n\nKeep the friction slope fixed and vary the dilatancy slope to explore the plastic volume response.\n\nMaterial parameters\n\nUse consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.\n\nParameter\tMeaning\tExample value and units\nE \u00b7 Young modulus\tSets the slope of the elastic axial stress\u2013strain response.\t30000000 \u00b7 Pa\n\u03bd \u00b7 Poisson ratio\tControls the balance of lateral and axial elastic deformation.\t0.25 \u00b7 dimensionless\nM \u00b7 Friction slope\tRaises shear yield stress as mean stress increases.\t1.2 \u00b7 dimensionless\nM_d \u00b7 Dilatancy slope\tControls plastic volume change; use source-consistent values between zero and the friction slope.\t0.2 \u00b7 dimensionless\nc \u00b7 Yield intercept\tSets the shear-stress intercept at zero mean stress.\t10000 \u00b7 Pa\nStarting state\n\nSupply the initial effective stress and void ratio. A numerically admissible state still needs to represent the material\u2019s actual preparation.\n\nScope and limitations\n\nThe Atlas formulation uses three-dimensional small strain, fixed spatial axes and compression-positive stress and strain. Stresses are effective stresses; the surrounding drainage formulation supplies any pore-pressure response. Changing elapsed time alone does not produce creep or relaxation.\n\nThis implementation has constant elasticity, no hardening and no separate tensile cutoff. The yield intercept is defined in p\u2013q space and is not directly a Mohr\u2013Coulomb cohesion.\n\nThe core equations\nRead more\nOpenSees \u2014 Drucker\u2013Prager material \u2197\nTechnical details, implementation and checks\ndrucker-prager\nLink to this model\nTest this model \u2192",
+      "technical": "drucker-prager-v03-agent-review-20261102-v1\n\nRecorded agent-review status: accepted \u00b7 Matches current definition bytes\n\nIndependent scientific reviewer \u00b7 /root/terracotta_source \u00b7 2026-11-02\n\nExact schema0.3 drucker-prager bdb66fb0a6b2b734830470f9407780deaae0e4610a823b9639ddbc1a5f324a2b: infinitesimal3D fixed spatial zero-spin compression-positive Mandel effective Cauchy stress material point, explicit caller persistent state and finite six-component strain-path loading. Both frozen native CLI and persistent ReleaseWasm public interfaces qualified only for exact83frozen perfect-cone/dilatancy/domain requests including declared failure/load-unload/reversal cases, plus new explicit-state/finite-loading/gamma zero-load/rejection/recovery interface. No current15atlas/browser/live qualification.\n\nRegistered project approval for this exact definition and scope.\n\nExperimental validation, current build qualification and live deployment remain separate. Review identity and independence are recorded declarations; packaging does not authenticate the reviewer.\n\nUncapped constant-isotropic-elastic nonassociated perfect cone only; no hardening/backstress/separate tensile cap or globally smooth tangent.\nMd0 hydrostatic loading beyond tensile apex has no admissible correction and is expected transactional failure; void bookkeeping can independently reject a stress-solvable step.\nNumerical source support is bounded to exact named frozen requests/parameters/states and unchanged tolerances; no arbitrary parameter/path, global convergence/uniqueness, full tangent or adaptive accuracy guarantee.\nNative invalid/recovery uses separate CLI processes; Wasm uses one persistent module. No native persistent-process/general serialized restart/FE host checkpoint qualification.\nNo finite strain/rotation/spin, physical-time creep/viscosity, coupled pore-pressure constitutive law, calibration/experimental validation, external-code benchmark, browser/package/live or deployment approval.\nActual sourcecommit was made after E4 with unchanged complete764source inventory. Original runner exit1 metadata finalization failure retained; distinct accepted recovery binds successful builds without rebuilding.\nOriginal private sources must remain readable for reproduction; no permission to redistribute PDF/raster/full extracted text inferred. Historical transcription author identities are unknown where prior records state so.\n\nOriginal agent-review record \u00b7 Exact reviewed definition JSON \u00b7 Approval registry\n\nChecklist, independence and exact identity",
+      "exposed": [
+        {
+          "text": "Original agent-review record",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/drucker-prager-v03-agent-v1.json"
+        },
+        {
+          "text": "Exact reviewed definition JSON",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/drucker-prager-v03-agent-v1.json"
+        },
+        {
+          "text": "Approval registry",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json"
+        }
+      ],
+      "hashes": [
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/drucker-prager-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "98d2bb85b10e33b3edcd8be8b9d33b1d26ffb45aa562917c87febed61274050a"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/drucker-prager-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "bdb66fb0a6b2b734830470f9407780deaae0e4610a823b9639ddbc1a5f324a2b"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json",
+          "status": 200,
+          "sha256": "cf6968829a79de70dd533a9e11d5eaf5befe6a31c94b2fc131d727f74cf1dc09"
+        }
+      ],
+      "url": "https://benjym.github.io/constitutive-atlas/#laboratory"
+    },
+    "model-hypoplastic-sand-igs97.js.result.txt": {
+      "model": "hypoplastic-sand-igs97",
+      "checks": [
+        "profile-to-laboratory/default/exports",
+        "invalid-controls-disable",
+        "parameter/state/latest/reset/import-replay"
+      ],
+      "profile": "Hypoplasticity\nAvailable in laboratory\n\u00d7\nSand hypoplasticity with intergranular strain (1997)\n\nSand hypoplasticity with additional memory of very small strains and changes in loading direction.\n\nThe Niemunis\u2013Herle intergranular-strain extension adds a tensor describing recent deformation to the von Wolffersdorff sand law. This lets unloading, reversal and continued loading have different stiffness.\n\nWhat it describes\nSmall-strain stiffness\nThe extra memory changes stiffness over a small deformation scale.\nDirection-dependent reloading\nReversing or turning the strain direction changes the response.\nPressure and density effects\nThe sand host retains its stress- and density-dependent behaviour.\nExplore the response\n\nCompare a monotonic path with a small strain cycle. Follow unloading and reloading stiffness, keeping the complete initial stress, density and memory fixed.\n\nMaterial parameters\n\nThe three limiting void ratios share a zero-pressure reference and must retain their dense\u2013critical\u2013loose ordering. Example coefficients are not a calibration for every sand. The additional memory parameters belong to the selected IGS extension.\n\nParameter\tMeaning\tExample value and units\n\u03c6_c \u00b7 Critical friction angle\tSets the frictional limit at critical state.\t0.5235987755982988 \u00b7 rad\nh_s \u00b7 Granular hardness\tSets the pressure scale for stiffness and density limits.\t5800000000 \u00b7 Pa\nn \u00b7 Pressure exponent\tControls how density limits and stiffness change with pressure.\t0.28 \u00b7 dimensionless\ne_d0 \u00b7 Dense limiting void ratio\tLocates the dense limit at zero pressure.\t0.53 \u00b7 dimensionless\ne_c0 \u00b7 Critical void ratio\tLocates the critical-state density at zero pressure.\t0.84 \u00b7 dimensionless\ne_i0 \u00b7 Loose limiting void ratio\tLocates the loose limit at zero pressure.\t1 \u00b7 dimensionless\n\u03b1 \u00b7 Density influence\tControls the influence of density on the nonlinear response.\t0.13 \u00b7 dimensionless\n\u03b2 \u00b7 Density stiffness influence\tControls how relative density changes stiffness.\t1.05 \u00b7 dimensionless\nR \u00b7 Memory radius\tSets the scale of very small strain over which direction memory changes.\t0.0001 \u00b7 dimensionless\nm_R \u00b7 Reversal stiffness\tSets the stiffness increase after reversing the strain direction.\t5 \u00b7 dimensionless\nm_T \u00b7 Orthogonal stiffness\tSets the stiffness response when the loading direction turns by a right angle.\t2 \u00b7 dimensionless\n\u03b2_r \u00b7 Memory mobilisation\tControls how quickly intergranular strain approaches its limiting magnitude.\t0.5 \u00b7 dimensionless\n\u03c7 \u00b7 Stiffness transition\tControls the transition between small-strain and continuing-loading stiffness.\t6 \u00b7 dimensionless\nStarting state\n\nSupply the initial effective stress and void ratio. A numerically admissible state still needs to represent the material\u2019s actual preparation. Also specify the full intergranular-strain tensor h. Zero history and a mobilized history describe different starting conditions.\n\nScope and limitations\n\nThe Atlas formulation uses three-dimensional small strain, fixed spatial axes and compression-positive stress and strain. Stresses are effective stresses; the surrounding drainage formulation supplies any pore-pressure response. Changing elapsed time alone does not produce creep or relaxation.\n\nThis is the 1997 extension paired with the selected von Wolffersdorff host. ISA and generalized intergranular strain are different extensions. Holding a stationary strain path does not erase memory.\n\nRead more\nNiemunis and Herle (1997) \u2014 hypoplastic model with intergranular strain \u2197\nRelated models and formulations\nSand hypoplasticity \u00b7 von Wolffersdorff (1996)\nHypoplasticity + ISA \u2014 Fuentes et al.\nGeneralized intergranular strain \u2014 Mugele, Stutz & Ma\u0161\u00edn (2024)\nTechnical details, implementation and checks\nhypoplastic-sand-igs97\nLink to this model\nTest this model \u2192",
+      "technical": "hypoplastic-sand-igs97-v03-agent-review-20261102-v1\n\nRecorded agent-review status: accepted \u00b7 Matches current definition bytes\n\nIndependent scientific reviewer \u00b7 /root/terracotta_source \u00b7 2026-11-02\n\nExact schema0.3 hypoplastic-sand-igs97 64453d282cf2c0f5e4e2b0923394e289702a9a2440f9ff7cc2d90a0c134a8108: infinitesimal3D fixed spatial zero-spin compression-positive Mandel effective Cauchy stress material point, explicit caller persistent state and finite six-component strain-path loading. Both frozen native CLI and persistent ReleaseWasm public interfaces qualified only for exact303source-rate/covariance/analytical-history/RK4/invalid/declared numerical-continuation cases and named rate variants plus new explicit-state/finite-loading zero-load/rejection/recovery interface. No current15atlas/browser/live qualification.\n\nRegistered project approval for this exact definition and scope.\n\nExperimental validation, current build qualification and live deployment remain separate. Review identity and independence are recorded declarations; packaging does not authenticate the reviewer.\n\nNH97 continuous overlay on general eight-parameter VW96 beta1.05 host, not original seven-parameter beta1 calibration. Named rate variants beyond source recommendations are software observations only.\nPhysical initial norm(h)<=R; cap and1%guard are declared numerical continuation, not physical preparation or full-stage source-ball certification. No spontaneous rest-duration erasure.\nNear-isotropy, density/pressure/shape boundaries and arbitrary parameter/path/long-cycle regions excluded. Collinear analytical history uses beta_r=.5; other/noncollinear paths retain empirical RK4 refinement.\nNumerical source support is bounded to exact named frozen requests/parameters/states and unchanged tolerances; no arbitrary parameter/path, global convergence/uniqueness, full tangent or adaptive accuracy guarantee.\nNative invalid/recovery uses separate CLI processes; Wasm uses one persistent module. No native persistent-process/general serialized restart/FE host checkpoint qualification.\nNo finite strain/rotation/spin, physical-time creep/viscosity, coupled pore-pressure constitutive law, calibration/experimental validation, external-code benchmark, browser/package/live or deployment approval.\nActual sourcecommit was made after E4 with unchanged complete764source inventory. Original runner exit1 metadata finalization failure retained; distinct accepted recovery binds successful builds without rebuilding.\nOriginal private sources must remain readable for reproduction; no permission to redistribute PDF/raster/full extracted text inferred. Historical transcription author identities are unknown where prior records state so.\n\nOriginal agent-review record \u00b7 Exact reviewed definition JSON \u00b7 Approval registry\n\nChecklist, independence and exact identity",
+      "exposed": [
+        {
+          "text": "Original agent-review record",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/hypoplastic-sand-igs97-v03-agent-v1.json"
+        },
+        {
+          "text": "Exact reviewed definition JSON",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/hypoplastic-sand-igs97-v03-agent-v1.json"
+        },
+        {
+          "text": "Approval registry",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json"
+        }
+      ],
+      "hashes": [
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/hypoplastic-sand-igs97-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "02bbc3fa0c0121933712361444ad41c40ea71eebf3839a8e74aa0030363f2352"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/hypoplastic-sand-igs97-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "64453d282cf2c0f5e4e2b0923394e289702a9a2440f9ff7cc2d90a0c134a8108"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json",
+          "status": 200,
+          "sha256": "cf6968829a79de70dd533a9e11d5eaf5befe6a31c94b2fc131d727f74cf1dc09"
+        }
+      ],
+      "url": "https://benjym.github.io/constitutive-atlas/#laboratory"
+    },
+    "model-hypoplastic-sand-vw96.js.result.txt": {
+      "model": "hypoplastic-sand-vw96",
+      "checks": [
+        "profile-to-laboratory/default/exports",
+        "invalid-controls-disable",
+        "parameter/state/latest/reset/import-replay"
+      ],
+      "profile": "Hypoplasticity\nAvailable in laboratory\n\u00d7\nSand hypoplasticity \u00b7 von Wolffersdorff (1996)\n\nA sand model whose stiffness, strength and volume response depend on pressure and density.\n\nThe von Wolffersdorff hypoplastic law evolves stress directly from the current stress, void ratio and strain direction. It describes nonlinear behaviour without dividing each increment into a separate elastic and plastic part.\n\nWhat it describes\nPressure-dependent stiffness\nThe same strain change can produce a different stress change at another pressure.\nDensity-dependent shearing\nDense and loose states can have different strength and contraction or dilation.\nExplore the response\n\nChoose Drained triaxial. Compare two admissible initial void ratios at the same stress and material parameters. Follow both the stress\u2013strain curve and the volume change.\n\nMaterial parameters\n\nThe three limiting void ratios share a zero-pressure reference and must retain their dense\u2013critical\u2013loose ordering. Example coefficients are not a calibration for every sand.\n\nParameter\tMeaning\tExample value and units\n\u03c6_c \u00b7 Critical friction angle\tSets the frictional limit at critical state.\t0.5235987755982988 \u00b7 rad\nh_s \u00b7 Granular hardness\tSets the pressure scale for stiffness and density limits.\t5800000000 \u00b7 Pa\nn \u00b7 Pressure exponent\tControls how density limits and stiffness change with pressure.\t0.28 \u00b7 dimensionless\ne_d0 \u00b7 Dense limiting void ratio\tLocates the dense limit at zero pressure.\t0.53 \u00b7 dimensionless\ne_c0 \u00b7 Critical void ratio\tLocates the critical-state density at zero pressure.\t0.84 \u00b7 dimensionless\ne_i0 \u00b7 Loose limiting void ratio\tLocates the loose limit at zero pressure.\t1 \u00b7 dimensionless\n\u03b1 \u00b7 Density influence\tControls the influence of density on the nonlinear response.\t0.13 \u00b7 dimensionless\n\u03b2 \u00b7 Density stiffness influence\tControls how relative density changes stiffness.\t1.05 \u00b7 dimensionless\nStarting state\n\nSupply the initial effective stress and void ratio. A numerically admissible state still needs to represent the material\u2019s actual preparation.\n\nScope and limitations\n\nThe Atlas formulation uses three-dimensional small strain, fixed spatial axes and compression-positive stress and strain. Stresses are effective stresses; the surrounding drainage formulation supplies any pore-pressure response. Changing elapsed time alone does not produce creep or relaxation.\n\nThe basic law has no additional small-strain direction-memory variable. Multiple reversals can show limitations in reloading stiffness. Atlas uses a restricted compressive-stress and density domain and does not transport finite rotations.\n\nRead more\nvon Wolffersdorff (1996) \u2014 hypoplastic relation for granular materials \u2197\nRelated models and formulations\nSand hypoplasticity with intergranular strain (1997)\nBarodesy sand (2015)\nTechnical details, implementation and checks\nhypoplastic-sand-vw96\nLink to this model\nTest this model \u2192",
+      "technical": "hypoplastic-sand-vw96-v03-agent-review-20261102-v1\n\nRecorded agent-review status: accepted \u00b7 Matches current definition bytes\n\nIndependent scientific reviewer \u00b7 /root/terracotta_source \u00b7 2026-11-02\n\nExact schema0.3 hypoplastic-sand-vw96 c028cdcd46b79d23c2798ff5309b8e8af8fb68ebf94ff08632dbf9af86ca4595: infinitesimal3D fixed spatial zero-spin compression-positive Mandel effective Cauchy stress material point, explicit caller persistent state and finite six-component strain-path loading. Both frozen native CLI and persistent ReleaseWasm public interfaces qualified only for exact229default-Karlsruhe illustrative source-rate/covariance/short-history/invalid-state cases plus new explicit-state/finite-loading zero-load/rejection/recovery interface. No current15atlas/browser/live qualification.\n\nRegistered project approval for this exact definition and scope.\n\nExperimental validation, current build qualification and live deployment remain separate. Review identity and independence are recorded declarations; packaging does not authenticate the reviewer.\n\nGeneral eight-parameter host; illustrative Karlsruhe/Fellin defaults differ from original Hochstetten TableI and are not Wichtmann calibration.\nExact isotropy included; nonzero near-isotropy cutoff, density/pressure/shape boundaries, mixed-sign extrapolation and arbitrary parameter boxes not accuracy/applicability qualified.\nOriginal cyclic cautions remain; finite short-history numerical agreement does not establish general long-cycle predictive suitability.\nNumerical source support is bounded to exact named frozen requests/parameters/states and unchanged tolerances; no arbitrary parameter/path, global convergence/uniqueness, full tangent or adaptive accuracy guarantee.\nNative invalid/recovery uses separate CLI processes; Wasm uses one persistent module. No native persistent-process/general serialized restart/FE host checkpoint qualification.\nNo finite strain/rotation/spin, physical-time creep/viscosity, coupled pore-pressure constitutive law, calibration/experimental validation, external-code benchmark, browser/package/live or deployment approval.\nActual sourcecommit was made after E4 with unchanged complete764source inventory. Original runner exit1 metadata finalization failure retained; distinct accepted recovery binds successful builds without rebuilding.\nOriginal private sources must remain readable for reproduction; no permission to redistribute PDF/raster/full extracted text inferred. Historical transcription author identities are unknown where prior records state so.\n\nOriginal agent-review record \u00b7 Exact reviewed definition JSON \u00b7 Approval registry\n\nChecklist, independence and exact identity",
+      "exposed": [
+        {
+          "text": "Original agent-review record",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/hypoplastic-sand-vw96-v03-agent-v1.json"
+        },
+        {
+          "text": "Exact reviewed definition JSON",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/hypoplastic-sand-vw96-v03-agent-v1.json"
+        },
+        {
+          "text": "Approval registry",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json"
+        }
+      ],
+      "hashes": [
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/hypoplastic-sand-vw96-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "541e8b4e1f5cfe6c993f5b7b5c3c181c6dab3a9b64d5cb971958ccf4e5a9d2b6"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/hypoplastic-sand-vw96-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "c028cdcd46b79d23c2798ff5309b8e8af8fb68ebf94ff08632dbf9af86ca4595"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json",
+          "status": 200,
+          "sha256": "cf6968829a79de70dd533a9e11d5eaf5befe6a31c94b2fc131d727f74cf1dc09"
+        }
+      ],
+      "url": "https://benjym.github.io/constitutive-atlas/#laboratory"
+    },
+    "model-linear-elastic.js.result.txt": {
+      "model": "linear-elastic",
+      "checks": [
+        "profile-to-laboratory/default/exports",
+        "invalid-controls-disable",
+        "parameter/state/latest/reset/import-replay"
+      ],
+      "profile": "Elasticity\nAvailable in laboratory\n\u00d7\nLinear isotropic elasticity\n\nA simple reversible response with constant stiffness and no permanent deformation.\n\nLinear isotropic elasticity is a useful baseline: stress changes in direct proportion to strain, and the material has the same stiffness in every direction.\n\nWhat it describes\nElastic loading and unloading\nReturning along the strain path reverses the stress change.\nVolume and shape changes\nTwo constants determine the resistance to compression and shear.\nExplore the response\n\nChoose Drained triaxial and a small monotonic strain. Compare two Young-modulus values while keeping the initial stress and Poisson ratio fixed. The stress\u2013strain slope changes.\n\nTry unloading through a strain cycle to see the reversible response.\n\nMaterial parameters\n\nUse consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.\n\nParameter\tMeaning\tExample value and units\nE \u00b7 Young modulus\tSets the slope of the elastic axial stress\u2013strain response.\t30000000 \u00b7 Pa\n\u03bd \u00b7 Poisson ratio\tControls the balance of lateral and axial elastic deformation.\t0.25 \u00b7 dimensionless\nStarting state\n\nSupply the initial effective stress and void ratio. A numerically admissible state still needs to represent the material\u2019s actual preparation.\n\nScope and limitations\n\nThe Atlas formulation uses three-dimensional small strain, fixed spatial axes and compression-positive stress and strain. Stresses are effective stresses; the surrounding drainage formulation supplies any pore-pressure response. Changing elapsed time alone does not produce creep or relaxation.\n\nThere is no yielding, hardening, density-dependent stiffness or plastic volume change. The stored void ratio is bookkeeping and does not affect stress.\n\nThe core equations\nRead more\nOpenGeoSys \u2014 isotropic linear elasticity \u2197\nTechnical details, implementation and checks\nlinear-elastic\nLink to this model\nTest this model \u2192",
+      "technical": "linear-elastic-v03-agent-review-20261102-v1\n\nRecorded agent-review status: accepted \u00b7 Matches current definition bytes\n\nIndependent scientific reviewer \u00b7 /root/terracotta_source \u00b7 2026-11-02\n\nExact schema0.3 linear-elastic 67a7203bc13486fcc431b2f2dd421b4d80300fadc45faacf6db5a4a89e499b5b: infinitesimal3D fixed spatial zero-spin compression-positive Mandel effective Cauchy stress material point, explicit caller persistent state and finite six-component strain-path loading. Both frozen native CLI and persistent ReleaseWasm public interfaces qualified only for 29Cartesian Lame/tensor/control cases at named nu=-.2,.25,.49 and the new explicit-state/finite-loading zero-load/rejection/recovery interface. No current15atlas/browser/live qualification.\n\nRegistered project approval for this exact definition and scope.\n\nExperimental validation, current build qualification and live deployment remain separate. Review identity and independence are recorded declarations; packaging does not authenticate the reviewer.\n\nConstant E/nu and uncoupled Atlas exponential void bookkeeping; no arbitrary E/p_ref or near-incompressible conditioning guarantee.\nNumerical source support is bounded to exact named frozen requests/parameters/states and unchanged tolerances; no arbitrary parameter/path, global convergence/uniqueness, full tangent or adaptive accuracy guarantee.\nNative invalid/recovery uses separate CLI processes; Wasm uses one persistent module. No native persistent-process/general serialized restart/FE host checkpoint qualification.\nNo finite strain/rotation/spin, physical-time creep/viscosity, coupled pore-pressure constitutive law, calibration/experimental validation, external-code benchmark, browser/package/live or deployment approval.\nActual sourcecommit was made after E4 with unchanged complete764source inventory. Original runner exit1 metadata finalization failure retained; distinct accepted recovery binds successful builds without rebuilding.\nOriginal private sources must remain readable for reproduction; no permission to redistribute PDF/raster/full extracted text inferred. Historical transcription author identities are unknown where prior records state so.\n\nOriginal agent-review record \u00b7 Exact reviewed definition JSON \u00b7 Approval registry\n\nChecklist, independence and exact identity",
+      "exposed": [
+        {
+          "text": "Original agent-review record",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/linear-elastic-v03-agent-v1.json"
+        },
+        {
+          "text": "Exact reviewed definition JSON",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/linear-elastic-v03-agent-v1.json"
+        },
+        {
+          "text": "Approval registry",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json"
+        }
+      ],
+      "hashes": [
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/linear-elastic-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "37e90bfb28ff81946bcea2a2adbd24b9da2e57cd568800996fd68377b1fb4cf5"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/linear-elastic-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "67a7203bc13486fcc431b2f2dd421b4d80300fadc45faacf6db5a4a89e499b5b"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json",
+          "status": 200,
+          "sha256": "cf6968829a79de70dd533a9e11d5eaf5befe6a31c94b2fc131d727f74cf1dc09"
+        }
+      ],
+      "url": "https://benjym.github.io/constitutive-atlas/#laboratory"
+    },
+    "model-modified-cam-clay.js.result.txt": {
+      "model": "modified-cam-clay",
+      "checks": [
+        "profile-to-laboratory/default/exports",
+        "invalid-controls-disable",
+        "parameter/state/latest/reset/import-replay"
+      ],
+      "profile": "Critical-State Plasticity\nAvailable in laboratory\n\u00d7\nModified Cam Clay\n\nA clay plasticity model that connects compression history with yielding and permanent deformation.\n\nModified Cam Clay describes how a clay changes volume and carries shear stress as it is loaded. A changing yield surface separates elastic response from plastic deformation. Its size records the effect of past plastic compression.\n\nWhat it describes\nPressure-dependent stiffness\nThe elastic stiffness increases with mean effective stress and depends on the current void ratio.\nYielding and compression history\nLoading inside the yield surface is elastic. Reaching the surface can cause permanent deformation and change the size of the surface.\nContraction, dilation and critical state\nPlastic shearing can reduce or increase volume, depending on the stress state. At critical state, shearing can continue without further plastic volume change.\nTry changing the compression history\n\nChoose Drained triaxial and Monotonic ramp. Start with a radial effective stress of 100 kPa, an axial / radial stress ratio of 1, void ratio 0.7 and preconsolidation pressure of 200 kPa. These give an initial overconsolidation ratio (OCR) of 2: the preconsolidation pressure is twice the initial mean effective stress.\n\nCompare this with a fresh run using preconsolidation pressure 100 kPa (OCR 1), keeping the other inputs the same. Look at when the stress\u2013strain response changes and how the volume response differs. This isolates the effect of the model\u2019s initial yield-surface size; the two states are illustrative rather than reconstructions of prepared specimens.\n\nMaterial parameters\n\nThese dimensionless example values illustrate behaviour. Calibrate them for the material and stress range you want to represent. The compression indices use natural logarithms.\n\nParameter\tMeaning\tExample value and units\nM \u00b7 Critical-state slope\tSets the ratio of deviator stress to mean effective stress at critical state (q = M p).\t1.2 \u00b7 dimensionless\n\u03bb \u00b7 Virgin compression index\tControls compression during virgin loading in specific volume versus natural log of mean effective stress.\t0.2 \u00b7 dimensionless\n\u03ba \u00b7 Swelling index\tControls elastic compression and swelling. It must be smaller than \u03bb.\t0.04 \u00b7 dimensionless\n\u03bd \u00b7 Elastic Poisson ratio\tSets the balance of shear and bulk stiffness in the elastic response.\t0.25 \u00b7 dimensionless\nStarting state\n\nSupply the initial effective stress, void ratio e (pore volume divided by solid volume) and preconsolidation pressure p_c (the size of the yield surface). For isotropic stress, OCR = p_c / p. The initial stress must lie on or inside the yield surface. These inputs are independent entries in Atlas; it does not infer a consistent specimen preparation history from them.\n\nScope and limitations\n\nThe Atlas formulation uses three-dimensional small strains and effective stress, with compression positive. It is rate independent: changing the elapsed loading time alone does not produce creep or stress relaxation. Pore-pressure evolution needs a surrounding drainage or fluid formulation; the laboratory reconstructs pore-pressure change for its undrained controls.\n\nUse this profile to explore the basic critical-state response of clay. This formulation has isotropic hardening and no evolving fabric anisotropy, structure/bond degradation or dedicated cyclic-memory mechanism. It requires positive mean effective stress and does not cover mean tensile stress or finite rotations.\n\nThe core equations\nRead more\nSilbermann and Nagel \u2014 Modified Cam Clay report (2023) \u2197\nItasca \u2014 Modified Cam-Clay theory and parameter guidance \u2197\nTechnical details, implementation and checks\nmodified-cam-clay\nLink to this model\nTest this model \u2192",
+      "technical": "modified-cam-clay-v03-agent-review-20261102-v1\n\nRecorded agent-review status: accepted \u00b7 Matches current definition bytes\n\nIndependent scientific reviewer \u00b7 /root/terracotta_source \u00b7 2026-11-02\n\nExact schema0.3 modified-cam-clay 96b33fadf285f555ef98c35d98cd562533c5ee3ae233aee8515e7e1c85f58777: infinitesimal3D fixed spatial zero-spin compression-positive Mandel effective Cauchy stress material point, explicit caller persistent state and finite six-component strain-path loading. Both frozen native CLI and persistent ReleaseWasm public interfaces qualified only for named57default-parameter scalar/tensor/wet-dry/recorded-partition/rollback/continuum-refinement cases plus new explicit-state/finite-loading/gamma zero-load/rejection/recovery interface. No current15atlas/browser/live qualification.\n\nRegistered project approval for this exact definition and scope.\n\nExperimental validation, current build qualification and live deployment remain separate. Review identity and independence are recorded declarations; packaging does not authenticate the reviewer.\n\nComplete selected Atlas MCC discrete law; endpoint pressure/volume stiffness, normalized temporary multiplier and exponential volume/log-pc differ from original finite-step scheme. Source M/porosity printed conflicts remain explicit.\nExplicit sigma/e/pc does not establish a calibrated NCL intercept or preparation. Recorded-partition reference is not global adaptive accuracy or branch uniqueness; positive finite elastic trial pressure required by scalar oracle.\nNumerical source support is bounded to exact named frozen requests/parameters/states and unchanged tolerances; no arbitrary parameter/path, global convergence/uniqueness, full tangent or adaptive accuracy guarantee.\nNative invalid/recovery uses separate CLI processes; Wasm uses one persistent module. No native persistent-process/general serialized restart/FE host checkpoint qualification.\nNo finite strain/rotation/spin, physical-time creep/viscosity, coupled pore-pressure constitutive law, calibration/experimental validation, external-code benchmark, browser/package/live or deployment approval.\nActual sourcecommit was made after E4 with unchanged complete764source inventory. Original runner exit1 metadata finalization failure retained; distinct accepted recovery binds successful builds without rebuilding.\nOriginal private sources must remain readable for reproduction; no permission to redistribute PDF/raster/full extracted text inferred. Historical transcription author identities are unknown where prior records state so.\n\nOriginal agent-review record \u00b7 Exact reviewed definition JSON \u00b7 Approval registry\n\nChecklist, independence and exact identity",
+      "exposed": [
+        {
+          "text": "Original agent-review record",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/modified-cam-clay-v03-agent-v1.json"
+        },
+        {
+          "text": "Exact reviewed definition JSON",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/modified-cam-clay-v03-agent-v1.json"
+        },
+        {
+          "text": "Approval registry",
+          "href": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json"
+        }
+      ],
+      "hashes": [
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/modified-cam-clay-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "01118154944e0ffe3eb029537be6bd0814db40a87bb7e55909f123f795a0d875"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/agent-reviews/definitions/modified-cam-clay-v03-agent-v1.json",
+          "status": 200,
+          "sha256": "96b33fadf285f555ef98c35d98cd562533c5ee3ae233aee8515e7e1c85f58777"
+        },
+        {
+          "url": "https://benjym.github.io/constitutive-atlas/evidence-records/catalogue/approved-models.json",
+          "status": 200,
+          "sha256": "cf6968829a79de70dd533a9e11d5eaf5befe6a31c94b2fc131d727f74cf1dc09"
+        }
+      ],
+      "url": "https://benjym.github.io/constitutive-atlas/#laboratory"
+    },
+    "named.js.result.txt": [
+      {
+        "id": "gis2024-small-drained",
+        "model": "research-hp-extracted-asbs-gis-2024-v03",
+        "preview": "GIS2024 \u00b7 small drained software example \u00b7 0.001 % axial strain \u00b7 8 increments \u00b7 0 cycles. 14 initial-state components, 19 parameters. Solver settings: {\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":2e-10,\"rate_tolerance\":0.000001,\"max_iterations\":45,\"max_depth\":20,\"max_substeps\":20000,\"max_backtracks\":11}. Bounded 0.001% strain,8 increments, explicit depth20; qualified tiny-path software case. Ordinary 1%/100step/depth14 default fails. Source review, specimen preparation, calibration and scientific admission remain pending. Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.",
+        "evidence": "https://github.com/benjym/constitutive-atlas/blob/main/docs/reviews/gis2024-laboratory-route-v1/README.md",
+        "target": "0.001"
+      },
+      {
+        "id": "duncan-dense-source-drained-v1",
+        "model": "duncan-chang-1970-endpoint-average",
+        "preview": "Duncan\u2013Chang \u00b7 dense source coefficients \u00b7 drained \u00b7 0.5 % axial strain \u00b7 128 increments \u00b7 0 cycles. 7 initial-state components, 10 parameters. Solver settings: {\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":2e-10,\"rate_tolerance\":0.000001,\"max_iterations\":45,\"max_depth\":14,\"max_substeps\":20000,\"max_backtracks\":11}. Illustrative Table1 coefficients,0.5% axial strain in128increments at100kPa initial confinement. Complete7component initial state and numerical choices are explicit. Source-law qualification and exact E5 scope are linked; no specimen calibration, experimental validation or FE-host tangent claim. Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.",
+        "evidence": "https://github.com/benjym/constitutive-atlas/blob/main/docs/ingestion/duncan-chang-1970/material-v1/independent-review/e5-v1/REPORT.md",
+        "target": "0.5"
+      },
+      {
+        "id": "duncan-loose-source-drained-v1",
+        "model": "duncan-chang-1970-endpoint-average",
+        "preview": "Duncan\u2013Chang \u00b7 loose source coefficients \u00b7 drained \u00b7 0.5 % axial strain \u00b7 128 increments \u00b7 0 cycles. 7 initial-state components, 10 parameters. Solver settings: {\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":2e-10,\"rate_tolerance\":0.000001,\"max_iterations\":45,\"max_depth\":14,\"max_substeps\":20000,\"max_backtracks\":11}. Illustrative Table1 coefficients,0.5% axial strain in128increments at100kPa initial confinement. Complete7component initial state and numerical choices are explicit. Source-law qualification and exact E5 scope are linked; no specimen calibration, experimental validation or FE-host tangent claim. Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.",
+        "evidence": "https://github.com/benjym/constitutive-atlas/blob/main/docs/ingestion/duncan-chang-1970/material-v1/independent-review/e5-v1/REPORT.md",
+        "target": "0.5"
+      },
+      {
+        "id": "barodesy2017-london-ncl-isotropic-v1",
+        "model": "barodesy-clay-2017",
+        "preview": "Barodesy 2017 \u00b7 London NCL isotropic example \u00b7 1 % axial strain \u00b7 100 increments \u00b7 0 cycles. 7 initial-state components, 5 parameters. Solver settings: {\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":2e-10,\"rate_tolerance\":0.000001,\"max_iterations\":45,\"max_depth\":14,\"max_substeps\":20000,\"max_backtracks\":11}. Source Table2 London parameters and Eq11 analytical 100kPa initial-state assignment; project-chosen 1% isotropic normal compression in100increments. Original seven native/Wasm requests and independent NCL trajectory gates replayed on current14model runtime. Body2p/zero spin only. No measured preparation, experiment or live-release qualification. Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.",
+        "evidence": "https://github.com/benjym/constitutive-atlas/blob/main/docs/ingestion/barodesy-clay-2017/ncl-current-v2/README.md",
+        "target": "1"
+      },
+      {
+        "id": "baseline-v03-linear-elastic-drained-v1",
+        "model": "linear-elastic",
+        "preview": "Linear elasticity \u00b7 drained compression \u00b7 1 % axial strain \u00b7 100 increments \u00b7 0 cycles. 7 initial-state components, 3 parameters. Solver settings: {\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":2e-10,\"rate_tolerance\":0.000001,\"max_iterations\":45,\"max_depth\":14,\"max_substeps\":20000,\"max_backtracks\":11}. 1% drained axial compression in 100 increments from explicit 100 kPa isotropic effective stress and void ratio 0.7. Constant elastic stiffness gives reversible stress changes; this monotonic path does not demonstrate yielding or cyclic soil behaviour. Parameters illustrate the equation response and are not a specimen calibration. Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.",
+        "evidence": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/MaterialLib/SolidModels/LinearElasticIsotropic.h",
+        "target": "1"
+      },
+      {
+        "id": "baseline-v03-drucker-prager-drained-v1",
+        "model": "drucker-prager",
+        "preview": "Drucker\u2013Prager \u00b7 drained compression \u00b7 1 % axial strain \u00b7 100 increments \u00b7 0 cycles. 8 initial-state components, 6 parameters. Solver settings: {\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":2e-10,\"rate_tolerance\":0.000001,\"max_iterations\":45,\"max_depth\":14,\"max_substeps\":20000,\"max_backtracks\":11}. 1% drained axial compression in 100 increments from explicit 100 kPa isotropic effective stress and void ratio 0.7. Pressure-dependent perfect plasticity with nonassociated flow. This example uses the smooth-cone/apex model without a separate tensile cutoff or hardening. Parameters illustrate the equation response and are not a specimen calibration. Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.",
+        "evidence": "https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/DruckerPrager.html",
+        "target": "1"
+      },
+      {
+        "id": "baseline-v03-modified-cam-clay-drained-v1",
+        "model": "modified-cam-clay",
+        "preview": "Modified Cam Clay \u00b7 drained compression \u00b7 1 % axial strain \u00b7 100 increments \u00b7 0 cycles. 9 initial-state components, 5 parameters. Solver settings: {\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":2e-10,\"rate_tolerance\":0.000001,\"max_iterations\":45,\"max_depth\":14,\"max_substeps\":20000,\"max_backtracks\":11}. 1% drained axial compression in 100 increments from explicit 100 kPa isotropic effective stress and void ratio 0.7. Pressure-dependent yielding and evolving preconsolidation pressure. The explicit initial preconsolidation pressure is 200 kPa at 100 kPa isotropic effective stress; the exponential finite-step hardening is the atlas discretization. Parameters illustrate the equation response and are not a specimen calibration. Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.",
+        "evidence": "https://github.com/ufz/ogs/blob/b5d0f115c75ee74a7cdbfad533625a550a416fda/web/content/docs/benchmarks/small-deformations/ModifiedCamClay/ModifiedCamClay_report.pdf",
+        "target": "1"
+      },
+      {
+        "id": "baseline-v03-hypoplastic-sand-vw96-drained-v1",
+        "model": "hypoplastic-sand-vw96",
+        "preview": "Hypoplastic sand 1996 \u00b7 drained compression \u00b7 1 % axial strain \u00b7 100 increments \u00b7 0 cycles. 7 initial-state components, 9 parameters. Solver settings: {\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":2e-10,\"rate_tolerance\":0.000001,\"max_iterations\":45,\"max_depth\":14,\"max_substeps\":20000,\"max_backtracks\":11}. 1% drained axial compression in 100 increments from explicit 100 kPa isotropic effective stress and void ratio 0.7. Stress and density dependent sand response from the specified void ratio. This monotonic path does not establish cyclic or small-strain behaviour. Parameters illustrate the equation response and are not a specimen calibration. Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.",
+        "evidence": "https://www.uibk.ac.at/de/geotechnik/bodenmechanik/forschung/hypoplasticity-copy-2/",
+        "target": "1"
+      },
+      {
+        "id": "baseline-v03-hypoplastic-sand-igs97-drained-v1",
+        "model": "hypoplastic-sand-igs97",
+        "preview": "Hypoplastic sand with IGS \u00b7 drained compression \u00b7 1 % axial strain \u00b7 100 increments \u00b7 0 cycles. 13 initial-state components, 14 parameters. Solver settings: {\"version\":\"incremental-settings-0.1\",\"norm\":\"scaled_component_max\",\"residual_tolerance\":2e-10,\"rate_tolerance\":0.000001,\"max_iterations\":45,\"max_depth\":14,\"max_substeps\":20000,\"max_backtracks\":11}. 1% drained axial compression in 100 increments from explicit 100 kPa isotropic effective stress and void ratio 0.7. Sand response with intergranular-strain history, initialized to zero. This monotonic path does not test reversal stiffness; the implementation includes its documented history cap and admission band. Parameters illustrate the equation response and are not a specimen calibration. Loading replaces parameters, the complete initial state, loading and solver settings. It starts a fresh replay; it does not continue a saved final state. Examples do not establish specimen preparation, calibration or scientific review.",
+        "evidence": "https://www.uibk.ac.at/de/geotechnik/bodenmechanik/forschung/hypoplasticity-copy-2/",
+        "target": "1"
+      }
+    ],
+    "negative-mobile.js.result.txt": {
+      "checks": [
+        "cross-model-example-invalidated",
+        "wrong-catalogue-import-rejected-inputs-preserved",
+        "mobile-profile-to-lab:linear-elastic",
+        "mobile-profile-to-lab:drucker-prager",
+        "mobile-profile-to-lab:modified-cam-clay",
+        "mobile-profile-to-lab:hypoplastic-sand-vw96",
+        "mobile-profile-to-lab:hypoplastic-sand-igs97"
+      ],
+      "rejection_excerpt": ". Global defaults stay unchanged.\n\nReplace inputs with this example\nMaterial parameters\nAdjust model constants\nMATERIAL PARAMETERS\nUnits shown per control\nReference stress / numerical scaling\nYoung modulus (E, Pa)\n\nSets the slope of the elastic axial stress\u2013strain response.\n\nPoisson ratio (\u03bd)\n\nControls the balance of lateral and axial elastic deformation.\n\nFriction slope (M)\n\nRaises shear yield stress as mean stress increases.\n\nDilatancy slope (M_d)\n\nControls plastic volume change; use source-consistent values between zero and the friction slope.\n\nYield intercept (c, Pa)\n\nSets the shear-stress intercept at zero mean stress.\n\nSolver settings\n\nLive \u00b7 changes update automatically.\n\n\u2713 Response up to date\n100 increments \u00b7 44.6 ms \u00b7 Drained triaxial \u00b7 effective stress\nStress\u2013strain response\n230\n-0.07\n170\n0.215\n110\n0.5\n47\n0.785\n-15\n1.07\nAxial strain \u03b5\u2081 (%)\nDeviator stress q (kPa)\nModel prediction\nEffective stress path\n230\n94.9\n170\n116\n110\n136\n47\n157\n-15\n177\nMean effective stress p\u2032 (kPa)\nDeviator stress q (kPa)\nModel prediction\nVolumetric response\n0.39\n-0.07\n0.28\n0.215\n0.18\n0.5\n0.077\n0.785\n-0.025\n1.07\nAxial strain \u03b5\u2081 (%)\nVolumetric strain \u03b5\u1d65 (%)\nModel prediction\nPore-pressure change\n1\n0\n0.75\n0.25\n0.5\n0.5\n0.25\n0.75\n0\n1\nAxial strain \u03b5\u2081 (%)\nPore-pressure change \u0394u (kPa)\nUnavailable for this mechanical protocol.\nModel prediction\n\nUnavailable for this mechanical protocol.\n\nExample parameters. No experimental calibration or predictive validity is implied.\n\n\u2193 Results CSV\n\u2193 Reproducible run\nCompare measurements\nEquations & source provenance\nInvalid scoped laboratory envelope or catalogue."
+    }
+  },
+  "limitations": [
+    "Software and declared bounded model scope only; no experimental calibration or predictive validation.",
+    "normalizedStatus is null after selecting native record; prior normalized visible-status and overlay toggle assertions passed and normalized screenshot retained.",
+    "Full CI and independent final E8 decision remain pending."
+  ],
+  "parent_visual_inspection": [
+    "linear-elastic-mobile.png",
+    "modified-cam-clay-profile.png",
+    "igs97-desktop-laboratory.png",
+    "compression-normalized-v1.png",
+    "compression-native-v1.png"
+  ]
+}

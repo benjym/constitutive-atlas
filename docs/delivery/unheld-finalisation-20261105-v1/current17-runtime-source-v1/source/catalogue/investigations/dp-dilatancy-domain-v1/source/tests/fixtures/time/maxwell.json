@@ -1,0 +1,77 @@
+{
+  "schema_version": "0.2",
+  "status": "draft",
+  "id": "test-maxwell",
+  "name": "Synthetic Maxwell verification fixture",
+  "family": "engine verification only",
+  "description": "Analytical engine fixture; not a literature atlas entry.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/TEMPORAL_INTEGRATION.md",
+      "role": "analytical verification specification",
+      "locator": "Maxwell deviatoric law; not Terracotta"
+    }
+  ],
+  "formulation": {
+    "time_dependence": "physical_time",
+    "equation_form": "ode"
+  },
+  "parameters": {
+    "Kmod": {
+      "default": 20000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa"
+    },
+    "Gmod": {
+      "default": 12000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa"
+    },
+    "tau": {
+      "default": 2,
+      "min": 1e-06,
+      "max": 1000000.0,
+      "unit": "s"
+    },
+    "time_limit": {
+      "default": 1000000000.0,
+      "min": 0.001,
+      "max": 1000000000000.0,
+      "unit": "s"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "Kmod",
+      "initial": [
+        140000,
+        80000,
+        80000,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "derived": [],
+  "equations": {
+    "sigma": "Kmod * trace(strain_rate) * I + 2 * Gmod * dev(strain_rate) - dev(sigma) / tau"
+  },
+  "domain": [
+    "time < time_limit"
+  ],
+  "observables": [
+    {
+      "name": "stress",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "Kmod",
+      "expr": "sigma"
+    }
+  ]
+}

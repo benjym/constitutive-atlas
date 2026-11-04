@@ -1,0 +1,32 @@
+--- frozen-v2/commands.py
++++ v3/commands.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ import hashlib,importlib.util,json
+ HERE=Path(__file__).resolve().parent
+-ACTUAL=HERE.parent/'rate-restoration-qualification-actual-v2';WORK=Path('/private/tmp/atlas-baseline-delivery-20261105/rate-control-build-v1');SOURCE=Path('/private/tmp/atlas-baseline-delivery-20261105/source')
++ACTUAL=HERE.parent/'rate-restoration-qualification-actual-v3';WORK=Path('/private/tmp/atlas-baseline-delivery-20261105/rate-control-build-v1');SOURCE=Path('/private/tmp/atlas-baseline-delivery-20261105/source')
+ OBSERVER=HERE.parents[1]/'unheld-finalisation-20261102-v1/baseline-five-host-context-dispatch-v3/proposed/tools/baseline_observe_child_v3.py'
+ OBSERVER_SHA='7328ba854ba75a85dc66fd29aa65c4166d252a5361886920fb67a5c6d788e60e'
+ def source_freeze_argv(python,node,tools,manifest_sha,launch_binding):
+@@ -19,6 +19,20 @@
+  return result
+ def closed_environment():
+  return {'PATH':'/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin','HOME':str(WORK/'env-home'),'XDG_CONFIG_HOME':str(WORK/'env-xdg'),'TMPDIR':str(WORK/'env-tmp'),'LC_ALL':'C','TZ':'UTC','PYTHONDONTWRITEBYTECODE':'1','PYTHONNOUSERSITE':'1','PYTHONHASHSEED':'0','GIT_CONFIG_NOSYSTEM':'1','GIT_CONFIG_SYSTEM':'/dev/null','GIT_CONFIG_GLOBAL':'/dev/null','GIT_CONFIG_COUNT':'0','GIT_ATTR_NOSYSTEM':'1','GIT_NO_REPLACE_OBJECTS':'1','GIT_OPTIONAL_LOCKS':'0','GIT_TERMINAL_PROMPT':'0'}
++def observe_source_freeze(python,node,tools,manifest_sha,launch_binding):
++ """Required outer route before a source freeze or plan binding exists."""
++ assert hashlib.sha256(OBSERVER.read_bytes()).hexdigest()==OBSERVER_SHA
++ spec=importlib.util.spec_from_file_location('_original_observer',OBSERVER);o=importlib.util.module_from_spec(spec);spec.loader.exec_module(o)
++ spec=importlib.util.spec_from_file_location('_fresh_C_collector',HERE/'collector.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
++ assert Path(python).resolve()==Path(m.sys.executable).resolve(),'outer Python identity must match child Python'
++ launch_pin=m.pin(launch_binding)
++ def operation():
++  result=o.observe(source_freeze_argv(python,node,tools,manifest_sha,launch_binding),str(SOURCE),ACTUAL.parent/(ACTUAL.name+'-outer-source-freeze'),env=closed_environment(),timeout=1800)
++  assert result.returncode==0,'first source-freeze failure retained; stop later phases'
++  return result
++ report=ACTUAL.parent/(ACTUAL.name+'-source-freeze-outer-binding.json')
++ return m.guarded_source_freeze(manifest_sha,launch_pin,Path(node),tools,operation,report)
++
+ def observe_phase(pre,phase,manifest_sha):
+  assert hashlib.sha256(OBSERVER.read_bytes()).hexdigest()==OBSERVER_SHA
+  spec=importlib.util.spec_from_file_location('_original_observer',OBSERVER);o=importlib.util.module_from_spec(spec);spec.loader.exec_module(o)

@@ -1,0 +1,283 @@
+{
+  "schema_version": "0.1",
+  "status": "draft",
+  "parameters": {
+    "p_ref": {
+      "default": 100000,
+      "min": 1,
+      "max": 10000000000.0,
+      "unit": "Pa",
+      "label": "Reference stress / numerical scaling"
+    },
+    "phi": {
+      "default": 0.5235987755982988,
+      "min": 0.1,
+      "max": 1.2,
+      "unit": "1",
+      "label": "Critical friction angle [rad]"
+    },
+    "hs": {
+      "default": 5800000000.0,
+      "min": 1000000.0,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "Granular hardness"
+    },
+    "n": {
+      "default": 0.28,
+      "min": 0.05,
+      "max": 0.9,
+      "unit": "1",
+      "label": "Barotropy exponent"
+    },
+    "ed0": {
+      "default": 0.53,
+      "min": 0.01,
+      "max": 2,
+      "unit": "1",
+      "label": "Minimum void ratio at zero pressure"
+    },
+    "ec0": {
+      "default": 0.84,
+      "min": 0.02,
+      "max": 3,
+      "unit": "1",
+      "label": "Critical void ratio at zero pressure"
+    },
+    "ei0": {
+      "default": 1.0,
+      "min": 0.03,
+      "max": 4,
+      "unit": "1",
+      "label": "Maximum void ratio at zero pressure"
+    },
+    "alpha": {
+      "default": 0.13,
+      "min": 0.01,
+      "max": 1,
+      "unit": "1",
+      "label": "Density / dilatancy exponent"
+    },
+    "beta": {
+      "default": 1.05,
+      "min": 0,
+      "max": 5,
+      "unit": "1",
+      "label": "Pyknotropy exponent"
+    },
+    "R": {
+      "default": 0.0001,
+      "min": 1e-07,
+      "max": 0.01,
+      "unit": "1",
+      "label": "Limiting intergranular strain magnitude"
+    },
+    "mR": {
+      "default": 5,
+      "min": 1,
+      "max": 30,
+      "unit": "1",
+      "label": "Reversal stiffness multiplier"
+    },
+    "mT": {
+      "default": 2,
+      "min": 1,
+      "max": 30,
+      "unit": "1",
+      "label": "Orthogonal stiffness multiplier"
+    },
+    "beta_r": {
+      "default": 0.5,
+      "min": 0.05,
+      "max": 5,
+      "unit": "1",
+      "label": "History mobilisation exponent"
+    },
+    "chi": {
+      "default": 6,
+      "min": 0.1,
+      "max": 20,
+      "unit": "1",
+      "label": "Stiffness transition exponent"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0
+      ],
+      "shape": "sym",
+      "scale": "p_ref"
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "initial": 0.7,
+      "shape": "scalar",
+      "scale": "1"
+    },
+    {
+      "name": "h",
+      "unit": "1",
+      "initial": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "shape": "sym",
+      "scale": "R"
+    }
+  ],
+  "derived": [
+    {
+      "name": "mean",
+      "expr": "trace(sigma) / 3"
+    },
+    {
+      "name": "hat",
+      "expr": "sigma / trace(sigma)"
+    },
+    {
+      "name": "hsdev",
+      "expr": "dev(hat)"
+    },
+    {
+      "name": "j2",
+      "expr": "dot(hsdev, hsdev)"
+    },
+    {
+      "name": "tanpsi",
+      "expr": "sqrt(3 * j2)"
+    },
+    {
+      "name": "lode",
+      "expr": "select(j2 > 1e-24, -sqrt(6) * cube_trace(hsdev) / j2**1.5, 0)"
+    },
+    {
+      "name": "F",
+      "expr": "sqrt(tanpsi**2 / 8 + (2 - tanpsi**2) / (2 + sqrt(2) * tanpsi * lode)) - tanpsi / (2 * sqrt(2))"
+    },
+    {
+      "name": "a",
+      "expr": "sqrt(3) * (3 - sin(phi)) / (2 * sqrt(2) * sin(phi))"
+    },
+    {
+      "name": "compression",
+      "expr": "exp(-(3 * mean / hs)**n)"
+    },
+    {
+      "name": "ed",
+      "expr": "ed0 * compression"
+    },
+    {
+      "name": "ec",
+      "expr": "ec0 * compression"
+    },
+    {
+      "name": "ei",
+      "expr": "ei0 * compression"
+    },
+    {
+      "name": "fd",
+      "expr": "((e - ed) / (ec - ed))**alpha"
+    },
+    {
+      "name": "fe",
+      "expr": "(ec / e)**beta"
+    },
+    {
+      "name": "fb",
+      "expr": "hs / n * (ei0 / ec0)**beta * (1 + ei) / ei * (3 * mean / hs)**(1 - n) / (3 + a**2 - a * sqrt(3) * ((ei0 - ed0) / (ec0 - ed0))**alpha)"
+    },
+    {
+      "name": "factor",
+      "expr": "fb * fe / dot(hat,hat)"
+    },
+    {
+      "name": "linear",
+      "expr": "factor * (F**2 * de + a**2 * dot(hat,de) * hat)"
+    },
+    {
+      "name": "nonlinear",
+      "expr": "-factor * fd * a * F * (hat + hsdev)"
+    },
+    {
+      "name": "hn",
+      "expr": "norm(h)"
+    },
+    {
+      "name": "eta",
+      "expr": "select(hn > 0, h / hn, 0 * I)"
+    },
+    {
+      "name": "rho",
+      "expr": "min(hn / R, 1)"
+    },
+    {
+      "name": "projection",
+      "expr": "dot(eta,de)"
+    },
+    {
+      "name": "linear_eta",
+      "expr": "factor * (F**2 * eta + a**2 * dot(hat,eta) * hat)"
+    },
+    {
+      "name": "overlay",
+      "expr": "rho**chi * mT + (1 - rho**chi) * mR"
+    }
+  ],
+  "domain": [
+    "e > 0",
+    "mean > p_ref * 1e-8",
+    "ed0 < ec0",
+    "ec0 < ei0",
+    "e > ed",
+    "e < ei",
+    "F > 0",
+    "fb > 0 * p_ref",
+    "hn < R * 1.01",
+    "mR >= mT"
+  ],
+  "integration": "rate",
+  "id": "hypoplastic-sand-igs97",
+  "name": "Sand hypoplasticity + intergranular strain (1997)",
+  "family": "hypoplasticity",
+  "description": "Draft IGS overlay on the von Wolffersdorff base law; compression-positive h and strain. Equation transcription requires independent review before scientific use.",
+  "sources": [
+    {
+      "url": "https://www.uibk.ac.at/de/geotechnik/bodenmechanik/forschung/hypoplasticity-copy-2/",
+      "locator": "Equations of the Hypoplastic Law, section 5, images 18\u201326; Karlsruhe parameter row",
+      "role": "equation transcription"
+    },
+    {
+      "url": "https://doi.org/10.1002/(SICI)1099-1484(199607)1:3<251::AID-CFM13>3.0.CO;2-3",
+      "locator": "von Wolffersdorff (1996), pp. 251\u2013271",
+      "role": "original publication"
+    },
+    {
+      "url": "https://doi.org/10.1002/(SICI)1099-1484(199710)2:4<279::AID-CFM29>3.0.CO;2-8",
+      "locator": "Niemunis & Herle (1997), hypoplastic model for cohesionless soils with elastic strain range; IGS evolution and stiffness overlay",
+      "role": "original publication; independent transcription review pending"
+    },
+    {
+      "url": "https://j-machacek.github.io/numgeo/2026-09/theory/constitutive-models/mechanical-models/hypo-igs.html#igs-extension",
+      "locator": "2026-09 theory manual, IGS Extension: stiffness operator, mobilisation/direction and history evolution displays. Atlas adds rho cap and 1% history admission band; see dossier.",
+      "role": "implementation-author continuous-equation cross-check; not external execution"
+    }
+  ],
+  "equations": {
+    "sigma": "overlay * linear + select(projection > 0, rho**chi * ((1 - mT) * linear_eta + nonlinear) * projection, rho**chi * (mR - mT) * linear_eta * projection)",
+    "e": "-(1 + e) * trace(de)",
+    "h": "de - select(projection > 0, rho**beta_r * eta * projection, 0 * I)"
+  }
+}

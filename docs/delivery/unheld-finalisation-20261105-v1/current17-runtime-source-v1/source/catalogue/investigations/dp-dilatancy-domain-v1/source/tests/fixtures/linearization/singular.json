@@ -1,0 +1,69 @@
+{
+  "schema_version": "0.1",
+  "status": "draft",
+  "parameters": {
+    "p_ref": {
+      "default": 1000,
+      "min": 1,
+      "max": 1000000000.0,
+      "unit": "Pa"
+    },
+    "limit": {
+      "default": 100,
+      "min": 0.001,
+      "max": 1000000000.0,
+      "unit": "1"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "shape": "sym",
+      "unit": "Pa",
+      "scale": "p_ref",
+      "initial": [
+        100,
+        100,
+        100,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "coordinate",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 1
+    },
+    {
+      "name": "anchor",
+      "shape": "scalar",
+      "unit": "1",
+      "scale": "1",
+      "initial": 0
+    }
+  ],
+  "derived": [],
+  "domain": [
+    "abs(coordinate) < limit"
+  ],
+  "integration": "residual",
+  "id": "test-update-tangent-singular",
+  "name": "Singular implicit tangent fixture",
+  "family": "engine verification only",
+  "description": "Engine verification only: converged zero increment with singular residual Jacobian; update succeeds but derivative unavailable.",
+  "sources": [
+    {
+      "url": "https://github.com/benjym/constitutive-atlas/blob/main/docs/PARENT_INCREMENT_RESETS.md",
+      "role": "Analytical engine verification specification",
+      "locator": "Constant loading coordinate and frozen parent-memory reset"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma - sigma_n - p_ref * de",
+    "coordinate": "(coordinate-coordinate_n)**3 - trace(de)**3",
+    "anchor": "anchor - anchor_n"
+  }
+}

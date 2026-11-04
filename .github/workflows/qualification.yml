@@ -213,12 +213,24 @@ jobs:
         ATLAS_CLAY2013_SOLVER: "${{ github.workspace }}/build/atlas_clay2013_solver"
         ATLAS_GIS2024_SOLVER: "${{ github.workspace }}/build/atlas_gis2024_solver"
       run: python -B tools/run_ci_tests.py --portable
+    - name: Build separately bound historical recorded catalogue
+      id: recorded_legacy_build
+      shell: bash
+      run: python -B tools/build_recorded_legacy_ci.py --build build --output "$RUNNER_TEMP/recorded-legacy-build" --github-output "$GITHUB_OUTPUT"
     - name: Verify recorded-path JSON replay
       env:
         ATLAS_RECORDED_SOLVER: "${{ github.workspace }}/build/atlas_solver"
+        ATLAS_RECORDED_LEGACY_SOLVER: "${{ github.workspace }}/build/atlas_recorded_legacy_solver"
+        ATLAS_RECORDED_LEGACY_SHA256: "${{ steps.recorded_legacy_build.outputs.solver_sha256 }}"
       run: python -m unittest tests.test_experiment_replay tests.test_recorded_api
         tests.test_recorded_path tests.test_web_recorded tests.test_refinement tests.test_isotropic_reference
         tests.test_resolution_diagnosis tests.test_recorded_restarts -v
+    - name: Retain historical recorded build receipts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: recorded-legacy-native-${{ matrix.os }}
+        path: "${{ runner.temp }}/recorded-legacy-build/"
     timeout-minutes: 180
   wasm:
     runs-on: macos-26

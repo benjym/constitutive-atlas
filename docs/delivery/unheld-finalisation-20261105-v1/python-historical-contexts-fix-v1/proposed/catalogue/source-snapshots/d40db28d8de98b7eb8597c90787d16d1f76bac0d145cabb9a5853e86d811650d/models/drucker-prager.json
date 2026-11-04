@@ -1,0 +1,148 @@
+{
+  "schema_version": "0.1",
+  "status": "transcribed",
+  "parameters": {
+    "p_ref": {
+      "default": 100000,
+      "min": 1,
+      "max": 10000000000.0,
+      "unit": "Pa",
+      "label": "Reference stress / numerical scaling"
+    },
+    "E": {
+      "default": 30000000.0,
+      "min": 1,
+      "max": 1000000000000.0,
+      "unit": "Pa",
+      "label": "Young modulus"
+    },
+    "nu": {
+      "default": 0.25,
+      "min": -0.99,
+      "max": 0.499,
+      "unit": "1",
+      "label": "Poisson ratio"
+    },
+    "M": {
+      "default": 1.2,
+      "min": 0,
+      "max": 3,
+      "unit": "1",
+      "label": "Friction slope"
+    },
+    "Md": {
+      "default": 0.2,
+      "min": 0,
+      "max": 3,
+      "unit": "1",
+      "label": "Dilatancy slope"
+    },
+    "c": {
+      "default": 10000,
+      "min": 0,
+      "max": 1000000000.0,
+      "unit": "Pa",
+      "label": "Yield intercept"
+    }
+  },
+  "state": [
+    {
+      "name": "sigma",
+      "unit": "Pa",
+      "initial": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0,
+        0,
+        0
+      ],
+      "shape": "sym",
+      "scale": "p_ref"
+    },
+    {
+      "name": "e",
+      "unit": "1",
+      "initial": 0.7,
+      "shape": "scalar",
+      "scale": "1"
+    },
+    {
+      "name": "gamma",
+      "unit": "1",
+      "initial": 0,
+      "shape": "scalar",
+      "scale": "1",
+      "transient": true,
+      "multiplier": true
+    }
+  ],
+  "derived": [
+    {
+      "name": "K",
+      "expr": "E / (3 * (1 - 2 * nu))"
+    },
+    {
+      "name": "G",
+      "expr": "E / (2 * (1 + nu))"
+    },
+    {
+      "name": "mean",
+      "expr": "trace(sigma) / 3"
+    },
+    {
+      "name": "q",
+      "expr": "sqrt(1.5 * dot(dev(sigma), dev(sigma)))"
+    },
+    {
+      "name": "yield_scaled",
+      "expr": "(q - M * mean - c) / p_ref"
+    },
+    {
+      "name": "trial_s",
+      "expr": "dev(sigma_n) + 2 * G * dev(de)"
+    },
+    {
+      "name": "trial_q",
+      "expr": "sqrt(1.5 * dot(trial_s, trial_s))"
+    },
+    {
+      "name": "trial_q_safe",
+      "expr": "select(trial_q > 0 * p_ref, trial_q, p_ref)"
+    }
+  ],
+  "domain": [
+    "e > 0",
+    "gamma > -1e-9"
+  ],
+  "integration": "residual",
+  "id": "drucker-prager",
+  "name": "Drucker–Prager, nonassociated perfect plasticity",
+  "family": "elastoplasticity",
+  "description": "Drucker–Prager cone f=q-M p-c with separate dilatancy slope Md. Backward Euler with declarative trial-direction radial return and subgradient apex branch. Constant elasticity; no hardening or tensile cap.",
+  "sources": [
+    {
+      "url": "https://opensees.github.io/OpenSeesDocumentation/user/manual/material/ndMaterials/DruckerPrager.html",
+      "locator": "Drucker–Prager yield and flow conventions; this entry is the explicitly stated perfect-plastic specialization",
+      "role": "formulation"
+    },
+    {
+      "url": "https://github.com/OpenSees/OpenSees/blob/8a0273db3e2f5a14c05924a179c1e439500c852c/SRC/material/nD/UWmaterials/DruckerPrager.cpp",
+      "locator": "plastic_integrator: smooth-cone correction under zero hardening; atlas omits separate tensile cutoff. Trial-direction elimination and apex subgradient are project derivations documented in docs/models/drucker-prager-apex.md.",
+      "role": "implementation reference"
+    },
+    {
+      "url": "https://docs.itascacg.com/itasca930/common/models/drucker/doc/modeldrucker.html",
+      "locator": "Equations 17–23 (radial scaling) and Apex Stress Correction; comparison source includes a separate tensile cutoff absent from this atlas law. Project derivation: docs/models/drucker-prager-apex.md.",
+      "role": "formulation reference"
+    }
+  ],
+  "equations": {
+    "sigma": "sigma - sigma_n - K * trace(de) * I - 2 * G * dev(de) + min(3 * G * gamma / trial_q_safe, 1) * trial_s - gamma * K * Md * I",
+    "e": "e - (1 + e_n) * exp(-trace(de)) + 1",
+    "gamma": "sqrt(gamma**2 + yield_scaled**2) - gamma + yield_scaled"
+  },
+  "initial_checks": [
+    "yield_scaled <= 1e-8"
+  ]
+}

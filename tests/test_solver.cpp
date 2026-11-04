@@ -283,6 +283,24 @@ int main(){
             }
 
         }
+        // Public edited-initial-state regression: the rate controller must not
+        // reject a successful path solely because perturbations adapt differently.
+        // This is the unchanged browser request that failed at step93 on640.
+        int edited_igs=-1;for(size_t i=0;i<atlas::models().size();++i)
+            if(atlas::models()[i].id=="hypoplastic-sand-igs97")edited_igs=int(i);
+        require(edited_igs>=0,"edited IGS model missing");
+        const atlas::State edited_parameters={100000,0.5235987755982988,5800000000,0.28,0.53,0.84,1,0.13,1.05,0.0001,5,2,0.5,6};
+        const atlas::State edited_initial={110000,110000,110000,0,0,0,.7,0,0,0,0,0,0};
+        const atlas::IntegrationSettings edited_settings{};
+        const auto edited_run=atlas::run_protocol(edited_igs,edited_initial,edited_parameters,1,.01,100,0,edited_settings);
+        require(edited_run.ok&&edited_run.points.size()==101,"edited IGS drained path failed");
+        require(edited_run.points.front().state==edited_initial,"edited IGS initial state mutated");
+        for(size_t i=0;i<edited_run.points.size();++i){
+            const auto&point=edited_run.points[i];
+            require(point.state.size()==13&&atlas::finite(point.state),"edited IGS state invalid");
+            require(point.control==.01*double(i)/100.,"edited IGS control changed");
+            require(std::abs(.5*(point.state[1]+point.state[2])-110000)<110000*1e-8,"edited IGS lateral control failed");
+        }
         // Hidden zero-history crossing: both midpoint estimates sample unloading
         // and agree exactly, yet the true endpoint is on the loading branch.
         int igs=-1;for(size_t i=0;i<atlas::models().size();++i)

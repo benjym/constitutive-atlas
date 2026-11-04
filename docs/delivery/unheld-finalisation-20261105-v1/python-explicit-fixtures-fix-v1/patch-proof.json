@@ -1,0 +1,36 @@
+{
+  "tests/test_atlas.py": [
+    {
+      "old": "def csv(values):",
+      "new": "# Fixed original test examples, now explicit for the migrated five definitions.\nBASELINE_INITIAL_EXAMPLES={'linear-elastic': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7), 'drucker-prager': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7, 0), 'modified-cam-clay': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7, 200000, 0), 'hypoplastic-sand-vw96': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7), 'hypoplastic-sand-igs97': (100000.0, 100000.0, 100000.0, 0, 0, 0, 0.7, 0, 0, 0, 0, 0, 0)}\n\ndef csv(values):"
+    },
+    {
+      "old": "def run(model, **kwargs):\n    args=",
+      "new": "def run(model, **kwargs):\n    if 'initial' not in kwargs and model in BASELINE_INITIAL_EXAMPLES:\n        kwargs={**kwargs,'initial':csv(BASELINE_INITIAL_EXAMPLES[model])}\n    args="
+    }
+  ],
+  "tests/test_capacity.py": [
+    {
+      "old": "from atlas.compiler import generate\n",
+      "new": "from atlas.compiler import generate\nfrom tests.historical_generation import public_models\n"
+    },
+    {
+      "old": "model=load(ROOT/'models/linear-elastic.json')",
+      "new": "model=next(m for m in public_models() if m['id']=='linear-elastic')"
+    }
+  ],
+  "tests/test_history_legacy.py": [
+    {
+      "old": "from atlas.model import ROOT, defaults, load, prepare_increment\n",
+      "new": "from atlas.model import ROOT, defaults, load, prepare_increment\nfrom tests.historical_generation import public_models, public_paths\n"
+    },
+    {
+      "old": "paths=[ROOT/'models'/(name+'.json') for name in baseline]",
+      "new": "legacy_paths={path.name:path for path in public_paths()}\n        paths=[legacy_paths[name+'.json'] for name in baseline]"
+    },
+    {
+      "old": "model=load(ROOT/'models/drucker-prager.json')",
+      "new": "model=next(m for m in public_models() if m['id']=='drucker-prager')"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "identity": "shared640-actual-required-CI-blockers-20261105-v1",
+  "revision": "64002531f0af5c06ad0402d0d80548102f8e6a38",
+  "run": 41918560285,
+  "final_E8": false,
+  "observed": [
+    {
+      "path": "full-jobs-checkpoint-2307.json",
+      "sha256": "cd644bc798664cebe7834c02acefd91782428311cb69e935493c52cd372b94a0"
+    },
+    {
+      "path": "native-linux-recorded-failure-2308.log",
+      "sha256": "56ad33833d11cc7a05d1cbefd730b27d9132152d15db1bff761906c60d9153e5"
+    },
+    {
+      "path": "wasm-linux-package-failure-2315.log",
+      "sha256": "88e89662add00666722de727f969c831b9d8a7e2b8b4656aa2515a5ee67fb216"
+    }
+  ],
+  "blockers": [
+    {
+      "jobs": "native Linux/macOS",
+      "gate": "Verify recorded-path JSON replay",
+      "failure": "74tests:6failures4errors; legacy missing-initial fixtures reject under v03explicitstate contract beforeintendedassertions",
+      "owner": "controlled_refresh_review source-onlyrecorded-native-fixtures-fix-v1; rootintegration/actual"
+    },
+    {
+      "jobs": "wasm-linux",
+      "gate": "ensemble current17 baseline membership",
+      "failure": "actual15 expected14 in test_ensemble.mjs69; exactapprovedpatch4c64a92d alreadyinstalledunpublished",
+      "owner": "MDpublisher reviewedpatch handed torootcombinedcandidate"
+    }
+  ],
+  "other_wasm_job": "stillrunning atcheckpoint; do notinferallremaininggatespassed"
+}

@@ -1,0 +1,9 @@
+# Production702 browser phase independently accepted
+
+Exact frozen97-member browser manifestbe2c3fdae05c1994c3c5bb98626a6f7b86745fb1ad43ef10b87a6dffbbffe7b9. Decision is production-browser-phase only; no finalE8 acceptance. All180 saved evidence/source closure checks and original source-qualified579 download gates pass. The replay report exactly matches the parent's result:30finite101-point model downloads,5exactCSV, original frozen requests/edits, exact same-instance/mobile replay exceptelapsed_ms,9exact named requests/replays and original1e-10 physical comparison (maximumbudgetfraction0). Five definitions/E5reviews/registry are served byteexact from the actual uploaded artifact;929recorded requestsHTTP200, zero console errors/warnings, normalized/native gzip asset identity holds.
+
+Every18 screenshot was independently viewed using the image tool. See VISUAL.json for per-image assessment and limits. Desktop IGS97 retains the expected deliberate wrong-catalogue rejection toast, supported by raw negative result. Native selection makes normalizedStatus null afterward; prior assertions/toggle/screenshot establish the normalized overlay. Long mobile profile screenshots are heavily scaled, so raw profile text/route assertions supplement them.
+
+Reproduce `python3 -B docs/delivery/unheld-finalisation-20261105-v1/live-release702-review-v1/browser-phase-v1/check.py`. It invokes only the accepted pure savedJSON/CSV validator, not compiled modules/browser/network. Genuine exit0 receipts and stdout/stderr retained; temporary output removed. A read-only diagnostic printer shape errorf950f6 is retained separately and corrected without changing evidence or gates.
+
+Preliminary parent review manifest remains untouched. Smallest next action: parent supplies final FullCI success/engine identity and completed cleanup/retention receipts; then distinct final E8 review. No scientific scope expansion or new experimental validation follows from this phase.

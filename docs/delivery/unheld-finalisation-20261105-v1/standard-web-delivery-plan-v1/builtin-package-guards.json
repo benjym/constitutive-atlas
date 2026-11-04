@@ -1,0 +1,67 @@
+{
+  "source": {
+    "path": "/private/tmp/atlas-baseline-delivery-20261105/source/tools/build_web.py",
+    "sha256": "d8bdefaa9f6612190ddf412bbb47d145716d7de5fcea4cf0983f0db2b30353e8",
+    "bytes": 12069
+  },
+  "mandatory_subprocesses": [
+    {
+      "line": 44,
+      "source": "subprocess.run(['node',str(ROOT/'tools/check_model_profiles.mjs'),str(ROOT)],check=True)"
+    },
+    {
+      "line": 80,
+      "source": "subprocess.run(['node',str(ROOT/'tools/build_laboratory_examples.mjs'),str(ROOT),str(dest),str(generated/'models.json')],check=True)"
+    },
+    {
+      "line": 106,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_perzyna_package.mjs'),str(dest)],check=True)"
+    },
+    {
+      "line": 109,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_bingham_package.mjs'),str(dest)],check=True)"
+    },
+    {
+      "line": 112,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_burgers_package.mjs'),str(dest)],check=True)"
+    },
+    {
+      "line": 114,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_power_creep_package.mjs'),str(dest)],check=True)"
+    },
+    {
+      "line": 117,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_sls_laboratory_package.mjs'),str(dest)],check=True)"
+    },
+    {
+      "line": 119,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_kelvin_voigt_package.mjs'),str(dest)],check=True)"
+    },
+    {
+      "line": 121,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)"
+    },
+    {
+      "line": 132,
+      "source": "subprocess.run(['node',str(ROOT/'tools'/interface_checker),str(dest)],check=True)"
+    },
+    {
+      "line": 139,
+      "source": "subprocess.run([sys.executable,str(ROOT/'tools/test_implicit_path_package.py'),str(dest),'--output',str(check_report)],check=True)"
+    },
+    {
+      "line": 141,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_orthotropic_package.mjs'),str(dest)],check=True)"
+    },
+    {
+      "line": 144,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_hill_package.mjs'),str(dest)],check=True)"
+    },
+    {
+      "line": 146,
+      "source": "subprocess.run(['node',str(ROOT/'tools/test_controlled_time_package.mjs'),str(dest)],check=True)"
+    }
+  ],
+  "all_check_true": true,
+  "not_executed": true
+}

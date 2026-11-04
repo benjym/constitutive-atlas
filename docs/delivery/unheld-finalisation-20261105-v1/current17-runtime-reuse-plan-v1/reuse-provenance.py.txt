@@ -1,0 +1,64 @@
+REVISION='64002531f0af5c06ad0402d0d80548102f8e6a38'
+REUSE_ID='baseline-five-current17-reused-execution-freeze-v1'
+
+def source_map(repo):
+ return {str(p.relative_to(repo)):sha(p) for p in source_files(repo)}
+
+def validate_handoff(repo,handoff,review):
+ """Existing-build authority remains genuine, reviewed, and distinct from v5 prebuild."""
+ h=json.loads(Path(handoff['path']).read_text());r=json.loads(Path(review['path']).read_text())
+ verify(handoff);verify(review)
+ assert h['identity']=='baseline-five-current17-existing-build-handoff-v1'
+ assert h['revision']==REVISION and h['source_sha256']==source_map(repo)
+ assert r['decision']=='accepted' and r['handoff_sha256']==handoff['sha256']
+ assert r.get('author_run') and r.get('reviewer_run') and r['author_run']!=r['reviewer_run']
+ assert r['unresolved_blockers']==[] and r['existing_build_provenance_accepted'] is True
+ assert set(h['artifacts'])=={'native','module','wasm','node'}
+ assert set(h['builds'])==set(h['generated'])=={'native','wasm'}
+ assert set(h['build_tools'])=={'cmake','native_cxx','emcmake','emcc'}
+ items=[*h['artifacts'].values(),*h['build_tools'].values(),*h['raw_provenance']]
+ assert h['raw_provenance'],'genuine source-to-build receipts/logs required'
+ definitions=[]
+ for backend in ['native','wasm']:
+  b=h['builds'][backend];assert b['returncode']==0
+  argv=b['argv'];assert '--build' in argv and argv[argv.index('--target')+1]=='atlas_solver' and argv[argv.index('--parallel')+1]=='1'
+  assert b['configure_returncode']==0 and b['logs'] and b['compiler_version_logs']
+  items.extend([*b['logs'],*b['compiler_version_logs'],b['resolved_compiler']])
+  g=h['generated'][backend];assert set(g)=={'header','json'}
+  items.extend(g.values());verify(g['json'])
+  d=json.loads(Path(g['json']['path']).read_text());models=d['models'];assert len(models)==17 and len({m['id'] for m in models})==17
+  policy=json.loads((HERE/'policy.json').read_text())
+  for model,expected in policy['candidate_sha256'].items():
+   assert sha(repo/'models'/f'{model}.json')==expected
+   assert next(m for m in models if m['id']==model)==json.loads((repo/'models'/f'{model}.json').read_text())
+  definitions.append(d)
+ assert definitions[0]==definitions[1],'generated native/Wasm catalogues differ'
+ assert h['generated']['native']['header']['sha256']==h['generated']['wasm']['header']['sha256']
+ for item in items:verify(item)
+ return h
+
+def reuse_freeze(a):
+ repo=a.repo.resolve();assert not a.output.exists(),'never overwrite a reuse freeze'
+ assert sha(a.handoff)==a.handoff_sha256 and sha(a.review)==a.review_sha256
+ handoff=pin(a.handoff);review=pin(a.review);h=validate_handoff(repo,handoff,review)
+ policy=json.loads((HERE/'policy.json').read_text())
+ for path,expected in policy['unchanged_gate_sha256'].items():assert sha(repo/path)==expected
+ candidates={model:pin(repo/'models'/f'{model}.json') for model in MODELS}
+ for model,p in candidates.items():assert p['sha256']==policy['candidate_sha256'][model]
+ plan=[HERE/'collector-reuse.py',HERE/'wasm-cli.mjs',HERE/'policy.json',HERE/'GATES.json']
+ inputs=source_files(repo)+plan+[a.handoff.resolve(),a.review.resolve()]
+ data={'identity':REUSE_ID,'revision':REVISION,'repo':str(repo),'source_inventory':[pin(p) for p in source_files(repo)],'candidates':candidates,'inputs':[pin(p) for p in inputs],'artifacts':h['artifacts'],'python':pin(sys.executable),'python_version':platform.python_version(),'platform':platform.platform(),'policy':policy,'compiled_observations':False,'handoff':handoff,'handoff_review':review}
+ validate_execution_freeze(data);write(a.output,data)
+
+def validate_execution_freeze(f):
+ repo=Path(f['repo']);assert f['identity']==REUSE_ID and f['revision']==REVISION and f['compiled_observations'] is False
+ assert f['policy']==json.loads((HERE/'policy.json').read_text())
+ h=validate_handoff(repo,f['handoff'],f['handoff_review'])
+ assert f['artifacts']==h['artifacts'] and set(f['candidates'])==set(MODELS)
+ files=source_files(repo);assert f['source_inventory']==[pin(p) for p in files]
+ plan=[HERE/'collector-reuse.py',HERE/'wasm-cli.mjs',HERE/'policy.json',HERE/'GATES.json']
+ expected=files+plan+[Path(f[key]['path']) for key in ['handoff','handoff_review']]
+ assert f['inputs']==[pin(p) for p in expected]
+ for item in [*f['inputs'],*f['artifacts'].values(),f['python']]:verify(item)
+ for model,expected in f['policy']['candidate_sha256'].items():assert f['candidates'][model]==pin(repo/'models'/f'{model}.json') and f['candidates'][model]['sha256']==expected
+ for path,expected in f['policy']['unchanged_gate_sha256'].items():assert sha(repo/path)==expected

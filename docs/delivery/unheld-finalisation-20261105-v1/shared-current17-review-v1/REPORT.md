@@ -1,0 +1,9 @@
+Shared current17 source reuse is accepted with mandatory runtime and browser refresh.
+
+245 source checks and two supplemental witness hashes pass. All five definitions and E5 reviews are exact, 39/42 A+B2 paths are exact, and the three differences preserve baseline assertions/pins under the reviewed strict17 adaptation. All original nine example specifications/settings remain identical despite their new input-only transport.
+
+The solver changes reach plastic predictor admissibility and drained adaptive control, including the five baseline models. Their old backend results therefore remain historical. Reuse the MD current17 build and global CI/package/upload proof rather than rebuild. Reuse numerical results only where their exact requests, independent original oracles and original thresholds cover the old701/42/87/pair gate; run only uncovered baseline gates with those qualified current17 artifacts under a separate prospective freeze. Generic CI/parity/MD-only results cannot replace baseline physical checks.
+
+Fresh baseline UI work covers the original five-model and nine-example matrix, original physical reference gates, cycles restoration/unsupported controls, export/import/definition bytes, profiles/plots, invalid/mobile cases and gzip normalized/largest checks. Reference one shared exact current17 global artifact/origin packet; no duplicate global archive or package campaign is necessary. Terminal required CI success, current17 original baseline physics, actual baseline browser evidence and final independent E8 review remain pending. This decision establishes none of those actual results.
+
+No compiled, browser, network, Git, source install or process operation occurred. No temporary resources remain. Missing metadata witness stopped the first check truthfully; the retained attempt precedes successful checks after the exact supplied witness arrived.
