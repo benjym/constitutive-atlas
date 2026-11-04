@@ -1,5 +1,7 @@
 """Deterministic, lossless browser datasets from checksum-pinned source archives."""
 from __future__ import annotations
+import gzip
+import io
 import hashlib
 import json
 from pathlib import Path
@@ -36,7 +38,22 @@ def json_bytes(value):
     return (json.dumps(value, separators=(',', ':'), ensure_ascii=False, allow_nan=False)+'\n').encode()
 
 
-def bundle(destination, *, preview=False, root=ROOT):
+def write_payload(destination, identifier, data, compressed):
+    filename = identifier+'.json'
+    if not compressed:
+        (destination/filename).write_bytes(data)
+        return dict(path=filename)
+    buffer = io.BytesIO()
+    with gzip.GzipFile(filename='', fileobj=buffer, mode='wb', compresslevel=6, mtime=0) as stream:
+        stream.write(data)
+    wire = buffer.getvalue()
+    filename += '.gz'
+    (destination/filename).write_bytes(wire)
+    return dict(path=filename, encoding='gzip', transport_size_bytes=len(wire),
+                transport_sha256=hashlib.sha256(wire).hexdigest())
+
+
+def bundle(destination, *, preview=False, root=ROOT, compressed=False):
     destination = Path(destination)
     registry = json.loads((root/'data/sources.json').read_text())
     releases = json.loads((root/'data/experiment_releases.json').read_text())
@@ -72,19 +89,17 @@ def bundle(destination, *, preview=False, root=ROOT):
                 record['provenance']['redistribution'] = grant['scope'] if grant else 'local preview; public permission unresolved'
                 record['provenance']['attribution'] = grant['attribution'] if grant else ATTRIBUTION
                 data = json_bytes(encode(record))
-                filename = record['id']+'.json'
-                (destination/filename).write_bytes(data)
+                asset = write_payload(destination, record['id'], data, compressed)
                 entry = dict(id=record['id'], kind=record['kind'], comparison=comparison_metadata(record), protocol=record['protocol'], material=record['material'],
-                             initial=record['initial'], rows=len(record['rows']), path=filename,
+                             initial=record['initial'], rows=len(record['rows']), **asset,
                              sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data))
                 source_entries.append(entry)
         entries.extend(sorted(source_entries, key=lambda e: int(re.search(r'\d+$', e['id'])[0])))
     for record in load_curated(root):
         data = json_bytes(encode(record))
-        filename = record['id'] + '.json'
-        (destination/filename).write_bytes(data)
+        asset = write_payload(destination, record['id'], data, compressed)
         entries.append(dict(id=record['id'], kind=record['kind'], comparison=comparison_metadata(record), protocol=record['protocol'], material=record['material'],
-                            initial=record['initial'], rows=len(record['rows']), path=filename,
+                            initial=record['initial'], rows=len(record['rows']), **asset,
                             sha256=hashlib.sha256(data).hexdigest(), size_bytes=len(data)))
     if len({entry['id'] for entry in entries}) != len(entries):
         raise ValueError('Duplicate experiment IDs')

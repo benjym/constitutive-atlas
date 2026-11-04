@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {gzipSync} from 'node:zlib';
 import {readFile,readdir} from 'node:fs/promises';
 import {normalizeWichtmann,validateExperiment,measuredSeries,decodeExperiment,fetchExperiment,comparisonMetadata,compatibleExperiment as scopedCompatibleExperiment,comparisonSeries as scopedComparisonSeries} from '../web/experiments.mjs';
 
@@ -76,6 +77,18 @@ assert.equal(oversizedRequested,false);
 await assert.rejects(fetchExperiment(entry,async()=>new Response('not found',{status:404})),/could not be loaded/);
 await assert.rejects(fetchExperiment({...entry,sha256:'0'.repeat(64)},async()=>new Response(bytes)),/checksum/);
 await assert.rejects(fetchExperiment({...entry,rows:3},async()=>new Response(bytes)),/selected test/);
+// Compressed transport preserves the original decoded-byte checksum and every observation.
+const wire=gzipSync(bytes,{mtime:0}),wireHash=b=>crypto.subtle.digest('SHA-256',b).then(d=>Array.from(new Uint8Array(d),x=>x.toString(16).padStart(2,'0')).join(''));
+const compressedEntry={...entry,path:entry.id+'.json.gz',encoding:'gzip',transport_size_bytes:wire.length,transport_sha256:await wireHash(wire)};
+assert.deepEqual(await fetchExperiment(compressedEntry,async()=>new Response(wire)),decoded);
+await assert.rejects(fetchExperiment({...compressedEntry,transport_sha256:'0'.repeat(64)},async()=>new Response(wire)),/transport checksum/);
+await assert.rejects(fetchExperiment({...compressedEntry,transport_size_bytes:wire.length+1},async()=>new Response(wire)),/transport size/);
+await assert.rejects(fetchExperiment({...compressedEntry,sha256:'0'.repeat(64)},async()=>new Response(wire)),/checksum/);
+await assert.rejects(fetchExperiment({...compressedEntry,size_bytes:bytes.length-1},async()=>new Response(wire)),/decoded size/);
+await assert.rejects(fetchExperiment({...compressedEntry,encoding:'unknown'},async()=>new Response(wire)),/catalogue entry/);
+await assert.rejects(fetchExperiment({...compressedEntry,path:'../private.gz'},async()=>new Response(wire)),/catalogue entry/);
+const truncated=wire.subarray(0,wire.length-5);
+await assert.rejects(fetchExperiment({...compressedEntry,transport_size_bytes:truncated.length,transport_sha256:await wireHash(truncated)},async()=>new Response(truncated)));
 console.log('Hosted experiment decoding, integrity, channel semantics and request validation passed.');
 
 if(process.argv[2]==='--built-assets'){

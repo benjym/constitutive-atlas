@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {gzipSync} from 'node:zlib';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {fetchExperiment} from '../../../../../web/experiments.mjs';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const raw=Buffer.alloc(1024*1024,65),wire=gzipSync(raw),entry={id:'review-bomb',path:'review-bomb.json.gz',encoding:'gzip',sha256:hash(raw),size_bytes:1024,transport_size_bytes:wire.length,transport_sha256:hash(wire)};
+await assert.rejects(fetchExperiment(entry,async()=>new Response(wire)),/decoded size exceeds/);
+let fetched=false;
+for(const bad of [{transport_size_bytes:33*1024*1024},{transport_size_bytes:0},{transport_size_bytes:1.5},{transport_sha256:'bad'},{size_bytes:33*1024*1024},{size_bytes:0},{path:'review-bomb.json'},{encoding:'deflate'}])await assert.rejects(fetchExperiment({...entry,...bad},async()=>{fetched=true;return new Response(wire);}),/catalogue entry/);
+assert.equal(fetched,false);
+const full={...entry,size_bytes:raw.length},corrupt=Buffer.from(wire);corrupt[corrupt.length-8]^=1;
+await assert.rejects(fetchExperiment({...full,transport_sha256:hash(corrupt)},async()=>new Response(corrupt)));
+const report={identity:'compressed-experiment-independent-pure-probes-v1',passed:true,compiled_calls:0,decoded_expansion_probe:{decoded_bytes:raw.length,declared_limit:entry.size_bytes,transport_bytes:wire.length,refused:true},metadata_refusals_before_fetch:8,corrupt_gzip_crc_refused:true,limitation:'Transport uses pre-existing response.arrayBuffer buffering; decoded chunks are bounded before retention. No claim of streamed network transport byte limiting.'};
+writeFileSync(new URL('./probes.json',import.meta.url),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));

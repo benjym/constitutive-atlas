@@ -1,4 +1,5 @@
 """Synthetic tests for reproducible experiment assets and release isolation."""
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -59,6 +60,25 @@ class BrowserBundleTests(unittest.TestCase):
             data = json.loads(content)
             self.assertNotIn('normalized_at', data['metadata']['provenance'])
             self.assertEqual(data['metadata']['provenance']['attribution'], 'Synthetic data')
+
+    def test_compressed_public_assets_preserve_exact_payloads(self):
+        self.grant()
+        plain = bundle(self.output, root=self.root)
+        originals = {e['id']: (self.output/e['path']).read_bytes() for e in plain['experiments']}
+        packed = bundle(self.output, root=self.root, compressed=True)
+        before = {p.name: p.read_bytes() for p in self.output.iterdir()}
+        for entry in packed['experiments']:
+            wire = (self.output/entry['path']).read_bytes()
+            self.assertEqual(entry['encoding'], 'gzip')
+            self.assertEqual(entry['transport_size_bytes'], len(wire))
+            self.assertEqual(entry['transport_sha256'], hashlib.sha256(wire).hexdigest())
+            decoded = gzip.decompress(wire)
+            self.assertEqual(decoded, originals[entry['id']])
+            self.assertEqual(entry['size_bytes'], len(decoded))
+            self.assertEqual(entry['sha256'], hashlib.sha256(decoded).hexdigest())
+            self.assertFalse((self.output/(entry['id']+'.json')).exists())
+        bundle(self.output, root=self.root, compressed=True)
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
 
     def test_incomplete_grant_and_changed_archive_rejected(self):
         self.grant(evidence='')

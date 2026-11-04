@@ -1,0 +1,52 @@
+{
+  "identity": "compressed-experiment-transport-source-review-v1",
+  "status": "accepted",
+  "reviewer_run": "/root/md1997_upstream_merge_review",
+  "scope": "source/pure synthetic transport checks only; no compiled material execution; coordinator owns all994 actual decoded byte comparison and final site size/browser verification",
+  "source_bindings": {
+    "tools/build_experiments.py": {
+      "prior_sha256": "40ceb64c9dd9ba7e7ce0ce64a0729877e496c40ba4fc15778567b5b3391eb2b0",
+      "current_sha256": "5f7e820ce7ec14260f90e48b3779c627bec80a1e21b7999308c65c503f0b173f"
+    },
+    "tools/build_web.py": {
+      "prior_sha256": "d8bdefaa9f6612190ddf412bbb47d145716d7de5fcea4cf0983f0db2b30353e8",
+      "current_sha256": "5866e4ae5fbc1cccbaf7180fcef1e3dc041268eb8616cf393a675a8fe8baa750"
+    },
+    "web/experiments.mjs": {
+      "prior_sha256": "12ce6a9d9f27f20064586293467a97de256c5d332fc229d5d4f901cab48feef5",
+      "current_sha256": "58b689676ed465fec2d840b78c700ca965419454d2ffc7076fe99f010b458a13"
+    },
+    "tools/test_experiments.mjs": {
+      "prior_sha256": "07eb106b95627bd49a82b0306d9695b9c511bc650d785c8dcddc1499ad68083c",
+      "current_sha256": "591c4a19b5bb75284b27a282d03ac451f74d203ce28f7950a6060f997db93372"
+    },
+    "tests/test_web_experiments.py": {
+      "prior_sha256": "f4566672c334eb7f0bcf3c991e3da9d8e2bb0fefac424c0f4e21886c337e2898",
+      "current_sha256": "ad3364007c19bb8f85c61c546941378eedf8be11c28844d83ddac126b58df557"
+    }
+  },
+  "probes_sha256": "7cea2aaa7a7db267787801a999bfbbef6a495de4706a0aa6533b4cde192c2cf4",
+  "checker_sha256": "2f1cd458856c0f541e29e7792b5415b47f6e3181776fa847335eb4b6f3e75d49",
+  "checks": [
+    "default bundle compressed=False preserves legacy format; explicit compressed=True only main publication builder",
+    "gzip deterministic empty filename and mtime0; original decoded sha256/size_bytes remain unchanged",
+    "existing source grants/archive checks/encode and metadata helpers unchanged",
+    "all original Python test function ASTs unchanged; new fixture verifies exact decoded bytes and deterministic compressed rebuild",
+    "all original JS experiment test bytes preserved; extra positive/seven negatives additive",
+    "existing decoded-byte size/hash/JSON/channel/identity decoder tail byte-exact",
+    "received compressed size/hash checked before decompress; decoded chunks rejected before storage on catalogue-bound overflow",
+    "independent1MiB decoded expansion vs1KiB declared bound refused;8badmetadata cases refused before fetch;badCRC refused",
+    "ensemble fetch routes measurement assets through shared fetchExperiment"
+  ],
+  "test_results": {
+    "python_unittest_discover": "PASS5",
+    "node_test_experiments": "PASS",
+    "independent_probes": "PASS"
+  },
+  "retained_failure": "Reviewer initially invoked Python test by dotted module; existing test_data import requires unittest discovery. Correct discovery invocation passed5. No implementation change.",
+  "limitations": [
+    "Transport retains pre-existing response.arrayBuffer buffering; no streamed network-input memory cap claim.",
+    "Actual hosted Content-Encoding behavior and DecompressionStream support require coordinator browser check."
+  ],
+  "blocking_findings": []
+}

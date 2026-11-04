@@ -99,7 +99,7 @@ def main():
     bundle_development(dest)
     shutil.copytree(ROOT/'schemas',dest/'schemas',dirs_exist_ok=True)
     shutil.copytree(ROOT/'models',dest/'models',dirs_exist_ok=True)
-    experiment_manifest=bundle(dest/'experiments', preview=args.preview_experiments)
+    experiment_manifest=bundle(dest/'experiments', preview=args.preview_experiments, compressed=True)
     print(f"Prepared {len(experiment_manifest['experiments'])} built-in experiments ({experiment_manifest['release']})")
     from build_perzyna_laboratory import bundle as bundle_perzyna
     bundle_perzyna(dest,args.perzyna_wasm_dir)
