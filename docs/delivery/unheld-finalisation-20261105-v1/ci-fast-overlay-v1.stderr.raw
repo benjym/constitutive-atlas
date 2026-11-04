@@ -1,0 +1,38 @@
+======================================================================
+FAIL: test_migration_records_roles_without_guessing_history_meaning (tests.test_state_contract.StateContractTests.test_migration_records_roles_without_guessing_history_meaning)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/atlas-baseline-delivery-20261105/source/tests/test_state_contract.py", line 26, in test_migration_records_roles_without_guessing_history_meaning
+    self.assertEqual(fields['pc']['semantics']['quantity'],'unspecified')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'preconsolidation_pressure' != 'unspecified'
+- preconsolidation_pressure
++ unspecified
+
+
+----------------------------------------------------------------------
+Ran 41 tests in 0.425s
+
+FAILED (failures=1)
+Traceback (most recent call last):
+  File "/private/tmp/atlas-baseline-delivery-20261105/source/tools/ci_fast.py", line 39, in <module>
+    main()
+    ~~~~^^
+  File "/private/tmp/atlas-baseline-delivery-20261105/source/tools/ci_fast.py", line 24, in main
+    run(sys.executable, '-B', '-m', 'unittest',
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        'tests.test_atlas.LanguageTests', 'tests.test_agent_review',
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        'tests.test_database_approval_integrity',
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        'tests.test_state_contract.StateContractTests', 'tests.test_ci_profiles',
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        'tests.test_ci_changes', '-q')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/atlas-baseline-delivery-20261105/source/tools/ci_fast.py", line 16, in run
+    subprocess.run(args, cwd=ROOT, check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '('/opt/homebrew/opt/python@3.14/bin/python3.14', '-B', '-m', 'unittest', 'tests.test_atlas.LanguageTests', 'tests.test_agent_review', 'tests.test_database_approval_integrity', 'tests.test_state_contract.StateContractTests', 'tests.test_ci_profiles', 'tests.test_ci_changes', '-q')' returned non-zero exit status 1.

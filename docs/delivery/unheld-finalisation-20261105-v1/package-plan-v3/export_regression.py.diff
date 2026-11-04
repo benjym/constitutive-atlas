@@ -1,0 +1,11 @@
+--- frozen-v2/export_regression.py
++++ proposed-v3/export_regression.py
+@@ -5,7 +5,7 @@
+ sys.dont_write_bytecode=True
+ 
+ def run(L,check):
+- P=Path(__file__).resolve().parent;B=P.parent;packet=B/'baseline-five-portable-export-executable-v1'
++ P=Path(__file__).resolve().parent;B=L.B;packet=B/'baseline-five-portable-export-executable-v1'
+  check('accepted exporter proposal exact',L.sha(packet/'manifest.json')=='3099f52ed76e1788a27c2b9155f7b55fd22725e3862e91d74cddd7d07c4aa460')
+  review=B/'baseline-five-portable-export-executable-review-v1';check('genuine exporter review exact',L.sha(review/'decision.json')=='5fcbb3f2d7f2db00992643e8132ed3b629f88931818ec30f1796f404c6111e4a')
+  source=ast.parse((packet/'proposed/tools/baseline_ci_package_portable_host_v3.py').read_text())

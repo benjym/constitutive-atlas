@@ -1,0 +1,11 @@
+# Active approval supersession — prospective policy
+
+Coordinator selected this alternative before final payload authoring or any compiled observation. The initial 35-entry proposal and separately scoped research.py successor remain retained drafts and must not be installed.
+
+Keep current atlas/research.py and every other atlas/core/compiler/CI byte unchanged. Preserve the exact ordered other twenty-five active approvals. Replace only the five legacy active baseline records, in their existing positions, by the exact five genuine accepted v0.3 approval records. The active registry remains thirty records. Retain exact old thirty-entry registry, all five old approval objects within it, old model definitions, all historical review records/artifacts, and complete archive redirects. Add explicit technical history pointing to the exact retained registry and five supersession relationships. Current approvals never transfer historical authority to changed bytes.
+
+Public review projection must retain all thirty-three reviews, with the five legacy definitions marked noncurrent and their reviews unregistered in the active registry. Normal SQLite active approval and agent-review rows reflect current authority only; historical records remain available through the complete review projection and exact original registry archive. This is an active-registry policy choice, not a scientific or numerical gate change.
+
+Preserve sixteen ordinary models, all current other models/S-CLAY1/VIBE, the four current named examples, public profiles/app/control support, current package/profile cases and thresholds. Update only five model identities in package/applicability and the linked package policy digest; label historical VW96 TMD7 evidence explicitly. Two controlled-path engines pin all five ordinary definitions and need fresh qualification. Maxwell core/source remains unchanged and must retain its normal guard.
+
+No installation/build/compiled/material/browser/remote/Git mutation. Separate independent exact review and fresh preimages required before coordinator integration. Subsequent current-sixteen named envelopes must come from actual responses; old fifteen-model envelopes are historical references only.

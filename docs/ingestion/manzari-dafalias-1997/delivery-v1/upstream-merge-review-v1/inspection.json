@@ -1,0 +1,159 @@
+{
+  "identity": "md1997-upstream-merge-inspection-v1",
+  "reviewer": "/root/md1997_upstream_merge_review",
+  "scope": "read-only inspection; no build/runtime execution; no integration approval",
+  "base_release": "ed901e0fd302478bd1488fa5e896b9a68e94deb8",
+  "upstream": "b13a5f942",
+  "pin_mismatches": {
+    "norsand": [],
+    "maxwell": [],
+    "interface2016": [
+      {
+        "path": "models/drucker-prager.json",
+        "qualified": "b2ae340e97fca4209e671b1f610dac7b1520394eefe3070548f299bd603ee877",
+        "current": "bdb66fb0a6b2b734830470f9407780deaae0e4610a823b9639ddbc1a5f324a2b"
+      },
+      {
+        "path": "models/hypoplastic-sand-igs97.json",
+        "qualified": "83777458ea437a3a7c1360117dbf435f7d763913cda399099ef2966e65a67e86",
+        "current": "64453d282cf2c0f5e4e2b0923394e289702a9a2440f9ff7cc2d90a0c134a8108"
+      },
+      {
+        "path": "models/hypoplastic-sand-vw96.json",
+        "qualified": "1df95f8128c4f16066004de7615289075bafe96d2174e06e5cd76704f45bbd61",
+        "current": "c028cdcd46b79d23c2798ff5309b8e8af8fb68ebf94ff08632dbf9af86ca4595"
+      },
+      {
+        "path": "models/linear-elastic.json",
+        "qualified": "33387b2058a3f54ed611949318289db24ab2d5b8edd172d0a2454042c7975041",
+        "current": "67a7203bc13486fcc431b2f2dd421b4d80300fadc45faacf6db5a4a89e499b5b"
+      },
+      {
+        "path": "models/modified-cam-clay.json",
+        "qualified": "e075117e07a71a17a35ce47dac66172a0cc402860f5c6cf106f7883db5721a14",
+        "current": "96b33fadf285f555ef98c35d98cd562533c5ee3ae233aee8515e7e1c85f58777"
+      },
+      {
+        "path": "tests/test_state_contract.py",
+        "qualified": "4788c1f30fce3747c256108199787cf820f45324fdae9d01ad21b996ddd4d739",
+        "current": "b4c954afff2e06fa302d2f2a28f7906f6b61c55d2472e123b96573066a25c660"
+      },
+      {
+        "path": "tools/qualify_controlled_path_refresh.py",
+        "qualified": "f3b0499b7aa856c35b2ae5f91d2d84df74ba2dcbf93926f4fc76d53f325dc198",
+        "current": "18e34733199f125efc89735ad3ee54dd94b981b900e946597d5d2ebe5fe17ec7"
+      }
+    ],
+    "controlled_time": [],
+    "upstream_plan": [
+      {
+        "path": "cpp/include/atlas/solver.hpp",
+        "qualified": "b094c0f08d1f9ca71af5279c7946259e222c491b0bd97c3c70dbda392bbbe46e",
+        "current": "05e6cc0c9dd6b6774597e07de0abe2beb7d9128383423d22b34c2e1d0a4d9218"
+      },
+      {
+        "path": "tools/build_controlled_path_web.py",
+        "qualified": "ec6b46169eacc59e0f45e3dc5de848e03b5b0c6ab51afef090349c2e014883bf",
+        "current": "b6b8b9a5b93c01dfe93ea23e761957a11117dc5f37de747ac40cbf59da51cda0"
+      },
+      {
+        "path": "tools/build_interface2016_web.py",
+        "qualified": "f599f10804fe86e8abca5c10257e2b8e59eae7f6e87e43ea9a2af72343086b87",
+        "current": "9ab5d13ab005580d9a7b19300946431f6ee9fc8da903614fa00bc960d2e75858"
+      }
+    ]
+  },
+  "baseline_model_comparison": {
+    "linear-elastic": {
+      "equations_unchanged": true,
+      "parameters_unchanged": true,
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    "drucker-prager": {
+      "equations_unchanged": true,
+      "parameters_unchanged": true,
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    "modified-cam-clay": {
+      "equations_unchanged": true,
+      "parameters_unchanged": true,
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "pc"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    "hypoplastic-sand-vw96": {
+      "equations_unchanged": true,
+      "parameters_unchanged": true,
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    },
+    "hypoplastic-sand-igs97": {
+      "equations_unchanged": true,
+      "parameters_unchanged": true,
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "e",
+          "h"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    }
+  },
+  "omitted_release_files": [
+    {
+      "path": "docs/ingestion/manzari-dafalias-1997/delivery-v1/current17-production-bridge-v1/profile-cases.json",
+      "consumer": "catalogue/laboratory-profile-policy.json",
+      "required": true
+    },
+    {
+      "path": "docs/ingestion/manzari-dafalias-1997/delivery-v1/full-model-review-v2/review.json",
+      "consumer": "catalogue/applicability/kfs-development-v1.json",
+      "required": "reference exists; assess existing source archive receipt before copying"
+    }
+  ],
+  "blocking_findings": [
+    "Interface source-compatibility exact source binding rejects seven upstream changes. Do not update prior reviewed binding in place.",
+    "Native strict fixture helper current17 branch expects old baseline five hashes, and rejects merged migrated17 policy. Preserve historical branches; use a distinct exact migrated17 branch.",
+    "profile-cases.json omitted from release Git tree despite active profile policy dependency.",
+    "New upstream controlled-path plan rejects three merged files and cannot be selected as-is."
+  ],
+  "next_actions": [
+    "Retain new baseline definitions, five independent review records and exact approval entries; union MD admission and ordinary policy.",
+    "Preserve upstream explicit initial-state changes to test_numerics.mjs.",
+    "Use new Interface equivalence/requalification evidence with independent exact-byte review; no model or numeric bound change needed from this inspection.",
+    "Run actual fast gate and serial numerical/build/package/browser gates against resolved merge."
+  ]
+}

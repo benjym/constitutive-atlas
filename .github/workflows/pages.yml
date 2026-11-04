@@ -70,12 +70,12 @@ jobs:
       run: |-
         python3 -B tools/provision_bingham_assets.py
         python3 -B tools/provision_perzyna_assets.py
-        python3 -B tools/check_current_dependency_assets.py --output "$RUNNER_TEMP/current-dependency-guards"
+        python3 -B tools/check_current_dependency_assets.py --current17-baseline --output "$RUNNER_TEMP/current-dependency-guards"
         python3 -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python3 -B tools/provision_implicit_path_assets.py
         python3 -B tools/fetch_data.py --approved-only
     - name: Build one website with unchanged package guards
-      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
+      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-baseline-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
     - name: Verify the exact publication package
       run: |-
         node tools/ci_smoke.mjs --wasm web/dist/atlas.js

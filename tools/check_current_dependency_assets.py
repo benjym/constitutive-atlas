@@ -26,6 +26,24 @@ REQUIRED['maxwell'] = ('maxwell.js', 'maxwell.wasm', 'generated/models.json',
                        'maxwell-qualification.json', 'build-review.json')
 
 
+def selected_engines(plan_path=None, plan_sha256=None, current17_baseline=False):
+    if current17_baseline:
+        if plan_path is not None or plan_sha256 is not None:
+            raise ValueError("Current17 selection cannot be combined with a historical plan")
+        return {k: "web/engines/"+("current17-baseline-compatible" if k=="interface2016" else "current17-compatible")+"/"+k for k in ENGINES}
+    if plan_path is None:
+        if plan_sha256 is not None:
+            raise ValueError('Plan hash requires explicit selection')
+        return dict(ENGINES)
+    from tools.qualify_controlled_path_refresh import load_plan, plan_layout
+    load_plan(plan_path, plan_sha256)
+    packet, _ = plan_layout(plan_path)
+    result = dict(ENGINES)
+    for key in ('norsand', 'interface2016'):
+        result[key] = str(packet/'execution-v2'/key/'engine')
+    return result
+
+
 def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -61,25 +79,48 @@ def tree_snapshot(directory):
     return files
 
 
-def engine_snapshot():
+def engine_snapshot(engines=ENGINES, current17_baseline=False):
     result = {}
-    for key,name in ENGINES.items():
+    for key,name in engines.items():
         files = tree_snapshot(repo_path(name))
-        if not set(REQUIRED[key]).issubset(files):
+        required = REQUIRED[key]
+        if current17_baseline:
+            required = {
+                'norsand': ('controlled-path-qualification.json', 'build-review.json', 'atlas_path_capability.mjs', 'atlas_path_capability.wasm', 'generated/path_catalogue.json', 'generated/path_models.hpp', 'generated/path_api.cpp', 'source-compatibility.json'),
+                'interface2016': REQUIRED['interface2016']+('source-compatibility.json',),
+                'maxwell': ('maxwell.mjs', 'maxwell.wasm', 'generated/models.json', 'generated/models.hpp', 'maxwell-qualification.json', 'build-review.json', 'source-compatibility.json'),
+            }[key]
+        if not set(required).issubset(files):
             raise ValueError('Required current qualification/artifacts missing: '+key)
         result[key] = dict(path=name, files=files)
     return result
 
 
-def source_snapshot():
+def source_snapshot(plan_path=None, plan_sha256=None, current17_baseline=False):
+    if current17_baseline:
+        from tools.profile_source_compatibility import validate
+        from tools.profile_source_compatibility_baseline import validate as validate_baseline
+        files = {}
+        for key, name in selected_engines(current17_baseline=True).items():
+            checked = (validate_baseline if key=="interface2016" else validate)(ROOT, repo_path(name), key)
+            if checked is None:
+                raise ValueError("Exact accepted current17 binding required")
+            for n, h in checked["sources"].items():
+                if n in files and files[n] != h:
+                    raise ValueError("Current17 source manifests disagree: "+n)
+                files[n] = h
+        for n in ["tools/check_current_dependency_assets.py", "tools/profile_source_compatibility_baseline.py", "tools/build_interface2016_baseline_web.py", "catalogue/approved-models.json", "catalogue/source-archive-map.json"]:
+            files[n] = sha(repo_path(n))
+        return dict(sorted(files.items()))
     from tools.qualify_controlled_path_refresh import load_plan, PLAN
     from tools.build_maxwell_laboratory import source_manifest
-    files = dict(load_plan()['source_closure'])
+    selected = PLAN if plan_path is None else Path(plan_path)
+    files = dict(load_plan(selected, plan_sha256)['source_closure'])
     for name,digest in source_manifest()['files'].items():
         if name in files and files[name] != digest:
             raise ValueError('Current source manifests disagree: '+name)
         files[name] = digest
-    names = [PLAN.as_posix(), 'catalogue/approved-models.json', 'catalogue/source-archive-map.json',
+    names = [selected.as_posix(), 'catalogue/approved-models.json', 'catalogue/source-archive-map.json',
              'tools/check_current_dependency_assets.py', 'tools/build_controlled_path_web.py',
              'tools/build_interface2016_web.py', 'tools/build_maxwell_laboratory.py']
     for name in names:
@@ -92,47 +133,51 @@ def source_snapshot():
     return dict(sorted(files.items()))
 
 
-def bundlers():
+def bundlers(current17_baseline=False):
     from tools.build_controlled_path_web import bundle as norsand
-    from tools.build_interface2016_web import bundle as interface2016
+    if current17_baseline:
+        from tools.build_interface2016_baseline_web import bundle as interface2016
+    else:
+        from tools.build_interface2016_web import bundle as interface2016
     from tools.build_maxwell_laboratory import bundle as maxwell
     return dict(norsand=norsand, interface2016=interface2016, maxwell=maxwell)
 
 
-def output_directory(value):
+def output_directory(value, engines=ENGINES):
     path = Path(value).absolute()
     if '..' in path.parts or path.exists() or path.is_symlink() or any(p.is_symlink() for p in path.parents):
         raise ValueError('Refusing existing or unsafe guard evidence directory: '+str(value))
-    for name in ENGINES.values():
+    for name in engines.values():
         if path.resolve().is_relative_to((ROOT/name).resolve()):
             raise ValueError('Guard output must not modify retained engine inputs')
     path.mkdir(parents=True, exist_ok=False)
     return path
 
 
-def check(output):
-    output = output_directory(output)
+def check(output, plan_path=None, plan_sha256=None, current17_baseline=False):
+    engines = selected_engines(plan_path, plan_sha256, current17_baseline)
+    output = output_directory(output, engines)
     report = dict(kind='current-dependency-package-guards-v1', status='failed', compiled_calls=0,
                   scope='Current retained assets, scientific approvals and exact pure package guards; no new numerical/browser/live qualification.',
                   packages={})
     try:
-        report['before'] = dict(engines=engine_snapshot(), sources=source_snapshot())
+        report['before'] = dict(engines=engine_snapshot(engines, current17_baseline), sources=source_snapshot(plan_path, plan_sha256, current17_baseline))
         with tempfile.TemporaryDirectory(prefix='atlas-current-dependency-guards-') as temporary:
-            actions = bundlers()
-            if set(actions) != set(ENGINES):
+            actions = bundlers(current17_baseline)
+            if set(actions) != set(engines):
                 raise ValueError('All three fixed dependency guards are required')
-            for key,name in ENGINES.items():
+            for key,name in engines.items():
                 destination = Path(temporary)/key
                 identity = actions[key](destination, repo_path(name))
                 report['packages'][key] = dict(identity=identity, files=tree_snapshot(destination))
-        report['after'] = dict(engines=engine_snapshot(), sources=source_snapshot())
+        report['after'] = dict(engines=engine_snapshot(engines, current17_baseline), sources=source_snapshot(plan_path, plan_sha256, current17_baseline))
         if report['before'] != report['after']:
             raise ValueError('Dependency/source changed during package guards')
         report['status'] = 'passed-source-and-retained-asset-guards'
     except BaseException as error:
         report['failure'] = dict(type=type(error).__name__, message=str(error))
         try:
-            report['after'] = dict(engines=engine_snapshot(), sources=source_snapshot())
+            report['after'] = dict(engines=engine_snapshot(engines, current17_baseline), sources=source_snapshot(plan_path, plan_sha256, current17_baseline))
         except BaseException as after_error:
             report['after_capture_failure'] = dict(type=type(after_error).__name__,message=str(after_error))
         raise
@@ -146,8 +191,11 @@ def check(output):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--controlled-plan', type=Path)
+    parser.add_argument('--controlled-plan-sha256')
+    parser.add_argument('--current17-baseline', action='store_true')
     args=parser.parse_args()
-    result=check(args.output)
+    result=check(args.output, args.controlled_plan, args.controlled_plan_sha256, args.current17_baseline)
     print(json.dumps(dict(status=result['status'], compiled_calls=0, report=str(args.output/'report.json'))))
 
 

@@ -450,7 +450,7 @@ jobs:
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
         python -B -m unittest tests.test_provision_maxwell_assets
-        python -B tools/check_current_dependency_assets.py --output "$RUNNER_TEMP/current-dependency-guards"
+        python -B tools/check_current_dependency_assets.py --current17-baseline --output "$RUNNER_TEMP/current-dependency-guards"
         python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python -B tools/provision_implicit_path_assets.py
         python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
@@ -483,7 +483,7 @@ jobs:
       shell: bash
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
-        python tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
+        python tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-baseline-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
         node --test tests/test_ensemble.mjs
         python -B -m unittest tests.test_ensemble_package
         node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"
@@ -667,7 +667,7 @@ jobs:
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
         python -B -m unittest tests.test_provision_maxwell_assets
-        python -B tools/check_current_dependency_assets.py --output "$RUNNER_TEMP/current-dependency-guards"
+        python -B tools/check_current_dependency_assets.py --current17-baseline --output "$RUNNER_TEMP/current-dependency-guards"
         python -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python -B tools/provision_implicit_path_assets.py
         python -B tools/check_maxwell_ci.py --build docs/ingestion/vibe-2026/maxwell-refresh-v1/execution-v1/engine --output "$RUNNER_TEMP/maxwell-ci-regression"
@@ -700,7 +700,7 @@ jobs:
       shell: bash
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
-        python tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
+        python tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-baseline-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
         node --test tests/test_ensemble.mjs
         python -B -m unittest tests.test_ensemble_package
         node tools/test_ensemble_wasm.mjs --wasm build-wasm/atlas.js --experiment web/dist/ensemble-experiment.json --output "$RUNNER_TEMP/ensemble-wasm.json"

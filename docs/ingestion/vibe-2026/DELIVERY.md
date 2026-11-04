@@ -11,7 +11,7 @@ Follow `docs/MODEL_DELIVERY_CHECKLIST.md` from the repository root; this ledger 
 - Detailed model-local checklist: [CHECKLIST.md](CHECKLIST.md) (copy every E0–E8 check and exit condition; retain evidence per item)
 - Canonical checklist at assignment: docs/MODEL_DELIVERY_CHECKLIST.md SHA256 3b7448281ec0429a1425f71d53a1d9f048900442dca0ab8c30735b800f499efb, 2026-11-02.
 - Candidate definition path / SHA-256: isolated models/research/vibe/vibe-2026-explicit-appendix-a.json, revision4 SHA256 a7d3f0f61ff6654f1dc924178a3551a740ca39212a99813c2b9ce5c15b16c987. E5 accepted; exact review record below.
-- Worktree / authorized path whitelist: docs/ingestion/vibe-2026/ and ignored private sources; active isolated /private/tmp/atlas-vibe2026-live-fix-v1 on codex/vibe2026-live-fix-v1; prior controlled-time worktree removed after preserving its commit and required evidence. Separately claimed generic runtime and StageB interface paths are recorded on the board. Historical delivery-v1 worktree was removed after its retained local checkpoint.
+- Worktree / authorized path whitelist: completed isolated /private/tmp/atlas-vibe2026-live-fix-v1 removed through Git without force after clean/ignored/untracked/consumer/retention checks; commit02ada retained on codex/vibe2026-live-fix-v1 and remote main. Final evidence-only successor uses an isolated Git index for only own E8 records, ledger/checklist/board rows and four exact canonical browser screenshots; shared root HEAD/index/peer work are preserved.
 - Implementation run ID(s): /root (orthotropic successor); source specialist /root/vibe_source
 - Independent review run ID: /root/vibe_gap_review, accepted bounded handoff; manifest0a7c29bc8547c1ebfa3cd366dbc07c06e748bc56142e651f45791299518f3280 (source/capability gap review only). Historical source-only review; the separate E5 run is /root/vibe_scientific_review. Additional independent reviews are indexed below.
 - Build/execution owner and handoff: coordinator /root; EXEC-vibe2026-controlled-time-v1 claimed after the user released the slot; native and Wasm qualification passed serially.
@@ -27,14 +27,14 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 - [X] **E5 — Agent approval:** separate actual agent run, all nine checklist decisions, blocking findings resolved, exact accepted record and generated approval entry.
 - [X] **E6 — Atlas:** qualified model/approval/source/evidence and source-backed public profile integrated through normal generation; profile-coverage check passes, prior models preserved and public metadata/current database checked.
 - [X] **E7 — Packaged website:** public profile/card, parameter units, example guidance, related/laboratory links and narrow-screen layout inspected; real controls/plots, technical source/review disclosure, import/export/reset/failure recovery, measurement applicability/toggle where relevant, actual browser and package checks pass.
-- [ ] **E8 — Live delivery:** authorized scoped commit/push, all CI/deployment gates pass, live assets match tested upload and the live model run works; task-owned cleanup verified and any retained resources handed off explicitly.
+- [X] **E8 — Live delivery:** authorized application pushed; all12original CI/deployment jobs pass for exact02ada; actual1533-file tested upload and35live checks, full frozen default run, public profile and strict desktop/mobile plots pass; task-owned cleanup verified. Terminal/live/cleanup receipts are in live-release-v1/.
 
 ## Current handoff
 
-- Current phase / overall state: E0–E7 complete; application89047fc6a deployed and live checks passed. Independent source-only correction for six native full-Python contract failures accepted; scoped commit/push and exact final CI/Pages/upload/live qualification pending. E8 remains open.
-- Current owner: coordinator /root; separate scientific acceptance and separately reviewed dependency/presentation integration are retained.
-- Blocker / missing evidence: final successor revision has not yet passed all current CI/Pages/upload/live gates. Original six native failures retained; exact source/test-context correction independently accepted with all39affected tests passing, no gate waiver.
-- Smallest next action: commit/push the exact accepted source-only repair under existing authorization; observe all original successor-revision CI gates, verify actual tested Pages upload/live model and complete cleanup.
+- Current phase / overall state: E0–E8 verified complete for qualified/deployed application02ada170badf379439a278bab874701c65219515. All12original workflow jobs SUCCESS, exact Pages deployment and final actual-browser/upload checks PASS, clean sourceworktree removed and owned browser closed. This closeout publishes only tracking/evidence; it does not create a newly CI-qualified application revision.
+- Current owner: coordinator /root for retained reproducibility resources; all source, scientific and repair reviewers completed their independent handoffs.
+- Blocker / missing evidence: none for the delivered application. Earlier acquisition, presentation, native-Python and controlled-time source-check failures remain retained with separately accepted corrections; no gate waived.
+- Smallest next action: no remaining model-delivery work. Final evidence-only successor publication is verified separately against remote main; qualified/deployed application identity remains02ada170badf379439a278bab874701c65219515.
 - Review-v4 manifest: 925efc46579dd73ff5f16a22dac72f6d6c473042edf9ba62102a5dc7dfc657a2; coordinator verified all57 inputs and8 outputs. Accepts source eligibility only, not E4/E5/browser/live status.
 - Retained failures: original acquisition failures, transcription revisions, generic default C3 failure and separately identified stricter study, and reviewer test corrections are preserved with exact preimages. No gate was weakened to obtain acceptance.
 
@@ -58,16 +58,22 @@ Use `[ ]` unstarted, `[-]` working/blocked, `[X]` verified complete. Add evidenc
 
 ## Deployment receipt
 
-- Release commit: the scoped local release commit containing this ledger on codex/vibe2026-controlled-time-v1; exact hash is recorded in the workspace post-commit handoff. Earlier checkpoints remain retained. No push or release.
-- Actions run URL and terminal result:
-- Pages deployment revision/result:
-- Tested upload / live asset comparison:
-- Live model URL / actual browser run evidence:
-- Source/review link checks:
-- Public profile / related links / profile asset identity checks:
-- Remaining limitations:
+- Release commit: application02ada170badf379439a278bab874701c65219515 pushed to main under current user Yes authorization. This ledger is published by an evidence-only [skip ci] successor with exact02ada parent and unchanged application bytes; the successor is not represented as a new CI-tested/deployed application. Post-publication receipt: .local/release-artifacts/vibe2026-v1/final-publication-receipt-v5.json.
+- Actions run URL and terminal result: Fast https://github.com/benjym/constitutive-atlas/actions/runs/41744174561 (3jobs), full https://github.com/benjym/constitutive-atlas/actions/runs/41744174585 (6jobs), controlled-time https://github.com/benjym/constitutive-atlas/actions/runs/41744174581 (1job), Pages https://github.com/benjym/constitutive-atlas/actions/runs/41744565630 (2jobs): all12SUCCESS for exact02ada. terminal-gates-v3.json pins all four terminal records.
+- Pages deployment revision/result:02ada170badf379439a278bab874701c65219515; https://github.com/benjym/constitutive-atlas/actions/runs/41744565630 SUCCESS, deployment7534347742 SUCCESS.
+- Tested upload / live asset comparison: actual1533-file upload retained at .local/release-artifacts/vibe2026-v1/pages-tested-upload-v3/artifact.tar SHA2561aeeac126468c4ea47830dddd2ee6fc5d487196a8df97430f701bd8a00ef1721; tested-upload-manifest-v3.json and live-upload-comparison-v3.json PASS35live HTTP/hash checks and exact exportedengineidentity.
+- Live model URL / actual browser run evidence: https://benjym.github.io/constitutive-atlas/index.html#catalogue/vibe-2026 ; actualmainlaboratory sessionvibe-live-v3 completed/exported defaultrequest and complete result exactly equal original frozen near_hold_1000. live-default-comparison-v3.json; browser-v3/ raw receipts retained. Session closed/PID30117absent.
+- Source/review link checks: allnine live technical links HTTP200/SHAexact testedupload, browser-v3/profile-links.log and live-upload-comparison-v3.json.
+- Public profile / related links / profile asset identity checks: PASS30parameterrows/guidance/closedtechnical/relatedmodels/mainlab routing, desktop1440/mobile390; all26selectedasset hashes exactupload includingthreeCSS; originalstrict3plotbounds and4screenshots visuallyinspected. Console0errors/0warnings/noHTTPfailures.
+- Remaining limitations: numerical qualification for disclosed published explicit Appendix A, positive suction/OA>=1, infinitesimal fixed-spatial zero-spin net-stress material point; no saturated endpoint, FE tangent, arbitrary rotation or experimental validation claim.
 
 ## Cleanup and retained resources
+
+Current final disposition2026-11-04: browser sessionvibe-live-v3 CLOSED/PID30117absent;51raw files andfour canonical screenshots retained byte-exact before duplicate removal. Last clean sourceworktree removed through Git;4,059,136,000 logical bytes removed, observed free space increased4,093,161,472 bytes to243925037056 bytes. No owned preview/browser/build process or temporary sourceworktree remains. final-cleanup-v5.json and browser-cleanup-v3.json retain exact ownership/removed-path/hash/space checks.
+
+Retain `.local/private-sources/vibe-2026/`, the user Downloads original, and `.local/release-artifacts/vibe2026-v1/`: private source originals/inventories, losslessly recoverable E7 builds/browser evidence, failures, both actual tested upload tars and original broad inventory gzip. Seven final artifact/private-original hashes rechecked; earlier complete archive recovery remains applicable because archive bytes are unchanged. Coordinator /root owns retention for reproducibility; these are required artifacts, not disposable caches. No unsafe or blocked cleanup remainder.
+
+The initial2November cleanup entries below are historical; subsequent receipts and the final disposition above supersede their current-state wording.
 
 Update throughout the task and at every final/blocked/ready-to-publish handoff. Follow [the repository cleanup rules](../../../AGENTS.md#cleanup-and-storage-at-handoff); preserve required evidence and resumption inputs before deleting temporary copies.
 
@@ -85,7 +91,7 @@ Update throughout the task and at every final/blocked/ready-to-publish handoff. 
 
 ## Completion statement
 
-Record separately: source complete; executable scope; independent numerical qualification; agent approval; atlas inclusion and public profile; packaged browser; live deployment; experimental validation. An absent experimental comparison can be an explicit limitation. A missing public profile, missing website support or unverified deployment cannot be called full delivery.
+Source complete for the published explicit Appendix A variant; declarative v0.3 eight-state physical-time THM model implemented. Independent equation/reference, native/Wasm and transactional numerical qualification passed; separate nine-item agent review accepted exact model bytes. Main atlas/public profile and actual packaged/live browser support are complete; no standalone model page was added. All12required jobs and exact Pages deployment passed for02ada, with35actual live file/link checks and the complete default run equal to the frozen reference. Task-owned temporary resources are cleaned and required sources/failures/archives retained. Experimental validation and material calibration are not claimed; positive suction, OA>=1, infinitesimal fixed-spatial zero-spin net-stress scope remains explicit.
 
 ## Scope and prospective gate boundary
 

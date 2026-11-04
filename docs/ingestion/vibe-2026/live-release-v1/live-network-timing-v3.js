@@ -1,0 +1,1 @@
+async(page)=>{return await page.evaluate(()=>{const rows=performance.getEntriesByType("resource").map(r=>({name:r.name,status:r.responseStatus,transfer:r.transferSize,duration:r.duration}));const bad=rows.filter(r=>r.status>=400);if(bad.length)throw Error(JSON.stringify(bad));return {rows,bad};});}

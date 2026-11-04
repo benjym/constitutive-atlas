@@ -1,0 +1,39 @@
+{
+  "identity": "interface-baseline-implementation-inspection-v1",
+  "source_only": true,
+  "compiled_calls": 0,
+  "passed": true,
+  "negative_fixtures": [
+    "identity",
+    "accepted",
+    "proof_manifest_sha256",
+    "bindings_sha256",
+    "implementation",
+    "reviewer_run",
+    "guard-plan_path",
+    "guard-plan_sha256"
+  ],
+  "implementation": {
+    "tools/profile_source_compatibility_baseline.py": "bac0315804aecf998a8c8f32c53c07282440865d113adb6c823b43f2285d1111",
+    "tools/build_interface2016_baseline_web.py": "6066ba5414d6538dd1db5edc191455b0f84ef4f5b4577487af8d01aec5b95a1f",
+    "tools/test_interface2016_baseline_package.mjs": "bdbde51a7e7a4d889d82aaa48ed85766b8b945b6d9a01099f9d50713ecc8dbd2"
+  },
+  "integration_bindings": {
+    "tools/build_web.py": "d8bdefaa9f6612190ddf412bbb47d145716d7de5fcea4cf0983f0db2b30353e8",
+    "tools/check_current_dependency_assets.py": "54d2b33efe806384c0a529d0bacaac77908999ae630aab30f915b753257ead5c",
+    "tools/check_native_fixture_contracts.py": "8ccb0ffc2ac74b1e3f9e5e0e56f5c7e9bf3cbf56ee032d1c5d7551d9eeae72a3",
+    ".github/workflows/pages.yml": "3b4c88deb169630f60b9e32180fb39adabaacb72f736a3682d605aa74d962932",
+    ".github/workflows/qualification.yml": "77b87d726516b70b76b9441762073ae45d91aadd545c9fa87e62338668642569"
+  },
+  "checks": [
+    "exact7 reviewed source pin updates only; explicit proof identity update",
+    "builder reverses byte-exact by import replacement",
+    "checker reverses byte-exact by evidence/identity replacement; numerical body unchanged",
+    "retained engine files except exact source row byte-identical",
+    "actual validator positive uses in-memory decision fixture only",
+    "six malformed decision fields rejected",
+    "current guard selection returns3 routes; rejects mixed plan selections"
+  ],
+  "blocking_findings": [],
+  "scope_limit": "actual bundled package/runtime execution and hosted integration gates remain coordinator responsibility"
+}

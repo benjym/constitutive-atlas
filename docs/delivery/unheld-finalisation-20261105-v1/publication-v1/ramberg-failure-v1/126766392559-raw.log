@@ -1,0 +1,858 @@
+﻿2026-11-04T18:12:38.4721160Z Current runner version: '2.338.2'
+2026-11-04T18:12:38.4772870Z ##[group]Runner Image Provisioner
+2026-11-04T18:12:38.4774420Z Hosted Compute Agent
+2026-11-04T18:12:38.4775420Z Version: 20261021.618
+2026-11-04T18:12:38.4776530Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-04T18:12:38.4777800Z Build Date: 2026-10-21T00:45:21Z
+2026-11-04T18:12:38.4779000Z Worker ID: {a5f21359-bf0f-49ab-b1b6-17c64518d24f}
+2026-11-04T18:12:38.4780250Z Region: westus
+2026-11-04T18:12:38.4781180Z Cloud: MacCloud
+2026-11-04T18:12:38.4782120Z ##[endgroup]
+2026-11-04T18:12:38.4785660Z ##[group]Operating System
+2026-11-04T18:12:38.4786720Z macOS
+2026-11-04T18:12:38.4787590Z 26.6.2
+2026-11-04T18:12:38.4788470Z 25G83
+2026-11-04T18:12:38.4789400Z ##[endgroup]
+2026-11-04T18:12:38.4790410Z ##[group]Runner Image
+2026-11-04T18:12:38.4791500Z Image: macos-26-arm64
+2026-11-04T18:12:38.4792590Z Version: 20261026.0455.2
+2026-11-04T18:12:38.4795420Z Included Software: https://github.com/actions/runner-images/blob/macos-26-arm64/20261026.0455/images/macos/macos-26-arm64-Readme.md
+2026-11-04T18:12:38.4798450Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-26-arm64%2F20261026.0455
+2026-11-04T18:12:38.4800300Z ##[endgroup]
+2026-11-04T18:12:38.4802540Z ##[group]GITHUB_TOKEN Permissions
+2026-11-04T18:12:38.4805800Z Contents: read
+2026-11-04T18:12:38.4806200Z Metadata: read
+2026-11-04T18:12:38.4806590Z ##[endgroup]
+2026-11-04T18:12:38.4808640Z Secret source: Actions
+2026-11-04T18:12:38.4809290Z Cache mode: write
+2026-11-04T18:12:38.4809780Z Prepare workflow directory
+2026-11-04T18:12:38.5310590Z Prepare all required actions
+2026-11-04T18:12:38.5378310Z Getting action download info
+2026-11-04T18:12:39.6079870Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-11-04T18:12:40.0063160Z Download action repository 'actions/setup-python@v6' (SHA:ece7cb06caefa5fff74198d8649806c4678c61a1)
+2026-11-04T18:12:40.1205500Z Download action repository 'actions/setup-node@v6' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+2026-11-04T18:12:40.2600810Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+2026-11-04T18:12:40.3759550Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-04T18:12:40.7399440Z Complete job name: wasm
+2026-11-04T18:12:40.8346200Z ##[group]Run actions/checkout@v5
+2026-11-04T18:12:40.8347190Z with:
+2026-11-04T18:12:40.8347790Z   repository: benjym/constitutive-atlas
+2026-11-04T18:12:40.8353700Z   token: ***
+2026-11-04T18:12:40.8354340Z   ssh-strict: true
+2026-11-04T18:12:40.8354960Z   ssh-user: git
+2026-11-04T18:12:40.8355520Z   persist-credentials: true
+2026-11-04T18:12:40.8356120Z   clean: true
+2026-11-04T18:12:40.8356780Z   sparse-checkout-cone-mode: true
+2026-11-04T18:12:40.8357440Z   fetch-depth: 1
+2026-11-04T18:12:40.8357970Z   fetch-tags: false
+2026-11-04T18:12:40.8358610Z   show-progress: true
+2026-11-04T18:12:40.8359170Z   lfs: false
+2026-11-04T18:12:40.8359870Z   submodules: false
+2026-11-04T18:12:40.8360530Z   set-safe-directory: true
+2026-11-04T18:12:40.8361250Z   allow-unsafe-pr-checkout: false
+2026-11-04T18:12:40.8362390Z env:
+2026-11-04T18:12:40.8362950Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:12:40.8363560Z ##[endgroup]
+2026-11-04T18:12:41.3921020Z Syncing repository: benjym/constitutive-atlas
+2026-11-04T18:12:41.3923040Z ##[group]Getting Git version info
+2026-11-04T18:12:41.3923850Z Working directory is '/Users/runner/work/constitutive-atlas/constitutive-atlas'
+2026-11-04T18:12:41.3924980Z [command]/opt/homebrew/bin/git version
+2026-11-04T18:12:41.4281450Z git version 2.56.0
+2026-11-04T18:12:41.4362560Z ##[endgroup]
+2026-11-04T18:12:41.4405810Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/09cefa1c-03e7-4456-987b-96214df38964/.gitconfig'
+2026-11-04T18:12:41.4407600Z Temporarily overriding HOME='/Users/runner/work/_temp/09cefa1c-03e7-4456-987b-96214df38964' before making global git config changes
+2026-11-04T18:12:41.4409350Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-04T18:12:41.4411670Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-04T18:12:41.4520860Z Deleting the contents of '/Users/runner/work/constitutive-atlas/constitutive-atlas'
+2026-11-04T18:12:41.4529560Z ##[group]Initializing the repository
+2026-11-04T18:12:41.4539040Z [command]/opt/homebrew/bin/git init /Users/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-04T18:12:41.4923260Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-04T18:12:41.4925090Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-04T18:12:41.4928460Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-04T18:12:41.4932270Z hint: call:
+2026-11-04T18:12:41.4933820Z hint:
+2026-11-04T18:12:41.4935490Z hint: 	git config --global init.defaultBranch <name>
+2026-11-04T18:12:41.4939050Z hint:
+2026-11-04T18:12:41.4940240Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-04T18:12:41.4941250Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-04T18:12:41.4942050Z hint:
+2026-11-04T18:12:41.4942710Z hint: 	git branch -m <name>
+2026-11-04T18:12:41.4943450Z hint:
+2026-11-04T18:12:41.4944330Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-04T18:12:41.4949280Z Initialized empty Git repository in /Users/runner/work/constitutive-atlas/constitutive-atlas/.git/
+2026-11-04T18:12:41.4972920Z [command]/opt/homebrew/bin/git remote add origin https://github.com/benjym/constitutive-atlas
+2026-11-04T18:12:41.5093260Z ##[endgroup]
+2026-11-04T18:12:41.5095600Z ##[group]Disabling automatic garbage collection
+2026-11-04T18:12:41.5098190Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2026-11-04T18:12:41.5181550Z ##[endgroup]
+2026-11-04T18:12:41.5184040Z ##[group]Setting up auth
+2026-11-04T18:12:41.5187190Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-04T18:12:41.5295750Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-04T18:12:41.6878950Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-04T18:12:41.6982050Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-04T18:12:41.8790390Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-04T18:12:41.9110640Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-04T18:12:42.1934960Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-04T18:12:42.2019570Z ##[endgroup]
+2026-11-04T18:12:42.2020890Z ##[group]Fetching the repository
+2026-11-04T18:12:42.2024520Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +58e6b78c7638c6ee0a8fafae5deb9c12737f2826:refs/remotes/origin/main
+2026-11-04T18:13:32.9609240Z From https://github.com/benjym/constitutive-atlas
+2026-11-04T18:13:32.9612360Z  * [new ref]           58e6b78c7638c6ee0a8fafae5deb9c12737f2826 -> origin/main
+2026-11-04T18:13:32.9649190Z ##[endgroup]
+2026-11-04T18:13:32.9650840Z ##[group]Determining the checkout info
+2026-11-04T18:13:32.9652860Z ##[endgroup]
+2026-11-04T18:13:32.9671360Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2026-11-04T18:13:32.9805910Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-04T18:13:32.9903710Z ##[group]Checking out the ref
+2026-11-04T18:13:32.9918240Z [command]/opt/homebrew/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-04T18:13:34.1759520Z Updating files:   9% (4468/44892)
+2026-11-04T18:13:34.3815060Z Updating files:  10% (4490/44892)
+2026-11-04T18:13:34.4817930Z Updating files:  11% (4939/44892)
+2026-11-04T18:13:34.6383230Z Updating files:  12% (5388/44892)
+2026-11-04T18:13:34.7568280Z Updating files:  13% (5836/44892)
+2026-11-04T18:13:34.8920480Z Updating files:  14% (6285/44892)
+2026-11-04T18:13:35.0994080Z Updating files:  15% (6734/44892)
+2026-11-04T18:13:35.1532850Z Updating files:  15% (7085/44892)
+2026-11-04T18:13:35.3675300Z Updating files:  16% (7183/44892)
+2026-11-04T18:13:35.5736660Z Updating files:  17% (7632/44892)
+2026-11-04T18:13:35.7843320Z Updating files:  18% (8081/44892)
+2026-11-04T18:13:36.0308200Z Updating files:  19% (8530/44892)
+2026-11-04T18:13:36.0986100Z Updating files:  20% (8979/44892)
+2026-11-04T18:13:36.2607730Z Updating files:  20% (9115/44892)
+2026-11-04T18:13:36.4878050Z Updating files:  21% (9428/44892)
+2026-11-04T18:13:37.1304290Z Updating files:  22% (9877/44892)
+2026-11-04T18:13:37.4410420Z Updating files:  22% (10314/44892)
+2026-11-04T18:13:38.1037960Z Updating files:  23% (10326/44892)
+2026-11-04T18:13:38.6516440Z Updating files:  23% (10530/44892)
+2026-11-04T18:13:39.1084130Z Updating files:  24% (10775/44892)
+2026-11-04T18:13:39.5292910Z Updating files:  24% (10887/44892)
+2026-11-04T18:13:39.6898180Z Updating files:  25% (11223/44892)
+2026-11-04T18:13:40.2229230Z Updating files:  26% (11672/44892)
+2026-11-04T18:13:40.2598380Z Updating files:  26% (11987/44892)
+2026-11-04T18:13:40.3842250Z Updating files:  27% (12121/44892)
+2026-11-04T18:13:40.9389890Z Updating files:  28% (12570/44892)
+2026-11-04T18:13:41.0994090Z Updating files:  29% (13019/44892)
+2026-11-04T18:13:41.1580860Z Updating files:  29% (13303/44892)
+2026-11-04T18:13:41.4381150Z Updating files:  30% (13468/44892)
+2026-11-04T18:13:41.6043320Z Updating files:  31% (13917/44892)
+2026-11-04T18:13:41.7578850Z Updating files:  32% (14366/44892)
+2026-11-04T18:13:41.8718530Z Updating files:  33% (14815/44892)
+2026-11-04T18:13:42.1002380Z Updating files:  34% (15264/44892)
+2026-11-04T18:13:42.1116500Z Updating files:  34% (15706/44892)
+2026-11-04T18:13:42.3897530Z Updating files:  35% (15713/44892)
+2026-11-04T18:13:42.8768540Z Updating files:  36% (16162/44892)
+2026-11-04T18:13:42.9899500Z Updating files:  37% (16611/44892)
+2026-11-04T18:13:43.1538550Z Updating files:  38% (17059/44892)
+2026-11-04T18:13:43.5176740Z Updating files:  38% (17097/44892)
+2026-11-04T18:13:43.7731000Z Updating files:  39% (17508/44892)
+2026-11-04T18:13:44.0845330Z Updating files:  40% (17957/44892)
+2026-11-04T18:13:44.1010000Z Updating files:  41% (18406/44892)
+2026-11-04T18:13:44.2119870Z Updating files:  41% (18457/44892)
+2026-11-04T18:13:44.3993130Z Updating files:  42% (18855/44892)
+2026-11-04T18:13:44.5396490Z Updating files:  43% (19304/44892)
+2026-11-04T18:13:44.9759370Z Updating files:  44% (19753/44892)
+2026-11-04T18:13:45.0833200Z Updating files:  45% (20202/44892)
+2026-11-04T18:13:45.1011070Z Updating files:  46% (20651/44892)
+2026-11-04T18:13:45.3384300Z Updating files:  46% (20713/44892)
+2026-11-04T18:13:45.5604850Z Updating files:  47% (21100/44892)
+2026-11-04T18:13:45.8316760Z Updating files:  48% (21549/44892)
+2026-11-04T18:13:46.1081450Z Updating files:  49% (21998/44892)
+2026-11-04T18:13:46.1106300Z Updating files:  49% (22440/44892)
+2026-11-04T18:13:46.4834690Z Updating files:  50% (22446/44892)
+2026-11-04T18:13:46.7229320Z Updating files:  51% (22895/44892)
+2026-11-04T18:13:46.9539340Z Updating files:  52% (23344/44892)
+2026-11-04T18:13:47.1025300Z Updating files:  53% (23793/44892)
+2026-11-04T18:13:47.1682620Z Updating files:  53% (24111/44892)
+2026-11-04T18:13:47.4406580Z Updating files:  54% (24242/44892)
+2026-11-04T18:13:47.6742780Z Updating files:  55% (24691/44892)
+2026-11-04T18:13:47.9817470Z Updating files:  56% (25140/44892)
+2026-11-04T18:13:48.1112260Z Updating files:  57% (25589/44892)
+2026-11-04T18:13:48.1438770Z Updating files:  57% (25962/44892)
+2026-11-04T18:13:48.2301520Z Updating files:  58% (26038/44892)
+2026-11-04T18:13:48.5092910Z Updating files:  59% (26487/44892)
+2026-11-04T18:13:49.0487370Z Updating files:  60% (26936/44892)
+2026-11-04T18:13:49.1121940Z Updating files:  61% (27385/44892)
+2026-11-04T18:13:49.2703250Z Updating files:  61% (27427/44892)
+2026-11-04T18:13:49.4363740Z Updating files:  62% (27834/44892)
+2026-11-04T18:13:49.6812000Z Updating files:  63% (28282/44892)
+2026-11-04T18:13:50.1043370Z Updating files:  64% (28731/44892)
+2026-11-04T18:13:50.1216680Z Updating files:  64% (29168/44892)
+2026-11-04T18:13:50.3515060Z Updating files:  65% (29180/44892)
+2026-11-04T18:13:51.0906970Z Updating files:  66% (29629/44892)
+2026-11-04T18:13:51.1049850Z Updating files:  67% (30078/44892)
+2026-11-04T18:13:51.5055330Z Updating files:  67% (30092/44892)
+2026-11-04T18:13:51.6918610Z Updating files:  68% (30527/44892)
+2026-11-04T18:13:51.7508720Z Updating files:  69% (30976/44892)
+2026-11-04T18:13:52.1011090Z Updating files:  70% (31425/44892)
+2026-11-04T18:13:52.1080570Z Updating files:  71% (31874/44892)
+2026-11-04T18:13:52.7306990Z Updating files:  71% (31902/44892)
+2026-11-04T18:13:52.8664860Z Updating files:  72% (32323/44892)
+2026-11-04T18:13:53.0192980Z Updating files:  73% (32772/44892)
+2026-11-04T18:13:53.1057180Z Updating files:  74% (33221/44892)
+2026-11-04T18:13:53.1975890Z Updating files:  74% (33398/44892)
+2026-11-04T18:13:53.3140310Z Updating files:  75% (33669/44892)
+2026-11-04T18:13:53.5782850Z Updating files:  76% (34118/44892)
+2026-11-04T18:13:53.7723160Z Updating files:  77% (34567/44892)
+2026-11-04T18:13:54.1262810Z Updating files:  78% (35016/44892)
+2026-11-04T18:13:54.8775480Z Updating files:  78% (35348/44892)
+2026-11-04T18:13:55.1177210Z Updating files:  79% (35465/44892)
+2026-11-04T18:13:55.6225590Z Updating files:  79% (35703/44892)
+2026-11-04T18:13:56.1075200Z Updating files:  80% (35914/44892)
+2026-11-04T18:13:56.1330760Z Updating files:  80% (36360/44892)
+2026-11-04T18:13:57.1131380Z Updating files:  81% (36363/44892)
+2026-11-04T18:13:58.1083130Z Updating files:  81% (36577/44892)
+2026-11-04T18:13:58.4762300Z Updating files:  81% (36629/44892)
+2026-11-04T18:13:59.1113960Z Updating files:  82% (36812/44892)
+2026-11-04T18:13:59.1863880Z Updating files:  82% (37244/44892)
+2026-11-04T18:13:59.8474890Z Updating files:  83% (37261/44892)
+2026-11-04T18:14:00.0598770Z Updating files:  84% (37710/44892)
+2026-11-04T18:14:00.1557300Z Updating files:  85% (38159/44892)
+2026-11-04T18:14:00.3518050Z Updating files:  85% (38255/44892)
+2026-11-04T18:14:00.5708090Z Updating files:  86% (38608/44892)
+2026-11-04T18:14:00.8544900Z Updating files:  87% (39057/44892)
+2026-11-04T18:14:01.0084360Z Updating files:  88% (39505/44892)
+2026-11-04T18:14:01.2199860Z Updating files:  89% (39954/44892)
+2026-11-04T18:14:01.5153340Z Updating files:  89% (40153/44892)
+2026-11-04T18:14:02.0974780Z Updating files:  90% (40403/44892)
+2026-11-04T18:14:02.1102820Z Updating files:  91% (40852/44892)
+2026-11-04T18:14:02.2925410Z Updating files:  91% (40892/44892)
+2026-11-04T18:14:02.4324100Z Updating files:  92% (41301/44892)
+2026-11-04T18:14:02.6347460Z Updating files:  93% (41750/44892)
+2026-11-04T18:14:02.9871760Z Updating files:  94% (42199/44892)
+2026-11-04T18:14:03.2069360Z Updating files:  95% (42648/44892)
+2026-11-04T18:14:03.4060200Z Updating files:  95% (42779/44892)
+2026-11-04T18:14:03.6921300Z Updating files:  96% (43097/44892)
+2026-11-04T18:14:04.1136250Z Updating files:  97% (43546/44892)
+2026-11-04T18:14:04.1677470Z Updating files:  97% (43961/44892)
+2026-11-04T18:14:04.3004480Z Updating files:  98% (43995/44892)
+2026-11-04T18:14:04.3970320Z Updating files:  99% (44444/44892)
+2026-11-04T18:14:04.3971840Z Updating files: 100% (44892/44892)
+2026-11-04T18:14:04.3972480Z Updating files: 100% (44892/44892), done.
+2026-11-04T18:14:04.5364790Z Switched to a new branch 'main'
+2026-11-04T18:14:04.5391800Z branch 'main' set up to track 'origin/main'.
+2026-11-04T18:14:04.5533110Z ##[endgroup]
+2026-11-04T18:14:04.6031170Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2026-11-04T18:14:04.6208720Z 58e6b78c7638c6ee0a8fafae5deb9c12737f2826
+2026-11-04T18:14:04.6819240Z ##[group]Run actions/setup-python@v6
+2026-11-04T18:14:04.6819480Z with:
+2026-11-04T18:14:04.6819750Z   python-version: 3.14
+2026-11-04T18:14:04.6819960Z   check-latest: false
+2026-11-04T18:14:04.6822040Z   token: ***
+2026-11-04T18:14:04.6822240Z   update-environment: true
+2026-11-04T18:14:04.6822520Z   allow-prereleases: false
+2026-11-04T18:14:04.6822790Z   freethreaded: false
+2026-11-04T18:14:04.6822940Z env:
+2026-11-04T18:14:04.6823120Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:14:04.6823350Z ##[endgroup]
+2026-11-04T18:14:04.9629520Z ##[group]Installed versions
+2026-11-04T18:14:04.9756960Z Successfully set up CPython (3.14.10)
+2026-11-04T18:14:04.9758860Z ##[endgroup]
+2026-11-04T18:14:04.9887880Z ##[group]Run actions/setup-node@v6
+2026-11-04T18:14:04.9888110Z with:
+2026-11-04T18:14:04.9888330Z   node-version-file: .nvmrc
+2026-11-04T18:14:04.9888640Z   check-latest: false
+2026-11-04T18:14:04.9890570Z   token: ***
+2026-11-04T18:14:04.9914140Z   package-manager-cache: true
+2026-11-04T18:14:04.9914360Z env:
+2026-11-04T18:14:04.9914520Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:14:04.9914800Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:04.9915490Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:14:04.9915900Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:04.9916290Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:04.9916640Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:04.9916930Z ##[endgroup]
+2026-11-04T18:14:05.1987600Z Resolved .nvmrc as 24
+2026-11-04T18:14:05.2047400Z Found in cache @ /Users/runner/hostedtoolcache/node/24.22.1/arm64
+2026-11-04T18:14:05.2049770Z ##[group]Environment details
+2026-11-04T18:14:05.9418920Z node: v24.22.1
+2026-11-04T18:14:05.9443250Z npm: 11.19.1
+2026-11-04T18:14:05.9443730Z yarn: 1.22.22
+2026-11-04T18:14:05.9444770Z ##[endgroup]
+2026-11-04T18:14:05.9690320Z ##[group]Run actions/cache@v4
+2026-11-04T18:14:05.9690940Z with:
+2026-11-04T18:14:05.9691430Z   path: /Users/runner/work/_temp/emsdk
+2026-11-04T18:14:05.9692050Z   key: emsdk-macOS-ARM64-6.0.8-v1
+2026-11-04T18:14:05.9692650Z   enableCrossOsArchive: false
+2026-11-04T18:14:05.9693190Z   fail-on-cache-miss: false
+2026-11-04T18:14:05.9693720Z   lookup-only: false
+2026-11-04T18:14:05.9694180Z   save-always: false
+2026-11-04T18:14:05.9694640Z env:
+2026-11-04T18:14:05.9695080Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:14:05.9695830Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:05.9696970Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:14:05.9698020Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:05.9699010Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:05.9700120Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:05.9700890Z ##[endgroup]
+2026-11-04T18:14:06.1358120Z (node:1877) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-04T18:14:06.1359110Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-04T18:14:06.2551960Z Cache hit for: emsdk-macOS-ARM64-6.0.8-v1
+2026-11-04T18:14:06.2624110Z (node:1877) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-04T18:14:07.4367240Z Received 134217728 of 496786022 (27.0%), 113.3 MBs/sec
+2026-11-04T18:14:08.4513280Z Received 268435456 of 496786022 (54.0%), 119.5 MBs/sec
+2026-11-04T18:14:09.4513180Z Received 436207616 of 496786022 (87.8%), 132.1 MBs/sec
+2026-11-04T18:14:09.9071370Z Received 496786022 of 496786022 (100.0%), 131.5 MBs/sec
+2026-11-04T18:14:09.9130490Z Cache Size: ~474 MB (496786022 B)
+2026-11-04T18:14:09.9254680Z [command]/opt/homebrew/bin/gtar -xf /Users/runner/work/_temp/3dc79b78-89ae-4b68-b9ad-622018828660/cache.tzst -P -C /Users/runner/work/constitutive-atlas/constitutive-atlas --delay-directory-restore --use-compress-program unzstd
+2026-11-04T18:14:19.1600210Z Cache restored successfully
+2026-11-04T18:14:19.2032960Z Cache restored from key: emsdk-macOS-ARM64-6.0.8-v1
+2026-11-04T18:14:19.2393970Z ##[group]Run source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+2026-11-04T18:14:19.2394470Z [36;1msource "$RUNNER_TEMP/emsdk/emsdk_env.sh"[0m
+2026-11-04T18:14:19.2395160Z [36;1mcmake -S . -B build -DCMAKE_BUILD_TYPE=Release[0m
+2026-11-04T18:14:19.2395640Z [36;1mpython tools/build_ci_targets.py build[0m
+2026-11-04T18:14:19.2396030Z [36;1memcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release[0m
+2026-11-04T18:14:19.2396550Z [36;1mpython tools/build_ci_targets.py build-wasm --wasm[0m
+2026-11-04T18:14:19.2397210Z [36;1mcmake --build build-wasm --target atlas_scalar_probe --parallel 1[0m
+2026-11-04T18:14:19.2397810Z [36;1mnode tools/collect_scalar_functions_wasm.mjs build-wasm/scalar-functions.js "$RUNNER_TEMP/scalar-wasm-raw.json"[0m
+2026-11-04T18:14:19.2398590Z [36;1mpython -B tools/check_scalar_functions.py "$RUNNER_TEMP/scalar-wasm-raw.json" "$RUNNER_TEMP/scalar-wasm-assessment.json"[0m
+2026-11-04T18:14:19.2399200Z [36;1mnode tools/test_experiments.mjs[0m
+2026-11-04T18:14:19.2399740Z [36;1mnode tools/test_wasm.mjs --profile-policy catalogue/laboratory-profile-policy.json[0m
+2026-11-04T18:14:19.3635600Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-04T18:14:19.3636050Z env:
+2026-11-04T18:14:19.3636320Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:14:19.3636730Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:19.3637250Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:14:19.3637880Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:19.3638360Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:19.3638910Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:14:19.3639330Z ##[endgroup]
+2026-11-04T18:14:19.8637950Z Setting up EMSDK environment (suppress these messages with EMSDK_QUIET=1)
+2026-11-04T18:14:19.8639260Z Adding directories to PATH:
+2026-11-04T18:14:19.8640440Z PATH += /Users/runner/work/_temp/emsdk
+2026-11-04T18:14:19.8641640Z PATH += /Users/runner/work/_temp/emsdk/upstream/emscripten
+2026-11-04T18:14:19.8642280Z 
+2026-11-04T18:14:19.8642630Z Setting environment variables:
+2026-11-04T18:14:19.8652060Z PATH = /Users/runner/work/_temp/emsdk:/Users/runner/work/_temp/emsdk/upstream/emscripten:/Users/runner/hostedtoolcache/node/24.22.1/arm64/bin:/Users/runner/hostedtoolcache/Python/3.14.10/arm64/bin:/Users/runner/hostedtoolcache/Python/3.14.10/arm64:/opt/homebrew/opt/rustup/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby@3.4/bin:/Users/runner/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/runner/.cargo/bin:/usr/local/opt/curl/bin:/usr/local/bin:/usr/local/sbin:/Users/runner/bin:/Users/runner/.yarn/bin:/Users/runner/Library/Android/sdk/tools:/Users/runner/Library/Android/sdk/platform-tools:/Library/Frameworks/Python.framework/Versions/Current/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/bin:/bin:/usr/sbin:/sbin:/Users/runner/.dotnet/tools
+2026-11-04T18:14:19.8655000Z EMSDK = /Users/runner/work/_temp/emsdk
+2026-11-04T18:14:19.8655580Z EMSDK_NODE = /Users/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node
+2026-11-04T18:14:19.8656240Z EMSDK_PYTHON = /Users/runner/work/_temp/emsdk/python/3.13.3_64bit/bin/python3
+2026-11-04T18:14:19.8657070Z SSL_CERT_FILE = /Users/runner/work/_temp/emsdk/python/3.13.3_64bit/lib/python3.13/site-packages/certifi/cacert.pem
+2026-11-04T18:14:27.2284390Z -- The C compiler identification is AppleClang 21.0.0.21000101
+2026-11-04T18:14:29.3791710Z -- The CXX compiler identification is AppleClang 21.0.0.21000101
+2026-11-04T18:14:29.4358680Z -- Detecting C compiler ABI info
+2026-11-04T18:14:30.3351490Z -- Detecting C compiler ABI info - done
+2026-11-04T18:14:30.3528420Z -- Check for working C compiler: /usr/bin/cc - skipped
+2026-11-04T18:14:30.3540390Z -- Detecting C compile features
+2026-11-04T18:14:30.3549500Z -- Detecting C compile features - done
+2026-11-04T18:14:30.3655760Z -- Detecting CXX compiler ABI info
+2026-11-04T18:14:30.5803340Z -- Detecting CXX compiler ABI info - done
+2026-11-04T18:14:30.6293520Z -- Check for working CXX compiler: /usr/bin/c++ - skipped
+2026-11-04T18:14:30.6294310Z -- Detecting CXX compile features
+2026-11-04T18:14:30.6296800Z -- Detecting CXX compile features - done
+2026-11-04T18:14:31.0952150Z -- Found Python3: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/bin/python3.14 (found version "3.14.10") found components: Interpreter
+2026-11-04T18:14:31.1245660Z -- Configuring done (11.2s)
+2026-11-04T18:14:31.2098600Z -- Generating done (0.1s)
+2026-11-04T18:14:31.2112530Z -- Build files have been written to: /Users/runner/work/constitutive-atlas/constitutive-atlas/build
+2026-11-04T18:14:31.4490160Z [  6%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow.c.o
+2026-11-04T18:14:31.6480970Z [ 13%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow_data.c.o
+2026-11-04T18:14:31.6994830Z [ 20%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/exp_data.c.o
+2026-11-04T18:14:31.7466730Z [ 26%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_xflow.c.o
+2026-11-04T18:14:31.7960120Z [ 33%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_uflow.c.o
+2026-11-04T18:14:31.8434810Z [ 40%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_oflow.c.o
+2026-11-04T18:14:31.8926370Z [ 46%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_invalid.c.o
+2026-11-04T18:14:31.9471170Z [ 53%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/sin.c.o
+2026-11-04T18:14:32.0077310Z [ 60%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__sin.c.o
+2026-11-04T18:14:32.0625920Z [ 66%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__cos.c.o
+2026-11-04T18:14:32.1299310Z [ 73%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-04T18:14:32.1971140Z [ 80%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-04T18:14:32.3208010Z [ 86%] Linking C static library libatlas_scalar_functions.a
+2026-11-04T18:14:33.8106130Z [ 86%] Built target atlas_scalar_functions
+2026-11-04T18:14:33.8526810Z [ 93%] Building CXX object CMakeFiles/atlas_scalar_probe.dir/tests/scalar_functions_probe.cpp.o
+2026-11-04T18:14:35.5294340Z [100%] Linking CXX shared library libatlas_scalar_probe.dylib
+2026-11-04T18:14:35.6173800Z [100%] Built target atlas_scalar_probe
+2026-11-04T18:14:35.7451270Z [  6%] Generating power-creep-generated/models.hpp, power-creep-generated/models.json
+2026-11-04T18:14:35.9385910Z [  6%] Built target atlas_power_creep_models
+2026-11-04T18:14:35.9767240Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:14:36.0107500Z [ 93%] Building CXX object CMakeFiles/atlas_power_creep_solver.dir/cpp/main.cpp.o
+2026-11-04T18:14:40.8973600Z [100%] Linking CXX executable atlas_power_creep_solver
+2026-11-04T18:14:40.9813670Z [100%] Built target atlas_power_creep_solver
+2026-11-04T18:14:41.0965870Z [  6%] Generating generated/models.hpp, generated/models.json
+2026-11-04T18:14:41.2766920Z [  6%] Built target atlas_models
+2026-11-04T18:14:41.3125220Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:14:41.3433180Z [ 93%] Building CXX object CMakeFiles/atlas_solver.dir/cpp/main.cpp.o
+2026-11-04T18:15:02.3437550Z [100%] Linking CXX executable atlas_solver
+2026-11-04T18:15:02.4481410Z [100%] Built target atlas_solver
+2026-11-04T18:15:02.5777260Z [  6%] Generating time-generated/models.hpp
+2026-11-04T18:15:02.7636520Z [  6%] Built target atlas_time_models
+2026-11-04T18:15:02.8086490Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:02.8472260Z [ 93%] Building CXX object CMakeFiles/atlas_time_solver.dir/cpp/main.cpp.o
+2026-11-04T18:15:09.5504840Z [100%] Linking CXX executable atlas_time_solver
+2026-11-04T18:15:09.6252030Z [100%] Built target atlas_time_solver
+2026-11-04T18:15:09.7296840Z [  6%] Generating research-generated/models.hpp
+2026-11-04T18:15:09.8440890Z [  6%] Built target atlas_research_models
+2026-11-04T18:15:09.8802540Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:09.9114480Z [ 93%] Building CXX object CMakeFiles/atlas_research_solver.dir/cpp/main.cpp.o
+2026-11-04T18:15:17.6829320Z [100%] Linking CXX executable atlas_research_solver
+2026-11-04T18:15:17.7634630Z [100%] Built target atlas_research_solver
+2026-11-04T18:15:17.8881870Z [ 81%] Built target atlas_scalar_functions
+2026-11-04T18:15:17.9044140Z [ 87%] Generating history-generated/history_programs.hpp
+2026-11-04T18:15:17.9991670Z [ 93%] Building CXX object CMakeFiles/atlas_history_solver.dir/cpp/history_main.cpp.o
+2026-11-04T18:15:19.1465020Z [100%] Linking CXX executable atlas_history_solver
+2026-11-04T18:15:19.2199280Z [100%] Built target atlas_history_solver
+2026-11-04T18:15:19.3252260Z [  6%] Generating clay2013-generated/models.hpp
+2026-11-04T18:15:19.4163190Z [  6%] Built target atlas_clay2013_models
+2026-11-04T18:15:19.4514020Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:19.4915820Z [ 93%] Building CXX object CMakeFiles/atlas_clay2013_solver.dir/cpp/main.cpp.o
+2026-11-04T18:15:24.2710260Z [100%] Linking CXX executable atlas_clay2013_solver
+2026-11-04T18:15:24.3452340Z [100%] Built target atlas_clay2013_solver
+2026-11-04T18:15:24.4463440Z [  6%] Generating gis2024-generated/models.hpp
+2026-11-04T18:15:24.5294320Z [  6%] Built target atlas_gis2024_models
+2026-11-04T18:15:24.5607140Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:24.5911470Z [ 93%] Building CXX object CMakeFiles/atlas_gis2024_solver.dir/cpp/main.cpp.o
+2026-11-04T18:15:30.3449020Z [100%] Linking CXX executable atlas_gis2024_solver
+2026-11-04T18:15:30.4182770Z [100%] Built target atlas_gis2024_solver
+2026-11-04T18:15:30.5220470Z [ 76%] Built target atlas_scalar_functions
+2026-11-04T18:15:30.5371820Z [ 82%] Generating expm-history-generated/history_programs.hpp
+2026-11-04T18:15:30.6089300Z [ 88%] Generating expm-generated/models.hpp, expm-generated/models.json
+2026-11-04T18:15:30.7110180Z [ 94%] Building CXX object CMakeFiles/atlas_expm_probe.dir/tests/expm_driver.cpp.o
+2026-11-04T18:15:33.4924510Z [100%] Linking CXX executable atlas_expm_probe
+2026-11-04T18:15:33.5651110Z [100%] Built target atlas_expm_probe
+2026-11-04T18:15:33.6651340Z [ 76%] Built target atlas_scalar_functions
+2026-11-04T18:15:33.6821420Z [ 82%] Generating log1p-history-generated/history_programs.hpp
+2026-11-04T18:15:33.7799470Z [ 88%] Generating log1p-generated/models.hpp, log1p-generated/models.json
+2026-11-04T18:15:33.9098250Z [ 94%] Building CXX object CMakeFiles/atlas_log1p_probe.dir/tests/log1p_driver.cpp.o
+2026-11-04T18:15:37.0218680Z [100%] Linking CXX executable atlas_log1p_probe
+2026-11-04T18:15:37.1081680Z [100%] Built target atlas_log1p_probe
+2026-11-04T18:15:37.2324440Z [  6%] Generating barodesy-rate-generated/models.hpp, barodesy-rate-generated/models.json
+2026-11-04T18:15:37.3484270Z [  6%] Built target atlas_barodesy_models
+2026-11-04T18:15:37.3993900Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:37.4389280Z [ 93%] Building CXX object CMakeFiles/atlas_barodesy_rate_probe.dir/tests/barodesy_rate_driver.cpp.o
+2026-11-04T18:15:38.3026620Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/tests/barodesy_rate_driver.cpp:2:
+2026-11-04T18:15:38.3131270Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-04T18:15:38.3144470Z /Users/runner/work/constitutive-atlas/constitutive-atlas/build/barodesy-rate-generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-04T18:15:38.3249100Z    19 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+2026-11-04T18:15:38.3351970Z       |                                                                                                                                                                                         ^
+2026-11-04T18:15:39.6682360Z 1 warning generated.
+2026-11-04T18:15:39.6896510Z [100%] Linking CXX executable atlas_barodesy_rate_probe
+2026-11-04T18:15:39.8254330Z [100%] Built target atlas_barodesy_rate_probe
+2026-11-04T18:15:40.0330040Z [  6%] Built target atlas_barodesy_models
+2026-11-04T18:15:40.1233270Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:40.1782850Z [ 93%] Building CXX object CMakeFiles/atlas_barodesy_material_ad_probe.dir/tests/barodesy_material_ad_driver.cpp.o
+2026-11-04T18:15:41.0655500Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/tests/barodesy_material_ad_driver.cpp:2:
+2026-11-04T18:15:41.0759110Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-04T18:15:41.0863640Z /Users/runner/work/constitutive-atlas/constitutive-atlas/build/barodesy-rate-generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-04T18:15:41.0963560Z    19 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+2026-11-04T18:15:41.1065930Z       |                                                                                                                                                                                         ^
+2026-11-04T18:15:42.8794300Z 1 warning generated.
+2026-11-04T18:15:42.8942760Z [100%] Linking CXX executable atlas_barodesy_material_ad_probe
+2026-11-04T18:15:42.9715960Z [100%] Built target atlas_barodesy_material_ad_probe
+2026-11-04T18:15:43.0819770Z [  6%] Built target atlas_barodesy_models
+2026-11-04T18:15:43.1161390Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:43.1490160Z [ 93%] Building CXX object CMakeFiles/atlas_barodesy_solver.dir/cpp/main.cpp.o
+2026-11-04T18:15:48.1984680Z [100%] Linking CXX executable atlas_barodesy_solver
+2026-11-04T18:15:48.2825770Z [100%] Built target atlas_barodesy_solver
+2026-11-04T18:15:48.3894240Z [  6%] Built target atlas_barodesy_models
+2026-11-04T18:15:48.4223870Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:48.4559840Z [ 93%] Building CXX object CMakeFiles/atlas_barodesy_hydro_ad_probe.dir/tests/barodesy_hydro_ad_driver.cpp.o
+2026-11-04T18:15:48.9904520Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/tests/barodesy_hydro_ad_driver.cpp:2:
+2026-11-04T18:15:48.9907890Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-04T18:15:48.9915350Z /Users/runner/work/constitutive-atlas/constitutive-atlas/build/barodesy-rate-generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-04T18:15:48.9920110Z    19 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+2026-11-04T18:15:48.9924560Z       |                                                                                                                                                                                         ^
+2026-11-04T18:15:50.4016830Z 1 warning generated.
+2026-11-04T18:15:50.4133170Z [100%] Linking CXX executable atlas_barodesy_hydro_ad_probe
+2026-11-04T18:15:50.4960650Z [100%] Built target atlas_barodesy_hydro_ad_probe
+2026-11-04T18:15:50.6480860Z [  6%] Generating clay2014-generated/models.hpp, clay2014-generated/models.json
+2026-11-04T18:15:50.7691270Z [  6%] Built target atlas_clay2014_models
+2026-11-04T18:15:50.8146370Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:50.8588870Z [ 93%] Building CXX object CMakeFiles/atlas_clay2014_rate_probe.dir/tests/research_rate_driver.cpp.o
+2026-11-04T18:15:51.5435070Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/tests/research_rate_driver.cpp:2:
+2026-11-04T18:15:51.5436160Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-04T18:15:51.5437290Z /Users/runner/work/constitutive-atlas/constitutive-atlas/build/clay2014-generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-04T18:15:51.5439070Z    19 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+2026-11-04T18:15:51.5441230Z       |                                                                                                                                                                                         ^
+2026-11-04T18:15:52.9433040Z 1 warning generated.
+2026-11-04T18:15:52.9636600Z [100%] Linking CXX executable atlas_clay2014_rate_probe
+2026-11-04T18:15:53.0472900Z [100%] Built target atlas_clay2014_rate_probe
+2026-11-04T18:15:53.1535630Z [  6%] Built target atlas_models
+2026-11-04T18:15:53.1826690Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:15:53.2102880Z [ 93%] Building CXX object CMakeFiles/atlas_numerical_tests.dir/tests/test_solver.cpp.o
+2026-11-04T18:16:10.9671440Z [100%] Linking CXX executable atlas_numerical_tests
+2026-11-04T18:16:11.0781090Z [100%] Built target atlas_numerical_tests
+2026-11-04T18:16:11.2269300Z [  6%] Built target atlas_models
+2026-11-04T18:16:11.2649710Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:16:11.3054770Z [ 93%] Building CXX object CMakeFiles/atlas_recorded_tests.dir/tests/test_recorded.cpp.o
+2026-11-04T18:16:32.6542520Z [100%] Linking CXX executable atlas_recorded_tests
+2026-11-04T18:16:32.7580990Z [100%] Built target atlas_recorded_tests
+2026-11-04T18:16:32.8846860Z [ 86%] Built target atlas_scalar_functions
+2026-11-04T18:16:32.9218510Z [ 93%] Building CXX object CMakeFiles/atlas_tensor_square_tests.dir/tests/test_tensor_square.cpp.o
+2026-11-04T18:16:34.1942220Z [100%] Linking CXX executable atlas_tensor_square_tests
+2026-11-04T18:16:34.3186920Z [100%] Built target atlas_tensor_square_tests
+2026-11-04T18:16:34.5269890Z [  6%] Built target atlas_time_models
+2026-11-04T18:16:34.5837930Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:16:34.6336460Z [ 93%] Building CXX object CMakeFiles/atlas_time_tests.dir/tests/test_time.cpp.o
+2026-11-04T18:16:40.6939270Z [100%] Linking CXX executable atlas_time_tests
+2026-11-04T18:16:40.8077480Z [100%] Built target atlas_time_tests
+2026-11-04T18:16:40.9587280Z [  6%] Built target atlas_time_models
+2026-11-04T18:16:41.0460550Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:16:41.0807090Z [ 93%] Building CXX object CMakeFiles/atlas_capacity_tests.dir/tests/test_capacity.cpp.o
+2026-11-04T18:16:46.4645940Z [100%] Linking CXX executable atlas_capacity_tests
+2026-11-04T18:16:46.5637220Z [100%] Built target atlas_capacity_tests
+2026-11-04T18:16:46.7191020Z [  6%] Built target atlas_time_models
+2026-11-04T18:16:46.8677190Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:16:46.9818330Z [ 93%] Building CXX object CMakeFiles/atlas_recorded_fixture_tests.dir/tests/test_recorded_fixture.cpp.o
+2026-11-04T18:16:54.8395880Z [100%] Linking CXX executable atlas_recorded_fixture_tests
+2026-11-04T18:16:54.9715100Z [100%] Built target atlas_recorded_fixture_tests
+2026-11-04T18:16:55.4560440Z emcmake: cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/Users/runner/work/_temp/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/Users/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node in directory /Users/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-04T18:16:57.4745960Z -- Found Python3: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/bin/python3.14 (found version "3.14.10") found components: Interpreter
+2026-11-04T18:16:57.4829390Z -- Configuring done (2.0s)
+2026-11-04T18:16:57.7172760Z -- Generating done (0.2s)
+2026-11-04T18:16:57.7218840Z -- Build files have been written to: /Users/runner/work/constitutive-atlas/constitutive-atlas/build-wasm
+2026-11-04T18:16:58.0258430Z [  6%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow.c.o
+2026-11-04T18:16:59.6539060Z [ 13%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow_data.c.o
+2026-11-04T18:16:59.9722400Z [ 20%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/exp_data.c.o
+2026-11-04T18:17:00.3070870Z [ 26%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_xflow.c.o
+2026-11-04T18:17:00.8056890Z [ 33%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_uflow.c.o
+2026-11-04T18:17:01.1988740Z [ 40%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_oflow.c.o
+2026-11-04T18:17:01.4512140Z [ 46%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_invalid.c.o
+2026-11-04T18:17:01.6797090Z [ 53%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/sin.c.o
+2026-11-04T18:17:01.8968380Z [ 60%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__sin.c.o
+2026-11-04T18:17:02.1110650Z [ 66%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__cos.c.o
+2026-11-04T18:17:02.3585440Z [ 73%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-04T18:17:02.6512290Z [ 80%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-04T18:17:02.9799430Z [ 86%] Linking C static library libatlas_scalar_functions.a
+2026-11-04T18:17:03.2343040Z [ 86%] Built target atlas_scalar_functions
+2026-11-04T18:17:03.2864520Z [ 93%] Building CXX object CMakeFiles/atlas_scalar_probe.dir/tests/scalar_functions_probe.cpp.o
+2026-11-04T18:17:05.1829770Z [100%] Linking CXX executable scalar-functions.js
+2026-11-04T18:17:07.9807970Z [100%] Built target atlas_scalar_probe
+2026-11-04T18:17:08.1109180Z [  6%] Generating power-creep-generated/models.hpp, power-creep-generated/models.json
+2026-11-04T18:17:08.2271580Z [  6%] Built target atlas_power_creep_models
+2026-11-04T18:17:08.2656850Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:17:08.3000610Z [ 93%] Building CXX object CMakeFiles/atlas_power_creep_solver.dir/cpp/main.cpp.o
+2026-11-04T18:17:12.9383240Z [100%] Linking CXX executable power-creep.js
+2026-11-04T18:17:16.3125530Z [100%] Built target atlas_power_creep_solver
+2026-11-04T18:17:16.4845320Z [  6%] Generating generated/models.hpp, generated/models.json
+2026-11-04T18:17:16.7653880Z [  6%] Built target atlas_models
+2026-11-04T18:17:16.8282400Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:17:16.8685180Z [ 93%] Building CXX object CMakeFiles/atlas_solver.dir/cpp/main.cpp.o
+2026-11-04T18:17:35.1677140Z [100%] Linking CXX executable atlas.js
+2026-11-04T18:17:51.5205630Z [100%] Built target atlas_solver
+2026-11-04T18:17:51.7191980Z [  6%] Generating time-generated/models.hpp
+2026-11-04T18:17:51.9634760Z [  6%] Built target atlas_time_models
+2026-11-04T18:17:52.0077750Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:17:52.0515990Z [ 93%] Building CXX object CMakeFiles/atlas_time_solver.dir/cpp/main.cpp.o
+2026-11-04T18:17:59.3770730Z [100%] Linking CXX executable time-fixtures.js
+2026-11-04T18:18:04.4332760Z [100%] Built target atlas_time_solver
+2026-11-04T18:18:04.5690740Z [  6%] Generating research-generated/models.hpp
+2026-11-04T18:18:04.7076400Z [  6%] Built target atlas_research_models
+2026-11-04T18:18:04.7453720Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:18:04.7793640Z [ 93%] Building CXX object CMakeFiles/atlas_research_solver.dir/cpp/main.cpp.o
+2026-11-04T18:18:12.9564470Z [100%] Linking CXX executable research.js
+2026-11-04T18:18:17.3583800Z [100%] Built target atlas_research_solver
+2026-11-04T18:18:17.5123190Z [ 81%] Built target atlas_scalar_functions
+2026-11-04T18:18:17.5770990Z [ 87%] Generating history-generated/history_programs.hpp
+2026-11-04T18:18:17.6680770Z [ 93%] Building CXX object CMakeFiles/atlas_history_solver.dir/cpp/history_main.cpp.o
+2026-11-04T18:18:19.3304280Z [100%] Linking CXX executable history-fixtures.js
+2026-11-04T18:18:21.3061660Z [100%] Built target atlas_history_solver
+2026-11-04T18:18:21.4192030Z [  6%] Generating clay2013-generated/models.hpp
+2026-11-04T18:18:21.5005180Z [  6%] Built target atlas_clay2013_models
+2026-11-04T18:18:21.5439750Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:18:21.5788520Z [ 93%] Building CXX object CMakeFiles/atlas_clay2013_solver.dir/cpp/main.cpp.o
+2026-11-04T18:18:26.3630820Z [100%] Linking CXX executable clay2013.js
+2026-11-04T18:18:29.1609030Z [100%] Built target atlas_clay2013_solver
+2026-11-04T18:18:29.2829380Z [  6%] Generating gis2024-generated/models.hpp
+2026-11-04T18:18:29.3837690Z [  6%] Built target atlas_gis2024_models
+2026-11-04T18:18:29.4197080Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:18:29.4591280Z [ 93%] Building CXX object CMakeFiles/atlas_gis2024_solver.dir/cpp/main.cpp.o
+2026-11-04T18:18:34.6444720Z [100%] Linking CXX executable gis2024.js
+2026-11-04T18:18:38.0707910Z [100%] Built target atlas_gis2024_solver
+2026-11-04T18:18:38.2051240Z [ 76%] Built target atlas_scalar_functions
+2026-11-04T18:18:38.2203660Z [ 82%] Generating expm-history-generated/history_programs.hpp
+2026-11-04T18:18:38.2958410Z [ 88%] Generating expm-generated/models.hpp, expm-generated/models.json
+2026-11-04T18:18:38.4361940Z [ 94%] Building CXX object CMakeFiles/atlas_expm_probe.dir/tests/expm_driver.cpp.o
+2026-11-04T18:18:41.6074990Z [100%] Linking CXX executable expm-fixtures.js
+2026-11-04T18:18:44.0014090Z [100%] Built target atlas_expm_probe
+2026-11-04T18:18:44.1507600Z [ 76%] Built target atlas_scalar_functions
+2026-11-04T18:18:44.1741690Z [ 82%] Generating log1p-history-generated/history_programs.hpp
+2026-11-04T18:18:44.2700600Z [ 88%] Generating log1p-generated/models.hpp, log1p-generated/models.json
+2026-11-04T18:18:44.4087300Z [ 94%] Building CXX object CMakeFiles/atlas_log1p_probe.dir/tests/log1p_driver.cpp.o
+2026-11-04T18:18:47.4866670Z [100%] Linking CXX executable log1p-fixtures.js
+2026-11-04T18:18:50.3761920Z [100%] Built target atlas_log1p_probe
+2026-11-04T18:18:50.5079260Z [  6%] Generating barodesy-rate-generated/models.hpp, barodesy-rate-generated/models.json
+2026-11-04T18:18:50.6372550Z [  6%] Built target atlas_barodesy_models
+2026-11-04T18:18:50.6732340Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:18:50.7104690Z [ 93%] Building CXX object CMakeFiles/atlas_barodesy_rate_probe.dir/tests/barodesy_rate_driver.cpp.o
+2026-11-04T18:18:51.8153360Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/tests/barodesy_rate_driver.cpp:2:
+2026-11-04T18:18:51.8253270Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-04T18:18:51.8327580Z /Users/runner/work/constitutive-atlas/constitutive-atlas/build-wasm/barodesy-rate-generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-04T18:18:51.8358110Z    19 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+2026-11-04T18:18:51.8360270Z       |                                                                                                                                                                                         ^
+2026-11-04T18:18:52.9151260Z 1 warning generated.
+2026-11-04T18:18:52.9359330Z [100%] Linking CXX executable barodesy-rates.js
+2026-11-04T18:18:54.9691140Z [100%] Built target atlas_barodesy_rate_probe
+2026-11-04T18:18:55.1006010Z [  6%] Built target atlas_barodesy_models
+2026-11-04T18:18:55.1401060Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:18:55.1844530Z [ 93%] Building CXX object CMakeFiles/atlas_barodesy_material_ad_probe.dir/tests/barodesy_material_ad_driver.cpp.o
+2026-11-04T18:18:56.0619590Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/tests/barodesy_material_ad_driver.cpp:2:
+2026-11-04T18:18:56.0622130Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-04T18:18:56.0625250Z /Users/runner/work/constitutive-atlas/constitutive-atlas/build-wasm/barodesy-rate-generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-04T18:18:56.0630390Z    19 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+2026-11-04T18:18:56.0634470Z       |                                                                                                                                                                                         ^
+2026-11-04T18:18:57.3232280Z 1 warning generated.
+2026-11-04T18:18:57.3468730Z [100%] Linking CXX executable barodesy-material-ad.js
+2026-11-04T18:18:59.8687010Z [100%] Built target atlas_barodesy_material_ad_probe
+2026-11-04T18:19:00.0019340Z [  6%] Built target atlas_barodesy_models
+2026-11-04T18:19:00.1030830Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:19:00.1420350Z [ 93%] Building CXX object CMakeFiles/atlas_barodesy_solver.dir/cpp/main.cpp.o
+2026-11-04T18:19:05.1283360Z [100%] Linking CXX executable barodesy-isotropic.js
+2026-11-04T18:19:08.2438600Z [100%] Built target atlas_barodesy_solver
+2026-11-04T18:19:08.3792680Z [  6%] Built target atlas_barodesy_models
+2026-11-04T18:19:08.4252130Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:19:08.4717490Z [ 93%] Building CXX object CMakeFiles/atlas_barodesy_hydro_ad_probe.dir/tests/barodesy_hydro_ad_driver.cpp.o
+2026-11-04T18:19:09.4861390Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/tests/barodesy_hydro_ad_driver.cpp:2:
+2026-11-04T18:19:09.5006300Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-04T18:19:09.5112490Z /Users/runner/work/constitutive-atlas/constitutive-atlas/build-wasm/barodesy-rate-generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-04T18:19:09.5218290Z    19 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+2026-11-04T18:19:09.5326850Z       |                                                                                                                                                                                         ^
+2026-11-04T18:19:10.9401270Z 1 warning generated.
+2026-11-04T18:19:10.9704860Z [100%] Linking CXX executable barodesy-hydro-ad.js
+2026-11-04T18:19:14.8939250Z [100%] Built target atlas_barodesy_hydro_ad_probe
+2026-11-04T18:19:15.0426970Z [  6%] Generating clay2014-generated/models.hpp, clay2014-generated/models.json
+2026-11-04T18:19:15.1510360Z [  6%] Built target atlas_clay2014_models
+2026-11-04T18:19:15.1828030Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:19:15.2151810Z [ 93%] Building CXX object CMakeFiles/atlas_clay2014_rate_probe.dir/tests/research_rate_driver.cpp.o
+2026-11-04T18:19:16.0853380Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/tests/research_rate_driver.cpp:2:
+2026-11-04T18:19:16.0855740Z In file included from /Users/runner/work/constitutive-atlas/constitutive-atlas/cpp/include/atlas/solver.hpp:2:
+2026-11-04T18:19:16.0859210Z /Users/runner/work/constitutive-atlas/constitutive-atlas/build-wasm/clay2014-generated/models.hpp:19:185: warning: unused parameter 'check_initial' [-Wunused-parameter]
+2026-11-04T18:19:16.0864570Z    19 | template<class T> bool evaluate_model(int model, const std::vector<T>& z, const std::vector<T>& zn, const Sym<T>& loading, const std::vector<double>& params, std::vector<T>& out, bool check_initial=false, double evaluation_time=std::numeric_limits<double>::quiet_NaN(), bool check_only=false, bool observables_only=false) {
+2026-11-04T18:19:16.0868140Z       |                                                                                                                                                                                         ^
+2026-11-04T18:19:17.6913560Z 1 warning generated.
+2026-11-04T18:19:17.7096040Z [100%] Linking CXX executable clay2014-rates.js
+2026-11-04T18:19:19.8145030Z [100%] Built target atlas_clay2014_rate_probe
+2026-11-04T18:19:19.9714360Z [ 86%] Built target atlas_scalar_functions
+2026-11-04T18:19:20.0248610Z [100%] Built target atlas_scalar_probe
+2026-11-04T18:19:20.5625440Z 391Wasm scalar observations retained
+2026-11-04T18:19:20.6837360Z passed 391 8106 0
+2026-11-04T18:19:20.7382070Z Browser experiment import, units, missing channels, ordering and visibility checks passed.
+2026-11-04T18:19:20.7790390Z Hosted experiment decoding, integrity, channel semantics and request validation passed.
+2026-11-04T18:19:20.7792610Z Comparison axes, display-unit conversions, drainage/loading filters and missing pairs passed.
+2026-11-04T18:19:25.4130830Z {"outside_public_qualification":[{"model":"s-clay1","protocol":0,"target":0.002,"steps":64,"cycles":0,"reason":"Public qualification covers monotonic drained and undrained triaxial paths at 1% and 100 increments. This control is outside that bounded support.","ok":true,"points":65},{"model":"s-clay1","protocol":3,"target":10000,"steps":64,"cycles":1,"reason":"Public qualification covers monotonic drained and undrained triaxial paths at 1% and 100 increments. This control is outside that bounded support.","ok":false,"points":7},{"model":"s-clay1","protocol":4,"target":0.002,"steps":64,"cycles":0,"reason":"Public qualification covers monotonic drained and undrained triaxial paths at 1% and 100 increments. This control is outside that bounded support.","ok":true,"points":65}]}
+2026-11-04T18:19:25.4228860Z Native/WebAssembly parity passed for 66 positive model/protocol combinations and 10 explicit legacy-contract rejections and 1 retained unsupported control failures; 3 additional full-prefix backend comparisons outside public qualification.
+2026-11-04T18:19:25.4445850Z Native/WebAssembly increment diagnostics and rollback parity passed for 4 cases.
+2026-11-04T18:19:25.4548340Z Native/WebAssembly Cartesian-rate parity passed for 2 hypoplastic states.
+2026-11-04T18:19:25.5057460Z Native/WebAssembly IGS analytical crossing and cyclic history passed for 6 increments.
+2026-11-04T18:19:25.5333030Z ##[group]Run source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+2026-11-04T18:19:25.5334480Z [36;1msource "$RUNNER_TEMP/emsdk/emsdk_env.sh"[0m
+2026-11-04T18:19:25.5335700Z [36;1mcmake -S . -B build-ramberg-qualified -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off[0m
+2026-11-04T18:19:25.5337240Z [36;1mcmake --build build-ramberg-qualified --target atlas_solver --parallel 1[0m
+2026-11-04T18:19:25.5339470Z [36;1mpython -B tools/check_ramberg_osgood.py --solver build-ramberg-qualified/atlas_solver --save-responses "$RUNNER_TEMP/ramberg-native.json" --output "$RUNNER_TEMP/ramberg-native-checks.json"[0m
+2026-11-04T18:19:25.5341940Z [36;1mnode tools/check_ramberg_osgood_wasm.mjs build-wasm "$RUNNER_TEMP/ramberg-wasm.json" "$RUNNER_TEMP/ramberg-native.json"[0m
+2026-11-04T18:19:25.5344300Z [36;1mpython -B tools/check_ramberg_osgood.py --responses "$RUNNER_TEMP/ramberg-wasm.json" --output "$RUNNER_TEMP/ramberg-wasm-checks.json"[0m
+2026-11-04T18:19:25.5346390Z [36;1mnode tools/test_numerics.mjs --wasm build-wasm/atlas.js --native build/atlas_solver[0m
+2026-11-04T18:19:25.5347510Z [36;1mnode tools/test_loading.mjs[0m
+2026-11-04T18:19:25.5349190Z [36;1mnode tools/test_browser_loading.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/browser-loading.json" catalogue/laboratory-profile-policy.json[0m
+2026-11-04T18:19:25.5351390Z [36;1mnode tools/test_scoped_parity.mjs build/atlas_solver build-wasm "$RUNNER_TEMP/scoped-parity.json" catalogue/laboratory-profile-policy.json[0m
+2026-11-04T18:19:25.5352120Z [36;1mnode tools/test_recorded.mjs --wasm build-wasm/atlas.js --native build/atlas_solver[0m
+2026-11-04T18:19:25.5919690Z shell: /bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-04T18:19:25.5920090Z env:
+2026-11-04T18:19:25.5920400Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:19:25.5920810Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:25.5921300Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:19:25.5921840Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:25.5922340Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:25.5922830Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:25.5923180Z ##[endgroup]
+2026-11-04T18:19:25.9808330Z Setting up EMSDK environment (suppress these messages with EMSDK_QUIET=1)
+2026-11-04T18:19:25.9809290Z Adding directories to PATH:
+2026-11-04T18:19:25.9809800Z PATH += /Users/runner/work/_temp/emsdk
+2026-11-04T18:19:25.9810430Z PATH += /Users/runner/work/_temp/emsdk/upstream/emscripten
+2026-11-04T18:19:25.9810790Z 
+2026-11-04T18:19:25.9811100Z Setting environment variables:
+2026-11-04T18:19:25.9814470Z PATH = /Users/runner/work/_temp/emsdk:/Users/runner/work/_temp/emsdk/upstream/emscripten:/Users/runner/hostedtoolcache/node/24.22.1/arm64/bin:/Users/runner/hostedtoolcache/Python/3.14.10/arm64/bin:/Users/runner/hostedtoolcache/Python/3.14.10/arm64:/opt/homebrew/opt/rustup/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:/opt/homebrew/opt/ruby@3.4/bin:/Users/runner/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/runner/.cargo/bin:/usr/local/opt/curl/bin:/usr/local/bin:/usr/local/sbin:/Users/runner/bin:/Users/runner/.yarn/bin:/Users/runner/Library/Android/sdk/tools:/Users/runner/Library/Android/sdk/platform-tools:/Library/Frameworks/Python.framework/Versions/Current/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/bin:/bin:/usr/sbin:/sbin:/Users/runner/.dotnet/tools
+2026-11-04T18:19:25.9817450Z EMSDK = /Users/runner/work/_temp/emsdk
+2026-11-04T18:19:25.9818090Z EMSDK_NODE = /Users/runner/work/_temp/emsdk/node/24.19.0_64bit/bin/node
+2026-11-04T18:19:25.9818830Z EMSDK_PYTHON = /Users/runner/work/_temp/emsdk/python/3.13.3_64bit/bin/python3
+2026-11-04T18:19:25.9819670Z SSL_CERT_FILE = /Users/runner/work/_temp/emsdk/python/3.13.3_64bit/lib/python3.13/site-packages/certifi/cacert.pem
+2026-11-04T18:19:26.4834730Z -- The C compiler identification is AppleClang 21.0.0.21000101
+2026-11-04T18:19:26.6850680Z -- The CXX compiler identification is AppleClang 21.0.0.21000101
+2026-11-04T18:19:26.8137610Z -- Detecting C compiler ABI info
+2026-11-04T18:19:27.1457880Z -- Detecting C compiler ABI info - done
+2026-11-04T18:19:27.1705190Z -- Check for working C compiler: /usr/bin/cc - skipped
+2026-11-04T18:19:27.1715560Z -- Detecting C compile features
+2026-11-04T18:19:27.1722840Z -- Detecting C compile features - done
+2026-11-04T18:19:27.1855960Z -- Detecting CXX compiler ABI info
+2026-11-04T18:19:27.5099370Z -- Detecting CXX compiler ABI info - done
+2026-11-04T18:19:27.5335560Z -- Check for working CXX compiler: /usr/bin/c++ - skipped
+2026-11-04T18:19:27.5437390Z -- Detecting CXX compile features
+2026-11-04T18:19:27.5548080Z -- Detecting CXX compile features - done
+2026-11-04T18:19:27.9041270Z -- Found Python3: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/bin/python3.14 (found version "3.14.10") found components: Interpreter
+2026-11-04T18:19:27.9145480Z -- Configuring done (1.9s)
+2026-11-04T18:19:28.0065080Z -- Generating done (0.1s)
+2026-11-04T18:19:28.0074560Z -- Build files have been written to: /Users/runner/work/constitutive-atlas/constitutive-atlas/build-ramberg-qualified
+2026-11-04T18:19:28.1398800Z [  6%] Generating generated/models.hpp, generated/models.json
+2026-11-04T18:19:28.3416540Z [  6%] Built target atlas_models
+2026-11-04T18:19:28.3745090Z [ 12%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow.c.o
+2026-11-04T18:19:28.4916280Z [ 18%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/pow_data.c.o
+2026-11-04T18:19:28.5595890Z [ 25%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/exp_data.c.o
+2026-11-04T18:19:28.6167950Z [ 31%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_xflow.c.o
+2026-11-04T18:19:28.6741310Z [ 37%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_uflow.c.o
+2026-11-04T18:19:28.7764300Z [ 43%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_oflow.c.o
+2026-11-04T18:19:28.8294800Z [ 50%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__math_invalid.c.o
+2026-11-04T18:19:28.8911670Z [ 56%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/sin.c.o
+2026-11-04T18:19:28.9613720Z [ 62%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__sin.c.o
+2026-11-04T18:19:29.0213850Z [ 68%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__cos.c.o
+2026-11-04T18:19:29.0752830Z [ 75%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2.c.o
+2026-11-04T18:19:29.1464350Z [ 81%] Building C object CMakeFiles/atlas_scalar_functions.dir/cpp/scalar-functions/__rem_pio2_large.c.o
+2026-11-04T18:19:29.2663800Z [ 87%] Linking C static library libatlas_scalar_functions.a
+2026-11-04T18:19:29.3612660Z [ 87%] Built target atlas_scalar_functions
+2026-11-04T18:19:29.4056930Z [ 93%] Building CXX object CMakeFiles/atlas_solver.dir/cpp/main.cpp.o
+2026-11-04T18:19:53.9515520Z [100%] Linking CXX executable atlas_solver
+2026-11-04T18:19:54.0851840Z [100%] Built target atlas_solver
+2026-11-04T18:19:56.0069030Z {"passed": true, "checks": 1141, "failed": []}
+2026-11-04T18:19:56.2893300Z {"status":"passed","cases":83,"compared":3276,"maxRelative":0}
+2026-11-04T18:19:57.8173230Z {"passed": true, "checks": 1141, "failed": []}
+2026-11-04T18:19:57.8791160Z Browser settings validation, default migration, wire mapping and stale-engine checks passed.
+2026-11-04T18:19:57.9068560Z node:internal/modules/run_main:107
+2026-11-04T18:19:57.9069020Z     triggerUncaughtException(
+2026-11-04T18:19:57.9069480Z     ^
+2026-11-04T18:19:57.9074080Z 
+2026-11-04T18:19:57.9077720Z AssertionError [ERR_ASSERTION]: v0.3 requires explicit state; initial literals are examples only
+2026-11-04T18:19:57.9078600Z 
+2026-11-04T18:19:57.9079230Z false !== true
+2026-11-04T18:19:57.9106720Z 
+2026-11-04T18:19:57.9108240Z     at file:///Users/runner/work/constitutive-atlas/constitutive-atlas/tools/test_numerics.mjs:47:10 {
+2026-11-04T18:19:57.9109650Z   generatedMessage: false,
+2026-11-04T18:19:57.9110350Z   code: 'ERR_ASSERTION',
+2026-11-04T18:19:57.9111140Z   actual: false,
+2026-11-04T18:19:57.9111760Z   expected: true,
+2026-11-04T18:19:57.9112440Z   operator: 'strictEqual',
+2026-11-04T18:19:57.9113210Z   diff: 'simple'
+2026-11-04T18:19:57.9113800Z }
+2026-11-04T18:19:57.9114150Z 
+2026-11-04T18:19:57.9114430Z Node.js v24.22.1
+2026-11-04T18:19:57.9137750Z ##[error]Process completed with exit code 1.
+2026-11-04T18:19:57.9455200Z ##[group]Run actions/upload-artifact@v4
+2026-11-04T18:19:57.9455860Z with:
+2026-11-04T18:19:57.9456290Z   name: kelvin-voigt-wasm-macos
+2026-11-04T18:19:57.9456920Z   path: /Users/runner/work/_temp/kelvin-voigt-wasm/
+2026-11-04T18:19:57.9457560Z   if-no-files-found: warn
+2026-11-04T18:19:57.9458070Z   compression-level: 6
+2026-11-04T18:19:57.9458530Z   overwrite: false
+2026-11-04T18:19:57.9459000Z   include-hidden-files: false
+2026-11-04T18:19:57.9459480Z env:
+2026-11-04T18:19:57.9459930Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:19:57.9460650Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:57.9462050Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:19:57.9462570Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:57.9462970Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:57.9463470Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:57.9463740Z ##[endgroup]
+2026-11-04T18:19:58.5172970Z (node:13747) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-04T18:19:58.5173860Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-04T18:19:58.5217330Z ##[warning]No files were found with the provided path: /Users/runner/work/_temp/kelvin-voigt-wasm/. No artifacts will be uploaded.
+2026-11-04T18:19:58.5382760Z ##[group]Run actions/upload-artifact@v4
+2026-11-04T18:19:58.5383030Z with:
+2026-11-04T18:19:58.5383190Z   name: orthotropic-wasm-macos
+2026-11-04T18:19:58.5383450Z   path: /Users/runner/work/_temp/orthotropic-wasm-raw.json
+2026-11-04T18:19:58.5383730Z   if-no-files-found: warn
+2026-11-04T18:19:58.5383920Z   compression-level: 6
+2026-11-04T18:19:58.5384100Z   overwrite: false
+2026-11-04T18:19:58.5384280Z   include-hidden-files: false
+2026-11-04T18:19:58.5384460Z env:
+2026-11-04T18:19:58.5384620Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:19:58.5384900Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:58.5385320Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:19:58.5385730Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:58.5386090Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:58.5386530Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:58.5386830Z ##[endgroup]
+2026-11-04T18:19:58.7251730Z (node:13748) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-04T18:19:58.7253120Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-04T18:19:58.7256730Z ##[warning]No files were found with the provided path: /Users/runner/work/_temp/orthotropic-wasm-raw.json. No artifacts will be uploaded.
+2026-11-04T18:19:58.7429890Z ##[group]Run actions/upload-artifact@v4
+2026-11-04T18:19:58.7430370Z with:
+2026-11-04T18:19:58.7430600Z   name: hill-wasm-macos
+2026-11-04T18:19:58.7430850Z   path: /Users/runner/work/_temp/hill-wasm/
+2026-11-04T18:19:58.7431100Z   if-no-files-found: warn
+2026-11-04T18:19:58.7431290Z   compression-level: 6
+2026-11-04T18:19:58.7431480Z   overwrite: false
+2026-11-04T18:19:58.7431930Z   include-hidden-files: false
+2026-11-04T18:19:58.7433340Z env:
+2026-11-04T18:19:58.7434260Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:19:58.7434670Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:58.7436270Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:19:58.7437110Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:58.7437490Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:58.7437920Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:58.7438200Z ##[endgroup]
+2026-11-04T18:19:58.9477880Z (node:13750) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-04T18:19:58.9580980Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-04T18:19:59.0037310Z ##[warning]No files were found with the provided path: /Users/runner/work/_temp/hill-wasm/. No artifacts will be uploaded.
+2026-11-04T18:19:59.0119970Z ##[group]Run actions/upload-artifact@v4
+2026-11-04T18:19:59.0120640Z with:
+2026-11-04T18:19:59.0121070Z   name: perzyna-paired-macOS
+2026-11-04T18:19:59.0121690Z   path: /Users/runner/work/_temp/perzyna-paired/
+2026-11-04T18:19:59.0122360Z   if-no-files-found: warn
+2026-11-04T18:19:59.0122880Z   compression-level: 6
+2026-11-04T18:19:59.0123400Z   overwrite: false
+2026-11-04T18:19:59.0123850Z   include-hidden-files: false
+2026-11-04T18:19:59.0124340Z env:
+2026-11-04T18:19:59.0124770Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:19:59.0125490Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.0126580Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:19:59.0127650Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.0128620Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.0129690Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.0130550Z ##[endgroup]
+2026-11-04T18:19:59.2337130Z (node:13751) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-04T18:19:59.2353100Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-04T18:19:59.2367010Z ##[warning]No files were found with the provided path: /Users/runner/work/_temp/perzyna-paired/. No artifacts will be uploaded.
+2026-11-04T18:19:59.2473850Z ##[group]Run actions/upload-artifact@v4
+2026-11-04T18:19:59.2474130Z with:
+2026-11-04T18:19:59.2474290Z   name: bingham-paired-macOS
+2026-11-04T18:19:59.2474520Z   path: /Users/runner/work/_temp/bingham-*
+2026-11-04T18:19:59.2474740Z   if-no-files-found: warn
+2026-11-04T18:19:59.2474940Z   compression-level: 6
+2026-11-04T18:19:59.2475130Z   overwrite: false
+2026-11-04T18:19:59.2475300Z   include-hidden-files: false
+2026-11-04T18:19:59.2475500Z env:
+2026-11-04T18:19:59.2475720Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:19:59.2476000Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.2476440Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:19:59.2476840Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.2477220Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.2477680Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.2477980Z ##[endgroup]
+2026-11-04T18:19:59.5573810Z (node:13752) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-04T18:19:59.5677300Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-04T18:19:59.5690230Z ##[warning]No files were found with the provided path: /Users/runner/work/_temp/bingham-*. No artifacts will be uploaded.
+2026-11-04T18:19:59.5741150Z ##[group]Run actions/upload-artifact@v4
+2026-11-04T18:19:59.5741430Z with:
+2026-11-04T18:19:59.5741620Z   name: current-dependency-guards-macOS
+2026-11-04T18:19:59.5742060Z   path: /Users/runner/work/_temp/current-dependency-guards/
+/Users/runner/work/_temp/maxwell-ci-regression/
+2026-11-04T18:19:59.5742470Z   if-no-files-found: warn
+2026-11-04T18:19:59.5742710Z   compression-level: 6
+2026-11-04T18:19:59.5742910Z   overwrite: false
+2026-11-04T18:19:59.5743090Z   include-hidden-files: false
+2026-11-04T18:19:59.5743300Z env:
+2026-11-04T18:19:59.5743510Z   PYTHONDONTWRITEBYTECODE: 1
+2026-11-04T18:19:59.5743810Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.5744220Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.14.10/arm64/lib/pkgconfig
+2026-11-04T18:19:59.5744640Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.5745040Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.5745430Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.14.10/arm64
+2026-11-04T18:19:59.5745710Z ##[endgroup]
+2026-11-04T18:19:59.8602280Z (node:13760) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-04T18:19:59.8708090Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-04T18:19:59.8891610Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-11-04T18:19:59.8892520Z The least common ancestor is /Users/runner/work/_temp. This will be the root directory of the artifact
+2026-11-04T18:19:59.8894120Z ##[warning]No files were found with the provided path: /Users/runner/work/_temp/current-dependency-guards/
+/Users/runner/work/_temp/maxwell-ci-regression/. No artifacts will be uploaded.
+2026-11-04T18:19:59.9037150Z Post job cleanup.
+2026-11-04T18:20:00.1138750Z [command]/opt/homebrew/bin/git version
+2026-11-04T18:20:00.1543920Z git version 2.56.0
+2026-11-04T18:20:00.1565440Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/ac1d3e7f-7329-413f-b4d0-9c7ccdc53077/.gitconfig'
+2026-11-04T18:20:00.1577260Z Temporarily overriding HOME='/Users/runner/work/_temp/ac1d3e7f-7329-413f-b4d0-9c7ccdc53077' before making global git config changes
+2026-11-04T18:20:00.1579370Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-04T18:20:00.1581710Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/constitutive-atlas/constitutive-atlas
+2026-11-04T18:20:00.1737020Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-04T18:20:00.1863250Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-04T18:20:00.4088860Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-04T18:20:00.4157060Z http.https://github.com/.extraheader
+2026-11-04T18:20:00.4165020Z [command]/opt/homebrew/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-04T18:20:00.4289740Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-04T18:20:00.5684440Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-04T18:20:00.5988420Z [command]/opt/homebrew/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-04T18:20:00.7953120Z Cleaning up orphan processes
+2026-11-04T18:20:05.6534890Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

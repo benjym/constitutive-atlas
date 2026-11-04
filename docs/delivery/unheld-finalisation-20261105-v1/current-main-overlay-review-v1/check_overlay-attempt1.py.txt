@@ -1,0 +1,102 @@
+"""Bounded frozen-overlay, approval and archive closure review; no engine or Git calls."""
+from pathlib import Path,PurePosixPath
+import argparse,hashlib,json,os,stat
+P=Path(__file__).resolve().parent;B=P.parent;ROOT=P.parents[3];A=B/'current-main-overlay-v1/final-active-v1';BASE=Path('/private/tmp/atlas-baseline-delivery-20261105/source');OLD=ROOT/'docs/delivery/unheld-finalisation-20261102-v1'
+sha=lambda b:hashlib.sha256(b).hexdigest();checks=[]
+def yes(ok,name):
+ if not ok:raise AssertionError(name)
+ checks.append(name)
+def safe(name):
+ p=PurePosixPath(name);yes(not p.is_absolute()and str(p)==name and all(x not in ['..','.git']for x in p.parts)and '\\'not in name,'safe relative path');return name
+def read(p):
+ for parent in [p,*p.parents]:yes(not parent.is_symlink(),'nofollow declared input')
+ yes(p.is_file(),'regular declared input');return p.read_bytes()
+def effective_prearchive(A,BASE,by,name,h):
+ archive='catalogue/source-snapshots/'+h+'/'+name
+ return read(A/by[archive]['proposal'])if archive in by else read(BASE/archive)
+def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--manifest-sha256',required=True);args=parser.parse_args();manifest=json.loads(read(A/'manifest.json'));yes(sha(read(A/'manifest.json'))==args.manifest_sha256,'frozen author manifest')
+ members=manifest.get('files',manifest.get('members'));yes(isinstance(members,list)and len({x['path']for x in members})==len(members),'unique manifest closure')
+ for x in members:
+  b=read(A/safe(x['path']));yes(sha(b)==x['sha256']and len(b)==x['bytes'],'frozen member hash/size')
+ table=json.loads(read(A/'source-delta.json'));yes(table['base_revision']=='6b957b866c977263fad0c02be4216c7f9170cf5b','exact currentmain base');rows=table['files'];by={x['path']:x for x in rows};yes(len(by)==len(rows),'unique overlay paths')
+ raw=read(B/'source-export-v1/base-tree.raw');yes(sha(raw)=='ec64f7cfbc52c41f7fd5846ba89cd765591efa4bcdb70763e800d15bc608e119','saved full base tree pin')
+ tree={}
+ for record in raw.split(b'\0'):
+  if record:
+   meta,name=record.split(b'\t',1);mode,kind,oid=meta.decode().split();tree[os.fsdecode(name)]=(mode,oid)
+ final=dict(tree)
+ for name,x in by.items():
+  safe(name);data=read(A/safe(x['proposal']));yes(sha(data)==x['sha256']and len(data)==x['bytes'],'payload SHA/size');yes(x['mode']=='100644'and not(A/x['proposal']).stat().st_mode&0o111,'payload regular100644')
+  pre=read(BASE/name)if name in tree else None;yes((sha(pre)if pre is not None else None)==x['preimage_sha256'],'exact current preimage')
+  if pre is not None:yes(tree[name][0]==x['preimage_mode']=='100644','existing mode unchanged');yes(sha(effective_prearchive(A,BASE,by,name,sha(pre)))==sha(pre),'exact original bytes archived before replacement')
+  final[name]=('100644',hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest())
+ def effective(name):return read(A/by[name]['proposal'])if name in by else read(BASE/safe(name))
+ def obj(name):return json.loads(effective(name))
+ def contains(node,path,h):
+  if isinstance(node,dict):return node.get(path)==h or(node.get('path')==path and any(node.get(k)==h for k in ['sha256','hash']))or any(contains(v,path,h)for v in node.values())
+  return isinstance(node,list)and any(contains(v,path,h)for v in node)
+ def receipt(document,name,h):
+  yes(contains(obj(document),name,h),'genuine document path/hash pair');selected=name;sidecar=str(PurePosixPath(document).parent/'source-archive-map.json')
+  if sidecar in final:
+   mapping=obj(sidecar);yes(mapping['version']=='immutable-source-archive-map-0.1'and mapping['documents'].get(document)==sha(effective(document)),'exact resolver document pin')
+   matches=[x for x in mapping['entries']if x.get('original_path')==name and x.get('sha256')==h];yes(len(matches)<=1,'unambiguous receipt map')
+   if matches:
+    selected='catalogue/source-snapshots/'+h+'/'+name;yes(matches[0]['archived_path']==selected,'intrinsic archive route')
+  yes(sha(effective(selected))==h,'exact effective receipt SHA')
+ for name in by:
+  if name.startswith('catalogue/source-snapshots/'):
+   yes(sha(effective(name))==name.split('/')[2],'intrinsic archive bytes')
+ current=json.loads(read(BASE/'catalogue/approved-models.json'));new=obj('catalogue/approved-models.json');oldapproved=json.loads(read(OLD/'baseline-five-publication-additive-source-v1/proposed/catalogue/approved-models.json'))
+ five=[r for r in oldapproved['models']if '-v03-'in r['id']];fiveby={r['model_id']:r for r in five};expectedactive=[fiveby.get(r['model_id'],r)for r in current['models']];yes(len(current['models'])==len(new['models'])==30 and new['models']==expectedactive,'preserve25 ordered active objects and replace only exact5 genuine approvals')
+ yes(len({r['id']for r in new['models']})==30,'unique30 active approval identities')
+ e5=json.loads(read(OLD/'baseline-five-v03-scientific-review-v1/actual-phase-v1/decision.json'));expected={r['canonical_path']:r['sha256']for r in e5['records']}
+ for r in five:
+  definition=json.loads(effective(r['definition']['path']));review=obj(r['review']['path']);yes(sha(effective(r['definition']['path']))==r['definition']['sha256']and definition['schema_version']=='0.3'and 'integration'not in definition and 'formulation'in definition,'exact accepted v03 definition')
+  yes(expected[r['review']['path']]==sha(effective(r['review']['path']))==r['review']['sha256'],'exact genuine E5 record')
+  yes(review['status']=='accepted'and not review['blocking_findings']and review['reviewer']['run_id']not in review['author_run_ids'],'genuine accepted independent review')
+  yes(len(review['checklist'])==9 and len({x['id']for x in review['checklist']})==9 and all(x['outcome']in ['pass','not-applicable']for x in review['checklist']),'complete nine-item checklist')
+  for ref in [r['definition'],r['review'],*r['supporting_files']]:receipt('catalogue/approved-models.json',ref['path'],ref['sha256'])
+  for ref in review['artifacts']:receipt(r['review']['path'],ref['path'],ref['sha256'])
+ # Existing sidecar document pins/entries are append-only except changed canonical registry pin.
+ for name in ['catalogue/source-archive-map.json','catalogue/agent-reviews/source-archive-map.json']:
+  before=json.loads(read(BASE/name));after=obj(name)
+  for doc,pin in before['documents'].items():yes(after['documents'][doc]==(sha(effective(doc))if doc in by else pin),'preserve existing resolver document')
+  yes(all(x in after['entries']for x in before['entries']),'preserve existing archive entries')
+ # Five superseded approval models and records must retain their exact old definition receipts.
+ changedmodels={r['definition']['path']for r in five}
+ for r in current['models']:
+  if r['definition']['path']in changedmodels:
+   receipt(r['review']['path'],r['definition']['path'],r['definition']['sha256'])
+ history=obj('catalogue/approval-history/baseline-five-supersession-20261105-v1.json');yes(effective(history['historical_registry']['path'])==read(BASE/'catalogue/approved-models.json'),'exact old30 registry retained');yes(len(history['supersessions'])==5,'five explicit historical relationships')
+ for r in history['supersessions']:
+  oldentry=next(a for a in current['models']if a['id']==r['historical_approval_id']);newentry=fiveby[r['model_id']];yes(r['historical_definition']==oldentry['definition']and r['current_definition']==newentry['definition']and r['current_approval_id']==newentry['id'],'history exact old/new approval binding')
+ yes(not any(n.startswith(('atlas/','cpp/','cmake/','schemas/','.github/','web/','tools/'))or n=='CMakeLists.txt'for n in by),'all current core/CI/web/role tools unchanged')
+ allowed={'catalogue/approval-history/baseline-five-supersession-20261105-v1.json','catalogue/agent-reviews/source-archive-map.json','catalogue/applicability/kfs-development-v1.json','catalogue/approved-models.json','catalogue/laboratory-package-policy.json','catalogue/laboratory-profile-policy.json','catalogue/manifest.json','catalogue/source-archive-map.json'}|changedmodels|set(expected)
+ yes(all(n in allowed or n.startswith(('catalogue/source-snapshots/','docs/delivery/unheld-finalisation-20261102-v1/'))for n in by),'no unrelated canonical overlay')
+ yes(all(final[n]==v for n,v in tree.items()if n not in by),'full prior member/mode/OID preservation outside finite table')
+ yes(len([n for n in final if n.startswith('models/')and n.count('/')==1 and n.endswith('.json')])==16,'preserve16 ordinary membership')
+ for name in ['catalogue/manifest.json','catalogue/laboratory-package-policy.json','catalogue/laboratory-profile-policy.json']:
+  before=json.loads(read(BASE/name));after=obj(name)
+  if name.endswith('/manifest.json'):
+   yes(len(before['models'])==len(after['models'])==50,'preserve50 discovery rows')
+   for a,b in zip(before['models'],after['models']):
+    a=dict(a);b=dict(b)
+    if a['id']=='hypoplastic-sand-igs97':a.pop('note',None);b.pop('note',None)
+    yes(a==b,'preserve discovery fields except scoped IGS note')
+  elif name.endswith('laboratory-package-policy.json'):
+   bm=before.pop('models');am=after.pop('models');before.pop('id');after.pop('id');yes(before==after and bm.keys()==am.keys(),'preserve current package policy/controls/failures')
+   for mid,h in am.items():yes(h==next((r['definition']['sha256']for r in five if r['model_id']==mid),bm[mid]),'only five package identity pins change')
+  else:
+   before.pop('id');after.pop('id');before.pop('supported_policy');ref=after.pop('supported_policy');yes(before==after and ref['sha256']==sha(effective(ref['path'])),'preserve profile roles and exact linked policy')
+ for name,h in json.loads(read(A/'base-pins.json')).items():yes(name not in by and sha(read(BASE/safe(name)))==h,'literal unchanged base guard')
+ before=json.loads(read(BASE/'catalogue/applicability/kfs-development-v1.json'));after=obj('catalogue/applicability/kfs-development-v1.json');yes(after['independent_review']==before['independent_review']=='pending','no experimental approval inferred')
+ for oldrow,newrow in zip(before['models'],after['models']):
+  oldrow=json.loads(json.dumps(oldrow));newrow=json.loads(json.dumps(newrow));mid=oldrow['model']['id']
+  if mid in fiveby:oldrow['model']['sha256']=fiveby[mid]['definition']['sha256']
+  if mid=='hypoplastic-sand-vw96':
+   yes('historical' in ' '.join(newrow['limitations']).lower()and 'not' in ' '.join(newrow['limitations']).lower(),'VW96 evidence explicitly historical without current equivalence');oldrow.pop('limitations');newrow.pop('limitations')
+  yes(oldrow==newrow,'preserve all applicability decisions/evidence/prerequisites')
+ report={'status':'PASS','checks':len(checks),'proposal_manifest_sha256':args.manifest_sha256,'source_delta_sha256':sha(read(A/'source-delta.json')),'rows':len(rows),'base_members':len(tree),'final_members':len(final),'ordinary_models':16,'approval_before':30,'approval_after':30,'actual_model_material_compiled_browser_remote_calls':0,'unaffected_current_files_preserved':len(tree)-sum(n in tree for n in by)}
+ print(json.dumps(report,indent=2))
+if __name__=='__main__':main()

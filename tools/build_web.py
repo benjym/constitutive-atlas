@@ -37,7 +37,7 @@ def main():
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
     parser.add_argument('--kelvin-voigt-wasm-dir',type=Path,default=ROOT/'build-kelvin-voigt-wasm',help='Qualified ordinary Kelvin–Voigt physical-time engine')
     parser.add_argument('--bingham-wasm-dir',type=Path,default=ROOT/'build-bingham-public',help='Exact independently reviewed Bingham physical-time engine')
-    parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'web/engines/current17-compatible/interface2016',help='Exact reviewed source-reconciled HvWE controlled-path engine')
+    parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'web/engines/current17-baseline-compatible/interface2016',help='Exact reviewed source-reconciled HvWE controlled-path engine')
     parser.add_argument('--perzyna-wasm-dir',type=Path,default=ROOT/'build-perzyna-public',help='Exact independently reviewed Perzyna physical-time engine')
     parser.add_argument('--controlled-time-wasm-dir',type=Path,default=ROOT/'web/engines/controlled-time',help='Exact independently qualified imposed-field physical-time engine for the main laboratory')
     args=parser.parse_args()
@@ -121,9 +121,14 @@ def main():
     subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)
     from build_controlled_path_web import bundle as bundle_controlled_path
     bundle_controlled_path(dest,args.controlled_path_wasm_dir)
-    from build_interface2016_web import bundle as bundle_interface2016
+    if args.interface2016_wasm_dir.resolve() == (ROOT/'web/engines/current17-baseline-compatible/interface2016').resolve():
+        from build_interface2016_baseline_web import bundle as bundle_interface2016
+        interface_checker = 'test_interface2016_baseline_package.mjs'
+    else:
+        from build_interface2016_web import bundle as bundle_interface2016
+        interface_checker = None
     bundle_interface2016(dest,args.interface2016_wasm_dir)
-    interface_checker = 'test_interface2016_compatible_package.mjs' if (dest/'material-point-interface2016/engine-path/source-compatibility.json').is_file() else 'test_interface2016_package.mjs'
+    interface_checker = interface_checker or ('test_interface2016_compatible_package.mjs' if (dest/'material-point-interface2016/engine-path/source-compatibility.json').is_file() else 'test_interface2016_package.mjs')
     subprocess.run(['node',str(ROOT/'tools'/interface_checker),str(dest)],check=True)
     from build_maxwell_laboratory import bundle as bundle_maxwell
     bundle_maxwell(dest,args.maxwell_wasm_dir)

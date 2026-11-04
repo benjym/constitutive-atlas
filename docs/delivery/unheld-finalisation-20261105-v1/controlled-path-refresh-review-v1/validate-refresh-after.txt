@@ -1,0 +1,49 @@
+def validate_refresh(build, model):
+    """Optional additive packaging branch. Historical branches stay unchanged."""
+    build = Path(build)
+    path = build / 'refresh-qualification.json'
+    if not path.is_file():
+        return None
+    data = json.loads(path.read_text())
+    binding = data.get('binding', {})
+    plan_pin = binding.get('plan', {})
+    plan_path = Path(plan_pin.get('path', ''))
+    plan = load_plan(plan_path, plan_pin.get('sha256'))
+    packet, _ = plan_layout(plan_path)
+    key = next((k for k, value in MODELS.items() if value == model))
+    if data.get('schema_version') != 'controlled-path-refresh-1' or data.get('status') != 'passed' or data.get('model') != model or (data.get('gates') != GATES[key]) or (not data.get('implementation_run', '').strip()) or (binding.get('model') != model) or (binding.get('model_sha256') != sha(relative(MODEL_PATHS[key][0]))) or (binding.get('source_closure') != plan['source_closure']) or (binding.get('plan') != dict(path=Path(plan_path).as_posix(), sha256=sha(relative(plan_path)))):
+        raise ValueError('Fresh controlled-path qualification is stale/incomplete')
+    if binding.get('generated') != {name: sha(build / 'generated' / name) for name in GENERATED} or binding.get('native_generated') != binding['generated']:
+        raise ValueError('Fresh generated source changed')
+    artifact_names = {'native/' + plan['native_library'], 'atlas_path_capability.mjs', 'atlas_path_capability.wasm'}
+    if set(binding.get('artifacts', {})) != artifact_names:
+        raise ValueError('Native and Wasm artifacts required')
+    for group, directory in [('artifacts', build), ('build_metadata', build), ('commands', ROOT), ('results', ROOT)]:
+        if not binding.get(group):
+            raise ValueError('Fresh qualification omits ' + group)
+        for name, digest in binding[group].items():
+            target = relative(name) if directory == ROOT else directory / Path(name)
+            if Path(name).is_absolute() or '..' in Path(name).parts or sha(target) != digest:
+                raise ValueError('Fresh qualification evidence changed: ' + name)
+    if set(binding['commands']) != {str(packet / 'execution-v2' / (r['id'] + ext)) for r in plan['commands'] for ext in ('.receipt.json', '.log')}:
+        raise ValueError('Fresh qualification omits exact commands/logs')
+    for row in plan['commands']:
+        receipt = json.loads(relative(str(packet / 'execution-v2' / (row['id'] + '.receipt.json'))).read_text())
+        if receipt.get('returncode') != 0 or receipt.get('plan_sha256') != sha(relative(plan_path)) or (not Path(receipt.get('repository_root', '')).is_absolute()) or (receipt.get('argv') != [arg.replace('$ROOT', receipt['repository_root']) for arg in row['argv']]):
+            raise ValueError('Fresh command receipt differs: ' + row['id'])
+    result_names = ('native.json', 'wasm.json') if key == 'norsand' else ('native.json', 'wasm.json', 'native-check.json', 'wasm-check.json', 'parity.json')
+    if set(binding['results']) != {str(packet / 'execution-v2' / key / name) for name in result_names}:
+        raise ValueError('Fresh qualification omits original backend results')
+    check_backend_identity(key, binding['artifacts'], binding['results'])
+    if set(binding['build_metadata']) != {'build-metadata/' + backend + '/' + name for backend in ('native', 'wasm') for name in ('CMakeCache.txt', 'compile_commands.json')}:
+        raise ValueError('Fresh qualification omits compiler metadata')
+    pin = data.get('independent_review', {})
+    if pin.get('path') != 'build-review.json' or pin.get('sha256') != sha(build / 'build-review.json'):
+        raise ValueError('Fresh independent review pin changed')
+    accepted = json.loads((build / 'build-review.json').read_text())
+    if accepted.get('schema_version') != 'controlled-path-refresh-review-1' or accepted.get('status') != 'accepted' or accepted.get('binding') != binding or (accepted.get('gates') != GATES[key]) or (not accepted.get('reviewer_run', '').strip()) or (accepted['reviewer_run'] == data['implementation_run']) or (accepted.get('blocking_findings') != []):
+        raise ValueError('Separate fresh build review required')
+    pending = json.loads((build / 'qualification-pending.json').read_text())
+    if accepted.get('qualification_pending_sha256') != sha(build / 'qualification-pending.json') or pending.get('binding') != binding or pending.get('gates') != data['gates'] or (pending.get('implementation_run') != data['implementation_run']) or (pending.get('status') != 'passed-original-backend-gates-pending-independent-review'):
+        raise ValueError('Fresh review does not bind exact observed pending receipt')
+    return dict(qualification=data, qualification_bytes=path.read_bytes(), review_bytes=(build / 'build-review.json').read_bytes(), artifacts={name: (build / name).read_bytes() for name in ('atlas_path_capability.mjs', 'atlas_path_capability.wasm')})

@@ -1,0 +1,180 @@
+- generic [active] [ref=e1]:
+  - complementary [ref=e2]:
+    - link "Constitutive Atlas home" [ref=e3] [cursor=pointer]:
+      - /url: "#home"
+      - generic [ref=e4]: Constitutive Atlas
+    - navigation "Main navigation" [ref=e5]:
+      - link "Home" [ref=e6] [cursor=pointer]:
+        - /url: "#home"
+      - link "Model testing" [ref=e8] [cursor=pointer]:
+        - /url: "#laboratory"
+      - link "Ensemble explorer" [ref=e10] [cursor=pointer]:
+        - /url: "#ensemble"
+      - link "Model catalogue 50" [ref=e214] [cursor=pointer]:
+        - /url: "#catalogue"
+        - generic [ref=e13]: Model catalogue
+        - generic [ref=e14]: "50"
+      - link "Methods & evidence" [ref=e15] [cursor=pointer]:
+        - /url: "#methods"
+  - main [ref=e17]:
+    - generic [ref=e215]:
+      - heading "Explore material behaviour." [level=1] [ref=e218]
+      - generic [ref=e219]:
+        - generic [ref=e220]:
+          - generic [ref=e221]: CONSTITUTIVE MODEL
+          - generic [ref=e222]: Available in laboratory
+        - generic [ref=e223]: Select a model
+        - combobox "Select a model" [ref=e224]:
+          - option "Barodesy clay 2017"
+          - option "Barodesy sand (2015)"
+          - option "Drucker–Prager, nonassociated perfect plasticity"
+          - option "Duncan–Chang (1970) · constant-Poisson formulation"
+          - option "Clay hypoplasticity — Mašín (2005)"
+          - option "Clay hypoplasticity with explicit asymptotic states — Mašín (2013)"
+          - option "Sand hypoplasticity with intergranular strain (1997)"
+          - option "Sand hypoplasticity · von Wolffersdorff (1996)"
+          - option "Linear isotropic elasticity"
+          - option "Modified Cam Clay"
+          - option "Mohr–Coulomb · nonassociated perfect plasticity"
+          - option "Original Cam Clay · logarithmic-recovery formulation"
+          - option "Ramberg–Osgood · reversible nonlinear elasticity"
+          - option "Sand hypoplasticity with generalized intergranular strain · selected pairing"
+          - option "S-CLAY1 — Wheeler et al. (2003)"
+          - option "Tresca · associated perfect plasticity"
+          - option "VIBE2026 · bentonite THM histories" [selected]
+          - option "Fully rough granular interface · normal strain and shear angles"
+          - option "Perzyna viscoplasticity · physical-time relaxation / creep"
+          - option "Bingham viscoplasticity · physical-time relaxation / creep"
+          - option "Hill · all-six strain increments"
+          - option "Burgers · physical-time creep / relaxation"
+          - option "Standard Linear Solid · physical-time relaxation / creep"
+          - option "Kelvin–Voigt · physical-time creep / loading / strain hold"
+          - option "Orthotropic elasticity · nine constants"
+          - option "NorSand 1993 · drained active axial law"
+          - option "Maxwell · physical-time relaxation / creep"
+          - option "Lade–Duncan 1975 · cohesionless soil"
+          - option "J2 · all-six strain increments"
+        - paragraph [ref=e225]: VIBE combines swelling within clay aggregates, deformation between aggregates and elapsed time to describe the coupled stress and water-retention response of bentonite.
+        - link "About this model and its parameters →" [ref=e226] [cursor=pointer]:
+          - /url: "#catalogue/vibe-2026"
+        - group [ref=e227]:
+          - generic "Sources & model definition" [ref=e228] [cursor=pointer]
+        - generic [ref=e229]:
+          - generic [ref=e230]: Viscohypoplastic bentonite
+          - generic [ref=e231]: Fixed axes · zero spin · physical seconds
+          - button "View equations ↗" [ref=e232] [cursor=pointer]
+      - generic [ref=e234]:
+        - generic [ref=e235]:
+          - heading "Viscohypoplastic bentonite (VIBE, Mašín 2026)" [level=2] [ref=e236]
+          - paragraph [ref=e237]: VIBE combines swelling within clay aggregates, deformation between aggregates and elapsed time to describe the coupled stress and water-retention response of bentonite.
+          - paragraph [ref=e238]: Net Cauchy stress · compression positive · infinitesimal strain in fixed axes with zero spin. Suction is positive air minus water pressure. Time is in seconds.
+          - generic [ref=e239]:
+            - text: Starting example
+            - combobox "Starting example" [ref=e240]:
+              - option "Relaxation · 1000 seconds" [selected]
+              - option "Relaxation · 1 hour"
+              - option "Dry state · negligible relaxation"
+              - option "Heating and drying · 100 seconds"
+              - option "Drying then wetting"
+              - option "Six-component mechanical loading"
+              - option "Mechanical loading then reversal"
+              - option "Combined mechanical, thermal and hydraulic loading"
+          - paragraph [ref=e241]: Hold every imposed field fixed near the asymptotic state boundary. Viscosity relaxes net stress while void ratio and hydraulic memory remain fixed.
+          - generic [ref=e242]:
+            - text: Start time (s)
+            - spinbutton "Start time (s)" [ref=e243]: "11"
+          - group [ref=e244]:
+            - generic "Complete starting state, imposed fields and incoming rates" [ref=e245] [cursor=pointer]
+          - group [ref=e246]:
+            - generic "Material parameters" [ref=e247] [cursor=pointer]
+          - heading "Loading history" [level=3] [ref=e248]
+          - paragraph [ref=e249]: Each segment changes imposed strain, suction and temperature linearly to the specified end values. Use a positive duration to hold values and observe relaxation. Add a separate segment for a change in direction.
+          - group [ref=e251]:
+            - generic "Segment 1" [ref=e252] [cursor=pointer]
+            - generic [ref=e253]:
+              - text: Duration (s)
+              - spinbutton "Duration (s)" [ref=e254]: "1000"
+            - generic [ref=e255]:
+              - text: Output intervals
+              - spinbutton "Output intervals" [ref=e256]: "20"
+            - generic [ref=e257]:
+              - generic [ref=e258]:
+                - text: End Imposed strain · xx (1)
+                - spinbutton "End Imposed strain · xx (1)" [ref=e259]: "0"
+              - generic [ref=e260]:
+                - text: End Imposed strain · yy (1)
+                - spinbutton "End Imposed strain · yy (1)" [ref=e261]: "0"
+              - generic [ref=e262]:
+                - text: End Imposed strain · zz (1)
+                - spinbutton "End Imposed strain · zz (1)" [ref=e263]: "0"
+              - generic [ref=e264]:
+                - text: End Imposed strain · √2 xy (1)
+                - spinbutton "End Imposed strain · √2 xy (1)" [ref=e265]: "0"
+              - generic [ref=e266]:
+                - text: End Imposed strain · √2 yz (1)
+                - spinbutton "End Imposed strain · √2 yz (1)" [ref=e267]: "0"
+              - generic [ref=e268]:
+                - text: End Imposed strain · √2 xz (1)
+                - spinbutton "End Imposed strain · √2 xz (1)" [ref=e269]: "0"
+              - generic [ref=e270]:
+                - text: End Suction (Pa)
+                - spinbutton "End Suction (Pa)" [ref=e271]: "10000000"
+              - generic [ref=e272]:
+                - text: End Temperature (K)
+                - spinbutton "End Temperature (K)" [ref=e273]: "294"
+            - button "Remove segment" [disabled] [ref=e274]
+          - button "Add segment" [ref=e275] [cursor=pointer]
+          - generic [ref=e276]:
+            - button "Run history" [ref=e277] [cursor=pointer]
+            - button "Reset starting example" [ref=e278] [cursor=pointer]
+            - button "Import and replay" [ref=e279] [cursor=pointer]
+            - button "Export complete run" [ref=e280] [cursor=pointer]
+            - status [ref=e281]: History completed. Numerical response; no experimental validation.
+        - generic [ref=e282]:
+          - generic [ref=e283]:
+            - heading "Response through time" [level=2] [ref=e284]
+            - paragraph [ref=e285]: Final time 1011.000s; mean net stress 5112.927kPa; e=0.7250000.
+            - img "Mean net stress against time" [ref=e286]:
+              - generic [ref=e287]: "5116.5"
+              - generic [ref=e288]: "-59"
+              - generic [ref=e289]: "5115.5"
+              - generic [ref=e290]: "226"
+              - generic [ref=e291]: "5114.6"
+              - generic [ref=e292]: "511"
+              - generic [ref=e293]: "5113.6"
+              - generic [ref=e294]: "796"
+              - generic [ref=e295]: "5112.7"
+              - generic [ref=e296]: "1080"
+              - generic [ref=e297]: Physical time (s)
+              - generic [ref=e298]: Mean net stress (kPa)
+            - img "Void ratio against time" [ref=e300]:
+              - generic [ref=e301]: "0.761"
+              - generic [ref=e302]: "-59"
+              - generic [ref=e303]: "0.743"
+              - generic [ref=e304]: "226"
+              - generic [ref=e305]: "0.725"
+              - generic [ref=e306]: "511"
+              - generic [ref=e307]: "0.707"
+              - generic [ref=e308]: "796"
+              - generic [ref=e309]: "0.689"
+              - generic [ref=e310]: "1080"
+              - generic [ref=e311]: Physical time (s)
+              - generic [ref=e312]: Global void ratio
+            - img "Saturation against time" [ref=e313]:
+              - generic [ref=e314]: "0.728277"
+              - generic [ref=e315]: "-59"
+              - generic [ref=e316]: "0.728272"
+              - generic [ref=e317]: "226"
+              - generic [ref=e318]: "0.728267"
+              - generic [ref=e319]: "511"
+              - generic [ref=e320]: "0.728262"
+              - generic [ref=e321]: "796"
+              - generic [ref=e322]: "0.728257"
+              - generic [ref=e323]: "1080"
+              - generic [ref=e324]: Physical time (s)
+              - generic [ref=e325]: Degree of saturation
+            - paragraph [ref=e327]: "These are model responses. Measurement comparison is unavailable: no calibrated experimental dataset is supplied."
+            - group [ref=e328]:
+              - generic "All state components and observables" [ref=e329] [cursor=pointer]
+          - group [ref=e330]:
+            - generic "Equations, sources and approved scope" [ref=e331] [cursor=pointer]

@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261105-v1/package-plan-v3/check.py", line 114, in <module>
+    if __name__=='__main__':print(json.dumps(run(),indent=2))
+                                             ~~~^^
+  File "/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261105-v1/package-plan-v3/check.py", line 109, in run
+    exporter_checks(L,check)
+    ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261105-v1/package-plan-v3/export_regression.py", line 9, in run
+    check('accepted exporter proposal exact',L.sha(packet/'manifest.json')=='3099f52ed76e1788a27c2b9155f7b55fd22725e3862e91d74cddd7d07c4aa460')
+                                             ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261105-v1/package-plan-v3/launcher.py", line 18, in sha
+    def sha(path):return hashlib.sha256(raw(path)).hexdigest()
+                                        ~~~^^^^^^
+  File "/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261105-v1/package-plan-v3/launcher.py", line 17, in raw
+    def raw(path):return safe(path).read_bytes()
+                         ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/bmar5496/code/constitutive-atlas/docs/delivery/unheld-finalisation-20261105-v1/baseline-five-portable-export-executable-v1/manifest.json'
