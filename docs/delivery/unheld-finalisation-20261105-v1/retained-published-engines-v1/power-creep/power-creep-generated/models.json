@@ -1,0 +1,253 @@
+{
+  "schema_version": "0.1",
+  "sha256": "47aa5d0dfa850ca6934471569bd3b5e359eadabdb0972cb90291194d555ba801",
+  "models": [
+    {
+      "schema_version": "0.3",
+      "id": "power-creep-itasca900-both-active-ode",
+      "name": "Two-component power creep \u2014 both active, continuous draft",
+      "family": "isotropic viscoelastic creep",
+      "status": "draft",
+      "description": "Itasca9.0 Power Model Eqs2-6, Both Components Active option: continuous zero-spin small-strain interpretation, no stress thresholds. Uses Eq2 deviator projection rather than inconsistent printed Eq7; n>=1 zero-stress continuous extension. Effective Cauchy stress only in an uncoupled u=0 host. b_i=A_i*p_ref**n_i; explicit physical seconds. Illustrative coefficients are not a salt calibration or vendor discretization. See docs/ingestion/power-creep-itasca900/execution-v1/README.md.",
+      "sources": [
+        {
+          "url": "https://docs.itascacg.com/itasca900/common/models/power/doc/modelpower.html",
+          "locator": "Itasca9.0.182; Eqs (1)-(6); option 2 Both Components Active; Eq7 discrepancy retained in ingestion packet",
+          "role": "Constitutive law and source-supported two-mechanism specialization"
+        },
+        {
+          "url": "https://docs.itascacg.com/itasca900/common/docproject/source/manual/program_guide/modelformulation/signconventions.html",
+          "locator": "Direct stress, direct strain, strain rate and shear; simultaneous sign reversal to compression positive",
+          "role": "Source conventions"
+        }
+      ],
+      "formulation": {
+        "time_dependence": "physical_time",
+        "equation_form": "ode",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "inputs": {
+          "equation": {
+            "time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "stage",
+              "constraint": "finite"
+            },
+            "strain_rate": {
+              "quantity": "strain_rate",
+              "measure": "infinitesimal_strain_rate",
+              "shape": "sym",
+              "unit": {
+                "si": [
+                  0,
+                  0,
+                  -1,
+                  0
+                ]
+              },
+              "configuration": "current",
+              "sampling": "stage",
+              "constraint": "finite"
+            }
+          },
+          "advance": {
+            "start_time": {
+              "quantity": "time",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "start",
+              "constraint": "finite"
+            },
+            "duration": {
+              "quantity": "duration",
+              "shape": "scalar",
+              "unit": "s",
+              "sampling": "interval",
+              "constraint": "positive_finite"
+            }
+          }
+        },
+        "stress": {
+          "source": "observable",
+          "name": "stress",
+          "measure": "cauchy",
+          "scope": "effective"
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma"
+        ],
+        "validation": "domain_and_initial_checks"
+      },
+      "parameters": {
+        "Kmod": {
+          "unit": "Pa",
+          "default": 20000000.0,
+          "min": 1,
+          "max": 100000000000000.0,
+          "label": "Elastic bulk modulus (Pa)"
+        },
+        "Gmod": {
+          "unit": "Pa",
+          "default": 12000000.0,
+          "min": 1,
+          "max": 100000000000000.0,
+          "label": "Elastic shear modulus (Pa)"
+        },
+        "p_ref": {
+          "unit": "Pa",
+          "default": 1000000.0,
+          "min": 1,
+          "max": 1000000000000.0,
+          "label": "Power-law normalization and numerical stress scale (Pa)"
+        },
+        "b1": {
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "default": 0.002,
+          "min": 0,
+          "max": 1000,
+          "label": "Rate coefficient at reference stress (1/s); illustrative, not salt calibration"
+        },
+        "n1": {
+          "unit": "1",
+          "default": 1,
+          "min": 1,
+          "max": 10,
+          "label": "Power exponent; project scope n>=1"
+        },
+        "b2": {
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "default": 0.001,
+          "min": 0,
+          "max": 1000,
+          "label": "Rate coefficient at reference stress (1/s); illustrative, not salt calibration"
+        },
+        "n2": {
+          "unit": "1",
+          "default": 3,
+          "min": 1,
+          "max": 10,
+          "label": "Power exponent; project scope n>=1"
+        },
+        "time_scale": {
+          "unit": "s",
+          "default": 1,
+          "min": 1e-12,
+          "max": 1000000000000.0,
+          "label": "Positive numerical creep-rate scale only (s); does not change law"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "initial": [
+            1200000,
+            900000,
+            900000,
+            0,
+            0,
+            0
+          ],
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "s",
+          "expr": "dev(sigma)"
+        },
+        {
+          "name": "sbar",
+          "expr": "s / p_ref"
+        },
+        {
+          "name": "q2",
+          "expr": "1.5 * dot(sbar, sbar)"
+        },
+        {
+          "name": "shape1",
+          "expr": "select(q2 > 0, q2**((n1 - 1) / 2), select(n1 > 1, 0, 1))"
+        },
+        {
+          "name": "shape2",
+          "expr": "select(q2 > 0, q2**((n2 - 1) / 2), select(n2 > 1, 0, 1))"
+        },
+        {
+          "name": "decay",
+          "expr": "3 * Gmod / p_ref * (b1 * shape1 + b2 * shape2)"
+        }
+      ],
+      "equations": {
+        "sigma": "Kmod * trace(strain_rate) * I + 2 * Gmod * dev(strain_rate) - decay * s"
+      },
+      "domain": [],
+      "observables": [
+        {
+          "name": "stress",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "expr": "sigma"
+        },
+        {
+          "name": "pressure",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "expr": "trace(sigma) / 3"
+        },
+        {
+          "name": "von_mises",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "expr": "p_ref * sqrt(q2)"
+        },
+        {
+          "name": "equivalent_creep_rate",
+          "shape": "scalar",
+          "unit": {
+            "si": [
+              0,
+              0,
+              -1,
+              0
+            ]
+          },
+          "scale": "1 / time_scale",
+          "expr": "b1 * select(q2 > 0, q2**(n1 / 2), 0) + b2 * select(q2 > 0, q2**(n2 / 2), 0)"
+        }
+      ]
+    }
+  ]
+}

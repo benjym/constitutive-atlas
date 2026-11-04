@@ -1,0 +1,26 @@
+[
+  [
+    "['--mode','run','--model',row.model,'--protocol'",
+    "['--mode','run','--model',row.model,'--initial',row.parent.join(','),'--protocol'"
+  ],
+  [
+    "[row.model,'','',1,.001,8,0,csv]",
+    "[row.model,'',row.parent.join(','),1,.001,8,0,csv]"
+  ],
+  [
+    "['--mode','run','--model','linear-elastic','--protocol'",
+    "['--mode','run','--model','linear-elastic','--initial',rows[0].parent.join(','),'--protocol'"
+  ],
+  [
+    "['linear-elastic','','',1,.001,8,0,settingsCsv(limited)]",
+    "['linear-elastic','',rows[0].parent.join(','),1,.001,8,0,settingsCsv(limited)]"
+  ],
+  [
+    "['--mode','integrate','--model','linear-elastic','--strain'",
+    "['--mode','integrate','--model','linear-elastic','--initial',rows[0].parent.join(','),'--strain'"
+  ],
+  [
+    "['linear-elastic','','','0,0,0,0,0,0',invalid]",
+    "['linear-elastic','',rows[0].parent.join(','),'0,0,0,0,0,0',invalid]"
+  ]
+]

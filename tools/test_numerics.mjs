@@ -42,8 +42,8 @@ if(options['--wasm']||options['--native']){
  }
  for(const row of rows){
   const csv=settingsCsv(configured);
-  const result=check('configured-run/'+row.model,['--mode','run','--model',row.model,'--protocol','1','--target','.001','--steps','8','--integration-settings',csv],
-   'atlas_run_with_settings',['string','string','string','number','number','number','number','string'],[row.model,'','',1,.001,8,0,csv]);
+  const result=check('configured-run/'+row.model,['--mode','run','--model',row.model,'--initial',row.parent.join(','),'--protocol','1','--target','.001','--steps','8','--integration-settings',csv],
+   'atlas_run_with_settings',['string','string','string','number','number','number','number','string'],[row.model,'',row.parent.join(','),1,.001,8,0,csv]);
   assert.equal(result.ok,true,result.message);verifyReturnedSettings(result,configured);
   for(const settings of [undefined,configured]){
    const cli=['--mode','linearize','--model',row.model,'--initial',row.parent.join(','),'--strain',row.increment.join(',')];
@@ -54,8 +54,8 @@ if(options['--wasm']||options['--native']){
   }
  }
  const limited={...defaults,max_iterations:1,max_depth:0};
- const stopped=check('limited-run',['--mode','run','--model','linear-elastic','--protocol','1','--target','.001','--steps','8','--integration-settings',settingsCsv(limited)],'atlas_run_with_settings',['string','string','string','number','number','number','number','string'],['linear-elastic','','',1,.001,8,0,settingsCsv(limited)]);assert.equal(stopped.ok,false);assert.equal(stopped.points.length,1);
- const invalid='0,1e-6,45,14,20000,11';const bad=check('invalid-settings',['--mode','integrate','--model','linear-elastic','--strain','0,0,0,0,0,0','--integration-settings',invalid],'atlas_integrate_with_settings',['string','string','string','string','string'],['linear-elastic','','','0,0,0,0,0,0',invalid]);assert.equal(bad.ok,false);
+ const stopped=check('limited-run',['--mode','run','--model','linear-elastic','--initial',rows[0].parent.join(','),'--protocol','1','--target','.001','--steps','8','--integration-settings',settingsCsv(limited)],'atlas_run_with_settings',['string','string','string','number','number','number','number','string'],['linear-elastic','',rows[0].parent.join(','),1,.001,8,0,settingsCsv(limited)]);assert.equal(stopped.ok,false);assert.equal(stopped.points.length,1);
+ const invalid='0,1e-6,45,14,20000,11';const bad=check('invalid-settings',['--mode','integrate','--model','linear-elastic','--initial',rows[0].parent.join(','),'--strain','0,0,0,0,0,0','--integration-settings',invalid],'atlas_integrate_with_settings',['string','string','string','string','string'],['linear-elastic','',rows[0].parent.join(','),'0,0,0,0,0,0',invalid]);assert.equal(bad.ok,false);
  console.log(`Native/Wasm numerical settings and full-update tangent parity passed for ${report.pairs.length} cases.`);
 }
 if(options['--output'])writeFileSync(options['--output'],JSON.stringify(report,null,2)+'\n');
