@@ -50,7 +50,14 @@ if(options['--wasm']||options['--native']){
  }
  const dir=mkdtempSync(join(tmpdir(),'atlas-recorded-parity-'));
  try{
-  for(const {request:s} of [...retained,...restartRetained,{request:example}]){
+  for(const {request:historical,response:frozen} of [...retained,...restartRetained,{request:example}]){
+   const s=structuredClone(historical);
+   // v0.3 requires caller state. Preserve each frozen study's original starting state.
+   if(!Object.hasOwn(s,'initial')){
+    assert.ok(Array.isArray(frozen?.initial)&&frozen.initial.length&&frozen.initial.every(Number.isFinite),'Frozen explicit recorded initial state required');
+    s.initial=structuredClone(frozen.initial);
+   }
+   validateRecordedRun(s);
    const {controls,knots}=recordedWire(s),settings=recordedSettings(s),c=join(dir,'controls.csv'),k=join(dir,'knots.csv');writeFileSync(c,controls.join(','));writeFileSync(k,knots.join(','));
    const args=['--mode','recorded','--model',s.model,'--initial-strain',s.path.initial_strain.join(','),'--recorded-controls-file',c,'--recorded-knots-file',k,'--integration-settings',settingsCsv(settings.material),'--recorded-settings',Object.values(settings.control).join(',')];
    if(settings.restarts)args.push('--recorded-restarts',Object.values(settings.restarts).join(','));

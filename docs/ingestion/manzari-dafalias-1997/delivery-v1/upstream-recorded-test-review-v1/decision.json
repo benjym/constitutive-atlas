@@ -1,0 +1,29 @@
+{
+  "identity": "recorded-explicit-state-source-review-v1",
+  "status": "accepted",
+  "reviewer_run": "/root/md1997_upstream_merge_review",
+  "scope": "small historical test input contract adaptation; source and pure data validation only; no actual backend execution",
+  "source_sha256": "f2fb8069ee876ecb3711c4b79b8d77350408a433a7d3787135079478f4ad8d8e",
+  "original_source_sha256": "45133e86775c8c8aafb2d4421b6e52b5ae61afea55179a0ba77784721803321e",
+  "pure_checks_sha256": "e97ae68dea481bf94bbe38d939aca9d05b75f0bf1bef06807bd196e3b2fb73aa",
+  "review_checker_sha256": "4086b50c5b854df723f4342aadcc3922ddf1d85a65af1458b645280d63fb596a",
+  "historical_requests": 45,
+  "example_requests": 1,
+  "supplied_initial": 35,
+  "preserved_initial": 11,
+  "frozen_input_sha256": {
+    "catalogue/investigations/recorded-replay-api-v1/responses.json.gz": "a01fead76ea5eb8cbed880ba9b3defb5d30d83e49085a9ef8660332e3fb7d595",
+    "catalogue/investigations/recorded-restarts-v1/responses.json.gz": "7b9a216ca532f3e78c5f460cb16b24bcf383db1b9f7333e4a9be68f7a4e2c732",
+    "protocols/recorded-dp-restart-run.json": "43cfccbfc1b03562a74976ee07ee5aa8c475d46815679eed65ebad1a5dbfac2d"
+  },
+  "checks": [
+    "exact source reversal proves only loop/input adaptation changed",
+    "all original assertions, replay coverage and tolerance bytes unchanged",
+    "all frozen input files match HEAD exact bytes",
+    "all46 requests retain original values except35 frozen explicit initial states copied",
+    "five malformed/missing frozen initial-state fixtures refused",
+    "no mutation of historical requests or response states"
+  ],
+  "blocking_findings": [],
+  "retained_review_failure": "First reviewer helper invocation used an incorrect relative module path and failed ERR_MODULE_NOT_FOUND; corrected reviewer helper only; no product failure or gate change."
+}
