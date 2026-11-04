@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async(page)=>{\n const p=page.locator('.model-profile');\n const rows=await p.locator('table tbody tr').count();if(rows!==30)throw Error('Parameter rows '+rows);\n const tech=await page.locator('.model-profile-technical').evaluate(d=>({open:d.open,summary:d.querySelector('summary').textContent}));if(tech.open)throw Error('Technical disclosure initially open');\n const links=await p.locator('a').evaluateAll(xs=>xs.map(a=>({text:a.textContent,href:a.getAttribute('href')})));\n for(const id of ['hypoplastic-clay-2013','hypoplastic-thermal-ma-2017'])if(!links.some(a=>a.href==='#catalogue/'+id))throw Error('Missing related link '+id);\n const text=await p.textContent();for(const needle of ['suction','temperature','seconds','Mandel'])if(!text.toLowerCase().includes(needle.toLowerCase()))throw Error('Missing guidance '+needle);\n const bounds=await page.evaluate(()=>({viewport:innerWidth,page:document.documentElement.scrollWidth}));if(bounds.page!==bounds.viewport)throw Error('Profile overflow');\n await p.evaluate(el=>{for(let p=el;p;p=p.parentElement)p.scrollTop=0;window.scrollTo(0,0);});return {rows,tech,links,bounds};\n}\n"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793752846.128294,
+  "elapsed_seconds": 0.6844708919525146,
+  "log_sha256": "a80ae6f5d5647904b7e337cc47701261781cf7631c3133eed51cee2ab2f40f5f"
+}

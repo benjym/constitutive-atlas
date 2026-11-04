@@ -1,0 +1,11 @@
+{
+  "command": [
+    "run-code",
+    "async (page) => {\n await page.getByRole('combobox',{name:'Starting example',exact:true}).selectOption('0');\n await page.getByRole('button',{name:'Run history',exact:true}).click();\n await page.waitForFunction(()=>/^(History completed|Run failed)/.test(document.querySelector('#ct-status').textContent),{},{timeout:120000});\n const status=await page.locator('#ct-status').textContent();if(!status.startsWith('History completed'))throw Error(status);\n const event=page.waitForEvent('download');await page.getByRole('button',{name:'Export complete run',exact:true}).click();const download=await event;\n await download.saveAs('output/playwright/vibe-live-v3/default-run.json');\n const plots=await page.locator('#ct-stress polyline,#ct-void polyline,#ct-saturation polyline').count();if(plots!==3)throw Error('Expected3plots, got'+plots);\n return {url:page.url(),status,summary:await page.locator('#ct-summary').textContent(),plots};\n}\n"
+  ],
+  "returncode": 0,
+  "cli_error": false,
+  "started_unix": 1793752879.9651468,
+  "elapsed_seconds": 1.2763841152191162,
+  "log_sha256": "fa6c1768a1e71dd2918ad41685c77858c4bd4c8f0041be1995514023a65d8ea0"
+}
