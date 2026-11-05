@@ -1,7 +1,7 @@
 // Test the completed Pages artifact, including its own Wasm and browser settings module.
 import assert from 'node:assert/strict';
 import {validateDatabasePackage} from './validate_database_package.mjs';
-import {readFileSync,writeFileSync,existsSync,readdirSync} from 'node:fs';
+import {readFileSync,writeFileSync,existsSync,readdirSync,lstatSync,realpathSync} from 'node:fs';
 import {resolve,dirname,join} from 'node:path';
 import {pathToFileURL,fileURLToPath} from 'node:url';
 
@@ -13,6 +13,25 @@ const componentNames=['controlled-time-engine.mjs','controlled-time-worker.mjs',
 const engineNames=['approval.json','catalogue.json','engine.mjs','engine.wasm','examples.json','expected-results.json','model.json','qualification.json','review.json'];
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 function exactKeys(object,names,label){assert.ok(object&&typeof object==='object'&&!Array.isArray(object),label);assert.deepEqual(Object.keys(object).sort(),[...names].sort(),label);}
+// Historical authority remains literal; this admits only the separately reviewed C4 source view.
+export function controlledTimePackagerSources(root,expected){
+ const packager='tools/build_controlled_time_web.py';
+ const read=name=>{assert.ok(!name.startsWith('/')&&!name.split('/').includes('..'),'Unsafe source view path');const path=join(root,name);assert.ok(lstatSync(path).isFile()&&!lstatSync(path).isSymbolicLink(),'Nonregular source view member');assert.equal(realpathSync(path),resolve(path),'Source view symlink');return readFileSync(path);};
+ const snapshot={};const pin=(name,sha)=>{const body=read(name);assert.equal(hash(body),sha,'Changed source view: '+name);snapshot[name]=hash(body);return body;};
+ if(hash(read(packager))===expected){pin(packager,expected);return snapshot;}
+ assert.equal(expected,'02b1dd6e36c2c23ca91a78d321c4af5060dd7b68dbf8385e142061f4149a4758','Unknown historical packager');
+ const packet='docs/delivery/unheld-finalisation-20261105-v1/';
+ const proof=strictJSON(pin(packet+'interface-receipt-source-closure-v1/proof.json','54f68390c72d71374799e3ecd427f93e3d9384df72a4c030e8ceee0a08bc6edd').toString());
+ const review=strictJSON(pin(packet+'shared-current17-review-v1/interface-receipt-source-closure-v1/source-view-decision.json','4fec2a1da7ee05f253f7c5f5cb3c98dc69d545fd014de212fa2cef6e4174f970').toString());
+ assert.equal(proof.identity,'interface-receipt-current-source-view-proof-v1');
+ assert.equal(review.identity,'interface-receipt-current-source-view-review-v1');assert.equal(review.decision,'accepted');assert.equal(review.author_run,'/root/baseline_migration');assert.ok(typeof review.reviewer_run==='string'&&review.reviewer_run.trim()&&review.reviewer_run!==review.author_run);assert.deepEqual(review.unresolved_blockers,[]);assert.equal(review.proof_sha256,'54f68390c72d71374799e3ecd427f93e3d9384df72a4c030e8ceee0a08bc6edd');assert.deepEqual(review.implementation,proof.implementation);
+ for(const [name,sha]of Object.entries(proof.implementation))pin(name,sha);
+ for(const [name,sha]of Object.entries(proof.ancestors))pin(name,sha);
+ for(const [name,alias]of Object.entries(proof.aliases)){pin(name,alias.current_sha256);pin(alias.archive,alias.predecessor_sha256);}
+ assert.equal(proof.aliases[packager].predecessor_sha256,expected);assert.equal(proof.implementation[packager],proof.aliases[packager].current_sha256);
+ return snapshot;
+}
+
 export function validateControlledTimeMembership(directory,entries,ordinaryIds){
  const claims=entries.filter(e=>Object.hasOwn(e,'controlled_time_laboratory'));
  if(!claims.length){assert.ok(!existsSync(join(directory,'engine-controlled-time')),'Unclaimed controlled-time package');return [];}
@@ -23,6 +42,7 @@ export function validateControlledTimeMembership(directory,entries,ordinaryIds){
  const base=join(directory,'engine-controlled-time'),bytes=name=>readFileSync(join(base,name)),read=name=>strictJSON(bytes(name).toString());
  const compatibilityNames=['source-compatibility.json','source-compatibility-review.json'];
  const compatible=compatibilityNames.some(n=>existsSync(join(base,n)));
+ let packagerSnapshot=null,packagerExpected=null;
  const qualifiedNames=[...engineNames,...(compatible?compatibilityNames:[])];
  if(compatible){
   const proofBytes=bytes(compatibilityNames[0]),decisionBytes=bytes(compatibilityNames[1]);
@@ -32,7 +52,7 @@ export function validateControlledTimeMembership(directory,entries,ordinaryIds){
   assert.deepEqual(proofBytes,readFileSync(join(repository,packet+'direct-controlled-time-compatibility-v1/proof.json')));
   assert.deepEqual(decisionBytes,readFileSync(join(repository,packet+'direct-controlled-time-compatibility-review-v1/decision.json')));
   const decision=strictJSON(decisionBytes.toString());
-  assert.equal(hash(readFileSync(join(repository,'tools/build_controlled_time_web.py'))),decision.source_sha256,'Changed accepted controlled-time packager');
+  packagerExpected=decision.source_sha256;packagerSnapshot=controlledTimePackagerSources(repository,packagerExpected);
  }
  assert.deepEqual(readdirSync(base).sort(),[...qualifiedNames,'identity.json','package-manifest.json'].sort(),'Controlled-time asset set');
  const identity=read('identity.json'),seal=read('package-manifest.json');
@@ -62,6 +82,7 @@ export function validateControlledTimeMembership(directory,entries,ordinaryIds){
  for(const name of componentNames){const pins=qualification.source_files.filter(p=>p.path==='web/'+name);assert.equal(pins.length,1);assert.equal(identity.components[name],pins[0].sha256,'Unqualified controlled-time component');}
  assert.equal(catalogue.profile,identity.profile);assert.equal(catalogue.catalogue_sha256,identity.catalogue_sha256);assert.equal(catalogue.models.length,1);assert.equal(catalogue.models[0].id,entry.id);assert.equal(catalogue.models[0].model_sha256,identity.model_sha256);assert.deepEqual(catalogue.models[0].formulation,definition.formulation);
  assert.deepEqual(bytes('catalogue.json'),readFileSync(join(repository,'web/engines/controlled-time/generated/controlled_time_catalogue.json')),'Stale controlled-time generated catalogue');
+ if(packagerSnapshot!==null)assert.deepEqual(controlledTimePackagerSources(repository,packagerExpected),packagerSnapshot,'Packager source view changed during membership validation');
  return [entry.id];
 }
 

@@ -1,0 +1,164 @@
+{
+  "identity": "supported-scoped-direct-source-consumer-audit-v1",
+  "entries": [
+    "tools/test_supported_package.mjs",
+    "tools/test_scoped_parity.mjs"
+  ],
+  "source_files": {
+    "tools/test_scoped_parity.mjs": {
+      "sha256": "f2cea82a0b31cd378820453ae04a51bf88d3f5a712009941c4584a8f844b89a7",
+      "static_literal_relative_imports": [
+        "tools/laboratory_profile_policy.mjs",
+        "web/laboratory-scope.mjs"
+      ],
+      "source_read_lines": [
+        {
+          "line": 3,
+          "text": "import {readFileSync,writeFileSync,mkdtempSync,existsSync}from'node:fs';"
+        },
+        {
+          "line": 12,
+          "text": "const catalogue=JSON.parse(readFileSync(resolve(wasmdir,'generated/models.json'),'utf8'));"
+        }
+      ]
+    },
+    "web/laboratory-scope.mjs": {
+      "sha256": "4e99152a21ad2682da2d035b5994fc7bf34d4b0eafca4506b3da499462566fbc",
+      "static_literal_relative_imports": [
+        "web/loading.mjs",
+        "web/numerics.mjs"
+      ],
+      "source_read_lines": []
+    },
+    "web/loading.mjs": {
+      "sha256": "9a340e1687ec2252fd53ad0b1d313ac4cb054d445dffe07cc0ddc864ffa73e56",
+      "static_literal_relative_imports": [],
+      "source_read_lines": []
+    },
+    "web/numerics.mjs": {
+      "sha256": "7cad4e4bf56eb0c4e2c6137b257715e925aa0683ef571297e6eb7d08ccd65200",
+      "static_literal_relative_imports": [
+        "web/loading.mjs"
+      ],
+      "source_read_lines": []
+    },
+    "tools/laboratory_profile_policy.mjs": {
+      "sha256": "f084f9e9ae3e88c7c4048191ca801a716109da1fac071e3586cd89b5dda470c6",
+      "static_literal_relative_imports": [
+        "tools/test_supported_package.mjs",
+        "web/laboratory-scope.mjs"
+      ],
+      "source_read_lines": [
+        {
+          "line": 3,
+          "text": "import {readFileSync,realpathSync}from'node:fs';"
+        },
+        {
+          "line": 32,
+          "text": " const read=name=>{const target=realpathSync(resolve(root,name));assert.ok(target.startsWith(root+sep),'Policy path escapes source root');return readFileSync(target,'utf8');};"
+        },
+        {
+          "line": 33,
+          "text": " const policy=JSON.parse(readFileSync(file,'utf8'));for(const pin of [policy.supported_policy,policy.cases])assert.equal(hash(read(pin.path)),pin.sha256,'Allocation input changed');const supported=JSON.parse(read(policy.supported_policy.path)),cases=JSON.parse(read(policy.cases.path));"
+        }
+      ]
+    },
+    "tools/test_supported_package.mjs": {
+      "sha256": "d06f4acb99c8b4963eac41b63b96fe65868056dbc2fef9c69a5f97d437b9bb3c",
+      "static_literal_relative_imports": [
+        "tools/test_web_package.mjs"
+      ],
+      "source_read_lines": [
+        {
+          "line": 3,
+          "text": "import {readFileSync,writeFileSync,realpathSync}from'node:fs';"
+        },
+        {
+          "line": 53,
+          "text": " const policyText=readFileSync(policyFile,'utf8'),policy=JSON.parse(policyText),index=JSON.parse(readFileSync(join(directory,'laboratory-examples.json'),'utf8'));"
+        },
+        {
+          "line": 61,
+          "text": " const dependencies={definitionHash:id=>digest(readFileSync(inside(directory,'models/'+id+'.json'))),readEvidence:name=>readFileSync(inside(realpathSync(root),name),'utf8')};validatePolicy(policy,catalogue,dependencies);"
+        },
+        {
+          "line": 62,
+          "text": " const engine=await createAtlas();const report=await assessSupportedPackage({catalogue,policy,index,ordinary,run:s=>runScopedLaboratory(engine,s,catalogue),prepareExample:(entry,index,catalogue)=>prepareExample(entry,index,catalogue,{crypto:webcrypto,fetcher:async url=>({ok:true,text:async()=>readFileSync(inside(directory,url),'utf8')})}),...dependencies});"
+        }
+      ]
+    },
+    "tools/test_web_package.mjs": {
+      "sha256": "59b40cce6c5d05f0be6de37da90ff283d7227e3ce43d1d4f6223893617aee698",
+      "static_literal_relative_imports": [
+        "tools/validate_database_package.mjs",
+        "web/controlled-time-engine.mjs"
+      ],
+      "source_read_lines": [
+        {
+          "line": 4,
+          "text": "import {readFileSync,writeFileSync,existsSync,readdirSync} from 'node:fs';"
+        },
+        {
+          "line": 23,
+          "text": " const base=join(directory,'engine-controlled-time'),bytes=name=>readFileSync(join(base,name)),read=name=>strictJSON(bytes(name).toString());"
+        },
+        {
+          "line": 32,
+          "text": "  assert.deepEqual(proofBytes,readFileSync(join(repository,packet+'direct-controlled-time-compatibility-v1/proof.json')));"
+        },
+        {
+          "line": 33,
+          "text": "  assert.deepEqual(decisionBytes,readFileSync(join(repository,packet+'direct-controlled-time-compatibility-review-v1/decision.json')));"
+        },
+        {
+          "line": 35,
+          "text": "  assert.equal(hash(readFileSync(join(repository,'tools/build_controlled_time_web.py'))),decision.source_sha256,'Changed accepted controlled-time packager');"
+        },
+        {
+          "line": 45,
+          "text": " for(const [name,expected] of Object.entries(identity.components))assert.equal(hash(readFileSync(join(directory,name))),expected,'Controlled-time component: '+name);"
+        },
+        {
+          "line": 46,
+          "text": " for(const [name,expected] of Object.entries(seal.files))assert.equal(hash(readFileSync(join(directory,name))),expected,'Controlled-time sealed file: '+name);"
+        },
+        {
+          "line": 48,
+          "text": " const registry=strictJSON(readFileSync(join(repository,'catalogue/approved-models.json'),'utf8'));"
+        },
+        {
+          "line": 64,
+          "text": " assert.deepEqual(bytes('catalogue.json'),readFileSync(join(repository,'web/engines/controlled-time/generated/controlled_time_catalogue.json')),'Stale controlled-time generated catalogue');"
+        },
+        {
+          "line": 69,
+          "text": " const read=name=>JSON.parse(readFileSync(join(directory,name),'utf8'));"
+        },
+        {
+          "line": 97,
+          "text": "  const html=readFileSync(join(directory,file),'utf8');"
+        }
+      ]
+    },
+    "web/controlled-time-engine.mjs": {
+      "sha256": "dc333b82182100e41d32ed8c0527688afc1e3bfec04664082f1c3d1e8d5fb497",
+      "static_literal_relative_imports": [],
+      "source_read_lines": []
+    },
+    "tools/validate_database_package.mjs": {
+      "sha256": "0c0c7fa443aea14f42e9ed91a15d4c983f63066243297740fec804cdc930730c",
+      "static_literal_relative_imports": [],
+      "source_read_lines": [
+        {
+          "line": 4,
+          "text": "import {readFileSync} from 'node:fs';"
+        },
+        {
+          "line": 9,
+          "text": " const read=name=>readFileSync(join(directory,name));"
+        }
+      ]
+    }
+  },
+  "conclusion": "Only raw packager-source assertion in this direct import closure is tools/test_web_package.mjs controlled-time membership source_sha256. All other metadata/definition/policy/evidence/artifact/seal/database and scoped physical comparisons remain unchanged. Runtime dynamic packaged imports are checked by original package identity and seals, not replaced."
+}
