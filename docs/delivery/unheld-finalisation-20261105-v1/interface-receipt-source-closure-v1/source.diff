@@ -1,0 +1,73 @@
+--- old/tools/profile_source_compatibility.py
++++ new/tools/profile_source_compatibility.py
+@@ -23,7 +23,7 @@
+ def regular(root,name):
+  p=Path(name);require(not p.is_absolute() and '..' not in p.parts,'Unsafe compatibility path')
+  f=root/p;require(not f.is_symlink() and f.is_file() and f.resolve().is_relative_to(root.resolve()),'Missing/unsafe compatibility file '+name)
+- from tools.package_final_source_view_v1 import historical_bytes
++ from tools.package_final_source_view_v2 import historical_bytes
+  return historical_bytes(root,name,f.read_bytes())
+ def namespace(root):
+  names=set()
+@@ -48,7 +48,7 @@
+  require(isinstance(decision['implementation'],dict) and set(decision['implementation'])==set(TOOLS),'Exact packaging implementation approval required')
+  for n,h in decision['implementation'].items():require(digest(regular(root,n))==h,'Packaging compatibility implementation changed '+n)
+  sources=row['source_files'];require(namespace(root)=={n for n in sources if n.startswith(('atlas/','cpp/','schemas/'))},'Complete compatibility source namespace changed')
+- from tools.package_final_source_view_v1 import current_snapshot
++ from tools.package_final_source_view_v2 import current_snapshot
+  current_sources=current_snapshot(root,sources)
+  for n,h in sources.items():require(digest(regular(root,n))==h,'Compatibility source changed '+n)
+  found={p.relative_to(build).as_posix() for p in build.rglob('*') if p.is_file()}
+--- old/tools/profile_source_compatibility_baseline.py
++++ new/tools/profile_source_compatibility_baseline.py
+@@ -23,7 +23,7 @@
+ def regular(root,name):
+  p=Path(name);require(not p.is_absolute() and '..' not in p.parts,'Unsafe compatibility path')
+  f=root/p;require(not f.is_symlink() and f.is_file() and f.resolve().is_relative_to(root.resolve()),'Missing/unsafe compatibility file '+name)
+- from tools.package_final_source_view_v1 import historical_bytes
++ from tools.package_final_source_view_v2 import historical_bytes
+  return historical_bytes(root,name,f.read_bytes())
+ def namespace(root):
+  names=set()
+@@ -48,7 +48,7 @@
+  require(isinstance(decision['implementation'],dict) and set(decision['implementation'])==set(TOOLS),'Exact packaging implementation approval required')
+  for n,h in decision['implementation'].items():require(digest(regular(root,n))==h,'Packaging compatibility implementation changed '+n)
+  sources=row['source_files'];require(namespace(root)=={n for n in sources if n.startswith(('atlas/','cpp/','schemas/'))},'Complete compatibility source namespace changed')
+- from tools.package_final_source_view_v1 import current_snapshot
++ from tools.package_final_source_view_v2 import current_snapshot
+  current_sources=current_snapshot(root,sources)
+  for n,h in sources.items():require(digest(regular(root,n))==h,'Compatibility source changed '+n)
+  found={p.relative_to(build).as_posix() for p in build.rglob('*') if p.is_file()}
+--- old/tools/build_controlled_time_web.py
++++ new/tools/build_controlled_time_web.py
+@@ -9,7 +9,7 @@
+ def sha(p):
+     p=Path(p);raw=p.read_bytes()
+     if p.resolve().is_relative_to(ROOT.resolve()):
+-        from tools.package_final_source_view_v1 import historical_bytes
++        from tools.package_final_source_view_v2 import historical_bytes
+         raw=historical_bytes(ROOT,p.resolve().relative_to(ROOT.resolve()).as_posix(),raw)
+     return hashlib.sha256(raw).hexdigest()
+ def source_pin(pin):
+--- old/tools/build_interface2016_web.py
++++ new/tools/build_interface2016_web.py
+@@ -64,7 +64,7 @@
+         receipt = dict(status='passed', definition_sha256=sha(definition),
+                        artifacts={name:digest for name,digest in qualification['binding']['artifacts'].items()
+                                   if name.endswith(('.mjs', '.wasm'))},
+-                       source_closure=closure, refresh_qualification_sha256=sha(build/'refresh-qualification.json'))
++                       source_closure=(json.loads(compatibility['compatibility_bytes'])['source_files'] if compatibility is not None else closure), refresh_qualification_sha256=sha(build/'refresh-qualification.json'))
+         receipt['artifacts']['generated/path_catalogue.json'] = qualification['binding']['generated']['path_catalogue.json']
+     else:
+         receipt = json.loads((ROOT/BUILD_RECEIPT).read_text())
+--- old/tools/build_interface2016_baseline_web.py
++++ new/tools/build_interface2016_baseline_web.py
+@@ -64,7 +64,7 @@
+         receipt = dict(status='passed', definition_sha256=sha(definition),
+                        artifacts={name:digest for name,digest in qualification['binding']['artifacts'].items()
+                                   if name.endswith(('.mjs', '.wasm'))},
+-                       source_closure=closure, refresh_qualification_sha256=sha(build/'refresh-qualification.json'))
++                       source_closure=(json.loads(compatibility['compatibility_bytes'])['source_files'] if compatibility is not None else closure), refresh_qualification_sha256=sha(build/'refresh-qualification.json'))
+         receipt['artifacts']['generated/path_catalogue.json'] = qualification['binding']['generated']['path_catalogue.json']
+     else:
+         receipt = json.loads((ROOT/BUILD_RECEIPT).read_text())

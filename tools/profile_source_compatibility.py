@@ -23,7 +23,7 @@ def load(data):
 def regular(root,name):
  p=Path(name);require(not p.is_absolute() and '..' not in p.parts,'Unsafe compatibility path')
  f=root/p;require(not f.is_symlink() and f.is_file() and f.resolve().is_relative_to(root.resolve()),'Missing/unsafe compatibility file '+name)
- from tools.package_final_source_view_v1 import historical_bytes
+ from tools.package_final_source_view_v2 import historical_bytes
  return historical_bytes(root,name,f.read_bytes())
 def namespace(root):
  names=set()
@@ -48,7 +48,7 @@ def validate(root,build,profile):
  require(isinstance(decision['implementation'],dict) and set(decision['implementation'])==set(TOOLS),'Exact packaging implementation approval required')
  for n,h in decision['implementation'].items():require(digest(regular(root,n))==h,'Packaging compatibility implementation changed '+n)
  sources=row['source_files'];require(namespace(root)=={n for n in sources if n.startswith(('atlas/','cpp/','schemas/'))},'Complete compatibility source namespace changed')
- from tools.package_final_source_view_v1 import current_snapshot
+ from tools.package_final_source_view_v2 import current_snapshot
  current_sources=current_snapshot(root,sources)
  for n,h in sources.items():require(digest(regular(root,n))==h,'Compatibility source changed '+n)
  found={p.relative_to(build).as_posix() for p in build.rglob('*') if p.is_file()}

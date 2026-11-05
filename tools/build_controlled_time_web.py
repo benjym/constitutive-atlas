@@ -9,7 +9,7 @@ COMPONENTS=('controlled-time-engine.mjs','controlled-time-worker.mjs','controlle
 def sha(p):
     p=Path(p);raw=p.read_bytes()
     if p.resolve().is_relative_to(ROOT.resolve()):
-        from tools.package_final_source_view_v1 import historical_bytes
+        from tools.package_final_source_view_v2 import historical_bytes
         raw=historical_bytes(ROOT,p.resolve().relative_to(ROOT.resolve()).as_posix(),raw)
     return hashlib.sha256(raw).hexdigest()
 def source_pin(pin):

@@ -64,7 +64,7 @@ def bundle(destination, build):
         receipt = dict(status='passed', definition_sha256=sha(definition),
                        artifacts={name:digest for name,digest in qualification['binding']['artifacts'].items()
                                   if name.endswith(('.mjs', '.wasm'))},
-                       source_closure=closure, refresh_qualification_sha256=sha(build/'refresh-qualification.json'))
+                       source_closure=(json.loads(compatibility['compatibility_bytes'])['source_files'] if compatibility is not None else closure), refresh_qualification_sha256=sha(build/'refresh-qualification.json'))
         receipt['artifacts']['generated/path_catalogue.json'] = qualification['binding']['generated']['path_catalogue.json']
     else:
         receipt = json.loads((ROOT/BUILD_RECEIPT).read_text())
