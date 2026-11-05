@@ -1,0 +1,71 @@
+--- old/tools/profile_source_compatibility.py
++++ new/tools/profile_source_compatibility.py
+@@ -23,7 +23,7 @@
+ def regular(root,name):
+  p=Path(name);require(not p.is_absolute() and '..' not in p.parts,'Unsafe compatibility path')
+  f=root/p;require(not f.is_symlink() and f.is_file() and f.resolve().is_relative_to(root.resolve()),'Missing/unsafe compatibility file '+name)
+- from tools.rate_restoration_source_view_v2 import historical_bytes
++ from tools.package_final_source_view_v1 import historical_bytes
+  return historical_bytes(root,name,f.read_bytes())
+ def namespace(root):
+  names=set()
+@@ -48,6 +48,8 @@
+  require(isinstance(decision['implementation'],dict) and set(decision['implementation'])==set(TOOLS),'Exact packaging implementation approval required')
+  for n,h in decision['implementation'].items():require(digest(regular(root,n))==h,'Packaging compatibility implementation changed '+n)
+  sources=row['source_files'];require(namespace(root)=={n for n in sources if n.startswith(('atlas/','cpp/','schemas/'))},'Complete compatibility source namespace changed')
++ from tools.package_final_source_view_v1 import current_snapshot
++ current_sources=current_snapshot(root,sources)
+  for n,h in sources.items():require(digest(regular(root,n))==h,'Compatibility source changed '+n)
+  found={p.relative_to(build).as_posix() for p in build.rglob('*') if p.is_file()}
+  require(found==set(row['files'])|{'source-compatibility.json'},'Exact retained engine membership changed')
+@@ -58,7 +60,8 @@
+  require(isinstance(q.get('implementation_run'),str) and q['implementation_run'].strip() and isinstance(review.get('reviewer_run'),str) and review['reviewer_run'].strip() and q['implementation_run']!=review['reviewer_run'],'Original independent review missing')
+  pin=q['independent_review'];require(pin['path']==row['review'] and pin['sha256']==digest(rraw),'Original review pin differs')
+  for n,h in row.get('retained_repository_evidence',{}).items():require(digest(regular(root,n))==h,'Original interface command/result evidence changed '+n)
+- return dict(qualification=q,qualification_bytes=qraw,review_bytes=rraw,sources=sources,compatibility_bytes=raw,decision_bytes=decision_raw)
++ require(current_snapshot(root,sources)==current_sources,'Current source/authority changed during compatibility validation')
++ return dict(qualification=q,qualification_bytes=qraw,review_bytes=rraw,sources=current_sources,compatibility_bytes=raw,decision_bytes=decision_raw)
+ 
+ def copy_evidence(checked,engine):
+  if checked is not None:
+--- old/tools/profile_source_compatibility_baseline.py
++++ new/tools/profile_source_compatibility_baseline.py
+@@ -23,7 +23,7 @@
+ def regular(root,name):
+  p=Path(name);require(not p.is_absolute() and '..' not in p.parts,'Unsafe compatibility path')
+  f=root/p;require(not f.is_symlink() and f.is_file() and f.resolve().is_relative_to(root.resolve()),'Missing/unsafe compatibility file '+name)
+- from tools.rate_restoration_source_view_v2 import historical_bytes
++ from tools.package_final_source_view_v1 import historical_bytes
+  return historical_bytes(root,name,f.read_bytes())
+ def namespace(root):
+  names=set()
+@@ -48,6 +48,8 @@
+  require(isinstance(decision['implementation'],dict) and set(decision['implementation'])==set(TOOLS),'Exact packaging implementation approval required')
+  for n,h in decision['implementation'].items():require(digest(regular(root,n))==h,'Packaging compatibility implementation changed '+n)
+  sources=row['source_files'];require(namespace(root)=={n for n in sources if n.startswith(('atlas/','cpp/','schemas/'))},'Complete compatibility source namespace changed')
++ from tools.package_final_source_view_v1 import current_snapshot
++ current_sources=current_snapshot(root,sources)
+  for n,h in sources.items():require(digest(regular(root,n))==h,'Compatibility source changed '+n)
+  found={p.relative_to(build).as_posix() for p in build.rglob('*') if p.is_file()}
+  require(found==set(row['files'])|{'source-compatibility.json'},'Exact retained engine membership changed')
+@@ -58,7 +60,8 @@
+  require(isinstance(q.get('implementation_run'),str) and q['implementation_run'].strip() and isinstance(review.get('reviewer_run'),str) and review['reviewer_run'].strip() and q['implementation_run']!=review['reviewer_run'],'Original independent review missing')
+  pin=q['independent_review'];require(pin['path']==row['review'] and pin['sha256']==digest(rraw),'Original review pin differs')
+  for n,h in row.get('retained_repository_evidence',{}).items():require(digest(regular(root,n))==h,'Original interface command/result evidence changed '+n)
+- return dict(qualification=q,qualification_bytes=qraw,review_bytes=rraw,sources=sources,compatibility_bytes=raw,decision_bytes=decision_raw)
++ require(current_snapshot(root,sources)==current_sources,'Current source/authority changed during compatibility validation')
++ return dict(qualification=q,qualification_bytes=qraw,review_bytes=rraw,sources=current_sources,compatibility_bytes=raw,decision_bytes=decision_raw)
+ 
+ def copy_evidence(checked,engine):
+  if checked is not None:
+--- old/tools/build_controlled_time_web.py
++++ new/tools/build_controlled_time_web.py
+@@ -9,7 +9,7 @@
+ def sha(p):
+     p=Path(p);raw=p.read_bytes()
+     if p.resolve().is_relative_to(ROOT.resolve()):
+-        from tools.rate_restoration_source_view_v2 import historical_bytes
++        from tools.package_final_source_view_v1 import historical_bytes
+         raw=historical_bytes(ROOT,p.resolve().relative_to(ROOT.resolve()).as_posix(),raw)
+     return hashlib.sha256(raw).hexdigest()
+ def source_pin(pin):
