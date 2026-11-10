@@ -40,7 +40,9 @@ jobs:
     - name: Verify publication checkout
       run: test "$(git rev-parse HEAD)" = "$ATLAS_PUBLICATION_REVISION"
     - name: Fast contracts for the exact publication revision
-      run: python3 -B tools/ci_fast.py
+      run: |-
+        python3 -B tools/ci_fast.py
+        python3 -B -m unittest tests.test_pages_numerical_replays -q
     - name: Build ordinary and power-creep Wasm engines
       run: |-
         emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
@@ -74,14 +76,38 @@ jobs:
         python3 -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python3 -B tools/provision_implicit_path_assets.py
         python3 -B tools/fetch_data.py --approved-only
-    - name: Build one website with unchanged package guards
-      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-baseline-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
+    - name: Build website and run package integrity checks
+      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --defer-pages-replays --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-baseline-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
+    - name: Fingerprint the numerical replay inputs
+      id: replays
+      run: |
+        key=$(python3 -B tools/pages_numerical_replays.py key web/dist --revision "$ATLAS_PUBLICATION_REVISION")
+        echo "key=$key" >> "$GITHUB_OUTPUT"
+    - name: Restore an exact numerical replay pass
+      id: replay-cache
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ runner.temp }}/pages-numerical-replays.json
+        key: pages-numerical-replays-v1-${{ steps.replays.outputs.key }}
+    - name: Require passing numerical replays for these inputs
+      env:
+        REPLAY_KEY: ${{ steps.replays.outputs.key }}
+      run: |
+        python3 -B tools/pages_numerical_replays.py replay web/dist \
+          --revision "$ATLAS_PUBLICATION_REVISION" --expected "$REPLAY_KEY" \
+          --receipt "$RUNNER_TEMP/pages-numerical-replays.json"
     - name: Verify the exact publication package
       run: |-
         node tools/ci_smoke.mjs --wasm web/dist/atlas.js
         node tools/test_experiments.mjs --built-assets web/dist/experiments
         node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
         node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
+    - name: Save passing numerical replay receipt
+      if: steps.replay-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ runner.temp }}/pages-numerical-replays.json
+        key: pages-numerical-replays-v1-${{ steps.replays.outputs.key }}
     - name: Retain publication checks
       if: always()
       uses: actions/upload-artifact@v4
@@ -89,6 +115,7 @@ jobs:
         name: pages-package-checks
         path: |-
           ${{ runner.temp }}/packaged-laboratory.json
+          ${{ runner.temp }}/pages-numerical-replays.json
           ${{ runner.temp }}/current-dependency-guards/
         if-no-files-found: ignore
     - uses: actions/configure-pages@v6

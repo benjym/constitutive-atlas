@@ -21,6 +21,13 @@ from build_orthotropic_laboratory import bundle as bundle_orthotropic
 from build_kelvin_voigt_laboratory import bundle as bundle_kelvin_voigt
 from build_controlled_time_web import bundle as bundle_controlled_time
 
+def check_pages_package(stem, dest, defer_replays):
+    # Only Publish Pages uses the cache. Other callers still run the original checks.
+    checker = f'check_{stem}_package.mjs' if defer_replays else f'test_{stem}_package.mjs'
+    mode = ['--integrity-only'] if defer_replays else []
+    subprocess.run(['node', str(ROOT / 'tools' / checker), str(dest), *mode], check=True)
+
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--orthotropic-wasm-dir',type=Path,default=ROOT/'build-orthotropic-wasm',help='Qualified orthotropic strain-increment engine for the main laboratory')
@@ -35,6 +42,8 @@ def main():
     parser.add_argument('--implicit-path-wasm-dir',type=Path,default=ROOT/'build-implicit-path-wasm',help='Exact independently qualified implicit strain-path engine')
     parser.add_argument('--hill-wasm-dir',type=Path,default=ROOT/'web/engines/hill',help='Exact reviewed Hill engine for main laboratory')
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
+    parser.add_argument('--defer-pages-replays', action='store_true',
+                        help='Run integrity now; Publish Pages gates upload on the deferred numerical replays')
     parser.add_argument('--kelvin-voigt-wasm-dir',type=Path,default=ROOT/'build-kelvin-voigt-wasm',help='Qualified ordinary Kelvin–Voigt physical-time engine')
     parser.add_argument('--bingham-wasm-dir',type=Path,default=ROOT/'build-bingham-public',help='Exact independently reviewed Bingham physical-time engine')
     parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'web/engines/current17-baseline-compatible/interface2016',help='Exact reviewed source-reconciled HvWE controlled-path engine')
@@ -103,10 +112,10 @@ def main():
     print(f"Prepared {len(experiment_manifest['experiments'])} built-in experiments ({experiment_manifest['release']})")
     from build_perzyna_laboratory import bundle as bundle_perzyna
     bundle_perzyna(dest,args.perzyna_wasm_dir)
-    subprocess.run(['node',str(ROOT/'tools/test_perzyna_package.mjs'),str(dest)],check=True)
+    check_pages_package('perzyna', dest, args.defer_pages_replays)
     from build_bingham_laboratory import bundle as bundle_bingham
     bundle_bingham(dest,args.bingham_wasm_dir)
-    subprocess.run(['node',str(ROOT/'tools/test_bingham_package.mjs'),str(dest)],check=True)
+    check_pages_package('bingham', dest, args.defer_pages_replays)
     from build_burgers_web import bundle as bundle_burgers
     bundle_burgers(dest,args.burgers_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_burgers_package.mjs'),str(dest)],check=True)
@@ -114,9 +123,9 @@ def main():
     subprocess.run(['node',str(ROOT/'tools/test_power_creep_package.mjs'),str(dest)],check=True)
     from build_sls_laboratory import bundle as bundle_sls_laboratory
     bundle_sls_laboratory(dest,args.sls_wasm_dir)
-    subprocess.run(['node',str(ROOT/'tools/test_sls_laboratory_package.mjs'),str(dest)],check=True)
+    check_pages_package('sls_laboratory', dest, args.defer_pages_replays)
     bundle_kelvin_voigt(dest,args.kelvin_voigt_wasm_dir)
-    subprocess.run(['node',str(ROOT/'tools/test_kelvin_voigt_package.mjs'),str(dest)],check=True)
+    check_pages_package('kelvin_voigt', dest, args.defer_pages_replays)
     bundle_material_point(dest,args.j2_wasm_dir)
     subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)
     from build_controlled_path_web import bundle as bundle_controlled_path
