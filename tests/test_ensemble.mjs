@@ -110,5 +110,5 @@ test('parallel timeout or failure does not abort a neighbouring run',async()=>{
  const q=new EnsembleQueue((j,signal)=>j.id===0?new Promise(()=>{}):j.id===1?new Promise(r=>setTimeout(()=>r({ok:true}),10)):Promise.reject(Error('isolated failure')),()=>{},20,2);
  const study={jobs:[job(0),job(1),job(2)]};await q.run(study);
  assert.deepEqual(study.jobs.map(j=>j.status),['timeout','completed','error']);assert.equal(q.controllers.size,0);
- assert.throws(()=>new EnsembleQueue(()=>{},()=>{},10,5),/one to four/);
+ assert.throws(()=>new EnsembleQueue(()=>{},()=>{},10,9),/one to eight/);
 });
