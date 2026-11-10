@@ -929,7 +929,7 @@ export const modelProfiles = {
         "Normal compression and unloading use separate slopes."
       ]
     ],
-    "scope": "This is the family entry. The linked logarithmic-recovery formulation identifies the version available in the laboratory.",
+    "scope": "This is the Original Cam Clay family profile. The related invariant log-recovery endpoint formulation is available in the laboratory with its stated shear-recovery and loading restrictions.",
     "limits": "A family name does not specify a particular shear-elastic assumption, tensor extension or finite-step algorithm.",
     "preparation": "Initial stress and specific volume must be consistent with the chosen compression and critical-state conventions.",
     "parameters": [],
@@ -945,7 +945,8 @@ export const modelProfiles = {
       "modified-cam-clay"
     ],
     "contentSources": [
-      "docs/ingestion/original-cam-clay/README.md"
+      "docs/ingestion/original-cam-clay/README.md",
+      "models/original-cam-clay-sw-electronic-log-recovery-v1.json"
     ],
     "parameterNote": "Use consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.",
     "title": "Original Cam Clay"
@@ -1060,7 +1061,7 @@ export const modelProfiles = {
         "Unloading and reloading depend on prior loading."
       ]
     ],
-    "scope": "This is the 1970 model-family entry. The constant-Poisson endpoint-average realization is linked below.",
+    "scope": "This is the Duncan–Chang 1970 family profile. The related constant-Poisson endpoint-average realization is available in the laboratory; later volume-response variants are separate formulations.",
     "limits": "Later revisions and numerical closures can have different volume responses and history rules.",
     "preparation": "The selected realization needs initial stress and loading history in addition to material coefficients.",
     "parameters": [],
@@ -1075,7 +1076,8 @@ export const modelProfiles = {
       "duncan-chang-1970-endpoint-average"
     ],
     "contentSources": [
-      "docs/models/duncan-chang-1970-endpoint-average.md"
+      "docs/models/duncan-chang-1970-endpoint-average.md",
+      "models/duncan-chang-1970-endpoint-average.json"
     ],
     "parameterNote": "Use consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.",
     "title": "Duncan–Chang hyperbolic model (1970)"
@@ -1197,7 +1199,7 @@ export const modelProfiles = {
         "Plastic volume change follows a separate plastic potential."
       ]
     ],
-    "scope": "This is the 1975 family entry. The linked midpoint-elastic realization provides the laboratory implementation.",
+    "scope": "This is the Lade–Duncan 1975 family profile. The related midpoint-elastic local Eq. 19 realization is available in the laboratory within its declared preparation and failure limits.",
     "limits": "The family entry does not identify later Lade revisions or a universal postfailure law.",
     "preparation": "Use the complete initial state and parameter set of the selected realization.",
     "parameters": [],
@@ -1298,7 +1300,7 @@ export const modelProfiles = {
         "Different shear mechanisms meet at corners."
       ]
     ],
-    "scope": "This is a criterion-family entry. The linked associated perfect-plastic formulation supplies elasticity, plastic flow and history.",
+    "scope": "This is the Tresca criterion-family profile. The related associated perfect-plastic formulation is available in the laboratory and supplies elasticity, plastic flow and plastic-strain history.",
     "limits": "A yield criterion alone is not a complete stress-update law. It does not specify stiffness, flow or hardening.",
     "preparation": "Choose a full constitutive formulation before assigning material parameters and an initial state.",
     "parameters": [],
@@ -1477,7 +1479,7 @@ export const modelProfiles = {
         "The state affects plastic shearing and volume change."
       ]
     ],
-    "scope": "This is the original 1993 family entry. A restricted active drained axial formulation is available through the related profile.",
+    "scope": "This is the original NorSand 1993 family profile. The related active drained axial realization is available in the laboratory. It is a restricted monotonic rigid-plastic branch, not a general three-dimensional or cyclic implementation.",
     "limits": "The linked axial branch does not supply the full family’s possible elastic, cyclic or three-dimensional extensions.",
     "preparation": "Initial density, stress and internal history must belong to the exact formulation being used.",
     "parameters": [],
@@ -1826,8 +1828,8 @@ export const modelProfiles = {
         "An additional surface supplies structure beyond a single fixed yield surface."
       ]
     ],
-    "scope": "This is the 1997 literature entry; there is no public laboratory implementation.",
-    "limits": "The later 2004 fabric-change model is a separate formulation. Exact surface, hardening and calibration conventions must be taken from the selected original source.",
+    "scope": "This is the Manzari–Dafalias 1997 family profile. The related original constant-yield-width realization is available in the laboratory for monotonic drained and undrained axial strain control. It uses effective stress, infinitesimal strain and fixed spatial axes.",
+    "limits": "The live realization selects constant yield width and the first published reference-distance option. It excludes the evolving-width appendix, full plastic cycles and finite rotations. SANISAND 2004 adds different fabric-history terms and remains a separate formulation.",
     "preparation": "Use the original publication for the complete parameter and internal-state specification; no Atlas material preset is supplied.",
     "parameters": [],
     "stateLabels": {},
@@ -1838,10 +1840,12 @@ export const modelProfiles = {
       }
     ],
     "related": [
+      "manzari-dafalias-1997-constant-m-be-v1",
       "sanisand-2004"
     ],
     "contentSources": [
-      "docs/ingestion/manzari-dafalias-1997/README.md"
+      "docs/ingestion/manzari-dafalias-1997/README.md",
+      "docs/ingestion/manzari-dafalias-1997/source-v1/visual-verification.md"
     ],
     "parameterNote": "Use consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.",
     "title": "Manzari–Dafalias sand model (1997)"
@@ -2188,7 +2192,7 @@ export const modelProfiles = {
         "Dense granular material can dilate during shear; restricting normal movement changes the normal stress response."
       ]
     ],
-    "scope": "This reading profile describes the 2016 granular interface family. The related fully rough HvWE realization has a separate laboratory with prescribed normal strain and two source shear angles.",
+    "scope": "This is the 2016 granular-interface family profile. The related source-reconciled fully rough HvWE realization is available in the laboratory with prescribed normal strain and two shear angles in fixed local axes. Other roughness branches, contact opening and general sliding controls are separate capabilities.",
     "limits": "Local interface directions and shear-zone thickness must be defined. Other roughness branches and opening or recontact need their own definitions; this entry does not supply a general bulk-soil stress update.",
     "preparation": "A specified specimen needs local normal and in-plane stresses, both shear tractions, density, shear-zone thickness and a loading history. The in-plane stress is a separate initial quantity and can evolve during shear.",
     "parameters": [],
@@ -2205,13 +2209,14 @@ export const modelProfiles = {
       }
     ],
     "related": [
-      "hypoplastic-sand-vw96",
-      "hvwe2016-reconciled-fixed-local"
+      "hvwe2016-reconciled-fixed-local",
+      "hypoplastic-sand-vw96"
     ],
     "contentSources": [
       "docs/ingestion/hypoplastic-interface-2016/source-v2/README.md",
       "docs/ingestion/hypoplastic-interface-2016/source-v2/RECONCILIATION.md",
-      "docs/ingestion/hypoplastic-interface-2016/source-v2/receipts.json"
+      "docs/ingestion/hypoplastic-interface-2016/source-v2/receipts.json",
+      "docs/ingestion/hypoplastic-interface-2016/implementation-v1/CONTRACT.md"
     ]
   },
   "multilaminate-schadlich-schweiger": {
@@ -2636,7 +2641,7 @@ export const modelProfiles = {
         "An additional history variable modifies the stiffness transition as cyclic loading accumulates."
       ]
     ],
-    "scope": "This is the 2024 framework entry. A separately listed selected host pairing is available in the laboratory.",
+    "scope": "This is the generalized intergranular-strain 2024 framework profile. A separately named HP/extracted-ASBS/GIS host pairing is available in the laboratory as a bounded zero-spin research draft. Use its labelled small-run example; this does not establish availability of every host pairing or ordinary large-strain paths.",
     "limits": "Different host pairings, the 1997 IGS overlay and ISA are distinct models. Framework parameters cannot be transferred without the corresponding host definition.",
     "preparation": "Supply the host state, intergranular-strain tensor and cyclic-preloading history under the selected pairing’s initialization rules.",
     "parameters": [],
@@ -2653,7 +2658,8 @@ export const modelProfiles = {
       "hypoplastic-isa"
     ],
     "contentSources": [
-      "docs/ingestion/hypoplastic-generalized-igs-2024/README.md"
+      "docs/ingestion/hypoplastic-generalized-igs-2024/README.md",
+      "models/research-hp-extracted-asbs-gis-2024-v03.json"
     ],
     "parameterNote": "Use consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.",
     "title": "Generalized intergranular strain — Mugele, Stutz & Mašín (2024)"
