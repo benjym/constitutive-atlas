@@ -35,10 +35,11 @@ jobs:
     - name: Verify exact public control-scope bindings
       run: node --test tests/test_laboratory_control_scope.mjs
   engine-smoke:
+    name: Current catalogue
     needs: contracts
     if: needs.contracts.outputs.numerical == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
     - uses: actions/checkout@v5
     - uses: actions/setup-python@v6
@@ -50,28 +51,77 @@ jobs:
     - uses: "./.github/actions/setup-atlas"
       with:
         wasm: 'true'
-    - name: Build only the ordinary native solver
+    - name: Build the ordinary native solver and numerical tests
       run: |-
-        cmake -S . -B build-ci-native -DCMAKE_BUILD_TYPE=Release
+        cmake -S . -B build-ci-native -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=-ffp-contract=off
         cmake --build build-ci-native --target atlas_solver --parallel 1
-    - name: Build only the ordinary Wasm solver
+        cmake --build build-ci-native --target atlas_numerical_tests --parallel 1
+        cmake --build build-ci-native --target atlas_recorded_tests --parallel 1
+    - name: Build the ordinary Wasm solver and scalar probe
       run: |-
         emcmake cmake -S . -B build-ci-wasm -DCMAKE_BUILD_TYPE=Release
         cmake --build build-ci-wasm --target atlas_solver --parallel 1
-    - name: Independent elastic reference, native/Wasm ABI and rejection smoke
-      run: node tools/ci_smoke.mjs --native build-ci-native/atlas_solver --wasm build-ci-wasm/atlas.js
+        cmake --build build-ci-wasm --target atlas_scalar_probe --parallel 1
+    - name: Run current catalogue examples and targeted regressions
+      run: bash tools/ci_numerics.sh ordinary "$RUNNER_TEMP/numerics" build-ci-native build-ci-wasm
+    - name: Retain numerical results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: current-numerics
+        path: "${{ runner.temp }}/numerics/"
+    - name: Save the tested engine for Pages
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: tested-ordinary-wasm
+        if-no-files-found: error
+        path: |
+          build-ci-wasm/atlas.js
+          build-ci-wasm/atlas.wasm
+          build-ci-wasm/generated/models.json
+  targeted:
+    needs: contracts
+    if: needs.contracts.outputs.numerical == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [schedules, plasticity]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v5
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.12'
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: ".nvmrc"
+    - uses: "./.github/actions/setup-atlas"
+    - name: Run targeted numerical references
+      run: bash tools/ci_numerics.sh ${{ matrix.profile }} "$RUNNER_TEMP/numerics"
+    - name: Retain numerical results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: numerics-${{ matrix.profile }}
+        path: "${{ runner.temp }}/numerics/"
   checks:
     if: always()
     needs:
     - contracts
     - engine-smoke
+    - targeted
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
     - env:
         CONTRACTS: "${{ needs.contracts.result }}"
         SMOKE: "${{ needs.engine-smoke.result }}"
+        TARGETED: "${{ needs.targeted.result }}"
         NUMERICAL: "${{ needs.contracts.outputs.numerical }}"
       run: |-
         test "$CONTRACTS" = success
-        if [ "$NUMERICAL" = true ]; then test "$SMOKE" = success; else test "$SMOKE" = skipped; fi
+        if [ "$NUMERICAL" = true ]; then expected=success; else expected=skipped; fi
+        test "$SMOKE" = "$expected"
+        test "$TARGETED" = "$expected"

@@ -17,23 +17,20 @@ Requires Python 3.10+, CMake 3.20+ and a C++20 compiler.
 ```sh
 python3 -m atlas.cli validate
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --parallel 1
-ctest --test-dir build --output-on-failure
+cmake --build build --target atlas_solver --parallel 1
+cmake --build build --target atlas_numerical_tests --parallel 1
+python3 -B tools/check_current_numerical_ci.py --build build --output build/current-numerics
 ```
 
 For the browser build, see [web/README.md](web/README.md) (Node.js 24 and Emscripten required).
 
-## Full qualification
+## Continuous integration
 
-Full qualification in GitHub Actions builds and tests the current catalogue, including model-specific numerical references and native/Wasm parity. To reproduce the native catalogue check locally:
+**Fast CI** validates today's model definitions and browser contracts. On code changes and pushes to `main`, it runs the current ordinary catalogue on native and Wasm, compares the histories within tolerance, and runs targeted checks against independent numerical references. For a model with no named example, the sweep uses the default drained test. Dedicated schedule and material-point engines have their own targeted tests in the same workflow. The schedule regressions use representative cases from the independent references; the manual studies retain the full matrices.
 
-```sh
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --target atlas_numerical_tests --parallel 1
-python -B tools/check_current_numerical_ci.py --build build --output build/current-numerical
-```
+**Publish Pages** reuses the tested ordinary Wasm engine from Fast CI, builds the other engines needed by the site, and smoke-tests the package in Chromium before deploying that artifact.
 
-Use a fresh output directory for each run. To reproduce exact historical outputs, manually run **Full qualification** with **Replay frozen catalogues and exact historical outputs** enabled (`historical_replays=true`).
+For exact historical reproduction, manually run **Historical research replays** or **Controlled physical time research replay**. Both use the archived source revision, with its original checks and checksums. The original broader study commands are in the [retired workflow at its last revision](https://github.com/benjym/constitutive-atlas/blob/41122c0a478372d589496e41310dd62f5bdc5425/.github/workflows/qualification.yml). Run the independent package studies with **Publish Pages → replay_studies** (no deploy), or locally by building the site without `--package-checks-only`.
 
 ## Published benchmark
 

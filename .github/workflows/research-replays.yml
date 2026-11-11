@@ -1,0 +1,170 @@
+name: Historical research replays
+'on':
+  workflow_dispatch:
+    inputs:
+      study:
+        description: Archived study to reproduce
+        type: choice
+        required: true
+        options:
+        - native-history
+        - barodesy
+        - exact-python
+        - specialist-schedules
+        - research-engines
+        - controlled-path
+permissions:
+  contents: read
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  ARCHIVE_REVISION: c5fd7e483693e6bf4e1a54b1e905a4f47c453e98
+jobs:
+  replay:
+    runs-on: ${{ (inputs.study == 'barodesy' || inputs.study == 'exact-python' || inputs.study == 'research-engines') && 'macos-26' || 'ubuntu-latest' }}
+    timeout-minutes: 120
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        ref: c5fd7e483693e6bf4e1a54b1e905a4f47c453e98
+    - uses: actions/setup-python@v6
+      with:
+        python-version: ${{ runner.os == 'macOS' && '3.14' || '3.12' }}
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: '.nvmrc'
+    - name: Verify historical checkout
+      run: test "$(git rev-parse HEAD)" = "$ARCHIVE_REVISION"
+    - name: Prepare Emscripten on Linux
+      if: inputs.study == 'specialist-schedules' || inputs.study == 'controlled-path'
+      uses: './.github/actions/setup-atlas'
+      with:
+        wasm: 'true'
+    - name: Prepare Emscripten on macOS
+      if: inputs.study == 'barodesy' || inputs.study == 'research-engines'
+      run: |
+        git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+        "$RUNNER_TEMP/emsdk/emsdk" install 6.0.8
+        "$RUNNER_TEMP/emsdk/emsdk" activate 6.0.8
+    - name: Replay the original 17-model numerical and recorded cases
+      if: inputs.study == 'native-history'
+      run: |
+        mkdir -p "$RUNNER_TEMP/replay"
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        for target in atlas_solver atlas_numerical_tests atlas_recorded_tests; do
+          cmake --build build --target "$target" --parallel 1
+        done
+        python -B tools/check_md1997_numerical_ci.py --build build --output "$RUNNER_TEMP/replay/md1997"
+        python -B tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/replay/native-fixtures.json"
+        python -B -m unittest \
+          tests.test_historical_generation.HistoricalGenerationTests.test_current_generation_contains_every_live_definition_and_scope \
+          tests.test_controlled_time.ControlledTimeTests.test_generated_layout_and_old_bytes -v
+        python -B tools/build_recorded_legacy_ci.py --build build --output "$RUNNER_TEMP/replay/recorded-build" --github-output "$RUNNER_TEMP/legacy.env"
+        source "$RUNNER_TEMP/legacy.env"
+        ATLAS_RECORDED_SOLVER="$PWD/build/atlas_solver" ATLAS_RECORDED_LEGACY_SOLVER="$PWD/build/atlas_recorded_legacy_solver" \
+          ATLAS_RECORDED_LEGACY_SHA256="$solver_sha256" python -B -m unittest \
+          tests.test_recorded_restarts.RestartNativeTests.test_disabled_legacy_responses_exact -v
+    - name: Replay the archived macOS Python suite
+      if: inputs.study == 'exact-python'
+      run: |
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        python -B tools/build_ci_targets.py build
+        ctest --test-dir build --output-on-failure -R '^atlas_python$'
+        node --test tests/test_laboratory_profile_policy.mjs
+    - name: Replay archived Barodesy
+      if: inputs.study == 'barodesy'
+      run: |
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        python -B tools/run_historical_barodesy.py --directory "$RUNNER_TEMP/replay/barodesy"
+    - name: Replay the paired Perzyna and Bingham studies
+      if: inputs.study == 'specialist-schedules'
+      run: |
+        python -B tools/check_perzyna_ci.py --paired --output "$RUNNER_TEMP/replay/perzyna"
+        study=docs/ingestion/bingham-comsol63/execution-v5
+        cmake -S cmake/bingham -B build-bingham -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-bingham --target atlas_bingham_solver --parallel 1
+        python -B tools/test_bingham_schedule.py --solver build-bingham/atlas_bingham_solver --output "$RUNNER_TEMP/replay/bingham-native.json"
+        emcmake cmake -S cmake/bingham -B build-bingham-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-bingham-wasm --target atlas_bingham_solver --parallel 1
+        cp build-bingham-wasm/bingham.js build-bingham-wasm/bingham.mjs
+        node "$study/collect_wasm.mjs" build-bingham-wasm/bingham.mjs "$study/cases.json" "$RUNNER_TEMP/replay/bingham-wasm.json"
+        python -B "$study/study.py" assess --raw "$RUNNER_TEMP/replay/bingham-wasm.json"
+        python -B "$study/parity.py" "$RUNNER_TEMP/replay/bingham-native.json" "$RUNNER_TEMP/replay/bingham-wasm.json"
+    - name: Reproduce isolated native and Wasm research studies
+      if: inputs.study == 'research-engines'
+      run: |
+        mkdir -p "$RUNNER_TEMP/replay"
+        source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+        for target in atlas_history_solver atlas_time_solver atlas_research_solver atlas_clay2013_solver atlas_gis2024_solver atlas_expm_probe atlas_log1p_probe atlas_barodesy_rate_probe atlas_barodesy_material_ad_probe atlas_barodesy_hydro_ad_probe atlas_clay2014_rate_probe; do
+          cmake --build build --target "$target" --parallel 1
+          cmake --build build-wasm --target "$target" --parallel 1
+        done
+        python -m tools.history_cases --output "$RUNNER_TEMP/replay/history-cases.json"
+        node tools/test_history_wasm.mjs --cases "$RUNNER_TEMP/replay/history-cases.json"
+        node tools/test_time_wasm.mjs
+        node tools/test_schedule_wasm.mjs
+        node tools/test_terracotta_wasm.mjs
+        node tools/test_terracotta_creep_wasm.mjs --output "$RUNNER_TEMP/replay/terracotta-creep-parity.json"
+        python -m tools.verify_terracotta_creep_wasm "$RUNNER_TEMP/replay/terracotta-creep-parity.json"
+        python -m tools.clay2013_integration_study --output "$RUNNER_TEMP/replay/clay2013-native.json"
+        node tools/test_clay2013_wasm.mjs --native-report "$RUNNER_TEMP/replay/clay2013-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/replay/clay2013-wasm.json"
+        python -m tools.verify_clay2013_wasm "$RUNNER_TEMP/replay/clay2013-wasm.json"
+        python -m tools.clay2013_nonisotropic_study --output "$RUNNER_TEMP/replay/clay2013-path-native.json"
+        node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/replay/clay2013-path-native.json" --wasm build-wasm/clay2013.js --output "$RUNNER_TEMP/replay/clay2013-path-wasm.json"
+        python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/replay/clay2013-path-wasm.json"
+        python -m tools.gis2024_rate_study --output "$RUNNER_TEMP/replay/gis2024-native.json"
+        node tools/test_research_matrix_wasm.mjs --native-report "$RUNNER_TEMP/replay/gis2024-native.json" --wasm build-wasm/gis2024.js --output "$RUNNER_TEMP/replay/gis2024-wasm.json"
+        python -m tools.verify_research_matrix_wasm "$RUNNER_TEMP/replay/gis2024-wasm.json"
+        python -m tools.gis2024_integration_study --output "$RUNNER_TEMP/replay/gis2024-path-native.json"
+        node tools/test_gis2024_paths_wasm.mjs --native-report "$RUNNER_TEMP/replay/gis2024-path-native.json" --wasm build-wasm/gis2024.js --output "$RUNNER_TEMP/replay/gis2024-path-wasm.json"
+        python -m tools.verify_gis2024_paths "$RUNNER_TEMP/replay/gis2024-path-wasm.json"
+        python tools/expm_study.py --binary build/atlas_expm_probe --output "$RUNNER_TEMP/replay/expm-native.json"
+        node tools/test_expm_wasm.mjs --native-report "$RUNNER_TEMP/replay/expm-native.json" --wasm build-wasm/expm-fixtures.js --output "$RUNNER_TEMP/replay/expm-wasm.json"
+        python tools/expm_study.py --verify "$RUNNER_TEMP/replay/expm-wasm.json" --native-report "$RUNNER_TEMP/replay/expm-native.json"
+        python -m tools.log1p_study --binary build/atlas_log1p_probe --output "$RUNNER_TEMP/replay/log1p-native.json"
+        node tools/test_log1p_wasm.mjs --native-report "$RUNNER_TEMP/replay/log1p-native.json" --wasm build-wasm/log1p-fixtures.js --output "$RUNNER_TEMP/replay/log1p-wasm.json"
+        python -m tools.log1p_study --report "$RUNNER_TEMP/replay/log1p-wasm.json" --native-report "$RUNNER_TEMP/replay/log1p-native.json" --output "$RUNNER_TEMP/replay/log1p-assessed.json"
+        python -m tools.barodesy2017_rate_study --native build/atlas_barodesy_rate_probe --output "$RUNNER_TEMP/replay/barodesy-native.json"
+        node tools/test_barodesy2017_rates_wasm.mjs --native-report "$RUNNER_TEMP/replay/barodesy-native.json" --wasm build-wasm/barodesy-rates.js --output "$RUNNER_TEMP/replay/barodesy-wasm.json"
+        python -m tools.barodesy2017_rate_study --verify "$RUNNER_TEMP/replay/barodesy-wasm.json" --native-report "$RUNNER_TEMP/replay/barodesy-native.json"
+        python -m tools.barodesy2017_material_ad --native build/atlas_barodesy_material_ad_probe --output "$RUNNER_TEMP/replay/barodesy-ad-native.json"
+        node tools/test_barodesy2017_material_ad_wasm.mjs --native-report "$RUNNER_TEMP/replay/barodesy-ad-native.json" --wasm build-wasm/barodesy-material-ad.js --output "$RUNNER_TEMP/replay/barodesy-ad-wasm.json"
+        python -m tools.barodesy2017_material_ad --verify "$RUNNER_TEMP/replay/barodesy-ad-wasm.json" --native-report-path "$RUNNER_TEMP/replay/barodesy-ad-native.json"
+        python -m tools.barodesy2017_hydro_ad --native build/atlas_barodesy_hydro_ad_probe --output "$RUNNER_TEMP/replay/barodesy-hydro-native.json"
+        node tools/test_barodesy2017_hydro_ad_wasm.mjs --native-report "$RUNNER_TEMP/replay/barodesy-hydro-native.json" --wasm build-wasm/barodesy-hydro-ad.js --output "$RUNNER_TEMP/replay/barodesy-hydro-wasm.json"
+        python -m tools.barodesy2017_hydro_ad --verify "$RUNNER_TEMP/replay/barodesy-hydro-wasm.json" --native-report-path "$RUNNER_TEMP/replay/barodesy-hydro-native.json"
+        python -m tools.clay2014_rate_study --native build/atlas_clay2014_rate_probe --output "$RUNNER_TEMP/replay/clay2014-native.json"
+        node tools/test_clay2014_rates_wasm.mjs --native-report "$RUNNER_TEMP/replay/clay2014-native.json" --wasm build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/replay/clay2014-wasm.json"
+        python -m tools.clay2014_rate_assessment --wasm-report "$RUNNER_TEMP/replay/clay2014-wasm.json" --native-report "$RUNNER_TEMP/replay/clay2014-native.json" --wasm-transport "$RUNNER_TEMP/replay/clay2014-wasm.transport.json" --native-transport "$RUNNER_TEMP/replay/clay2014-native.transport.json" --artifact build-wasm/clay2014-rates.js --output "$RUNNER_TEMP/replay/clay2014-assessment.json"
+    - name: Reproduce controlled-path and rough-interface studies
+      if: inputs.study == 'controlled-path'
+      run: |
+        path_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"
+        cmake -S cmake/controlled-path -B build-path-native -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"
+        cmake --build build-path-native --target atlas_path_capability --parallel 1
+        mkdir -p "$RUNNER_TEMP/replay/path-results"
+        python -B docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py build-path-native/libatlas_path_capability.so docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json "$RUNNER_TEMP/replay/path-results/native.json"
+        python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json "$RUNNER_TEMP/replay/path-results/native.json"
+        path_models="$PWD/models/research/norsand/norsand-jefferies-1993-active-axial.json;$PWD/tests/fixtures/controlled-path/synthetic-curved.json;$PWD/tests/fixtures/controlled-path/synthetic-model.json"
+        emcmake cmake -S cmake/controlled-path -B build-path-wasm -DCMAKE_BUILD_TYPE=Debug "-DATLAS_PATH_MODELS=$path_models"
+        cmake --build build-path-wasm --target atlas_path_capability --parallel 1
+        node docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs build-path-wasm/atlas_path_capability.mjs build-path-wasm/atlas_path_capability.wasm docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json "$RUNNER_TEMP/replay/path-results/wasm.json"
+        python -B docs/ingestion/norsand-1993/e2-v3/check_backend_results_v3.py docs/ingestion/norsand-1993/e2-v3/backend-requests-v2.json "$RUNNER_TEMP/replay/path-results/native.json" "$RUNNER_TEMP/replay/path-results/wasm.json"
+        model="$PWD/models/research/interface2016/hvwe2016-reconciled-fixed-local.json"
+        cmake -S cmake/controlled-path -B build-interface2016-native -DCMAKE_BUILD_TYPE=Release "-DATLAS_PATH_MODELS=$model"
+        cmake --build build-interface2016-native --target atlas_path_capability --parallel 1
+        mkdir -p "$RUNNER_TEMP/replay/path-results/interface2016"
+        python -B docs/ingestion/norsand-1993/e2-v3/run_native_requests_v2.py build-interface2016-native/libatlas_path_capability.so docs/ingestion/hypoplastic-interface-2016/implementation-v1/backend-requests.json "$RUNNER_TEMP/replay/path-results/interface2016/native.json"
+        python -B docs/ingestion/hypoplastic-interface-2016/implementation-v1/check_backend_results_v2.py "$RUNNER_TEMP/replay/path-results/interface2016/native.json" --output "$RUNNER_TEMP/replay/path-results/interface2016/native-check.json"
+        emcmake cmake -S cmake/controlled-path -B build-interface2016-wasm -DCMAKE_BUILD_TYPE=Release "-DATLAS_PATH_MODELS=$model"
+        cmake --build build-interface2016-wasm --target atlas_path_capability --parallel 1
+        node docs/ingestion/norsand-1993/e2-v3/run_wasm_requests_v2.mjs build-interface2016-wasm/atlas_path_capability.mjs build-interface2016-wasm/atlas_path_capability.wasm docs/ingestion/hypoplastic-interface-2016/implementation-v1/backend-requests.json "$RUNNER_TEMP/replay/path-results/interface2016/wasm.json"
+        python -B docs/ingestion/hypoplastic-interface-2016/implementation-v1/check_backend_results_v2.py "$RUNNER_TEMP/replay/path-results/interface2016/wasm.json" --output "$RUNNER_TEMP/replay/path-results/interface2016/wasm-check.json"
+        python -B docs/ingestion/hypoplastic-interface-2016/execution-v1/check_parity_v2.py "$RUNNER_TEMP/replay/path-results/interface2016/native.json" "$RUNNER_TEMP/replay/path-results/interface2016/wasm.json" "$RUNNER_TEMP/replay/path-results/interface2016/parity.json"
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: research-replay-${{ inputs.study }}
+        path: ${{ runner.temp }}/replay/
+        if-no-files-found: ignore

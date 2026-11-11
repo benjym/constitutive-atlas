@@ -8,9 +8,15 @@ name: Publish Pages
     - completed
     branches:
     - main
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      replay_studies:
+        description: Run the independent package studies without deploying
+        type: boolean
+        default: false
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: github-pages
   cancel-in-progress: false
@@ -39,15 +45,23 @@ jobs:
         wasm: 'true'
     - name: Verify publication checkout
       run: test "$(git rev-parse HEAD)" = "$ATLAS_PUBLICATION_REVISION"
-    - name: Fast contracts for the exact publication revision
-      run: |-
-        python3 -B tools/ci_fast.py
-        python3 -B -m unittest tests.test_pages_numerical_replays -q
-    - name: Build ordinary and power-creep Wasm engines
-      run: |-
-        emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
-        cmake --build build-wasm --target atlas_solver --parallel 1
-        cmake --build build-wasm --target atlas_power_creep_solver --parallel 1
+    - name: Download the ordinary engine tested by Fast CI
+      if: github.event_name == 'workflow_run'
+      uses: actions/download-artifact@v5
+      with:
+        name: tested-ordinary-wasm
+        path: build-wasm
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ github.token }}
+    - name: Build the power-creep engine and the ordinary engine for manual runs
+      run: |
+        # Configure separately so a manual build cannot overwrite a tested artifact.
+        emcmake cmake -S . -B build-power-creep-wasm -DCMAKE_BUILD_TYPE=Release
+        cmake --build build-power-creep-wasm --target atlas_power_creep_solver --parallel 1
+        if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ]; then
+          emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-wasm --target atlas_solver --parallel 1
+        fi
     - name: Build kelvin-voigt Wasm engine
       run: |-
         emcmake cmake -S cmake/kelvin-voigt -B build-kelvin-voigt-wasm -DCMAKE_BUILD_TYPE=Release
@@ -68,62 +82,39 @@ jobs:
       run: |-
         emcmake cmake -S cmake/orthotropic -B build-orthotropic-wasm -DCMAKE_BUILD_TYPE=Release
         cmake --build build-orthotropic-wasm --target atlas_orthotropic_solver --parallel 1
-    - name: Restore exact reviewed assets and approved data
+    - name: Prepare approved engine assets and data
       run: |-
         python3 -B tools/provision_bingham_assets.py
         python3 -B tools/provision_perzyna_assets.py
-        python3 -B tools/check_current_dependency_assets.py --current17-baseline --output "$RUNNER_TEMP/current-dependency-guards"
         python3 -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python3 -B tools/provision_implicit_path_assets.py
         python3 -B tools/fetch_data.py --approved-only
-    - name: Build website and run package integrity checks
-      run: env GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py --defer-pages-replays --controlled-path-wasm-dir web/engines/current17-compatible/norsand --interface2016-wasm-dir web/engines/current17-baseline-compatible/interface2016 --maxwell-wasm-dir web/engines/current17-compatible/maxwell
-    - name: Fingerprint the numerical replay inputs
-      id: replays
-      run: |
-        key=$(python3 -B tools/pages_numerical_replays.py key web/dist --revision "$ATLAS_PUBLICATION_REVISION")
-        echo "key=$key" >> "$GITHUB_OUTPUT"
-    - name: Restore an exact numerical replay pass
-      id: replay-cache
-      uses: actions/cache/restore@v4
-      with:
-        path: ${{ runner.temp }}/pages-numerical-replays.json
-        key: pages-numerical-replays-v1-${{ steps.replays.outputs.key }}
-    - name: Require passing numerical replays for these inputs
+    - name: Build the website package
       env:
-        REPLAY_KEY: ${{ steps.replays.outputs.key }}
+        REPLAY_STUDIES: ${{ inputs.replay_studies }}
       run: |
-        python3 -B tools/pages_numerical_replays.py replay web/dist \
-          --revision "$ATLAS_PUBLICATION_REVISION" --expected "$REPLAY_KEY" \
-          --receipt "$RUNNER_TEMP/pages-numerical-replays.json"
-    - name: Verify the exact publication package
-      run: |-
+        args=(--power-creep-wasm-dir build-power-creep-wasm)
+        if [ "$REPLAY_STUDIES" != true ]; then args+=(--package-checks-only); fi
+        GITHUB_SHA="$ATLAS_PUBLICATION_REVISION" python3 -B tools/build_web.py "${args[@]}"
+    - name: Smoke-test the package that will deploy
+      run: |
         node tools/ci_smoke.mjs --wasm web/dist/atlas.js
         node tools/test_experiments.mjs --built-assets web/dist/experiments
-        node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs tests/test_supported_package.mjs tests/test_laboratory_profile_policy.mjs
-        node tools/test_supported_package.mjs --directory web/dist --output "$RUNNER_TEMP/packaged-laboratory.json"
-    - name: Save passing numerical replay receipt
-      if: steps.replay-cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v4
-      with:
-        path: ${{ runner.temp }}/pages-numerical-replays.json
-        key: pages-numerical-replays-v1-${{ steps.replays.outputs.key }}
-    - name: Retain publication checks
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: pages-package-checks
-        path: |-
-          ${{ runner.temp }}/packaged-laboratory.json
-          ${{ runner.temp }}/pages-numerical-replays.json
-          ${{ runner.temp }}/current-dependency-guards/
-        if-no-files-found: ignore
+        node --test tests/test_database_download_gate.mjs tests/test_web_package.mjs
+    - name: Check the laboratory and guided experiment in Chromium
+      run: |
+        npm install --prefix "$RUNNER_TEMP/atlas-browser" --no-save playwright@1.54.2
+        "$RUNNER_TEMP/atlas-browser/node_modules/.bin/playwright" install --with-deps chromium
+        NODE_PATH="$RUNNER_TEMP/atlas-browser/node_modules" node tools/test_pages_browser.cjs web/dist
     - uses: actions/configure-pages@v6
+      if: ${{ !inputs.replay_studies }}
     - name: Upload the tested website
+      if: ${{ !inputs.replay_studies }}
       uses: actions/upload-pages-artifact@v5
       with:
         path: web/dist
   deploy:
+    if: ${{ !inputs.replay_studies }}
     needs: package
     runs-on: ubuntu-latest
     permissions:

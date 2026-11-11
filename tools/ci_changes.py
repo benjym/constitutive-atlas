@@ -32,7 +32,9 @@ def changed_paths(event, name):
 def main():
     event = json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
     paths = changed_paths(event, os.environ['GITHUB_EVENT_NAME'])
-    numerical = paths is None or needs_numerical(paths)
+    # Pages reuses the tested Wasm engine from each successful main push.
+    publishing = os.environ['GITHUB_EVENT_NAME'] == 'push' and os.environ.get('GITHUB_REF') == 'refs/heads/main'
+    numerical = publishing or paths is None or needs_numerical(paths)
     with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
         output.write('numerical=' + str(numerical).lower() + '\n')
     print('Compiled smoke:', 'required' if numerical else 'prose/media only; skipped')

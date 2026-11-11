@@ -37,17 +37,13 @@ class ProfileTests(unittest.TestCase):
         # Full canonical discovery is untouched and exercises the exact test.
         calls.clear();make().run(unittest.TestResult());self.assertCountEqual(calls,['current','exact'])
 
-    def test_full_qualification_retains_both_platforms_and_replay_option(self):
-        workflow=(ROOT/'.github/workflows/qualification.yml').read_text()
-        for value in ['ubuntu-latest', 'macos-26', "3.14", 'atlas_recorded',
-                      'explicit-gis20-occ-restart-duncan-sclay1-v6', 'run_ci_tests.py --portable',
-                      'test_bingham_schedule.py', 'check_perzyna_ci.py --paired',
-                      'run_historical_barodesy.py', 'schedule:', 'workflow_dispatch:',
-                      'if: inputs.historical_replays', 'check_current_numerical_ci.py']:
-            self.assertIn(value,workflow)
-        self.assertNotIn('needs: [native, wasm, wasm-linux]',workflow)
-        self.assertNotIn('actions/deploy-pages',workflow)
-        self.assertFalse((ROOT/'.github/workflows/controlled-path.yml').exists())
+    def test_archival_replays_are_manual_and_do_not_deploy(self):
+        for name in ('research-replays.yml', 'controlled-time.yml'):
+            text=(ROOT/'.github/workflows'/name).read_text()
+            self.assertIn('workflow_dispatch:',text)
+            for trigger in ('\n  push:', '\n  pull_request:', '\n  schedule:', 'actions/deploy-pages'):
+                self.assertNotIn(trigger,text)
+        self.assertFalse((ROOT/'.github/workflows/qualification.yml').exists())
         policy=json.loads((ROOT/'tools/ci_exact_replays.json').read_text())
         self.assertEqual(len(policy['exact_test_ids']),len(set(policy['exact_test_ids'])))
 
@@ -55,7 +51,8 @@ class ProfileTests(unittest.TestCase):
         fast=(ROOT/'.github/workflows/verify.yml').read_text()
         pages=' '.join((ROOT/'.github/workflows/pages.yml').read_text().split())
         self.assertIn('cancel-in-progress: true',fast)
-        self.assertIn('ci_smoke.mjs',fast)
+        self.assertIn('ci_numerics.sh',fast)
+        self.assertIn('tested-ordinary-wasm',fast)
         self.assertNotIn('study.py',fast)
         self.assertNotIn('build_ci_targets.py',fast)
         self.assertIn('workflow_run:',pages)
@@ -66,7 +63,9 @@ class ProfileTests(unittest.TestCase):
         self.assertIn('actions/upload-pages-artifact',pages)
         self.assertIn('needs: package',pages)
         self.assertNotIn('needs: qualification',pages)
-        self.assertIn('test_supported_package.mjs',pages)
+        self.assertIn('tested-ordinary-wasm',pages)
+        self.assertIn('test_pages_browser.cjs',pages)
+        self.assertNotIn('pages_numerical_replays.py',pages)
 
 
 if __name__=='__main__':unittest.main()

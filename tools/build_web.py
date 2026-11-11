@@ -22,7 +22,7 @@ from build_kelvin_voigt_laboratory import bundle as bundle_kelvin_voigt
 from build_controlled_time_web import bundle as bundle_controlled_time
 
 def check_pages_package(stem, dest, defer_replays):
-    # Only Publish Pages uses the cache. Other callers still run the original checks.
+    # Publication checks the package; study replays are available separately.
     checker = f'check_{stem}_package.mjs' if defer_replays else f'test_{stem}_package.mjs'
     mode = ['--integrity-only'] if defer_replays else []
     subprocess.run(['node', str(ROOT / 'tools' / checker), str(dest), *mode], check=True)
@@ -42,8 +42,8 @@ def main():
     parser.add_argument('--implicit-path-wasm-dir',type=Path,default=ROOT/'build-implicit-path-wasm',help='Exact independently qualified implicit strain-path engine')
     parser.add_argument('--hill-wasm-dir',type=Path,default=ROOT/'web/engines/hill',help='Exact reviewed Hill engine for main laboratory')
     parser.add_argument('--output',type=Path,help='Explicit local output directory')
-    parser.add_argument('--defer-pages-replays', action='store_true',
-                        help='Run integrity now; Publish Pages gates upload on the deferred numerical replays')
+    parser.add_argument('--package-checks-only', '--defer-pages-replays', dest='defer_pages_replays', action='store_true',
+                        help='Check package integrity without replaying independent studies')
     parser.add_argument('--kelvin-voigt-wasm-dir',type=Path,default=ROOT/'build-kelvin-voigt-wasm',help='Qualified ordinary Kelvin–Voigt physical-time engine')
     parser.add_argument('--bingham-wasm-dir',type=Path,default=ROOT/'build-bingham-public',help='Exact independently reviewed Bingham physical-time engine')
     parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'web/engines/current17-baseline-compatible/interface2016',help='Exact reviewed source-reconciled HvWE controlled-path engine')

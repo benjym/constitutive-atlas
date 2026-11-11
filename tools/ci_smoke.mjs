@@ -1,5 +1,5 @@
 // Small independent Hooke-law reference, real transport and refusal checks.
-// This is a smoke gate; the unchanged full studies live in qualification.yml.
+// This is a smoke gate; independent studies are separate.
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {resolve} from 'node:path';

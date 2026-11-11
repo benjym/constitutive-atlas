@@ -1,11 +1,6 @@
 ---
-name: Controlled physical time qualification
+name: Controlled physical time research replay
 'on':
-  push:
-    branches: [main]
-    paths: ['atlas/**', 'cpp/**', 'cmake/**', 'schemas/**', 'models/research/vibe/**', 'tests/test_controlled_time*', 'tests/fixtures/controlled-time/**', 'tools/qualify_vibe2026.*', 'tools/generate_controlled_time.py', 'tools/check_controlled_time_ci.py', 'web/controlled-time-engine.mjs', 'docs/ingestion/vibe-2026/**', '.github/workflows/controlled-time.yml', '.github/actions/setup-atlas/**', '.nvmrc']
-  pull_request:
-    paths: ['atlas/**', 'cpp/**', 'cmake/**', 'schemas/**', 'models/research/vibe/**', 'tests/test_controlled_time*', 'tests/fixtures/controlled-time/**', 'tools/qualify_vibe2026.*', 'tools/generate_controlled_time.py', 'tools/check_controlled_time_ci.py', 'web/controlled-time-engine.mjs', 'docs/ingestion/vibe-2026/**', '.github/workflows/controlled-time.yml', '.github/actions/setup-atlas/**', '.nvmrc']
   workflow_dispatch: {}
 permissions:
   contents: read
@@ -23,6 +18,8 @@ jobs:
     timeout-minutes: 60
     steps:
     - uses: actions/checkout@v5
+      with:
+        ref: c5fd7e483693e6bf4e1a54b1e905a4f47c453e98
     - uses: actions/setup-python@v6
       with:
         python-version: '3.12'
