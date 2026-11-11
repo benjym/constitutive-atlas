@@ -1,9 +1,19 @@
 /** Catalogue navigation and evidence presentation; no solver dependencies. */
+// Retain family identities for the database and source evidence. Their public
+// catalogue links open the runnable profile where the family explanation lives.
+const consolidatedProfiles={
+  'tresca':'tresca-associated-perfect-bk2022v1-be',
+  'duncan-chang-1970':'duncan-chang-1970-endpoint-average',
+  'lade-duncan-1975':'lade-duncan-1975-midpoint-elastic-eq19-gap-v4',
+  'manzari-dafalias-1997':'manzari-dafalias-1997-constant-m-be-v1'
+};
+export const catalogueProfileTarget=id=>Object.hasOwn(consolidatedProfiles,id)?consolidatedProfiles[id]:id;
+
 export function catalogueHash(id){return '#catalogue/'+encodeURIComponent(id);}
 export function catalogueRoute(hash){
   const anchor=hash.replace(/^#/, '');
   if(anchor.startsWith('catalogue/')){
-    try{const id=decodeURIComponent(anchor.slice(10));return {page:'catalogue',modelId:id||null,invalid:!id};}
+    try{const id=decodeURIComponent(anchor.slice(10));return {page:'catalogue',modelId:id?catalogueProfileTarget(id):null,invalid:!id};}
     catch{return {page:'catalogue',modelId:null,invalid:true};}
   }
   if(!anchor||anchor==='home'||anchor==='explore-atlas')return {page:'home',modelId:null,invalid:false};

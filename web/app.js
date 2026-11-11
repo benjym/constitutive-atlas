@@ -25,7 +25,7 @@ import {laboratoryStress,validateScopedLaboratory,verifyScopedLaboratory} from '
 import {laboratoryPresentation,laboratoryPoreView} from './laboratory-view.mjs';
 import {createLaboratoryDocument,parseLaboratoryDocument,laboratoryDocumentCSV} from './laboratory-document.mjs';
 import {persistentState,temporaryStateComponents,laboratoryExample} from './state-contract.mjs';
-import {catalogueHash as catalogueModelHash,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
+import {catalogueHash as catalogueModelHash,catalogueProfileTarget,catalogueRoute,validateEvidenceIndex,evidenceSection} from './catalogue.mjs';
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
 const $ = id => document.getElementById(id);
@@ -473,7 +473,7 @@ function renderCharts(){
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
-  for(const entry of catalogue){const spec=models.find(x=>x.id===entry.id),profile=modelProfile(entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'||entry.controlled_time_laboratory==='index.html'));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id+' '+(profile?.summary??'')).toLowerCase().includes(query))continue;
+  for(const entry of catalogue){if(catalogueProfileTarget(entry.id)!==entry.id)continue;const spec=models.find(x=>x.id===entry.id),profile=modelProfile(entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'||entry.controlled_time_laboratory==='index.html'));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id+' '+(profile?.summary??'')).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Reading profile','catalogue-availability'+(executable?' available':'')));
     const heading=element('h2'),open=element('a',profile?.title??entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);

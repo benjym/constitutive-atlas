@@ -1,4 +1,5 @@
 /** Public explanations are editorial content, separate from executable definitions. */
+import {catalogueProfileTarget} from './catalogue.mjs';
 import {modelProfiles} from './model-profile-data.mjs';
 export const modelProfile=id=>Object.hasOwn(modelProfiles,id)?modelProfiles[id]:null;
 
@@ -64,7 +65,8 @@ export function modelProfileSection(document,spec,{catalogue=[]}={}){
   }
   const links=el('ul');for(const reference of profile.references){const item=el('li'),link=el('a',reference.label+' ↗');link.href=reference.url;link.target='_blank';link.rel='noopener noreferrer';item.append(link);links.append(item);}
   section('Read more',links);
-  const related=(profile.related??[]).map(id=>catalogue.find(entry=>entry.id===id)).filter(Boolean);
+  const related=[...new Set((profile.related??[]).map(catalogueProfileTarget))]
+    .filter(id=>id!==catalogueProfileTarget(spec.id)).map(id=>catalogue.find(entry=>entry.id===id)).filter(Boolean);
   if(related.length){const list=el('ul');for(const entry of related){const item=el('li'),link=el('a',modelProfile(entry.id)?.title??entry.name);link.href='#catalogue/'+encodeURIComponent(entry.id);item.append(link);list.append(item);}section('Related models and formulations',list);}
   return root;
 }

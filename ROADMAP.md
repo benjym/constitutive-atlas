@@ -99,9 +99,10 @@ gates and unresolved loading-process/source choices; resume only on the named
 source or discriminating-evidence triggers. [Terra Cotta journal follow-up](docs/ingestion/terracotta-2024/journal-followup-v1/README.md)
 records the exact missing journal page reconciliation and strictness/preset
 questions. Its author-image/code evidence must not be substituted for complete
-journal verification. Multilaminate work retains its
-[full-formulation questions](docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/README.md)
-and separately reviewed correction/capability handoffs.
+journal verification. Schädlich’s multilaminate model remains a reading profile
+and is off the implementation roadmap. Reconsider it only with a reproducible
+[preparation contract](docs/ingestion/multilaminate-schadlich-schweiger/full-formulation-v1/README.md)
+and a coupled multipoint solver.
 
 Keep the twenty-formulation release target, SANISAND representation proof and one
 qualified experimental benchmark as the roadmap gates. Current additions and

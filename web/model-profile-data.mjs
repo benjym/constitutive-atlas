@@ -953,7 +953,7 @@ export const modelProfiles = {
   },
   "duncan-chang-1970-endpoint-average": {
     "summary": "A hyperbolic soil model with confinement-dependent stiffness and a separate unloading stiffness.",
-    "introduction": "The Duncan–Chang law was developed around nonlinear soil stress–strain curves. As the stress difference approaches strength, primary-loading stiffness decreases; previous maximum stress difference helps select unloading and reloading behaviour.",
+    "introduction": "The Duncan–Chang law was developed around nonlinear soil stress–strain curves. As the stress difference approaches strength, primary-loading stiffness decreases; previous maximum stress difference helps select unloading and reloading behaviour. Stiffness also depends on confinement. The unloading rule makes the response depend on loading history.",
     "behaviours": [
       [
         "Nonlinear primary loading",
@@ -1084,7 +1084,7 @@ export const modelProfiles = {
   },
   "lade-duncan-1975-midpoint-elastic-eq19-gap-v4": {
     "summary": "A sand elastoplastic model whose strength and plastic flow depend on all three principal stresses.",
-    "introduction": "The original Lade–Duncan formulation combines pressure-dependent elasticity with a stress-invariant failure description and plastic-work-dependent evolution. The flow direction is distinct from the failure surface.",
+    "introduction": "The original Lade–Duncan formulation combines pressure-dependent elasticity with a stress-invariant failure description and plastic-work-dependent evolution. The flow direction is distinct from the failure surface. All three principal stresses affect strength and deformation in this cohesionless-soil model.",
     "behaviours": [
       [
         "Three-principal-stress response",
@@ -1221,7 +1221,7 @@ export const modelProfiles = {
   },
   "tresca-associated-perfect-bk2022v1-be": {
     "summary": "Pressure-independent yielding governed by maximum shear stress.",
-    "introduction": "The Tresca law yields when the difference between the largest and smallest principal stresses reaches twice the shear strength. Atlas pairs this with constant elastic moduli and associated plastic flow.",
+    "introduction": "The Tresca law yields when the difference between the largest and smallest principal stresses reaches twice the shear strength. Atlas pairs this with constant elastic moduli and associated plastic flow. Adding the same pressure in every direction leaves the principal stress difference unchanged. The criterion specifies when yielding starts; the elastic law and flow rule determine the response after that.",
     "behaviours": [
       [
         "Maximum-shear yield",
@@ -3636,7 +3636,7 @@ export const modelProfiles = {
   "manzari-dafalias-1997-constant-m-be-v1": {
     "title": "Manzari–Dafalias sand (1997, constant yield width)",
     "summary": "A sand plasticity model in which density relative to critical state controls strength and volume change during shearing.",
-    "introduction": "The model compares the current void ratio with the critical void ratio at the same mean effective stress. This difference, called the state parameter, connects loose and dense sand responses within one formulation. A translating yield cone records directional plastic loading, while bounding and dilatancy surfaces control hardening and volume change.",
+    "introduction": "The model compares the current void ratio with the critical void ratio at the same mean effective stress. This difference, called the state parameter, connects loose and dense sand responses within one formulation. A translating yield cone records directional plastic loading, while bounding and dilatancy surfaces control hardening and volume change. The current yield surface and the bounding surface play different roles: the first locates yielding and the second helps govern hardening.",
     "behaviours": [
       [
         "Density and volume change",
@@ -3806,7 +3806,7 @@ export const modelProfiles = {
       }
     ],
     "related": [
-      "manzari-dafalias-1997"
+      "sanisand-2004"
     ],
     "contentSources": [
       "docs/ingestion/manzari-dafalias-1997/source-v1/visual-verification.md",

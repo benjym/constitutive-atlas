@@ -16,6 +16,15 @@ test('deep links round-trip identifiers and retain project-relative hash routes'
   assert.deepEqual(catalogueRoute('#catalogue/%E0%A4'),{page:'catalogue',modelId:null,invalid:true});
   assert.equal(catalogueRoute('#catalogue/').invalid,true);
 });
+test('bookmarks for consolidated profiles open runnable formulations',()=>{
+  for(const [family,model] of [
+    ['tresca','tresca-associated-perfect-bk2022v1-be'],
+    ['duncan-chang-1970','duncan-chang-1970-endpoint-average'],
+    ['lade-duncan-1975','lade-duncan-1975-midpoint-elastic-eq19-gap-v4'],
+    ['manzari-dafalias-1997','manzari-dafalias-1997-constant-m-be-v1']
+  ])assert.deepEqual(catalogueRoute(catalogueHash(family)),{page:'catalogue',modelId:model,invalid:false});
+  assert.equal(catalogueRoute('#catalogue/norsand-1993').modelId,'norsand-1993');
+});
 test('existing navigation and laboratory anchors retain their page',()=>{
   for(const hash of ['','#','#home'])assert.equal(catalogueRoute(hash).page,'home');
   assert.equal(catalogueRoute('#recorded').page,'laboratory');
