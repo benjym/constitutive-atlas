@@ -5,6 +5,7 @@ import {EnsembleQueue,ensembleConcurrency} from './ensemble-queue.mjs';
 import {createRecordedDocument} from './recorded-document.mjs';
 const root=document.getElementById('ensemble');
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el;};
+const outcomeIcons={completed:['✓','Completed'],stopped:['!','Stopped early'],rejected:['×','Input rejected'],error:['×','Run failed'],timeout:['×','Timed out'],cancelled:['–','Cancelled'],queued:['·','Waiting'],running:['·','In progress']};
 const palette=['#256d64','#a55635','#6258a4','#ac7822','#286fa8','#a23f72','#62752a','#795c40','#447b85','#72517b','#b04b47','#6d6f38','#375595'];
 const compactNames={'linear-elastic':'Linear elasticity','drucker-prager':'Drucker–Prager','modified-cam-clay':'Modified Cam Clay','barodesy-clay-2017':'Barodesy clay (2017)','barodesy-sand':'Barodesy sand (2015)','duncan-chang-1970-endpoint-average':'Duncan–Chang (1970)','hypoplastic-clay-2005':'Hypoplastic clay (2005)','hypoplastic-clay-2013':'Hypoplastic clay (2013)','hypoplastic-sand-igs97':'Hypoplastic sand + IGS (1997)','hypoplastic-sand-vw96':'Hypoplastic sand (1996)','mohr-coulomb':'Mohr–Coulomb','original-cam-clay-sw-electronic-log-recovery-v1':'Original Cam Clay','research-hp-extracted-asbs-gis-2024-v03':'ASBS + GIS (2024)'};
 let modelIds=[],names={},colors=[];
@@ -78,21 +79,48 @@ async function setup(){
   input.setEnabled=enabled=>{input.disabled=slider.disabled=display.disabled=!enabled||readonly;};sync();
   return {wrapper,input};
  }
+ function outcomeSlot(className){return {element:node('div',undefined,'ensemble-outcome-slot '+className),badges:new Map()};}
+ function updateOutcomes(slot,jobs){
+  const ids=new Set(jobs.map(job=>job.id));
+  for(const [id,badge]of slot.badges)if(!ids.has(id)){badge.wrapper.remove();slot.badges.delete(id);}
+  for(const [index,job]of jobs.entries()){
+   let badge=slot.badges.get(job.id);
+   if(!badge){
+    const wrapper=node('span',undefined,'ensemble-outcome'),button=node('button'),tooltip=node('span',undefined,'ensemble-outcome-tip');
+    tooltip.id='ensemble-outcome-'+(++controlId);tooltip.setAttribute('role','tooltip');
+    button.type='button';button.setAttribute('aria-label',names[job.model]+' · '+job.label);button.setAttribute('aria-describedby',tooltip.id);button.setAttribute('aria-controls','ensemble-run-detail');
+    button.onclick=()=>{selected=job.id;render();};
+    wrapper.onkeydown=event=>{if(event.key==='Escape'&&!wrapper.hasAttribute('data-dismissed')){event.stopPropagation();wrapper.setAttribute('data-dismissed','');}};
+    const restore=()=>wrapper.removeAttribute('data-dismissed');button.onblur=restore;wrapper.onpointerleave=restore;
+    wrapper.append(button,tooltip);badge={wrapper,button,tooltip};slot.badges.set(job.id,badge);
+   }
+   const [symbol,label]=outcomeIcons[job.status];
+   if(badge.button.textContent!==symbol)badge.button.textContent=symbol;
+   const tip=job.label+' · '+(stale?'Previous result: ':'')+label;
+   if(badge.tooltip.textContent!==tip)badge.tooltip.textContent=tip;
+   badge.button.dataset.status=job.status;badge.button.setAttribute('aria-pressed',String(job.id===selected));
+   if(slot.element.children[index]!==badge.wrapper)slot.element.insertBefore(badge.wrapper,slot.element.children[index]||null);
+  }
+ }
  function populate(configurations){
   fields.replaceChildren();editors.clear();
   for(const config of configurations){
-   const model=catalogue.models.find(m=>m.id===config.model),box=node('details',undefined,'ensemble-model');box.open=config.model==='linear-elastic';
+   const model=catalogue.models.find(m=>m.id===config.model),box=node('details',undefined,'ensemble-model'),row=node('div',undefined,'ensemble-model-row'),baseline=outcomeSlot('ensemble-baseline-outcome');box.open=config.model==='linear-elastic';
    const heading=node('summary',names[config.model]);heading.style.borderLeftColor=colors[modelIds.indexOf(config.model)];box.append(heading);
    const enabledLabel=node('label',undefined,'ensemble-check'),enabled=node('input');enabled.type='checkbox';enabled.checked=config.enabled;enabled.disabled=!model;enabledLabel.append(enabled,node('span',model?'Include this model':'Unavailable in this engine'));box.append(enabledLabel);
-   const parameters={},variations={},history={};
+   const parameters={},variations={},history={},variationOutcomes={};
    if(model){
     const grid=node('div',undefined,'ensemble-fields');
     for(const [key,f]of Object.entries(model.parameters)){const item=numeric(key+' ('+f.unit+')',config.parameters[key],key==='p_ref',f);item.input.dataset.parameter=key;parameters[key]=item.input;grid.append(item.wrapper);}box.append(grid);
     for(const field of historyFields(model)){const item=numeric('Assumed initial '+field.key+' ('+field.unit+') · not measured',config.history[field.key]);history[field.key]=item.input;box.append(item.wrapper);}
-    for(const key of variedParameters(model)){const label=node('label',key+' variation values · comma separated'),input=node('input');input.type='text';input.value=config.variations[key].join(', ');input.dataset.variation=key;variations[key]=input;label.append(input);box.append(label);}
+    for(const key of variedParameters(model)){
+     const field=node('div',undefined,'ensemble-variation'),header=node('div',undefined,'ensemble-variation-heading'),label=node('label',key+' variation values · comma separated'),input=node('input');
+     input.type='text';input.id='ensemble-variation-'+(++controlId);input.value=config.variations[key].join(', ');input.dataset.variation=key;label.htmlFor=input.id;variations[key]=input;
+     const slot=variationOutcomes[key]=outcomeSlot('ensemble-variation-outcomes');header.append(label,slot.element);field.append(header,input);box.append(field);
+    }
     const definition=node('a','Exact model definition ↗');definition.href='./models/'+config.model+'.json';definition.target='_blank';definition.rel='noopener';box.append(definition);
    }
-   fields.append(box);editors.set(config.model,{enabled,parameters,variations,history,original:config});
+   row.append(box,baseline.element);fields.append(row);editors.set(config.model,{enabled,parameters,variations,history,baseline,variationOutcomes,original:config});
   }
  }
  const count=node('p','');count.id='ensemble-count';const actions=node('div',undefined,'ensemble-actions'),cancel=node('button','Cancel'),save=node('button','Export ensemble'),importButton=node('button','Import & replay'),file=node('input');
@@ -109,7 +137,7 @@ async function setup(){
   panel.append(heading,chart,error);results.append(panel);panels[channel]=panel;
   charts[channel]=createEnsemblePlot(chart,{channel,onSelect:id=>{selected=id;render();},onError:failure=>{error.textContent=failure.message;}});
  }
- const outcomes=node('section',undefined,'experiment-card');outcomes.append(node('h2','Runs & outcomes'));const list=node('div');list.id='ensemble-runs';outcomes.append(list);const detail=node('section',undefined,'experiment-card');detail.append(node('h2','Selected run'));const detailText=node('p','Select a run to inspect its inputs.'),raw=node('pre'),rawDetails=node('details');raw.id='ensemble-selected';rawDetails.append(node('summary','Exact request, outcome and retained response'),raw);const single=node('button','Export selected recorded replay');single.type='button';single.disabled=true;single.id='ensemble-single-export';detail.append(detailText,single,rawDetails);results.append(outcomes,detail);layout.append(controls,results);root.append(layout);
+ const detail=node('section',undefined,'experiment-card');detail.id='ensemble-run-detail';detail.append(node('h2','Selected run'));const detailText=node('p','Select a run to inspect its inputs.'),raw=node('pre'),rawDetails=node('details');raw.id='ensemble-selected';rawDetails.append(node('summary','Exact request, outcome and retained response'),raw);const single=node('button','Export selected recorded replay');single.type='button';single.disabled=true;single.id='ensemble-single-export';detail.append(detailText,single,rawDetails);results.append(detail);layout.append(controls,results);root.append(layout);
  const executor=workerExecutor(catalogue),queue=new EnsembleQueue(executor.execute,()=>render(),30000,ensembleConcurrency(navigator.hardwareConcurrency));
  function read(){return [...editors].map(([id,e])=>{if(!e.enabled.checked)return {...e.original,enabled:false};return {model:id,enabled:e.enabled.checked,parameters:Object.fromEntries(Object.entries(e.parameters).map(([k,v])=>[k,v.value.trim()===''?NaN:Number(v.value)])),history:Object.fromEntries(Object.entries(e.history).map(([k,v])=>[k,v.value.trim()===''?NaN:Number(v.value)])),variations:Object.fromEntries(Object.entries(e.variations).map(([k,v])=>[k,v.value.trim()===''?[]:v.value.split(',').map(x=>x.trim()===''?NaN:Number(x.trim()))]))};});}
  function updateTestInfo(){
@@ -121,7 +149,7 @@ async function setup(){
   const native=record.kind&&record.kind!=='experiment';sourceControls.hidden=!native;
   if(native)for(const [input,key]of [[sourceX,'x'],[sourceY,'y']]){input.replaceChildren();for(const c of record.columns)input.append(new Option(c.name+' ('+c.unit+')',c.key));input.value=record.source_plot[key];}
   plotHelp.textContent=testGap?'Hover for source values. Use the toolbar to zoom, pan, reset axes or download an image.':'Solid: baseline · dashed: parameter variation · thicker: selected run. Hover for values or click a model curve to select its run. Use the toolbar to zoom, pan, reset axes or download an image.';
-  exclusions.hidden=!!testGap;controls.hidden=!!testGap;legend.hidden=!!testGap;outcomes.hidden=detail.hidden=!!testGap;
+  exclusions.hidden=!!testGap;controls.hidden=!!testGap;legend.hidden=!!testGap;detail.hidden=!!testGap;
   for(const [channel,panel]of Object.entries(panels))panel.hidden=native?channel!=='source':channel==='source'||channel==='pore'&&record.protocol!=='undrained-triaxial'||channel==='path'&&!record.rows.some(r=>Number.isFinite(r.p)||Number.isFinite(r.radial_effective_stress))||channel==='volume'&&!record.rows.some(r=>Number.isFinite(r.volumetric_strain));
  }
  function describeLoading(){loadingNote.textContent=testGap?testGap:record.protocol==='undrained-triaxial'?'Idealized undrained replay: impose acquired axial strain, zero volumetric strain and equal lateral effective stresses. Measured effective radial stress is an output comparison, not imposed loading. Pore-pressure change is inferred from measured cell-pressure change minus predicted lateral effective-stress change; saturated incompressible response is assumed.':'Acquired axial strain and measured membrane-corrected radial effective stress are imposed. This is a conditional comparison: the membrane correction uses measured specimen volume.';}
@@ -140,7 +168,17 @@ async function setup(){
    progress.max=jobs.length;progress.value=finished;
    status.textContent=stale?'Inputs changed · displayed results are stale.':queue.running?'Updating cases · '+finished+' of '+jobs.length:finished+' cases finished'+(attention?' · '+attention+' need attention':'');
   }
-  list.replaceChildren();for(const job of jobs){const row=node('button',undefined,'ensemble-run-row');row.type='button';row.dataset.status=job.status;row.setAttribute('aria-pressed',String(job.id===selected));row.style.borderLeftColor=colors[modelIds.indexOf(job.model)];row.append(node('span',names[job.model]+' · '+job.label),node('span',job.status));row.onclick=()=>{selected=job.id;render();};list.append(row);}
+  const byModel=new Map();
+  for(const job of jobs){if(!byModel.has(job.model))byModel.set(job.model,[]);byModel.get(job.model).push(job);}
+  for(const [model,editor]of editors){
+   const cases=editor.enabled.checked?byModel.get(model)||[]:[];
+   updateOutcomes(editor.baseline,cases.filter(job=>!job.change));
+   for(const [key,slot]of Object.entries(editor.variationOutcomes)){
+    const byValue=new Map(cases.filter(job=>job.change?.parameter===key).map(job=>[job.change.value,job]));
+    const values=new Set(editor.variations[key].value.split(',').filter(value=>value.trim()!=='').map(Number));
+    updateOutcomes(slot,[...values].map(value=>byValue.get(value)).filter(Boolean));
+   }
+  }
   const job=jobs.find(j=>j.id===selected);single.disabled=!job?.result||stale||queue.running;
   if(job){detailText.textContent=names[job.model]+' · '+job.label+' · '+job.status+(job.message?' · '+job.message:'');raw.textContent=JSON.stringify({parameters:job.parameters,initial_history_assumptions:job.history,specification:job.specification,status:job.status,message:job.message,result:job.result},null,2);}
  }
@@ -172,7 +210,7 @@ async function setup(){
  single.onclick=()=>{const job=study.jobs.find(j=>j.id===selected);try{download(job.model+'-'+record.id+'-recorded.json',createRecordedDocument(job.specification,job.result,catalogue));}catch(e){status.textContent=e.message;}};
  async function selectTest(id,{run=true}={}){
   const requested=++testSequence;const next=entries.find(e=>e.id===id);if(!next)throw Error('Test is absent from this catalogue.');
-  ++revision;clearPending();queue.cancel();loading=true;study=null;selected=null;stale=false;save.disabled=true;single.disabled=true;list.replaceChildren();raw.textContent='';detailText.textContent='Select a run to inspect its inputs.';testHeading.textContent=id;testDescription.textContent='';source.hidden=true;disclosure.hidden=true;gapNote.textContent='Loading '+id+'…';controls.hidden=true;outcomes.hidden=detail.hidden=legend.hidden=true;sourceControls.hidden=true;for(const panel of Object.values(panels))panel.hidden=true;
+  ++revision;clearPending();queue.cancel();loading=true;study=null;selected=null;stale=false;save.disabled=true;single.disabled=true;raw.textContent='';detailText.textContent='Select a run to inspect its inputs.';testHeading.textContent=id;testDescription.textContent='';source.hidden=true;disclosure.hidden=true;gapNote.textContent='Loading '+id+'…';controls.hidden=true;detail.hidden=legend.hidden=true;sourceControls.hidden=true;for(const panel of Object.values(panels))panel.hidden=true;
   try{
    const loaded=await fetchEnsembleTest(next);if(requested!==testSequence)return false;
    if(next.replay)validateExperiment(loaded);
