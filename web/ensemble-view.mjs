@@ -1,11 +1,10 @@
-import {defaultConfigurations,makeStudy,exportStudy,importStudy,availableModels,modelExclusion,variedParameters,historyFields,validateExperiment} from './ensemble.mjs';
+import {defaultConfigurations,makeStudy,exportStudy,importStudy,availableModels,modelExclusion,variedParameters,historyFields,validateExperiment,describeEnsembleOutcome} from './ensemble.mjs';
 import {loadEnsembleCatalogue,fetchEnsembleTest,filterTests,replayGap} from './ensemble-experiments.mjs';
 import {createEnsemblePlot} from './ensemble-plots.mjs';
 import {EnsembleQueue,ensembleConcurrency} from './ensemble-queue.mjs';
 import {createRecordedDocument} from './recorded-document.mjs';
 const root=document.getElementById('ensemble');
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el;};
-const outcomeIcons={completed:['✓','Completed'],stopped:['!','Stopped early'],rejected:['×','Input rejected'],error:['×','Run failed'],timeout:['×','Timed out'],cancelled:['–','Cancelled'],queued:['·','Waiting'],running:['·','In progress']};
 const palette=['#256d64','#a55635','#6258a4','#ac7822','#286fa8','#a23f72','#62752a','#795c40','#447b85','#72517b','#b04b47','#6d6f38','#375595'];
 const compactNames={'linear-elastic':'Linear elasticity','drucker-prager':'Drucker–Prager','modified-cam-clay':'Modified Cam Clay','barodesy-clay-2017':'Barodesy clay (2017)','barodesy-sand':'Barodesy sand (2015)','duncan-chang-1970-endpoint-average':'Duncan–Chang (1970)','hypoplastic-clay-2005':'Hypoplastic clay (2005)','hypoplastic-clay-2013':'Hypoplastic clay (2013)','hypoplastic-sand-igs97':'Hypoplastic sand + IGS (1997)','hypoplastic-sand-vw96':'Hypoplastic sand (1996)','mohr-coulomb':'Mohr–Coulomb','original-cam-clay-sw-electronic-log-recovery-v1':'Original Cam Clay','research-hp-extracted-asbs-gis-2024-v03':'ASBS + GIS (2024)'};
 let modelIds=[],names={},colors=[];
@@ -94,11 +93,11 @@ async function setup(){
     const restore=()=>wrapper.removeAttribute('data-dismissed');button.onblur=restore;wrapper.onpointerleave=restore;
     wrapper.append(button,tooltip);badge={wrapper,button,tooltip};slot.badges.set(job.id,badge);
    }
-   const [symbol,label]=outcomeIcons[job.status];
+   const {kind,symbol,label,reason}=describeEnsembleOutcome(job,record);
    if(badge.button.textContent!==symbol)badge.button.textContent=symbol;
-   const tip=job.label+' · '+(stale?'Previous result: ':'')+label;
+   const tip=job.label+' · '+(stale?'Previous result: ':'')+label+(reason?' — '+reason:'');
    if(badge.tooltip.textContent!==tip)badge.tooltip.textContent=tip;
-   badge.button.dataset.status=job.status;badge.button.setAttribute('aria-pressed',String(job.id===selected));
+   badge.button.dataset.status=job.status;badge.button.dataset.outcome=kind;badge.button.setAttribute('aria-pressed',String(job.id===selected));
    if(slot.element.children[index]!==badge.wrapper)slot.element.insertBefore(badge.wrapper,slot.element.children[index]||null);
   }
  }

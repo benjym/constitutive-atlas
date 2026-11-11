@@ -77,13 +77,15 @@
 #ensemble .ensemble-variation-heading label{margin:0}
 #ensemble .ensemble-variation input{width:100%;margin-top:4px}
 #ensemble .ensemble-outcome{position:relative;display:inline-flex}
+#ensemble .ensemble-variation-outcomes{position:relative;margin-left:auto}
+#ensemble .ensemble-variation-outcomes .ensemble-outcome{position:static}
 #ensemble .ensemble-outcome button{display:grid;place-items:center;width:27px;height:27px;padding:0;border:1px solid transparent;border-radius:5px;background:transparent;color:#59636b;font:700 15px/1 system-ui;cursor:pointer}
 #ensemble .ensemble-outcome button[data-status=completed]{color:#1a7044}
-#ensemble .ensemble-outcome button[data-status=stopped]{color:#a34d09}
-#ensemble .ensemble-outcome button:is([data-status=rejected],[data-status=error],[data-status=timeout]){color:#ab2730}
+#ensemble .ensemble-outcome button[data-outcome=stopped]{color:#a34d09}
+#ensemble .ensemble-outcome button:is([data-status=rejected],[data-status=error],[data-status=timeout],[data-outcome=could-not-start]){color:#ab2730}
 #ensemble .ensemble-outcome button:is(:hover,[aria-pressed=true]){border-color:currentColor;background:var(--paper,#fff)}
 #ensemble .ensemble-outcome button:focus-visible{outline:2px solid currentColor;outline-offset:1px}
-#ensemble .ensemble-outcome-tip{position:absolute;z-index:4;right:0;top:100%;width:max-content;max-width:180px;padding:5px 8px;border-radius:4px;background:var(--ink,#25312d);color:var(--paper,#fff);font-size:12px;line-height:1.35;visibility:hidden}
+#ensemble .ensemble-outcome-tip{position:absolute;z-index:4;right:0;top:100%;width:max-content;max-width:min(220px,65vw);padding:5px 8px;border-radius:4px;background:var(--ink,#25312d);color:var(--paper,#fff);font-size:12px;line-height:1.35;overflow-wrap:anywhere;visibility:hidden}
 #ensemble .ensemble-outcome:not([data-dismissed]):is(:hover,:focus-within) .ensemble-outcome-tip{visibility:visible}
 
 #ensemble .ensemble-comparison-context{padding:12px 15px;margin-bottom:10px;border:1px solid var(--line);border-left:3px solid #596d62;background:var(--card);font-size:14px}

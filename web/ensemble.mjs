@@ -110,6 +110,46 @@ export function makeStudy(record,catalogue,configurations,lastRow=record.rows.le
  require(jobs.length>0&&jobs.length<=Math.max(39,catalogue.models.length*13),'Select at least one available model (at most 13 runs per catalogue model).');
  return structuredClone({version:'atlas-ensemble-study-0.1',experiment:{id:record.id,source_asset_sha256:record.source_asset_sha256,archive_sha256:record.provenance.archive_sha256,member_sha256:record.provenance.member_sha256,window:{first_row:0,last_row:lastRow,max_axial_strain:record.id===experimentId&&lastRow===94?.01:sourceRows.at(-1).axial_strain,last_acquired_strain:sourceRows.at(-1).axial_strain},control:undrained?'constant-volume-axisymmetric-effective-stress':'direct-author-membrane-corrected-radial-effective-stress',strain_origin:'first-observation',initial:record.initial,limitations:[undrained?'Idealized undrained replay: zero volumetric strain and equal lateral effective stresses; measured pore pressure and effective radial stress are comparison outputs.':'Conditional replay: measured volumetric strain contributes to membrane-corrected radial input.','No consolidation history is inferred; MCC pc is an explicit unmeasured assumption.','Illustrative parameters; no calibration, applicability or experimental validation claim.']},catalogue_hash:catalogue.sha256,model_definitions:definitions,configurations,jobs});
 }
+const outcomeIcons={completed:['✓','Completed'],stopped:['!','Solver stopped'],rejected:['×','Input rejected'],error:['×','Run failed'],timeout:['×','Timed out'],cancelled:['–','Cancelled'],queued:['·','Waiting'],running:['·','In progress']};
+
+function sandStartingReason(job,record){
+ if(!['hypoplastic-sand-vw96','hypoplastic-sand-igs97'].includes(job.model))return '';
+ const {hs,n,ed0,ei0}=job.parameters||{},stress=record?.initial?.effective_stress,e=record?.initial?.void_ratio;
+ if(!Array.isArray(stress)||![...stress.slice(0,3),e,hs,n,ed0,ei0].every(finite)||stress.length<3||hs<=0||n<=0||ed0<=0||ei0<=ed0)return '';
+ const trace=stress[0]+stress[1]+stress[2];
+ if(trace<=0)return '';
+ const compression=Math.exp(-((trace/hs)**n));
+ const low=ed0*compression,high=ei0*compression;
+ if(e<=low||e>=high)return 'Measured starting void ratio '+e+' must be '+(e<=low?'above '+low.toPrecision(4):'below '+high.toPrecision(4))+' at this pressure with these parameters.';
+ return '';
+}
+
+export function describeEnsembleOutcome(job,record){
+ const [symbol,label]=outcomeIcons[job.status],result=job.result;
+ const message=(job.message||result?.message||'').replace(/; last committed knot retained$/,'');
+ if(job.status!=='stopped'){
+  return {kind:job.status,symbol,label,reason:['rejected','error','timeout'].includes(job.status)?message:''};
+ }
+ if(result?.points?.length===0){
+  const reason=message==='invalid recorded-path parameters or initial state'
+   ?sandStartingReason(job,record)||'The model rejected the starting parameters or initial state; the solver did not identify which check failed.'
+   :message;
+  return {kind:'could-not-start',symbol:'×',label:'Couldn’t start with this specimen',reason};
+ }
+ const lastAxial=result?.points?.at(-1)?.strain?.[0],origin=record?.rows?.[0]?.axial_strain??0;
+ const axial=100*(lastAxial+origin);
+ let reason=message;
+ const budget=result?.control_settings?.max_material_trials??job.specification?.control_settings?.max_material_trials;
+ if(message==='mixed-control line search failed or trial budget exhausted'){
+  if(finite(budget)&&finite(result?.material_trials))reason=result.material_trials>=budget
+   ?'Reached the limit of '+budget.toLocaleString()+' material trials.'
+   :'No trial step improved the match to the prescribed stress.';
+ }else if(message==='singular mixed-control system'){
+  reason='The control system was singular: the solver could not determine a lateral strain adjustment to match the prescribed stress.';
+ }
+ return {kind:job.status,symbol,label:finite(axial)?'Solver stopped at '+Number(axial.toFixed(3))+'% axial strain':label,reason};
+}
+
 export function resultSeries(job,channel,record){
  if(!job.result)return [];
  return job.result.points.map((p,i)=>{const axial=(p.strain[0]+(record?.rows[0].axial_strain||0))*100,q=(p.state[0]-p.state[1])/1000;
