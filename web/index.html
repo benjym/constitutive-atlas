@@ -27,8 +27,9 @@
         <img class="home-cover-image" src="assets/constitutive-cover.webp" alt="Layered sandstone and angular mineral grains against a dark background" width="1536" height="1024" fetchpriority="high">
         <div class="home-cover-copy">
           <h1 id="home-title">The Constitutive Atlas</h1>
-          <p class="home-subtitle">Explore the models.<br>See how materials respond.</p>
-          <a class="home-button" href="#laboratory">Start exploring</a>
+          <p class="home-subtitle">Run virtual soil tests and see how models respond.</p>
+          <a class="home-button" href="#experiment?preset=clay">See how compression history changes clay response</a>
+          <p class="home-experiments"><a href="#experiment">Browse guided experiments or build your own</a></p>
         </div>
       </section>
       <div id="explore-atlas" class="home-destinations" aria-label="Explore the atlas">
@@ -47,6 +48,56 @@
         </a>
       </div>
       <footer class="home-footer"><div><p class="home-footer-title">The Constitutive Atlas</p><p>An open, source-linked geomechanics laboratory.</p></div><div><a href="https://github.com/benjym/constitutive-atlas" target="_blank" rel="noopener">Explore the project</a><p>By <a href="https://github.com/benjym">Benjy Marks</a> &amp; <a href="https://github.com/Franzzzzzzzz">François Guillard</a></p></div></footer>
+    </section>
+    <section id="experiment" class="page guided-experiment" hidden>
+      <p class="eyebrow">Guided experiment</p>
+      <h1 id="guided-title" tabindex="-1">Compare two model runs</h1>
+      <nav id="guided-presets" class="guided-presets" aria-label="Ready-made experiments"></nav>
+      <p id="guided-status" role="status">Loading experiment…</p>
+      <div id="guided-workspace" hidden>
+        <div class="model-card guided-controls">
+          <p><strong>Model:</strong> <a id="guided-model"></a>. <span id="guided-setup"></span></p>
+          <div class="guided-inputs">
+            <label><span id="guided-label">Comparison input</span><input id="guided-value" type="number" step="any"></label>
+            <button type="button" id="guided-reset" class="secondary">Reset experiment</button>
+            <a id="guided-share" class="text-button">Copy link to this setup</a>
+          </div>
+          <p class="control-hint">Changes run when you leave the input. Use <strong>Copy link to this setup</strong> to share your edits.</p>
+          <p id="guided-link-status" role="status"></p>
+          <label id="guided-link-fallback" hidden>Setup URL <input id="guided-url" type="text" readonly></label>
+          <details><summary>Fixed inputs shared by both runs</summary><ul id="guided-fixed"></ul></details>
+        </div>
+        <p class="guided-question"><strong>What to look for:</strong> <span id="guided-prompt"></span></p>
+        <div id="guided-visuals">
+          <div class="guided-key"><span id="guided-key-a"></span><span id="guided-key-b"></span></div>
+          <div class="charts guided-charts" id="guided-charts" aria-busy="false">
+            <section class="chart-panel"><h2>Stress–strain response</h2><svg id="guided-stress" viewBox="0 0 480 290" role="img" aria-label="Reference and comparison deviator stress versus axial strain"></svg></section>
+            <section class="chart-panel"><h2>Volume change</h2><svg id="guided-volume" viewBox="0 0 480 290" role="img" aria-label="Reference and comparison volumetric strain versus axial strain"></svg></section>
+            <section class="chart-panel" id="guided-pore-panel" hidden><h2>Pore-pressure change</h2><svg id="guided-pore" viewBox="0 0 480 290" role="img" aria-label="Reference and comparison pore-pressure change versus axial strain"></svg></section>
+          </div>
+          <p id="guided-pore-note" class="control-hint" hidden>Pore-pressure change is reconstructed assuming fixed radial total stress and incompressible fluid and grains.</p>
+          <p id="guided-values" class="control-hint"></p>
+        </div>
+        <p class="control-hint">Both curves are simulations. No measurements or calibration are included.</p>
+        <details id="guided-explain" hidden><summary>Why do the curves differ?</summary><p id="guided-explanation"></p></details>
+      </div>
+      <details class="guided-diy">
+        <summary>Build and share your own comparison</summary>
+        <p>Open <a id="guided-lab" href="#laboratory">Model testing</a>, choose a model and test, and set up your reference run. In <strong>Build a comparison</strong>, pick one input to vary. Change its value on the comparison page, then copy the setup link.</p>
+        <p>You can also edit the URL. Example: <a href="#experiment?v=1&amp;model=linear-elastic&amp;protocol=1&amp;target=0.01&amp;compare=param.E&amp;a=30000000&amp;b=60000000">compare Young’s moduli of 30 and 60 MPa</a>. Use model definition units in URLs (Pa for stresses, decimal strain); the page shows the field’s display units. See the URL field reference below.</p>
+      </details>
+      <details id="guided-url-reference" class="guided-diy">
+        <summary>URL field reference</summary>
+        <p><code>#experiment?v=1&amp;model=…&amp;compare=…&amp;a=…&amp;b=…</code> sets the model, one scalar input, and its two values. Use the catalogue ID and the keys from your generated link.</p>
+        <ul>
+          <li><code>protocol</code>: 0 oedometer, 1 drained triaxial, 2 undrained triaxial, 3 undrained stress control, 4 isotropic compression. The model may support only some of these.</li>
+          <li><code>target</code>: decimal axial strain (0.04 means 4%), or deviator stress in Pa for protocol 3. <code>steps</code> and <code>cycles</code> set the increment and cycle counts.</li>
+          <li><code>confinement</code> in Pa and <code>ratio</code> set the initial axisymmetric stress. Use <code>param.NAME</code> for a material constant, <code>state.NAME</code> for a starting state variable, and <code>solver.NAME</code> for a numerical setting. Fixed tensor states use six comma-separated Mandel components.</li>
+          <li><code>compare</code> can name a scalar material constant, scalar state, <code>confinement</code>, <code>ratio</code>, or <code>target</code>. Use only <code>a</code> and <code>b</code> for that input. Omitted fields use the packaged defaults.</li>
+          <li>Optional <code>title</code> and <code>prompt</code> fields let you add a question or instructions for the person opening the link.</li>
+        </ul>
+        <p>Comparison links run on the current browser build. For archival reproducibility, export a run from Model testing. This builder uses the ordinary material-point lab; dedicated time and recorded-path views have their own controls.</p>
+      </details>
     </section>
     <section id="laboratory" class="page" hidden>
       <div class="intro">
@@ -118,6 +169,16 @@
             <p class="control-hint">Current runs save exact loading values. Earlier saved runs keep their legacy loading version; changing this selection creates a new run.</p>
             <div id="numerical-fields"></div>
             <p class="control-hint">Tolerances use model state scales. Smaller values usually require more work; they do not bound total error. Limits apply to each material increment.</p>
+          </details>
+          <details class="control-section" id="guided-builder">
+            <summary>Build a comparison</summary>
+            <p class="control-hint">Use these inputs as the reference. Choose one input to vary and compare the two curves on a separate page.</p>
+            <label>Input to vary<select id="guided-field"></select></label>
+            <details><summary>Add a title or question</summary>
+              <label>Experiment title<input id="guided-custom-title" type="text" maxlength="100"></label>
+              <label>What to look for<input id="guided-custom-prompt" type="text" maxlength="250"></label>
+            </details>
+            <button type="button" id="guided-build" class="secondary">Open comparison</button>
           </details>
           <div class="run-actions">
             <p id="control-status" role="status">Changes update the plots automatically.</p><button type="button" id="cancel-button" class="secondary" hidden>Stop calculation</button><button type="button" id="retry-button" class="secondary" hidden>Retry calculation</button>

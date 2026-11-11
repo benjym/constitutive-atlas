@@ -1,3 +1,4 @@
+import {guidedFields,guideFromRun,setupGuidedExperiments} from './guided-experiments.mjs';
 import {formatTickLabels,tickLeftMargin,layoutHorizontalTickLabels} from './plot-labels.mjs';
 import {setupInterface2016Laboratory} from './interface2016-laboratory.mjs';
 import {setupPerzynaLaboratory} from './perzyna-laboratory.mjs';
@@ -29,7 +30,7 @@ import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
 const $ = id => document.getElementById(id);
 let j2View=null,timedView=null;
-let compiledCatalogue=null, laboratoryExamples=null, controlSupport=null;
+let compiledCatalogue=null, laboratoryExamples=null, controlSupport=null, guidedView=null;
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
 const experimentCache=new Map();
@@ -144,6 +145,7 @@ function route({initial=false}={}){
   if(entry)showCatalogueModel(entry,models.find(x=>x.id===entry.id));
   else{if($('catalogue-dialog').open)$('catalogue-dialog').close();if(selection.modelId||selection.invalid)toast('That model link is not in this catalogue.');}
   document.querySelectorAll('.page').forEach(x=>x.hidden=x.id!==page);
+  guidedView?.route(page==='experiment'?location.hash:'',!initial);
   document.querySelectorAll('.rail nav a').forEach(x=>{const active=x.hash==='#'+page;x.classList.toggle('active',active);if(active)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current');});
   if($('breadcrumb'))$('breadcrumb').textContent={laboratory:'MODEL TESTING',catalogue:'MODEL CATALOGUE',methods:'METHODS & EVIDENCE'}[page];
   const target=$(anchor);
@@ -288,7 +290,7 @@ function populate({loadExample=true}={}){
     sourceLinks(sources,profile.references.map(r=>({url:r.url,role:r.label,locator:'Further reading'})));
   }else sourceLinks(sources,m.sources);
   sources.append(definitionLink(m.id));
-  updateControlSupport();currentResult=null;lastSpec=null;experimentOptions($('experiment-select').value);renderCharts();$('export-run').disabled=$('export-csv').disabled=true;syncSliders();
+  updateControlSupport();refreshGuidedFields();currentResult=null;lastSpec=null;experimentOptions($('experiment-select').value);renderCharts();$('export-run').disabled=$('export-csv').disabled=true;syncSliders();
 }
 function valuesForState(m){
   const p=Number($('confinement').value)*1000,ratio=Number($('stress-ratio').value);const z=[p*ratio,p,p,0,0,0];
@@ -314,6 +316,20 @@ function numericalValues(){
   return normalizeSettings(s);
 }
 function setNumericalValues(value){const s=normalizeSettings(value);for(const f of settingFields)$('numerical-'+f.key).value=s[f.key];}
+function refreshGuidedFields(){
+  if(!model())return;
+  const select=$('guided-field'),selected=select.value;
+  select.replaceChildren(...[...guidedFields(model(),Number($('protocol').value))].filter(([,f])=>!f.vector).map(([key,f])=>new Option(f.label+(f.unit?' ('+f.unit+')':''),key)));
+  if([...select.options].some(option=>option.value===selected))select.value=selected;
+}
+$('guided-build').onclick=()=>{
+  try{
+    if(!$('controls').reportValidity())return;
+    const s=specification();validateSpec(s);
+    if(!s.loading)throw Error('Select current loading in Solver settings to share a comparison.');
+    location.hash=guideFromRun(model(),s,$('guided-field').value,{ratio:Number($('stress-ratio').value),title:$('guided-custom-title').value.trim(),prompt:$('guided-custom-prompt').value.trim()});
+  }catch(error){toast(error.message);}
+};
 function specification(){
   const m=model(),protocol=Number($('protocol').value);
   const s={response_contract:'stress-scope-0.1',stress_scope:laboratoryStress(m).scope,model:m.id,parameters:Object.keys(m.parameters).map(n=>Number($('param-'+n).value)*Number($('param-'+n).dataset.factor)),initial:valuesForState(m),protocol,target:Number($('target').value)*(protocol===3?1000:.01),steps:Number($('steps').value),cycles:Number($('cycles').value),integration_settings:numericalValues()};
@@ -389,9 +405,9 @@ function axisRange(values,nearConstant=false){
 }
 function numberLabel(v){if(Math.abs(v)<1e-10)return '0';return Number(v.toPrecision(3)).toString();}
 function svgNode(name,attributes,text){const n=document.createElementNS('http://www.w3.org/2000/svg',name);for(const[k,v]of Object.entries(attributes))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n;}
-function chart(id,xLabel,yLabel,predicted,measured=[],emptyMessage){
+function chart(id,xLabel,yLabel,predicted,measured=[],emptyMessage,{comparison=[],stopped=false,comparisonStopped=false}={}){
   const svg=$(id);svg.replaceChildren();svg.append(svgNode('title',{},yLabel+' versus '+xLabel));
-  const top=40,h=198,all=[...predicted,...measured].filter(a=>a.every(Number.isFinite));
+  const top=40,h=198,all=[...predicted,...measured,...comparison].filter(a=>a.every(Number.isFinite));
   const [xmin,xmax]=axisRange(all.map(p=>p[0])),[ymin,ymax]=axisRange(all.map(p=>p[1]),true);
   const yTicks=Array.from({length:5},(_,i)=>ymax-i*(ymax-ymin)/4),xTicks=Array.from({length:5},(_,i)=>xmin+i*(xmax-xmin)/4);
   const yTickLabels=formatTickLabels(yTicks),xTickLabels=formatTickLabels(xTicks),left=tickLeftMargin(yTickLabels),w=454-left;
@@ -404,7 +420,14 @@ function chart(id,xLabel,yLabel,predicted,measured=[],emptyMessage){
   svg.append(svgNode('text',{x:left+w/2,y:282,'text-anchor':'middle',class:'axis-label'},xLabel.length>56?xLabel.slice(0,53)+'…':xLabel),svgNode('text',{x:12,y:17,class:'axis-label'},yLabel.length>60?yLabel.slice(0,57)+'…':yLabel));
   if(!all.length)svg.append(svgNode('text',{x:left+w/2,y:top+h/2,'text-anchor':'middle'},(emptyMessage||(id==='source-chart'?'No paired observations for these channels':'Preparing response…'))));
   if(predicted.length)svg.append(svgNode('polyline',{points:predicted.map(([a,b])=>`${x(a)},${y(b)}`).join(' '),fill:'none',stroke:'#bc643e','stroke-width':2,'stroke-linejoin':'round'}));
+  if(comparison.length)svg.append(svgNode('polyline',{points:comparison.map(([a,b])=>`${x(a)},${y(b)}`).join(' '),fill:'none',stroke:'#316481','stroke-width':2.5,'stroke-dasharray':'6 4','stroke-linejoin':'round'}));
   const stride=Math.max(1,Math.ceil(measured.length/350));measured.filter((_,i)=>i%stride===0).forEach(([a,b])=>svg.append(svgNode('circle',{cx:x(a),cy:y(b),r:2,fill:'#547a95',opacity:.6,class:'experiment-point'})));
+  svg.onpointermove=svg.onpointerleave=null;
+  for(const [ended,points,color,label] of [[stopped,predicted,'#bc643e',comparison.length?'Reference stopped':'Run stopped'],[comparisonStopped,comparison,'#316481','Comparison stopped']]){
+    if(!ended||!points.length)continue;
+    const [a,b]=points.at(-1),cx=x(a),cy=y(b),right=cx<left+w/2;
+    svg.append(svgNode('circle',{cx,cy,r:5,fill:'#fff',stroke:color,'stroke-width':2}),svgNode('text',{x:cx+(right?8:-8),y:cy+(comparisonStopped&&points===comparison?15:-8),'text-anchor':right?'start':'end',class:'axis-label'},label));
+  }
   if(predicted.length){
     const marker=svgNode('circle',{r:4,fill:'#bc643e',stroke:'#fff','stroke-width':2,visibility:'hidden'}),label=svgNode('text',{x:left+8,y:top+12,visibility:'hidden'});svg.append(marker,label);
     svg.onpointermove=e=>{const box=svg.getBoundingClientRect(),px=(e.clientX-box.left)/box.width*480;let nearest=predicted[0];for(const pt of predicted)if(Math.abs(x(pt[0])-px)<Math.abs(x(nearest[0])-px))nearest=pt;marker.setAttribute('cx',x(nearest[0]));marker.setAttribute('cy',y(nearest[1]));marker.setAttribute('visibility','visible');label.textContent=`${numberLabel(nearest[0])}, ${numberLabel(nearest[1])}`;label.setAttribute('visibility','visible');};
@@ -440,8 +463,10 @@ function renderCharts(){
   };
   for(const [key,axes] of Object.entries(presentation.axes)){
     const measured=comparisonSeries(experiment,visible,key,protocol,cycles,model());
-    chart(key+'-chart',axes.xLabel,axes.yLabel,predicted[key],measured,key==='pore'?pore.caption:undefined);
     const panel=$(key+'-chart').closest('.chart-panel');
+    panel.hidden=key==='pore'&&!measured.length&&(presentation.scope==='total'||(protocol!==2&&protocol!==3));
+    if(panel.hidden)continue;
+    chart(key+'-chart',axes.xLabel,axes.yLabel,predicted[key],measured,key==='pore'?pore.caption:undefined,{stopped:matching&&currentResult?.ok===false});
     panel.querySelector('.measured-key').hidden=!measured.length;
     panel.querySelector('.measurement-note').textContent=experiment&&experiment.kind==='experiment'&&!measured.length?(visible?'No compatible measured channel pair for these axes.':'Measurements hidden.') : '';
   }
@@ -502,6 +527,7 @@ function showCatalogueModel(entry,spec){
 function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function setProtocol(){
   updateControlSupport();
+  refreshGuidedFields();
   const input=$('target'),stress=$('protocol').value==='3',wasStress=input.dataset.mode==='stress';
   $('target-label').textContent=stress?'Deviator stress (kPa)':'Axial strain (%)';updateScopeLabels();
   if(stress!==wasStress)input.value=stress?'20':'1';
@@ -660,5 +686,5 @@ try{
   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
   models.forEach(m=>$('model').append(new Option(modelProfile(m.id)?.title??m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
-  populate();timedView=createLaboratoryControllerRouter([setupControlledTimeLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupInterface2016Laboratory({chart,cancelOrdinary:()=>cancel('')}),setupPerzynaLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupBinghamLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
-}catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';}
+  populate();timedView=createLaboratoryControllerRouter([setupControlledTimeLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupInterface2016Laboratory({chart,cancelOrdinary:()=>cancel('')}),setupPerzynaLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupBinghamLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();guidedView=setupGuidedExperiments({catalogue:definitions,chart,validate:validateSpec});route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+}catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';$('guided-status').textContent='The experiment could not load. Reload to try again.';}

@@ -130,7 +130,9 @@ async function setup(){
  const status=node('p','Parameters update automatically.');status.id='ensemble-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');controls.append(count,actions,status);controls.insertBefore(count,fields);controls.insertBefore(actions,fields);controls.insertBefore(status,fields);controls.insertBefore(progress,fields);
  const legend=node('div',undefined,'ensemble-legend');legend.setAttribute('role','group');legend.setAttribute('aria-label','Visible model curves');legend.append(node('span','··· Measurements','ensemble-measurements'));
  for(const id of modelIds){const label=node('label',undefined,'ensemble-check'),input=node('input');input.type='checkbox';input.checked=true;label.style.color=colors[modelIds.indexOf(id)];input.setAttribute('aria-label',names[id]);label.title=names[id];label.append(input,node('span',compactNames[id]||names[id].split(' — ')[0]));input.onchange=()=>{input.checked?hidden.delete(id):hidden.add(id);render();};legend.append(label);}
- const plotHelp=node('p',undefined,'control-hint');results.append(legend,plotHelp);
+ const comparisonContext=node('aside',undefined,'ensemble-comparison-context'),comparisonText=node('p'),stopKey=node('p','× marks where a model run stopped. No model response is shown beyond that point.');
+ comparisonContext.append(node('strong','How to read this comparison'),comparisonText,stopKey);
+ const plotHelp=node('p',undefined,'control-hint');results.append(comparisonContext,legend,plotHelp);
  const charts={},panels={};for(const channel of ['stress','volume','path','pore','source']){
   const panel=node('section',undefined,'chart-panel'),heading=node('h2',({stress:'Deviator stress',volume:'Volumetric strain · compression positive',path:'Effective stress path',pore:'Pore-pressure change',source:'Source measurements'})[channel]),chart=node('div',undefined,'ensemble-plot'),error=node('p',undefined,'control-hint');
   heading.id='ensemble-'+channel+'-title';chart.id='ensemble-'+channel;chart.setAttribute('role','region');chart.setAttribute('aria-labelledby',heading.id);error.setAttribute('role','status');
@@ -160,6 +162,12 @@ async function setup(){
   cancel.hidden=!queue.running&&pendingRun===null;save.disabled=!study||stale||queue.running;importButton.disabled=queue.running;
   if(!study)status.textContent=testGap?'Measurements only · no simulation requested.':'Ready to run the selected test.';
   const jobs=study?.jobs||[];
+  comparisonContext.hidden=!!testGap;
+  if(!testGap){
+   const applied=record.protocol==='undrained-triaxial'?'Models follow the measured axial strain at fixed specimen volume. Pore-pressure change is inferred using measured cell pressure.':'Models follow the measured axial strain and recorded radial effective stress.';
+   comparisonText.textContent='The dotted line is measured; coloured lines are model responses. '+applied+' Starting stress and void ratio come from the test. Atlas starts with example parameters and assumed specimen history; it does not fit parameters to this test.';
+   stopKey.hidden=!jobs.some(job=>job.status==='stopped'&&job.result?.points?.length&&!hidden.has(job.model));
+  }
   if(location.hash==='#ensemble')for(const [channel,chart]of Object.entries(charts))if(!panels[channel].hidden)chart.update(record,jobs.filter(j=>!hidden.has(j.model)),selected,styles,viewRevision);
   progress.hidden=!study&&pendingRun===null;
   if(pendingRun!==null){progress.removeAttribute('value');status.textContent='Updating cases…';}
@@ -210,7 +218,7 @@ async function setup(){
  single.onclick=()=>{const job=study.jobs.find(j=>j.id===selected);try{download(job.model+'-'+record.id+'-recorded.json',createRecordedDocument(job.specification,job.result,catalogue));}catch(e){status.textContent=e.message;}};
  async function selectTest(id,{run=true}={}){
   const requested=++testSequence;const next=entries.find(e=>e.id===id);if(!next)throw Error('Test is absent from this catalogue.');
-  ++revision;clearPending();queue.cancel();loading=true;study=null;selected=null;stale=false;save.disabled=true;single.disabled=true;raw.textContent='';detailText.textContent='Select a run to inspect its inputs.';testHeading.textContent=id;testDescription.textContent='';source.hidden=true;disclosure.hidden=true;gapNote.textContent='Loading '+id+'…';controls.hidden=true;detail.hidden=legend.hidden=true;sourceControls.hidden=true;for(const panel of Object.values(panels))panel.hidden=true;
+  ++revision;clearPending();queue.cancel();loading=true;study=null;selected=null;stale=false;save.disabled=true;single.disabled=true;raw.textContent='';detailText.textContent='Select a run to inspect its inputs.';testHeading.textContent=id;testDescription.textContent='';source.hidden=true;disclosure.hidden=true;gapNote.textContent='Loading '+id+'…';controls.hidden=true;detail.hidden=legend.hidden=comparisonContext.hidden=true;sourceControls.hidden=true;for(const panel of Object.values(panels))panel.hidden=true;
   try{
    const loaded=await fetchEnsembleTest(next);if(requested!==testSequence)return false;
    if(next.replay)validateExperiment(loaded);

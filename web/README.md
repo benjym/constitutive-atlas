@@ -24,6 +24,14 @@ Open <http://127.0.0.1:8765> for development. The native build must exist before
 
 ## Live laboratory controls
 
+Guided experiments compare two runs of an ordinary Model testing model while changing one input. Use **Build a comparison** in Model testing to carry the current inputs into the guided page, add an optional title or question, and copy a setup link. The link can also be written directly, for example:
+
+```text
+#experiment?v=1&model=linear-elastic&protocol=1&target=0.01&compare=param.E&a=30000000&b=60000000
+```
+
+The guided page documents the URL fields and units and includes clay compression history, elastic stiffness and sand density presets. Links use the current build; exported laboratory run documents carry the exact catalogue identity.
+
 The laboratory recalculates automatically when a model, protocol, slider or numeric field changes. Rapid edits are coalesced into updates every 100 ms; the Wasm worker is reused and only the latest settings may replace the plots. Sliders supplement precise numeric inputs, with logarithmic scaling for wide positive parameter ranges. Numeric inputs retain their declared bounds even when a slider uses a narrower exploration range.
 
 Initial state details, material parameters, solver settings, measurements and sources expand on demand. Reset restores the current model’s defaults and recalculates. Invalid inputs pause updates with an inline explanation; exports remain disabled until a response matches the current settings. Cyclic presets increase increments to the minimum required resolution. On small screens the section links stay available when scrolling between controls and plots.

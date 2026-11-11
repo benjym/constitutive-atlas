@@ -10,13 +10,14 @@ function fn(name){const start=source.indexOf('function '+name+'(');assert.ok(sta
 const nodes=new Map();
 const node=id=>{if(!nodes.has(id))nodes.set(id,{value:'',hidden:false,textContent:'',open:false,replaceChildren(){},append(){},focus(){}});return nodes.get(id);};
 const $=id=>['model','import-run','model-description','model-family','model-status','model-sources','catalogue-dialog','breadcrumb','catalogue-detail-body'].includes(id)?node(id):null;
-const c={$,document:{querySelector:node,querySelectorAll:()=>[]},location:{hash:''},window:{scrollTo(){}},requestAnimationFrame:f=>f(),URLSearchParams,encodeURIComponent,catalogueRoute,createLaboratoryControllerRouter,ids,trace:[],toasts:[],element:()=>node('element')};
+const c={$,document:{querySelector:node,querySelectorAll:()=>[]},location:{hash:''},window:{scrollTo(){}},requestAnimationFrame:f=>f(),URLSearchParams,encodeURIComponent,catalogueRoute,createLaboratoryControllerRouter,ids,trace:[],toasts:[],clayVisits:[],element:()=>node('element')};
 vm.createContext(c);
 vm.runInContext([
 "let experimentLoadSequence=0,models=ids.map(id=>({id})),catalogue=[],runs=0,populations=0,cancels=0;",
 "function profile(modelId){return {modelId,active:false,select(id){this.active=id===modelId;document.querySelector('#laboratory > .lab-layout').hidden=this.active;document.querySelector('#laboratory > .workspace-links').hidden=this.active;$('import-run').hidden=this.active;if(this.active)$('model').value=modelId;return this.active;}};}",
 "const timedView=createLaboratoryControllerRouter(['burgers','sls','maxwell','norsand'].map(profile)),j2View=profile('j2');",
 "function cancel(){++cancels;}function populate(){++populations;}function simulate(){++runs;}",
+"const guidedView={route(hash,focus){clayVisits.push({hash,focus});}};",
 "function refreshPublicModelSummary(){}function toast(message){toasts.push(message);}function showCatalogueModel(){throw Error('Unexpected catalogue detail');}",
 ...['specialLaboratoryActive','selectJ2','selectLaboratory','activateLaboratoryModel','route'].map(fn),
 "globalThis.api={route,activate:activateLaboratoryModel,metrics:()=>({runs,populations,cancels}),states:()=>[j2View.active,timedView.active]};"
@@ -25,6 +26,10 @@ const onChange=source.slice(source.indexOf("$('model').onchange="),source.indexO
 vm.runInContext(onChange,c);
 let checks=0;
 function route(id,options){c.location.hash='#laboratory?model='+encodeURIComponent(id);c.api.route(options);}
+c.location.hash='#experiment?preset=clay';c.api.route({initial:true});
+assert.equal(c.clayVisits.at(-1).hash,'#experiment?preset=clay');assert.equal(c.clayVisits.at(-1).focus,false);
+c.location.hash='#home';c.api.route();
+assert.equal(c.clayVisits.at(-1).hash,'');checks+=3;
 for(const id of ids){
  node('model').value='initial-sentinel';const before=c.api.metrics();
  route(id,{initial:true});assert.equal(node('model').value,id);assert.equal(c.api.metrics().runs,before.runs);assert.equal(c.api.metrics().populations,before.populations+1);checks+=3;

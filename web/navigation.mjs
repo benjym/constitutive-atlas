@@ -1,6 +1,6 @@
 // Navigation remains available while the numerical laboratories initialize.
 import {catalogueRoute} from './catalogue.mjs';
-const titles={home:'Constitutive Atlas',laboratory:'Model testing',ensemble:'Ensemble explorer',catalogue:'Model catalogue',methods:'Methods & evidence'};
+const titles={home:'Constitutive Atlas',laboratory:'Model testing',ensemble:'Ensemble explorer',catalogue:'Model catalogue',methods:'Methods & evidence',experiment:'Guided experiment'};
 function navigate(){
  const {page}=catalogueRoute(location.hash);
  document.querySelectorAll('.page').forEach(el=>el.hidden=el.id!==page);

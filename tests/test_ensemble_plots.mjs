@@ -24,6 +24,14 @@ test('stable trace IDs and view revision preserve interaction identity through s
  assert.deepEqual(a.data.map(t=>t.uid).sort(),b.data.map(t=>t.uid).sort());assert.ok(a.data.slice(1).every(t=>/^run-[a-f0-9]+$/.test(t.uid)));assert.equal(new Set(a.data.map(t=>t.uid)).size,3);
  assert.deepEqual(ensembleFigure(record,[],'stress',null,styles,1).data.map(t=>t.uid),['measurements']);
 });
+test('a stopped run marks only its last committed point; a completed run has no stop marker',()=>{
+ const stopped={...job('stopped'),status:'stopped'},completed={...job('completed'),status:'completed'};
+ const {data}=ensembleFigure(record,[stopped,completed],'stress',null,styles,1);
+ assert.deepEqual(data[1].x,[1,2]);
+ assert.deepEqual(data[1].marker.size,[0,9]);assert.equal(data[1].marker.symbol,'x');
+ assert.match(data[1].hovertemplate[1],/^Run stopped here/);
+ assert.equal(data[2].mode,'lines');assert.equal(data[2].marker,undefined);
+});
 test('async rendering coalesces updates, never overlaps Plotly calls and purges after disposal',async()=>{
  const frames=[],observers=[],calls=[],completions=[];let purged=0,active=0,max=0,loaded=0,click;
  const old={requestAnimationFrame:globalThis.requestAnimationFrame,cancelAnimationFrame:globalThis.cancelAnimationFrame,ResizeObserver:globalThis.ResizeObserver};

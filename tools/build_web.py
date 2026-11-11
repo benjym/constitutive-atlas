@@ -72,7 +72,7 @@ def main():
             shutil.rmtree(dest/name)
     for name in ['plot-labels.mjs','timed-route.mjs','index.html','style.css','app.js','worker.js','experiments.mjs','numerics.mjs','loading.mjs','laboratory-scope.mjs','laboratory-document.mjs','laboratory-view.mjs','laboratory-worker.mjs','recorded.mjs','recorded-scope.mjs','recorded-scope-execution.mjs','recorded-document.mjs','recorded-worker.mjs','catalogue.mjs','state-contract.mjs','laboratory-examples.mjs','laboratory-examples-view.mjs','laboratory-support.mjs','formulation-view.mjs','applicability-view.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
-    for name in ['atlas-theme.css', 'navigation.mjs']:
+    for name in ['atlas-theme.css', 'navigation.mjs', 'guided-experiments.mjs']:
         shutil.copyfile(ROOT/'web'/name,dest/name)
     (dest/'assets').mkdir(exist_ok=True)
     for name in ['constitutive-cover.webp', 'home-laboratory.webp', 'home-catalogue.webp', 'home-methods.webp']:
