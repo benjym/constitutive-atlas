@@ -66,7 +66,8 @@ test('timeout aborts executor and proceeds to next request',async()=>{
 const fullCatalogue={...catalogue,models:readdirSync(new URL('../models/',import.meta.url)).filter(f=>f.endsWith('.json')).map(f=>JSON.parse(readFileSync(new URL('../models/'+f,import.meta.url))))};
 test('all compatible compiled models receive baseline requests with complete state and exact replay',()=>{
  const configs=defaultConfigurations(fullCatalogue),study=makeStudy(record,fullCatalogue,configs);
- assert.equal(configs.length,15);assert.equal(study.jobs.length,27);
+ assert.equal(configs.length,16);assert.equal(study.jobs.length,28);
+ assert.ok(study.jobs.some(job=>job.model==='nakai-hinokio-2004-clay-appendix-v-be'&&!job.change),'Nakai–Hinokio clay participates in the current catalogue study');
  assert.ok(study.jobs.some(job=>job.model==='manzari-dafalias-1997-constant-m-be-v1'&&!job.change),'MD1997 participates in the current catalogue study');
  assert.ok(study.jobs.some(job=>job.model==='s-clay1'&&!job.change),'S-CLAY1 participates in the current catalogue study');
  for(const model of availableModels(fullCatalogue)){
