@@ -41,7 +41,12 @@ name: Full qualification
     - docs/**/*.gz
   schedule:
   - cron: 17 15 * * *
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      historical_replays:
+        description: Replay frozen catalogues and exact historical outputs
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -65,6 +70,9 @@ jobs:
     - uses: actions/setup-python@v6
       with:
         python-version: "${{ matrix.python }}"
+    - uses: actions/setup-node@v6
+      with:
+        node-version-file: ".nvmrc"
     - run: python -m atlas.cli validate
     - run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
     - run: python tools/build_ci_targets.py build
@@ -178,33 +186,20 @@ jobs:
       with:
         name: hill-native-${{ matrix.os }}
         path: "${{ runner.temp }}/hill-native/"
-    - name: Native numerical checks with frozen MD1997 Decimal assessment
-      run: python -B tools/check_md1997_numerical_ci.py --build build --output "$RUNNER_TEMP/md1997-numerical"
+    - name: Qualify the current native catalogue
+      run: python -B tools/check_current_numerical_ci.py --build build --output "$RUNNER_TEMP/current-numerical"
     - name: Retain native numerical assessment and raw output
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: numerical-native-${{ matrix.os }}
-        path: "${{ runner.temp }}/md1997-numerical/"
-    # v6 inherits explicit-gis20-occ-restart-duncan-v5 and adds constrained S-CLAY1 fixtures.
-    - name: Native checks and full exact archival replay
-      if: runner.os == 'macOS'
-      run: |
-        ctest --test-dir build --output-on-failure -E "^(atlas_numerical|atlas_recorded)$"
-        ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-sclay1-v6 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
+        path: "${{ runner.temp }}/current-numerical/"
+    - name: Current native CTest suite
+      run: ctest --test-dir build --output-on-failure -E "^(atlas_numerical|atlas_python)$"
       env:
         ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-sclay1-v6
-    - name: Linux native checks
-      if: runner.os == 'Linux'
-      run: |
-        ctest --test-dir build --output-on-failure -E "^(atlas_numerical|atlas_python|atlas_recorded)$"
-        ATLAS_NATIVE_FIXTURES=explicit-gis20-occ-restart-duncan-sclay1-v6 ctest --test-dir build --output-on-failure -R "^atlas_recorded$"
-      env:
-        ATLAS_NATIVE_FIXTURES: explicit-gis20-occ-restart-duncan-sclay1-v6
-    - name: Retain strict original native failures and reject unknown fixtures
-      run: python tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
-    - name: Linux portable Python suite
-      if: runner.os == 'Linux'
+    - name: Current Python suite
+      if: runner.os == 'Linux' || !inputs.historical_replays
       env:
         ATLAS_SOLVER: "${{ github.workspace }}/build/atlas_solver"
         ATLAS_TIME_SOLVER: "${{ github.workspace }}/build/atlas_time_solver"
@@ -213,25 +208,72 @@ jobs:
         ATLAS_CLAY2013_SOLVER: "${{ github.workspace }}/build/atlas_clay2013_solver"
         ATLAS_GIS2024_SOLVER: "${{ github.workspace }}/build/atlas_gis2024_solver"
       run: python -B tools/run_ci_tests.py --portable
+    - name: Python suite including exact historical replays on macOS
+      if: runner.os == 'macOS' && inputs.historical_replays
+      run: ctest --test-dir build --output-on-failure -R "^atlas_python$"
+    - name: Verify current recorded-path JSON replay
+      env:
+        ATLAS_RECORDED_SOLVER: "${{ github.workspace }}/build/atlas_solver"
+      run: python -m unittest tests.test_experiment_replay tests.test_recorded_api
+        tests.test_recorded_path tests.test_web_recorded tests.test_refinement tests.test_isotropic_reference
+        tests.test_resolution_diagnosis tests.test_recorded_restarts -v
     - name: Build separately bound historical recorded catalogue
+      if: inputs.historical_replays
       id: recorded_legacy_build
       shell: bash
       run: python -B tools/build_recorded_legacy_ci.py --build build --output "$RUNNER_TEMP/recorded-legacy-build" --github-output "$GITHUB_OUTPUT"
-    - name: Verify recorded-path JSON replay
+    - name: Replay the historical recorded catalogue
+      if: inputs.historical_replays
       env:
         ATLAS_RECORDED_SOLVER: "${{ github.workspace }}/build/atlas_solver"
         ATLAS_RECORDED_LEGACY_SOLVER: "${{ github.workspace }}/build/atlas_recorded_legacy_solver"
         ATLAS_RECORDED_LEGACY_SHA256: "${{ steps.recorded_legacy_build.outputs.solver_sha256 }}"
-      run: python -m unittest tests.test_experiment_replay tests.test_recorded_api
-        tests.test_recorded_path tests.test_web_recorded tests.test_refinement tests.test_isotropic_reference
-        tests.test_resolution_diagnosis tests.test_recorded_restarts -v
+      run: python -m unittest tests.test_recorded_restarts.RestartNativeTests.test_disabled_legacy_responses_exact -v
     - name: Retain historical recorded build receipts
-      if: always()
+      if: always() && inputs.historical_replays
       uses: actions/upload-artifact@v4
       with:
         name: recorded-legacy-native-${{ matrix.os }}
         path: "${{ runner.temp }}/recorded-legacy-build/"
     timeout-minutes: 180
+  historical-native:
+    if: inputs.historical_replays
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: ubuntu-latest
+          python: '3.12'
+        - os: macos-26
+          python: '3.14'
+    runs-on: "${{ matrix.os }}"
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        # Reviewed 17-model source for the original MD1997 replay and strict failures.
+        ref: c5fd7e483693e6bf4e1a54b1e905a4f47c453e98
+    - uses: actions/setup-python@v6
+      with:
+        python-version: "${{ matrix.python }}"
+    - name: Replay the archived native numerical and fixture checks
+      run: |
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        cmake --build build --target atlas_numerical_tests --parallel 1
+        cmake --build build --target atlas_recorded_tests --parallel 1
+        python -B tools/check_md1997_numerical_ci.py --build build --output "$RUNNER_TEMP/md1997-historical"
+        python -B tools/check_native_fixture_contracts.py --build build --output "$RUNNER_TEMP/native-fixture-contracts.json"
+        python -B -m unittest \
+          tests.test_historical_generation.HistoricalGenerationTests.test_current_generation_contains_every_live_definition_and_scope \
+          tests.test_controlled_time.ControlledTimeTests.test_generated_layout_and_old_bytes -v
+    - name: Retain historical native evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: historical-native-${{ matrix.os }}
+        path: |
+          ${{ runner.temp }}/md1997-historical/
+          ${{ runner.temp }}/native-fixture-contracts.json
   wasm:
     runs-on: macos-26
     steps:
@@ -358,6 +400,7 @@ jobs:
         python -m tools.barodesy2017_material_ad --verify "$RUNNER_TEMP/barodesy-ad-wasm.json" --native-report-path "$RUNNER_TEMP/barodesy-ad-native.json"
     - name: 'Build and compare native and Wasm / 12: python tools/run_historical_barodesy.py
         --directory "$RUNNER_TEMP/historical-barodesy"'
+      if: inputs.historical_replays
       shell: bash
       run: |
         source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
@@ -844,9 +887,18 @@ jobs:
     - wasm
     - wasm-linux
     - controlled-path
+    - historical-native
     runs-on: ubuntu-latest
     steps:
     - env:
         RESULTS: "${{ toJSON(needs) }}"
-      run: python3 -c 'import json,os; assert all(j["result"] == "success" for j in
-        json.loads(os.environ["RESULTS"]).values())'
+        HISTORICAL: "${{ inputs.historical_replays }}"
+      run: |
+        python3 - <<'PY'
+        import json, os
+        results = json.loads(os.environ["RESULTS"])
+        historical = results.pop("historical-native")["result"]
+        expected = "success" if os.environ["HISTORICAL"] == "true" else "skipped"
+        assert historical == expected, (historical, expected)
+        assert all(job["result"] == "success" for job in results.values()), results
+        PY

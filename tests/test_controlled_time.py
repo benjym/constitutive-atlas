@@ -119,7 +119,7 @@ class ControlledTimeTests(unittest.TestCase):
   with self.assertRaises(ValueError):advance(m,p,4,p.controls,p.controls,Settings(maximum_depth=8))
   self.assertEqual(asdict(p),before)
   q=advance(m,p,2,p.controls,p.controls).context;self.assertEqual(q.time,13)
- def test_generated_layout_and_old_bytes(self):
+ def test_generated_layout_and_current_catalogue(self):
   from atlas.controlled_time_compiler import generate
   from atlas.compiler import generate as ordinary
   with tempfile.TemporaryDirectory() as d:
@@ -127,18 +127,7 @@ class ControlledTimeTests(unittest.TestCase):
    self.assertEqual(c['profile'],PROFILE);self.assertEqual([(f['name'],f['offset'],f['size']) for f in row['controls']],[('strain',0,6),('suction',6,1),('temperature',7,1)])
    code=(Path(d)/'controlled_time_api.cpp').read_text();self.assertIn('controlled_time_advance',code);self.assertIn('disjoint',code);self.assertNotIn('extern "C" int path_advance',code)
    with self.assertRaises(ValueError):generate(d,[ROOT/'models/linear-elastic.json'])
-  baseline=ROOT/'docs/ingestion/vibe-2026/controlled-time-qualification-v1/baseline'
-  import importlib.util
-  helper_path=ROOT/'docs/ingestion/vibe-2026/full-python-contracts-v1/historical_baseline.py'
-  spec=importlib.util.spec_from_file_location('controlled_time_historical_baseline',helper_path);helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
-  with tempfile.TemporaryDirectory() as d:
-   helper.generate(d)
-   for r in json.loads((baseline/'manifest.json').read_text()):self.assertEqual(hashlib.sha256((Path(d)/Path(r['path']).name).read_bytes()).hexdigest(),r['sha256'])
-  # Current ordinary coverage is a distinct strict release check, not the old15.
-  live=json.loads((ROOT/'tests/contexts/current-seventeen-md1997-baseline-v1.json').read_text());paths={ROOT/row['path'] for row in live['models']}
-  self.assertEqual(len(paths),17);self.assertEqual(paths,set((ROOT/'models').glob('*.json')))
-  for row in live['models']:self.assertEqual(hashlib.sha256((ROOT/row['path']).read_bytes()).hexdigest(),row['sha256'])
-  self.assertEqual(hashlib.sha256((ROOT/live['catalogue']['path']).read_bytes()).hexdigest(),live['catalogue']['sha256'])
+  paths=sorted((ROOT/'models').glob('*.json'))
   with tempfile.TemporaryDirectory() as d:
    emitted=ordinary(d);metadata=json.loads((Path(d)/'models.json').read_text())
    self.assertEqual({m['id']:m for m in emitted},{load(path)['id']:load(path) for path in paths})

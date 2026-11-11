@@ -23,6 +23,18 @@ ctest --test-dir build --output-on-failure
 
 For the browser build, see [web/README.md](web/README.md) (Node.js 24 and Emscripten required).
 
+## Full qualification
+
+Full qualification in GitHub Actions builds and tests the current catalogue, including model-specific numerical references and native/Wasm parity. To reproduce the native catalogue check locally:
+
+```sh
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target atlas_numerical_tests --parallel 1
+python -B tools/check_current_numerical_ci.py --build build --output build/current-numerical
+```
+
+Use a fresh output directory for each run. To reproduce exact historical outputs, manually run **Full qualification** with **Replay frozen catalogues and exact historical outputs** enabled (`historical_replays=true`).
+
 ## Published benchmark
 
 Reproduce the fixed Karlsruhe fine sand TMD2 calculation locally (Python, CMake, C++20 and Matplotlib):

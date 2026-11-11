@@ -1,4 +1,4 @@
-"""Keep archival gates required while testing the portable projection separately."""
+"""Test current qualification and the optional archival replay configuration."""
 import json
 from pathlib import Path
 import unittest
@@ -37,12 +37,13 @@ class ProfileTests(unittest.TestCase):
         # Full canonical discovery is untouched and exercises the exact test.
         calls.clear();make().run(unittest.TestResult());self.assertCountEqual(calls,['current','exact'])
 
-    def test_full_qualification_retains_both_platforms_and_archival_gates(self):
+    def test_full_qualification_retains_both_platforms_and_replay_option(self):
         workflow=(ROOT/'.github/workflows/qualification.yml').read_text()
         for value in ['ubuntu-latest', 'macos-26', "3.14", 'atlas_recorded',
-                      'explicit-gis20-occ-restart-duncan-v5', 'run_ci_tests.py --portable',
+                      'explicit-gis20-occ-restart-duncan-sclay1-v6', 'run_ci_tests.py --portable',
                       'test_bingham_schedule.py', 'check_perzyna_ci.py --paired',
-                      'run_historical_barodesy.py', 'schedule:', 'workflow_dispatch:']:
+                      'run_historical_barodesy.py', 'schedule:', 'workflow_dispatch:',
+                      'if: inputs.historical_replays', 'check_current_numerical_ci.py']:
             self.assertIn(value,workflow)
         self.assertNotIn('needs: [native, wasm, wasm-linux]',workflow)
         self.assertNotIn('actions/deploy-pages',workflow)

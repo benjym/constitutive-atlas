@@ -126,7 +126,11 @@ std::string md_decimal_export(int model,const atlas::State&z,const atlas::State&
     out<<']';return out.str(); // caller appends C++ check flags only after ALL checks
 }
 
-int main(){
+int main(int argc,char** argv){
+    if(argc==2&&std::string(argv[1])=="--catalogue-hash"){
+        std::cout<<atlas::catalogue_hash()<<'\n';
+        return 0;
+    }
     try{
         const char* profile=std::getenv("ATLAS_NATIVE_FIXTURES");
         require(!profile||(std::string(profile)=="explicit-gis20-v2"||std::string(profile)=="explicit-gis20-occ-v3"||(std::string(profile)=="explicit-gis20-occ-restart-v4"||(std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"||std::string(profile)=="explicit-gis20-occ-restart-duncan-sclay1-v6"))),"unknown native fixture profile");
@@ -134,14 +138,19 @@ int main(){
         const bool md_decimal_legacy=numerical_profile&&std::string(numerical_profile)=="md1997-decimal-fd-reference-v1";
         const bool md_decimal_current17=numerical_profile&&std::string(numerical_profile)=="md1997-decimal-fd-reference-current17-v1";
         const bool md_binary64_current17=numerical_profile&&std::string(numerical_profile)=="md1997-source-admissible-current17-v1";
+        const bool current_catalogue=numerical_profile&&std::string(numerical_profile)=="current-catalogue-v1";
+        const auto& catalogue=atlas::models();
+        const bool md_current=current_catalogue&&std::any_of(catalogue.begin(),catalogue.end(),[](const auto& model){
+            return model.id=="manzari-dafalias-1997-constant-m-be-v1";
+        });
         const bool md_current17=md_decimal_current17||md_binary64_current17;
-        const bool md_decimal=md_decimal_legacy||md_decimal_current17;
-        const bool md_admissible=numerical_profile!=nullptr;
-        require(!numerical_profile||std::string(numerical_profile)=="md1997-source-admissible-v1"||md_decimal||md_binary64_current17,"unknown numerical fixture profile");
+        const bool md_decimal=md_decimal_legacy||md_decimal_current17||md_current;
+        const bool md_admissible=numerical_profile&&(!current_catalogue||md_current);
+        require(!numerical_profile||std::string(numerical_profile)=="md1997-source-admissible-v1"||md_decimal||md_binary64_current17||current_catalogue,"unknown numerical fixture profile");
         const char*decimal_binding=std::getenv("ATLAS_MD1997_DECIMAL_BUILD_BINDING_SHA256");
         std::string decimal_payload;
         if(md_admissible){
-            if(!md_current17)require(profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-v5","MD1997 numerical fixture requires explicit-gis20-occ-restart-duncan-v5");
+            if(!md_current17&&!md_current)require(profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-v5","MD1997 numerical fixture requires explicit-gis20-occ-restart-duncan-v5");
             int count=0;
             for(size_t m=0;m<atlas::models().size();++m)if(atlas::models()[m].id=="manzari-dafalias-1997-constant-m-be-v1"){
                 ++count;const auto&fields=atlas::models()[m].fields;
@@ -176,6 +185,9 @@ int main(){
                 "tresca-associated-perfect-bk2022v1-be",
                 "manzari-dafalias-1997-constant-m-be-v1"};
             for(const auto*id:expected_ids){int count=0;for(const auto&model:atlas::models())if(model.id==id)++count;require(count==1,"MD current17 exact model ID set");}
+        }
+        if(current_catalogue||md_current17){
+            require(profile&&std::string(profile)=="explicit-gis20-occ-restart-duncan-sclay1-v6","MD numerical check requires explicit valid-domain fixtures");
             for(const auto&model:atlas::models())if(model.id=="manzari-dafalias-1997-constant-m-be-v1"){
                 const auto&f=model.fields;
                 require(!f[0].transient&&!f[1].transient&&!f[2].transient&&!f[0].multiplier&&!f[1].multiplier&&!f[2].multiplier&&f[3].transient&&f[3].multiplier,"MD current17 exact 13 persistent plus gamma layout");
@@ -217,15 +229,15 @@ int main(){
             require(atlas::evaluate_model(int(model),x,xn,d,p,r),"AD test state outside domain");
             if(md_admissible&&atlas::models()[model].id=="manzari-dafalias-1997-constant-m-be-v1"){
                 if(md_decimal){require(decimal_payload.empty(),"MD Decimal duplicate model export");decimal_payload=md_decimal_export(int(model),z,zn,p,scales,de,r,decimal_binding);
-                    if(md_decimal_current17){
+                    if(md_decimal_current17||md_current){
                         const std::string old_identity="\"identity\":\"md1997-decimal-ad-export-v1\"";
                         const auto identity_position=decimal_payload.find(old_identity);
                         require(identity_position!=std::string::npos&&decimal_payload.find(old_identity,identity_position+1)==std::string::npos,"MD current17 export identity singleton");
-                        decimal_payload.replace(identity_position,old_identity.size(),"\"identity\":\"md1997-decimal-ad-export-current17-v1\"");
+                        decimal_payload.replace(identity_position,old_identity.size(),md_current?"\"identity\":\"md1997-decimal-ad-export-current-catalogue-v1\"":"\"identity\":\"md1997-decimal-ad-export-current17-v1\"");
                         const std::string old_selector="\"selector\":\"md1997-decimal-fd-reference-v1\"";
                         const auto position=decimal_payload.find(old_selector);
                         require(position!=std::string::npos&&decimal_payload.find(old_selector,position+1)==std::string::npos,"MD current17 export selector singleton");
-                        decimal_payload.replace(position,old_selector.size(),"\"selector\":\"md1997-decimal-fd-reference-current17-v1\"");
+                        decimal_payload.replace(position,old_selector.size(),md_current?"\"selector\":\"current-catalogue-v1\"":"\"selector\":\"md1997-decimal-fd-reference-current17-v1\"");
                     }}
                 md_fixture_derivatives(int(model),z,zn,p,scales,de,r,md_decimal);
             }else 
@@ -247,6 +259,10 @@ int main(){
                 z[6]=2.5+.16*(1-std::log(150000./1000.))-.04*std::log(100000./1000.);
             const bool duncan_fixture=profile&&(std::string(profile)=="explicit-gis20-occ-restart-duncan-v5"||std::string(profile)=="explicit-gis20-occ-restart-duncan-sclay1-v6")&&atlas::models()[m].id=="duncan-chang-1970-endpoint-average";
             if(duncan_fixture)z[6]=50000.;
+            // This formulation couples committed stress and its SMP tensor.
+            // Use its admissible isotropic initial pair, then apply anisotropic strain.
+            const bool nakai=current_catalogue&&atlas::models()[m].id=="nakai-hinokio-2004-clay-appendix-v-be";
+            if(nakai)z=atlas::initial_state(int(m));
             const bool md_rotation=md_admissible&&atlas::models()[m].id=="manzari-dafalias-1997-constant-m-be-v1";
             if(md_rotation){z[0]=640500;z[1]=639500;z[2]=640000;z[3]=100;z[4]=z[5]=0;}
             atlas::Sym<double>de;de.v={.0001,-.00002,.00001,.00003,.00001,-.00001};auto zr=z;
@@ -263,11 +279,17 @@ int main(){
                 require(rotated_fabric>=0,"S-CLAY1 rotation fabric absent");
                 atlas::put_tensor(zr,rotated_fabric,rotate(atlas::tensor_from(z,rotated_fabric)));
             }
+            int smp_offset=-1;
+            if(nakai){
+                for(const auto& f:atlas::models()[m].fields)if(f.name=="smp"&&f.size==6)smp_offset=f.offset;
+                require(smp_offset>=0,"Nakai–Hinokio SMP field absent");
+                atlas::put_tensor(zr,smp_offset,rotate(atlas::tensor_from(z,smp_offset)));
+            }
             atlas::put_tensor(zr,0,rotate(atlas::tensor_from(z,0)));
             if(md_rotation){require(atlas::domain(int(m),z,p,true)&&atlas::domain(int(m),zr,p,true),"MD rotation initial domain");md_fixture_branch(z,p);md_fixture_branch(zr,p);}
             atlas::IntegrationSettings fixture_settings;
             if(explicit_fixtures&&atlas::models()[m].id=="research-hp-extracted-asbs-gis-2024-v03")fixture_settings.max_depth=20;
-            auto a=atlas::integrate(int(m),z,de,p,fixture_settings),b=atlas::integrate(int(m),zr,rotate(de),p,fixture_settings);require(a.ok&&b.ok,"rotation integration failed");
+            auto a=atlas::integrate(int(m),z,de,p,fixture_settings),b=atlas::integrate(int(m),zr,rotate(de),p,fixture_settings);require(a.ok&&b.ok,current_catalogue?("rotation integration failed: "+atlas::models()[m].id).c_str():"rotation integration failed");
             if(duncan_fixture)require(a.state.size()==7&&b.state.size()==7&&a.state[6]==50000.&&b.state[6]==50000.,"scalar maxhistory rotation fixture changed");
             if(md_rotation){
                 require(a.state.size()==14&&b.state.size()==14&&atlas::finite(a.state)&&atlas::finite(b.state)&&atlas::domain(int(m),a.state,p)&&atlas::domain(int(m),b.state,p),"MD rotation final finite domain layout");
@@ -276,6 +298,10 @@ int main(){
                 require(std::abs(a.state[6]-b.state[6])<=1e-10&&std::abs(a.state[13]-b.state[13])<=1e-10,"MD scalar rotation covariance failed");
             }
             auto want=rotate(atlas::tensor_from(a.state,0));for(int i=0;i<6;++i)require(std::abs(want.v[i]-b.state[i])<.01,"fixed-frame rotation covariance failed");
+            if(smp_offset>=0){
+                const auto smp=rotate(atlas::tensor_from(a.state,smp_offset));
+                for(int i=0;i<6;++i)require(std::abs(smp.v[i]-b.state[smp_offset+i])<=1e-9,"Nakai–Hinokio SMP rotation covariance failed");
+            }
             if(rotated_fabric>=0){
                 const auto fabric_want=rotate(atlas::tensor_from(a.state,rotated_fabric));
                 for(int i=0;i<6;++i)require(std::abs(fabric_want.v[i]-b.state[rotated_fabric+i])<1e-9,"fabric rotation covariance failed");

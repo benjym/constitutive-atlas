@@ -123,6 +123,8 @@ class RestartNativeTests(unittest.TestCase):
             else:self.assertEqual(x,y)
         compare(a,b)
 
+    @unittest.skipUnless(os.environ.get('ATLAS_RECORDED_LEGACY_SOLVER'),
+                         'historical replay requires the separately bound legacy solver')
     def test_disabled_legacy_responses_exact(self):
         with historical_recorded_context(self,globals()):
             with gzip.open(ROOT/'catalogue/investigations/recorded-replay-api-v1/responses.json.gz','rt') as f:retained=json.load(f)

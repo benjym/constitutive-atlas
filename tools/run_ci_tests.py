@@ -1,8 +1,4 @@
-"""Run portable tests on Linux; keep exact historical replay gates on macOS.
-
-The full unittest suite remains unchanged and runs in the required macOS job.
-This separate Linux projection does not claim bit reproduction of Mac libm.
-"""
+"""Run the default Python suite without exact historical macOS replays."""
 import argparse
 import json
 from pathlib import Path
@@ -33,7 +29,7 @@ class CanonicalReplay(unittest.TestCase):
     def __str__(self):
         return self.original_id
 
-    @unittest.skip('Exact archived macOS arithmetic; required macos-26 job runs the unchanged test')
+    @unittest.skip('Exact historical macOS arithmetic; enable historical replays to run')
     def runTest(self):
         pass
 

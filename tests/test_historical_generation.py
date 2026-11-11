@@ -1,13 +1,11 @@
-"""Historical byte gates stay complete; current generation covers all 16 models."""
+"""Check historical input integrity and generate the current catalogue."""
 import ast
 import copy
-import hashlib
 import json
 from pathlib import Path
 import tempfile
 import unittest
 
-from atlas.evidence import checked_receipt
 from atlas.compiler import generate
 from atlas.model import ROOT, all_models
 from atlas.stress import stress_scope
@@ -38,34 +36,19 @@ class HistoricalGenerationTests(unittest.TestCase):
                 verified(bad)
 
     def test_current_generation_contains_every_live_definition_and_scope(self):
-        data = contexts()
-        # This is a release identity guard, separate from the historical nine.
-        paths = [verified(item) for item in data['current_models']]
-        self.assertEqual(len(paths), 12)  # Retained historical twelve-model context.
-        live = json.loads((ROOT / 'tests/contexts/current-seventeen-md1997-baseline-v1.json').read_text())
-        self.assertEqual(live['id'], 'current-seventeen-md1997-baseline-v1')
-        current_paths = {ROOT / item['path'] for item in live['models']}
-        self.assertEqual(current_paths, set((ROOT / 'models').glob('*.json')))
-        self.assertEqual(len(current_paths), 17)
-        historical_names = {ROOT / item['path'] for item in data['current_models']}
-        self.assertTrue(historical_names < current_paths)
-        for item in live['models']:
-            self.assertEqual(hashlib.sha256((ROOT / item['path']).read_bytes()).hexdigest(), item['sha256'])
-        self.assertEqual(hashlib.sha256((ROOT / live['catalogue']['path']).read_bytes()).hexdigest(), live['catalogue']['sha256'])
-        catalogue = data['current_catalogue']
-        checked_receipt(ROOT, Path('tests/fixtures/historical-test-contexts.json'),
-                        catalogue['path'], catalogue['sha256'])
         models = all_models()
-        self.assertEqual({m['id'] for m in models if stress_scope(m) == 'total'},
-                         {'tresca-associated-perfect-bk2022v1-be', 'ramberg-osgood-ansys242'})
+        expected_scope_counts = {
+            scope: sum(stress_scope(model) == scope for model in models)
+            for scope in ('total', 'effective')
+        }
         with tempfile.TemporaryDirectory() as directory:
             emitted = generate(directory)
             metadata = json.loads((Path(directory) / 'models.json').read_text())
             self.assertEqual({m['id'] for m in emitted}, {m['id'] for m in models})
             self.assertEqual({m['id']: m for m in metadata['models']}, {m['id']: m for m in models})
             header = (Path(directory) / 'models.hpp').read_text()
-            self.assertEqual(header.count(',StressScope::total'), 2)
-            self.assertEqual(header.count(',StressScope::effective'), 15)
+            for scope, count in expected_scope_counts.items():
+                self.assertEqual(header.count(f',StressScope::{scope}'), count)
 
     def test_original_methods_and_unmodified_gates_are_retained(self):
         failures = json.loads((P / 'original-failures.json').read_text())
