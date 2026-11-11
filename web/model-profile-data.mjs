@@ -1863,7 +1863,7 @@ export const modelProfiles = {
         "The construction links shear and normal stress on mobilized planes."
       ]
     ],
-    "scope": "This is a literature-family entry, with no public stress-update implementation.",
+    "scope": "This profile explains the strength framework. The related Nakai–Hinokio (2004) entry applies it in a complete clay law with a runnable laboratory example.",
     "limits": "A strength criterion by itself does not specify a complete constitutive model. Elasticity, flow and evolution rules depend on the chosen formulation.",
     "preparation": "Consult the exact source formulation before assigning stiffness, history or a loading path.",
     "parameters": [],
@@ -1875,6 +1875,7 @@ export const modelProfiles = {
       }
     ],
     "related": [
+      "nakai-hinokio-2004-clay-appendix-v-be",
       "lade-duncan-1975",
       "mohr-coulomb"
     ],
@@ -1883,6 +1884,105 @@ export const modelProfiles = {
     ],
     "parameterNote": "Use consistent units and a material-specific parameter set. Laboratory presets illustrate behaviour.",
     "title": "Matsuoka–Nakai plasticity"
+  },
+  "nakai-hinokio-2004-clay-appendix-v-be": {
+    "title": "Nakai–Hinokio subloading clay (2004)",
+    "summary": "A clay plasticity law in which intermediate principal stress and consolidation history affect the response.",
+    "introduction": "The model describes clay compression and shear in three-dimensional effective stress. It uses modified stresses to account for the intermediate principal stress and a density index to represent how far the state lies from the reference compression surface.",
+    "behaviours": [
+      [
+        "Consolidation history",
+        "The density index distinguishes normally consolidated and overconsolidated states and evolves during loading."
+      ],
+      [
+        "Response depends on the loading path",
+        "The model combines plastic flow in a modified stress space with additional compression along some loading paths."
+      ]
+    ],
+    "explorationTitle": "Drained compression from the Table 2 clay state",
+    "exploration": "Load “Nakai–Hinokio · Table 2 clay · drained”. Apply 1% axial compression at constant lateral effective stress. Compare the rise in deviator stress with the volumetric strain.",
+    "preparation": "The example starts at 98 kPa isotropic effective pressure with void ratio 0.83 and a zero density index. It also sets the full stress-transform tensor. Changing the pressure or density independently can create a synthetic state inconsistent with the reference compression line.",
+    "scope": "One-coefficient clay formulation with Appendix V, small strains and fixed axes. The laboratory examples use monotonic loading and effective Cauchy stress.",
+    "limits": "Sustained post-peak softening, cyclic accuracy, creep and finite rotation are outside the qualified scope. The clay law has no pore-fluid evolution; any undrained pressure shown is reconstructed from the laboratory boundary conditions. The separate sand formulation is not included.",
+    "parameters": [
+      {
+        "name": "p_ref",
+        "symbol": "pᵣ",
+        "meaning": "Reference pressure",
+        "help": "Sets the reference pressure and stress scale. Keep it consistent with the initial reference state.",
+        "unit": "Pa"
+      },
+      {
+        "name": "Cc",
+        "symbol": "Cc",
+        "meaning": "Normal compression slope",
+        "help": "Slope divided by one plus the reference void ratio.",
+        "unit": "1"
+      },
+      {
+        "name": "Ce",
+        "symbol": "Ce",
+        "meaning": "Swelling slope",
+        "help": "The normalized swelling and recompression slope controls elastic bulk stiffness.",
+        "unit": "1"
+      },
+      {
+        "name": "e_ref",
+        "symbol": "eᵣ",
+        "meaning": "Reference void ratio",
+        "help": "Fixed value used to scale volume changes, distinct from the evolving void ratio.",
+        "unit": "1"
+      },
+      {
+        "name": "Rcs",
+        "symbol": "Rcs",
+        "meaning": "Critical stress ratio",
+        "help": "Major to minor principal stress ratio at critical state in triaxial compression.",
+        "unit": "1"
+      },
+      {
+        "name": "beta",
+        "symbol": "β",
+        "meaning": "Yield shape exponent",
+        "help": "Shapes the yield surface in the modified stress space.",
+        "unit": "1"
+      },
+      {
+        "name": "a_density",
+        "symbol": "a",
+        "meaning": "Density coefficient",
+        "help": "Sets the strength of the density-index effect on the clay response.",
+        "unit": "1"
+      },
+      {
+        "name": "nu",
+        "symbol": "ν",
+        "meaning": "Poisson ratio",
+        "help": "Sets elastic shear stiffness relative to bulk stiffness.",
+        "unit": "1"
+      }
+    ],
+    "parameterNote": "The named example uses the source Table 2 clay coefficients and a compatible illustrative reference state.",
+    "stateLabels": {
+      "rho": "Density index",
+      "e": "Void ratio",
+      "smp": "Stress-transform tensor"
+    },
+    "references": [
+      {
+        "label": "Nakai and Hinokio (2004) — Table 2, equations 40–52 and Appendix V",
+        "url": "https://doi.org/10.3208/sandf.44.2_53"
+      }
+    ],
+    "related": [
+      "matsuoka-nakai",
+      "modified-cam-clay"
+    ],
+    "contentSources": [
+      "docs/models/nakai-hinokio-2004-clay-appendix-v-be.md",
+      "docs/ingestion/matsuoka-nakai/working-v1/SOURCE_DECISIONS.md",
+      "catalogue/laboratory-examples.json"
+    ]
   },
   "s-clay1": {
     "title": "S-CLAY1 — Wheeler et al. (2003)",

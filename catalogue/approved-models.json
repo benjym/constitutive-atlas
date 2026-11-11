@@ -7956,6 +7956,137 @@
       ],
       "experimental_validation": "not_assessed",
       "deployment_authorized": false
+    },
+    {
+      "id": "nakai-hinokio-2004-clay-appendix-v-be-agent-v1-approval",
+      "model_id": "nakai-hinokio-2004-clay-appendix-v-be",
+      "status": "approved",
+      "approved_on": "2026-11-11",
+      "approval_authority": {
+        "kind": "independent-agent-review",
+        "policy": "agent-checklist-v1",
+        "identity": {
+          "kind": "agent",
+          "name": "Codex independent NH2004 source and numerical reviewer",
+          "run_id": "/root/nh2004_e5",
+          "independence_basis": "Separate agent from coordinating implementation run /root. Personally read the exact original PDF and authored an independent source-principal and raw-capture audit. Did not author the model, reference study, shared solver or compiled captures. Inherited task context; no compiled or vendor execution."
+        }
+      },
+      "definition": {
+        "path": "models/research/nh2004/nakai-hinokio-2004-clay-appendix-v-be.json",
+        "sha256": "a93d2d47ed0808135f804fb2b0ac0ebb289b3421a43a03c563cbfddffb447ce8"
+      },
+      "scope": {
+        "use": "Exact unchanged Nakai–Hinokio 2004 one-a clay with Appendix V and project endpoint backward Euler; compression-positive Mandel, fixed-frame infinitesimal effective Cauchy stress. Isolated current native and Wasm support is limited to exact Table 2 NC inputs: p=98 kPa, rho=0, e=.83, isotropic auxiliary diagonal .5773502691896257, all eight Table 2 defaults; 100 monotonic steps, zero cycles, settings 2e-10,1e-6,45,14,20000,11. Oedometric, drained, zero-volume undrained, and isotropic examples at 1% axial/normal target, and zero-volume signed deviator stress control at 5 kPa. The same drained-only example also qualifies using the exact definition auxiliary diagonal .5773502691896258 on native and scope-aware Wasm with the captured exact linear controls. Only these short illustrative lab inputs are approved; saved material trajectories are supporting diagnostics."
+      },
+      "review": {
+        "kind": "agent-model-review",
+        "path": "catalogue/agent-reviews/nakai-hinokio-2004-clay-appendix-v-be-agent-v1.json",
+        "sha256": "35e9b4e5c0ce90b28ec5a72c9150e5ac9a4992d4380567ecfd4437783c87c890"
+      },
+      "limitations": [
+        "Table 2 gives the constants and NC reference intercept; these project examples do not reproduce the source specimen preparation or validate against observations. Parameter metadata bounds and arbitrary initialized states are not qualified.",
+        "Sustained softening, meaningful peak/branch crossing, general cyclic/reversal response and general constitutive tangent are outside scope. Endpoint BE has finite reference-intercept drift and a numerical hydrostatic Newton derivative.",
+        "Pore pressure is host-reconstructed change only when the zero-volume control assumptions apply. No coupled pressure evolution, physical-time response, finite deformation/spin, anisotropy, structured soil, sand, or FE host claim.",
+        "Standard Atlas integration, packaged browser qualification and live delivery remain separate. No deployment authorization is conveyed by the record.",
+        "Source commit identifies review checkout base; current isolated artifacts and uncommitted working receipts are bound by SHA-256, and publication must preserve exact model and evidence bytes."
+      ],
+      "supporting_files": [
+        {
+          "path": "docs/ingestion/matsuoka-nakai/current-native-lab.json",
+          "sha256": "ca251f7cf1559b04607c7dcaace164cadad63850fa9cfc1983880714ee46feda"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/current-runtime-receipt.json",
+          "sha256": "407e67b274b6c58fb9853f5a04dd8c8e7d14988c259b0ad16a166e515a22e2a6"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/current-wasm-lab.json",
+          "sha256": "2b542025e9a196aae4d84e78d3fbd71906f4dc42727412641d1adb08aabc4d1d"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/current-wasm-material.json",
+          "sha256": "a33216ac7f82f8bf072b2696bc803ea67be656aad20c11adfb42201665997644"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/e5-v1/CHECK_PLAN.md",
+          "sha256": "c5a732aab5e1fcd7bf25cdbdc8ae0b55e74501a202f1eeea53b066a905d12bd7"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/e5-v1/REPORT.md",
+          "sha256": "4c4267c563ffa9be7067298b33edc546ef56bdc6cc15d6b511586cf2fd71e9e0"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/e5-v1/audit-results.json",
+          "sha256": "9e06c72d1ac39dab316ea20a1e0047c40e1b20bc1e7294386682b639c17dd049"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/e5-v1/audit.py",
+          "sha256": "b037306e2a836dd50ecf8dc9cbe37a2066ab8e02188707b91d46c944d7c67cc5"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/e5-v1/current-raw-receipt.json",
+          "sha256": "0a71585b01bd4ce5eca12ac8c3a468e207aff2676bf7d66f7817cd6282838b56"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/source-receipt.json",
+          "sha256": "1566e035b4a49b7ae25a04b53c46f9ea5693af829dfd23fb5572fe5af067975a"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/wasm-lab-checker-first-attempt.json",
+          "sha256": "62554a898ac02b7f83b77db9a12eb98ccfcadb62915aef37615476335131acf7"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/wasm-link-first-attempt.log",
+          "sha256": "a31b21e2ed5c0d8ae4cd16f17a33d9c279ba394e2c4d697e046199f57ec42581"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/working-v1/PLAN.md",
+          "sha256": "13d277f22b5b6381b423cf62e8fdf99cc599555dc5a09f4ad039b531d5511a9f"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/working-v1/SOURCE_DECISIONS.md",
+          "sha256": "48f6e160deef3cba583c459aa8514ee986af1f81d56f08288a14970782b03064"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/working-v1/prospective-freeze.json",
+          "sha256": "64136c2b5e25958cbcfe623783b49eb4707d55b1fbc6ad8bf5e4e7aa6efab3dc"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/working-v1/qualification.json.gz",
+          "sha256": "931b8188c9b7ec615393a56b994bee7079d37ee37ad5f45a9b60c5587826476c"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/working-v1/reference.py",
+          "sha256": "b44eea0eac26ac38eab5b661e215138bd5f5d0e3ff5eed751503f7593d93b035"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/working-v1/residual-fixtures.json",
+          "sha256": "c6da7964c8cbae53ee92befd5e51d17a7d8ce1c006bb734c1a08965f2c639c98"
+        },
+        {
+          "path": "docs/ingestion/matsuoka-nakai/working-v1/source-archive-map.json",
+          "sha256": "c09103f5e7f2f481990abc2146a015cec84294662c276abcfda2e79771a02cc3"
+        },
+        {
+          "path": "docs/reviews/nh2004-scientific-v1/README.md",
+          "sha256": "c4880f84570357aae09295dc12b15f775429c2e27cf992d16c7617d4bfe0bafa"
+        },
+        {
+          "path": "docs/reviews/nh2004-scientific-v1/check-results.json",
+          "sha256": "fc8307c0ce87900272f7ac5f9ed6c896ca05eaf0164d322c6125ba4a10cda778"
+        },
+        {
+          "path": "docs/reviews/nh2004-scientific-v1/initialization-probes.json",
+          "sha256": "0d40550b67be13e3b466b00410f75ee1db215949d37e49137e8aa551c038b988"
+        },
+        {
+          "path": "docs/reviews/nh2004-scientific-v1/source-archive-map.json",
+          "sha256": "a95f0002da9e84ac334b14aca510e00dea635137c35c9b3c28ae5cc736fc95a2"
+        }
+      ],
+      "experimental_validation": "not_assessed",
+      "deployment_authorized": false
     }
   ],
   "historical_registries": [
