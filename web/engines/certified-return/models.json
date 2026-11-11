@@ -1,0 +1,538 @@
+{
+  "schema_version": "0.1",
+  "sha256": "5e182580e7a589a4de7e47903fc49800deac2cc4ac23a5053514d9236d5a6924",
+  "models": [
+    {
+      "schema_version": "0.3",
+      "id": "extended-mohr-coulomb-2013-exact-generalized-work-be-exact-domain-v3",
+      "name": "Extended Mohr\u2013Coulomb2013 \u2014 exact generalized flow/work BE (exact fractional/full-domain source v3)",
+      "family": "elastoplasticity",
+      "status": "draft",
+      "description": "Project exact-criterion generalized interior EMC2013 with work-conjugate hardening and backward Euler; both nonhydrostatic edges included. Active apex unsupported; no original UMAT equivalence or numerical approval. Isolated source correction: exact rational b coefficients, not rounded decimal surrogates; no runtime qualification. Exact ideal angular domain: positive angle below2 with positive cosine; no decimal pi/2 truncation.",
+      "sources": [
+        {
+          "url": "https://doi.org/10.1680/geot.12.P.008",
+          "locator": "Eqs7,11\u201313,55 and Appendices1\u20133; project corrections/choices in exact-generalized-v1 and canonical-postsolve-v1 dossier",
+          "role": "governing publication"
+        },
+        {
+          "url": "https://github.com/benjym/constitutive-atlas",
+          "locator": "docs/ingestion/extended-mohr-coulomb-2013/exact-generalized-v1/CONTRACT.md and independent review; exact generalized-flow/work-BE project variant",
+          "role": "project formulation and numerical choices"
+        }
+      ],
+      "parameters": {
+        "G": {
+          "default": 4000000.0,
+          "min": 0.0,
+          "max": 1.7976931348623157e+308,
+          "unit": "Pa",
+          "label": "G"
+        },
+        "mu": {
+          "default": 0.25,
+          "min": -1.0,
+          "max": 0.5,
+          "unit": "1",
+          "label": "mu"
+        },
+        "beta": {
+          "default": 0.005,
+          "min": 0.0,
+          "max": 1.7976931348623157e+308,
+          "unit": "1",
+          "label": "beta"
+        },
+        "a": {
+          "default": 0.0,
+          "min": 0.0,
+          "max": 1.7976931348623157e+308,
+          "unit": "Pa",
+          "label": "a"
+        },
+        "phi_peak": {
+          "default": 0.5235987755982988,
+          "min": 0.0,
+          "max": 2,
+          "unit": "1",
+          "label": "phi_peak"
+        },
+        "phi_cv": {
+          "default": 0.3490658503988659,
+          "min": 0.0,
+          "max": 2,
+          "unit": "1",
+          "label": "phi_cv"
+        },
+        "phi_zero": {
+          "default": 0.017453292519943295,
+          "min": 0.0,
+          "max": 2,
+          "unit": "1",
+          "label": "phi_zero"
+        },
+        "p_ref": {
+          "default": 100000.0,
+          "min": 0.0,
+          "max": 1.7976931348623157e+308,
+          "unit": "Pa",
+          "label": "p_ref"
+        },
+        "check_tol": {
+          "default": 1e-08,
+          "min": 1e-14,
+          "max": 0.001,
+          "unit": "1",
+          "label": "Numerical final-check tolerance; not a material constant"
+        }
+      },
+      "state": [
+        {
+          "name": "sigma",
+          "shape": "sym",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "cauchy_stress",
+            "transformation": "symmetric_spatial_tensor"
+          },
+          "initial": [
+            100000.0,
+            100000.0,
+            100000.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "kappa",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "1",
+          "semantics": {
+            "role": "persistent",
+            "quantity": "work_conjugate_plastic_shear",
+            "transformation": "scalar_invariant"
+          },
+          "initial": 0.0
+        },
+        {
+          "name": "u1",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "increment_unknown",
+            "quantity": "trial_principal_stress_correction",
+            "transformation": "fixed_components"
+          },
+          "initial": 0.0
+        },
+        {
+          "name": "u2",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "increment_unknown",
+            "quantity": "trial_principal_stress_correction",
+            "transformation": "fixed_components"
+          },
+          "initial": 0.0
+        },
+        {
+          "name": "u3",
+          "shape": "scalar",
+          "unit": "Pa",
+          "scale": "p_ref",
+          "semantics": {
+            "role": "increment_unknown",
+            "quantity": "trial_principal_stress_correction",
+            "transformation": "fixed_components"
+          },
+          "initial": 0.0
+        },
+        {
+          "name": "lam12",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "1",
+          "semantics": {
+            "role": "plastic_multiplier",
+            "quantity": "principal_pair_multiplier",
+            "transformation": "fixed_components"
+          },
+          "initial": 0.0
+        },
+        {
+          "name": "lam13",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "1",
+          "semantics": {
+            "role": "plastic_multiplier",
+            "quantity": "principal_pair_multiplier",
+            "transformation": "fixed_components"
+          },
+          "initial": 0.0
+        },
+        {
+          "name": "lam21",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "1",
+          "semantics": {
+            "role": "plastic_multiplier",
+            "quantity": "principal_pair_multiplier",
+            "transformation": "fixed_components"
+          },
+          "initial": 0.0
+        },
+        {
+          "name": "lam23",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "1",
+          "semantics": {
+            "role": "plastic_multiplier",
+            "quantity": "principal_pair_multiplier",
+            "transformation": "fixed_components"
+          },
+          "initial": 0.0
+        },
+        {
+          "name": "lam31",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "1",
+          "semantics": {
+            "role": "plastic_multiplier",
+            "quantity": "principal_pair_multiplier",
+            "transformation": "fixed_components"
+          },
+          "initial": 0.0
+        },
+        {
+          "name": "lam32",
+          "shape": "scalar",
+          "unit": "1",
+          "scale": "1",
+          "semantics": {
+            "role": "plastic_multiplier",
+            "quantity": "principal_pair_multiplier",
+            "transformation": "fixed_components"
+          },
+          "initial": 0.0
+        }
+      ],
+      "derived": [
+        {
+          "name": "bulkden",
+          "expr": "3*(1-2*mu)"
+        },
+        {
+          "name": "Kb",
+          "expr": "select(bulkden>0, 2*G*(1+mu)/bulkden, 0*G)"
+        },
+        {
+          "name": "trial",
+          "expr": "-sigma_n - Kb*trace(de)*I-2*G*dev(de)"
+        },
+        {
+          "name": "hardbase",
+          "expr": "beta*phi_peak"
+        },
+        {
+          "name": "hardcoef",
+          "expr": "select(hardbase>0, (phi_peak-phi_zero)/hardbase, 0)"
+        },
+        {
+          "name": "hd",
+          "expr": "1+kappa*hardcoef"
+        },
+        {
+          "name": "hdn",
+          "expr": "1+kappa_n*hardcoef"
+        },
+        {
+          "name": "ph",
+          "expr": "select(hd>0, phi_peak-(phi_peak-phi_zero)/hd, 0)"
+        },
+        {
+          "name": "phn",
+          "expr": "select(hdn>0, phi_peak-(phi_peak-phi_zero)/hdn, 0)"
+        },
+        {
+          "name": "t1",
+          "expr": "select(principal_max_repeated(trial), select(principal_min_repeated(trial), trace(trial)/3, principal_upper_sum(trial)/2), principal_max(trial))"
+        },
+        {
+          "name": "t3",
+          "expr": "select(principal_min_repeated(trial), select(principal_max_repeated(trial), trace(trial)/3, principal_lower_sum(trial)/2), principal_min(trial))"
+        },
+        {
+          "name": "t2",
+          "expr": "select(principal_max_repeated(trial), t1, select(principal_min_repeated(trial), t3, trace(trial)-t1-t3))"
+        },
+        {
+          "name": "Ftrial",
+          "expr": "(t1-t3)/2+sin(phn)*((t1+t3)/2-a)"
+        },
+        {
+          "name": "r1",
+          "expr": "t1+u1"
+        },
+        {
+          "name": "r2",
+          "expr": "t2+u2"
+        },
+        {
+          "name": "r3",
+          "expr": "t3+u3"
+        },
+        {
+          "name": "pr",
+          "expr": "(r1+r2+r3)/3"
+        },
+        {
+          "name": "qr",
+          "expr": "(r1-r3)/2+sin(ph)*((r1+r3)/2-pr)"
+        },
+        {
+          "name": "qc",
+          "expr": "(r1-r3)/2+sin(phi_cv)*((r1+r3)/2-pr)"
+        },
+        {
+          "name": "Jr",
+          "expr": "sqrt(((r1-pr)**2+(r2-pr)**2+(r3-pr)**2)/2)"
+        },
+        {
+          "name": "W",
+          "expr": "select(Ftrial<=0*p_ref, 0, select(Jr>0*p_ref, qc/Jr, 0))"
+        },
+        {
+          "name": "vol",
+          "expr": "select(Ftrial<=0*p_ref, 0, select(qr>0*p_ref, qc*sin(ph)/qr-sin(phi_cv), 0))"
+        },
+        {
+          "name": "L",
+          "expr": "lam12+lam13+lam21+lam23+lam31+lam32"
+        },
+        {
+          "name": "f12",
+          "expr": "(r1-r2)/2+sin(ph)*((r1+r2)/2-a)"
+        },
+        {
+          "name": "b12c1",
+          "expr": "(1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "b12c2",
+          "expr": "(-1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "b12c3",
+          "expr": "(0)/2+sin(phi_cv)*((0)/2-1/3)"
+        },
+        {
+          "name": "f13",
+          "expr": "(r1-r3)/2+sin(ph)*((r1+r3)/2-a)"
+        },
+        {
+          "name": "b13c1",
+          "expr": "(1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "b13c2",
+          "expr": "(0)/2+sin(phi_cv)*((0)/2-1/3)"
+        },
+        {
+          "name": "b13c3",
+          "expr": "(-1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "f21",
+          "expr": "(r2-r1)/2+sin(ph)*((r2+r1)/2-a)"
+        },
+        {
+          "name": "b21c1",
+          "expr": "(-1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "b21c2",
+          "expr": "(1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "b21c3",
+          "expr": "(0)/2+sin(phi_cv)*((0)/2-1/3)"
+        },
+        {
+          "name": "f23",
+          "expr": "(r2-r3)/2+sin(ph)*((r2+r3)/2-a)"
+        },
+        {
+          "name": "b23c1",
+          "expr": "(0)/2+sin(phi_cv)*((0)/2-1/3)"
+        },
+        {
+          "name": "b23c2",
+          "expr": "(1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "b23c3",
+          "expr": "(-1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "f31",
+          "expr": "(r3-r1)/2+sin(ph)*((r3+r1)/2-a)"
+        },
+        {
+          "name": "b31c1",
+          "expr": "(-1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "b31c2",
+          "expr": "(0)/2+sin(phi_cv)*((0)/2-1/3)"
+        },
+        {
+          "name": "b31c3",
+          "expr": "(1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "f32",
+          "expr": "(r3-r2)/2+sin(ph)*((r3+r2)/2-a)"
+        },
+        {
+          "name": "b32c1",
+          "expr": "(0)/2+sin(phi_cv)*((0)/2-1/3)"
+        },
+        {
+          "name": "b32c2",
+          "expr": "(-1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "b32c3",
+          "expr": "(1)/2+sin(phi_cv)*((1)/2-1/3)"
+        },
+        {
+          "name": "returned",
+          "expr": "select(Ftrial<=0*p_ref, trial, select(principal_max_repeated(trial), select(principal_min_repeated(trial), ((r1+r2+r3)/3)*I, ((r1+r2)/2)*I+(r3-(r1+r2)/2)*projector_min(trial)), select(principal_min_repeated(trial), ((r2+r3)/2)*I+(r1-(r2+r3)/2)*projector_max(trial), (r1-r2)*projector_max(trial)+r2*I+(r3-r2)*projector_min(trial))))"
+        }
+      ],
+      "equations": {
+        "sigma": "sigma+returned",
+        "kappa": "select(Ftrial<=0*p_ref, kappa-kappa_n, kappa-kappa_n-L*W)",
+        "u1": "select(Ftrial<=0*p_ref, u1, u1+2*G*(lam12*b12c1+lam13*b13c1+lam21*b21c1+lam23*b23c1+lam31*b31c1+lam32*b32c1)+Kb*L*vol)",
+        "u2": "select(Ftrial<=0*p_ref, u2, u2+2*G*(lam12*b12c2+lam13*b13c2+lam21*b21c2+lam23*b23c2+lam31*b31c2+lam32*b32c2)+Kb*L*vol)",
+        "u3": "select(Ftrial<=0*p_ref, u3, u3+2*G*(lam12*b12c3+lam13*b13c3+lam21*b21c3+lam23*b23c3+lam31*b31c3+lam32*b32c3)+Kb*L*vol)",
+        "lam12": "select(Ftrial<=0*p_ref, lam12, sqrt(lam12**2+(f12/p_ref)**2)-lam12+f12/p_ref)",
+        "lam13": "select(Ftrial<=0*p_ref, lam13, sqrt(lam13**2+(f13/p_ref)**2)-lam13+f13/p_ref)",
+        "lam21": "select(Ftrial<=0*p_ref, lam21, sqrt(lam21**2+(f21/p_ref)**2)-lam21+f21/p_ref)",
+        "lam23": "select(Ftrial<=0*p_ref, lam23, sqrt(lam23**2+(f23/p_ref)**2)-lam23+f23/p_ref)",
+        "lam31": "select(Ftrial<=0*p_ref, lam31, sqrt(lam31**2+(f31/p_ref)**2)-lam31+f31/p_ref)",
+        "lam32": "select(Ftrial<=0*p_ref, lam32, sqrt(lam32**2+(f32/p_ref)**2)-lam32+f32/p_ref)"
+      },
+      "domain": [
+        "G>0*G",
+        "mu>-1",
+        "mu<0.5",
+        "beta>0",
+        "phi_peak>0",
+        "phi_peak<2",
+        "cos(phi_peak)>0",
+        "phi_cv>0",
+        "phi_cv<2",
+        "cos(phi_cv)>0",
+        "phi_zero>0",
+        "phi_zero<=phi_peak",
+        "a>=0*p_ref",
+        "p_ref>0*p_ref",
+        "bulkden>0",
+        "hardbase>0",
+        "hd>0",
+        "hdn>0",
+        "kappa>=0",
+        "kappa_n>=0",
+        "ph>0",
+        "phn>0",
+        "select(phi_zero<phi_peak, ph<phi_peak, ph<=phi_peak)",
+        "select(Ftrial<=0*p_ref, 1, select(Jr>0*p_ref, select(qr>0*p_ref, 1, 0), 0))>0"
+      ],
+      "initial_checks": [
+        "(principal_max_value(-sigma)-principal_min_value(-sigma))/2+sin(phi_peak-(phi_peak-phi_zero)/(1+kappa*(phi_peak-phi_zero)/(beta*phi_peak)))*((principal_max_value(-sigma)+principal_min_value(-sigma))/2-a)<=check_tol*p_ref"
+      ],
+      "postsolve_checks": [
+        "kappa>=kappa_n",
+        "r1>=r2",
+        "r2>=r3",
+        "select(Ftrial<=0*p_ref, 1, select(pr<a, 1, 0))>0",
+        "lam12>=0",
+        "f12<=check_tol*p_ref",
+        "abs(lam12*f12/p_ref)<=check_tol",
+        "lam13>=0",
+        "f13<=check_tol*p_ref",
+        "abs(lam13*f13/p_ref)<=check_tol",
+        "lam21>=0",
+        "f21<=check_tol*p_ref",
+        "abs(lam21*f21/p_ref)<=check_tol",
+        "lam23>=0",
+        "f23<=check_tol*p_ref",
+        "abs(lam23*f23/p_ref)<=check_tol",
+        "lam31>=0",
+        "f31<=check_tol*p_ref",
+        "abs(lam31*f31/p_ref)<=check_tol",
+        "lam32>=0",
+        "f32<=check_tol*p_ref",
+        "abs(lam32*f32/p_ref)<=check_tol",
+        "norm(sigma+returned)<=check_tol*p_ref",
+        "abs(kappa-kappa_n-L*W)<=check_tol",
+        "select(Ftrial<=0*p_ref, 1, select(abs(vol+qc/(pr-a)+sin(phi_cv))<=check_tol, 1, 0))>0",
+        "abs(select(Ftrial<=0*p_ref, u1, u1+2*G*(lam12*b12c1+lam13*b13c1+lam21*b21c1+lam23*b23c1+lam31*b31c1+lam32*b32c1)+Kb*L*vol))<=check_tol*p_ref",
+        "abs(select(Ftrial<=0*p_ref, u2, u2+2*G*(lam12*b12c2+lam13*b13c2+lam21*b21c2+lam23*b23c2+lam31*b31c2+lam32*b32c2)+Kb*L*vol))<=check_tol*p_ref",
+        "abs(select(Ftrial<=0*p_ref, u3, u3+2*G*(lam12*b12c3+lam13*b13c3+lam21*b21c3+lam23*b23c3+lam31*b31c3+lam32*b32c3)+Kb*L*vol))<=check_tol*p_ref",
+        "(principal_max_value(-sigma)-principal_min_value(-sigma))/2+sin(phi_peak-(phi_peak-phi_zero)/(1+kappa*(phi_peak-phi_zero)/(beta*phi_peak)))*((principal_max_value(-sigma)+principal_min_value(-sigma))/2-a)<=check_tol*p_ref"
+      ],
+      "formulation": {
+        "time_dependence": "strain_path",
+        "equation_form": "incremental_residual",
+        "kinematics": "small_strain_3d",
+        "frame": "fixed_spatial",
+        "objective_rate": "none",
+        "tensor_representation": "mandel",
+        "stress_sign": "compression_positive",
+        "strain_sign": "compression_positive",
+        "inputs": {
+          "equation": {
+            "de": {
+              "quantity": "strain_increment",
+              "measure": "infinitesimal_strain",
+              "shape": "sym",
+              "unit": "1",
+              "configuration": "current",
+              "sampling": "increment",
+              "constraint": "finite"
+            }
+          },
+          "advance": {}
+        },
+        "stress": {
+          "source": "state",
+          "name": "sigma",
+          "measure": "cauchy",
+          "scope": "effective"
+        }
+      },
+      "initialization": {
+        "method": "explicit_state",
+        "default_policy": "examples_only",
+        "required_state": [
+          "sigma",
+          "kappa"
+        ],
+        "validation": "domain_and_initial_checks"
+      }
+    }
+  ]
+}

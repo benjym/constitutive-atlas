@@ -19,7 +19,7 @@ from build_power_creep_web import bundle as bundle_power_creep
 from build_orthotropic_laboratory import bundle as bundle_orthotropic
 
 from build_kelvin_voigt_laboratory import bundle as bundle_kelvin_voigt
-from build_controlled_time_web import bundle as bundle_controlled_time
+from package_emc_retained_profiles import PROFILES, retained_profiles
 
 def check_pages_package(stem, dest, defer_replays):
     # Publication checks the package; study replays are available separately.
@@ -37,7 +37,7 @@ def main():
     parser.add_argument('--sls-wasm-dir',type=Path,default=ROOT/'build-sls-wasm',help=argparse.SUPPRESS)
     parser.add_argument('--burgers-wasm-dir',type=Path,default=ROOT/'build-burgers-wasm',help='Dedicated common physical-time Burgers engine')
     parser.add_argument('--j2-wasm-dir',type=Path,default=ROOT/'build-j2-wasm',help='Qualified J2 material-point engine for the main laboratory')
-    parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'web/engines/current17-compatible/norsand',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
+    parser.add_argument('--controlled-path-wasm-dir',type=Path,default=ROOT/'web/engines/emc-release-norsand',help='Exact retained qualified controlled-path engine; generated source and runtime hashes are checked')
     parser.add_argument('--maxwell-wasm-dir',type=Path,default=ROOT/'web/engines/current17-compatible/maxwell',help='Dedicated Maxwell engine with exact accepted current-build qualification receipt')
     parser.add_argument('--implicit-path-wasm-dir',type=Path,default=ROOT/'build-implicit-path-wasm',help='Exact independently qualified implicit strain-path engine')
     parser.add_argument('--hill-wasm-dir',type=Path,default=ROOT/'web/engines/hill',help='Exact reviewed Hill engine for main laboratory')
@@ -49,6 +49,7 @@ def main():
     parser.add_argument('--interface2016-wasm-dir',type=Path,default=ROOT/'web/engines/current17-baseline-compatible/interface2016',help='Exact reviewed source-reconciled HvWE controlled-path engine')
     parser.add_argument('--perzyna-wasm-dir',type=Path,default=ROOT/'build-perzyna-public',help='Exact independently reviewed Perzyna physical-time engine')
     parser.add_argument('--controlled-time-wasm-dir',type=Path,default=ROOT/'web/engines/controlled-time',help='Exact independently qualified imposed-field physical-time engine for the main laboratory')
+    parser.add_argument('--certified-recorded-wasm-dir',type=Path,default=ROOT/'web/engines/certified-return')
     args=parser.parse_args()
     subprocess.run(['node',str(ROOT/'tools/check_model_profiles.mjs'),str(ROOT)],check=True)
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
@@ -88,6 +89,11 @@ def main():
     shutil.copyfile(ROOT/'cpp/scalar-functions/NOTICES.txt',dest/'scalar-functions-NOTICES.txt')
     subprocess.run(['node',str(ROOT/'tools/build_laboratory_examples.mjs'),str(ROOT),str(dest),str(generated/'models.json')],check=True)
     shutil.copyfile(ROOT/'catalogue/manifest.json',dest/'catalogue.json')
+    from build_certified_recorded import bundle as bundle_certified_recorded
+    recorded_model = bundle_certified_recorded(dest,args.certified_recorded_wasm_dir)
+    (dest/'certified-recorded.json').write_text(json.dumps(recorded_model)+'\n')
+    shutil.copyfile(ROOT/'web/recorded-laboratory.mjs',dest/'recorded-laboratory.mjs')
+    subprocess.run(['node',str(ROOT/'tools/test_certified_recorded_package.mjs'),str(dest)],check=True)
     from build_database import bundle as bundle_database
     bundle_database(dest)
     import hashlib
@@ -130,29 +136,38 @@ def main():
     subprocess.run(['node',str(ROOT/'tools/test_j2_laboratory_package.mjs'),str(dest)],check=True)
     from build_controlled_path_web import bundle as bundle_controlled_path
     bundle_controlled_path(dest,args.controlled_path_wasm_dir)
-    if args.interface2016_wasm_dir.resolve() == (ROOT/'web/engines/current17-baseline-compatible/interface2016').resolve():
-        from build_interface2016_baseline_web import bundle as bundle_interface2016
-        interface_checker = 'test_interface2016_baseline_package.mjs'
-    else:
-        from build_interface2016_web import bundle as bundle_interface2016
-        interface_checker = None
-    bundle_interface2016(dest,args.interface2016_wasm_dir)
-    interface_checker = interface_checker or ('test_interface2016_compatible_package.mjs' if (dest/'material-point-interface2016/engine-path/source-compatibility.json').is_file() else 'test_interface2016_package.mjs')
-    subprocess.run(['node',str(ROOT/'tools'/interface_checker),str(dest)],check=True)
-    from build_maxwell_laboratory import bundle as bundle_maxwell
-    bundle_maxwell(dest,args.maxwell_wasm_dir)
-    from build_implicit_path_laboratory import bundle as bundle_implicit_path
-    bundle_implicit_path(dest,args.implicit_path_wasm_dir)
-    check_root=dest/'implicit-path-package-checks';check_root.mkdir(exist_ok=True)
-    check_report=Path(tempfile.mkdtemp(prefix='build-',dir=check_root))/'report.json'
-    subprocess.run([sys.executable,str(ROOT/'tools/test_implicit_path_package.py'),str(dest),'--output',str(check_report)],check=True)
-    bundle_orthotropic(dest,args.orthotropic_wasm_dir)
-    subprocess.run(['node',str(ROOT/'tools/test_orthotropic_package.mjs'),str(dest)],check=True)
-    from build_hill_laboratory import bundle as bundle_hill
-    bundle_hill(dest,args.hill_wasm_dir)
-    subprocess.run(['node',str(ROOT/'tools/test_hill_package.mjs'),str(dest)],check=True)
-    bundle_controlled_time(dest,args.controlled_time_wasm_dir)
-    subprocess.run(['node',str(ROOT/'tools/test_controlled_time_package.mjs'),str(dest)],check=True)
+    with retained_profiles() as bundle_retained:
+        if args.interface2016_wasm_dir.resolve() == ROOT/PROFILES['interface2016'][0]:
+            bundle_retained('interface2016',dest,args.interface2016_wasm_dir)
+            interface_checker = 'test_interface2016_baseline_package.mjs'
+        else:
+            from build_interface2016_web import bundle as bundle_interface2016
+            bundle_interface2016(dest,args.interface2016_wasm_dir)
+            interface_checker = ('test_interface2016_compatible_package.mjs'
+                                 if (dest/'material-point-interface2016/engine-path/source-compatibility.json').is_file()
+                                 else 'test_interface2016_package.mjs')
+        subprocess.run(['node',str(ROOT/'tools'/interface_checker),str(dest)],check=True)
+        if args.maxwell_wasm_dir.resolve() == ROOT/PROFILES['maxwell'][0]:
+            bundle_retained('maxwell',dest,args.maxwell_wasm_dir)
+        else:
+            from build_maxwell_laboratory import bundle as bundle_maxwell
+            bundle_maxwell(dest,args.maxwell_wasm_dir)
+        from build_implicit_path_laboratory import bundle as bundle_implicit_path
+        bundle_implicit_path(dest,args.implicit_path_wasm_dir)
+        check_root=dest/'implicit-path-package-checks';check_root.mkdir(exist_ok=True)
+        check_report=Path(tempfile.mkdtemp(prefix='build-',dir=check_root))/'report.json'
+        subprocess.run([sys.executable,str(ROOT/'tools/test_implicit_path_package.py'),str(dest),'--output',str(check_report)],check=True)
+        bundle_orthotropic(dest,args.orthotropic_wasm_dir)
+        subprocess.run(['node',str(ROOT/'tools/test_orthotropic_package.mjs'),str(dest)],check=True)
+        from build_hill_laboratory import bundle as bundle_hill
+        bundle_hill(dest,args.hill_wasm_dir)
+        subprocess.run(['node',str(ROOT/'tools/test_hill_package.mjs'),str(dest)],check=True)
+        if args.controlled_time_wasm_dir.resolve() == ROOT/PROFILES['controlled_time'][0]:
+            bundle_retained('controlled_time',dest,args.controlled_time_wasm_dir)
+        else:
+            from build_controlled_time_web import bundle as bundle_controlled_time
+            bundle_controlled_time(dest,args.controlled_time_wasm_dir)
+        subprocess.run(['node',str(ROOT/'tools/test_controlled_time_package.mjs'),str(dest)],check=True)
     (dest/'.nojekyll').touch()
     print(f'Packaged {dest}')
 

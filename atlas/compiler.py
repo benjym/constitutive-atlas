@@ -24,7 +24,11 @@ def finite_derived(name,typ):
 
 
 def generate(destination, model_paths=None):
-    models=all_models() if model_paths is None else [load(p) for p in sorted(model_paths)]; dest=Path(destination); dest.mkdir(parents=True,exist_ok=True)
+    models=all_models() if model_paths is None else [load(p) for p in sorted(model_paths)]
+    for model in models:
+        if model.get('postsolve_checks'):
+            raise ValueError(f"{model['id']}: postsolve checks require a certified-return backend")
+    dest=Path(destination); dest.mkdir(parents=True,exist_ok=True)
     if any(m.get('formulation',{}).get('equation_form')=='controlled_ode' for m in models):
         raise ValueError('controlled-time profile requires dedicated generate_controlled_time; mixed catalogues unsupported')
     if any(m.get('formulation',{}).get('equation_form')=='path_ode' for m in models):

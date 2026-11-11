@@ -89,6 +89,8 @@ jobs:
         python3 -B docs/ingestion/lade-duncan-1975/atlas-integration-v1/live-release-v1/restore_interface_request.py
         python3 -B tools/provision_implicit_path_assets.py
         python3 -B tools/fetch_data.py --approved-only
+    - name: Fetch the exact reviewed retained-profile source
+      run: git fetch --no-tags --depth=1 origin 7c9954254fe89fe7fcd45d1a64549f8e837c99c4
     - name: Build the website package
       env:
         REPLAY_STUDIES: ${{ inputs.replay_studies }}

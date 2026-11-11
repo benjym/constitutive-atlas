@@ -1,5 +1,112 @@
 /** Public model profiles. Authoring requirements: docs/PUBLIC_MODEL_PROFILES.md. */
 export const modelProfiles = {
+  "extended-mohr-coulomb-2013-exact-generalized-work-be-exact-domain-v3": {
+    "title": "Extended Mohr–Coulomb (2013) · generalized flow",
+    "summary": "A frictional soil model with work-based strength hardening and a separate rule for contraction or dilation.",
+    "introduction": "Doherty and Muir Wood’s 2013 model combines the angular Mohr–Coulomb yield surface with a Cam Clay type plastic flow rule. Elastic deformation uses constant stiffness. Once yielding starts, a work-based history variable changes the mobilized friction angle, which approaches a specified peak value as plastic deformation accumulates.",
+    "behaviours": [
+      [
+        "Strength grows with plastic history",
+        "The starting friction angle records the chosen preparation. Further plastic work raises the mobilized angle toward its peak; elastic unloading preserves that history."
+      ],
+      [
+        "Strength and volume change have separate controls",
+        "The flow angle changes the plastic volume response without replacing the friction angle in the yield surface. Contraction or dilation depends on the stress state and the flow parameters."
+      ],
+      [
+        "Corners matter",
+        "The exact Mohr–Coulomb surface has faces and edges. The proposed Atlas formulation includes both nonhydrostatic edges, where two principal stresses coincide, through a generalized flow rule."
+      ]
+    ],
+    "parameters": [
+      {
+        "name": "G",
+        "symbol": "G",
+        "meaning": "Elastic shear modulus",
+        "help": "Sets the elastic resistance to a change of shape. The bulk modulus is derived from G and the Poisson ratio.",
+        "unit": "Pa"
+      },
+      {
+        "name": "mu",
+        "symbol": "ν",
+        "meaning": "Elastic Poisson ratio",
+        "help": "Together with G, controls elastic volume change. Use the selected material’s elastic constants consistently.",
+        "unit": "1"
+      },
+      {
+        "name": "beta",
+        "symbol": "β",
+        "meaning": "Friction-hardening scale",
+        "help": "Controls how quickly the friction angle approaches its peak as work history grows. For the same starting and peak angles, a smaller positive β gives faster hardening.",
+        "unit": "1"
+      },
+      {
+        "name": "a",
+        "symbol": "a",
+        "meaning": "Attraction stress",
+        "help": "Shifts the frictional strength surface. Its contribution to strength also depends on the friction angle; it is not an independently specified tensile cap.",
+        "unit": "Pa"
+      },
+      {
+        "name": "phi_peak",
+        "symbol": "φ_peak",
+        "meaning": "Peak friction angle",
+        "help": "The limiting friction angle approached during hardening. The selected formulation has no subsequent softening branch. Enter angles in radians.",
+        "unit": "1"
+      },
+      {
+        "name": "phi_cv",
+        "symbol": "φ_cv",
+        "meaning": "Plastic flow angle",
+        "help": "Controls the plastic volume-change rule. It can lie above or below the peak friction angle within the declared domain. The name does not guarantee a true critical state for every parameter choice. Enter radians.",
+        "unit": "1"
+      },
+      {
+        "name": "phi_zero",
+        "symbol": "φ₀",
+        "meaning": "Friction angle at the preparation origin",
+        "help": "Records the maximum friction mobilized before the chosen zero of work history. Keep it unchanged on restart; it is preparation information rather than an extra fitted material constant. Enter radians.",
+        "unit": "1"
+      }
+    ],
+    "parameterNote": "G and a use the same stress unit. Angles are dimensionless inputs expressed in radians. The starting angle and work-history origin must describe the same preparation; the parameter values alone do not identify a specimen or establish a calibration.",
+    "stateLabels": {
+      "sigma": "Initial effective stress",
+      "kappa": "Work history from the preparation origin"
+    },
+    "preparation": "Supply the full effective stress tensor, a nonnegative work-history value κ, and its unchanged preparation angle φ₀. A fresh preparation starts at κ = 0. A restart retains both κ and the original φ₀; resetting κ while replacing φ₀ by the current friction angle erases the intended history. The starting stress must lie inside or on the yield surface for that history. κ is a work-based scalar, not a second plastic-strain norm or elapsed time.",
+    "scope": "This Atlas variant uses three-dimensional infinitesimal strain, fixed spatial axes, effective Cauchy stress and compression-positive stress and strain. Its exact yield surface and generalized edge flow are integrated by backward Euler. The laboratory offers one verified six-component prescribed strain path.",
+    "limits": "The example is a material-point calculation. Axisymmetric presets, mixed controls, active tensile apex returns and update tangents are outside the supported example. The model has no postpeak softening, creep or finite-rotation transport. The example is not experimental validation or a reproduction of the author implementation.",
+    "equationIntro": "Friction hardens from the declared preparation origin.",
+    "equations": [
+      [
+        "Friction hardening",
+        "φ(κ) = φ_peak − (φ_peak − φ₀) / [1 + κ(φ_peak − φ₀)/(βφ_peak)]"
+      ]
+    ],
+    "equationNote": "κ is the nonnegative work-conjugate history scalar. The same φ₀ and parameter identity are retained throughout a restart. If φ₀ equals φ_peak, this relation gives constant friction.",
+    "references": [
+      {
+        "label": "Doherty & Muir Wood (2013), An extended Mohr–Coulomb (EMC) model for predicting the settlement of shallow foundations on sand — Géotechnique 63(8), 661–673",
+        "url": "https://doi.org/10.1680/geot.12.P.008"
+      }
+    ],
+    "related": [
+      "extended-mohr-coulomb-2013",
+      "mohr-coulomb",
+      "modified-cam-clay"
+    ],
+    "contentSources": [
+      "docs/ingestion/extended-mohr-coulomb-2013/selected-return-policy-v1/model.json",
+      "docs/ingestion/extended-mohr-coulomb-2013/selected-return-policy-v1/frozen/CONTRACT.md",
+      "docs/ingestion/extended-mohr-coulomb-2013/selected-return-policy-v1/MATH.md",
+      "docs/ingestion/extended-mohr-coulomb-2013/canonical-postsolve-v1/PUBLIC_PROFILE_DRAFT.md",
+      "docs/ingestion/extended-mohr-coulomb-2013/README.md",
+      "docs/ingestion/extended-mohr-coulomb-2013/certified-public-backend-v1/recorded-gate.json"
+    ],
+    "explorationTitle": "Replay a six-component strain path",
+    "exploration": "Open the laboratory and replay the prepared six-component strain path. The loading step develops plastic work; the final repeated observation retains the same state. Stress and strain use compression-positive Mandel components."
+  },
   "modified-cam-clay": {
     "summary": "A clay plasticity model that connects compression history with yielding and permanent deformation.",
     "introduction": "Modified Cam Clay describes how a clay changes volume and carries shear stress as it is loaded. A changing yield surface separates elastic response from plastic deformation. Its size records the effect of past plastic compression.",

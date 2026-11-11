@@ -1,0 +1,9 @@
+# Extended Mohr–Coulomb2013 — profile draft
+
+This sand model expands the frictional yield surface as plastic shearing accumulates. It combines constant elastic stiffness with friction hardening toward a peak angle and a flow rule that can give contraction or dilation. The flow angle phi_cv marks zero volume change in the source construction; it is not a supplied density evolution or a universal critical-state guarantee.
+
+Material parameters are shear modulus G(Pa), Poisson ratio mu, peak friction and flow angles(radians), attraction a(Pa), and dimensionless hardening scale beta. Initial effective stress and the maximum previously mobilized friction angle specify preparation. The work accumulator starts at zero for that preparation and must be retained with its origin on restart. Numerical scaling/tolerances are separate controls. The source illustrates phi_cv20,30,40degrees at peak30; the model must not artificially require phi_cv below peak.
+
+The Atlas candidate selects exact unrounded yield, generalized flow on both nonhydrostatic edges, work-conjugate hardening and backward Euler. Those are disclosed project choices following reconciliation of printed equation inconsistencies, not a reproduction of the unavailable author UMAT. Infinitesimal fixed-frame effective-stress paths are the intended interface. Active apex/tensile continuation, finite rotation, intrinsic creep, full cyclic calibration and experimental validation are not established. No laboratory example is advertised as working yet.
+
+Reference: [Doherty & Muir Wood2013](https://doi.org/10.1680/geot.12.P.008), Géotechnique63(8),661–673. Provenance: original ingestion source receipts, complete-law-v1 accepted assessment, exact-generalized-v1 accepted proposal, declarative-representation-v1 accepted study and this canonical source packet. Keep raw copyrighted PDF/code private.

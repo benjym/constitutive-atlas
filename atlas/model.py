@@ -274,6 +274,9 @@ def validate(model):
         if infer(parse(condition),symbols)!=Type('bool'): raise ValidationError('domain checks must be comparisons')
     for condition in model.get('initial_checks',[]):
         if infer(parse(condition),symbols)!=Type('bool'): raise ValidationError('initial checks must be comparisons')
+    for condition in model.get('postsolve_checks', []):
+        if infer(parse(condition), symbols) != Type('bool'):
+            raise ValidationError('postsolve checks must be Boolean predicates')
     for field in model.get('observables',[]):
         typ=field_type(field)
         if infer(parse(field['expr']),symbols)!=typ:

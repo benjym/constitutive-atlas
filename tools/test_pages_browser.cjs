@@ -2,7 +2,7 @@
 const assert = require('node:assert/strict');
 const {createServer} = require('node:http');
 const {createReadStream} = require('node:fs');
-const {stat} = require('node:fs/promises');
+const {stat, readFile} = require('node:fs/promises');
 const {extname, resolve, sep} = require('node:path');
 const {chromium} = require('playwright');
 
@@ -53,8 +53,27 @@ async function main() {
       assert.equal(response.status(), 200, path);
       assert.ok(Number(response.headers()['content-length']) > 0, path);
     }
+    const id = 'extended-mohr-coulomb-2013-exact-generalized-work-be-exact-domain-v3';
+    await page.goto(url + '#catalogue/' + id);
+    await page.locator('#catalogue-explore').click();
+    const done = () => page.getByText('Response up to date · 3 ordered observations.', {exact: true}).waitFor();
+    await done();
+    const downloading = page.waitForEvent('download');
+    await page.getByRole('button', {name: 'Reproducible run'}).click();
+    const downloaded = await (await downloading).path();
+    const replay = JSON.parse(await readFile(downloaded, 'utf8'));
+    const expected = JSON.parse(await readFile(resolve(__dirname, '../docs/ingestion/extended-mohr-coulomb-2013/certified-public-backend-v1/recorded-wasm.json'), 'utf8'));
+    assert.deepEqual(replay.result, expected);
+    await page.getByRole('button', {name: 'Return to standard laboratory'}).click();
+    await page.locator('#run-file').setInputFiles(downloaded);
+    await done();
+    await page.setViewportSize({width: 390, height: 844});
+    await page.reload();
+    await done();
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false);
+    await page.getByRole('img', {name: 'Recorded deviator stress versus mean stress'}).waitFor();
     assert.deepEqual(errors, []);
-    console.log('Packaged laboratory, Cam Clay comparison and database links passed.');
+    console.log('Packaged laboratory, Cam Clay comparison, database links and Extended Mohr–Coulomb replay passed.');
   } finally {
     try { await browser?.close(); }
     finally { await new Promise(ok => server.close(ok)); }

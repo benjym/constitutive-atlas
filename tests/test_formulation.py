@@ -80,6 +80,14 @@ class FormulationTests(unittest.TestCase):
                 # explicit scope metadata can differ from unscoped legacy timed output.
                 with tempfile.TemporaryDirectory() as directory:
                     base = Path(directory)
+                    if old.get('postsolve_checks'):
+                        self.assertEqual(old['postsolve_checks'],new['postsolve_checks'])
+                        for label, model in [('old', old), ('new', new)]:
+                            definition=base/(label+'.json')
+                            definition.write_text(json.dumps(model))
+                            with self.assertRaisesRegex(ValueError,'postsolve checks require a certified-return backend'):
+                                generate(base/label,[definition])
+                        continue
                     if integration_kind(old)=='controlled_ode':
                         from atlas.controlled_time_compiler import generate as generate_controlled
                         for label, model in [('old', old), ('new', new)]:
