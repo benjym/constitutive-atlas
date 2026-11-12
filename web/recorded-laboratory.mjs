@@ -89,9 +89,9 @@ export function setupRecordedLaboratory({catalogue,chart,cancelOrdinary,onLeave}
   if(size===1){input.type='number';input.step='any';}else input.type='text';
   wrapper.append(input);$(container).append(wrapper);if(!readonly)inputs[key].push({input,offset,size});
  }
- function load(saved,{partition=ordinaryCatalogue,worker='./worker.js',readOnly=false,title=null}={}){
+ function load(saved,{partition=ordinaryCatalogue,worker='./worker.js',readOnly=false,title=null,hint=null}={}){
   catalogue=partition;workerPath=worker;fixed=readOnly;
-  $('hint').textContent=fixed?'Replay the verified six-component example with its original inputs. The repeated target records the same state without another material update.':'Every acquired control point is retained. Parameter and starting-state edits rerun the same path.';
+  $('hint').textContent=fixed?(hint??'Replay the verified six-component example with its original inputs. The repeated target records the same state without another material update.'):'Every acquired control point is retained. Parameter and starting-state edits rerun the same path.';
   $('leave').textContent=fixed?'Return to standard laboratory':'Use standard loading controls';
   const parsed=parseRecordedDocument(JSON.stringify(saved),catalogue),model=catalogue.models.find(m=>m.id===parsed.specification.model);
   stop();spec=structuredClone(parsed.specification);result=null;

@@ -1,0 +1,138 @@
+{
+  "identity": "clay2014-full13-source-scope-independent-review-20261111-v1",
+  "status": "accepted_for_explicit_reconciled_contract_preparation",
+  "reviewer_run": "/root/md1997_upstream_merge_review",
+  "scope": "Independent source/scope and algebra review only. No candidate model, E5 admission, compiled/material calls, publication equivalence or author-intent verdict.",
+  "proposal_sha256": "5ffcdb91fdf3b9b6c947effaa15e8284f2257518cdafc942c78e915757d46e32",
+  "source_receipt_sha256": "32e1fe4165e4f34ac65182d4ca5e2967426f5811395249dc7cbe9068ff3796b3",
+  "source_pdf_sha256": "2eb8598297e3ac9cf245161f56674d6cef622b35fc612adc89dc129568b55202",
+  "additional_packet_bindings": {
+    "table-parameters.json": "baa954e0aaeb2821302949f9e056b2095b69652b42693dd283766e5d6ee94f11",
+    "calibration_witness.py": "b2136450b0600be41d89df0717c683ef8d857726467c31930fad6f11996b2f87"
+  },
+  "visually_inspected_private_sources": {
+    "source-03.png": "faa787a391ef261b37b9adf52c9992f7b048da048552659f53b031d2b68cb5c0",
+    "source-04.png": "9e9756074fca3de916ba6e02fa5bd3435391c674981db3bb63b7d3869d81304d",
+    "appendix-09.png": "3d81c9b6204afe6126811bf5a18ed946efa10af95f3c798b6f647ba92f251240",
+    "appendix-10.png": "61e8f21b9aab7cab19fb2314355f88a9e4c0e776fdfcf5db0dea5cdf6cdeca1e",
+    "appendix-11.png": "4e7bbf984bf6fc5b43e0f04a4fde958ce44b55ab660c2a620b832871bcf27164",
+    "tables-13.png": "f6405d0809395137aed53d6be8b21e9e5d24ef1a4b81812e5b3f983c21377df6",
+    "source-02.png": "8efa176fc408b10b8b653acb87c013e2aa5c84dd32a8627261ea3b210a5d8d5f"
+  },
+  "recommendation": "Proceed to a distinct, fully disclosed thirteen-state project-reconciled contract retaining anisotropic stiffness, the selected Eq49 exponent in both density factors, and complete AppendixB IGS. Neither a base-only shortcut nor literal manuscript/final-author equivalence is justified. Implementation freeze is premature until the qualifications and prerequisites below are resolved explicitly.",
+  "findings": [
+    {
+      "id": "F1",
+      "topic": "Trace versus printedAm",
+      "decision": "Supported algebraic discrepancy; selected correction is a project choice, not uniquely inferred author intent.",
+      "details": "For a unit material normal, tr(L:I)=3a1+9a2+6a3+2a4+a5 = 2r+1+nu(2r+4r/v)+nu^2(4r/v-1). Its difference from printedEq14 is 2r^2 nu^2(1-v^-2). Newly visually inspected page2 Eqs1-6 confirms the fourth-order product/action and a1/a2/a3; page3 confirms a4/a5, printedAm andfs. The retained-model coefficients and prior independent coefficient review agree with these source expressions.",
+      "source": "Eqs2-8 and14-15; existing independent-model review."
+    },
+    {
+      "id": "F2",
+      "topic": "Essential unloading-calibration qualification",
+      "decision": "Proposal must narrow the meaning of isotropic-unloading consistency in the final selected contract.",
+      "derivation": "Let source stress=-pI, source D=theta I/3 with theta>0 for expansion, d=-I/sqrt(3), and k=fd/fdA=(p/pe)^alpha_f at Fm=0. Eq34 gives sigma_dot=(1+k)fs theta(L:I)/3 - k p theta I/lambda_star and p_dot=[k p/lambda_star-(1+k)fs T/9]theta. PrintedEq13 corresponds to k=1, hence p=pe (normal-compression density) for positivealpha_f. Selecting Acal=T gives p_dot=-p theta/kappa_star at that state.",
+      "qualification": "This is an instantaneous mean-rate calibration of the base law under imposed isotropic strain. Generally dev(L:I) is nonzero: isotropicD does not preserve isotropicstress. It is not a universal hydrostatic stress-controlled unloading slope, nor a finite unloading trajectory at arbitrary density. For fullIGS the delta=0 tangent is mRfsL; the base-law calibration is recovered at rho=1 with D positively collinear withmemory, not automatically at delta=0.",
+      "required_density_state": "Freeze pe=pr exp[(N-ln(1+e))/lambda_star]; normal-compression calibration state ln(1+e)=N-lambda_star ln(p/pr), with finite admissible e/p. Test both on-line and off-line density and state preparation.",
+      "source": "Eqs12-15,34-48,51-55."
+    },
+    {
+      "id": "F3",
+      "topic": "Very-small-strain shear calibration",
+      "decision": "Factor9/2 discrepancy confirmed independently; proposed denominator9 is defensible as an explicitly calibration-derived choice.",
+      "derivation": "Eq16/17 gives Gtp0=mR fs rB/(2g), fs=9p(1/lambda_star+1/kappa_star)/(2Acal). Solving for targetGt=pr Ag(p/pr)^ng gives mRcal=Gt*4Acal*g*lambda_star*kappa_star/[9p*r*(lambda_star+kappa_star)*B]. PrintedEqs19/56 use2 instead of9 in this denominator and produceGtp0/Gt=9/2.",
+      "qualification": "The choice to retain printedEq17 and targetEq18 while changing19/56 is a named project reconciliation. The manuscript alone does not prove which printed expression the author intended to change."
+    },
+    {
+      "id": "F4",
+      "topic": "AppendixB branches and tensor order",
+      "decision": "The proposed q>0/q<=0 stress andmemory branch formulas agree with the visually readEqs51-57.",
+      "N_definition": "Source-sign N_tensor=-(A:d)/(fs*fdA), A=fsL+(sigma/lambda_star) outer I, so fs*fd*N_tensor=-(fd/fdA)A:d asEq34 requires. Distinguish N_tensor from scalar density-intercept parameterN. InEq52 the nonlinear term acts as N_tensor outer h, not h outer N_tensor: contraction withD yields N_tensor*(h:D). Likewise (L:h) outer h contracts to(L:h)*(h:D).",
+      "limit_checks": "Atdelta0 seth0/rho0; M=mRfsL anddelta_dot=D. Atq0 corrections vanish anddelta_dot=D on both sides. Atrho1 andD positively collinear withh, M:D recovers the complete base law and radialmemory growth vanishes. No projection/clipping follows from that continuous boundary identity."
+    },
+    {
+      "id": "F5",
+      "topic": "Compression-sign mapping",
+      "decision": "Final contract must choose and verify a signedmemory convention before any definition is authored.",
+      "consistent_mapping_example": "One consistent option is sigma_source=-sigma_compression, D_source=-D_compression, delta_source=-delta_compression. Thenh_source=-h_compression andq is invariant, so the AppendixB branch condition andmemory form are preserved. L andfs/fd are unchanged, while N_compression=-N_source. The source tensorA becomes fsL-(sigma_compression/lambda_star) outer I; source normalizedstress ratios andd remain computed consistently from invariant normalizedstress. Applying only stress/strain flips but leavingmemory unexamined can interchange loading branches.",
+      "verified_compression_positive_rate": "With Sigma=-sigma_source, E=-D_source and H=-delta_source, q=h_A:E is invariant. Define Q=fs*L:d-Sigma*tr(d)/lambda_star. Positive branch Sigma_dot=c*fs*L:E+rho^chi*(1-mT)*fs*(L:h_A)*q+rho^chi*(fd/fdA)*Q*q; nonpositive branch replaces corrections withrho^chi*(mR-mT)*fs*(L:h_A)*q. H_dot=E-h_A*rho^beta_r*q forpositiveq, otherwiseE. Here d is the source normalized-invariant direction, not silently negated; N_A=Q/(fs*fdA). These signs agree with the parent proposed mapping and reduce to the previously checked compression-positive base law at aligned saturatedmemory."
+    },
+    {
+      "id": "F6",
+      "topic": "Table information",
+      "decision": "Visually confirmedTable1 proposedAg270,ng1,mrat0.5,R5e-5,beta_r0.08,chi0.9 andTable2 phi21.9deg,lambda0.095,kappa0.015,N1.19,nu_pp0.1,alphaG2.",
+      "qualification": "These are manuscript example coefficients, not newvariant calibration or valid ranges. Convertpr1kPa to1000Pa andphi to radians. Tables do not provide complete alphaE/alphaNu, materialorientation, initialstress/voidratio/IGS or preparation."
+    }
+  ],
+  "independent_algebra_checks": {
+    "arithmetic": "Fresh standard-library Fraction calculations by this reviewer, not execution of supplied witness/model/backend.",
+    "witnesses": [
+      {
+        "r": "2",
+        "v": "2",
+        "g": "2",
+        "nu": "1/10",
+        "T_minus_printed": "3/50",
+        "LI_inplane": "231/100",
+        "LI_normal": "121/100"
+      },
+      {
+        "r": "3/2",
+        "v": "4/5",
+        "g": "6/5",
+        "nu": "1/10",
+        "T_minus_printed": "-81/3200",
+        "LI_inplane": "297/160",
+        "LI_normal": "561/400"
+      },
+      {
+        "r": "1",
+        "v": "1",
+        "g": "1",
+        "nu": "1/5",
+        "T_minus_printed": "0",
+        "LI_inplane": "36/25",
+        "LI_normal": "36/25"
+      },
+      {
+        "r": "2",
+        "v": "2",
+        "g": "2",
+        "nu": "0",
+        "T_minus_printed": "0",
+        "LI_inplane": "2",
+        "LI_normal": "1"
+      }
+    ],
+    "all_checks": "All4 trace-discrepancy identities, printedG/target9/2, correctedG/target1 and k1 mean-unloading slope passed exact rational arithmetic; k1/2 doesnotgive the samekappa slope. Hidden isotropic/nu0 cases do not establish general equivalence.",
+    "compiled_calls": 0,
+    "material_calls": 0
+  },
+  "prerequisites_before_definition_freeze": [
+    "Distinct versioned identity naming manuscript2013-11-26, trace-basedAcal, calibration-derivedmR, Eq49 exponent, fullIGS, fixed material plane andzero-spin/smallstrain. State every difference from printedAm/19/56; no claim of finalpublisher/vendor equivalence.",
+    "Complete v0.3 rate/path contract and scalar/tensor crosswalk: sigma6,e,delta6 persistent, Mandel/Frobenius norm, pressure/referenceunits, strainpath coordinate, fixed unit normal and physical-time-independent hold behavior. No silent objective/fabric transport.",
+    "Freeze complete explicit parameters and illustrative preparation, including alphaE/alphaNu andsignedmemory. Required initialstress/e/delta; isotropiccalibration state differs from an arbitrary specimen. ZeroIGS is an explicit example assumption, not reconstructed sample history.",
+    "Define admissible domains: positive finitep/pr/Ag/R andstiffness,lambda>kappa>0,frictioninterval andEq49 argument/positiveexponent,positiveAcal/B and fulltensorpositive-definiteness; finitepositivepe/fs/fd/fdA/mR/mT anddeclared beta_r/chi/mrat ranges. Simple positive individual parameters are insufficient. Guardlog/power/exp denominators and preserveunsupporteddomain refusals.",
+    "Freeze interior stress/ASBS range andsource invariant definitionsI1/I2/I3, omega,Fm,Lodecosine,dA/norm(dA). State hydrostatic limit for undefinedLode0/0, critical/boundary singularities, androundoff policy without inventingglobal continuation or changing source law.",
+    "Freeze norm(delta)<=R invariant with origin/rho1 andq0 event semantics, nonintegerchi/beta origin regularity, transaction/cutback/rejection andfailure-recovery. No automaticmemoryprojection/clamping,epsilon substitution or leakedtrialhistory. Classical stateJacobian maynotexist atdelta0/q0; tests must respect directional/branch semantics.",
+    "SourceTable samples andAg target do not supply universal anisotropy calibration; require sourceorclearlyproject-labelled alphaE/alphaNu/exampleorientations andpreparation."
+  ],
+  "prospective_independent_numerical_gates": [
+    "Freeze independent Cartesian4-index reference, parameters, acceptedinteriorcases, errornorms andtolerances before compiledresults; do not reuse declarativeinterpreter/nativeWasm parity as independent equation verification.",
+    "Exact stiffnesssymmetry/positive-definiteness/anistropicaxis tests; basis/Mandel conversion andmaterial-plane covariance under simultaneous fixedbasis change, not finitephysicalrotationvalidation.",
+    "Isotropicstress normal-compression-state imposedisotropicstrain meanrate/kappa check plus offNCLcounterexample andanisotropicdeviatoricrate; separate optionalhydrostaticstresscontrolled solve with no unfoundedkappa target.",
+    "delta0 shear probes forGtp0 target over multiplep/ng andanisotropyratios; pressuredependentmR/mT updates and4.5 printednegativewitness; no denominator/tolerance changes after observingfailures.",
+    "NonzeroIGS qpositive/qnegative/q0,origin,radial/tangentialmemory directions,rho1 base-lawrecovery andnormboundary,6componenttensorstates; independentalgebra and one-sided/directional derivatives whereclassical derivatives fail.",
+    "Independent adaptive/fixed-stepconverged full13state finitepaths: drained/undrained straincontrols,mixedshear,smallreversal,reload andzerohold; componentandFrobeniusstress/e/memory errors, mesh refinement,complete trajectory comparisons.",
+    "Trialcommit/rollback,invalidstate/parameter/domain,budget/latefailure recovery, explicitmissingstate refusal,reset andsource/evidence identity; serialnative/Wasm onlyafter source/reference freeze. Preserve alloriginalfailure evidence and freeze distinctnewstudyidentity."
+  ],
+  "preservation": {
+    "old_model_path": "models/research/clay2014/hypoplastic-clay-2014-printed-am-proposed-alpha-fixed-plane.json",
+    "old_model_sha256": "9077e7d5d7cdb42a7cc5c2ab49c29c1643543c54310caad26c17b5f256236de5",
+    "unchanged_old_observations": "Original37rate/16recovery evidence and finite-pathFAIL4/144 perbackend remain retained, not erased by separate passinghydro study. No oldmodel/source/review bytes rewritten.",
+    "new_archives": 0
+  },
+  "primary_source_blockers": [],
+  "limits": "No unresolved contradiction blocks authoring an explicitly project-reconciled candidate identity with the qualifications above. Source ambiguity DOES block claiming exactauthor/finalpublished equivalence or universalunloading calibration. This is scope permission for a prospective contract, not permission to skip missingcrosswalk/reference/independentapproval/numerical/browser/live gates."
+}

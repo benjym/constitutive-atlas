@@ -50,6 +50,8 @@ def main():
     parser.add_argument('--perzyna-wasm-dir',type=Path,default=ROOT/'build-perzyna-public',help='Exact independently reviewed Perzyna physical-time engine')
     parser.add_argument('--controlled-time-wasm-dir',type=Path,default=ROOT/'web/engines/controlled-time',help='Exact independently qualified imposed-field physical-time engine for the main laboratory')
     parser.add_argument('--certified-recorded-wasm-dir',type=Path,default=ROOT/'web/engines/certified-return')
+    parser.add_argument('--weighted-recorded-wasm-dir',type=Path,default=ROOT/'web/engines/weighted-history',
+                        help='Exact approved weighted-history engine for the fixed Mašín example')
     args=parser.parse_args()
     subprocess.run(['node',str(ROOT/'tools/check_model_profiles.mjs'),str(ROOT)],check=True)
     dest=args.output or ROOT/('web/preview' if args.preview_experiments else 'web/dist');dest.mkdir(parents=True,exist_ok=True)
@@ -94,6 +96,13 @@ def main():
     (dest/'certified-recorded.json').write_text(json.dumps(recorded_model)+'\n')
     shutil.copyfile(ROOT/'web/recorded-laboratory.mjs',dest/'recorded-laboratory.mjs')
     subprocess.run(['node',str(ROOT/'tools/test_certified_recorded_package.mjs'),str(dest)],check=True)
+    from build_weighted_recorded import bundle as bundle_weighted_recorded, EXPECTED as weighted_expected
+    weighted_model=bundle_weighted_recorded(dest,args.weighted_recorded_wasm_dir)
+    (dest/'weighted-recorded.json').write_text(json.dumps(weighted_model)+'\n')
+    if weighted_model:
+        partition=dest/'engine-weighted-history'
+        subprocess.run(['node',str(ROOT/'tools/test_weighted_recorded_package.mjs'),str(partition),
+                        str(partition/'recorded.json'),str(weighted_expected)],check=True)
     from build_database import bundle as bundle_database
     bundle_database(dest)
     import hashlib

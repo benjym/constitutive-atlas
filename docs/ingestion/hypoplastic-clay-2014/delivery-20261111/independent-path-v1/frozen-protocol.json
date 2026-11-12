@@ -1,0 +1,477 @@
+{
+  "status": "frozen_before_any_reference_path_outputs",
+  "author_run": "/root/md1997_upstream_merge_review",
+  "task": "REF-clay2014-full13-paths-v1",
+  "initial_states": {
+    "synthetic-NCL-H0": {
+      "source_case": "origin-G-p100000-ng1-axis3",
+      "state": [
+        100000.0,
+        100000.0,
+        100000.0,
+        0.0,
+        0.0,
+        0.0,
+        1.1223178827272515,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parameters": {
+        "p_ref": 1000,
+        "p_scale": 100000,
+        "phi_c": 0.38222710618675815,
+        "lambda_star": 0.095,
+        "kappa_star": 0.015,
+        "N": 1.19,
+        "nu_pp": 0.1,
+        "alpha_G": 2,
+        "alpha_E": 2,
+        "alpha_nu": 2,
+        "n1": 0,
+        "n2": 0,
+        "n3": 1,
+        "source_a": 0.3,
+        "lode_roundoff_allowance": 1.4210854715202004e-14,
+        "orientation_allowance": 1.4210854715202004e-14,
+        "stress_interior_margin": 1.4210854715202004e-14,
+        "Ag": 270,
+        "ng": 1.0,
+        "mrat": 0.5,
+        "R": 5e-05,
+        "beta_r": 0.08,
+        "chi": 0.9
+      }
+    },
+    "full6-memory-rho0.3": {
+      "source_case": "fullH-rho0.3-mixed",
+      "state": [
+        120000.0,
+        90000.0,
+        80000.0,
+        3000.0,
+        -2000.0,
+        1000.0,
+        1.1291641390888694,
+        1.5724272550828776e-06,
+        -3.144854510165755e-06,
+        4.7172817652486325e-06,
+        -6.28970902033151e-06,
+        7.862136275414388e-06,
+        9.434563530497265e-06
+      ],
+      "parameters": {
+        "p_ref": 1000,
+        "p_scale": 100000,
+        "phi_c": 0.38222710618675815,
+        "lambda_star": 0.095,
+        "kappa_star": 0.015,
+        "N": 1.19,
+        "nu_pp": 0.1,
+        "alpha_G": 2,
+        "alpha_E": 2,
+        "alpha_nu": 2,
+        "n1": 0,
+        "n2": 0,
+        "n3": 1,
+        "source_a": 0.3,
+        "lode_roundoff_allowance": 1.4210854715202004e-14,
+        "orientation_allowance": 1.4210854715202004e-14,
+        "stress_interior_margin": 1.4210854715202004e-14,
+        "Ag": 270,
+        "ng": 1,
+        "mrat": 0.5,
+        "R": 5e-05,
+        "beta_r": 0.08,
+        "chi": 0.9
+      }
+    },
+    "exact-rho1-shear-memory": {
+      "source_case": "rho1-positive",
+      "state": [
+        120000.0,
+        90000.0,
+        80000.0,
+        3000.0,
+        -2000.0,
+        1000.0,
+        1.1291641390888694,
+        0,
+        0,
+        0,
+        5e-05,
+        0,
+        0
+      ],
+      "parameters": {
+        "p_ref": 1000,
+        "p_scale": 100000,
+        "phi_c": 0.38222710618675815,
+        "lambda_star": 0.095,
+        "kappa_star": 0.015,
+        "N": 1.19,
+        "nu_pp": 0.1,
+        "alpha_G": 2,
+        "alpha_E": 2,
+        "alpha_nu": 2,
+        "n1": 0,
+        "n2": 0,
+        "n3": 1,
+        "source_a": 0.3,
+        "lode_roundoff_allowance": 1.4210854715202004e-14,
+        "orientation_allowance": 1.4210854715202004e-14,
+        "stress_interior_margin": 1.4210854715202004e-14,
+        "Ag": 270,
+        "ng": 1,
+        "mrat": 0.5,
+        "R": 5e-05,
+        "beta_r": 0.08,
+        "chi": 0.9
+      }
+    }
+  },
+  "policy": {
+    "status": "prospective_only_not_executed",
+    "integrator": "independent Cartesian classical RK4, all13 simultaneous, stage domain rejects; step doubling, no reuse Atlas integration. Mixed controls Newton root solves using Cartesian rates; no hidden state interpolation. Implement and hash separate path solver before path results.",
+    "refinement_steps_per_segment": [
+      1024,
+      2048,
+      4096,
+      8192,
+      16384
+    ],
+    "reference_convergence": "last two refinements at every endpoint AND 16 equally spaced checkpoints/segment: sigma norm difference <= 1e-6 Pa + 2e-9*max(1e5 Pa,norm(sigma)); e <=2e-11; H norm<=2e-12. Require two consecutive refinement pairs. Failure at max or domain crossing remains failure; no looser gates.",
+    "candidate_error": "at same checkpoints: sigma norm <= 1e-3 Pa + 2e-6*max(1e5 Pa,norm(reference sigma)); abs e<=2e-8; Hnorm<=2e-9; every component finite. Compare each block separately, no cancellation/aggregate pass.",
+    "initial_states": "table synthetic NCL p100kPa H0; fullH-rho0.3-mixed state; initial rho1-positive state (boundary expected-risk, not silently excluded)",
+    "segments": [
+      {
+        "id": "simple-shear-reversal-hold",
+        "increments": [
+          [
+            0,
+            0,
+            0,
+            2e-05,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            -4e-05,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            2e-05,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "id": "mixed-six-components",
+        "increments": [
+          [
+            2e-05,
+            -6e-06,
+            4e-06,
+            8e-06,
+            -4e-06,
+            2e-06
+          ],
+          [
+            -1e-05,
+            3e-06,
+            -2e-06,
+            -4e-06,
+            2e-06,
+            -1e-06
+          ]
+        ]
+      },
+      {
+        "id": "isotropic-compression-expansion",
+        "increments": [
+          [
+            1e-05,
+            1e-05,
+            1e-05,
+            0,
+            0,
+            0
+          ],
+          [
+            -1e-05,
+            -1e-05,
+            -1e-05,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "controls": [
+      {
+        "id": "drained-axisymmetric",
+        "prescribe": "axial strain +2e-5 then -2e-5; solve equal lateral strain rates for sigma_xx_dot=sigma_yy_dot=0; no pore pressure variable"
+      },
+      {
+        "id": "undrained-axisymmetric",
+        "prescribe": "axial strain +2e-5 then -2e-5; lateral strains -axial/2, trace strain zero; effective stress only, no hydraulic prediction"
+      }
+    ],
+    "root_tolerance": "lateral stress residual <=1e-7 Pa per unit path fraction +1e-11*norm(stress_rate); maximum30 Newton iterations, central finite difference perturbation 1e-8 of max(1e-6, strain-rate norm); fail if root cannot converge",
+    "transactions": "parent coordinator separately qualifies rollback every13 state, late failure recovery, restart and native/Wasm; a rate/reference pass does not qualify them"
+  },
+  "checkpoints": [
+    0.0625,
+    0.125,
+    0.1875,
+    0.25,
+    0.3125,
+    0.375,
+    0.4375,
+    0.5,
+    0.5625,
+    0.625,
+    0.6875,
+    0.75,
+    0.8125,
+    0.875,
+    0.9375,
+    1.0
+  ],
+  "refinement_convention": "RK4 integrates all thirteen state components simultaneously in path fraction [0,1] per segment; 16 endpoint-inclusive checkpoints per segment. Compare adjacent ladder levels, scale stress by finer state. Stop after two consecutive successful comparisons. Any rejection remains recorded and blocks path qualification. Restart each refinement from identical initial state. No stage projection. Validate grid state at next k1 and final segment endpoint explicitly.",
+  "bindings": {
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/independent-path-v1/solve.py": "4871322733c8c52071e2e4a853250fdee40ff4bc5a128f0580b8d7077ac23fa3",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/independent-reference-v1/reference.py": "c8adecccaddebaf16e7a82189c8828b502c00e4d29d6d43b7819c9fb6ea28eda",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/independent-reference-v1/frozen-policy.json": "d839ba935fbcca38fa82217e8dcb1b74a1f5d3d60718d93c8942b400321039dd",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/independent-reference-v1/rate-corpus.json": "137aa1253aef4b17a156472c35155dbd1addd55d40f370729d17d9b7229f1d6c",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/independent-reference-v1/rate-results.json": "6577f61e2311c54f14b7a7760c711671c01cf874932f6ca40b0f69a162bdb4ea",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/independent-reference-v1/full13-calibration-supplement.json": "014221edfa68e47697dbefed840dbda3329a109de26b78fd53413f38b4fe4141",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/independent-reference-v1/full13-calibration-results.json": "5e5b998df07d96a0353a510f0f7046cf824ee772882a0d4948d5589581111d61",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/independent-reference-v1/manifest.json": "2c2c8aeec11ab30fc7484fcd536f4b070085616a5c0a88ebf7cd70a33c2039bf",
+    "tools/reference_clay2014_cartesian.py": "0bc6e129d836fbe9f17b176eb1bcfe6728c4a9293db37c3449d67a39d044465c",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/FULL_CONTRACT.md": "2bf03ffec42e6e6595ff1c8d84ecabe01c65a7924aa7f28f4a96ae9c2b940646",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/source-receipt.json": "32e1fe4165e4f34ac65182d4ca5e2967426f5811395249dc7cbe9068ff3796b3",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/candidate-v3.json": "e2ea575498d4dbe909b16db70ee40a7d3e78e84590719d5a8fa21cdf9175c9c3",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/arithmetic-v3-rate-protocol.json": "039f5c59f74d31f0ca7ae4800ee8add9b51441c0b915b361f8c6210094940afa",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/arithmetic-v2-review.json": "a2047375f68fd9b557213d9e169957bb7428918ef36556b2cb41d9de7e5f619e",
+    "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/rate-comparison-arithmetic-v3.json": "fabfeaad2af3582e1bb222818ad64432f38cc1af8189a055a9a2c7186ff53fe6"
+  },
+  "source_manuscript_sha256": "2eb8598297e3ac9cf245161f56674d6cef622b35fc612adc89dc129568b55202",
+  "cache": "Only the literal immutable four-index stiffness result keyed on the exact coefficients and projector is memoized, in isolated reference module instances. Before any path output verify exact frozen outputs/diagnostics for 48 computed rates and exact reasons for six malformed and 13 invalid fixtures, plain vs cached and stored.",
+  "scope": "Reference computations only; no Atlas candidate/material/native/Wasm/backend execution, no model acceptance.",
+  "identity": "clay2014-full13-independent-path-protocol-v1",
+  "protocols": {
+    "simple-shear-reversal-hold": [
+      {
+        "mode": "strain",
+        "increment": [
+          0,
+          0,
+          0,
+          2e-05,
+          0,
+          0
+        ]
+      },
+      {
+        "mode": "strain",
+        "increment": [
+          0,
+          0,
+          0,
+          -4e-05,
+          0,
+          0
+        ]
+      },
+      {
+        "mode": "strain",
+        "increment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "mode": "strain",
+        "increment": [
+          0,
+          0,
+          0,
+          2e-05,
+          0,
+          0
+        ]
+      }
+    ],
+    "mixed-six-components": [
+      {
+        "mode": "strain",
+        "increment": [
+          2e-05,
+          -6e-06,
+          4e-06,
+          8e-06,
+          -4e-06,
+          2e-06
+        ]
+      },
+      {
+        "mode": "strain",
+        "increment": [
+          -1e-05,
+          3e-06,
+          -2e-06,
+          -4e-06,
+          2e-06,
+          -1e-06
+        ]
+      }
+    ],
+    "isotropic-compression-expansion": [
+      {
+        "mode": "strain",
+        "increment": [
+          1e-05,
+          1e-05,
+          1e-05,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "mode": "strain",
+        "increment": [
+          -1e-05,
+          -1e-05,
+          -1e-05,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "drained-axisymmetric": [
+      {
+        "mode": "drained",
+        "axial": 2e-05
+      },
+      {
+        "mode": "drained",
+        "axial": -2e-05
+      }
+    ],
+    "undrained-axisymmetric": [
+      {
+        "mode": "undrained",
+        "axial": 2e-05
+      },
+      {
+        "mode": "undrained",
+        "axial": -2e-05
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "synthetic-NCL-H0--simple-shear-reversal-hold",
+      "initial": "synthetic-NCL-H0",
+      "protocol": "simple-shear-reversal-hold"
+    },
+    {
+      "id": "synthetic-NCL-H0--mixed-six-components",
+      "initial": "synthetic-NCL-H0",
+      "protocol": "mixed-six-components"
+    },
+    {
+      "id": "synthetic-NCL-H0--isotropic-compression-expansion",
+      "initial": "synthetic-NCL-H0",
+      "protocol": "isotropic-compression-expansion"
+    },
+    {
+      "id": "synthetic-NCL-H0--drained-axisymmetric",
+      "initial": "synthetic-NCL-H0",
+      "protocol": "drained-axisymmetric"
+    },
+    {
+      "id": "synthetic-NCL-H0--undrained-axisymmetric",
+      "initial": "synthetic-NCL-H0",
+      "protocol": "undrained-axisymmetric"
+    },
+    {
+      "id": "full6-memory-rho0.3--simple-shear-reversal-hold",
+      "initial": "full6-memory-rho0.3",
+      "protocol": "simple-shear-reversal-hold"
+    },
+    {
+      "id": "full6-memory-rho0.3--mixed-six-components",
+      "initial": "full6-memory-rho0.3",
+      "protocol": "mixed-six-components"
+    },
+    {
+      "id": "full6-memory-rho0.3--isotropic-compression-expansion",
+      "initial": "full6-memory-rho0.3",
+      "protocol": "isotropic-compression-expansion"
+    },
+    {
+      "id": "full6-memory-rho0.3--drained-axisymmetric",
+      "initial": "full6-memory-rho0.3",
+      "protocol": "drained-axisymmetric"
+    },
+    {
+      "id": "full6-memory-rho0.3--undrained-axisymmetric",
+      "initial": "full6-memory-rho0.3",
+      "protocol": "undrained-axisymmetric"
+    },
+    {
+      "id": "exact-rho1-shear-memory--simple-shear-reversal-hold",
+      "initial": "exact-rho1-shear-memory",
+      "protocol": "simple-shear-reversal-hold"
+    },
+    {
+      "id": "exact-rho1-shear-memory--mixed-six-components",
+      "initial": "exact-rho1-shear-memory",
+      "protocol": "mixed-six-components"
+    },
+    {
+      "id": "exact-rho1-shear-memory--isotropic-compression-expansion",
+      "initial": "exact-rho1-shear-memory",
+      "protocol": "isotropic-compression-expansion"
+    },
+    {
+      "id": "exact-rho1-shear-memory--drained-axisymmetric",
+      "initial": "exact-rho1-shear-memory",
+      "protocol": "drained-axisymmetric"
+    },
+    {
+      "id": "exact-rho1-shear-memory--undrained-axisymmetric",
+      "initial": "exact-rho1-shear-memory",
+      "protocol": "undrained-axisymmetric"
+    }
+  ],
+  "drained_root": "One unknown x=de_xx=de_yy; two independent zero-stress-rate residuals, each required within original tolerance. Newton least-squares update -(J dot residual)/(J dot J), central FD, deterministic seed -nu_pp*axial at each RK stage. No averaging to accept a nonzero component. Original30-evaluation iteration limit; no fallback if singular/stagnated or source rate rejects."
+}

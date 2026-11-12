@@ -1,0 +1,13 @@
+# Independent review of the v4 near-zero reversal update
+
+Reviewer: separate Codex agent run `/root/clay_reversal_review`. I inspected the exact headers below against the candidate-v3 `H_rate` equation and the prior weighted advance. I did not author the update or build or execute compiled code. Accept for the isolated frozen-path qualification; this is not E5 approval.
+
+| Header | SHA-256 |
+| --- | --- |
+| `advance.hpp` | `15f7942b9c9907dc9a801e3e100d6101d65928275eb965f19c764a10f6653ac4` |
+| `history.hpp` | `23160fec4a01791bf6d14fcec860866356c6e39a190a53e507ecfa51348fc19b` |
+| `reversal.hpp` | `037a864ede4c8963db80bd52562cfd321ba3a2cc349bf0b1d22d002269570b59` |
+
+For constant strain direction `d`, the source memory rate is `d` while `H:d <= 0`. On the positive branch it subtracts `H*(H:d)/|H|²*(|H|/R)^beta`. The switch is located along the affine part, and the new solver advances only this correction using `t = start + (1-start)*u^4`. The derivative of the map gives `4*u^3*(1-start)`, and the stage branch uses the exact dot sign with the original unscaled direction. It retains transverse memory instead of projecting the state onto the loading direction. The integration stages and both endpoints retain exact memory-ball checks. Generated stress/void checks, full-versus-two stress and memory defects, depth, physical step floor and rollback are still enforced. The 16- and 32-panel fourth-order quadratures are compared at the existing `2e-12` allocation times physical span, in addition to the outer full-versus-two checks. The combined 192 stages (each at most one fractional power) are charged to the existing shared probe cap. These checks are numerical consistency tests, not a uniform truncation-error bound across all model parameters.
+
+The preliminary reversal header (SHA-256 `933adbc06ae28071ade4e159406a038413374561d36280e8027963933219026c`) could falsely refuse at an exact right-endpoint event: a rounded stage could have positive dot sign with zero positive span. The bound revision tests `H0:d + d:d` exactly before constructing any positive interval. On the affine trajectory the dot grows monotonically from `H0:d` by `t*(d:d)`; hence a nonpositive endpoint sign proves the whole interval remains affine, including equality. That branch returns the directed endpoint with the exact ball guard and uses no quadrature stages. A positive exact sign with a nonpositive reconstructed wide span still refuses rather than skipping an unresolved positive interval. This resolves the reported exact-event issue on the bound revision. No approval for unrestricted near-collinear inputs or parameter ranges follows from this review.

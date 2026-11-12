@@ -1,6 +1,8 @@
-import createAtlas from './engine-certified-return/certified-return.mjs';
 import {replayRecorded} from './recorded-worker.mjs';
 
+const weighted = new URL(import.meta.url).searchParams.get('profile')==='weighted-history';
+const root = weighted?'./engine-weighted-history/':'./engine-certified-return/';
+const launcher = weighted?'weighted-history.mjs':'certified-return.mjs';
 let ready;
 const printErr = line => {
   // The reviewed build emits per-attempt tracing on stderr. Keep other
@@ -13,7 +15,7 @@ const normalized = value => Array.isArray(value) ? value.map(normalized)
   : value;
 self.onmessage = async ({data}) => {
   try {
-    ready ??= Promise.all([createAtlas({printErr}),fetch('./engine-certified-return/recorded.json').then(r=>{
+    ready ??= Promise.all([import(root+launcher).then(({default:createAtlas})=>createAtlas({printErr})),fetch(root+'recorded.json').then(r=>{
       if(!r.ok)throw Error('Certified example could not load.');
       return r.json();
     })]);

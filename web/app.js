@@ -30,7 +30,8 @@ import {catalogueHash as catalogueModelHash,catalogueProfileTarget,catalogueRout
 import {settingFields,normalizeSettings,verifyReturnedSettings} from './numerics.mjs';
 import {normalizeWichtmann,validateExperiment,measuredSeries,fetchExperiment,comparisonAxes,comparisonMetadata,compatibleExperiment,comparisonSeries,supportsEffectiveExperiment} from './experiments.mjs';
 const $ = id => document.getElementById(id);
-let j2View=null,timedView=null,recordedView=null,certifiedRecorded=null;
+let j2View=null,timedView=null,recordedView=null;
+const fixedRecorded=new Map();
 let compiledCatalogue=null, laboratoryExamples=null, controlSupport=null, guidedView=null;
 let models=[], catalogue=[], catalogueHash='', currentResult=null, lastSpec=null, experiment=null, worker=null, timer=null, sequence=0, activeId=null, pendingRun=null, updateTimer=null;
 let experiments=[],builtinExperiments=[],experimentLoadSequence=0;
@@ -474,7 +475,7 @@ function renderCharts(){
 }
 function catalogueCards(){
   const query=$('search').value.toLowerCase(),filter=$('availability').value,grid=$('catalogue-grid');grid.replaceChildren();
-  for(const entry of catalogue){if(catalogueProfileTarget(entry.id)!==entry.id)continue;const spec=models.find(x=>x.id===entry.id),profile=modelProfile(entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'||entry.controlled_time_laboratory==='index.html'||entry.id===certifiedRecorded?.preset.model));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id+' '+(profile?.summary??'')).toLowerCase().includes(query))continue;
+  for(const entry of catalogue){if(catalogueProfileTarget(entry.id)!==entry.id)continue;const spec=models.find(x=>x.id===entry.id),profile=modelProfile(entry.id),executable=!!spec||!!timedLaboratoryRoute(entry)||entry.id===j2View?.modelId||(timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'||entry.controlled_time_laboratory==='index.html'||fixedRecorded.has(entry.id)));if(filter==='executable'&&!executable||filter==='candidate'&&executable)continue;if(!(entry.name+' '+entry.family+' '+entry.id+' '+(profile?.summary??'')).toLowerCase().includes(query))continue;
     const card=element('article',undefined,'catalogue-card'),meta=element('div',undefined,'catalogue-card-meta');
     meta.append(element('span',entry.family,'catalogue-family'),element('span',executable?'Available to test':'Reading profile','catalogue-availability'+(executable?' available':'')));
     const heading=element('h2'),open=element('a',profile?.title??entry.name,'catalogue-open');open.href=catalogueModelHash(entry.id);open.setAttribute('aria-haspopup','dialog');heading.append(open);
@@ -498,15 +499,15 @@ function showCatalogueModel(entry,spec){
   refreshCatalogueStatus(entry,spec);
   $('catalogue-detail-status').className='catalogue-availability'+(spec||timedRoute||entry.id===j2View?.modelId||timedView?.supports(entry.id)?' available':'');
   if(modelProfile(entry.id)){
-    body.append(modelProfileSection(document,spec??entry,{catalogue}));
+    body.append(modelProfileSection(document,spec??fixedRecorded.get(entry.id)?.catalogue.models[0]??entry,{catalogue}));
     const technical=element('details',undefined,'model-profile-technical');
     technical.append(element('summary','Technical details, implementation and checks'));
     body.append(technical);body=technical;
   }
-  if(entry.id===certifiedRecorded?.preset.model){
+  if(fixedRecorded.has(entry.id)){
     const links=element('p');
     for(const [label,name] of [['Independent checklist','review.json'],['Exact approval','approval.json'],['Exact model definition','model.json']]){
-      const link=element('a',label+' ↗');link.href='./engine-certified-return/'+name;links.append(link,document.createTextNode(' · '));
+      const link=element('a',label+' ↗');link.href=fixedRecorded.get(entry.id).root+name;links.append(link,document.createTextNode(' · '));
     }
     body.append(links);
   }else if(entry.id===j2View?.modelId){body.append(element('p','The exact approved formulation, complete state and all-six-component controls are available in the main laboratory. Experimental validation is absent.'));}else if(entry.id==='perzyna-comsol63-mises-perfect-zero-spin-ode'&&timedView?.supports(entry.id)){const section=element('section');section.append(element('h3','Physical-time formulation and preparation'),element('p','The main laboratory provides a strain hold, stress hold and all-six constant strain rate for the printed COMSOL6.3 Perzyna law. Isotropic elasticity, associative von Mises flow and a constant yield stress use thirteen explicit strain/history components and five parameters K,G,σy,A,n. Stress is dry total Cauchy stress, with infinitesimal strain, fixed spatial axes and zero spin. This realization selects the printed yield-normalized equation with exponent n; the vendor settings page differs, so software equivalence is not claimed. Examples are illustrative; custom coefficients, states and times need accuracy checks. No experimental validation is supplied.'));body.append(section);}else if(entry.id==='bingham-comsol63-mises-perfect-zero-spin-ode'&&timedView?.supports(entry.id)){const section=element('section');section.append(element('h3','Physical-time formulation and preparation'),element('p','The main laboratory provides relaxation (hold all strains), creep (hold all stresses) and constant strain-rate loading for the COMSOL 6.3 small-strain Bingham formulation: isotropic elasticity and associative von Mises viscoplasticity with constant yield stress, no hardening and zero spin. The complete 13-component state contains six total strains, six viscoplastic strains and accumulated equivalent viscoplastic strain; results include all six dry total Cauchy stresses. Approval covers the bounded source-derived numerical study. Presets are illustrative; custom coefficients, starting states and loading times need their own accuracy checks. No experimental validation is claimed.'));body.append(section);}else if(entry.id==='kelvin-voigt-comsol63-deviatoric-zero-spin-ode'&&timedView?.supports(entry.id)){const section=element('section');section.append(element('h3','Definition, conventions & preparation'),element('p','COMSOL 6.3 Kelvin–Voigt Eq. 3-36: parallel deviatoric spring and dashpot with purely elastic bulk. Physical seconds; six persistent total infinitesimal strain components. Fixed spatial frame, zero spin; compression-positive Mandel tensors and dry total Cauchy stress. Parameters K, G (Pa), tau (s); viscosity G tau. Creep holds the incoming stress defined by explicit initial strain and initial rate. A strain hold immediately sheds viscous stress and then preserves elastic stress. No experimental validation or broad material calibration is claimed.'));const links=element('p');for(const [label,path] of [['Exact definition','./engine-kelvin-voigt/'+entry.id+'.json'],['Source Eq. 3-36','https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.029.html#3441080'],['Readable independent review','./engine-kelvin-voigt/review.html'],['Independent scientific checklist','./engine-kelvin-voigt/review.json'],['Approval and limitations','./engine-kelvin-voigt/approval.json']]){const a=element('a',label+' ↗');a.href=path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}section.append(links);body.append(section);}else if(entry.implicit_path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes the original complete 1975 elastoplastic law through a bounded implicit strain-path realization, explicit Table 1 preparation and complete stress/history/work state. Total mechanical Cauchy stress; no pore-pressure law or experimental validation.'));const links=element('p');for(const [label,path] of [['Exact definition','engine-implicit-path/'+entry.id+'.json'],['Independent scientific checklist','engine-implicit-path/review.json'],['Approval and limitations','engine-implicit-path/approval.json']]){const a=element('a',label+' ↗');a.href='./'+path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}body.append(links);}else if(entry.id==='hvwe2016-reconciled-fixed-local'&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes prescribed normal compression strain and two source shear angles in a fixed local zero-spin frame. Four effective stresses and void ratio evolve; source reconciliation, illustrative host parameters and absent contact/finite-slip mechanisms are disclosed.'));const links=element('p');for(const [label,path] of [['Exact definition','model.json'],['Readable sources and scope','review.html'],['Independent scientific checklist','review.json'],['Approval and limitations','approval.json'],['Complete starting example','example.json']]){const a=element('a',label+' ↗');a.href='./material-point-interface2016/engine-path/'+path;a.target='_blank';a.rel='noopener';links.append(a,document.createTextNode(' · '));}body.append(links);}else if(entry.path_laboratory&&timedView?.supports(entry.id)){body.append(element('p','The main laboratory exposes dimensionless shear progress, complete initial history and linearly changing stress controls for the original drained active axial law. Experimental comparison is unavailable.'));}else if(timedRoute){const section=element('section');section.append(element('h3','Physical-time formulation'),element('p','Open the dedicated laboratory for supported controls, conventions and source/review links.'));body.append(section);}else body.append(formulationSection(document,spec,{evidenceIndex}));
@@ -527,7 +528,7 @@ function showCatalogueModel(entry,spec){
   body.append(evidenceSection(document,entry.id,evidenceIndex,evidenceState),applicabilitySection(document,entry.id,applicabilityMatrix,applicabilityState));
   $('catalogue-detail-id').textContent=entry.id;
   $('catalogue-permalink').href=catalogueModelHash(entry.id);
-  const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'||entry.controlled_time_laboratory==='index.html'||entry.id===certifiedRecorded?.preset.model);
+  const timed=timedView?.supports(entry.id)&&(entry.timed_laboratory==='index.html'||entry.path_laboratory==='index.html'||entry.implicit_path_laboratory==='index.html'||entry.material_laboratory==='index.html'||entry.controlled_time_laboratory==='index.html'||fixedRecorded.has(entry.id));
   const explore=$('catalogue-explore');explore.hidden=!spec&&!timedRoute&&!timed&&entry.id!==j2View?.modelId;explore.onclick=()=>{if(timedRoute){location.href=timedRoute;return;}dialog.close();if(activateLaboratoryModel(entry.id))location.hash='laboratory?model='+encodeURIComponent(entry.id);$('model').focus({preventScroll:true});};
   if(!dialog.open)dialog.showModal();$('catalogue-detail-body').scrollTop=0;
 }
@@ -560,10 +561,10 @@ async function importRun(file){
     const text=await file.text();
     if(requested!==sequence||specialLaboratoryActive())return;
     const document=JSON.parse(text);
-    if(certifiedRecorded&&(document?.specification??document)?.model===certifiedRecorded.preset.model){
-      const id=certifiedRecorded.preset.model;
+    const id=(document?.specification??document)?.model;
+    if(fixedRecorded.has(id)){
       if(activateLaboratoryModel(id)){
-        openCertifiedRecorded(document);
+        openFixedRecorded(document,fixedRecorded.get(id));
         location.hash='laboratory?model='+encodeURIComponent(id);
       }
       return;
@@ -704,28 +705,33 @@ $('catalogue-dialog').addEventListener('close',restoreCatalogueFocus);
 $('catalogue-dialog').addEventListener('cancel',event=>{event.preventDefault();closeCatalogue();});
 $('catalogue-dialog').onclick=e=>{if(e.target===$('catalogue-dialog')){const box=e.target.getBoundingClientRect();if(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom)closeCatalogue();}};
 try{
-  const [response,manifest,support,certifiedIndex]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json'),fetch('./laboratory-control-support.json'),fetch('./certified-recorded.json')]);if(!response.ok||!manifest.ok||!support.ok)throw Error('Catalogue could not be loaded.');
+  const [response,manifest,support,certifiedIndex,weightedIndex]=await Promise.all([fetch('./models.json'),fetch('./catalogue.json'),fetch('./laboratory-control-support.json'),fetch('./certified-recorded.json'),fetch('./weighted-recorded.json')]);if(!response.ok||!manifest.ok||!support.ok)throw Error('Catalogue could not be loaded.');
   const definitions=await response.json();compiledCatalogue=definitions;catalogueHash=definitions.sha256;models=definitions.models;catalogue=(await manifest.json()).models;controlSupport=validateSupport(await support.json(),definitions);
-  const certifiedId=certifiedIndex.ok?await certifiedIndex.json():null;
-  if(certifiedId){
-    const result=await fetch('./engine-certified-return/recorded.json');
-    if(!result.ok)throw Error('Certified recorded example is missing.');
-    certifiedRecorded=await result.json();
-    const id=certifiedRecorded.preset.model;
-    if(id!==certifiedId||!catalogue.some(e=>e.id===id))throw Error('Certified recorded catalogue mismatch.');
+  for(const [index,root,worker,hint] of [
+    [certifiedIndex,'./engine-certified-return/','./certified-recorded-worker.mjs',null],
+    [weightedIndex,'./engine-weighted-history/','./certified-recorded-worker.mjs?profile=weighted-history',
+      'Replay the fixed six-component load and reversal. The material parameters and starting state are fixed for this example.'],
+  ]){
+    const id=index.ok?await index.json():null;
+    if(!id)continue;
+    const response=await fetch(root+'recorded.json');
+    if(!response.ok)throw Error('Fixed recorded example is missing.');
+    const entry=await response.json();
+    if(entry.preset.model!==id||fixedRecorded.has(id)||!catalogue.some(e=>e.id===id))throw Error('Fixed recorded catalogue mismatch.');
+    fixedRecorded.set(id,{...entry,root,worker,hint});
     $('model').append(new Option(modelProfile(id)?.title??id,id));
   }
   models.forEach(m=>$('model').append(new Option(modelProfile(m.id)?.title??m.name,m.id)));$('model').value='hypoplastic-sand-vw96';$('catalogue-count').textContent=catalogue.length;$('build-hash').textContent='Catalogue SHA-256: '+catalogueHash;
   laboratoryExamples=setupLaboratoryExamples({catalogue:definitions,getModel:model,applySpecification:s=>{if(!specialLaboratoryActive())applyRunSpecification(s);},onError:toast});
   populate();
-  if(certifiedRecorded)recordedView=setupRecordedLaboratory({catalogue:definitions,chart,cancelOrdinary:()=>cancel(''),onLeave:id=>activateLaboratoryModel(id)});
-  timedView=createLaboratoryControllerRouter([...(certifiedRecorded?[{
-    modelId:certifiedRecorded.preset.model,get active(){return recordedView.active;},
-    select(id){if(id!==this.modelId)return recordedView.select(null);if(!recordedView.active)openCertifiedRecorded(certifiedRecorded.preset);return true;},
+  if(fixedRecorded.size)recordedView=setupRecordedLaboratory({catalogue:definitions,chart,cancelOrdinary:()=>cancel(''),onLeave:id=>activateLaboratoryModel(id)});
+  timedView=createLaboratoryControllerRouter([...[...fixedRecorded].map(([modelId,entry])=>({
+    modelId,get active(){return recordedView.active;},
+    select(id){if(id!==modelId)return recordedView.select(null);if(!recordedView.active)openFixedRecorded(entry.preset,entry);return true;},
     run:()=>recordedView.run(),showEquations:()=>recordedView.showEquations()
-  }]:[]),setupControlledTimeLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupInterface2016Laboratory({chart,cancelOrdinary:()=>cancel('')}),setupPerzynaLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupBinghamLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();guidedView=setupGuidedExperiments({catalogue:definitions,chart,validate:validateSpec});route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
+  })),setupControlledTimeLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupInterface2016Laboratory({chart,cancelOrdinary:()=>cancel('')}),setupPerzynaLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupBinghamLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupHillLaboratory({cancelOrdinary:()=>cancel('')}),setupTimedLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupSlsLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupKelvinVoigtLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupOrthotropicLaboratory({cancelOrdinary:()=>cancel('')}),setupPathLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupMaxwellLaboratory({chart,cancelOrdinary:()=>cancel('')}),setupImplicitPathLaboratory({chart,cancelOrdinary:()=>cancel('')})]);j2View=setupJ2Laboratory({cancelOrdinary:()=>cancel('')});catalogueCards();guidedView=setupGuidedExperiments({catalogue:definitions,chart,validate:validateSpec});route({initial:true});simulate();loadExperimentCatalogue();loadEvidenceIndex();loadApplicability();
 }catch(e){toast('Initialization failed: '+e.message);$('run-state').textContent='Unable to initialize';$('guided-status').textContent='The experiment could not load. Reload to try again.';}
 
-function openCertifiedRecorded(document){
-  return recordedView.load(document,{partition:certifiedRecorded.catalogue,worker:'./certified-recorded-worker.mjs',readOnly:true,title:modelProfile(certifiedRecorded.preset.model)?.title});
+function openFixedRecorded(document,entry){
+  return recordedView.load(document,{partition:entry.catalogue,worker:entry.worker,hint:entry.hint,readOnly:true,title:modelProfile(entry.preset.model)?.title});
 }

@@ -6,12 +6,16 @@ from pathlib import Path
 import subprocess
 from tempfile import TemporaryDirectory
 
+from atlas.agent_review import approval_entry
 from atlas.compiler import generate
 from atlas.controlled_time_compiler import generate as generate_controlled_time
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '7c9954254fe89fe7fcd45d1a64549f8e837c99c4'
 PACKET = ROOT/'docs/ingestion/extended-mohr-coulomb-2013/release-norsand-v1'
+CLAY_MODEL = 'clay2014-trace-calibrated-igs-fixed-plane-v1'
+CLAY_PACKET = ROOT/'docs/ingestion/hypoplastic-clay-2014/delivery-20261111/generic-boundary-v1/radius-bounded-v2/production/reversal-v4'
+BRIDGE_FILES = ('tools/package_emc_retained_profiles.py', 'tools/build_web.py', '.github/workflows/pages.yml')
 SOURCE_PROOF = 'ba01a2bcb62f48beea197954a80ba62f2967a588c33bdadf8613b8198a79c4df'
 PROFILES = {
     'interface2016': ('web/engines/current17-baseline-compatible/interface2016',
@@ -61,11 +65,14 @@ def namespace(root):
             and not p.is_relative_to(root/'models/research/certified-return')}
 
 
-def check_source(base, proof, key):
+def check_source(base, proof, key, additions, clay_approval):
     directory, builder, components = PROFILES[key]
     row = proof['profiles'][key]
     entries = namespace(base)
-    require(entries == namespace(ROOT), 'compiled source namespace changed')
+    require(not entries.intersection(additions) and entries | set(additions) == namespace(ROOT),
+            'compiled source namespace changed')
+    require(all(digest(regular(ROOT, name)) == value for name, value in additions.items()),
+            'isolated weighted-history source changed')
     source = set(entries) | {builder, *('web/'+name for name in components)}
     if key == 'interface2016':
         closure = json.loads(regular(base,directory+'/source-compatibility.json').read_text())['source_files']
@@ -91,7 +98,9 @@ def check_source(base, proof, key):
         require(all(after[name]==h for name,h in row[field].items()), 'changed '+field)
     old_registry=json.loads(regular(base,'catalogue/approved-models.json').read_text())['models']
     new_registry=json.loads(regular(ROOT,'catalogue/approved-models.json').read_text())['models']
-    require([r for r in new_registry if r['model_id']!='extended-mohr-coulomb-2013-exact-generalized-work-be-exact-domain-v3']==old_registry,
+    require(new_registry.count(clay_approval) == 1 and
+            [r for r in new_registry if r != clay_approval and
+             r['model_id']!='extended-mohr-coulomb-2013-exact-generalized-work-be-exact-domain-v3']==old_registry,
             'existing approvals differ')
     return after
 
@@ -113,13 +122,21 @@ def retained_profiles():
     proof = json.loads(proof_path.read_text())
     require(proof['source_commit']==BASE and proof['decision']=='accepted' and
             proof['reviewer_run']!=proof['author_run'] and not proof['blocking_findings'], 'independent proof is incomplete')
-    decision = json.loads((PACKET/'retained-packaging-review.json').read_text())
+    predecessor_review = PACKET/'retained-packaging-review.json'
+    decision = json.loads((CLAY_PACKET/'retained-package-review.json').read_text())
     reviewer = decision.get('reviewer_run')
     require(decision['status']=='accepted' and isinstance(reviewer,str) and reviewer.strip() and reviewer!='/root' and
             decision['source_proof_sha256']==SOURCE_PROOF and not decision['blocking_findings'] and
-            decision['implementation']=={name:digest(ROOT/name) for name in
-                ('tools/package_emc_retained_profiles.py','tools/build_web.py','.github/workflows/pages.yml')},
-            'exact bridge implementation requires independent approval')
+            decision['predecessor_review_sha256']==digest(predecessor_review) and
+            decision['implementation']=={name:digest(regular(ROOT,name)) for name in BRIDGE_FILES},
+            'exact successor bridge requires independent approval')
+    clay_approval = approval_entry(ROOT/'catalogue/agent-reviews'/f'{CLAY_MODEL}-agent-v1.json', root=ROOT)
+    additions = decision['isolated_source_additions']
+    require(set(additions)=={clay_approval['definition']['path'], *(
+                f'cpp/profiles/weighted-history-v1/{name}' for name in
+                ('CMakeLists.txt','advance.hpp','bridge.hpp','check.cpp','history.hpp','prepare.py',
+                 'reversal.hpp','prepare-recorded-overlay.py','recorded-controls.patch'))},
+            'unexpected isolated source inventory')
     with TemporaryDirectory(prefix='emc-retained-release-') as tmp:
         base = Path(tmp).resolve()/'source'
         git('worktree','add','--quiet','--detach',str(base),BASE)
@@ -128,7 +145,7 @@ def retained_profiles():
             def bundle(key, destination, artifacts):
                 directory, builder, _ = PROFILES[key]
                 require(artifacts.resolve()==ROOT/directory, 'only the exact reviewed engine may use this route')
-                before = check_source(base, proof, key)
+                before = check_source(base, proof, key, additions, clay_approval)
                 regenerate(proof, key)
                 witness = base/INTERFACE_WITNESS
                 restored = key=='interface2016' and not witness.exists()
@@ -140,7 +157,7 @@ def retained_profiles():
                 finally:
                     if restored:
                         witness.unlink(missing_ok=True)
-                require(check_source(base, proof, key)==before, 'source changed during packaging')
+                require(check_source(base, proof, key, additions, clay_approval)==before, 'source changed during packaging')
                 regenerate(proof, key)
             yield bundle
         finally:

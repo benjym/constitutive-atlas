@@ -2769,6 +2769,157 @@ export const modelProfiles = {
       "hypoplastic-thermal-ma-2017"
     ]
   },
+  "clay2014-trace-calibrated-igs-fixed-plane-v1": {
+    "title": "Anisotropic clay with strain memory — Mašín (2014)",
+    "summary": "A clay model combining direction-dependent stiffness with memory of recent strain direction.",
+    "introduction": "Sedimentary clay can respond more stiffly in one direction than another, while its stiffness also changes after a reversal. This formulation combines a transversely anisotropic stiffness tensor with intergranular strain, a tensor memory of recent deformation, and a density-dependent hypoplastic base law.",
+    "behaviours": [
+      [
+        "Directional stiffness",
+        "The supplied material normal defines a symmetry plane. Separate ratios control normal stiffness, shear stiffness and Poisson coupling within and across that plane."
+      ],
+      [
+        "Recent strain history",
+        "The intergranular strain tensor changes the response during continued loading, reversal and a change of loading direction. Zero memory is a distinct initial condition, not a synonym for a prepared specimen."
+      ],
+      [
+        "Pressure and density effects",
+        "A pressure-dependent target sets very-small-strain shear stiffness. The base law also uses void ratio relative to its compression reference to change the stress response."
+      ]
+    ],
+    "parameters": [
+      {
+        "name": "phi_c",
+        "symbol": "φc",
+        "meaning": "Critical friction angle",
+        "help": "Sets the strength scale used by the asymptotic stress response.",
+        "unit": "rad"
+      },
+      {
+        "name": "lambda_star",
+        "symbol": "λ*",
+        "meaning": "Logarithmic compression slope",
+        "help": "Controls the density change associated with the normal-compression reference.",
+        "unit": "1"
+      },
+      {
+        "name": "kappa_star",
+        "symbol": "κ*",
+        "meaning": "Logarithmic swelling slope",
+        "help": "Enters the base stiffness calibration; it is not a universal full-IGS unloading slope.",
+        "unit": "1"
+      },
+      {
+        "name": "N",
+        "symbol": "N",
+        "meaning": "Density intercept",
+        "help": "Locates the reference compression line at the fixed reference pressure.",
+        "unit": "1"
+      },
+      {
+        "name": "nu_pp",
+        "symbol": "νpp",
+        "meaning": "In-plane Poisson ratio",
+        "help": "Controls coupling between normal strains within the material symmetry plane.",
+        "unit": "1"
+      },
+      {
+        "name": "alpha_G",
+        "symbol": "αG",
+        "meaning": "Shear stiffness anisotropy ratio",
+        "help": "Changes the relation between shearing within and across the symmetry plane.",
+        "unit": "1"
+      },
+      {
+        "name": "alpha_E",
+        "symbol": "αE",
+        "meaning": "Young-modulus anisotropy ratio",
+        "help": "Changes normal stiffness within the plane relative to its normal direction.",
+        "unit": "1"
+      },
+      {
+        "name": "alpha_nu",
+        "symbol": "αν",
+        "meaning": "Poisson-coupling anisotropy ratio",
+        "help": "Changes the coupling between in-plane and transverse deformation.",
+        "unit": "1"
+      },
+      {
+        "name": "Ag",
+        "symbol": "Ag",
+        "meaning": "Very-small-strain shear coefficient",
+        "help": "Sets the transverse shear target together with pressure and its exponent.",
+        "unit": "1"
+      },
+      {
+        "name": "ng",
+        "symbol": "ng",
+        "meaning": "Pressure exponent",
+        "help": "Controls how the target very-small-strain shear modulus changes with mean effective pressure.",
+        "unit": "1"
+      },
+      {
+        "name": "mrat",
+        "symbol": "mrat",
+        "meaning": "Orthogonal-to-reversal stiffness ratio",
+        "help": "Sets mT relative to the stage-dependent reversal multiplier mR.",
+        "unit": "1"
+      },
+      {
+        "name": "R",
+        "symbol": "R",
+        "meaning": "Intergranular strain radius",
+        "help": "Sets the strain scale over which recent loading-direction memory develops.",
+        "unit": "1"
+      },
+      {
+        "name": "beta_r",
+        "symbol": "βr",
+        "meaning": "Memory evolution exponent",
+        "help": "Controls how memory growth slows as its magnitude approaches R.",
+        "unit": "1"
+      },
+      {
+        "name": "chi",
+        "symbol": "χ",
+        "meaning": "Stiffness transition exponent",
+        "help": "Controls the interpolation between zero-memory stiffness and the directional memory response.",
+        "unit": "1"
+      }
+    ],
+    "parameterNote": "These parameters are fixed in the example. Expand Material parameters in the laboratory to see the exact preset values.",
+    "stateLabels": {
+      "sigma": "Effective Cauchy stress",
+      "e": "Void ratio",
+      "H": "Recent strain memory (IGS)"
+    },
+    "preparation": "The preset starts at 100 kPa hydrostatic effective stress, with a synthetic normal-compression void ratio and zero intergranular strain. Zero memory is an explicit starting assumption.",
+    "scope": "The fixed example uses effective Cauchy stress, small strains, zero spin and a fixed material plane. It includes all six stress components, void ratio and six components of intergranular strain.",
+    "limits": "The example uses the author manuscript with explicit trace and shear calibration choices. It is not a calibrated specimen, a pore-pressure model or a finite-element model. The laboratory does not vary parameters or rotate the material plane.",
+    "references": [
+      {
+        "label": "Mašín (2014), Clay hypoplasticity model including stiffness anisotropy, Géotechnique64(3),232–238",
+        "url": "https://doi.org/10.1680/geot.13.P.065"
+      },
+      {
+        "label": "Author manuscript,26November2013 (equations used for this realization)",
+        "url": "https://web.natur.cuni.cz/uhigug/masin/download/Masin_Geot14-pp.pdf"
+      }
+    ],
+    "related": [
+      "hypoplastic-clay-2014",
+      "hypoplastic-clay-2013",
+      "s-clay1"
+    ],
+    "contentSources": [
+      "docs/models/hypoplastic-clay-2014-original.md",
+      "docs/ingestion/hypoplastic-clay-2014/delivery-20261111/SOURCE_DECISION.md",
+      "models/research/weighted-history/clay2014-trace-calibrated-igs-fixed-plane-v1.json"
+    ],
+    "explorationTitle": "Try the six-component load and reversal",
+    "exploration": "Open the laboratory and replay 33 observations of combined compression and shear, then reversal. Compare the stress path and volume change while the material remembers its recent loading direction.",
+    "comparison": "This synthetic example has no experimental overlay."
+  },
   "hypoplastic-clay-2014": {
     "summary": "Clay hypoplasticity with direction-dependent stiffness.",
     "introduction": "The 2014 Mašín model adds stiffness anisotropy to the explicitly asymptotic-state clay framework. Different directions relative to the material plane can have different stiffnesses.",
@@ -2782,7 +2933,7 @@ export const modelProfiles = {
         "Stress and density still evolve through a direct nonlinear law."
       ]
     ],
-    "scope": "This profile describes the 2014 anisotropic formulation. It has no public laboratory run.",
+    "scope": "This profile describes the 2014 anisotropic formulation. The related fixed-plane model includes a runnable example with strain memory.",
     "limits": "The 2013 isotropic clay law and the 2014 anisotropic extension are separate. A fixed-plane research calculation does not supply automatic rotation of the material fabric.",
     "preparation": "Specify the material-plane orientation, anisotropy ratios, stress and density consistently with the selected formulation.",
     "parameters": [],
@@ -2794,6 +2945,7 @@ export const modelProfiles = {
       }
     ],
     "related": [
+      "clay2014-trace-calibrated-igs-fixed-plane-v1",
       "hypoplastic-clay-2013",
       "s-clay1"
     ],

@@ -1,0 +1,326 @@
+diff --git a/cpp/include/atlas/recorded.hpp b/cpp/include/atlas/recorded.hpp
+index a445fc340..2fe222aeb 100644
+--- a/cpp/include/atlas/recorded.hpp
++++ b/cpp/include/atlas/recorded.hpp
+@@ -5,11 +5,18 @@ namespace atlas {
+ // Absolute linear targets in one fixed Mandel frame. Coordinate orders records;
+ // it is not physical time and does not drive material evolution.
+ struct RecordedControl { bool stress=false; Sym<double> coefficients; };
+-struct RecordedKnot { double coordinate=0; std::array<double,6> targets{}; };
++struct RecordedKnot {
++    double coordinate=0; std::array<double,6> targets{};
++    double extra_target=0.;
++    double target(int i) const {return i==6?extra_target:targets[i];}
++};
+ struct RecordedPath {
+     Sym<double> initial_strain;
+     std::array<RecordedControl,6> controls;
+     std::vector<RecordedKnot> knots;
++    int row_count=6;
++    RecordedControl extra_control;
++    const RecordedControl& control(int i) const {return i==6?extra_control:controls[i];}
+ };
+ struct RecordedSettings {
+     IntegrationSettings material;
+@@ -17,6 +24,9 @@ struct RecordedSettings {
+     int max_iterations=30,max_backtracks=10,max_material_trials=20000;
+     double finite_difference_step=1e-7;
+     int max_restarts=0,restart_levels=8; double restart_step=1e-4;
++    // Opt-in policy for source-qualified paths whose stress tolerance is
++    // defined per unit of path coordinate rather than per endpoint.
++    bool stress_per_coordinate=false;
+ };
+ struct RecordedPoint {
+     double coordinate=0; Sym<double> strain; State state; Diagnostics diagnostics;
+@@ -40,11 +50,42 @@ inline bool valid_recorded_settings(const RecordedSettings& s){
+ // Temporary max-component-normalized rows avoid sensitivity to multiplying an equation by a
+ // constant. Raw document values remain untouched. Stress scale is fixed from
+ // the supplied parent/material scales, not adjusted to make a trial pass.
+-inline RecordedResult replay_recorded(int model,const State& initial,const State& parameters,
+-                                      const RecordedPath& path,const RecordedSettings& settings={}){
++// Rectangular Householder QR proposes a correction. Acceptance still checks
++// every control row. Keep the legacy square solve on its existing path.
++inline bool recorded_control_correction(std::vector<State> a, State b, State& x) {
++    if(a.empty()||a.front().empty()||a.size()!=b.size()||a.size()<a.front().size())return false;
++    const auto m=a.size(), n=a.front().size();
++    if(m==n)return solve_linear(a,b,x);
++    for(size_t j=0;j<n;++j){
++        double length=0.;
++        for(size_t i=j;i<m;++i)length=std::hypot(length,a[i][j]);
++        if(!std::isfinite(length)||length<1e-14)return false;
++        State v(m-j);
++        for(size_t i=j;i<m;++i)v[i-j]=a[i][j]/length;
++        v[0]+=std::copysign(1.,v[0]);
++        double vv=0.;for(double t:v)vv+=t*t;
++        for(size_t k=j;k<n;++k){
++            double dot=0.;for(size_t i=j;i<m;++i)dot+=v[i-j]*a[i][k];
++            for(size_t i=j;i<m;++i)a[i][k]-=(2.*dot/vv)*v[i-j];
++        }
++        double dot=0.;for(size_t i=j;i<m;++i)dot+=v[i-j]*b[i];
++        for(size_t i=j;i<m;++i)b[i]-=(2.*dot/vv)*v[i-j];
++    }
++    a.resize(n);b.resize(n);
++    return solve_linear(a,b,x);
++}
++template<class MaterialAdvance,class MaterialLinearize>
++inline RecordedResult replay_recorded_with_material(int model,const State& initial,const State& parameters,
++                                      const RecordedPath& path,const RecordedSettings& settings,
++                                      MaterialAdvance advance, MaterialLinearize linearize){
+     RecordedResult result;result.state=initial;result.strain=path.initial_strain;
+     auto invalid=[&](const std::string& message){result.message=message;return result;};
++    const int row_count=path.row_count;
++    if(row_count!=6&&row_count!=7)return invalid("recorded path requires six or seven control rows");
+     if(!valid_recorded_settings(settings))return invalid("invalid recorded-path settings");
++    if(settings.stress_per_coordinate&&(settings.max_iterations>30||settings.max_backtracks>10||
++       settings.max_material_trials>20000||settings.finite_difference_step!=1e-8||settings.max_restarts!=0))
++        return invalid("settings exceed the coordinate-scaled control policy");
+     if(model<0||model>=int(models().size()))return invalid("unknown recorded-path model");
+     if(models()[model].physical_time||initial_state(model).size()<6||models()[model].fields.empty()||
+        models()[model].fields[0].name!="sigma"||models()[model].fields[0].offset!=0||models()[model].fields[0].size!=6)
+@@ -53,16 +94,17 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+         return invalid("invalid recorded-path parameters or initial state");
+     for(double x:path.initial_strain.v)if(!std::isfinite(x))return invalid("nonfinite initial recorded strain");
+     if(path.knots.size()<2||path.knots.size()>5001)return invalid("recorded path requires 2 to 5001 knots");
+-    std::array<Sym<double>,6> rows;std::array<double,6> lengths;
++    std::array<Sym<double>,7> rows;std::array<double,7> lengths;
+     bool all_strain=true;
+-    for(int i=0;i<6;++i){
+-        const auto& c=path.controls[i];all_strain=all_strain&&!c.stress;
++    for(int i=0;i<row_count;++i){
++        const auto& c=path.control(i);all_strain=all_strain&&!c.stress;
+         double maximum=0;for(double x:c.coefficients.v){if(!std::isfinite(x))return invalid("nonfinite control coefficient");maximum=std::max(maximum,std::abs(x));}
+         if(maximum==0)return invalid("zero recorded control row");
+         lengths[i]=maximum;
+         for(int j=0;j<6;++j)rows[i].v[j]=c.coefficients.v[j]/maximum;
+     }
+     if(all_strain){
++        if(row_count!=6)return invalid("overdetermined all-strain controls");
+         std::vector<State> a(6,State(6));State unused;
+         for(int i=0;i<6;++i)for(int j=0;j<6;++j)a[i][j]=rows[i].v[j];
+         if(!solve_linear(a,State(6,0.),unused))return invalid("dependent all-strain control rows");
+@@ -71,7 +113,7 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+         const auto& knot=path.knots[k];
+         if(!std::isfinite(knot.coordinate)||(k&&!(knot.coordinate>path.knots[k-1].coordinate)))
+             return invalid("recorded coordinates must be finite and strictly increasing in input order");
+-        for(int i=0;i<6;++i)if(!std::isfinite(knot.targets[i])||!std::isfinite(knot.targets[i]/lengths[i]))
++        for(int i=0;i<row_count;++i)if(!std::isfinite(knot.target(i))||!std::isfinite(knot.target(i)/lengths[i]))
+             return invalid("nonfinite recorded target or normalized target");
+     }
+     const auto material_scales=model_scales(model,parameters);
+@@ -81,30 +123,57 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+         stress_scale=std::max(stress_scale,std::max(std::abs(initial[i]),material_scales[i]));
+     }
+     auto residual=[&](const State& state,const Sym<double>& strain,const RecordedKnot& knot,State& r){
+-        r.resize(6);
++        r.resize(row_count);
+         const auto stress=tensor_from(state,0);
+-        for(int i=0;i<6;++i)r[i]=(dot(rows[i],path.controls[i].stress?stress:strain)-knot.targets[i]/lengths[i])/
+-            (path.controls[i].stress?stress_scale:1.);
++        for(int i=0;i<row_count;++i)r[i]=(dot(rows[i],path.control(i).stress?stress:strain)-knot.target(i)/lengths[i])/
++            (path.control(i).stress?stress_scale:1.);
+         return finite(r);
+     };
+     auto error=[](const State& r){double e=0;for(double x:r)e=std::max(e,std::abs(x));return e;};
++    auto satisfied=[&](const State& r,const State& state,const State& parent,double span){
++        if(!settings.stress_per_coordinate)return error(r)<=settings.control_tolerance;
++        double rate_norm=0.;
++        for(int i=0;i<6;++i)rate_norm=std::hypot(rate_norm,(state[i]-parent[i])/span);
++        const double gate=1e-7+1e-11*rate_norm;
++        if(!std::isfinite(gate))return false;
++        for(int i=0;i<row_count;++i){
++            if(path.control(i).stress){if(std::abs(r[i])*stress_scale/span>gate)return false;}
++            else if(std::abs(r[i])>1e-14)return false;
++        }
++        return true;
++    };
++    auto objective=[&](const State& r){
++        if(!settings.stress_per_coordinate)return error(r);
++        double e=0.;
++        for(int i=0;i<row_count;++i)if(path.control(i).stress)e=std::hypot(e,r[i]);
++        return e;
++    };
+     State first;
+-    if(!residual(initial,path.initial_strain,path.knots[0],first)||error(first)>settings.control_tolerance)
++    if(!residual(initial,path.initial_strain,path.knots[0],first)||!satisfied(first,initial,initial,1.))
+         return invalid("first recorded targets do not match supplied initial state and strain; preparation is explicit");
+     RecordedPoint origin;origin.coordinate=path.knots[0].coordinate;origin.state=initial;origin.strain=path.initial_strain;
+     origin.control_error=error(first);result.points.push_back(origin);
+     auto account=[&](const Advance& a){result.attempted_substeps+=a.diagnostics.attempted_substeps;};
+     auto material=[&](const State& parent,const Sym<double>& increment,Advance& trial){
+         if(result.material_trials>=settings.max_material_trials)return false;
+-        ++result.material_trials;trial=integrate(model,parent,increment,parameters,settings.material);account(trial);return trial.ok;
++        ++result.material_trials;trial=advance(model,parent,increment,parameters,settings.material);account(trial);return trial.ok;
+     };
+     for(size_t k=1;k<path.knots.size();++k){
+         const auto parent=result.points.back();const auto& knot=path.knots[k];
+-        auto fail=[&](const std::string& message){result.failed_knot=int(k);result.message=message+"; last committed knot retained";return result;};
++        const double span=knot.coordinate-parent.coordinate;
++        auto fail=[&](const std::string& message){
++            result.failed_knot=int(k);
++            if(row_count==7){
++                result.points.clear();result.state=initial;result.strain=path.initial_strain;
++                result.message=message+"; entire path rolled back";
++            }else result.message=message+"; last committed knot retained";
++            return result;
++        };
++        if(settings.stress_per_coordinate&&!std::isfinite(span))return fail("nonfinite path span");
+         Sym<double> increment;Advance accepted;State r;
+         bool converged=false;double control_error=0;
+         if(!residual(parent.state,parent.strain,knot,r))return fail("nonfinite control residual");
+-        if(knot.targets==path.knots[k-1].targets&&error(r)<=settings.control_tolerance){
++        if((knot.targets==path.knots[k-1].targets&&(row_count==6||knot.extra_target==path.knots[k-1].extra_target))&&satisfied(r,parent.state,parent.state,span)){
+             // A repeated target is a recorded observation, not a new zero update
+             // or a hidden history/preparation event. Preserve every state bit.
+             accepted.ok=true;accepted.state=parent.state;converged=true;control_error=error(r);
+@@ -114,7 +183,7 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+             if(!solve_linear(a,rhs,solution))return fail("singular strain controls");
+             for(int j=0;j<6;++j)increment.v[j]=solution[j];
+             if(!material(parent.state,increment,accepted))return fail("material update failed or trial budget exhausted");
+-            if(!residual(accepted.state,parent.strain+increment,knot,r)||error(r)>settings.control_tolerance)
++            if(!residual(accepted.state,parent.strain+increment,knot,r)||!satisfied(r,accepted.state,parent.state,span))
+                 return fail("strain target precision failure");
+             control_error=error(r);converged=true;
+         }else{
+@@ -123,7 +192,7 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+             // its unknown stress-control correction. Free coordinates start at
+             // zero; rectangular pivot elimination avoids normal equations.
+             std::vector<State> constraints;State rhs;std::vector<int> pivots;
+-            for(int i=0;i<6;++i)if(!path.controls[i].stress){
++            for(int i=0;i<row_count;++i)if(!path.control(i).stress){
+                 constraints.emplace_back(rows[i].v.begin(),rows[i].v.end());rhs.push_back(-r[i]);
+             }
+             int rank=0;const int count=int(constraints.size());
+@@ -149,12 +218,17 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+                 if(std::find(pivots.begin(),pivots.end(),column)!=pivots.end())continue;
+                 Sym<double> direction;direction.v[column]=1.;double scale=1.;
+                 for(int i=0;i<count;++i){direction.v[pivots[i]]=-constraints[i][column];scale=std::max(scale,std::abs(direction.v[pivots[i]]));}
++                if(settings.stress_per_coordinate){
++                    scale=0.;for(double x:direction.v)scale=std::hypot(scale,x);
++                }
+                 if(!std::isfinite(scale))return fail("nonfinite free control direction");
+                 for(double& x:direction.v)x/=scale;
+                 directions.push_back(direction);
+             }
+-            std::vector<int> stress_rows;for(int i=0;i<6;++i)if(path.controls[i].stress)stress_rows.push_back(i);
+-            const int unknowns=int(directions.size());State free_values(unknowns,0.);
++            std::vector<int> stress_rows;for(int i=0;i<row_count;++i)if(path.control(i).stress)stress_rows.push_back(i);
++            const int unknowns=int(directions.size()), equations=int(stress_rows.size());
++            if(unknowns<1||equations<unknowns)return fail("insufficient free coordinates or stress constraints");
++            State free_values(unknowns,0.);
+             auto construct=[&](const State& values){
+                 auto candidate=particular;
+                 for(int j=0;j<unknowns;++j)candidate=candidate+values[j]*directions[j];
+@@ -187,8 +261,8 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+                         if(ok){
+                             State trial_r;
+                             if(residual(trial.state,parent.strain+candidate,knot,trial_r)){
+-                                const double next_error=error(trial_r);
+-                                if(next_error<=settings.control_tolerance){
++                                const double next_error=objective(trial_r);
++                                if(satisfied(trial_r,trial.state,parent.state,span)){
+                                     increment=candidate;free_values=values;accepted=trial;control_error=next_error;converged=true;
+                                     result.last_control_error=next_error;result.last_trial_increment=candidate;
+                                     ++result.accepted_restarts;return true;
+@@ -212,22 +286,38 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+             };
+             for(int iteration=0;iteration<settings.max_iterations;++iteration){
+                 if(result.material_trials>=settings.max_material_trials)return fail("material trial budget exhausted");
+-                ++result.material_trials;
+-                auto linearized=linearize_update(model,parent.state,increment,parameters,settings.material);
+-                auto trial=linearized.advance;account(trial);
++                LinearizedAdvance linearized;
++                if(settings.stress_per_coordinate)material(parent.state,increment,linearized.advance);
++                else{
++                    ++result.material_trials;
++                    linearized=linearize(model,parent.state,increment,parameters,settings.material);
++                    account(linearized.advance);
++                }
++                const auto& trial=linearized.advance;
+                 if(!trial.ok)return fail("material trial failed");
+                 if(!residual(trial.state,parent.strain+increment,knot,r))return fail("nonfinite control residual");
+-                const double current_error=error(r);
++                const double current_error=objective(r);
+                 result.last_control_error=current_error;result.last_trial_increment=increment;
+-                if(current_error<=settings.control_tolerance){accepted=trial;control_error=current_error;converged=true;break;}
++                if(satisfied(r,trial.state,parent.state,span)){accepted=trial;control_error=error(r);converged=true;break;}
+                 // Stress derivatives only along the nullspace of prescribed
+                 // strains. Numerical probes also obey every strain constraint.
+-                std::vector<State> jacobian(unknowns,State(unknowns));
++                std::vector<State> jacobian(equations,State(unknowns));
+                 for(int j=0;j<unknowns;++j){
+                     State stress_derivative(6,0.);
+                     if(linearized.tangent_ok){
+                         for(int l=0;l<6;++l)for(int component=0;component<6;++component)
+                             stress_derivative[l]+=linearized.state_tangent[l][component]*directions[j].v[component];
++                    }else if(settings.stress_per_coordinate){
++                        double load_norm=0.;
++                        for(double x:increment.v)load_norm=std::hypot(load_norm,x/span);
++                        const double h=settings.finite_difference_step*std::max(1e-6,load_norm)*span;
++                        auto plus=free_values,minus=free_values;plus[j]+=h;minus[j]-=h;
++                        Advance high,low;const int before=result.material_trials;
++                        const bool ok=std::isfinite(h)&&h>0&&material(parent.state,construct(plus),high)
++                            &&material(parent.state,construct(minus),low);
++                        result.finite_difference_probes+=result.material_trials-before;
++                        if(!ok)return fail("control derivative trial failed or trial budget exhausted");
++                        for(int l=0;l<6;++l)stress_derivative[l]=(high.state[l]-low.state[l])/(2*h);
+                     }else{
+                         const double h=settings.finite_difference_step*std::max(1.,std::abs(free_values[j]));
+                         auto values=free_values;values[j]+=h;Advance shifted;double signed_h=h;
+@@ -243,26 +333,28 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+                         }
+                         for(int l=0;l<6;++l)stress_derivative[l]=(shifted.state[l]-trial.state[l])/signed_h;
+                     }
+-                    for(int i=0;i<unknowns;++i)for(int l=0;l<6;++l)
++                    for(int i=0;i<equations;++i)for(int l=0;l<6;++l)
+                         jacobian[i][j]+=rows[stress_rows[i]].v[l]*stress_derivative[l]/stress_scale;
+                 }
+-                State load(unknowns),delta;
+-                for(int i=0;i<unknowns;++i)load[i]=-r[stress_rows[i]];
++                State load(equations),delta;
++                for(int i=0;i<equations;++i)load[i]=-r[stress_rows[i]];
+                 for(const auto& row:jacobian)if(!finite(row))return fail("nonfinite mixed-control Jacobian");
+-                if(!solve_linear(jacobian,load,delta)){
++                if(!recorded_control_correction(jacobian,load,delta)){
+                     if(restart(current_error)){if(converged)break;continue;}
+                     return fail(settings.max_restarts?"singular mixed-control system; bounded restart failed or trial budget exhausted":"singular mixed-control system");
+                 }
+-                bool improved=false;
++                bool improved=false,valid_trial=false;
+                 for(int backtrack=0;backtrack<=settings.max_backtracks;++backtrack){
+                     const double alpha=std::ldexp(1.,-backtrack);auto values=free_values;
+                     for(int j=0;j<unknowns;++j)values[j]+=alpha*delta[j];
+                     const auto candidate=construct(values);
+                     Advance next;if(!material(parent.state,candidate,next))continue;
++                    valid_trial=true;
+                     State next_r;
+-                    if(residual(next.state,parent.strain+candidate,knot,next_r)&&error(next_r)<current_error){
++                    if(residual(next.state,parent.strain+candidate,knot,next_r)&&
++                       (objective(next_r)<current_error||(settings.stress_per_coordinate&&satisfied(next_r,next.state,parent.state,span)))){
+                         increment=candidate;free_values=values;improved=true;
+-                        if(error(next_r)<=settings.control_tolerance){
++                        if(satisfied(next_r,next.state,parent.state,span)){
+                             accepted=next;control_error=error(next_r);converged=true;
+                             result.last_control_error=control_error;result.last_trial_increment=increment;
+                         }
+@@ -270,7 +362,11 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+                     }
+                 }
+                 if(converged)break;
+-                if(!improved)return fail("mixed-control line search failed or trial budget exhausted");
++                if(!improved){
++                    if(settings.stress_per_coordinate&&valid_trial&&result.material_trials<settings.max_material_trials)
++                        return fail("simultaneous stress constraints did not converge");
++                    return fail("mixed-control line search failed or trial budget exhausted");
++                }
+             }
+         }
+         if(!converged)return fail("mixed-control iteration limit");
+@@ -280,4 +376,8 @@ inline RecordedResult replay_recorded(int model,const State& initial,const State
+     }
+     result.ok=true;return result;
+ }
++inline RecordedResult replay_recorded(int model,const State& initial,const State& parameters,
++                                      const RecordedPath& path,const RecordedSettings& settings={}){
++    return replay_recorded_with_material(model,initial,parameters,path,settings,integrate,linearize_update);
++}
+ }

@@ -52,7 +52,7 @@ for(const id of ['modified-cam-clay','maxwell-itasca900-zero-spin-ode','sanisand
   test('actual dialog presents the profile first with technical records closed: '+id,()=>{
     const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,new Element('div'));return nodes.get(id);};
     $('catalogue-detail-body').scrollTop=200;$('catalogue-dialog').showModal=()=>{$('catalogue-dialog').open=true;};
-    const context={$,document,modelProfile,modelProfileSection,catalogue:entries,j2View:null,timedView:null,certifiedRecorded:null,
+    const context={$,document,modelProfile,modelProfileSection,catalogue:entries,j2View:null,timedView:null,fixedRecorded:new Map(),
       timedLaboratoryRoute:()=>null,refreshCatalogueStatus:()=>{},technicalReviewLinks:()=>new Element('p'),element:(tag,value,className)=>Object.assign(new Element(tag),{textContent:value??'',className}),
       recordedDescription:value=>value,formulationSection:()=>new Element('section'),evidenceSection:(_document,id)=>Object.assign(new Element('section'),{className:'catalogue-evidence',textContent:'evidence:'+id}),applicabilitySection:(_document,id)=>Object.assign(new Element('section'),{className:'catalogue-applicability',textContent:'applicability:'+id}),
       evidenceIndex:null,evidenceState:'loaded',applicabilityMatrix:null,applicabilityState:'loaded',definitionLink:()=>new Element('a'),catalogueModelHash:id=>'#catalogue/'+id,URL};

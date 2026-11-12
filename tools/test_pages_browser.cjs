@@ -53,27 +53,36 @@ async function main() {
       assert.equal(response.status(), 200, path);
       assert.ok(Number(response.headers()['content-length']) > 0, path);
     }
-    const id = 'extended-mohr-coulomb-2013-exact-generalized-work-be-exact-domain-v3';
-    await page.goto(url + '#catalogue/' + id);
-    await page.locator('#catalogue-explore').click();
-    const done = () => page.getByText('Response up to date · 3 ordered observations.', {exact: true}).waitFor();
-    await done();
-    const downloading = page.waitForEvent('download');
-    await page.getByRole('button', {name: 'Reproducible run'}).click();
-    const downloaded = await (await downloading).path();
-    const replay = JSON.parse(await readFile(downloaded, 'utf8'));
-    const expected = JSON.parse(await readFile(resolve(__dirname, '../docs/ingestion/extended-mohr-coulomb-2013/certified-public-backend-v1/recorded-wasm.json'), 'utf8'));
-    assert.deepEqual(replay.result, expected);
-    await page.getByRole('button', {name: 'Return to standard laboratory'}).click();
-    await page.locator('#run-file').setInputFiles(downloaded);
-    await done();
-    await page.setViewportSize({width: 390, height: 844});
-    await page.reload();
-    await done();
-    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false);
-    await page.getByRole('img', {name: 'Recorded deviator stress versus mean stress'}).waitFor();
+    const recorded = [
+      ['extended-mohr-coulomb-2013-exact-generalized-work-be-exact-domain-v3', 3,
+        'extended-mohr-coulomb-2013/certified-public-backend-v1/recorded-wasm.json'],
+      ['clay2014-trace-calibrated-igs-fixed-plane-v1', 33,
+        'hypoplastic-clay-2014/delivery-20261111/generic-boundary-v1/radius-bounded-v2/production/reversal-v4/strain-wasm/synthetic-NCL-H0--mixed-six-components.json'],
+    ];
+    for (const [id, count, reference] of recorded) {
+      await page.setViewportSize({width: 1280, height: 900});
+      await page.goto(url + '#catalogue/' + id);
+      await page.locator('#catalogue-explore').click();
+      const done = () => page.getByText('Response up to date · ' + count + ' ordered observations.', {exact: true}).waitFor();
+      await done();
+      const downloading = page.waitForEvent('download');
+      await page.getByRole('button', {name: 'Reproducible run'}).click();
+      const downloaded = await (await downloading).path();
+      const replay = JSON.parse(await readFile(downloaded, 'utf8'));
+      const expected = JSON.parse(await readFile(resolve(__dirname, '../docs/ingestion', reference), 'utf8'));
+      assert.deepEqual(replay.result, expected);
+      assert.ok(await page.locator('#recorded-lab-parameters input[readonly]').count() > 0);
+      await page.getByRole('button', {name: 'Return to standard laboratory'}).click();
+      await page.locator('#run-file').setInputFiles(downloaded);
+      await done();
+      await page.setViewportSize({width: 390, height: 844});
+      await page.reload();
+      await done();
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false);
+      await page.getByRole('img', {name: 'Recorded deviator stress versus mean stress'}).waitFor();
+    }
     assert.deepEqual(errors, []);
-    console.log('Packaged laboratory, Cam Clay comparison, database links and Extended Mohr–Coulomb replay passed.');
+    console.log('Packaged laboratory, Cam Clay comparison, database links and both fixed recorded model replays passed.');
   } finally {
     try { await browser?.close(); }
     finally { await new Promise(ok => server.close(ok)); }
